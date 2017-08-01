@@ -27,7 +27,7 @@
                     </a>
                 </li>
                 <li>
-                    <a ui-sref="fileupload">
+                    <a ui-sref="company">
                         <i class="icon-paper-clip"></i> 企业信息</span>
                     </a>
                 </li>
