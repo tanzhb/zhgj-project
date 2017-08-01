@@ -86,6 +86,14 @@ public class PageController {
     public String jgml() {
         return "jgml";
     }
+    
+    /**
+     * 用户管理
+     */
+    @RequestMapping("/user")
+    public String user() {
+        return "user";
+    }
 
     /**
      * 404页

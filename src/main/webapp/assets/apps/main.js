@@ -44,6 +44,7 @@ MetronicApp.factory('settings', ['$rootScope', function($rootScope) {
     };
 
     $rootScope.settings = settings;
+    $rootScope.basePath = getRootPath();
 
     return settings;
 }]);
@@ -148,7 +149,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
-        // Advanced Datatables
+        // 价格目录
         .state('jgml', {
             url: "/jgml",
             templateUrl: "rest/page/jgml",
@@ -173,8 +174,51 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
+        // 用户管理
+        .state('user', {
+            url: "/user",
+            templateUrl: "rest/page/user",
+            data: {pageTitle: '用户管理'},
+            controller: "UserController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [                             
+                            'assets/global/plugins/datatables/datatables.min.css', 
+//                            /'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+                            
+                            
+                            //'assets/global/scripts/datatable.js',
+                            'assets/global/plugins/datatables/datatables.min.js',
+                            //'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+                            //'assets/global/plugins/datatables/datatables.all.min.js',
+                            //'assets/pages/scripts/table-datatables-managed.min.js',
+                            'assets/pages/scripts/table-datatables-fixedheader.min.js',
+                            'assets/apps/service/UserService.js',
+                            'assets/apps/controllers/UserController.js'
+                        ]
+                    });
+                }]
+            }
+        })
 
 }]);
+
+//js获取项目根路径，如： http://localhost:8083/uimcardprj  
+function getRootPath(){  
+    //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp  
+    var curWwwPath=window.document.location.href;  
+    //获取主机地址之后的目录，如： uimcardprj/share/meun.jsp  
+    var pathName=window.document.location.pathname;  
+    var pos=curWwwPath.indexOf(pathName);  
+    //获取主机地址，如： http://localhost:8083  
+    var localhostPaht=curWwwPath.substring(0,pos);  
+    //获取带"/"的项目名，如：/uimcardprj  
+    var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);  
+    return(localhostPaht+projectName);  
+}  
 
 /* Init global settings and run the app */
 MetronicApp.run(["$rootScope", "settings", "$state", function($rootScope, settings, $state) {
