@@ -27,7 +27,7 @@
                     </a>
                 </li>
                 <li>
-                    <a ui-sref="fileupload">
+                    <a ui-sref="company">
                         <i class="icon-paper-clip"></i> 企业信息</span>
                     </a>
                 </li>
@@ -92,7 +92,7 @@
             </a>
             <ul class="sub-menu">
                 <li>
-                    <a ui-sref="user">
+                    <a ui-sref="uibootstrap">
                         <i class="icon-puzzle"></i> 用户管理</span>
                     </a>
                 </li>
