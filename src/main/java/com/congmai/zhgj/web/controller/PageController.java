@@ -94,7 +94,14 @@ public class PageController {
     public String user() {
         return "user";
     }
-
+    /**
+     * 新增物料
+     */
+    @RequestMapping("/addMateriel")
+    public String addMateriel() {
+        return "materiel/addMateriel";
+    }
+    
     /**
      * 404页
      */
