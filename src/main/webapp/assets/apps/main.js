@@ -148,6 +148,75 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
+        // 物料信息
+        .state('materiel', {
+            url: "/materiel",
+            templateUrl: "rest/page/materiel",
+            data: {pageTitle: '物料信息'},
+            controller: "materielController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [                             
+                            'assets/global/plugins/datatables/datatables.min.css', 
+                            'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+                            'assets/global/plugins/jstree/dist/themes/default/style.min.css',
+                            
+                            'assets/global/plugins/datatables/datatables.all.min.js',
+                            'assets/pages/scripts/table-datatables-managed.js',
+                            
+                            'assets/global/plugins/jstree/dist/jstree.min.js',
+                            'assets/pages/scripts/ui-tree.min.js',
+                            'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js',
+                            'assets/apps/service/materielService.js',
+                            'assets/apps/controllers/materielController.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        // 新增物料
+        .state('addMateriel', {
+            url: "/addMateriel",
+            templateUrl: "rest/page/addMateriel",
+            data: {pageTitle: '新增物料'},
+            controller: "materielController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [     
+'assets/global/plugins/select2/css/select2.min.css',
+'assets/global/plugins/select2/css/select2-bootstrap.min.css',
+'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
+'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css',
+'assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css',
+'assets/global/plugins/icheck/skins/all.css',
+'assets/global/plugins/select2/js/select2.full.min.js',
+'assets/global/plugins/jquery-validation/js/jquery.validate.min.js',
+'assets/global/plugins/jquery-validation/js/localization/messages_zh.min.js',
+'assets/global/plugins/jquery-validation/js/additional-methods.min.js',
+'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+'assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js',
+'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js',
+'assets/global/plugins/ckeditor/ckeditor.js',
+'assets/global/plugins/bootstrap-markdown/lib/markdown.js',
+'assets/global/plugins/bootstrap-markdown/js/bootstrap-markdown.js',
+
+'assets/pages/scripts/form-icheck.min.js',
+'assets/pages/scripts/form-validation.min.js',
+'assets/apps/service/materielService.js',
+'assets/apps/controllers/materielController.js'
+
+
+                        ]
+                    });
+                }]
+            }
+        })
         // Advanced Datatables
         .state('jgml', {
             url: "/jgml",
@@ -173,6 +242,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
+        
 
 }]);
 

@@ -86,7 +86,24 @@ public class PageController {
     public String jgml() {
         return "jgml";
     }
+    
+    
+    /**
+     * 物料信息
+     */
+    @RequestMapping("/materiel")
+    public String materiel() {
+        return "materiel/materiel";
+    }
 
+    /**
+     * 新增物料
+     */
+    @RequestMapping("/addMateriel")
+    public String addMateriel() {
+        return "materiel/addMateriel";
+    }
+    
     /**
      * 404页
      */
