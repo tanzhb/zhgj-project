@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
+import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.dao.UserMapper;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.UserExample;
@@ -42,6 +43,7 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements U
         return userMapper.deleteByPrimaryKey(id);
     }
 
+    
     public User authentication(User user) {
         return userMapper.authentication(user);
     }
@@ -67,5 +69,17 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements U
     	List<User> list = userMapper.findAllUsers();
     	return list;
     }
-
+    
+    public boolean isUserExist(User user){
+    	boolean exist = false;
+    	if(userMapper.isUserExist(user) > 0){
+    		exist = true;
+    	}
+    	return exist;
+    }
+    
+    public void deleteUsers(String ids){
+    	List<String> idList = ApplicationUtils.getIdList(ids);
+    	userMapper.deleteUsers(idList);
+    }
 }

@@ -41,6 +41,10 @@ public interface UserMapper extends GenericDao<User, Long> {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+    
+    int isUserExist(User record);
+    
+    void deleteUsers(List<String> ids);
 
     /**
      * 用户登录验证查询
