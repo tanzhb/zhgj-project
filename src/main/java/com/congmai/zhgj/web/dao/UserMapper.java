@@ -29,6 +29,8 @@ public interface UserMapper extends GenericDao<User, Long> {
     int insertSelective(User record);
 
     List<User> selectByExample(UserExample example);
+    
+    List<User> findAllUsers();
 
     User selectByPrimaryKey(Long id);
 

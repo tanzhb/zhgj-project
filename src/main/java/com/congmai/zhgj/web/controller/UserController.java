@@ -1,5 +1,9 @@
 package com.congmai.zhgj.web.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -11,6 +15,8 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -84,6 +90,30 @@ public class UserController {
         subject.logout();
         return "login";
     }
+    
+    /**
+     * 
+     * @Description 查找所有用户信息
+     * @return
+     */
+	@RequestMapping(value = "/findAllUsers", method = RequestMethod.GET)
+	public ResponseEntity<Map> findAllUsers(HttpServletRequest request) {
+		List<User> users = userService.findAllUsers();
+		
+		if (users.isEmpty()) {
+			return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);// You many
+			                                                             // decide to
+			                                                             // return
+			                                                             // HttpStatus.NOT_FOUND
+		}
+		//封装datatables数据返回到前台
+		Map pageMap = new HashMap();
+		pageMap.put("draw", 1);
+		pageMap.put("recordsTotal", users.size());
+		pageMap.put("recordsFiltered", users.size());
+		pageMap.put("data", users);
+		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+	}
 
     /**
      * 基于角色 标识的权限控制案例

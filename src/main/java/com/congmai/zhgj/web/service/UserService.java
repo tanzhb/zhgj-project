@@ -1,5 +1,7 @@
 package com.congmai.zhgj.web.service;
 
+import java.util.List;
+
 import com.congmai.zhgj.core.generic.GenericService;
 import com.congmai.zhgj.web.model.User;
 
@@ -28,4 +30,11 @@ public interface UserService extends GenericService<User, Long> {
      * @return
      */
     User selectByUsername(String username);
+    
+    /**
+     * 
+     * @Description 查找所有用户信息
+     * @return
+     */
+    List<User> findAllUsers();
 }

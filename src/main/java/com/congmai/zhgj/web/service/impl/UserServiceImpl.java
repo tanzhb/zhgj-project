@@ -62,5 +62,10 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements U
         final List<User> list = userMapper.selectByExample(example);
         return list.get(0);
     }
+    
+    public List<User> findAllUsers(){
+    	List<User> list = userMapper.findAllUsers();
+    	return list;
+    }
 
 }

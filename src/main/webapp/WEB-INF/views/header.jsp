@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!-- BEGIN HEADER INNER -->
 <div class="page-header-inner container">
     <!-- BEGIN LOGO -->
@@ -391,8 +393,8 @@
                                 <i class="icon-lock"></i> Lock Screen </a>
                         </li>
                         <li>
-                            <a href="#">
-                                <i class="icon-key"></i> Log Out </a>
+                            <a href="rest/page/login">
+                                <i class="icon-key"></i> 退 出 </a>
                         </li>
                     </ul>
                 </li>
