@@ -18,9 +18,8 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 				orientation: "left",
 				autoclose: true
         	})
-        	
-        	FormValidation.init();
         	FormiCheck.init()
+        	r();
         }
         
         
@@ -28,16 +27,21 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     });
     
     $scope.save  = function(isValid) {
-    	if(isValid)
-    	materielService.save($scope.materiel).then(
-    		     function(answer){
-    		    	 $state.go('materiel');
-    		     },
-    		     function(error){
-    		         $scope.error = error;
-    		     }
-    		 );
-    	};
+    	if(isValid){
+    		if($scope.materiel.manufactureDate=='') {
+    			$scope.materiel.manufactureDate=null;
+    		}
+    		materielService.save($scope.materiel).then(
+       		     function(answer){
+       		    	 $state.go('materiel');
+       		     },
+       		     function(error){
+       		         $scope.error = error;
+       		     }
+       		 );
+    	}
+    	
+    }; 	
     
 	var initList = function(start,limit) {
     	materielService.findList(start,limit).then(
@@ -50,13 +54,14 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     		 );
     	};
     	
-    var parent = "#";	
+	
     var table;
+    var tableAjaxUrl = "rest/materiel/findMaterielList";
     var loadMainTable = function() {
-            table = $("#sample_2"),
             a = 0;
             App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
-            table.DataTable({
+            table = $("#sample_2")
+			.DataTable({
                 language: {
                     aria: {
                         sortAscending: ": activate to sort column ascending",
@@ -88,8 +93,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
                 pageLength: 5,//每页显示数量
                 processing: true,//loading等待框
 //                serverSide: true,
-                ajax: "rest/materiel/findMaterielList",//加载数据中
-                data : {parent : parent},
+                ajax: tableAjaxUrl,//加载数据中
                 "aoColumns": [
                               { mData: 'serialNum' },
                               { mData: 'materielNum' },
@@ -102,12 +106,72 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
                               { mData: 'brand' },
                               { mData: 'versionNO' },
                               { mData: 'status' }
-                        ]
+                        ],
+               'aoColumnDefs' : [ {
+							'targets' : 0,
+							'searchable' : false,
+							'orderable' : false,
+							'className' : 'dt-body-center',
+							'render' : function(data,
+									type, full, meta) {
+								return '<input type="checkbox" name="serialNum[]" value="'
+										+ $('<div/>')
+												.text(
+														data)
+												.html()
+										+ '">';
+							}
+						} ]
 
             }).on('order.dt',
             function() {
                 console.log('排序');
             })
+            
+            
+            
+            
+            // 添加checkbox功能***************************************
+							// Handle click on "Select all" control
+							$('#example-select-all').on(
+									'click',
+									function() {
+										// Check/uncheck all checkboxes in the
+										// table
+										var rows = table.rows({
+											'search' : 'applied'
+										}).nodes();
+										$('input[type="checkbox"]', rows).prop(
+												'checked', this.checked);
+									});
+
+							// Handle click on checkbox to set state of "Select
+							// all" control
+							$('#sample_2 tbody')
+									.on(
+											'change',
+											'input[type="checkbox"]',
+											function() {
+												// If checkbox is not checked
+												if (!this.checked) {
+													var el = $(
+															'#example-select-all')
+															.get(0);
+													// If "Select all" control
+													// is checked and has
+													// 'indeterminate' property
+													if (el
+															&& el.checked
+															&& ('indeterminate' in el)) {
+														// Set visual state of
+														// "Select all" control
+														// as 'indeterminate'
+														el.indeterminate = true;
+													}
+												}
+											});
+							// 添加checkbox功能
+							// ***************************************
         };
         
         
@@ -139,10 +203,77 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
                 plugins: ["types"]
             }),
             $("#tree_1").on("select_node.jstree", function(e, t) {
-            	parent = t.selected[0];
-            	table.ajax.reload(); // 重新加载datatables数据
+            	table.ajax.url(tableAjaxUrl+"?parent="+t.selected[0]).load()// 重新加载datatables数据
             })
             
         };
+        $scope.reloadTable = function() {
+        	table.ajax.url(tableAjaxUrl).load()// 重新加载datatables数据
+        }
+        
+        
+     // 删除用户开始***************************************
+		$scope.del = function() {
+			var ids = '';
+			// Iterate over all checkboxes in the table
+			table.$('input[type="checkbox"]').each(
+					function() {
+						// If checkbox exist in DOM
+						if ($.contains(document, this)) {
+							// If checkbox is checked
+							if (this.checked) {
+								// 将选中数据id放入ids中
+								if (ids == '') {
+									ids = this.value;
+								} else
+									ids = ids + ','
+											+ this.value;
+							}
+						}
+					});
+			materielService
+					.delMateriel(ids)
+					.then(
+							function(data) {
+								$('#delMaterielModal').modal(
+										'hide');// 删除成功后关闭模态框
+								$(".modal-backdrop").remove();
+								/*table.ajax.reload(); // 重新加载datatables数据*/
+								 $state.go('materiel',{},{reload:true});
+							},
+							function(errResponse) {
+								console
+										.error('Error while deleting Users');
+							}
+
+					);
+		};
+		// 删除用户结束***************************************
+        
+        var r = function() {
+            var e = $("#form_sample_2"), r = $(".alert-danger", e), i = $(".alert-success", e);
+            e.validate({errorElement: "span",errorClass: "help-block help-block-error",focusInvalid: !1,ignore: "",
+            	rules: {materielNum: {required: !0,maxlength: 20},
+            			type: {required: !0,maxlength: 20},
+            			materielName: {required: !0,maxlength: 20},
+            			category: {required: !0,maxlength: 20},
+            			specifications: {required: !0,maxlength: 20},
+            			stockUnit: {required: !0,maxlength: 20}
+            			},
+            		invalidHandler: function(e, t) {
+                    i.hide(), r.show(), App.scrollTo(r, -200)
+                },errorPlacement: function(e, r) {
+                    var i = $(r).parent(".input-icon").children("i");
+                    i.removeClass("fa-check").addClass("fa-warning"), i.attr("data-original-title", e.text()).tooltip({container: "body"})
+                },highlight: function(e) {
+                    $(e).closest(".form-group").removeClass("has-success").addClass("has-error")
+                },unhighlight: function(e) {
+                },success: function(e, r) {
+                    var i = $(r).parent(".input-icon").children("i");
+                    $(r).closest(".form-group").removeClass("has-error").addClass("has-success"), i.removeClass("fa-warning").addClass("fa-check")
+                },submitHandler: function(e) {
+                    i.show(), r.hide()
+                }})
+        }
 
 }]);

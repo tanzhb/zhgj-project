@@ -1,5 +1,7 @@
 package com.congmai.zhgj.core.util;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -30,7 +32,7 @@ public class ApplicationUtils {
      * @return UUID
      */
     public static String random32UUID() {
-        return UUID.randomUUID().toString();
+        return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
     /**
@@ -63,4 +65,25 @@ public class ApplicationUtils {
         return DigestUtils.sha256Hex(value);
     }
 
+    
+    /**
+	 * 
+	 * @Description 切割ids成list
+	 * @param ids
+	 * @return
+	 */
+	public static List<String> getIdList(String ids) {
+		List<String> list = new ArrayList<String>();
+		String[] str = ids.split(",");
+		for (int i = 0; i < str.length; i++) {
+			list.add(str[i]);
+		}
+		return list;
+	}
+	
+	public static void main(String args[]){
+		String ids = "45";
+		List<String> list = ApplicationUtils.getIdList(ids);
+		System.out.print("++++++++  " + list);
+	}
 }

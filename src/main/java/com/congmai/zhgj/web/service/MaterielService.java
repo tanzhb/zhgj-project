@@ -24,4 +24,6 @@ public interface MaterielService extends GenericService<Materiel, Long> {
      * @return 对象集合
      */
     List<Materiel> selectList(MaterielExample m);
+
+	public void deleteMateriels(String ids);
 }
