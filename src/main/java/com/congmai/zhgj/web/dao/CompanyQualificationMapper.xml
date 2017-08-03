@@ -126,6 +126,16 @@
 	      order by createTime DESC
 	      limit ${firstResult},${pageSize} -->
   </select>
+  
+  <select id="selectListByCondition" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.CompanyQualification" >
+    select 
+    <include refid="Base_Column_List" />
+    from companyQualification
+       	where 1=1
+     <if test="comId != null" >
+        and comId = #{comId,jdbcType=VARCHAR}
+      </if>
+  </select>
 
   <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.CompanyQualification" >
     update companyQualification

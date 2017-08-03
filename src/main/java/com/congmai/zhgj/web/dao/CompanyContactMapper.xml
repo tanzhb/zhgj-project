@@ -14,10 +14,13 @@
     <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
     <result column="updater" jdbcType="VARCHAR" property="updater" />
     <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="wechat" property="wechat" jdbcType="VARCHAR" />
+    <result column="department" property="department" jdbcType="VARCHAR" />
+     <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List">
-    serialNum, comId, contactName, contactTel, contactEmail, contactTitle, contactImage, 
-    delFlg, creator, createTime, updater, updateTime
+     serialNum, comId, contactName, contactTel, wechat, contactEmail, contactTitle, department, 
+    contactImage, remark, delFlg, creator, createTime, updater, updateTime
   </sql>
   
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -34,14 +37,13 @@
   
   
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.CompanyContact">
-    insert into companyContact (serialNum, comId, contactName, 
-      contactTel, contactEmail, contactTitle, 
-      contactImage, delFlg, creator, 
-      createTime, updater, updateTime
+    insert into companyContact ( serialNum, comId, contactName, contactTel, wechat, contactEmail, contactTitle, department, 
+    contactImage, remark, delFlg, creator, createTime, updater, updateTime
       )
     values (#{serialNum,jdbcType=VARCHAR}, #{comId,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, 
-      #{contactTel,jdbcType=VARCHAR}, #{contactEmail,jdbcType=VARCHAR}, #{contactTitle,jdbcType=VARCHAR}, 
-      #{contactImage,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{contactTel,jdbcType=VARCHAR}, #{wechat,jdbcType=VARCHAR}, #{contactEmail,jdbcType=VARCHAR}, 
+      #{contactTitle,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{contactImage,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -54,6 +56,17 @@
   
   <select id="countList" parameterType="com.congmai.zhgj.web.model.CompanyContact" resultType="java.lang.Integer">
     select count(*) from companyContact
+  </select>
+  
+  
+   <select id="selectListByCondition" parameterType="com.congmai.zhgj.web.model.CompanyContact" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from companyContact
+    where 1=1 
+    <if test="comId != null">
+       and comId = #{comId,jdbcType=VARCHAR}
+    </if>
   </select>
   
 
@@ -92,6 +105,15 @@
       </if>
       <if test="updateTime != null">
         updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="wechat != null" >
+        wechat = #{wechat,jdbcType=VARCHAR},
+      </if>
+       <if test="department != null" >
+        department = #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
       </if>
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}

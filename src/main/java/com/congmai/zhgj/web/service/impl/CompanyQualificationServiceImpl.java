@@ -84,4 +84,12 @@ public class CompanyQualificationServiceImpl extends GenericServiceImpl<CompanyQ
 	}
 
 
+	@Override
+	public List<CompanyQualification> selectListByComId(String comId) {
+		CompanyQualification companyQualification = new CompanyQualification();
+		companyQualification.setComId(comId);
+		return companyQualificationMapper.selectListByCondition(companyQualification);
+	}
+
+
 }

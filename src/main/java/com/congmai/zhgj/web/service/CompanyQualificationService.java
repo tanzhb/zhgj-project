@@ -31,4 +31,6 @@ public interface CompanyQualificationService extends GenericService<CompanyQuali
 	void updateBatch(List<CompanyQualification> updateList);
 
 	void insertOrUpdateBatch(List<CompanyQualification> companyQualifications);
+
+	List<CompanyQualification> selectListByComId(String comId);
 }

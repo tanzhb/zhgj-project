@@ -1,6 +1,16 @@
 <%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!-- BEGIN PAGE HEADER-->
+<style>
+.box_card{
+	width: 33.333333%;
+	float: left;
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 4px;
+	margin-bottom: 4px;
+}
+</style>
 <h3 class="page-title"> 企业信息
 </h3>
 <div class="page-bar">
@@ -27,7 +37,7 @@
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
         <div class="portlet bordered">
             <div class="portlet-body">
-				<div class="portlet box blue ">
+				<div class="portlet light ">
                         <div class="portlet-title">
                             <div class="caption">企业信息</div>
                             <div class="actions">
@@ -35,10 +45,10 @@
                                 <a href="#portlet-config" data-toggle="modal" class="config" data-original-title="" title=""> </a>
                                 <a href="" class="reload" data-original-title="" title=""> </a>
                                 <a href="" class="remove" data-original-title="" title=""> </a> -->
-                                <a   ng-show="companyView" class="btn blue btn-default  btn-sm " ng-click="editCompany()">
-                                            <i class="fa fa-edit"></i> 编辑 </a>
-                                <a   ng-hide="companyAdd" class="btn blue btn-default  btn-sm " ng-click="saveCompany()">
-                                            <i class="fa fa-save"></i> 保存 </a>
+                                <button   ng-show="companyView" class="btn blue  btn-outline  btn-sm " ng-click="editCompany()">
+                                            <i class="fa fa-edit"></i> 编辑 </button>
+                                <button   ng-hide="companyAdd" class="btn blue  btn-outline  btn-sm " ng-click="saveCompany()">
+                                            <i class="fa fa-save"></i> 保存 </button>
                             </div>
                         </div>
                         <div class="portlet-body form">
@@ -47,12 +57,11 @@
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label class="control-label col-md-3">企业编号</label>
-												<div class="col-md-9 input-icon right">
+												<label class="control-label col-md-4">企业编号：</label>
+												<div class="col-md-8 input-icon right">
 													<input  ng-hide="companyAdd"  type="text" ng-model="company.comNum"
-														class="form-control" placeholder=""> <span
-														class="help-block"></span>
-													<span ng-show="companyView">{{company.comNum}}</span>
+														class="form-control" placeholder="">
+													<p class="form-control-static" ng-show="companyView">{{company.comNum}}</p>
 												</div>
 											</div>
 										</div>
@@ -60,12 +69,11 @@
 										<!--/span-->
 										<div class="col-md-6">
 											<div class="form-group">
-												<label class="control-label col-md-3">企业名称</label>
-												<div class="col-md-9">
+												<label class="control-label col-md-4">企业名称：</label>
+												<div class="col-md-8">
 													<input  ng-hide="companyAdd"  type="text" ng-model="company.comName"
-														class="form-control" placeholder=""> <span
-														class="help-block"></span>
-													<span ng-show="companyView">{{company.comName}}</span>
+														class="form-control" placeholder="">
+													<p class="form-control-static"  ng-show="companyView">{{company.comName}}</p>
 												</div>
 											</div>
 										</div>
@@ -75,24 +83,22 @@
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label class="control-label col-md-3">企业类型</label>
-												<div class="col-md-9">
+												<label class="control-label col-md-4">企业类型：</label>
+												<div class="col-md-8">
 													<input ng-hide="companyAdd" type="text" ng-model="company.comType"
-														class="form-control" placeholder=""> <span
-														class="help-block"></span>
-													<span ng-show="companyView">{{company.comType}}</span>
+														class="form-control" placeholder=""> 
+													<p class="form-control-static"  ng-show="companyView">{{company.comType}}</p>
 												</div>
 											</div>
 										</div>
 										<!--/span-->
 										<div class="col-md-6">
 											<div class="form-group">
-												<label class="control-label col-md-3">企业简称</label>
-												<div class="col-md-9">
+												<label class="control-label col-md-4">企业简称：</label>
+												<div class="col-md-8">
 													<input ng-hide="companyAdd" type="text" ng-model="company.abbreviation"
-														class="form-control" placeholder=""> <span
-														class="help-block"></span>
-													<span ng-show="companyView">{{company.abbreviation}}</span>
+														class="form-control" placeholder=""> 
+													<p class="form-control-static"  ng-show="companyView">{{company.abbreviation}}</p>
 												</div>
 											</div>
 										</div>
@@ -102,23 +108,21 @@
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label class="control-label col-md-3">经营性质</label>
-												<div class="col-md-9">
+												<label class="control-label col-md-4">经营性质：</label>
+												<div class="col-md-8">
 													<input ng-hide="companyAdd" type="text" ng-model="company.businessNature"
-														class="form-control" placeholder=""> <span
-														class="help-block"></span>
-													<span ng-show="companyView">{{company.businessNature}}</span>
+														class="form-control" placeholder="">
+													<p class="form-control-static"  ng-show="companyView">{{company.businessNature}}</p>
 												</div>
 											</div>
 										</div>
 										<div class="col-md-6">
 											<div class="form-group">
-												<label class="control-label col-md-3">企业性质</label>
-												<div class="col-md-9">
+												<label class="control-label col-md-4">企业性质：</label>
+												<div class="col-md-8">
 													<input ng-hide="companyAdd" type="text" ng-model="company.comNature"
-														class="form-control" placeholder=""> <span
-														class="help-block"></span>
-													<span ng-show="companyView">{{company.comNature}}</span>
+														class="form-control" placeholder=""> 
+													<p class="form-control-static"  ng-show="companyView">{{company.comNature}}</p>
 												</div>
 											</div>
 										</div>
@@ -127,23 +131,21 @@
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label class="control-label col-md-3">经营类型</label>
-												<div class="col-md-9">
+												<label class="control-label col-md-4">经营类型：</label>
+												<div class="col-md-8">
 													<input ng-hide="companyAdd" type="text" ng-model="company.businessType"
-														class="form-control" placeholder=""> <span
-														class="help-block"></span>
-													<span ng-show="companyView">{{company.businessType}}</span>
+														class="form-control" placeholder=""> 
+													<p class="form-control-static"  ng-show="companyView">{{company.businessType}}</p>
 												</div>
 											</div>
 										</div>
 										<div class="col-md-6">
 											<div class="form-group">
-												<label class="control-label col-md-3">注册资金</label>
-												<div class="col-md-9">
+												<label class="control-label col-md-4">注册资金：</label>
+												<div class="col-md-8">
 													<input ng-hide="companyAdd" type="text" ng-model="company.registeredCapital"
-														class="form-control" placeholder=""> <span
-														class="help-block"></span>
-													<span ng-show="companyView">{{company.registeredCapital}}</span>
+														class="form-control" placeholder=""> 
+													<p class="form-control-static"  ng-show="companyView">{{company.registeredCapital}}</p>
 												</div>
 											</div>
 										</div>
@@ -152,23 +154,21 @@
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label class="control-label col-md-3">企业法人姓名</label>
-												<div class="col-md-9">
+												<label class="control-label col-md-4">企业法人姓名：</label>
+												<div class="col-md-8">
 													<input ng-hide="companyAdd" type="text" ng-model="company.legalPerson"
-														class="form-control" placeholder=""> <span
-														class="help-block"></span>
-													<span ng-show="companyView">{{company.legalPerson}}</span>
+														class="form-control" placeholder="">
+													<p class="form-control-static"  ng-show="companyView">{{company.legalPerson}}</p>
 												</div>
 											</div>
 										</div>
 										<div class="col-md-6">
 											<div class="form-group">
-												<label class="control-label col-md-3">注册地址</label>
-												<div class="col-md-9">
+												<label class="control-label col-md-4">注册地址：</label>
+												<div class="col-md-8">
 													<input ng-hide="companyAdd" type="text" ng-model="company.address"
-														class="form-control" placeholder=""> <span
-														class="help-block"></span>
-													<span ng-show="companyView">{{company.address}}</span>
+														class="form-control" placeholder=""> 
+													<p class="form-control-static"  ng-show="companyView">{{company.address}}</p>
 												</div>
 											</div>
 										</div>
@@ -177,23 +177,21 @@
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label class="control-label col-md-3">纳税人识别号</label>
-												<div class="col-md-9">
+												<label class="control-label col-md-4">纳税人识别号：</label>
+												<div class="col-md-8">
 													<input ng-hide="companyAdd" type="text" ng-model="company.taxpayeNumber"
-														class="form-control" placeholder=""> <span
-														class="help-block"></span>
-													<span ng-show="companyView">{{company.taxpayeNumber}}</span>
+														class="form-control" placeholder=""> 
+													<p class="form-control-static"  ng-show="companyView">{{company.taxpayeNumber}}</p>
 												</div>
 											</div>
 										</div>
 										<div class="col-md-6">
 											<div class="form-group">
-												<label class="control-label col-md-3">联系电话</label>
-												<div class="col-md-9">
+												<label class="control-label col-md-4">联系电话：</label>
+												<div class="col-md-8">
 													<input ng-hide="companyAdd" type="text" ng-model="company.tel"
-														class="form-control" placeholder=""> <span
-														class="help-block"></span>
-													<span ng-show="companyView">{{company.tel}}</span>
+														class="form-control" placeholder=""> 
+													<p class="form-control-static"  ng-show="companyView">{{company.tel}}</p>
 												</div>
 											</div>
 										</div>
@@ -202,23 +200,21 @@
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
-												<label class="control-label col-md-3">维护人员</label>
-												<div class="col-md-9">
+												<label class="control-label col-md-4">维护人员：</label>
+												<div class="col-md-8">
 													<input ng-hide="companyAdd" type="text" ng-model="company.contact"
-														class="form-control" placeholder=""> <span
-														class="help-block"></span>
-													<span ng-show="companyView">{{company.contact}}</span>
+														class="form-control" placeholder="">
+													<p class="form-control-static"  ng-show="companyView">{{company.contact}}</p>
 												</div>
 											</div>
 										</div>
 										<div class="col-md-6">
 											<div class="form-group">
-												<label class="control-label col-md-3">备注</label>
-												<div class="col-md-9">
+												<label class="control-label col-md-4">备注：</label>
+												<div class="col-md-8">
 													<input ng-hide="companyAdd" type="text" ng-model="company.remark"
-														class="form-control" placeholder=""> <span
-														class="help-block"></span>
-													<span ng-show="companyView">{{company.remark}}</span>
+														class="form-control" placeholder=""> 
+													<p class="form-control-static"  ng-show="companyView" class="control-label">{{company.remark}}</p>
 												</div>
 											</div>
 										</div>
@@ -227,9 +223,9 @@
 							</form>
          				</div>
 
-				</div>
+			<!-- 	</div>
 				
-				<div class="portlet box blue ">
+				<div class="portlet light"> -->
                         <div class="portlet-title">
                             <div class="caption">资质信息</div>
                             <div class="actions">
@@ -237,10 +233,10 @@
                                 <a href="#portlet-config" data-toggle="modal" class="config" data-original-title="" title=""> </a>
                                 <a href="" class="reload" data-original-title="" title=""> </a>
                                 <a href="" class="remove" data-original-title="" title=""> </a> -->
-                                <a   ng-show="companyQualificationView" class="btn blue btn-default  btn-sm " ng-click="editCompanyQualification()">
-                                            <i class="fa fa-edit"></i> 编辑 </a>
-                                <a   ng-hide="companyQualificationAdd" class="btn blue btn-default  btn-sm " ng-click="saveCompanyQualification()">
-                                            <i class="fa fa-save"></i> 保存 </a>
+                                <button   ng-show="companyQualificationView" class="btn blue btn-outline  btn-sm " ng-click="editCompanyQualification()">
+                                            <i class="fa fa-edit"></i> 编辑 </button>
+                                <button   ng-hide="companyQualificationAdd" class="btn blue btn-outline  btn-sm " ng-click="saveCompanyQualification()">
+                                            <i class="fa fa-save"></i> 保存 </button>
                             </div>
                         </div>
                         <div class="portlet-body form">
@@ -253,7 +249,7 @@
 													<input  ng-hide="companyQualificationAdd" type="text" ng-model="companyQualification.qualificationName"
 														class="form-control" placeholder="资质信息"> <span
 														class="help-block"></span>
-														<span   ng-show="companyQualificationView"  class="c_edit" ></span>
+														<label   ng-show="companyQualificationView"  class="c_edit" >{{companyQualification.qualificationName}}</label>
 												</div>
 											</div>
 										</div>
@@ -265,7 +261,7 @@
 													<input  ng-hide="companyQualificationAdd" type="text" ng-model="companyQualification.qualificationNum"
 														class="form-control" placeholder="资质号码"> <span
 														class="help-block"></span>
-														<span   ng-show="companyQualificationView"  class="c_edit" ></span>
+														<label   ng-show="companyQualificationView"  class="c_edit" >{{companyQualification.qualificationNum}}</label>
 												</div>
 											</div>
 										</div>
@@ -284,7 +280,7 @@
 														</span>
 														<span class="help-block"></span>
 													</div>
-													<span   ng-show="companyQualificationView" class="c_edit" ></span>
+													<label   ng-show="companyQualificationView" class="c_edit" >{{companyQualification.validityDate}}</label>
 												</div>
 											</div>
 										</div>
@@ -302,7 +298,7 @@
 			                                                      <a href="javascript:;" class="btn red btn-sm fileinput-exists " data-dismiss="fileinput"> 移除 </a>
 			                                                  </div>
 			                                          </div>
-			                                          <div   ng-show="companyQualificationView" class="c_edit" >施工中。。</div>
+			                                          <div   ng-show="companyQualificationView" class="c_edit" >施工中</div>
 												</div>
 											</div>
 										</div>
@@ -318,7 +314,7 @@
                                      				</a>
 												</div> -->
 												<div class="col-md-12">
-													 <a href="javascript:;" data-repeater-delete class="btn red btn-sm">
+													 <a href="javascript:;" data-repeater-delete class="btn red btn-sm" ng-click="deleteRepeat()">
                                             			<i class="fa fa-close"></i> 
                                      				</a>
 												</div>
@@ -328,16 +324,16 @@
 									<!-- /row -->
 								</div>
 								<div class="form-actions right">
-									<a href="javascript:;" data-repeater-create class="btn blue btn-outline" ng-click="addRepeat()" >
+									<a href="javascript:;" data-repeater-create class="btn blue btn-sm" ng-click="addRepeat()" >
                                             <i class="fa fa-plus"></i> 增加
                                      </a>
                                 </div>
 							</form>
          				</div>
 
-				</div>
+				<!-- </div>
 				
-				<div class="portlet box blue ">
+				<div class="portlet light"> -->
                         <div class="portlet-title">
                             <div class="caption">联系人</div>
                             <div class="actions">
@@ -347,63 +343,47 @@
                                 <a href="" class="remove" data-original-title="" title=""> </a> -->
                             </div>
                         </div>
-                        <div class="portlet-body form">
-                            <form   class="form-horizontal" >
-								<div class="form-body"  >
-								  <div  class="row">
-										<div class="col-md-4">
-											<div class="portlet-body">
-                                            		<!-- <i class="glyphicon glyphicon-remove-circle" aria-hidden="true"></i> -->
-                                            	<a href="javascript:;" class="btn btn-circle btn-xs grey-salsa" style="position: absolute;top: -12px;right: 5px;z-index: 100"><i class="fa fa-close"> </i>
-                                                                    </a>
-                                               <!--  <div class="portlet-body"> -->
-                                                	<div class="mt-element-list">
-				                                        <div class="mt-list-container list-news ext-1" style="border-top: 1px solid #e7ecf1;">
-				                                            <ul>
-				                                                <li class="mt-list-item">
-				                                                    <div class="list-thumb">
-				                                                        <a href="javascript:;">
-				                                                            <img alt="" src="../assets/global/img/portfolio/600x600/12.jpg">
-				                                                        </a>
-				                                                    </div>
-				                                                    <h5 class="list-item-content uppercase">张晓军&nbsp;销售总监</h5>
-				                                                    <div class="list-item-content">
-				                                                        <h5 class="uppercase">
-				                                                            13855644983
-				                                                        </h5>
-				                                                        <h5>zhangxj@scmyun.com</h5>
-				                                                    </div>
-				                                                </li>
-				                                            </ul>
-				                                        </div>
-				                                    </div>
-                                                
-												<!-- </div> -->
-                                            </div>
-										</div>
-										<div class="col-md-4">
-                                            <div class="portlet-body" >
-                                            		<div class="mt-element-list" >
-				                                 		<div class="mt-list-container list-news ext-1" style="border: 1px solid #94A0B2;height: 115px;border-style: dashed;">
-				                                            <ul style="text-align: center;">
-				                                                <li class="mt-list-item" style="line-height: 84px;">
-				                                                    <i class="fa fa-plus"></i>
-				                                                </li>
-				                                            </ul>
-				                                        </div>
-				                                  </div>
-				                            </div>
-										</div>
-										<!--/span-->
-									</div>
-									<!--/row-->
-								</div>
-							</form>
-         				</div>
-
-				</div>
+                          <div class="portlet-body form">
+			                                    <div class="table-scrollable">
+			                                        <table class="table table-bordered table-hover">
+			                                            <thead>
+			                                                <tr>
+			                                                    <th>姓名</th>
+			                                                    <th>职位</th>
+			                                                    <th>部门/公司</th>
+			                                                    <th>电话</th>
+			                                                    <th>微信</th>
+			                                                    <th>邮箱</th>
+			                                                    <th>备注</th>
+			                                                </tr>
+			                                            </thead>
+			                                           <tbody ng-show="noContactData" ng-if="companyContact.length==0">
+			                                             	<tr>
+			                                                    <td colspan="7" align="center" >暂无数据</td>
+			                                                </tr>
+			                                            </tbody>
+			                                            <tbody ng-repeat="contact in companyContacts">
+			                                                <tr>
+			                                                    <td>{{contact.contactName}}</td>
+			                                                    <td>{{contact.contactTitle}}</td>
+			                                                    <td>{{contact.department}}</td>
+			                                                    <td>{{contact.contactTel}}</td>
+			                                                    <td>{{contact.wechat}}</td>
+			                                                    <td>{{contact.contactEmail}}</td>
+			                                                    <td>{{contact.remark}}</td>
+			                                                </tr>
+			                                            </tbody>
+			                                        </table>
+			                                    </div>
+			                                    <div class="form-actions right">
+												 	<a href="#"  class="btn blue btn-sm"   data-toggle="modal" data-target="#contact" >
+			                                            <i class="fa fa-plus"></i> 增加
+			                                     	</a>
+			                                	</div>
+                             </div>
+				<!-- </div>
 				
-				<div class="portlet box blue ">
+				<div class="portlet light"> -->
                         <div class="portlet-title">
                             <div class="caption">财务信息</div>
                             <div class="actions">
@@ -413,53 +393,34 @@
                                 <a href="" class="remove" data-original-title="" title=""> </a> -->
                             </div>
                         </div>
-                        <div class="portlet-body form">
-                            <form   class="form-horizontal" >
-								<div class="form-body"  >
-								  <div  class="row">
-										<div class="col-md-4">
-											<div class="portlet-body">
-                                            		<!-- <i class="glyphicon glyphicon-remove-circle" aria-hidden="true"></i> -->
-                                            	<a href="javascript:;" class="btn btn-circle btn-xs grey-salsa" style="position: absolute;top: -12px;right: 5px;z-index: 100"><i class="fa fa-close"> </i>
-                                                                    </a>
-                                               <!--  <div class="portlet-body"> -->
-                                                	<div class="mt-element-list">
-				                                        <div class="mt-list-container list-news ext-1" style="border-top: 1px solid #e7ecf1;">
-				                                            <ul>
-				                                                <li class="mt-list-item">
-				                                                    <div class="uppercase"><span class="bold">工商银行</span><span>（上海市黄渡分行）</span></div>
-				                                                    <div class="">
-				                                                        <h5 class="uppercase">户名：朱老大</h5>
-				                                                        <h5>账号：6228480031334798910</h5>
-				                                                    </div>
-				                                                </li>
-				                                            </ul>
-				                                        </div>
-				                                    </div>
-                                                
-												<!-- </div> -->
-                                            </div>
-										</div>
-										<div class="col-md-4">
-                                            <div class="portlet-body" >
-                                            		<div class="mt-element-list" >
-				                                 		<div class="mt-list-container list-news ext-1" style="border: 1px solid #94A0B2;height: 115px;border-style: dashed;">
-				                                            <ul style="text-align: center;">
-				                                                <li class="mt-list-item" style="line-height: 84px;">
-				                                                    <i class="fa fa-plus"></i>
-				                                                </li>
-				                                            </ul>
-				                                        </div>
-				                                  </div>
-				                            </div>
-										</div>
-										<!--/span-->
-									</div>
-									<!--/row-->
-								</div>
-							</form>
-         				</div>
-
+                        
+                          <div class="portlet-body form">
+                                    <div class="table-scrollable">
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>银行</th>
+                                                    <th>户名</th>
+                                                    <th>账号</th>
+                                                    <th>备注</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody ng-repeat="finance in companyFinances">
+                                                <tr>
+                                                    <td>{{finance.openingBank}}</td>
+                                                    <td>{{finance.accountName}}</td>
+                                                    <td>{{finance.accountNumber}}</td>
+                                                    <td>{{finance.remark}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="form-actions right">
+									 	<a   href="#" class="btn blue btn-sm" data-toggle="modal" data-target="#finance" >
+                                            <i class="fa fa-plus"></i> 增加
+                                     	</a>
+                                	</div>
+                                </div>
 				</div>
 				
         </div>
@@ -467,6 +428,188 @@
     </div>
 </div>
 
+
+
+ <div class="modal fade" id="contact" tabindex="-1" role="contact" aria-hidden="true" data-backdrop="static">
+     <div class="modal-dialog" style="width: 400px;">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                 <h4 class="modal-title" >新建联系人</h4>
+             </div>
+             <div class="modal-body">
+               <div class="form-body" >
+               <form id="wareForm">
+                <!--  <h3 class="form-section">仓库信息</h3> -->
+                 <div class="row">
+                     <div class="col-md-12">
+                         <div class="form-group">
+                             <label class="control-label col-md-3">姓名：</label>
+                             <div class="col-md-9 input-icon right">
+                                 <input type="text" ng-model="companyContact.contactName" class="form-control" placeholder="">
+                                 <span class="help-block"></span>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <!--/row-->
+                 <div class="row">
+                     <div class="col-md-12">
+                         <div class="form-group">
+                             <label class="control-label col-md-3">职位：</label>
+                             <div class="col-md-9 input-icon right">
+                                 <input type="text" ng-model="companyContact.contactTitle" class="form-control" placeholder="">
+                                 <span class="help-block"></span>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="row">
+                     <div class="col-md-12">
+                         <div class="form-group">
+                             <label class="control-label col-md-3">部门/公司：</label>
+                             <div class="col-md-9 input-icon right">
+                                 <input type="text" ng-model="companyContact.department" class="form-control" placeholder="">
+                                 <span class="help-block"></span>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <!--/row-->
+                 <div class="row">
+                     <div class="col-md-12">
+                         <div class="form-group">
+                             <label class="control-label col-md-3">电话：</label>
+                             <div class="col-md-9 input-icon right">
+                                 <input type="text" ng-model="companyContact.contactTel" class="form-control" placeholder="">
+                                 <span class="help-block"></span>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <!--/row-->
+                 <div class="row">
+                     <div class="col-md-12">
+                         <div class="form-group">
+                             <label class="control-label col-md-3">微信：</label>
+                             <div class="col-md-9 input-icon right">
+                                 <input type="text" ng-model="companyContact.wechat" class="form-control" placeholder="">
+                                 <span class="help-block"></span>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <!--/row-->
+                 <div class="row">
+                     <div class="col-md-12">
+                         <div class="form-group">
+                             <label class="control-label col-md-3">邮箱：</label>
+                             <div class="col-md-9 input-icon right">
+                                 <input type="text" ng-model="companyContact.contactEmail" class="form-control" placeholder="">
+                                 <span class="help-block"></span>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <!--/row-->
+                 <div class="row">
+                     <div class="col-md-12">
+                         <div class="form-group">
+                             <label class="control-label col-md-3">备注：</label>
+                             <div class="col-md-9 input-icon right">
+                                 <input type="text" ng-model="companyContact.remark" class="form-control" placeholder="">
+                                 <span class="help-block"></span>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <!--/row-->
+                 
+                 </form>
+             </div>
+             </div>
+             <div class="modal-footer">
+                 <button type="button" class="btn btn-outline sbold red" data-dismiss="modal">取消</button>
+                 <button type="button" class="btn btn-outline sbold blue" ng-click="saveCompanyContact()">保存</button>
+             </div>
+             
+         </div>
+         <!-- /.modal-content -->
+     </div>
+     <!-- /.modal-dialog -->
+ </div>
+
+ <div class="modal fade modal-overflow in" id="finance" tabindex="-1" role="finance" aria-hidden="true" data-backdrop="static">
+     <div class="modal-dialog" style="width: 400px;">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                 <h4 class="modal-title" >新建账号</h4>
+             </div>
+             <div class="modal-body">
+               <div class="form-body" >
+               <form id="wareForm">
+                <!--  <h3 class="form-section">仓库信息</h3> -->
+                 <div class="row">
+                     <div class="col-md-12">
+                         <div class="form-group">
+                             <label class="control-label col-md-3">银行</label>
+                             <div class="col-md-9 input-icon right">
+                                 <input type="text" ng-model="companyFinance.openingBank" class="form-control" placeholder="">
+                                 <span class="help-block"></span>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <!--/row-->
+                 <div class="row">
+                     <div class="col-md-12">
+                         <div class="form-group">
+                             <label class="control-label col-md-3">户名</label>
+                             <div class="col-md-9 input-icon right">
+                                 <input type="text" ng-model="companyFinance.accountName" class="form-control" placeholder="">
+                                 <span class="help-block"></span>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <!--/row-->
+                 <div class="row">
+                     <div class="col-md-12">
+                         <div class="form-group">
+                             <label class="control-label col-md-3">账号</label>
+                             <div class="col-md-9 input-icon right">
+                                 <input type="text" ng-model="companyFinance.accountNumber" class="form-control" placeholder="">
+                                 <span class="help-block"></span>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="row">
+                     <div class="col-md-12">
+                         <div class="form-group">
+                             <label class="control-label col-md-3">备注</label>
+                             <div class="col-md-9 input-icon right">
+                                 <input type="text" ng-model="companyFinance.remark" class="form-control" placeholder="">
+                                 <span class="help-block"></span>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <!--/row-->
+                 </form>
+             </div>
+             </div>
+             <div class="modal-footer">
+                 <button type="button" class="btn btn-outline sbold red" data-dismiss="modal">取消</button>
+                 <button type="button" class="btn btn-outline sbold blue" ng-click="saveCompanyFinance()">保存</button>
+             </div>
+             
+         </div>
+         <!-- /.modal-content -->
+     </div>
+     <!-- /.modal-dialog -->
+ </div>
 
 
 

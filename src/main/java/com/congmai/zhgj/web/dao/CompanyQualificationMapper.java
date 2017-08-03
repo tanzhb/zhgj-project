@@ -32,4 +32,6 @@ public interface CompanyQualificationMapper extends GenericDao<CompanyQualificat
     
     int insertSelectiveBatch(List<CompanyQualification> list);
     int updateSelectiveBatch(List<CompanyQualification> list);
+    
+    List<CompanyQualification>  selectListByCondition(CompanyQualification companyQualification);
 }

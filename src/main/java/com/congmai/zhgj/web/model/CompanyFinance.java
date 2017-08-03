@@ -12,6 +12,8 @@ public class CompanyFinance {
     private String accountName;
 
     private String accountNumber;
+    
+    private String remark;
 
     private String delFlg;
 
@@ -102,4 +104,12 @@ public class CompanyFinance {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 }

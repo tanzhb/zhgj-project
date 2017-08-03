@@ -1,7 +1,7 @@
 package com.congmai.zhgj.web.controller;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -12,7 +12,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.CompanyContact;
+import com.congmai.zhgj.web.model.CompanyFinance;
 import com.congmai.zhgj.web.model.CompanyQualification;
+import com.congmai.zhgj.web.service.CompanyContactService;
+import com.congmai.zhgj.web.service.CompanyFinanceService;
 import com.congmai.zhgj.web.service.CompanyQualificationService;
 import com.congmai.zhgj.web.service.CompanyService;
 
@@ -40,6 +43,10 @@ public class CompanyController {
 	private CompanyService companyService;
 	@Autowired
 	private CompanyQualificationService companyQualificationService;
+	@Autowired
+	private CompanyContactService companyContactService;
+	@Autowired
+	private CompanyFinanceService companyFinanceService;
 	
 	  /**
      * @Description (企业信息首页)
@@ -68,16 +75,33 @@ public class CompanyController {
     }
     
     
+    /**
+     * @Description (获取企业全部信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping("getCompanyInfo")
+    @ResponseBody
+    public Map<String,Object> getCompanyInfo(HttpServletRequest request,String comId) {
+    	Map<String, Object> map = new HashMap<String, Object>();
+    	map.put("company", companyService.selectById(comId));
+    	map.put("companyFinances", companyFinanceService.selectListByComId(comId));
+     	map.put("companyQualifications", companyQualificationService.selectListByComId(comId));
+    	map.put("companyContacts", companyContactService.selectListByComId(comId));
+    	return map;
+    }
+    
+    
 	  /**
      * @Description (企业信息首页)
      * @param request
      * @return
      */
     @RequestMapping("companyAdd")
-    public String companyAdd(HttpServletRequest request,Company company,Map<String,Object> map) {
-    	if(company !=null){
+    public String companyAdd(HttpServletRequest request,String comId,Map<String,Object> map) {
+    	/*if(company !=null){
     		map.put("company", company);
-    	}
+    	}*/
         return "company/companyAdd";
     }
 
@@ -86,11 +110,14 @@ public class CompanyController {
      * @param request
      * @return
      */
-    @RequestMapping("viewCompany")
-    @ResponseBody
-    public Company viewCompany(Map<String, Object> map,String comId) {
+    @RequestMapping("companyView")
+    public String companyView(HttpServletRequest request,String comId,Map<String,Object> map) {
     	//map.put("company", companyService.selectOne(serialNum));
-    	return companyService.selectOne(comId);
+    	map.put("company", companyService.selectById(comId));
+    	map.put("companyFinances", companyFinanceService.selectListByComId(comId));
+     	map.put("companyQualifications", companyQualificationService.selectListByComId(comId));
+    	map.put("companyContacts", companyContactService.selectListByComId(comId));
+    	return "company/companyView";
     }
     
     /**
@@ -124,10 +151,34 @@ public class CompanyController {
      */
     @RequestMapping("deleteCompany")
     @ResponseBody
-    public String deleteCompany(Map<String, Object> map,String id) {
+    public String deleteCompany(Map<String, Object> map,String comId) {
     	String flag ="0"; //默认失败
     	try{
-    		companyService.delete(id);
+    		companyService.delete(comId);
+    		flag = "1";
+    	}catch(Exception e){
+    		System.out.println(e.getMessage());
+    	}
+    	return flag;
+    }
+    
+    /**
+     * @Description (删除)
+     * @param request
+     * @return
+     */
+    @RequestMapping("deleteCompanyBatch")
+    @ResponseBody
+    public String deleteCompanyBatch(Map<String, Object> map,String comIds) {
+    	String flag ="0"; //默认失败
+    	String[] comIdArray = null;
+    	List<String> comIdList = null;
+    	if(!StringUtils.isEmpty(comIds)){
+    		comIdArray = comIds.split(",");
+    		comIdList = Arrays.asList(comIdArray);
+    	}
+    	try{
+    		companyService.deleteBatch(comIdList);
     		flag = "1";
     	}catch(Exception e){
     		System.out.println(e.getMessage());
@@ -160,6 +211,61 @@ public class CompanyController {
     	}
     	return companyQualifications;
     }
+    
+    /**
+     * @Description (保存联系人)
+     * @param request
+     * @return
+     */
+    @RequestMapping("saveCompanyContact")
+    @ResponseBody
+    public List<CompanyContact> saveCompanyContact(Map<String, Object> map,CompanyContact companyContact) {
+    	String flag ="0"; //默认失败
+    	List<CompanyContact> companyContacts = null;
+    	try{
+    		if(StringUtils.isEmpty(companyContact.getSerialNum())){
+    			companyContact.setSerialNum(UUID.randomUUID().toString().replace("-",""));
+    			companyContactService.insert(companyContact);
+    		}else{
+    			companyContactService.update(companyContact);
+    		}
+    		
+    		companyContacts = companyContactService.selectListByComId(companyContact.getComId());
+    		
+    		flag = "1";
+    	}catch(Exception e){
+    		System.out.println(e.getMessage());
+    	}
+    	return companyContacts;
+    }
+
+    /**
+     * @Description (保存财务信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping("saveCompanyFinance")
+    @ResponseBody
+    public List<CompanyFinance> saveCompanyFinance(Map<String, Object> map,CompanyFinance companyFinance) {
+    	String flag ="0"; //默认失败
+    	List<CompanyFinance> companyFinances = null;
+    	try{
+    		if(StringUtils.isEmpty(companyFinance.getSerialNum())){
+    			companyFinance.setSerialNum(UUID.randomUUID().toString().replace("-",""));
+    			companyFinanceService.insert(companyFinance);
+    		}else{
+    			companyFinanceService.update(companyFinance);
+    		}
+    		
+    		companyFinances = companyFinanceService.selectListByComId(companyFinance.getComId());
+    		
+    		flag = "1";
+    	}catch(Exception e){
+    		System.out.println(e.getMessage());
+    	}
+    	return companyFinances;
+    }
+    
     
 
 	

@@ -2,19 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.congmai.zhgj.web.dao.CompanyFinanceMapper" >
   <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.CompanyFinance" >
-    <id column="serialNum" property="serialNum" jdbcType="CHAR" />
-    <result column="comId" property="comId" jdbcType="CHAR" />
-    <result column="openingBank" property="openingBank" jdbcType="CHAR" />
-    <result column="accountName" property="accountName" jdbcType="CHAR" />
-    <result column="accountNumber" property="accountNumber" jdbcType="CHAR" />
-    <result column="delFlg" property="delFlg" jdbcType="CHAR" />
-    <result column="creator" property="creator" jdbcType="CHAR" />
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="comId" property="comId" jdbcType="VARCHAR" />
+    <result column="openingBank" property="openingBank" jdbcType="VARCHAR" />
+    <result column="accountName" property="accountName" jdbcType="VARCHAR" />
+    <result column="accountNumber" property="accountNumber" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="updater" property="updater" jdbcType="CHAR" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    serialNum, comId, openingBank, accountName, accountNumber, delFlg, creator, createTime, 
+    serialNum, comId, openingBank, accountName, accountNumber,remark, delFlg, creator, createTime, 
     updater, updateTime
   </sql>
  
@@ -22,23 +23,23 @@
     select 
     <include refid="Base_Column_List" />
     from companyFinance
-    where serialNum = #{serialNum,jdbcType=CHAR}
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
   </select>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from companyFinance
-    where serialNum = #{serialNum,jdbcType=CHAR}
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
   </delete>
   
 
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.CompanyFinance" >
     insert into companyFinance (serialNum, comId, openingBank, 
-      accountName, accountNumber, delFlg, 
+      accountName, accountNumber,remark, delFlg, 
       creator, createTime, updater, 
       updateTime)
-    values (#{serialNum,jdbcType=CHAR}, #{comId,jdbcType=CHAR}, #{openingBank,jdbcType=CHAR}, 
-      #{accountName,jdbcType=CHAR}, #{accountNumber,jdbcType=CHAR}, #{delFlg,jdbcType=CHAR}, 
-      #{creator,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=CHAR}, 
+    values (#{serialNum,jdbcType=VARCHAR}, #{comId,jdbcType=VARCHAR}, #{openingBank,jdbcType=VARCHAR}, 
+      #{accountName,jdbcType=VARCHAR}, #{accountNumber,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   
@@ -52,37 +53,50 @@
     select count(*) from companyFinance
   </select>
   
+    <select id="selectListByCondition" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.CompanyFinance" >
+    select 
+    <include refid="Base_Column_List" />
+    from companyFinance
+    	where 1=1
+     <if test="comId != null" >
+        and comId = #{comId,jdbcType=VARCHAR}
+      </if>
+  </select>
+  
   <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.CompanyFinance" >
     update companyFinance
     <set >
       <if test="comId != null" >
-        comId = #{comId,jdbcType=CHAR},
+        comId = #{comId,jdbcType=VARCHAR},
       </if>
       <if test="openingBank != null" >
-        openingBank = #{openingBank,jdbcType=CHAR},
+        openingBank = #{openingBank,jdbcType=VARCHAR},
       </if>
       <if test="accountName != null" >
-        accountName = #{accountName,jdbcType=CHAR},
+        accountName = #{accountName,jdbcType=VARCHAR},
       </if>
       <if test="accountNumber != null" >
-        accountNumber = #{accountNumber,jdbcType=CHAR},
+        accountNumber = #{accountNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNumber != null" >
+        remark = #{remark,jdbcType=VARCHAR},
       </if>
       <if test="delFlg != null" >
-        delFlg = #{delFlg,jdbcType=CHAR},
+        delFlg = #{delFlg,jdbcType=VARCHAR},
       </if>
       <if test="creator != null" >
-        creator = #{creator,jdbcType=CHAR},
+        creator = #{creator,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         createTime = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updater != null" >
-        updater = #{updater,jdbcType=CHAR},
+        updater = #{updater,jdbcType=VARCHAR},
       </if>
       <if test="updateTime != null" >
         updateTime = #{updateTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where serialNum = #{serialNum,jdbcType=CHAR}
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -2,7 +2,7 @@
  * 
  */
 
-angular.module('MetronicApp').controller('CompanyController',['$rootScope','$scope','$state','$http','$window','settings','companyService','$location',function($rootScope,$scope,$state,$http,$window,settings,companyService,$location) {
+angular.module('MetronicApp').controller('CompanyController',['$rootScope','$scope','$state','$http','companyService','$location','$stateParams',function($rootScope,$scope,$state,$http,companyService,$location,$stateParams) {
 	 $scope.$on('$viewContentLoaded', function() {   
 	    	// initialize core components
 		    handle = new pageHandle();
@@ -12,6 +12,23 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    		_index = 0; 
 	    		$scope.companyQualifications =[{}];
 	    		 handle.datePickersInit();
+	    		/* $(document).off('show.bs.modal').off('hidden.bs.modal');*/
+	    		 
+	    		/* $(document).off('click.modal').on('click.modal.data-api', '[data-toggle="modal"]', function ( e ) {
+	    				var $this = $(this),
+	    					href = $this.attr('href'),
+	    					$target = $($this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, ''))), //strip for ie7
+	    					option = $target.data('modal') ? 'toggle' : $.extend({ remote: !/#/.test(href) && href }, $target.data(), $this.data());
+
+	    				e.preventDefault();
+	    				$target
+	    					.modal(option)
+	    					.one('hide', function () {
+	    						$this.focus();
+	    					})
+	    			});*/
+	    		 
+	    		getCompanyInfo($stateParams.comId);
 	 		}else{
 	 			createTable(15,1,true);
 	 		}
@@ -39,12 +56,14 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		        	console.log(data.data);
 	        		$scope.companyView = true;
 	        		$scope.companyAdd = true;
+	        		//$stateParams.comId = company.comId;
+	        		$location.search('comId',company.comId);
 	            },function(data){
 	               //调用承诺接口reject();
 	            });
 	        	
 	        }; 
-	        
+
 	        /**
 	         * 编辑
 	         */
@@ -58,7 +77,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	 	               //调用承诺接口reject();
 	 	            });*/
 	        	$scope.companyView = false;
-        		$scope.companyAdd = false;
+	        	$scope.companyAdd = false;
 	        	
 	        };  
 	        
@@ -109,7 +128,16 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        * 保存企业资质信息
 	        */
 	       $scope.saveCompanyQualification = function(){
-	    	   handle.blockUI();debugger;
+		    	if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
+		    		 handle.showMesssage("warning","您的企业信息还未保存！","提示");
+		    		 return;
+		    	}else{
+		    		for(var i=0;i<$scope.companyQualifications.length;i++){
+		    			$scope.companyQualifications[i].comId = $scope.company.comId;
+		    		}
+		    	}
+
+	    	   	handle.blockUI();
 	    	    console.log($scope.companyQualifications);
 	        	var promise = companyService.saveCompanyQualification($scope.companyQualifications);
 	        	promise.then(function(data){
@@ -159,7 +187,23 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        * 保存联系人信息
 	        */
 	       $scope.saveCompanyContact = function(){
-	    	   
+		    	if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
+		    		 handle.showMesssage("warning","您的企业信息还未保存！","提示");
+		    		 return;
+		    	}else{
+		    		$scope.companyContact.comId = $scope.company.comId;
+		    	}
+	    	    console.log($scope.companyContact);
+	        	var promise = companyService.saveCompanyContact($scope.companyContact);
+	        	promise.then(function(data){
+	        		//$(".modal-backdrop").remove();
+	        		handle.showMesssage("success","保存成功","提示");
+	        		$("#contact").modal("hide");
+	        		$scope.companyContact = {};
+	        		$scope.companyContacts = data.data;
+	            },function(data){
+	               //调用承诺接口reject();
+	            });
 	       }
 	       
 	       
@@ -181,7 +225,23 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        * 保存财务信息
 	        */
 	       $scope.saveCompanyFinance = function(){
-	    	   
+	    		if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
+		    		 handle.showMesssage("warning","您的企业信息还未保存！","提示");
+		    		 return;
+		    	}else{
+		    		$scope.companyFinance.comId = $scope.company.comId;
+		    	}
+	    	   console.log($scope.companyFinance);
+	        	var promise = companyService.saveCompanyFinance($scope.companyFinance);
+	        	promise.then(function(data){
+	        		//$(".modal-backdrop").remove();
+	        		handle.showMesssage("success","保存成功","提示");
+	        		$("#finance").modal("hide");
+	        		$scope.companyFinance = {};
+	        		$scope.companyFinances = data.data;
+	            },function(data){
+	               //调用承诺接口reject();
+	            });
 	       }
 	       
 	       
@@ -199,9 +259,9 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    	   
 	       }
 	       
-	       $scope.$watch("list",function(){  
-	    	      console.log($scope.list); 
-	    	      console.log("-------------------"); 
+	       $scope.$watch("aaa",function(){  
+	    	      console.log($scope.aaa); 
+	    	      console.log("-------33------------"); 
 	    	    
 	    	      console.log($scope.$parent.list);
 	       }); 
@@ -216,9 +276,46 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    	   $scope.companyQualifications[_index] = {}
 	       };
 	       
+	       $scope.deleteRepeat = function(){
+	    	   _index--;
+	    	   $scope.companyQualifications.splice(_index,1);
+	       };
+	       
 	       $scope.repeatDone = function(){
 	    	   handle.datePickersInit();
 	       };
+	       
+	       $scope.showCompanyInfo = function(comId){
+	    	   getCompanyInfo(comId);
+	    	   $('#viewCompany').modal('show'); 
+	       };
+	       
+	       
+	       function getCompanyInfo(comId){
+	    	   if(!handle.isNull(comId)){
+	    			 var promise = companyService.getCompanyInfo(comId);
+	 	        	promise.then(function(data){
+	 	        		$scope.company = data.data.company;
+	 	        		if(!handle.isNull(data.data.companyQualifications)){
+	 	        			$scope.companyQualifications = data.data.companyQualifications;
+	 	        		}
+	 	        		
+	 	        		$scope.companyContacts = data.data.companyContacts;
+	 	        		$scope.companyFinances = data.data.companyFinances;
+	 		        	//$state.go('companyAdd',company,{reload:true});
+	 	        		//$scope.company = company
+	 		        	//console.log(data.data);
+	 	        		//$scope.companyView = true;
+	 	        		//$scope.companyAdd = true;
+	 	            },function(data){
+	 	               //调用承诺接口reject();
+	 	            });
+	    		 }
+	       }
+	/*       
+	       $('#ajax').on('show.bs.modal', function (e) {  
+	    	   // do something...  
+	       }) */
 
 	       
 	       

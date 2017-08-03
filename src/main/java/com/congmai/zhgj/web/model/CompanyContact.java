@@ -26,6 +26,12 @@ public class CompanyContact {
     private String updater;
 
     private Date updateTime;
+    
+    private String wechat;
+
+    private String department;
+    
+    private String remark;
 
     public String getSerialNum() {
         return serialNum;
@@ -122,4 +128,30 @@ public class CompanyContact {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public String getWechat() {
+		return wechat;
+	}
+
+	public void setWechat(String wechat) {
+		this.wechat = wechat;
+	}
+
+	public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+    
+    
 }

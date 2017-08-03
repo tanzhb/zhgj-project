@@ -52,6 +52,14 @@
     where comId = #{comId,jdbcType=VARCHAR}
   </delete>
   
+  <delete id="deleteCompanyBatch"  parameterType="java.util.List" >
+    delete from company
+    where comId in 
+    (<foreach collection="list" item="item" index="index" separator="," >  
+       #{item,jdbcType=VARCHAR}
+    </foreach>)  
+  </delete>
+  
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.Company" >
     insert into company (comId, comNum, comType, 
       abbreviation, comName, registeredCapital, 
