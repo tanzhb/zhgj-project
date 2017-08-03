@@ -2,7 +2,9 @@ package com.congmai.zhgj.web.dao;
 
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface MaterielMapper {
@@ -25,5 +27,7 @@ public interface MaterielMapper {
     int updateByExample(@Param("record") Materiel record, @Param("example") MaterielExample example);
 
     int updateByPrimaryKeySelective(Materiel record);
+    
+    void deleteMateriels(List<String> ids);
 
 }

@@ -159,7 +159,7 @@
       packageheight, packagelength, packagevolume, 
       packageUnitConversion, palletWeight, customsSupervisionConditions, 
       qualityDate, versionNO, isLatestVersion, 
-      status, delFlg, creator, 
+      status, creator, 
       createTime, updater, updateTime
       )
     values (#{serialNum,jdbcType=VARCHAR}, #{materielId,jdbcType=VARCHAR}, #{materielNum,jdbcType=VARCHAR}, 
@@ -175,7 +175,7 @@
       #{packageheight,jdbcType=VARCHAR}, #{packagelength,jdbcType=VARCHAR}, #{packagevolume,jdbcType=VARCHAR}, 
       #{packageUnitConversion,jdbcType=VARCHAR}, #{palletWeight,jdbcType=VARCHAR}, #{customsSupervisionConditions,jdbcType=VARCHAR}, 
       #{qualityDate,jdbcType=VARCHAR}, #{versionNO,jdbcType=VARCHAR}, #{isLatestVersion,jdbcType=VARCHAR}, 
-      #{status,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -601,5 +601,10 @@
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
-  
+  <delete id="deleteMateriels" parameterType="java.util.List">
+    	delete from serialNum where id in
+        <foreach item="idList" collection="list" open="(" close=")" separator=",">
+            #{idList}
+        </foreach>
+    </delete>
 </mapper>

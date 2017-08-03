@@ -21,50 +21,68 @@
              <div class="portlet-title">
                  <div class="caption">
                      <i class="icon-social-dribbble font-blue-sharp"></i>
-                     <span class="caption-subject font-blue-sharp bold uppercase">全部物料</span>
+                     <span ng-click="reloadTable()" class="caption-subject font-blue-sharp bold uppercase">全部物料</span>
                  </div>
              </div>
              <div class="portlet-body">
                  <div id="tree_1" class="tree-demo">
-                     <ul>
-                         <li> Root node 1
-                             <ul>
-                                 <li data-jstree='{ "selected" : true }'>
-                                     <a href="javascript:;"> Initially selected </a>
-                                 </li>
-                                 <li data-jstree='{ "icon" : "fa fa-briefcase icon-state-success " }'> custom icon URL </li>
-                                 <li data-jstree='{ "opened" : true }'> initially open
-                                     <ul>
-                                         <li data-jstree='{ "disabled" : true }'> Disabled Node </li>
-                                         <li data-jstree='{ "type" : "file" }'> Another node </li>
-                                     </ul>
-                                 </li>
-                                 <li data-jstree='{ "icon" : "fa fa-warning icon-state-danger" }'> Custom icon class (bootstrap) </li>
-                             </ul>
-                         </li>
-                         <li data-jstree='{ "type" : "file" }'>
-                             <a href="http://www.jstree.com"> Clickanle link node </a>
-                         </li>
-                     </ul>
                  </div>
              </div>
          </div>
 	</div>
 	<div class="col-md-8">
         <div class="row">
-	        <div class="portlet light bordered">
+	        <div class="portlet box red">
 	            <div class="portlet-title">
-	                <div class="actions">
-	                    <button id="sample_editable_1_new" ui-sref="addMateriel" class="btn sbold green">
-	                                    <i class="fa fa-plus"></i>物料
-	                                </button>
-	                </div>
+				<div class="caption">
+					<i class="fa fa-globe"></i>物料列表
+				</div>
+				<div class="actions">
+					<a href="javascript:;" ui-sref="addMateriel"
+						data-toggle="modal" class="btn btn-default btn-sm btn-circle">
+						<i class="fa fa-plus"></i> 物料
+					</a> <a href="javascript:;" data-target="#delMaterielModal"
+						data-toggle="modal" 
+						class="btn btn-default btn-sm btn-circle"> <i
+						class="fa fa-minus"></i> 删除
+					</a>
+					<div class="btn-group">
+						<a class="btn btn-default btn-outline btn-circle"
+							href="javascript:;" data-toggle="dropdown"> <i
+							class="fa fa-share"></i> <span class="hidden-xs"> 其它 </span> <i
+							class="fa fa-angle-down"></i>
+						</a>
+						<ul class="dropdown-menu pull-right" id="sample_3_tools">
+							<li><a href="javascript:;" data-action="0"
+								class="tool-action"> <i class="icon-printer"></i> Print
+							</a></li>
+							<li><a href="javascript:;" data-action="1"
+								class="tool-action"> <i class="icon-check"></i> Copy
+							</a></li>
+							<li><a href="javascript:;" data-action="2"
+								class="tool-action"> <i class="icon-doc"></i> PDF
+							</a></li>
+							<li><a href="javascript:;" data-action="3"
+								class="tool-action"> <i class="icon-paper-clip"></i> Excel
+							</a></li>
+							<li><a href="javascript:;" data-action="4"
+								class="tool-action"> <i class="icon-cloud-upload"></i> CSV
+							</a></li>
+							<li class="divider"></li>
+							<li><a href="javascript:;" data-action="5"
+								class="tool-action"> <i class="icon-refresh"></i> Reload
+							</a></li>
+							</li>
+						</ul>
+					</div>
+				</div>
 	            </div>
 	            <div class="portlet-body">
 	                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_2">
 	                    <thead>
 	                        <tr>
-	                            <th>流水号</th>
+	                            <th style="text-align: center"><input name="select_all"
+								value="1" id="example-select-all" type="checkbox" /></th>
 	                            <th> 物料编码 </th>
 	                            <th> 物料名称 </th>
 	                            <th> 规格型号 </th>
@@ -77,25 +95,22 @@
 	                            <th> 状态 </th>
 	                        </tr>
 	                    </thead>
+	                    <tfoot>
+	                        <tr>
+	                            <th></th>
+	                            <th> 物料编码 </th>
+	                            <th> 物料名称 </th>
+	                            <th> 规格型号 </th>
+	                            <th> 单位 </th>
+	                            <th> 类别 </th>
+	                            <th> 产地 </th>
+	                            <th> 品牌 </th>
+	                            <th> 供应商 </th>
+	                            <th> 版本 </th>
+	                            <th> 状态 </th>
+	                        </tr>
+	                    </tfoot>
 	                    <tbody>
-	                    	<!-- <tr ng-repeat="list in materielList" ng-init="index=$index" class="odd gradeX">
-	                            <td>
-	                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-	                                    <input type="checkbox" class="checkboxes" value="{{list.serialNum}}" />
-	                                    <span></span>
-	                                </label>
-	                            </td>
-	                            <td> {{list.materielNum}} </td>
-	                            <td> {{list.materielName}} </td>
-	                            <td> {{list.specifications}} </td>
-	                            <td> {{list.unit}} </td>
-	                            <td> {{list.type}} </td>
-	                            <td> {{list.productionPlace}} </td>
-	                            <td> {{list.brand}} </td>
-	                            <td>  </td>
-	                            <td> {{list.versionNO}} </td>
-	                            <td> <span class="label label-sm label-success"> {{list.status}} </span></td>
-	                        </tr> -->
 	                    </tbody>
 	                </table>
 	            </div>
@@ -325,4 +340,26 @@
  </div>
 <!-- END PAGE HEADER-->
 
-<!-- END MAIN CONTENT -->
+<!-- 删除用户modal 开始 -->
+			<div id="delMaterielModal" class="modal fade" tabindex="-1"
+				data-backdrop="static" data-keyboard="false">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true"></button>
+							<h4 class="modal-title">确认</h4>
+						</div>
+						<div class="modal-body">
+							<p>是否删除已选物料?</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" data-dismiss="modal"
+								class="btn dark btn-outline">取消</button>
+							<button type="button" ng-click="del()" class="btn green">确定
+								</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 删除用户modal 结束 -->

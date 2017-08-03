@@ -22,9 +22,13 @@
     <div class="portlet light bordered">
           <div class="portlet-body form">
               <!-- BEGIN FORM-->
-              <form id="form_sample_2" name="materielForm"  class="form-horizontal" >
+              <form id="form_sample_2" name="materielForm"  class="form-horizontal">
                   <div class="form-body">
                       <h3 class="form-section">基本信息</h3>
+                      <div class="alert alert-danger display-hide">
+                          <button class="close" data-close="alert"></button> 表单有些错误，请检查！ </div>
+                      <div class="alert alert-success display-hide">
+                          <button class="close" data-close="alert"></button> 表单验证通过！</div>
                       <div class="row">
                           <div class="col-md-6">
                               <div class="form-group">
@@ -32,7 +36,7 @@
                                   <div class="col-md-9">
                                   <div class="input-icon right">
                                                 <i class="fa"></i>
-                                      <input type="text" name="name" data-required class="form-control"  ng-model="materiel.materielNum"  >
+                                      <input type="text" name="materielNum" class="form-control"  ng-model="materiel.materielNum"  >
                                   </div>
                                   </div>
                                   
@@ -60,7 +64,7 @@
                                   <div class="col-md-9">
                                       <div class="input-icon right">
                                                 <i class="fa"></i>
-                                      <input type="text" name="email" ng-model="materiel.type" class="form-control" >
+                                      <input type="text" name="type" data-required ng-model="materiel.type" class="form-control" >
                                       </div>
                                   </div>
 
@@ -71,7 +75,10 @@
                               <div class="form-group">
                                   <label class="control-label col-md-3">物料名称<span class="required" aria-required="true"> * </span></label>
                                   <div class="col-md-9">
-                                      <input type="text"  name="url"  class="form-control" ng-model="materiel.materielName" >
+                                  <div class="input-icon right">
+                                                <i class="fa"></i>
+                                      <input type="text"  name="materielName" data-required class="form-control" ng-model="materiel.materielName" >
+                                  </div>
                                   </div>
 
                               </div>
@@ -84,7 +91,10 @@
                               <div class="form-group">
                                   <label class="control-label col-md-3">物料类别<span class="required" aria-required="true"> * </span></label>
                                   <div class="col-md-9">
-                                      <input type="text" ng-model="materiel.category" class="form-control" >
+                                  <div class="input-icon right">
+                                                <i class="fa"></i>
+                                      <input type="text" name="category" data-required ng-model="materiel.category" class="form-control" >
+                                  </div>
                                   </div>
 
                               </div>
@@ -107,7 +117,10 @@
                               <div class="form-group">
                                   <label class="control-label col-md-3">规格型号<span class="required" aria-required="true"> * </span></label>
                                   <div class="col-md-9">
-                                      <input type="text" ng-model="materiel.specifications" class="form-control" >
+                                  <div class="input-icon right">
+                                                <i class="fa"></i>
+                                      <input type="text" name="specifications" data-required ng-model="materiel.specifications" class="form-control" >
+                                  </div>
                                   </div>
 
                               </div>
@@ -130,9 +143,11 @@
                               <div class="form-group">
                                   <label class="control-label col-md-3">库存单位<span class="required" aria-required="true"> * </span></label>
                                   <div class="col-md-9">
-                                      <input type="text" ng-model="materiel.stockUnit" class="form-control" >
+                                  <div class="input-icon right">
+                                                <i class="fa"></i>
+                                      <input type="text" name="stockUnit" data-required ng-model="materiel.stockUnit" class="form-control" >
                                   </div>
-
+								</div>
                               </div>
                           </div>
                           <!--/span-->
@@ -359,7 +374,7 @@
                           <div class="col-md-6">
                               <div class="row">
                                   <div class="col-md-offset-3 col-md-9">
-                                      <button ng-click="save(materielForm.$valid)" class="btn green">保存</button>
+                                      <button type="submit" ng-click="save(materielForm.$valid)" class="btn green">保存</button>
                                       <button ui-sref="materiel" type="button" class="btn default">取消</button>
                                   </div>
                               </div>

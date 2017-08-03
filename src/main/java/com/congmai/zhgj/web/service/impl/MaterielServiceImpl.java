@@ -1,11 +1,13 @@
 package com.congmai.zhgj.web.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.dao.MaterielMapper;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
@@ -66,6 +68,19 @@ public class MaterielServiceImpl implements MaterielService {
 	@Override
 	public List<Materiel> selectList(MaterielExample m) {
 		return MaterielMapper.selectByExample(m);
+	}
+
+	@Override
+	public void deleteMateriels(String ids) {
+		List<String> idList = ApplicationUtils.getIdList(ids);
+		for(String id : idList){
+			Materiel m = new Materiel();
+			m.setSerialNum(id);
+			m.setDelFlg("1");
+			m.setUpdateTime(new Date());
+			MaterielMapper.updateByPrimaryKeySelective(m);
+		}
+
 	}
 
 	

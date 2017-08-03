@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -66,23 +67,51 @@ public class MaterielController {
 
     /**
      * @param oredCriteria 
-     * @Description 查询物料列表
+     * @Description 查询物料列表//全部查询，或根据父节点查询
      * @param materiel
      * @return
      */
     @RequestMapping("/findMaterielList")
     @ResponseBody
-    public ResponseEntity<Map> findMaterielList(String parentId) {
+    public ResponseEntity<Map> findMaterielList(String parent) {
     	MaterielExample m =new MaterielExample();
-    	Criteria criteria =  m.createCriteria();
-    	criteria.andIsLatestVersionEqualTo("1");
-    	Criteria criteria2 =  m.createCriteria();
-    	criteria2.andStatusEqualTo("0");
-    	m.or(criteria2);
-    	m.setOrderByClause("updateTime");
-    	List<Materiel> materielList = materielService.selectList(m);
+    	List<Materiel> materielList = new ArrayList<Materiel>();
+    	if(parent==null||parent.isEmpty()){//查询全部物料
+    		//and 条件1
+        	Criteria criteria =  m.createCriteria();
+        	criteria.andIsLatestVersionEqualTo("1");
+        	criteria.andDelFlgEqualTo("0");
+        	//and 条件2
+        	Criteria criteria2 =  m.createCriteria();
+        	criteria2.andStatusEqualTo("0");
+        	criteria2.andDelFlgEqualTo("0");
+        	//or 条件
+        	m.or(criteria2);
+        	//排序字段
+        	m.setOrderByClause("updateTime DESC");
+        	materielList = materielService.selectList(m);
+    	}else{//根据父节点查询
+    		//and 条件1
+        	Criteria criteria =  m.createCriteria();
+        	criteria.andIsLatestVersionEqualTo("1");
+        	criteria.andDelFlgEqualTo("0");
+        	criteria.andSerialNumEqualTo(parent);
+        	//and 条件2
+        	Criteria criteria2 =  m.createCriteria();
+        	criteria2.andStatusEqualTo("0");
+        	criteria2.andDelFlgEqualTo("0");
+        	criteria2.andSerialNumEqualTo(parent);
+        	//or 条件
+        	m.or(criteria2);
+        	//排序字段
+        	m.setOrderByClause("updateTime DESC");
+        	materielList = materielService.selectList(m);
+        	
+        	//查询下级物料
+        	findChildList(parent,materielList);
+    	}
     	
-    	if (materielList.isEmpty()) {
+    	if (materielList==null||materielList.isEmpty()) {
 			return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);
 		}
     	//封装datatables数据返回到前台
@@ -94,6 +123,32 @@ public class MaterielController {
 		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 
     }
+
+	private void findChildList(String parent,List<Materiel> allMaterielList) {
+		List<Materiel> materielList = new ArrayList<Materiel>();
+		MaterielExample m =new MaterielExample();
+		//and 条件1
+		Criteria criteria =  m.createCriteria();
+		criteria.andIsLatestVersionEqualTo("1");
+		criteria.andDelFlgEqualTo("0");
+		criteria.andParentMaterielSerialEqualTo(parent);
+		//and 条件2
+		Criteria criteria2 =  m.createCriteria();
+		criteria2.andStatusEqualTo("0");
+		criteria2.andDelFlgEqualTo("0");
+		criteria2.andParentMaterielSerialEqualTo(parent);
+		//or 条件
+		m.or(criteria2);
+		//排序字段
+		m.setOrderByClause("updateTime DESC");
+		materielList = materielService.selectList(m);
+		if(materielList.size()>0){
+			allMaterielList.addAll(materielList);
+			for(Materiel materiel:materielList){
+				findChildList(materiel.getSerialNum(),allMaterielList);
+			}
+		}
+	}
     
     
     
@@ -110,6 +165,7 @@ public class MaterielController {
     	//and 条件1
     	Criteria criteria =  m.createCriteria();
     	criteria.andIsLatestVersionEqualTo("1");
+    	criteria.andDelFlgEqualTo("0");
     	if("#".equals(parent)){
     		criteria.andParentMaterielSerialIsNull();
     	}else{
@@ -118,6 +174,7 @@ public class MaterielController {
     	//and 条件2
     	Criteria criteria2 =  m.createCriteria();
     	criteria2.andStatusEqualTo("0");
+    	criteria2.andDelFlgEqualTo("0");
     	if("#".equals(parent)){
     		criteria2.andParentMaterielSerialIsNull();
     	}else{
@@ -151,7 +208,32 @@ public class MaterielController {
     
     
     
-    
+	/**
+	 * 
+	 * @Description 批量删除物料
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "/deleteMateriels", method = RequestMethod.POST)
+	public ResponseEntity<Void> deleteMateriels(@RequestBody String ids, HttpServletRequest request) {
+		if ("".equals(ids) || ids == null) {
+			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		}
+		List<String> idList = ApplicationUtils.getIdList(ids);
+		for(String id : idList){
+			Materiel m = new Materiel();
+			m.setSerialNum(id);
+			m.setDelFlg("1");
+			m.setUpdateTime(new Date());
+			User user = (User) request.getSession().getAttribute("userInfo");
+	    	if(user!=null){
+	    		m.setUpdater(user.getId().toString());
+	    	}
+			materielService.update(m);
+		}
+
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
     
     
     
