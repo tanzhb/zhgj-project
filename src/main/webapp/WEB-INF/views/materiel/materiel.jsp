@@ -61,15 +61,10 @@
 	                </div>
 	            </div>
 	            <div class="portlet-body">
-	                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_1">
+	                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_2">
 	                    <thead>
 	                        <tr>
-	                            <th>
-	                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-	                                    <input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" />
-	                                    <span></span>
-	                                </label>
-	                            </th>
+	                            <th>流水号</th>
 	                            <th> 物料编码 </th>
 	                            <th> 物料名称 </th>
 	                            <th> 规格型号 </th>
@@ -83,7 +78,7 @@
 	                        </tr>
 	                    </thead>
 	                    <tbody>
-	                    	<tr ng-repeat="list in materielList" ng-init="index=$index" class="odd gradeX">
+	                    	<!-- <tr ng-repeat="list in materielList" ng-init="index=$index" class="odd gradeX">
 	                            <td>
 	                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
 	                                    <input type="checkbox" class="checkboxes" value="{{list.serialNum}}" />
@@ -100,297 +95,7 @@
 	                            <td>  </td>
 	                            <td> {{list.versionNO}} </td>
 	                            <td> <span class="label label-sm label-success"> {{list.status}} </span></td>
-	                        </tr>
-	                        <tr  class="odd gradeX">
-	                            <td>
-	                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-	                                    <input type="checkbox" class="checkboxes" value="{{list.serialNum}}" />
-	                                    <span></span>
-	                                </label>
-	                            </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                           <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td>  </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                        </tr>
-	                        <tr  class="odd gradeX">
-	                            <td>
-	                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-	                                    <input type="checkbox" class="checkboxes" value="{{list.serialNum}}" />
-	                                    <span></span>
-	                                </label>
-	                            </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                           <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td>  </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                        </tr>
-	                        <tr  class="odd gradeX">
-	                            <td>
-	                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-	                                    <input type="checkbox" class="checkboxes" value="{{list.serialNum}}" />
-	                                    <span></span>
-	                                </label>
-	                            </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                           <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td>  </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                        </tr>
-	                        <tr  class="odd gradeX">
-	                            <td>
-	                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-	                                    <input type="checkbox" class="checkboxes" value="{{list.serialNum}}" />
-	                                    <span></span>
-	                                </label>
-	                            </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                           <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td>  </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                        </tr>
-	                        <tr  class="odd gradeX">
-	                            <td>
-	                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-	                                    <input type="checkbox" class="checkboxes" value="{{list.serialNum}}" />
-	                                    <span></span>
-	                                </label>
-	                            </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                           <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td>  </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                        </tr>
-	                        
-	                        <tr  class="odd gradeX">
-	                            <td>
-	                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-	                                    <input type="checkbox" class="checkboxes" value="{{list.serialNum}}" />
-	                                    <span></span>
-	                                </label>
-	                            </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                           <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td>  </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                        </tr>
-	                        <tr  class="odd gradeX">
-	                            <td>
-	                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-	                                    <input type="checkbox" class="checkboxes" value="{{list.serialNum}}" />
-	                                    <span></span>
-	                                </label>
-	                            </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                           <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td>  </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                        </tr>
-	                        <tr  class="odd gradeX">
-	                            <td>
-	                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-	                                    <input type="checkbox" class="checkboxes" value="{{list.serialNum}}" />
-	                                    <span></span>
-	                                </label>
-	                            </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                           <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td>  </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                        </tr>
-	                        <tr  class="odd gradeX">
-	                            <td>
-	                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-	                                    <input type="checkbox" class="checkboxes" value="{{list.serialNum}}" />
-	                                    <span></span>
-	                                </label>
-	                            </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                           <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td>  </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                        </tr>
-	                        <tr  class="odd gradeX">
-	                            <td>
-	                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-	                                    <input type="checkbox" class="checkboxes" value="{{list.serialNum}}" />
-	                                    <span></span>
-	                                </label>
-	                            </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                           <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td>  </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                        </tr>
-	                        <tr  class="odd gradeX">
-	                            <td>
-	                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-	                                    <input type="checkbox" class="checkboxes" value="{{list.serialNum}}" />
-	                                    <span></span>
-	                                </label>
-	                            </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                           <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td>  </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                        </tr>
-	                        <tr  class="odd gradeX">
-	                            <td>
-	                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-	                                    <input type="checkbox" class="checkboxes" value="{{list.serialNum}}" />
-	                                    <span></span>
-	                                </label>
-	                            </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                           <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td>  </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                        </tr>
-	                        <tr  class="odd gradeX">
-	                            <td>
-	                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-	                                    <input type="checkbox" class="checkboxes" value="{{list.serialNum}}" />
-	                                    <span></span>
-	                                </label>
-	                            </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                           <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td>  </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                        </tr>
-	                        <tr  class="odd gradeX">
-	                            <td>
-	                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-	                                    <input type="checkbox" class="checkboxes" value="{{list.serialNum}}" />
-	                                    <span></span>
-	                                </label>
-	                            </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                           <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td>  </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                        </tr>
-	                        <tr  class="odd gradeX">
-	                            <td>
-	                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-	                                    <input type="checkbox" class="checkboxes" value="{{list.serialNum}}" />
-	                                    <span></span>
-	                                </label>
-	                            </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                           <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td>  </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                        </tr>
-	                        <tr  class="odd gradeX">
-	                            <td>
-	                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-	                                    <input type="checkbox" class="checkboxes" value="{{list.serialNum}}" />
-	                                    <span></span>
-	                                </label>
-	                            </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                           <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                            <td>  </td>
-	                            <td> 1 </td>
-	                            <td> 1 </td>
-	                        </tr>
-	                        
+	                        </tr> -->
 	                    </tbody>
 	                </table>
 	            </div>
@@ -401,16 +106,16 @@
                 <div class="portlet-body">
                     <ul class="nav nav-pills">
                         <li class="active">
-                            <a href="#tab_2_1" data-toggle="tab"> Home </a>
+                            <a href="#" data-target="#tab_2_1" data-toggle="tab"> 供应商 </a>
                         </li>
                         <li>
-                            <a href="#tab_2_2" data-toggle="tab"> Profile </a>
+                            <a href="#" data-target="#tab_2_2" data-toggle="tab"> 使用采购商 </a>
                         </li>
                         <li>
-                            <a href="#tab_2_3" data-toggle="tab"> Profile </a>
+                            <a href="#" data-target="#tab_2_3"  data-toggle="tab"> BOM </a>
                         </li>
                         <li>
-                            <a href="#tab_2_4" data-toggle="tab"> Profile </a>
+                            <a href="#" data-target="#tab_2_4"  data-toggle="tab"> 包装信息 </a>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -621,8 +326,3 @@
 <!-- END PAGE HEADER-->
 
 <!-- END MAIN CONTENT -->
-<!-- BEGIN MAIN JS -->
-<!-- <script>
-    TableDatatablesManaged.init();
-</script> -->
-<!-- END MAIN JS -->

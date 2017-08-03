@@ -150,7 +150,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             }
         })
 
-        // 价格目录        .state('jgml', {
+        // 价格目录       
+        .state('jgml', {
             url: "/jgml",
             templateUrl: "rest/page/jgml",
             data: {pageTitle: '价格目录'},
@@ -189,10 +190,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                             'assets/global/plugins/datatables/datatables.min.css', 
                             'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
                             'assets/global/plugins/jstree/dist/themes/default/style.min.css',
-                            
-                            'assets/global/plugins/datatables/datatables.all.min.js',
-                            'assets/pages/scripts/table-datatables-managed.js',
-                            
+                          'assets/global/plugins/datatables/datatables.min.js',
+                          'assets/pages/scripts/table-datatables-fixedheader.min.js',
+
                             'assets/global/plugins/jstree/dist/jstree.min.js',
                             'assets/pages/scripts/ui-tree.min.js',
                             'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js',
