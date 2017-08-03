@@ -159,6 +159,25 @@ public class UserController {
 
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
+	
+	/**
+	 * 
+	 * @Description 检查某用户名是否存在
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/selectByUsername", method = RequestMethod.POST)
+	public String selectByUsername(HttpServletRequest request) {
+		String user = request.getParameter("");
+		if (user == null) {
+			return "false";
+		}
+		User u = userService.selectByUsername(user);
+		if(u == null){
+			return "false";
+		}
+		return "true";
+	}
 
 	/**
 	 * 基于角色 标识的权限控制案例

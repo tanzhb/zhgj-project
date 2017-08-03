@@ -6,7 +6,8 @@ angular.module('MetronicApp').factory('UserService', ['$rootScope', '$http', '$q
     var factory = {
         fetchAllUsers: fetchAllUsers,
         saveUser: saveUser,
-        delUsers:delUsers
+        delUsers:delUsers,
+        selectByUsername:selectByUsername
     };
 
     return factory;
@@ -45,6 +46,22 @@ angular.module('MetronicApp').factory('UserService', ['$rootScope', '$http', '$q
         var deferred = $q.defer();  
 
         $http.post($rootScope.basePath + "/rest/user/deleteUsers", ids).success(function (data) {  
+            // 如果连接成功，延时返回给调用者  
+            deferred.resolve(data);  
+        })  
+            .error(function () {  
+                deferred.reject('连接服务器出错！');  
+            })  
+        return deferred.promise;  
+          
+    };
+    
+    //某用户名是否存在
+    function selectByUsername(user){
+    	alert();
+        var deferred = $q.defer();  
+
+        $http.get($rootScope.basePath + "/rest/user/selectByUsername", user).success(function (data) {  
             // 如果连接成功，延时返回给调用者  
             deferred.resolve(data);  
         })  

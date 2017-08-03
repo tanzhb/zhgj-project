@@ -23,6 +23,23 @@ angular
 												$rootScope.settings.layout.pageBodySolid = false;
 												$rootScope.settings.layout.pageSidebarClosed = false;
 											});
+							
+							//初始化toastr开始
+							toastr.options = {
+									"closeButton" : true,
+									"debug" : false,
+									"positionClass" : "toast-top-center",
+									"onclick" : null,
+									"showDuration" : "1000",
+									"hideDuration" : "1000",
+									"timeOut" : "5000",
+									"extendedTimeOut" : "1000",
+									"showEasing" : "swing",
+									"hideEasing" : "linear",
+									"showMethod" : "fadeIn",
+									"hideMethod" : "fadeOut"
+								}
+							//初始化toastr结束
 
 							// 构建datatables开始***************************************
 							var a = 0;
@@ -155,61 +172,216 @@ angular
 
 							// 保存用户开始***************************************
 							$scope.saveUser = function() {
-								UserService
-										.saveUser($scope.user)
-										.then(
-												function(data) {
-													$('#addUserModal').modal(
-															'hide');// 保存成功后关闭模态框
-													table.ajax.reload(); // 重新加载datatables数据
-												},
-												function(errResponse) {
-													console
-															.error('Error while creating User');
-												}
+								if($('#form_sample_1').valid()){//表单验证通过则执行添加功能
+									UserService
+									.saveUser($scope.user)
+									.then(
+											function(data) {
+												$('#addUserModal').modal(
+														'hide');// 保存成功后关闭模态框
+												toastr.success("保存用户数据成功！");
+												table.ajax.reload(); // 重新加载datatables数据
+											},
+											function(errResponse) {
+												toastr.warning("用户名重复，请重新输入！");
+												console
+														.error('Error while creating User');
+											}
 
-										);
+									);
+								}
+								
 							};
 							// 保存用户结束***************************************
 
-							
-							// 删除用户开始***************************************
+							// 删除用户开始***************************************							
 							$scope.del = function() {
-
 								var ids = '';
 								// Iterate over all checkboxes in the table
-								table.$('input[type="checkbox"]').each(
-										function() {
-											// If checkbox exist in DOM
-											if ($.contains(document, this)) {
-												// If checkbox is checked
-												if (this.checked) {
-													// 将选中数据id放入ids中
-													if (ids == '') {
-														ids = this.value;
-													} else
-														ids = ids + ','
-																+ this.value;
-												}
-											}
-										});
-								UserService
-										.delUsers(ids)
-										.then(
-												function(data) {
-													$('#delUsersModal').modal(
-															'hide');// 删除成功后关闭模态框
+								table.$('input[type="checkbox"]').each(function() {
+									// If checkbox exist in DOM
+									if ($.contains(document, this)) {
+										// If checkbox is checked
+										if (this.checked) {
+											// 将选中数据id放入ids中
+											if (ids == '') {
+												ids = this.value;
+											} else
+												ids = ids + ',' + this.value;
+										}
+									}
+								});
 
-													table.ajax.reload(); // 重新加载datatables数据
-												},
-												function(errResponse) {
-													console
-															.error('Error while deleting Users');
-												}
+								if (ids == '') {// 未勾选删除数据									
+									toastr.warning("未勾选要删除数据！");
+								} else {
+									$('#delUsersModal').modal('show');// 打开确认删除模态框
+									
+									$scope.confirmDel = function() {										
+										UserService
+												.delUsers(ids)
+												.then(
+														function(data) {
+															$('#delUsersModal').modal(
+																	'hide');// 删除成功后关闭模态框
+															toastr.success("删除成功！");
+															table.ajax.reload(); // 重新加载datatables数据
+														},
+														function(errResponse) {
+															console
+																	.error('Error while deleting Users');
+														}
 
-										);
+												);
+									}
+								}								
 							};
 							// 删除用户结束***************************************
+							
+							//清除form中输入框内容
+							$('#addUserModal').on('hidden.bs.modal',  function () {
+//					　　			$("input").val("");
+								document.getElementById("form_sample_1").reset();
+							});
+
+							// 页面加载完成后调用，验证输入框
+							$scope.$watch('$viewContentLoaded', function() {  
+								var e = $("#form_sample_1"),
+						        r = $(".alert-danger", e),
+						        i = $(".alert-success", e);
+						        e.validate({
+						            errorElement: "span",
+						            errorClass: "help-block help-block-error",
+						            focusInvalid: !1,
+						            ignore: "",
+						            messages: {
+						            	name3:{required:"用户名不能为空！",rangelength:jQuery.validator.format("用户名位数必须在{0}到{1}字符之间！"),
+						            		remote:jQuery.validator.format("用户名已经被注册")},
+					            		password:{required:"密码不能为空！",rangelength:jQuery.validator.format("密码位数必须在{0}到{1}字符之间！")},
+						                payment: {
+						                    maxlength: jQuery.validator.format("Max {0} items allowed for selection"),
+						                    minlength: jQuery.validator.format("At least {0} items must be selected")
+						                },
+						                "checkboxes1[]": {
+						                    required: "Please check some options",
+						                    minlength: jQuery.validator.format("At least {0} items must be selected")
+						                },
+						                "checkboxes2[]": {
+						                    required: "Please check some options",
+						                    minlength: jQuery.validator.format("At least {0} items must be selected")
+						                }
+						            },
+						            rules: {
+						                name: {
+						                    minlength: 2,
+						                    required: !0
+						                },
+						                name2: {
+						                    minlength: 6,
+						                    required: !0
+						                },
+						                name3:{required:true,
+						                	rangelength:[3,10]
+						                	/*rangelength:[6,20],
+						                    remote:{//验证用户名是否存在
+						                           type:"POST",
+						                           url:$rootScope.basePath + "/rest/user/selectByUsername",
+						                           data:{
+						                             name3:function(){return $("#name3").val();}
+						                           } 
+						                    }*/
+						                },
+						                password:{required:true,
+						                	rangelength:[6,12]
+						                },
+						                        
+						                email: {
+						                    required: !0,
+						                    email: !0
+						                },
+						                email2: {
+						                    required: !0,
+						                    email: !0
+						                },
+						                url: {
+						                    required: !0,
+						                    url: !0
+						                },
+						                url2: {
+						                    required: !0,
+						                    url: !0
+						                },
+						                number: {
+						                    required: !0,
+						                    number: !0
+						                },
+						                number2: {
+						                    required: !0,
+						                    number: !0
+						                },
+						                digits: {
+						                    required: !0,
+						                    digits: !0
+						                },
+						                creditcard: {
+						                    required: !0,
+						                    creditcard: !0
+						                },
+						                delivery: {
+						                    required: !0
+						                },
+						                payment: {
+						                    required: !0,
+						                    minlength: 2,
+						                    maxlength: 4
+						                },
+						                memo: {
+						                    required: !0,
+						                    minlength: 10,
+						                    maxlength: 40
+						                },
+						                "checkboxes1[]": {
+						                    required: !0,
+						                    minlength: 2
+						                },
+						                "checkboxes2[]": {
+						                    required: !0,
+						                    minlength: 3
+						                },
+						                radio1: {
+						                    required: !0
+						                },
+						                radio2: {
+						                    required: !0
+						                }
+						            },
+						            invalidHandler: function(e, t) {
+						                i.hide(),
+						                r.show(),
+						                App.scrollTo(r, -200)
+						            },
+						            errorPlacement: function(e, r) {
+						                r.is(":checkbox") ? e.insertAfter(r.closest(".md-checkbox-list, .md-checkbox-inline, .checkbox-list, .checkbox-inline")) : r.is(":radio") ? e.insertAfter(r.closest(".md-radio-list, .md-radio-inline, .radio-list,.radio-inline")) : e.insertAfter(r)
+						            },
+						            highlight: function(e) {
+						                $(e).closest(".form-group").addClass("has-error")
+						            },
+						            unhighlight: function(e) {
+						                $(e).closest(".form-group").removeClass("has-error")
+						            },
+						            success: function(e) {
+						                e.closest(".form-group").removeClass("has-error")
+						            },
+						            submitHandler: function(e) {
+						                i.show(),
+						                r.hide()
+						            }
+						        })   
+							}); 
+							
+							
+							
+							
 							var self = this;
 							self.user = {
 								id : null,

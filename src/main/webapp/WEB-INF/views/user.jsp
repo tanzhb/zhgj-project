@@ -15,8 +15,7 @@
 					<a href="javascript:;" data-target="#addUserModal"
 						data-toggle="modal" class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-plus"></i> 添加
-					</a> <a href="javascript:;" data-target="#delUsersModal"
-						data-toggle="modal" 
+					</a> <a href="javascript:;" ng-click="del()"
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-minus"></i> 删除
 					</a>
@@ -64,42 +63,47 @@
 							<h4 class="modal-title">添加用户</h4>
 						</div>
 						<div class="modal-body form">
-							<form action="#" class="form-horizontal form-row-seperated">
-								<div class="form-group">
-									<label class="col-sm-4 control-label">用户名</label>
-									<div class="col-sm-6">
-										<div class="input-group">
-											<span class="input-group-addon"> <i class="fa fa-user"></i>
-											</span> <input type="text" id="typeahead_example_modal_1"
-												ng-model="user.username" name="typeahead_example_modal_1"
-												class="form-control" />
+							
+							
+							<form action="#" class="form-horizontal" id="form_sample_1">
+                                            <div class="alert alert-danger display-hide">
+                                                <button class="close" data-close="alert"></button> 请先输入正确数据！ </div>
+                                            <!-- <div class="alert alert-success display-hide">
+                                                <button class="close" data-close="alert"></button> 验证通过 </div> -->
+                                            <div class="form-group form-md-line-input">
+                                                <label class="col-md-3 control-label" for="form_control_1">用户名
+                                                    <span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-8">
+                                                    <input type="text" class="form-control" onkeydown="if(event.keyCode==32) return false" ng-model="user.username" placeholder="" id="name3" name="name3">
+                                                    <div class="form-control-focus"> </div>
+                                                    <span class="help-block">输入用户名</span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group form-md-line-input">
+                                                <label class="col-md-3 control-label" for="form_control_1">密码
+                                                    <span class="required">*</span>
+                                                </label>
+                                                <div class="col-md-8">
+                                                    <input type="text" class="form-control" ng-model="user.password" placeholder="" name="password">
+                                                    <div class="form-control-focus"> </div>
+                                                    <span class="help-block">输入密码</span>
+                                                </div>
+                                            </div>
+                                       <div class="modal-footer">
+											<button type="reset" class="btn btn-default">重置</button>
+											<button type="submit" ng-click="saveUser()"
+												class="btn btn-primary">
+												<i class="fa fa-check"></i> 保存
+											</button>
 										</div>
-										
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-4 control-label">密码</label>
-									<div class="col-sm-6">
-										<div class="input-group">
-											<span class="input-group-addon"> <i
-												class="fa fa-search"></i>
-											</span> <input type="text" id="typeahead_example_modal_2"
-												ng-model="user.password" name="typeahead_example_modal_2"
-												class="form-control" />
-										</div>
-										
-									</div>
-								</div>
-							</form>
+                                    </form>
+							
+							
+							
+							
 						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default"
-								data-dismiss="modal">取消</button>
-							<button type="button" ng-click="saveUser()"
-								class="btn btn-primary">
-								<i class="fa fa-check"></i> 保存
-							</button>
-						</div>
+						
 					</div>
 				</div>
 			</div>
@@ -121,7 +125,7 @@
 						<div class="modal-footer">
 							<button type="button" data-dismiss="modal"
 								class="btn dark btn-outline">取消</button>
-							<button type="button" ng-click="del()" class="btn green">确定
+							<button type="button" ng-click="confirmDel()" class="btn green">确定
 								</button>
 						</div>
 					</div>
@@ -175,4 +179,9 @@
 
 <script>
 	//TableDatatablesFixedHeader.init();//页面元素载入结束后，装载datatables
+	$(document).ready(function(){
+　　		
+　　		
+　　		
+	}); 
 </script>
