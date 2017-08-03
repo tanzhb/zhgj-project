@@ -103,6 +103,14 @@ public class PageController {
     }
     
     /**
+     * 新增物料
+     */
+    @RequestMapping("/materiel")
+    public String materiel() {
+        return "materiel/materiel";
+    }
+    
+    /**
      * 404页
      */
     @RequestMapping("/404")

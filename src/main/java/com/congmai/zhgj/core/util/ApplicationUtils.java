@@ -24,6 +24,16 @@ public class ApplicationUtils {
 	public static String randomUUID() {
 		return UUID.randomUUID().toString();
 	}
+    
+    
+    /**
+     * 产生一个32个字符的UUID
+     *
+     * @return UUID
+     */
+    public static String random32UUID() {
+        return UUID.randomUUID().toString();
+    }
 
 	/**
 	 * md5加密
