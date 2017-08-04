@@ -170,29 +170,75 @@ angular
 							// 添加checkbox功能
 							// ***************************************
 
-							// 保存用户开始***************************************
-							$scope.saveUser = function() {
-								if($('#form_sample_1').valid()){//表单验证通过则执行添加功能
+							// 添加用户开始***************************************
+							$scope.add = function() {
+								$scope.user = null;//打开添加用户模态框前将输入框置空
+								$('#appendTitle').empty();
+								$('#appendTitle').append("<h4 class='modal-title'>添加用户</h4>");
+								$('#addUserModal').modal('show');// 弹出添加模态框
+								$scope.saveUser = function() {
+									if($('#form_sample_1').valid()){//表单验证通过则执行添加功能
+										UserService
+										.saveUser($scope.user)
+										.then(
+												function(data) {
+													$('#addUserModal').modal(
+															'hide');// 保存成功后关闭模态框
+													toastr.success("保存用户数据成功！");
+													table.ajax.reload(); // 重新加载datatables数据
+												},
+												function(errResponse) {
+													toastr.warning("用户名重复，请重新输入！");
+													console
+															.error('Error while creating User');
+												}
+
+										);
+									}
+									
+								};								
+							};	
+							// 添加用户结束***************************************
+							
+							// 修改用户开始***************************************							
+							$scope.edit = function() {
+								var ids = '';
+								// Iterate over all checkboxes in the table
+								table.$('input[type="checkbox"]').each(function() {
+									// If checkbox exist in DOM
+									if ($.contains(document, this)) {
+										// If checkbox is checked
+										if (this.checked) {
+											// 将选中数据id放入ids中
+											if (ids == '') {
+												ids = this.value;
+											} else
+												ids = ids + ',' + this.value;
+										}
+									}
+								});
+								if (ids == '' || ids.split(',').length > 1) {// 选择一条数据进行修改									
+									toastr.warning("选择一条数据进行修改！");
+								} else {
+									
 									UserService
-									.saveUser($scope.user)
+									.selectById(ids)
 									.then(
 											function(data) {
-												$('#addUserModal').modal(
-														'hide');// 保存成功后关闭模态框
-												toastr.success("保存用户数据成功！");
-												table.ajax.reload(); // 重新加载datatables数据
+												$scope.user = data;//将后台数据赋值给前台页面
+												$('#appendTitle').empty();
+												$('#appendTitle').append("<h4 class='modal-title'>修改用户</h4>");
+												$('#addUserModal').modal('show');// 弹出修改模态框
 											},
 											function(errResponse) {
-												toastr.warning("用户名重复，请重新输入！");
 												console
-														.error('Error while creating User');
+														.error('Error while editing Users');
 											}
 
 									);
-								}
-								
+								}								
 							};
-							// 保存用户结束***************************************
+							// 修改用户结束***************************************							
 
 							// 删除用户开始***************************************							
 							$scope.del = function() {
@@ -239,10 +285,12 @@ angular
 							// 删除用户结束***************************************
 							
 							//清除form中输入框内容
-							$('#addUserModal').on('hidden.bs.modal',  function () {
+							//$('#addUserModal').on('hidden.bs.modal',  function () {
 //					　　			$("input").val("");
-								document.getElementById("form_sample_1").reset();
-							});
+//								document.getElementById("form_sample_1").reset();
+//								$('#name3').val("");$('#password').val("");
+								//$scope.user = null;
+							//});
 
 							// 页面加载完成后调用，验证输入框
 							$scope.$watch('$viewContentLoaded', function() {  
