@@ -193,6 +193,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                             'assets/global/plugins/jstree/dist/themes/default/style.min.css',
 
                           'assets/global/plugins/datatables/datatables.min.js',
+                        'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+                          'assets/global/plugins/datatables/datatables.all.min.js',
                           'assets/pages/scripts/table-datatables-fixedheader.min.js',
 
                             'assets/global/plugins/jstree/dist/jstree.min.js',
@@ -207,7 +209,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         // 新增物料
         .state('addMateriel', {
-            url: "/addMateriel",
+            url: "/addMateriel?:serialNum",
             templateUrl: "rest/page/addMateriel",
             data: {pageTitle: '新增物料'},
             controller: "materielController",

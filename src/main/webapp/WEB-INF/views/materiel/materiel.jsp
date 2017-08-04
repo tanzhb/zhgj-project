@@ -39,9 +39,14 @@
 				</div>
 				<div class="actions">
 					<a href="javascript:;" ui-sref="addMateriel"
-						data-toggle="modal" class="btn btn-default btn-sm btn-circle">
+						 class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-plus"></i> 物料
-					</a> <a href="javascript:;" data-target="#delMaterielModal"
+					</a> 
+					<a href="javascript:;" ng-click="editMateriel()"
+						 class="btn btn-default btn-sm btn-circle">
+						<i class="fa fa-edit"></i> 编辑
+					</a>
+					<a href="javascript:;" data-target="#delMaterielModal"
 						data-toggle="modal" 
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-minus"></i> 删除
@@ -87,6 +92,7 @@
 	                            <th> 物料名称 </th>
 	                            <th> 规格型号 </th>
 	                            <th> 单位 </th>
+	                            <th> 上级物料 </th>
 	                            <th> 类别 </th>
 	                            <th> 产地 </th>
 	                            <th> 品牌 </th>
@@ -102,6 +108,7 @@
 	                            <th> 物料名称 </th>
 	                            <th> 规格型号 </th>
 	                            <th> 单位 </th>
+	                            <th> 上级物料 </th>
 	                            <th> 类别 </th>
 	                            <th> 产地 </th>
 	                            <th> 品牌 </th>

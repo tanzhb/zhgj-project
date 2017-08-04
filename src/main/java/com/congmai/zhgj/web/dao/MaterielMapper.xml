@@ -47,6 +47,7 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <association property="parentMateriel" column="parentMaterielSerial" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByPrimaryKey"/> 
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -607,4 +608,148 @@
             #{idList}
         </foreach>
     </delete>
+    
+    <update id="updateByExampleSelective" parameterType="map" >
+    update materiel
+    <set >
+      <if test="record.serialNum != null" >
+        serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materielId != null" >
+        materielId = #{record.materielId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materielNum != null" >
+        materielNum = #{record.materielNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materielName != null" >
+        materielName = #{record.materielName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.specifications != null" >
+        specifications = #{record.specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unit != null" >
+        unit = #{record.unit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentMaterielSerial != null" >
+        parentMaterielSerial = #{record.parentMaterielSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null" >
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productionPlace != null" >
+        productionPlace = #{record.productionPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="record.brand != null" >
+        brand = #{record.brand,jdbcType=VARCHAR},
+      </if>
+      <if test="record.category != null" >
+        category = #{record.category,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mnemonicCode != null" >
+        MnemonicCode = #{record.mnemonicCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isBOM != null" >
+        isBOM = #{record.isBOM,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stockUnit != null" >
+        stockUnit = #{record.stockUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.originCountry != null" >
+        originCountry = #{record.originCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="record.width != null" >
+        width = #{record.width,jdbcType=VARCHAR},
+      </if>
+      <if test="record.height != null" >
+        height = #{record.height,jdbcType=VARCHAR},
+      </if>
+      <if test="record.length != null" >
+        length = #{record.length,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currency != null" >
+        currency = #{record.currency,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unitPrice != null" >
+        unitPrice = #{record.unitPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.filingItemNo != null" >
+        filingItemNo = #{record.filingItemNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.volume != null" >
+        volume = #{record.volume,jdbcType=VARCHAR},
+      </if>
+      <if test="record.weight != null" >
+        weight = #{record.weight,jdbcType=VARCHAR},
+      </if>
+      <if test="record.palletSpecification != null" >
+        palletSpecification = #{record.palletSpecification,jdbcType=VARCHAR},
+      </if>
+      <if test="record.manufactureDate != null" >
+        manufactureDate = #{record.manufactureDate,jdbcType=DATE},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.packageNum != null" >
+        packageNum = #{record.packageNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.packageSpecifications != null" >
+        packageSpecifications = #{record.packageSpecifications,jdbcType=VARCHAR},
+      </if>
+      <if test="record.packageUnit != null" >
+        packageUnit = #{record.packageUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.packagewidth != null" >
+        packagewidth = #{record.packagewidth,jdbcType=VARCHAR},
+      </if>
+      <if test="record.packageheight != null" >
+        packageheight = #{record.packageheight,jdbcType=VARCHAR},
+      </if>
+      <if test="record.packagelength != null" >
+        packagelength = #{record.packagelength,jdbcType=VARCHAR},
+      </if>
+      <if test="record.packagevolume != null" >
+        packagevolume = #{record.packagevolume,jdbcType=VARCHAR},
+      </if>
+      <if test="record.packageUnitConversion != null" >
+        packageUnitConversion = #{record.packageUnitConversion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.palletWeight != null" >
+        palletWeight = #{record.palletWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customsSupervisionConditions != null" >
+        customsSupervisionConditions = #{record.customsSupervisionConditions,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qualityDate != null" >
+        qualityDate = #{record.qualityDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.versionNO != null" >
+        versionNO = #{record.versionNO,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isLatestVersion != null" >
+        isLatestVersion = #{record.isLatestVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlg != null" >
+        delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creator != null" >
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updater != null" >
+        updater = #{record.updater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
 </mapper>

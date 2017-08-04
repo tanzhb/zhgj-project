@@ -16,6 +16,8 @@ public class Materiel {
     private String unit;
 
     private String parentMaterielSerial;
+    
+    private Materiel parentMateriel;
 
     private String type;
 
@@ -452,4 +454,13 @@ public class Materiel {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public Materiel getParentMateriel() {
+		return parentMateriel;
+	}
+
+	public void setParentMateriel(Materiel parentMateriel) {
+		this.parentMateriel = parentMateriel;
+	}
+    
 }

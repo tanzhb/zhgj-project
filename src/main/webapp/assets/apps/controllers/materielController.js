@@ -1,5 +1,5 @@
 /* Setup general page controller */
-angular.module('MetronicApp').controller('materielController', ['$rootScope', '$scope', 'settings','materielService','$state', function($rootScope, $scope, settings,materielService,$state) {
+angular.module('MetronicApp').controller('materielController', ['$rootScope', '$scope', 'settings','materielService','$state',"$stateParams", function($rootScope, $scope, settings,materielService,$state,$stateParams) {
     $scope.$on('$viewContentLoaded', function() {   
     	// initialize core components
     	App.initAjax();
@@ -10,16 +10,20 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
         $rootScope.settings.layout.pageSidebarClosed = false;
         
         if($state.current.name=="materiel"){
-        	loadMainTable();
-        	loadTree();
+        	loadMainTable();//加载物料列表
+        	
+        	loadTree();//加载物料树
         }else{
         	$('.date-picker').datepicker({
 				rtl: App.isRTL(),
 				orientation: "left",
 				autoclose: true
-        	})
-        	FormiCheck.init()
-        	r();
+        	})//初始化日期控件
+        	FormiCheck.init()//初始化checkbox控件
+        	r();//加载表单验证控件
+        	
+        	getMaterielInfo($stateParams.serialNum)
+        	
         }
         
         
@@ -28,18 +32,24 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     
     $scope.save  = function(isValid) {
     	if(isValid){
-    		if($scope.materiel.manufactureDate=='') {
+    		if($scope.materiel.manufactureDate=='') {//日期为空的处理
     			$scope.materiel.manufactureDate=null;
     		}
-    		if($scope.materiel.isBOM==true) {
-    			$scope.materiel.isBOM=1;
-    		}else{
-    			$scope.materiel.isBOM=0;
+    		if($scope.materiel.parentMaterielSerial=='') {//上级物料为空的处理
+    			$scope.materiel.parentMaterielSerial=null;
     		}
+    		//TODO待删除 
+    		$scope.materiel.parentMaterielSerial=null;
+    		$scope.materiel.createTime=null;
+    		$scope.materiel.updateTime=null;
+    		$scope.materiel.manufactureDate=null;
+    		//**********//
 
     		materielService.save($scope.materiel).then(
-       		     function(answer){
-       		    	 $state.go('materiel');
+       		     function(data){
+       		    	$scope.materiel=data;
+       		    	$scope.materielInput = true;
+       		    	$scope.materielShow = true;
        		     },
        		     function(error){
        		         $scope.error = error;
@@ -48,6 +58,22 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     	}
     	
     }; 	
+    
+    $scope.cancel  = function() {//取消编辑
+    	if($scope.materiel.serialNum==null || $scope.materiel.serialNum=='') {//如果是取消新增，返回列表页面
+    		$state.go("materiel");
+    		return;
+		}
+    	getMaterielInfo($scope.materiel.serialNum);
+    	$scope.materielInput = true;
+	    $scope.materielShow = true;
+    };
+    
+    $scope.edit  = function() {//进入编辑
+    	$scope.materielInput = false;
+	    $scope.materielShow = false;
+    };
+    
     
 	var initList = function(start,limit) {
     	materielService.findList(start,limit).then(
@@ -106,6 +132,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
                               { mData: 'materielName' },
                               { mData: 'specifications' },
                               { mData: 'unit' },
+                              { mData: 'parentMateriel' },
                               { mData: 'type' },
                               { mData: 'productionPlace' },
                               { mData: 'brand' },
@@ -127,6 +154,17 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 												.html()
 										+ '">';
 							}
+						},{
+							'targets' : 5,
+							'className' : 'dt-body-center',
+							'render' : function(data,
+									type, full, meta) {
+								if(data==null){
+									return  ''
+								}else{
+									return  data.materielName
+								}
+							}
 						} ]
 
             }).on('order.dt',
@@ -138,46 +176,46 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
             
             
             // 添加checkbox功能***************************************
-							// Handle click on "Select all" control
-							$('#example-select-all').on(
-									'click',
-									function() {
-										// Check/uncheck all checkboxes in the
-										// table
-										var rows = table.rows({
-											'search' : 'applied'
-										}).nodes();
-										$('input[type="checkbox"]', rows).prop(
-												'checked', this.checked);
-									});
-
-							// Handle click on checkbox to set state of "Select
-							// all" control
-							$('#sample_2 tbody')
-									.on(
-											'change',
-											'input[type="checkbox"]',
-											function() {
-												// If checkbox is not checked
-												if (!this.checked) {
-													var el = $(
-															'#example-select-all')
-															.get(0);
-													// If "Select all" control
-													// is checked and has
-													// 'indeterminate' property
-													if (el
-															&& el.checked
-															&& ('indeterminate' in el)) {
-														// Set visual state of
-														// "Select all" control
-														// as 'indeterminate'
-														el.indeterminate = true;
-													}
-												}
-											});
-							// 添加checkbox功能
-							// ***************************************
+			// Handle click on "Select all" control
+			$('#example-select-all').on(
+					'click',
+					function() {
+						// Check/uncheck all checkboxes in the
+						// table
+						var rows = table.rows({
+							'search' : 'applied'
+						}).nodes();
+						$('input[type="checkbox"]', rows).prop(
+								'checked', this.checked);
+					});
+	
+			// Handle click on checkbox to set state of "Select
+			// all" control
+			$('#sample_2 tbody')
+					.on(
+							'change',
+							'input[type="checkbox"]',
+							function() {
+								// If checkbox is not checked
+								if (!this.checked) {
+									var el = $(
+											'#example-select-all')
+											.get(0);
+									// If "Select all" control
+									// is checked and has
+									// 'indeterminate' property
+									if (el
+											&& el.checked
+											&& ('indeterminate' in el)) {
+										// Set visual state of
+										// "Select all" control
+										// as 'indeterminate'
+										el.indeterminate = true;
+									}
+								}
+							});
+			// 添加checkbox功能
+			// ***************************************
         };
         
         
@@ -218,7 +256,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
         }
         
         
-     // 删除用户开始***************************************
+     // 删除开始***************************************
 		$scope.del = function() {
 			var ids = '';
 			// Iterate over all checkboxes in the table
@@ -254,11 +292,17 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 
 					);
 		};
-		// 删除用户结束***************************************
+		// 删除结束***************************************
         
         var r = function() {
-            var e = $("#form_sample_2"), r = $(".alert-danger", e), i = $(".alert-success", e);
-            e.validate({errorElement: "span",errorClass: "help-block help-block-error",focusInvalid: !1,ignore: "",
+        	var e = $("#form_sample_1"),
+	        r = $(".alert-danger", e),
+	        i = $(".alert-success", e);
+	        e.validate({
+	            errorElement: "span",
+	            errorClass: "help-block help-block-error",
+	            focusInvalid: !1,
+	            ignore: "",
             	rules: {materielNum: {required: !0,maxlength: 20},
             			type: {required: !0,maxlength: 20},
             			materielName: {required: !0,maxlength: 20},
@@ -268,18 +312,67 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
             			},
             		invalidHandler: function(e, t) {
                     i.hide(), r.show(), App.scrollTo(r, -200)
-                },errorPlacement: function(e, r) {
-                    var i = $(r).parent(".input-icon").children("i");
-                    i.removeClass("fa-check").addClass("fa-warning"), i.attr("data-original-title", e.text()).tooltip({container: "body"})
-                },highlight: function(e) {
-                    $(e).closest(".form-group").removeClass("has-success").addClass("has-error")
-                },unhighlight: function(e) {
-                },success: function(e, r) {
-                    var i = $(r).parent(".input-icon").children("i");
-                    $(r).closest(".form-group").removeClass("has-error").addClass("has-success"), i.removeClass("fa-warning").addClass("fa-check")
-                },submitHandler: function(e) {
-                    i.show(), r.hide()
-                }})
-        }
+                },
+	            invalidHandler: function(e, t) {
+	                i.hide(),
+	                r.show(),
+	                App.scrollTo(r, -200)
+	            },
+	            errorPlacement: function(e, r) {
+	                r.is(":checkbox") ? e.insertAfter(r.closest(".md-checkbox-list, .md-checkbox-inline, .checkbox-list, .checkbox-inline")) : r.is(":radio") ? e.insertAfter(r.closest(".md-radio-list, .md-radio-inline, .radio-list,.radio-inline")) : e.insertAfter(r)
+	            },
+	            highlight: function(e) {
+	                $(e).closest(".form-group").addClass("has-error")
+	            },
+	            unhighlight: function(e) {
+	                $(e).closest(".form-group").removeClass("has-error")
+	            },
+	            success: function(e) {
+	                e.closest(".form-group").removeClass("has-error")
+	            },
+	            submitHandler: function(e) {
+	                i.show(),
+	                r.hide()
+	            }})
+        };
 
+        
+        $scope.editMateriel  = function() {//进入编辑页面
+        	var ids = '';
+    		// Iterate over all checkboxes in the table
+    		table.$('input[type="checkbox"]').each(
+    				function() {
+    					// If checkbox exist in DOM
+    					if ($.contains(document, this)) {
+    						// If checkbox is checked
+    						if (this.checked) {
+    							// 将选中数据id放入ids中
+    							if (ids == '') {
+    								ids = this.value;
+    							} else{
+    								ids = "more"
+    							}
+    						}
+    					}
+    				});
+    		if(ids==''){
+    			toastr.warning('请选择一个物料！');return;
+    		}else if(ids=='more'){
+    			toastr.warning('只能选择一个物料！');return;
+    		}
+    		
+    		$state.go("addMateriel",{serialNum:ids});
+        };
+        
+        var getMaterielInfo  = function(serialNum) {
+        	materielService.getMaterielInfo(serialNum).then(
+          		     function(data){
+          		    	$scope.materiel=data;
+          		     },
+          		     function(error){
+          		         $scope.error = error;
+          		     }
+          		 );
+        	
+        }; 	
 }]);

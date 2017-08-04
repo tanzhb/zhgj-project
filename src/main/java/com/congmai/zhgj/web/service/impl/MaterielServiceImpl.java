@@ -11,6 +11,8 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.dao.MaterielMapper;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
+import com.congmai.zhgj.web.model.User;
+import com.congmai.zhgj.web.model.MaterielExample.Criteria;
 import com.congmai.zhgj.web.service.MaterielService;
 
 /**
@@ -43,9 +45,8 @@ public class MaterielServiceImpl implements MaterielService {
 	}
 
 	@Override
-	public Materiel selectById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Materiel selectById(String serialNum) {
+		return MaterielMapper.selectByPrimaryKey(serialNum);
 	}
 
 	@Override
@@ -57,12 +58,6 @@ public class MaterielServiceImpl implements MaterielService {
 	@Override
 	public List<Materiel> selectList() {
 		return MaterielMapper.selectByExample(null);
-	}
-
-	@Override
-	public int delete(Long id) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override
@@ -81,6 +76,27 @@ public class MaterielServiceImpl implements MaterielService {
 			MaterielMapper.updateByPrimaryKeySelective(m);
 		}
 
+	}
+
+	@Override
+	public void updateVersion(Materiel materiel) {
+		//当前版本更新为老版本-start
+		Materiel m = new Materiel();
+		m.setIsLatestVersion("0");
+		m.setUpdateTime(new Date());
+		m.setUpdater(materiel.getCreator());
+		
+		//更新条件为当前版本
+		MaterielExample ex =new MaterielExample();
+    	//and 条件1
+    	Criteria criteria =  ex.createCriteria();
+    	criteria.andIsLatestVersionEqualTo("1");
+    	criteria.andMaterielIdEqualTo(materiel.getMaterielId());
+
+		MaterielMapper.updateByExampleSelective(m, ex);
+		//当前版本更新为老版本-end
+		//插入最新版本
+		MaterielMapper.insert(materiel);
 	}
 
 	

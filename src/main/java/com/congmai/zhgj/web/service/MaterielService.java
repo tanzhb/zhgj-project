@@ -15,9 +15,7 @@ import com.congmai.zhgj.web.model.User;
  * @Date 2017年7月28日 下午3:04:17
  * @version 1.0.0
  */
-public interface MaterielService extends GenericService<Materiel, Long> {
-	public int delete(String serialNum);
-	
+public interface MaterielService extends GenericService<Materiel, String> {
 	/**
      * 查询多个对象
      *
@@ -26,4 +24,6 @@ public interface MaterielService extends GenericService<Materiel, Long> {
     List<Materiel> selectList(MaterielExample m);
 
 	public void deleteMateriels(String ids);
+
+	void updateVersion(Materiel materiel);
 }

@@ -43,27 +43,81 @@ public class MaterielController {
     private MaterielService materielService;
 
     /**
-     * 保存
+     * 保存物料
      */
     @RequestMapping("/save")
     @ResponseBody
-    public String save(Materiel materiel, HttpServletRequest request) {
-    	materiel.setSerialNum(ApplicationUtils.random32UUID());
-    	materiel.setMaterielId(ApplicationUtils.random32UUID());
-    	User user = (User) request.getSession().getAttribute("userInfo");
-    	if(user!=null){
-    		materiel.setCreator(user.getId().toString());
-    		materiel.setUpdater(user.getId().toString());
+    public Materiel save(Materiel materiel, HttpServletRequest request) {
+    	if(materiel.getSerialNum()==null||materiel.getSerialNum().isEmpty()){//新增
+    		insertNew(materiel, request);
+    	}else{//编辑升级
+    		updateVersion(materiel, request);
     	}
-    	materiel.setCreateTime(new Date());
-    	materiel.setUpdateTime(new Date());
-    	materiel.setIsLatestVersion("1");
-    	materiel.setVersionNO("1");
-    	materiel.setStatus("1");
-    	
-    	materielService.insert(materiel);
-    	return "materiel/addMateriel";
+    	return materiel;
     }
+	/**
+	 * 
+	 * @Description 升级版本
+	 * @param materiel
+	 * @param request
+	 */
+	private void updateVersion(Materiel materiel, HttpServletRequest request) {
+		materiel.setSerialNum(ApplicationUtils.random32UUID());
+		User user = (User) request.getSession().getAttribute("userInfo");
+		if(user!=null){
+			materiel.setCreator(user.getId().toString());
+			materiel.setUpdater(user.getId().toString());
+		}
+		materiel.setCreateTime(new Date());
+		materiel.setUpdateTime(new Date());
+		materiel.setIsLatestVersion("1");
+		
+		//根据物料id获取最新版本物料
+		Materiel lastmateriel = getMaterielInfoByMaterielId(materiel.getMaterielId());
+		//生成当前版本号为最新版本+1
+		if(lastmateriel==null){
+			materiel.setVersionNO("1");
+		}else{
+			materiel.setVersionNO(String.valueOf((Integer.parseInt(lastmateriel.getVersionNO())+1)));
+		}
+		materiel.setStatus("1");
+		
+		if("true".equals(materiel.getIsBOM())){
+			materiel.setIsBOM("1");
+		}else{
+			materiel.setIsBOM("0");
+		}
+		
+		materielService.updateVersion(materiel);
+	}
+	/**
+	 * 
+	 * @Description 新增物料
+	 * @param materiel
+	 * @param request
+	 */
+	private void insertNew(Materiel materiel, HttpServletRequest request) {
+		materiel.setSerialNum(ApplicationUtils.random32UUID());
+		materiel.setMaterielId(ApplicationUtils.random32UUID());
+		User user = (User) request.getSession().getAttribute("userInfo");
+		if(user!=null){
+			materiel.setCreator(user.getId().toString());
+			materiel.setUpdater(user.getId().toString());
+		}
+		materiel.setCreateTime(new Date());
+		materiel.setUpdateTime(new Date());
+		materiel.setIsLatestVersion("1");
+		materiel.setVersionNO("1");
+		materiel.setStatus("1");
+		
+		if("true".equals(materiel.getIsBOM())){
+			materiel.setIsBOM("1");
+		}else{
+			materiel.setIsBOM("0");
+		}
+		
+		materielService.insert(materiel);
+	}
 
     /**
      * @param oredCriteria 
@@ -235,7 +289,43 @@ public class MaterielController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
     
+	
+	/**
+	 * 
+	 * @Description 获取物料信息
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "/getMaterielInfo")
+	@ResponseBody
+	public Materiel getMaterielInfo(String serialNum, HttpServletRequest request,Materiel materiel) {
+		materiel = materielService.selectById(serialNum);
+		if("1".equals(materiel.getIsBOM())){
+			materiel.setIsBOM("true");
+		}else{
+			materiel.setIsBOM("false");
+		}
+		return materiel;
+	}
     
+	
+	
+	public Materiel getMaterielInfoByMaterielId(String materielId) {
+		MaterielExample m =new MaterielExample();
+    	//and 条件1
+    	Criteria criteria =  m.createCriteria();
+    	criteria.andIsLatestVersionEqualTo("1");
+    	criteria.andMaterielIdEqualTo(materielId);
+    	criteria.andDelFlgEqualTo("0");
+    	//排序字段
+    	m.setOrderByClause("updateTime DESC");
+    	List<Materiel> materielList = materielService.selectList(m);
+    	
+    	if(materielList==null||materielList.size()<1){
+    		return null;
+    	}
+		return materielList.get(0);
+	}
     
     
     

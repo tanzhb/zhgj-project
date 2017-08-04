@@ -98,7 +98,7 @@ public class PageController {
      * 新增物料
      */
     @RequestMapping("/addMateriel")
-    public String addMateriel() {
+    public String addMateriel(String serialNum) {
         return "materiel/addMateriel";
     }
     
