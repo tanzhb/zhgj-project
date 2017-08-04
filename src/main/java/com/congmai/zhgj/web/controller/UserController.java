@@ -131,18 +131,36 @@ public class UserController {
 	@RequestMapping(value = "/addUser", method = RequestMethod.POST)
 	public ResponseEntity<Void> addUser(@RequestBody User user,
 			UriComponentsBuilder ucBuilder) {
-		if (userService.isUserExist(user)) {
-			System.out.println("A User with name " + user.getUsername()
-					+ " already exist");
-			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		if(user.getId() == null){
+			if (userService.isUserExist(user)) {
+				System.out.println("A User with name " + user.getUsername()
+						+ " already exist");
+				return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+			}
+			userService.insert(user);
+		}else{
+			userService.update(user);
 		}
+		
 
-		userService.insert(user);
+		
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("/user/{id}")
 				.buildAndExpand(user.getId()).toUri());
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+	}
+	/**
+	 * 
+	 * @Description 根据id查找用户
+	 * @param user
+	 * @return
+	 */
+	@RequestMapping(value = "/selectById", method = RequestMethod.POST)
+	public ResponseEntity<User> selectById(@RequestBody String ids) {
+		User u = userService.selectById(Long.valueOf(ids));
+		
+		return new ResponseEntity<User>(u, HttpStatus.OK);
 	}
 	/**
 	 * 

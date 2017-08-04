@@ -1,7 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
-
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a ui-sref="dashboard">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a ui-sref="datatablesmanaged">系统管理</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a ui-sref="datatablesmanaged">用户管理</a>
+        </li>
+    </ul>
+    
+</div>
 <div class="row" ng-controller="UserController as uTrl">
 	<div class="col-md-12">
 
@@ -9,13 +25,15 @@
 		<div class="portlet box red">
 			<div class="portlet-title">
 				<div class="caption">
-					<i class="fa fa-globe"></i>Header & Footer Fixed
+					<i class="fa fa-list"></i>用户列表
 				</div>
 				<div class="actions">
-					<a href="javascript:;" data-target="#addUserModal"
-						data-toggle="modal" class="btn btn-default btn-sm btn-circle">
+					<a href="javascript:;" ng-click="add()" class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-plus"></i> 添加
-					</a> <a href="javascript:;" ng-click="del()"
+					</a><a href="javascript:;" ng-click="edit()"
+						class="btn btn-default btn-sm btn-circle"> <i
+						class="fa fa-edit"></i> 修改
+					</a><a href="javascript:;" ng-click="del()"
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-minus"></i> 删除
 					</a>
@@ -59,8 +77,9 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal"
-								aria-hidden="true"></button>
-							<h4 class="modal-title">添加用户</h4>
+								aria-hidden="true" ></button>
+								<div id="appendTitle"></div>
+							<!-- <h4 class="modal-title">添加用户</h4> -->
 						</div>
 						<div class="modal-body form">
 							
@@ -85,7 +104,7 @@
                                                     <span class="required">*</span>
                                                 </label>
                                                 <div class="col-md-8">
-                                                    <input type="text" class="form-control" ng-model="user.password" placeholder="" name="password">
+                                                    <input type="text" class="form-control" ng-model="user.password" placeholder="" name="password" id="password">
                                                     <div class="form-control-focus"> </div>
                                                     <span class="help-block">输入密码</span>
                                                 </div>
