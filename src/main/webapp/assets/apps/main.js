@@ -3,6 +3,7 @@ Metronic AngularJS App Main Script
 ***/
 
 /* Metronic App */
+//定义模块时引入依赖
 var MetronicApp = angular.module("MetronicApp", [
     "ui.router", 
     "ui.bootstrap", 
@@ -191,7 +192,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                             
                             
                             //'assets/global/scripts/datatable.js',
-                            'assets/global/plugins/datatables/datatables.min.js',
+                             'assets/global/plugins/datatables/datatables.min.js',
                             //'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
                             //'assets/global/plugins/datatables/datatables.all.min.js',
                             //'assets/pages/scripts/table-datatables-managed.min.js',
