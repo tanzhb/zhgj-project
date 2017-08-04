@@ -38,9 +38,13 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 
 	@Override
 	public Page<Company> selectByPage(Company company) {
-		List<Company> list = companyMapper.selectList(company);
-		Integer count = companyMapper.countList(company);
-		Page<Company>  page = new Page<Company>(company.getPageIndex(), company.getPageSize());
+		List<Company> list =  null;
+		Integer count = 0;
+		if(company != null){
+			list = companyMapper.selectList(company);
+			count = companyMapper.countList(company);
+		}
+		Page<Company>  page = new Page<Company>();
 		page.setResult(list);
 		page.setTotalCount(count);
 		return page;

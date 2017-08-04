@@ -66,6 +66,21 @@ angular.module('MetronicApp').service('companyService',['$http','$q',function($h
 	}
 	
 	/**
+	 * 批量删除
+	 */
+	this.deleteCompanyBatch = function(comIds){
+		var deferred = $q.defer();
+		$http.get("rest/company/deleteCompanyBatch", {  
+			params:{comIds:comIds,cache:false}//传整个表单数据  
+		}).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
+	
+	/**
 	 * 获取列表数据
 	 */
 	this.createTable = function(pageSize,pageIndex,params){

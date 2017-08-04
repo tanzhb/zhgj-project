@@ -2,7 +2,7 @@
  * 
  */
 
-angular.module('MetronicApp').controller('CompanyController',['$rootScope','$scope','$state','$http','companyService','$location','$stateParams',function($rootScope,$scope,$state,$http,companyService,$location,$stateParams) {
+angular.module('MetronicApp').controller('CompanyController',['$rootScope','$scope','$state','$http','companyService','$location','$compile','$stateParams',function($rootScope,$scope,$state,$http,companyService,$location,$compile,$stateParams) {
 	 $scope.$on('$viewContentLoaded', function() {   
 	    	// initialize core components
 		    handle = new pageHandle();
@@ -30,7 +30,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    		 
 	    		getCompanyInfo($stateParams.comId);
 	 		}else{
-	 			createTable(15,1,true);
+	 			//createTable(15,1,true);
 	 		}
 	    	// set default layout mode
 	    	$rootScope.settings.layout.pageContentWhite = true;
@@ -40,6 +40,159 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	       
 	    	
 	 });
+	 
+	 
+	 
+	 var a = 0;
+		App.getViewPort().width < App
+				.getResponsiveBreakpoint("md") ? $(
+				".page-header").hasClass(
+				"page-header-fixed-mobile")
+				&& (a = $(".page-header").outerHeight(!0))
+				: $(".page-header").hasClass(
+						"navbar-fixed-top") ? a = $(
+						".page-header").outerHeight(!0)
+						: $("body").hasClass(
+								"page-header-fixed")
+								&& (a = 64);
+						
+
+		var table = $("#sample_1")
+				.DataTable(
+						{
+							language : {
+								aria : {
+									sortAscending : ": activate to sort column ascending",
+									sortDescending : ": activate to sort column descending"
+								},
+								emptyTable : "空表",
+								info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+								infoEmpty : "没有数据",
+								infoFiltered : "(从 _MAX_ 条数据中检索)",
+								lengthMenu : "每页显示 _MENU_ 条数据",
+								search : "查询:",
+								zeroRecords : "抱歉， 没有找到！",
+								paginate : {
+									"sFirst" : "首页",
+									"sPrevious" : "前一页",
+									"sNext" : "后一页",
+									"sLast" : "尾页"
+								}
+							},
+							fixedHeader : {// 固定表头、表底
+								header : !0,
+								footer : !0,
+								headerOffset : a
+							},
+							// select: true,行多选
+							order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+							bRetrieve : true,
+							// searching: true,//是否过滤检索
+							// ordering: true,//是否排序
+							lengthMenu : [
+									[ 5, 10, 15, 30, -1 ],
+									[ 5, 10, 15, 30, "All" ] ],
+							pageLength : 10,// 每页显示数量
+							processing : true,// loading等待框
+							// serverSide: true,
+							ajax : $rootScope.basePath
+									+ "/rest/company/companyList",// 加载数据中user表数据
+
+							"aoColumns" : [
+
+							{
+								mData : 'comId'
+							}, {
+								mData : 'comNum'
+							}, {
+								mData : 'comName'
+							}, {
+								mData : 'comNature'
+							}, {
+								mData : 'registeredCapital'
+							}, {
+								mData : 'businessNature'
+							}, {
+								mData : 'legalPerson'
+							}, {
+								mData : 'address'
+							} , {
+								mData : 'comType'
+							}, {
+								mData : 'comType'
+							}, {
+								mData : 'comType'
+							}],
+							'aoColumnDefs' : [ {
+								'targets' : 0,
+								'searchable' : false,
+								'orderable' : false,
+								'className' : 'dt-body-center',
+								'render' : function(data,
+										type, full, meta) {
+									return '<input type="checkbox" name="id[]" value="'
+											+ $('<div/>')
+													.text(
+															data)
+													.html()
+											+ '">';
+								}
+							},{
+								'targets' : 1,
+								'render' : function(data,
+										type, row, meta) {
+									return '<a   ng-click="showCompanyInfo(\''+row.comId+'\')">'+data+'</a>';
+								},"createdCell": function (td, cellData, rowData, row, col) {
+									 $compile(td)($scope);
+							    }
+							} ],
+
+						})
+		// 构建datatables结束***************************************
+
+		// 添加checkbox功能***************************************
+		// Handle click on "Select all" control
+		$('#example-select-all').on(
+				'click',
+				function() {
+					// Check/uncheck all checkboxes in the
+					// table
+					var rows = table.rows({
+						'search' : 'applied'
+					}).nodes();
+					$('input[type="checkbox"]', rows).prop(
+							'checked', this.checked);
+				});
+
+		// Handle click on checkbox to set state of "Select
+		// all" control
+		$('#sample_1 tbody')
+				.on(
+						'change',
+						'input[type="checkbox"]',
+						function() {
+							// If checkbox is not checked
+							if (!this.checked) {
+								var el = $(
+										'#example-select-all')
+										.get(0);
+								// If "Select all" control
+								// is checked and has
+								// 'indeterminate' property
+								if (el
+										&& el.checked
+										&& ('indeterminate' in el)) {
+									// Set visual state of
+									// "Select all" control
+									// as 'indeterminate'
+									el.indeterminate = true;
+								}
+							}
+						});
+		
+		
+		
+		
 	 		/**
 	 		 * 保存
 	 		 */
@@ -57,7 +210,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        		$scope.companyView = true;
 	        		$scope.companyAdd = true;
 	        		//$stateParams.comId = company.comId;
-	        		$location.search('comId',company.comId);
+	        		//$location.search('comId',company.comId);
 	            },function(data){
 	               //调用承诺接口reject();
 	            });
@@ -82,6 +235,23 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        };  
 	        
 	        /**
+	         * 编辑
+	         */
+	        $scope.toEditCompany=function () {
+				// Iterate over all checkboxes in the table
+				var id_count = table.$('input[type="checkbox"]:checked').length;
+				if(id_count==0){
+					handle.showMesssage("warning","请选择一条数据进行编辑","提示");
+				}else if(id_count>1){
+					handle.showMesssage("warning","只能选择一条数据进行编辑","提示");
+				}else{
+					var comId = table.$('input[type="checkbox"]:checked').val();
+					$state.go("companyAdd",{comId:comId});
+				}
+				
+	        };  
+	        
+	        /**
 	         * 删除
 	         */
 	        $scope.deleteCompany=function (comId) {
@@ -99,6 +269,45 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        		
 	        	});
 			   
+	        };
+	        
+	        
+	        /**
+	         * 删除
+	         */
+	        $scope.deleteCompanyBatch=function () {
+	        	
+	        	handle.confirm("确定删除吗？",function(){
+	        		var ids = '';
+					// Iterate over all checkboxes in the table
+					table.$('input[type="checkbox"]').each(
+							function() {
+								// If checkbox exist in DOM
+								if ($.contains(document, this)) {
+									// If checkbox is checked
+									if (this.checked) {
+										// 将选中数据id放入ids中
+										if (ids == '') {
+											ids = this.value;
+										} else
+											ids = ids + ','
+													+ this.value;
+									}
+								}
+							});
+	        		handle.blockUI();
+	        		var promise = companyService.deleteCompanyBatch(ids);
+	        		promise.then(function(data){
+	        			handle.showMesssage("success","删除成功","提示");
+	        			handle.unblockUI();
+	        			table.ajax.reload(); // 重新加载datatables数据
+	        			/*$state.go('company',{},{reload:true}); */
+	        		},function(data){
+	        			//调用承诺接口reject();
+	        		});
+	        		
+	        	});
+	        	
 	        };
 	        
 	        /**
@@ -259,12 +468,12 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    	   
 	       }
 	       
-	       $scope.$watch("aaa",function(){  
+	    /*   $scope.$watch("aaa",function(){  
 	    	      console.log($scope.aaa); 
 	    	      console.log("-------33------------"); 
 	    	    
 	    	      console.log($scope.$parent.list);
-	       }); 
+	       }); */
 	  
 	      /* $scope.$watch("list",function(){  
 	    	   console.log($scope.list);  

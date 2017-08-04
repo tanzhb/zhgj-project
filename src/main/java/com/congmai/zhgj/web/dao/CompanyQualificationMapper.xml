@@ -35,24 +35,24 @@
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.CompanyQualification" >
     insert into companyQualification (serialNum, comId, qualificationNum, 
       validityDate, qualificationName, qualificatioImage, 
-      delFlg, creator, createTime, 
+       creator, createTime, 
       updater, updateTime)
     values (#{serialNum,jdbcType=VARCHAR}, #{comId,jdbcType=VARCHAR}, #{qualificationNum,jdbcType=VARCHAR}, 
       #{validityDate,jdbcType=DATE}, #{qualificationName,jdbcType=VARCHAR}, #{qualificatioImage,jdbcType=VARCHAR}, 
-      #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   
   <insert id="insertSelectiveBatch"  parameterType="java.util.List"> 
    insert into companyQualification (serialNum, comId, qualificationNum, 
       validityDate, qualificationName, qualificatioImage, 
-      delFlg, creator, createTime, 
+      creator, createTime, 
       updater, updateTime) 
     values  
     <foreach collection="list" item="item" index="index" separator="," >  
        (#{item.serialNum,jdbcType=VARCHAR}, #{item.comId,jdbcType=VARCHAR}, #{item.qualificationNum,jdbcType=VARCHAR}, 
       #{item.validityDate,jdbcType=DATE}, #{item.qualificationName,jdbcType=VARCHAR}, #{item.qualificatioImage,jdbcType=VARCHAR}, 
-      #{item.delFlg,jdbcType=VARCHAR}, #{item.creator,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
+      #{item.creator,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
       #{item.updater,jdbcType=VARCHAR}, #{item.updateTime,jdbcType=TIMESTAMP})  
     </foreach>  
 </insert>  

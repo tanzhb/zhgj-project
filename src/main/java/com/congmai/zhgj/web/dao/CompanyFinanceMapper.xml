@@ -34,11 +34,11 @@
 
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.CompanyFinance" >
     insert into companyFinance (serialNum, comId, openingBank, 
-      accountName, accountNumber,remark, delFlg, 
+      accountName, accountNumber,remark,
       creator, createTime, updater, 
       updateTime)
     values (#{serialNum,jdbcType=VARCHAR}, #{comId,jdbcType=VARCHAR}, #{openingBank,jdbcType=VARCHAR}, 
-      #{accountName,jdbcType=VARCHAR}, #{accountNumber,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, 
+      #{accountName,jdbcType=VARCHAR}, #{accountNumber,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>

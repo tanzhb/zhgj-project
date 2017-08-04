@@ -195,7 +195,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                             //'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
                             //'assets/global/plugins/datatables/datatables.all.min.js',
                             //'assets/pages/scripts/table-datatables-managed.min.js',
-                            //'assets/pages/scripts/table-datatables-fixedheader.min.js',
+                            'assets/pages/scripts/table-datatables-fixedheader.min.js',
                             'assets/apps/service/UserService.js',
                             'assets/apps/controllers/UserController.js'
                         ]
@@ -235,6 +235,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         				        'assets/global/plugins/jquery.blockui.min.js',
         				        'assets/pages/scripts/ui-blockui.min.js',
         				        'assets/apps/scripts/pageHandle.js',
+        				        'assets/pages/scripts/table-datatables-fixedheader.min.js',
         				        'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js'
         				        ]
         			});
@@ -272,7 +273,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        				        'assets/pages/scripts/ui-bootbox.min.js',
 	        				        'assets/global/plugins/jquery.blockui.min.js',
 	        				        'assets/pages/scripts/ui-blockui.min.js',
-	        				        'assets/apps/scripts/pageHandle.js'
+	        				        'assets/apps/scripts/pageHandle.js',
+	        				        'assets/pages/scripts/form-validation.min.js'
+	        				        
 	        				        ]
 	        			});
 	        		}]

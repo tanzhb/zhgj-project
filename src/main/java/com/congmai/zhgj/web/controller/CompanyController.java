@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.controller;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +25,7 @@ import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyContact;
 import com.congmai.zhgj.web.model.CompanyFinance;
 import com.congmai.zhgj.web.model.CompanyQualification;
+import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.CompanyContactService;
 import com.congmai.zhgj.web.service.CompanyFinanceService;
 import com.congmai.zhgj.web.service.CompanyQualificationService;
@@ -55,9 +59,6 @@ public class CompanyController {
      */
     @RequestMapping("companyManage")
     public String companyIndex(Map<String, Object> map,HttpServletRequest request,Company company) {
-    	//company.setPageIndex(0);
-    	//company.setPageSize(10);
-    	//map.put("list", companyService.selectByPage(company));
         return "company/companyManage";
     }
     
@@ -66,12 +67,37 @@ public class CompanyController {
      * @param request
      * @return
      */
-    @RequestMapping("companyList")
+  /*  @RequestMapping("companyList")
     @ResponseBody
     public Page<Company> companyList(Map<String, Object> map,HttpServletRequest request,Company company) {
     	company.setFirstResult((company.getPageIndex()-1)*company.getPageSize());
     	company.setPageSize(company.getPageSize());
     	return companyService.selectByPage(company);
+    }
+    */
+    /**
+     * @Description (获取列表数据)
+     * @param request
+     * @return
+     */
+    @RequestMapping("companyList")
+    public ResponseEntity<Map<String,Object>> companyList(Map<String, Object> map,HttpServletRequest request,Company company) {
+    	
+    	List<Company> companys = companyService.selectByPage(new Company()).getResult();
+
+		if (companys.isEmpty()) {
+			return new ResponseEntity<Map<String,Object>>(HttpStatus.NO_CONTENT);// You many
+																	// decide to
+																	// return
+																	// HttpStatus.NOT_FOUND
+		}
+		// 封装datatables数据返回到前台
+		Map<String,Object> pageMap = new HashMap<String,Object>();
+		pageMap.put("draw", 1);
+		pageMap.put("recordsTotal", companys.size());
+		pageMap.put("recordsFiltered", companys.size());
+		pageMap.put("data", companys);
+		return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
     }
     
     
@@ -127,13 +153,20 @@ public class CompanyController {
      */
     @RequestMapping("saveCompany")
     @ResponseBody
-    public Company saveCompany(Map<String, Object> map,Company company) {
+    public Company saveCompany(Map<String, Object> map,Company company,HttpServletRequest request) {
     	String flag ="0"; //默认失败
     	try{
+    		String user = "user";
     		if(StringUtils.isEmpty(company.getComId())){
     			company.setComId(UUID.randomUUID().toString().replace("-",""));
+    			company.setCreateTime(new Date());
+    			company.setCreator(user);
+    			company.setUpdateTime(new Date());
+    			company.setUpdater(user);
     			companyService.insert(company);
     		}else{
+    			company.setUpdateTime(new Date());
+    			company.setUpdater(user);
     			companyService.update(company);
     		}
     		
@@ -225,8 +258,15 @@ public class CompanyController {
     	try{
     		if(StringUtils.isEmpty(companyContact.getSerialNum())){
     			companyContact.setSerialNum(UUID.randomUUID().toString().replace("-",""));
+    			companyContact.setSerialNum(UUID.randomUUID().toString().replace("-",""));
+    			companyContact.setCreateTime(new Date());
+    			companyContact.setCreator("user");
+    			companyContact.setUpdateTime(new Date());
+    			companyContact.setUpdater("user");
     			companyContactService.insert(companyContact);
     		}else{
+    			companyContact.setUpdateTime(new Date());
+    			companyContact.setUpdater("user");
     			companyContactService.update(companyContact);
     		}
     		
@@ -252,8 +292,14 @@ public class CompanyController {
     	try{
     		if(StringUtils.isEmpty(companyFinance.getSerialNum())){
     			companyFinance.setSerialNum(UUID.randomUUID().toString().replace("-",""));
+    			companyFinance.setCreateTime(new Date());
+    			companyFinance.setCreator("user");
+    			companyFinance.setUpdateTime(new Date());
+    			companyFinance.setUpdater("user");
     			companyFinanceService.insert(companyFinance);
     		}else{
+    			companyFinance.setUpdateTime(new Date());
+    			companyFinance.setUpdater("user");
     			companyFinanceService.update(companyFinance);
     		}
     		

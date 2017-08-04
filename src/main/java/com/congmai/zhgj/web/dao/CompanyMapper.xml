@@ -37,7 +37,6 @@
     from company
    		where 1=1
    	order by createTime DESC
-	      limit ${firstResult},${pageSize}
   </select>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
@@ -66,7 +65,7 @@
       legalPerson, address, taxpayeNumber, 
       tel, contact, businessNature, 
       comNature, businessType, classification,remark, 
-      status, delFlg, creator, 
+      status, creator, 
       createTime, updater, updateTime
       )
     values (#{comId,jdbcType=VARCHAR}, #{comNum,jdbcType=VARCHAR}, #{comType,jdbcType=VARCHAR}, 
@@ -74,7 +73,7 @@
       #{legalPerson,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{taxpayeNumber,jdbcType=VARCHAR}, 
       #{tel,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, #{businessNature,jdbcType=VARCHAR}, 
       #{comNature,jdbcType=VARCHAR}, #{businessType,jdbcType=VARCHAR}, #{classification,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>

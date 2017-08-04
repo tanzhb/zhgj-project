@@ -75,8 +75,8 @@
                     </div>
                 </div>
             </div> -->
-            <div class="portlet-body">
-                 <div class="table-toolbar">
+          <div class="portlet-body">
+  <!--               <div class="table-toolbar">
                     <div class="row">
                         <div class="col-md-7">
                             <div class="btn-group">
@@ -87,9 +87,9 @@
                         </div>
                         <div class="col-md-5">
                             <div class="btn-group pull-right">
-                             	<!-- <a href="javascript:;" class="btn btn-icon-only blue btn-outline">
+                             	<a href="javascript:;" class="btn btn-icon-only blue btn-outline">
                                           <i class="fa fa-search"></i>
-                                 </a> -->
+                                 </a>
                                  <div class="input-group input-medium pull-left">
                                                     <input ng-model="searchKey" type="text" class="form-control" placeholder="请输入关键字">
                                                     <span class="input-group-btn">
@@ -115,7 +115,7 @@
 							</div>
                         </div>
                     </div>
-                </div> 
+                </div>  -->
                 
                 
                 <div class="portlet box blue">
@@ -128,9 +128,50 @@
                                         <a href="javascript:;" class="btn btn-default btn-sm">
                                             <i class="fa fa-print"></i> 打印 </a>
                                     </div> -->
+                                    <div class="actions">
+										<a href="javascript:;" 
+											 class="btn btn-default btn-sm btn-circle"  ui-sref="companyAdd">
+											<i class="fa fa-plus"></i> 添加
+										</a> <a href="javascript:;" 
+											 class="btn btn-default btn-sm btn-circle"  ng-click="toEditCompany()">
+											<i class="fa fa-edit"></i> 编辑
+										</a> <a href="javascript:;" 
+											class="btn btn-default btn-sm btn-circle" ng-click="deleteCompanyBatch()"> <i
+											class="fa fa-minus"></i> 删除
+										</a>
+										<div class="btn-group">
+											<a class="btn btn-default btn-outline btn-circle"
+												href="javascript:;" data-toggle="dropdown"> <i
+												class="fa fa-share"></i> <span class="hidden-xs"> 其它 </span> <i
+												class="fa fa-angle-down"></i>
+											</a>
+											<ul class="dropdown-menu pull-right" id="sample_3_tools">
+												<li><a href="javascript:;" data-action="0"
+													class="tool-action"> <i class="icon-printer"></i> Print
+												</a></li>
+												<li><a href="javascript:;" data-action="1"
+													class="tool-action"> <i class="icon-check"></i> Copy
+												</a></li>
+												<li><a href="javascript:;" data-action="2"
+													class="tool-action"> <i class="icon-doc"></i> PDF
+												</a></li>
+												<li><a href="javascript:;" data-action="3"
+													class="tool-action"> <i class="icon-paper-clip"></i> Excel
+												</a></li>
+												<li><a href="javascript:;" data-action="4"
+													class="tool-action"> <i class="icon-cloud-upload"></i> CSV
+												</a></li>
+												<li class="divider"></li>
+												<li><a href="javascript:;" data-action="5"
+													class="tool-action"> <i class="icon-refresh"></i> Reload
+												</a></li>
+												</li>
+											</ul>
+										</div>
+									</div>
                                 </div>
-                                <div class="portlet-body dataTables_wrapper">
-                                    <div class="table-responsive">
+                                <div class="portlet-body">
+                                    <!-- <div class="table-responsive"> -->
 										<table   class="table table-bordered" id="sample_1">
 											<!-- <thead>
 												<tr>
@@ -142,7 +183,8 @@
 											</thead> -->
 											<thead>
 												<tr>
-													<th>#</th>
+													<th><input name="select_all"
+															value="1" id="example-select-all" type="checkbox" /></th>
 													<th>企业编码</th>
 													<th>企业名称</th>
 													<th>企业性质</th>
@@ -153,13 +195,14 @@
 													<th>业务员</th>
 													<th>采购商分类</th>
 													<th>状态</th>
-													<th class="center">操作</th>
+													 <!-- <th class="center">操作</th> 
+													 <th class="center">操作</th>  -->
 												</tr>
 											</thead>
 											<tbody>
-												<tr ng-repeat="record in records.result" class="odd gradeX" ng-cloak>
+												<!-- <tr ng-repeat="record in records.result" class="odd gradeX" ng-cloak>
 													<td></td>
-													<!-- <td><a data-target="#viewCompany" data-id="record.comId"  data-toggle="modal">{{record.comNum}}</a></td> -->
+													<td><a data-target="#viewCompany" data-id="record.comId"  data-toggle="modal">{{record.comNum}}</a></td>
 													<td><a   ng-click="showCompanyInfo(record.comId)">{{record.comNum}}</a></td>
 													<td>{{record.comName}}</td>
 													<td>{{record.comNature}}</td>
@@ -174,15 +217,15 @@
 														<a ui-sref="companyAdd({comId:record.comId})" title="编辑"><i class="fa fa-edit"></i></a>&nbsp;&nbsp; 
 														<a ng-click="deleteCompany(record.comId)" title="删除"><i class="fa fa-trash"></i></a>
 													</td>
-												</tr> 
+												</tr>  -->
 											 </tbody>
 										</table>
-									</div>
+									<!-- </div> -->
 									<!-- <div class="rows">
 										<ul id="page"></ul>
 										
 									</div> -->
-									<div class="row">
+								<!-- 	<div class="row">
 										<div class="col-md-5 col-sm-5">
 											<div class="dataTables_info" id="sample_1_info" role="status"></div>
 										</div>
@@ -193,7 +236,7 @@
 											</div>
 										</div>
 									</div>
-			
+			 -->
 			
 			
 								</div>

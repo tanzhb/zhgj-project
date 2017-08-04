@@ -54,6 +54,10 @@
                         <div class="portlet-body form">
                             <form  id="wareForm" class="form-horizontal" >
 								<div class="form-body">
+									<div class="alert alert-danger display-hide">
+                                                <button class="close" data-close="alert"></button> You have some form errors. Please check below. </div>
+                                    <div class="alert alert-success display-hide">
+                                                <button class="close" data-close="alert"></button> Your form validation is successful! </div>
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group">
@@ -85,8 +89,16 @@
 											<div class="form-group">
 												<label class="control-label col-md-4">企业类型：</label>
 												<div class="col-md-8">
-													<input ng-hide="companyAdd" type="text" ng-model="company.comType"
-														class="form-control" placeholder=""> 
+													<select class="bs-select form-control" ng-hide="companyAdd" ng-model="company.comType">
+                                                             <option value="采购商" >采购商</option>
+                                                             <option value="供应商" >供应商</option>
+                                                             <option value="承运人" >承运人</option>
+                                                             <option value="外协仓" >外协仓</option>
+                                                             <option value="境外供应商" >境外供应商</option>
+                                                             <option value="装卸公司" >装卸公司</option>
+                                                             <option value="银行" >银行</option>
+                                                             <option value="保险公司" >保险公司</option>
+                                                    </select>
 													<p class="form-control-static"  ng-show="companyView">{{company.comType}}</p>
 												</div>
 											</div>
@@ -96,8 +108,12 @@
 											<div class="form-group">
 												<label class="control-label col-md-4">企业简称：</label>
 												<div class="col-md-8">
-													<input ng-hide="companyAdd" type="text" ng-model="company.abbreviation"
-														class="form-control" placeholder=""> 
+													<select class="bs-select form-control" ng-hide="companyAdd" ng-model="company.abbreviation">
+                                                             <option value="国有企业" >国有企业</option>
+                                                             <option value="民营企业" >民营企业</option>
+                                                             <option value="合资企业" >合资企业</option>
+                                                             <option value="外资企业" >外资企业</option>
+                                                    </select>
 													<p class="form-control-static"  ng-show="companyView">{{company.abbreviation}}</p>
 												</div>
 											</div>
@@ -110,8 +126,11 @@
 											<div class="form-group">
 												<label class="control-label col-md-4">经营性质：</label>
 												<div class="col-md-8">
-													<input ng-hide="companyAdd" type="text" ng-model="company.businessNature"
-														class="form-control" placeholder="">
+													<select class="bs-select form-control" ng-hide="companyAdd" ng-model="company.businessNature">
+                                                             <option value="国有企业" >加工制造</option>
+                                                             <option value="民营企业" >分销/交易</option>
+                                                             <option value="合资企业" >仓储供应</option>
+                                                    </select>
 													<p class="form-control-static"  ng-show="companyView">{{company.businessNature}}</p>
 												</div>
 											</div>
@@ -444,8 +463,8 @@
                  <div class="row">
                      <div class="col-md-12">
                          <div class="form-group">
-                             <label class="control-label col-md-3">姓名：</label>
-                             <div class="col-md-9 input-icon right">
+                             <label class="control-label col-md-4">姓名：</label>
+                             <div class="col-md-8 input-icon right">
                                  <input type="text" ng-model="companyContact.contactName" class="form-control" placeholder="">
                                  <span class="help-block"></span>
                              </div>
@@ -456,8 +475,8 @@
                  <div class="row">
                      <div class="col-md-12">
                          <div class="form-group">
-                             <label class="control-label col-md-3">职位：</label>
-                             <div class="col-md-9 input-icon right">
+                             <label class="control-label col-md-4">职位：</label>
+                             <div class="col-md-8 input-icon right">
                                  <input type="text" ng-model="companyContact.contactTitle" class="form-control" placeholder="">
                                  <span class="help-block"></span>
                              </div>
@@ -467,8 +486,8 @@
                  <div class="row">
                      <div class="col-md-12">
                          <div class="form-group">
-                             <label class="control-label col-md-3">部门/公司：</label>
-                             <div class="col-md-9 input-icon right">
+                             <label class="control-label col-md-4">部门/公司：</label>
+                             <div class="col-md-8 input-icon right">
                                  <input type="text" ng-model="companyContact.department" class="form-control" placeholder="">
                                  <span class="help-block"></span>
                              </div>
@@ -479,8 +498,8 @@
                  <div class="row">
                      <div class="col-md-12">
                          <div class="form-group">
-                             <label class="control-label col-md-3">电话：</label>
-                             <div class="col-md-9 input-icon right">
+                             <label class="control-label col-md-4">电话：</label>
+                             <div class="col-md-8 input-icon right">
                                  <input type="text" ng-model="companyContact.contactTel" class="form-control" placeholder="">
                                  <span class="help-block"></span>
                              </div>
@@ -491,8 +510,8 @@
                  <div class="row">
                      <div class="col-md-12">
                          <div class="form-group">
-                             <label class="control-label col-md-3">微信：</label>
-                             <div class="col-md-9 input-icon right">
+                             <label class="control-label col-md-4">微信：</label>
+                             <div class="col-md-8 input-icon right">
                                  <input type="text" ng-model="companyContact.wechat" class="form-control" placeholder="">
                                  <span class="help-block"></span>
                              </div>
@@ -503,8 +522,8 @@
                  <div class="row">
                      <div class="col-md-12">
                          <div class="form-group">
-                             <label class="control-label col-md-3">邮箱：</label>
-                             <div class="col-md-9 input-icon right">
+                             <label class="control-label col-md-4">邮箱：</label>
+                             <div class="col-md-8 input-icon right">
                                  <input type="text" ng-model="companyContact.contactEmail" class="form-control" placeholder="">
                                  <span class="help-block"></span>
                              </div>
@@ -515,8 +534,8 @@
                  <div class="row">
                      <div class="col-md-12">
                          <div class="form-group">
-                             <label class="control-label col-md-3">备注：</label>
-                             <div class="col-md-9 input-icon right">
+                             <label class="control-label col-md-4">备注：</label>
+                             <div class="col-md-8 input-icon right">
                                  <input type="text" ng-model="companyContact.remark" class="form-control" placeholder="">
                                  <span class="help-block"></span>
                              </div>
@@ -553,7 +572,7 @@
                  <div class="row">
                      <div class="col-md-12">
                          <div class="form-group">
-                             <label class="control-label col-md-3">银行</label>
+                             <label class="control-label col-md-3">银行：</label>
                              <div class="col-md-9 input-icon right">
                                  <input type="text" ng-model="companyFinance.openingBank" class="form-control" placeholder="">
                                  <span class="help-block"></span>
@@ -565,7 +584,7 @@
                  <div class="row">
                      <div class="col-md-12">
                          <div class="form-group">
-                             <label class="control-label col-md-3">户名</label>
+                             <label class="control-label col-md-3">户名：</label>
                              <div class="col-md-9 input-icon right">
                                  <input type="text" ng-model="companyFinance.accountName" class="form-control" placeholder="">
                                  <span class="help-block"></span>
@@ -577,7 +596,7 @@
                  <div class="row">
                      <div class="col-md-12">
                          <div class="form-group">
-                             <label class="control-label col-md-3">账号</label>
+                             <label class="control-label col-md-3">账号：</label>
                              <div class="col-md-9 input-icon right">
                                  <input type="text" ng-model="companyFinance.accountNumber" class="form-control" placeholder="">
                                  <span class="help-block"></span>
@@ -588,7 +607,7 @@
                  <div class="row">
                      <div class="col-md-12">
                          <div class="form-group">
-                             <label class="control-label col-md-3">备注</label>
+                             <label class="control-label col-md-3">备注：</label>
                              <div class="col-md-9 input-icon right">
                                  <input type="text" ng-model="companyFinance.remark" class="form-control" placeholder="">
                                  <span class="help-block"></span>

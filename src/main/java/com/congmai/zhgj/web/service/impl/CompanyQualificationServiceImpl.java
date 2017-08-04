@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -67,7 +68,13 @@ public class CompanyQualificationServiceImpl extends GenericServiceImpl<CompanyQ
 				if(StringUtils.isEmpty(companyQualification.getSerialNum())){
 					insertList.add(companyQualification);
 	    			companyQualification.setSerialNum(UUID.randomUUID().toString().replace("-",""));
+	    			companyQualification.setCreateTime(new Date());
+	    			companyQualification.setCreator("user");
+	    			companyQualification.setUpdateTime(new Date());
+	    			companyQualification.setUpdater("user");
 	    		}else{
+	    			companyQualification.setUpdateTime(new Date());
+	    			companyQualification.setUpdater("user");
 	    			updateList.add(companyQualification);
 	    		}
     		}
