@@ -88,25 +88,4 @@ public class ApplicationUtils {
 		System.out.print("++++++++  " + list);
 	}
 
-    
-    /**
-	 * 
-	 * @Description 切割ids成list
-	 * @param ids
-	 * @return
-	 */
-	public static List<String> getIdList(String ids) {
-		List<String> list = new ArrayList<String>();
-		String[] str = ids.split(",");
-		for (int i = 0; i < str.length; i++) {
-			list.add(str[i]);
-		}
-		return list;
-	}
-	
-	public static void main(String args[]){
-		String ids = "45";
-		List<String> list = ApplicationUtils.getIdList(ids);
-		System.out.print("++++++++  " + list);
-	}
 }

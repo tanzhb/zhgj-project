@@ -31,6 +31,12 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     		if($scope.materiel.manufactureDate=='') {
     			$scope.materiel.manufactureDate=null;
     		}
+    		if($scope.materiel.isBOM==true) {
+    			$scope.materiel.isBOM=1;
+    		}else{
+    			$scope.materiel.isBOM=0;
+    		}
+
     		materielService.save($scope.materiel).then(
        		     function(answer){
        		    	 $state.go('materiel');
