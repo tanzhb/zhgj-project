@@ -2,7 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.congmai.zhgj.web.dao.UserMapper">
     <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.User">
+
         <id column="id" property="id" jdbcType="BIGINT" />
+        <id column="id" property="id" jdbcType="VARCHAR" />
         <result column="loginName" property="loginName" jdbcType="VARCHAR" />
         <result column="password" property="password" jdbcType="CHAR" />
         <result column="userName" property="userName" jdbcType="VARCHAR" />
@@ -111,11 +113,11 @@
         select
         <include refid="Base_Column_List" />
         from user
-        where id = #{id,jdbcType=BIGINT}
+        where id = #{id,jdbcType=VARCHAR}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from user
-        where id = #{id,jdbcType=BIGINT}
+        where id = #{id,jdbcType=VARCHAR}
     </delete>
     <!-- 逻辑删除 -->
     <delete id="deleteUsers" parameterType="java.util.List">
@@ -134,7 +136,7 @@
     <insert id="insert" parameterType="com.congmai.zhgj.web.model.User">
         insert into user (id, loginName, password, userName, idNumber, station, telphone, email, 
         state, delFlg, creator, createTime, updater, updateTime, comments)
-        values (#{id,jdbcType=BIGINT}, #{loginName,jdbcType=VARCHAR}, #{password,jdbcType=CHAR},#{userName,jdbcType=VARCHAR}, 
+        values (#{id,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, #{password,jdbcType=CHAR},#{userName,jdbcType=VARCHAR}, 
         #{idNumber,jdbcType=VARCHAR},#{station,jdbcType=VARCHAR},#{telphone,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},
         #{state,jdbcType=VARCHAR},#{delFlg,jdbcType=CHAR},#{creator,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},
         #{updater,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{comments,jdbcType=VARCHAR})
@@ -191,7 +193,7 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
-                #{id,jdbcType=BIGINT},
+                #{id,jdbcType=VARCHAR},
             </if>
             <if test="loginName != null">
                 #{loginName,jdbcType=VARCHAR},
@@ -249,7 +251,7 @@
         update user
         <set>
             <if test="user.id != null">
-                id = #{user.id,jdbcType=BIGINT},
+                id = #{user.id,jdbcType=VARCHAR},
             </if>
             <if test="user.loginName != null">
                 loginName = #{loginName,jdbcType=VARCHAR},
@@ -302,7 +304,7 @@
     </update>
     <update id="updateByExample" parameterType="map">
         update user
-        set id = #{id,jdbcType=BIGINT},
+        set id = #{id,jdbcType=VARCHAR},
         loginName = #{loginName,jdbcType=VARCHAR},
         password = #{password,jdbcType=CHAR},
         userName = #{userName,jdbcType=VARCHAR},
@@ -369,7 +371,7 @@
                 comments = #{comments,jdbcType=VARCHAR},
             </if>
         </set>
-        where id = #{id,jdbcType=BIGINT}
+        where id = #{id,jdbcType=VARCHAR}
     </update>
     
    <select id="isUserExist" parameterType="com.congmai.zhgj.web.model.User" resultType="java.lang.Integer">
@@ -394,7 +396,7 @@
         updater = #{updater,jdbcType=VARCHAR},
         updateTime = #{updateTime,jdbcType=TIMESTAMP},
         comments = #{comments,jdbcType=VARCHAR}
-        where id = #{id,jdbcType=BIGINT}
+        where id = #{id,jdbcType=VARCHAR}
     </update>
 
     <!-- 用户登录验证查询 -->
