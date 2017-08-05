@@ -22,7 +22,7 @@
             </a>
             <ul class="sub-menu">
                 <li>
-                    <a ui-sref="uibootstrap">
+                    <a ui-sref="materiel">
                         <i class="icon-puzzle"></i> 物料信息</span>
                     </a>
                 </li>
