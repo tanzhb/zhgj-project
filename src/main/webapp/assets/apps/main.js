@@ -196,7 +196,66 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
+        .state('warehouse', {
+            url: "/warehouse",
+            templateUrl: "rest/warehouse/viewWarehouseList",
+            data: {pageTitle: '仓库信息'},
+            controller: "WarehouseController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [   
+							/*'assets/global/plugins/jquery.min.js',
+							'assets/global/plugins/bootstrap/js/bootstrap.min.js',
+							'assets/global/plugins/js.cookie.min.js',
+							'assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js',
+							'assets/global/plugins/jquery.blockui.min.js',
+							'assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js',
+							'assets/global/scripts/datatable.js',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+							'assets/global/scripts/app.min.js',
+							
+							'assets/layouts/layout2/scripts/layout.min.js',
+							'assets/layouts/layout2/scripts/demo.min.js',
+							'assets/layouts/global/scripts/quick-sidebar.min.js',
+							'assets/layouts/global/scripts/quick-nav.min.js',*/
+                           'assets/global/plugins/datatables/datatables.min.css', 
+                           'assets/global/plugins/datatables/datatables.min.js',
+	                       /* 'assets/global/plugins/datatables/datatables.all.min.js',*/
+	                        'assets/apps/service/WarehouseService.js',
+	                        'assets/apps/controllers/WarehouseController.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        .state('addWarehouse', {
+            url: "/addWarehouse",
+            templateUrl: "rest/warehouse/addOrEditWarehouseInfo",
+            data: {pageTitle: '新增仓库'},
+            controller: "WarehouseController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [                             
+                            'assets/global/plugins/datatables/datatables.min.css', 
+                           /* 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+                            'assets/global/scripts/datatable.js',
+                            'assets/global/plugins/datatables/datatables.all.min.js',
+                            'assets/global/plugins/datatables/datatables.min.css', */
+                            'assets/global/plugins/datatables/datatables.min.js',
+                            /*'assets/pages/scripts/table-datatables-managed.min.js',*/
 
+                            'assets/apps/controllers/WarehouseController.js'
+                        ]
+                    });
+                }]
+            }
+        })
 }]);
 
 //js获取项目根路径，如： http://localhost:8083/uimcardprj  
