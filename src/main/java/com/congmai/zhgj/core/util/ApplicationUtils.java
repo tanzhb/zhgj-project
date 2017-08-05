@@ -16,7 +16,6 @@ import org.apache.commons.codec.digest.DigestUtils;
  */
 public class ApplicationUtils {
 
-
 	/**
 	 * 产生一个36个字符的UUID
 	 *
@@ -25,7 +24,16 @@ public class ApplicationUtils {
 	public static String randomUUID() {
 		return UUID.randomUUID().toString();
 	}
-
+    
+    
+    /**
+     * 产生一个32个字符的UUID
+     *
+     * @return UUID
+     */
+    public static String random32UUID() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
+    }
 
 	/**
 	 * md5加密
@@ -38,7 +46,6 @@ public class ApplicationUtils {
 		return DigestUtils.md5Hex(value);
 	}
 
-
 	/**
 	 * sha1加密
 	 *
@@ -49,7 +56,6 @@ public class ApplicationUtils {
 	public static String sha1Hex(String value) {
 		return DigestUtils.sha1Hex(value);
 	}
-
 
 	/**
 	 * sha256加密

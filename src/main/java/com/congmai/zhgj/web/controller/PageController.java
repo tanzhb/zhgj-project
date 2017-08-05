@@ -94,7 +94,22 @@ public class PageController {
     public String user() {
         return "user";
     }
-
+    /**
+     * 新增物料
+     */
+    @RequestMapping("/addMateriel")
+    public String addMateriel(String serialNum,String view) {
+        return "materiel/addMateriel";
+    }
+    
+    /**
+     * 新增物料
+     */
+    @RequestMapping("/materiel")
+    public String materiel() {
+        return "materiel/materiel";
+    }
+    
     /**
      * 404页
      */
