@@ -120,14 +120,15 @@ public class MaterielController {
 	}
 
     /**
-     * @param oredCriteria 
+     * 
      * @Description 查询物料列表//全部查询，或根据父节点查询
-     * @param materiel
+     * @param parent(若有值，则查询它及上级物料是它的物料)
+     * @param isLatestVersion(若有值为1，则查询所以已发布的正式物料)
      * @return
      */
     @RequestMapping("/findMaterielList")
     @ResponseBody
-    public ResponseEntity<Map> findMaterielList(String parent) {
+    public ResponseEntity<Map> findMaterielList(String parent,String isLatestVersion) {
     	MaterielExample m =new MaterielExample();
     	List<Materiel> materielList = new ArrayList<Materiel>();
     	if(parent==null||parent.isEmpty()){//查询全部物料
@@ -135,12 +136,15 @@ public class MaterielController {
         	Criteria criteria =  m.createCriteria();
         	criteria.andIsLatestVersionEqualTo("1");
         	criteria.andDelFlgEqualTo("0");
-        	//and 条件2
-        	Criteria criteria2 =  m.createCriteria();
-        	criteria2.andStatusEqualTo("0");
-        	criteria2.andDelFlgEqualTo("0");
-        	//or 条件
-        	m.or(criteria2);
+        	if("1".equals(isLatestVersion)){
+        	}else{
+        		//and 条件2,未发布可编辑的物料
+            	Criteria criteria2 =  m.createCriteria();
+            	criteria2.andStatusEqualTo("0");
+            	criteria2.andDelFlgEqualTo("0");
+            	//or 条件
+            	m.or(criteria2);
+        	}
         	//排序字段
         	m.setOrderByClause("updateTime DESC");
         	materielList = materielService.selectList(m);
