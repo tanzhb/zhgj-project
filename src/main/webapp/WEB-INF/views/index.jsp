@@ -28,7 +28,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
     <head>
     	<base href="<%=basePath%>">
-        <title data-ng-bind="'Metronic AngularJS | ' + $state.current.data.pageTitle"></title>
+        <title data-ng-bind="'中航国际 | ' + $state.current.data.pageTitle"></title>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1" name="viewport" />
@@ -41,7 +41,7 @@ License: You must have a valid license purchased only from themeforest(the above
         <link href="assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
         <!-- END GLOBAL MANDATORY STYLES -->
-         <!-- BEGIN PAGE LEVEL PLUGINS -->
+        <!-- BEGIN PAGE LEVEL PLUGINS -->
         <link href="assets/global/plugins/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css" />
         <!-- END PAGE LEVEL PLUGINS -->
         <!-- BEGIN DYMANICLY LOADED CSS FILES(all plugin and page related styles must be loaded between GLOBAL and THEME css files ) -->
@@ -139,6 +139,7 @@ License: You must have a valid license purchased only from themeforest(the above
         <!-- BEGIN APP LEVEL ANGULARJS SCRIPTS -->
         <script src="assets/apps/main.js" type="text/javascript"></script>
         <script src="assets/apps/directives.js" type="text/javascript"></script>
+        <script src="assets/apps/common.js" type="text/javascript"></script>
         <!-- END APP LEVEL ANGULARJS SCRIPTS -->
         <!-- BEGIN APP LEVEL JQUERY SCRIPTS -->
         <script src="assets/global/scripts/app.min.js" type="text/javascript"></script>

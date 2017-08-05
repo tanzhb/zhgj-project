@@ -1,5 +1,6 @@
 package com.congmai.zhgj.web.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,11 +69,10 @@ public class UserController {
 				return "login";
 			}
 			// 身份验证
-			subject.login(new UsernamePasswordToken(user.getUsername(), user
+			subject.login(new UsernamePasswordToken(user.getLoginName(), user
 					.getPassword()));
 			// 验证成功在Session中保存用户信息
-			final User authUserInfo = userService.selectByUsername(user
-					.getUsername());
+			final User authUserInfo = userService.selectByUsername(user.getLoginName());
 			request.getSession().setAttribute("userInfo", authUserInfo);
 		} catch (AuthenticationException e) {
 			// 身份验证失败
@@ -131,18 +131,44 @@ public class UserController {
 	@RequestMapping(value = "/addUser", method = RequestMethod.POST)
 	public ResponseEntity<Void> addUser(@RequestBody User user,
 			UriComponentsBuilder ucBuilder) {
-		if (userService.isUserExist(user)) {
-			System.out.println("A User with name " + user.getUsername()
-					+ " already exist");
-			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		if(user.getId() == null){
+			if (userService.isUserExist(user)) {
+				System.out.println("A User with name " + user.getLoginName()
+						+ " already exist");
+				return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+			}			
+			user.setCreator(currenLoginName);
+			user.setCreateTime(new Date());
+			if(user.getDelFlg() == null)
+				user.setDelFlg("0");
+			userService.insert(user);
+		}else{
+			user.setUpdater(currenLoginName);
+			user.setUpdateTime(new Date());
+			userService.update(user);
 		}
+		
 
-		userService.insert(user);
+		
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("/user/{id}")
 				.buildAndExpand(user.getId()).toUri());
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+	}
+	/**
+	 * 
+	 * @Description 根据id查找用户
+	 * @param user
+	 * @return
+	 */
+	@RequestMapping(value = "/selectById", method = RequestMethod.POST)
+	public ResponseEntity<User> selectById(@RequestBody String ids) {
+		User u = userService.selectById(Long.valueOf(ids));
+		
+		return new ResponseEntity<User>(u, HttpStatus.OK);
 	}
 	/**
 	 * 
