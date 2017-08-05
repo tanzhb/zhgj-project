@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.security.PermissionSign;
 import com.congmai.zhgj.web.security.RoleSign;
@@ -143,6 +144,7 @@ public class UserController {
 			user.setCreateTime(new Date());
 			if(user.getDelFlg() == null)
 				user.setDelFlg("0");
+			user.setId(ApplicationUtils.random32UUID());
 			userService.insert(user);
 		}else{
 			user.setUpdater(currenLoginName);
