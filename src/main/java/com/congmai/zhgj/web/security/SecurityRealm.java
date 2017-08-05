@@ -47,9 +47,9 @@ public class SecurityRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        String username = String.valueOf(principals.getPrimaryPrincipal());
+        String loginName = String.valueOf(principals.getPrimaryPrincipal());
 
-        final User user = userService.selectByUsername(username);
+        final User user = userService.selectByUsername(loginName);
         final List<Role> roleInfos = roleService.selectRolesByUserId(user.getId());
         for (Role role : roleInfos) {
             // 添加角色
@@ -71,14 +71,14 @@ public class SecurityRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        String username = String.valueOf(token.getPrincipal());
+        String loginName = String.valueOf(token.getPrincipal());
         String password = new String((char[]) token.getCredentials());
         // 通过数据库进行验证
-        final User authentication = userService.authentication(new User(username, password));
+        final User authentication = userService.authentication(new User(loginName, password));
         if (authentication == null) {
             throw new AuthenticationException("用户名或密码错误.");
         }
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(username, password, getName());
+        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(loginName, password, getName());
         return authenticationInfo;
     }
 
