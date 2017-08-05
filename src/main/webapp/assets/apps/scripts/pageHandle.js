@@ -5,7 +5,7 @@ pageHandle = (function(){
 		     	toastr.options = {
 		     		  "closeButton": true,
 		     		  "debug": false,
-		     		  "positionClass": "toast-top-right",
+		     		  "positionClass": "toast-top-center",
 		     		  "showDuration": "1000",
 		     		  "hideDuration": "1000",
 		     		  "timeOut": "5000",
@@ -16,6 +16,20 @@ pageHandle = (function(){
 		     		  "hideMethod": "fadeOut"
 		     	}  
 	}
+	
+	toastr.options = {
+			"closeButton": true,
+			"debug": false,
+			"positionClass": "toast-top-center",
+			"showDuration": "1000",
+			"hideDuration": "1000",
+			"timeOut": "5000",
+			"extendedTimeOut": "1000",
+			"showEasing": "swing",
+			"hideEasing": "linear",
+			"showMethod": "fadeIn",
+			"hideMethod": "fadeOut"
+	} 
 	
 	var _confirm = function(message,callbackOK,callbackCANCEL){
 		bootbox.confirm({
@@ -157,6 +171,7 @@ pageHandle = (function(){
 		this.datePickersInit = _datePickersInit;
 		this.pageRepeater = _pageRepeater;
 		this.isNull = _isNull;
+		this.toastr = toastr;
 		
 	}
 	

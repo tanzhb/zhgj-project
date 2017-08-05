@@ -10,6 +10,10 @@
 	margin-top: 4px;
 	margin-bottom: 4px;
 }
+
+.left{
+	float: left;
+}
 </style>
 <h3 class="page-title"> 企业信息
 </h3>
@@ -47,46 +51,63 @@
                                 <a href="" class="remove" data-original-title="" title=""> </a> -->
                                 <button   ng-show="companyView" class="btn blue  btn-outline  btn-sm " ng-click="editCompany()">
                                             <i class="fa fa-edit"></i> 编辑 </button>
+                                <button   ng-show="companyEdit" class="btn red  btn-outline  btn-sm " ng-click="cancelCompany('company')">
+                                            <i class="fa fa-undo"></i> 取消 </button>
                                 <button   ng-hide="companyAdd" class="btn blue  btn-outline  btn-sm " ng-click="saveCompany()">
                                             <i class="fa fa-save"></i> 保存 </button>
                             </div>
                         </div>
                         <div class="portlet-body form">
-                            <form  id="wareForm" class="form-horizontal" >
+                            <form  id="companyForm" class="form-horizontal" >
 								<div class="form-body">
 									<div class="alert alert-danger display-hide">
-                                                <button class="close" data-close="alert"></button> You have some form errors. Please check below. </div>
-                                    <div class="alert alert-success display-hide">
-                                                <button class="close" data-close="alert"></button> Your form validation is successful! </div>
+                                                <button class="close" data-close="alert"></button>请先输入正确数据！</div>
 									<div class="row">
 										<div class="col-md-6">
-											<div class="form-group">
+											<!-- <div class="form-group">
 												<label class="control-label col-md-4">企业编号：</label>
 												<div class="col-md-8 input-icon right">
 													<input  ng-hide="companyAdd"  type="text" ng-model="company.comNum"
 														class="form-control" placeholder="">
 													<p class="form-control-static" ng-show="companyView">{{company.comNum}}</p>
 												</div>
-											</div>
+											</div> -->
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="comNum"> <span class="required"> * </span>企业编号：</label>
+                                                    <div class="col-md-8">
+                                                        <input type="text" class="form-control" id="comNum" name="comNum" ng-model="company.comNum" ng-hide="companyAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="companyView">{{company.comNum}}</p>
+                                                    </div>
+                                            </div>
 										</div>
 						
 										<!--/span-->
 										<div class="col-md-6">
-											<div class="form-group">
+											<!-- <div class="form-group">
 												<label class="control-label col-md-4">企业名称：</label>
 												<div class="col-md-8">
 													<input  ng-hide="companyAdd"  type="text" ng-model="company.comName"
 														class="form-control" placeholder="">
 													<p class="form-control-static"  ng-show="companyView">{{company.comName}}</p>
 												</div>
-											</div>
+											</div> -->
+											
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="comName"> <span class="required"> * </span>企业名称：</label>
+                                                    <div class="col-md-8">
+                                                        <input type="text" class="form-control" id="comName"  name="comName" ng-model="company.comName" ng-hide="companyAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="companyView">{{company.comName}}</p>
+                                                    </div>
+                                            </div>
 										</div>
 										<!--/span-->
 									</div>
 									<!--/row-->
 									<div class="row">
 										<div class="col-md-6">
-											<div class="form-group">
+											<!-- <div class="form-group">
 												<label class="control-label col-md-4">企业类型：</label>
 												<div class="col-md-8">
 													<select class="bs-select form-control" ng-hide="companyAdd" ng-model="company.comType">
@@ -101,20 +122,48 @@
                                                     </select>
 													<p class="form-control-static"  ng-show="companyView">{{company.comType}}</p>
 												</div>
-											</div>
+											</div> -->
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="comType"> <span class="required"> * </span>企业类型：</label>
+                                                    <div class="col-md-8">
+                                                         <select class="form-control" id="comType"  ng-hide="companyAdd" name="comType"  ng-model="company.comType" >
+                                                            <option value=""></option>
+                                                           	<option value="采购商" >采购商</option>
+                                                             <option value="供应商" >供应商</option>
+                                                             <option value="承运人" >承运人</option>
+                                                             <option value="外协仓" >外协仓</option>
+                                                             <option value="境外供应商" >境外供应商</option>
+                                                             <option value="装卸公司" >装卸公司</option>
+                                                             <option value="银行" >银行</option>
+                                                             <option value="保险公司" >保险公司</option>
+                                                        </select>
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="companyView">{{company.comType}}</p>
+                                                    </div>
+                                            </div>
 										</div>
 										<!--/span-->
 										<div class="col-md-6">
-											<div class="form-group">
-												<label class="control-label col-md-4">企业简称：</label>
+											<div class="form-group  form-md-line-input">
+												<label class="control-label col-md-4" for="abbreviation">企业简称：</label>
 												<div class="col-md-8">
-													<select class="bs-select form-control" ng-hide="companyAdd" ng-model="company.abbreviation">
+													<input type="text" class="form-control" id="abbreviation" name="comNature" ng-model="company.abbreviation" ng-hide="companyAdd" > 
+													<!-- <select class="bs-select form-control" ng-hide="companyAdd" ng-model="company.abbreviation">
                                                              <option value="国有企业" >国有企业</option>
                                                              <option value="民营企业" >民营企业</option>
                                                              <option value="合资企业" >合资企业</option>
                                                              <option value="外资企业" >外资企业</option>
                                                     </select>
-													<p class="form-control-static"  ng-show="companyView">{{company.abbreviation}}</p>
+													<p class="form-control-static"  ng-show="companyView">{{company.abbreviation}}</p> -->
+													<!-- <select class="form-control" id="abbreviation" ng-hide="companyAdd"  ng-model="company.abbreviation" >
+                                                            <option value=""></option>
+                                                           	<option value="国有企业" >国有企业</option>
+                                                            <option value="民营企业" >民营企业</option>
+                                                            <option value="合资企业" >合资企业</option>
+                                                            <option value="外资企业" >外资企业</option>
+                                                    </select> -->
+                                                    <div class="form-control-focus"> </div>
+                                                    <p class="control-label left" ng-show="companyView">{{company.abbreviation}}</p>
 												</div>
 											</div>
 										</div>
@@ -123,7 +172,7 @@
 									<!--/row-->
 									<div class="row">
 										<div class="col-md-6">
-											<div class="form-group">
+											<!-- <div class="form-group">
 												<label class="control-label col-md-4">经营性质：</label>
 												<div class="col-md-8">
 													<select class="bs-select form-control" ng-hide="companyAdd" ng-model="company.businessNature">
@@ -133,109 +182,210 @@
                                                     </select>
 													<p class="form-control-static"  ng-show="companyView">{{company.businessNature}}</p>
 												</div>
+											</div> -->
+											<div class="form-group  form-md-line-input">
+												<label class="control-label col-md-4" for="businessNature">经营性质：</label>
+												<div class="col-md-8">
+													<select class="form-control" id="businessNature" ng-hide="companyAdd"  ng-model="company.businessNature" >
+                                                            <option value=""></option>
+                                                           	 <option value="国有企业" >加工制造</option>
+                                                             <option value="民营企业" >分销/交易</option>
+                                                             <option value="合资企业" >仓储供应</option>
+                                                    </select>
+                                                    <div class="form-control-focus"> </div>
+                                                    <p class="control-label left" ng-show="companyView">{{company.businessNature}}</p>
+												</div>
 											</div>
 										</div>
 										<div class="col-md-6">
-											<div class="form-group">
+											<!-- <div class="form-group">
 												<label class="control-label col-md-4">企业性质：</label>
 												<div class="col-md-8">
 													<input ng-hide="companyAdd" type="text" ng-model="company.comNature"
 														class="form-control" placeholder=""> 
 													<p class="form-control-static"  ng-show="companyView">{{company.comNature}}</p>
 												</div>
-											</div>
+											</div> -->
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="comNature"><span class="required"> * </span>企业性质：</label>
+                                                    <div class="col-md-8">
+                                                     <!--    <input type="text" class="form-control" id="comNature" name="comNature" ng-model="company.comNature" ng-hide="companyAdd" > -->
+                                                        <select class="form-control" id="comNature" ng-hide="companyAdd" name="comNature"  ng-model="company.comNature" >
+                                                            <option value=""></option>
+                                                           	<option value="国有企业" >国有企业</option>
+                                                            <option value="民营企业" >民营企业</option>
+                                                            <option value="合资企业" >合资企业</option>
+                                                            <option value="外资企业" >外资企业</option>
+                                                    	</select>
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="companyView">{{company.comNature}}</p>
+                                                    </div>
+                                            </div>
 										</div>
 									</div>
 									<!--/row-->
 									<div class="row">
 										<div class="col-md-6">
-											<div class="form-group">
+											<!-- <div class="form-group">
 												<label class="control-label col-md-4">经营类型：</label>
 												<div class="col-md-8">
 													<input ng-hide="companyAdd" type="text" ng-model="company.businessType"
 														class="form-control" placeholder=""> 
 													<p class="form-control-static"  ng-show="companyView">{{company.businessType}}</p>
 												</div>
-											</div>
+											</div> -->
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="businessType">经营类型：</label>
+                                                    <div class="col-md-8">
+                                                        <input type="text" class="form-control" id="businessType" ng-model="company.businessType" ng-hide="companyAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="companyView">{{company.businessType}}</p>
+                                                    </div>
+                                            </div>
 										</div>
 										<div class="col-md-6">
-											<div class="form-group">
+											<!-- <div class="form-group">
 												<label class="control-label col-md-4">注册资金：</label>
 												<div class="col-md-8">
 													<input ng-hide="companyAdd" type="text" ng-model="company.registeredCapital"
 														class="form-control" placeholder=""> 
 													<p class="form-control-static"  ng-show="companyView">{{company.registeredCapital}}</p>
 												</div>
-											</div>
+											</div> -->
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="registeredCapital">注册资金：</label>
+                                                    <div class="col-md-8">
+                                                      <!--   <input type="text" class="form-control" id="registeredCapital" name="registeredCapital" ng-model="company.registeredCapital" ng-hide="companyAdd" > -->
+                                                        <select class="form-control" id="registeredCapital" ng-hide="companyAdd"  ng-model="company.registeredCapital" >
+                                                            <option value=""></option>
+                                                           	<option value="0-50万" >0-50万</option>
+                                                            <option value="50万-100万" >50万-100万</option>
+                                                            <option value="100万-200万" >100万-200万</option>
+                                                            <option value="200万-500万" >200万-500万</option>
+                                                            <option value="500万-1000万" >500万-1000万</option>
+                                                            <option value="1000万以上" >1000万以上</option>
+                                                   		 </select>
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="companyView">{{company.registeredCapital}}</p>
+                                                    </div>
+                                            </div>
 										</div>
 									</div>
 									<!--/row-->
 									<div class="row">
 										<div class="col-md-6">
-											<div class="form-group">
+											<!-- <div class="form-group">
 												<label class="control-label col-md-4">企业法人姓名：</label>
 												<div class="col-md-8">
 													<input ng-hide="companyAdd" type="text" ng-model="company.legalPerson"
 														class="form-control" placeholder="">
 													<p class="form-control-static"  ng-show="companyView">{{company.legalPerson}}</p>
 												</div>
-											</div>
+											</div> -->
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="legalPerson"> <span class="required"> * </span>企业法人姓名:</label>
+                                                    <div class="col-md-8">
+                                                        <input type="text" class="form-control" id="legalPerson" name="legalPerson" ng-model="company.legalPerson" ng-hide="companyAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="companyView">{{company.legalPerson}}</p>
+                                                    </div>
+                                            </div>
 										</div>
 										<div class="col-md-6">
-											<div class="form-group">
+											<!-- <div class="form-group">
 												<label class="control-label col-md-4">注册地址：</label>
 												<div class="col-md-8">
 													<input ng-hide="companyAdd" type="text" ng-model="company.address"
 														class="form-control" placeholder=""> 
 													<p class="form-control-static"  ng-show="companyView">{{company.address}}</p>
 												</div>
-											</div>
+											</div> -->
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="address"> <span class="required"> * </span>注册地址：</label>
+                                                    <div class="col-md-8">
+                                                        <input type="text" class="form-control" id="address" name="address" ng-model="company.address" ng-hide="companyAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="companyView">{{company.address}}</p>
+                                                    </div>
+                                            </div>
 										</div>
 									</div>
 									<!--/row-->
 									<div class="row">
 										<div class="col-md-6">
-											<div class="form-group">
+											<!-- <div class="form-group">
 												<label class="control-label col-md-4">纳税人识别号：</label>
 												<div class="col-md-8">
 													<input ng-hide="companyAdd" type="text" ng-model="company.taxpayeNumber"
 														class="form-control" placeholder=""> 
 													<p class="form-control-static"  ng-show="companyView">{{company.taxpayeNumber}}</p>
 												</div>
-											</div>
+											</div> -->
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="taxpayeNumber"> <span class="required"> * </span>纳税人识别号：</label>
+                                                    <div class="col-md-8">
+                                                        <input type="text" class="form-control" id="taxpayeNumber" name="taxpayeNumber" ng-model="company.taxpayeNumber" ng-hide="companyAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="companyView">{{company.taxpayeNumber}}</p>
+                                                    </div>
+                                            </div>
 										</div>
 										<div class="col-md-6">
-											<div class="form-group">
+											<!-- <div class="form-group">
 												<label class="control-label col-md-4">联系电话：</label>
 												<div class="col-md-8">
 													<input ng-hide="companyAdd" type="text" ng-model="company.tel"
 														class="form-control" placeholder=""> 
 													<p class="form-control-static"  ng-show="companyView">{{company.tel}}</p>
 												</div>
-											</div>
+											</div> -->
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="tel">联系电话：</label>
+                                                    <div class="col-md-8">
+                                                        <input type="text" class="form-control" id="tel" ng-model="company.tel" ng-hide="companyAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="companyView">{{company.tel}}</p>
+                                                    </div>
+                                            </div>
 										</div>
 									</div>
 									<!--/row-->
 									<div class="row">
 										<div class="col-md-6">
-											<div class="form-group">
+											<!-- <div class="form-group">
 												<label class="control-label col-md-4">维护人员：</label>
 												<div class="col-md-8">
 													<input ng-hide="companyAdd" type="text" ng-model="company.contact"
 														class="form-control" placeholder="">
 													<p class="form-control-static"  ng-show="companyView">{{company.contact}}</p>
 												</div>
-											</div>
+											</div> -->
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="contact"><span class="required"> * </span>维护人员：</label>
+                                                    <div class="col-md-8">
+                                                        <input type="text" class="form-control" id="contact" name="contact" ng-model="company.contact" ng-hide="companyAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="companyView">{{company.contact}}</p>
+                                                    </div>
+                                            </div>
 										</div>
 										<div class="col-md-6">
-											<div class="form-group">
+											<!-- <div class="form-group">
 												<label class="control-label col-md-4">备注：</label>
 												<div class="col-md-8">
 													<input ng-hide="companyAdd" type="text" ng-model="company.remark"
 														class="form-control" placeholder=""> 
 													<p class="form-control-static"  ng-show="companyView" class="control-label">{{company.remark}}</p>
 												</div>
-											</div>
+											</div> -->
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="remark">备注：</label>
+                                                    <div class="col-md-8">
+                                                        <input type="text" class="form-control" id="remark" ng-model="company.remark" ng-hide="companyAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="companyView">{{company.remark}}</p>
+                                                    </div>
+                                            </div>
 										</div>
 									</div>
 								</div>
@@ -254,19 +404,21 @@
                                 <a href="" class="remove" data-original-title="" title=""> </a> -->
                                 <button   ng-show="companyQualificationView" class="btn blue btn-outline  btn-sm " ng-click="editCompanyQualification()">
                                             <i class="fa fa-edit"></i> 编辑 </button>
+                                <button   ng-show="companyQualificationEdit" class="btn red  btn-outline  btn-sm " ng-click="cancelCompany('companyQualification')">
+                                            <i class="fa fa-undo"></i> 取消 </button>
                                 <button   ng-hide="companyQualificationAdd" class="btn blue btn-outline  btn-sm " ng-click="saveCompanyQualification()">
                                             <i class="fa fa-save"></i> 保存 </button>
                             </div>
                         </div>
                         <div class="portlet-body form">
-                            <form  id="wareForm" class="page-repeater form-horizontal">
+                            <form  id="qualificationForm" class="page-repeater form-horizontal">
 								<div class="form-body" data-repeater-list="group-a"  >
 									<div  class="row" data-repeater-item  ng-repeat="companyQualification in companyQualifications  track by $index" repeat-done="repeatDone()">
 										<div class="col-md-3">
 											<div class="form-group">
 												<div class="col-md-12 input-icon right">
-													<input  ng-hide="companyQualificationAdd" type="text" ng-model="companyQualification.qualificationName"
-														class="form-control" placeholder="资质信息"> <span
+													<input  ng-hide="companyQualificationAdd" type="text" ng-model="companyQualification.qualificationName" name="qualificationName"
+														class="form-control" placeholder="资质名称"> <span
 														class="help-block"></span>
 														<label   ng-show="companyQualificationView"  class="c_edit" >{{companyQualification.qualificationName}}</label>
 												</div>
@@ -277,7 +429,7 @@
 										<div class="col-md-3">
 											<div class="form-group">
 												<div class="col-md-12">
-													<input  ng-hide="companyQualificationAdd" type="text" ng-model="companyQualification.qualificationNum"
+													<input  ng-hide="companyQualificationAdd" type="text" ng-model="companyQualification.qualificationNum" name="qualificationNum"
 														class="form-control" placeholder="资质号码"> <span
 														class="help-block"></span>
 														<label   ng-show="companyQualificationView"  class="c_edit" >{{companyQualification.qualificationNum}}</label>
@@ -291,7 +443,7 @@
 													<div  ng-hide="companyQualificationAdd" class="input-group input-medium date date-picker"
 														 data-date-format="yyyy-mm-dd"
 														data-date-viewmode="years">
-														<input type="text" class="form-control" readonly="" ng-model="companyQualification.validityDate"
+														<input type="text" class="form-control" readonly="" ng-model="companyQualification.validityDate" name="validityDate"
 															placeholder="有效期"> <span class="input-group-btn">
 															<button class="btn default" type="button">
 																<i class="fa fa-calendar"></i>
@@ -333,7 +485,7 @@
                                      				</a>
 												</div> -->
 												<div class="col-md-12">
-													 <a href="javascript:;" data-repeater-delete class="btn red btn-sm" ng-click="deleteRepeat()">
+													 <a href="javascript:;"  class="btn red btn-sm" ng-click="deleteRepeat()">
                                             			<i class="fa fa-close"></i> 
                                      				</a>
 												</div>
@@ -342,7 +494,7 @@
 									</div>
 									<!-- /row -->
 								</div>
-								<div class="form-actions right">
+								<div class="form-actions right" ng-hide="companyQualificationAdd">
 									<a href="javascript:;" data-repeater-create class="btn blue btn-sm" ng-click="addRepeat()" >
                                             <i class="fa fa-plus"></i> 增加
                                      </a>
@@ -374,6 +526,7 @@
 			                                                    <th>微信</th>
 			                                                    <th>邮箱</th>
 			                                                    <th>备注</th>
+			                                                    <th style="width:65px;"></th>
 			                                                </tr>
 			                                            </thead>
 			                                           <tbody ng-show="noContactData" ng-if="companyContact.length==0">
@@ -381,21 +534,26 @@
 			                                                    <td colspan="7" align="center" >暂无数据</td>
 			                                                </tr>
 			                                            </tbody>
-			                                            <tbody ng-repeat="contact in companyContacts">
-			                                                <tr>
-			                                                    <td>{{contact.contactName}}</td>
-			                                                    <td>{{contact.contactTitle}}</td>
-			                                                    <td>{{contact.department}}</td>
-			                                                    <td>{{contact.contactTel}}</td>
-			                                                    <td>{{contact.wechat}}</td>
-			                                                    <td>{{contact.contactEmail}}</td>
-			                                                    <td>{{contact.remark}}</td>
+			                                            <tbody ng-repeat="_contact in companyContacts track by $index">
+			                                                <tr ng-mouseover="showOperation('contact',$index)" ng-mouseleave="hideOperation('contact',$index)">
+			                                                    <td>{{_contact.contactName}}</td>
+			                                                    <td>{{_contact.contactTitle}}</td>
+			                                                    <td>{{_contact.department}}</td>
+			                                                    <td>{{_contact.contactTel}}</td>
+			                                                    <td>{{_contact.wechat}}</td>
+			                                                    <td>{{_contact.contactEmail}}</td>
+			                                                    <td>{{_contact.remark}}</td>
+			                                                    <td ng-show="operation_c{{$index}}">
+			                                                    	<a ng-click="editCompanyContact(_contact.serialNum)"><i class="fa fa-edit" title="编辑"></i></a>
+			                                                    	&nbsp;&nbsp;&nbsp;
+			                                                    	<a ng-click="deleteCompanyContact(_contact.serialNum)"><i class="fa fa-trash" title="删除"></i></a>
+			                                                    </td>
 			                                                </tr>
 			                                            </tbody>
 			                                        </table>
 			                                    </div>
 			                                    <div class="form-actions right">
-												 	<a href="#"  class="btn blue btn-sm"   data-toggle="modal" data-target="#contact" >
+												 	<a  class="btn blue btn-sm"   data-toggle="modal" data-target="#contactor" >
 			                                            <i class="fa fa-plus"></i> 增加
 			                                     	</a>
 			                                	</div>
@@ -422,14 +580,20 @@
                                                     <th>户名</th>
                                                     <th>账号</th>
                                                     <th>备注</th>
+                                                    <th style="width:65px;"></th>
                                                 </tr>
                                             </thead>
                                             <tbody ng-repeat="finance in companyFinances">
-                                                <tr>
+                                                <tr ng-mouseover="showOperation('finance',$index)" ng-mouseleave="hideOperation('finance',$index)">
                                                     <td>{{finance.openingBank}}</td>
                                                     <td>{{finance.accountName}}</td>
                                                     <td>{{finance.accountNumber}}</td>
                                                     <td>{{finance.remark}}</td>
+                                                    <td ng-show="operation_f{{$index}}">
+                                                    	<a ng-click="editCompanyFinance(finance.serialNum)"><i class="fa fa-edit" title="编辑"></i></a>
+                                                    		&nbsp;&nbsp;&nbsp;
+                                                    	<a ng-click="deleteCompanyFinance(finance.serialNum)"><i class="fa fa-trash" title="删除"></i></a>
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -449,8 +613,8 @@
 
 
 
- <div class="modal fade" id="contact" tabindex="-1" role="contact" aria-hidden="true" data-backdrop="static">
-     <div class="modal-dialog" style="width: 400px;">
+ <div class="modal fade  modal-overflow in" id="contactor" tabindex="-1" role="contactor" aria-hidden="true" data-backdrop="static">
+     <div class="modal-dialog" style="width: 450px;">
          <div class="modal-content">
              <div class="modal-header">
                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
@@ -458,87 +622,138 @@
              </div>
              <div class="modal-body">
                <div class="form-body" >
-               <form id="wareForm">
+               <div class="alert alert-danger display-hide">
+                                                <button class="close" data-close="alert"></button>表单数据未填写完整</div>
+               <form id="contactForm"  class="form-horizontal">
                 <!--  <h3 class="form-section">仓库信息</h3> -->
                  <div class="row">
                      <div class="col-md-12">
-                         <div class="form-group">
+                        <!--  <div class="form-group">
                              <label class="control-label col-md-4">姓名：</label>
                              <div class="col-md-8 input-icon right">
                                  <input type="text" ng-model="companyContact.contactName" class="form-control" placeholder="">
                                  <span class="help-block"></span>
                              </div>
+                         </div> -->
+                         <div class="form-group form-md-line-input">
+                                 <label class="col-md-4 control-label" for="contactName"><span class="required"> * </span>姓名：</label>
+                                 <div class="col-md-7">
+                                     <input type="text" class="form-control" id="contactName" name="contactName" ng-model="companyContact.contactName"  >
+                                     <div class="form-control-focus"> </div>
+                                 </div>
                          </div>
                      </div>
                  </div>
                  <!--/row-->
                  <div class="row">
                      <div class="col-md-12">
-                         <div class="form-group">
+                        <!--  <div class="form-group">
                              <label class="control-label col-md-4">职位：</label>
                              <div class="col-md-8 input-icon right">
                                  <input type="text" ng-model="companyContact.contactTitle" class="form-control" placeholder="">
                                  <span class="help-block"></span>
                              </div>
+                         </div> -->
+                         <div class="form-group form-md-line-input">
+                                 <label class="col-md-4 control-label" for="contactTitle"><span class="required"> * </span>职位：</label>
+                                 <div class="col-md-7">
+                                     <input type="text" class="form-control" id="contactTitle" name="contactTitle" ng-model="companyContact.contactTitle"  >
+                                     <div class="form-control-focus"> </div>
+                                 </div>
                          </div>
                      </div>
                  </div>
                  <div class="row">
                      <div class="col-md-12">
-                         <div class="form-group">
+                         <!-- <div class="form-group">
                              <label class="control-label col-md-4">部门/公司：</label>
                              <div class="col-md-8 input-icon right">
                                  <input type="text" ng-model="companyContact.department" class="form-control" placeholder="">
                                  <span class="help-block"></span>
                              </div>
+                         </div> -->
+                         <div class="form-group form-md-line-input">
+                                 <label class="col-md-4 control-label" for="department"><span class="required"> * </span>部门/公司：</label>
+                                 <div class="col-md-7">
+                                     <input type="text" class="form-control" id="department" name="department" ng-model="companyContact.department"  >
+                                     <div class="form-control-focus"> </div>
+                                 </div>
                          </div>
                      </div>
                  </div>
                  <!--/row-->
                  <div class="row">
                      <div class="col-md-12">
-                         <div class="form-group">
+                         <!-- <div class="form-group">
                              <label class="control-label col-md-4">电话：</label>
                              <div class="col-md-8 input-icon right">
                                  <input type="text" ng-model="companyContact.contactTel" class="form-control" placeholder="">
                                  <span class="help-block"></span>
                              </div>
+                         </div> -->
+                         <div class="form-group form-md-line-input">
+                                 <label class="col-md-4 control-label" for="contactTel"><span class="required"> * </span>电话：</label>
+                                 <div class="col-md-7">
+                                     <input type="text" class="form-control" id="contactTel" name="contactTel" ng-model="companyContact.contactTel"  >
+                                     <div class="form-control-focus"> </div>
+                                 </div>
                          </div>
                      </div>
                  </div>
                  <!--/row-->
                  <div class="row">
                      <div class="col-md-12">
-                         <div class="form-group">
+                         <!-- <div class="form-group">
                              <label class="control-label col-md-4">微信：</label>
                              <div class="col-md-8 input-icon right">
                                  <input type="text" ng-model="companyContact.wechat" class="form-control" placeholder="">
                                  <span class="help-block"></span>
                              </div>
+                         </div> -->
+                         <div class="form-group form-md-line-input">
+                                 <label class="col-md-4 control-label" for="wechat">微信：</label>
+                                 <div class="col-md-7">
+                                     <input type="text" class="form-control" id="wechat" ng-model="companyContact.wechat"  >
+                                     <div class="form-control-focus"> </div>
+                                 </div>
                          </div>
                      </div>
                  </div>
                  <!--/row-->
                  <div class="row">
                      <div class="col-md-12">
-                         <div class="form-group">
+                         <!-- <div class="form-group">
                              <label class="control-label col-md-4">邮箱：</label>
                              <div class="col-md-8 input-icon right">
                                  <input type="text" ng-model="companyContact.contactEmail" class="form-control" placeholder="">
                                  <span class="help-block"></span>
                              </div>
+                         </div> -->
+                         <div class="form-group form-md-line-input">
+                                 <label class="col-md-4 control-label" for="contactEmail">邮箱：</label>
+                                 <div class="col-md-7">
+                                     <input type="text" class="form-control" id="contactEmail" ng-model="companyContact.contactEmail"  >
+                                     <div class="form-control-focus"> </div>
+                                 </div>
                          </div>
                      </div>
                  </div>
                  <!--/row-->
                  <div class="row">
                      <div class="col-md-12">
-                         <div class="form-group">
+                         <!-- <div class="form-group">
                              <label class="control-label col-md-4">备注：</label>
                              <div class="col-md-8 input-icon right">
                                  <input type="text" ng-model="companyContact.remark" class="form-control" placeholder="">
                                  <span class="help-block"></span>
                              </div>
+                         </div> -->
+                         <div class="form-group form-md-line-input">
+                                 <label class="col-md-4 control-label" for="remark">备注：</label>
+                                 <div class="col-md-7">
+                                     <input type="text" class="form-control" id="remark" ng-model="companyContact.remark"  >
+                                     <div class="form-control-focus"> </div>
+                                 </div>
                          </div>
                      </div>
                  </div>
@@ -567,51 +782,81 @@
              </div>
              <div class="modal-body">
                <div class="form-body" >
-               <form id="wareForm">
+               <div class="alert alert-danger display-hide">
+                                                <button class="close" data-close="alert"></button>表单数据未填写完整</div>
+               <form id="companyFinanceForm" class="form-horizontal">
                 <!--  <h3 class="form-section">仓库信息</h3> -->
                  <div class="row">
                      <div class="col-md-12">
-                         <div class="form-group">
+                         <!-- <div class="form-group">
                              <label class="control-label col-md-3">银行：</label>
                              <div class="col-md-9 input-icon right">
                                  <input type="text" ng-model="companyFinance.openingBank" class="form-control" placeholder="">
                                  <span class="help-block"></span>
                              </div>
+                         </div> -->
+                         <div class="form-group form-md-line-input">
+                                 <label class="col-md-4 control-label" for="openingBank"><span class="required"> * </span>银行：</label>
+                                 <div class="col-md-7">
+                                     <input type="text" class="form-control" id="openingBank" name="openingBank" ng-model="companyFinance.openingBank"  >
+                                     <div class="form-control-focus"> </div>
+                                 </div>
                          </div>
                      </div>
                  </div>
                  <!--/row-->
                  <div class="row">
                      <div class="col-md-12">
-                         <div class="form-group">
+                         <!-- <div class="form-group">
                              <label class="control-label col-md-3">户名：</label>
                              <div class="col-md-9 input-icon right">
                                  <input type="text" ng-model="companyFinance.accountName" class="form-control" placeholder="">
                                  <span class="help-block"></span>
                              </div>
+                         </div> -->
+                         <div class="form-group form-md-line-input">
+                                 <label class="col-md-4 control-label" for="accountName"><span class="required"> * </span>户名：</label>
+                                 <div class="col-md-7">
+                                     <input type="text" class="form-control" id="accountName" name="accountName" ng-model="companyFinance.accountName"  >
+                                     <div class="form-control-focus"> </div>
+                                 </div>
                          </div>
                      </div>
                  </div>
                  <!--/row-->
                  <div class="row">
                      <div class="col-md-12">
-                         <div class="form-group">
+                         <!-- <div class="form-group">
                              <label class="control-label col-md-3">账号：</label>
                              <div class="col-md-9 input-icon right">
                                  <input type="text" ng-model="companyFinance.accountNumber" class="form-control" placeholder="">
                                  <span class="help-block"></span>
                              </div>
+                         </div> -->
+                         <div class="form-group form-md-line-input">
+                                 <label class="col-md-4 control-label" for="accountNumber"><span class="required"> * </span>账号：</label>
+                                 <div class="col-md-7">
+                                     <input type="text" class="form-control" id="accountNumber" name="accountNumber" ng-model="companyFinance.accountNumber"  >
+                                     <div class="form-control-focus"> </div>
+                                 </div>
                          </div>
                      </div>
                  </div>
                  <div class="row">
                      <div class="col-md-12">
-                         <div class="form-group">
+                         <!-- <div class="form-group">
                              <label class="control-label col-md-3">备注：</label>
                              <div class="col-md-9 input-icon right">
                                  <input type="text" ng-model="companyFinance.remark" class="form-control" placeholder="">
                                  <span class="help-block"></span>
                              </div>
+                         </div> -->
+                         <div class="form-group form-md-line-input">
+                                 <label class="col-md-4 control-label" for="remark">备注：</label>
+                                 <div class="col-md-7">
+                                     <input type="text" class="form-control" id="remark" ng-model="companyFinance.remark"  >
+                                     <div class="form-control-focus"> </div>
+                                 </div>
                          </div>
                      </div>
                  </div>
@@ -629,6 +874,166 @@
      </div>
      <!-- /.modal-dialog -->
  </div>
+
+
+
+<!-- 
+
+
+
+
+
+  BEGIN SAMPLE FORM PORTLET
+                                <div class="portlet light bordered">
+                                    <div class="portlet-title">
+                                        <div class="caption font-green-haze">
+                                            <i class="icon-settings font-green-haze"></i>
+                                            <span class="caption-subject bold uppercase"> Horizontal Form</span>
+                                        </div>
+                                        <div class="actions">
+                                            <a class="btn btn-circle btn-icon-only blue" href="javascript:;">
+                                                <i class="icon-cloud-upload"></i>
+                                            </a>
+                                            <a class="btn btn-circle btn-icon-only green" href="javascript:;">
+                                                <i class="icon-wrench"></i>
+                                            </a>
+                                            <a class="btn btn-circle btn-icon-only red" href="javascript:;">
+                                                <i class="icon-trash"></i>
+                                            </a>
+                                            <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body form">
+                                        <form role="form" class="form-horizontal">
+                                            <div class="form-body">
+                                                <div class="form-group form-md-line-input">
+                                                    <label class="col-md-2 control-label" for="form_control_1">Regular input</label>
+                                                    <div class="col-md-10">
+                                                        <input type="text" class="form-control" id="form_control_1" placeholder="Enter your name">
+                                                        <div class="form-control-focus"> </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-md-line-input">
+                                                    <label class="col-md-2 control-label" for="form_control_1">Input with hint</label>
+                                                    <div class="col-md-10">
+                                                        <input type="text" class="form-control" id="form_control_1" placeholder="Enter your email">
+                                                        <div class="form-control-focus"> </div>
+                                                        <span class="help-block">Some help goes here...</span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-md-line-input has-success">
+                                                    <label class="col-md-2 control-label" for="form_control_1">Success Input</label>
+                                                    <div class="col-md-10">
+                                                        <input type="text" class="form-control" id="form_control_1" placeholder="Success state">
+                                                        <div class="form-control-focus"> </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-md-line-input has-warning">
+                                                    <label class="col-md-2 control-label" for="form_control_1">Warning Input</label>
+                                                    <div class="col-md-10">
+                                                        <input type="text" class="form-control" id="form_control_1" placeholder="Warning state">
+                                                        <div class="form-control-focus"> </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-md-line-input has-error">
+                                                    <label class="col-md-2 control-label" for="form_control_1">Error State</label>
+                                                    <div class="col-md-10">
+                                                        <input type="text" class="form-control" id="form_control_1" placeholder="Error state">
+                                                        <div class="form-control-focus"> </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-md-line-input">
+                                                    <label class="col-md-2 control-label" for="form_control_1">Dropdown Input</label>
+                                                    <div class="col-md-10">
+                                                        <select class="form-control" id="form_control_1">
+                                                            <option value=""></option>
+                                                            <option value="">Option 1</option>
+                                                            <option value="">Option 2</option>
+                                                            <option value="">Option 3</option>
+                                                            <option value="">Option 4</option>
+                                                        </select>
+                                                        <div class="form-control-focus"> </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-md-line-input has-success">
+                                                    <label class="col-md-2 control-label" for="form_control_1">Textarea</label>
+                                                    <div class="col-md-10">
+                                                        <textarea class="form-control" rows="3" placeholder="Enter more text"></textarea>
+                                                        <div class="form-control-focus"> </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-md-line-input">
+                                                    <label class="col-md-2 control-label" for="form_control_1">Disabled</label>
+                                                    <div class="col-md-10">
+                                                        <input type="text" class="form-control" disabled id="form_control_1" placeholder="Placeholder...">
+                                                        <div class="form-control-focus"> </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-md-line-input">
+                                                    <label class="col-md-2 control-label" for="form_control_1">Readonly</label>
+                                                    <div class="col-md-10">
+                                                        <input type="text" class="form-control" readonly value="Some value" id="form_control_1" placeholder="Placeholder...">
+                                                        <div class="form-control-focus"> </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-md-line-input">
+                                                    <label class="col-md-2 control-label" for="form_control_1">Readonly</label>
+                                                    <div class="col-md-10">
+                                                        <div class="form-control form-control-static"> email@example.com </div>
+                                                        <div class="form-control-focus"> </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-md-line-input">
+                                                    <label class="col-md-2 control-label" for="form_control_1">Small</label>
+                                                    <div class="col-md-10">
+                                                        <input type="text" class="form-control input-sm" id="form_control_1" placeholder=".input-sm">
+                                                        <div class="form-control-focus"> </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-md-line-input">
+                                                    <label class="col-md-2 control-label" for="form_control_1">Large</label>
+                                                    <div class="col-md-10">
+                                                        <input type="text" class="form-control input-lg" id="form_control_1" placeholder=".input-lg">
+                                                        <div class="form-control-focus"> </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-actions">
+                                                <div class="row">
+                                                    <div class="col-md-offset-2 col-md-10">
+                                                        <button type="button" class="btn default">Cancel</button>
+                                                        <button type="button" class="btn blue">Submit</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                END SAMPLE FORM PORTLET
+
+
+
+ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

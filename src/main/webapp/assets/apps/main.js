@@ -214,10 +214,17 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         			return $ocLazyLoad.load({
         				name: 'MetronicApp',
         				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
-        				files: [                             
-        				        'assets/global/plugins/datatables/datatables.min.css', 
-        				        'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-        				        'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
+        				files: [       
+'assets/global/plugins/datatables/datatables.min.css',                           
+'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+
+//'assets/global/plugins/datatables/datatables.min.js',
+'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+
+        				        //'assets/global/plugins/datatables/datatables.min.css', 
+        				        //'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+        				        //'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+        				       // 'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
         				        'assets/global/plugins/datatables/datatables.all.min.js',
         				        'assets/global/plugins/bootstrap-toastr/toastr.js',
         				        'assets/global/plugins/bootstrap-toastr/toastr.css',
@@ -275,6 +282,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        				        'assets/global/plugins/jquery.blockui.min.js',
 	        				        'assets/pages/scripts/ui-blockui.min.js',
 	        				        'assets/apps/scripts/pageHandle.js',
+	        				        'assets/global/plugins/jquery-validation/js/jquery.validate.min.js',
 	        				        'assets/pages/scripts/form-validation.min.js'
 	        				        
 	        				        ]

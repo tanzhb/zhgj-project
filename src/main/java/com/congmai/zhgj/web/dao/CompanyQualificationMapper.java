@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.web.model.CompanyQualification;
@@ -34,4 +35,6 @@ public interface CompanyQualificationMapper extends GenericDao<CompanyQualificat
     int updateSelectiveBatch(List<CompanyQualification> list);
     
     List<CompanyQualification>  selectListByCondition(CompanyQualification companyQualification);
+
+	void deleteByComId(String comId);
 }

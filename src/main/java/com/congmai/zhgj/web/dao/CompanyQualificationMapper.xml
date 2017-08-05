@@ -31,6 +31,11 @@
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </delete>
   
+  <update id="deleteByComId" parameterType="java.util.Map" >
+    update  companyQualification set delFlg =1 
+    where comId = #{comId,jdbcType=VARCHAR}
+  </update>
+  
 
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.CompanyQualification" >
     insert into companyQualification (serialNum, comId, qualificationNum, 
@@ -60,11 +65,11 @@
   <select id="selectList" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.CompanyQualification" >
     select 
     <include refid="Base_Column_List" />
-    from companyQualification
+    from companyQualification where delFlg= 0
   </select>
   
   <select id="countList" parameterType="com.congmai.zhgj.web.model.CompanyQualification" resultType="java.lang.Integer" >
-    select count(*) from companyQualification
+    select count(*) from companyQualification where delFlg= 0
 <!--     <if test="warehouseNum != null" >
 	        and warehouseNum = #{warehouseNum,jdbcType=VARCHAR},
 	      </if>
@@ -131,7 +136,7 @@
     select 
     <include refid="Base_Column_List" />
     from companyQualification
-       	where 1=1
+       	where delFlg ='0'
      <if test="comId != null" >
         and comId = #{comId,jdbcType=VARCHAR}
       </if>
@@ -140,6 +145,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.CompanyQualification" >
     update companyQualification
     <set >
+    	serialNum = #{item.serialNum,jdbcType=VARCHAR},
       <if test="comId != null" >
         comId = #{comId,jdbcType=VARCHAR},
       </if>
@@ -178,6 +184,7 @@
    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
 	    update companyQualification
 	    <set >
+	   		 serialNum = #{item.serialNum,jdbcType=VARCHAR},
 	      <if test="item.comId != null" >
 	        comId = #{item.comId,jdbcType=VARCHAR},
 	      </if>

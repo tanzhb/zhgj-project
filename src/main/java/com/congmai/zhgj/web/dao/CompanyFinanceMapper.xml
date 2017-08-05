@@ -26,10 +26,10 @@
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </select>
   
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from companyFinance
+  <update id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    update companyFinance set delFlg = 1
     where serialNum = #{serialNum,jdbcType=VARCHAR}
-  </delete>
+  </update>
   
 
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.CompanyFinance" >
@@ -46,18 +46,18 @@
   <select id="selectList" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.CompanyFinance" >
     select 
     <include refid="Base_Column_List" />
-    from companyFinance
+    from companyFinance where delFlg= 0
   </select>
   
   <select id="countList" parameterType="com.congmai.zhgj.web.model.CompanyFinance" resultType="java.lang.Integer" >
-    select count(*) from companyFinance
+    select count(*) from companyFinance where delFlg= 0
   </select>
   
     <select id="selectListByCondition" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.CompanyFinance" >
     select 
     <include refid="Base_Column_List" />
     from companyFinance
-    	where 1=1
+    	where  delFlg ='0'
      <if test="comId != null" >
         and comId = #{comId,jdbcType=VARCHAR}
       </if>

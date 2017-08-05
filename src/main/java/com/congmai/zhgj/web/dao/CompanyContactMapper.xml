@@ -30,10 +30,10 @@
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </select>
   
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from companyContact
+  <update id="deleteByPrimaryKey" parameterType="java.lang.String">
+    update companyContact set delFlg = 1
     where serialNum = #{serialNum,jdbcType=VARCHAR}
-  </delete>
+  </update>
   
   
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.CompanyContact">
@@ -51,11 +51,11 @@
   <select id="selectList" parameterType="com.congmai.zhgj.web.model.CompanyContact" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from companyContact
+    from companyContact where delFlg= 0
   </select>
   
   <select id="countList" parameterType="com.congmai.zhgj.web.model.CompanyContact" resultType="java.lang.Integer">
-    select count(*) from companyContact
+    select count(*) from companyContact where delFlg= 0
   </select>
   
   
@@ -63,7 +63,7 @@
     select 
     <include refid="Base_Column_List" />
     from companyContact
-    where 1=1 
+    where 1=1 and delFlg= 0
     <if test="comId != null">
        and comId = #{comId,jdbcType=VARCHAR}
     </if>
@@ -112,7 +112,7 @@
        <if test="department != null" >
         department = #{department,jdbcType=VARCHAR},
       </if>
-      <if test="record.remark != null" >
+      <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
       </if>
     </set>

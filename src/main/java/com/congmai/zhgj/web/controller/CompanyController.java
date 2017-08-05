@@ -1,5 +1,7 @@
 package com.congmai.zhgj.web.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,12 +11,14 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -155,24 +159,27 @@ public class CompanyController {
     @ResponseBody
     public Company saveCompany(Map<String, Object> map,Company company,HttpServletRequest request) {
     	String flag ="0"; //默认失败
-    	try{
-    		String user = "user";
-    		if(StringUtils.isEmpty(company.getComId())){
-    			company.setComId(UUID.randomUUID().toString().replace("-",""));
-    			company.setCreateTime(new Date());
-    			company.setCreator(user);
-    			company.setUpdateTime(new Date());
-    			company.setUpdater(user);
-    			companyService.insert(company);
-    		}else{
-    			company.setUpdateTime(new Date());
-    			company.setUpdater(user);
-    			companyService.update(company);
-    		}
-    		
-    		flag = "1";
-    	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    	User user= (User)request.getSession().getAttribute("userInfo");
+    	if(user!=null){
+        	try{
+        	
+        		if(StringUtils.isEmpty(company.getComId())){
+        			company.setComId(UUID.randomUUID().toString().replace("-",""));
+        			company.setCreateTime(new Date());
+        			company.setCreator(user.getId().toString());
+        			company.setUpdateTime(new Date());
+        			company.setUpdater(user.getId().toString());
+        			companyService.insert(company);
+        		}else{
+        			company.setUpdateTime(new Date());
+        			company.setUpdater(user.getId().toString());
+        			companyService.update(company);
+        		}
+        		
+        		flag = "1";
+        	}catch(Exception e){
+        		System.out.println(e.getMessage());
+        	}
     	}
     	return company;
     }
@@ -228,20 +235,28 @@ public class CompanyController {
      */
     @RequestMapping("saveCompanyQualification")
     @ResponseBody
-    public List<CompanyQualification> saveCompanyQualification(Map<String, Object> map,@RequestBody String params) {
+    public List<CompanyQualification> saveCompanyQualification(Map<String, Object> map,@RequestBody String params,HttpServletRequest request) {
     	//List<CompanyQualification> companyQualificationArrays =Arrays.asList(companyQualifications);
     	String flag ="0"; //默认失败
     	List<CompanyQualification> companyQualifications = null;
-    	try{
-    		params = params.replace("\\", "");
-    		ObjectMapper objectMapper = new ObjectMapper();  
-            JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, CompanyQualification.class);  
-            companyQualifications = objectMapper.readValue(params, javaType); 
-    		companyQualificationService.insertOrUpdateBatch(companyQualifications);
-    		flag = "1";
-    	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    	User user= (User)request.getSession().getAttribute("userInfo");
+    	if(user!=null){
+    	   	try{
+        		params = params.replace("\\", "");
+        		ObjectMapper objectMapper = new ObjectMapper();  
+                JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, CompanyQualification.class);  
+                companyQualifications = objectMapper.readValue(params, javaType);
+                if(!CollectionUtils.isEmpty(companyQualifications)){
+                	companyQualificationService.deleteByComId(companyQualifications.get(0).getComId());
+            		companyQualificationService.insertBatch(companyQualifications,user.getId().toString());
+                }
+                
+        		flag = "1";
+        	}catch(Exception e){
+        		System.out.println(e.getMessage());
+        	}
     	}
+ 
     	return companyQualifications;
     }
     
@@ -252,31 +267,57 @@ public class CompanyController {
      */
     @RequestMapping("saveCompanyContact")
     @ResponseBody
-    public List<CompanyContact> saveCompanyContact(Map<String, Object> map,CompanyContact companyContact) {
+    public List<CompanyContact> saveCompanyContact(Map<String, Object> map,CompanyContact companyContact,HttpServletRequest request) {
     	String flag ="0"; //默认失败
     	List<CompanyContact> companyContacts = null;
+    	User user= (User)request.getSession().getAttribute("userInfo");
+    	if(user!=null){
+    	   	try{
+        		if(StringUtils.isEmpty(companyContact.getSerialNum())){
+        			companyContact.setSerialNum(UUID.randomUUID().toString().replace("-",""));
+        			companyContact.setSerialNum(UUID.randomUUID().toString().replace("-",""));
+        			companyContact.setCreateTime(new Date());
+        			companyContact.setCreator(user.getId().toString());
+        			companyContact.setUpdateTime(new Date());
+        			companyContact.setUpdater(user.getId().toString());
+        			companyContactService.insert(companyContact);
+        		}else{
+        			companyContact.setUpdateTime(new Date());
+        			companyContact.setUpdater(user.getId().toString());
+        			companyContactService.update(companyContact);
+        		}
+        		
+        		companyContacts = companyContactService.selectListByComId(companyContact.getComId());
+        		
+        		flag = "1";
+        	}catch(Exception e){
+        		System.out.println(e.getMessage());
+        	}
+
+    	}
+     	return companyContacts;
+    }
+    
+    /**
+     * @Description (删除联系人)
+     * @param request
+     * @return
+     */
+    @RequestMapping("deleteCompanyContact")
+    @ResponseBody
+    public String deleteCompanyContact(Map<String, Object> map,String serialNum) {
+    	String flag ="0"; //默认失败
+    
     	try{
-    		if(StringUtils.isEmpty(companyContact.getSerialNum())){
-    			companyContact.setSerialNum(UUID.randomUUID().toString().replace("-",""));
-    			companyContact.setSerialNum(UUID.randomUUID().toString().replace("-",""));
-    			companyContact.setCreateTime(new Date());
-    			companyContact.setCreator("user");
-    			companyContact.setUpdateTime(new Date());
-    			companyContact.setUpdater("user");
-    			companyContactService.insert(companyContact);
-    		}else{
-    			companyContact.setUpdateTime(new Date());
-    			companyContact.setUpdater("user");
-    			companyContactService.update(companyContact);
-    		}
     		
-    		companyContacts = companyContactService.selectListByComId(companyContact.getComId());
+    		companyContactService.delete(serialNum);
+    		
     		
     		flag = "1";
     	}catch(Exception e){
     		System.out.println(e.getMessage());
     	}
-    	return companyContacts;
+    	return flag;
     }
 
     /**
@@ -286,30 +327,55 @@ public class CompanyController {
      */
     @RequestMapping("saveCompanyFinance")
     @ResponseBody
-    public List<CompanyFinance> saveCompanyFinance(Map<String, Object> map,CompanyFinance companyFinance) {
+    public List<CompanyFinance> saveCompanyFinance(Map<String, Object> map,CompanyFinance companyFinance,HttpServletRequest request) {
     	String flag ="0"; //默认失败
     	List<CompanyFinance> companyFinances = null;
+    	User user= (User)request.getSession().getAttribute("userInfo");
+    	if(user!=null){
+    	   	try{
+        		if(StringUtils.isEmpty(companyFinance.getSerialNum())){
+        			companyFinance.setSerialNum(UUID.randomUUID().toString().replace("-",""));
+        			companyFinance.setCreateTime(new Date());
+        			companyFinance.setCreator(user.getId().toString());
+        			companyFinance.setUpdateTime(new Date());
+        			companyFinance.setUpdater(user.getId().toString());
+        			companyFinanceService.insert(companyFinance);
+        		}else{
+        			companyFinance.setUpdateTime(new Date());
+        			companyFinance.setUpdater(user.getId().toString());
+        			companyFinanceService.update(companyFinance);
+        		}
+        		
+        		companyFinances = companyFinanceService.selectListByComId(companyFinance.getComId());
+        		
+        		flag = "1";
+        	}catch(Exception e){
+        		System.out.println(e.getMessage());
+        	}
+    	}
+    	return companyFinances;
+    }
+    
+    /**
+     * @Description (删除财务信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping("deleteCompanyFinance")
+    @ResponseBody
+    public String deleteCompanyFinance(Map<String, Object> map,String serialNum) {
+    	String flag ="0"; //默认失败
+    	
     	try{
-    		if(StringUtils.isEmpty(companyFinance.getSerialNum())){
-    			companyFinance.setSerialNum(UUID.randomUUID().toString().replace("-",""));
-    			companyFinance.setCreateTime(new Date());
-    			companyFinance.setCreator("user");
-    			companyFinance.setUpdateTime(new Date());
-    			companyFinance.setUpdater("user");
-    			companyFinanceService.insert(companyFinance);
-    		}else{
-    			companyFinance.setUpdateTime(new Date());
-    			companyFinance.setUpdater("user");
-    			companyFinanceService.update(companyFinance);
-    		}
     		
-    		companyFinances = companyFinanceService.selectListByComId(companyFinance.getComId());
+    		companyFinanceService.delete(serialNum);
+    		
     		
     		flag = "1";
     	}catch(Exception e){
     		System.out.println(e.getMessage());
     	}
-    	return companyFinances;
+    	return flag;
     }
     
     

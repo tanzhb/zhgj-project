@@ -26,11 +26,13 @@ public interface CompanyQualificationService extends GenericService<CompanyQuali
 	 */
 	Company selectOne(String id);
 
-	void insertBatch(List<CompanyQualification> insertList);
+	void insertBatch(List<CompanyQualification> insertList,String userId);
 
 	void updateBatch(List<CompanyQualification> updateList);
 
 	void insertOrUpdateBatch(List<CompanyQualification> companyQualifications);
 
 	List<CompanyQualification> selectListByComId(String comId);
+
+	void deleteByComId(String comId);
 }

@@ -35,7 +35,7 @@
     select
     <include refid="Base_Column_List" />
     from company
-   		where 1=1
+   		where delFlg = 0
    	order by createTime DESC
   </select>
   
@@ -51,13 +51,21 @@
     where comId = #{comId,jdbcType=VARCHAR}
   </delete>
   
-  <delete id="deleteCompanyBatch"  parameterType="java.util.List" >
+<!--   <delete id="deleteCompanyBatch"  parameterType="java.util.List" >
     delete from company
     where comId in 
     (<foreach collection="list" item="item" index="index" separator="," >  
        #{item,jdbcType=VARCHAR}
     </foreach>)  
-  </delete>
+  </delete> -->
+  
+  <update id="deleteCompanyBatch"  parameterType="java.util.List" >
+    update company set delFlg = 1
+    where comId in 
+    (<foreach collection="list" item="item" index="index" separator="," >  
+       #{item,jdbcType=VARCHAR}
+    </foreach>)  
+  </update>
   
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.Company" >
     insert into company (comId, comNum, comType, 
@@ -81,7 +89,7 @@
 
   
   <select id="countList" parameterType="com.congmai.zhgj.web.model.Company" resultType="java.lang.Integer" >
-    select count(*) from company
+    select count(*) from company where delFlg = 0
   </select>
   
   <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.Company" >
