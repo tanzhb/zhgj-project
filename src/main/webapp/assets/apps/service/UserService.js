@@ -29,8 +29,9 @@ angular.module('MetronicApp').factory('UserService', ['$rootScope', '$http', '$q
     }
     //保存用户
     function saveUser(user){
+    	if(user.createTime != null) user.createTime = Date.parse(new Date(user.createTime));//date格式转换成timestamp格式
+    	if(user.updateTime != null) user.updateTime = Date.parse(new Date(user.updateTime));
         var deferred = $q.defer();  
-
         $http.post($rootScope.basePath + "/rest/user/addUser", user).success(function (data) {  
             // 如果连接成功，延时返回给调用者  
             deferred.resolve(data);  

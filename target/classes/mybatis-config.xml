@@ -9,7 +9,8 @@
 
     <!-- 配置mybatis的缓存，延迟加载等等一系列属性 -->
     <settings>
-
+    	<!-- 控制台打印sql语句 -->
+		<setting name="logImpl" value="STDOUT_LOGGING" />
         <!-- 全局映射器启用缓存 -->
         <setting name="cacheEnabled" value="true"/>
 
@@ -53,7 +54,7 @@
 
         <!-- 设置关联对象加载的形态，此处为按需加载字段(加载字段由SQL指 定)，不会加载关联表的所有字段，以提高性能 -->
         <setting name="aggressiveLazyLoading" value="false"/>
-		<setting name="logImpl" value="STDOUT_LOGGING" />
+
     </settings>
 
     <typeAliases>

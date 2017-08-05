@@ -161,7 +161,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
                         name: 'MetronicApp',
-                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before' 
                         files: [
                             'assets/global/plugins/datatables/datatables.min.css',
                             'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
@@ -265,17 +265,12 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                     return $ocLazyLoad.load({
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
-                        files: [
-                            'assets/global/plugins/datatables/datatables.min.css',
-//                            /'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-
-
-                            //'assets/global/scripts/datatable.js',
-                            'assets/global/plugins/datatables/datatables.min.js',
-                            //'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
-                            //'assets/global/plugins/datatables/datatables.all.min.js',
-                            //'assets/pages/scripts/table-datatables-managed.min.js',
-                            //'assets/pages/scripts/table-datatables-fixedheader.min.js',
+                        files: [      
+                            'assets/global/plugins/datatables/datatables.all.min.js',
+                            'assets/global/plugins/datatables/datatables.min.css',                           
+                            'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+                            
+                            'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
                             'assets/apps/service/UserService.js',
                             'assets/apps/controllers/UserController.js'
                         ]
@@ -285,6 +280,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
 
 }]);
+
 
 //js获取项目根路径，如： http://localhost:8083/uimcardprj
 function getRootPath(){
