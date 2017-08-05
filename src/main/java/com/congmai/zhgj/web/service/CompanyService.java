@@ -1,5 +1,7 @@
 package com.congmai.zhgj.web.service;
 
+import java.util.List;
+
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericService;
 import com.congmai.zhgj.web.model.Company;
@@ -21,5 +23,7 @@ public interface CompanyService extends GenericService<Company, String>{
 	 * @return
 	 */
 	Company selectOne(String id);
+
+	void deleteBatch(List<String> comIdList);
 	
 }

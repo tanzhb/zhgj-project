@@ -4,12 +4,16 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
+import com.congmai.zhgj.web.dao.CompanyContactMapper;
+import com.congmai.zhgj.web.dao.CompanyFinanceMapper;
 import com.congmai.zhgj.web.dao.CompanyMapper;
+import com.congmai.zhgj.web.dao.CompanyQualificationMapper;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.service.CompanyService;
 
@@ -18,6 +22,12 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 
 	@Resource
 	private CompanyMapper companyMapper;
+	@Resource
+	private CompanyContactMapper companyContactMapper;
+	@Resource
+	private CompanyFinanceMapper companyFinanceMapper;
+	@Resource
+	private CompanyQualificationMapper companyQualificationMapper;
 	
 	@Override
 	public GenericDao<Company, String> getDao() {
@@ -28,9 +38,13 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 
 	@Override
 	public Page<Company> selectByPage(Company company) {
-		List<Company> list = companyMapper.selectList(company);
-		Integer count = companyMapper.countList(company);
-		Page<Company>  page = new Page<Company>(company.getPageIndex(), company.getPageSize());
+		List<Company> list =  null;
+		Integer count = 0;
+		if(company != null){
+			list = companyMapper.selectList(company);
+			count = companyMapper.countList(company);
+		}
+		Page<Company>  page = new Page<Company>();
 		page.setResult(list);
 		page.setTotalCount(count);
 		return page;
@@ -40,6 +54,12 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 	public Company selectOne(String id) {
 		
 		return companyMapper.selectByPrimaryKey(id);
+	}
+
+
+	@Override
+	public void deleteBatch(List<String> comIdList) {
+		companyMapper.deleteCompanyBatch(comIdList);
 	}
 
 

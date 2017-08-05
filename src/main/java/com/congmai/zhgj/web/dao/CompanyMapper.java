@@ -11,4 +11,6 @@ public interface CompanyMapper extends GenericDao<Company,String>{
 	
 	public Integer countList(Company company);
 	
+	public void deleteCompanyBatch(List<String> comIds);
+	
 }
