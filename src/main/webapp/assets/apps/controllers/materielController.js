@@ -1,5 +1,6 @@
 /* Setup general page controller */
-angular.module('MetronicApp').controller('materielController', ['$rootScope', '$scope', 'settings','materielService','$state',"$stateParams", function($rootScope, $scope, settings,materielService,$state,$stateParams) {
+angular.module('MetronicApp').controller('materielController', ['$rootScope', '$scope', 'settings','materielService',
+    '$state',"$stateParams",'$compile','$location', function($rootScope, $scope, settings,materielService,$state,$stateParams,$compile,$location) {
     $scope.$on('$viewContentLoaded', function() {   
     	// initialize core components
     	App.initAjax();
@@ -22,7 +23,15 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
         	FormiCheck.init()//初始化checkbox控件
         	r();//加载表单验证控件
         	
-        	getMaterielInfo($stateParams.serialNum)
+        	//加载数据
+        	if($stateParams.serialNum)$scope.getMaterielInfo($stateParams.serialNum)
+        	
+        	if($stateParams.view==1){//切换为查看
+        		$scope.materielInput = true;
+		    	$scope.materielShow = true;
+		    	$scope.materielPackageInput = true;
+   		    	$scope.materielPackageShow = true;
+		    }
         	
         }
         
@@ -39,7 +48,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     			$scope.materiel.parentMaterielSerial=null;
     		}
     		//TODO待删除 
-    		$scope.materiel.parentMaterielSerial=null;
+    		$scope.materiel.parentMateriel=null;
     		$scope.materiel.createTime=null;
     		$scope.materiel.updateTime=null;
     		$scope.materiel.manufactureDate=null;
@@ -47,9 +56,10 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 
     		materielService.save($scope.materiel).then(
        		     function(data){
-       		    	$scope.materiel=data;
+       		    	$location.search({serialNum:data.serialNum,view:1});
+       		    	/*$scope.materiel=data;
        		    	$scope.materielInput = true;
-       		    	$scope.materielShow = true;
+       		    	$scope.materielShow = true;*/
        		     },
        		     function(error){
        		         $scope.error = error;
@@ -64,7 +74,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     		$state.go("materiel");
     		return;
 		}
-    	getMaterielInfo($scope.materiel.serialNum);
+    	$scope.getMaterielInfo($scope.materiel.serialNum);
     	$scope.materielInput = true;
 	    $scope.materielShow = true;
     };
@@ -72,6 +82,50 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     $scope.edit  = function() {//进入编辑
     	$scope.materielInput = false;
 	    $scope.materielShow = false;
+    };
+    
+    
+    
+    $scope.savePackage  = function(isValid) {//保存包装信息
+    	if(isValid){
+    		if($scope.materiel.manufactureDate=='') {//日期为空的处理
+    			$scope.materiel.manufactureDate=null;
+    		}
+    		if($scope.materiel.parentMaterielSerial=='') {//上级物料为空的处理
+    			$scope.materiel.parentMaterielSerial=null;
+    		}
+    		
+    		$scope.materiel.parentMateriel=null
+    		//TODO待删除 
+    		$scope.materiel.createTime=null;
+    		$scope.materiel.updateTime=null;
+    		$scope.materiel.manufactureDate=null;
+    		//**********//
+
+    		materielService.save($scope.materiel).then(
+       		     function(data){
+       		    	$location.search({serialNum:data.serialNum,view:1});
+       		    	/*$scope.materiel=data;
+       		    	$scope.materielPackageInput = true;
+       		    	$scope.materielPackageShow = true;*/
+       		     },
+       		     function(error){
+       		         $scope.error = error;
+       		     }
+       		 );
+    	}
+    	
+    }; 	
+    
+    $scope.cancelPackage  = function() {//取消编辑包装信息
+    	$scope.getMaterielInfo($scope.materiel.serialNum);
+    	$scope.materielPackageInput = true;
+	    $scope.materielPackageShow = true;
+    };
+    
+    $scope.editPackage  = function() {//进入编辑包装信息
+    	$scope.materielPackageInput = false;
+	    $scope.materielPackageShow = false;
     };
     
     
@@ -86,7 +140,17 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     		 );
     	};
     	
-	
+    $scope.getMaterielInfo  = function(serialNum) {
+    	materielService.getMaterielInfo(serialNum).then(
+      		     function(data){
+      		    	$scope.materiel=data;
+      		     },
+      		     function(error){
+      		         $scope.error = error;
+      		     }
+      		 );
+    	
+    }; 
     var table;
     var tableAjaxUrl = "rest/materiel/findMaterielList";
     var loadMainTable = function() {
@@ -113,11 +177,11 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
                         "sLast": "尾页"
                      }
                 },
-                fixedHeader: {//固定表头、表底
+/*                fixedHeader: {//固定表头、表底
                     header: !0,
                     footer: !0,
                     headerOffset: a
-                },
+                },*/
                 order: [[1, "asc"]],//默认排序列及排序方式
                 searching: true,//是否过滤检索
                 ordering:  true,//是否排序
@@ -147,13 +211,26 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 							'className' : 'dt-body-center',
 							'render' : function(data,
 									type, full, meta) {
-								return '<input type="checkbox" name="serialNum[]" value="'
+								return '<input type="checkbox" ng-click="getMaterielInfo(\''+data+'\')" name="serialNum[]" value="'
 										+ $('<div/>')
 												.text(
 														data)
 												.html()
 										+ '">';
-							}
+							},
+							"createdCell": function (td, cellData, rowData, row, col) {
+								 $compile(td)($scope);
+						       }
+						},{
+							'targets' : 1,
+							'className' : 'dt-body-center',
+							'render' : function(data,
+									type, row, meta) {
+								return '<a data-target="#basicMaterielInfo" data-toggle="modal" ng-click="getMaterielInfo(\''+row.serialNum+'\')" ">'+data+'</a>';
+							},
+							"createdCell": function (td, cellData, rowData, row, col) {
+								 $compile(td)($scope);
+						       }
 						},{
 							'targets' : 5,
 							'className' : 'dt-body-center',
@@ -308,7 +385,11 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
             			materielName: {required: !0,maxlength: 20},
             			category: {required: !0,maxlength: 20},
             			specifications: {required: !0,maxlength: 20},
-            			stockUnit: {required: !0,maxlength: 20}
+            			stockUnit: {required: !0,maxlength: 20}/*,
+            			packageNum: {required: !0,maxlength: 20},
+            			packageSpecifications: {required: !0,maxlength: 20},
+            			packageUnit: {required: !0,maxlength: 20},
+            			packageUnitConversion: {required: !0,maxlength: 20,number:!0}*/
             			},
             		invalidHandler: function(e, t) {
                     i.hide(), r.show(), App.scrollTo(r, -200)
@@ -363,16 +444,131 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     		
     		$state.go("addMateriel",{serialNum:ids});
         };
-        
-        var getMaterielInfo  = function(serialNum) {
-        	materielService.getMaterielInfo(serialNum).then(
-          		     function(data){
-          		    	$scope.materiel=data;
-          		     },
-          		     function(error){
-          		         $scope.error = error;
-          		     }
-          		 );
+      
+        var selectParentTable;
+        $scope.selectParentMateriel = function() {
+                a = 0;
+                App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
+                selectParentTable = $("#select_sample_2")
+    			.DataTable({
+                    language: {
+                        aria: {
+                            sortAscending: ": activate to sort column ascending",
+                            sortDescending: ": activate to sort column descending"
+                        },
+                        emptyTable: "空表",
+                        info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                        infoEmpty: "没有数据",
+                        //infoFiltered: "(filtered1 from _MAX_ total entries)",
+                        lengthMenu: "每页显示 _MENU_ 条数据",
+                        search: "查询:",
+                        zeroRecords: "抱歉， 没有找到！",
+                        paginate: {
+                            "sFirst": "首页",
+                            "sPrevious": "前一页",
+                            "sNext": "后一页",
+                            "sLast": "尾页"
+                         }
+                    },
+    /*                fixedHeader: {//固定表头、表底
+                        header: !0,
+                        footer: !0,
+                        headerOffset: a
+                    },*/
+                    order: [[1, "asc"]],//默认排序列及排序方式
+                    searching: true,//是否过滤检索
+                    ordering:  true,//是否排序
+                    lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
+                    pageLength: 5,//每页显示数量
+                    processing: true,//loading等待框
+//                    serverSide: true,
+                    ajax: "rest/materiel/findMaterielList?isLatestVersion=1",//加载数据中
+                    "aoColumns": [
+                                  { mData: 'serialNum' },
+                                  { mData: 'materielNum' },
+                                  { mData: 'materielName' },
+                                  { mData: 'specifications' },
+                                  { mData: 'unit' },
+                                  { mData: 'parentMateriel' },
+                                  { mData: 'type' },
+                                  { mData: 'productionPlace' },
+                                  { mData: 'brand' },
+                                  { mData: 'brand' },
+                                  { mData: 'versionNO' },
+                                  { mData: 'status' }
+                            ],
+                   'aoColumnDefs' : [ {
+    							'targets' : 0,
+    							'searchable' : false,
+    							'orderable' : false,
+    							'className' : 'dt-body-center',
+    							'render' : function(data,
+    									type, row, meta) {
+    								return '<input type="radio" ng-click="selectParent(\''+data+'\',\''+row.materielName+'\')" name="serialNum[]" value="'
+    										+ $('<div/>')
+    												.text(
+    														data)
+    												.html()
+    										+ '">';
+    							},
+    							"createdCell": function (td, cellData, rowData, row, col) {
+    								 $compile(td)($scope);
+    						       }
+    						},{
+    							'targets' : 5,
+    							'className' : 'dt-body-center',
+    							'render' : function(data,
+    									type, full, meta) {
+    								if(data==null){
+    									return  ''
+    								}else{
+    									return  data.materielName
+    								}
+    							}
+    						} ]
+
+                }).on('order.dt',
+                function() {
+                    console.log('排序');
+                })
+            };
+            
+            $scope.selectParent  = function(serialNum,materielName) {
+            	$scope.row = {};
+            	$scope.row.serialNum = serialNum;
+            	$scope.row.parentMateriel = {};
+            	$scope.row.parentMateriel.materielName = materielName;
+            }; 
+         // 确认选择开始***************************************
+    		$scope.confirmSelect = function() {
+    			var ids = '';
+    			// Iterate over all checkboxes in the table
+    			selectParentTable.$('input[type="radio"]').each(
+    					function() {
+    						// If checkbox exist in DOM
+    						if ($.contains(document, this)) {
+    							// If checkbox is checked
+    							if (this.checked) {
+    								// 将选中数据id放入ids中
+    								if (ids == '') {
+    									ids = this.value;
+    								} else
+    									ids = ids + ','
+    											+ this.value;
+    							}
+    						}
+    					});
+    			if(ids==''){
+        			toastr.warning('请选择一个物料！');return;
+        		}
+    			
+    			$scope.materiel.parentMaterielSerial=$scope.row.serialNum;
+    			$scope.materiel.parentMateriel = {};
+    			$scope.materiel.parentMateriel.materielName=$scope.row.parentMateriel.materielName;
+    			
+    			
+    			$('#basicMaterielInfo').modal('hide');// 删除成功后关闭模态框
+    			$(".modal-backdrop").remove();
+    		};
         	
-        }; 	
 }]);

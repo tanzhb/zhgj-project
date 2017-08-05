@@ -103,6 +103,7 @@
                                   <label class="control-label col-md-3">单位</label>
                                   <div class="col-md-9">
                                       <input type="text" class="form-control" ng-hide="materielInput" ng-model="materiel.unit" >
+                                      <div class="form-control-focus"> </div>
                                       <span class="help-block">请输入单位</span>
                                       <p class="form-control-static" ng-show="materielShow"> {{materiel.unit}} </p>
                                   </div>
@@ -131,6 +132,7 @@
                                   <label class="control-label col-md-3">产地</label>
                                   <div class="col-md-9">
                                       <input type="text" class="form-control" ng-hide="materielInput" ng-model="materiel.productionPlace" >
+                                      <div class="form-control-focus"> </div>
                                       <span class="help-block">请输入产地</span>
                                        <p class="form-control-static" ng-show="materielShow"> {{materiel.productionPlace}} </p>
                                   </div>
@@ -157,7 +159,8 @@
                               <div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3">上级产品</label>
                                   <div class="col-md-9">
-                                      <input type="text" ng-hide="materielInput" ng-model="materiel.parentMateriel.materielName" class="form-control" >
+                                      <input type="text" ng-hide="materielInput" ng-click="selectParentMateriel()" data-target="#basicMaterielInfo" data-toggle="modal" ng-model="materiel.parentMateriel.materielName" class="form-control" >
+                                      <div class="form-control-focus"> </div>
                                        <span class="help-block">请选择上级产品</span>
                                       <p class="form-control-static" ng-show="materielShow"> {{materiel.parentMateriel.materielName}} </p>
                                   </div>
@@ -172,6 +175,7 @@
                                   <label class="control-label col-md-3">品牌</label>
                                   <div class="col-md-9">
                                       <input type="text" ng-hide="materielInput" ng-model="materiel.brand" class="form-control" >
+                                      <div class="form-control-focus"> </div>
                                        <span class="help-block">请输入品牌</span>
                                       <p class="form-control-static" ng-show="materielShow"> {{materiel.brand}} </p>
                                   </div>
@@ -184,6 +188,7 @@
                                   <label class="control-label col-md-3">原产国</label>
                                   <div class="col-md-9">
                                       <input type="text" ng-hide="materielInput" ng-model="materiel.originCountry" class="form-control" >
+                                      <div class="form-control-focus"> </div>
                                       <span class="help-block">请输入原产国</span>
                                       <p class="form-control-static" ng-show="materielShow"> {{materiel.originCountry}} </p>
                                   </div>
@@ -198,6 +203,7 @@
                                   <label class="control-label col-md-3">长度</label>
                                   <div class="col-md-9">
                                       <input type="text" ng-hide="materielInput" ng-model="materiel.length" class="form-control" >
+                                      <div class="form-control-focus"> </div>
                                       <span class="help-block">请输入长度</span>
                                       <p class="form-control-static" ng-show="materielShow"> {{materiel.length}} </p>
                                   </div>
@@ -210,6 +216,7 @@
                                   <label class="control-label col-md-3">币种</label>
                                   <div class="col-md-9">
                                       <input type="text" ng-hide="materielInput" ng-model="materiel.currency" class="form-control" >
+                                      <div class="form-control-focus"> </div>
                                       <span class="help-block">请输入币种</span>
                                       <p class="form-control-static" ng-show="materielShow"> {{materiel.currency}} </p>
                                   </div>
@@ -224,6 +231,7 @@
                                   <label class="control-label col-md-3">宽度</label>
                                   <div class="col-md-9">
                                       <input type="text" ng-hide="materielInput" ng-model="materiel.width" class="form-control" >
+                                      <div class="form-control-focus"> </div>
                                       <span class="help-block">请输入宽度</span>
                                       <p class="form-control-static" ng-show="materielShow"> {{materiel.width}} </p>
                                   </div>
@@ -236,6 +244,7 @@
                                   <label class="control-label col-md-3">单价</label>
                                   <div class="col-md-9">
                                       <input type="text" ng-hide="materielInput" ng-model="materiel.unitPrice" class="form-control" >
+                                      <div class="form-control-focus"> </div>
                                       <span class="help-block">请输入单价</span>
                                       <p class="form-control-static" ng-show="materielShow"> {{materiel.unitPrice}} </p>
                                   </div>
@@ -250,6 +259,7 @@
                                   <label class="control-label col-md-3">高度</label>
                                   <div class="col-md-9">
                                       <input type="text" ng-hide="materielInput" ng-model="materiel.height" class="form-control" >
+                                      <div class="form-control-focus"> </div>
                                       <span class="help-block">请输入高度</span>
                                       <p class="form-control-static" ng-show="materielShow"> {{materiel.height}} </p>
                                   </div>
@@ -262,6 +272,7 @@
                                   <label class="control-label col-md-3">备案项号</label>
                                   <div class="col-md-9">
                                       <input type="text" ng-hide="materielInput" ng-model="materiel.filingItemNo" class="form-control" >
+                                      <div class="form-control-focus"> </div>
                                       <span class="help-block">请输入备案项号</span>
                                       <p class="form-control-static" ng-show="materielShow"> {{materiel.filingItemNo}} </p>
                                   </div>
@@ -276,6 +287,7 @@
                                   <label class="control-label col-md-3">单件体积</label>
                                   <div class="col-md-9">
                                       <input type="text" ng-hide="materielInput" ng-model="materiel.volume" class="form-control" >
+                                      <div class="form-control-focus"> </div>
                                       <span class="help-block">请输入单件体积</span>
                                       <p class="form-control-static" ng-show="materielShow"> {{materiel.volume}} </p>
                                   </div>
@@ -288,6 +300,7 @@
                                   <label class="control-label col-md-3">海关监管条件</label>
                                   <div class="col-md-9">
                                       <input type="text" ng-hide="materielInput" ng-model="materiel.customsSupervisionConditions" class="form-control" >
+                                      <div class="form-control-focus"> </div>
                                       <span class="help-block">请输入海关监管条件</span>
                                       <p class="form-control-static" ng-show="materielShow"> {{materiel.customsSupervisionConditions}} </p>
                                   </div>
@@ -302,6 +315,7 @@
                                   <label class="control-label col-md-3">单件重量</label>
                                   <div class="col-md-9">
                                       <input type="text" ng-hide="materielInput" ng-model="materiel.weight" class="form-control" >
+                                      <div class="form-control-focus"> </div>
                                       <span class="help-block">请输入单件重量</span>
                                       <p class="form-control-static" ng-show="materielShow"> {{materiel.weight}} </p>
                                   </div>
@@ -314,6 +328,7 @@
                                   <label class="control-label col-md-3">保质期</label>
                                   <div class="col-md-9">
                                       <input type="text" ng-hide="materielInput" ng-model="materiel.qualityDate" class="form-control" >
+                                      <div class="form-control-focus"> </div>
                                       <span class="help-block">请输入保质期</span>
                                       <p class="form-control-static" ng-show="materielShow"> {{materiel.qualityDate}} </p>
                                   </div>
@@ -328,6 +343,7 @@
                                   <label class="control-label col-md-3">托盘规格</label>
                                   <div class="col-md-9">
                                       <input type="text" ng-hide="materielInput" ng-model="materiel.palletSpecification" class="form-control" >
+                                      <div class="form-control-focus"> </div>
                                       <span class="help-block">请输入托盘规格</span>
                                       <p class="form-control-static" ng-show="materielShow"> {{materiel.palletSpecification}} </p>
                                   </div>
@@ -340,6 +356,7 @@
                                   <label class="control-label col-md-3">生产日期</label>
                                   <div class="col-md-9">
                                       <input class="form-control form-control-inline input-medium date-picker" size="16" ng-hide="materielInput" ng-model="materiel.manufactureDate" type="text" value="" />
+                                      <div class="form-control-focus"> </div>
                                       <span class="help-block">请选择生产日期</span>
                                       <p class="form-control-static" ng-show="materielShow"> {{materiel.manufactureDate}} </p>
                                   </div>
@@ -354,6 +371,7 @@
                                   <label class="control-label col-md-3">每托数量</label>
                                   <div class="col-md-9">
                                       <input type="text" ng-hide="materielInput" ng-model="materiel.palletWeight" class="form-control" >
+                                      <div class="form-control-focus"> </div>
                                        <span class="help-block">请输入每托数量</span>
                                       <p class="form-control-static" ng-show="materielShow"> {{materiel.palletWeight}} </p>
                                   </div>
@@ -366,6 +384,7 @@
                                   <label class="control-label col-md-3">备注</label>
                                   <div class="col-md-9">
                                       <input type="text" ng-hide="materielInput" ng-model="materiel.remark" class="form-control" >
+                                      <div class="form-control-focus"> </div>
                                       <span class="help-block">请输入备注</span>
                                       <p class="form-control-static" ng-show="materielShow"> {{materiel.remark}} </p>
                                   </div>
@@ -414,15 +433,170 @@
                                   <div class="col-md-offset-3 col-md-9">
                                       <button type="submit" ng-click="save(materielForm.$valid)" ng-hide="materielInput" class="btn green">保存</button>
                                       <button ng-click="cancel()" type="button" ng-hide="materielInput" class="btn default">取消</button>
-                                      <button ng-click="edit()" type="button" ng-show="materielShow" class="btn green">编辑</button>
+                                      <button ng-click="edit()" type="button" ng-show="materielShow" class="btn green"><i class="fa fa-pencil"></i>编辑</button>
                                   </div>
                               </div>
                           </div>
                       </div>
                   </div>
+                  
+                  <div class="form-body">
+                      <h3 class="form-section">包装信息</h3>
+                  </div> 
+                  <div class="row">
+                      <div class="col-md-2">
+                          <div class="form-group form-md-line-input" style="text-align: center;">
+                              <label class="control-label">包装编号<span class="required" aria-required="true"> * </span></label>
+                          </div>
+                      </div>
+                      <!--/span-->
+                      <div class="col-md-2">
+                          <div class="form-group form-md-line-input" style="text-align: center;">
+                              <label class="control-label">包装规格<span class="required" aria-required="true"> * </span></label>
+                          </div>
+                      </div>
+                      <div class="col-md-1">
+                          <div class="form-group form-md-line-input" style="text-align: center;">
+                              <label class="control-label">包装单位<span class="required" aria-required="true"> * </span></label>
+                          </div>
+                      </div>
+                      <div class="col-md-1">
+                          <div class="form-group form-md-line-input" style="text-align: center;">
+                              <label class="control-label">长</label>
+                          </div>
+                      </div>
+                      <div class="col-md-1">
+                          <div class="form-group form-md-line-input" style="text-align: center;">
+                              <label class="control-label">宽</label>
+                          </div>
+                      </div>
+                      <div class="col-md-1">
+                          <div class="form-group form-md-line-input" style="text-align: center;">
+                              <label class="control-label">高</label>
+                          </div>
+                      </div>
+                      <div class="col-md-2">
+                          <div class="form-group form-md-line-input" style="text-align: center;">
+                              <label class="control-label">包装体积</label>
+                          </div>
+                      </div>
+                      <div class="col-md-2">
+                          <div class="form-group form-md-line-input" style="text-align: center;">
+                              <label class="control-label">包装单位换算<span class="required" aria-required="true"> * </span></label>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-2">
+                          <div class="form-group form-md-line-input">
+                              <div class="col-md-12">
+                              <input type="text" name="packageNum" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packageNum"  >
+                                  <div class="form-control-focus"> </div>
+                                  <span class="help-block">请输入包装编号</span>
+                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packageNum}} </p>
+                              </div>
+                          </div>
+                      </div>
+                      <!--/span-->
+                      <div class="col-md-2">
+                          <div class="form-group form-md-line-input">
+                              <div class="col-md-12">
+                              <input type="text" name="packageSpecifications" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packageSpecifications"  >
+                                  <div class="form-control-focus"> </div>
+                                  <span class="help-block">请输入包装规格</span>
+                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packageSpecifications}} </p>
+                              </div>
+                              
+                          </div>
+                      </div>
+                      <div class="col-md-1">
+                          <div class="form-group form-md-line-input">
+                              <div class="col-md-12">
+                              <input type="text" name="packageUnit" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packageUnit"  >
+                                  <div class="form-control-focus"> </div>
+                                  <span class="help-block">请输入包装单位</span>
+                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packageUnit}} </p>
+                              </div>
+                              
+                          </div>
+                      </div>
+                      <div class="col-md-1">
+                          <div class="form-group form-md-line-input">
+                              <div class="col-md-12">
+                              <input type="text" name="packagelength" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packagelength"  >
+                                  <div class="form-control-focus"> </div>
+                                  <span class="help-block">请输入长度</span>
+                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packagelength}} </p>
+                              </div>
+                              
+                          </div>
+                      </div>
+                      <div class="col-md-1">
+                          <div class="form-group form-md-line-input">
+                              <div class="col-md-12">
+                              <input type="text" name="packagewidth" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packagewidth"  >
+                                  <div class="form-control-focus"> </div>
+                                  <span class="help-block">请输入宽度</span>
+                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packagewidth}} </p>
+                              </div>
+                              
+                          </div>
+                      </div>
+                      <div class="col-md-1">
+                          <div class="form-group form-md-line-input">
+                              <div class="col-md-12">
+                              <input type="text" name="packageheight" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packageheight"  >
+                                  <div class="form-control-focus"> </div>
+                                  <span class="help-block">请输入高度</span>
+                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packageheight}} </p>
+                              </div>
+                              
+                          </div>
+                      </div>
+                      <div class="col-md-2">
+                          <div class="form-group form-md-line-input">
+                              <div class="col-md-12">
+                              <input type="text" name="packagevolume" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packagevolume"  >
+                                  <div class="form-control-focus"> </div>
+                                  <span class="help-block">请输入包装体积</span>
+                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packagevolume}} </p>
+                              </div>
+                              
+                          </div>
+                      </div>
+                      <div class="col-md-2">
+                          <div class="form-group form-md-line-input">
+                              <div class="col-md-12">
+                              <input type="text" name="packageUnitConversion" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packageUnitConversion"  >
+                                  <div class="form-control-focus"> </div>
+                                  <span class="help-block">请输入包装单位换算</span>
+                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packageUnitConversion}} </p>
+                              </div>
+                              
+                          </div>
+                      </div>
+                  </div>
+                  <div class="form-actions">
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="row">
+                                  <div class="col-md-offset-3 col-md-9">
+                                      <button type="submit" ng-click="savePackage(materielForm.$valid)" ng-hide="materielPackageInput" class="btn green">保存</button>
+                                      <button ng-click="cancelPackage()" type="button" ng-hide="materielPackageInput" class="btn default">取消</button>
+                                      <button ng-click="editPackage()" type="button" ng-show="materielPackageShow" class="btn green"><i class="fa fa-pencil"></i>编辑</button>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  
+                  
               </form>
+              
+              
+
               <!-- END FORM-->
           </div>
       </div>
 
-
+<jsp:include  page="selectMateriel.jsp"/>

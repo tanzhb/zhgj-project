@@ -86,8 +86,7 @@
 	                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_2">
 	                    <thead>
 	                        <tr>
-	                            <th style="text-align: center"><input name="select_all"
-								value="1" id="example-select-all" type="checkbox" /></th>
+	                            <th style="text-align: center"><input name="select_all" id="example-select-all" type="checkbox"/></th>
 	                            <th> 物料编码 </th>
 	                            <th> 物料名称 </th>
 	                            <th> 规格型号 </th>
@@ -142,199 +141,86 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane fade active in" id="tab_2_1">
-							<div class="portlet light bordered">
 					            <div class="portlet-body">
 					                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_1">
 					                    <thead>
 					                        <tr>
-					                            <th>
-					                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-					                                    <input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" />
-					                                    <span></span>
-					                                </label>
-					                            </th>
-					                            <th> 物料编码 </th>
-					                            <th> 物料名称 </th>
+					                            <th> 供应商物料编码 </th>
+					                            <th> 供应商名称 </th>
 					                            <th> 规格型号 </th>
-					                            <th> 单位 </th>
-					                            <th> 类别 </th>
-					                            <th> 产地 </th>
-					                            <th> 品牌 </th>
-					                            <th> 供应商 </th>
-					                            <th> 版本 </th>
-					                            <th> 状态 </th>
+					                            <th> 包装单位 </th>
+					                            <th> 长 </th>
+					                            <th> 宽 </th>
+					                            <th> 高 </th>
+					                            <th> 包装体积 </th>
+					                            <th> 包装单位换算 </th>
 					                        </tr>
 					                    </thead>
 					                    <tbody>
-					                        <tr  class="odd gradeX">
-					                            <td>
-					                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-					                                    <input type="checkbox" class="checkboxes" value="{{list.serialNum}}" />
-					                                    <span></span>
-					                                </label>
-					                            </td>
-					                            <td> 1 </td>
-					                            <td> 1 </td>
-					                           <td> 1 </td>
-					                            <td> 1 </td>
-					                            <td> 1 </td>
-					                            <td> 1 </td>
-					                            <td> 1 </td>
-					                            <td>  </td>
-					                            <td> 1 </td>
-					                            <td> 1 </td>
-					                        </tr>
-					                        
 					                    </tbody>
 					                </table>
 					            </div>
-					        </div>                        
 					    </div>
                         <div class="tab-pane fade" id="tab_2_2">
-                            <div class="portlet light bordered">
 					            <div class="portlet-body">
 					                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_1">
 					                    <thead>
 					                        <tr>
-					                            <th>
-					                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-					                                    <input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" />
-					                                    <span></span>
-					                                </label>
-					                            </th>
-					                            <th> 物料编码 </th>
-					                            <th> 物料名称 </th>
-					                            <th> 规格型号 </th>
-					                            <th> 单位 </th>
-					                            <th> 类别 </th>
-					                            <th> 产地 </th>
-					                            <th> 品牌 </th>
-					                            <th> 供应商 </th>
-					                            <th> 版本 </th>
-					                            <th> 状态 </th>
+					                            <th> 客户编码 </th>
+					                            <th> 客户名称 </th>
 					                        </tr>
 					                    </thead>
 					                    <tbody>
-					                        <tr  class="odd gradeX">
-					                            <td>
-					                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-					                                    <input type="checkbox" class="checkboxes" value="{{list.serialNum}}" />
-					                                    <span></span>
-					                                </label>
-					                            </td>
-					                            <td> 2 </td>
-					                            <td> 3 </td>
-					                           <td> 4 </td>
-					                            <td> 5 </td>
-					                            <td> 3 </td>
-					                            <td> 1 </td>
-					                            <td> 1 </td>
-					                            <td>  </td>
-					                            <td> 1 </td>
-					                            <td> 1 </td>
-					                        </tr>
-					                        
 					                    </tbody>
 					                </table>
 					            </div>
-					        </div>
                         </div>
                         <div class="tab-pane fade" id="tab_2_3">
-                            <div class="portlet light bordered">
 					            <div class="portlet-body">
 					                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_1">
 					                    <thead>
 					                        <tr>
-					                            <th>
-					                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-					                                    <input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" />
-					                                    <span></span>
-					                                </label>
-					                            </th>
 					                            <th> 物料编码 </th>
 					                            <th> 物料名称 </th>
 					                            <th> 规格型号 </th>
 					                            <th> 单位 </th>
-					                            <th> 类别 </th>
-					                            <th> 产地 </th>
 					                            <th> 品牌 </th>
-					                            <th> 供应商 </th>
-					                            <th> 版本 </th>
-					                            <th> 状态 </th>
+					                            <th> 单套用量 </th>
 					                        </tr>
 					                    </thead>
 					                    <tbody>
-					                        <tr  class="odd gradeX">
-					                            <td>
-					                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-					                                    <input type="checkbox" class="checkboxes" value="{{list.serialNum}}" />
-					                                    <span></span>
-					                                </label>
-					                            </td>
-					                            <td> 3 </td>
-					                            <td> 4 </td>
-					                           <td> 3 </td>
-					                            <td> 3 </td>
-					                            <td> 1 </td>
-					                            <td> 1 </td>
-					                            <td> 1 </td>
-					                            <td>  </td>
-					                            <td> 1 </td>
-					                            <td> 1 </td>
-					                        </tr>
-					                        
 					                    </tbody>
 					                </table>
 					            </div>
-					        </div>
                         </div>
                         <div class="tab-pane fade" id="tab_2_4">
-                            <div class="portlet light bordered">
 					            <div class="portlet-body">
 					                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_1">
 					                    <thead>
-					                        <tr>
-					                            <th>
-					                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-					                                    <input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" />
-					                                    <span></span>
-					                                </label>
-					                            </th>
-					                            <th> 物料编码 </th>
-					                            <th> 物料名称 </th>
-					                            <th> 规格型号 </th>
-					                            <th> 单位 </th>
-					                            <th> 类别 </th>
-					                            <th> 产地 </th>
-					                            <th> 品牌 </th>
-					                            <th> 供应商 </th>
-					                            <th> 版本 </th>
-					                            <th> 状态 </th>
+					                          <tr>
+					                            <th> 包装编号 </th>
+					                            <th> 包装规格 </th>
+					                            <th> 包装单位 </th>
+					                            <th> 长 </th>
+					                            <th> 宽 </th>
+					                            <th> 高 </th>
+					                            <th> 包装体积 </th>
+					                            <th> 包装单位换算 </th>
 					                        </tr>
 					                    </thead>
 					                    <tbody>
-					                        <tr  class="odd gradeX">
-					                            <td>
-					                                <label class="mt-checkbox mt-checkbox-outline mt-checkbox-single">
-					                                    <input type="checkbox" class="checkboxes" value="{{list.serialNum}}" />
-					                                    <span></span>
-					                                </label>
-					                            </td>
-					                            <td> 4 </td>
-					                            <td> 5 </td>
-					                           <td> 4 </td>
-					                            <td> 4 </td>
-					                            <td> 1 </td>
-					                            <td> 1 </td>
-					                            <td> 1 </td>
-					                            <td>  </td>
-					                            <td> 1 </td>
-					                            <td> 1 </td>
+					                    	<tr>
+					                            <td> {{materiel.packageNum}} </td>
+					                            <td> {{materiel.packageSpecifications}} </td>
+					                            <td> {{materiel.packageUnit}}</td>
+					                            <td> {{materiel.packagewidth}} </td>
+					                            <td> {{materiel.packageheight}} </td>
+					                            <td> {{materiel.packagelength}} </td>
+					                            <td> {{materiel.packagevolume}} </td>
+					                            <td> {{materiel.packageUnitConversion}} </td>
 					                        </tr>
-					                        
 					                    </tbody>
 					                </table>
-					            </div>
 					        </div>
                         </div>
                     </div>
@@ -348,25 +234,353 @@
 <!-- END PAGE HEADER-->
 
 <!-- 删除用户modal 开始 -->
-			<div id="delMaterielModal" class="modal fade" tabindex="-1"
-				data-backdrop="static" data-keyboard="false">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal"
-								aria-hidden="true"></button>
-							<h4 class="modal-title">确认</h4>
-						</div>
-						<div class="modal-body">
-							<p>是否删除已选物料?</p>
-						</div>
-						<div class="modal-footer">
-							<button type="button" data-dismiss="modal"
-								class="btn dark btn-outline">取消</button>
-							<button type="button" ng-click="del()" class="btn green">确定
-								</button>
-						</div>
-					</div>
+	<div id="delMaterielModal" class="modal fade" tabindex="-1"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true"></button>
+					<h4 class="modal-title">确认</h4>
+				</div>
+				<div class="modal-body">
+					<p>是否删除已选物料?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" data-dismiss="modal"
+						class="btn dark btn-outline">取消</button>
+					<button type="button" ng-click="del()" class="btn green">确定
+						</button>
 				</div>
 			</div>
-			<!-- 删除用户modal 结束 -->
+		</div>
+	</div>
+<!-- 删除用户modal 结束 -->
+
+
+
+<!-- 基本信息modal 开始 -->
+	<div id="basicMaterielInfo" class="modal fade" tabindex="-1"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true"></button>
+					<h4 class="modal-title">基本信息</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">物料编码</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.materielNum}}
+                                  </label>
+                                  
+                              </div>
+                          </div>
+                          <!--/span-->
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">助记码</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.mnemonicCode}}
+                                  </label>
+                              </div>
+                          </div>
+                          <!--/span-->
+                      </div>
+                      <!--/row-->
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">物料种类</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.type}}
+                                  </label>
+
+                              </div>
+                          </div>
+                          <!--/span-->
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">物料名称</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.materielName}}
+                                  </label>
+
+                              </div>
+                          </div>
+                          <!--/span-->
+                      </div>
+                      <!--/row-->
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">物料类别</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.category}}
+                                  </label>
+
+                              </div>
+                          </div>
+                          <!--/span-->
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">单位</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.unit}}
+                                  </label>
+
+                              </div>
+                          </div>
+                          <!--/span-->
+                      </div>
+                      <!--/row-->
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">规格型号</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.specifications}}
+                                  </label>
+
+                              </div>
+                          </div>
+                          <!--/span-->
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">产地</label>
+                                  <label class="control-label col-md-7">
+                                       {{materiel.productionPlace}}
+                                  </label>
+
+                              </div>
+                          </div>
+                          <!--/span-->
+                      </div>
+                      <!--/row-->
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">库存单位</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.stockUnit}}
+								</label>
+                              </div>
+                          </div>
+                          <!--/span-->
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">上级产品</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.parentMateriel.materielName}}
+                                  </label>
+                              </div>
+                          </div>
+                          <!--/span-->
+                      </div>
+                      <!--/row-->
+                       <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">品牌</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.brand}}
+                                  </label>
+
+                              </div>
+                          </div>
+                          <!--/span-->
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">原产国</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.originCountry}}
+                                  </label>
+                              </div>
+                          </div>
+                          <!--/span-->
+                      </div>
+                      <!--/row-->
+                       <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">长度</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.length}}
+                                  </label>
+
+                              </div>
+                          </div>
+                          <!--/span-->
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">币种</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.currency}}
+                                  </label>
+                              </div>
+                          </div>
+                          <!--/span-->
+                      </div>
+                      <!--/row-->
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">宽度</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.width}}
+                                  </label>
+
+                              </div>
+                          </div>
+                          <!--/span-->
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">单价</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.unitPrice}}
+                                  </label>
+                              </div>
+                          </div>
+                          <!--/span-->
+                      </div>
+                      <!--/row-->
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">高度</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.height}}
+                                  </label>
+
+                              </div>
+                          </div>
+                          <!--/span-->
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">备案项号</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.filingItemNo}}
+                                  </label>
+                              </div>
+                          </div>
+                          <!--/span-->
+                      </div>
+                      <!--/row-->
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">单件体积</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.volume}}
+                                  </label>
+
+                              </div>
+                          </div>
+                          <!--/span-->
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">海关监管条件</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.customsSupervisionConditions}}
+                                  </label>
+                              </div>
+                          </div>
+                          <!--/span-->
+                      </div>
+                      <!--/row-->
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">单件重量</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.weight}}
+                                  </label>
+
+                              </div>
+                          </div>
+                          <!--/span-->
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">保质期</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.qualityDate}}
+                                  </label>
+                              </div>
+                          </div>
+                          <!--/span-->
+                      </div>
+                      <!--/row-->
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">托盘规格</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.palletSpecification}}
+                                  </label>
+
+                              </div>
+                          </div>
+                          <!--/span-->
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">生产日期</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.manufactureDate}}
+                                  </label>
+                              </div>
+                          </div>
+                          <!--/span-->
+                      </div>
+                      <!--/row-->
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">每托数量</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.palletWeight}}
+                                  </label>
+
+                              </div>
+                          </div>
+                          <!--/span-->
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">备注</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.remark}}
+                                  </label>
+                              </div>
+                          </div>
+                          <!--/span-->
+                      </div>
+                      <!--/row-->
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">是否BOM物料</label>
+                                  <label class="control-label col-md-7">
+                                        {{materiel.isBOM}}
+                                  </label>
+                              </div>
+                          </div>
+                          <!--/span-->
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5">版本</label>
+                                  <label class="control-label col-md-7">
+                                  	{{materiel.versionNO}}
+                                  </label>
+                              </div>
+                          </div>
+                          <!--/span-->
+                      </div>
+                      <!--/row-->
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- 基本信息modal 结束 -->

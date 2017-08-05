@@ -192,7 +192,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                             'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
                             'assets/global/plugins/jstree/dist/themes/default/style.min.css',
 
-                          'assets/global/plugins/datatables/datatables.min.js',
                         'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
                           'assets/global/plugins/datatables/datatables.all.min.js',
                           'assets/pages/scripts/table-datatables-fixedheader.min.js',
@@ -209,7 +208,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         // 新增物料
         .state('addMateriel', {
-            url: "/addMateriel?:serialNum",
+            url: "/addMateriel?:serialNum&:view",
             templateUrl: "rest/page/addMateriel",
             data: {pageTitle: '新增物料'},
             controller: "materielController",
@@ -239,7 +238,15 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 'assets/pages/scripts/form-icheck.min.js',
 'assets/pages/scripts/form-validation.min.js',
 'assets/apps/service/materielService.js',
-'assets/apps/controllers/materielController.js'
+'assets/apps/controllers/materielController.js',
+
+'assets/global/plugins/datatables/datatables.min.css',
+'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+
+'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+'assets/global/plugins/datatables/datatables.all.min.js',
+'assets/pages/scripts/table-datatables-fixedheader.min.js'/*,
+'assets/apps/controllers/selectMaterielController.js'*/
 
 
                         ]
