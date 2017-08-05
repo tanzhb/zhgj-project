@@ -409,7 +409,7 @@
                     <div class="" id="tab2_c">
                           <div class="portlet-body form">
                               <!-- BEGIN FORM-->
-                              <form class="form-horizontal" >
+                              <form class="form-horizontal" >施工中
                                   <div class="form-body" ng-repeat="companyQualification in companyQualifications">
                                       <div class="row">
                                           <div class="col-md-3">
@@ -448,7 +448,7 @@
               		<div class="">
                           <div class="portlet-body form">
                               <!-- BEGIN FORM-->
-                              <form class="form-horizontal">
+                              <form class="form-horizontal">施工中
                                   <div class="form-body" ng-repeat="companyContact in companyContacts">
                                       <div class="row">
                                           <div class="col-md-2">

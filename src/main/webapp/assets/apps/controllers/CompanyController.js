@@ -542,6 +542,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        			$scope.companyView = true;
 	        			$scope.companyAdd = true;
 	        			$scope.companyEdit = false;
+	        			$(".alert-danger").hide();
 	        			//$stateParams.comId = company.comId;
 	        			//$location.search('comId',company.comId);
 	        		},function(data){
@@ -951,7 +952,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	 	        			_index = data.data.companyQualifications.length-1;
 	 	        		}
 	 	        		
-	 	        		$scope.companyContacts2 = data.data.companyContacts;
+	 	        		$scope.companyContacts = data.data.companyContacts;
 	 	        		$scope.companyFinances = data.data.companyFinances;
 	 	        		
 	 		        	//$state.go('companyAdd',company,{reload:true});
@@ -969,12 +970,22 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	      /* $('#ajax').on('show.bs.modal', function (e) {  
 	    	    
 	       })*/
-	       $('#contactor').on('hiden.bs.modal', function (e) {  
+	       $('#contactor').on('hide.bs.modal', function (e) {  
+	    	   getCompanyInfo($scope.company.comId)
+	       })
+	       $('#finance').on('hide.bs.modal', function (e) {  
+	    	   getCompanyInfo($scope.company.comId)
+	       })
+	       
+	       $scope.contactorB = function(){
 	    	   $scope.companyContact = {};
-	       })
-	       $('#finance').on('hiden.bs.modal', function (e) {  
-        		$scope.companyFinance = {};
-	       })
+	    	   $("#contactor").modal("show");
+	       };
+	       $scope.financeB = function(){
+	    	   $scope.companyFinance ={};
+	    	   $("#finance").modal("show");
+	       };
+
 
 	       
 	       

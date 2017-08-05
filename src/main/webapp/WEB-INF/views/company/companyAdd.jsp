@@ -147,7 +147,7 @@
 											<div class="form-group  form-md-line-input">
 												<label class="control-label col-md-4" for="abbreviation">企业简称：</label>
 												<div class="col-md-8">
-													<input type="text" class="form-control" id="abbreviation" name="comNature" ng-model="company.abbreviation" ng-hide="companyAdd" > 
+													<input type="text" class="form-control" id="abbreviation" name="abbreviation" ng-model="company.abbreviation" ng-hide="companyAdd" > 
 													<!-- <select class="bs-select form-control" ng-hide="companyAdd" ng-model="company.abbreviation">
                                                              <option value="国有企业" >国有企业</option>
                                                              <option value="民营企业" >民营企业</option>
@@ -485,7 +485,7 @@
                                      				</a>
 												</div> -->
 												<div class="col-md-12">
-													 <a href="javascript:;"  class="btn red btn-sm" ng-click="deleteRepeat()">
+													 <a href="javascript:;"  class="btn red btn-sm" ng-hide="companyQualificationAdd" ng-click="deleteRepeat()">
                                             			<i class="fa fa-close"></i> 
                                      				</a>
 												</div>
@@ -553,7 +553,7 @@
 			                                        </table>
 			                                    </div>
 			                                    <div class="form-actions right">
-												 	<a  class="btn blue btn-sm"   data-toggle="modal" data-target="#contactor" >
+												 	<a  class="btn blue btn-sm"  ng-click="contactorB()"   >
 			                                            <i class="fa fa-plus"></i> 增加
 			                                     	</a>
 			                                	</div>
@@ -599,7 +599,7 @@
                                         </table>
                                     </div>
                                     <div class="form-actions right">
-									 	<a   href="#" class="btn blue btn-sm" data-toggle="modal" data-target="#finance" >
+									 	<a   class="btn blue btn-sm" ng-click="financeB()"  >
                                             <i class="fa fa-plus"></i> 增加
                                      	</a>
                                 	</div>

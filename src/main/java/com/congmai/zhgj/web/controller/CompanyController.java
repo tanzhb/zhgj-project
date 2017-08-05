@@ -159,7 +159,8 @@ public class CompanyController {
     @ResponseBody
     public Company saveCompany(Map<String, Object> map,Company company,HttpServletRequest request) {
     	String flag ="0"; //默认失败
-    	User user= (User)request.getSession().getAttribute("userInfo");
+    	User user = new User();
+    	user.setId("1");
     	if(user!=null){
         	try{
         	
@@ -239,7 +240,9 @@ public class CompanyController {
     	//List<CompanyQualification> companyQualificationArrays =Arrays.asList(companyQualifications);
     	String flag ="0"; //默认失败
     	List<CompanyQualification> companyQualifications = null;
-    	User user= (User)request.getSession().getAttribute("userInfo");
+    	//User user= (User)request.getSession().getAttribute("userInfo");
+    	User user = new User();
+    	user.setId("1");
     	if(user!=null){
     	   	try{
         		params = params.replace("\\", "");
@@ -270,7 +273,9 @@ public class CompanyController {
     public List<CompanyContact> saveCompanyContact(Map<String, Object> map,CompanyContact companyContact,HttpServletRequest request) {
     	String flag ="0"; //默认失败
     	List<CompanyContact> companyContacts = null;
-    	User user= (User)request.getSession().getAttribute("userInfo");
+    	//User user= (User)request.getSession().getAttribute("userInfo");
+    	User user = new User();
+    	user.setId("1");
     	if(user!=null){
     	   	try{
         		if(StringUtils.isEmpty(companyContact.getSerialNum())){
@@ -330,7 +335,9 @@ public class CompanyController {
     public List<CompanyFinance> saveCompanyFinance(Map<String, Object> map,CompanyFinance companyFinance,HttpServletRequest request) {
     	String flag ="0"; //默认失败
     	List<CompanyFinance> companyFinances = null;
-    	User user= (User)request.getSession().getAttribute("userInfo");
+    	//User user= (User)request.getSession().getAttribute("userInfo");
+    	User user = new User();
+    	user.setId("1");
     	if(user!=null){
     	   	try{
         		if(StringUtils.isEmpty(companyFinance.getSerialNum())){
