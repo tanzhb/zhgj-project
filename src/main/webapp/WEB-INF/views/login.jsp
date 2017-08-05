@@ -28,7 +28,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <head>
         <base href="<%=basePath%>">
 		<meta charset="utf-8"/>
-		<title>登录到 中航国际</title>
+		<title>中航国际</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <meta content="Preview page of Metronic Admin Theme #2 for " name="description" />
@@ -66,7 +66,7 @@ License: You must have a valid license purchased only from themeforest(the above
                 </div>
                 <div class="col-md-6 login-container bs-reset mt-login-5-bsfix">
                     <div class="login-content">
-                        <h1>Metronic Admin Login</h1>
+                        <h1>中航能科供应链服务平台</h1>
                         <p> Lorem ipsum dolor sit amet, coectetuer adipiscing elit sed diam nonummy et nibh euismod aliquam erat volutpat. Lorem ipsum dolor sit amet, coectetuer adipiscing. </p>
                         <form action="rest/user/login" class="login-form" method="post">
                             <div class="alert alert-danger display-hide">
@@ -75,7 +75,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             </div>
                             <div class="row">
                                 <div class="col-xs-6">
-                                    <input class="form-control form-control-solid placeholder-no-fix form-group" type="text" autocomplete="off" placeholder="用户名" name="username" required/> </div>
+                                    <input class="form-control form-control-solid placeholder-no-fix form-group" type="text" autocomplete="off" placeholder="用户名" name="loginName" required/> </div>
                                 <div class="col-xs-6">
                                     <input class="form-control form-control-solid placeholder-no-fix form-group" type="password" autocomplete="off" placeholder="密码" name="password" required/> </div>
                             </div>
@@ -132,7 +132,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             </div>
                             <div class="col-xs-7 bs-reset">
                                 <div class="login-copyright text-right">
-                                    <p>Copyright &copy; Keenthemes 2015</p>
+                                    <p>Copyright &copy; 聪脉(上海 )  2017</p>
                                 </div>
                             </div>
                         </div>

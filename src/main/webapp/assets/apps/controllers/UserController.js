@@ -42,19 +42,6 @@ angular
 							//初始化toastr结束
 
 							// 构建datatables开始***************************************
-							var a = 0;
-							App.getViewPort().width < App
-									.getResponsiveBreakpoint("md") ? $(
-									".page-header").hasClass(
-									"page-header-fixed-mobile")
-									&& (a = $(".page-header").outerHeight(!0))
-									: $(".page-header").hasClass(
-											"navbar-fixed-top") ? a = $(
-											".page-header").outerHeight(!0)
-											: $("body").hasClass(
-													"page-header-fixed")
-													&& (a = 64);
-
 							var table = $("#sample_2")
 									.DataTable(
 											{
@@ -77,22 +64,15 @@ angular
 														"sLast" : "尾页"
 													}
 												},
-												fixedHeader : {// 固定表头、表底
-													header : !0,
-													footer : !0,
-													headerOffset : a
-												},
-												// select: true,行多选
 												order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+
 												bRetrieve : true,
-												// searching: true,//是否过滤检索
-												// ordering: true,//是否排序
 												lengthMenu : [
 														[ 5, 10, 15, 30, -1 ],
 														[ 5, 10, 15, 30, "All" ] ],
 												pageLength : 10,// 每页显示数量
 												processing : true,// loading等待框
-												// serverSide: true,
+												
 												ajax : $rootScope.basePath
 														+ "/rest/user/findAllUsers",// 加载数据中user表数据
 
@@ -101,13 +81,33 @@ angular
 												{
 													mData : 'id'
 												}, {
-													mData : 'username'
+													mData : 'loginName'
 												}, {
 													mData : 'password'
 												}, {
+													mData : 'userName'
+												},{
+													mData : 'idNumber'
+												}, {
+													mData : 'station'
+												}, {
+													mData : 'telphone'
+												}, {
+													mData : 'email'
+												},{
 													mData : 'state'
 												}, {
+													mData : 'delFlg'
+												}, {
+													mData : 'creator'
+												}, {
 													mData : 'createTime'
+												}, {
+													mData : 'updater'
+												}, {
+													mData : 'updateTime'
+												}, {
+													mData : 'comments'
 												} ],
 												'aoColumnDefs' : [ {
 													'targets' : 0,
@@ -172,33 +172,37 @@ angular
 
 							// 添加用户开始***************************************
 							$scope.add = function() {
+								
 								$scope.user = null;//打开添加用户模态框前将输入框置空
+								$('#twoPass').val('');//密码确认处置空
 								$('#appendTitle').empty();
 								$('#appendTitle').append("<h4 class='modal-title'>添加用户</h4>");
 								$('#addUserModal').modal('show');// 弹出添加模态框
-								$scope.saveUser = function() {
-									if($('#form_sample_1').valid()){//表单验证通过则执行添加功能
-										UserService
-										.saveUser($scope.user)
-										.then(
-												function(data) {
-													$('#addUserModal').modal(
-															'hide');// 保存成功后关闭模态框
-													toastr.success("保存用户数据成功！");
-													table.ajax.reload(); // 重新加载datatables数据
-												},
-												function(errResponse) {
-													toastr.warning("用户名重复，请重新输入！");
-													console
-															.error('Error while creating User');
-												}
-
-										);
-									}
-									
-								};								
-							};	
+																
+							};								
 							// 添加用户结束***************************************
+							
+							$scope.saveUser = function() {
+								if($('#form_sample_1').valid()){//表单验证通过则执行添加功能
+									UserService
+									.saveUser($scope.user)
+									.then(
+											function(data) {
+												$('#addUserModal').modal(
+														'hide');// 保存成功后关闭模态框
+												toastr.success("保存用户数据成功！");
+												table.ajax.reload(); // 重新加载datatables数据
+											},
+											function(errResponse) {
+												toastr.warning("用户名重复，请重新输入！");
+												console
+														.error('Error while creating User');
+											}
+
+									);
+								}
+								
+							};
 							
 							// 修改用户开始***************************************							
 							$scope.edit = function() {
@@ -226,6 +230,7 @@ angular
 									.then(
 											function(data) {
 												$scope.user = data;//将后台数据赋值给前台页面
+												$('#twoPass').val($scope.user.password);//密码赋值给验证密码
 												$('#appendTitle').empty();
 												$('#appendTitle').append("<h4 class='modal-title'>修改用户</h4>");
 												$('#addUserModal').modal('show');// 弹出修改模态框
@@ -284,13 +289,6 @@ angular
 							};
 							// 删除用户结束***************************************
 							
-							//清除form中输入框内容
-							//$('#addUserModal').on('hidden.bs.modal',  function () {
-//					　　			$("input").val("");
-//								document.getElementById("form_sample_1").reset();
-//								$('#name3').val("");$('#password').val("");
-								//$scope.user = null;
-							//});
 
 							// 页面加载完成后调用，验证输入框
 							$scope.$watch('$viewContentLoaded', function() {  
@@ -306,6 +304,13 @@ angular
 						            	name3:{required:"用户名不能为空！",rangelength:jQuery.validator.format("用户名位数必须在{0}到{1}字符之间！"),
 						            		remote:jQuery.validator.format("用户名已经被注册")},
 					            		password:{required:"密码不能为空！",rangelength:jQuery.validator.format("密码位数必须在{0}到{1}字符之间！")},
+					            		twoPass:{required: "请输入确认密码!",rangelength:jQuery.validator.format("密码位数必须在{0}到{1}字符之间！"),
+					                         equalTo: "请再次输入相同的值!"},
+					                    email: { email:"E-Mail格式不正确"},
+					                    telphone: { 
+					                    	digits:'请输入正确的电话, 必须为数字！',
+			                        	    rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")
+					                    },
 						                payment: {
 						                    maxlength: jQuery.validator.format("Max {0} items allowed for selection"),
 						                    minlength: jQuery.validator.format("At least {0} items must be selected")
@@ -330,22 +335,22 @@ angular
 						                },
 						                name3:{required:true,
 						                	rangelength:[3,10]
-						                	/*rangelength:[6,20],
-						                    remote:{//验证用户名是否存在
-						                           type:"POST",
-						                           url:$rootScope.basePath + "/rest/user/selectByUsername",
-						                           data:{
-						                             name3:function(){return $("#name3").val();}
-						                           } 
-						                    }*/
 						                },
 						                password:{required:true,
 						                	rangelength:[6,12]
 						                },
-						                        
+						                telphone: {
+						                	digits:true,
+						                    rangelength:[7,20]
+						                },
+						                twoPass: {
+						                    required: true,
+						                    rangelength:[6,12],
+						                    equalTo: "#password"
+						                  },
+						                idNumber: "isIdCardNo",      
 						                email: {
-						                    required: !0,
-						                    email: !0
+						                	email:true
 						                },
 						                email2: {
 						                    required: !0,
@@ -433,10 +438,20 @@ angular
 							var self = this;
 							self.user = {
 								id : null,
-								username : '',
+								loginName : '',
 								password : '',
+								userName : '',
+								idNumber : '',
+								station : '',
+								telphone : '',
+								email : '',
 								state : '',
-								createTime : ''
+								delFlg : '',
+								creator : '',
+								createTime : '',
+								updater : '',
+								updateTime : '',
+								comments : ''
 							};
 							self.users = [];
 
@@ -447,9 +462,6 @@ angular
 										.fetchAllUsers()
 										.then(
 												function(d) {
-													// console.log("************"
-													// + d.length);
-													// self.users = d;
 
 												},
 												function(errResponse) {

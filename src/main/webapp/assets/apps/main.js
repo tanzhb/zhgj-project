@@ -2,13 +2,14 @@
 Metronic AngularJS App Main Script
 ***/
 
+/* Metronic App */
 //定义模块时引入依赖
 var MetronicApp = angular.module("MetronicApp", [
-    "ui.router", 
-    "ui.bootstrap", 
-    "oc.lazyLoad",  
+    "ui.router",
+    "ui.bootstrap",
+    "oc.lazyLoad",
     "ngSanitize"
-]); 
+]);
 
 /* Configure ocLazyLoader(refer: https://github.com/ocombe/ocLazyLoad) */
 MetronicApp.config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
@@ -53,13 +54,13 @@ MetronicApp.factory('settings', ['$rootScope', function($rootScope) {
 MetronicApp.controller('AppController', ['$scope', '$rootScope', function($scope, $rootScope) {
     $scope.$on('$viewContentLoaded', function() {
         //App.initComponents(); // init core components
-        //Layout.init(); //  Init entire layout(header, footer, sidebar, etc) on page load if the partials included in server side instead of loading with ng-include directive 
+        //Layout.init(); //  Init entire layout(header, footer, sidebar, etc) on page load if the partials included in server side instead of loading with ng-include directive
     });
 }]);
 
 /***
 Layout Partials.
-By default the partials are loaded through AngularJS ng-include directive. In case they loaded in server side(e.g: PHP include function) then below partial 
+By default the partials are loaded through AngularJS ng-include directive. In case they loaded in server side(e.g: PHP include function) then below partial
 initialization can be disabled and Layout.init() should be called on page load complete as explained above.
 ***/
 
@@ -78,16 +79,16 @@ MetronicApp.controller('SidebarController', ['$state', '$scope', function($state
 }]);
 
 /* Setup Layout Part - Quick Sidebar */
-MetronicApp.controller('QuickSidebarController', ['$scope', function($scope) {    
+MetronicApp.controller('QuickSidebarController', ['$scope', function($scope) {
     $scope.$on('$includeContentLoaded', function() {
        setTimeout(function(){
-            QuickSidebar.init(); // init quick sidebar        
+            QuickSidebar.init(); // init quick sidebar
         }, 2000)
     });
 }]);
 
 /* Setup Layout Part - Theme Panel */
-MetronicApp.controller('ThemePanelController', ['$scope', function($scope) {    
+MetronicApp.controller('ThemePanelController', ['$scope', function($scope) {
     $scope.$on('$includeContentLoaded', function() {
         Demo.init(); // init theme panel
     });
@@ -103,14 +104,14 @@ MetronicApp.controller('FooterController', ['$scope', function($scope) {
 /* Setup Rounting For All Pages */
 MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
     // Redirect any unmatched url
-    $urlRouterProvider.otherwise("/dashboard");  
+    $urlRouterProvider.otherwise("/dashboard");
 
     $stateProvider
 
         // Dashboard
         .state('dashboard', {
             url: "/dashboard",
-            templateUrl: "rest/page/dashboard",            
+            templateUrl: "rest/page/dashboard",
             data: {pageTitle: '首页'},
             controller: "DashboardController",
             resolve: {
@@ -119,14 +120,14 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
                         files: [
-                            'assets/global/plugins/morris/morris.css',                            
+                            'assets/global/plugins/morris/morris.css',
                             'assets/global/plugins/morris/morris.min.js',
-                            'assets/global/plugins/morris/raphael-min.js',                            
+                            'assets/global/plugins/morris/raphael-min.js',
                             'assets/global/plugins/jquery.sparkline.min.js',
 
                             'assets/pages/scripts/dashboard.min.js',
                             'assets/apps/controllers/DashboardController.js',
-                        ] 
+                        ]
                     });
                 }]
             }
@@ -134,7 +135,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         // Blank Page
         .state('blank', {
             url: "/blank",
-            templateUrl: "rest/page/blank",            
+            templateUrl: "rest/page/blank",
             data: {pageTitle: '空白页'},
             controller: "BlankController",
             resolve: {
@@ -144,11 +145,12 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         insertBefore: '#ng_load_plugins_before', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
                         files: [
                             'assets/apps/controllers/BlankController.js'
-                        ] 
+                        ]
                     });
                 }]
             }
         })
+
         // 价格目录
         .state('jgml', {
             url: "/jgml",
@@ -159,9 +161,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
                         name: 'MetronicApp',
-                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
-                        files: [                             
-                            'assets/global/plugins/datatables/datatables.min.css', 
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before' 
+                        files: [
+                            'assets/global/plugins/datatables/datatables.min.css',
                             'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 
                             'assets/global/plugins/datatables/datatables.all.min.js',
@@ -174,7 +176,85 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
-        // 用户管理
+// 物料信息
+        .state('materiel', {
+            url: "/materiel",
+            templateUrl: "rest/page/materiel",
+            data: {pageTitle: '物料信息'},
+            controller: "materielController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+                            'assets/global/plugins/datatables/datatables.min.css',
+                            'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+                            'assets/global/plugins/jstree/dist/themes/default/style.min.css',
+
+                        'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+                          'assets/global/plugins/datatables/datatables.all.min.js',
+                          'assets/pages/scripts/table-datatables-fixedheader.min.js',
+
+                            'assets/global/plugins/jstree/dist/jstree.min.js',
+                            'assets/pages/scripts/ui-tree.min.js',
+                            'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js',
+                            'assets/apps/service/materielService.js',
+                            'assets/apps/controllers/materielController.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        // 新增物料
+        .state('addMateriel', {
+            url: "/addMateriel?:serialNum&:view",
+            templateUrl: "rest/page/addMateriel",
+            data: {pageTitle: '新增物料'},
+            controller: "materielController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+'assets/global/plugins/select2/css/select2.min.css',
+'assets/global/plugins/select2/css/select2-bootstrap.min.css',
+'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
+'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css',
+'assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css',
+'assets/global/plugins/icheck/skins/all.css',
+'assets/global/plugins/select2/js/select2.full.min.js',
+'assets/global/plugins/jquery-validation/js/jquery.validate.min.js',
+'assets/global/plugins/jquery-validation/js/localization/messages_zh.min.js',
+'assets/global/plugins/jquery-validation/js/additional-methods.min.js',
+'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+'assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js',
+'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js',
+'assets/global/plugins/ckeditor/ckeditor.js',
+'assets/global/plugins/bootstrap-markdown/lib/markdown.js',
+'assets/global/plugins/bootstrap-markdown/js/bootstrap-markdown.js',
+
+'assets/pages/scripts/form-icheck.min.js',
+'assets/pages/scripts/form-validation.min.js',
+'assets/apps/service/materielService.js',
+'assets/apps/controllers/materielController.js',
+
+'assets/global/plugins/datatables/datatables.min.css',
+'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+
+'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+'assets/global/plugins/datatables/datatables.all.min.js',
+'assets/pages/scripts/table-datatables-fixedheader.min.js'/*,
+'assets/apps/controllers/selectMaterielController.js'*/
+
+
+                        ]
+                    });
+                }]
+            }
+        })
+// 用户管理
         .state('user', {
             url: "/user",
             templateUrl: "rest/page/user",
@@ -185,19 +265,95 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                     return $ocLazyLoad.load({
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
-                        files: [                             
-                            'assets/global/plugins/datatables/datatables.min.css', 
+                           'assets/global/plugins/datatables/datatables.min.css', 
+                        files: [      
+                            'assets/global/plugins/datatables/datatables.all.min.js',
+                            'assets/global/plugins/datatables/datatables.min.css',                           
+                            'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
                             
-                            'assets/global/plugins/datatables/datatables.min.js',
+                            'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
                             'assets/apps/service/UserService.js',
                             'assets/apps/controllers/UserController.js'
                         ]
                     });
                 }]
             }
+        })        .state('company', {
+        	url: "/company",
+        	templateUrl: "rest/company/companyManage",
+        	data: {pageTitle: '企业信息'},
+        	reload:true, 
+        	controller: "CompanyController",
+        	resolve: {
+        		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+        			return $ocLazyLoad.load({
+        				name: 'MetronicApp',
+        				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+        				files: [                             
+        				        'assets/global/plugins/datatables/datatables.min.css', 
+        				        'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+        				        'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
+        				        'assets/global/plugins/datatables/datatables.all.min.js',
+        				        'assets/global/plugins/bootstrap-toastr/toastr.js',
+        				        'assets/global/plugins/bootstrap-toastr/toastr.css',
+        				        'assets/apps/controllers/CompanyController.js',
+        				        'assets/apps/service/CompanyService.js',
+        				        'assets/apps/directive/CompanyDirective.js',
+        				        'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
+        				        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+        				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css',
+        				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js',
+        				        'assets/global/plugins/jquery-repeater/jquery.repeater.js',
+        				        'assets/pages/scripts/form-repeater.min.js',
+        				        'assets/pages/scripts/form-repeater.js',
+        				        'assets/global/plugins/bootbox/bootbox.min.js',
+        				        'assets/pages/scripts/ui-bootbox.min.js',
+        				        'assets/global/plugins/jquery.blockui.min.js',
+        				        'assets/pages/scripts/ui-blockui.min.js',
+        				        'assets/apps/scripts/pageHandle.js'
+        				        ]
+        			});
+        		}]
+        	}
         })
-        .state('warehouse', {
-            url: "/warehouse",
+d', {
+	        	url: "/companyAdd",
+	        	templateUrl: "rest/company/companyAdd",
+	        	data: {pageTitle: '新建企业信息'},
+	        	reload:true, 
+	        	controller: "CompanyController",
+	        	resolve: {
+	        		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+	        			return $ocLazyLoad.load({
+	        				name: 'MetronicApp',
+	        				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+	        				files: [                             
+	        				        'assets/global/plugins/datatables/datatables.min.css', 
+	        				        'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+	        				        'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
+	        				        'assets/global/plugins/datatables/datatables.all.min.js',
+	        				        'assets/global/plugins/bootstrap-toastr/toastr.js',
+	        				        'assets/global/plugins/bootstrap-toastr/toastr.css',
+	        				        'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
+	        				        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+	        				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css',
+	        				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js',
+	        				        'assets/global/plugins/jquery-repeater/jquery.repeater.js',
+	        				        'assets/pages/scripts/form-repeater.min.js',
+	        				        'assets/pages/scripts/form-repeater.js',
+	        				        'assets/apps/controllers/CompanyController.js',
+	        				        'assets/apps/service/CompanyService.js',
+	        				        'assets/apps/directive/CompanyDirective.js',
+	        				        'assets/global/plugins/bootbox/bootbox.min.js',
+	        				        'assets/pages/scripts/ui-bootbox.min.js',
+	        				        'assets/global/plugins/jquery.blockui.min.js',
+	        				        'assets/pages/scripts/ui-blockui.min.js',
+	        				        'assets/apps/scripts/pageHandle.js'
+	        				        ]
+	        			});
+	        		}]
+	        	}
+	        })            url: "/warehouse",
             templateUrl: "rest/warehouse/viewWarehouseList",
             data: {pageTitle: '仓库信息'},
             controller: "WarehouseController",
@@ -258,19 +414,21 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
 }]);
 
-//js获取项目根路径，如： http://localhost:8083/uimcardprj  
-function getRootPath(){  
-    //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp  
-    var curWwwPath=window.document.location.href;  
-    //获取主机地址之后的目录，如： uimcardprj/share/meun.jsp  
-    var pathName=window.document.location.pathname;  
-    var pos=curWwwPath.indexOf(pathName);  
-    //获取主机地址，如： http://localhost:8083  
-    var localhostPaht=curWwwPath.substring(0,pos);  
-    //获取带"/"的项目名，如：/uimcardprj  
-    var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);  
-    return(localhostPaht+projectName);  
-}  
+
+
+//js获取项目根路径，如： http://localhost:8083/uimcardprj
+function getRootPath(){
+    //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
+    var curWwwPath=window.document.location.href;
+    //获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
+    var pathName=window.document.location.pathname;
+    var pos=curWwwPath.indexOf(pathName);
+    //获取主机地址，如： http://localhost:8083
+    var localhostPaht=curWwwPath.substring(0,pos);
+    //获取带"/"的项目名，如：/uimcardprj
+    var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);
+    return(localhostPaht+projectName);
+}
 
 /* Init global settings and run the app */
 MetronicApp.run(["$rootScope", "settings", "$state", function($rootScope, settings, $state) {
