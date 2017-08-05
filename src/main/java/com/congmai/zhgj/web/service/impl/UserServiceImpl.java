@@ -1,5 +1,7 @@
 package com.congmai.zhgj.web.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -58,10 +60,10 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements
 		return userMapper;
 	}
 
-	public User selectByUsername(String username) {
+	public User selectByUsername(String loginName) {
 		UserExample example = new UserExample();
 		User user = null;
-		example.createCriteria().andUsernameEqualTo(username);
+		example.createCriteria().andUsernameEqualTo(loginName);
 		final List<User> list = userMapper.selectByExample(example);
 		if (list != null && list.size() > 0) {
 			user = list.get(0);
@@ -71,6 +73,14 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements
 
 	public List<User> findAllUsers() {
 		List<User> list = userMapper.findAllUsers();
+		if(list != null && list.size() > 0){
+			for(User user : list){
+				if(user.getDelFlg() != null){
+					if("0".equals(user.getDelFlg())) user.setDelFlg("否");
+					else user.setDelFlg("是");
+				}
+			}
+		}
 		return list;
 	}
 
