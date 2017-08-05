@@ -3,7 +3,6 @@
 <mapper namespace="com.congmai.zhgj.web.dao.UserMapper">
     <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.User">
 
-        <id column="id" property="id" jdbcType="BIGINT" />
         <id column="id" property="id" jdbcType="VARCHAR" />
         <result column="loginName" property="loginName" jdbcType="VARCHAR" />
         <result column="password" property="password" jdbcType="CHAR" />
