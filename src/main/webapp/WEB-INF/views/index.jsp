@@ -35,12 +35,15 @@ License: You must have a valid license purchased only from themeforest(the above
         <meta content="" name="description" />
         <meta content="" name="author" />
         <!-- BEGIN GLOBAL MANDATORY STYLES -->
-        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
+         <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
         <link href="assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
         <!-- END GLOBAL MANDATORY STYLES -->
+        <!-- BEGIN PAGE LEVEL PLUGINS -->
+        <link href="assets/global/plugins/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css" />
+        <!-- END PAGE LEVEL PLUGINS -->
         <!-- BEGIN DYMANICLY LOADED CSS FILES(all plugin and page related styles must be loaded between GLOBAL and THEME css files ) -->
         <link id="ng_load_plugins_before" />
         <!-- END DYMANICLY LOADED CSS FILES -->
@@ -48,6 +51,8 @@ License: You must have a valid license purchased only from themeforest(the above
         <!-- DOC: To use 'rounded corners' style just load 'components-rounded.css' stylesheet instead of 'components.css' in the below style tag -->
         <link href="assets/global/css/components.min.css" id="style_components" rel="stylesheet" type="text/css" />
         <link href="assets/global/css/plugins.min.css" rel="stylesheet" type="text/css" />
+        <link href="assets/global/css/components-md.min.css" rel="stylesheet" id="style_components" type="text/css" />
+        <link href="assets/global/css/plugins-md.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/layouts/layout2/css/layout.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/layouts/layout2/css/themes/default.min.css" rel="stylesheet" type="text/css" id="style_color" />
         <link href="assets/layouts/layout2/css/custom.min.css" rel="stylesheet" type="text/css" />
@@ -113,7 +118,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	<script src="assets/global/plugins/respond.min.js"></script>
 	<script src="assets/global/plugins/excanvas.min.js"></script> 
 	<![endif]-->
-        <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+         <script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
         <script src="assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
         <script src="assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
         <script src="assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
@@ -128,6 +133,8 @@ License: You must have a valid license purchased only from themeforest(the above
         <script src="assets/global/plugins/angularjs/plugins/angular-ui-router.min.js" type="text/javascript"></script>
         <script src="assets/global/plugins/angularjs/plugins/ocLazyLoad.min.js" type="text/javascript"></script>
         <script src="assets/global/plugins/angularjs/plugins/ui-bootstrap-tpls.min.js" type="text/javascript"></script>
+        <script src="assets/global/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
+        <script src="assets/global/plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>
         <!-- END CORE ANGULARJS PLUGINS -->
         <!-- BEGIN APP LEVEL ANGULARJS SCRIPTS -->
         <script src="assets/apps/main.js" type="text/javascript"></script>

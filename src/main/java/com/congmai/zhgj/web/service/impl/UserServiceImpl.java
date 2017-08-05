@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
+import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.dao.UserMapper;
+import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.UserExample;
 import com.congmai.zhgj.web.service.UserService;
@@ -67,5 +69,38 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements U
     	List<User> list = userMapper.findAllUsers();
     	return list;
     }
+    
+    
+    @Override
+	public void insertContract(ContractVO contractVO) {
+		// TODO Auto-generated method stub
+		userMapper.insertContract(contractVO);
+	}
 
+	@Override
+	public List<ContractVO> queryContractList(String userId) {
+		// TODO Auto-generated method stub
+		
+		return userMapper.queryContractList(userId);
+	}
+
+	
+	@Override
+	public void deleteUserContractS(String ids) {
+		List<String> idList = ApplicationUtils.getIdList(ids);
+		userMapper.deleteUserContractS(idList);
+	}
+
+	@Override
+	public ContractVO selectConbtractById(String id) {
+		// TODO Auto-generated method stub
+		
+		return userMapper.selectContractById(id);
+	}
+
+	@Override
+	public void updateContract(ContractVO contractVO) {
+		// TODO Auto-generated method stub
+		userMapper.updateContract(contractVO);
+	}
 }

@@ -247,4 +247,70 @@
             order by ${orderByClause}
         </if>
     </select>
+    
+    <insert id="insertContract" parameterType="com.congmai.zhgj.web.model.ContractVO">
+    INSERT INTO contract(serialNum,  comId,   contractNum,    contractType,  serviceModel,   settlementClause,  startDate,  endDate,   signDate,   signer,    remark,  electronicContract,  signContract, isLatestVersion,creator,createTime,updater,updateTime) 
+                VALUES(#{id},#{comId},#{contractNum},#{contractType},#{serviceModel},#{settlementClause},#{startDate},#{endDate},#{signDate},#{signer},#{remark},#{electronicContract},#{signContract},'1',        #{creator},NOW(),#{creator},NOW())
+    </insert>
+    
+   <select id="queryContractList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ContractVO">
+    SELECT 
+    serialNum AS Id,
+	contractNum,
+	contractType,
+	serviceModel,
+	settlementClause,
+	startDate
+	FROM
+	contract
+	WHERE 
+	creator=#{userId}
+    </select>
+    
+    
+    <delete id="deleteUserContractS" parameterType="java.util.List">
+    	delete from contract where serialNum in
+        <foreach item="idList" collection="list" open="(" close=")" separator=",">
+            #{idList}
+        </foreach>
+    </delete>
+    
+    <select id="selectContractById" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ContractVO">
+    SELECT 
+    serialNum AS Id,
+	contractNum,
+	contractType,
+	serviceModel,
+	comId,
+	settlementClause,
+	startDate,
+	endDate,
+	signDate,
+	signer
+	FROM
+	contract
+	WHERE 
+	serialNum=#{id}
+    </select>
+    
+    
+    <update id="updateContract" parameterType="com.congmai.zhgj.web.model.ContractVO">
+    UPDATE
+	contract
+	SET
+	contractNum=#{contractNum},
+	comId=#{comId},
+	contractType=#{contractType},
+	serviceModel=#{serviceModel},
+	settlementClause=#{settlementClause},
+	startDate=#{startDate},
+	endDate=#{endDate},
+	signDate=#{signDate},
+	signer=#{signer},
+	remark=#{remark},
+	updater=#{updater},
+	updateTime=NOW()
+	WHERE
+	serialNum=#{id}
+    </update>
 </mapper>

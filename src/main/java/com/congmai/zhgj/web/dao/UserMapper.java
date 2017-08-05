@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericDao;
+import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.UserExample;
 
@@ -31,6 +32,10 @@ public interface UserMapper extends GenericDao<User, Long> {
     List<User> selectByExample(UserExample example);
     
     List<User> findAllUsers();
+    
+    int insertContract(ContractVO record);
+
+    List<ContractVO> queryContractList(String userId);
 
     User selectByPrimaryKey(Long id);
 
@@ -58,4 +63,11 @@ public interface UserMapper extends GenericDao<User, Long> {
      * @return
      */
     List<User> selectByExampleAndPage(Page<User> page, UserExample example);
+    
+    public void deleteUserContractS(List<String> ids);
+    
+    public ContractVO selectContractById(String id);
+    
+    
+    public void updateContract(ContractVO record);
 }

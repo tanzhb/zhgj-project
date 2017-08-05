@@ -3,6 +3,7 @@ package com.congmai.zhgj.web.service;
 import java.util.List;
 
 import com.congmai.zhgj.core.generic.GenericService;
+import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.User;
 
 /**
@@ -37,4 +38,26 @@ public interface UserService extends GenericService<User, Long> {
      * @return
      */
     List<User> findAllUsers();
+    
+    
+   public void insertContract(ContractVO contractVO);
+    
+    
+    
+    public List<ContractVO> queryContractList(String userId);
+    
+    
+    /**
+     * 
+     * @Description 批量删除
+     * @param ids
+     * @return
+     */
+	public void deleteUserContractS(String ids);
+	
+	
+	public ContractVO selectConbtractById(String id);
+	
+	
+	public void updateContract(ContractVO contractVO);
 }

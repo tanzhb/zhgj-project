@@ -3,6 +3,7 @@ package com.congmai.zhgj.web.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -15,15 +16,20 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import com.alibaba.druid.util.StringUtils;
+import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.security.PermissionSign;
 import com.congmai.zhgj.web.security.RoleSign;
@@ -114,7 +120,84 @@ public class UserController {
 		pageMap.put("data", users);
 		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 	}
+	
+	
+	/**
+     * 
+     * @Description 查找所有用户合同信息
+     * @return
+     */
+	@RequestMapping(value = "/findAllUserContract", method = RequestMethod.GET)
+	public ResponseEntity<Map> findAllUserContract(HttpServletRequest request) {
+		
+		User user=(User) request.getSession().getAttribute("userInfo"); 
+    	List<ContractVO> contractList=userService.queryContractList(user.getId()+"");
+		
+		if (contractList.isEmpty()) {
+			return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);// You many
+			                                                             // HttpStatus.NOT_FOUND
+		}
+		//封装datatables数据返回到前台
+		Map pageMap = new HashMap();
+		pageMap.put("draw", 1);
+		pageMap.put("recordsTotal", contractList.size());
+		pageMap.put("recordsFiltered", contractList.size());
+		pageMap.put("data", contractList);
+		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+	}
 
+	
+	  @RequestMapping(value = "/saveUserContract", method = RequestMethod.POST)
+	   public ResponseEntity<Void> saveUserContract(@Valid ContractVO contractVO, HttpServletRequest request,UriComponentsBuilder ucBuilder) {
+		  if(StringUtils.isEmpty(contractVO.getId())){
+			  String serialNum=UUID.randomUUID().toString().toUpperCase().replaceAll("-", ""); 
+			   contractVO.setId(serialNum);
+			   User user=(User) request.getSession().getAttribute("userInfo");   
+			   contractVO.setCreator(user.getId()+"");
+			   userService.insertContract(contractVO);
+		  }else{
+			  User user=(User) request.getSession().getAttribute("userInfo");
+			  contractVO.setUpdater(user.getId()+"");
+			  userService.updateContract(contractVO);
+		  }
+		    
+		   
+		   HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(ucBuilder.path("/userContract").buildAndExpand(contractVO.getId()).toUri());
+					
+			return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+	   }
+	 
+	 
+	 /**
+	 * 删除用户合同
+	 * @param contractVO
+	 * @param request
+	 * @return
+	 */
+	 @RequestMapping(value = "/deleteUserContractS", method = RequestMethod.POST)
+	   public ResponseEntity<Void> deleteUserContractS(@RequestBody String ids) {
+		 if ("".equals(ids) || ids == null) {
+				return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+			}
+		   userService.deleteUserContractS(ids); 
+		   return new ResponseEntity<Void>(HttpStatus.OK);
+	   }
+	 
+	 
+	 @RequestMapping(value = "/selectConbtractById", method = RequestMethod.POST)
+     public ResponseEntity<ContractVO> selectConbtractById(@RequestBody String ids) {
+		 
+		 ContractVO c=userService.selectConbtractById(ids);
+		 return new ResponseEntity<ContractVO>(c, HttpStatus.OK);
+     }
+	 
+	 @RequestMapping(value = "/editUserContractPage")
+     public String editUserContractPage() {
+		 return "editUserContractPage";
+     }
+	 
+	 
     /**
      * 基于角色 标识的权限控制案例
      */
