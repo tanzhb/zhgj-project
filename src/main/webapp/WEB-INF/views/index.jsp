@@ -28,7 +28,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
     <head>
     	<base href="<%=basePath%>">
-        <title data-ng-bind="'Metronic AngularJS | ' + $state.current.data.pageTitle"></title>
+        <title data-ng-bind="'中航国际 | ' + $state.current.data.pageTitle"></title>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1" name="viewport" />
