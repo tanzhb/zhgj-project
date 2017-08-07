@@ -21,17 +21,17 @@ import com.congmai.zhgj.web.service.RoleService;
  * @version 1.0.0
  */
 @Service
-public class RoleServiceImpl extends GenericServiceImpl<Role, Long> implements RoleService {
+public class RoleServiceImpl extends GenericServiceImpl<Role, String> implements RoleService {
 
     @Resource
     private RoleMapper roleMapper;
 
     @Override
-    public GenericDao<Role, Long> getDao() {
+    public GenericDao<Role, String> getDao() {
         return roleMapper;
     }
 
-    public List<Role> selectRolesByUserId(Long userId) {
+    public List<Role> selectRolesByUserId(String userId) {
         return roleMapper.selectRolesByUserId(userId);
     }
 

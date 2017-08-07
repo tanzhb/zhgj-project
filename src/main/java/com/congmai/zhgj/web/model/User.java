@@ -16,7 +16,7 @@ import com.congmai.zhgj.core.util.JsonDateSerializer;
  * @version 1.0.0
  */
 public class User {
-    private Long id;    
+    private String id;    
     private String loginName;//用户登录名
     private String userName;//用户姓名
     private String password;//密码
@@ -38,7 +38,7 @@ public class User {
     }
 
     
-    public User(Long id, String loginName, String userName, String password,
+    public User(String id, String loginName, String userName, String password,
 			String idNumber, String station, String telphone, String email,
 			String state, String delFlg, String creator, Date createTime,
 			String updater, Date updateTime, String comments) {
@@ -66,12 +66,12 @@ public class User {
     }
 
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

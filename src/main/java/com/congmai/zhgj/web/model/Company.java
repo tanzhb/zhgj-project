@@ -2,6 +2,10 @@ package com.congmai.zhgj.web.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class Company {
     private String comId;
 
@@ -41,10 +45,12 @@ public class Company {
 
     private String creator;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     private String updater;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     
     
@@ -146,7 +152,7 @@ public class Company {
     public Date getCreateTime() {
         return createTime;
     }
-
+    @JsonFormat(timezone="GTM+8",pattern="yyyy-MM-dd HH:mm:ss")
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
@@ -158,10 +164,11 @@ public class Company {
     public void setUpdater(String updater) {
         this.updater = updater == null ? null : updater.trim();
     }
-
+    @JsonFormat(timezone="GTM+8",pattern="yyyy-MM-dd HH:mm:ss")
     public Date getUpdateTime() {
         return updateTime;
     }
+
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
