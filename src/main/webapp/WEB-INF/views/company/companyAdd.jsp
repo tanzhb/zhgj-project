@@ -64,14 +64,6 @@
                                                 <button class="close" data-close="alert"></button>请先输入正确数据！</div>
 									<div class="row">
 										<div class="col-md-6">
-											<!-- <div class="form-group">
-												<label class="control-label col-md-4">企业编号：</label>
-												<div class="col-md-8 input-icon right">
-													<input  ng-hide="companyAdd"  type="text" ng-model="company.comNum"
-														class="form-control" placeholder="">
-													<p class="form-control-static" ng-show="companyView">{{company.comNum}}</p>
-												</div>
-											</div> -->
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="comNum"> <span class="required"> * </span>企业编号：</label>
                                                     <div class="col-md-8">
@@ -84,15 +76,6 @@
 						
 										<!--/span-->
 										<div class="col-md-6">
-											<!-- <div class="form-group">
-												<label class="control-label col-md-4">企业名称：</label>
-												<div class="col-md-8">
-													<input  ng-hide="companyAdd"  type="text" ng-model="company.comName"
-														class="form-control" placeholder="">
-													<p class="form-control-static"  ng-show="companyView">{{company.comName}}</p>
-												</div>
-											</div> -->
-											
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="comName"> <span class="required"> * </span>企业名称：</label>
                                                     <div class="col-md-8">
@@ -107,22 +90,6 @@
 									<!--/row-->
 									<div class="row">
 										<div class="col-md-6">
-											<!-- <div class="form-group">
-												<label class="control-label col-md-4">企业类型：</label>
-												<div class="col-md-8">
-													<select class="bs-select form-control" ng-hide="companyAdd" ng-model="company.comType">
-                                                             <option value="采购商" >采购商</option>
-                                                             <option value="供应商" >供应商</option>
-                                                             <option value="承运人" >承运人</option>
-                                                             <option value="外协仓" >外协仓</option>
-                                                             <option value="境外供应商" >境外供应商</option>
-                                                             <option value="装卸公司" >装卸公司</option>
-                                                             <option value="银行" >银行</option>
-                                                             <option value="保险公司" >保险公司</option>
-                                                    </select>
-													<p class="form-control-static"  ng-show="companyView">{{company.comType}}</p>
-												</div>
-											</div> -->
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="comType"> <span class="required"> * </span>企业类型：</label>
                                                     <div class="col-md-8">
@@ -148,20 +115,6 @@
 												<label class="control-label col-md-4" for="abbreviation">企业简称：</label>
 												<div class="col-md-8">
 													<input type="text" class="form-control" id="abbreviation" name="abbreviation" ng-model="company.abbreviation" ng-hide="companyAdd" > 
-													<!-- <select class="bs-select form-control" ng-hide="companyAdd" ng-model="company.abbreviation">
-                                                             <option value="国有企业" >国有企业</option>
-                                                             <option value="民营企业" >民营企业</option>
-                                                             <option value="合资企业" >合资企业</option>
-                                                             <option value="外资企业" >外资企业</option>
-                                                    </select>
-													<p class="form-control-static"  ng-show="companyView">{{company.abbreviation}}</p> -->
-													<!-- <select class="form-control" id="abbreviation" ng-hide="companyAdd"  ng-model="company.abbreviation" >
-                                                            <option value=""></option>
-                                                           	<option value="国有企业" >国有企业</option>
-                                                            <option value="民营企业" >民营企业</option>
-                                                            <option value="合资企业" >合资企业</option>
-                                                            <option value="外资企业" >外资企业</option>
-                                                    </select> -->
                                                     <div class="form-control-focus"> </div>
                                                     <p class="control-label left" ng-show="companyView">{{company.abbreviation}}</p>
 												</div>
@@ -172,17 +125,6 @@
 									<!--/row-->
 									<div class="row">
 										<div class="col-md-6">
-											<!-- <div class="form-group">
-												<label class="control-label col-md-4">经营性质：</label>
-												<div class="col-md-8">
-													<select class="bs-select form-control" ng-hide="companyAdd" ng-model="company.businessNature">
-                                                             <option value="国有企业" >加工制造</option>
-                                                             <option value="民营企业" >分销/交易</option>
-                                                             <option value="合资企业" >仓储供应</option>
-                                                    </select>
-													<p class="form-control-static"  ng-show="companyView">{{company.businessNature}}</p>
-												</div>
-											</div> -->
 											<div class="form-group  form-md-line-input">
 												<label class="control-label col-md-4" for="businessNature">经营性质：</label>
 												<div class="col-md-8">
@@ -198,18 +140,9 @@
 											</div>
 										</div>
 										<div class="col-md-6">
-											<!-- <div class="form-group">
-												<label class="control-label col-md-4">企业性质：</label>
-												<div class="col-md-8">
-													<input ng-hide="companyAdd" type="text" ng-model="company.comNature"
-														class="form-control" placeholder=""> 
-													<p class="form-control-static"  ng-show="companyView">{{company.comNature}}</p>
-												</div>
-											</div> -->
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="comNature"><span class="required"> * </span>企业性质：</label>
                                                     <div class="col-md-8">
-                                                     <!--    <input type="text" class="form-control" id="comNature" name="comNature" ng-model="company.comNature" ng-hide="companyAdd" > -->
                                                         <select class="form-control" id="comNature" ng-hide="companyAdd" name="comNature"  ng-model="company.comNature" >
                                                             <option value=""></option>
                                                            	<option value="国有企业" >国有企业</option>
@@ -226,14 +159,6 @@
 									<!--/row-->
 									<div class="row">
 										<div class="col-md-6">
-											<!-- <div class="form-group">
-												<label class="control-label col-md-4">经营类型：</label>
-												<div class="col-md-8">
-													<input ng-hide="companyAdd" type="text" ng-model="company.businessType"
-														class="form-control" placeholder=""> 
-													<p class="form-control-static"  ng-show="companyView">{{company.businessType}}</p>
-												</div>
-											</div> -->
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="businessType">经营类型：</label>
                                                     <div class="col-md-8">
@@ -244,14 +169,6 @@
                                             </div>
 										</div>
 										<div class="col-md-6">
-											<!-- <div class="form-group">
-												<label class="control-label col-md-4">注册资金：</label>
-												<div class="col-md-8">
-													<input ng-hide="companyAdd" type="text" ng-model="company.registeredCapital"
-														class="form-control" placeholder=""> 
-													<p class="form-control-static"  ng-show="companyView">{{company.registeredCapital}}</p>
-												</div>
-											</div> -->
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="registeredCapital">注册资金：</label>
                                                     <div class="col-md-8">
@@ -274,14 +191,6 @@
 									<!--/row-->
 									<div class="row">
 										<div class="col-md-6">
-											<!-- <div class="form-group">
-												<label class="control-label col-md-4">企业法人姓名：</label>
-												<div class="col-md-8">
-													<input ng-hide="companyAdd" type="text" ng-model="company.legalPerson"
-														class="form-control" placeholder="">
-													<p class="form-control-static"  ng-show="companyView">{{company.legalPerson}}</p>
-												</div>
-											</div> -->
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="legalPerson"> <span class="required"> * </span>企业法人姓名:</label>
                                                     <div class="col-md-8">
@@ -292,14 +201,6 @@
                                             </div>
 										</div>
 										<div class="col-md-6">
-											<!-- <div class="form-group">
-												<label class="control-label col-md-4">注册地址：</label>
-												<div class="col-md-8">
-													<input ng-hide="companyAdd" type="text" ng-model="company.address"
-														class="form-control" placeholder=""> 
-													<p class="form-control-static"  ng-show="companyView">{{company.address}}</p>
-												</div>
-											</div> -->
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="address"> <span class="required"> * </span>注册地址：</label>
                                                     <div class="col-md-8">
@@ -313,14 +214,6 @@
 									<!--/row-->
 									<div class="row">
 										<div class="col-md-6">
-											<!-- <div class="form-group">
-												<label class="control-label col-md-4">纳税人识别号：</label>
-												<div class="col-md-8">
-													<input ng-hide="companyAdd" type="text" ng-model="company.taxpayeNumber"
-														class="form-control" placeholder=""> 
-													<p class="form-control-static"  ng-show="companyView">{{company.taxpayeNumber}}</p>
-												</div>
-											</div> -->
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="taxpayeNumber"> <span class="required"> * </span>纳税人识别号：</label>
                                                     <div class="col-md-8">
@@ -331,18 +224,10 @@
                                             </div>
 										</div>
 										<div class="col-md-6">
-											<!-- <div class="form-group">
-												<label class="control-label col-md-4">联系电话：</label>
-												<div class="col-md-8">
-													<input ng-hide="companyAdd" type="text" ng-model="company.tel"
-														class="form-control" placeholder=""> 
-													<p class="form-control-static"  ng-show="companyView">{{company.tel}}</p>
-												</div>
-											</div> -->
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="tel">联系电话：</label>
                                                     <div class="col-md-8">
-                                                        <input type="text" class="form-control" id="tel" ng-model="company.tel" ng-hide="companyAdd" >
+                                                        <input type="text" class="form-control" id="tel" name="tel" ng-model="company.tel" ng-hide="companyAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="companyView">{{company.tel}}</p>
                                                     </div>
@@ -352,14 +237,6 @@
 									<!--/row-->
 									<div class="row">
 										<div class="col-md-6">
-											<!-- <div class="form-group">
-												<label class="control-label col-md-4">维护人员：</label>
-												<div class="col-md-8">
-													<input ng-hide="companyAdd" type="text" ng-model="company.contact"
-														class="form-control" placeholder="">
-													<p class="form-control-static"  ng-show="companyView">{{company.contact}}</p>
-												</div>
-											</div> -->
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="contact"><span class="required"> * </span>维护人员：</label>
                                                     <div class="col-md-8">
@@ -370,14 +247,6 @@
                                             </div>
 										</div>
 										<div class="col-md-6">
-											<!-- <div class="form-group">
-												<label class="control-label col-md-4">备注：</label>
-												<div class="col-md-8">
-													<input ng-hide="companyAdd" type="text" ng-model="company.remark"
-														class="form-control" placeholder=""> 
-													<p class="form-control-static"  ng-show="companyView" class="control-label">{{company.remark}}</p>
-												</div>
-											</div> -->
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="remark">备注：</label>
                                                     <div class="col-md-8">
@@ -426,7 +295,7 @@
 										</div>
 						
 										<!--/span-->
-										<div class="col-md-3">
+										<div class="col-md-2">
 											<div class="form-group">
 												<div class="col-md-12">
 													<input  ng-hide="companyQualificationAdd" type="text" ng-model="companyQualification.qualificationNum" name="qualificationNum"
@@ -445,7 +314,7 @@
 														data-date-viewmode="years">
 														<input type="text" class="form-control" readonly="" ng-model="companyQualification.validityDate" name="validityDate"
 															placeholder="有效期"> <span class="input-group-btn">
-															<button class="btn default" type="button">
+															<button class="btn default " type="button">
 																<i class="fa fa-calendar"></i>
 															</button>
 														</span>
@@ -478,30 +347,32 @@
 											<div class="form-group">
 												<div class="col-md-12">
 													<input  ng-hide="companyQualificationAdd" type="text" ng-model="companyQualification.remark" name="remark"
-														class="form-control" placeholder="备注"> <span
-														class="help-block"></span>
-														<label   ng-show="companyQualificationView"  >{{companyQualification.remark}}</label>
+														class="form-control" placeholder="备注"> 
+														<label   ng-show="companyQualificationView" class="c_edit" >{{companyQualification.remark}}</label>
 												</div>
 											</div>
 										</div>
 										<!--/span-->
 										<div class="col-md-1">
 											<div class="form-group">
-												<!-- <div class="col-md-5" >
-													 <a  ng-hide="companyQualificationAdd"  href="javascript:;" class="btn blue btn-sm" ng-click="saveCompanyQualification()" >
-                                            			<i class="fa fa-save"></i>
-                                     				</a>
-													 <a  ng-show="companyQualificationView"  href="javascript:;" class="btn blue btn-sm c_edit"  ng-click="editCompanyQualification()" >
-                                            			<i class="fa fa-edit"></i>
-                                     				</a>
-												</div> -->
+												<div class="col-md-12">
+														
+												 	<span ng-show="companyQualificationView" ng-if="companyQualification.status=='0'" class="label label-sm label-success">正常</span>
+												 	<span ng-show="companyQualificationView" ng-if="companyQualification.status=='1'" class="label label-sm label-danger">已过期</span>
+												 	<span ng-show="companyQualificationView" ng-if="companyQualification.status=='2'" class="label label-sm label-warning">即将过期</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
 												<div class="col-md-12">
 													 <a href="javascript:;"  class="btn red btn-sm" ng-hide="companyQualificationAdd" ng-click="deleteRepeat()">
                                             			<i class="fa fa-close"></i> 
                                      				</a>
 												</div>
 											</div>
-										</div> 
+										</div>
+										<!--/span--> 
 									</div>
 									<!-- /row -->
 								</div>
@@ -566,7 +437,7 @@
 			                                        </table>
 			                                    </div>
 			                                    <div class="form-actions right">
-												 	<a  class="btn blue btn-sm"  ng-click="contactorB()"   >
+												 	<a  class="btn blue btn-sm"  ng-click="addCompanyContact()"   >
 			                                            <i class="fa fa-plus"></i> 增加
 			                                     	</a>
 			                                	</div>
@@ -612,7 +483,7 @@
                                         </table>
                                     </div>
                                     <div class="form-actions right">
-									 	<a   class="btn blue btn-sm" ng-click="financeB()"  >
+									 	<a   class="btn blue btn-sm" ng-click="addCompanyFinance()"  >
                                             <i class="fa fa-plus"></i> 增加
                                      	</a>
                                 	</div>
@@ -625,7 +496,7 @@
 </div>
 
 
-
+<!-- 联系人modal START -->
  <div class="modal fade  modal-overflow in" id="contactor" tabindex="-1" role="contactor" aria-hidden="true" data-backdrop="static">
      <div class="modal-dialog" style="width: 450px;">
          <div class="modal-content">
@@ -638,16 +509,8 @@
                <div class="alert alert-danger display-hide">
                                                 <button class="close" data-close="alert"></button>表单数据未填写完整</div>
                <form id="contactForm"  class="form-horizontal">
-                <!--  <h3 class="form-section">仓库信息</h3> -->
                  <div class="row">
                      <div class="col-md-12">
-                        <!--  <div class="form-group">
-                             <label class="control-label col-md-4">姓名：</label>
-                             <div class="col-md-8 input-icon right">
-                                 <input type="text" ng-model="companyContact.contactName" class="form-control" placeholder="">
-                                 <span class="help-block"></span>
-                             </div>
-                         </div> -->
                          <div class="form-group form-md-line-input">
                                  <label class="col-md-4 control-label" for="contactName"><span class="required"> * </span>姓名：</label>
                                  <div class="col-md-7">
@@ -660,13 +523,6 @@
                  <!--/row-->
                  <div class="row">
                      <div class="col-md-12">
-                        <!--  <div class="form-group">
-                             <label class="control-label col-md-4">职位：</label>
-                             <div class="col-md-8 input-icon right">
-                                 <input type="text" ng-model="companyContact.contactTitle" class="form-control" placeholder="">
-                                 <span class="help-block"></span>
-                             </div>
-                         </div> -->
                          <div class="form-group form-md-line-input">
                                  <label class="col-md-4 control-label" for="contactTitle"><span class="required"> * </span>职位：</label>
                                  <div class="col-md-7">
@@ -678,13 +534,6 @@
                  </div>
                  <div class="row">
                      <div class="col-md-12">
-                         <!-- <div class="form-group">
-                             <label class="control-label col-md-4">部门/公司：</label>
-                             <div class="col-md-8 input-icon right">
-                                 <input type="text" ng-model="companyContact.department" class="form-control" placeholder="">
-                                 <span class="help-block"></span>
-                             </div>
-                         </div> -->
                          <div class="form-group form-md-line-input">
                                  <label class="col-md-4 control-label" for="department"><span class="required"> * </span>部门/公司：</label>
                                  <div class="col-md-7">
@@ -709,13 +558,6 @@
                  <!--/row-->
                  <div class="row">
                      <div class="col-md-12">
-                         <!-- <div class="form-group">
-                             <label class="control-label col-md-4">电话：</label>
-                             <div class="col-md-8 input-icon right">
-                                 <input type="text" ng-model="companyContact.contactTel" class="form-control" placeholder="">
-                                 <span class="help-block"></span>
-                             </div>
-                         </div> -->
                          <div class="form-group form-md-line-input">
                                  <label class="col-md-4 control-label" for="contactTel"><span class="required"> * </span>电话：</label>
                                  <div class="col-md-7">
@@ -728,17 +570,10 @@
                  <!--/row-->
                  <div class="row">
                      <div class="col-md-12">
-                         <!-- <div class="form-group">
-                             <label class="control-label col-md-4">微信：</label>
-                             <div class="col-md-8 input-icon right">
-                                 <input type="text" ng-model="companyContact.wechat" class="form-control" placeholder="">
-                                 <span class="help-block"></span>
-                             </div>
-                         </div> -->
                          <div class="form-group form-md-line-input">
                                  <label class="col-md-4 control-label" for="wechat">微信：</label>
                                  <div class="col-md-7">
-                                     <input type="text" class="form-control" id="wechat" ng-model="companyContact.wechat"  >
+                                     <input type="text" class="form-control" id="wechat"  ng-model="companyContact.wechat"  >
                                      <div class="form-control-focus"> </div>
                                  </div>
                          </div>
@@ -747,17 +582,10 @@
                  <!--/row-->
                  <div class="row">
                      <div class="col-md-12">
-                         <!-- <div class="form-group">
-                             <label class="control-label col-md-4">邮箱：</label>
-                             <div class="col-md-8 input-icon right">
-                                 <input type="text" ng-model="companyContact.contactEmail" class="form-control" placeholder="">
-                                 <span class="help-block"></span>
-                             </div>
-                         </div> -->
                          <div class="form-group form-md-line-input">
                                  <label class="col-md-4 control-label" for="contactEmail">邮箱：</label>
                                  <div class="col-md-7">
-                                     <input type="text" class="form-control" id="contactEmail" ng-model="companyContact.contactEmail"  >
+                                     <input type="text" class="form-control" id="contactEmail" name="contactEmail" ng-model="companyContact.contactEmail"  >
                                      <div class="form-control-focus"> </div>
                                  </div>
                          </div>
@@ -766,13 +594,6 @@
                  <!--/row-->
                  <div class="row">
                      <div class="col-md-12">
-                         <!-- <div class="form-group">
-                             <label class="control-label col-md-4">备注：</label>
-                             <div class="col-md-8 input-icon right">
-                                 <input type="text" ng-model="companyContact.remark" class="form-control" placeholder="">
-                                 <span class="help-block"></span>
-                             </div>
-                         </div> -->
                          <div class="form-group form-md-line-input">
                                  <label class="col-md-4 control-label" for="remark">备注：</label>
                                  <div class="col-md-7">
@@ -797,7 +618,9 @@
      </div>
      <!-- /.modal-dialog -->
  </div>
+<!-- 联系人modal END -->
 
+<!-- 财务信息modal START -->
  <div class="modal fade modal-overflow in" id="finance" tabindex="-1" role="finance" aria-hidden="true" data-backdrop="static">
      <div class="modal-dialog" style="width: 400px;">
          <div class="modal-content">
@@ -810,16 +633,8 @@
                <div class="alert alert-danger display-hide">
                                                 <button class="close" data-close="alert"></button>表单数据未填写完整</div>
                <form id="companyFinanceForm" class="form-horizontal">
-                <!--  <h3 class="form-section">仓库信息</h3> -->
                  <div class="row">
                      <div class="col-md-12">
-                         <!-- <div class="form-group">
-                             <label class="control-label col-md-3">银行：</label>
-                             <div class="col-md-9 input-icon right">
-                                 <input type="text" ng-model="companyFinance.openingBank" class="form-control" placeholder="">
-                                 <span class="help-block"></span>
-                             </div>
-                         </div> -->
                          <div class="form-group form-md-line-input">
                                  <label class="col-md-4 control-label" for="openingBank"><span class="required"> * </span>银行：</label>
                                  <div class="col-md-7">
@@ -832,13 +647,6 @@
                  <!--/row-->
                  <div class="row">
                      <div class="col-md-12">
-                         <!-- <div class="form-group">
-                             <label class="control-label col-md-3">户名：</label>
-                             <div class="col-md-9 input-icon right">
-                                 <input type="text" ng-model="companyFinance.accountName" class="form-control" placeholder="">
-                                 <span class="help-block"></span>
-                             </div>
-                         </div> -->
                          <div class="form-group form-md-line-input">
                                  <label class="col-md-4 control-label" for="accountName"><span class="required"> * </span>户名：</label>
                                  <div class="col-md-7">
@@ -851,13 +659,6 @@
                  <!--/row-->
                  <div class="row">
                      <div class="col-md-12">
-                         <!-- <div class="form-group">
-                             <label class="control-label col-md-3">账号：</label>
-                             <div class="col-md-9 input-icon right">
-                                 <input type="text" ng-model="companyFinance.accountNumber" class="form-control" placeholder="">
-                                 <span class="help-block"></span>
-                             </div>
-                         </div> -->
                          <div class="form-group form-md-line-input">
                                  <label class="col-md-4 control-label" for="accountNumber"><span class="required"> * </span>账号：</label>
                                  <div class="col-md-7">
@@ -869,13 +670,6 @@
                  </div>
                  <div class="row">
                      <div class="col-md-12">
-                         <!-- <div class="form-group">
-                             <label class="control-label col-md-3">备注：</label>
-                             <div class="col-md-9 input-icon right">
-                                 <input type="text" ng-model="companyFinance.remark" class="form-control" placeholder="">
-                                 <span class="help-block"></span>
-                             </div>
-                         </div> -->
                          <div class="form-group form-md-line-input">
                                  <label class="col-md-4 control-label" for="remark">备注：</label>
                                  <div class="col-md-7">
@@ -899,167 +693,7 @@
      </div>
      <!-- /.modal-dialog -->
  </div>
-
-
-
-<!-- 
-
-
-
-
-
-  BEGIN SAMPLE FORM PORTLET
-                                <div class="portlet light bordered">
-                                    <div class="portlet-title">
-                                        <div class="caption font-green-haze">
-                                            <i class="icon-settings font-green-haze"></i>
-                                            <span class="caption-subject bold uppercase"> Horizontal Form</span>
-                                        </div>
-                                        <div class="actions">
-                                            <a class="btn btn-circle btn-icon-only blue" href="javascript:;">
-                                                <i class="icon-cloud-upload"></i>
-                                            </a>
-                                            <a class="btn btn-circle btn-icon-only green" href="javascript:;">
-                                                <i class="icon-wrench"></i>
-                                            </a>
-                                            <a class="btn btn-circle btn-icon-only red" href="javascript:;">
-                                                <i class="icon-trash"></i>
-                                            </a>
-                                            <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
-                                        </div>
-                                    </div>
-                                    <div class="portlet-body form">
-                                        <form role="form" class="form-horizontal">
-                                            <div class="form-body">
-                                                <div class="form-group form-md-line-input">
-                                                    <label class="col-md-2 control-label" for="form_control_1">Regular input</label>
-                                                    <div class="col-md-10">
-                                                        <input type="text" class="form-control" id="form_control_1" placeholder="Enter your name">
-                                                        <div class="form-control-focus"> </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group form-md-line-input">
-                                                    <label class="col-md-2 control-label" for="form_control_1">Input with hint</label>
-                                                    <div class="col-md-10">
-                                                        <input type="text" class="form-control" id="form_control_1" placeholder="Enter your email">
-                                                        <div class="form-control-focus"> </div>
-                                                        <span class="help-block">Some help goes here...</span>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group form-md-line-input has-success">
-                                                    <label class="col-md-2 control-label" for="form_control_1">Success Input</label>
-                                                    <div class="col-md-10">
-                                                        <input type="text" class="form-control" id="form_control_1" placeholder="Success state">
-                                                        <div class="form-control-focus"> </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group form-md-line-input has-warning">
-                                                    <label class="col-md-2 control-label" for="form_control_1">Warning Input</label>
-                                                    <div class="col-md-10">
-                                                        <input type="text" class="form-control" id="form_control_1" placeholder="Warning state">
-                                                        <div class="form-control-focus"> </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group form-md-line-input has-error">
-                                                    <label class="col-md-2 control-label" for="form_control_1">Error State</label>
-                                                    <div class="col-md-10">
-                                                        <input type="text" class="form-control" id="form_control_1" placeholder="Error state">
-                                                        <div class="form-control-focus"> </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group form-md-line-input">
-                                                    <label class="col-md-2 control-label" for="form_control_1">Dropdown Input</label>
-                                                    <div class="col-md-10">
-                                                        <select class="form-control" id="form_control_1">
-                                                            <option value=""></option>
-                                                            <option value="">Option 1</option>
-                                                            <option value="">Option 2</option>
-                                                            <option value="">Option 3</option>
-                                                            <option value="">Option 4</option>
-                                                        </select>
-                                                        <div class="form-control-focus"> </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group form-md-line-input has-success">
-                                                    <label class="col-md-2 control-label" for="form_control_1">Textarea</label>
-                                                    <div class="col-md-10">
-                                                        <textarea class="form-control" rows="3" placeholder="Enter more text"></textarea>
-                                                        <div class="form-control-focus"> </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group form-md-line-input">
-                                                    <label class="col-md-2 control-label" for="form_control_1">Disabled</label>
-                                                    <div class="col-md-10">
-                                                        <input type="text" class="form-control" disabled id="form_control_1" placeholder="Placeholder...">
-                                                        <div class="form-control-focus"> </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group form-md-line-input">
-                                                    <label class="col-md-2 control-label" for="form_control_1">Readonly</label>
-                                                    <div class="col-md-10">
-                                                        <input type="text" class="form-control" readonly value="Some value" id="form_control_1" placeholder="Placeholder...">
-                                                        <div class="form-control-focus"> </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group form-md-line-input">
-                                                    <label class="col-md-2 control-label" for="form_control_1">Readonly</label>
-                                                    <div class="col-md-10">
-                                                        <div class="form-control form-control-static"> email@example.com </div>
-                                                        <div class="form-control-focus"> </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group form-md-line-input">
-                                                    <label class="col-md-2 control-label" for="form_control_1">Small</label>
-                                                    <div class="col-md-10">
-                                                        <input type="text" class="form-control input-sm" id="form_control_1" placeholder=".input-sm">
-                                                        <div class="form-control-focus"> </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group form-md-line-input">
-                                                    <label class="col-md-2 control-label" for="form_control_1">Large</label>
-                                                    <div class="col-md-10">
-                                                        <input type="text" class="form-control input-lg" id="form_control_1" placeholder=".input-lg">
-                                                        <div class="form-control-focus"> </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-actions">
-                                                <div class="row">
-                                                    <div class="col-md-offset-2 col-md-10">
-                                                        <button type="button" class="btn default">Cancel</button>
-                                                        <button type="button" class="btn blue">Submit</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                                END SAMPLE FORM PORTLET
-
-
-
- -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<!-- 财务信息modal END -->
 
 
 <!-- END MAIN CONTENT -->

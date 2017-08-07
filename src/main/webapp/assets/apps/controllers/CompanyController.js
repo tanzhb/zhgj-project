@@ -131,8 +131,8 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 									'targets' : 1,
 									'render' : function(data,
 											type, row, meta) {
-										//return '<a   ng-click="showCompanyInfo(\''+row.comId+'\')">'+data+'</a>';
-										return data;
+										return '<a   ng-click="showCompanyInfoModal(\''+row.comId+'\')">'+data+'</a>';
+										//return data;
 									},"createdCell": function (td, cellData, rowData, row, col) {
 										 $compile(td)($scope);
 								    }
@@ -170,7 +170,8 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 					            		legalPerson:{required:"企业法人姓名不能为空！"},
 					            		address:{required:"注册地址不能为空！"},
 					            		taxpayeNumber:{required:"纳税人识别号不能为空！"},
-					            		contact:{required:"维护人员不能为空！"}
+					            		contact:{required:"维护人员不能为空！"},
+					            		tel:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")}
 						            },
 						            rules: {
 						            	comNum: {
@@ -199,6 +200,10 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 						                },
 						                contact:{
 						                	required:true,
+						                },
+						                tel:{
+						                	digits:true,
+						                	rangelength:[7,20]
 						                }
 						            },
 						            invalidHandler: function(e, t) {
@@ -377,7 +382,8 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 					contactTitle:{required:"职位不能为空！"},
 					department:{required:"部门/公司不能为空！"},
 					responsibility:{required:"管理职责不能为空！"},
-					contactTel:{required:"电话不能为空！"}
+					contactTel:{required:"电话不能为空！",digits:"请输入正确的电话, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
+					contactEmail:{email:"请输入正确的邮箱！"}
 				},
 				rules: {
 					contactName: {
@@ -393,7 +399,12 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 						required: !0
 					},
 					contactTel: {
-						required: !0
+						required: !0,
+						digits:true,
+						rangelength:[7,20]
+					},
+					contactEmail:{
+						email:true
 					}
 				},
 				invalidHandler: function(e, t) {
@@ -433,7 +444,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 				messages: {
 					openingBank:{required:"银行不能为空！"},
 					accountName:{required:"户名不能为空！"},
-					accountNumber:{required:"账号不能为空！"}
+					accountNumber:{required:"账号不能为空！",digits:"银行账号必须为数字！"}
 				},
 				rules: {
 					accountName: {
@@ -443,7 +454,8 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 						required: !0
 					},
 					accountNumber: {
-						required: !0
+						required: !0,
+						digits:true
 					}
 				},
 				invalidHandler: function(e, t) {
@@ -539,21 +551,33 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        		$scope.company.updateTime=null;
 	        		var promise = companyService.saveCompany($scope.company);
 	        		promise.then(function(data){
-	        			$(".modal-backdrop").remove();
-	        			handle.toastr.success("保存成功");
-	        			handle.unblockUI();
-	        			var company = data.data;
-	        			//$state.go('companyAdd',company,{reload:true});
-	        			$scope.company = company
-	        			console.log(data.data);
-	        			$scope.companyView = true;
-	        			$scope.companyAdd = true;
-	        			$scope.companyEdit = false;
-	        			$(".alert-danger").hide();
-	        			//$stateParams.comId = company.comId;
-	        			//$location.search('comId',company.comId);
+	        			if(!handle.isNull(data.data)){
+	        				$(".modal-backdrop").remove();
+		        			handle.toastr.success("保存成功");
+		        			handle.unblockUI();
+		        			var company = data.data;
+		        			//$state.go('companyAdd',company,{reload:true});
+		        			$scope.company = company
+		        			console.log(data.data);
+		        			$scope.companyView = true;
+		        			$scope.companyAdd = true;
+		        			$scope.companyEdit = false;
+		        			$(".alert-danger").hide();
+		        			//$stateParams.comId = company.comId;
+		        			//$location.search('comId',company.comId);
+	        			}else{
+	        				$(".modal-backdrop").remove();
+		        			handle.unblockUI();
+	        				handle.toastr.error("保存失败！请联系管理员");
+			            	console.log(data);
+	        			}
+	        			
 	        		},function(data){
 	        			//调用承诺接口reject();
+	        			$(".modal-backdrop").remove();
+	        			handle.unblockUI();
+	        			handle.toastr.error("保存失败！请联系管理员");
+		            	console.log(data);
 	        		});
 	        	}
 	        	
@@ -585,7 +609,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 				// Iterate over all checkboxes in the table
 				var id_count = table.$('input[type="checkbox"]:checked').length;
 				if(id_count==0){
-					handle.toastr.warning("请选择一条数据进行编辑");
+					handle.toastr.warning("请选择您要编辑的记录");
 				}else if(id_count>1){
 					handle.toastr.warning("只能选择一条数据进行编辑");
 				}else{
@@ -599,16 +623,23 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	         * 删除
 	         */
 	        $scope.deleteCompany=function (comId) {
-	        	
 	        	handle.confirm("确定删除吗？",function(){
 	        		handle.blockUI();
 	        		var promise = companyService.deleteCompany(comId);
 	        		promise.then(function(data){
-	        			handle.toastr.success("删除成功");
-	        			handle.unblockUI();
-		        		 $state.go('company',{},{reload:true}); 
+	        			if(data.data == "1"){
+	        				handle.toastr.success("删除成功");
+		        			handle.unblockUI();
+			        		 $state.go('company',{},{reload:true}); 
+	        			}else{
+	        				handle.toastr.error("保存失败！请联系管理员");
+			            	console.log(data);
+	        			}
+	        			
 	 	            },function(data){
 	 	               //调用承诺接口reject();
+	 	            	handle.toastr.error("保存失败！请联系管理员");
+		            	console.log(data);
 	 	            });
 	        		
 	        	});
@@ -620,7 +651,11 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	         * 批量删除
 	         */
 	        $scope.deleteCompanyBatch=function () {
-	        	
+	        	var id_count = table.$('input[type="checkbox"]:checked').length;
+				if(id_count==0){
+					handle.toastr.warning("请选择您要删除的记录");
+					return;
+				}
 	        	handle.confirm("确定删除吗？",function(){
 	        		var ids = '';
 					// Iterate over all checkboxes in the table
@@ -715,14 +750,23 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		        	var promise = companyService.saveCompanyQualification($scope.companyQualifications);
 		        	promise.then(function(data){
 		        		//$(".modal-backdrop").remove();
-		        		handle.toastr.success("保存成功");
-		        		handle.unblockUI();
-		        		$scope.companyQualification = data.data;
-		        		$scope.companyQualificationView = true;
-		        		$scope.companyQualificationAdd = true;
-		        		$scope.companyQualificationEdit = false;
+		        		if(!handle.isNull(data.data)){
+			        		handle.toastr.success("保存成功");
+			        		handle.unblockUI();
+			        		//$scope.companyQualifications = data.data;
+			        		getCompanyInfo($scope.company.comId,'companyQualification');
+			        		$scope.companyQualificationView = true;
+			        		$scope.companyQualificationAdd = true;
+			        		$scope.companyQualificationEdit = false;
+		        		}else{
+		        			handle.toastr.error("保存失败！请联系管理员");
+			        		handle.unblockUI();
+		        		}
 		            },function(data){
+		            	handle.unblockUI();
 		               //调用承诺接口reject();
+		            	handle.toastr.error("保存失败！请联系管理员");
+		            	console.log(data);
 		            });
 		    	}
 	    	   
@@ -781,25 +825,33 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		        	var promise = companyService.saveCompanyContact($scope.companyContact);
 		        	promise.then(function(data){
 		        		//$(".modal-backdrop").remove();
-		        		handle.toastr.success("保存成功");
-		        		$("#contactor").modal("hide");
-		        		$scope.companyContact = {};
-		        		$scope.companyContacts = data.data;
+		        		if(!handle.isNull(data.data)){
+			        		handle.toastr.success("保存成功");
+			        		$("#contactor").modal("hide");
+			        		$scope.companyContact = {};
+			        		$scope.companyContacts = data.data;
+		        		}else{
+		        			$("#contactor").modal("hide");
+		        			handle.toastr.error("保存失败！请联系管理员");
+		        		}
 		            },function(data){
 		               //调用承诺接口reject();
+		            	handle.toastr.error("保存失败！请联系管理员");
+		            	console.log(data);
 		            });
 		    	}
 	    	    
 	       }
 	       
 	       /**
-	        * 新增财务信息
+	        * 新增联系人信息
 	        */
 	       $scope.addCompanyContact = function(){
 	    	   if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
 		    		 handle.toastr.warning("您的企业信息还未保存");
 		    		 return;
 		       }else{
+		    	   $scope.companyContact = {};
 		    	   $("#contactor").modal("show");
 		       }
 	    	  
@@ -865,12 +917,21 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		        	var promise = companyService.saveCompanyFinance($scope.companyFinance);
 		        	promise.then(function(data){
 		        		//$(".modal-backdrop").remove();
-		        		handle.toastr.success("保存成功");
-		        		$("#finance").modal("hide");
-		        		$scope.companyFinance = {};
-		        		$scope.companyFinances = data.data;
+		        		if(!handle.isNull(data.data)){
+		        			handle.toastr.success("保存成功");
+			        		$("#finance").modal("hide");
+			        		$scope.companyFinance = {};
+			        		$scope.companyFinances = data.data;
+		        		}else{
+		        			$("#finance").modal("hide");
+		        			handle.toastr.error("保存失败！请联系管理员");
+		        			console.log(data);
+		        		}
+		        		
 		            },function(data){
 		               //调用承诺接口reject();
+		            	handle.toastr.error("保存失败！请联系管理员");
+		            	console.log(data);
 		            });
 	    		}
 	       }
@@ -884,6 +945,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		    		 handle.toastr.warning("您的企业信息还未保存");
 		    		 return;
 		       }else{
+		    	   $scope.companyFinance = {};
 		    	   $("#finance").modal("show");
 		       }
 	    	  
@@ -945,8 +1007,13 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        * 企业资质加一行
 	        */
 	       $scope.addRepeat = function(){
-	    	   _index++;
-	    	   $scope.companyQualifications[_index] = {}
+	    	   if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
+		    		 handle.toastr.warning("您的企业信息还未保存");
+		    		 return;
+		       }else{
+		    	   _index++;
+		    	   $scope.companyQualifications[_index] = {}
+		       }
 	       };
 	       
 	       /**
@@ -973,6 +1040,14 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	       };
 	       
 	       /**
+	        * 显示企业信息
+	        */
+	       $scope.showCompanyInfoModal = function(comId){
+	    	   getCompanyInfo(comId);
+	    	   $('#viewCompany').modal('show'); 
+	       };
+	       
+	       /**
 	        * 显示编辑、删除操作
 	        */
 	       $scope.showOperation = function(type,index){
@@ -995,19 +1070,26 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	       };
 	       
 	       
-	       function getCompanyInfo(comId){
+	       function getCompanyInfo(comId,type){
 	    	   if(!handle.isNull(comId)){
 	    			 var promise = companyService.getCompanyInfo(comId);
 	 	        	promise.then(function(data){
-	 	        		$scope.company = data.data.company;
-	 	        		$scope.company1 = data.data.company;
-	 	        		if(!handle.isNull(data.data.companyQualifications)){
-	 	        			$scope.companyQualifications = data.data.companyQualifications;
-	 	        			_index = data.data.companyQualifications.length-1;
+	 	        		if(type=="companyQualification"){
+	 	        			if(!handle.isNull(data.data.companyQualifications)){
+		 	        			$scope.companyQualifications = data.data.companyQualifications;
+		 	        			_index = data.data.companyQualifications.length-1;
+		 	        		}
+	 	        		}else{
+	 	        			$scope.company = data.data.company;
+		 	        		if(!handle.isNull(data.data.companyQualifications)){
+		 	        			$scope.companyQualifications = data.data.companyQualifications;
+		 	        			_index = data.data.companyQualifications.length-1;
+		 	        		}
+		 	        		
+		 	        		$scope.companyContacts = data.data.companyContacts;
+		 	        		$scope.companyFinances = data.data.companyFinances;
 	 	        		}
 	 	        		
-	 	        		$scope.companyContacts = data.data.companyContacts;
-	 	        		$scope.companyFinances = data.data.companyFinances;
 	 	        		
 	 		        	//$state.go('companyAdd',company,{reload:true});
 	 	        		//$scope.company = company
@@ -1025,20 +1107,24 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    	    
 	       })*/
 	       $('#contactor').on('hide.bs.modal', function (e) {  
-	    	   getCompanyInfo($scope.company.comId)
+	    	   if(handle.isNull($scope.company)&&handle.isNull($scope.company.comId)){
+	    		   getCompanyInfo($scope.company.comId);
+	    	   }
 	       })
 	       $('#finance').on('hide.bs.modal', function (e) {  
-	    	   getCompanyInfo($scope.company.comId)
+	    	   if(handle.isNull($scope.company)&&handle.isNull($scope.company.comId)){
+	    		   getCompanyInfo($scope.company.comId);
+	    	   }
 	       })
 	       
-	       $scope.contactorB = function(){
+	     /*  $scope.contactorB = function(){
 	    	   $scope.companyContact = {};
 	    	   $("#contactor").modal("show");
 	       };
 	       $scope.financeB = function(){
 	    	   $scope.companyFinance ={};
 	    	   $("#finance").modal("show");
-	       };
+	       };*/
 
 
 	       
