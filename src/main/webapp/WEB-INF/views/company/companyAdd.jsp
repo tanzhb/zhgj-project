@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8" %>
+<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"  %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!-- BEGIN PAGE HEADER-->
 <style>
@@ -414,7 +414,7 @@
                             <form  id="qualificationForm" class="page-repeater form-horizontal">
 								<div class="form-body" data-repeater-list="group-a"  >
 									<div  class="row" data-repeater-item  ng-repeat="companyQualification in companyQualifications  track by $index" repeat-done="repeatDone()">
-										<div class="col-md-3">
+										<div class="col-md-2">
 											<div class="form-group">
 												<div class="col-md-12 input-icon right">
 													<input  ng-hide="companyQualificationAdd" type="text" ng-model="companyQualification.qualificationName" name="qualificationName"
@@ -437,10 +437,10 @@
 											</div>
 										</div>
 										<!--/span-->
-										<div class="col-md-3">
+										<div class="col-md-2">
 											<div class="form-group">
 												<div class="col-md-12">
-													<div  ng-hide="companyQualificationAdd" class="input-group input-medium date date-picker"
+													<div  ng-hide="companyQualificationAdd" class="input-group input-small date date-picker"
 														 data-date-format="yyyy-mm-dd"
 														data-date-viewmode="years">
 														<input type="text" class="form-control" readonly="" ng-model="companyQualification.validityDate" name="validityDate"
@@ -470,6 +470,17 @@
 			                                                  </div>
 			                                          </div>
 			                                          <div   ng-show="companyQualificationView" class="c_edit" >施工中</div>
+												</div>
+											</div>
+										</div>
+										<!--/span-->
+										<div class="col-md-2">
+											<div class="form-group">
+												<div class="col-md-12">
+													<input  ng-hide="companyQualificationAdd" type="text" ng-model="companyQualification.remark" name="remark"
+														class="form-control" placeholder="备注"> <span
+														class="help-block"></span>
+														<label   ng-show="companyQualificationView"  >{{companyQualification.remark}}</label>
 												</div>
 											</div>
 										</div>
@@ -522,6 +533,7 @@
 			                                                    <th>姓名</th>
 			                                                    <th>职位</th>
 			                                                    <th>部门/公司</th>
+			                                                    <th>管理职责</th>
 			                                                    <th>电话</th>
 			                                                    <th>微信</th>
 			                                                    <th>邮箱</th>
@@ -539,6 +551,7 @@
 			                                                    <td>{{_contact.contactName}}</td>
 			                                                    <td>{{_contact.contactTitle}}</td>
 			                                                    <td>{{_contact.department}}</td>
+			                                                    <td>{{_contact.responsibility}}</td>
 			                                                    <td>{{_contact.contactTel}}</td>
 			                                                    <td>{{_contact.wechat}}</td>
 			                                                    <td>{{_contact.contactEmail}}</td>
@@ -676,6 +689,18 @@
                                  <label class="col-md-4 control-label" for="department"><span class="required"> * </span>部门/公司：</label>
                                  <div class="col-md-7">
                                      <input type="text" class="form-control" id="department" name="department" ng-model="companyContact.department"  >
+                                     <div class="form-control-focus"> </div>
+                                 </div>
+                         </div>
+                     </div>
+                 </div>
+                 <!--/row-->
+                 <div class="row">
+                     <div class="col-md-12">
+                         <div class="form-group form-md-line-input">
+                                 <label class="col-md-4 control-label" for="department"><span class="required"> * </span>管理职责：</label>
+                                 <div class="col-md-7">
+                                     <input type="text" class="form-control" id="responsibility" name="responsibility" ng-model="companyContact.responsibility"  >
                                      <div class="form-control-focus"> </div>
                                  </div>
                          </div>
