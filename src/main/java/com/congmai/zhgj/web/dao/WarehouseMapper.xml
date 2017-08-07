@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.congmai.zhgj.web.dao.WarehouseMapper" >
+  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.Warehouse" >
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="warehouseNum" property="warehouseNum" jdbcType="VARCHAR" />
+    <result column="warehouseName" property="warehouseName" jdbcType="VARCHAR" />
+    <result column="warehouseType" property="warehouseType" jdbcType="VARCHAR" />
+    <result column="warehouseCategory" property="warehouseCategory" jdbcType="VARCHAR" />
+    <result column="owner" property="owner" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="admin" property="admin" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="fax" property="fax" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    serialNum, warehouseNum, warehouseName, warehouseType, warehouseCategory, owner, 
+    address, area, admin, tel, email, fax, remark, delFlg, creator, createTime, updater, 
+    updateTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.WarehouseExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from warehouse
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  
+  <!-- <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.MaterielExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from materiel
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select> -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from warehouse
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from warehouse
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.WarehouseExample" >
+    delete from warehouse
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.congmai.zhgj.web.model.Warehouse" >
+    insert into warehouse (serialNum, warehouseNum, warehouseName, 
+      warehouseType, warehouseCategory, owner, 
+      address, area, admin, 
+      tel, email, fax, remark, 
+      delFlg, creator, createTime, 
+      updater, updateTime)
+    values (#{serialNum,jdbcType=VARCHAR}, #{warehouseNum,jdbcType=VARCHAR}, #{warehouseName,jdbcType=VARCHAR}, 
+      #{warehouseType,jdbcType=VARCHAR}, #{warehouseCategory,jdbcType=VARCHAR}, #{owner,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, #{admin,jdbcType=VARCHAR}, 
+      #{tel,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{fax,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.Warehouse" >
+    insert into warehouse
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        serialNum,
+      </if>
+      <if test="warehouseNum != null" >
+        warehouseNum,
+      </if>
+      <if test="warehouseName != null" >
+        warehouseName,
+      </if>
+      <if test="warehouseType != null" >
+        warehouseType,
+      </if>
+      <if test="warehouseCategory != null" >
+        warehouseCategory,
+      </if>
+      <if test="owner != null" >
+        owner,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="admin != null" >
+        admin,
+      </if>
+      <if test="tel != null" >
+        tel,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="fax != null" >
+        fax,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="delFlg != null" >
+        delFlg,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="updater != null" >
+        updater,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseNum != null" >
+        #{warehouseNum,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseName != null" >
+        #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseType != null" >
+        #{warehouseType,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseCategory != null" >
+        #{warehouseCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="owner != null" >
+        #{owner,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="admin != null" >
+        #{admin,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null" >
+        #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.WarehouseExample" resultType="java.lang.Integer" >
+    select count(*) from warehouse
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update warehouse
+    <set >
+      <if test="record.serialNum != null" >
+        serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.warehouseNum != null" >
+        warehouseNum = #{record.warehouseNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.warehouseName != null" >
+        warehouseName = #{record.warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.warehouseType != null" >
+        warehouseType = #{record.warehouseType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.warehouseCategory != null" >
+        warehouseCategory = #{record.warehouseCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="record.owner != null" >
+        owner = #{record.owner,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null" >
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.area != null" >
+        area = #{record.area,jdbcType=VARCHAR},
+      </if>
+      <if test="record.admin != null" >
+        admin = #{record.admin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tel != null" >
+        tel = #{record.tel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null" >
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fax != null" >
+        fax = #{record.fax,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlg != null" >
+        delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creator != null" >
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updater != null" >
+        updater = #{record.updater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update warehouse
+    set serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      warehouseNum = #{record.warehouseNum,jdbcType=VARCHAR},
+      warehouseName = #{record.warehouseName,jdbcType=VARCHAR},
+      warehouseType = #{record.warehouseType,jdbcType=VARCHAR},
+      warehouseCategory = #{record.warehouseCategory,jdbcType=VARCHAR},
+      owner = #{record.owner,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
+      area = #{record.area,jdbcType=VARCHAR},
+      admin = #{record.admin,jdbcType=VARCHAR},
+      tel = #{record.tel,jdbcType=VARCHAR},
+      email = #{record.email,jdbcType=VARCHAR},
+      fax = #{record.fax,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      updater = #{record.updater,jdbcType=VARCHAR},
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.Warehouse" >
+    update warehouse
+    <set >
+      <if test="warehouseNum != null" >
+        warehouseNum = #{warehouseNum,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseName != null" >
+        warehouseName = #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseType != null" >
+        warehouseType = #{warehouseType,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseCategory != null" >
+        warehouseCategory = #{warehouseCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="owner != null" >
+        owner = #{owner,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="admin != null" >
+        admin = #{admin,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null" >
+        fax = #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        delFlg = #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        updater = #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.Warehouse" >
+    update warehouse
+    set warehouseNum = #{warehouseNum,jdbcType=VARCHAR},
+      warehouseName = #{warehouseName,jdbcType=VARCHAR},
+      warehouseType = #{warehouseType,jdbcType=VARCHAR},
+      warehouseCategory = #{warehouseCategory,jdbcType=VARCHAR},
+      owner = #{owner,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
+      admin = #{admin,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      fax = #{fax,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      delFlg = #{delFlg,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+    <delete id="deleteWarehouse" parameterType="java.util.List">
+    	delete from warehouse where serialNum in
+        <foreach item="idList" collection="list" open="(" close=")" separator=",">
+            #{idList}
+        </foreach>
+    </delete>
+</mapper>

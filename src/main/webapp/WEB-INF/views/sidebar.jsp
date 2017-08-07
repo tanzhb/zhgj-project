@@ -37,12 +37,12 @@
                     </a>
                 </li>
                 <li>
-                    <a ui-sref="uiselect">
+                    <a ui-sref="userContract">
                         <i class="icon-check"></i> 合同管理</span>
                     </a>
                 </li>
                 <li>
-                    <a ui-sref="uiselect">
+                    <a ui-sref="warehouse">
                         <i class="icon-check"></i> 仓库信息</span>
                     </a>
                 </li>

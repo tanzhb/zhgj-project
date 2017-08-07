@@ -16,13 +16,34 @@ import org.apache.commons.codec.digest.DigestUtils;
  */
 public class ApplicationUtils {
 
-	/**
-	 * 产生一个36个字符的UUID
-	 *
-	 * @return UUID
-	 */
-	public static String randomUUID() {
-		return UUID.randomUUID().toString();
+    /**
+     * 产生一个36个字符的UUID
+     *
+     * @return UUID
+     */
+    public static String randomUUID() {
+        return UUID.randomUUID().toString();
+    }
+
+
+    /**
+     * sha1加密
+     *
+     * @param value 要加密的值
+     * @return sha1加密后的值
+     */
+    public static String sha1Hex(String value) {
+        return DigestUtils.sha1Hex(value);
+    }
+
+
+    public static List<String> getIdList(String ids) {
+    	List<String> list = new ArrayList<String>();
+		String[] str = ids.split(",");
+		for (int i = 0; i < str.length; i++) {
+			list.add(str[i]);
+		}
+		return list;
 	}
     
     
@@ -47,17 +68,6 @@ public class ApplicationUtils {
 	}
 
 	/**
-	 * sha1加密
-	 *
-	 * @param value
-	 *            要加密的值
-	 * @return sha1加密后的值
-	 */
-	public static String sha1Hex(String value) {
-		return DigestUtils.sha1Hex(value);
-	}
-
-	/**
 	 * sha256加密
 	 *
 	 * @param value
@@ -66,20 +76,6 @@ public class ApplicationUtils {
 	 */
 	public static String sha256Hex(String value) {
 		return DigestUtils.sha256Hex(value);
-	}
-	/**
-	 * 
-	 * @Description 切割ids成list
-	 * @param ids
-	 * @return
-	 */
-	public static List<String> getIdList(String ids) {
-		List<String> list = new ArrayList<String>();
-		String[] str = ids.split(",");
-		for (int i = 0; i < str.length; i++) {
-			list.add(str[i]);
-		}
-		return list;
 	}
 	
 	public static void main(String args[]){
