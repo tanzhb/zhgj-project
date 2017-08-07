@@ -187,13 +187,12 @@
 															value="1" id="example-select-all" type="checkbox" /></th>
 													<th>企业编码</th>
 													<th>企业名称</th>
+													<th>合作分类</th>
 													<th>企业性质</th>
-													<th>注册资金</th>
-													<th>经营性质</th>
+													<th>经营类型</th>
+													<th>营业性质</th>
 													<th>企业法人</th>
-													<th>地址</th>
-													<th>业务员</th>
-													<th>采购商分类</th>
+													<th>注册地址</th>
 													<th>状态</th>
 													 <!-- <th class="center">操作</th> 
 													 <th class="center">操作</th>  -->

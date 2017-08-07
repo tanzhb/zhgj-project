@@ -95,9 +95,11 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 								}, {
 									mData : 'comName'
 								}, {
+									mData : 'comType'
+								}, {
 									mData : 'comNature'
 								}, {
-									mData : 'registeredCapital'
+									mData : 'businessType'
 								}, {
 									mData : 'businessNature'
 								}, {
@@ -105,10 +107,6 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 								}, {
 									mData : 'address'
 								} , {
-									mData : 'status'
-								}, {
-									mData : 'comType'
-								}, {
 									mData : 'status'
 								}],
 								'aoColumnDefs' : [ {
