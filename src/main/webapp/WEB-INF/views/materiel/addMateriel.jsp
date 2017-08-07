@@ -355,7 +355,8 @@
                               <div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3">生产日期</label>
                                   <div class="col-md-9">
-                                      <input class="form-control form-control-inline input-medium date-picker" size="16" ng-hide="materielInput" ng-model="materiel.manufactureDate" type="text" value="" />
+                                      <input class="form-control form-control-inline input-medium date-picker" 
+                                      data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="materielInput" ng-model="materiel.manufactureDate" type="text" value="" />
                                       <div class="form-control-focus"> </div>
                                       <span class="help-block">请选择生产日期</span>
                                       <p class="form-control-static" ng-show="materielShow"> {{materiel.manufactureDate}} </p>

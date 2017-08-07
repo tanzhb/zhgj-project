@@ -18,7 +18,9 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
         	$('.date-picker').datepicker({
 				rtl: App.isRTL(),
 				orientation: "left",
-				autoclose: true
+				autoclose: true,
+				dateFormat:"yyyy-mm-dd"
+
         	})//初始化日期控件
         	FormiCheck.init()//初始化checkbox控件
         	r();//加载表单验证控件
@@ -51,7 +53,6 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     		$scope.materiel.parentMateriel=null;
     		$scope.materiel.createTime=null;
     		$scope.materiel.updateTime=null;
-    		$scope.materiel.manufactureDate=null;
     		//**********//
 
     		materielService.save($scope.materiel).then(
@@ -99,7 +100,6 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     		//TODO待删除 
     		$scope.materiel.createTime=null;
     		$scope.materiel.updateTime=null;
-    		$scope.materiel.manufactureDate=null;
     		//**********//
 
     		materielService.save($scope.materiel).then(
@@ -332,6 +332,32 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
         	table.ajax.url(tableAjaxUrl).load()// 重新加载datatables数据
         }
         
+        //弹出确认删除模态框
+        $scope.deleteMateriel = function() {
+			var ids = '';
+			// Iterate over all checkboxes in the table
+			table.$('input[type="checkbox"]').each(
+					function() {
+						// If checkbox exist in DOM
+						if ($.contains(document, this)) {
+							// If checkbox is checked
+							if (this.checked) {
+								// 将选中数据id放入ids中
+								if (ids == '') {
+									ids = this.value;
+								} else
+									ids = ids + ','
+											+ this.value;
+							}
+						}
+					});
+			if(ids==''){
+    			toastr.warning('未选择物料！');return;
+    		}else{
+    			$('#addUserModal').modal('show');// 弹出删除确认模态框
+    		}
+			
+		};
         
      // 删除开始***************************************
 		$scope.del = function() {

@@ -17,12 +17,12 @@ import com.congmai.zhgj.web.model.UserExample;
  * @Date 2017年7月26日 下午2:48:52
  * @version 1.0.0
  */
-public interface UserMapper extends GenericDao<User, Long> {
+public interface UserMapper extends GenericDao<User, String> {
     int countByExample(UserExample example);
 
     int deleteByExample(UserExample example);
 
-    int deleteByPrimaryKey(Long id);
+    int deleteByPrimaryKey(String id);
 
     int insert(User record);
 
@@ -32,7 +32,7 @@ public interface UserMapper extends GenericDao<User, Long> {
     
     List<User> findAllUsers();
 
-    User selectByPrimaryKey(Long id);
+    User selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") User record, @Param("example") UserExample example);
 

@@ -46,8 +46,7 @@
 						 class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-edit"></i> 编辑
 					</a>
-					<a href="javascript:;" data-target="#delMaterielModal"
-						data-toggle="modal" 
+					<a href="javascript:;" ng-click="deleteMateriel()"
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-minus"></i> 删除
 					</a>
