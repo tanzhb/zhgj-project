@@ -168,7 +168,7 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/selectById", method = RequestMethod.POST)
 	public ResponseEntity<User> selectById(@RequestBody String ids) {
-		User u = userService.selectById(Long.valueOf(ids));
+		User u = userService.selectById(ids);
 		
 		return new ResponseEntity<User>(u, HttpStatus.OK);
 	}

@@ -101,11 +101,21 @@ angular
 												}, {
 													mData : 'creator'
 												}, {
-													mData : 'createTime'
+													mData : 'createTime',
+													mRender: function (data) {
+									                    if (data != null) {
+									                        return timeStamp2String(data);
+									                    }else return '';
+									                }
 												}, {
 													mData : 'updater'
 												}, {
-													mData : 'updateTime'
+													mData : 'updateTime',
+													mRender: function (data) {
+									                    if (data != null) {
+									                        return timeStamp2String(data);
+									                    }else return '';
+									                }
 												}, {
 													mData : 'comments'
 												} ],

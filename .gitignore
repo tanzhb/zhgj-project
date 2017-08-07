@@ -1,5 +1,6 @@
-<<<<<<< HEAD
+##ignore this file##
 /target/
-=======
-/target/
->>>>>>> refs/heads/master
+
+.classpath
+.project
+.settings 
