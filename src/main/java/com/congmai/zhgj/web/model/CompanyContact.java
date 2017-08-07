@@ -2,6 +2,10 @@ package com.congmai.zhgj.web.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class CompanyContact {
     private String serialNum;
 
@@ -21,11 +25,19 @@ public class CompanyContact {
 
     private String creator;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     private String updater;
-
+    
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
+    
+    private String wechat;
+
+    private String department;
+    
+    private String remark;
 
     public String getSerialNum() {
         return serialNum;
@@ -99,6 +111,7 @@ public class CompanyContact {
         this.creator = creator == null ? null : creator.trim();
     }
 
+    @JsonFormat(timezone="GTM+8",pattern="yyyy-MM-dd HH:mm:ss")
     public Date getCreateTime() {
         return createTime;
     }
@@ -115,6 +128,7 @@ public class CompanyContact {
         this.updater = updater == null ? null : updater.trim();
     }
 
+    @JsonFormat(timezone="GTM+8",pattern="yyyy-MM-dd HH:mm:ss")
     public Date getUpdateTime() {
         return updateTime;
     }
@@ -122,4 +136,30 @@ public class CompanyContact {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public String getWechat() {
+		return wechat;
+	}
+
+	public void setWechat(String wechat) {
+		this.wechat = wechat;
+	}
+
+	public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+    
+    
 }

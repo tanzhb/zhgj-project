@@ -92,7 +92,7 @@
             </a>
             <ul class="sub-menu">
                 <li>
-                    <a ui-sref="uibootstrap">
+                    <a ui-sref="user">
                         <i class="icon-puzzle"></i> 用户管理</span>
                     </a>
                 </li>
