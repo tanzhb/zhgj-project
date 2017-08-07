@@ -33,10 +33,6 @@ public interface UserMapper extends GenericDao<User, Long> {
     
     List<User> findAllUsers();
     
-    int insertContract(ContractVO record);
-
-    List<ContractVO> queryContractList(String userId);
-
     User selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") User record, @Param("example") UserExample example);
@@ -67,11 +63,4 @@ public interface UserMapper extends GenericDao<User, Long> {
      * @return
      */
     List<User> selectByExampleAndPage(Page<User> page, UserExample example);
-    
-    public void deleteUserContractS(List<String> ids);
-    
-    public ContractVO selectContractById(String id);
-    
-    
-    public void updateContract(ContractVO record);
 }

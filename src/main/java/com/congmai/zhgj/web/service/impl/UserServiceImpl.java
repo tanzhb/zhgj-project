@@ -73,12 +73,6 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements
 	}
     
     
-    @Override
-	public void insertContract(ContractVO contractVO) {
-		// TODO Auto-generated method stub
-		userMapper.insertContract(contractVO);
-	}
-
 	public List<User> findAllUsers() {
 		List<User> list = userMapper.findAllUsers();
 		if(list != null && list.size() > 0){
@@ -104,29 +98,6 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements
 		List<String> idList = ApplicationUtils.getIdList(ids);
 		userMapper.deleteUsers(idList);
 	}
-}	public List<ContractVO> queryContractList(String userId) {
-		// TODO Auto-generated method stub
-		
-		return userMapper.queryContractList(userId);
-	}
-
 	
-	@Override
-	public void deleteUserContractS(String ids) {
-		List<String> idList = ApplicationUtils.getIdList(ids);
-		userMapper.deleteUserContractS(idList);
-	}
-
-	@Override
-	public ContractVO selectConbtractById(String id) {
-		// TODO Auto-generated method stub
-		
-		return userMapper.selectContractById(id);
-	}
-
-	@Override
-	public void updateContract(ContractVO contractVO) {
-		// TODO Auto-generated method stub
-		userMapper.updateContract(contractVO);
-	}
+	
 }

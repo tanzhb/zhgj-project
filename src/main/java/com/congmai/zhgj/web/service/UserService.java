@@ -81,25 +81,4 @@ public interface UserService extends GenericService<User, Long> {
      */
 	void deleteUsers(String ids);
     
-    
-   public void insertContract(ContractVO contractVO);
-    
-    
-    
-    public List<ContractVO> queryContractList(String userId);
-    
-    
-    /**
-     * 
-     * @Description 批量删除
-     * @param ids
-     * @return
-     */
-	public void deleteUserContractS(String ids);
-	
-	
-	public ContractVO selectConbtractById(String id);
-	
-	
-	public void updateContract(ContractVO contractVO);
 }

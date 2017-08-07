@@ -1,12 +1,16 @@
 'use strict';
 
 angular.module('MetronicApp').factory('ContractService', ['$rootScope', '$http', '$q','$filter', function($rootScope, $http, $q,$filter){
-    var REST_SERVICE_URI = $rootScope.basePath + '/rest/user/findAllUserContract';
+    var REST_SERVICE_URI = $rootScope.basePath + '/rest/contract/findAllUserContract';
 
     var factory = {
+    		//查询列表
     		fetchAllUserContract: fetchAllUserContract,
-    		saveUser: saveUser,
-    		delUsers:delUsers,
+    		//添加
+    		saveUserContract: saveUserContract,
+    		//删除
+    		delUserContract:delUserContract,
+    		//单个查找
     		selectUserContract:selectUserContract
     };
 
@@ -17,10 +21,10 @@ angular.module('MetronicApp').factory('ContractService', ['$rootScope', '$http',
         $http.get(REST_SERVICE_URI)
             .then(
             function (response) {
-            	for(var i=0;i<response.data.data.length;i++){
+            	/*for(var i=0;i<response.data.data.length;i++){
             		var myJsDate=$filter('date')(response.data.data[i].startDate,'MM/dd/yyyy');
                     response.data.data[i].startDate=myJsDate;	
-            	}
+            	}*/
             	deferred.resolve(response.data);
             },
             function(errResponse){
@@ -31,12 +35,11 @@ angular.module('MetronicApp').factory('ContractService', ['$rootScope', '$http',
         return deferred.promise;
     }
     
-    function saveUser(contractVO){
-    	debugger
+    function saveUserContract(contractVO){
+    	
         var deferred = $q.defer();  
 
-        /*$http.post($rootScope.basePath + "/rest/user/saveUserContract", contractVO)*/
-    	$.post("rest/user/saveUserContract", {
+    	$.post("rest/contract/saveUserContract", {
     		id:contractVO.id,
 			comId:contractVO.comId,
 			contractNum:contractVO.contractNum,
@@ -60,10 +63,10 @@ angular.module('MetronicApp').factory('ContractService', ['$rootScope', '$http',
     };
     
   //删除用户
-    function delUsers(ids){
+    function delUserContract(ids){
         var deferred = $q.defer();  
 
-        $http.post($rootScope.basePath + "/rest/user/deleteUserContractS", ids).success(function (data) {  
+        $http.post($rootScope.basePath + "/rest/contract/deleteUserContractS", ids).success(function (data) {  
             // 如果连接成功，延时返回给调用者  
             deferred.resolve(data);  
         })  
@@ -78,7 +81,7 @@ angular.module('MetronicApp').factory('ContractService', ['$rootScope', '$http',
     function selectUserContract(ids){
         var deferred = $q.defer();  
 
-        $http.post($rootScope.basePath + "/rest/user/selectConbtractById", ids).success(function (data) { 
+        $http.post($rootScope.basePath + "/rest/contract/selectConbtractById", ids).success(function (data) { 
             // 如果连接成功，延时返回给调用者  
             deferred.resolve(data);
             

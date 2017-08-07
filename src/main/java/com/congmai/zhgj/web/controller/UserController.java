@@ -124,33 +124,8 @@ public class UserController {
 		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 	}
 	
-	
-	/**
-     * 
-     * @Description 查找所有用户合同信息
-     * @return
-     */
-	@RequestMapping(value = "/findAllUserContract", method = RequestMethod.GET)
-	public ResponseEntity<Map> findAllUserContract(HttpServletRequest request) {
-		
-		User user=(User) request.getSession().getAttribute("userInfo"); 
-    	List<ContractVO> contractList=userService.queryContractList(user.getId()+"");
-		
-		if (contractList.isEmpty()) {
-			return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);// You many
-			                                                             // HttpStatus.NOT_FOUND
-		}
-		//封装datatables数据返回到前台
-		Map pageMap = new HashMap();
-		pageMap.put("draw", 1);
-		pageMap.put("recordsTotal", contractList.size());
-		pageMap.put("recordsFiltered", contractList.size());
-		pageMap.put("data", contractList);
-		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
-	}
 
-
-	 * 
+	 /* 
 	 * @Description 添加用户
 	 * @param user
 	 * @param ucBuilder
@@ -178,104 +153,13 @@ public class UserController {
 			userService.update(user);
 		}
 		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-estMapping(value = "/saveUserContract", method = RequestMethod.POST)
-	   public ResponseEntity<Void> saveUserContract(@Valid ContractVO contractVO, HttpServletRequest request,UriComponentsBuilder ucBuilder) {
-		  if(StringUtils.isEmpty(contractVO.getId())){
-			  String serialNum=UUID.randomUUID().toString().toUpperCase().replaceAll("-", ""); 
-			   contractVO.setId(serialNum);
-			   User user=(User) request.getSession().getAttribute("userInfo");   
-			   contractVO.setCreator(user.getId()+"");
-			   userService.insertContract(contractVO);
-		  }else{
-			  User user=(User) request.getSession().getAttribute("userInfo");
-			  contractVO.setUpdater(user.getId()+"");
-			  userService.updateContract(contractVO);
-		  }
-		    
-		   
-		   HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(ucBuilder.path("/userContract").buildAndExpand(contractVO.getId()).toUri());
-					
-			return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
-	   }
-	 
-	 
-	 /**
-	 * 删除用户合同
-	 * @param contractVO
-	 * @param request
-	 * @return
-	 */
-	 @RequestMapping(value = "/deleteUserContractS", method = RequestMethod.POST)
-	   public ResponseEntity<Void> deleteUserContractS(@RequestBody String ids) {
-		 if ("".equals(ids) || ids == null) {
-				return new ResponseEntity<Void>(HttpStatus.CONFLICT);
-			}
-		   userService.deleteUserContractS(ids); 
-		   return new ResponseEntity<Void>(HttpStatus.OK);
-	   }
-	 
-	 
-	 @RequestMapping(value = "/selectConbtractById", method = RequestMethod.POST)
-     public ResponseEntity<ContractVO> selectConbtractById(@RequestBody String ids) {
-		 
-		 ContractVO c=userService.selectConbtractById(ids);
-		 return new ResponseEntity<ContractVO>(c, HttpStatus.OK);
-     }
-	 
-	 @RequestMapping(value = "/editUserContractPage")
-     public String editUserContractPage() {
-		 return "editUserContractPage";
-     }
-	 
-	 
-    /**
-     * 基于角色 标识的权限控制案例
-     */
-    @RequestMapping(value = "/admin")
-    @ResponseBody
-    @RequiresRoles(value = RoleSign.ADMIN)
-    public String admin() {
-        return "拥有admin角色,能访问";
-    }
-		
-
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("/user/{id}")
 				.buildAndExpand(user.getId()).toUri());
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
+		
+
 	/**
 	 * 
 	 * @Description 根据id查找用户

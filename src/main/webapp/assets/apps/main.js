@@ -106,10 +106,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
     // Redirect any unmatched url
     $urlRouterProvider.otherwise("/dashboard");
 
-    $stateProvider
+    
 
-        // Dashboard
-        .state('dashboard', {
+    $stateProvider.state('dashboard', {
             url: "/dashboard",
             templateUrl: "rest/page/dashboard",
             data: {pageTitle: '首页'},
@@ -218,35 +217,35 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [
-'assets/global/plugins/select2/css/select2.min.css',
-'assets/global/plugins/select2/css/select2-bootstrap.min.css',
-'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
-'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css',
-'assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css',
-'assets/global/plugins/icheck/skins/all.css',
-'assets/global/plugins/select2/js/select2.full.min.js',
-'assets/global/plugins/jquery-validation/js/jquery.validate.min.js',
-'assets/global/plugins/jquery-validation/js/localization/messages_zh.min.js',
-'assets/global/plugins/jquery-validation/js/additional-methods.min.js',
-'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
-'assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js',
-'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js',
-'assets/global/plugins/ckeditor/ckeditor.js',
-'assets/global/plugins/bootstrap-markdown/lib/markdown.js',
-'assets/global/plugins/bootstrap-markdown/js/bootstrap-markdown.js',
-
-'assets/pages/scripts/form-icheck.min.js',
-'assets/pages/scripts/form-validation.min.js',
-'assets/apps/service/materielService.js',
-'assets/apps/controllers/materielController.js',
-
-'assets/global/plugins/datatables/datatables.min.css',
-'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-
-'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
-'assets/global/plugins/datatables/datatables.all.min.js',
-'assets/pages/scripts/table-datatables-fixedheader.min.js'/*,
-'assets/apps/controllers/selectMaterielController.js'*/
+				'assets/global/plugins/select2/css/select2.min.css',
+				'assets/global/plugins/select2/css/select2-bootstrap.min.css',
+				'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
+				'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css',
+				'assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css',
+				'assets/global/plugins/icheck/skins/all.css',
+				'assets/global/plugins/select2/js/select2.full.min.js',
+				'assets/global/plugins/jquery-validation/js/jquery.validate.min.js',
+				'assets/global/plugins/jquery-validation/js/localization/messages_zh.min.js',
+				'assets/global/plugins/jquery-validation/js/additional-methods.min.js',
+				'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+				'assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js',
+				'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js',
+				'assets/global/plugins/ckeditor/ckeditor.js',
+				'assets/global/plugins/bootstrap-markdown/lib/markdown.js',
+				'assets/global/plugins/bootstrap-markdown/js/bootstrap-markdown.js',
+				
+				'assets/pages/scripts/form-icheck.min.js',
+				'assets/pages/scripts/form-validation.min.js',
+				'assets/apps/service/materielService.js',
+				'assets/apps/controllers/materielController.js',
+				
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/pages/scripts/table-datatables-fixedheader.min.js'/*,
+				'assets/apps/controllers/selectMaterielController.js'*/
 
 
                         ]
@@ -254,119 +253,46 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
-// 用户管理
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-rContract', {
-            url: "/userContract",
-            templateUrl:"rest/page/userContract",
-            data: {pageTitle: '合同管理'},
-            controller: "ContractController",
-            resolve: {
-                deps: ['$ocLazyLoad', function($ocLazyLoad) {
-                    return $ocLazyLoad.load({
-                        name: 'MetronicApp',
-                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
-                        files: [                             
-					'assets/global/plugins/datatables/datatables.min.css', 
-                    'assets/global/plugins/datatables/datatables.min.js',
-                  /*  'assets/pages/scripts/table-datatables-fixedheader.min.js',*/
-                    'assets/apps/service/ContractService.js',
-                    'assets/apps/controllers/ContractController.js'
-                        ]
-                    });
-                }]
-            }
-        })
+	    .state('userContract', {
+	            url: "/userContract",
+	            templateUrl:"rest/page/userContract",
+	            data: {pageTitle: '合同管理'},
+	            controller: "ContractController",
+	            resolve: {
+	                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+	                    return $ocLazyLoad.load({
+	                        name: 'MetronicApp',
+	                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+	                        files: [                             
+	                    
+	                    'assets/global/plugins/datatables/datatables.min.css', 
+	                    'assets/global/plugins/datatables/datatables.min.js',
+						
+	                    
+	                    'assets/global/plugins/jquery-validation/js/jquery.validate.js',
+						'assets/global/plugins/datatables/datatables.all.min.js',
+                       'assets/pages/scripts/table-datatables-managed.min.js',
+						'assets/global/plugins/jquery.min.js',
+						
+						'assets/global/plugins/jquery.min.js',
+				        'assets/global/plugins/bootstrap/js/bootstrap.min.js',
+				        'assets/global/plugins/js.cookie.min.js',
+				        'assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js',
+				        'assets/global/plugins/jquery.blockui.min.js',
+				        'assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js',
+				        
+	                    'assets/apps/service/ContractService.js',
+	                    'assets/apps/controllers/ContractController.js'
+	                   
+	                        ]
+	                    });
+	                }]
+	            }
+	        })
         
         
-        .state('addUserContract', {
+        .state('addUserContract',{
             url: "/addUserContract",
             templateUrl: "rest/page/addUserContract",
             data: {pageTitle: '合同管理'},
@@ -377,59 +303,34 @@ rContract', {
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [                             
-						'assets/global/plugins/select2/css/select2.min.css',
-						'assets/global/plugins/select2/css/select2-bootstrap.min.css',
-						'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
-						'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css',
-						'assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css',
-						
-						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-						
-						
-						'assets/global/plugins/jquery-validation/js/jquery.validate.js',
-						'assets/global/plugins/datatables/datatables.all.min.js',
-                        'assets/pages/scripts/table-datatables-managed.min.js',
-						'assets/global/plugins/jquery.min.js',
-						'assets/global/plugins/select2/js/select2.full.min.js',
-						'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
-						'assets/global/plugins/jquery-validation/js/jquery.validate.min.js',
-						'assets/global/plugins/jquery-validation/js/additional-methods.min.js',
-						'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
-						'assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js',
-						'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js',
-						'assets/global/plugins/ckeditor/ckeditor.js',
-						'assets/global/plugins/bootstrap-markdown/lib/markdown.js',
-						'assets/global/plugins/bootstrap-markdown/js/bootstrap-markdown.js',
-						'assets/pages/scripts/form-validation.js',
-						
-						'assets/global/plugins/jquery.min.js',
-				        'assets/global/plugins/bootstrap/js/bootstrap.min.js',
-				        'assets/global/plugins/js.cookie.min.js',
-				        'assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js',
-				        'assets/global/plugins/jquery.blockui.min.js',
-				        'assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js',
-				        
-				         
-				         'assets/global/scripts/app.min.js',
-				         'assets/layouts/layout2/scripts/layout.min.js',
-				         'assets/layouts/layout2/scripts/demo.min.js',
-				         'assets/layouts/global/scripts/quick-sidebar.min.js',
-				         'assets/layouts/global/scripts/quick-nav.min.js',
-				        'assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js',
-				        
-				        'assets/global/plugins/angularjs/angular.min.js',
-				        'assets/global/plugins/angularjs/angular-sanitize.min.js',
-				        'assets/global/plugins/angularjs/angular-touch.min.js',
-				        'assets/global/plugins/angularjs/plugins/angular-ui-router.min.js',
-				        
-				        'assets/global/plugins/angularjs/plugins/ocLazyLoad.min.js',
-				        'assets/global/plugins/angularjs/plugins/ui-bootstrap-tpls.min.js',
-				        'assets/apps/directives.js',
-				        
-				        
-				        'assets/apps/service/ContractService.js',
-	                    'assets/apps/controllers/ContractController.js',
-                        'assets/apps/controllers/datepickerCtrl.js',
+				'assets/global/plugins/select2/css/select2.min.css',
+				'assets/global/plugins/select2/css/select2-bootstrap.min.css',
+				'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
+				'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css',
+				'assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css',
+				
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				
+				
+				'assets/global/plugins/jquery-validation/js/jquery.validate.js',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/pages/scripts/table-datatables-managed.min.js',
+				'assets/global/plugins/jquery.min.js',
+				'assets/global/plugins/select2/js/select2.full.min.js',
+				'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+				'assets/global/plugins/jquery-validation/js/jquery.validate.min.js',
+				'assets/global/plugins/jquery-validation/js/additional-methods.min.js',
+				'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+				
+				'assets/global/plugins/jquery.min.js',
+				'assets/global/plugins/bootstrap/js/bootstrap.min.js',
+				
+				 
+				
+				'assets/global/plugins/angularjs/angular.min.js',
+				
+				'assets/apps/service/ContractService.js',
+				'assets/apps/controllers/ContractController.js',
                         ]
                     });
                 }]
@@ -440,8 +341,8 @@ rContract', {
         
         .state('editUserContractPage', {
         	params:{data:null},
-            url: "/editUserContractPage",
-            templateUrl: "rest/user/editUserContractPage",
+            url: "/editUserContractPage:id",
+            templateUrl: "rest/contract/editUserContractPage",
             data: {pageTitle: '合同管理'},
             controller: "ContractController",
             resolve: {
@@ -468,48 +369,25 @@ rContract', {
 						'assets/global/plugins/jquery-validation/js/jquery.validate.min.js',
 						'assets/global/plugins/jquery-validation/js/additional-methods.min.js',
 						'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
-						'assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js',
-						'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js',
-						'assets/global/plugins/ckeditor/ckeditor.js',
-						'assets/global/plugins/bootstrap-markdown/lib/markdown.js',
-						'assets/global/plugins/bootstrap-markdown/js/bootstrap-markdown.js',
-						'assets/pages/scripts/form-validation.js',
 						
 						'assets/global/plugins/jquery.min.js',
 				        'assets/global/plugins/bootstrap/js/bootstrap.min.js',
-				        'assets/global/plugins/js.cookie.min.js',
-				        'assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js',
-				        'assets/global/plugins/jquery.blockui.min.js',
-				        'assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js',
 				        
 				         
-				         'assets/global/scripts/app.min.js',
-				         'assets/layouts/layout2/scripts/layout.min.js',
-				         'assets/layouts/layout2/scripts/demo.min.js',
-				         'assets/layouts/global/scripts/quick-sidebar.min.js',
-				         'assets/layouts/global/scripts/quick-nav.min.js',
-				        'assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js',
-				        
-				        'assets/global/plugins/angularjs/angular.min.js',
-				        'assets/global/plugins/angularjs/angular-sanitize.min.js',
-				        'assets/global/plugins/angularjs/angular-touch.min.js',
 				        'assets/global/plugins/angularjs/plugins/angular-ui-router.min.js',
-				        
-				        'assets/global/plugins/angularjs/plugins/ocLazyLoad.min.js',
-				        'assets/global/plugins/angularjs/plugins/ui-bootstrap-tpls.min.js',
-				        'assets/apps/directives.js',
+				        'assets/global/plugins/angularjs/angular.min.js',
 				        
 				        
 				        'assets/apps/service/ContractService.js',
 	                    'assets/apps/controllers/ContractController.js',
-                        'assets/apps/controllers/datepickerCtrl.js',
                         ]
                     });
                 }]
             }
         })
         
-        // 用户管理        .state('user', {
+        // 用户管理
+            .state('user', {
             url: "/user",
             templateUrl: "rest/page/user",
             data: {pageTitle: '用户管理'},
@@ -531,7 +409,8 @@ rContract', {
                     });
                 }]
             }
-        })        .state('company', {
+        })       
+        .state('company', {
         	url: "/company",
         	templateUrl: "rest/company/companyManage",
         	data: {pageTitle: '企业信息'},

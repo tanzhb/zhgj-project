@@ -2,20 +2,20 @@
 angular.module('MetronicApp').controller('ContractController', ['$rootScope', '$scope', 'settings', 'ContractService','$state','$compile','$stateParams','$filter', function($rootScope, $scope, settings, ContractService,$state,$compile,$stateParams,$filter) {
 	$scope.$on('$viewContentLoaded', function() {   
 		// initialize core components
-		App.initAjax();
+		//App.initAjax();
 
 		// set default layout mode
 		$rootScope.settings.layout.pageContentWhite = true;
 		$rootScope.settings.layout.pageBodySolid = false;
 		$rootScope.settings.layout.pageSidebarClosed = false;
 		
-		$scope.saveUser = function() {
-			debugger
+		//添加合同
+		$scope.saveUserContract = function() {
 			if($('#form_sample_1').valid()){//表单验证通过则执行添加功能
-			ContractService.saveUser($scope.contractVO)
+			ContractService.saveUserContract($scope.contractVO)
 			.then(
 					function(data) {
-						toastr.success("保存用户数据成功！");
+						toastr.success("保存合同数据成功！");
 						$state.go('userContract');
 					},
 					function(errResponse) {
@@ -26,27 +26,37 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope', '$
 			);
 			}
 		};
-		if($state.current.name=='editUserContractPage'){
-			ContractService.selectUserContract($stateParams.data).then(
-					function(data) {
-						debugger
-						$scope.contractVO = data;//将后台数据赋值给前台页面
-						var myJsDate=$filter('date')($scope.contractVO.startDate,'MM/dd/yyyy');
-						$scope.contractVO.startDate=myJsDate;
-						
-						var myJsDate1=$filter('date')($scope.contractVO.endDate,'MM/dd/yyyy');
-						$scope.contractVO.endDate=myJsDate1;
-						
-						var myJsDate2=$filter('date')($scope.contractVO.signDate,'MM/dd/yyyy');
-						$scope.contractVO.signDate=myJsDate2;
-					},
-					function(errResponse) {
-						console.error('Error while editing Users');
-					}
-			);
-		};
+		//根据参数查询对象
+    if($stateParams.id)$scope.getUserContractInfo($stateParams.id);
 		
 	});
+	
+	//返回按钮
+	$scope.goback=function(){
+		$state.go('userContract',{},{reload:true});
+	}
+	
+	//根据参数查询对象
+	$scope.getUserContractInfo  = function(id) {
+		ContractService.selectUserContract(id).then(
+      		     function(data){
+      		    	$scope.contractVO=data;
+      		    	//将日期转换成标准格式
+      		    	var myJsDate=$filter('date')($scope.contractVO.startDate,'MM/dd/yyyy');
+					$scope.contractVO.startDate=myJsDate;
+					
+					var myJsDate1=$filter('date')($scope.contractVO.endDate,'MM/dd/yyyy');
+					$scope.contractVO.endDate=myJsDate1;
+					
+					var myJsDate2=$filter('date')($scope.contractVO.signDate,'MM/dd/yyyy');
+					$scope.contractVO.signDate=myJsDate2;
+      		     },
+      		    /* function(error){
+      		         $scope.error = error;
+      		     }*/
+      		 );
+    	
+    }; 
 	
 	//初始化toastr开始
 	toastr.options = {
@@ -64,6 +74,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope', '$
 			"hideMethod" : "fadeOut"
 		}
 	
+	//删除
 	$scope.del = function() {
 		var ids = '';
 		// Iterate over all checkboxes in the table
@@ -87,16 +98,15 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope', '$
 				$('#delUsersModal').modal('show');// 打开确认删除模态框
 				
 				$scope.confirmDel = function() {										
-					ContractService.delUsers(ids).then(
+					ContractService.delUserContract(ids).then(
 									function(data) {
-										$('#delUsersModal').modal(
-												'hide');// 删除成功后关闭模态框
+										$('#delUsersModal').modal('hide');// 删除成功后关闭模态框
 										toastr.success("删除成功！");
-										table.ajax.reload(); // 重新加载datatables数据
+										$state.go('userContract',{},{reload:true}); // 重新加载datatables数据
 									},
 									function(errResponse) {
-										console
-												.error('Error while deleting Users');
+										/*console.error('Error while deleting Users');*/
+										alert(123);
 									}
 
 							);
@@ -104,25 +114,26 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope', '$
 			}								
 		};
 		
-		
+		//单个删除
 		$scope.jumpToDel = function(value) {
 			var ids=value;	
 			if (ids == '') {// 未勾选删除数据									
 				toastr.warning("未勾选要删除数据！");
 			} else {
-				$('#delUsersModal').modal('show');// 打开确认删除模态框
+				Jquery('#delUsersModal').modal('show');// 打开确认删除模态框
 				
 				$scope.confirmDel = function() {										
 					ContractService.delUsers(ids).then(
 									function(data) {
-										$('#delUsersModal').modal(
-												'hide');// 删除成功后关闭模态框
+										
+										$('#delUsersModal').modal('hide');// 删除成功后关闭模态框
 										toastr.success("删除成功！");
-										table.ajax.reload(); // 重新加载datatables数据
+										var table = $('#sample_2').DataTable();
+										/*table.ajax.reload();*/
+										$("#sample_2").dataTable().fnDraw(false)
 									},
 									function(errResponse) {
-										console
-												.error('Error while deleting Users');
+										/*console.error('Error while deleting Users');*/
 									}
 
 							);
@@ -131,37 +142,39 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope', '$
 		};
 		
 		
-		$scope.jumpToEdit = function(value) {
-			/*ContractService.selectUserContract(value).then(
-					function(data) {
-						$scope.contractVO = data;//将后台数据赋值给前台页面
-					},
-					
-			);*/
-			$state.go('editUserContractPage',{'data':value});
+		//修改
+		$scope.jumpToEdit = function() {
+			var ids = '';
+    		// Iterate over all checkboxes in the table
+    		table.$('input[type="checkbox"]').each(
+    				function() {
+    					// If checkbox exist in DOM
+    					if ($.contains(document, this)) {
+    						// If checkbox is checked
+    						if (this.checked) {
+    							// 将选中数据id放入ids中
+    							if (ids == '') {
+    								ids = this.value;
+    							} else{
+    								ids = "more"
+    							}
+    						}
+    					}
+    				});
+    		if(ids==''){
+    			toastr.warning('请选择一个合同！');return;
+    		}else if(ids=='more'){
+    			toastr.warning('只能选择一个合同！');return;
+    		}
+			$state.go('editUserContractPage',{id:ids});
 		};
 		
 		
-			
-			
-	    $scope.show = function () {
-	        alert("dd");
-	    }
 	
 	var a = 0;
-	App.getViewPort().width < App
-			.getResponsiveBreakpoint("md") ? $(
-			".page-header").hasClass(
-			"page-header-fixed-mobile")
-			&& (a = $(".page-header").outerHeight(!0))
-			: $(".page-header").hasClass(
-					"navbar-fixed-top") ? a = $(
-					".page-header").outerHeight(!0)
-					: $("body").hasClass(
-							"page-header-fixed")
-							&& (a = 64);
-					
-	
+	App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile")&& (a = $(".page-header").outerHeight(!0)): 
+	$(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0): $("body").hasClass("page-header-fixed")&& (a = 64);
+			
 		var table = $("#sample_2").DataTable(
 			{
 				language : {
@@ -175,7 +188,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope', '$
 					infoFiltered : "(从 _MAX_ 条数据中检索)",
 					lengthMenu : "每页显示 _MENU_ 条数据",
 					search : "查询:",
-					zeroRecords : "抱歉， 没有找到！",
+					zeroRecords : "抱歉， 没有找到！&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
 					paginate : {
 						"sFirst" : "首页",
 						"sPrevious" : "前一页",
@@ -202,15 +215,59 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope', '$
 				pageLength : 10,// 每页显示数量
 				processing : true,// loading等待框
 				// serverSide: true,
-				ajax: "http://localhost:8080/zhgj-web/rest/user/findAllUserContract",//加载数据中user表数据
+				ajax: "http://localhost:8080/zhgj-web/rest/contract/findAllUserContract",//加载数据中user表数据
 				"aoColumns": [
                               { mData: 'id'},
 				              { mData: 'contractNum' },
+				              { mData: 'comId' },
 				              { mData: 'contractType' },
 				              { mData: 'serviceModel' },
-				              { mData: 'settlementClause'},
-				              { mData: 'startDate'},
-				              { mData: 'id' }
+				              { mData: 'signDate',
+					                mRender:function(data){
+					                	if(data!=""&&data!=null){
+					                		return timeStamp2String(data);
+					                	}else{
+					                		return "";
+					                	}
+					                }
+					              }
+					              ,
+				              { mData: 'signer'},
+				              { mData: 'startDate',
+				                mRender:function(data){
+				                	if(data!=""&&data!=null){
+				                		return timeStamp2String(data);
+				                	}else{
+				                		return "";
+				                	}
+				                }
+				              }
+				              ,
+				              { mData: 'endDate',
+					                mRender:function(data){
+					                	if(data!=""&&data!=null){
+					                		return timeStamp2String(data);
+					                	}else{
+					                		return "";
+					                	}
+					                }
+					              }
+					              ,
+					          { mData: 'versionNO' },
+					          { mData: 'status',
+					                mRender:function(data){
+					                	if(data!=""&&data!=null){
+					                		if(data=='0'){
+					                			return '初始';
+					                		}
+					                	}else{
+					                		return "";
+					                	}
+					                }
+					              }
+					          /*,
+					              
+				              { mData: 'id' }*/
 				              ],
 				'aoColumnDefs': [ {
 					'targets' : 0,
@@ -220,7 +277,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope', '$
 					'render' : function(data,type, full, meta) {
 						return '<input type="checkbox" name="id[]" value="'+ $('<div/>').text(data).html()+ '">';
 					}
-				} ,{
+				} ,/*{
 					'targets' : 6,
 					"aTargets" :　["_all"],
 					'searchable' : false,
@@ -228,7 +285,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope', '$
 					'className' : 'dt-body-center',
 					"mRender" : function(data) {
 						var html="'"+$('<div/>').text(data).html()+"'";
-						/*return '<input type="radio" name="id[]" value="'+ $('<div/>').text(data).html()+ '">';*/
+						return '<input type="radio" name="id[]" value="'+ $('<div/>').text(data).html()+ '">';
 						html= '<a href="javascript:;" class="btn btn-outline btn-circle dark btn-sm black"  ng-click=jumpToDel('+html+')><i class="fa fa-remove"></i> 删除  </a>'+
 						'<a href="javascript:;" class="btn btn-outline btn-circle btn-sm purple" ng-click=jumpToEdit('+html+')><i class="fa fa-edit"></i> 编辑 </a>';
 						return html;
@@ -236,11 +293,21 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope', '$
 					"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
                         $compile(nTd)($scope);
                     } 
-				}],
+				}*/],
 
 			})
 			
+			//格式化日期
+			function timeStamp2String(time){
+	        var datetime = new Date();
+	         datetime.setTime(time);
+	         var year = datetime.getFullYear();
+	         var month = datetime.getMonth() + 1;
+	         var date = datetime.getDate();
+	         return month+"/"+date+"/"+year ;
+	        };
 			
+			//复选框全选
 			$('#example-select-all').on(
 									'click',
 									function() {
@@ -445,6 +512,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope', '$
 	self.contractList=[];
 
 
+	//查询所有的用户合同
 	fetchAllUserContract();
 
 	function fetchAllUserContract(){
@@ -454,7 +522,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope', '$
 
 				},
 				function(errResponse){
-					console.error('Error while fetching Users');
+					/*console.error('Error while fetching Users');*/
 				}
 		);
 	}

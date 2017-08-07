@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.User;
+import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.UserService;
 
 /**
@@ -32,6 +33,9 @@ public class PageController {
 
 	 @Resource
 	 private UserService userService;
+	 
+	 @Resource
+	 private ContractService contractService;
 	 
     /**
      * 登录页
@@ -105,44 +109,23 @@ public class PageController {
         return "jgml";
     }
     
+    /**
+     * 合同列表
+     * @return 列表页面的url
+     */
     @RequestMapping("/userContract")
-    public String userContract(HttpServletRequest request,Model model) {
-        return "userContract";
+    public String userContract() {
+        return "contract/userContract";
     }
     
     
-   /* @RequestMapping("/userContractList")
-    public String userContractList(HttpServletRequest request,Model model) {
-    	User user=(User) request.getSession().getAttribute("userInfo"); 
-    	List<ContractVO> contractList=userService.queryContractList(user.getId()+"");
-    	model.addAttribute("contractList", contractList);
-        return "userContractList";
-    }*/
-    
-    @RequestMapping(value = "/userContractList", method = RequestMethod.GET)
-	public ResponseEntity<Map> userContractList(HttpServletRequest request) {
-    	User user=(User) request.getSession().getAttribute("userInfo"); 
-    	List<ContractVO> contractList=userService.queryContractList(user.getId()+"");
-		
-		if (contractList.isEmpty()) {
-			return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);// You many
-			                                                             // decide to
-			                                                             // return
-			                                                             // HttpStatus.NOT_FOUND
-		}
-		//封装datatables数据返回到前台
-		Map pageMap = new HashMap();
-		pageMap.put("draw", 1);
-		pageMap.put("recordsTotal", contractList.size());
-		pageMap.put("recordsFiltered", contractList.size());
-		pageMap.put("data", contractList);
-		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
-	}
-    
-    
+    /**
+     * 添加合同页面
+     * @return 添加合同页面url
+     */
     @RequestMapping("/addUserContract")
     public String addUserContract() {
-        return "addUserContract";
+        return "contract/addUserContract";
     }
     
     /**
@@ -152,6 +135,7 @@ public class PageController {
     public String user() {
         return "user";
     }
+    
     /**
      * 新增物料
      */
