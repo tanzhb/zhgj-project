@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -29,8 +28,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.alibaba.druid.util.StringUtils;
-import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.security.PermissionSign;
 import com.congmai.zhgj.web.security.RoleSign;
@@ -123,9 +121,9 @@ public class UserController {
 		pageMap.put("data", users);
 		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 	}
-	
 
-	 /* 
+	/**
+	 * 
 	 * @Description 添加用户
 	 * @param user
 	 * @param ucBuilder
@@ -146,6 +144,7 @@ public class UserController {
 			user.setCreateTime(new Date());
 			if(user.getDelFlg() == null)
 				user.setDelFlg("0");
+			user.setId(ApplicationUtils.random32UUID());
 			userService.insert(user);
 		}else{
 			user.setUpdater(currenLoginName);
@@ -153,13 +152,14 @@ public class UserController {
 			userService.update(user);
 		}
 		
+
+		
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("/user/{id}")
 				.buildAndExpand(user.getId()).toUri());
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
-		
-
 	/**
 	 * 
 	 * @Description 根据id查找用户
@@ -168,7 +168,7 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/selectById", method = RequestMethod.POST)
 	public ResponseEntity<User> selectById(@RequestBody String ids) {
-		User u = userService.selectById(Long.valueOf(ids));
+		User u = userService.selectById(ids);
 		
 		return new ResponseEntity<User>(u, HttpStatus.OK);
 	}
@@ -226,4 +226,5 @@ public class UserController {
 	public String create() {
 		return "拥有user:create权限,能访问";
 	}
+
 }

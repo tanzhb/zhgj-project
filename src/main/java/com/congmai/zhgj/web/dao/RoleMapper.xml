@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.congmai.zhgj.web.dao.RoleMapper">
     <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.Role">
-        <id column="id" property="id" jdbcType="BIGINT" />
+        <id column="id" property="id" jdbcType="VARCHAR" />
         <result column="role_name" property="roleName" jdbcType="VARCHAR" />
         <result column="role_sign" property="roleSign" jdbcType="VARCHAR" />
         <result column="description" property="description" jdbcType="VARCHAR" />
@@ -86,11 +86,11 @@
         select
         <include refid="Base_Column_List" />
         from role
-        where id = #{id,jdbcType=BIGINT}
+        where id = #{id,jdbcType=VARCHAR}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from role
-        where id = #{id,jdbcType=BIGINT}
+        where id = #{id,jdbcType=VARCHAR}
     </delete>
     <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.RoleExample">
         delete from role
@@ -101,7 +101,7 @@
     <insert id="insert" parameterType="com.congmai.zhgj.web.model.Role">
         insert into role (id, role_name, role_sign,
         description)
-        values (#{id,jdbcType=BIGINT}, #{roleName,jdbcType=VARCHAR}, #{roleSign,jdbcType=VARCHAR},
+        values (#{id,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, #{roleSign,jdbcType=VARCHAR},
         #{description,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.Role">
@@ -122,7 +122,7 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
-                #{id,jdbcType=BIGINT},
+                #{id,jdbcType=VARCHAR},
             </if>
             <if test="roleName != null">
                 #{roleName,jdbcType=VARCHAR},
@@ -145,7 +145,7 @@
         update role
         <set>
             <if test="record.id != null">
-                id = #{record.id,jdbcType=BIGINT},
+                id = #{record.id,jdbcType=VARCHAR},
             </if>
             <if test="record.roleName != null">
                 role_name = #{record.roleName,jdbcType=VARCHAR},
@@ -163,7 +163,7 @@
     </update>
     <update id="updateByExample" parameterType="map">
         update role
-        set id = #{record.id,jdbcType=BIGINT},
+        set id = #{record.id,jdbcType=VARCHAR},
         role_name = #{record.roleName,jdbcType=VARCHAR},
         role_sign = #{record.roleSign,jdbcType=VARCHAR},
         description =
@@ -185,19 +185,19 @@
                 description = #{description,jdbcType=VARCHAR},
             </if>
         </set>
-        where id = #{id,jdbcType=BIGINT}
+        where id = #{id,jdbcType=VARCHAR}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.Role">
         update role
         set role_name = #{roleName,jdbcType=VARCHAR},
         role_sign = #{roleSign,jdbcType=VARCHAR},
         description = #{description,jdbcType=VARCHAR}
-        where id = #{id,jdbcType=BIGINT}
+        where id = #{id,jdbcType=VARCHAR}
     </update>
 
     <!-- 通过用户id 查询用户 拥有的角色 -->
     <select id="selectRolesByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long">
         SELECT r.* FROM role r LEFT JOIN user_role ur ON r.id = ur.role_id
-        WHERE ur.user_id = #{id,jdbcType=BIGINT}
+        WHERE ur.user_id = #{id,jdbcType=VARCHAR}
     </select>
 </mapper>

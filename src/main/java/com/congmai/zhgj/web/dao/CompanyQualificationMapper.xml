@@ -13,10 +13,11 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     serialNum, comId, qualificationNum, validityDate, qualificationName, qualificatioImage, 
-    delFlg, creator, createTime, updater, updateTime
+    delFlg, creator, createTime, updater, updateTime,remark
   </sql>
  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
@@ -31,40 +32,45 @@
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </delete>
   
+  <update id="deleteByComId" parameterType="java.util.Map" >
+    update  companyQualification set delFlg =1 
+    where comId = #{comId,jdbcType=VARCHAR}
+  </update>
+  
 
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.CompanyQualification" >
     insert into companyQualification (serialNum, comId, qualificationNum, 
       validityDate, qualificationName, qualificatioImage, 
-      delFlg, creator, createTime, 
-      updater, updateTime)
+       creator, createTime, 
+      updater, updateTime, remark)
     values (#{serialNum,jdbcType=VARCHAR}, #{comId,jdbcType=VARCHAR}, #{qualificationNum,jdbcType=VARCHAR}, 
       #{validityDate,jdbcType=DATE}, #{qualificationName,jdbcType=VARCHAR}, #{qualificatioImage,jdbcType=VARCHAR}, 
-      #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
   </insert>
   
   <insert id="insertSelectiveBatch"  parameterType="java.util.List"> 
    insert into companyQualification (serialNum, comId, qualificationNum, 
       validityDate, qualificationName, qualificatioImage, 
-      delFlg, creator, createTime, 
-      updater, updateTime) 
+      creator, createTime, 
+      updater, updateTime,remark) 
     values  
     <foreach collection="list" item="item" index="index" separator="," >  
        (#{item.serialNum,jdbcType=VARCHAR}, #{item.comId,jdbcType=VARCHAR}, #{item.qualificationNum,jdbcType=VARCHAR}, 
       #{item.validityDate,jdbcType=DATE}, #{item.qualificationName,jdbcType=VARCHAR}, #{item.qualificatioImage,jdbcType=VARCHAR}, 
-      #{item.delFlg,jdbcType=VARCHAR}, #{item.creator,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
-      #{item.updater,jdbcType=VARCHAR}, #{item.updateTime,jdbcType=TIMESTAMP})  
+      #{item.creator,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
+      #{item.updater,jdbcType=VARCHAR}, #{item.updateTime,jdbcType=TIMESTAMP}, #{item.remark,jdbcType=VARCHAR})  
     </foreach>  
 </insert>  
   
   <select id="selectList" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.CompanyQualification" >
     select 
     <include refid="Base_Column_List" />
-    from companyQualification
+    from companyQualification where delFlg= 0 order by createTime DESC
   </select>
   
   <select id="countList" parameterType="com.congmai.zhgj.web.model.CompanyQualification" resultType="java.lang.Integer" >
-    select count(*) from companyQualification
+    select count(*) from companyQualification where delFlg= 0
 <!--     <if test="warehouseNum != null" >
 	        and warehouseNum = #{warehouseNum,jdbcType=VARCHAR},
 	      </if>
@@ -126,10 +132,21 @@
 	      order by createTime DESC
 	      limit ${firstResult},${pageSize} -->
   </select>
+  
+  <select id="selectListByCondition" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.CompanyQualification" >
+    select 
+    <include refid="Base_Column_List" />
+    from companyQualification
+       	where delFlg ='0'
+     <if test="comId != null" >
+        and comId = #{comId,jdbcType=VARCHAR}
+      </if>
+  </select>
 
   <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.CompanyQualification" >
     update companyQualification
     <set >
+    	serialNum = #{item.serialNum,jdbcType=VARCHAR},
       <if test="comId != null" >
         comId = #{comId,jdbcType=VARCHAR},
       </if>
@@ -147,6 +164,9 @@
       </if>
       <if test="delFlg != null" >
         delFlg = #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
       </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
@@ -168,6 +188,7 @@
    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
 	    update companyQualification
 	    <set >
+	   		 serialNum = #{item.serialNum,jdbcType=VARCHAR},
 	      <if test="item.comId != null" >
 	        comId = #{item.comId,jdbcType=VARCHAR},
 	      </if>
@@ -185,6 +206,9 @@
 	      </if>
 	      <if test="item.delFlg != null" >
 	        delFlg = #{item.delFlg,jdbcType=VARCHAR},
+	      </if>
+	      <if test="item.remark != null" >
+	        remark = #{item.remark,jdbcType=VARCHAR},
 	      </if>
 	      <if test="item.creator != null" >
 	        creator = #{item.creator,jdbcType=VARCHAR},

@@ -1,7 +1,11 @@
 package com.congmai.zhgj.web.service.impl;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Resource;
@@ -13,6 +17,7 @@ import org.springframework.util.StringUtils;
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
+import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.web.dao.CompanyQualificationMapper;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyQualification;
@@ -45,7 +50,17 @@ public class CompanyQualificationServiceImpl extends GenericServiceImpl<CompanyQ
 
 
 	@Override
-	public void insertBatch(List<CompanyQualification> insertList) {
+	public void insertBatch(List<CompanyQualification> insertList,String userId) {
+	if(!CollectionUtils.isEmpty(insertList)){
+			
+			for(CompanyQualification companyQualification:insertList){
+	    			companyQualification.setSerialNum(UUID.randomUUID().toString().replace("-",""));
+	    			companyQualification.setCreateTime(new Date());
+	    			companyQualification.setCreator(userId);
+	    			companyQualification.setUpdateTime(new Date());
+	    			companyQualification.setUpdater(userId);
+    		}
+		}
 		companyQualificationMapper.insertSelectiveBatch(insertList);
 	}
 
@@ -67,19 +82,65 @@ public class CompanyQualificationServiceImpl extends GenericServiceImpl<CompanyQ
 				if(StringUtils.isEmpty(companyQualification.getSerialNum())){
 					insertList.add(companyQualification);
 	    			companyQualification.setSerialNum(UUID.randomUUID().toString().replace("-",""));
+	    			companyQualification.setCreateTime(new Date());
+	    			companyQualification.setCreator("user");
+	    			companyQualification.setUpdateTime(new Date());
+	    			companyQualification.setUpdater("user");
 	    		}else{
+	    			companyQualification.setUpdateTime(new Date());
+	    			companyQualification.setUpdater("user");
 	    			updateList.add(companyQualification);
 	    		}
     		}
 		}
 		if(!CollectionUtils.isEmpty(insertList)){
 			this.insertBatch(
-					insertList);
+					insertList,"");
 		}
 		if(!CollectionUtils.isEmpty(updateList)){
 			this.updateBatch(
 					updateList);
 		}
+		
+	}
+
+
+	@Override
+	public List<CompanyQualification> selectListByComId(String comId){
+		CompanyQualification companyQualification = new CompanyQualification();
+		companyQualification.setComId(comId);
+		List<CompanyQualification> list = companyQualificationMapper.selectListByCondition(companyQualification);
+		if(!CollectionUtils.isEmpty(list)){
+			for(CompanyQualification qualification :list){
+				if(qualification!=null){
+					int count;
+					try {
+						count = DateUtil.daysBetween(new Date(), qualification.getValidityDate());
+						if(count<30&&count>=0){
+							qualification.setStatus("2");//即将过期
+						}else if(count<0){
+							qualification.setStatus("1");//已过期
+						}else{
+							qualification.setStatus("0");//正常
+						}
+					} catch (Exception e) {
+						System.out.println(e.getMessage());
+						qualification.setStatus("0");
+					}
+					
+				}
+			}
+		}
+		return companyQualificationMapper.selectListByCondition(companyQualification);
+	}
+
+
+	@Override
+	public void deleteByComId(String comId) {
+		if(!StringUtils.isEmpty(comId)){
+			companyQualificationMapper.deleteByComId(comId);
+		}
+		
 		
 	}
 

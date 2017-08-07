@@ -16,12 +16,12 @@ import com.congmai.zhgj.web.model.RoleExample;
  * @Date 2017年7月26日 下午2:47:18
  * @version 1.0.0
  */
-public interface RoleMapper extends GenericDao<Role, Long> {
+public interface RoleMapper extends GenericDao<Role, String> {
     int countByExample(RoleExample example);
 
     int deleteByExample(RoleExample example);
 
-    int deleteByPrimaryKey(Long id);
+    int deleteByPrimaryKey(String id);
 
     int insert(Role record);
 
@@ -29,7 +29,7 @@ public interface RoleMapper extends GenericDao<Role, Long> {
 
     List<Role> selectByExample(RoleExample example);
 
-    Role selectByPrimaryKey(Long id);
+    Role selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") Role record, @Param("example") RoleExample example);
 
@@ -45,5 +45,5 @@ public interface RoleMapper extends GenericDao<Role, Long> {
      * @param id
      * @return
      */
-    List<Role> selectRolesByUserId(Long userId);
+    List<Role> selectRolesByUserId(String userId);
 }

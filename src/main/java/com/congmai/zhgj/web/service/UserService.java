@@ -3,7 +3,6 @@ package com.congmai.zhgj.web.service;
 import java.util.List;
 
 import com.congmai.zhgj.core.generic.GenericService;
-import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.User;
 
 /**
@@ -14,7 +13,7 @@ import com.congmai.zhgj.web.model.User;
  * @Date 2017年7月26日 下午2:55:25
  * @version 1.0.0
  */
-public interface UserService extends GenericService<User, Long> {
+public interface UserService extends GenericService<User, String> {
 
     /**
      * 用户验证
@@ -44,7 +43,7 @@ public interface UserService extends GenericService<User, Long> {
      * @param id
      * @return
      */
-    User selectById(Long id);
+    User selectById(String id);
     /**
      * 
      * @Description 通过用户名找用户
@@ -72,7 +71,7 @@ public interface UserService extends GenericService<User, Long> {
      * @param id
      * @return
      */
-	int delete(Long id);
+	int delete(String id);
     /**
      * 
      * @Description 批量删除
@@ -80,5 +79,4 @@ public interface UserService extends GenericService<User, Long> {
      * @return
      */
 	void deleteUsers(String ids);
-    
 }

@@ -35,9 +35,8 @@
     select
     <include refid="Base_Column_List" />
     from company
-   		where 1=1
-   	order by createTime DESC
-	      limit ${firstResult},${pageSize}
+   		where delFlg = 0
+   	order by updateTime DESC
   </select>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
@@ -52,13 +51,29 @@
     where comId = #{comId,jdbcType=VARCHAR}
   </delete>
   
+<!--   <delete id="deleteCompanyBatch"  parameterType="java.util.List" >
+    delete from company
+    where comId in 
+    (<foreach collection="list" item="item" index="index" separator="," >  
+       #{item,jdbcType=VARCHAR}
+    </foreach>)  
+  </delete> -->
+  
+  <update id="deleteCompanyBatch"  parameterType="java.util.List" >
+    update company set delFlg = 1
+    where comId in 
+    (<foreach collection="list" item="item" index="index" separator="," >  
+       #{item,jdbcType=VARCHAR}
+    </foreach>)  
+  </update>
+  
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.Company" >
     insert into company (comId, comNum, comType, 
       abbreviation, comName, registeredCapital, 
       legalPerson, address, taxpayeNumber, 
       tel, contact, businessNature, 
       comNature, businessType, classification,remark, 
-      status, delFlg, creator, 
+      status, creator, 
       createTime, updater, updateTime
       )
     values (#{comId,jdbcType=VARCHAR}, #{comNum,jdbcType=VARCHAR}, #{comType,jdbcType=VARCHAR}, 
@@ -66,7 +81,7 @@
       #{legalPerson,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{taxpayeNumber,jdbcType=VARCHAR}, 
       #{tel,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, #{businessNature,jdbcType=VARCHAR}, 
       #{comNature,jdbcType=VARCHAR}, #{businessType,jdbcType=VARCHAR}, #{classification,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -74,7 +89,7 @@
 
   
   <select id="countList" parameterType="com.congmai.zhgj.web.model.Company" resultType="java.lang.Integer" >
-    select count(*) from company
+    select count(*) from company where delFlg = 0
   </select>
   
   <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.Company" >
