@@ -365,6 +365,8 @@
             <scope>compile</scope>
         </dependency>
         
+        
+        <!-- jackson -->
         <dependency>  
             <groupId>com.fasterxml.jackson.core</groupId>  
             <artifactId>jackson-databind</artifactId>  
@@ -387,8 +389,8 @@
         	<version>2.4</version>
        		 <classifier>jdk15</classifier>
    		 </dependency>
-      
-          
+         
+         <!-- json --> 
         <dependency>  
             <groupId>org.apache.commons</groupId>  
             <artifactId>commons-lang3</artifactId>  
@@ -400,7 +402,6 @@
             <artifactId>commons-beanutils</artifactId>  
             <version>1.8.3</version>  
         </dependency>  
-          
   
         <dependency>  
             <groupId>net.sf.ezmorph</groupId>  

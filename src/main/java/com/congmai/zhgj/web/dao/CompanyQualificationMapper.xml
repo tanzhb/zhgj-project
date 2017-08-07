@@ -13,10 +13,11 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     serialNum, comId, qualificationNum, validityDate, qualificationName, qualificatioImage, 
-    delFlg, creator, createTime, updater, updateTime
+    delFlg, creator, createTime, updater, updateTime,remark
   </sql>
  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
@@ -41,31 +42,31 @@
     insert into companyQualification (serialNum, comId, qualificationNum, 
       validityDate, qualificationName, qualificatioImage, 
        creator, createTime, 
-      updater, updateTime)
+      updater, updateTime, remark)
     values (#{serialNum,jdbcType=VARCHAR}, #{comId,jdbcType=VARCHAR}, #{qualificationNum,jdbcType=VARCHAR}, 
       #{validityDate,jdbcType=DATE}, #{qualificationName,jdbcType=VARCHAR}, #{qualificatioImage,jdbcType=VARCHAR}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
   </insert>
   
   <insert id="insertSelectiveBatch"  parameterType="java.util.List"> 
    insert into companyQualification (serialNum, comId, qualificationNum, 
       validityDate, qualificationName, qualificatioImage, 
       creator, createTime, 
-      updater, updateTime) 
+      updater, updateTime,remark) 
     values  
     <foreach collection="list" item="item" index="index" separator="," >  
        (#{item.serialNum,jdbcType=VARCHAR}, #{item.comId,jdbcType=VARCHAR}, #{item.qualificationNum,jdbcType=VARCHAR}, 
       #{item.validityDate,jdbcType=DATE}, #{item.qualificationName,jdbcType=VARCHAR}, #{item.qualificatioImage,jdbcType=VARCHAR}, 
       #{item.creator,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
-      #{item.updater,jdbcType=VARCHAR}, #{item.updateTime,jdbcType=TIMESTAMP})  
+      #{item.updater,jdbcType=VARCHAR}, #{item.updateTime,jdbcType=TIMESTAMP}, #{item.remark,jdbcType=VARCHAR})  
     </foreach>  
 </insert>  
   
   <select id="selectList" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.CompanyQualification" >
     select 
     <include refid="Base_Column_List" />
-    from companyQualification where delFlg= 0
+    from companyQualification where delFlg= 0 order by createTime DESC
   </select>
   
   <select id="countList" parameterType="com.congmai.zhgj.web.model.CompanyQualification" resultType="java.lang.Integer" >
@@ -164,6 +165,9 @@
       <if test="delFlg != null" >
         delFlg = #{delFlg,jdbcType=VARCHAR},
       </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
       </if>
@@ -202,6 +206,9 @@
 	      </if>
 	      <if test="item.delFlg != null" >
 	        delFlg = #{item.delFlg,jdbcType=VARCHAR},
+	      </if>
+	      <if test="item.remark != null" >
+	        remark = #{item.remark,jdbcType=VARCHAR},
 	      </if>
 	      <if test="item.creator != null" >
 	        creator = #{item.creator,jdbcType=VARCHAR},
