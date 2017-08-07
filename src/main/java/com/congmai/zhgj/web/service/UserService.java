@@ -25,19 +25,61 @@ public interface UserService extends GenericService<User, Long> {
     User authentication(User user);
 
     /**
-     * 根据用户名查询用户
-     * 
-     * @param username
-     * @return
-     */
-    User selectByUsername(String username);
-    
-    /**
      * 
      * @Description 查找所有用户信息
      * @return
      */
     List<User> findAllUsers();
+    
+    /**
+     * 
+     * @Description 某用户是否存在
+     * @param user
+     * @return
+     */
+    boolean isUserExist(User user);
+    /**
+     * 
+     * @Description 通过id找用户
+     * @param id
+     * @return
+     */
+    User selectById(Long id);
+    /**
+     * 
+     * @Description 通过用户名找用户
+     * @param id
+     * @return
+     */
+	User selectByUsername(String name);
+    /**
+     * 
+     * @Description 添加用户
+     * @param id
+     * @return
+     */
+	int insert(User user);
+    /**
+     * 
+     * @Description 更新用户
+     * @param id
+     * @return
+     */
+	int update(User user);
+    /**
+     * 
+     * @Description 根据id删除某用户
+     * @param id
+     * @return
+     */
+	int delete(Long id);
+    /**
+     * 
+     * @Description 批量删除
+     * @param ids
+     * @return
+     */
+	void deleteUsers(String ids);
     
     
    public void insertContract(ContractVO contractVO);
