@@ -9,16 +9,28 @@ angular
 						'$state',
 						'$compile',
 						'$http',
+						'$location',
+						'$stateParams',
 						'settings',
 						'WarehouseService',
-						function($rootScope, $scope, $state, $compile,$http,settings,
+						function($rootScope, $scope, $state, $compile,$http,$location,$stateParams,settings,
 								WarehouseService) {
 							$scope
 									.$on(
 											'$viewContentLoaded',
 											function() {
 												// initialize core components
+												 handle = new pageHandle();
 												App.initAjax();
+												if($location.path()=="/addWarehouse"){
+													/*debugger;
+													console.log($rootScope.warehouseSerialNum);*/
+										    		getWarehouseInfo($stateParams.warehouseSerialNum);
+										 		}
+												 if($location.path()=="/warehouse"){
+											        	loadWarehouseTable();//加载仓库列表
+											        	//loadWarehouseTree();//加载仓库树
+											        }
 												// set default layout mode
 												$rootScope.settings.layout.pageContentWhite = true;
 												$rootScope.settings.layout.pageBodySolid = false;
@@ -43,6 +55,9 @@ angular
 							//初始化toastr结束
 
 							// 构建datatables开始***************************************
+							var tableAjaxUrl = "rest/warehouse/getWarehouseList";
+							 var table;
+			function loadWarehouseTable(){
 							var a = 0;
 							App.getViewPort().width < App
 									.getResponsiveBreakpoint("md") ? $(
@@ -56,7 +71,7 @@ angular
 													"page-header-fixed")
 													&& (a = 64);
 
-							var table = $("#sample_1")
+						 table = $("#sample_1")
 									.DataTable(
 											{
 												language : {
@@ -94,8 +109,7 @@ angular
 												pageLength : 10,// 每页显示数量
 												processing : true,// loading等待框
 												// serverSide: true,
-												ajax : $rootScope.basePath
-														+ "/rest/warehouse/getWarehouseList",// 加载数据中仓库表数据
+												ajax : tableAjaxUrl,// 加载数据中仓库表数据
 
 												"aoColumns" : [
 													{
@@ -178,17 +192,29 @@ angular
 											});
 							// 添加checkbox功能
 							// ***************************************
-
+							}
 							// 添加仓库开始***************************************
 						$scope.addWarehouse = function() {
-							$rootScope.isNoData=true;
+							$scope.warehouseAdd=true;
 							 $state.go('addWarehouse',{},{reload:true}); 
 						}
-						
-								
+						$scope.editWarehouse = function(){
+							debugger;
+							var warehouse=$scope.warehouse;
+							$scope.warehouse=warehouse;
+							$scope.warehouseView = false;
+		        			$scope.warehouseAdd = false;
+		        			$scope.warehouseEdit = true;
+						}
+						$scope.cancelEditWarehouse = function(){
+							getWarehouseInfo($scope.warehouse.serialNum);
+							$scope.warehouseView = true;
+		        			$scope.warehouseAdd = true;
+		        			$scope.warehouseEdit = false;
+						}		
 								$scope.saveWarehouse= function() {
 									debugger;
-									if($('#form_sample_1').valid()){//表单验证通过则执行添加功能
+									if($('#warehouseForm').valid()){//表单验证通过则执行添加功能
 										WarehouseService
 										.saveWarehouse($scope.warehouse)
 										.then(
@@ -196,7 +222,12 @@ angular
 													$('#addWarehouseModal').modal(
 															'hide');// 保存成功后关闭模态框
 													toastr.success("保存仓库数据成功！");
-													 $state.go('warehouse',{},{reload:true});  // 重新加载datatables数据
+													// $state.go('warehouse',{},{reload:true});  // 重新加载datatables数据
+													$scope.warehouse = $scope.warehouse;
+								        			$scope.warehouseView = true;
+								        			$scope.warehouseAdd = true;
+								        			$scope.warehouseEdit = false;
+								        			$(".alert-danger").hide();
 												},
 												function(errResponse) {
 													toastr.warning("仓库名重复，请重新输入！");
@@ -209,8 +240,19 @@ angular
 							// 添加仓库结束***************************************
 							
 							// 修改仓库开始***************************************							
-							$scope.editWarehouse = function() {
-								var ids = '';
+							$scope.toEditWarehousePage = function() {//弹出框修改仓库信息
+								debugger;
+								var id_count = table.$('input[type="checkbox"]:checked').length;
+								if(id_count==0){
+									handle.toastr.warning("请选择一条数据进行编辑");
+								}else if(id_count>1){
+									handle.toastr.warning("只能选择一条数据进行编辑");
+								}else{
+									var serialNum = table.$('input[type="checkbox"]:checked').val();
+									$state.go("addWarehouse",{warehouseSerialNum:serialNum});
+								}
+								
+							/*	var ids = '';
 								// Iterate over all checkboxes in the table
 								table.$('input[type="checkbox"]').each(function() {
 									// If checkbox exist in DOM
@@ -236,7 +278,7 @@ angular
 												debugger;
 												$scope.warehouse = data;//将后台数据赋值给前台页面
 												$('#pageTitle').html("修改仓库");
-												/*$('#appendTitle').append("<h4 class='modal-title'>修改仓库</h4>");*/
+												$('#appendTitle').append("<h4 class='modal-title'>修改仓库</h4>");
 												$('#addWarehouseModal').modal('show');// 弹出修改模态框
 											},
 											function(errResponse) {
@@ -245,7 +287,7 @@ angular
 											}
 
 									);
-								}								
+								}					*/			
 							};
 							// 修改仓库结束***************************************							
 
@@ -304,7 +346,7 @@ angular
 
 							// 页面加载完成后调用，验证输入框
 							$scope.$watch('$viewContentLoaded', function() {  
-								var e = $("#form_sample_1"),
+								var e = $("#warehouseForm"),
 						        r = $(".alert-danger", e),
 						        i = $(".alert-success", e);
 						        e.validate({
@@ -366,9 +408,54 @@ angular
 						        })   							}); 
 							
 							
+							 function getWarehouseInfo(serialNum){
+						    	   if(!handle.isNull(serialNum)){
+						    		   debugger;
+						    			 var promise =WarehouseService .selectBySerialNum(serialNum);
+						    			 
+						 	        	promise.then(function(data){
+						 	        		  debugger;
+						 	        		$scope.warehouse = data;
+						 	            },function(data){
+						 	               //调用承诺接口reject();
+						 	            });
+						    		 }
+						       }
 							
-							/*$http.post('rest/warehouseposition/viewWarehousepositionList').then(function(result){//加载库位数据
-								debugger;
-				                $scope.warehousepositions = result.data;
-				            })*/
+							 function  loadWarehouseTree () {
+						            $("#warehouseTree").jstree({
+						                core: {
+						                    themes: {
+						                        responsive: !1
+						                    },
+						                    data: {
+						                        url: function(e) {
+						                            return "rest/warehouse/getWarehouseTree"
+						                           
+						                        },
+						                        data: function(e) {
+						                            return {
+						                                parent: e.pid
+						                            }
+						                        }
+						                    }
+						                },
+						                types: {
+						                    "default": {
+						                        icon: "fa fa-folder icon-state-warning icon-lg"
+						                    },
+						                    file: {
+						                        icon: "fa fa-file icon-state-warning icon-lg"
+						                    }
+						                },
+						                plugins: ["types"]
+						            }),
+						            $("#warehouseTree").on("select_node.jstree", function(e, t) {
+						            	table.ajax.url(tableAjaxUrl+"?parent="+t.selected[0]).load()// 重新加载datatables数据
+						            })
+						            
+						        };
+						        $scope.reloadWarehouseTable = function() {
+						        	table.ajax.url(tableAjaxUrl).load()// 重新加载datatables数据
+						        }
 						} ]);

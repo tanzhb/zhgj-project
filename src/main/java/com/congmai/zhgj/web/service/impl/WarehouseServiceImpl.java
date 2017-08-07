@@ -45,6 +45,11 @@ public class WarehouseServiceImpl extends GenericServiceImpl<Warehouse, Long> im
 		warehouseMapper.deleteWarehouse(idList);
 		return 1;
 	}
+	@Override
+	public List<Warehouse> selectWarehouseList(WarehouseExample we) {
+		// TODO Auto-generated method stub
+		return  warehouseMapper.selectByExample(we);
+	}
 	
 	  
 	    

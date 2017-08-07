@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.controller;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +32,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
+import com.congmai.zhgj.web.model.JsonTreeData;
+import com.congmai.zhgj.web.model.Materiel;
+import com.congmai.zhgj.web.model.MaterielExample;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
+import com.congmai.zhgj.web.model.WarehouseExample;
 import com.congmai.zhgj.web.model.Warehouseposition;
+import com.congmai.zhgj.web.model.WarehouseExample.Criteria;
 import com.congmai.zhgj.web.security.PermissionSign;
 import com.congmai.zhgj.web.security.RoleSign;
 import com.congmai.zhgj.web.service.UserService;
@@ -150,4 +156,45 @@ public class WareHouseController {
 		warehouseService.deleteWarehouse(ids);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
+	
+	   /**
+     * @param oredCriteria 
+     * @Description 查询仓库树
+     * @param materiel
+     * @return
+     */
+    @RequestMapping("/getWarehouseTree")
+    @ResponseBody
+    public List<JsonTreeData> getWarehouseTree(String parent) {
+    	WarehouseExample we =new WarehouseExample();
+    	//and 条件1
+  Criteria criteria =  we.createCriteria();
+    	criteria.andDelFlgEqualTo("0");
+    	if(!StringUtils.isEmpty(parent)){
+    	if(parent.indexOf("仓库")>-1){
+    		criteria.andWarehouseTypeEqualTo(parent);
+    	}else if(parent.indexOf("#")<0) {
+    		criteria.andSerialNumEqualTo(parent);
+    	}
+    	}
+    	//排序字段
+    	/*we.setOrderByClause("updateTime DESC");*/
+    	List<Warehouse> warehouselList = warehouseService.selectWarehouseList(we);
+    	if (warehouselList.isEmpty()) {
+			return new ArrayList<JsonTreeData>();
+		}
+    	List<JsonTreeData> treeDataList = new ArrayList<JsonTreeData>();
+      for (Warehouse warehouse : warehouselList) {
+           JsonTreeData treeData = new JsonTreeData();
+           treeData.setId(warehouse.getSerialNum());
+           treeData.setPid(warehouse.getWarehouseType());
+           treeData.setText(warehouse.getWarehouseType());
+           treeData.setChildren(false);
+           treeData.setState("open");
+           treeDataList.add(treeData);
+       }
+/*       //最后得到结果集,经过FirstJSON转换后就可得所需的json格式
+       List<JsonTreeData> newTreeDataList = TreeNodeUtil.getfatherNode(treeDataList);*/
+       return treeDataList;
+    }
 }

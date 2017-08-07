@@ -22,6 +22,20 @@
 </div>
 
 <div class="row" >
+<!-- <div class="col-md-4">
+         <div class="portlet light ">
+             <div class="portlet-title">
+                 <div class="caption">
+                     <i class="icon-social-dribbble font-blue-sharp"></i>
+                     <span ng-click="reloadWarehouseTable()" class="caption-subject font-blue-sharp bold uppercase">仓库展示</span>
+                 </div>
+             </div>
+             <div class="portlet-body">
+                 <div id="warehouseTree" class="tree-demo">
+                 </div>
+             </div>
+         </div>
+	</div> -->
 	<div class="col-md-12">
 
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
@@ -39,7 +53,7 @@
 					<button ui-sref="addWarehouse" 
 						data-toggle="modal" class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-plus"></i> 添加
-					</button><button ng-click="editWarehouse()"
+					</button><button ng-click="toEditWarehousePage()"
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-edit"></i> 修改
 					</button> <button ng-click="delWarehouse()" 

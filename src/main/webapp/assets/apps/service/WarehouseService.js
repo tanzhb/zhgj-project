@@ -62,7 +62,6 @@ debugger;
     //某仓库名是否存在
     function selectByWarehouseName(warehouseName){
         var deferred = $q.defer();  
-
         $http.get($rootScope.basePath + "/rest/warehouse/selectByWarehousename", warehouseName).success(function (data) {  
             // 如果连接成功，延时返回给调用者  
             deferred.resolve(data);  
@@ -76,9 +75,8 @@ debugger;
     //通过仓库serialNum查找仓库
     function selectBySerialNum(serialNum){
         var deferred = $q.defer();  
-debugger;
         $http.post($rootScope.basePath + "/rest/warehouse/viewWarehouseDetail", serialNum).success(function (data) { 
-            // 如果连接成功，延时返回给调用者  
+            // 如果连接成功，延时返回给调用者 
             deferred.resolve(data);  
         })  
             .error(function () {  
