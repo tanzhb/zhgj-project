@@ -29,4 +29,6 @@ public interface CompanyContactMapper extends GenericDao<CompanyContact, String>
     int updateByPrimaryKeySelective(CompanyContact record);
 
     int updateByPrimaryKey(CompanyContact record);
+    
+    List<CompanyContact> selectListByCondition(CompanyContact contact);
 }

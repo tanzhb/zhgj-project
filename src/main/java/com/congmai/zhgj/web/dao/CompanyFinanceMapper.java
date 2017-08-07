@@ -29,4 +29,6 @@ public interface CompanyFinanceMapper extends GenericDao<CompanyFinance, String>
     int updateByPrimaryKeySelective(CompanyFinance record);
 
     int updateByPrimaryKey(CompanyFinance record);
+    
+    List<CompanyFinance> selectListByCondition(CompanyFinance companyFinance);
 }
