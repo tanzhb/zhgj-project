@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.congmai.zhgj.web.dao.CompanyContactMapper">
+  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.CompanyContact">
+    <id column="serialNum" jdbcType="VARCHAR" property="serialNum" />
+    <result column="comId" jdbcType="VARCHAR" property="comId" />
+    <result column="contactName" jdbcType="VARCHAR" property="contactName" />
+    <result column="contactTel" jdbcType="VARCHAR" property="contactTel" />
+    <result column="contactEmail" jdbcType="VARCHAR" property="contactEmail" />
+    <result column="contactTitle" jdbcType="VARCHAR" property="contactTitle" />
+    <result column="contactImage" jdbcType="VARCHAR" property="contactImage" />
+    <result column="delFlg" jdbcType="VARCHAR" property="delFlg" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="updater" jdbcType="VARCHAR" property="updater" />
+    <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="wechat" property="wechat" jdbcType="VARCHAR" />
+    <result column="department" property="department" jdbcType="VARCHAR" />
+     <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List">
+     serialNum, comId, contactName, contactTel, wechat, contactEmail, contactTitle, department, 
+    contactImage, remark, delFlg, creator, createTime, updater, updateTime
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from companyContact
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  
+  <update id="deleteByPrimaryKey" parameterType="java.lang.String">
+    update companyContact set delFlg = 1
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.CompanyContact">
+    insert into companyContact ( serialNum, comId, contactName, contactTel, wechat, contactEmail, contactTitle, department, 
+    contactImage, remark, creator, createTime, updater, updateTime
+      )
+    values (#{serialNum,jdbcType=VARCHAR}, #{comId,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, 
+      #{contactTel,jdbcType=VARCHAR}, #{wechat,jdbcType=VARCHAR}, #{contactEmail,jdbcType=VARCHAR}, 
+      #{contactTitle,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{contactImage,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+  <select id="selectList" parameterType="com.congmai.zhgj.web.model.CompanyContact" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from companyContact where delFlg= 0
+  </select>
+  
+  <select id="countList" parameterType="com.congmai.zhgj.web.model.CompanyContact" resultType="java.lang.Integer">
+    select count(*) from companyContact where delFlg= 0
+  </select>
+  
+  
+   <select id="selectListByCondition" parameterType="com.congmai.zhgj.web.model.CompanyContact" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from companyContact
+    where 1=1 and delFlg= 0
+    <if test="comId != null">
+       and comId = #{comId,jdbcType=VARCHAR}
+    </if>
+  </select>
+  
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.CompanyContact">
+    update companyContact
+    <set>
+      <if test="comId != null">
+        comId = #{comId,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName != null">
+        contactName = #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactTel != null">
+        contactTel = #{contactTel,jdbcType=VARCHAR},
+      </if>
+      <if test="contactEmail != null">
+        contactEmail = #{contactEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="contactTitle != null">
+        contactTitle = #{contactTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="contactImage != null">
+        contactImage = #{contactImage,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null">
+        delFlg = #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null">
+        updater = #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="wechat != null" >
+        wechat = #{wechat,jdbcType=VARCHAR},
+      </if>
+       <if test="department != null" >
+        department = #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+</mapper>

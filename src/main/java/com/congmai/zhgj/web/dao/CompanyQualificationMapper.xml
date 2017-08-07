@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.congmai.zhgj.web.dao.CompanyQualificationMapper" >
+  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.CompanyQualification" >
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="comId" property="comId" jdbcType="VARCHAR" />
+    <result column="qualificationNum" property="qualificationNum" jdbcType="VARCHAR" />
+    <result column="validityDate" property="validityDate" jdbcType="DATE" />
+    <result column="qualificationName" property="qualificationName" jdbcType="VARCHAR" />
+    <result column="qualificatioImage" property="qualificatioImage" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    serialNum, comId, qualificationNum, validityDate, qualificationName, qualificatioImage, 
+    delFlg, creator, createTime, updater, updateTime
+  </sql>
+ 
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from companyQualification
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from companyQualification
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </delete>
+  
+  <update id="deleteByComId" parameterType="java.util.Map" >
+    update  companyQualification set delFlg =1 
+    where comId = #{comId,jdbcType=VARCHAR}
+  </update>
+  
+
+  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.CompanyQualification" >
+    insert into companyQualification (serialNum, comId, qualificationNum, 
+      validityDate, qualificationName, qualificatioImage, 
+       creator, createTime, 
+      updater, updateTime)
+    values (#{serialNum,jdbcType=VARCHAR}, #{comId,jdbcType=VARCHAR}, #{qualificationNum,jdbcType=VARCHAR}, 
+      #{validityDate,jdbcType=DATE}, #{qualificationName,jdbcType=VARCHAR}, #{qualificatioImage,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  
+  <insert id="insertSelectiveBatch"  parameterType="java.util.List"> 
+   insert into companyQualification (serialNum, comId, qualificationNum, 
+      validityDate, qualificationName, qualificatioImage, 
+      creator, createTime, 
+      updater, updateTime) 
+    values  
+    <foreach collection="list" item="item" index="index" separator="," >  
+       (#{item.serialNum,jdbcType=VARCHAR}, #{item.comId,jdbcType=VARCHAR}, #{item.qualificationNum,jdbcType=VARCHAR}, 
+      #{item.validityDate,jdbcType=DATE}, #{item.qualificationName,jdbcType=VARCHAR}, #{item.qualificatioImage,jdbcType=VARCHAR}, 
+      #{item.creator,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
+      #{item.updater,jdbcType=VARCHAR}, #{item.updateTime,jdbcType=TIMESTAMP})  
+    </foreach>  
+</insert>  
+  
+  <select id="selectList" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.CompanyQualification" >
+    select 
+    <include refid="Base_Column_List" />
+    from companyQualification where delFlg= 0
+  </select>
+  
+  <select id="countList" parameterType="com.congmai.zhgj.web.model.CompanyQualification" resultType="java.lang.Integer" >
+    select count(*) from companyQualification where delFlg= 0
+<!--     <if test="warehouseNum != null" >
+	        and warehouseNum = #{warehouseNum,jdbcType=VARCHAR},
+	      </if>
+	      <if test="warehouseName != null" >
+	        and warehouseName = #{warehouseName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="warehouseType != null" >
+	       	 and warehouseType = #{warehouseType,jdbcType=VARCHAR},
+	      </if>
+	      <if test="warehouseCategory != null" >
+	       	 and warehouseCategory = #{warehouseCategory,jdbcType=VARCHAR},
+	      </if>
+	      <if test="owner != null" >
+	        	and owner = #{owner,jdbcType=VARCHAR},
+	      </if>
+	      <if test="address != null" >
+	       	 and address = #{address,jdbcType=VARCHAR},
+	      </if>
+	      <if test="area != null" >
+	        	and area = #{area,jdbcType=VARCHAR},
+	      </if>
+	      <if test="admin != null" >
+	        	and admin = #{admin,jdbcType=VARCHAR},
+	      </if>
+	      <if test="tel != null" >
+	       	 and tel = #{tel,jdbcType=VARCHAR},
+	      </if>
+	      <if test="email != null" >
+	       	 and email = #{email,jdbcType=VARCHAR},
+	      </if>
+	      <if test="fax != null" >
+	       	 and fax = #{fax,jdbcType=VARCHAR},
+	      </if>
+	      <if test="remark != null" >
+	       	 and remark = #{remark,jdbcType=VARCHAR},
+	      </if>
+	      <if test="delFlg != null" >
+	        	and delFlg = #{delFlg,jdbcType=VARCHAR},
+	      </if>
+	      <if test="creator != null" >
+	        	and creator = #{creator,jdbcType=VARCHAR},
+	      </if>
+	      <if test="createTime != null" >
+	        	and createTime = #{createTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="updater != null" >
+	        	and updater = #{updater,jdbcType=VARCHAR},
+	      </if>
+	      <if test="updateTime != null" >
+	        	and updateTime = #{updateTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="searchKey != null and searchKey!=''" >
+	        	and (warehouseNum like CONCAT('%','${searchKey}%}','%' )  or  
+	        	warehouseName like CONCAT('%','${searchKey}','%' ) or 
+	        	warehouseType like CONCAT('%','${searchKey}','%' ) or 
+	        	address like CONCAT('%','${searchKey}','%' ) or 
+	        	area like CONCAT('%','${searchKey}','%' ))
+	      </if>
+	      order by createTime DESC
+	      limit ${firstResult},${pageSize} -->
+  </select>
+  
+  <select id="selectListByCondition" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.CompanyQualification" >
+    select 
+    <include refid="Base_Column_List" />
+    from companyQualification
+       	where delFlg ='0'
+     <if test="comId != null" >
+        and comId = #{comId,jdbcType=VARCHAR}
+      </if>
+  </select>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.CompanyQualification" >
+    update companyQualification
+    <set >
+    	serialNum = #{item.serialNum,jdbcType=VARCHAR},
+      <if test="comId != null" >
+        comId = #{comId,jdbcType=VARCHAR},
+      </if>
+      <if test="qualificationNum != null" >
+        qualificationNum = #{qualificationNum,jdbcType=VARCHAR},
+      </if>
+      <if test="validityDate != null" >
+        validityDate = #{validityDate,jdbcType=DATE},
+      </if>
+      <if test="qualificationName != null" >
+        qualificationName = #{qualificationName,jdbcType=VARCHAR},
+      </if>
+      <if test="qualificatioImage != null" >
+        qualificatioImage = #{qualificatioImage,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        delFlg = #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        updater = #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateSelectiveBatch" parameterType="java.util.List" >
+   <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+	    update companyQualification
+	    <set >
+	   		 serialNum = #{item.serialNum,jdbcType=VARCHAR},
+	      <if test="item.comId != null" >
+	        comId = #{item.comId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="item.qualificationNum != null" >
+	        qualificationNum = #{item.qualificationNum,jdbcType=VARCHAR},
+	      </if>
+	      <if test="item.validityDate != null" >
+	        validityDate = #{item.validityDate,jdbcType=DATE},
+	      </if>
+	      <if test="item.qualificationName != null" >
+	        qualificationName = #{item.qualificationName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="item.qualificatioImage != null" >
+	        qualificatioImage = #{item.qualificatioImage,jdbcType=VARCHAR},
+	      </if>
+	      <if test="item.delFlg != null" >
+	        delFlg = #{item.delFlg,jdbcType=VARCHAR},
+	      </if>
+	      <if test="item.creator != null" >
+	        creator = #{item.creator,jdbcType=VARCHAR},
+	      </if>
+	      <if test="item.createTime != null" >
+	        createTime = #{item.createTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="item.updater != null" >
+	        updater = #{item.updater,jdbcType=VARCHAR},
+	      </if>
+	      <if test="item.updateTime != null" >
+	        updateTime = #{item.updateTime,jdbcType=TIMESTAMP},
+	      </if>
+	    </set>
+	    where serialNum = #{item.serialNum,jdbcType=VARCHAR}
+    </foreach>
+  </update>
+</mapper>
