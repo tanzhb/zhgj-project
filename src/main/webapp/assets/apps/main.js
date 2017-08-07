@@ -265,7 +265,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                     return $ocLazyLoad.load({
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
-                           'assets/global/plugins/datatables/datatables.min.css', 
                         files: [      
                             'assets/global/plugins/datatables/datatables.all.min.js',
                             'assets/global/plugins/datatables/datatables.min.css',                           

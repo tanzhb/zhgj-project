@@ -367,8 +367,8 @@ angular
 							
 							
 							
-							$http.post('rest/warehouseposition/viewWarehousepositionList').then(function(result){//加载库位数据
+							/*$http.post('rest/warehouseposition/viewWarehousepositionList').then(function(result){//加载库位数据
 								debugger;
 				                $scope.warehousepositions = result.data;
-				            })
+				            })*/
 						} ]);
