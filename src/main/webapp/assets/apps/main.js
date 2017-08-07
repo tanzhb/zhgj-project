@@ -265,7 +265,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                     return $ocLazyLoad.load({
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
-                           'assets/global/plugins/datatables/datatables.min.css', 
                         files: [      
                             'assets/global/plugins/datatables/datatables.all.min.js',
                             'assets/global/plugins/datatables/datatables.min.css',                           
@@ -365,7 +364,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        		}]
 	        	}
 	        })         
-	           .state('addWarehouse', {
+	           .state('warehouse', {
 	        url: "/warehouse",
             templateUrl: "rest/warehouse/viewWarehouseList",
             data: {pageTitle: '仓库信息'},
@@ -390,6 +389,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 							'assets/layouts/layout2/scripts/demo.min.js',
 							'assets/layouts/global/scripts/quick-sidebar.min.js',
 							'assets/layouts/global/scripts/quick-nav.min.js',*/
+							 'assets/global/plugins/bootstrap-toastr/toastr.js',
+        				        'assets/global/plugins/bootstrap-toastr/toastr.css',
                            'assets/global/plugins/datatables/datatables.min.css', 
                            'assets/global/plugins/datatables/datatables.min.js',
 	                       /* 'assets/global/plugins/datatables/datatables.all.min.js',*/
@@ -418,7 +419,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                             'assets/global/plugins/datatables/datatables.min.css', */
                             'assets/global/plugins/datatables/datatables.min.js',
                             /*'assets/pages/scripts/table-datatables-managed.min.js',*/
-
+                            'assets/global/plugins/bootstrap-toastr/toastr.js',
+    				        'assets/global/plugins/bootstrap-toastr/toastr.css',
                             'assets/apps/controllers/WarehouseController.js'
                         ]
                     });
