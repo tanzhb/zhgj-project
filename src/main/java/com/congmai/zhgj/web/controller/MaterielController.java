@@ -45,9 +45,9 @@ public class MaterielController {
     /**
      * 保存物料
      */
-    @RequestMapping("/save")
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
-    public Materiel save(Materiel materiel, HttpServletRequest request) {
+    public Materiel save(@RequestBody Materiel materiel, HttpServletRequest request) {
     	if(materiel.getSerialNum()==null||materiel.getSerialNum().isEmpty()){//新增
     		insertNew(materiel, request);
     	}else{//编辑升级
@@ -73,7 +73,7 @@ public class MaterielController {
 		materiel.setIsLatestVersion("1");
 		
 		//根据物料id获取最新版本物料
-		Materiel lastmateriel = getMaterielInfoByMaterielId(materiel.getMaterielId());
+		Materiel lastmateriel = materielService.getMaterielInfoByMaterielId(materiel.getMaterielId());
 		//生成当前版本号为最新版本+1
 		if(lastmateriel==null){
 			materiel.setVersionNO("1");
@@ -82,11 +82,11 @@ public class MaterielController {
 		}
 		materiel.setStatus("1");
 		
-		if("true".equals(materiel.getIsBOM())){
+/*		if("true".equals(materiel.getIsBOM())){
 			materiel.setIsBOM("1");
 		}else{
 			materiel.setIsBOM("0");
-		}
+		}*/
 		
 		materielService.updateVersion(materiel);
 	}
@@ -110,11 +110,11 @@ public class MaterielController {
 		materiel.setVersionNO("1");
 		materiel.setStatus("1");
 		
-		if("true".equals(materiel.getIsBOM())){
+/*		if("true".equals(materiel.getIsBOM())){
 			materiel.setIsBOM("1");
 		}else{
 			materiel.setIsBOM("0");
-		}
+		}*/
 		
 		materielService.insert(materiel);
 	}
@@ -304,32 +304,15 @@ public class MaterielController {
 	@ResponseBody
 	public Materiel getMaterielInfo(String serialNum, HttpServletRequest request,Materiel materiel) {
 		materiel = materielService.selectById(serialNum);
-		if("1".equals(materiel.getIsBOM())){
-			materiel.setIsBOM("true");
+/*		if("1".equals(materiel.getIsBOM())){
+			materiel.setIsBOMcheck(true);
 		}else{
-			materiel.setIsBOM("false");
-		}
+			materiel.setIsBOMcheck(false);
+		}*/
 		return materiel;
 	}
     
 	
-	
-	public Materiel getMaterielInfoByMaterielId(String materielId) {
-		MaterielExample m =new MaterielExample();
-    	//and 条件1
-    	Criteria criteria =  m.createCriteria();
-    	criteria.andIsLatestVersionEqualTo("1");
-    	criteria.andMaterielIdEqualTo(materielId);
-    	criteria.andDelFlgEqualTo("0");
-    	//排序字段
-    	m.setOrderByClause("updateTime DESC");
-    	List<Materiel> materielList = materielService.selectList(m);
-    	
-    	if(materielList==null||materielList.size()<1){
-    		return null;
-    	}
-		return materielList.get(0);
-	}
     
     
     

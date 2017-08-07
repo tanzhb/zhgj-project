@@ -1,7 +1,6 @@
-<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!-- BEGIN PAGE HEADER-->
 <h3 class="page-title"> 物料信息
-    <small>新增</small>
 </h3>
 <div class="page-bar">
     <ul class="page-breadcrumb">
@@ -11,20 +10,35 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a ui-sref="materiel">物料信息</a>
+            <a ui-sref="materiel">物料列表</a>
         </li>
         <li>
-            <a ui-sref="addMateriel">新增物料</a>
+            <a>{{opration}}</a>
         </li>
     </ul>
 </div>
-<!-- END PAGE HEADER-->
-    <div class="portlet light bordered">
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="portlet bordered">
+            <div class="portlet-body">
+				<div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption">基本信息</div>
+                            <div class="tools">
+                            	<button type="submit" ng-click="save(materielForm.$valid)" ng-hide="materielInput" class="btn blue  btn-outline  btn-sm">
+                               		<i class="fa fa-save"></i> 保存 </button>
+                               <button ng-click="cancel()" type="button" ng-hide="materielInput" class="btn red  btn-outline  btn-sm">
+                               		<i class="fa fa-undo"></i> 取消 </button>
+                               <button ng-click="edit()" type="button" ng-show="materielShow" class="btn blue  btn-outline  btn-sm">
+                               		<i class="fa fa-edit"></i> 编辑 </button>
+                                 <a href="javascript:;" class="collapse"> </a>
+                             </div>
+                        </div>
           <div class="portlet-body form">
               <!-- BEGIN FORM-->
-              <form id="form_sample_1" name="materielForm"  class="form-horizontal">
+              <form action="#" id="form_sample_1" name="materielForm"  class="form-horizontal">
                   <div class="form-body">
-                      <h3 class="form-section">基本信息</h3>
                       <div class="alert alert-danger display-hide">
                           <button class="close" data-close="alert"></button> 请先输入正确数据！ </div>
                       <div class="row">
@@ -401,11 +415,10 @@
                                   <div class="col-md-9">
                                   		<div class="input-group" ng-hide="materielInput">
                                             <div class="icheck-inline">
-                                                <label class="" >
-                                                    <input type="checkbox" class="icheck"  ng-model="materiel.isBOM" > 是 </label>
+                                                <input type="checkbox" class="icheck" id="isBOMcheck" > 是  </label>
                                             </div>
                                         </div>
-                                        <p class="form-control-static" ng-show="materielShow"> {{materiel.isBOM}} </p>
+                                        <p class="form-control-static" ng-show="materielShow" > {{materiel.isBOM=="1"?'是':'否'}} </p>
                                   </div>
                               </div>
                           </div>
@@ -422,182 +435,178 @@
                           <!--/span-->
                       </div>
                       <!--/row-->
-                      
-                      
-
-  
                   </div>
-                  <div class="form-actions">
-                      <div class="row">
-                          <div class="col-md-6">
-                              <div class="row">
-                                  <div class="col-md-offset-3 col-md-9">
-                                      <button type="submit" ng-click="save(materielForm.$valid)" ng-hide="materielInput" class="btn green">保存</button>
-                                      <button ng-click="cancel()" type="button" ng-hide="materielInput" class="btn default">取消</button>
-                                      <button ng-click="edit()" type="button" ng-show="materielShow" class="btn green"><i class="fa fa-pencil"></i>编辑</button>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
+				</form>
+             </div>  
+             </div>
+      </div>
+</div>
+</div>
+</div>
+<!-- <div class="row">
+    <div class="col-md-12">
+        BEGIN EXAMPLE TABLE PORTLET
+        <div class="portlet bordered">
+            <div class="portlet-body">
+				<div class="portlet light ">   
+                  <div class="portlet-title">
+                       <div class="caption">包装信息</div>
+                       <div class="tools">
+                       	 	<button type="submit" ng-click="savePackage(materielPackageForm.$valid)" ng-hide="materielPackageInput" class="btn blue  btn-outline  btn-sm">
+                          		<i class="fa fa-save"></i> 保存 </button>
+                          <button ng-click="cancelPackage()" type="button" ng-hide="materielPackageInput" class="btn red  btn-outline  btn-sm">
+                          		<i class="fa fa-undo"></i> 取消 </button>
+                          <button ng-click="editPackage()" type="button" ng-show="materielPackageShow" class="btn blue  btn-outline  btn-sm">
+                          		<i class="fa fa-edit"></i> 编辑 </button>
+                          		<a href="javascript:;" class="collapse"> </a>
+                        </div>
+                   </div>
+           <div class="portlet-body form">
+     BEGIN FORM
+			     <form id="form_Package" name="materielPackageForm"  class="form-horizontal">
+			         <div class="form-body">
+			             <div class="alert alert-danger display-hide">
+			                 <button class="close" data-close="alert"></button> 请先输入正确数据！ </div>
+			                  <div class="row">
+			                      <div class="col-md-2">
+			                          <div class="form-group form-md-line-input" style="text-align: center;">
+			                              <label class="control-label">包装编号<span class="required" aria-required="true"> * </span></label>
+			                          </div>
+			                      </div>
+			                      <div class="col-md-2">
+			                          <div class="form-group form-md-line-input" style="text-align: center;">
+			                              <label class="control-label">包装规格<span class="required" aria-required="true"> * </span></label>
+			                          </div>
+			                      </div>
+			                      <div class="col-md-1">
+			                          <div class="form-group form-md-line-input" style="text-align: center;">
+			                              <label class="control-label">包装单位<span class="required" aria-required="true"> * </span></label>
+			                          </div>
+			                      </div>
+			                      <div class="col-md-1">
+			                          <div class="form-group form-md-line-input" style="text-align: center;">
+			                              <label class="control-label">长</label>
+			                          </div>
+			                      </div>
+			                      <div class="col-md-1">
+			                          <div class="form-group form-md-line-input" style="text-align: center;">
+			                              <label class="control-label">宽</label>
+			                          </div>
+			                      </div>
+			                      <div class="col-md-1">
+			                          <div class="form-group form-md-line-input" style="text-align: center;">
+			                              <label class="control-label">高</label>
+			                          </div>
+			                      </div>
+			                      <div class="col-md-2">
+			                          <div class="form-group form-md-line-input" style="text-align: center;">
+			                              <label class="control-label">包装体积</label>
+			                          </div>
+			                      </div>
+			                      <div class="col-md-2">
+			                          <div class="form-group form-md-line-input" style="text-align: center;">
+			                              <label class="control-label">包装单位换算<span class="required" aria-required="true"> * </span></label>
+			                          </div>
+			                      </div>
+			                  </div>
+			                  <div class="row">
+			                      <div class="col-md-2">
+			                          <div class="form-group form-md-line-input" style="text-align: center;">
+			                              <div class="col-md-12">
+			                              <input type="text" name="packageNum" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packageNum"  >
+			                                  <div class="form-control-focus"> </div>
+			                                  <span class="help-block">请输入包装编号</span>
+			                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packageNum}} </p>
+			                              </div>
+			                          </div>
+			                      </div>
+			                      <div class="col-md-2">
+			                          <div class="form-group form-md-line-input" style="text-align: center;">
+			                              <div class="col-md-12">
+			                              <input type="text" name="packageSpecifications" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packageSpecifications"  >
+			                                  <div class="form-control-focus"> </div>
+			                                  <span class="help-block">请输入包装规格</span>
+			                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packageSpecifications}} </p>
+			                              </div>
+			                              
+			                          </div>
+			                      </div>
+			                      <div class="col-md-1">
+			                          <div class="form-group form-md-line-input" style="text-align: center;">
+			                              <div class="col-md-12">
+			                              <input type="text" name="packageUnit" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packageUnit"  >
+			                                  <div class="form-control-focus"> </div>
+			                                  <span class="help-block">请输入包装单位</span>
+			                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packageUnit}} </p>
+			                              </div>
+			                              
+			                          </div>
+			                      </div>
+			                      <div class="col-md-1">
+			                          <div class="form-group form-md-line-input" style="text-align: center;">
+			                              <div class="col-md-12">
+			                              <input type="text" name="packagelength" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packagelength"  >
+			                                  <div class="form-control-focus"> </div>
+			                                  <span class="help-block">请输入长度</span>
+			                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packagelength}} </p>
+			                              </div>
+			                              
+			                          </div>
+			                      </div>
+			                      <div class="col-md-1">
+			                          <div class="form-group form-md-line-input" style="text-align: center;">
+			                              <div class="col-md-12">
+			                              <input type="text" name="packagewidth" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packagewidth"  >
+			                                  <div class="form-control-focus"> </div>
+			                                  <span class="help-block">请输入宽度</span>
+			                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packagewidth}} </p>
+			                              </div>
+			                              
+			                          </div>
+			                      </div>
+			                      <div class="col-md-1">
+			                          <div class="form-group form-md-line-input" style="text-align: center;">
+			                              <div class="col-md-12">
+			                              <input type="text" name="packageheight" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packageheight"  >
+			                                  <div class="form-control-focus"> </div>
+			                                  <span class="help-block">请输入高度</span>
+			                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packageheight}} </p>
+			                              </div>
+			                              
+			                          </div>
+			                      </div>
+			                      <div class="col-md-2">
+			                          <div class="form-group form-md-line-input" style="text-align: center;">
+			                              <div class="col-md-12">
+			                              <input type="text" name="packagevolume" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packagevolume"  >
+			                                  <div class="form-control-focus"> </div>
+			                                  <span class="help-block">请输入包装体积</span>
+			                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packagevolume}} </p>
+			                              </div>
+			                              
+			                          </div>
+			                      </div>
+			                      <div class="col-md-2">
+			                          <div class="form-group form-md-line-input" style="text-align: center;">
+			                              <div class="col-md-12">
+			                              <input type="text" name="packageUnitConversion" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packageUnitConversion"  >
+			                                  <div class="form-control-focus"> </div>
+			                                  <span class="help-block">请输入包装单位换算</span>
+			                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packageUnitConversion}} </p>
+			                              </div>
+			                              
+			                          </div>
+			                      </div>
+			                  </div>
+			             </div>
+                  </form>
                   
-                  <div class="form-body">
-                      <h3 class="form-section">包装信息</h3>
-                  </div> 
-                  <div class="row">
-                      <div class="col-md-2">
-                          <div class="form-group form-md-line-input" style="text-align: center;">
-                              <label class="control-label">包装编号<span class="required" aria-required="true"> * </span></label>
-                          </div>
-                      </div>
-                      <!--/span-->
-                      <div class="col-md-2">
-                          <div class="form-group form-md-line-input" style="text-align: center;">
-                              <label class="control-label">包装规格<span class="required" aria-required="true"> * </span></label>
-                          </div>
-                      </div>
-                      <div class="col-md-1">
-                          <div class="form-group form-md-line-input" style="text-align: center;">
-                              <label class="control-label">包装单位<span class="required" aria-required="true"> * </span></label>
-                          </div>
-                      </div>
-                      <div class="col-md-1">
-                          <div class="form-group form-md-line-input" style="text-align: center;">
-                              <label class="control-label">长</label>
-                          </div>
-                      </div>
-                      <div class="col-md-1">
-                          <div class="form-group form-md-line-input" style="text-align: center;">
-                              <label class="control-label">宽</label>
-                          </div>
-                      </div>
-                      <div class="col-md-1">
-                          <div class="form-group form-md-line-input" style="text-align: center;">
-                              <label class="control-label">高</label>
-                          </div>
-                      </div>
-                      <div class="col-md-2">
-                          <div class="form-group form-md-line-input" style="text-align: center;">
-                              <label class="control-label">包装体积</label>
-                          </div>
-                      </div>
-                      <div class="col-md-2">
-                          <div class="form-group form-md-line-input" style="text-align: center;">
-                              <label class="control-label">包装单位换算<span class="required" aria-required="true"> * </span></label>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="row">
-                      <div class="col-md-2">
-                          <div class="form-group form-md-line-input">
-                              <div class="col-md-12">
-                              <input type="text" name="packageNum" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packageNum"  >
-                                  <div class="form-control-focus"> </div>
-                                  <span class="help-block">请输入包装编号</span>
-                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packageNum}} </p>
-                              </div>
-                          </div>
-                      </div>
-                      <!--/span-->
-                      <div class="col-md-2">
-                          <div class="form-group form-md-line-input">
-                              <div class="col-md-12">
-                              <input type="text" name="packageSpecifications" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packageSpecifications"  >
-                                  <div class="form-control-focus"> </div>
-                                  <span class="help-block">请输入包装规格</span>
-                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packageSpecifications}} </p>
-                              </div>
-                              
-                          </div>
-                      </div>
-                      <div class="col-md-1">
-                          <div class="form-group form-md-line-input">
-                              <div class="col-md-12">
-                              <input type="text" name="packageUnit" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packageUnit"  >
-                                  <div class="form-control-focus"> </div>
-                                  <span class="help-block">请输入包装单位</span>
-                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packageUnit}} </p>
-                              </div>
-                              
-                          </div>
-                      </div>
-                      <div class="col-md-1">
-                          <div class="form-group form-md-line-input">
-                              <div class="col-md-12">
-                              <input type="text" name="packagelength" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packagelength"  >
-                                  <div class="form-control-focus"> </div>
-                                  <span class="help-block">请输入长度</span>
-                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packagelength}} </p>
-                              </div>
-                              
-                          </div>
-                      </div>
-                      <div class="col-md-1">
-                          <div class="form-group form-md-line-input">
-                              <div class="col-md-12">
-                              <input type="text" name="packagewidth" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packagewidth"  >
-                                  <div class="form-control-focus"> </div>
-                                  <span class="help-block">请输入宽度</span>
-                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packagewidth}} </p>
-                              </div>
-                              
-                          </div>
-                      </div>
-                      <div class="col-md-1">
-                          <div class="form-group form-md-line-input">
-                              <div class="col-md-12">
-                              <input type="text" name="packageheight" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packageheight"  >
-                                  <div class="form-control-focus"> </div>
-                                  <span class="help-block">请输入高度</span>
-                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packageheight}} </p>
-                              </div>
-                              
-                          </div>
-                      </div>
-                      <div class="col-md-2">
-                          <div class="form-group form-md-line-input">
-                              <div class="col-md-12">
-                              <input type="text" name="packagevolume" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packagevolume"  >
-                                  <div class="form-control-focus"> </div>
-                                  <span class="help-block">请输入包装体积</span>
-                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packagevolume}} </p>
-                              </div>
-                              
-                          </div>
-                      </div>
-                      <div class="col-md-2">
-                          <div class="form-group form-md-line-input">
-                              <div class="col-md-12">
-                              <input type="text" name="packageUnitConversion" class="form-control" ng-hide="materielPackageInput" ng-model="materiel.packageUnitConversion"  >
-                                  <div class="form-control-focus"> </div>
-                                  <span class="help-block">请输入包装单位换算</span>
-                                  <p class="form-control-static" ng-show="materielPackageShow"> {{materiel.packageUnitConversion}} </p>
-                              </div>
-                              
-                          </div>
-                      </div>
-                  </div>
-                  <div class="form-actions">
-                      <div class="row">
-                          <div class="col-md-6">
-                              <div class="row">
-                                  <div class="col-md-offset-3 col-md-9">
-                                      <button type="submit" ng-click="savePackage(materielForm.$valid)" ng-hide="materielPackageInput" class="btn green">保存</button>
-                                      <button ng-click="cancelPackage()" type="button" ng-hide="materielPackageInput" class="btn default">取消</button>
-                                      <button ng-click="editPackage()" type="button" ng-show="materielPackageShow" class="btn green"><i class="fa fa-pencil"></i>编辑</button>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-                  
-                  
-              </form>
-              
-              
-
-              <!-- END FORM-->
+              END FORM
+          </div>
           </div>
       </div>
+</div>
+</div>
+</div> -->
 
 <jsp:include  page="selectMateriel.jsp"/>

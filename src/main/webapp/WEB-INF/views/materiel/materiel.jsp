@@ -1,6 +1,6 @@
-<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!-- BEGIN PAGE HEADER-->
-<h3 class="page-title"> 物料信息
+<h3 class="page-title"> 物料列表
     <small></small>
 </h3>
 <div class="page-bar">
@@ -16,7 +16,7 @@
     </ul>
 </div>
 <div class="row">
-     <div class="col-md-4">
+<!--      <div class="col-md-4">
          <div class="portlet light ">
              <div class="portlet-title">
                  <div class="caption">
@@ -29,8 +29,8 @@
                  </div>
              </div>
          </div>
-	</div>
-	<div class="col-md-8">
+	</div> -->
+	<div class="col-md-12">
         <div class="row">
 	        <div class="portlet box red">
 	            <div class="portlet-title">
@@ -137,6 +137,12 @@
                         <li>
                             <a href="#" data-target="#tab_2_4"  data-toggle="tab"> 包装信息 </a>
                         </li>
+                        <li>
+                            <a href="#" data-target="#tab_2_5"  data-toggle="tab"> 库存信息 </a>
+                        </li>
+                        <li>
+                            <a href="#" data-target="#tab_2_6"  data-toggle="tab"> 价格趋势 </a>
+                        </li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane fade active in" id="tab_2_1">
@@ -161,18 +167,7 @@
 					            </div>
 					    </div>
                         <div class="tab-pane fade" id="tab_2_2">
-					            <div class="portlet-body">
-					                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_1">
-					                    <thead>
-					                        <tr>
-					                            <th> 客户编码 </th>
-					                            <th> 客户名称 </th>
-					                        </tr>
-					                    </thead>
-					                    <tbody>
-					                    </tbody>
-					                </table>
-					            </div>
+					            未关联
                         </div>
                         <div class="tab-pane fade" id="tab_2_3">
 					            <div class="portlet-body">
@@ -221,6 +216,16 @@
 					                    </tbody>
 					                </table>
 					        </div>
+                        </div>
+                        <div class="tab-pane fade" id="tab_2_5">
+					            <div class="portlet-body">
+					                	未关联
+					            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tab_2_6">
+					            <div class="portlet-body">
+					                	未关联
+					            </div>
                         </div>
                     </div>
                 </div>
@@ -562,7 +567,7 @@
                               <div class="form-group">
                                   <label class="control-label col-md-5">是否BOM物料</label>
                                   <label class="control-label col-md-7">
-                                        {{materiel.isBOM}}
+                                        {{materiel.isBOM=="1"?'是':'否'}}
                                   </label>
                               </div>
                           </div>

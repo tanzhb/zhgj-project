@@ -196,8 +196,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                           'assets/global/plugins/datatables/datatables.all.min.js',
                           'assets/pages/scripts/table-datatables-fixedheader.min.js',
 
-                            'assets/global/plugins/jstree/dist/jstree.min.js',
-                            'assets/pages/scripts/ui-tree.min.js',
+                            /*'assets/global/plugins/jstree/dist/jstree.min.js',
+                            'assets/pages/scripts/ui-tree.min.js',*/
                             'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js',
                             'assets/apps/service/materielService.js',
                             'assets/apps/controllers/materielController.js'
@@ -223,7 +223,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
 'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css',
 'assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css',
-'assets/global/plugins/icheck/skins/all.css',
+
 'assets/global/plugins/select2/js/select2.full.min.js',
 'assets/global/plugins/jquery-validation/js/jquery.validate.min.js',
 'assets/global/plugins/jquery-validation/js/localization/messages_zh.min.js',
@@ -235,6 +235,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 'assets/global/plugins/bootstrap-markdown/lib/markdown.js',
 'assets/global/plugins/bootstrap-markdown/js/bootstrap-markdown.js',
 
+'assets/global/plugins/icheck/skins/all.css',
+'assets/global/plugins/icheck/icheck.min.js',
 'assets/pages/scripts/form-icheck.min.js',
 'assets/pages/scripts/form-validation.min.js',
 'assets/apps/service/materielService.js',
@@ -245,8 +247,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 
 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 'assets/global/plugins/datatables/datatables.all.min.js',
-'assets/pages/scripts/table-datatables-fixedheader.min.js'/*,
-'assets/apps/controllers/selectMaterielController.js'*/
+'assets/pages/scripts/table-datatables-fixedheader.min.js',
+'assets/apps/controllers/selectMaterielController.js'
 
 
                         ]

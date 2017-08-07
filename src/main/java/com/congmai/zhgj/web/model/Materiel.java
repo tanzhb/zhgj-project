@@ -99,6 +99,8 @@ public class Materiel {
     private String updater;
 
     private Date updateTime;
+    
+/*    private boolean isBOMcheck;*/
 
     public String getSerialNum() {
         return serialNum;
@@ -468,5 +470,13 @@ public class Materiel {
 	public void setParentMateriel(Materiel parentMateriel) {
 		this.parentMateriel = parentMateriel;
 	}
+
+/*	public boolean getIsBOMcheck() {
+		return isBOMcheck;
+	}
+
+	public void setIsBOMcheck(boolean isBOMcheck) {
+		this.isBOMcheck = isBOMcheck;
+	}*/
     
 }
