@@ -25,7 +25,7 @@ import com.congmai.zhgj.web.service.UserService;
  * @version 1.0.0
  */
 @Service
-public class UserServiceImpl extends GenericServiceImpl<User, Long> implements
+public class UserServiceImpl extends GenericServiceImpl<User, String> implements
 		UserService {
 
 	@Resource
@@ -42,7 +42,7 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements
 	}
 
 	@Override
-	public int delete(Long id) {
+	public int delete(String id) {
 		return userMapper.deleteByPrimaryKey(id);
 	}
 
@@ -51,12 +51,12 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements
 	}
 
 	@Override
-	public User selectById(Long id) {
+	public User selectById(String id) {
 		return userMapper.selectByPrimaryKey(id);
 	}
 
 	@Override
-	public GenericDao<User, Long> getDao() {
+	public GenericDao<User, String> getDao() {
 		return userMapper;
 	}
 

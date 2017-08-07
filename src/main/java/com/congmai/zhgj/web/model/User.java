@@ -175,8 +175,8 @@ public class User {
 		this.creator = creator;
 	}
 
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
-	@JsonSerialize(using=JsonDateSerializer.class)  
+//	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
+//	@JsonSerialize(using=JsonDateSerializer.class)  
 	public Date getCreateTime() {
 		return createTime;
 	}
@@ -196,8 +196,8 @@ public class User {
 		this.updater = updater;
 	}
 
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
-	@JsonSerialize(using=JsonDateSerializer.class)  
+//	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
+//	@JsonSerialize(using=JsonDateSerializer.class)  
 	public Date getUpdateTime() {
 		return updateTime;
 	}
