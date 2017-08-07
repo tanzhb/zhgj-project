@@ -50,7 +50,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope', '$
 					
 					var myJsDate2=$filter('date')($scope.contractVO.signDate,'MM/dd/yyyy');
 					$scope.contractVO.signDate=myJsDate2;
-      		     },
+      		     }
       		    /* function(error){
       		         $scope.error = error;
       		     }*/
