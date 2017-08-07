@@ -289,10 +289,17 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         			return $ocLazyLoad.load({
         				name: 'MetronicApp',
         				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
-        				files: [                             
-        				        'assets/global/plugins/datatables/datatables.min.css', 
-        				        'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-        				        'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
+        				files: [       
+'assets/global/plugins/datatables/datatables.min.css',                           
+'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+
+//'assets/global/plugins/datatables/datatables.min.js',
+'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+
+        				        //'assets/global/plugins/datatables/datatables.min.css', 
+        				        //'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+        				        //'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+        				       // 'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
         				        'assets/global/plugins/datatables/datatables.all.min.js',
         				        'assets/global/plugins/bootstrap-toastr/toastr.js',
         				        'assets/global/plugins/bootstrap-toastr/toastr.css',
@@ -310,14 +317,16 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         				        'assets/pages/scripts/ui-bootbox.min.js',
         				        'assets/global/plugins/jquery.blockui.min.js',
         				        'assets/pages/scripts/ui-blockui.min.js',
-        				        'assets/apps/scripts/pageHandle.js'
+        				        'assets/apps/scripts/pageHandle.js',
+        				        'assets/pages/scripts/table-datatables-fixedheader.min.js',
+        				        'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js'
         				        ]
         			});
         		}]
         	}
         })
-d', {
-	        	url: "/companyAdd",
+        .state('companyAdd', {
+	        	url: "/companyAdd?:comId",
 	        	templateUrl: "rest/company/companyAdd",
 	        	data: {pageTitle: '新建企业信息'},
 	        	reload:true, 
@@ -329,7 +338,6 @@ d', {
 	        				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
 	        				files: [                             
 	        				        'assets/global/plugins/datatables/datatables.min.css', 
-	        				        'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 	        				        'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
 	        				        'assets/global/plugins/datatables/datatables.all.min.js',
 	        				        'assets/global/plugins/bootstrap-toastr/toastr.js',
@@ -348,12 +356,17 @@ d', {
 	        				        'assets/pages/scripts/ui-bootbox.min.js',
 	        				        'assets/global/plugins/jquery.blockui.min.js',
 	        				        'assets/pages/scripts/ui-blockui.min.js',
-	        				        'assets/apps/scripts/pageHandle.js'
+	        				        'assets/apps/scripts/pageHandle.js',
+	        				        'assets/global/plugins/jquery-validation/js/jquery.validate.min.js',
+	        				        'assets/pages/scripts/form-validation.min.js'
+	        				        
 	        				        ]
 	        			});
 	        		}]
 	        	}
-	        })            url: "/warehouse",
+	        })         
+	           .state('addWarehouse', {
+	        url: "/warehouse",
             templateUrl: "rest/warehouse/viewWarehouseList",
             data: {pageTitle: '仓库信息'},
             controller: "WarehouseController",
