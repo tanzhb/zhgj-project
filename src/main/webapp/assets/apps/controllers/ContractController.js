@@ -215,7 +215,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope', '$
 				pageLength : 10,// 每页显示数量
 				processing : true,// loading等待框
 				// serverSide: true,
-				ajax: "http://localhost:8080/zhgj-web/rest/contract/findAllUserContract",//加载数据中user表数据
+				ajax: "rest/contract/findAllUserContract",//加载数据中user表数据
 				"aoColumns": [
                               { mData: 'id'},
 				              { mData: 'contractNum' },
