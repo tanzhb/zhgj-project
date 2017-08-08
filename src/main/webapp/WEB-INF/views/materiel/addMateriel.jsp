@@ -10,7 +10,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a ui-sref="materiel">物料列表</a>
+            <a ui-sref="materiel">物料信息</a>
         </li>
         <li>
             <a>{{opration}}</a>
@@ -26,7 +26,7 @@
                         <div class="portlet-title">
                             <div class="caption">基本信息</div>
                             <div class="tools">
-                            	<button type="submit" ng-click="save(materielForm.$valid)" ng-hide="materielInput" class="btn blue  btn-outline  btn-sm">
+                            	<button type="submit" ng-click="save()" ng-hide="materielInput" class="btn blue  btn-outline  btn-sm">
                                		<i class="fa fa-save"></i> 保存 </button>
                                <button ng-click="cancel()" type="button" ng-hide="materielInput" class="btn red  btn-outline  btn-sm">
                                		<i class="fa fa-undo"></i> 取消 </button>
@@ -37,7 +37,7 @@
                         </div>
           <div class="portlet-body form">
               <!-- BEGIN FORM-->
-              <form action="#" id="form_sample_1" name="materielForm"  class="form-horizontal">
+              <form action="#" id="form_sample_1"  class="form-horizontal">
                   <div class="form-body">
                       <div class="alert alert-danger display-hide">
                           <button class="close" data-close="alert"></button> 请先输入正确数据！ </div>
@@ -173,7 +173,7 @@
                               <div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3">上级产品</label>
                                   <div class="col-md-9">
-                                      <input type="text" ng-hide="materielInput" ng-click="selectParentMateriel()" data-target="#basicMaterielInfo" data-toggle="modal" ng-model="materiel.parentMateriel.materielName" class="form-control" >
+                                      <input type="text" ng-hide="materielInput"  data-target="#basicMaterielInfo" data-toggle="modal" ng-model="materiel.parentMateriel.materielName" class="form-control" >
                                       <div class="form-control-focus"> </div>
                                        <span class="help-block">请选择上级产品</span>
                                       <p class="form-control-static" ng-show="materielShow"> {{materiel.parentMateriel.materielName}} </p>
@@ -437,33 +437,21 @@
                       <!--/row-->
                   </div>
 				</form>
-             </div>  
-             </div>
-      </div>
-</div>
-</div>
-</div>
-<!-- <div class="row">
-    <div class="col-md-12">
-        BEGIN EXAMPLE TABLE PORTLET
-        <div class="portlet bordered">
-            <div class="portlet-body">
-				<div class="portlet light ">   
+             </div>   
                   <div class="portlet-title">
                        <div class="caption">包装信息</div>
                        <div class="tools">
-                       	 	<button type="submit" ng-click="savePackage(materielPackageForm.$valid)" ng-hide="materielPackageInput" class="btn blue  btn-outline  btn-sm">
+                       	 	<button type="submit" ng-click="savePackage()" ng-hide="materielPackageInput" class="btn blue  btn-outline  btn-sm">
                           		<i class="fa fa-save"></i> 保存 </button>
                           <button ng-click="cancelPackage()" type="button" ng-hide="materielPackageInput" class="btn red  btn-outline  btn-sm">
                           		<i class="fa fa-undo"></i> 取消 </button>
                           <button ng-click="editPackage()" type="button" ng-show="materielPackageShow" class="btn blue  btn-outline  btn-sm">
                           		<i class="fa fa-edit"></i> 编辑 </button>
-                          		<a href="javascript:;" class="collapse"> </a>
                         </div>
                    </div>
            <div class="portlet-body form">
-     BEGIN FORM
-			     <form id="form_Package" name="materielPackageForm"  class="form-horizontal">
+
+			     <form id="form_sample_2"   class="form-horizontal">
 			         <div class="form-body">
 			             <div class="alert alert-danger display-hide">
 			                 <button class="close" data-close="alert"></button> 请先输入正确数据！ </div>
@@ -600,13 +588,192 @@
 			                  </div>
 			             </div>
                   </form>
-                  
-              END FORM
+
           </div>
+          
+          
+          <!-- BOM start-->
+          <div class="portlet-title" ng-show="BOMShow">
+               <div class="caption">BOM</div>
+               <div class="tools">
+               	 	<button type="submit" ng-click="saveBOM()" ng-hide="BOMInfoInput" class="btn blue  btn-outline  btn-sm">
+                  		<i class="fa fa-save"></i> 保存 </button>
+                  <button ng-click="cancelBOM()" type="button" ng-hide="BOMInfoInput" class="btn red  btn-outline  btn-sm">
+                  		<i class="fa fa-undo"></i> 取消 </button>
+                  <button ng-click="editBOM()" type="button" ng-show="BOMInfoShow" class="btn blue  btn-outline  btn-sm">
+                  		<i class="fa fa-edit"></i> 编辑 </button>
+                </div>
+            </div>
+           <div class="portlet-body form"  ng-show="BOMShow">
+			     <form id="form_sample_3"   class="form-horizontal">
+			         <div class="table-scrollable">
+                          <table class="table table-bordered table-hover">
+                              <thead>
+                                  <tr>
+                                      <th>物料编码</th>
+                                      <th>物料名称</th>
+                                      <th>规格型号</th>
+                                      <th>单位</th>
+                                      <th>品牌</th>
+                                      <th>单套用量</th>
+                                      <th style="width:65px;"></th>
+                                  </tr>
+                              </thead>
+                             <tbody ng-show="noContactData" ng-if="BOM.length==0">
+                               	<tr>
+                                      <td colspan="7" align="center" >暂无数据</td>
+                                  </tr>
+                              </tbody>
+                              <tbody ng-repeat="_contact in BOM track by $index">
+                                  <tr ng-mouseover="showOperation('contact',$index)" ng-mouseleave="hideOperation('contact',$index)">
+                                      <td>{{_contact.contactName}}</td>
+                                      <td>{{_contact.contactTitle}}</td>
+                                      <td>{{_contact.department}}</td>
+                                      <td>{{_contact.responsibility}}</td>
+                                      <td>{{_contact.contactTel}}</td>
+                                      <td>{{_contact.wechat}}</td>
+                                      <td ng-show="operation_c{{$index}}">
+                                      	<a ng-click="editCompanyContact(_contact.serialNum)"><i class="fa fa-edit" title="编辑"></i></a>
+                                      	&nbsp;&nbsp;&nbsp;
+                                      	<a ng-click="deleteCompanyContact(_contact.serialNum)"><i class="fa fa-trash" title="删除"></i></a>
+                                      </td>
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+                      <div class="form-actions right">
+							<!-- <a  class="btn blue btn-sm"  ng-click="addCompanyContact()"   >
+	                              <i class="fa fa-plus"></i> 增加
+	                       	</a> -->
+                  		</div>
+                  </form>
+          </div>
+          <!-- BOM end-->
+          <!-- 附件 start-->
+          				<!-- <div class="portlet-title">
+                            <div class="caption">附件</div>
+                            <div class="actions">
+                                <a href="" class="collapse" data-original-title="" title=""> </a>
+                                <a href="#portlet-config" data-toggle="modal" class="config" data-original-title="" title=""> </a>
+                                <a href="" class="reload" data-original-title="" title=""> </a>
+                                <a href="" class="remove" data-original-title="" title=""> </a>
+                                <button   ng-show="companyQualificationView" class="btn blue btn-outline  btn-sm " ng-click="editCompanyQualification()">
+                                            <i class="fa fa-edit"></i> 编辑 </button>
+                                <button   ng-show="companyQualificationEdit" class="btn red  btn-outline  btn-sm " ng-click="cancelCompany('companyQualification')">
+                                            <i class="fa fa-undo"></i> 取消 </button>
+                                <button   ng-hide="companyQualificationAdd" class="btn blue btn-outline  btn-sm " ng-click="saveCompanyQualification()">
+                                            <i class="fa fa-save"></i> 保存 </button>
+                            </div>
+                        </div>
+                        <div class="portlet-body form">
+                            <form  id="qualificationForm" class="page-repeater form-horizontal">
+								<div class="form-body" data-repeater-list="group-a"  >
+									<div  class="row" data-repeater-item  ng-repeat="companyQualification in companyQualifications  track by $index" repeat-done="repeatDone()">
+										<div class="col-md-2">
+											<div class="form-group">
+												<div class="col-md-12 input-icon right">
+													<input  ng-hide="companyQualificationAdd" type="text" ng-model="companyQualification.qualificationName" name="qualificationName"
+														class="form-control" placeholder="资质名称"> <span
+														class="help-block"></span>
+														<label   ng-show="companyQualificationView"  class="c_edit" >{{companyQualification.qualificationName}}</label>
+												</div>
+											</div>
+										</div>
+						
+										/span
+										<div class="col-md-2">
+											<div class="form-group">
+												<div class="col-md-12">
+													<input  ng-hide="companyQualificationAdd" type="text" ng-model="companyQualification.qualificationNum" name="qualificationNum"
+														class="form-control" placeholder="资质号码"> <span
+														class="help-block"></span>
+														<label   ng-show="companyQualificationView"  class="c_edit" >{{companyQualification.qualificationNum}}</label>
+												</div>
+											</div>
+										</div>
+										/span
+										<div class="col-md-2">
+											<div class="form-group">
+												<div class="col-md-12">
+													<div  ng-hide="companyQualificationAdd" class="input-group input-small date date-picker"
+														 data-date-format="yyyy-mm-dd"
+														data-date-viewmode="years">
+														<input type="text" class="form-control" readonly="" ng-model="companyQualification.validityDate" name="validityDate"
+															placeholder="有效期"> <span class="input-group-btn">
+															<button class="btn default " type="button">
+																<i class="fa fa-calendar"></i>
+															</button>
+														</span>
+														<span class="help-block"></span>
+													</div>
+													<label   ng-show="companyQualificationView" class="c_edit" >{{companyQualification.validityDate}}</label>
+												</div>
+											</div>
+										</div>
+										/span
+										<div class="col-md-2">
+											<div class="form-group rigjt">
+												<div class="col-md-12">
+													 <div  ng-hide="companyQualificationAdd" class="fileinput fileinput-new" data-provides="fileinput">
+			                                                  <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 70px; max-height: 70px; line-height: 10px;float: left;"> </div>
+			                                                  <div style="float: left;">
+			                                                      <span class="btn default btn-file btn-sm">
+			                                                          <span class="fileinput-new "><i class="fa fa-plus "></i></span>
+			                                                          <span class="fileinput-exists">更换 </span>
+			                                                          <input type="hidden"><input type="file" name="..."> </span><br>
+			                                                      <a href="javascript:;" class="btn red btn-sm fileinput-exists " data-dismiss="fileinput"> 移除 </a>
+			                                                  </div>
+			                                          </div>
+			                                          <div   ng-show="companyQualificationView" class="c_edit" >施工中</div>
+												</div>
+											</div>
+										</div>
+										/span
+										<div class="col-md-2">
+											<div class="form-group">
+												<div class="col-md-12">
+													<input  ng-hide="companyQualificationAdd" type="text" ng-model="companyQualification.remark" name="remark"
+														class="form-control" placeholder="备注"> 
+														<label   ng-show="companyQualificationView" class="c_edit" >{{companyQualification.remark}}</label>
+												</div>
+											</div>
+										</div>
+										/span
+										<div class="col-md-1">
+											<div class="form-group">
+												<div class="col-md-12">
+														
+												 	<span ng-show="companyQualificationView" ng-if="companyQualification.status=='0'" class="label label-sm label-success">正常</span>
+												 	<span ng-show="companyQualificationView" ng-if="companyQualification.status=='1'" class="label label-sm label-danger">已过期</span>
+												 	<span ng-show="companyQualificationView" ng-if="companyQualification.status=='2'" class="label label-sm label-warning">即将过期</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+												<div class="col-md-12">
+													 <a href="javascript:;"  class="btn red btn-sm" ng-hide="companyQualificationAdd" ng-click="deleteRepeat()">
+                                            			<i class="fa fa-close"></i> 
+                                     				</a>
+												</div>
+											</div>
+										</div>
+										/span 
+									</div>
+									/row
+								</div>
+								<div class="form-actions right" ng-hide="companyQualificationAdd">
+									<a href="javascript:;" data-repeater-create class="btn blue btn-sm" ng-click="addRepeat()" >
+                                            <i class="fa fa-plus"></i> 增加
+                                     </a>
+                                </div>
+							</form>
+         				</div> -->
+         				<!-- 附件 end-->
           </div>
       </div>
 </div>
 </div>
-</div> -->
+</div> 
 
 <jsp:include  page="selectMateriel.jsp"/>

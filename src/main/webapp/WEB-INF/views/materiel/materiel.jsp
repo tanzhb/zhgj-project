@@ -11,6 +11,9 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
+            <a ui-sref="materiel">基础数据</a>
+        </li>
+        <li>
             <a ui-sref="materiel">物料信息</a>
         </li>
     </ul>
@@ -31,7 +34,6 @@
          </div>
 	</div> -->
 	<div class="col-md-12">
-        <div class="row">
 	        <div class="portlet box red">
 	            <div class="portlet-title">
 				<div class="caption">
@@ -40,11 +42,11 @@
 				<div class="actions">
 					<a href="javascript:;" ui-sref="addMateriel"
 						 class="btn btn-default btn-sm btn-circle">
-						<i class="fa fa-plus"></i> 物料
+						<i class="fa fa-plus"></i> 添加
 					</a> 
 					<a href="javascript:;" ng-click="editMateriel()"
 						 class="btn btn-default btn-sm btn-circle">
-						<i class="fa fa-edit"></i> 编辑
+						<i class="fa fa-edit"></i> 修改
 					</a>
 					<a href="javascript:;" ng-click="deleteMateriel()"
 						class="btn btn-default btn-sm btn-circle"> <i
@@ -120,8 +122,26 @@
 	                </table>
 	            </div>
 	        </div>
-        </div>
-        <div class="row">
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+ </div>
+ 
+ <div class="row">
+<!--      <div class="col-md-4">
+         <div class="portlet light ">
+             <div class="portlet-title">
+                 <div class="caption">
+                     <i class="icon-social-dribbble font-blue-sharp"></i>
+                     <span ng-click="reloadTable()" class="caption-subject font-blue-sharp bold uppercase">全部物料</span>
+                 </div>
+             </div>
+             <div class="portlet-body">
+                 <div id="tree_1" class="tree-demo">
+                 </div>
+             </div>
+         </div>
+	</div> -->
+	<div class="col-md-12">
         	<div class="portlet light ">
                 <div class="portlet-body">
                     <ul class="nav nav-pills">
@@ -231,8 +251,6 @@
                 </div>
             </div>
 	        
-        </div>
-        <!-- END EXAMPLE TABLE PORTLET-->
     </div>
  </div>
 <!-- END PAGE HEADER-->
