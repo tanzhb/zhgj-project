@@ -28,6 +28,10 @@ public class CompanyQualification {
     private String updater;
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
+    
+    private String remark;
+    
+    private String status;
 
     public String getSerialNum() {
         return serialNum;
@@ -116,4 +120,20 @@ public class CompanyQualification {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 }

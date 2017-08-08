@@ -12,6 +12,7 @@ import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.dao.UserMapper;
+import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.UserExample;
 import com.congmai.zhgj.web.service.UserService;
@@ -70,7 +71,8 @@ public class UserServiceImpl extends GenericServiceImpl<User, String> implements
 		}
 		return user;
 	}
-
+    
+    
 	public List<User> findAllUsers() {
 		List<User> list = userMapper.findAllUsers();
 		if(list != null && list.size() > 0){
@@ -96,4 +98,6 @@ public class UserServiceImpl extends GenericServiceImpl<User, String> implements
 		List<String> idList = ApplicationUtils.getIdList(ids);
 		userMapper.deleteUsers(idList);
 	}
+	
+	
 }

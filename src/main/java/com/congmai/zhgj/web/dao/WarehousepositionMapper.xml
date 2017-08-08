@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.congmai.zhgj.web.dao.WarehousepositionMapper" >
+  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.Warehouseposition" >
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="warehouseSerial" property="warehouseSerial" jdbcType="VARCHAR" />
+    <result column="positionNum" property="positionNum" jdbcType="VARCHAR" />
+    <result column="positionName" property="positionName" jdbcType="VARCHAR" />
+    <result column="storageAttribute" property="storageAttribute" jdbcType="VARCHAR" />
+    <result column="maxRows" property="maxRows" jdbcType="VARCHAR" />
+    <result column="maxCols" property="maxCols" jdbcType="VARCHAR" />
+    <result column="maxLayers" property="maxLayers" jdbcType="VARCHAR" />
+    <result column="storageType" property="storageType" jdbcType="VARCHAR" />
+    <result column="storageMode" property="storageMode" jdbcType="VARCHAR" />
+    <result column="defaultLWH" property="defaultLWH" jdbcType="VARCHAR" />
+    <result column="defaultVolume" property="defaultVolume" jdbcType="VARCHAR" />
+    <result column="defaultBearing" property="defaultBearing" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    serialNum, warehouseSerial, positionNum, positionName, storageAttribute, maxRows, 
+    maxCols, maxLayers, storageType, storageMode, defaultLWH, defaultVolume, defaultBearing, 
+    delFlg, creator, createTime, updater, updateTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.WarehousepositionExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from warehouseposition
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from warehouseposition
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from warehouseposition
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.WarehousepositionExample" >
+    delete from warehouseposition
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.congmai.zhgj.web.model.Warehouseposition" >
+    insert into warehouseposition (serialNum, warehouseSerial, positionNum, 
+      positionName, storageAttribute, maxRows, 
+      maxCols, maxLayers, storageType, 
+      storageMode, defaultLWH, defaultVolume, 
+      defaultBearing, delFlg, creator, 
+      createTime, updater, updateTime
+      )
+    values (#{serialNum,jdbcType=VARCHAR}, #{warehouseSerial,jdbcType=VARCHAR}, #{positionNum,jdbcType=VARCHAR}, 
+      #{positionName,jdbcType=VARCHAR}, #{storageAttribute,jdbcType=VARCHAR}, #{maxRows,jdbcType=VARCHAR}, 
+      #{maxCols,jdbcType=VARCHAR}, #{maxLayers,jdbcType=VARCHAR}, #{storageType,jdbcType=VARCHAR}, 
+      #{storageMode,jdbcType=VARCHAR}, #{defaultLWH,jdbcType=VARCHAR}, #{defaultVolume,jdbcType=VARCHAR}, 
+      #{defaultBearing,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.Warehouseposition" >
+    insert into warehouseposition
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        serialNum,
+      </if>
+      <if test="warehouseSerial != null" >
+        warehouseSerial,
+      </if>
+      <if test="positionNum != null" >
+        positionNum,
+      </if>
+      <if test="positionName != null" >
+        positionName,
+      </if>
+      <if test="storageAttribute != null" >
+        storageAttribute,
+      </if>
+      <if test="maxRows != null" >
+        maxRows,
+      </if>
+      <if test="maxCols != null" >
+        maxCols,
+      </if>
+      <if test="maxLayers != null" >
+        maxLayers,
+      </if>
+      <if test="storageType != null" >
+        storageType,
+      </if>
+      <if test="storageMode != null" >
+        storageMode,
+      </if>
+      <if test="defaultLWH != null" >
+        defaultLWH,
+      </if>
+      <if test="defaultVolume != null" >
+        defaultVolume,
+      </if>
+      <if test="defaultBearing != null" >
+        defaultBearing,
+      </if>
+      <if test="delFlg != null" >
+        delFlg,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="updater != null" >
+        updater,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseSerial != null" >
+        #{warehouseSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="positionNum != null" >
+        #{positionNum,jdbcType=VARCHAR},
+      </if>
+      <if test="positionName != null" >
+        #{positionName,jdbcType=VARCHAR},
+      </if>
+      <if test="storageAttribute != null" >
+        #{storageAttribute,jdbcType=VARCHAR},
+      </if>
+      <if test="maxRows != null" >
+        #{maxRows,jdbcType=VARCHAR},
+      </if>
+      <if test="maxCols != null" >
+        #{maxCols,jdbcType=VARCHAR},
+      </if>
+      <if test="maxLayers != null" >
+        #{maxLayers,jdbcType=VARCHAR},
+      </if>
+      <if test="storageType != null" >
+        #{storageType,jdbcType=VARCHAR},
+      </if>
+      <if test="storageMode != null" >
+        #{storageMode,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultLWH != null" >
+        #{defaultLWH,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultVolume != null" >
+        #{defaultVolume,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultBearing != null" >
+        #{defaultBearing,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.WarehousepositionExample" resultType="java.lang.Integer" >
+    select count(*) from warehouseposition
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update warehouseposition
+    <set >
+      <if test="record.serialNum != null" >
+        serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.warehouseSerial != null" >
+        warehouseSerial = #{record.warehouseSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.positionNum != null" >
+        positionNum = #{record.positionNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.positionName != null" >
+        positionName = #{record.positionName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.storageAttribute != null" >
+        storageAttribute = #{record.storageAttribute,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maxRows != null" >
+        maxRows = #{record.maxRows,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maxCols != null" >
+        maxCols = #{record.maxCols,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maxLayers != null" >
+        maxLayers = #{record.maxLayers,jdbcType=VARCHAR},
+      </if>
+      <if test="record.storageType != null" >
+        storageType = #{record.storageType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.storageMode != null" >
+        storageMode = #{record.storageMode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.defaultLWH != null" >
+        defaultLWH = #{record.defaultLWH,jdbcType=VARCHAR},
+      </if>
+      <if test="record.defaultVolume != null" >
+        defaultVolume = #{record.defaultVolume,jdbcType=VARCHAR},
+      </if>
+      <if test="record.defaultBearing != null" >
+        defaultBearing = #{record.defaultBearing,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlg != null" >
+        delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creator != null" >
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updater != null" >
+        updater = #{record.updater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update warehouseposition
+    set serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      warehouseSerial = #{record.warehouseSerial,jdbcType=VARCHAR},
+      positionNum = #{record.positionNum,jdbcType=VARCHAR},
+      positionName = #{record.positionName,jdbcType=VARCHAR},
+      storageAttribute = #{record.storageAttribute,jdbcType=VARCHAR},
+      maxRows = #{record.maxRows,jdbcType=VARCHAR},
+      maxCols = #{record.maxCols,jdbcType=VARCHAR},
+      maxLayers = #{record.maxLayers,jdbcType=VARCHAR},
+      storageType = #{record.storageType,jdbcType=VARCHAR},
+      storageMode = #{record.storageMode,jdbcType=VARCHAR},
+      defaultLWH = #{record.defaultLWH,jdbcType=VARCHAR},
+      defaultVolume = #{record.defaultVolume,jdbcType=VARCHAR},
+      defaultBearing = #{record.defaultBearing,jdbcType=VARCHAR},
+      delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      updater = #{record.updater,jdbcType=VARCHAR},
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.Warehouseposition" >
+    update warehouseposition
+    <set >
+      <if test="warehouseSerial != null" >
+        warehouseSerial = #{warehouseSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="positionNum != null" >
+        positionNum = #{positionNum,jdbcType=VARCHAR},
+      </if>
+      <if test="positionName != null" >
+        positionName = #{positionName,jdbcType=VARCHAR},
+      </if>
+      <if test="storageAttribute != null" >
+        storageAttribute = #{storageAttribute,jdbcType=VARCHAR},
+      </if>
+      <if test="maxRows != null" >
+        maxRows = #{maxRows,jdbcType=VARCHAR},
+      </if>
+      <if test="maxCols != null" >
+        maxCols = #{maxCols,jdbcType=VARCHAR},
+      </if>
+      <if test="maxLayers != null" >
+        maxLayers = #{maxLayers,jdbcType=VARCHAR},
+      </if>
+      <if test="storageType != null" >
+        storageType = #{storageType,jdbcType=VARCHAR},
+      </if>
+      <if test="storageMode != null" >
+        storageMode = #{storageMode,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultLWH != null" >
+        defaultLWH = #{defaultLWH,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultVolume != null" >
+        defaultVolume = #{defaultVolume,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultBearing != null" >
+        defaultBearing = #{defaultBearing,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        delFlg = #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        updater = #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.Warehouseposition" >
+    update warehouseposition
+    set warehouseSerial = #{warehouseSerial,jdbcType=VARCHAR},
+      positionNum = #{positionNum,jdbcType=VARCHAR},
+      positionName = #{positionName,jdbcType=VARCHAR},
+      storageAttribute = #{storageAttribute,jdbcType=VARCHAR},
+      maxRows = #{maxRows,jdbcType=VARCHAR},
+      maxCols = #{maxCols,jdbcType=VARCHAR},
+      maxLayers = #{maxLayers,jdbcType=VARCHAR},
+      storageType = #{storageType,jdbcType=VARCHAR},
+      storageMode = #{storageMode,jdbcType=VARCHAR},
+      defaultLWH = #{defaultLWH,jdbcType=VARCHAR},
+      defaultVolume = #{defaultVolume,jdbcType=VARCHAR},
+      defaultBearing = #{defaultBearing,jdbcType=VARCHAR},
+      delFlg = #{delFlg,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <delete id="deleteWarehouseposition" parameterType="java.util.List">
+    	delete from warehouseposition where serialNum in
+        <foreach item="idList" collection="list" open="(" close=")" separator=",">
+            #{idList}
+        </foreach>
+    </delete>
+</mapper>

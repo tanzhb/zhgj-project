@@ -1,7 +1,23 @@
 package com.congmai.zhgj.web.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.User;
+import com.congmai.zhgj.web.service.ContractService;
+import com.congmai.zhgj.web.service.UserService;
 
 /**
  * 
@@ -15,6 +31,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/page")
 public class PageController {
 
+	 @Resource
+	 private UserService userService;
+	 
+	 @Resource
+	 private ContractService contractService;
+	 
     /**
      * 登录页
      */
@@ -88,12 +110,32 @@ public class PageController {
     }
     
     /**
+     * 合同列表
+     * @return 列表页面的url
+     */
+    @RequestMapping("/userContract")
+    public String userContract() {
+        return "contract/userContract";
+    }
+    
+    
+    /**
+     * 添加合同页面
+     * @return 添加合同页面url
+     */
+    @RequestMapping("/addUserContract")
+    public String addUserContract() {
+        return "contract/addUserContract";
+    }
+    
+    /**
      * 用户管理
      */
     @RequestMapping("/user")
     public String user() {
         return "user";
     }
+    
     /**
      * 新增物料
      */
