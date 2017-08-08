@@ -239,8 +239,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 'assets/global/plugins/icheck/icheck.min.js',
 'assets/pages/scripts/form-icheck.min.js',
 'assets/pages/scripts/form-validation.min.js',
-'assets/apps/service/materielService.js',
-'assets/apps/controllers/materielController.js',
 
 'assets/global/plugins/datatables/datatables.min.css',
 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
@@ -248,7 +246,10 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 'assets/global/plugins/datatables/datatables.all.min.js',
 'assets/pages/scripts/table-datatables-fixedheader.min.js',
-'assets/apps/controllers/selectMaterielController.js'
+
+'assets/apps/service/materielService.js',
+'assets/apps/controllers/materielController.js',
+/*'assets/apps/controllers/selectMaterielController.js'*/
 
 
                         ]
