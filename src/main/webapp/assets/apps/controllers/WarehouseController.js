@@ -146,7 +146,16 @@ angular
 																		.html()
 																+ '">';
 													}
-												} ],
+												},{
+													'targets' : 1,
+													'render' : function(data,
+															type, row, meta) {
+														return '<a   ng-click="showWarehouseInfoModal(\''+row.serialNum+'\')">'+data+'</a>';
+														//return data;
+													},"createdCell": function (td, cellData, rowData, row, col) {
+														 $compile(td)($scope);
+												    }
+												}  ],
 
 											})
 							// 构建datatables结束***************************************
@@ -251,43 +260,6 @@ angular
 									var serialNum = table.$('input[type="checkbox"]:checked').val();
 									$state.go("addWarehouse",{warehouseSerialNum:serialNum});
 								}
-								
-							/*	var ids = '';
-								// Iterate over all checkboxes in the table
-								table.$('input[type="checkbox"]').each(function() {
-									// If checkbox exist in DOM
-									if ($.contains(document, this)) {
-										// If checkbox is checked
-										if (this.checked) {
-											// 将选中数据id放入ids中
-											if (ids == '') {
-												ids = this.value;
-											} else
-												ids = ids + ',' + this.value;
-										}
-									}
-								});
-								if (ids == '' || ids.split(',').length > 1) {// 选择一条数据进行修改									
-									toastr.warning("选择一条数据进行修改！");
-								} else {
-									
-									WarehouseService
-									.selectBySerialNum(ids)
-									.then(
-											function(data) {
-												debugger;
-												$scope.warehouse = data;//将后台数据赋值给前台页面
-												$('#pageTitle').html("修改仓库");
-												$('#appendTitle').append("<h4 class='modal-title'>修改仓库</h4>");
-												$('#addWarehouseModal').modal('show');// 弹出修改模态框
-											},
-											function(errResponse) {
-												console
-														.error('Error while editing Users');
-											}
-
-									);
-								}					*/			
 							};
 							// 修改仓库结束***************************************							
 
@@ -334,16 +306,6 @@ angular
 									}
 								}								
 							};
-							// 删除仓库结束***************************************
-							
-							//清除form中输入框内容
-							//$('#addUserModal').on('hidden.bs.modal',  function () {
-//					　　			$("input").val("");
-//								document.getElementById("form_sample_1").reset();
-//								$('#name3').val("");$('#password').val("");
-								//$scope.user = null;
-							//});
-
 							// 页面加载完成后调用，验证输入框
 							$scope.$watch('$viewContentLoaded', function() {  
 								var e = $("#warehouseForm"),
@@ -362,11 +324,20 @@ angular
 						            	owner:{required:"仓库持有者不能为空！"},
 						            	address:{required:"仓库地址不能为空！"},
 						            	area:{required:"仓库面积不能为空！"},
-						            	email:{required:"邮箱不能为空！"},
-						            	tel:{required:"电话不能为空！"},
-						            	remark:{required:"备注不能为空！"},
+						            	email: { email:"E-Mail格式不正确"},
+						            	//email:{required:"邮箱不能为空！"},
+						            	 tel: { 
+						                    	digits:'请输入正确的电话, 必须为数字！',
+				                        	    rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")
+						                    },
+						                   fax: { 
+						                    	digits:'请输入正确的传真, 必须为数字！',
+				                        	    rangelength:jQuery.validator.format("传真必须在{0}到{1}位数字之间！")
+						                    },
+						            	//tel:{required:"电话不能为空！"},
+						            	//remark:{required:"备注不能为空！"},
 						            	admin:{required:"仓库管理员不能为空！"},
-						            	fax:{required:"传真不能为空！"}
+						            	//fax:{required:"传真不能为空！"}
 						            },
 						            rules: {
 						            	warehouseNum:{required:true},
@@ -376,12 +347,14 @@ angular
 						            	owner:{required:true},
 						            	address:{required:true},
 						            	area:{required:true},
-						            	email:{required:true},
-						            	tel:{required:true},
+						            	//email:{required:true},
+						            	 email: {	email:true},
+						            	 tel: {digits:true, rangelength:[7,20] },
+						            	//tel:{required:true},
+				                         fax: {digits:true, rangelength:[7,20] },
 						            	remark:{required:true},
-						            	fax:{required:true},
-						            	admin:{required:true},
-						                email: {required:true}
+						            	//fax:{required:true},
+						            	admin:{required:true}
 						               
 						            },
 						            invalidHandler: function(e, t) {
@@ -458,4 +431,12 @@ angular
 						        $scope.reloadWarehouseTable = function() {
 						        	table.ajax.url(tableAjaxUrl).load()// 重新加载datatables数据
 						        }
+						        /**
+							        * 显示仓库信息(弹框)
+							        */
+							       $scope.showWarehouseInfoModal = function(serialNum){
+							    	   getWarehouseInfo(serialNum);
+							    	   $('#viewWarehouse').modal('show'); 
+							       };
+							       
 						} ]);
