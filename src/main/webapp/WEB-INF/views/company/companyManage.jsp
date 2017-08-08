@@ -1,5 +1,8 @@
 <%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<head>
+	<meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8" />
+</head>
 <!-- BEGIN PAGE HEADER-->
 <h3 class="page-title"> 企业信息
 </h3>
@@ -135,7 +138,7 @@
 											<i class="fa fa-plus"></i> 添加
 										</a> <a href="javascript:;" 
 											 class="btn btn-default btn-sm btn-circle"  ng-click="toEditCompany()">
-											<i class="fa fa-edit"></i> 编辑
+											<i class="fa fa-edit"></i> 修改
 										</a> <a href="javascript:;" 
 											class="btn btn-default btn-sm btn-circle" ng-click="deleteCompanyBatch()"> <i
 											class="fa fa-minus"></i> 删除
@@ -147,26 +150,25 @@
 												class="fa fa-angle-down"></i>
 											</a>
 											<ul class="dropdown-menu pull-right" id="sample_3_tools">
-												<li><a href="javascript:;" data-action="0"
+												<!-- <li><a href="javascript:;" data-action="0"
 													class="tool-action"> <i class="icon-printer"></i> Print
 												</a></li>
 												<li><a href="javascript:;" data-action="1"
 													class="tool-action"> <i class="icon-check"></i> Copy
-												</a></li>
-												<li><a href="javascript:;" data-action="2"
-													class="tool-action"> <i class="icon-doc"></i> PDF
-												</a></li>
+												</a></li>-->
+												<li><a data-action="2"
+													class="tool-action" data-toggle="modal" data-target="#import"> <i class="icon-doc"></i> 导入
+												</a></li> 
 												<li><a href="javascript:;" data-action="3"
-													class="tool-action"> <i class="icon-paper-clip"></i> Excel
+													class="tool-action" ng-click="exportCompany()"> <i class="icon-paper-clip"></i> 导出
 												</a></li>
-												<li><a href="javascript:;" data-action="4"
+												<!-- <li><a href="javascript:;" data-action="4"
 													class="tool-action"> <i class="icon-cloud-upload"></i> CSV
 												</a></li>
 												<li class="divider"></li>
 												<li><a href="javascript:;" data-action="5"
 													class="tool-action"> <i class="icon-refresh"></i> Reload
-												</a></li>
-												</li>
+												</a></li> -->
 											</ul>
 										</div>
 									</div>
@@ -174,17 +176,9 @@
                                 <div class="portlet-body">
                                     <!-- <div class="table-responsive"> -->
 										<table   class="table table-bordered" id="sample_1">
-											<!-- <thead>
-												<tr>
-													<th data-mdata="warehouseNum" data-sclass="ceneter">仓库编号</th>
-													<th data-mdata="warehouseName" data-sclass="ceneter">仓库名称</th>
-													<th data-mdata="area" data-sclass="ceneter">面积</th>
-													<th data-mdata="address" data-sclass="ceneter">备注</th>
-												</tr>
-											</thead> -->
 											<thead>
 												<tr>
-													<th><input name="select_all"
+													<th><input name="select_all" class="dt-body-center"
 															value="1" id="example-select-all" type="checkbox" /></th>
 													<th>企业编码</th>
 													<th>企业名称</th>
@@ -200,24 +194,6 @@
 												</tr>
 											</thead>
 											<tbody>
-												<!-- <tr ng-repeat="record in records.result" class="odd gradeX" ng-cloak>
-													<td></td>
-													<td><a data-target="#viewCompany" data-id="record.comId"  data-toggle="modal">{{record.comNum}}</a></td>
-													<td><a   ng-click="showCompanyInfo(record.comId)">{{record.comNum}}</a></td>
-													<td>{{record.comName}}</td>
-													<td>{{record.comNature}}</td>
-													<td>{{record.registeredCapital}}</td>
-													<td>{{record.businessNature}}</td>
-													<td>{{record.legalPerson}}</td>
-													<td>{{record.address}}</td>
-													<td>----</td>
-													<td>{{record.comType}}</td>
-													<td>----</td>
-													<td class="center">
-														<a ui-sref="companyAdd({comId:record.comId})" title="编辑"><i class="fa fa-edit"></i></a>&nbsp;&nbsp; 
-														<a ng-click="deleteCompany(record.comId)" title="删除"><i class="fa fa-trash"></i></a>
-													</td>
-												</tr>  -->
 											 </tbody>
 										</table>
 								</div>
@@ -517,8 +493,8 @@
 
 
 <!-- 企业信息查看modal START -->
-<div class="modal fade" id="viewCompany" role="basic" aria-hidden="true">
-     <div class="modal-dialog" style="width: 750px;">
+<div class="modal fade bs-modal-lg" id="viewCompany" role="basic" aria-hidden="true">
+     <div class="modal-dialog modal-lg" >
 	    <div class="modal-content">
 	 		<div class="modal-header">
 	            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
@@ -688,7 +664,80 @@
 	    </div>
     </div>
 </div>
+</div>
 <!-- 企业信息查看modal END-->
+
+
+<!-- 导入modal START -->
+<div class="modal fade" id="import" role="import" aria-hidden="true">
+     <div class="modal-dialog" >
+	    <div class="modal-content">
+	 		<div class="modal-header">
+	            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+	            <h4 class="modal-title" >企业信息导入</h4>
+	        </div>
+	        <div class="modal-body">
+	          		<!-- <div class="col-md-12"> -->
+	          		 <div class="">
+                           <div class="portlet-body form">
+                              <!--  BEGIN FORM -->
+                               <form class="form-horizontal" role="form">
+                                   <div class="form-body">
+                                   		<form id="fileImport" method="post" enctype="multipart/form-data" >
+	                                       <div class="row">
+	                                           <div class="col-md-2">
+	                                               <div class="form-group">
+	                                               		<!-- <div class="col-md-4">
+	                                               		</div> -->
+	                                               		<div class="col-md-12">
+	                                               			<button type="button" class="btn blue" ng-click="downloadImportTemp()">下载模板</button>
+	                                               		</div>
+	                                               </div>
+	                                           </div>
+	                                           <div class="col-md-7">
+	                                               <div class="form-group">
+	                                               		 <div class="fileinput fileinput-new" data-provides="fileinput">
+	                                                        <div class="input-group input-large">
+	                                                            <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+	                                                                <i class="fa fa-file fileinput-exists"></i>&nbsp;
+	                                                                <span class="fileinput-filename"> </span>
+	                                                            </div>
+	                                                            <span class="input-group-addon btn default btn-file" id="file_span">
+	                                                                <span class="fileinput-new"> 选择文件 </span>
+	                                                                <span class="fileinput-exists">更换</span>
+	                                                                <input type="file" file-model="excelFile" accept=".xls" name="..."> </span>
+	                                                            <a href="javascript:;" id="resetFile" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> 移除 </a>
+	                                                        </div>
+	                                                    </div>
+	                                               </div>
+	                                           </div>
+	                                            <div class="col-md-2">
+	                                               <div class="form-group">
+	                                               		<div class="col-md-4">
+	                                               			
+	                                               		</div>
+	                                               		<div class="col-md-8">
+	                                               			<button type="button" class="btn blue" ng-click="uploadExcel()">上传</button>
+	                                               		</div>
+	                                               </div>
+	                                           </div>
+	                                           
+	                                         <!--   /span -->
+	                                       </div>
+	                                       <!-- /row -->
+                                       </form>
+                                   </div>
+                               </form>
+                              <!--  END FORM -->
+                           </div>
+                      </div>
+					<!-- </div> -->
+	        <!-- </div> -->
+	    </div>
+    </div>
+</div>
+</div>
+<!-- 导入modal END-->
 
 <!-- END MAIN CONTENT -->
 <!-- BEGIN MAIN JS -->

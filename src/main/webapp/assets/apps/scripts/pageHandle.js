@@ -59,10 +59,14 @@ pageHandle = (function(){
 		}); 
 	}
 	
-	var _blockUI = function(){
+	var _blockUI = function(_message){
+		  var  message = '请稍等';
+		  if(_message!=undefined){
+			  message = _message;
+		  }
 		  App.blockUI({
               boxed: true,
-              message:'请稍等'
+              message:message
           });
 	} 
 	
