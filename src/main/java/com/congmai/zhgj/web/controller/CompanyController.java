@@ -1,5 +1,6 @@
 package com.congmai.zhgj.web.controller;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,7 +9,9 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -22,13 +25,19 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.ExcelReader;
+import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
+import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyContact;
 import com.congmai.zhgj.web.model.CompanyFinance;
 import com.congmai.zhgj.web.model.CompanyQualification;
-import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.CompanyContactService;
 import com.congmai.zhgj.web.service.CompanyFinanceService;
 import com.congmai.zhgj.web.service.CompanyQualificationService;
@@ -374,6 +383,85 @@ public class CompanyController {
     		System.out.println(e.getMessage());
     	}
     	return flag;
+    }
+    
+    /**
+     * @Description (导出企业信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping("exportCompany")
+    public void exportCompany(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+    		Map<String, Object> dataMap = new HashMap<String, Object>();
+    		List<Company> companyList = companyService.selectByPage(new Company()).getResult();
+    		dataMap.put("companyList",companyList);
+    		ExcelUtil.export(request, response, dataMap, "company", "企业信息");
+    }
+    
+    /**
+     * @Description (下载导入模板)
+     * @param request
+     * @return
+     */
+    @RequestMapping("downloadImportTemp")
+    public void downloadCompanyTemp(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+    	ExcelUtil.importTempDownLoad(request, response, "company");
+    }
+    
+    /**
+     * @Description (企业信息导入)
+     * @param request
+     * @return
+     */
+    @RequestMapping("companyImport")
+    @ResponseBody
+    public Map<String,String> companyImport(@RequestParam(value = "excelFile") MultipartFile excelFile,HttpServletRequest request,HttpServletResponse response) {
+    	Map<String,String> map = new HashMap<String, String>();
+    	 try {
+		     
+			ExcelReader excelReader = new ExcelReader(excelFile.getInputStream());
+			excelReader.readExcelContent(new RowHandler() {
+				@Override
+				public void handle(List<Object> row,int i) throws Exception {
+					if(!CollectionUtils.isEmpty(row)){
+						try{
+							Company company = new Company();
+							company.setComId(ApplicationUtils.random32UUID());
+							company.setComNum(row.get(0).toString());
+							company.setComName(row.get(1).toString());
+							company.setComType(row.get(2).toString());
+							company.setAbbreviation(row.get(3).toString());
+							company.setBusinessNature(row.get(4).toString());
+							company.setComNature(row.get(5).toString());
+							company.setBusinessType(row.get(6).toString());
+							company.setRegisteredCapital(row.get(7).toString());
+							company.setLegalPerson(row.get(8).toString());
+							company.setAddress(row.get(9).toString());
+							company.setTaxpayeNumber(row.get(10).toString());
+							company.setTel(row.get(11).toString());
+							company.setContact(row.get(12).toString());
+							company.setRemark(row.get(13).toString());
+							Subject currentUser = SecurityUtils.getSubject();
+							String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+							company.setCreateTime(new Date());
+							company.setCreator(currenLoginName);
+							company.setUpdateTime(new Date());
+							company.setUpdater(currenLoginName);
+							companyService.insert(company);
+						}catch(Exception  e){
+							throw new Exception("第"+i+"行数据异常请检查，数据内容："+row.toString());
+						}
+						
+					}
+					
+				}
+			}, 1);
+			map.put("data", "success");
+		} catch (Exception e1) {
+			map.put("data", e1.getMessage());
+		}
+    	
+         return map;
     }
     
     
