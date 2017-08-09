@@ -17,6 +17,7 @@ import org.apache.shiro.subject.Subject;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -215,9 +216,9 @@ public class CompanyController {
      * @param request
      * @return
      */
-    @RequestMapping("deleteCompanyBatch")
+    @RequestMapping(value="deleteCompanyBatch",method=RequestMethod.POST)
     @ResponseBody
-    public String deleteCompanyBatch(Map<String, Object> map,String comIds) {
+    public String deleteCompanyBatch(Map<String, Object> map,@RequestBody String comIds) {
     	String flag ="0"; //默认失败
     	String[] comIdArray = null;
     	List<String> comIdList = null;
