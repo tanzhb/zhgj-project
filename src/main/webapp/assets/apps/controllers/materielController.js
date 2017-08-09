@@ -48,11 +48,13 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 
         	validatePackageInit();//加载包装信息验证控件
        	
-        	selectParentMateriel();
+        	selectParentMateriel();//选择物料表格初始化
+        	
+        	validateBOMInit();//bom表单初始化
+       	
+        	$scope.BOM =[{}];//bom初始化
+        	
         }
-        
-        
-        
     });
     
     $scope.save  = function() {
@@ -121,11 +123,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     		if($scope.materiel.parentMaterielSerial=='') {//上级物料为空的处理
     			$scope.materiel.parentMaterielSerial=null;
     		}
-    		/*if($scope.materiel.isBOMcheck==true) {//是否物料选中处理
-    			$scope.materiel.isBOM="1";
-    		}else{
-    			$scope.materiel.isBOM="0";
-    		}*/
+
     		//保存数据处理
     		$scope.materiel.parentMateriel=null;
     		$scope.materiel.createTime=null;
@@ -160,41 +158,6 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 	    $scope.materielPackageShow = false;
     };
     
-    
-    
-    $scope.saveBOM  = function() {//保存BOM信息
-    	if($scope.materiel.serialNum==null||$scope.materiel.serialNum=='') {//上级物料为空的处理
-    		toastr.error('请先保存基本信息！');return
-		}
-    	if($('#form_sample_1').valid()&&$('#form_sample_2').valid()){
-
-    		materielService.saveBOM($scope.materiel).then(
-       		     function(data){
-       		    	toastr.success('数据保存成功！');
-       		    	/*$scope.materiel=data;
-       		    	$scope.materielPackageInput = true;
-       		    	$scope.materielPackageShow = true;*/
-       		     },
-       		     function(error){
-       		    	toastr.error('数据保存出错！');
-       		         $scope.error = error;
-       		     }
-       		 );
-    	}
-    	
-    }; 	
-    
-    $scope.cancelBOM  = function() {//取消编辑BOM信息
-    	$scope.BOMInfoInput = true;
-	    $scope.BOMInfoShow = true;
-    };
-    
-    $scope.editBOM  = function() {//进入编辑BOM信息
-    	$scope.BOMInfoInput = false;
-	    $scope.BOMInfoShow = false;
-    };
-    
-    
 /*	var initList = function(start,limit) {
     	materielService.findList(start,limit).then(
     		     function(data){
@@ -205,15 +168,22 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     		     }
     		 );
     	};*/
-    	
+    /**
+     * 获取物料信息
+     */	
     $scope.getMaterielInfo  = function(serialNum) {
     	materielService.getMaterielInfo(serialNum).then(
       		     function(data){
-      		    	$scope.materiel=data;
-      		    	if($scope.materiel.isBOM=="1"){
+      		    	$scope.materiel=data.materiel;
+      		    	if($state.current.name=="addMateriel"&&$scope.materiel.isBOM=="1"){
       	        		$('#isBOMcheck').iCheck('check'); 
       	        		$scope.BOMShow=true;
       	        	}
+      		    	
+      		    	if(!isNull(data.BOM)){
+ 	        			$scope.BOM = data.BOM;
+ 	        			_index = $scope.BOM.length-1;
+ 	        		}
       		     },
       		     function(error){
       		         $scope.error = error;
@@ -552,7 +522,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 	            	packageNum:{required:"包装编码不能为空！"},
 	            	packageSpecifications:{required:"包装规格不能为空！"},
 	            	packageUnit:{required:"包装单位不能为空！"},
-	            	packageUnitConversion:{required:"单位换算率不能为空！"}
+	            	packageUnitConversion:{required:"单位换算率不能为空！",number:"请输入有效的数字"}
             		
 	            },
             	rules: {
@@ -712,7 +682,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
                     console.log('排序');
                 })
             };
-            
+            //设置当前选中的物料行
             $scope.selectParent  = function(serialNum,materielName) {
             	$scope.row = {};
             	$scope.row.serialNum = serialNum;
@@ -742,13 +712,167 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
         			toastr.warning('请选择一个物料！');return;
         		}
     			
-    			$scope.materiel.parentMaterielSerial=$scope.row.serialNum;
-    			$scope.materiel.parentMateriel = {};
-    			$scope.materiel.parentMateriel.materielName=$scope.row.parentMateriel.materielName;
-    			
+    			if(selectIndex=="parent"){//是选择上级物料
+    				$scope.materiel.parentMaterielSerial=$scope.row.serialNum;
+        			$scope.materiel.parentMateriel = {};
+        			$scope.materiel.parentMateriel.materielName=$scope.row.parentMateriel.materielName;
+    			}else{//选择bom物料
+    				$scope.BOM[selectIndex].materielSerial=$scope.row.serialNum;
+    				$scope.BOM[selectIndex].bomMaterielSerial = $scope.materiel.serialNum;
+    				materielService.getMaterielInfo($scope.row.serialNum).then(
+    		      		     function(data){
+    		      		    	$scope.BOM[selectIndex].materiel={};
+    		      		    	$scope.BOM[selectIndex].materiel.materielNum=data.materiel.materielNum
+    		      		    	$scope.BOM[selectIndex].materiel.materielName=data.materiel.materielName
+    		      		    	$scope.BOM[selectIndex].materiel.specifications=data.materiel.specifications
+    		      		    	$scope.BOM[selectIndex].materiel.unit=data.materiel.unit
+    		      		    	$scope.BOM[selectIndex].materiel.brand=data.materiel.brand
+    		      		     },
+    		      		     function(error){
+    		      		         $scope.error = error;
+    		      		     }
+    		      		 );
+    			}
     			
     			$('#basicMaterielInfo').modal('hide');// 删除成功后关闭模态框
     			$(".modal-backdrop").remove();
     		};
+    		
+    		
+    		
+    		
+    		
+    		//********bom  start****************//
+    		var _index = 0;
+    	    $scope.saveBOM  = function() {//保存BOM信息
+    	    	if($scope.materiel.serialNum==null||$scope.materiel.serialNum=='') {//上级物料为空的处理
+    	    		toastr.error('请先保存基本信息！');return
+    			}
+    	    	if($('#form_sample_3').valid()){
+    	    		for(var i=0;i<$scope.BOM.length;i++){
+    	    			$scope.BOM[i].materiel = null
+    		    	}
+
+    	    		materielService.saveBOM($scope.BOM).then(
+    	       		     function(data){
+    	       		    	toastr.success('数据保存成功！');
+    	       		    	$scope.materiel = data.materiel;
+    	       		    	if(!isNull(data.BOM)){
+    	 	        			$scope.BOM = data.BOM;
+    	 	        			_index = $scope.BOM.length-1;
+    	 	        		}
+    	       		    	$scope.cancelBOM();
+    	       		    	
+    	       		     },
+    	       		     function(error){
+    	       		    	toastr.error('数据保存出错！');
+    	       		         $scope.error = error;
+    	       		     }
+    	       		 );
+    	    	}
+    	    	
+    	    }; 	
+    	    
+    	    $scope.cancelBOM  = function() {//取消编辑BOM信息
+    	    	$scope.BOMInfoInput = true;
+    		    $scope.BOMInfoShow = true;
+    	    };
+    	    
+    	    $scope.editBOM  = function() {//进入编辑BOM信息
+    	    	$scope.BOMInfoInput = false;
+    		    $scope.BOMInfoShow = false;
+    	    };
+    	    /**
+  	        * bom新增一行
+  	        */
+    	    $scope.addBOM = function(){
+    	    	if($scope.materiel.serialNum==null||$scope.materiel.serialNum=='') {
+    	    		toastr.error('请先保存基本信息！');return
+    			}else{
+    		    	   _index++;
+    		    	   $scope.BOM[_index] = {};
+    		    	   $scope.BOM[_index].materiel = {}
+    		       }
+    	    };
+    	    
+    	    /**
+ 	        * bom删除一行
+ 	        */
+ 	       $scope.deleteBOM = function(index){
+ 	    	   $scope.BOM.splice(index,1);
+ 	    	   _index--;
+ 	       };
+ 	       /**
+ 	        * 显示编辑、删除操作
+ 	        */
+ 	       $scope.showOperation = function(type,index){
+ 	    	   var call = "operation_c"+index;
+ 	    	   if(type=='finance'){
+ 	    		   call =  "operation_f"+index;
+ 	    	   }
+ 	    	   $scope[call] = true;
+ 	       };
+ 	       
+ 	       /**
+ 	        * 隐藏编辑、删除操作
+ 	        */
+ 	       $scope.hideOperation = function(type,index){
+ 	    	   var call = "operation_c"+index;
+ 	    	   if(type=='finance'){
+ 	    		   call =  "operation_f"+index;
+ 	    	   }
+ 	    	   $scope[call]= false;
+ 	       };
+ 	       
+ 	       
+ 	      var validateBOMInit = function() {
+ 	        	var e = $("#form_sample_3");
+ 		        r = $(".alert-danger", e),
+ 		        i = $(".alert-success", e);
+ 		        e.validate({
+ 		            errorElement: "span",
+ 		            errorClass: "help-block help-block-error",
+ 		            focusInvalid: !1,
+ 		            ignore: "",
+ 		            messages: {
+ 		            	'BOMMaterielNum':{required:"物料编码不能为空！"},
+ 		            	'singleDose':{required:"单套用量不能为空！",number:"请输入有效的数字"}
+ 	            		
+ 		            },
+ 	            	rules: {
+ 	            			'BOMMaterielNum': {required: !0,maxlength: 20},
+ 	            			'singleDose': {required: !0,maxlength: 20,number:!0}
+ 	            			},
+ 	            		invalidHandler: function(e, t) {
+ 	                    i.hide(), r.show(), App.scrollTo(r, -200)
+ 	                },
+ 		            invalidHandler: function(e, t) {
+ 		                i.hide(),
+ 		                r.show(),
+ 		                App.scrollTo(r, -200)
+ 		            },
+ 		            errorPlacement: function(e, r) {
+ 		                r.is(":checkbox") ? e.insertAfter(r.closest(".md-checkbox-list, .md-checkbox-inline, .checkbox-list, .checkbox-inline")) : r.is(":radio") ? e.insertAfter(r.closest(".md-radio-list, .md-radio-inline, .radio-list,.radio-inline")) : e.insertAfter(r)
+ 		            },
+ 		            highlight: function(e) {
+ 		                $(e).closest(".form-group").addClass("has-error")
+ 		            },
+ 		            unhighlight: function(e) {
+ 		                $(e).closest(".form-group").removeClass("has-error")
+ 		            },
+ 		            success: function(e) {
+ 		                e.closest(".form-group").removeClass("has-error")
+ 		            },
+ 		            submitHandler: function(e) {
+ 		                i.show(),
+ 		                r.hide()
+ 		            }})
+ 	        };
+ 	        var selectIndex;
+ 	       $scope.selectMateriel = function(index){
+ 	    	  selectIndex = index;
+ 	       }
+ 	        
+    	  //********bom  end****************//
         	
 }]);

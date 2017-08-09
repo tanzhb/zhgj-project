@@ -106,3 +106,12 @@ function timeStamp2String (time){
      var mseconds = datetime.getMilliseconds();
      return year + "-" + month + "-" + date+" "+hour+":"+minute+":"+second;
 };
+
+//为空判断
+var isNull = function(str) {
+	if (str == "" || str == undefined)
+		return true;
+	var regu = "^[ ]+$";
+	var re = new RegExp(regu);
+	return re.test(str);
+}

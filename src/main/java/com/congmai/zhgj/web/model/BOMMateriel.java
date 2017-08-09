@@ -5,6 +5,8 @@ import java.util.Date;
 public class BOMMateriel {
     private String serialNum;
 
+    private String bomMaterielSerial;
+
     private String materielSerial;
 
     private String singleDose;
@@ -18,6 +20,8 @@ public class BOMMateriel {
     private String updater;
 
     private Date updateTime;
+    
+    private Materiel materiel;
 
     public String getSerialNum() {
         return serialNum;
@@ -27,7 +31,15 @@ public class BOMMateriel {
         this.serialNum = serialNum == null ? null : serialNum.trim();
     }
 
-    public String getMaterielSerial() {
+    public String getBomMaterielSerial() {
+		return bomMaterielSerial;
+	}
+
+	public void setBomMaterielSerial(String bomMaterielSerial) {
+		this.bomMaterielSerial = bomMaterielSerial;
+	}
+
+	public String getMaterielSerial() {
         return materielSerial;
     }
 
@@ -82,4 +94,13 @@ public class BOMMateriel {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public Materiel getMateriel() {
+		return materiel;
+	}
+
+	public void setMateriel(Materiel materiel) {
+		this.materiel = materiel;
+	}
+    
 }

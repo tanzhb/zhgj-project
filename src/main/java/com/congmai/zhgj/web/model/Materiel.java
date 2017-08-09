@@ -294,7 +294,7 @@ public class Materiel {
         this.palletSpecification = palletSpecification == null ? null : palletSpecification.trim();
     }
 
-    @JsonFormat(timezone="GTM+8",pattern="yyyy-MM-dd")
+    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
     public Date getManufactureDate() {
         return manufactureDate;
     }

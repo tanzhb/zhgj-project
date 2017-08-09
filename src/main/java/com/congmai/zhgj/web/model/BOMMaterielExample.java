@@ -175,6 +175,76 @@ public class BOMMaterielExample {
             return (Criteria) this;
         }
 
+        public Criteria andBomMaterielSerialIsNull() {
+            addCriterion("bomMaterielSerial is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBomMaterielSerialIsNotNull() {
+            addCriterion("bomMaterielSerial is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBomMaterielSerialEqualTo(String value) {
+            addCriterion("bomMaterielSerial =", value, "bomMaterielSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andBomMaterielSerialNotEqualTo(String value) {
+            addCriterion("bomMaterielSerial <>", value, "bomMaterielSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andBomMaterielSerialGreaterThan(String value) {
+            addCriterion("bomMaterielSerial >", value, "bomMaterielSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andBomMaterielSerialGreaterThanOrEqualTo(String value) {
+            addCriterion("bomMaterielSerial >=", value, "bomMaterielSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andBomMaterielSerialLessThan(String value) {
+            addCriterion("bomMaterielSerial <", value, "bomMaterielSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andBomMaterielSerialLessThanOrEqualTo(String value) {
+            addCriterion("bomMaterielSerial <=", value, "bomMaterielSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andBomMaterielSerialLike(String value) {
+            addCriterion("bomMaterielSerial like", value, "bomMaterielSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andBomMaterielSerialNotLike(String value) {
+            addCriterion("bomMaterielSerial not like", value, "bomMaterielSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andBomMaterielSerialIn(List<String> values) {
+            addCriterion("bomMaterielSerial in", values, "bomMaterielSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andBomMaterielSerialNotIn(List<String> values) {
+            addCriterion("bomMaterielSerial not in", values, "bomMaterielSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andBomMaterielSerialBetween(String value1, String value2) {
+            addCriterion("bomMaterielSerial between", value1, value2, "bomMaterielSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andBomMaterielSerialNotBetween(String value1, String value2) {
+            addCriterion("bomMaterielSerial not between", value1, value2, "bomMaterielSerial");
+            return (Criteria) this;
+        }
+
         public Criteria andMaterielSerialIsNull() {
             addCriterion("materielSerial is null");
             return (Criteria) this;

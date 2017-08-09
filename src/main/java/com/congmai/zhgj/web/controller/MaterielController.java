@@ -1,5 +1,6 @@
 package com.congmai.zhgj.web.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,15 +11,23 @@ import java.util.UUID;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.JavaType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.web.model.BOMMateriel;
+import com.congmai.zhgj.web.model.BOMMaterielExample;
+import com.congmai.zhgj.web.model.CompanyQualification;
 import com.congmai.zhgj.web.model.JsonTreeData;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
@@ -41,6 +50,9 @@ public class MaterielController {
 	
     @Resource
     private MaterielService materielService;
+    
+    @Resource
+    private com.congmai.zhgj.web.service.BOMMaterielService BOMMaterielService;
 
     /**
      * 保存物料
@@ -55,6 +67,52 @@ public class MaterielController {
     	}
     	return materiel;
     }
+    
+    
+    @RequestMapping(value = "/saveBOM", method = RequestMethod.POST)
+    @ResponseBody
+    public Map saveBOM(@RequestBody String params, HttpServletRequest request) {
+    	params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+        JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, BOMMateriel.class);  
+        List<BOMMateriel> BOM;
+		try {
+			BOM = objectMapper.readValue(params, javaType);
+			Materiel materiel = null;
+	    	if(!CollectionUtils.isEmpty(BOM)){
+	    		materiel = materielService.selectById(BOM.get(0).getBomMaterielSerial());
+	    		if(materiel!=null){
+		    		createNewVersion(materiel, request);
+		    	}
+	    		//生成新版本物料******↑↑↑↑↑↑********
+		    	User user = (User) request.getSession().getAttribute("userInfo");
+		    	for(BOMMateriel b:BOM){
+		    		b.setSerialNum(ApplicationUtils.random32UUID());
+		    		b.setBomMaterielSerial(materiel.getSerialNum());
+		    		if(user!=null){
+		    			b.setCreator(user.getId().toString());
+		    			b.setUpdater(user.getId().toString());
+		    		}
+		    			b.setCreateTime(new Date());
+		    			b.setUpdateTime(new Date());
+		    	}
+		    	//填充BOM******↑↑↑↑↑↑********
+		    	BOMMaterielService.betchInsertBOM(materiel,BOM);
+		    	//数据插入******↑↑↑↑↑↑********
+	        }
+	    	
+	    	Map<String, Object> map = new HashMap<String, Object>();
+	    	map.put("materiel", materiel);
+	    	map.put("BOM", BOM);
+	    	//返回数据******↑↑↑↑↑↑********
+	    	return getMaterielInfo(materiel.getSerialNum(),materiel);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+    	
+    }
+    
 	/**
 	 * 
 	 * @Description 升级版本
@@ -62,6 +120,18 @@ public class MaterielController {
 	 * @param request
 	 */
 	private void updateVersion(Materiel materiel, HttpServletRequest request) {
+		createNewVersion(materiel, request);
+		
+		materielService.updateVersion(materiel);
+	}
+
+
+	/**
+	 * @Description 构造新版本物料
+	 * @param materiel
+	 * @param request
+	 */
+	private void createNewVersion(Materiel materiel, HttpServletRequest request) {
 		materiel.setSerialNum(ApplicationUtils.random32UUID());
 		User user = (User) request.getSession().getAttribute("userInfo");
 		if(user!=null){
@@ -81,14 +151,6 @@ public class MaterielController {
 			materiel.setVersionNO(String.valueOf((Integer.parseInt(lastmateriel.getVersionNO())+1)));
 		}
 		materiel.setStatus("1");
-		
-/*		if("true".equals(materiel.getIsBOM())){
-			materiel.setIsBOM("1");
-		}else{
-			materiel.setIsBOM("0");
-		}*/
-		
-		materielService.updateVersion(materiel);
 	}
 	/**
 	 * 
@@ -302,14 +364,20 @@ public class MaterielController {
 	 */
 	@RequestMapping(value = "/getMaterielInfo")
 	@ResponseBody
-	public Materiel getMaterielInfo(String serialNum, HttpServletRequest request,Materiel materiel) {
+	public Map getMaterielInfo(String serialNum,Materiel materiel) {
 		materiel = materielService.selectById(serialNum);
-/*		if("1".equals(materiel.getIsBOM())){
-			materiel.setIsBOMcheck(true);
-		}else{
-			materiel.setIsBOMcheck(false);
-		}*/
-		return materiel;
+		Map<String, Object> map = new HashMap<String, Object>();
+    	map.put("materiel", materiel);
+    	//查询bom
+    	if("1".equals(materiel.getIsBOM())){//如果是bom物料
+	    	BOMMaterielExample m =new BOMMaterielExample();
+	    	com.congmai.zhgj.web.model.BOMMaterielExample.Criteria criteria =  m.createCriteria();
+	    	criteria.andBomMaterielSerialEqualTo(serialNum);
+	    	List<BOMMateriel> BOM = BOMMaterielService.selectList(m);
+	    	map.put("BOM", BOM);
+    	}
+    	
+    	return map;
 	}
     
 	

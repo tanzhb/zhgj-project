@@ -239,9 +239,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        'assets/pages/scripts/ui-bootbox.min.js',
 		        'assets/global/plugins/jquery.blockui.min.js',
 		        'assets/pages/scripts/ui-blockui.min.js',
-		        'assets/apps/scripts/pageHandle.js',
-/*		        'assets/global/plugins/jquery-validation/js/jquery.validate.min.js',
-	        	'assets/pages/scripts/form-validation.min.js',*/
 	        	'assets/apps/service/materielService.js',
 				'assets/apps/controllers/materielController.js'
                       ]

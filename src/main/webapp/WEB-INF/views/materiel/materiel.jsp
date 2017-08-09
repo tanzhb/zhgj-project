@@ -191,20 +191,34 @@
                         </div>
                         <div class="tab-pane fade" id="tab_2_3">
 					            <div class="portlet-body">
-					                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_1">
-					                    <thead>
-					                        <tr>
-					                            <th> 物料编码 </th>
-					                            <th> 物料名称 </th>
-					                            <th> 规格型号 </th>
-					                            <th> 单位 </th>
-					                            <th> 品牌 </th>
-					                            <th> 单套用量 </th>
-					                        </tr>
-					                    </thead>
-					                    <tbody>
-					                    </tbody>
-					                </table>
+                          <table class="table table-striped table-bordered table-hover table-checkable order-column">
+                              <thead>
+                                  <tr>
+                                      <th style="width:200px;">物料编码</th>
+                                      <th>物料名称</th>
+                                      <th>规格型号</th>
+                                      <th>单位</th>
+                                      <th>品牌</th>
+                                      <th style="width:100px;">单套用量</th>
+                                  </tr>
+                              </thead>
+                              <tbody ng-repeat="_BOM in BOM track by $index">
+                                  <tr >
+                                      <td>
+                                      		<p class="form-control-static"> {{_BOM.materiel.materielNum}} </p>
+			                          </td>
+			                          <td>
+			                                <p class="form-control-static"> {{_BOM.materiel.materielName}} </p>
+			                          </td>
+                                      <td><p class="form-control-static"> {{_BOM.materiel.specifications}} </p></td>
+                                      <td><p class="form-control-static"> {{_BOM.materiel.unit}} </p></td>
+                                      <td><p class="form-control-static"> {{_BOM.materiel.brand}} </p></td>
+                                      <td>
+			                                <p class="form-control-static"> {{_BOM.singleDose}} </p>
+			                          </td>
+                                  </tr>
+                              </tbody>
+                          </table>
 					            </div>
                         </div>
                         <div class="tab-pane fade" id="tab_2_4">

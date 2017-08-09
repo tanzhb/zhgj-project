@@ -3,6 +3,7 @@
 <mapper namespace="com.congmai.zhgj.web.dao.BOMMaterielMapper" >
   <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.BOMMateriel" >
     <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="bomMaterielSerial" property="bomMaterielSerial" jdbcType="VARCHAR" />
     <result column="materielSerial" property="materielSerial" jdbcType="VARCHAR" />
     <result column="singleDose" property="singleDose" jdbcType="VARCHAR" />
     <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
@@ -10,6 +11,7 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <association property="materiel" column="materielSerial" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByPrimaryKey"/> 
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -70,7 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    serialNum, materielSerial, singleDose, delFlg, creator, createTime, updater, updateTime
+    serialNum, bomMaterielSerial, materielSerial, singleDose, delFlg, creator, createTime, 
+    updater, updateTime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.BOMMaterielExample" >
     select
@@ -103,18 +106,23 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.congmai.zhgj.web.model.BOMMateriel" >
-    insert into BOMMateriel (serialNum, materielSerial, singleDose, 
-      delFlg, creator, createTime, 
-      updater, updateTime)
-    values (#{serialNum,jdbcType=VARCHAR}, #{materielSerial,jdbcType=VARCHAR}, #{singleDose,jdbcType=VARCHAR}, 
-      #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+    insert into BOMMateriel (serialNum, bomMaterielSerial, materielSerial, 
+      singleDose, creator, 
+      createTime, updater, updateTime
+      )
+    values (#{serialNum,jdbcType=VARCHAR}, #{bomMaterielSerial,jdbcType=VARCHAR}, #{materielSerial,jdbcType=VARCHAR}, 
+      #{singleDose,jdbcType=VARCHAR},  #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.BOMMateriel" >
     insert into BOMMateriel
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
         serialNum,
+      </if>
+      <if test="bomMaterielSerial != null" >
+        bomMaterielSerial,
       </if>
       <if test="materielSerial != null" >
         materielSerial,
@@ -141,6 +149,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
         #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="bomMaterielSerial != null" >
+        #{bomMaterielSerial,jdbcType=VARCHAR},
       </if>
       <if test="materielSerial != null" >
         #{materielSerial,jdbcType=VARCHAR},
@@ -177,6 +188,9 @@
       <if test="record.serialNum != null" >
         serialNum = #{record.serialNum,jdbcType=VARCHAR},
       </if>
+      <if test="record.bomMaterielSerial != null" >
+        bomMaterielSerial = #{record.bomMaterielSerial,jdbcType=VARCHAR},
+      </if>
       <if test="record.materielSerial != null" >
         materielSerial = #{record.materielSerial,jdbcType=VARCHAR},
       </if>
@@ -206,6 +220,7 @@
   <update id="updateByExample" parameterType="map" >
     update BOMMateriel
     set serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      bomMaterielSerial = #{record.bomMaterielSerial,jdbcType=VARCHAR},
       materielSerial = #{record.materielSerial,jdbcType=VARCHAR},
       singleDose = #{record.singleDose,jdbcType=VARCHAR},
       delFlg = #{record.delFlg,jdbcType=VARCHAR},
@@ -220,6 +235,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.BOMMateriel" >
     update BOMMateriel
     <set >
+      <if test="bomMaterielSerial != null" >
+        bomMaterielSerial = #{bomMaterielSerial,jdbcType=VARCHAR},
+      </if>
       <if test="materielSerial != null" >
         materielSerial = #{materielSerial,jdbcType=VARCHAR},
       </if>
@@ -246,7 +264,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.BOMMateriel" >
     update BOMMateriel
-    set materielSerial = #{materielSerial,jdbcType=VARCHAR},
+    set bomMaterielSerial = #{bomMaterielSerial,jdbcType=VARCHAR},
+      materielSerial = #{materielSerial,jdbcType=VARCHAR},
       singleDose = #{singleDose,jdbcType=VARCHAR},
       delFlg = #{delFlg,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
