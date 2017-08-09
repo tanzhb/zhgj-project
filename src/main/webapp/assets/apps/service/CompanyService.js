@@ -24,9 +24,9 @@ angular.module('MetronicApp').service('companyService',['$http','$q',function($h
 	 */
 	this.saveCompany = function (company){
 		var deferred = $q.defer();
-		$http.get("rest/company/saveCompany", {  
-			params:company//传整个表单数据  
-		}).then(function success(result) {
+		$http.post("rest/company/saveCompany", 
+			company//传整个表单数据  
+		).then(function success(result) {
 			deferred.resolve(result);//请求成功
 		}, function error(err) {
 			deferred.reject(err);//请求失败
@@ -80,6 +80,33 @@ angular.module('MetronicApp').service('companyService',['$http','$q',function($h
 		return deferred.promise;//返回承诺
 	}
 	
+	this.exportCompany = function(){
+		$http({
+			url:'rest/company/exportCompany',
+			method:'GET'
+			}).success(function(data,header,config,status){
+			//响应成功
+
+			}).error(function(data,header,config,status){
+			//处理响应失败
+			});
+	}
+	
+	this.uploadExcel = function(params){
+		var deferred = $q.defer();
+		var fd = new FormData();
+        var file = document.querySelector('input[type=file]').files[0];
+        fd.append('excelFile', file);
+		$http.post("rest/company/companyImport",  
+				fd,{headers:{'Content-Type': undefined},transformRequest: angular.identity}
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
+	
 	/**
 	 * 获取列表数据
 	 */
@@ -111,7 +138,7 @@ angular.module('MetronicApp').service('companyService',['$http','$q',function($h
 		var params = {};  
 	    params = JSON.stringify(companyQualifications); 
 		$http.post("rest/company/saveCompanyQualification",  
-    		params//传整个表单数据  
+				params//传整个表单数据  
     	).then(function success(result) {
             deferred.resolve(result);//请求成功
         }, function error(err) {
@@ -156,9 +183,9 @@ angular.module('MetronicApp').service('companyService',['$http','$q',function($h
 	 */
 	this.saveCompanyContact = function (companyContact){
 		var deferred = $q.defer();
-		$http.get("rest/company/saveCompanyContact",{  
-    		params:companyContact//传整个表单数据  
-		}).then(function success(result) {
+		$http.post("rest/company/saveCompanyContact", 
+    		companyContact//传整个表单数据  
+		).then(function success(result) {
             deferred.resolve(result);//请求成功
         }, function error(err) {
             deferred.reject(err);//请求失败
@@ -187,9 +214,9 @@ angular.module('MetronicApp').service('companyService',['$http','$q',function($h
 	 */
 	this.saveCompanyFinance = function (companyFinance){
 		var deferred = $q.defer();
-		$http.get("rest/company/saveCompanyFinance",{  
-			params:companyFinance//传整个表单数据  
-		}).then(function success(result) {
+		$http.post("rest/company/saveCompanyFinance", 
+			companyFinance//传整个表单数据  
+		).then(function success(result) {
 			deferred.resolve(result);//请求成功
 		}, function error(err) {
 			deferred.reject(err);//请求失败

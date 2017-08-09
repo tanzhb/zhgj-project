@@ -46,7 +46,7 @@
   <select id="selectList" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.CompanyFinance" >
     select 
     <include refid="Base_Column_List" />
-    from companyFinance where delFlg= 0
+    from companyFinance where delFlg= 0 order by createTime  DESC
   </select>
   
   <select id="countList" parameterType="com.congmai.zhgj.web.model.CompanyFinance" resultType="java.lang.Integer" >

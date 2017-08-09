@@ -37,6 +37,8 @@ public class CompanyContact {
 
     private String department;
     
+    private String responsibility;
+    
     private String remark;
 
     public String getSerialNum() {
@@ -159,6 +161,14 @@ public class CompanyContact {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public String getResponsibility() {
+		return responsibility;
+	}
+
+	public void setResponsibility(String responsibility) {
+		this.responsibility = responsibility;
 	}
     
     

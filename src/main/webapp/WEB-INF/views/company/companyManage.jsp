@@ -1,5 +1,8 @@
-<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8" %>
+<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<head>
+	<meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8" />
+</head>
 <!-- BEGIN PAGE HEADER-->
 <h3 class="page-title"> 企业信息
 </h3>
@@ -18,6 +21,7 @@
             <a ui-sref="datatablesmanaged">企业信息</a>
         </li>
     </ul>
+    
 <!--     <div class="page-toolbar">
         <div class="btn-group pull-right">
             <button type="button" class="btn btn-fit-height grey-salt dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true"> Actions
@@ -134,7 +138,7 @@
 											<i class="fa fa-plus"></i> 添加
 										</a> <a href="javascript:;" 
 											 class="btn btn-default btn-sm btn-circle"  ng-click="toEditCompany()">
-											<i class="fa fa-edit"></i> 编辑
+											<i class="fa fa-edit"></i> 修改
 										</a> <a href="javascript:;" 
 											class="btn btn-default btn-sm btn-circle" ng-click="deleteCompanyBatch()"> <i
 											class="fa fa-minus"></i> 删除
@@ -146,26 +150,25 @@
 												class="fa fa-angle-down"></i>
 											</a>
 											<ul class="dropdown-menu pull-right" id="sample_3_tools">
-												<li><a href="javascript:;" data-action="0"
+												<!-- <li><a href="javascript:;" data-action="0"
 													class="tool-action"> <i class="icon-printer"></i> Print
 												</a></li>
 												<li><a href="javascript:;" data-action="1"
 													class="tool-action"> <i class="icon-check"></i> Copy
-												</a></li>
-												<li><a href="javascript:;" data-action="2"
-													class="tool-action"> <i class="icon-doc"></i> PDF
-												</a></li>
+												</a></li>-->
+												<li><a data-action="2"
+													class="tool-action" data-toggle="modal" data-target="#import"> <i class="icon-doc"></i> 导入
+												</a></li> 
 												<li><a href="javascript:;" data-action="3"
-													class="tool-action"> <i class="icon-paper-clip"></i> Excel
+													class="tool-action" ng-click="exportCompany()"> <i class="icon-paper-clip"></i> 导出
 												</a></li>
-												<li><a href="javascript:;" data-action="4"
+												<!-- <li><a href="javascript:;" data-action="4"
 													class="tool-action"> <i class="icon-cloud-upload"></i> CSV
 												</a></li>
 												<li class="divider"></li>
 												<li><a href="javascript:;" data-action="5"
 													class="tool-action"> <i class="icon-refresh"></i> Reload
-												</a></li>
-												</li>
+												</a></li> -->
 											</ul>
 										</div>
 									</div>
@@ -173,51 +176,24 @@
                                 <div class="portlet-body">
                                     <!-- <div class="table-responsive"> -->
 										<table   class="table table-bordered" id="sample_1">
-											<!-- <thead>
-												<tr>
-													<th data-mdata="warehouseNum" data-sclass="ceneter">仓库编号</th>
-													<th data-mdata="warehouseName" data-sclass="ceneter">仓库名称</th>
-													<th data-mdata="area" data-sclass="ceneter">面积</th>
-													<th data-mdata="address" data-sclass="ceneter">备注</th>
-												</tr>
-											</thead> -->
 											<thead>
 												<tr>
-													<th><input name="select_all"
+													<th><input name="select_all" class="dt-body-center"
 															value="1" id="example-select-all" type="checkbox" /></th>
 													<th>企业编码</th>
 													<th>企业名称</th>
+													<th>合作分类</th>
 													<th>企业性质</th>
-													<th>注册资金</th>
-													<th>经营性质</th>
+													<th>经营类型</th>
+													<th>营业性质</th>
 													<th>企业法人</th>
-													<th>地址</th>
-													<th>业务员</th>
-													<th>采购商分类</th>
+													<th>注册地址</th>
 													<th>状态</th>
 													 <!-- <th class="center">操作</th> 
 													 <th class="center">操作</th>  -->
 												</tr>
 											</thead>
 											<tbody>
-												<!-- <tr ng-repeat="record in records.result" class="odd gradeX" ng-cloak>
-													<td></td>
-													<td><a data-target="#viewCompany" data-id="record.comId"  data-toggle="modal">{{record.comNum}}</a></td>
-													<td><a   ng-click="showCompanyInfo(record.comId)">{{record.comNum}}</a></td>
-													<td>{{record.comName}}</td>
-													<td>{{record.comNature}}</td>
-													<td>{{record.registeredCapital}}</td>
-													<td>{{record.businessNature}}</td>
-													<td>{{record.legalPerson}}</td>
-													<td>{{record.address}}</td>
-													<td>----</td>
-													<td>{{record.comType}}</td>
-													<td>----</td>
-													<td class="center">
-														<a ui-sref="companyAdd({comId:record.comId})" title="编辑"><i class="fa fa-edit"></i></a>&nbsp;&nbsp; 
-														<a ng-click="deleteCompany(record.comId)" title="删除"><i class="fa fa-trash"></i></a>
-													</td>
-												</tr>  -->
 											 </tbody>
 										</table>
 								</div>
@@ -226,7 +202,7 @@
           <!--   </div>
         </div> -->
         <!-- END EXAMPLE TABLE PORTLET-->
-</div>
+	</div>
 </div>
 
 <!-- 企业其他信息展示Start -->
@@ -235,21 +211,24 @@
  <div class="portlet light " id="comViewPage"> 
       <div class="portlet-body" id="comViewContent">
           <ul class="nav nav-pills">
-              <li class="active">
+             <!--  <li class="active">
                   <a data-target="#tab_1_1" data-toggle="tab">基本信息</a>
+              </li> -->
+              <li class="active">
+                  <a data-target="#tab_1_2" data-toggle="tab">联系人</a>
               </li>
               <li>
-                  <a data-target="#tab_1_2" data-toggle="tab">企业资质</a>
+                  <a data-target="#tab_1_3" data-toggle="tab">资质信息</a>
               </li>
               <li>
-                  <a data-target="#tab_1_3" data-toggle="tab">联系人</a>
+                  <a data-target="#tab_1_4" data-toggle="tab">财务信息</a>
               </li>
           </ul>
           <div class="tab-content">
-              <div class="tab-pane fade active in" id="tab_1_1">
+              <!-- <div class="tab-pane fade active in" id="tab_1_1">
                     <div class="">
                           <div class="portlet-body form">
-                              <!-- BEGIN FORM-->
+                              BEGIN FORM
                               <form class="form-horizontal" >
                                   <div class="form-body">
                                       <div class="row">
@@ -261,7 +240,7 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          <!--/span-->
+                                          /span
                                           <div class="col-md-6">
                                               <div class="form-group">
                                                   <label class="control-label col-md-5">企业名称：</label>
@@ -270,9 +249,9 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          <!--/span-->
+                                          /span
                                       </div>
-                                      <!--/row-->
+                                      /row
                                       <div class="row">
                                           <div class="col-md-6">
                                               <div class="form-group">
@@ -282,7 +261,7 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          <!--/span-->
+                                          /span
                                           <div class="col-md-6">
                                               <div class="form-group">
                                                   <label class="control-label col-md-5">企业简称：</label>
@@ -291,9 +270,9 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          <!--/span-->
+                                          /span
                                       </div>
-                                      <!--/row-->
+                                      /row
                                       <div class="row">
                                           <div class="col-md-6">
                                               <div class="form-group">
@@ -303,7 +282,7 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          <!--/span-->
+                                          /span
                                           <div class="col-md-6">
                                               <div class="form-group">
                                                   <label class="control-label col-md-5">企业性质：</label>
@@ -312,9 +291,9 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          <!--/span-->
+                                          /span
                                       </div>
-                                      <!--/row-->
+                                      /row
                                       <div class="row">
                                           <div class="col-md-6">
                                               <div class="form-group">
@@ -324,7 +303,7 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          <!--/span-->
+                                          /span
                                           <div class="col-md-6">
                                               <div class="form-group">
                                                   <label class="control-label col-md-5">注册资金：</label>
@@ -333,9 +312,9 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          <!--/span-->
+                                          /span
                                       </div>
-                                      <!--/row-->
+                                      /row
                                       <div class="row">
                                           <div class="col-md-6">
                                               <div class="form-group">
@@ -345,7 +324,7 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          <!--/span-->
+                                          /span
                                           <div class="col-md-6">
                                               <div class="form-group">
                                                   <label class="control-label col-md-5">注册地址：</label>
@@ -354,9 +333,9 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          <!--/span-->
+                                          /span
                                       </div>
-                                      <!--/row-->
+                                      /row
                                       <div class="row">
                                           <div class="col-md-6">
                                               <div class="form-group">
@@ -366,7 +345,7 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          <!--/span-->
+                                          /span
                                           <div class="col-md-6">
                                               <div class="form-group">
                                                   <label class="control-label col-md-5">联系电话：</label>
@@ -375,9 +354,9 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          <!--/span-->
+                                          /span
                                       </div>
-                                      <!--/row-->
+                                      /row
                                       <div class="row">
                                           <div class="col-md-6">
                                               <div class="form-group">
@@ -387,7 +366,7 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          <!--/span-->
+                                          /span
                                           <div class="col-md-6">
                                               <div class="form-group">
                                                   <label class="control-label col-md-5">备注：</label>
@@ -396,110 +375,114 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          <!--/span-->
+                                          /span
                                       </div>
-                                      <!--/row-->
+                                      /row
                                   </div>
                               </form>
-                              <!-- END FORM-->
+                              END FORM
                           </div>
                       </div>
-              </div>
-              <div class="tab-pane fade" id="tab_1_2">
+              </div> -->
+              <div class="tab-pane fade active in" id="tab_1_2">
                     <div class="" id="tab2_c">
-                          <div class="portlet-body form">
-                              <!-- BEGIN FORM-->
-                              <form class="form-horizontal" >施工中
-                                  <div class="form-body" ng-repeat="companyQualification in companyQualifications">
-                                      <div class="row">
-                                          <div class="col-md-3">
-                                              <div class="form-group">
-                                                  <label class="control-label">{{companyQualification.qualificationName}}</label>
-                                              </div>
-                                          </div>
-                                          <!--/span-->
-                                          <div class="col-md-3">
-                                              <div class="form-group">
-                                                  <label class="control-label">{{companyQualification.qualificationNum}}</label>
-                                              </div>
-                                          </div>
-                                          <!--/span-->
-                                          <div class="col-md-3">
-                                              <div class="form-group">
-                                                  <label class="control-label">{{companyQualification.validityDate}}</label>
-                                              </div>
-                                          </div>
-                                          <!--/span-->
-                                          <div class="col-md-3">
-                                              <div class="form-group">
-                                                  <label class="control-label">施工中</label>
-                                              </div>
-                                          </div>
-                                          <!--/span-->
-                                      </div>
-                                      <!--/row-->
-                                  </div>
-                              </form>
-                              <!-- END FORM-->
-                          </div>
+                    
+                    	<!-- START SAMPLE TABLE PORTLET-->
+                    	 <div class="">
+                                <div class="portlet-body">
+                                    <div class="table-scrollable">
+                                        <table class="table table-striped table-bordered table-advance table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>姓名</th>
+                                                    <th>职位</th>
+                                                    <th>部门/公司</th>
+                                                    <th>管理职责</th>
+                                                    <th>电话</th>
+                                                    <th>微信</th>
+                                                    <th>邮箱</th>
+                                                    <th>备注</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="companyContact in companyContacts" >
+                                                 	<td>{{companyContact.contactName}}</td>
+                                                    <td>{{companyContact.contactTitle}}</td>
+                                                    <td>{{companyContact.department}}</td>
+                                                    <td>{{companyContact.responsibility}}</td>
+                                                    <td>{{companyContact.contactTel}}</td>
+                                                    <td>{{companyContact.wechat}}</td>
+                                                    <td>{{companyContact.contactEmail}}</td>
+                                                    <td>{{companyContact.remark}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END SAMPLE TABLE PORTLET-->
                       </div>
               </div>
               <div class="tab-pane fade" id="tab_1_3">
-              		<div class="">
-                          <div class="portlet-body form">
-                              <!-- BEGIN FORM-->
-                              <form class="form-horizontal">施工中
-                                  <div class="form-body" ng-repeat="companyContact in companyContacts">
-                                      <div class="row">
-                                          <div class="col-md-2">
-                                              <div class="form-group">
-                                                  <label class="control-label">{{companyContact.contactName}}</label>
-                                              </div>
-                                          </div>
-                                          <!--/span-->
-                                          <div class="col-md-1">
-                                              <div class="form-group">
-                                                  <label class="control-label">{{companyContact.contactTitle}}</label>
-                                              </div>
-                                          </div>
-                                          <!--/span-->
-                                          <div class="col-md-1">
-                                              <div class="form-group">
-                                                  <label class="control-label">{{companyContact.department}}</label>
-                                              </div>
-                                          </div>
-                                          <!--/span-->
-                                          <div class="col-md-2">
-                                              <div class="form-group">
-                                                  <label class="control-label">{{companyContact.contactTel}}</label>
-                                              </div>
-                                          </div>
-                                          <!--/span-->
-                                          <div class="col-md-2">
-                                              <div class="form-group">
-                                                  <label class="control-label">{{companyContact.wechat}}</label>
-                                              </div>
-                                          </div>
-                                          <!--/span-->
-                                          <div class="col-md-2">
-                                              <div class="form-group">
-                                                  <label class="control-label">{{companyContact.contactEmail}}</label>
-                                              </div>
-                                          </div>
-                                          <!--/span-->
-                                         		<div class="col-md-2">
-                                              <div class="form-group">
-                                                  <label class="control-label">{{companyContact.remark}}</label>
-                                              </div>
-                                          </div>
-                                          <!--/span-->
-                                      </div>
-                                      <!--/row-->
-                                  </div>
-                              </form>
-                              <!-- END FORM-->
-                          </div>
-                   </div>
+              			<!-- START SAMPLE TABLE PORTLET-->
+                    	 <div class="">
+                                <div class="portlet-body">
+                                    <div class="table-scrollable">
+                                        <table class="table table-striped table-bordered table-advance table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>资质类型</th>
+                                                    <th>号码</th>
+                                                    <th>有效期</th>
+                                                    <th>状态</th>
+                                                    <th>备注</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="companyQualification in companyQualifications" >
+                                                 	<td>{{companyQualification.qualificationName}}</td>
+                                                    <td>{{companyQualification.qualificationNum}}</td>
+                                                    <td>{{companyQualification.validityDate}}</td>
+                                                    <td><span ng-if="companyQualification.status==0" class="label label-sm label-success">正常</span>
+												 	<span ng-if="companyQualification.status==1" class="label label-sm label-danger">已过期</span>
+												 	<span  ng-if="companyQualification.status==2" class="label label-sm label-warning">即将过期</span></td>
+                                                    <td>{{companyQualification.remark}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END SAMPLE TABLE PORTLET-->
+              </div>
+              
+               <div class="tab-pane fade" id="tab_1_4">
+              			<!-- START SAMPLE TABLE PORTLET-->
+                    	 <div class="">
+                                <div class="portlet-body">
+                                    <div class="table-scrollable">
+                                        <table class="table table-striped table-bordered table-advance table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>银行</th>
+                                                    <th>户名</th>
+                                                    <th>账号</th>
+                                                    <th>备注</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="finance in companyFinances" >
+                                                 	<td>{{finance.openingBank}}</td>
+                                                    <td>{{finance.accountName}}</td>
+                                                    <td>{{finance.accountNumber}}</td>
+                                                    <td>{{finance.remark}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END SAMPLE TABLE PORTLET-->
               </div>
           </div>
       </div>
@@ -509,294 +492,252 @@
 <!-- 企业其他信息展示End -->
 
 
-<!-- 企业信息查看modal START --><!-- 
-<div class="modal fade" id="viewCompany" role="basic" aria-hidden="true">
-     <div class="modal-dialog" style="width: 750px;">
+<!-- 企业信息查看modal START -->
+<div class="modal fade bs-modal-lg" id="viewCompany" role="basic" aria-hidden="true">
+     <div class="modal-dialog modal-lg" >
 	    <div class="modal-content">
 	 		<div class="modal-header">
 	            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
 	            <h4 class="modal-title" >企业信息</h4>
 	        </div>
 	        <div class="modal-body">
-	          		<div class="col-md-12">
-					   <div class="portlet light ">
-					       <div class="portlet-body">
-					           <ul class="nav nav-tabs">
-					               <li class="active">
-					                   <a data-target="#tab_1_1" data-toggle="tab">基本信息</a>
-					               </li>
-					               <li>
-					                   <a data-target="#tab_1_2" data-toggle="tab">企业资质</a>
-					               </li>
-					               <li>
-					                   <a data-target="#tab_1_3" data-toggle="tab">联系人</a>
-					               </li>
-					           </ul>
-					           <div class="tab-content">
-					               <div class="tab-pane fade active in" id="tab_1_1">
-					                     <div class="portlet light">
-					                           <div class="portlet-body form">
-					                               BEGIN FORM
-					                               <form class="form-horizontal" role="form">
-					                                   <div class="form-body">
-					                                       <div class="row">
-					                                           <div class="col-md-6">
-					                                               <div class="form-group">
-					                                                   <label class="control-label col-md-5">企业编号：</label>
-					                                                   <div class="col-md-7">
-					                                                       <p class="form-control-static" >{{company.comNum}}</p>
-					                                                   </div>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                           <div class="col-md-6">
-					                                               <div class="form-group">
-					                                                   <label class="control-label col-md-5">企业名称：</label>
-					                                                   <div class="col-md-7">
-					                                                       <p class="form-control-static">{{company.comName}}</p>
-					                                                   </div>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                       </div>
-					                                       /row
-					                                       <div class="row">
-					                                           <div class="col-md-6">
-					                                               <div class="form-group">
-					                                                   <label class="control-label col-md-5">企业类型：</label>
-					                                                   <div class="col-md-7">
-					                                                       <p class="form-control-static">{{company.comType}}</p>
-					                                                   </div>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                           <div class="col-md-6">
-					                                               <div class="form-group">
-					                                                   <label class="control-label col-md-5">企业简称：</label>
-					                                                   <div class="col-md-7">
-					                                                       <p class="form-control-static">{{company.abbreviation}}</p>
-					                                                   </div>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                       </div>
-					                                       /row
-					                                       <div class="row">
-					                                           <div class="col-md-6">
-					                                               <div class="form-group">
-					                                                   <label class="control-label col-md-5">营业性质：</label>
-					                                                   <div class="col-md-7">
-					                                                       <p class="form-control-static">{{company.businessNature}}</p>
-					                                                   </div>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                           <div class="col-md-6">
-					                                               <div class="form-group">
-					                                                   <label class="control-label col-md-5">企业性质：</label>
-					                                                   <div class="col-md-7">
-					                                                       <p class="form-control-static">{{company.comNature}}</p>
-					                                                   </div>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                       </div>
-					                                       /row
-					                                       <div class="row">
-					                                           <div class="col-md-6">
-					                                               <div class="form-group">
-					                                                   <label class="control-label col-md-5">经营类型：</label>
-					                                                   <div class="col-md-7">
-					                                                       <p class="form-control-static">{{company.businessType}}</p>
-					                                                   </div>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                           <div class="col-md-6">
-					                                               <div class="form-group">
-					                                                   <label class="control-label col-md-5">注册资金：</label>
-					                                                   <div class="col-md-7">
-					                                                       <p class="form-control-static">{{company.registeredCapital}}</p>
-					                                                   </div>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                       </div>
-					                                       /row
-					                                       <div class="row">
-					                                           <div class="col-md-6">
-					                                               <div class="form-group">
-					                                                   <label class="control-label col-md-5">企业法人姓名：</label>
-					                                                   <div class="col-md-7">
-					                                                       <p class="form-control-static">{{company.legalPerson}}</p>
-					                                                   </div>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                           <div class="col-md-6">
-					                                               <div class="form-group">
-					                                                   <label class="control-label col-md-5">注册地址：</label>
-					                                                   <div class="col-md-7">
-					                                                       <p class="form-control-static">{{company.address}}</p>
-					                                                   </div>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                       </div>
-					                                       /row
-					                                       <div class="row">
-					                                           <div class="col-md-6">
-					                                               <div class="form-group">
-					                                                   <label class="control-label col-md-5">纳税人识别号：</label>
-					                                                   <div class="col-md-7">
-					                                                       <p class="form-control-static">{{company.taxpayeNumber}}</p>
-					                                                   </div>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                           <div class="col-md-6">
-					                                               <div class="form-group">
-					                                                   <label class="control-label col-md-5">联系电话：</label>
-					                                                   <div class="col-md-7">
-					                                                       <p class="form-control-static">{{company.tel}}</p>
-					                                                   </div>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                       </div>
-					                                       /row
-					                                       <div class="row">
-					                                           <div class="col-md-6">
-					                                               <div class="form-group">
-					                                                   <label class="control-label col-md-5">维护人员：</label>
-					                                                   <div class="col-md-7">
-					                                                       <p class="form-control-static">{{company.contact}}</p>
-					                                                   </div>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                           <div class="col-md-6">
-					                                               <div class="form-group">
-					                                                   <label class="control-label col-md-5">备注：</label>
-					                                                   <div class="col-md-7">
-					                                                       <p class="form-control-static">{{company.remark}}</p>
-					                                                   </div>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                       </div>
-					                                       /row
-					                                   </div>
-					                               </form>
-					                               END FORM
-					                           </div>
-					                       </div>
-					               </div>
-					               <div class="tab-pane fade" id="tab_1_2">
-					                     <div class="portlet light">
-					                           <div class="portlet-body form">
-					                               BEGIN FORM
-					                               <form class="form-horizontal" role="form">
-					                                   <div class="form-body" ng-repeat="companyQualification in companyQualifications">
-					                                       <div class="row">
-					                                           <div class="col-md-3">
-					                                               <div class="form-group">
-					                                                   <label class="control-label">{{companyQualification.qualificationName}}</label>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                           <div class="col-md-3">
-					                                               <div class="form-group">
-					                                                   <label class="control-label">{{companyQualification.qualificationNum}}</label>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                           <div class="col-md-3">
-					                                               <div class="form-group">
-					                                                   <label class="control-label">{{companyQualification.validityDate}}</label>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                           <div class="col-md-3">
-					                                               <div class="form-group">
-					                                                   <label class="control-label">施工中</label>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                       </div>
-					                                       /row
-					                                   </div>
-					                               </form>
-					                               END FORM
-					                           </div>
-					                       </div>
-					               </div>
-					               <div class="tab-pane fade" id="tab_1_3">
-					               		<div class="portlet light">
-					                           <div class="portlet-body form">
-					                               BEGIN FORM
-					                               <form class="form-horizontal" role="form">
-					                                   <div class="form-body" ng-repeat="companyContact in companyContacts">
-					                                       <div class="row">
-					                                           <div class="col-md-2">
-					                                               <div class="form-group">
-					                                                   <label class="control-label">{{companyContact.contactName}}</label>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                           <div class="col-md-1">
-					                                               <div class="form-group">
-					                                                   <label class="control-label">{{companyContact.contactTitle}}</label>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                           <div class="col-md-1">
-					                                               <div class="form-group">
-					                                                   <label class="control-label">{{companyContact.department}}</label>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                           <div class="col-md-2">
-					                                               <div class="form-group">
-					                                                   <label class="control-label">{{companyContact.contactTel}}</label>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                           <div class="col-md-2">
-					                                               <div class="form-group">
-					                                                   <label class="control-label">{{companyContact.wechat}}</label>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                           <div class="col-md-2">
-					                                               <div class="form-group">
-					                                                   <label class="control-label">{{companyContact.contactEmail}}</label>
-					                                               </div>
-					                                           </div>
-					                                           /span
-				                                           		<div class="col-md-2">
-					                                               <div class="form-group">
-					                                                   <label class="control-label">{{companyContact.remark}}</label>
-					                                               </div>
-					                                           </div>
-					                                           /span
-					                                       </div>
-					                                       /row
-					                                   </div>
-					                               </form>
-					                               END FORM
-					                           </div>
-					                    </div>
-					               </div>
-					           </div>
-					       </div>
-					   </div>
-					</div>
-	        </div>
+	          		<!-- <div class="col-md-12"> -->
+	          		 <div class="">
+                           <div class="portlet-body form">
+                              <!--  BEGIN FORM -->
+                               <form class="form-horizontal" role="form">
+                                   <div class="form-body">
+                                       <div class="row">
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">企业编号：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static" >{{company.comNum}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                           <!-- /span -->
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">企业名称：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{company.comName}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                         <!--   /span -->
+                                       </div>
+                                       <!-- /row -->
+                                       <div class="row">
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">企业类型：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{company.comType}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                          <!--  /span -->
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">企业简称：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{company.abbreviation}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                          <!--  /span -->
+                                       </div>
+                                      <!--  /row -->
+                                       <div class="row">
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">营业性质：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{company.businessNature}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                        <!--    /span -->
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">企业性质：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{company.comNature}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                         <!--   /span -->
+                                       </div>
+                                     <!--   /row -->
+                                       <div class="row">
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">经营类型：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{company.businessType}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                      <!--      /span -->
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">注册资金：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{company.registeredCapital}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                           <!-- /span -->
+                                       </div>
+                                      <!--  /row -->
+                                       <div class="row">
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">企业法人姓名：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{company.legalPerson}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                           <!-- /span -->
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">注册地址：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{company.address}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                           <!-- /span -->
+                                       </div>
+                                       <!-- /row -->
+                                       <div class="row">
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">纳税人识别号：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{company.taxpayeNumber}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                         <!--   /span -->
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">联系电话：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{company.tel}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                           <!-- /span -->
+                                       </div>
+                                       <!-- /row -->
+                                       <div class="row">
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">维护人员：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{company.contact}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                          <!--  /span -->
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">备注：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{company.remark}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                           <!-- /span -->
+                                       </div>
+                                       <!-- /row -->
+                                   </div>
+                               </form>
+                              <!--  END FORM -->
+                           </div>
+                      </div>
+					<!-- </div> -->
+	        <!-- </div> -->
 	    </div>
     </div>
 </div>
- --><!-- 企业信息查看modal END-->
+</div>
+<!-- 企业信息查看modal END-->
+
+
+<!-- 导入modal START -->
+<div class="modal fade" id="import" role="import" aria-hidden="true">
+     <div class="modal-dialog" >
+	    <div class="modal-content">
+	 		<div class="modal-header">
+	            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+	            <h4 class="modal-title" >企业信息导入</h4>
+	        </div>
+	        <div class="modal-body">
+	          		<!-- <div class="col-md-12"> -->
+	          		 <div class="">
+                           <div class="portlet-body form">
+                              <!--  BEGIN FORM -->
+                               <form class="form-horizontal" role="form">
+                                   <div class="form-body">
+                                   		<form id="fileImport" method="post" enctype="multipart/form-data" >
+	                                       <div class="row">
+	                                           <div class="col-md-2">
+	                                               <div class="form-group">
+	                                               		<!-- <div class="col-md-4">
+	                                               		</div> -->
+	                                               		<div class="col-md-12">
+	                                               			<button type="button" class="btn blue" ng-click="downloadImportTemp()">下载模板</button>
+	                                               		</div>
+	                                               </div>
+	                                           </div>
+	                                           <div class="col-md-7">
+	                                               <div class="form-group">
+	                                               		 <div class="fileinput fileinput-new" data-provides="fileinput">
+	                                                        <div class="input-group input-large">
+	                                                            <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+	                                                                <i class="fa fa-file fileinput-exists"></i>&nbsp;
+	                                                                <span class="fileinput-filename"> </span>
+	                                                            </div>
+	                                                            <span class="input-group-addon btn default btn-file" id="file_span">
+	                                                                <span class="fileinput-new"> 选择文件 </span>
+	                                                                <span class="fileinput-exists">更换</span>
+	                                                                <input type="file" file-model="excelFile" accept=".xls" name="..."> </span>
+	                                                            <a href="javascript:;" id="resetFile" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> 移除 </a>
+	                                                        </div>
+	                                                    </div>
+	                                               </div>
+	                                           </div>
+	                                            <div class="col-md-2">
+	                                               <div class="form-group">
+	                                               		<div class="col-md-4">
+	                                               			
+	                                               		</div>
+	                                               		<div class="col-md-8">
+	                                               			<button type="button" class="btn blue" ng-click="uploadExcel()">上传</button>
+	                                               		</div>
+	                                               </div>
+	                                           </div>
+	                                           
+	                                         <!--   /span -->
+	                                       </div>
+	                                       <!-- /row -->
+                                       </form>
+                                   </div>
+                               </form>
+                              <!--  END FORM -->
+                           </div>
+                      </div>
+					<!-- </div> -->
+	        <!-- </div> -->
+	    </div>
+    </div>
+</div>
+</div>
+<!-- 导入modal END-->
 
 <!-- END MAIN CONTENT -->
 <!-- BEGIN MAIN JS -->

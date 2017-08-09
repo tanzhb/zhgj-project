@@ -16,10 +16,11 @@
     <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="wechat" property="wechat" jdbcType="VARCHAR" />
     <result column="department" property="department" jdbcType="VARCHAR" />
+    <result column="responsibility" property="responsibility" jdbcType="VARCHAR" />
      <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List">
-     serialNum, comId, contactName, contactTel, wechat, contactEmail, contactTitle, department, 
+     serialNum, comId, contactName, contactTel, wechat, contactEmail, contactTitle, department,responsibility, 
     contactImage, remark, delFlg, creator, createTime, updater, updateTime
   </sql>
   
@@ -37,12 +38,12 @@
   
   
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.CompanyContact">
-    insert into companyContact ( serialNum, comId, contactName, contactTel, wechat, contactEmail, contactTitle, department, 
+    insert into companyContact ( serialNum, comId, contactName, contactTel, wechat, contactEmail, contactTitle, department,responsibility, 
     contactImage, remark, creator, createTime, updater, updateTime
       )
     values (#{serialNum,jdbcType=VARCHAR}, #{comId,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, 
       #{contactTel,jdbcType=VARCHAR}, #{wechat,jdbcType=VARCHAR}, #{contactEmail,jdbcType=VARCHAR}, 
-      #{contactTitle,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{contactImage,jdbcType=VARCHAR}, 
+      #{contactTitle,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR},#{responsibility,jdbcType=VARCHAR}, #{contactImage,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
       )
@@ -51,7 +52,7 @@
   <select id="selectList" parameterType="com.congmai.zhgj.web.model.CompanyContact" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from companyContact where delFlg= 0
+    from companyContact where delFlg= 0 order by createTime DESC
   </select>
   
   <select id="countList" parameterType="com.congmai.zhgj.web.model.CompanyContact" resultType="java.lang.Integer">
@@ -111,6 +112,9 @@
       </if>
        <if test="department != null" >
         department = #{department,jdbcType=VARCHAR},
+      </if>
+       <if test="responsibility != null" >
+        responsibility  = #{responsibility,jdbcType=VARCHAR},
       </if>
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},

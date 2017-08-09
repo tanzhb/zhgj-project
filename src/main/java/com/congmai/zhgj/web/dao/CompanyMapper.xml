@@ -36,7 +36,7 @@
     <include refid="Base_Column_List" />
     from company
    		where delFlg = 0
-   	order by createTime DESC
+   	order by updateTime DESC
   </select>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >

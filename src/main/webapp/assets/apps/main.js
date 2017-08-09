@@ -106,10 +106,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
     // Redirect any unmatched url
     $urlRouterProvider.otherwise("/dashboard");
 
-    $stateProvider
+    
 
-        // Dashboard
-        .state('dashboard', {
+    $stateProvider.state('dashboard', {
             url: "/dashboard",
             templateUrl: "rest/page/dashboard",
             data: {pageTitle: '首页'},
@@ -176,7 +175,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
-// 物料信息
+
         .state('materiel', {
             url: "/materiel",
             templateUrl: "rest/page/materiel",
@@ -218,35 +217,35 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [
-'assets/global/plugins/select2/css/select2.min.css',
-'assets/global/plugins/select2/css/select2-bootstrap.min.css',
-'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
-'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css',
-'assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css',
-'assets/global/plugins/icheck/skins/all.css',
-'assets/global/plugins/select2/js/select2.full.min.js',
-'assets/global/plugins/jquery-validation/js/jquery.validate.min.js',
-'assets/global/plugins/jquery-validation/js/localization/messages_zh.min.js',
-'assets/global/plugins/jquery-validation/js/additional-methods.min.js',
-'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
-'assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js',
-'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js',
-'assets/global/plugins/ckeditor/ckeditor.js',
-'assets/global/plugins/bootstrap-markdown/lib/markdown.js',
-'assets/global/plugins/bootstrap-markdown/js/bootstrap-markdown.js',
-
-'assets/pages/scripts/form-icheck.min.js',
-'assets/pages/scripts/form-validation.min.js',
-'assets/apps/service/materielService.js',
-'assets/apps/controllers/materielController.js',
-
-'assets/global/plugins/datatables/datatables.min.css',
-'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-
-'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
-'assets/global/plugins/datatables/datatables.all.min.js',
-'assets/pages/scripts/table-datatables-fixedheader.min.js'/*,
-'assets/apps/controllers/selectMaterielController.js'*/
+				'assets/global/plugins/select2/css/select2.min.css',
+				'assets/global/plugins/select2/css/select2-bootstrap.min.css',
+				'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
+				'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css',
+				'assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css',
+				'assets/global/plugins/icheck/skins/all.css',
+				'assets/global/plugins/select2/js/select2.full.min.js',
+				'assets/global/plugins/jquery-validation/js/jquery.validate.min.js',
+				'assets/global/plugins/jquery-validation/js/localization/messages_zh.min.js',
+				'assets/global/plugins/jquery-validation/js/additional-methods.min.js',
+				'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+				'assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js',
+				'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js',
+				'assets/global/plugins/ckeditor/ckeditor.js',
+				'assets/global/plugins/bootstrap-markdown/lib/markdown.js',
+				'assets/global/plugins/bootstrap-markdown/js/bootstrap-markdown.js',
+				
+				'assets/pages/scripts/form-icheck.min.js',
+				'assets/pages/scripts/form-validation.min.js',
+				'assets/apps/service/materielService.js',
+				'assets/apps/controllers/materielController.js',
+				
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/pages/scripts/table-datatables-fixedheader.min.js'/*,
+				'assets/apps/controllers/selectMaterielController.js'*/
 
 
                         ]
@@ -254,8 +253,141 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
-// 用户管理
-        .state('user', {
+
+	    .state('userContract', {
+	            url: "/userContract",
+	            templateUrl:"rest/page/userContract",
+	            data: {pageTitle: '合同管理'},
+	            controller: "ContractController",
+	            resolve: {
+	                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+	                    return $ocLazyLoad.load({
+	                        name: 'MetronicApp',
+	                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+	                        files: [                             
+	                    
+	                    'assets/global/plugins/datatables/datatables.min.css', 
+	                    'assets/global/plugins/datatables/datatables.min.js',
+						
+	                    
+	                    'assets/global/plugins/jquery-validation/js/jquery.validate.js',
+						'assets/global/plugins/datatables/datatables.all.min.js',
+                       'assets/pages/scripts/table-datatables-managed.min.js',
+						'assets/global/plugins/jquery.min.js',
+						
+						'assets/global/plugins/jquery.min.js',
+				        'assets/global/plugins/bootstrap/js/bootstrap.min.js',
+				        'assets/global/plugins/js.cookie.min.js',
+				        'assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js',
+				        'assets/global/plugins/jquery.blockui.min.js',
+				        'assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js',
+				        
+	                    'assets/apps/service/ContractService.js',
+	                    'assets/apps/controllers/ContractController.js'
+	                   
+	                        ]
+	                    });
+	                }]
+	            }
+	        })
+        
+        
+        .state('addUserContract',{
+            url: "/addUserContract",
+            templateUrl: "rest/page/addUserContract",
+            data: {pageTitle: '合同管理'},
+            controller: "ContractController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [                             
+				'assets/global/plugins/select2/css/select2.min.css',
+				'assets/global/plugins/select2/css/select2-bootstrap.min.css',
+				'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
+				'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css',
+				'assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css',
+				
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				
+				
+				'assets/global/plugins/jquery-validation/js/jquery.validate.js',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/pages/scripts/table-datatables-managed.min.js',
+				'assets/global/plugins/jquery.min.js',
+				'assets/global/plugins/select2/js/select2.full.min.js',
+				'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+				'assets/global/plugins/jquery-validation/js/jquery.validate.min.js',
+				'assets/global/plugins/jquery-validation/js/additional-methods.min.js',
+				'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+				
+				'assets/global/plugins/jquery.min.js',
+				'assets/global/plugins/bootstrap/js/bootstrap.min.js',
+				
+				 
+				
+				'assets/global/plugins/angularjs/angular.min.js',
+				
+				'assets/apps/service/ContractService.js',
+				'assets/apps/controllers/ContractController.js',
+                        ]
+                    });
+                }]
+            }
+        })
+        
+        
+        
+        .state('editUserContractPage', {
+        	params:{data:null},
+            url: "/editUserContractPage:id",
+            templateUrl: "rest/contract/editUserContractPage",
+            data: {pageTitle: '合同管理'},
+            controller: "ContractController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [                             
+						'assets/global/plugins/select2/css/select2.min.css',
+						'assets/global/plugins/select2/css/select2-bootstrap.min.css',
+						'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
+						'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css',
+						'assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css',
+						
+						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+						
+						
+						'assets/global/plugins/jquery-validation/js/jquery.validate.js',
+						'assets/global/plugins/datatables/datatables.all.min.js',
+                        'assets/pages/scripts/table-datatables-managed.min.js',
+						'assets/global/plugins/jquery.min.js',
+						'assets/global/plugins/select2/js/select2.full.min.js',
+						'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+						'assets/global/plugins/jquery-validation/js/jquery.validate.min.js',
+						'assets/global/plugins/jquery-validation/js/additional-methods.min.js',
+						'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+						
+						'assets/global/plugins/jquery.min.js',
+				        'assets/global/plugins/bootstrap/js/bootstrap.min.js',
+				        
+				         
+				        'assets/global/plugins/angularjs/plugins/angular-ui-router.min.js',
+				        'assets/global/plugins/angularjs/angular.min.js',
+				        
+				        
+				        'assets/apps/service/ContractService.js',
+	                    'assets/apps/controllers/ContractController.js',
+                        ]
+                    });
+                }]
+            }
+        })
+        
+        // 用户管理
+            .state('user', {
             url: "/user",
             templateUrl: "rest/page/user",
             data: {pageTitle: '用户管理'},
@@ -277,7 +409,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                     });
                 }]
             }
-        })        .state('company', {
+        })       
+        .state('company', {
         	url: "/company",
         	templateUrl: "rest/company/companyManage",
         	data: {pageTitle: '企业信息'},
@@ -305,7 +438,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         				        'assets/apps/controllers/CompanyController.js',
         				        'assets/apps/service/CompanyService.js',
         				        'assets/apps/directive/CompanyDirective.js',
-        				        'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
+        				        //'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
         				        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
         				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css',
         				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js',
@@ -341,7 +474,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        				        'assets/global/plugins/datatables/datatables.all.min.js',
 	        				        'assets/global/plugins/bootstrap-toastr/toastr.js',
 	        				        'assets/global/plugins/bootstrap-toastr/toastr.css',
-	        				        'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
+	        				        //'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
+	        				        'assets/global/css/components-rounded.min.css',
 	        				        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
 	        				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css',
 	        				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js',
@@ -363,9 +497,89 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        			});
 	        		}]
 	        	}
-	        })
-
+	        })         
+	           .state('warehouse', {
+	        url: "/warehouse",
+            templateUrl: "rest/warehouse/viewWarehouseList",
+            data: {pageTitle: '仓库信息'},
+            controller: "WarehouseController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [   
+							/*'assets/global/plugins/jquery.min.js',
+							'assets/global/plugins/bootstrap/js/bootstrap.min.js',
+							'assets/global/plugins/js.cookie.min.js',
+							'assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js',
+							'assets/global/plugins/jquery.blockui.min.js',
+							'assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js',
+							'assets/global/scripts/datatable.js',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+							'assets/global/scripts/app.min.js',
+							
+							'assets/layouts/layout2/scripts/layout.min.js',
+							'assets/layouts/layout2/scripts/demo.min.js',
+							'assets/layouts/global/scripts/quick-sidebar.min.js',
+							'assets/layouts/global/scripts/quick-nav.min.js',*/
+							 'assets/global/plugins/jstree/dist/themes/default/style.min.css',
+							  'assets/global/plugins/jstree/dist/jstree.min.js',
+                            'assets/pages/scripts/ui-tree.min.js',
+							 'assets/apps/scripts/pageHandle.js',
+							 'assets/global/plugins/bootstrap-toastr/toastr.js',
+        				        'assets/global/plugins/bootstrap-toastr/toastr.css',
+                           'assets/global/plugins/datatables/datatables.min.css', 
+                           'assets/global/plugins/datatables/datatables.min.js',
+	                       /* 'assets/global/plugins/datatables/datatables.all.min.js',*/
+	                        'assets/apps/service/WarehouseService.js',
+	                        'assets/apps/controllers/WarehouseController.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        .state('addWarehouse', {
+            url: "/addWarehouse?:warehouseSerialNum",
+            templateUrl: "rest/warehouse/addOrEditWarehouseInfo",
+            data: {pageTitle: '新增仓库'},
+            controller: "WarehouseController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [                             
+                            /*'assets/global/plugins/datatables/datatables.min.css', 
+                            'assets/global/plugins/datatables/datatables.min.js',
+                            'assets/global/plugins/bootstrap-toastr/toastr.js',
+    				        'assets/global/plugins/bootstrap-toastr/toastr.css',
+                            'assets/apps/controllers/WarehouseController.js'*/
+                            'assets/global/plugins/datatables/datatables.min.css', 
+    				        'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
+    				        'assets/global/plugins/datatables/datatables.all.min.js',
+    				        'assets/global/plugins/bootstrap-toastr/toastr.js',
+    				        'assets/global/plugins/bootstrap-toastr/toastr.css',
+    				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css',
+    				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js',
+    				        'assets/global/plugins/jquery-repeater/jquery.repeater.js',
+    				        'assets/pages/scripts/form-repeater.min.js',
+    				        'assets/pages/scripts/form-repeater.js',
+    				        'assets/apps/controllers/WarehouseController.js',
+    				        'assets/apps/service/WarehouseService.js',
+    				        'assets/global/plugins/bootbox/bootbox.min.js',
+    				        'assets/pages/scripts/ui-bootbox.min.js',
+    				        'assets/global/plugins/jquery.blockui.min.js',
+    				        'assets/pages/scripts/ui-blockui.min.js',
+    				        'assets/apps/scripts/pageHandle.js'
+    				        
+                        ]
+                    });
+                }]
+            }
+        })
 }]);
+
 
 
 //js获取项目根路径，如： http://localhost:8083/uimcardprj
