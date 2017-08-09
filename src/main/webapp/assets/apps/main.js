@@ -151,11 +151,11 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
 
         // 价格目录
-        .state('price', {
-            url: "/price",
-            templateUrl: "rest/price/viewPriceList",
+        .state('priceist', {
+            url: "/pricelist",
+            templateUrl: "rest/priceList/viewPriceList",
             data: {pageTitle: '价格目录'},
-            controller: "PriceController",
+            controller: "PriceListController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
@@ -170,19 +170,19 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
           				        'assets/global/plugins/bootstrap-toastr/toastr.css',
                              'assets/global/plugins/datatables/datatables.min.css', 
                              'assets/global/plugins/datatables/datatables.min.js',
-  	                        'assets/apps/service/PriceService.js',
-  	                        'assets/apps/controllers/PriceController.js'
+  	                        'assets/apps/service/PriceListService.js',
+  	                        'assets/apps/controllers/PriceListController.js'
                         ]
                     });
                 }]
             }
         })
         
-          .state('addPrice', {
-            url: "/addPrice?:priceSerialNum",
-            templateUrl: "rest/price/addOrEditPriceInfo",
+          .state('addPriceList', {
+            url: "/addPriceList?:priceListSerialNum",
+            templateUrl: "rest/priceList/addOrEditPriceListInfo",
             data: {pageTitle: '新增价格'},
-            controller: "PriceController",
+            controller: "PriceListController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
@@ -194,13 +194,12 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
     				        'assets/global/plugins/datatables/datatables.all.min.js',
     				        'assets/global/plugins/bootstrap-toastr/toastr.js',
     				        'assets/global/plugins/bootstrap-toastr/toastr.css',
-    				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css',
     				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js',
     				        'assets/global/plugins/jquery-repeater/jquery.repeater.js',
     				        'assets/pages/scripts/form-repeater.min.js',
     				        'assets/pages/scripts/form-repeater.js',
-    				        'assets/apps/controllers/PriceController.js',
-    				        'assets/apps/service/PriceService.js',
+    				        'assets/apps/controllers/PriceListController.js',
+    				        'assets/apps/service/PriceListService.js',
     				        'assets/global/plugins/bootbox/bootbox.min.js',
     				        'assets/pages/scripts/ui-bootbox.min.js',
     				        'assets/global/plugins/jquery.blockui.min.js',
@@ -214,7 +213,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
     				        'assets/global/plugins/simple-line-icons/simple-line-icons.min.css',
     				        'assets/layouts/layout2/css/layout.min.css',
     				        'assets/layouts/layout2/css/custom.min.css',
-    				        'assets/layouts/layout2/css/themes/blue.min.css'
+    				        'assets/layouts/layout2/css/themes/blue.min.css',
+    				        'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
+    				        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
                         ]
                     });
                 }]
@@ -239,7 +240,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
                           'assets/global/plugins/datatables/datatables.all.min.js',
                           'assets/pages/scripts/table-datatables-fixedheader.min.js',
-
+                          
                             'assets/global/plugins/jstree/dist/jstree.min.js',
                             'assets/pages/scripts/ui-tree.min.js',
                             'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js',

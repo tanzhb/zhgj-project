@@ -31,13 +31,13 @@
 					<i class="fa fa-globe"></i>价格列表
 				</div>
 				<div class="actions"><!-- ui-sref="addPrice"  -->
-					<button ng-click="addPrice()"
+					<button ng-click="addPriceList()"
 						data-toggle="modal" class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-plus"></i> 添加
-					</button><button ng-click="toEditPricePage()"
+					</button><button ng-click="toEditPriceListPage()"
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-edit"></i> 修改
-					</button> <button ng-click="delPrice()" 
+					</button> <button ng-click="delPriceList()" 
 						data-toggle="modal" 
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-minus"></i> 删除

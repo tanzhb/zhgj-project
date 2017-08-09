@@ -56,7 +56,7 @@ import com.congmai.zhgj.web.service.WarehouseService;
  * @version 1.0.0
  */
 @Controller
-@RequestMapping(value = "/price")
+@RequestMapping(value = "/priceList")
 public class PriceListController {
 
     @Resource
@@ -71,7 +71,7 @@ public class PriceListController {
      */
     @RequestMapping(value = "/viewPriceList")
     public String viewPriceList(HttpServletRequest request) {
-        return "price/priceList";
+        return "priceList/priceList";
     }
     
     /**
@@ -80,9 +80,9 @@ public class PriceListController {
      * @param session
      * @return
      */
-    @RequestMapping(value = "/addOrEditPriceInfo")
+    @RequestMapping(value = "/addOrEditPriceListInfo")
     public String addOrEditWarehouseDetail( ) {
-        return "price/addOrEditPriceInfo";
+        return "priceList/addOrEditPriceInfo";
     }
     /**
      * 保存价格信息
@@ -90,7 +90,7 @@ public class PriceListController {
      * @param session
      * @return
      */
-    @RequestMapping(value = "/savePriceInfo", method = RequestMethod.POST)
+    @RequestMapping(value = "/savePriceListInfo", method = RequestMethod.POST)
 	public ResponseEntity<Void> savePriceDetail(@RequestBody  PriceList priceList,UriComponentsBuilder ucBuilder) {
     	try{
     		if(StringUtils.isEmpty(priceList.getSerialNum())){
@@ -125,7 +125,7 @@ public class PriceListController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/viewPriceDetail", method = RequestMethod.POST)
+    @RequestMapping(value = "/viewPriceListDetail", method = RequestMethod.POST)
     public ResponseEntity<PriceList> viewWarehouseDetail(Map<String, Object> map, @RequestBody String  serialNum) {
     	PriceList priceList=priceListService.selectById(serialNum);
     	return new ResponseEntity<PriceList>(priceList, HttpStatus.OK);
@@ -137,7 +137,7 @@ public class PriceListController {
 	 * @param ids
 	 * @return
 	 */
-	@RequestMapping(value = "/deletePrice", method = RequestMethod.POST)
+	@RequestMapping(value = "/deletePriceList", method = RequestMethod.POST)
 	public ResponseEntity<Void> deletePriceList(@RequestBody String ids) {
 		if ("".equals(ids) || ids == null) {
 			return new ResponseEntity<Void>(HttpStatus.CONFLICT);

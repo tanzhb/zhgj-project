@@ -2,7 +2,7 @@
 angular
 		.module('MetronicApp')
 		.controller(
-				'PriceController',
+				'PriceListController',
 				[
 						'$rootScope',
 						'$scope',
@@ -12,9 +12,9 @@ angular
 						'$location',
 						'$stateParams',
 						'settings',
-						'PriceService',
+						'PriceListService',
 						function($rootScope, $scope, $state, $compile,$http,$location,$stateParams,settings,
-								PriceService) {
+								PriceListService) {
 							$scope
 									.$on(
 											'$viewContentLoaded',
@@ -22,13 +22,23 @@ angular
 												// initialize core components
 												 handle = new pageHandle();
 												App.initAjax();
-												if($location.path()=="/addPrice"){
+												if($location.path()=="/addPriceList"){
 													debugger;
-										    		getPriceInfo($stateParams.priceSerialNum);
-										 		}
-												 if($location.path()=="/price"){
+													$('.date-picker').datepicker({
+														rtl: App.isRTL(),
+														orientation: "left",
+														autoclose: true
+										        	})//初始化日期控件
+										    		getPriceListInfo($stateParams.PriceListSerialNum);
+														 $scope.isChecked=false;
+														 $scope.ladderPrices=[{}];
+														 _index = 0; 
+														 handle.pageRepeater();
+												    		
+													 }
+												 if($location.path()=="/priceList"){
 													 debugger;
-											        	loadPriceTable();//加载价格列表
+											        	loadPriceListTable();//加载价格列表
 											        }
 												// set default layout mode
 												$rootScope.settings.layout.pageContentWhite = true;
@@ -54,9 +64,9 @@ angular
 							//初始化toastr结束
 
 							// 构建datatables开始***************************************
-							var tableAjaxUrl = "rest/price/getPriceList";
+							var tableAjaxUrl = "rest/priceList/getPriceList";
 							 var table;
-			function loadPriceTable(){
+			function loadPriceListTable(){
 							var a = 0;
 							App.getViewPort().width < App
 									.getResponsiveBreakpoint("md") ? $(
@@ -157,7 +167,7 @@ angular
 													'targets' : 1,
 													'render' : function(data,
 															type, row, meta) {
-														return '<a   ng-click="showPriceInfoModal(\''+row.serialNum+'\')">'+data+'</a>';
+														return '<a   ng-click="showPriceListInfoModal(\''+row.serialNum+'\')">'+data+'</a>';
 														//return data;
 													},"createdCell": function (td, cellData, rowData, row, col) {
 														 $compile(td)($scope);
@@ -210,37 +220,37 @@ angular
 							// ***************************************
 							}
 							// 添加价格开始***************************************
-						$scope.addPrice = function() {
+						$scope.addPriceList = function() {
 							debugger;
-							$scope.priceAdd=true;
-							 $state.go('addPrice',{},{reload:true}); 
+							$scope.priceListAdd=true;
+							 $state.go('addPriceList',{},{reload:true}); 
 						}
-						$scope.editPrice = function(){
+						$scope.editPriceList = function(){
 							debugger;
-							var price=$scope.price;
-							$scope.price=price;
-							$scope.priceView = false;
-		        			$scope.priceAdd = false;
-		        			$scope.priceEdit = true;
+							var priceList=$scope.priceList;
+							$scope.priceList=priceList;
+							$scope.priceListView = false;
+		        			$scope.priceListAdd = false;
+		        			$scope.PriceListEdit = true;
 						}
-						$scope.cancelEditPrice = function(){
-							getPriceInfo($scope.price.serialNum);
-							$scope.priceView = true;
-		        			$scope.priceAdd = true;
-		        			$scope.priceEdit = false;
+						$scope.cancelEditPriceList = function(){
+							getPriceListInfo($scope.priceList.serialNum);
+							$scope.priceListView = true;
+		        			$scope.priceListAdd = true;
+		        			$scope.priceListEdit = false;
 						}		
-								$scope.savePrice= function() {
+								$scope.savePriceList= function() {
 									debugger;
-									if($('#priceForm').valid()){//表单验证通过则执行添加功能
-										PriceService
-										.savePrice($scope.price)
+									if($('#PriceListForm').valid()){//表单验证通过则执行添加功能
+										PriceListService
+										.savePriceList($scope.priceList)
 										.then(
 												function(data) {debugger;
 													toastr.success("保存价格数据成功！");
-													$scope.price = $scope.price;
-								        			$scope.priceView = true;
-								        			$scope.priceAdd = true;
-								        			$scope.priceEdit = false;
+													$scope.priceList = $scope.priceList;
+								        			$scope.priceListView = true;
+								        			$scope.priceListAdd = true;
+								        			$scope.priceListEdit = false;
 								        			$(".alert-danger").hide();
 												},
 												function(errResponse) {
@@ -254,7 +264,7 @@ angular
 							// 添加价格结束***************************************
 							
 							// 修改价格开始***************************************							
-							$scope.toEditPricePage = function() {//弹出框修改价格信息
+							$scope.toEditPriceListPage = function() {//弹出框修改价格信息
 								debugger;
 								var id_count = table.$('input[type="checkbox"]:checked').length;
 								if(id_count==0){
@@ -263,15 +273,18 @@ angular
 									handle.toastr.warning("只能选择一条数据进行编辑");
 								}else{
 									var serialNum = table.$('input[type="checkbox"]:checked').val();
-									$state.go("addPrice",{priceSerialNum:serialNum});
+									$state.go("addPriceList",{priceListSerialNum:serialNum});
 								}
 							};
 							// 修改价格结束***************************************							
-
+							$scope.showOrHide = function() {//控制阶梯div的显示与隐藏
+								 $scope.isChecked=!$scope.isChecked;
+								 
+							 }
 						
 							// 页面加载完成后调用，验证输入框
 							$scope.$watch('$viewContentLoaded', function() {  
-								var e = $("#priceForm"),
+								var e = $("#PriceListForm"),
 						        r = $(".alert-danger", e),
 						        i = $(".alert-success", e);
 						        e.validate({
@@ -280,45 +293,33 @@ angular
 						            focusInvalid: !1,
 						            ignore: "",
 						            messages: {
-						            	warehouseNum:{required:"价格编号不能为空！"},
-						            	warehouseName:{required:"价格名称不能为空！"},
-						            	warehouseType:{required:"未选择价格类型！"},
-						            	warehouseCategory:{required:"未选择价格分类！"},
-						            	owner:{required:"价格持有者不能为空！"},
-						            	address:{required:"价格地址不能为空！"},
-						            	area:{required:"价格面积不能为空！"},
-						            	email: { email:"E-Mail格式不正确"},
-						            	//email:{required:"邮箱不能为空！"},
-						            	 tel: { 
-						                    	digits:'请输入正确的电话, 必须为数字！',
-				                        	    rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")
-						                    },
-						                   fax: { 
-						                    	digits:'请输入正确的传真, 必须为数字！',
-				                        	    rangelength:jQuery.validator.format("传真必须在{0}到{1}位数字之间！")
-						                    },
-						            	//tel:{required:"电话不能为空！"},
-						            	//remark:{required:"备注不能为空！"},
-						            	admin:{required:"价格管理员不能为空！"},
-						            	//fax:{required:"传真不能为空！"}
+						            	priceNum:{required:"价格编号不能为空！"},
+						            	materielNum:{required:"未选择物料！"},
+						            	priceType:{required:"未选择价格类型！"},
+						            	buyComId:{required:"未选择采购商！"},
+						            	supplyComId:{required:"未选择供应商商！"},
+						            	currency:{required:"未选择币种！"},
+						            	rate:{required:"税率不能为空！"},
+						            	price: {required:"单价不能为空！"},
+						            	priceEffectiveDate: {required:"价格生效期未选择！" },
+						                    	/*digits:'请输入正确的电话, 必须为数字！',
+				                        	    rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")*/
+						            	priceExpirationDate: {required:"价格失效期未选择！" }
+						                    	/*digits:'请输入正确的传真, 必须为数字！',
+				                        	    rangelength:jQuery.validator.format("传真必须在{0}到{1}位数字之间！")*/
+						                    
 						            },
 						            rules: {
-						            	warehouseNum:{required:true},
-						            	warehouseName:{required:true},
-						            	warehouseType:{required:true},
-						            	warehouseCategory:{required:true},
-						            	owner:{required:true},
-						            	address:{required:true},
-						            	area:{required:true},
-						            	//email:{required:true},
-						            	 email: {	email:true},
-						            	 tel: {digits:true, rangelength:[7,20] },
-						            	//tel:{required:true},
-				                         fax: {digits:true, rangelength:[7,20] },
-						            	remark:{required:true},
-						            	//fax:{required:true},
-						            	admin:{required:true}
-						               
+						            	priceNum:{required:true},
+						            	materielNum:{required:true},
+						            	priceType:{required:true},
+						            	buyComId:{required:true},
+						            	supplyComId:{required:true},
+						            	currency:{required:true},
+						            	rate:{digits:true,required:true},
+						            	price: {digits:true,required:true},
+						            	priceEffectiveDate: {required:true },
+						            	priceListExpirationDate: {required:true },
 						            },
 						            invalidHandler: function(e, t) {
 						                i.hide(),
@@ -344,24 +345,66 @@ angular
 						        })   							}); 
 							
 							
-							 function getPriceInfo(serialNum){
+							 function getPriceListInfo(serialNum){
 						    	   if(!handle.isNull(serialNum)){
 						    		   debugger;
-						    			 var promise =PriceService .selectBySerialNum(serialNum);
+						    			 var promise =PriceListService.selectBySerialNum(serialNum);
 						 	        	promise.then(function(data){
 						 	        		  debugger;
-						 	        		$scope.price = data;
+						 	        		$scope.priceList = data;
 						 	            },function(data){
 						 	               //调用承诺接口reject();
 						 	            });
 						    		 }
 						       }
+							 
+							  /**
+						        * 阶梯价格加一行
+						        */
+						       $scope.addRepeat = function(){
+						    	   if(handle.isNull($scope.priceList)||handle.isNull($scope.priceList.serialNum)){
+							    		 handle.toastr.warning("您的价格信息还未保存");
+							    		 return;
+							       }else{
+							    	   _index++;
+							    	   $scope.ladderPrices[_index] = {}
+							       }
+						       };
+						       
+						       /**
+						        * 阶梯价格删除一行
+						        */
+						       $scope.deleteRepeat = function(){
+						    	   $scope.ladderPrices.splice(_index,1);
+						    	   _index--;
+						       };
+						       /**
+						        * 显示编辑、删除操作
+						        */
+						       $scope.showOperation = function(type,index){
+						    	   var call = "operation_c"+index;
+						    	   if(type=='finance'){
+						    		   call =  "operation_f"+index;
+						    	   }
+						    	   $scope[call] = true;
+						       };
+						       
+						       /**
+						        * 隐藏编辑、删除操作
+						        */
+						       $scope.hideOperation = function(type,index){
+						    	   var call = "operation_c"+index;
+						    	   if(type=='finance'){
+						    		   call =  "operation_f"+index;
+						    	   }
+						    	   $scope[call]= false;
+						       };
 						        /**
 							        * 显示价格信息(弹框)
 							        */
-							       $scope.showPriceInfoModal = function(serialNum){
-							    	   getWarehouseInfo(serialNum);
-							    	   $('#viewPrice').modal('show'); 
+							       $scope.showPriceListInfoModal = function(serialNum){
+							    	   getPriceListInfo(serialNum);
+							    	   $('#viewPriceList').modal('show'); 
 							       };
 							       
 						} ]);

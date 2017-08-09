@@ -1,19 +1,19 @@
 'use strict';
 
-angular.module('MetronicApp').factory('PriceService', ['$rootScope', '$http', '$q', function($rootScope, $http, $q){
+angular.module('MetronicApp').factory('PriceListService', ['$rootScope', '$http', '$q', function($rootScope, $http, $q){
     var factory = {
-        savePrice: savePrice,
-        delPrices:delPrices,
+        savePriceList: savePriceList,
+        delPriceLists:delPriceLists,
         /*selectByWarehouseName:selectByWarehouseName,*/
         selectBySerialNum:selectBySerialNum
     };
 
     return factory;
     //保存价格
-    function savePrice(price){
+    function savePriceList(PriceLis){
         var deferred = $q.defer();  
 debugger;
-        $http.post($rootScope.basePath + "/rest/price/savePriceInfo", price).success(function (data) {  
+        $http.post($rootScope.basePath + "/rest/priceList/savePriceListInfo", PriceList).success(function (data) {  
             // 如果连接成功，延时返回给调用者  
         	debugger;
             deferred.resolve(data);  
@@ -26,10 +26,10 @@ debugger;
     };
     
     //删除价格
-    function delPrices(serialNums){
+    function delPriceLists(serialNums){
         var deferred = $q.defer();  
 
-        $http.post($rootScope.basePath + "/rest/price/deletePrice", serialNums).success(function (data) {  
+        $http.post($rootScope.basePath + "/rest/priceList/deletePriceList", serialNums).success(function (data) {  
             // 如果连接成功，延时返回给调用者  
             deferred.resolve(data);  
         })  
@@ -56,7 +56,7 @@ debugger;
     //通过价格serialNum查找价格
     function selectBySerialNum(serialNum){
         var deferred = $q.defer();  
-        $http.post($rootScope.basePath + "/rest/price/viewPriceDetail", serialNum).success(function (data) { 
+        $http.post($rootScope.basePath + "/rest/priceList/viewPriceListDetail", serialNum).success(function (data) { 
             // 如果连接成功，延时返回给调用者 
             deferred.resolve(data);  
         })  

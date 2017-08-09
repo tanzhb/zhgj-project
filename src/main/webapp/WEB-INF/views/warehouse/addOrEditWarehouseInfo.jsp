@@ -196,7 +196,7 @@
                                                          <div class="row">
                                                             <div class="col-md-6">
                                                              <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="tel"> <span class="required"> * </span>备注 :</label>
+                                                    <label class="col-md-4 control-label" for="tel"> <!-- <span class="required"> * </span> -->备注 :</label>
                                                     <div class="col-md-8">
                                                                         <input type="text"  class="form-control" placeholder=""  id="remark" name ="remark"  ng-hide="warehouseAdd" 
 												ng-model="warehouse.remark">

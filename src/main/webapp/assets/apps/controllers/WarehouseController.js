@@ -324,14 +324,16 @@ angular
 						            	owner:{required:"仓库持有者不能为空！"},
 						            	address:{required:"仓库地址不能为空！"},
 						            	area:{required:"仓库面积不能为空！"},
-						            	email: { email:"E-Mail格式不正确"},
+						            	email: { required:"邮箱不能为空！",email:"E-Mail格式不正确"},
 						            	//email:{required:"邮箱不能为空！"},
 						            	 tel: { 
 						                    	digits:'请输入正确的电话, 必须为数字！',
+						                    	required:"电话不能为空！",
 				                        	    rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")
 						                    },
 						                   fax: { 
 						                    	digits:'请输入正确的传真, 必须为数字！',
+						                    	required:"传真不能为空！",
 				                        	    rangelength:jQuery.validator.format("传真必须在{0}到{1}位数字之间！")
 						                    },
 						            	//tel:{required:"电话不能为空！"},
@@ -347,13 +349,10 @@ angular
 						            	owner:{required:true},
 						            	address:{required:true},
 						            	area:{required:true},
-						            	//email:{required:true},
-						            	 email: {	email:true},
-						            	 tel: {digits:true, rangelength:[7,20] },
-						            	//tel:{required:true},
-				                         fax: {digits:true, rangelength:[7,20] },
-						            	remark:{required:true},
-						            	//fax:{required:true},
+						            	 email: {	required:true,email:true},
+						            	 tel: {required:true,digits:true, rangelength:[7,20] },
+				                         fax: {required:true,digits:true, rangelength:[7,20] },
+						            	//remark:{required:true},
 						            	admin:{required:true}
 						               
 						            },

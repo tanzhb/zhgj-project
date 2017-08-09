@@ -49,7 +49,7 @@
     <button   class="btn sbold green" data-toggle="modal"  ng-click="jumpToUrl('/addWarehouse')">新建仓库<i class="fa fa-plus"></i></button>
     
 </div> -->
- <a class="btn sbold green" data-toggle="modal"   ng-click="addWarehouse()">新建仓库 <i class="fa fa-plus"></i></a>
+ <!-- <a class="btn sbold green" data-toggle="modal"   ng-click="addWarehouse()">新建仓库 <i class="fa fa-plus"></i></a> -->
 					<button ui-sref="addWarehouse" 
 						data-toggle="modal" class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-plus"></i> 添加
@@ -286,7 +286,7 @@
 
 			<div class="portlet-body">
 				<table
-					class="table table-striped table-bordered table-hover table-header-fixed"
+					class="table table-striped table-bordered table-hover "
 					id="sample_1">
 					<thead>
 						<tr>
