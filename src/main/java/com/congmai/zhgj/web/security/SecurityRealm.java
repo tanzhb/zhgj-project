@@ -8,6 +8,8 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.credential.DefaultPasswordService;
+import org.apache.shiro.authc.credential.PasswordService;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -73,13 +75,30 @@ public class SecurityRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         String loginName = String.valueOf(token.getPrincipal());
         String password = new String((char[]) token.getCredentials());
+        
+        PasswordService svc = new DefaultPasswordService();
+        
+        
         // 通过数据库进行验证
-        final User authentication = userService.authentication(new User(loginName, password));
-        if (authentication == null) {
-            throw new AuthenticationException("用户名或密码错误.");
-        }
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(loginName, password, getName());
-        return authenticationInfo;
+        final User authentication = userService.selectByUsername(loginName);
+        
+        if(authentication != null){  
+        	if(svc.passwordsMatch(password, authentication.getPassword())){
+        		return new SimpleAuthenticationInfo(loginName,password,getName());
+        	}else{  
+            	throw new AuthenticationException("用户名或密码错误.") ;
+            } 
+        }else{  
+        	throw new AuthenticationException("用户名或密码错误.") ;
+        }  
+//        String password = new String((char[]) token.getCredentials());
+//        // 通过数据库进行验证
+//        final User authentication = userService.authentication(new User(loginName, password));
+//        if (authentication == null) {
+//            throw new AuthenticationException("用户名或密码错误.");
+//        }
+//        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(loginName, password, getName());
+//        return authenticationInfo;
     }
 
 }
