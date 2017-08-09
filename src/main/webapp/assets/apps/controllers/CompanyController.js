@@ -18,6 +18,11 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	 			//createTable(15,1,true);
 	 			loadTable();
 	 		//	 $("#comViewPage").html($compile($("#comViewContent").html())($scope));
+	 			$("#sample_3_tools > li > a.tool-action").on("click",
+	 			        function(){debugger;
+	 			            var e=$(this).attr("data-action");
+	 			           $("#companyTable").DataTable().button(e).trigger();
+	 			 })
 	 		}
 	    	// set default layout mode
 	    	$rootScope.settings.layout.pageContentWhite = true;
@@ -45,7 +50,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 									&& (a = 64);
 							
 
-			table = $("#sample_1")
+			table = $("#companyTable")
 					.DataTable(
 							{
 								language : {
@@ -76,6 +81,16 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 								order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
 								bRetrieve : true,
 								'scrollX': false,
+								  buttons: [
+							                {
+							                },
+							                {
+							                },
+							                {
+							                	 extend: "print",
+								                 className: "btn dark btn-outline"
+							                }
+							            ],
 								// searching: true,//是否过滤检索
 								// ordering: true,//是否排序
 								lengthMenu : [
@@ -1144,6 +1159,9 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        */
 	       $scope.uploadExcel = function(){
 	    	    var file = document.querySelector('input[type=file]').files[0];
+	    	    if(handle.isNull(file)){
+	    	    	handle.toastr.warning("请选择Excel文件！");
+	    	    }
 	    	    console.log(file.name);
 	    	    var type = file.name.substring(file.name.lastIndexOf("."));
 	    	   if(type != ".xls"){
@@ -1174,7 +1192,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    	  //$(".fileinput-filename").val("");
 	    	  //$("#file_span").appendTo('<input type="file" file-model="excelFile" accept=".xls" name="...">');
 	       })
-	       
+
 	         
 	       
 
