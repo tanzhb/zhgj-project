@@ -49,7 +49,7 @@ import com.congmai.zhgj.web.service.WarehouseService;
 
 
 /**
- * @ClassName WareHouseController
+ * @ClassName PriceListController
  * @Description TODO   价格控制器
  * @author zhaichao
  * @Date 2017年8月8日 下午3:31:35
