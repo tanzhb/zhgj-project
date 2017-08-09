@@ -186,24 +186,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<label class="col-md-3 control-label" for="form_control_1">电子合同
 								<span class="required">*</span>
 							</label>
-
 							<div class="col-md-9">
-								<input type="file" id="electric" onchange="uploadElectric(this)"
-									class="form-control" /> <input type="hidden"
-									ng-model="contractVO.electronicContract" />
-								<div class="form-control-focus"></div>
+								<input type="file" id="electric"  ng-model="contractVO.electronicContract" name="files" value="123"
+									class="form-control" /> 
+									<div class="form-control-focus"></div>
 								<span class="help-block">电子合同</span>
 							</div>
 						</div>
+
 						<div class="form-group form-md-line-input col-md-6">
 							<label class="col-md-3 control-label" for="form_control_1">签字合同
 								<span class="required">*</span>
 							</label>
-
 							<div class="col-md-9">
-								<input type="file" id="" onchange="uploadSign(this)"
-									class="form-control" /> <input type="hidden"
-									ng-model="contractVO.signContract" />
+									<input type="file" id="signContract" ng-model="contractVO.signContract" name="file"
+									class="form-control" /> 
 								<div class="form-control-focus"></div>
 								<span class="help-block">签字合同</span>
 							</div>
@@ -228,7 +225,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!-- BEGIN MAIN JS -->
 <script>
 
-     TableDatatablesManaged.init();
+    /*  TableDatatablesManaged.init(); */
     
      $('#signDate').datepicker({
   	   language:"zh-CN",

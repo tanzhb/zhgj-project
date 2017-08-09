@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 
-<div class="row" ng-controller="ContractController as uTrl">
+<div class="row" >
 	<div class="col-md-12">
 
 		<script type="text/javascript">
@@ -19,45 +19,10 @@
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
 		<div class="portlet box red">
 			<div class="portlet-title">
-				<!-- <div class="caption">
-					<i class="fa fa-globe"></i>Header & Footer Fixed
-				</div>
 				<div class="actions" ng-controller='MyCtrl'>
 					<a href="javascript:;" ng-click="jumpToUrl('addUserContract')"
 						class="btn btn-default btn-sm btn-circle"> <i
-						class="fa fa-plus"></i> 新增合同
-					</a> <a href="javascript:;" ng-click="del()"
-						class="btn btn-default btn-sm btn-circle"> <i
-						class="fa fa-minus"></i> 删除
-					</a>
-				</div>
-				
-
-				<div id="delUsersModal" class="modal fade" tabindex="-1"
-					data-backdrop="static" data-keyboard="false">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal"
-									aria-hidden="true"></button>
-								<h4 class="modal-title">确认</h4>
-							</div>
-							<div class="modal-body">
-								<p>是否删除已选条目?</p>
-							</div>
-							<div class="modal-footer">
-								<button type="button" data-dismiss="modal"
-									class="btn dark btn-outline">取消</button>
-								<button type="button" ng-click="confirmDel()" class="btn green">确定
-								</button>
-							</div>
-						</div>
-					</div>
-				</div> -->
-				<div class="actions" ng-controller='MyCtrl'>
-					<a href="javascript:;" ng-click="jumpToUrl('addUserContract')"
-						class="btn btn-default btn-sm btn-circle"> <i
-						class="fa fa-plus"></i> 新增合同
+						class="fa fa-plus"></i> 新增
 					</a> <a href="javascript:;" ng-click="del()"
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-minus"></i> 删除
@@ -176,7 +141,123 @@
 	</div>
 </div>
 
-<script>
+<!-- 基本信息modal 开始 -->
+<div id="basicContractInfo" class="modal fade" tabindex="-1"
+	data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog">
+		<div class="modal-content" style="width: 750px;">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true"></button>
+				<h4 class="modal-title">基本信息</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row" style="line-height:60px;">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label col-md-5">合同编号</label> <label
+								class="control-label col-md-7">
+								{{contractVO.contractNum}} </label>
+
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label col-md-5">合同类型</label> <label
+								class="control-label col-md-7">
+								{{contractVO.contractType}} </label>
+
+						</div>
+					</div>
+				</div>
+				
+				
+				
+				<div class="row" style="line-height:60px;">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label col-md-5">服务模式</label> <label
+								class="control-label col-md-7">
+								{{contractVO.serviceModel}} </label>
+
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label col-md-5">结算条款</label> <label
+								class="control-label col-md-7">
+								{{contractVO.settlementClause}} </label>
+
+						</div>
+					</div>
+				</div>
+				
+				
+				<div class="row" style="line-height:60px;">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label col-md-5">供应商</label> <label
+								class="control-label col-md-7">
+								{{contractVO.comId}} </label>
+
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label col-md-5">备注</label> <label
+								class="control-label col-md-7">
+								{{contractVO.remark}} </label>
+
+						</div>
+					</div>
+				</div>
+				
+				
+				<div class="row" style="line-height:60px;">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label col-md-5">开始日期</label> <label
+								class="control-label col-md-7">
+								{{contractVO.startDate}} </label>
+
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label col-md-5">结束日期</label> <label
+								class="control-label col-md-7">
+								{{contractVO.endDate}} </label>
+
+						</div>
+					</div>
+				</div>
+				
+				
+				<div class="row" style="line-height:60px;">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label col-md-5">签订日期</label> <label
+								class="control-label col-md-7">
+								{{contractVO.signDate}} </label>
+
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label col-md-5">签订人</label> <label
+								class="control-label col-md-7">
+								{{contractVO.signer}} </label>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 基本信息modal 结束 -->
+
+<!-- <script>
 /* TableDatatablesFixedHeader.init();//页面元素载入结束后，装载datatables */
 	$(document).ready(function(){
 　　		
@@ -186,4 +267,4 @@
  
  
 
-</script>
+</script> -->

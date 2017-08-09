@@ -1,5 +1,8 @@
 package com.congmai.zhgj.web.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +12,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.tomcat.util.http.parser.MediaType;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +21,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.alibaba.druid.util.StringUtils;
@@ -73,11 +80,19 @@ public class ContractController {
 	 * @return 操作结果
 	 */
 	@RequestMapping(value = "/saveUserContract", method = RequestMethod.POST)
-	   public ResponseEntity<Void> saveUserContract(@Valid ContractVO contractVO, HttpServletRequest request,UriComponentsBuilder ucBuilder) {
+	   public ResponseEntity<Void> saveUserContract(@Valid ContractVO contractVO, HttpServletRequest request,
+			   UriComponentsBuilder ucBuilder,@RequestParam(value = "files")MultipartFile files[]) {
 		//如果id为空执行保存
 		if(StringUtils.isEmpty(contractVO.getId())){
 			  String serialNum=UUID.randomUUID().toString().toUpperCase().replaceAll("-", ""); 
+			  
 			   contractVO.setId(serialNum);
+			   String electronicContract=uploadFile(files[0]);
+			   String signContract=uploadFile(files[1]);
+			   
+			   contractVO.setElectronicContract(electronicContract);
+			   contractVO.setSignContract(signContract);
+			   
 			   User user=(User) request.getSession().getAttribute("userInfo");   
 			   contractVO.setCreator("1");
 			   contractService.insertContract(contractVO);
@@ -94,6 +109,77 @@ public class ContractController {
 					
 			return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	   }
+	
+	
+	public String uploadFile(MultipartFile file){
+		String filePath = getClasspath()+"uploadAttachFiles/";
+		String randomName=UUID.randomUUID().toString().toUpperCase().replaceAll("-", ""); 
+		String fileName = fileUp(file, filePath,randomName);
+		System.out.println(fileName);
+		return fileName;
+	}
+	
+	
+	public  String fileUp(MultipartFile file, String filePath, String fileName){
+		String extName = ""; // 扩展名格式：
+		try {
+
+			if (file.getOriginalFilename().lastIndexOf(".") >= 0){
+				extName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+			}
+
+			copyFile(file.getInputStream(), filePath, fileName+extName).replaceAll("-", "");
+
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		return fileName+extName;
+	}
+	
+	
+	/**
+	 * 写文件到当前目录的upload目录中
+	 * @param in
+	 * @param fileName
+	 * @throws IOException
+	 */
+	private  String copyFile(InputStream in, String dir, String realName)
+			throws IOException {
+		File file = mkdirsmy(dir,realName);
+		FileUtils.copyInputStreamToFile(in, file);
+		return realName;
+	}
+	
+	
+	/**判断路径是否存在，否：创建此路径
+	 * @param dir  文件路径
+	 * @param realName  文件名
+	 * @throws IOException 
+	 */
+	public  File mkdirsmy(String dir, String realName) throws IOException{
+		File file = new File(dir, realName);
+		if (!file.exists()) {
+			if (!file.getParentFile().exists()) {
+				file.getParentFile().mkdirs();
+			}
+			file.createNewFile();
+		}
+		return file;
+	}
+	
+	
+	
+	
+	/**获取classpath1
+	 * @return
+	 */
+	public  String getClasspath(){
+		String path = (String.valueOf(Thread.currentThread().getContextClassLoader().getResource(""))+"../../").replaceAll("file:/", "").replaceAll("%20", " ").trim();	
+		if(path.indexOf(":") != 1){
+			path = File.separator + path;
+		}
+		return path;
+	}
 	
 	
 		 /**
@@ -117,8 +203,8 @@ public class ContractController {
 		  * @param ids（前台所传递的id）
 		  * @return
 		  */
-		 @RequestMapping(value = "/selectConbtractById", method = RequestMethod.POST)
-	     public ResponseEntity<ContractVO> selectConbtractById(@RequestBody String ids) {
+		 @RequestMapping(value = "/selectConbtractById", method = RequestMethod.GET)
+	     public ResponseEntity<ContractVO> selectConbtractById(String ids) {
 			 
 			 ContractVO c=contractService.selectConbtractById(ids);
 			 return new ResponseEntity<ContractVO>(c, HttpStatus.OK);
@@ -133,4 +219,13 @@ public class ContractController {
 			 return "contract/editUserContractPage";
 	     }
 
+		 
+		 /**
+		  * 跳转到编辑页面
+		  * @return
+		  */
+		 @RequestMapping(value = "/upload")
+	     public String upload(String id,String view) {
+			 return "contract/upload";
+	     }
 }

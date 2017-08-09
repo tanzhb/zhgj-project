@@ -35,22 +35,23 @@ angular.module('MetronicApp').factory('ContractService', ['$rootScope', '$http',
         return deferred.promise;
     }
     
-    function saveUserContract(contractVO){
+    function saveUserContract($scope){
     	
         var deferred = $q.defer();  
-
+    debugger
     	$.post("rest/contract/saveUserContract", {
-    		id:contractVO.id,
-			comId:contractVO.comId,
-			contractNum:contractVO.contractNum,
-			contractType:contractVO.contractType,
-			serviceModel:contractVO.serviceModel,
-			settlementClause:contractVO.settlementClause,
+    		id:$scope.contractVO.id,
+			comId:$scope.contractVO.comId,
+			contractNum:$scope.contractVO.contractNum,
+			contractType:$scope.contractVO.contractType,
+			serviceModel:$scopecontractVO.serviceModel,
+			settlementClause:$scope.contractVO.settlementClause,
 			startDate:$("#startDate").val(),
 			endDate:$("#endDate").val(),
 			signDate:$("#signDate").val(),
-			signer:contractVO.signer,
-			remark:contractVO.remark//传整个表单数据
+			signer:$scopecontractVO.signer,
+			remark:$scope.contractVO.remark,
+			file:$scope.myForm.file//传整个表单数据
         }).success(function (data) {  
 		            // 如果连接成功，延时返回给调用者  
 		            deferred.resolve(data);  
@@ -81,7 +82,7 @@ angular.module('MetronicApp').factory('ContractService', ['$rootScope', '$http',
     function selectUserContract(ids){
         var deferred = $q.defer();  
 
-        $http.post($rootScope.basePath + "/rest/contract/selectConbtractById", ids).success(function (data) { 
+        $.get("rest/contract/selectConbtractById", {ids:ids}).success(function (data) { 
             // 如果连接成功，延时返回给调用者  
             deferred.resolve(data);
             
