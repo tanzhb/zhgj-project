@@ -22,24 +22,8 @@ angular
 												$rootScope.settings.layout.pageContentWhite = true;
 												$rootScope.settings.layout.pageBodySolid = false;
 												$rootScope.settings.layout.pageSidebarClosed = false;
-											});
+											});							
 							
-							//初始化toastr开始
-							toastr.options = {
-									"closeButton" : true,
-									"debug" : false,
-									"positionClass" : "toast-top-center",
-									"onclick" : null,
-									"showDuration" : "1000",
-									"hideDuration" : "1000",
-									"timeOut" : "5000",
-									"extendedTimeOut" : "1000",
-									"showEasing" : "swing",
-									"hideEasing" : "linear",
-									"showMethod" : "fadeIn",
-									"hideMethod" : "fadeOut"
-								}
-							//初始化toastr结束
 
 							// 构建datatables开始***************************************
 							var table = $("#sample_2")
@@ -441,6 +425,7 @@ angular
 						            }
 						        })   
 							}); 
+							// 页面加载完成后调用，验证输入框
 							
 							
 							
