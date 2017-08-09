@@ -82,7 +82,7 @@ public class PriceListController {
      */
     @RequestMapping(value = "/addOrEditPriceListInfo")
     public String addOrEditWarehouseDetail( ) {
-        return "priceList/addOrEditPriceInfo";
+        return "priceList/addOrEditPriceListInfo";
     }
     /**
      * 保存价格信息

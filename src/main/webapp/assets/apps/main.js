@@ -151,8 +151,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
 
         // 价格目录
-        .state('priceist', {
-            url: "/pricelist",
+        .state('priceList', {
+            url: "/priceList",
             templateUrl: "rest/priceList/viewPriceList",
             data: {pageTitle: '价格目录'},
             controller: "PriceListController",
