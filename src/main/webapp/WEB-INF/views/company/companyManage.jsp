@@ -21,107 +21,12 @@
             <a ui-sref="datatablesmanaged">企业信息</a>
         </li>
     </ul>
-    
-<!--     <div class="page-toolbar">
-        <div class="btn-group pull-right">
-            <button type="button" class="btn btn-fit-height grey-salt dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true"> Actions
-                <i class="fa fa-angle-down"></i>
-            </button>
-            <ul class="dropdown-menu pull-right" role="menu">
-                <li>
-                    <a href="#">
-                        <i class="icon-user"></i> New User </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="icon-present"></i> New Event
-                        <span class="badge badge-success">4</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="icon-basket"></i> New order </a>
-                </li>
-                <li class="divider"> </li>
-                <li>
-                    <a href="#">
-                        <i class="icon-flag"></i> Pending Orders
-                        <span class="badge badge-danger">4</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="icon-users"></i> Pending Users
-                        <span class="badge badge-warning">12</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div> -->
 </div>
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
 <div class="row">
     <div class="col-md-12">
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
-        <!-- <div class="portlet light"> -->
-           <!--  <div class="portlet-title">
-                <div class="caption font-dark">
-                    <i class="icon-settings font-dark"></i>
-                    <span class="caption-subject bold uppercase"> 仓库信息列表 </span>
-                </div>
-                <div class="actions">
-                    <div class="btn-group btn-group-devided" data-toggle="buttons">
-                        <label class="btn btn-transparent dark btn-outline btn-circle btn-sm active">
-                            <input type="radio" name="options" class="toggle" id="option1">Actions</label>
-                        <label class="btn btn-transparent dark btn-outline btn-circle btn-sm">
-                            <input type="radio" name="options" class="toggle" id="option2">Settings</label>
-                    </div>
-                </div>
-            </div> -->
-          <!-- <div class="portlet-body"> -->
-  <!--               <div class="table-toolbar">
-                    <div class="row">
-                        <div class="col-md-7">
-                            <div class="btn-group">
-                                <button id="sample_editable_1_new" class="btn sbold blue" ui-sref="companyAdd">
-                                    <i class="fa fa-plus"></i> 新建
-                                </button>
-                            </div>
-                        </div>
-                        <div class="col-md-5">
-                            <div class="btn-group pull-right">
-                             	<a href="javascript:;" class="btn btn-icon-only blue btn-outline">
-                                          <i class="fa fa-search"></i>
-                                 </a>
-                                 <div class="input-group input-medium pull-left">
-                                                    <input ng-model="searchKey" type="text" class="form-control" placeholder="请输入关键字">
-                                                    <span class="input-group-btn">
-                                                        <button class="btn blue   btn-outline" type="button" ng-click="search()" ><i class="fa fa-search"></i></button>
-                                                    </span>
-                                  </div>
-                               <a href="javascript:;" class="btn blue btn-outline">筛选
-                                      <span class="glyphicon glyphicon-cog"> </span>
-                                </a>
-                               <button class="btn blue  btn-outline dropdown-toggle pull-left" data-toggle="dropdown">更多
-                                    <i class="fa fa-angle-down"></i>
-                                </button>
-                                <ul class="dropdown-menu pull-right">
-                                    <li>
-                                        <a href="javascript:;">
-                                            <i class="fa fa-file-excel-o"></i>导出</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:;">
-                                            <i class="fa fa-print"></i>打印</a>
-                                    </li>
-                                </ul>
-							</div>
-                        </div>
-                    </div>
-                </div>  -->
-                
-                
                 <div class="portlet box blue">
                                 <div class="portlet-title">
                                     <div class="caption">
@@ -150,32 +55,22 @@
 												class="fa fa-angle-down"></i>
 											</a>
 											<ul class="dropdown-menu pull-right" id="sample_3_tools">
-												<!-- <li><a href="javascript:;" data-action="0"
-													class="tool-action"> <i class="icon-printer"></i> Print
-												</a></li>
-												<li><a href="javascript:;" data-action="1"
-													class="tool-action"> <i class="icon-check"></i> Copy
-												</a></li>-->
-												<li><a data-action="2"
-													class="tool-action" data-toggle="modal" data-target="#import"> <i class="icon-doc"></i> 导入
+												<li><a data-action="0"
+													class="tool-action" data-toggle="modal" data-target="#import"> <i class="fa fa-upload"></i> 导入
 												</a></li> 
-												<li><a href="javascript:;" data-action="3"
-													class="tool-action" ng-click="exportCompany()"> <i class="icon-paper-clip"></i> 导出
+												<li><a href="javascript:;" data-action="1"
+													class="tool-action" ng-click="exportCompany()"> <i class="fa fa-file-excel-o"></i> 导出
 												</a></li>
-												<!-- <li><a href="javascript:;" data-action="4"
-													class="tool-action"> <i class="icon-cloud-upload"></i> CSV
-												</a></li>
-												<li class="divider"></li>
-												<li><a href="javascript:;" data-action="5"
-													class="tool-action"> <i class="icon-refresh"></i> Reload
-												</a></li> -->
+												<li><a href="javascript:;" data-action="2"
+													class="tool-action" > <i class="fa fa-print"></i> 打印
+												</a></li> 
 											</ul>
 										</div>
 									</div>
                                 </div>
                                 <div class="portlet-body">
                                     <!-- <div class="table-responsive"> -->
-										<table   class="table table-bordered" id="sample_1">
+										<table   class="table table-bordered" id="companyTable">
 											<thead>
 												<tr>
 													<th><input name="select_all" class="dt-body-center"
@@ -189,8 +84,6 @@
 													<th>企业法人</th>
 													<th>注册地址</th>
 													<th>状态</th>
-													 <!-- <th class="center">操作</th> 
-													 <th class="center">操作</th>  -->
 												</tr>
 											</thead>
 											<tbody>
@@ -717,7 +610,7 @@
 	                                               			
 	                                               		</div>
 	                                               		<div class="col-md-8">
-	                                               			<button type="button" class="btn blue" ng-click="uploadExcel()">上传</button>
+	                                               			<button type="button" class="btn blue" ng-click="uploadExcel()">导入</button>
 	                                               		</div>
 	                                               </div>
 	                                           </div>
