@@ -31,7 +31,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								<input type="text" class="form-control"
 									ng-model="contractVO.contractNum" placeholder="采购合同编号"
 									id="contractNum" name="contractNum" /> <input type="hidden"
-									class="" ng-model="contractVO.id" value="{{contractVO.id}}"
+									id="id" ng-model="contractVO.id" value="{{contractVO.id}}"
 									ng-hide="visible" />
 								<div class="form-control-focus"></div>
 								<span class="help-block">采购合同编号</span>
@@ -44,7 +44,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</label>
 							<div class="col-md-9">
 								<select class="form-control" ng-model="contractVO.contractType"
-									name="contractType">
+									name="contractType" id="contractType">
 									<option value="">合同类型</option>
 									<option value="采购合同">采购合同</option>
 									<option value="销售合同">销售合同</option>
@@ -64,7 +64,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</label>
 							<div class="col-md-9">
 								<select class="form-control" ng-model="contractVO.serviceModel"
-									name="serviceModel">
+									name="serviceModel" id="serviceModel">
 									<option value="">服务模式</option>
 									<option value="仓储服务">仓储服务</option>
 									<option value="仓储+垫资服务">仓储+垫资服务</option>
@@ -81,7 +81,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</label>
 							<div class="col-md-9">
 								<select class="form-control"
-									ng-model="contractVO.settlementClause" name="settlementClause">
+									ng-model="contractVO.settlementClause" name="settlementClause" id="settlementClause">
 									<option value="">结算条款</option>
 									<option value="进销差">进销差</option>
 									<option value="服务费">服务费</option>
@@ -102,7 +102,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</label>
 							<div class="col-md-9">
 								<input type="text" class="form-control"
-									ng-model="contractVO.comId" placeholder="供应商" name="comId" />
+									ng-model="contractVO.comId" placeholder="供应商" name="comId" id="comId"/>
 								<div class="form-control-focus"></div>
 								<span class="help-block">供应商</span>
 							</div>
@@ -162,7 +162,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</label>
 							<div class="col-md-9">
 								<input type="text" class="form-control"
-									ng-model="contractVO.signer" placeholder="签订人" name="signer" />
+									ng-model="contractVO.signer" placeholder="签订人" name="signer" id="signer"/>
 								<div class="form-control-focus"></div>
 								<span class="help-block">签订人</span>
 							</div>
@@ -173,7 +173,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</label>
 							<div class="col-md-9">
 								<input type="text" class="form-control"
-									ng-model="contractVO.remark" placeholder="备注" />
+									ng-model="contractVO.remark" placeholder="备注" id="remark"/>
 								<div class="form-control-focus"></div>
 								<span class="help-block">备注</span>
 							</div>
@@ -186,23 +186,47 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<label class="col-md-3 control-label" for="form_control_1">电子合同
 								<span class="required">*</span>
 							</label>
-							<div class="col-md-9">
-								<input type="file" id="electric"  ng-model="contractVO.electronicContract" name="files" value="123"
-									class="form-control" /> 
+							<div class="col-md-9" style="display:none;">
+								<input type="file" id="electric"   name="" class="form-control" /> <!-- name="file" -->
 									<div class="form-control-focus"></div>
 								<span class="help-block">电子合同</span>
 							</div>
+							
+							<div class="col-md-9">
+								<div class="input-icon right">
+									<!-- <input type="text" class="form-control"  ng-model="contractVO.electronicContract" readonly> -->
+									<a title="{{contractVO.electronicContract}}" ng-click="download(contractVO.electronicContract)">
+									{{contractVO.electronicContract}}
+									</a>
+									
+									<div class="form-control-focus"></div>
+									<i class="fa fa-edit" style="margin-top:-15px;" ng-click="editElectronicContract($event)"></i>
+								</div>
+							</div>
+
+
 						</div>
 
 						<div class="form-group form-md-line-input col-md-6">
 							<label class="col-md-3 control-label" for="form_control_1">签字合同
 								<span class="required">*</span>
 							</label>
-							<div class="col-md-9">
-									<input type="file" id="signContract" ng-model="contractVO.signContract" name="file"
-									class="form-control" /> 
+							<div class="col-md-9" style="display:none;">
+									<input type="file" id="signContract" name=""   class="form-control" /> <!--name="file"  -->
 								<div class="form-control-focus"></div>
 								<span class="help-block">签字合同</span>
+							</div>
+							
+							<div class="col-md-9">
+								<div class="input-icon right">
+									<!-- <input type="text" class="form-control"  ng-model="contractVO.electronicContract" readonly> -->
+									<a title="{{contractVO.signContract}}" ng-click="download(contractVO.signContract)">
+									{{contractVO.signContract}}
+									</a>
+									
+									<div class="form-control-focus"></div>
+									<i class="fa fa-edit" style="margin-top:-15px;" ng-click="editSignContract($event)"></i>
+								</div>
 							</div>
 						</div>
 					</div>

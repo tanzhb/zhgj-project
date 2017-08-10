@@ -71,6 +71,15 @@
 	endDate=#{endDate},
 	signDate=#{signDate},
 	signer=#{signer},
+	
+	<if test="electronicContract!=null and electronicContract!=''">  
+    electronicContract = #{electronicContract},  
+    </if> 
+    
+    <if test="electronicContract!=null and electronicContract!=''">  
+    signContract = #{signContract},  
+    </if> 
+	
 	versionNO=versionNO+1,
 	remark=#{remark},
 	updater=#{updater},

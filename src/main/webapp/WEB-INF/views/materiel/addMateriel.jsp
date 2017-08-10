@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!-- BEGIN PAGE HEADER-->
+
 <h3 class="page-title"> 物料信息
 </h3>
 <div class="page-bar">
@@ -11,13 +12,23 @@
         </li>
         <li>
             <a ui-sref="materiel">物料信息</a>
+            <i class="fa fa-angle-right"></i>
         </li>
         <li>
             <a>{{opration}}</a>
         </li>
     </ul>
+    <div class="page-toolbar">
+          <div class="btn-group pull-right">
+              <button type="button" class="btn btn-fit-height grey-salt dropdown-toggle" onclick="printdiv('materielPrint')"> 
+              	<i class="fa fa-print"></i>
+                  		打印
+              </button>
+              
+          </div>
+      </div>
 </div>
-<div class="row">
+<div class="row" id="materielPrint">
     <div class="col-md-12">
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
         <div class="portlet bordered">
@@ -25,7 +36,7 @@
 				<div class="portlet light ">
                         <div class="portlet-title">
                             <div class="caption">基本信息</div>
-                            <div class="tools">
+                            <div class="tools" id="noprintdiv">
                             	<button type="submit" ng-click="save()" ng-hide="materielInput" class="btn blue  btn-outline  btn-sm">
                                		<i class="fa fa-save"></i> 保存 </button>
                                <button ng-click="cancel()" type="button" ng-hide="materielInput" class="btn red  btn-outline  btn-sm">
