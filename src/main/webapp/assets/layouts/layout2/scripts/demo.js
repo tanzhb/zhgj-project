@@ -246,10 +246,11 @@ var Demo = function () {
 
         $('.layout-option, .page-header-top-dropdown-style-option, .page-header-option, .sidebar-option, .page-footer-option, .sidebar-pos-option, .sidebar-style-option, .sidebar-menu-option', panel).change(setLayout);
 
-        resetLayout();
+ /*       resetLayout();*/
         //重新设置默认样式
-        $('.layout-option', $('.theme-panel')).val("fluid");
-        $('.sidebar-style-option',  $('.theme-panel')).val("compact");
+        $('.layout-option', panel).val("fluid");
+        $(".page-sidebar-menu").removeClass("page-sidebar-menu-compact");
+        $('.sidebar-style-option', panel).val("compact");
         setLayout();
     };
 

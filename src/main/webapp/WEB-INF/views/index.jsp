@@ -69,7 +69,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	id="style_components" type="text/css" />
 <link href="assets/global/css/plugins-md.min.css" rel="stylesheet"
 	type="text/css" />
-<link href="assets/layouts/layout2/css/layout.css" rel="stylesheet"
+<link href="assets/layouts/layout2/css/layout.min.css" rel="stylesheet"
 	type="text/css" />
 <link href="assets/layouts/layout2/css/themes/default.min.css"
 	rel="stylesheet" type="text/css" id="style_color" />
