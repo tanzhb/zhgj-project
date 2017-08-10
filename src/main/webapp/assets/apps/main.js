@@ -240,7 +240,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        'assets/global/plugins/jquery.blockui.min.js',
 		        'assets/pages/scripts/ui-blockui.min.js',
 	        	'assets/apps/service/materielService.js',
-				'assets/apps/controllers/materielController.js'
+				'assets/apps/controllers/materielController.js'/*,
+				'http://www.jq22.com/jquery/jquery-migrate-1.2.1.min.js',
+				'assets/pages/scripts/jquery.jqprint-0.3.js'*/
                       ]
                     });
                 }]
