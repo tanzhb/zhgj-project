@@ -338,7 +338,7 @@
                                                     <td>{{companyQualification.qualificationNum}}</td>
                                                     <td>{{companyQualification.validityDate}}</td>
                                                     <td ng-if="companyQualification.qualificatioImage==null||companyQualification.qualificatioImage==''">
-                                                    	无附件
+                                                    	无
                                                     </td>
                                                     <td ng-if="companyQualification.qualificatioImage!=null&&companyQualification.qualificatioImage!=''">
                                                     	<a href="javascript:;" ng-click="downloadFile(companyQualification)">下载附件</a>

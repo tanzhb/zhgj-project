@@ -55,8 +55,6 @@
                                             <i class="fa fa-undo"></i> 取消 </button>
                                 <button   ng-hide="companyAdd" class="btn blue  btn-outline  btn-sm " ng-click="saveCompany()">
                                             <i class="fa fa-save"></i> 保存 </button>
-                                <button  onclick="window.print()" class="btn blue  btn-outline  btn-sm " ng-click="saveCompany()">
-                                            <i class="fa fa-save"></i> 保存 </button>
                             </div>
                         </div>
                         <div class="portlet-body form">
@@ -288,7 +286,7 @@
 										<div class="col-md-2">
 											<div class="form-group">
 												<div class="col-md-12 input-icon right">
-													<input  ng-hide="companyQualificationAdd" type="text" ng-model="companyQualification.qualificationName" name="qualificationName"
+													<input  ng-hide="companyQualificationAdd" type="text" id="qualificationName{{$index}}" ng-model="companyQualification.qualificationName" name="qualificationName"
 														class="form-control" placeholder="资质名称"> <span
 														class="help-block"></span>
 														<label   ng-show="companyQualificationView"  class="c_edit" >{{companyQualification.qualificationName}}</label>
@@ -300,7 +298,7 @@
 										<div class="col-md-2">
 											<div class="form-group">
 												<div class="col-md-12">
-													<input  ng-hide="companyQualificationAdd" type="text" ng-model="companyQualification.qualificationNum" name="qualificationNum"
+													<input  ng-hide="companyQualificationAdd" type="text" id="qualificationNum{{$index}}" ng-model="companyQualification.qualificationNum" name="qualificationNum"
 														class="form-control" placeholder="资质号码"> <span
 														class="help-block"></span>
 														<label   ng-show="companyQualificationView"  class="c_edit" >{{companyQualification.qualificationNum}}</label>
@@ -314,7 +312,7 @@
 													<div  ng-hide="companyQualificationAdd" class="input-group input-small date date-picker"
 														 data-date-format="yyyy-mm-dd"
 														data-date-viewmode="years">
-														<input type="text" class="form-control" readonly="" ng-model="companyQualification.validityDate" name="validityDate"
+														<input type="text" class="form-control" readonly="" id="validityDate{{$index}}" ng-model="companyQualification.validityDate" name="validityDate"
 															placeholder="有效期"> <span class="input-group-btn">
 															<button class="btn default " type="button">
 																<i class="fa fa-calendar"></i>
@@ -346,7 +344,7 @@
 	                                                        <span class="fileinput-filename">{{companyQualification.qualificatioImage}}</span> &nbsp;
 	                                                        <a href="javascript:;" class="close fileinput-exists"  ng-click="removefile(companyQualification)" data-dismiss="fileinput"> </a>
 	                                                    </div>
-                                                    	<label   ng-show="companyQualificationView" ng-if="companyQualification.qualificatioImage==null||companyQualification.qualificatioImage==''" class="c_edit" >无附件</label>
+                                                    	<label   ng-show="companyQualificationView" ng-if="companyQualification.qualificatioImage==null||companyQualification.qualificatioImage==''" class="c_edit" >未上传附件</label>
                                                     	<label   ng-show="companyQualificationView" ng-if="companyQualification.qualificatioImage!=null&&companyQualification.qualificatioImage!=''" class="c_edit" ><a href="javascript:;" ng-click="downloadFile(companyQualification)">下载附件</a></label>
 												</div>
 											</div>
@@ -375,7 +373,7 @@
 										<div class="col-md-1">
 											<div class="form-group">
 												<div class="col-md-12">
-													 <a href="javascript:;"  class="btn red btn-sm" ng-hide="companyQualificationAdd" ng-click="deleteRepeat()">
+													 <a href="javascript:;"  class="btn red btn-sm" ng-hide="companyQualificationAdd" ng-click="deleteRepeat(companyQualification)">
                                             			<i class="fa fa-close"></i> 
                                      				</a>
 												</div>
