@@ -106,7 +106,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
     // Redirect any unmatched url
     $urlRouterProvider.otherwise("/dashboard");
 
+
     
+
 
     $stateProvider.state('dashboard', {
             url: "/dashboard",
@@ -195,6 +197,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                           'assets/global/plugins/datatables/datatables.all.min.js',
                           'assets/pages/scripts/table-datatables-fixedheader.min.js',
 
+
                             'assets/global/plugins/jstree/dist/jstree.min.js',
                             'assets/pages/scripts/ui-tree.min.js',
                             'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js',
@@ -217,38 +220,28 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [
-				'assets/global/plugins/select2/css/select2.min.css',
-				'assets/global/plugins/select2/css/select2-bootstrap.min.css',
-				'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
-				'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css',
-				'assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css',
-				'assets/global/plugins/icheck/skins/all.css',
-				'assets/global/plugins/select2/js/select2.full.min.js',
-				'assets/global/plugins/jquery-validation/js/jquery.validate.min.js',
-				'assets/global/plugins/jquery-validation/js/localization/messages_zh.min.js',
-				'assets/global/plugins/jquery-validation/js/additional-methods.min.js',
-				'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
-				'assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js',
-				'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js',
-				'assets/global/plugins/ckeditor/ckeditor.js',
-				'assets/global/plugins/bootstrap-markdown/lib/markdown.js',
-				'assets/global/plugins/bootstrap-markdown/js/bootstrap-markdown.js',
-				
+	        	'assets/global/plugins/icheck/skins/all.css',
+	        	'assets/global/plugins/icheck/icheck.min.js',
 				'assets/pages/scripts/form-icheck.min.js',
-				'assets/pages/scripts/form-validation.min.js',
-				'assets/apps/service/materielService.js',
-				'assets/apps/controllers/materielController.js',
-				
-				'assets/global/plugins/datatables/datatables.min.css',
-				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-				
-				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
-				'assets/global/plugins/datatables/datatables.all.min.js',
-				'assets/pages/scripts/table-datatables-fixedheader.min.js'/*,
-				'assets/apps/controllers/selectMaterielController.js'*/
-
-
-                        ]
+		        'assets/global/plugins/datatables/datatables.min.css', 
+		        'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
+		        'assets/global/plugins/datatables/datatables.all.min.js',
+		        'assets/global/plugins/bootstrap-toastr/toastr.js',
+		        'assets/global/plugins/bootstrap-toastr/toastr.css',
+		        'assets/global/css/components-rounded.min.css',
+		        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+		        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css',
+		        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js',
+		        'assets/global/plugins/jquery-repeater/jquery.repeater.js',
+		        'assets/pages/scripts/form-repeater.min.js',
+		        'assets/pages/scripts/form-repeater.js',
+		        'assets/global/plugins/bootbox/bootbox.min.js',
+		        'assets/pages/scripts/ui-bootbox.min.js',
+		        'assets/global/plugins/jquery.blockui.min.js',
+		        'assets/pages/scripts/ui-blockui.min.js',
+	        	'assets/apps/service/materielService.js',
+				'assets/apps/controllers/materielController.js'
+                      ]
                     });
                 }]
             }
@@ -336,8 +329,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
-        
-        
         
         .state('editUserContractPage', {
         	params:{data:null},
@@ -524,8 +515,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        				        ]
 	        			});
 	        		}]
-	        	}
-	        })         
+	        	}	        })         
 	           .state('warehouse', {
 	        url: "/warehouse",
             templateUrl: "rest/warehouse/viewWarehouseList",

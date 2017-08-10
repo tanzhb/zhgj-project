@@ -2,6 +2,10 @@ package com.congmai.zhgj.web.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class Materiel {
     private String serialNum;
 
@@ -53,6 +57,7 @@ public class Materiel {
 
     private String palletSpecification;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date manufactureDate;
 
     private String remark;
@@ -94,6 +99,8 @@ public class Materiel {
     private String updater;
 
     private Date updateTime;
+    
+/*    private boolean isBOMcheck;*/
 
     public String getSerialNum() {
         return serialNum;
@@ -287,6 +294,7 @@ public class Materiel {
         this.palletSpecification = palletSpecification == null ? null : palletSpecification.trim();
     }
 
+    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
     public Date getManufactureDate() {
         return manufactureDate;
     }
@@ -462,5 +470,13 @@ public class Materiel {
 	public void setParentMateriel(Materiel parentMateriel) {
 		this.parentMateriel = parentMateriel;
 	}
+
+/*	public boolean getIsBOMcheck() {
+		return isBOMcheck;
+	}
+
+	public void setIsBOMcheck(boolean isBOMcheck) {
+		this.isBOMcheck = isBOMcheck;
+	}*/
     
 }
