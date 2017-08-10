@@ -2,13 +2,8 @@ package com.congmai.zhgj.web.dao;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-
-import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.web.model.ContractVO;
-import com.congmai.zhgj.web.model.User;
-import com.congmai.zhgj.web.model.UserExample;
 
 /**
  * 

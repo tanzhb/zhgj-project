@@ -48,7 +48,9 @@
 	endDate,
 	signDate,
 	signer,
-	remark
+	remark,
+	electronicContract,
+	signContract
 	FROM
 	contract
 	WHERE 

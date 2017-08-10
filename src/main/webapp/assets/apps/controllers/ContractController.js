@@ -1,43 +1,71 @@
-'use strict';
-angular.module('MetronicApp').controller('ContractController', ['$rootScope', '$scope', 'settings', 'ContractService','$state','$compile','$stateParams','$filter', function($rootScope, $scope, settings, ContractService,$state,$compile,$stateParams,$filter) {
+angular.module('MetronicApp').controller('ContractController', ['$rootScope','$scope','$http', 'settings', 'ContractService','$state','$compile','$stateParams','$filter', function($rootScope,$scope,$http,settings, ContractService,$state,$compile,$stateParams,$filter) {
 	$scope.$on('$viewContentLoaded', function() {   
 		// initialize core components
-		//App.initAjax();
+		App.initAjax();
 
 		// set default layout mode
 		$rootScope.settings.layout.pageContentWhite = true;
 		$rootScope.settings.layout.pageBodySolid = false;
 		$rootScope.settings.layout.pageSidebarClosed = false;
 		
-		//添加合同
-		$scope.saveUserContract = function() {
-			if($('#form_sample_1').valid()){//表单验证通过则执行添加功能
-			ContractService.saveUserContract($scope.contractVO)
-			.then(
-					function(data) {
-						toastr.success("保存合同数据成功！");
-						$state.go('userContract');
-					},
-					function(errResponse) {
-						toastr.warning("保存失败，请检查数据！");
-						
-					}
-
-			);
-			}
-		};
-		//根据参数查询对象
-    if($stateParams.id)$scope.getUserContractInfo($stateParams.id);
+		loadMainTable();
 		
+	
+		
+		
+		//根据参数查询对象
+    if($stateParams.id){
+    	$scope.getUserContractInfo($stateParams.id);	
+    }
 	});
+	
+	
+	//添加合同
+	$scope.saveUserContract = function() {
+		debugger
+		if($('#form_sample_1').valid()){//表单验证通过则执行添加功能
+		var fd = new FormData();
+        var files = document.querySelector('input[name="files"]').files[0];
+        
+        var file = document.querySelector('input[name="file"]').files[0];
+        fd.append("files", files);
+        fd.append("files", file);
+
+		
+        fd.append('contractNum', $("#contractNum").val()); 
+        fd.append('contractType', $("#contractType").val()); 
+        fd.append('serviceModel', $("#serviceModel").val()); 
+        fd.append('settlementClause', $("#settlementClause").val()); 
+        fd.append('comId', $("#comId").val()); 
+        fd.append('startDate', $("#startDate").val()); 
+        fd.append('endDate', $("#endDate").val()); 
+        fd.append('signDate', $("#signDate").val()); 
+        fd.append('signer', $("#signer").val()); 
+        fd.append('remark', $("#remark").val()); 
+         $http({
+        	  method:'POST',
+              url:"rest/contract/saveUserContract",
+              data: fd,
+              headers: {'Content-Type':undefined}
+               })   
+              .success( function ( response )
+                       {
+                       //上传成功的操作
+            	  toastr.success("保存合同数据成功！");
+				  $state.go('userContract');
+                       });
+		}
+	};
+	
 	
 	//返回按钮
 	$scope.goback=function(){
-		$state.go('userContract',{},{reload:true});
+		$state.go('userContract');
 	}
 	
 	//根据参数查询对象
 	$scope.getUserContractInfo  = function(id) {
+		debugger
 		ContractService.selectUserContract(id).then(
       		     function(data){
       		    	$scope.contractVO=data;
@@ -50,14 +78,15 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope', '$
 					
 					var myJsDate2=$filter('date')($scope.contractVO.signDate,'MM/dd/yyyy');
 					$scope.contractVO.signDate=myJsDate2;
+      		     },
+      		     function(error){
+      		         console.log("error")
       		     }
-      		    /* function(error){
-      		         $scope.error = error;
-      		     }*/
       		 );
     	
     }; 
-	
+    
+    
 	//初始化toastr开始
 	toastr.options = {
 			"closeButton" : true,
@@ -74,45 +103,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope', '$
 			"hideMethod" : "fadeOut"
 		}
 	
-	//删除
-	$scope.del = function() {
-		var ids = '';
-		// Iterate over all checkboxes in the table
-		table.$('input[type="checkbox"]').each(function() {
-			// If checkbox exist in DOM
-			if ($.contains(document, this)) {
-				// If checkbox is checked
-				if (this.checked) {
-					// 将选中数据id放入ids中
-					if (ids == '') {
-						ids = this.value;
-					} else
-						ids = ids + ',' + this.value;
-				}
-			}
-		});
 		
-			if (ids == '') {// 未勾选删除数据									
-				toastr.warning("未勾选要删除数据！");
-			} else {
-				$('#delUsersModal').modal('show');// 打开确认删除模态框
-				
-				$scope.confirmDel = function() {										
-					ContractService.delUserContract(ids).then(
-									function(data) {
-										$('#delUsersModal').modal('hide');// 删除成功后关闭模态框
-										toastr.success("删除成功！");
-										$state.go('userContract',{},{reload:true}); // 重新加载datatables数据
-									},
-									function(errResponse) {
-										/*console.error('Error while deleting Users');*/
-										alert(123);
-									}
-
-							);
-				}
-			}								
-		};
 		
 		//单个删除
 		$scope.jumpToDel = function(value) {
@@ -142,6 +133,183 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope', '$
 		};
 		
 		
+		var table;
+		var tableAjaxUrl = "rest/contract/findAllUserContract";
+		var loadMainTable = function() {
+			var a = 0;
+			App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile")&& (a = $(".page-header").outerHeight(!0)): 
+				$(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0): $("body").hasClass("page-header-fixed")&& (a = 64);
+
+				 table = $("#sample_2").DataTable(
+						{
+							language : {
+								aria : {
+									sortAscending : ": activate to sort column ascending",
+									sortDescending : ": activate to sort column descending"
+								},
+								emptyTable : "空表",
+								info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+								infoEmpty : "没有数据",
+								infoFiltered : "(从 _MAX_ 条数据中检索)",
+								lengthMenu : "每页显示 _MENU_ 条数据",
+								search : "查询:",
+								zeroRecords : "抱歉， 没有找到！&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
+								paginate : {
+									"sFirst" : "首页",
+									"sPrevious" : "前一页",
+									"sNext" : "后一页",
+									"sLast" : "尾页"
+								}
+							},
+							fixedHeader : {// 固定表头、表底
+								header : !0,
+								footer : !0,
+								headerOffset : a
+							},
+							// select: true,行多选
+							order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+							bRetrieve : true,
+							"sScrollX": "100%",
+							"sScrollXInner": "110%",
+							"bScrollCollapse": true,
+							// searching: true,//是否过滤检索
+							// ordering: true,//是否排序
+							lengthMenu : [
+							              [ 5, 10, 15,15, 30, -1 ],
+							              [ 5, 10, 15, 15,30, "All" ] ],
+							              pageLength : 10,// 每页显示数量
+							              processing : true,// loading等待框
+							              // serverSide: true,
+							              ajax: tableAjaxUrl,//加载数据中user表数据
+							              "aoColumns": [
+							                            { mData: 'id'},
+							                            { mData: 'contractNum' },
+							                            { mData: 'comId' },
+							                            { mData: 'contractType' },
+							                            { mData: 'serviceModel' },
+							                            { mData: 'signDate',
+							                            	mRender:function(data){
+							                            		if(data!=""&&data!=null){
+							                            			return timeStamp2String(data);
+							                            		}else{
+							                            			return "";
+							                            		}
+							                            	}
+							                            }
+							                            ,
+							                            { mData: 'signer'},
+							                            { mData: 'startDate',
+							                            	mRender:function(data){
+							                            		if(data!=""&&data!=null){
+							                            			return timeStamp2String(data);
+							                            		}else{
+							                            			return "";
+							                            		}
+							                            	}
+							                            }
+							                            ,
+							                            { mData: 'endDate',
+							                            	mRender:function(data){
+							                            		if(data!=""&&data!=null){
+							                            			return timeStamp2String(data);
+							                            		}else{
+							                            			return "";
+							                            		}
+							                            	}
+							                            }
+							                            ,
+							                            { mData: 'versionNO' },
+							                            { mData: 'status',
+							                            	mRender:function(data){
+							                            		if(data!=""&&data!=null){
+							                            			if(data=='0'){
+							                            				return '初始';
+							                            			}
+							                            		}else{
+							                            			return "";
+							                            		}
+							                            	}
+							                            }
+							                            /*,
+
+				              { mData: 'id' }*/
+							                            ],
+							                            'aoColumnDefs': [ {
+							                            	'targets' : 0,
+							                            	'searchable' : false,
+							                            	'orderable' : false,
+							                            	'className' : 'dt-body-center',
+							                            	'render' : function(data,type, full, meta) {
+							                            		return '<input type="checkbox" name="id[]" value="'+ $('<div/>').text(data).html()+ '">';
+							                            	}
+							                            } ,
+							                            {
+							                            	'targets' : 1,
+							                            	'className' : 'dt-body-center',
+							                            	'render' : function(data,
+							                            			type, row, meta) {
+							                            		return '<a data-target="#basicContractInfo" data-toggle="modal" ng-click="getUserContractInfo(\''+row.id+'\')" ">'+data+'</a>';
+							                            	},
+							                            	"createdCell": function (td, cellData, rowData, row, col) {
+							                            		$compile(td)($scope);
+							                            	}
+							                            }
+							                            ]}).on('order.dt',
+							                            		function() {
+							                            	console.log('排序');
+							                            })
+		}
+		
+		//删除
+		$scope.del = function() {
+			var ids = '';
+			// Iterate over all checkboxes in the table
+			table.$('input[type="checkbox"]').each(function() {
+				// If checkbox exist in DOM
+				if ($.contains(document, this)) {
+					// If checkbox is checked
+					if (this.checked) {
+						// 将选中数据id放入ids中
+						if (ids == '') {
+							ids = this.value;
+						} else
+							ids = ids + ',' + this.value;
+					}
+				}
+			});
+			
+				if (ids == '') {// 未勾选删除数据									
+					toastr.warning("未勾选要删除数据！");
+				} else {
+					$('#delUsersModal').modal('show');// 打开确认删除模态框
+					
+					$scope.confirmDel = function() {										
+						ContractService.delUserContract(ids).then(
+										function(data) {
+											$('#delUsersModal').modal('hide');// 删除成功后关闭模态框
+											$(".modal-backdrop").remove();
+											toastr.success("删除成功！");
+											$state.go('userContract',{},{reload:true}); // 重新加载datatables数据
+										},
+										function(errResponse) {
+											/*console.error('Error while deleting Users');*/
+											alert(123);
+										}
+
+								);
+					}
+				}								
+			};
+			
+			$scope.download=function(name){
+		    	alert(name);
+		    	/*ContractService.downLoad(name).then(
+		    			toastr.success("删除成功")
+		    	);*/
+		    	$http.get($rootScope.basePath + "/rest/contract/resourceDownload",  {filename:name}).success(function (data) {  
+		        })
+		  }
+		
 		//修改
 		$scope.jumpToEdit = function() {
 			var ids = '';
@@ -169,133 +337,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope', '$
 			$state.go('editUserContractPage',{id:ids});
 		};
 		
-		
-	
-	var a = 0;
-	App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile")&& (a = $(".page-header").outerHeight(!0)): 
-	$(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0): $("body").hasClass("page-header-fixed")&& (a = 64);
 			
-		var table = $("#sample_2").DataTable(
-			{
-				language : {
-					aria : {
-						sortAscending : ": activate to sort column ascending",
-						sortDescending : ": activate to sort column descending"
-					},
-					emptyTable : "空表",
-					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
-					infoEmpty : "没有数据",
-					infoFiltered : "(从 _MAX_ 条数据中检索)",
-					lengthMenu : "每页显示 _MENU_ 条数据",
-					search : "查询:",
-					zeroRecords : "抱歉， 没有找到！&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
-					paginate : {
-						"sFirst" : "首页",
-						"sPrevious" : "前一页",
-						"sNext" : "后一页",
-						"sLast" : "尾页"
-					}
-				},
-				fixedHeader : {// 固定表头、表底
-					header : !0,
-					footer : !0,
-					headerOffset : a
-				},
-				// select: true,行多选
-				order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
-				bRetrieve : true,
-				"sScrollX": "100%",
-				"sScrollXInner": "110%",
-				"bScrollCollapse": true,
-				// searching: true,//是否过滤检索
-				// ordering: true,//是否排序
-				lengthMenu : [
-						[ 5, 10, 15,15, 30, -1 ],
-						[ 5, 10, 15, 15,30, "All" ] ],
-				pageLength : 10,// 每页显示数量
-				processing : true,// loading等待框
-				// serverSide: true,
-				ajax: "rest/contract/findAllUserContract",//加载数据中user表数据
-				"aoColumns": [
-                              { mData: 'id'},
-				              { mData: 'contractNum' },
-				              { mData: 'comId' },
-				              { mData: 'contractType' },
-				              { mData: 'serviceModel' },
-				              { mData: 'signDate',
-					                mRender:function(data){
-					                	if(data!=""&&data!=null){
-					                		return timeStamp2String(data);
-					                	}else{
-					                		return "";
-					                	}
-					                }
-					              }
-					              ,
-				              { mData: 'signer'},
-				              { mData: 'startDate',
-				                mRender:function(data){
-				                	if(data!=""&&data!=null){
-				                		return timeStamp2String(data);
-				                	}else{
-				                		return "";
-				                	}
-				                }
-				              }
-				              ,
-				              { mData: 'endDate',
-					                mRender:function(data){
-					                	if(data!=""&&data!=null){
-					                		return timeStamp2String(data);
-					                	}else{
-					                		return "";
-					                	}
-					                }
-					              }
-					              ,
-					          { mData: 'versionNO' },
-					          { mData: 'status',
-					                mRender:function(data){
-					                	if(data!=""&&data!=null){
-					                		if(data=='0'){
-					                			return '初始';
-					                		}
-					                	}else{
-					                		return "";
-					                	}
-					                }
-					              }
-					          /*,
-					              
-				              { mData: 'id' }*/
-				              ],
-				'aoColumnDefs': [ {
-					'targets' : 0,
-					'searchable' : false,
-					'orderable' : false,
-					'className' : 'dt-body-center',
-					'render' : function(data,type, full, meta) {
-						return '<input type="checkbox" name="id[]" value="'+ $('<div/>').text(data).html()+ '">';
-					}
-				} ,/*{
-					'targets' : 6,
-					"aTargets" :　["_all"],
-					'searchable' : false,
-					'orderable' : false,
-					'className' : 'dt-body-center',
-					"mRender" : function(data) {
-						var html="'"+$('<div/>').text(data).html()+"'";
-						return '<input type="radio" name="id[]" value="'+ $('<div/>').text(data).html()+ '">';
-						html= '<a href="javascript:;" class="btn btn-outline btn-circle dark btn-sm black"  ng-click=jumpToDel('+html+')><i class="fa fa-remove"></i> 删除  </a>'+
-						'<a href="javascript:;" class="btn btn-outline btn-circle btn-sm purple" ng-click=jumpToEdit('+html+')><i class="fa fa-edit"></i> 编辑 </a>';
-						return html;
-					},
-					"fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                        $compile(nTd)($scope);
-                    } 
-				}*/],
-
-			})
 			
 			//格式化日期
 			function timeStamp2String(time){
@@ -371,6 +413,8 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope', '$
             	endDate:{required:"结束日期不能为空！"},
             	signDate:{required:"签订日期不能为空！"},
             	signer:{required:"签订人不能为空！"},
+            	files:{required:"电子合同不能为空！"},
+            	file:{required:"签字合同不能为空！"},
                 payment: {
                     maxlength: jQuery.validator.format("Max {0} items allowed for selection"),
                     minlength: jQuery.validator.format("At least {0} items must be selected")
@@ -422,7 +466,11 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope', '$
                 signDate:{required:true,
                 },
                 signer:{required:true,
-                },       
+                }, 
+                files:{required:true,
+                },
+                file:{required:true,
+                },
                 email: {
                     required: !0,
                     email: !0
@@ -528,6 +576,5 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope', '$
 	}
 
 }]);
-
 
 

@@ -1,220 +1,217 @@
 package com.congmai.zhgj.web.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.congmai.zhgj.core.util.JsonDateSerializer;
-
 /**
- * 
- * @ClassName User
- * @Description 用户模型
  * @author tanzb
- * @Date 2017年7月26日 下午2:52:03
- * @version 1.0.0
+ * @version 2017年8月9日 下午10:09:41
  */
 public class User {
-    private String id;    
-    private String loginName;//用户登录名
-    private String userName;//用户姓名
-    private String password;//密码
-    private String idNumber;//身份证号码
-    private String station;//用户岗位
-    private String telphone;//电话号码
-    private String email;//邮箱地址
-    private String state;//状态
-    
-    private String delFlg;//删除标志（1是0否）
-    private String creator;//创建人    
-    private Date createTime;//创建时间
-    private String updater;//更新人    
-    private Date updateTime;//更新时间
-    private String comments;//备注
 
-    public User() {
+    private static final long serialVersionUID = 1L;
 
-    }
+    /**
+     * 主键id
+     */
+	private Integer id;
+    /**
+     * 头像
+     */
+	private String avatar;
+    /**
+     * 账号
+     */
+	private String account;
+    /**
+     * 密码
+     */
+	private String password;
+    /**
+     * md5密码盐
+     */
+	private String salt;
+    /**
+     * 名字
+     */
+	private String name;
+    /**
+     * 生日
+     */
+	private Date birthday;
+    /**
+     * 性别（1：男 2：女）
+     */
+	private Integer sex;
+    /**
+     * 电子邮件
+     */
+	private String email;
+    /**
+     * 电话
+     */
+	private String phone;
+    /**
+     * 角色id
+     */
+	private String roleid;
+    /**
+     * 部门id
+     */
+	private Integer deptid;
+    /**
+     * 状态(1：启用  2：冻结  3：删除）
+     */
+	private Integer status;
+    /**
+     * 创建时间
+     */
+	private Date createtime;
+    /**
+     * 保留字段
+     */
+	private Integer version;
 
-    
-    public User(String id, String loginName, String userName, String password,
-			String idNumber, String station, String telphone, String email,
-			String state, String delFlg, String creator, Date createTime,
-			String updater, Date updateTime, String comments) {
-		super();
-		this.id = id;
-		this.loginName = loginName;
-		this.userName = userName;
-		this.password = password;
-		this.idNumber = idNumber;
-		this.station = station;
-		this.telphone = telphone;
-		this.email = email;
-		this.state = state;
-		this.delFlg = delFlg;
-		this.creator = creator;
-		this.createTime = createTime;
-		this.updater = updater;
-		this.updateTime = updateTime;
-		this.comments = comments;
-	}
-    
-    public User(String loginName, String password){
-    	this.loginName = loginName;
-		this.password = password;
-    }
 
-
-	public String getId() {
+	public Integer getId() {
 		return id;
 	}
 
-
-	public void setId(String id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-
-	public String getLoginName() {
-		return loginName;
+	public String getAvatar() {
+		return avatar;
 	}
 
-
-	public void setLoginName(String loginName) {
-		this.loginName = loginName;
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
 
-
-	public String getUserName() {
-		return userName;
+	public String getAccount() {
+		return account;
 	}
 
-
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setAccount(String account) {
+		this.account = account;
 	}
-
 
 	public String getPassword() {
 		return password;
 	}
 
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
-
-	public String getIdNumber() {
-		return idNumber;
+	public String getSalt() {
+		return salt;
 	}
 
-
-	public void setIdNumber(String idNumber) {
-		this.idNumber = idNumber;
+	public void setSalt(String salt) {
+		this.salt = salt;
 	}
 
-
-	public String getStation() {
-		return station;
+	public String getName() {
+		return name;
 	}
 
-
-	public void setStation(String station) {
-		this.station = station;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-
-	public String getTelphone() {
-		return telphone;
+	public Date getBirthday() {
+		return birthday;
 	}
 
-
-	public void setTelphone(String telphone) {
-		this.telphone = telphone;
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
 	}
 
+	public Integer getSex() {
+		return sex;
+	}
+
+	public void setSex(Integer sex) {
+		this.sex = sex;
+	}
 
 	public String getEmail() {
 		return email;
 	}
 
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
+	public String getPhone() {
+		return phone;
+	}
 
-	public String getState() {
-		return state;
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getRoleid() {
+		return roleid;
+	}
+
+	public void setRoleid(String roleid) {
+		this.roleid = roleid;
+	}
+
+	public Integer getDeptid() {
+		return deptid;
+	}
+
+	public void setDeptid(Integer deptid) {
+		this.deptid = deptid;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public Date getCreatetime() {
+		return createtime;
+	}
+
+	public void setCreatetime(Date createtime) {
+		this.createtime = createtime;
+	}
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 
 
-	public void setState(String state) {
-		this.state = state;
+	@Override
+	public String toString() {
+		return "User{" +
+			"id=" + id +
+			", avatar=" + avatar +
+			", account=" + account +
+			", password=" + password +
+			", salt=" + salt +
+			", name=" + name +
+			", birthday=" + birthday +
+			", sex=" + sex +
+			", email=" + email +
+			", phone=" + phone +
+			", roleid=" + roleid +
+			", deptid=" + deptid +
+			", status=" + status +
+			", createtime=" + createtime +
+			", version=" + version +
+			"}";
 	}
-
-
-	public String getDelFlg() {
-		return delFlg;
-	}
-
-
-	public void setDelFlg(String delFlg) {
-		this.delFlg = delFlg;
-	}
-
-
-	public String getCreator() {
-		return creator;
-	}
-
-
-	public void setCreator(String creator) {
-		this.creator = creator;
-	}
-
-//	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
-//	@JsonSerialize(using=JsonDateSerializer.class)  
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
-
-	public String getUpdater() {
-		return updater;
-	}
-
-
-	public void setUpdater(String updater) {
-		this.updater = updater;
-	}
-
-//	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")  
-//	@JsonSerialize(using=JsonDateSerializer.class)  
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-
-
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
-	}
-
-
-	public String getComments() {
-		return comments;
-	}
-
-
-	public void setComments(String comments) {
-		this.comments = comments;
-	}
-
 }
