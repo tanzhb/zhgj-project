@@ -55,6 +55,8 @@
                                             <i class="fa fa-undo"></i> 取消 </button>
                                 <button   ng-hide="companyAdd" class="btn blue  btn-outline  btn-sm " ng-click="saveCompany()">
                                             <i class="fa fa-save"></i> 保存 </button>
+                                <button  onclick="window.print()" class="btn blue  btn-outline  btn-sm " ng-click="saveCompany()">
+                                            <i class="fa fa-save"></i> 保存 </button>
                             </div>
                         </div>
                         <div class="portlet-body form">
@@ -328,17 +330,24 @@
 										<div class="col-md-2">
 											<div class="form-group rigjt">
 												<div class="col-md-12">
-													 <div  ng-hide="companyQualificationAdd" class="fileinput fileinput-new" data-provides="fileinput">
-			                                                  <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 70px; max-height: 70px; line-height: 10px;float: left;"> </div>
-			                                                  <div style="float: left;">
-			                                                      <span class="btn default btn-file btn-sm">
-			                                                          <span class="fileinput-new "><i class="fa fa-plus "></i></span>
-			                                                          <span class="fileinput-exists">更换 </span>
-			                                                          <input type="hidden"><input type="file" name="..."> </span><br>
-			                                                      <a href="javascript:;" class="btn red btn-sm fileinput-exists " data-dismiss="fileinput"> 移除 </a>
-			                                                  </div>
-			                                          </div>
-			                                          <div   ng-show="companyQualificationView" class="c_edit" >施工中</div>
+				                                         <div ng-hide="companyQualificationAdd"   ng-if="companyQualification.qualificatioImage==null||companyQualification.qualificatioImage==''"  class="fileinput fileinput-new" data-provides="fileinput">
+	                                                        <span class="btn blue btn-outline btn-file">
+	                                                            <span class="fileinput-new">上传附件</span>
+	                                                            <span class="fileinput-exists">更改</span>
+	                                                            <input type="file" name="..." nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="companyQualification" ng-click="uploadFile(companyQualification)" > </span>
+	                                                        <span class="fileinput-filename">{{companyQualification.qualificatioImage}}</span> &nbsp;
+	                                                        <a href="javascript:;" class="close fileinput-exists" ng-click="removefile(companyQualification)" data-dismiss="fileinput"> </a>
+	                                                    </div>
+				                                         <div ng-hide="companyQualificationAdd"   ng-if="companyQualification.qualificatioImage!=null&&companyQualification.qualificatioImage!=''"  class="fileinput fileinput-exists" data-provides="fileinput">
+	                                                        <span class="btn blue btn-outline btn-file">
+	                                                            <span class="fileinput-new">上传附件</span>
+	                                                            <span class="fileinput-exists">更改</span>
+	                                                            <input type="file" name="..." nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="companyQualification" ng-click="uploadFile(companyQualification)" > </span>
+	                                                        <span class="fileinput-filename">{{companyQualification.qualificatioImage}}</span> &nbsp;
+	                                                        <a href="javascript:;" class="close fileinput-exists"  ng-click="removefile(companyQualification)" data-dismiss="fileinput"> </a>
+	                                                    </div>
+                                                    	<label   ng-show="companyQualificationView" ng-if="companyQualification.qualificatioImage==null||companyQualification.qualificatioImage==''" class="c_edit" >无附件</label>
+                                                    	<label   ng-show="companyQualificationView" ng-if="companyQualification.qualificatioImage!=null&&companyQualification.qualificatioImage!=''" class="c_edit" ><a href="javascript:;" ng-click="downloadFile(companyQualification)">下载附件</a></label>
 												</div>
 											</div>
 										</div>

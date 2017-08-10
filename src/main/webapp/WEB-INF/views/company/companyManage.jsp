@@ -327,8 +327,9 @@
                                                     <th>资质类型</th>
                                                     <th>号码</th>
                                                     <th>有效期</th>
-                                                    <th>状态</th>
+                                                    <th>附件</th>
                                                     <th>备注</th>
+                                                    <th>状态</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -336,10 +337,17 @@
                                                  	<td>{{companyQualification.qualificationName}}</td>
                                                     <td>{{companyQualification.qualificationNum}}</td>
                                                     <td>{{companyQualification.validityDate}}</td>
+                                                    <td ng-if="companyQualification.qualificatioImage==null||companyQualification.qualificatioImage==''">
+                                                    	无附件
+                                                    </td>
+                                                    <td ng-if="companyQualification.qualificatioImage!=null&&companyQualification.qualificatioImage!=''">
+                                                    	<a href="javascript:;" ng-click="downloadFile(companyQualification)">下载附件</a>
+                                                    </td>
+                                                    <td>{{companyQualification.remark}}</td>
                                                     <td><span ng-if="companyQualification.status==0" class="label label-sm label-success">正常</span>
 												 	<span ng-if="companyQualification.status==1" class="label label-sm label-danger">已过期</span>
 												 	<span  ng-if="companyQualification.status==2" class="label label-sm label-warning">即将过期</span></td>
-                                                    <td>{{companyQualification.remark}}</td>
+                                                    
                                                 </tr>
                                             </tbody>
                                         </table>

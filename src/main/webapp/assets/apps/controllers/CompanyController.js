@@ -2,9 +2,10 @@
  * 
  */
 
-angular.module('MetronicApp').controller('CompanyController',['$rootScope','$scope','$state','$http','companyService','$location','$compile','$stateParams',function($rootScope,$scope,$state,$http,companyService,$location,$compile,$stateParams) {
+angular.module('MetronicApp').controller('CompanyController',['$rootScope','$scope','$state','$http','companyService','$location','$compile','$stateParams','FileUploader',function($rootScope,$scope,$state,$http,companyService,$location,$compile,$stateParams,FileUploader) {
 	 $scope.$on('$viewContentLoaded', function() {   
 	    	// initialize core components
+		 	
 		    handle = new pageHandle();
 	    	App.initAjax();
 	    	if($location.path()=="/companyAdd"){
@@ -29,10 +30,49 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        $rootScope.settings.layout.pageBodySolid = false;
 	        $rootScope.settings.layout.pageSidebarClosed = false;
 	        console.log("------------->"+$scope.company);
-	       
 	    	
 	 });
 	 
+	  //创建对象
+	  var uploader = $scope.uploader = new FileUploader({url:'rest/fileOperate/uploadSingleFile'});
+	 
+	  //添加文件到上传队列后
+	  uploader.onCompleteAll = function () {
+		  uploader.clearQueue();
+	  };
+	  //上传成功
+	  uploader.onSuccessItem = function (fileItem, , status, headers) {
+		  if (status == 200){ 
+			  if(response=""){
+				  toastr.success("上传失败！");
+				  return;
+			  }
+		  		toastr.success("上传成功！");
+		  	  for(var i=0;i < $scope.companyQualifications.length;i++){
+		  		  if($scope.qualification_temp==$scope.companyQualifications[i]){
+		  			$scope.companyQualifications[i].qualificatioImage = response;
+		  		  }
+		  	  }
+		  }else{
+			  toastr.error("上传失败！");
+			  $scope.qualification_temp.qualificatioImage = response;
+		  }
+		};
+	  //上传失败
+	  uploader.onErrorItem = function (fileItem, response, status, headers) {
+			toastr.error("上传失败！");
+	  };
+	  
+	  $scope.uploadFile = function(item){
+		  $scope.qualification_temp = item;
+	  }
+	  
+	  $scope.up = function(file){
+		  uploader.clearQueue();
+		  uploader.addToQueue(file);
+		  uploader.uploadAll();
+	  }
+		
 	 var table;
 	 /** 加载列表 Start**/
 	 var loadTable = function(){
@@ -792,6 +832,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        * 编辑企业资质信息
 	        */
 	       $scope.editCompanyQualification = function(){
+	    	    getCompanyInfo($scope.company.comId,'companyQualification');
 	    	   	$scope.companyQualificationView = false;
        			$scope.companyQualificationAdd = false;
        			$scope.companyQualificationEdit = true;
@@ -1192,8 +1233,25 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    	  //$(".fileinput-filename").val("");
 	    	  //$("#file_span").appendTo('<input type="file" file-model="excelFile" accept=".xls" name="...">');
 	       })
+	       
+	       
+	       $scope.downloadFile = function(obj){
+	    	   if(!handle.isNull(obj)){
+	    		   window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+obj.qualificatioImage;
+	    	   }else{
+	    		   toastr.error("下载失败!");
+	    	   }
+	       }
+	       
+	       $scope.removefile = function(obj){
+	    	   for(var i=0;i < $scope.companyQualifications.length;i++){
+			  		  if(obj == $scope.companyQualifications[i]){
+			  			$scope.companyQualifications[i].qualificatioImage = "";
+			  		  }
+			  	}
+	       }
 
-	         
+	   
 	       
 
 	       
