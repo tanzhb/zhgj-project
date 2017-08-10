@@ -1,13 +1,12 @@
 package com.congmai.zhgj.web.dao;
 
-import com.congmai.zhgj.core.generic.GenericDao;
-import com.congmai.zhgj.web.model.Role;
-import com.congmai.zhgj.web.model.Warehouse;
-import com.congmai.zhgj.web.model.WarehouseExample;
-
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+
+import com.congmai.zhgj.core.generic.GenericDao;
+import com.congmai.zhgj.web.model.Warehouse;
+import com.congmai.zhgj.web.model.WarehouseExample;
 
 public interface WarehouseMapper   extends GenericDao<Warehouse, Long>{
     int countByExample(WarehouseExample example);

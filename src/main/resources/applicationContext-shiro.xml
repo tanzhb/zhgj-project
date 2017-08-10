@@ -12,6 +12,14 @@
         <property name="loginUrl" value="/rest/page/login"/>
         <property name="successUrl" value="/rest/index"/>
         <property name="unauthorizedUrl" value="/rest/page/401"/>
+        
+        <!-- 添加各种验证过滤器 -->  
+        <property name="filters">  
+            <map>  
+                <entry key="roles" value-ref="anyRolesAuthorizationFilter"/>  
+            </map>  
+        </property> 
+        <!-- 添加对各种请求执行的过滤操作 --> 
         <property name="filterChainDefinitions">
             <value>
                 <!-- 静态资源允许访问 -->
@@ -24,6 +32,9 @@
             </value>
         </property>
     </bean>
+    
+    <!-- 多角色过滤器实现 -->
+    <bean id="anyRolesAuthorizationFilter" class="com.congmai.zhgj.web.security.AnyRolesAuthorizationFilter"/>
 
     <!-- 缓存管理器 使用Ehcache实现 -->
     <bean id="shiroEhcacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">

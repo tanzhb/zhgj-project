@@ -26,38 +26,21 @@ import com.congmai.zhgj.web.service.UserService;
  * @version 1.0.0
  */
 @Service
-public class UserServiceImpl extends GenericServiceImpl<User, String> implements
+public class UserServiceImpl extends GenericServiceImpl<User, Integer> implements
 		UserService {
 
 	@Resource
 	private UserMapper userMapper;
 
-	@Override
-	public int insert(User model) {
-		return userMapper.insertSelective(model);
-	}
 
-	@Override
-	public int update(User model) {
-		return userMapper.updateByPrimaryKeySelective(model);
-	}
-
-	@Override
-	public int delete(String id) {
-		return userMapper.deleteByPrimaryKey(id);
-	}
 
 	public User authentication(User user) {
 		return userMapper.authentication(user);
 	}
 
-	@Override
-	public User selectById(String id) {
-		return userMapper.selectByPrimaryKey(id);
-	}
 
 	@Override
-	public GenericDao<User, String> getDao() {
+	public GenericDao<User, Integer> getDao() {
 		return userMapper;
 	}
 
@@ -71,33 +54,10 @@ public class UserServiceImpl extends GenericServiceImpl<User, String> implements
 		}
 		return user;
 	}
-    
-    
-	public List<User> findAllUsers() {
-		List<User> list = userMapper.findAllUsers();
-		if(list != null && list.size() > 0){
-			for(User user : list){
-				if(user.getDelFlg() != null){
-					if("0".equals(user.getDelFlg())) user.setDelFlg("否");
-					else user.setDelFlg("是");
-				}
-			}
-		}
-		return list;
+  
+	@Override
+	public int update(User model) {
+		return userMapper.updateByPrimaryKeySelective(model);
 	}
-
-	public boolean isUserExist(User user) {
-		boolean exist = false;
-		if (userMapper.isUserExist(user) > 0) {
-			exist = true;
-		}
-		return exist;
-	}
-
-	public void deleteUsers(String ids) {
-		List<String> idList = ApplicationUtils.getIdList(ids);
-		userMapper.deleteUsers(idList);
-	}
-	
 	
 }
