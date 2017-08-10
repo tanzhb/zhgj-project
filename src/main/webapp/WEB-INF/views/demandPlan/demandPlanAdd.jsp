@@ -27,7 +27,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a ui-sref="company">需求计划</a>
+            <a ui-sref="demandPlan">需求计划</a>
         </li>
     </ul>
 
@@ -132,9 +132,9 @@
                         <div class="portlet-title">
                             <div class="caption">物料</div>
                             <div class="actions">
-                                <a href="javascript:;" data-repeater-create class="btn blue btn-sm" ng-click="addRepeat()" >
-                                            <i class="fa fa-plus"></i> 增加
-                                     </a>
+                                <a href="javascript:;" data-repeater-create class="btn blue btn-sm" ng-click="addMateriel()" >
+                                     <i class="fa fa-plus"></i> 增加
+                                </a>
                             </div>
                         </div>
                           <div class="portlet-body form">
@@ -142,14 +142,15 @@
 			                                        <table class="table table-bordered table-hover">
 			                                            <thead>
 			                                                <tr>
-			                                                    <th>姓名</th>
-			                                                    <th>职位</th>
-			                                                    <th>部门/公司</th>
-			                                                    <th>管理职责</th>
-			                                                    <th>电话</th>
-			                                                    <th>微信</th>
-			                                                    <th>邮箱</th>
-			                                                    <th>备注</th>
+			                                                    <th>物料编号</th>
+			                                                    <th>物料名称</th>
+			                                                    <th>规格型号</th>
+			                                                    <th>单位</th>
+			                                                    <th>数量</th>
+			                                                    <th>交付日期</th>
+			                                                    <th>距离交付</th>
+			                                                    <th>交付地点</th>
+			                                                    <th>供应商</th>
 			                                                    <th style="width:65px;"></th>
 			                                                </tr>
 			                                            </thead>
@@ -158,16 +159,17 @@
 			                                                    <td colspan="7" align="center" >暂无数据</td>
 			                                                </tr>
 			                                            </tbody>
-			                                            <tbody ng-repeat="_contact in companyContacts track by $index">
+			                                            <tbody ng-repeat="materiel in materiel track by $index">
 			                                                <tr ng-mouseover="showOperation('contact',$index)" ng-mouseleave="hideOperation('contact',$index)">
-			                                                    <td>{{_contact.contactName}}</td>
-			                                                    <td>{{_contact.contactTitle}}</td>
-			                                                    <td>{{_contact.department}}</td>
-			                                                    <td>{{_contact.responsibility}}</td>
-			                                                    <td>{{_contact.contactTel}}</td>
-			                                                    <td>{{_contact.wechat}}</td>
-			                                                    <td>{{_contact.contactEmail}}</td>
-			                                                    <td>{{_contact.remark}}</td>
+			                                                    <td>{{materiel.materielNum}}</td>
+			                                                    <td>{{materiel.materielName}}</td>
+			                                                    <td>{{materiel.specifications}}</td>
+			                                                    <td>{{materiel.unit}}</td>
+			                                                    <td>{{materiel.contactTel}}</td>
+			                                                    <td>{{materiel.wechat}}</td>
+			                                                    <td>{{materiel.contactEmail}}</td>
+			                                                    <td>{{materiel.remark}}</td>
+			                                                    <td>{{materiel.remark}}</td>
 			                                                    <td ng-show="operation_c{{$index}}">
 			                                                    	<a ng-click="editCompanyContact(_contact.serialNum)"><i class="fa fa-edit" title="编辑"></i></a>
 			                                                    	&nbsp;&nbsp;&nbsp;
@@ -386,7 +388,7 @@
      <!-- /.modal-dialog -->
  </div>
 <!-- 财务信息modal END -->
-
+<jsp:include page="selectMateriel.jsp"></jsp:include>
 
 <!-- END MAIN CONTENT -->
 <!-- BEGIN MAIN JS -->

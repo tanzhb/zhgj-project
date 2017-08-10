@@ -19,6 +19,19 @@ angular.module('MetronicApp').service('demandPlanService',['$http','$q',function
         return deferred.promise;//返回承诺
 	}
 	
+	
+	this.chooseMateriels = function(ids){
+		var deferred = $q.defer();
+		$http.post("rest/demandPlan/chooseMateriel",
+			ids//传整个表单数据  
+    	).then(function success(result) {
+            deferred.resolve(result);//请求成功
+        }, function error(err) {
+            deferred.reject(err);//请求失败
+        });
+        return deferred.promise;//返回承诺
+	}
+	
 	/**
 	 * 保存
 	 */

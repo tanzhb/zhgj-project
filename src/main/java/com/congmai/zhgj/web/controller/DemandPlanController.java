@@ -24,6 +24,7 @@ import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.DemandPlan;
+import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.service.DemandPlanService;
 
 /**
@@ -105,6 +106,25 @@ public class DemandPlanController {
         		return null;
         	}
     	return demandPlan;
+    }
+    
+    /**
+     * 
+     * @Description (选择物料)
+     * @param ids
+     * @return
+     */
+    @RequestMapping(value="chooseMateriel",method=RequestMethod.POST)
+    @ResponseBody
+    public List<Materiel> chooseMateriel(@RequestBody String ids){
+    	List<Materiel> list = null;
+    	try {
+    		list = demandPlanService.chooseMateriel(ids);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+    	
+    	return list;
     }
     
 
