@@ -1,8 +1,6 @@
 package com.congmai.zhgj.web.controller;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -28,12 +26,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.security.PermissionSign;
 import com.congmai.zhgj.web.security.RoleSign;
+import com.congmai.zhgj.web.security.ShiroKit;
 import com.congmai.zhgj.web.service.UserService;
 
 /**
@@ -73,10 +70,16 @@ public class UserController {
 				return "login";
 			}
 			// 身份验证
-			subject.login(new UsernamePasswordToken(user.getLoginName(), user
-					.getPassword()));
+			try{
+				UsernamePasswordToken upt = new UsernamePasswordToken(user.getAccount(), user
+						.getPassword());
+				subject.login(upt);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			
 			// 验证成功在Session中保存用户信息
-			final User authUserInfo = userService.selectByUsername(user.getLoginName());
+			final User authUserInfo = userService.selectByUsername(user.getAccount());
 			request.getSession().setAttribute("userInfo", authUserInfo);
 		} catch (AuthenticationException e) {
 			// 身份验证失败
@@ -99,98 +102,6 @@ public class UserController {
 		Subject subject = SecurityUtils.getSubject();
 		subject.logout();
 		return "login";
-	}
-
-	/**
-	 * 
-	 * @Description 查找所有用户信息
-	 * @return
-	 */
-	@RequestMapping(value = "/findAllUsers", method = RequestMethod.GET)
-	public ResponseEntity<Map> findAllUsers(HttpServletRequest request) {
-		List<User> users = userService.findAllUsers();
-
-		if (users.isEmpty()) {
-			return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);// You many
-																	// decide to
-																	// return
-																	// HttpStatus.NOT_FOUND
-		}
-		// 封装datatables数据返回到前台
-		Map pageMap = new HashMap();
-		pageMap.put("draw", 1);
-		pageMap.put("recordsTotal", users.size());
-		pageMap.put("recordsFiltered", users.size());
-		pageMap.put("data", users);
-		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
-	}
-
-	/**
-	 * 
-	 * @Description 添加用户
-	 * @param user
-	 * @param ucBuilder
-	 * @return
-	 */
-	@RequestMapping(value = "/addUser", method = RequestMethod.POST)
-	public ResponseEntity<Void> addUser(@RequestBody User user,
-			UriComponentsBuilder ucBuilder) {
-		Subject currentUser = SecurityUtils.getSubject();
-		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-		
-		if(user.getId() == null){
-			if (userService.isUserExist(user)) {
-				System.out.println("A User with name " + user.getLoginName()
-						+ " already exist");
-				return new ResponseEntity<Void>(HttpStatus.CONFLICT);
-			}			
-			user.setCreator(currenLoginName);
-			user.setCreateTime(new Date());
-			if(user.getDelFlg() == null)
-				user.setDelFlg("0");
-			user.setId(ApplicationUtils.random32UUID());
-			user.setPassword(svc.encryptPassword("000000"));//密码加密,默认密码6个零
-			userService.insert(user);
-		}else{
-			user.setUpdater(currenLoginName);
-			user.setUpdateTime(new Date());
-			userService.update(user);
-		}
-		
-
-		
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(ucBuilder.path("/user/{id}")
-				.buildAndExpand(user.getId()).toUri());
-		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
-	}
-	/**
-	 * 
-	 * @Description 根据id查找用户
-	 * @param user
-	 * @return
-	 */
-	@RequestMapping(value = "/selectById", method = RequestMethod.POST)
-	public ResponseEntity<User> selectById(@RequestBody String ids) {
-		User u = userService.selectById(ids);
-		
-		return new ResponseEntity<User>(u, HttpStatus.OK);
-	}
-	/**
-	 * 
-	 * @Description 批量删除用户
-	 * @param ids
-	 * @return
-	 */
-	@RequestMapping(value = "/deleteUsers", method = RequestMethod.POST)
-	public ResponseEntity<Void> deleteUsers(@RequestBody String ids) {
-		if ("".equals(ids) || ids == null) {
-			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
-		}
-		userService.deleteUsers(ids);
-
-		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
 	/**
@@ -228,10 +139,10 @@ public class UserController {
 		if(user == null){//当前用户过期或不存在
 			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
 		}else{
-			if(svc.passwordsMatch(m.get("oldPassword").toString(), user.getPassword())){//原密码输入正确
-				user.setPassword(svc.encryptPassword(m.get("newPassword").toString()));
-				user.setUpdater(currenLoginName);
-				user.setUpdateTime(new Date());
+			String source = user.getSalt();
+			if(user.getPassword().equals(ShiroKit.md5(m.get("oldPassword").toString(), source))){	  
+				String newMd5 = ShiroKit.md5(m.get("newPassword").toString(), user.getSalt());
+				user.setPassword(newMd5);
 				userService.update(user);
 			}else{//原密码输入有错
 				return new ResponseEntity<Void>(HttpStatus.CONFLICT);
@@ -241,7 +152,7 @@ public class UserController {
 		HttpHeaders headers = new HttpHeaders();
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
-
+	
 	/**
 	 * 基于角色 标识的权限控制案例
 	 */

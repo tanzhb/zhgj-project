@@ -3,14 +3,14 @@ package com.congmai.zhgj.web.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PermissionExample {
+public class MenuExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public PermissionExample() {
+    public MenuExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -164,143 +164,143 @@ public class PermissionExample {
             return (Criteria) this;
         }
 
-        public Criteria andPermissionNameIsNull() {
-            addCriterion("permission_name is null");
+        public Criteria andMenuNameIsNull() {
+            addCriterion("menu_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionNameIsNotNull() {
-            addCriterion("permission_name is not null");
+        public Criteria andMenuNameIsNotNull() {
+            addCriterion("menu_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionNameEqualTo(String value) {
-            addCriterion("permission_name =", value, "permissionName");
+        public Criteria andMenuNameEqualTo(String value) {
+            addCriterion("menu_name =", value, "menuName");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionNameNotEqualTo(String value) {
-            addCriterion("permission_name <>", value, "permissionName");
+        public Criteria andMenuNameNotEqualTo(String value) {
+            addCriterion("menu_name <>", value, "menuName");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionNameGreaterThan(String value) {
-            addCriterion("permission_name >", value, "permissionName");
+        public Criteria andMenuNameGreaterThan(String value) {
+            addCriterion("menu_name >", value, "menuName");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionNameGreaterThanOrEqualTo(String value) {
-            addCriterion("permission_name >=", value, "permissionName");
+        public Criteria andMenuNameGreaterThanOrEqualTo(String value) {
+            addCriterion("menu_name >=", value, "menuName");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionNameLessThan(String value) {
-            addCriterion("permission_name <", value, "permissionName");
+        public Criteria andMenuNameLessThan(String value) {
+            addCriterion("menu_name <", value, "menuName");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionNameLessThanOrEqualTo(String value) {
-            addCriterion("permission_name <=", value, "permissionName");
+        public Criteria andMenuNameLessThanOrEqualTo(String value) {
+            addCriterion("menu_name <=", value, "menuName");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionNameLike(String value) {
-            addCriterion("permission_name like", value, "permissionName");
+        public Criteria andMenuNameLike(String value) {
+            addCriterion("menu_name like", value, "menuName");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionNameNotLike(String value) {
-            addCriterion("permission_name not like", value, "permissionName");
+        public Criteria andMenuNameNotLike(String value) {
+            addCriterion("menu_name not like", value, "menuName");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionNameIn(List<String> values) {
-            addCriterion("permission_name in", values, "permissionName");
+        public Criteria andMenuNameIn(List<String> values) {
+            addCriterion("menu_name in", values, "menuName");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionNameNotIn(List<String> values) {
-            addCriterion("permission_name not in", values, "permissionName");
+        public Criteria andMenuNameNotIn(List<String> values) {
+            addCriterion("menu_name not in", values, "menuName");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionNameBetween(String value1, String value2) {
-            addCriterion("permission_name between", value1, value2, "permissionName");
+        public Criteria andMenuNameBetween(String value1, String value2) {
+            addCriterion("menu_name between", value1, value2, "menuName");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionNameNotBetween(String value1, String value2) {
-            addCriterion("permission_name not between", value1, value2, "permissionName");
+        public Criteria andMenuNameNotBetween(String value1, String value2) {
+            addCriterion("menu_name not between", value1, value2, "menuName");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionSignIsNull() {
-            addCriterion("permission_sign is null");
+        public Criteria andMenuSignIsNull() {
+            addCriterion("menu_sign is null");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionSignIsNotNull() {
-            addCriterion("permission_sign is not null");
+        public Criteria andMenuSignIsNotNull() {
+            addCriterion("menu_sign is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionSignEqualTo(String value) {
-            addCriterion("permission_sign =", value, "permissionSign");
+        public Criteria andMenuSignEqualTo(String value) {
+            addCriterion("menu_sign =", value, "menuSign");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionSignNotEqualTo(String value) {
-            addCriterion("permission_sign <>", value, "permissionSign");
+        public Criteria andMenuSignNotEqualTo(String value) {
+            addCriterion("menu_sign <>", value, "menuSign");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionSignGreaterThan(String value) {
-            addCriterion("permission_sign >", value, "permissionSign");
+        public Criteria andMenuSignGreaterThan(String value) {
+            addCriterion("menu_sign >", value, "menuSign");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionSignGreaterThanOrEqualTo(String value) {
-            addCriterion("permission_sign >=", value, "permissionSign");
+        public Criteria andMenuSignGreaterThanOrEqualTo(String value) {
+            addCriterion("menu_sign >=", value, "menuSign");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionSignLessThan(String value) {
-            addCriterion("permission_sign <", value, "permissionSign");
+        public Criteria andMenuSignLessThan(String value) {
+            addCriterion("menu_sign <", value, "menuSign");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionSignLessThanOrEqualTo(String value) {
-            addCriterion("permission_sign <=", value, "permissionSign");
+        public Criteria andMenuSignLessThanOrEqualTo(String value) {
+            addCriterion("menu_sign <=", value, "menuSign");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionSignLike(String value) {
-            addCriterion("permission_sign like", value, "permissionSign");
+        public Criteria andMenuSignLike(String value) {
+            addCriterion("menu_sign like", value, "menuSign");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionSignNotLike(String value) {
-            addCriterion("permission_sign not like", value, "permissionSign");
+        public Criteria andMenuSignNotLike(String value) {
+            addCriterion("menu_sign not like", value, "menuSign");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionSignIn(List<String> values) {
-            addCriterion("permission_sign in", values, "permissionSign");
+        public Criteria andMenuSignIn(List<String> values) {
+            addCriterion("menu_sign in", values, "menuSign");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionSignNotIn(List<String> values) {
-            addCriterion("permission_sign not in", values, "permissionSign");
+        public Criteria andMenuSignNotIn(List<String> values) {
+            addCriterion("menu_sign not in", values, "menuSign");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionSignBetween(String value1, String value2) {
-            addCriterion("permission_sign between", value1, value2, "permissionSign");
+        public Criteria andMenuSignBetween(String value1, String value2) {
+            addCriterion("menu_sign between", value1, value2, "menuSign");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionSignNotBetween(String value1, String value2) {
-            addCriterion("permission_sign not between", value1, value2, "permissionSign");
+        public Criteria andMenuSignNotBetween(String value1, String value2) {
+            addCriterion("menu_sign not between", value1, value2, "menuSign");
             return (Criteria) this;
         }
 

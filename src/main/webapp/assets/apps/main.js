@@ -285,8 +285,22 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        'assets/global/plugins/jquery.blockui.min.js',
 		        'assets/pages/scripts/ui-blockui.min.js',
 	        	'assets/apps/service/materielService.js',
-				'assets/apps/controllers/materielController.js'
-                      ]
+				'assets/apps/controllers/materielController.js',
+				
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/pages/scripts/table-datatables-fixedheader.min.js'
+				
+				/*,
+				'assets/apps/controllers/selectMaterielController.js'*/
+
+
+                        ]
+
+
                     });
                 }]
             }
@@ -303,25 +317,20 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	                        name: 'MetronicApp',
 	                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
 	                        files: [                             
-	                    
-	                    'assets/global/plugins/datatables/datatables.min.css', 
-	                    'assets/global/plugins/datatables/datatables.min.js',
-						
-	                    
-	                    'assets/global/plugins/jquery-validation/js/jquery.validate.js',
-						'assets/global/plugins/datatables/datatables.all.min.js',
-                       'assets/pages/scripts/table-datatables-managed.min.js',
-						'assets/global/plugins/jquery.min.js',
-						
-						'assets/global/plugins/jquery.min.js',
-				        'assets/global/plugins/bootstrap/js/bootstrap.min.js',
-				        'assets/global/plugins/js.cookie.min.js',
-				        'assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js',
-				        'assets/global/plugins/jquery.blockui.min.js',
-				        'assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js',
-				        
-	                    'assets/apps/service/ContractService.js',
-	                    'assets/apps/controllers/ContractController.js'
+                        
+                        'assets/global/plugins/datatables/datatables.min.css',
+                        'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+                        'assets/global/plugins/jstree/dist/themes/default/style.min.css',
+
+                        'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+                        'assets/global/plugins/datatables/datatables.all.min.js',
+                        'assets/pages/scripts/table-datatables-fixedheader.min.js',
+
+                        'assets/global/plugins/jstree/dist/jstree.min.js',
+                        'assets/pages/scripts/ui-tree.min.js',
+                        'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js',
+                        'assets/apps/service/ContractService.js',
+	                    'assets/apps/controllers/ContractController.js',                 
 	                   
 	                        ]
 	                    });
@@ -346,29 +355,47 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
 				'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css',
 				'assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css',
-				
-				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-				
-				
-				'assets/global/plugins/jquery-validation/js/jquery.validate.js',
-				'assets/global/plugins/datatables/datatables.all.min.js',
-				'assets/pages/scripts/table-datatables-managed.min.js',
-				'assets/global/plugins/jquery.min.js',
+				'assets/global/plugins/icheck/skins/all.css',
 				'assets/global/plugins/select2/js/select2.full.min.js',
-				'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
 				'assets/global/plugins/jquery-validation/js/jquery.validate.min.js',
+				'assets/global/plugins/jquery-validation/js/localization/messages_zh.min.js',
 				'assets/global/plugins/jquery-validation/js/additional-methods.min.js',
 				'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+				'assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js',
+				'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js',
+				'assets/global/plugins/ckeditor/ckeditor.js',
+				'assets/global/plugins/bootstrap-markdown/lib/markdown.js',
+				'assets/global/plugins/bootstrap-markdown/js/bootstrap-markdown.js',
 				
-				'assets/global/plugins/jquery.min.js',
-				'assets/global/plugins/bootstrap/js/bootstrap.min.js',
-				
-				 
-				
-				'assets/global/plugins/angularjs/angular.min.js',
-				
+				'assets/pages/scripts/form-icheck.min.js',
+				'assets/pages/scripts/form-validation.min.js',
 				'assets/apps/service/ContractService.js',
 				'assets/apps/controllers/ContractController.js',
+				
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/pages/scripts/table-datatables-fixedheader.min.js',
+				
+				
+		        'assets/global/plugins/font-awesome/css/font-awesome.min.css',
+		        'assets/global/plugins/simple-line-icons/simple-line-icons.min.css',
+		        'assets/global/plugins/bootstrap/css/bootstrap.min.css',
+		        'assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css',
+		        'assets/global/plugins/fancybox/source/jquery.fancybox.css',
+		        'assets/global/plugins/jquery-file-upload/blueimp-gallery/blueimp-gallery.min.css',
+		        'assets/global/plugins/jquery-file-upload/css/jquery.fileupload.css',
+		        'assets/global/plugins/jquery-file-upload/css/jquery.fileupload-ui.css',
+		        'assets/global/css/components.min.css',
+		        'assets/global/css/plugins.min.css',
+		        'assets/layouts/layout2/css/layout.min.css',
+		        'assets/layouts/layout2/css/themes/blue.min.css',
+		        'assets/layouts/layout2/css/custom.min.css',
+		        
+				
+				
                         ]
                     });
                 }]
@@ -377,9 +404,10 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         
         .state('editUserContractPage', {
         	params:{data:null},
-            url: "/editUserContractPage:id",
+            url: "/editUserContractPage?:id",
             templateUrl: "rest/contract/editUserContractPage",
             data: {pageTitle: '合同管理'},
+            reload:true,
             controller: "ContractController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -392,30 +420,30 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 						'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
 						'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css',
 						'assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css',
-						
-						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-						
-						
-						'assets/global/plugins/jquery-validation/js/jquery.validate.js',
-						'assets/global/plugins/datatables/datatables.all.min.js',
-                        'assets/pages/scripts/table-datatables-managed.min.js',
-						'assets/global/plugins/jquery.min.js',
+						'assets/global/plugins/icheck/skins/all.css',
 						'assets/global/plugins/select2/js/select2.full.min.js',
-						'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
 						'assets/global/plugins/jquery-validation/js/jquery.validate.min.js',
+						'assets/global/plugins/jquery-validation/js/localization/messages_zh.min.js',
 						'assets/global/plugins/jquery-validation/js/additional-methods.min.js',
 						'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+						'assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js',
+						'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js',
+						'assets/global/plugins/ckeditor/ckeditor.js',
+						'assets/global/plugins/bootstrap-markdown/lib/markdown.js',
+						'assets/global/plugins/bootstrap-markdown/js/bootstrap-markdown.js',
 						
-						'assets/global/plugins/jquery.min.js',
-				        'assets/global/plugins/bootstrap/js/bootstrap.min.js',
+						'assets/pages/scripts/form-icheck.min.js',
+						'assets/pages/scripts/form-validation.min.js',
+						'assets/apps/service/ContractService.js',
+						'assets/apps/controllers/ContractController.js',
+						
+						'assets/global/plugins/datatables/datatables.min.css',
+						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+						
+						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+						'assets/global/plugins/datatables/datatables.all.min.js',
+						'assets/pages/scripts/table-datatables-fixedheader.min.js',
 				        
-				         
-				        'assets/global/plugins/angularjs/plugins/angular-ui-router.min.js',
-				        'assets/global/plugins/angularjs/angular.min.js',
-				        
-				        
-				        'assets/apps/service/ContractService.js',
-	                    'assets/apps/controllers/ContractController.js',
                         ]
                     });
                 }]
@@ -504,7 +532,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        		}]
 	        	}
 	        })         
-	           .state('warehouse', {
+	        
+	        .state('warehouse', {	        
 	        url: "/warehouse",
             templateUrl: "rest/warehouse/viewWarehouseList",
             data: {pageTitle: '仓库信息'},
@@ -584,6 +613,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
+	        
+	        
 }]);
 
 
@@ -607,3 +638,5 @@ MetronicApp.run(["$rootScope", "settings", "$state", function($rootScope, settin
     $rootScope.$state = $state; // state to be accessed from view
     $rootScope.$settings = settings; // state to be accessed from view
 }]);
+
+
