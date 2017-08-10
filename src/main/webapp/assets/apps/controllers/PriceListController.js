@@ -34,11 +34,13 @@ angular
 														 $scope.ladderprices=[{}];
 														 _index = 0; 
 														 handle.pageRepeater();
+														 selectParentMateriel();//选择物料表格初始化
 												    		
 													 }
 												 if($location.path()=="/priceList"){
 													 debugger;
 											        	loadPriceListTable();//加载价格列表
+											        	
 											        }
 												// set default layout mode
 												$rootScope.settings.layout.pageContentWhite = true;
@@ -240,6 +242,9 @@ angular
 		        			$scope.priceListEdit = false;
 						}		
 								$scope.savePriceList= function() {
+									
+									console.log($('#priceListForm').valid());
+									//$scope.priceList=null;
 									if($('#priceListForm').valid()){//表单验证通过则执行添加功能
 									priceListService.savePriceList($scope.priceList)
 									.then(
@@ -249,36 +254,59 @@ angular
 												$scope.priceListView = true;
 							        			$scope.priceListAdd = true;
 							        			$scope.priceListEdit = false;
-							        			$(".alert-danger").hide();
+							        			$("#priceListTips").hide();
 											},
 											function(errResponse) {
 												toastr.warning("保存错误！");
 												console
 														.error('Error while creating User');
 											}
+											);
 									}
-									);
-									/*debugger;
-									if(true){//表单验证通过则执行添加功能//$('#priceListForm').valid()
-									var promise = priceListService.savePriceList($scope.priceList);
-										debugger;
-										promise.then(
-												function(data) {debugger;
-													toastr.success("保存价格数据成功！");
-													$scope.priceList = $scope.priceList;
-								        			$scope.priceListView = true;
-								        			$scope.priceListAdd = true;
-								        			$scope.priceListEdit = false;
-								        			$(".alert-danger").hide();
-												},
-												function(errResponse) {
-													toastr.warning("保存价格错误！");
-													console
-															.error('Error while creating User');
-												}
-										);
-									}*/
 							};	
+							// 删除仓库开始***************************************							
+							$scope.delPriceList= function() {
+								debugger;
+								var ids = '';
+								// Iterate over all checkboxes in the table
+								table.$('input[type="checkbox"]').each(function() {
+									// If checkbox exist in DOM
+									if ($.contains(document, this)) {
+										// If checkbox is checked
+										if (this.checked) {
+											// 将选中数据id放入ids中
+											if (ids == '') {
+												ids = this.value;
+											} else
+												ids = ids + ',' + this.value;
+										}
+									}
+								});
+
+								if (ids == '') {// 未勾选删除数据									
+									toastr.warning("未勾选要删除数据！");
+								} else {
+									$('#delPriceListModal').modal('show');// 打开确认删除模态框
+									
+									$scope.confirmDelPriceList = function() {										
+										priceListService
+												.delPriceLists(ids)
+												.then(
+														function(data) {
+															$('#delPriceListModal').modal(
+																	'hide');// 删除成功后关闭模态框
+															toastr.success("删除成功！");
+															table.ajax.reload(); // 重新加载datatables数据
+														},
+														function(errResponse) {
+															console
+																	.error('Error while deleting Users');
+														}
+
+												);
+									}
+								}								
+							};
 							// 添加价格结束***************************************
 							
 							// 修改价格开始***************************************							
@@ -319,9 +347,9 @@ angular
 						            	currency:{required:"未选择币种！"},
 						            	rate:{digits:"必须是数字！",required:"税率不能为空！"},
 						            	price: {digits:"必须是数字！",required:"单价不能为空！"},
-						            	/*inclusiveprice:{digits:"必须是数字！"},
+						            	inclusiveprice:{digits:"必须是数字！"},
 						            	topprice:{digits:"必须是数字！"},
-						            	floorprice:{digits:"必须是数字！"},*/
+						            	floorprice:{digits:"必须是数字！"},
 						            	priceEffectiveDate: {required:"价格生效期未选择！" },
 						            	priceExpirationDate: {required:"价格失效期未选择！" }
 						            },
@@ -334,9 +362,9 @@ angular
 						            	currency:{required:true},
 						            	rate:{digits:true,required:!0},
 						            	price: {digits:true,required:!0},
-						            /*	inclusiveprice:{digits:true},
+						            	inclusiveprice:{digits:true},
 						            	topprice:{digits:true},
-						            	floorprice:{digits:true},*/
+						            	floorprice:{digits:true},
 						            	priceEffectiveDate: {required:true },
 						            	priceExpirationDate: {required:true }
 						            },
@@ -349,7 +377,6 @@ angular
 						                r.is(":checkbox") ? e.insertAfter(r.closest(".md-checkbox-list, .md-checkbox-inline, .checkbox-list, .checkbox-inline")) : r.is(":radio") ? e.insertAfter(r.closest(".md-radio-list, .md-radio-inline, .radio-list,.radio-inline")) : e.insertAfter(r)
 						            },
 						            highlight: function(e) {
-						            	debugger;
 						                $(e).closest(".form-group").addClass("has-error")
 						            },
 						            unhighlight: function(e) {
@@ -426,5 +453,150 @@ angular
 							    	   getPriceListInfo(serialNum);
 							    	   $('#viewPriceList').modal('show'); 
 							       };
-							       
+							       //选择物料弹框
+							       var selectIndex;
+						 	       $scope.selectMateriel = function(index){
+						 	    	  selectIndex = index;
+						 	       }
+						 	      var selectParentTable;
+						 	       var selectParentMateriel = function() {
+						 	    	   debugger;
+						 	                a = 0;
+						 	                App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
+						 	                selectParentTable = $("#select_sample_2")
+						 	    			.DataTable({
+						 	                    language: {
+						 	                        aria: {
+						 	                            sortAscending: ": activate to sort column ascending",
+						 	                            sortDescending: ": activate to sort column descending"
+						 	                        },
+						 	                        emptyTable: "空表",
+						 	                        info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+						 	                        infoEmpty: "没有数据",
+						 	                        //infoFiltered: "(filtered1 from _MAX_ total entries)",
+						 	                        lengthMenu: "每页显示 _MENU_ 条数据",
+						 	                        search: "查询:",
+						 	                        zeroRecords: "抱歉， 没有找到！",
+						 	                        paginate: {
+						 	                            "sFirst": "首页",
+						 	                            "sPrevious": "前一页",
+						 	                            "sNext": "后一页",
+						 	                            "sLast": "尾页"
+						 	                         }
+						 	                    },
+						 	    /*                fixedHeader: {//固定表头、表底
+						 	                        header: !0,
+						 	                        footer: !0,
+						 	                        headerOffset: a
+						 	                    },*/
+						 	                    order: [[1, "asc"]],//默认排序列及排序方式
+						 	                    searching: true,//是否过滤检索
+						 	                    ordering:  true,//是否排序
+						 	                    lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
+						 	                    pageLength: 5,//每页显示数量
+						 	                    processing: true,//loading等待框
+//						 	                    serverSide: true,
+						 	                    ajax: "rest/materiel/findMaterielList?isLatestVersion=1",//加载数据中
+						 	                    "aoColumns": [
+						 	                                  { mData: 'serialNum' },
+						 	                                  { mData: 'materielNum' },
+						 	                                  { mData: 'materielName' },
+						 	                                  { mData: 'specifications' },
+						 	                                  { mData: 'unit' },
+						 	                                  { mData: 'parentMateriel' },
+						 	                                  { mData: 'type' },
+						 	                                  { mData: 'productionPlace' },
+						 	                                  { mData: 'brand' },
+						 	                                  { mData: 'brand' },
+						 	                                  { mData: 'versionNO' },
+						 	                                  { mData: 'status' }
+						 	                            ],
+						 	                   'aoColumnDefs' : [ {
+						 	    							'targets' : 0,
+						 	    							'searchable' : false,
+						 	    							'orderable' : false,
+						 	    							
+						 	    							'render' : function(data,
+						 	    									type, row, meta) {
+						 	    								return '<input type="radio" ng-click="selectParent(\''+data+'\',\''+row.materielName+'\',\''+row.materielNum+'\',\''+row.specifications+'\',\''+row.unit+'\')" name="serialNum[]" value="'
+						 	    										+ $('<div/>')
+						 	    												.text(
+						 	    														data)
+						 	    												.html()
+						 	    										+ '">';
+						 	    							},
+						 	    							"createdCell": function (td, cellData, rowData, row, col) {
+						 	    								 $compile(td)($scope);
+						 	    						       }
+						 	    						},{
+						 	    							'targets' : 1,
+						 	    							'render' : function(data,
+						 	    									type, row, meta) {
+						 	    								var bomIcon='';//bom图标
+						 	    								if(row.isBOM==1){
+						 	    									bomIcon = '<span class="label label-sm label-success">B</span> '
+						 	    								}
+						 	    								return bomIcon + data;
+						 	    							}
+
+						 	    						},{
+						 	    							'targets' : 5,
+						 	    							
+						 	    							'render' : function(data,
+						 	    									type, full, meta) {
+						 	    								if(data==null){
+						 	    									return  ''
+						 	    								}else{
+						 	    									return  data.materielName
+						 	    								}
+						 	    							}
+						 	    						} ]
+
+						 	                }).on('order.dt',
+						 	                function() {
+						 	                    console.log('排序');
+						 	                })
+						 	            };
+						 	            //设置当前选中的物料行
+						 	            $scope.selectParent  = function(serialNum,materielName,materielNum,specifications,unit) {
+						 	            	$scope.row = {};
+						 	            	$scope.row.serialNum = serialNum;//物料流水
+						 	            	$scope.row.materielName=materielName;//物料名称
+						 	            	$scope.row.materielNum=materielNum;//物料编号
+						 	            	$scope.row.specifications=specifications;//规格型号
+						 	            	$scope.row.unit=unit;//单位
+						 	            }; 
+						 	         // 确认选择开始***************************************
+						 	    		$scope.confirmSelect = function() {
+						 	    			var ids = '';
+						 	    			// Iterate over all checkboxes in the table
+						 	    			selectParentTable.$('input[type="radio"]').each(
+						 	    					function() {
+						 	    						// If checkbox exist in DOM
+						 	    						if ($.contains(document, this)) {
+						 	    							// If checkbox is checked
+						 	    							if (this.checked) {
+						 	    								// 将选中数据id放入ids中
+						 	    								if (ids == '') {
+						 	    									ids = this.value;
+						 	    								} else
+						 	    									ids = ids + ','
+						 	    											+ this.value;
+						 	    							}
+						 	    						}
+						 	    					});
+						 	    			if(ids==''){
+						 	        			toastr.warning('请选择一个物料！');return;
+						 	        		}
+						 	    			//为前台五个参数赋值
+						 	    			$scope.priceList.materielSerial = $scope.row.serialNum;//物料流水
+						 	            	$scope.priceList.materielName=$scope.row.materielName;//物料名称
+						 	            	$scope.priceList.materielNum=$scope.row.materielNum;//物料编号
+						 	            	$scope.priceList.specifications=$scope.row.specifications;//规格型号
+						 	            	$scope.priceList.unit=$scope.row.unit;//单位
+						 	    			
+						 	    			$('#basicMaterielInfo').modal('hide');// 删除成功后关闭模态框
+						 	    			$(".modal-backdrop").remove();
+						 	    		};
+						 	    		
 						} ]);

@@ -437,5 +437,55 @@ angular
 							    	   getWarehouseInfo(serialNum);
 							    	   $('#viewWarehouse').modal('show'); 
 							       };
+							       /**
+							        * 下载EXCEL模板
+							        */
+							       $scope.downloadImportTemp = function(){
+							    	   window.location.href=$rootScope.basePath+"/rest/warehouse/downloadImportTemp";
+							       }
 							       
+							       /**
+							        * 上传EXCEL
+							        */
+							       $scope.uploadExcel = function(){
+							    	    var file = document.querySelector('input[type=file]').files[0];
+							    	    if(handle.isNull(file)){
+							    	    	handle.toastr.warning("请选择Excel文件！");
+							    	    }
+							    	    console.log(file.name);
+							    	    var type = file.name.substring(file.name.lastIndexOf("."));
+							    	   if(type != ".xls"){
+							    		   handle.toastr.warning("文件格式不正确，需要xls类型的Excel文档");
+							    		   return;
+							    	   }
+							    	   	handle.blockUI("正在导入中，请不要进行其他操作"); 
+							    	   	var promise = WarehouseService.uploadExcel();
+						       			promise.then(function(data){
+						       				handle.unblockUI(); 
+						       				if(data.data.data=="success"){
+						       					handle.toastr.success("导入成功");
+						       					table.ajax.reload();
+						       				}else{
+						       					handle.toastr.error(data.data.data);
+						       				}
+						       				$('#import').modal('hide'); 
+							            },function(data){
+							               //调用承诺接口reject();
+							            	handle.toastr.error("操作失败");
+							            	$('#import').modal('hide'); 
+							            });
+							    	   
+							       }
+							       $scope.exportWarehouse = function(){
+								    	 handle.blockUI("正在导出数据，请稍后"); 
+								    	 window.location.href=$rootScope.basePath+"/rest/warehouse/exportWarehouse";
+								    	 handle.unblockUI(); 
+								       }
+								       
+							       $('#import').on('hide.bs.modal', function (e) { 
+							    	   $("#resetFile").trigger("click");
+							    	  //$("#file_span input[type='file']").remove();
+							    	  //$(".fileinput-filename").val("");
+							    	  //$("#file_span").appendTo('<input type="file" file-model="excelFile" accept=".xls" name="...">');
+							       })
 						} ]);

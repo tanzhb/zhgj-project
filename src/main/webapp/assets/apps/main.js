@@ -193,7 +193,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         files: [                             
                             'assets/global/plugins/datatables/datatables.min.css', 
     				        'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
-    				      /*  'assets/global/plugins/datatables/datatables.all.min.js',*/
+    				        'assets/global/plugins/datatables/datatables.all.min.js',//
     				        'assets/global/plugins/bootstrap-toastr/toastr.js',
     				        'assets/global/plugins/bootstrap-toastr/toastr.css',
     				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js',
@@ -217,7 +217,24 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
     				        'assets/layouts/layout2/css/custom.min.css',
     				        'assets/layouts/layout2/css/themes/blue.min.css',
     				        'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
-    				        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+    				        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js'
+    				        /*'assets/global/plugins/bootstrap-select/css/bootstrap-select.css',
+    				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
+    				        'assets/pages/scripts/components-bootstrap-select.min.js',
+    				        'assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js',
+    				        'assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js',
+    				        'assets/global/plugins/jquery.blockui.min.js',
+                            'assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css',
+                            'assets/global/plugins/bootstrap-select/css/bootstrap-select.css',
+                           'assets/layouts/layout2/css/layout.min.css',
+                           'assets/global/plugins/jquery.min.js',
+                          'assets/global/plugins/bootstrap/js/bootstrap.min.js',
+                        'assets/global/plugins/js.cookie.min.js',
+                          'assets/global/scripts/app.min.js',
+                          'assets/layouts/layout2/scripts/layout.min.js',
+                           'assets/layouts/layout2/scripts/demo.min.js',
+                           'assets/layouts/global/scripts/quick-sidebar.min.js',
+                          'assets/layouts/global/scripts/quick-nav.min.js'*/
                         ]
                     });
                 }]

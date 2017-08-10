@@ -2,6 +2,8 @@ package com.congmai.zhgj.web.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 /**
  * @ClassName PriceList
  * @Description TODO(这里用一句话描述这个类的作用)
@@ -33,9 +35,9 @@ public class PriceList {
     private String price;
 
     private String priceType;
-
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date priceEffectiveDate;
-
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date priceExpirationDate;
 
     private String remark;
@@ -47,7 +49,7 @@ public class PriceList {
     private String delFlg;
 
     private String creator;
-
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     private String versionNO;
@@ -55,7 +57,7 @@ public class PriceList {
     private String isLatestVersion;
 
     private String updater;
-
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
     private String currency;
