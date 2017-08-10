@@ -1,4 +1,4 @@
-angular.module('MetronicApp').controller('ContractController', ['$rootScope','$scope','$http', 'settings', 'ContractService','$state','$compile','$stateParams','$filter', function($rootScope,$scope,$http,settings, ContractService,$state,$compile,$stateParams,$filter) {
+angular.module('MetronicApp').controller('ContractController', ['$rootScope','$scope','$http', 'settings', '$q','ContractService','$state','$compile','$stateParams','$filter', function($rootScope,$scope,$http,settings, $q,ContractService,$state,$compile,$stateParams,$filter) {
 	$scope.$on('$viewContentLoaded', function() {   
 		// initialize core components
 		App.initAjax();
@@ -25,13 +25,16 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 		debugger
 		if($('#form_sample_1').valid()){//表单验证通过则执行添加功能
 		var fd = new FormData();
-        var files = document.querySelector('input[name="files"]').files[0];
+		if($("input[name='files']").length){
+			var files = document.querySelector('input[name="files"]').files[0];
+			fd.append("files", files);
+		}
         
+		if($("input[name='file']").length){
         var file = document.querySelector('input[name="file"]').files[0];
-        fd.append("files", files);
         fd.append("files", file);
-
-		
+		}
+		fd.append('id', $("#id").val()); 
         fd.append('contractNum', $("#contractNum").val()); 
         fd.append('contractType', $("#contractType").val()); 
         fd.append('serviceModel', $("#serviceModel").val()); 
@@ -301,14 +304,52 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 				}								
 			};
 			
-			$scope.download=function(name){
-		    	alert(name);
-		    	/*ContractService.downLoad(name).then(
-		    			toastr.success("删除成功")
-		    	);*/
-		    	$http.get($rootScope.basePath + "/rest/contract/resourceDownload",  {filename:name}).success(function (data) {  
+			
+			//查看上传的文件
+			$scope.download=function(name) {
+	           /* $http({
+	                url: '/rest/contract/resourceDownload',
+	                method: "POST",
+	                data: $.param({
+	                }),
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	                responseType: 'arraybuffer'
+	            }).success(function (data, status, headers, config) {
+	                var blob = new Blob([data], {type: "application/vnd.ms-excel"});
+	                saveAs(blob, [headers('Content-Disposition').replace(/attachment;fileName=/,"")]);
+	            }).error(function (data, status, headers, config) {
+	                //upload failed
+	            });*/
+				window.open($rootScope.basePath+"/uploadAttachFiles/"+name);
+	        };
+				
+				
+				/*function(name){
+				 var deferred = $q.defer();  
+		    	ContractService.downLoad(name).then(
+		    			toastr.success("下载成功")
+		    	);
+		    	$http.get($rootScope.basePath + "/rest/contract/resourceDownload").success(function (data) {  
+		    		alert(data);
+		    		deferred.resolve(data); 
 		        })
-		  }
+		  }*/
+	        
+	        //修改电子合同
+	        $scope.editElectronicContract=function(myevent){
+	        	var htmlObj = $(myevent.target);
+	        	htmlObj.parent().parent().hide();
+	        	htmlObj.parent().parent().prev().show();
+	        	htmlObj.parent().parent().prev().find("input[type='file']").attr("name","files");
+	        }
+	        
+	        //修改签字合同
+	        $scope.editSignContract=function(myevent){
+	        	var htmlObj = $(myevent.target);
+	        	htmlObj.parent().parent().hide();
+	        	htmlObj.parent().parent().prev().show();
+	        	htmlObj.parent().parent().prev().find("input[type='file']").attr("name","file");
+	        }
 		
 		//修改
 		$scope.jumpToEdit = function() {
