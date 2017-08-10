@@ -1,8 +1,12 @@
 package com.congmai.zhgj.web.controller;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +14,8 @@ import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.commons.io.FileUtils;
@@ -18,6 +24,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -111,6 +118,11 @@ public class ContractController {
 	   }
 	
 	
+	/**
+	 * 上传执行
+	 * @param file（上传的文件）
+	 * @return
+	 */
 	public String uploadFile(MultipartFile file){
 		String filePath = getClasspath()+"uploadAttachFiles/";
 		String randomName=UUID.randomUUID().toString().toUpperCase().replaceAll("-", ""); 
@@ -120,6 +132,13 @@ public class ContractController {
 	}
 	
 	
+	/**
+	 * 复制文件
+	 * @param file (文件对象）
+	 * @param filePath （文件路径）
+	 * @param fileName   （文件名）
+	 * @return
+	 */
 	public  String fileUp(MultipartFile file, String filePath, String fileName){
 		String extName = ""; // 扩展名格式：
 		try {
@@ -221,11 +240,106 @@ public class ContractController {
 
 		 
 		 /**
-		  * 跳转到编辑页面
+		  * 附件下载
 		  * @return
 		  */
-		 @RequestMapping(value = "/upload")
-	     public String upload(String id,String view) {
-			 return "contract/upload";
-	     }
-}
+		 /*@RequestMapping(value = "/resourceDownload", method = RequestMethod.GET)
+	     public String upload(HttpSession session, HttpServletRequest request,String name,HttpServletResponse response) {
+			 if(session==null)
+			  {
+			  return "redirect:/";
+			  }
+			  String dataDirectory = request.getServletContext().getRealPath("/uploadAttachFiles");
+			  File file = new File(dataDirectory,"D2E2589B23CA4B0EA9035DA9FC7E4BB2.gif");
+			  if(file.exists())
+			  {
+			   response.setContentType("application/octet-stream");
+			   response.addHeader("Content-Disposition","attachment;filename=D2E2589B23CA4B0EA9035DA9FC7E4BB2.gif");
+			   byte[] buffer = new byte[1024];
+			   FileInputStream fis =null;
+			   BufferedInputStream bis =null;
+			   try {
+			    fis = new FileInputStream(file);
+			    bis = new BufferedInputStream(fis);
+			    OutputStream os =response.getOutputStream();
+			    int i =bis.read(buffer);
+			    while (i!=-1) {
+			     os.write(buffer, 0, i);
+			     i=bis.read(buffer);
+			    }
+			   } catch (FileNotFoundException e) {
+			    e.printStackTrace();
+			   } catch (IOException e) {
+			    e.printStackTrace();
+			   }finally {
+			    try {
+			     bis.close();
+			    } catch (IOException e) {
+			     e.printStackTrace();
+			    }
+			    try {
+			     fis.close();
+			    } catch (IOException e) {
+			     e.printStackTrace();
+			    }
+			   }
+			 
+			  }
+			  return null;
+			 }*/
+		 
+		  @RequestMapping(value="/resourceDownload",method=RequestMethod.GET) //匹配的是href中的download请求
+		  public String download(String fileName, HttpServletRequest request,
+		            HttpServletResponse response) {
+		        response.setCharacterEncoding("utf-8");
+		       /* response.setContentType("multipart/form-data");*/
+		        response.setHeader("Content-Disposition", "attachment;fileName=" + "D2E2589B23CA4B0EA9035DA9FC7E4BB2.gif");
+		               
+		        try {
+		            String path = Thread.currentThread().getContextClassLoader()
+		                    .getResource("").getPath()//获得项目编译路径（MyEclipse的项目编译路径）
+		                    + "download";
+		            //D:\My Documents\GitHub\.metadata\.plugins\org.eclipse.wst.server.core\tmp1\wtpwebapps\zhgj-project\WEB-INF\classes\download
+		            InputStream inputStream = new FileInputStream(new File("D:\\userUploadFile\\Files\\" + "D2E2589B23CA4B0EA9035DA9FC7E4BB2.gif"));//path是在本项目webinfo下的classes下的download文件夹下下载文件
+		                                                  //若想在本机下载，把path去掉即可
+
+		            OutputStream os = response.getOutputStream();
+		            byte[] b = new byte[2048];
+		            int length;
+		            while ((length = inputStream.read(b)) > 0) {
+		                os.write(b, 0, length);
+		            }
+
+		             // 这里主要关闭。
+		            os.close();
+
+		            inputStream.close();
+		        } catch (FileNotFoundException e) {
+		            e.printStackTrace();
+		        } catch (IOException e) {
+		            e.printStackTrace();
+		        }
+		            //  返回值要注意，要不然就出现下面这句错误！
+		            //java+getOutputStream() has already been called for this response
+		        return null;
+		    }
+		}
+		  /*  public ResponseEntity<byte[]> download(HttpServletRequest request,@RequestParam("filename") String filename,
+		            Model model) throws IOException{
+		        
+		        String downloadFilePath="D:\\userUploadFile\\Files";//从我们的上传文件夹中去取
+		        filename="D2E2589B23CA4B0EA9035DA9FC7E4BB2.gif";
+		        File file = new File(downloadFilePath+File.separator+filename);//新建一个文件
+		        
+		        HttpHeaders headers = new HttpHeaders();//http头信息
+		        
+		        String downloadFileName = new String(filename.getBytes("UTF-8"),"iso-8859-1");//设置编码
+		        
+		        headers.setContentDispositionFormData("attachment", downloadFileName);
+		        
+		        
+		        //MediaType:互联网媒介类型  contentType：具体请求中的媒体类型信息
+		        
+		        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),headers,HttpStatus.CREATED);
+		        
+		    }*/

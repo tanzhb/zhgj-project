@@ -85,7 +85,8 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
       		 );
     	
     }; 
-	
+    
+    
 	//初始化toastr开始
 	toastr.options = {
 			"closeButton" : true,
@@ -299,6 +300,15 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 					}
 				}								
 			};
+			
+			$scope.download=function(name){
+		    	alert(name);
+		    	/*ContractService.downLoad(name).then(
+		    			toastr.success("删除成功")
+		    	);*/
+		    	$http.get($rootScope.basePath + "/rest/contract/resourceDownload",  {filename:name}).success(function (data) {  
+		        })
+		  }
 		
 		//修改
 		$scope.jumpToEdit = function() {
@@ -326,6 +336,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
     		}
 			$state.go('editUserContractPage',{id:ids});
 		};
+		
 			
 			
 			//格式化日期

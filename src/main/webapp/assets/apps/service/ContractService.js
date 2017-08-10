@@ -11,7 +11,9 @@ angular.module('MetronicApp').factory('ContractService', ['$rootScope', '$http',
     		//删除
     		delUserContract:delUserContract,
     		//单个查找
-    		selectUserContract:selectUserContract
+    		selectUserContract:selectUserContract,
+    		
+    		downLoad:downLoad
     };
 
     return factory;
@@ -38,7 +40,6 @@ angular.module('MetronicApp').factory('ContractService', ['$rootScope', '$http',
     function saveUserContract($scope){
     	
         var deferred = $q.defer();  
-    debugger
     	$.post("rest/contract/saveUserContract", {
     		id:$scope.contractVO.id,
 			comId:$scope.contractVO.comId,
@@ -62,6 +63,11 @@ angular.module('MetronicApp').factory('ContractService', ['$rootScope', '$http',
         return deferred.promise;  
           
     };
+    
+    function downLoad(name){
+    	$http.get($rootScope.basePath + "/rest/contract/resourceDownload",  {filename:name}).success(function (data) {  
+        })
+    }
     
   //删除用户
     function delUserContract(ids){

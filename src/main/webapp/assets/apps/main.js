@@ -240,8 +240,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        'assets/global/plugins/jquery.blockui.min.js',
 		        'assets/pages/scripts/ui-blockui.min.js',
 	        	'assets/apps/service/materielService.js',
-				'assets/apps/controllers/materielController.js'
-                 'assets//apps/service/materielService.js',
 				'assets/apps/controllers/materielController.js',
 				
 				'assets/global/plugins/datatables/datatables.min.css',

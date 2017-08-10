@@ -251,6 +251,32 @@
 						</div>
 					</div>
 				</div>
+				
+				
+				<div class="row" style="line-height:60px;">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label col-md-5">电子合同</label> <label
+								class="control-label col-md-7">
+								<a title="{{contractVO.electronicContract}}" ng-click="download(contractVO.electronicContract)">
+								{{contractVO.electronicContract|limitTo:10}}... 
+								</a>
+								</label>
+
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label col-md-5">签字合同</label> <label
+								class="control-label col-md-7">
+								<a title="{{contractVO.signContract}}" ng-click="download(contractVO.signContract)">
+								{{contractVO.signContract|limitTo:10}}... 
+								</a>
+								</label>
+
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
