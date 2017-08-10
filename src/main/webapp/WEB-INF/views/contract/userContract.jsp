@@ -1,6 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
+<h3 class="page-title">
+	合同列表 <small></small>
+</h3>
+<div class="page-bar">
+	<ul class="page-breadcrumb">
+		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
+			class="fa fa-angle-right"></i></li>
+		<li><a ui-sref="userContract">基础数据</a></li>
+		<li><a ui-sref="userContract">合同信息</a></li>
+	</ul>
+</div>
 
 <div class="row" >
 	<div class="col-md-12">
@@ -22,15 +32,17 @@
 				<div class="actions" ng-controller='MyCtrl'>
 					<a href="javascript:;" ng-click="jumpToUrl('addUserContract')"
 						class="btn btn-default btn-sm btn-circle"> <i
-						class="fa fa-plus"></i> 新增
-					</a> <a href="javascript:;" ng-click="del()"
-						class="btn btn-default btn-sm btn-circle"> <i
-						class="fa fa-minus"></i> 删除
-					</a>
+						class="fa fa-plus"></i> 添加
+					</a> 
 					<a href="javascript:;" ng-click="jumpToEdit()"
 						class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-edit"></i> 修改
 					</a>
+					<a href="javascript:;" ng-click="del()"
+						class="btn btn-default btn-sm btn-circle"> <i
+						class="fa fa-minus"></i> 删除
+					</a>
+					
 					<div class="btn-group">
 						<a class="btn btn-default btn-outline btn-circle"
 							href="javascript:;" data-toggle="dropdown"> <i
@@ -107,22 +119,6 @@
 							<!-- <th style="white-space: nowrap;"></th> -->
 						</tr>
 					</thead>
-					<tfoot>
-						<tr >
-							<th style="white-space: nowrap;"></th>
-							<th style="white-space: nowrap;">合同编号</th>
-							<th style="white-space: nowrap;">企业名称</th>
-							<th style="white-space: nowrap;">合同类型</th>
-							<th style="white-space: nowrap;">服务模式</th>
-							<th style="white-space: nowrap;">签订日期</th>
-							<th style="white-space: nowrap;">签订人</th>
-							<th style="white-space: nowrap;">开始日期</th>
-							<th style="white-space: nowrap;">结束日期</th>
-							<th style="white-space: nowrap;">版本号</th>
-							<th style="white-space: nowrap;">状态</th>
-							<!-- <th style="white-space: nowrap;"></th> -->
-						</tr>
-					</tfoot>
 					<tbody>
 
 						<!-- <tr ng-repeat="user in uTrl.users">

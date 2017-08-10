@@ -335,7 +335,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/pages/scripts/table-datatables-fixedheader.min.js',
 				
 				
-		        'assets/global/plugins/font-awesome/css/font-awesome.min.css',
 		        'assets/global/plugins/simple-line-icons/simple-line-icons.min.css',
 		        'assets/global/plugins/bootstrap/css/bootstrap.min.css',
 		        'assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css',
