@@ -2,6 +2,7 @@ package com.congmai.zhgj.web.controller;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,8 +96,11 @@ public class PriceListController {
 	public ResponseEntity<Void> savePriceDetail(@RequestBody  PriceList priceList,UriComponentsBuilder ucBuilder) {
     	try{
     		if(StringUtils.isEmpty(priceList.getSerialNum())){
+    			/*PriceList pl=new PriceList();*/
     			priceList.setSerialNum(UUID.randomUUID().toString().replace("-",""));
     			priceList.setMaterielSerial("08f062e453f847c2b5767ed8169339ad");
+    			priceList.setPriceEffectiveDate(new Date());
+    			priceList.setPriceExpirationDate(new Date());
     			priceListService.insert(priceList);
     		}else{
     			priceListService.update(priceList);

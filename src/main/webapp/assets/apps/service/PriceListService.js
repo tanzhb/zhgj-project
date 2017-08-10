@@ -13,6 +13,7 @@ angular.module('MetronicApp').factory('priceListService', ['$rootScope', '$http'
     function savePriceList(priceList){
         var deferred = $q.defer();  
         console.log("baocun");
+        debugger;
         $http.post($rootScope.basePath+"/rest/priceList/savePriceListInfo", priceList).success(function (data) {  
             // 如果连接成功，延时返回给调用者  
         	debugger;
@@ -29,7 +30,7 @@ angular.module('MetronicApp').factory('priceListService', ['$rootScope', '$http'
     function delPriceLists(serialNums){
         var deferred = $q.defer();  
 
-        $http.post($rootScope.basePath + "/rest/priceList/deletePriceList", serialNums).success(function (data) {  
+        $http.post("rest/priceList/deletePriceList", serialNums).success(function (data) {  
             // 如果连接成功，延时返回给调用者  
             deferred.resolve(data);  
         })  

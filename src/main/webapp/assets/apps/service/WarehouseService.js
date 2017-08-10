@@ -85,7 +85,32 @@ debugger;
         return deferred.promise;  
           
     };
+    function exportCompany {
+		$http({
+			url:'rest/warehouse/exportWarehouse',
+			method:'GET'
+			}).success(function(data,header,config,status){
+			//响应成功
 
+			}).error(function(data,header,config,status){
+			//处理响应失败
+			});
+	}
+	
+    function  uploadExcel(params){
+		var deferred = $q.defer();
+		var fd = new FormData();
+        var file = document.querySelector('input[type=file]').files[0];
+        fd.append('excelFile', file);
+		$http.post("rest/warehouse/warehouseImport",  
+				fd,{headers:{'Content-Type': undefined},transformRequest: angular.identity}
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
     
 
 }]);

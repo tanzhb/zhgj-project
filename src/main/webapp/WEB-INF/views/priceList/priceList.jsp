@@ -240,7 +240,7 @@
 			<!-- 添加用户modal 结束 -->
 
 			<!-- 删除用户modal 开始 -->
-			<div id="delWarehouseModal" class="modal fade" tabindex=
+			<div id="delPriceListModal" class="modal fade" tabindex=
 
 				data-backdrop="static" data-keyboard="false">
 				<div class="modal-dialog">
@@ -251,12 +251,12 @@
 							<h4 class="modal-title">确认</h4>
 						</div>
 						<div class="modal-body">
-							<p>是否删除已选仓库?</p>
+							<p>是否删除已选价格?</p>
 						</div>
 						<div class="modal-footer">
 							<button type="button" data-dismiss="modal"
 								class="btn dark btn-outline">取消</button>
-							<button type="button" ng-click="confirmDellWarehouse()" class="btn green">确定
+							<button type="button" ng-click="confirmDelPriceList()" class="btn green">确定
 								</button>
 						</div>
 					</div>

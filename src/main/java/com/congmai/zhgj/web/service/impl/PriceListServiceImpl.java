@@ -9,7 +9,10 @@ import org.springframework.stereotype.Service;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.web.dao.MaterielMapper;
 import com.congmai.zhgj.web.dao.PriceListMapper;
+import com.congmai.zhgj.web.model.Materiel;
+import com.congmai.zhgj.web.model.MaterielExample;
 import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.PriceListExample;
 import com.congmai.zhgj.web.service.PriceListService;
@@ -25,6 +28,8 @@ import com.congmai.zhgj.web.service.PriceListService;
 public class PriceListServiceImpl extends GenericServiceImpl<PriceList, String> implements PriceListService {
     @Resource
     private  PriceListMapper  priceListMapper;
+    @Resource
+    private MaterielMapper MaterielMapper;
 	@Override
 	public GenericDao<PriceList, String> getDao() {
 		// TODO Auto-generated method stub
@@ -41,6 +46,11 @@ public class PriceListServiceImpl extends GenericServiceImpl<PriceList, String> 
 		// TODO Auto-generated method stub
 		return priceListMapper.selectByExample(ple);
 	}
+	/*@Override
+	public List<Materiel> selectList(MaterielExample m) {
+		// TODO Auto-generated method stub
+		return MaterielMapper.selectByExample(m);
+	}*/
 	
 	
 	  
