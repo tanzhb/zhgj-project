@@ -157,7 +157,7 @@
                                                             <!--/span-->
                                                             <div class="col-md-6">
                                                              <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="admin"> <span class="required"> * </span>仓库面积 :</label>
+                                                    <label class="col-md-4 control-label" for="area"> <span class="required"> * </span>仓库面积 :</label>
                                                     <div class="col-md-8">
                                                                         <input type="text"  class="form-control" placeholder=""  id="area" name ="area"  ng-hide="warehouseAdd" 
 												ng-model="warehouse.area" >

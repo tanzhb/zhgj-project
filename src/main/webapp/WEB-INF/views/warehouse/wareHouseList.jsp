@@ -287,7 +287,7 @@
 			<div class="portlet-body">
 				<table
 					class="table table-striped table-bordered table-hover "
-					id="sample_1">
+					id="sample_warehouse">
 					<thead>
 						<tr>
 							<th style="text-align: center"><input name="select_all"

@@ -61,11 +61,11 @@
 								           <div class="row">
                                                              <div class="col-md-6">
 											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="priceListNum"> <span class="required"> * </span>价格编号 :</label>
+                                                    <label class="col-md-4 control-label" for="priceNum"> <span class="required"> * </span>价格编号 :</label>
                                                     <div class="col-md-8">
-                                                        <input type="text" class="form-control" id="priceListNum" name="priceListNum" ng-model="priceList.priceListNum"  ng-hide="priceListAdd" />
+                                                        <input type="text" class="form-control" id="priceListNum" name="priceNum" ng-model="priceList.priceNum"  ng-hide="priceListAdd" />
                                                         <div class="form-control-focus"> </div>
-                                                          <p class="control-label left" ng-show="priceListView">{{priceList.priceListNum}}</p> 
+                                                          <p class="control-label left" ng-show="priceListView">{{priceList.priceNum}}</p> 
                                                           <input type="hidden"  id="materielSerial" ng-model="priceList.materielSerial"  /><!--  存放物料流水号-->
                                                     </div>
                                             </div>
@@ -74,10 +74,10 @@
                                                                 <div class="form-group form-md-line-input">
                                                                 <label class="col-md-4 control-label" for="priceListName"><!--  <span class="required"> * </span> -->描述 :</label>
                                                                     <div class="col-md-8">
-                                                                       <input type="text" class="form-control" placeholder=""  id="priceListDescribe" name ="priceListDescribe"  ng-hide="priceListAdd" 
-												ng-model="priceList.priceListDescribe" > 
+                                                                       <input type="text" class="form-control" placeholder=""  id="priceDescribe" name ="priceDescribe"  ng-hide="priceListAdd" 
+												ng-model="priceList.priceDescribe" > 
                                                                        <div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.priceListDescribe}}</p> 
+                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.priceDescribe}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -172,7 +172,7 @@
                                                             </div>
                                                             <!--/span-->
                                                         </div>
-                                                        <div class="col-md-6"  ng-show="priceList.priceListType=='采购价格'"">
+                                                        <div class="col-md-6"  ng-show="priceList.priceType=='采购价格'"">
                                                              <div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="admin"> <span class="required"> * </span>供应商 :</label>
                                                     <div class="col-md-8">
@@ -380,7 +380,7 @@
                                                              <div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="priceEffectiveDate"> <span class="required"> * </span>价格生效期 :</label>
                                                     <div class="col-md-8">
-                                                                        <input class="form-control form-control-inline date-picker"    data-date-format="yyyy-mm-dd"  name="priceEffectiveDate"  size="16" type="text" value="" />
+                                                                        <input class="form-control form-control-inline date-picker"    data-date-format="yyyy-mm-dd"    id="priceEffectiveDate"  name="priceEffectiveDate"  size="16" type="text" />
                                                      <div class="form-control-focus"> </div>
                                       <!-- <span class="help-block">请选择价格生效期</span> -->
                                                                         <p class="control-label left" ng-show="priceListView">{{priceList.priceEffectiveDate}}</p>
@@ -391,7 +391,7 @@
                                                            <div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="priceExpirationDate"> <span class="required"> * </span>价格失效期 :</label>
                                                     <div class="col-md-8">
-                                                     <input class="form-control form-control-inline  date-picker"   data-date-format="yyyy-mm-dd"   name="priceExpirationDate"   size="16" type="text" value="" />
+                                                     <input class="form-control form-control-inline  date-picker"   data-date-format="yyyy-mm-dd"   id="priceExpirationDate"  name="priceExpirationDate"   size="16" type="text" />
                                                      <div class="form-control-focus"> </div>
                                       <!-- <span class="help-block">请选择价格失效期</span> -->
                                       <p class="control-label left" ng-show="priceListView">{{priceList.priceEffectiveDate}}</p>

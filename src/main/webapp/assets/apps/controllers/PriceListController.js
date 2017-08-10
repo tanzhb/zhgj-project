@@ -12,9 +12,9 @@ angular
 						'$location',
 						'$stateParams',
 						'settings',
-						'PriceListService',
+						'priceListService',
 						function($rootScope, $scope, $state, $compile,$http,$location,$stateParams,settings,
-								PriceListService) {
+								priceListService) {
 							$scope
 									.$on(
 											'$viewContentLoaded',
@@ -29,9 +29,9 @@ angular
 														orientation: "left",
 														autoclose: true
 										        	})//初始化日期控件
-										    		getPriceListInfo($stateParams.PriceListSerialNum);
+										    		getPriceListInfo($stateParams.priceListSerialNum);
 														 $scope.isChecked=false;
-														 $scope.ladderPrices=[{}];
+														 $scope.ladderprices=[{}];
 														 _index = 0; 
 														 handle.pageRepeater();
 												    		
@@ -80,7 +80,7 @@ angular
 													"page-header-fixed")
 													&& (a = 64);
 
-						 table = $("#sample_1")
+						 table = $("#sample_priceList")
 									.DataTable(
 											{
 												language : {
@@ -193,7 +193,7 @@ angular
 
 							// Handle click on checkbox to set state of "Select
 							// all" control
-							$('#sample_1 tbody')
+							$('#sample_priceList tbody')
 									.on(
 											'change',
 											'input[type="checkbox"]',
@@ -240,11 +240,29 @@ angular
 		        			$scope.priceListEdit = false;
 						}		
 								$scope.savePriceList= function() {
-									debugger;
-									if($('#PriceListForm').valid()){//表单验证通过则执行添加功能
-										PriceListService
-										.savePriceList($scope.priceList)
-										.then(
+									if($('#priceListForm').valid()){//表单验证通过则执行添加功能
+									priceListService.savePriceList($scope.priceList)
+									.then(
+											function(data) {debugger;
+												toastr.success("保存价格数据成功！");
+												$scope.priceList = $scope.priceList;
+												$scope.priceListView = true;
+							        			$scope.priceListAdd = true;
+							        			$scope.priceListEdit = false;
+							        			$(".alert-danger").hide();
+											},
+											function(errResponse) {
+												toastr.warning("保存错误！");
+												console
+														.error('Error while creating User');
+											}
+									}
+									);
+									/*debugger;
+									if(true){//表单验证通过则执行添加功能//$('#priceListForm').valid()
+									var promise = priceListService.savePriceList($scope.priceList);
+										debugger;
+										promise.then(
 												function(data) {debugger;
 													toastr.success("保存价格数据成功！");
 													$scope.priceList = $scope.priceList;
@@ -254,12 +272,12 @@ angular
 								        			$(".alert-danger").hide();
 												},
 												function(errResponse) {
-													toastr.warning("价格名重复，请重新输入！");
+													toastr.warning("保存价格错误！");
 													console
 															.error('Error while creating User');
 												}
 										);
-									}
+									}*/
 							};	
 							// 添加价格结束***************************************
 							
@@ -284,7 +302,7 @@ angular
 						
 							// 页面加载完成后调用，验证输入框
 							$scope.$watch('$viewContentLoaded', function() {  
-								var e = $("#PriceListForm"),
+								var e = $("#priceListForm"),
 						        r = $(".alert-danger", e),
 						        i = $(".alert-success", e);
 						        e.validate({
@@ -299,15 +317,13 @@ angular
 						            	buyComId:{required:"未选择采购商！"},
 						            	supplyComId:{required:"未选择供应商商！"},
 						            	currency:{required:"未选择币种！"},
-						            	rate:{required:"税率不能为空！"},
-						            	price: {required:"单价不能为空！"},
+						            	rate:{digits:"必须是数字！",required:"税率不能为空！"},
+						            	price: {digits:"必须是数字！",required:"单价不能为空！"},
+						            	/*inclusiveprice:{digits:"必须是数字！"},
+						            	topprice:{digits:"必须是数字！"},
+						            	floorprice:{digits:"必须是数字！"},*/
 						            	priceEffectiveDate: {required:"价格生效期未选择！" },
-						                    	/*digits:'请输入正确的电话, 必须为数字！',
-				                        	    rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")*/
 						            	priceExpirationDate: {required:"价格失效期未选择！" }
-						                    	/*digits:'请输入正确的传真, 必须为数字！',
-				                        	    rangelength:jQuery.validator.format("传真必须在{0}到{1}位数字之间！")*/
-						                    
 						            },
 						            rules: {
 						            	priceNum:{required:true},
@@ -316,10 +332,13 @@ angular
 						            	buyComId:{required:true},
 						            	supplyComId:{required:true},
 						            	currency:{required:true},
-						            	rate:{digits:true,required:true},
-						            	price: {digits:true,required:true},
+						            	rate:{digits:true,required:!0},
+						            	price: {digits:true,required:!0},
+						            /*	inclusiveprice:{digits:true},
+						            	topprice:{digits:true},
+						            	floorprice:{digits:true},*/
 						            	priceEffectiveDate: {required:true },
-						            	priceListExpirationDate: {required:true },
+						            	priceExpirationDate: {required:true }
 						            },
 						            invalidHandler: function(e, t) {
 						                i.hide(),
@@ -330,6 +349,7 @@ angular
 						                r.is(":checkbox") ? e.insertAfter(r.closest(".md-checkbox-list, .md-checkbox-inline, .checkbox-list, .checkbox-inline")) : r.is(":radio") ? e.insertAfter(r.closest(".md-radio-list, .md-radio-inline, .radio-list,.radio-inline")) : e.insertAfter(r)
 						            },
 						            highlight: function(e) {
+						            	debugger;
 						                $(e).closest(".form-group").addClass("has-error")
 						            },
 						            unhighlight: function(e) {
@@ -348,7 +368,7 @@ angular
 							 function getPriceListInfo(serialNum){
 						    	   if(!handle.isNull(serialNum)){
 						    		   debugger;
-						    			 var promise =PriceListService.selectBySerialNum(serialNum);
+						    			 var promise =priceListService.selectBySerialNum(serialNum);
 						 	        	promise.then(function(data){
 						 	        		  debugger;
 						 	        		$scope.priceList = data;
@@ -367,7 +387,7 @@ angular
 							    		 return;
 							       }else{
 							    	   _index++;
-							    	   $scope.ladderPrices[_index] = {}
+							    	   $scope.ladderprices[_index] = {}
 							       }
 						       };
 						       
@@ -375,7 +395,7 @@ angular
 						        * 阶梯价格删除一行
 						        */
 						       $scope.deleteRepeat = function(){
-						    	   $scope.ladderPrices.splice(_index,1);
+						    	   $scope.ladderprices.splice(_index,1);
 						    	   _index--;
 						       };
 						       /**

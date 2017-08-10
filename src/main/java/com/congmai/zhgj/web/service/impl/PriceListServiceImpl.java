@@ -11,6 +11,7 @@ import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.dao.PriceListMapper;
 import com.congmai.zhgj.web.model.PriceList;
+import com.congmai.zhgj.web.model.PriceListExample;
 import com.congmai.zhgj.web.service.PriceListService;
 
 /**
@@ -27,13 +28,18 @@ public class PriceListServiceImpl extends GenericServiceImpl<PriceList, String> 
 	@Override
 	public GenericDao<PriceList, String> getDao() {
 		// TODO Auto-generated method stub
-		return  (GenericDao<PriceList, String>) priceListMapper;
+		return   priceListMapper;
 	}
 	@Override
 	public void deletePriceList(String serialNumList) {
 		List<String> idList = ApplicationUtils.getIdList(serialNumList);
 		// TODO Auto-generated method stub
 		priceListMapper.deletePriceList(idList);
+	}
+	@Override
+	public List<PriceList> selectPriceList(PriceListExample ple) {
+		// TODO Auto-generated method stub
+		return priceListMapper.selectByExample(ple);
 	}
 	
 	

@@ -191,7 +191,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         files: [                             
                             'assets/global/plugins/datatables/datatables.min.css', 
     				        'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
-    				        'assets/global/plugins/datatables/datatables.all.min.js',
+    				      /*  'assets/global/plugins/datatables/datatables.all.min.js',*/
     				        'assets/global/plugins/bootstrap-toastr/toastr.js',
     				        'assets/global/plugins/bootstrap-toastr/toastr.css',
     				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js',

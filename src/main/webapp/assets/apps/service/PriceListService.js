@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('MetronicApp').factory('PriceListService', ['$rootScope', '$http', '$q', function($rootScope, $http, $q){
+angular.module('MetronicApp').factory('priceListService', ['$rootScope', '$http', '$q', function($rootScope, $http, $q){
     var factory = {
         savePriceList: savePriceList,
         delPriceLists:delPriceLists,
@@ -10,10 +10,10 @@ angular.module('MetronicApp').factory('PriceListService', ['$rootScope', '$http'
 
     return factory;
     //保存价格
-    function savePriceList(PriceLis){
+    function savePriceList(priceList){
         var deferred = $q.defer();  
-debugger;
-        $http.post($rootScope.basePath + "/rest/priceList/savePriceListInfo", PriceList).success(function (data) {  
+        console.log("baocun");
+        $http.post($rootScope.basePath+"/rest/priceList/savePriceListInfo", priceList).success(function (data) {  
             // 如果连接成功，延时返回给调用者  
         	debugger;
             deferred.resolve(data);  

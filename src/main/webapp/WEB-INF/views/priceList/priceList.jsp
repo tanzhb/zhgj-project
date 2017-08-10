@@ -268,7 +268,7 @@
 			<div class="portlet-body">
 				<table
 					class="table table-striped table-bordered table-hover table-header-fixed"
-					id="sample_1">
+					id="sample_priceList">
 					<thead>
 						<tr>
 							<th style="text-align: center"><input name="select_all"
@@ -313,16 +313,16 @@
 		<!-- END EXAMPLE TABLE PORTLET-->
 	</div>
 </div>
-<div class="row" ng-controller="PriceController">
+<div class="row" ng-controller="PriceListController">
 	<div class="col-md-12">
 
 			<!-- 仓库信息弹框查看开始 -->
-<div class="modal fade" id="viewWarehouse" role="basic" aria-hidden="true">
+<div class="modal fade" id="viewPriceList" role="basic" aria-hidden="true">
      <div class="modal-dialog" style="width: 750px;">
 	    <div class="modal-content">
 	 		<div class="modal-header">
 	            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-	            <h4 class="modal-title" >仓库信息</h4>
+	            <h4 class="modal-title" >价格信息</h4>
 	        </div>
 	        <div class="modal-body">
 	          		<!-- <div class="col-md-12"> -->
@@ -334,18 +334,18 @@
                                        <div class="row">
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label col-md-5">仓库编号：</label>
+                                                   <label class="control-label col-md-5">价格编号：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static" >{{warehouse.warehouseNum}}</p>
+                                                       <p class="form-control-static" >{{priceList.priceNum}}</p>
                                                    </div>
                                                </div>
                                            </div>
                                            <!-- /span -->
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label col-md-5">仓库名称：</label>
+                                                   <label class="control-label col-md-5">描述：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{warehouse.warehouseName}}</p>
+                                                       <p class="form-control-static">{{priceList.priceDescribe}}</p>
                                                    </div>
                                                </div>
                                            </div>
@@ -355,18 +355,18 @@
                                        <div class="row">
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label col-md-5">仓库类型：</label>
+                                                   <label class="control-label col-md-5">物料编号：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{warehouse.warehouseType}}</p>
+                                                       <p class="form-control-static">{{priceList.materielNum}}</p>
                                                    </div>
                                                </div>
                                            </div>
                                           <!--  /span -->
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label col-md-5">仓库分类：</label>
+                                                   <label class="control-label col-md-5">物料名称：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{warehouse.warehouseCategory}}</p>
+                                                       <p class="form-control-static">{{priceList.materielName}}</p>
                                                    </div>
                                                </div>
                                            </div>
@@ -376,18 +376,18 @@
                                        <div class="row">
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label col-md-5">仓库地址：</label>
+                                                   <label class="control-label col-md-5">规格型号：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{warehouse.address}}</p>
+                                                       <p class="form-control-static">{{priceList.specifications}}</p>
                                                    </div>
                                                </div>
                                            </div>
                                         <!--    /span -->
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label col-md-5">仓库所有者：</label>
+                                                   <label class="control-label col-md-5">单位：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{warehouse.owner}}</p>
+                                                       <p class="form-control-static">{{priceList.unit}}</p>
                                                    </div>
                                                </div>
                                            </div>
@@ -397,18 +397,24 @@
                                        <div class="row">
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label col-md-5">仓库管理员：</label>
+                                                   <label class="control-label col-md-5">价格类型：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{warehouse.admin}}</p>
+                                                       <p class="form-control-static">{{priceList.priceType}}</p>
                                                    </div>
                                                </div>
                                            </div>
                                       <!--      /span -->
                                            <div class="col-md-6">
-                                               <div class="form-group">
-                                                   <label class="control-label col-md-5">仓库面积：</label>
+                                               <div class="form-group"  ng-if="isBuy">
+                                                   <label class="control-label col-md-5">采购商：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{warehouse.area}}</p>
+                                                       <p class="form-control-static">{{priceList.buyComName}}</p>
+                                                   </div>
+                                               </div>
+                                               <div class="form-group" ng-if="isSupply">
+                                                   <label class="control-label col-md-5">供应商：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{priceList.supplyComName}}</p>
                                                    </div>
                                                </div>
                                            </div>
@@ -418,18 +424,18 @@
                                        <div class="row">
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label col-md-5">邮件：</label>
+                                                   <label class="control-label col-md-5">币种：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{warehouse.email}}</p>
+                                                       <p class="form-control-static">{{priceList.currency}}</p>
                                                    </div>
                                                </div>
                                            </div>
                                            <!-- /span -->
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label col-md-5">电话：</label>
+                                                   <label class="control-label col-md-5">税率：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{warehouse.tel}}</p>
+                                                       <p class="form-control-static">{{priceList.rate}}%</p>
                                                    </div>
                                                </div>
                                            </div>
@@ -439,18 +445,18 @@
                                        <div class="row">
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label col-md-5">备注：</label>
+                                                   <label class="control-label col-md-5">单价：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{warehouse.remark}}</p>
+                                                       <p class="form-control-static">{{priceList.price}}</p>
                                                    </div>
                                                </div>
                                            </div>
                                          <!--   /span -->
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label col-md-5">传真：</label>
+                                                   <label class="control-label col-md-5">含税价格：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{warehouse.fax}}</p>
+                                                       <p class="form-control-static">{{priceList.inclusivePrice}}</p>
                                                    </div>
                                                </div>
                                            </div>

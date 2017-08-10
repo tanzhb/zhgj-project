@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.congmai.zhgj.web.dao.PriceListMapper" >
-  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.PriceList" >
+<mapper namespace="com.congmai.zhgj.web.dao.LadderPriceMapper" >
+  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.LadderPrice" >
     <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
-    <result column="supplyComId" property="supplyComId" jdbcType="VARCHAR" />
-    <result column="buyComId" property="buyComId" jdbcType="VARCHAR" />
-    <result column="priceDescribe" property="priceDescribe" jdbcType="VARCHAR" />
-    <result column="materielSerial" property="materielSerial" jdbcType="VARCHAR" />
+    <result column="priceSerial" property="priceSerial" jdbcType="VARCHAR" />
+    <result column="countStart" property="countStart" jdbcType="VARCHAR" />
+    <result column="countEnd" property="countEnd" jdbcType="VARCHAR" />
+    <result column="inclusivePrice" property="inclusivePrice" jdbcType="VARCHAR" />
     <result column="price" property="price" jdbcType="VARCHAR" />
-    <result column="priceEffectiveDate" property="priceEffectiveDate" jdbcType="DATE" />
-    <result column="priceExpirationDate" property="priceExpirationDate" jdbcType="DATE" />
-    <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="file" property="file" jdbcType="VARCHAR" />
     <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
@@ -77,16 +73,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    serialNum, supplyComId, buyComId, priceDescribe, materielSerial, price, priceEffectiveDate, 
-    priceExpirationDate, remark, file, delFlg, creator, createTime, updater, updateTime
+    serialNum, priceSerial, countStart, countEnd, inclusivePrice, price, delFlg, creator, 
+    createTime, updater, updateTime
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.PriceListExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.LadderPriceExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from priceList
+    from ladderPrice
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -97,65 +93,49 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from priceList
+    from ladderPrice
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from priceList
+    delete from ladderPrice
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.PriceListExample" >
-    delete from priceList
+  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.LadderPriceExample" >
+    delete from ladderPrice
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.congmai.zhgj.web.model.PriceList" >
-    insert into priceList (serialNum, supplyComId, buyComId, 
-      priceDescribe, materielSerial, price, 
-      priceEffectiveDate, priceExpirationDate, remark, 
-      file, delFlg, creator, 
-      createTime, updater, updateTime
-      )
-    values (#{serialNum,jdbcType=VARCHAR}, #{supplyComId,jdbcType=VARCHAR}, #{buyComId,jdbcType=VARCHAR}, 
-      #{priceDescribe,jdbcType=VARCHAR}, #{materielSerial,jdbcType=VARCHAR}, #{price,jdbcType=VARCHAR}, 
-      #{priceEffectiveDate,jdbcType=DATE}, #{priceExpirationDate,jdbcType=DATE}, #{remark,jdbcType=VARCHAR}, 
-      #{file,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+  <insert id="insert" parameterType="com.congmai.zhgj.web.model.LadderPrice" >
+    insert into ladderPrice (serialNum, priceSerial, countStart, 
+      countEnd, inclusivePrice, price, 
+      delFlg, creator, createTime, 
+      updater, updateTime)
+    values (#{serialNum,jdbcType=VARCHAR}, #{priceSerial,jdbcType=VARCHAR}, #{countStart,jdbcType=VARCHAR}, 
+      #{countEnd,jdbcType=VARCHAR}, #{inclusivePrice,jdbcType=VARCHAR}, #{price,jdbcType=VARCHAR}, 
+      #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.PriceList" >
-    insert into priceList
+  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.LadderPrice" >
+    insert into ladderPrice
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
         serialNum,
       </if>
-      <if test="supplyComId != null" >
-        supplyComId,
+      <if test="priceSerial != null" >
+        priceSerial,
       </if>
-      <if test="buyComId != null" >
-        buyComId,
+      <if test="countStart != null" >
+        countStart,
       </if>
-      <if test="priceDescribe != null" >
-        priceDescribe,
+      <if test="countEnd != null" >
+        countEnd,
       </if>
-      <if test="materielSerial != null" >
-        materielSerial,
+      <if test="inclusivePrice != null" >
+        inclusivePrice,
       </if>
       <if test="price != null" >
         price,
-      </if>
-      <if test="priceEffectiveDate != null" >
-        priceEffectiveDate,
-      </if>
-      <if test="priceExpirationDate != null" >
-        priceExpirationDate,
-      </if>
-      <if test="remark != null" >
-        remark,
-      </if>
-      <if test="file != null" >
-        file,
       </if>
       <if test="delFlg != null" >
         delFlg,
@@ -177,32 +157,20 @@
       <if test="serialNum != null" >
         #{serialNum,jdbcType=VARCHAR},
       </if>
-      <if test="supplyComId != null" >
-        #{supplyComId,jdbcType=VARCHAR},
+      <if test="priceSerial != null" >
+        #{priceSerial,jdbcType=VARCHAR},
       </if>
-      <if test="buyComId != null" >
-        #{buyComId,jdbcType=VARCHAR},
+      <if test="countStart != null" >
+        #{countStart,jdbcType=VARCHAR},
       </if>
-      <if test="priceDescribe != null" >
-        #{priceDescribe,jdbcType=VARCHAR},
+      <if test="countEnd != null" >
+        #{countEnd,jdbcType=VARCHAR},
       </if>
-      <if test="materielSerial != null" >
-        #{materielSerial,jdbcType=VARCHAR},
+      <if test="inclusivePrice != null" >
+        #{inclusivePrice,jdbcType=VARCHAR},
       </if>
       <if test="price != null" >
         #{price,jdbcType=VARCHAR},
-      </if>
-      <if test="priceEffectiveDate != null" >
-        #{priceEffectiveDate,jdbcType=DATE},
-      </if>
-      <if test="priceExpirationDate != null" >
-        #{priceExpirationDate,jdbcType=DATE},
-      </if>
-      <if test="remark != null" >
-        #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="file != null" >
-        #{file,jdbcType=VARCHAR},
       </if>
       <if test="delFlg != null" >
         #{delFlg,jdbcType=VARCHAR},
@@ -221,44 +189,32 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.PriceListExample" resultType="java.lang.Integer" >
-    select count(*) from priceList
+  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.LadderPriceExample" resultType="java.lang.Integer" >
+    select count(*) from ladderPrice
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update priceList
+    update ladderPrice
     <set >
       <if test="record.serialNum != null" >
         serialNum = #{record.serialNum,jdbcType=VARCHAR},
       </if>
-      <if test="record.supplyComId != null" >
-        supplyComId = #{record.supplyComId,jdbcType=VARCHAR},
+      <if test="record.priceSerial != null" >
+        priceSerial = #{record.priceSerial,jdbcType=VARCHAR},
       </if>
-      <if test="record.buyComId != null" >
-        buyComId = #{record.buyComId,jdbcType=VARCHAR},
+      <if test="record.countStart != null" >
+        countStart = #{record.countStart,jdbcType=VARCHAR},
       </if>
-      <if test="record.priceDescribe != null" >
-        priceDescribe = #{record.priceDescribe,jdbcType=VARCHAR},
+      <if test="record.countEnd != null" >
+        countEnd = #{record.countEnd,jdbcType=VARCHAR},
       </if>
-      <if test="record.materielSerial != null" >
-        materielSerial = #{record.materielSerial,jdbcType=VARCHAR},
+      <if test="record.inclusivePrice != null" >
+        inclusivePrice = #{record.inclusivePrice,jdbcType=VARCHAR},
       </if>
       <if test="record.price != null" >
         price = #{record.price,jdbcType=VARCHAR},
-      </if>
-      <if test="record.priceEffectiveDate != null" >
-        priceEffectiveDate = #{record.priceEffectiveDate,jdbcType=DATE},
-      </if>
-      <if test="record.priceExpirationDate != null" >
-        priceExpirationDate = #{record.priceExpirationDate,jdbcType=DATE},
-      </if>
-      <if test="record.remark != null" >
-        remark = #{record.remark,jdbcType=VARCHAR},
-      </if>
-      <if test="record.file != null" >
-        file = #{record.file,jdbcType=VARCHAR},
       </if>
       <if test="record.delFlg != null" >
         delFlg = #{record.delFlg,jdbcType=VARCHAR},
@@ -281,17 +237,13 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update priceList
+    update ladderPrice
     set serialNum = #{record.serialNum,jdbcType=VARCHAR},
-      supplyComId = #{record.supplyComId,jdbcType=VARCHAR},
-      buyComId = #{record.buyComId,jdbcType=VARCHAR},
-      priceDescribe = #{record.priceDescribe,jdbcType=VARCHAR},
-      materielSerial = #{record.materielSerial,jdbcType=VARCHAR},
+      priceSerial = #{record.priceSerial,jdbcType=VARCHAR},
+      countStart = #{record.countStart,jdbcType=VARCHAR},
+      countEnd = #{record.countEnd,jdbcType=VARCHAR},
+      inclusivePrice = #{record.inclusivePrice,jdbcType=VARCHAR},
       price = #{record.price,jdbcType=VARCHAR},
-      priceEffectiveDate = #{record.priceEffectiveDate,jdbcType=DATE},
-      priceExpirationDate = #{record.priceExpirationDate,jdbcType=DATE},
-      remark = #{record.remark,jdbcType=VARCHAR},
-      file = #{record.file,jdbcType=VARCHAR},
       delFlg = #{record.delFlg,jdbcType=VARCHAR},
       creator = #{record.creator,jdbcType=VARCHAR},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
@@ -301,35 +253,23 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.PriceList" >
-    update priceList
+  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.LadderPrice" >
+    update ladderPrice
     <set >
-      <if test="supplyComId != null" >
-        supplyComId = #{supplyComId,jdbcType=VARCHAR},
+      <if test="priceSerial != null" >
+        priceSerial = #{priceSerial,jdbcType=VARCHAR},
       </if>
-      <if test="buyComId != null" >
-        buyComId = #{buyComId,jdbcType=VARCHAR},
+      <if test="countStart != null" >
+        countStart = #{countStart,jdbcType=VARCHAR},
       </if>
-      <if test="priceDescribe != null" >
-        priceDescribe = #{priceDescribe,jdbcType=VARCHAR},
+      <if test="countEnd != null" >
+        countEnd = #{countEnd,jdbcType=VARCHAR},
       </if>
-      <if test="materielSerial != null" >
-        materielSerial = #{materielSerial,jdbcType=VARCHAR},
+      <if test="inclusivePrice != null" >
+        inclusivePrice = #{inclusivePrice,jdbcType=VARCHAR},
       </if>
       <if test="price != null" >
         price = #{price,jdbcType=VARCHAR},
-      </if>
-      <if test="priceEffectiveDate != null" >
-        priceEffectiveDate = #{priceEffectiveDate,jdbcType=DATE},
-      </if>
-      <if test="priceExpirationDate != null" >
-        priceExpirationDate = #{priceExpirationDate,jdbcType=DATE},
-      </if>
-      <if test="remark != null" >
-        remark = #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="file != null" >
-        file = #{file,jdbcType=VARCHAR},
       </if>
       <if test="delFlg != null" >
         delFlg = #{delFlg,jdbcType=VARCHAR},
@@ -349,17 +289,13 @@
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.PriceList" >
-    update priceList
-    set supplyComId = #{supplyComId,jdbcType=VARCHAR},
-      buyComId = #{buyComId,jdbcType=VARCHAR},
-      priceDescribe = #{priceDescribe,jdbcType=VARCHAR},
-      materielSerial = #{materielSerial,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.LadderPrice" >
+    update ladderPrice
+    set priceSerial = #{priceSerial,jdbcType=VARCHAR},
+      countStart = #{countStart,jdbcType=VARCHAR},
+      countEnd = #{countEnd,jdbcType=VARCHAR},
+      inclusivePrice = #{inclusivePrice,jdbcType=VARCHAR},
       price = #{price,jdbcType=VARCHAR},
-      priceEffectiveDate = #{priceEffectiveDate,jdbcType=DATE},
-      priceExpirationDate = #{priceExpirationDate,jdbcType=DATE},
-      remark = #{remark,jdbcType=VARCHAR},
-      file = #{file,jdbcType=VARCHAR},
       delFlg = #{delFlg,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP},
@@ -367,10 +303,4 @@
       updateTime = #{updateTime,jdbcType=TIMESTAMP}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
-  <delete id="deletePriceList" parameterType="java.util.List">
-    	delete from priceList where serialNum in
-        <foreach item="idList" collection="list" open="(" close=")" separator=",">
-            #{idList}
-        </foreach>
-    </delete>
 </mapper>

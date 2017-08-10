@@ -71,7 +71,7 @@ angular
 													"page-header-fixed")
 													&& (a = 64);
 
-						 table = $("#sample_1")
+						 table = $("#sample_warehouse")
 									.DataTable(
 											{
 												language : {
@@ -176,7 +176,7 @@ angular
 
 							// Handle click on checkbox to set state of "Select
 							// all" control
-							$('#sample_1 tbody')
+							$('#sample_warehouse tbody')
 									.on(
 											'change',
 											'input[type="checkbox"]',
@@ -323,7 +323,7 @@ angular
 						            	warehouseCategory:{required:"未选择仓库分类！"},
 						            	owner:{required:"仓库持有者不能为空！"},
 						            	address:{required:"仓库地址不能为空！"},
-						            	area:{required:"仓库面积不能为空！"},
+						            	area:{required:"仓库面积不能为空！",digits:"请输入正确的数字!"},
 						            	email: { required:"邮箱不能为空！",email:"E-Mail格式不正确"},
 						            	//email:{required:"邮箱不能为空！"},
 						            	 tel: { 
@@ -348,7 +348,7 @@ angular
 						            	warehouseCategory:{required:true},
 						            	owner:{required:true},
 						            	address:{required:true},
-						            	area:{required:true},
+						            	area:{required:!0,digits:true,},
 						            	 email: {	required:true,email:true},
 						            	 tel: {required:true,digits:true, rangelength:[7,20] },
 				                         fax: {required:true,digits:true, rangelength:[7,20] },

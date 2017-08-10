@@ -36,6 +36,7 @@ import com.congmai.zhgj.web.model.JsonTreeData;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
 import com.congmai.zhgj.web.model.PriceList;
+import com.congmai.zhgj.web.model.PriceListExample;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.WarehouseExample;
@@ -95,6 +96,7 @@ public class PriceListController {
     	try{
     		if(StringUtils.isEmpty(priceList.getSerialNum())){
     			priceList.setSerialNum(UUID.randomUUID().toString().replace("-",""));
+    			priceList.setMaterielSerial("08f062e453f847c2b5767ed8169339ad");
     			priceListService.insert(priceList);
     		}else{
     			priceListService.update(priceList);
@@ -108,7 +110,7 @@ public class PriceListController {
   
     @RequestMapping(value = "/getPriceList", method = RequestMethod.GET)
     public ResponseEntity<Map> getWarehouseList(HttpServletRequest request) {
-		List<PriceList> priceLists = priceListService.selectList();
+		List<PriceList> priceLists = priceListService.selectPriceList(new  PriceListExample());
 		if (priceLists==null||priceLists.isEmpty()) {
 			return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);//判断是否为空,为空返回NO_CONTENT
 		}
