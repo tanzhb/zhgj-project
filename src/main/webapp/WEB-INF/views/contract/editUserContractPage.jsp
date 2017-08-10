@@ -6,7 +6,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 %>
 <!-- BEGIN PAGE HEADER-->
 <h3 class="page-title">
-	合同列表 <small></small>
+	合同信息 <small></small>
 </h3>
 <div class="page-bar">
 	<ul class="page-breadcrumb">

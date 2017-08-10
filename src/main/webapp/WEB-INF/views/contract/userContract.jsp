@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <h3 class="page-title">
-	合同列表 <small></small>
+	合同信息 <small></small>
 </h3>
 <div class="page-bar">
 	<ul class="page-breadcrumb">
@@ -29,6 +29,9 @@
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
 		<div class="portlet box red">
 			<div class="portlet-title">
+			<div class="caption">
+					<i class="fa fa-globe"></i>合同列表
+				</div>
 				<div class="actions" ng-controller='MyCtrl'>
 					<a href="javascript:;" ng-click="jumpToUrl('addUserContract')"
 						class="btn btn-default btn-sm btn-circle"> <i
@@ -99,7 +102,7 @@
 
 			<div class="portlet-body" >
 				<table
-					class="table table-striped table-bordered table-hover table-header-fixed"
+					class="table table-bordered"
 					id="sample_2">
 					<thead>
 						<tr>
