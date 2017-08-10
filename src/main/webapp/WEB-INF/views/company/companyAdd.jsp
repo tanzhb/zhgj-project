@@ -498,7 +498,7 @@
 
 <!-- 联系人modal START -->
  <div class="modal fade  modal-overflow in" id="contactor" tabindex="-1" role="contactor" aria-hidden="true" data-backdrop="static">
-     <div class="modal-dialog" style="width: 450px;">
+     <div class="modal-dialog" >
          <div class="modal-content">
              <div class="modal-header">
                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
@@ -513,7 +513,7 @@
                      <div class="col-md-12">
                          <div class="form-group form-md-line-input">
                                  <label class="col-md-4 control-label" for="contactName"><span class="required"> * </span>姓名：</label>
-                                 <div class="col-md-7">
+                                 <div class="col-md-6">
                                      <input type="text" class="form-control" id="contactName" name="contactName" ng-model="companyContact.contactName"  >
                                      <div class="form-control-focus"> </div>
                                  </div>
@@ -525,7 +525,7 @@
                      <div class="col-md-12">
                          <div class="form-group form-md-line-input">
                                  <label class="col-md-4 control-label" for="contactTitle"><span class="required"> * </span>职位：</label>
-                                 <div class="col-md-7">
+                                 <div class="col-md-6">
                                      <input type="text" class="form-control" id="contactTitle" name="contactTitle" ng-model="companyContact.contactTitle"  >
                                      <div class="form-control-focus"> </div>
                                  </div>
@@ -536,7 +536,7 @@
                      <div class="col-md-12">
                          <div class="form-group form-md-line-input">
                                  <label class="col-md-4 control-label" for="department"><span class="required"> * </span>部门/公司：</label>
-                                 <div class="col-md-7">
+                                 <div class="col-md-6">
                                      <input type="text" class="form-control" id="department" name="department" ng-model="companyContact.department"  >
                                      <div class="form-control-focus"> </div>
                                  </div>
@@ -548,7 +548,7 @@
                      <div class="col-md-12">
                          <div class="form-group form-md-line-input">
                                  <label class="col-md-4 control-label" for="department"><span class="required"> * </span>管理职责：</label>
-                                 <div class="col-md-7">
+                                 <div class="col-md-6">
                                      <input type="text" class="form-control" id="responsibility" name="responsibility" ng-model="companyContact.responsibility"  >
                                      <div class="form-control-focus"> </div>
                                  </div>
@@ -560,7 +560,7 @@
                      <div class="col-md-12">
                          <div class="form-group form-md-line-input">
                                  <label class="col-md-4 control-label" for="contactTel"><span class="required"> * </span>电话：</label>
-                                 <div class="col-md-7">
+                                 <div class="col-md-6">
                                      <input type="text" class="form-control" id="contactTel" name="contactTel" ng-model="companyContact.contactTel"  >
                                      <div class="form-control-focus"> </div>
                                  </div>
@@ -572,7 +572,7 @@
                      <div class="col-md-12">
                          <div class="form-group form-md-line-input">
                                  <label class="col-md-4 control-label" for="wechat">微信：</label>
-                                 <div class="col-md-7">
+                                 <div class="col-md-6">
                                      <input type="text" class="form-control" id="wechat"  ng-model="companyContact.wechat"  >
                                      <div class="form-control-focus"> </div>
                                  </div>
@@ -584,7 +584,7 @@
                      <div class="col-md-12">
                          <div class="form-group form-md-line-input">
                                  <label class="col-md-4 control-label" for="contactEmail">邮箱：</label>
-                                 <div class="col-md-7">
+                                 <div class="col-md-6">
                                      <input type="text" class="form-control" id="contactEmail" name="contactEmail" ng-model="companyContact.contactEmail"  >
                                      <div class="form-control-focus"> </div>
                                  </div>
@@ -596,7 +596,7 @@
                      <div class="col-md-12">
                          <div class="form-group form-md-line-input">
                                  <label class="col-md-4 control-label" for="remark">备注：</label>
-                                 <div class="col-md-7">
+                                 <div class="col-md-6">
                                      <input type="text" class="form-control" id="remark" ng-model="companyContact.remark"  >
                                      <div class="form-control-focus"> </div>
                                  </div>
@@ -622,7 +622,7 @@
 
 <!-- 财务信息modal START -->
  <div class="modal fade modal-overflow in" id="finance" tabindex="-1" role="finance" aria-hidden="true" data-backdrop="static">
-     <div class="modal-dialog" style="width: 400px;">
+     <div class="modal-dialog">
          <div class="modal-content">
              <div class="modal-header">
                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
@@ -637,7 +637,7 @@
                      <div class="col-md-12">
                          <div class="form-group form-md-line-input">
                                  <label class="col-md-4 control-label" for="openingBank"><span class="required"> * </span>银行：</label>
-                                 <div class="col-md-7">
+                                 <div class="col-md-6">
                                      <input type="text" class="form-control" id="openingBank" name="openingBank" ng-model="companyFinance.openingBank"  >
                                      <div class="form-control-focus"> </div>
                                  </div>
@@ -649,7 +649,7 @@
                      <div class="col-md-12">
                          <div class="form-group form-md-line-input">
                                  <label class="col-md-4 control-label" for="accountName"><span class="required"> * </span>户名：</label>
-                                 <div class="col-md-7">
+                                 <div class="col-md-6">
                                      <input type="text" class="form-control" id="accountName" name="accountName" ng-model="companyFinance.accountName"  >
                                      <div class="form-control-focus"> </div>
                                  </div>
@@ -661,7 +661,7 @@
                      <div class="col-md-12">
                          <div class="form-group form-md-line-input">
                                  <label class="col-md-4 control-label" for="accountNumber"><span class="required"> * </span>账号：</label>
-                                 <div class="col-md-7">
+                                 <div class="col-md-6">
                                      <input type="text" class="form-control" id="accountNumber" name="accountNumber" ng-model="companyFinance.accountNumber"  >
                                      <div class="form-control-focus"> </div>
                                  </div>
@@ -672,7 +672,7 @@
                      <div class="col-md-12">
                          <div class="form-group form-md-line-input">
                                  <label class="col-md-4 control-label" for="remark">备注：</label>
-                                 <div class="col-md-7">
+                                 <div class="col-md-6">
                                      <input type="text" class="form-control" id="remark" ng-model="companyFinance.remark"  >
                                      <div class="form-control-focus"> </div>
                                  </div>

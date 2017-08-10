@@ -18,6 +18,11 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	 			//createTable(15,1,true);
 	 			loadTable();
 	 		//	 $("#comViewPage").html($compile($("#comViewContent").html())($scope));
+	 			$("#sample_3_tools > li > a.tool-action").on("click",
+	 			        function(){debugger;
+	 			            var e=$(this).attr("data-action");
+	 			           $("#companyTable").DataTable().button(e).trigger();
+	 			 })
 	 		}
 	    	// set default layout mode
 	    	$rootScope.settings.layout.pageContentWhite = true;
@@ -29,6 +34,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	 });
 	 
 	 var table;
+	 /** 加载列表 Start**/
 	 var loadTable = function(){
 		 var a = 0;
 			App.getViewPort().width < App
@@ -44,7 +50,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 									&& (a = 64);
 							
 
-			table = $("#sample_1")
+			table = $("#companyTable")
 					.DataTable(
 							{
 								language : {
@@ -75,6 +81,16 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 								order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
 								bRetrieve : true,
 								'scrollX': false,
+								  buttons: [
+							                {
+							                },
+							                {
+							                },
+							                {
+							                	 extend: "print",
+								                 className: "btn dark btn-outline"
+							                }
+							            ],
 								// searching: true,//是否过滤检索
 								// ordering: true,//是否排序
 								lengthMenu : [
@@ -147,8 +163,9 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 							})
 			// 构建datatables结束***************************************
 	 }
-	
-						
+	/**加载列表结束**/
+	 
+		
 						
 			// 页面加载完成后调用，验证输入框
 				$scope.$watch('$viewContentLoaded', function() {  
@@ -799,6 +816,12 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        	});
 	       }
 	       
+	       $scope.exportCompany = function(){
+	    	 handle.blockUI("正在导出数据，请稍后"); 
+	    	 window.location.href=$rootScope.basePath+"/rest/company/exportCompany";
+	    	 handle.unblockUI(); 
+	       }
+	       
 	       
 	       
 	       
@@ -1123,7 +1146,55 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    	   $scope.companyFinance ={};
 	    	   $("#finance").modal("show");
 	       };*/
+	       
+	       /**
+	        * 下载EXCEL模板
+	        */
+	       $scope.downloadImportTemp = function(){
+	    	   window.location.href=$rootScope.basePath+"/rest/company/downloadImportTemp";
+	       }
+	       
+	       /**
+	        * 上传EXCEL
+	        */
+	       $scope.uploadExcel = function(){
+	    	    var file = document.querySelector('input[type=file]').files[0];
+	    	    if(handle.isNull(file)){
+	    	    	handle.toastr.warning("请选择Excel文件！");
+	    	    }
+	    	    console.log(file.name);
+	    	    var type = file.name.substring(file.name.lastIndexOf("."));
+	    	   if(type != ".xls"){
+	    		   handle.toastr.warning("文件格式不正确，需要xls类型的Excel文档");
+	    		   return;
+	    	   }
+	    	   	handle.blockUI("正在导入中，请不要进行其他操作"); 
+	    	   	var promise = companyService.uploadExcel();
+       			promise.then(function(data){
+       				handle.unblockUI(); 
+       				if(data.data.data=="success"){
+       					handle.toastr.success("导入成功");
+       					table.ajax.reload();
+       				}else{
+       					handle.toastr.error(data.data.data);
+       				}
+       				$('#import').modal('hide'); 
+	            },function(data){
+	               //调用承诺接口reject();
+	            	handle.toastr.error("操作失败");
+	            	$('#import').modal('hide'); 
+	            });
+	    	   
+	       }
+	       $('#import').on('hide.bs.modal', function (e) { 
+	    	   $("#resetFile").trigger("click");
+	    	  //$("#file_span input[type='file']").remove();
+	    	  //$(".fileinput-filename").val("");
+	    	  //$("#file_span").appendTo('<input type="file" file-model="excelFile" accept=".xls" name="...">');
+	       })
 
+	         
+	       
 
 	       
 	       

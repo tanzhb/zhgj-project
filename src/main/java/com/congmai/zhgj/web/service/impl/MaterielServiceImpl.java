@@ -98,7 +98,28 @@ public class MaterielServiceImpl implements MaterielService {
 		//插入最新版本
 		MaterielMapper.insert(materiel);
 	}
-
-	
+	/**
+	 * 
+	 * @Description 根据materielId查询最新版本物料
+	 * @param materielId
+	 * @return
+	 */
+	@Override
+	public Materiel getMaterielInfoByMaterielId(String materielId) {
+		MaterielExample m =new MaterielExample();
+    	//and 条件1
+    	Criteria criteria =  m.createCriteria();
+    	criteria.andIsLatestVersionEqualTo("1");
+    	criteria.andMaterielIdEqualTo(materielId);
+    	criteria.andDelFlgEqualTo("0");
+    	//排序字段
+    	m.setOrderByClause("updateTime DESC");
+    	List<Materiel> materielList = MaterielMapper.selectByExample(m);
+    	
+    	if(materielList==null||materielList.size()<1){
+    		return null;
+    	}
+		return materielList.get(0);
+	}
 
 }

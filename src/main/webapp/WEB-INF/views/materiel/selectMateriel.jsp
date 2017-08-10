@@ -1,8 +1,8 @@
-<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!-- 基本信息modal 开始 -->
-	<div id="basicMaterielInfo" class="modal fade" tabindex="-1"
+	<div id="basicMaterielInfo" class="modal fade bs-modal-lg" tabindex="-1"
 		data-backdrop="static" data-keyboard="false">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"

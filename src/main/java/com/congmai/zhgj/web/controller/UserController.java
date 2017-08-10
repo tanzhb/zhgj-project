@@ -13,6 +13,8 @@ import javax.validation.Valid;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.credential.DefaultPasswordService;
+import org.apache.shiro.authc.credential.PasswordService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
@@ -47,8 +49,9 @@ import com.congmai.zhgj.web.service.UserService;
 public class UserController {
 
 	@Resource
-	private UserService userService;
+	private UserService userService;	
 
+	private PasswordService svc = new DefaultPasswordService();
 	/**
 	 * 用户登录
 	 * 
@@ -134,6 +137,7 @@ public class UserController {
 			UriComponentsBuilder ucBuilder) {
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		
 		if(user.getId() == null){
 			if (userService.isUserExist(user)) {
 				System.out.println("A User with name " + user.getLoginName()
@@ -145,6 +149,7 @@ public class UserController {
 			if(user.getDelFlg() == null)
 				user.setDelFlg("0");
 			user.setId(ApplicationUtils.random32UUID());
+			user.setPassword(svc.encryptPassword("000000"));//密码加密,默认密码6个零
 			userService.insert(user);
 		}else{
 			user.setUpdater(currenLoginName);
@@ -205,6 +210,36 @@ public class UserController {
 			return "false";
 		}
 		return "true";
+	}
+	
+	/**
+	 * 
+	 * @Description 修改密码
+	 * @param user
+	 * @return
+	 */
+	@RequestMapping(value = "/updatePass", method = RequestMethod.POST)
+	public ResponseEntity<Void> updatePass(@RequestBody Object password) {
+		Map m = (Map)password;
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		
+		User user = userService.selectByUsername(currenLoginName);
+		if(user == null){//当前用户过期或不存在
+			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		}else{
+			if(svc.passwordsMatch(m.get("oldPassword").toString(), user.getPassword())){//原密码输入正确
+				user.setPassword(svc.encryptPassword(m.get("newPassword").toString()));
+				user.setUpdater(currenLoginName);
+				user.setUpdateTime(new Date());
+				userService.update(user);
+			}else{//原密码输入有错
+				return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+			}
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 
 	/**

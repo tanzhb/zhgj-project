@@ -87,7 +87,7 @@ public class CompanyFinance {
         this.creator = creator == null ? null : creator.trim();
     }
 
-    @JsonFormat(timezone="GTM+8",pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     public Date getCreateTime() {
         return createTime;
     }
@@ -105,7 +105,7 @@ public class CompanyFinance {
         this.updater = updater == null ? null : updater.trim();
     }
     
-    @JsonFormat(timezone="GTM+8",pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     public Date getUpdateTime() {
         return updateTime;
     }

@@ -152,7 +152,7 @@ public class Company {
     public Date getCreateTime() {
         return createTime;
     }
-    @JsonFormat(timezone="GTM+8",pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
@@ -164,7 +164,7 @@ public class Company {
     public void setUpdater(String updater) {
         this.updater = updater == null ? null : updater.trim();
     }
-    @JsonFormat(timezone="GTM+8",pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     public Date getUpdateTime() {
         return updateTime;
     }
