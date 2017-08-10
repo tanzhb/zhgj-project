@@ -106,3 +106,30 @@ function timeStamp2String (time){
      var mseconds = datetime.getMilliseconds();
      return year + "-" + month + "-" + date+" "+hour+":"+minute+":"+second;
 };
+
+
+//初始化toastr开始
+toastr.options = {
+		"closeButton" : true,
+		"debug" : false,
+		"positionClass" : "toast-top-center",
+		"onclick" : null,
+		"showDuration" : "1000",
+		"hideDuration" : "1000",
+		"timeOut" : "5000",
+		"extendedTimeOut" : "1000",
+		"showEasing" : "swing",
+		"hideEasing" : "linear",
+		"showMethod" : "fadeIn",
+		"hideMethod" : "fadeOut"
+	}
+//初始化toastr结束
+
+//为空判断
+var isNull = function(str) {
+	if (str == "" || str == undefined)
+		return true;
+	var regu = "^[ ]+$";
+	var re = new RegExp(regu);
+	return re.test(str);
+}

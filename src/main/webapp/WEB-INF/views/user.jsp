@@ -126,7 +126,7 @@
 			                                                </div>
 			                                            </div> 
 		                                            </p> 
-		                                            <p>
+		                                            <!-- <p>
 			                                            <div class="form-group form-md-line-input">
 			                                                <label class="col-md-4 control-label" for="form_control_1">密码
 			                                                    <span class="required">*</span>
@@ -137,7 +137,7 @@
 			                                                    <span class="help-block">输入密码</span>
 			                                                </div>
 			                                            </div> 
-                                                    </p>   
+                                                    </p>  -->  
                                                     <p>
                                                         <div class="form-group form-md-line-input">
 			                                                <label class="col-md-4 control-label" for="form_control_1">身份证</label>
@@ -185,7 +185,7 @@
 			                                                </div>
 			                                            </div> 
                                                     </p>                                                    
-                                                    <p>
+                                                    <!-- <p>
 			                                            <div class="form-group form-md-line-input">
 			                                                <label class="col-md-4 control-label" for="form_control_1">确认密码
 			                                                    <span class="required">*</span>
@@ -196,7 +196,7 @@
 			                                                    <span class="help-block">输入确认密码</span>
 			                                                </div>
 			                                            </div> 
-                                                    </p>
+                                                    </p> -->
                                                     <p>
                                                         <div class="form-group form-md-line-input">
 			                                                <label class="col-md-4 control-label" for="form_control_1">岗位</label>
@@ -244,10 +244,10 @@
                                        </div>    
                                             
                                        <div class="modal-footer">
-											<button type="reset" class="btn btn-default">重置</button>
+											<button type="reset" class="btn btn-default"><i class="fa fa-reset"></i> 重置</button>
 											<button type="submit" ng-click="saveUser()"
 												class="btn btn-primary">
-												<i class="fa fa-check"></i> 保存
+												<i class="fa fa-save"></i> 保存
 											</button>
 										</div>
                                     </form>

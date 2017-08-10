@@ -102,7 +102,7 @@
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal"
 								aria-hidden="true"></button>
-							<h4 id="pageTitle" class="modal-title">添加仓库</h4>
+							<h4 id="pageTitle" class="modal-title">仓库详情</h4>
 						</div>
 						<div class="modal-body form">
 							<form action="#" class="form-horizontal form-row-seperated"  id="form_sample_1">
@@ -324,7 +324,7 @@
 		<!-- END EXAMPLE TABLE PORTLET-->
 	</div>
 </div>
-<div class="row" ng-controller="WarehouseController as uTrl">
+<div class="row" ng-controller="WarehouseController">
 	<div class="col-md-12">
 
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
@@ -373,83 +373,159 @@
 					</div>
 				</div>
 			</div>
-
-
-			<!-- 添加用户modal 开始 -->
-			<div id="addUserModal" class="modal fade" role="dialog"
-				aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal"
-								aria-hidden="true"></button>
-							<h4 class="modal-title">添加用户</h4>
-						</div>
-						<div class="modal-body form">
-							<form action="#" class="form-horizontal form-row-seperated">
-								<div class="form-group">
-									<label class="col-sm-4 control-label">用户名</label>
-									<div class="col-sm-6">
-										<div class="input-group">
-											<span class="input-group-addon"> <i class="fa fa-user"></i>
-											</span> <input type="text" id="typeahead_example_modal_1"
-												ng-model="user.username" name="typeahead_example_modal_1"
-												class="form-control" />
-										</div>
-										
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-4 control-label">密码</label>
-									<div class="col-sm-6">
-										<div class="input-group">
-											<span class="input-group-addon"> <i
-												class="fa fa-search"></i>
-											</span> <input type="text" id="typeahead_example_modal_2"
-												ng-model="user.password" name="typeahead_example_modal_2"
-												class="form-control" />
-										</div>
-										
-									</div>
-								</div>
-							</form>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default"
-								data-dismiss="modal">取消</button>
-							<button type="button" ng-click="saveUser()"
-								class="btn btn-primary">
-								<i class="fa fa-check"></i> 保存
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- 添加用户modal 结束 -->
-
-			<!-- 删除用户modal 开始 -->
-			<div id="delUsersModal" class="modal fade" tabindex="-1"
-				data-backdrop="static" data-keyboard="false">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal"
-								aria-hidden="true"></button>
-							<h4 class="modal-title">确认</h4>
-						</div>
-						<div class="modal-body">
-							<p>是否删除已选仓库?</p>
-						</div>
-						<div class="modal-footer">
-							<button type="button" data-dismiss="modal"
-								class="btn dark btn-outline">取消</button>
-							<button type="button" ng-click="confirmDellWarehouse()" class="btn green">确定
-								</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- 删除用户modal 结束 -->
+			<!-- 仓库信息弹框查看开始 -->
+<div class="modal fade" id="viewWarehouse" role="basic" aria-hidden="true">
+     <div class="modal-dialog" style="width: 750px;">
+	    <div class="modal-content">
+	 		<div class="modal-header">
+	            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+	            <h4 class="modal-title" >仓库信息</h4>
+	        </div>
+	        <div class="modal-body">
+	          		<!-- <div class="col-md-12"> -->
+	          		 <div class="">
+                           <div class="portlet-body form">
+                              <!--  BEGIN FORM -->
+                               <form class="form-horizontal" role="form">
+                                   <div class="form-body">
+                                       <div class="row">
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">仓库编号：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static" >{{warehouse.warehouseNum}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                           <!-- /span -->
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">仓库名称：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{warehouse.warehouseName}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                         <!--   /span -->
+                                       </div>
+                                       <!-- /row -->
+                                       <div class="row">
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">仓库类型：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{warehouse.warehouseType}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                          <!--  /span -->
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">仓库分类：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{warehouse.warehouseCategory}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                          <!--  /span -->
+                                       </div>
+                                      <!--  /row -->
+                                       <div class="row">
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">仓库地址：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{warehouse.address}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                        <!--    /span -->
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">仓库所有者：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{warehouse.owner}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                         <!--   /span -->
+                                       </div>
+                                     <!--   /row -->
+                                       <div class="row">
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">仓库管理员：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{warehouse.admin}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                      <!--      /span -->
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">仓库面积：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{warehouse.area}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                           <!-- /span -->
+                                       </div>
+                                      <!--  /row -->
+                                       <div class="row">
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">邮件：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{warehouse.email}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                           <!-- /span -->
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">电话：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{warehouse.tel}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                           <!-- /span -->
+                                       </div>
+                                       <!-- /row -->
+                                       <div class="row">
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">备注：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{warehouse.remark}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                         <!--   /span -->
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                   <label class="control-label col-md-5">传真：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{warehouse.fax}}</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                           <!-- /span -->
+                                       </div>
+                                       <!-- /row -->
+                                   </div>
+                               </form>
+                              <!--  END FORM -->
+                           </div>
+                      </div>
+					<!-- </div> -->
+	        <!-- </div> -->
+	    </div>
+    </div>
+</div>
+</div>
+<!-- 仓库信息查看modal END-->
 
 
 			<div class="portlet-body">

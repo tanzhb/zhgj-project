@@ -26,4 +26,6 @@ public interface MaterielService extends GenericService<Materiel, String> {
 	public void deleteMateriels(String ids);
 
 	void updateVersion(Materiel materiel);
+
+	Materiel getMaterielInfoByMaterielId(String materielId);
 }

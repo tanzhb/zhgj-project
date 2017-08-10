@@ -1,6 +1,6 @@
-<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!-- BEGIN PAGE HEADER-->
-<h3 class="page-title"> 物料信息
+<h3 class="page-title"> 物料列表
     <small></small>
 </h3>
 <div class="page-bar">
@@ -11,12 +11,15 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
+            <a ui-sref="materiel">基础数据</a>
+        </li>
+        <li>
             <a ui-sref="materiel">物料信息</a>
         </li>
     </ul>
 </div>
 <div class="row">
-     <div class="col-md-4">
+<!--      <div class="col-md-4">
          <div class="portlet light ">
              <div class="portlet-title">
                  <div class="caption">
@@ -29,9 +32,8 @@
                  </div>
              </div>
          </div>
-	</div>
-	<div class="col-md-8">
-        <div class="row">
+	</div> -->
+	<div class="col-md-12">
 	        <div class="portlet box red">
 	            <div class="portlet-title">
 				<div class="caption">
@@ -40,14 +42,13 @@
 				<div class="actions">
 					<a href="javascript:;" ui-sref="addMateriel"
 						 class="btn btn-default btn-sm btn-circle">
-						<i class="fa fa-plus"></i> 物料
+						<i class="fa fa-plus"></i> 添加
 					</a> 
 					<a href="javascript:;" ng-click="editMateriel()"
 						 class="btn btn-default btn-sm btn-circle">
-						<i class="fa fa-edit"></i> 编辑
+						<i class="fa fa-edit"></i> 修改
 					</a>
-					<a href="javascript:;" data-target="#delMaterielModal"
-						data-toggle="modal" 
+					<a href="javascript:;" ng-click="deleteMateriel()"
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-minus"></i> 删除
 					</a>
@@ -121,8 +122,26 @@
 	                </table>
 	            </div>
 	        </div>
-        </div>
-        <div class="row">
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+ </div>
+ 
+ <div class="row">
+<!--      <div class="col-md-4">
+         <div class="portlet light ">
+             <div class="portlet-title">
+                 <div class="caption">
+                     <i class="icon-social-dribbble font-blue-sharp"></i>
+                     <span ng-click="reloadTable()" class="caption-subject font-blue-sharp bold uppercase">全部物料</span>
+                 </div>
+             </div>
+             <div class="portlet-body">
+                 <div id="tree_1" class="tree-demo">
+                 </div>
+             </div>
+         </div>
+	</div> -->
+	<div class="col-md-12">
         	<div class="portlet light ">
                 <div class="portlet-body">
                     <ul class="nav nav-pills">
@@ -137,6 +156,12 @@
                         </li>
                         <li>
                             <a href="#" data-target="#tab_2_4"  data-toggle="tab"> 包装信息 </a>
+                        </li>
+                        <li>
+                            <a href="#" data-target="#tab_2_5"  data-toggle="tab"> 库存信息 </a>
+                        </li>
+                        <li>
+                            <a href="#" data-target="#tab_2_6"  data-toggle="tab"> 价格趋势 </a>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -162,35 +187,38 @@
 					            </div>
 					    </div>
                         <div class="tab-pane fade" id="tab_2_2">
-					            <div class="portlet-body">
-					                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_1">
-					                    <thead>
-					                        <tr>
-					                            <th> 客户编码 </th>
-					                            <th> 客户名称 </th>
-					                        </tr>
-					                    </thead>
-					                    <tbody>
-					                    </tbody>
-					                </table>
-					            </div>
+					            未关联
                         </div>
                         <div class="tab-pane fade" id="tab_2_3">
 					            <div class="portlet-body">
-					                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_1">
-					                    <thead>
-					                        <tr>
-					                            <th> 物料编码 </th>
-					                            <th> 物料名称 </th>
-					                            <th> 规格型号 </th>
-					                            <th> 单位 </th>
-					                            <th> 品牌 </th>
-					                            <th> 单套用量 </th>
-					                        </tr>
-					                    </thead>
-					                    <tbody>
-					                    </tbody>
-					                </table>
+                          <table class="table table-striped table-bordered table-hover table-checkable order-column">
+                              <thead>
+                                  <tr>
+                                      <th style="width:200px;">物料编码</th>
+                                      <th>物料名称</th>
+                                      <th>规格型号</th>
+                                      <th>单位</th>
+                                      <th>品牌</th>
+                                      <th style="width:100px;">单套用量</th>
+                                  </tr>
+                              </thead>
+                              <tbody ng-repeat="_BOM in BOM track by $index">
+                                  <tr >
+                                      <td>
+                                      		<p class="form-control-static"> {{_BOM.materiel.materielNum}} </p>
+			                          </td>
+			                          <td>
+			                                <p class="form-control-static"> {{_BOM.materiel.materielName}} </p>
+			                          </td>
+                                      <td><p class="form-control-static"> {{_BOM.materiel.specifications}} </p></td>
+                                      <td><p class="form-control-static"> {{_BOM.materiel.unit}} </p></td>
+                                      <td><p class="form-control-static"> {{_BOM.materiel.brand}} </p></td>
+                                      <td>
+			                                <p class="form-control-static"> {{_BOM.singleDose}} </p>
+			                          </td>
+                                  </tr>
+                              </tbody>
+                          </table>
 					            </div>
                         </div>
                         <div class="tab-pane fade" id="tab_2_4">
@@ -223,12 +251,20 @@
 					                </table>
 					        </div>
                         </div>
+                        <div class="tab-pane fade" id="tab_2_5">
+					            <div class="portlet-body">
+					                	未关联
+					            </div>
+                        </div>
+                        <div class="tab-pane fade" id="tab_2_6">
+					            <div class="portlet-body">
+					                	未关联
+					            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 	        
-        </div>
-        <!-- END EXAMPLE TABLE PORTLET-->
     </div>
  </div>
 <!-- END PAGE HEADER-->
@@ -563,7 +599,7 @@
                               <div class="form-group">
                                   <label class="control-label col-md-5">是否BOM物料</label>
                                   <label class="control-label col-md-7">
-                                        {{materiel.isBOM}}
+                                        {{materiel.isBOM=="1"?'是':'否'}}
                                   </label>
                               </div>
                           </div>
