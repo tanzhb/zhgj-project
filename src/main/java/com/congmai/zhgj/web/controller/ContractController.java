@@ -1,11 +1,13 @@
 package com.congmai.zhgj.web.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.File;  
+import java.io.IOException;  
+  
+
+
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.StringReader;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,13 +18,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.apache.commons.io.FileUtils;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.apache.commons.io.FileUtils;  
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
+import org.springframework.context.annotation.Scope;  
+import org.springframework.http.HttpHeaders;  
+import org.springframework.http.HttpStatus;  
+import org.springframework.http.MediaType;  
+import org.springframework.http.ResponseEntity;  
+import org.springframework.stereotype.Component;  
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMapping;  
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +46,8 @@ import com.congmai.zhgj.web.service.ContractService;
  * @author czw
  *
  */
+@Component  
+@Scope("prototype")  
 @Controller
 @RequestMapping("/contract")
 public class ContractController {
@@ -89,9 +98,21 @@ public class ContractController {
 			  String serialNum=UUID.randomUUID().toString().toUpperCase().replaceAll("-", ""); 
 			  
 			   contractVO.setId(serialNum);
-			   String electronicContract=uploadFile(files[0]);
-			   String signContract=uploadFile(files[1]);
+			   String electronicContract=null;
+			   String signContract=null;
+			   //只有在文件组不为空时上传文件
+			   if(files.length>0){
+			   if(files[0]!=null){
+				   electronicContract=uploadFile(files[0]);   
+			   }
 			   
+			   
+			   if(files[1]!=null){
+				   signContract=uploadFile(files[1]); 
+			   }
+			   }
+			   
+			   //给各自的文件字段赋值文件名
 			   contractVO.setElectronicContract(electronicContract);
 			   contractVO.setSignContract(signContract);
 			   
@@ -102,6 +123,24 @@ public class ContractController {
 			  //如果id不为空执行更新
 			  User user1=(User) request.getSession().getAttribute("userInfo");
 			  contractVO.setUpdater("1");
+			  
+			  String electronicContract=null;
+			  String signContract=null;
+			//只有在文件组不为空时上传文件
+			  if(files.length>0){
+			   if(files[0]!=null){
+				   electronicContract=uploadFile(files[0]);   
+			   }
+			   
+			  
+			   if(files[1]!=null){
+				   signContract=uploadFile(files[1]); 
+			   }
+			  }
+			//给各自的文件字段赋值文件名
+			   contractVO.setElectronicContract(electronicContract);
+			   contractVO.setSignContract(signContract);
+			  
 			  contractService.updateContract(contractVO);
 		  }
 		    
@@ -237,6 +276,7 @@ public class ContractController {
 		 /**
 		  * 附件下载
 		  * @return
+		 * @throws IOException 
 		  */
 		 /*@RequestMapping(value = "/resourceDownload", method = RequestMethod.GET)
 	     public String upload(HttpSession session, HttpServletRequest request,String name,HttpServletResponse response) {
@@ -283,11 +323,10 @@ public class ContractController {
 			  return null;
 			 }*/
 		 
-		  @RequestMapping(value="/resourceDownload",method=RequestMethod.GET) //匹配的是href中的download请求
-		  public String download(String fileName, HttpServletRequest request,
-		            HttpServletResponse response) {
-		        response.setCharacterEncoding("utf-8");
-		       /* response.setContentType("multipart/form-data");*/
+		  @RequestMapping(value="/resourceDownload",method=RequestMethod.POST) //匹配的是href中的download请求
+		  public void download(@RequestParam("project_id") Integer projectId, HttpServletResponse response) throws IOException {
+		       /* response.setCharacterEncoding("utf-8");
+		        response.setContentType("multipart/form-data");
 		        response.setHeader("Content-Disposition", "attachment;fileName=" + "D2E2589B23CA4B0EA9035DA9FC7E4BB2.gif");
 		               
 		        try {
@@ -296,6 +335,7 @@ public class ContractController {
 		                    + "download";
 		            //D:\My Documents\GitHub\.metadata\.plugins\org.eclipse.wst.server.core\tmp1\wtpwebapps\zhgj-project\WEB-INF\classes\download
 		            InputStream inputStream = new FileInputStream(new File("D:\\userUploadFile\\Files\\" + "D2E2589B23CA4B0EA9035DA9FC7E4BB2.gif"));//path是在本项目webinfo下的classes下的download文件夹下下载文件
+		            FileInputStream in=new FileInputStream("D:\\userUploadFile\\Files\\" + "D2E2589B23CA4B0EA9035DA9FC7E4BB2.gif");
 		                                                  //若想在本机下载，把path去掉即可
 
 		            OutputStream os = response.getOutputStream();
@@ -316,7 +356,50 @@ public class ContractController {
 		        }
 		            //  返回值要注意，要不然就出现下面这句错误！
 		            //java+getOutputStream() has already been called for this response
-		        return null;
+		        return null;*/
+			/*  try {  
+			        // 清空response  
+			        response.reset();  
+			        //设置输出的格式  
+			        response.setContentType("application/x-download");// 设置为下载application/x-download   
+			        response.addHeader("content-type ","application/x-msdownload");   
+			        response.setContentType("application/octet-stream");  
+			        response.setHeader("content-disposition", "attachment; filename="+ "aaaa");//设定输出文件头  
+			        response.addHeader("Content-Length", "1024");  
+			        // 以流的形式下载文件。  
+			        InputStream fis = new BufferedInputStream(new FileInputStream("D:\\userUploadFile\\Files\\" + "D2E2589B23CA4B0EA9035DA9FC7E4BB2.gif"));  
+			        ServletOutputStream toClient = response.getOutputStream();  
+			        byte[] buffer = new byte[1024];  
+			        int n = 0;  
+			        while ((n = fis.read(buffer))!=-1) {  
+			            toClient.write(buffer,0,n);  
+			            toClient.flush();  
+			        }  
+			        fis.close();  
+			        //输出文件  
+			        toClient.close();  
+			    } catch (Exception ex) {  
+			        ex.printStackTrace();  
+			    }  */
+			  
+			 /* String path="D:\\userUploadFile\\Files\\" + "D2E2589B23CA4B0EA9035DA9FC7E4BB2.xlsx";  
+		        File file=new File(path); 
+		        System.out.println(file.length());
+		        HttpHeaders headers = new HttpHeaders();    
+		        String fileName=new String("你好.xlsx".getBytes("UTF-8"),"iso-8859-1");//为了解决中文名称乱码问题  
+		        headers.setContentDispositionFormData("attachment", fileName); 
+		        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);  
+		        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),    
+		                                          headers, HttpStatus.CREATED); */
+			 /* String filename = "rules_" + DateFormatUtils.ISO_DATE_FORMAT.format(new Date()) + ".txt";
+		        response.setCharacterEncoding("utf-8");
+		        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+		        response.setHeader("Content-Disposition", "attachment;filename=" + filename);
+		        response.setHeader("Transfer-Encoding", "chunked");
+		        IOUtils.copy(new StringReader(ruleService.export(projectId)), response.getOutputStream(), "utf-8");*/
+			  
+			  
+			  
 		    }
 		}
 		  /*  public ResponseEntity<byte[]> download(HttpServletRequest request,@RequestParam("filename") String filename,
