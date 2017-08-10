@@ -34,7 +34,11 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
         var file = document.querySelector('input[name="file"]').files[0];
         fd.append("files", file);
 		}
+		
+		if($("input[id='id']").length){
 		fd.append('id', $("#id").val()); 
+		}
+		
         fd.append('contractNum', $("#contractNum").val()); 
         fd.append('contractType', $("#contractType").val()); 
         fd.append('serviceModel', $("#serviceModel").val()); 

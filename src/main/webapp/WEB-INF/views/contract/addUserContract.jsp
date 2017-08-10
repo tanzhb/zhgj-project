@@ -42,9 +42,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<div class="col-md-8">
 								<input type="text" class="form-control"
 									ng-model="contractVO.contractNum" placeholder="采购合同编号" id="contractNum" name="contractNum"/>
-									<input type="hidden"
-									id="id" 
-									ng-hide="visible" />
 								<div class="form-control-focus"></div>
 								<span class="help-block">采购合同编号</span>
 								<span class="help-block">采购合同编号</span>
