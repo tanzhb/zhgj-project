@@ -5,7 +5,17 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <!-- BEGIN PAGE HEADER-->
-
+<h3 class="page-title">
+	合同列表 <small></small>
+</h3>
+<div class="page-bar">
+	<ul class="page-breadcrumb">
+		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
+			class="fa fa-angle-right"></i></li>
+		<li><a ui-sref="userContract">基础数据</a></li>
+		<li><a ui-sref="userContract">合同信息</a></li>
+	</ul>
+</div>
 <div class="tab-pane" id="tab_1">
 	<div class="portlet box blue">
 		<div class="portlet-title">
@@ -32,6 +42,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							<div class="col-md-8">
 								<input type="text" class="form-control"
 									ng-model="contractVO.contractNum" placeholder="采购合同编号" id="contractNum" name="contractNum"/>
+									<input type="hidden"
+									id="id" 
+									ng-hide="visible" />
 								<div class="form-control-focus"></div>
 								<span class="help-block">采购合同编号</span>
 								<span class="help-block">采购合同编号</span>
