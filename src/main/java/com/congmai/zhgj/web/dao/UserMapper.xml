@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.congmai.zhgj.web.dao.UserMapper">
-    <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.User">
+	<resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.User">
 
-        <id column="id" property="id" jdbcType="VARCHAR" />
-        <result column="loginName" property="loginName" jdbcType="VARCHAR" />
-        <result column="password" property="password" jdbcType="CHAR" />
-        <result column="userName" property="userName" jdbcType="VARCHAR" />
-        <result column="idNumber" property="idNumber" jdbcType="VARCHAR" />
-        <result column="station" property="station" jdbcType="VARCHAR" />
-        <result column="telphone" property="telphone" jdbcType="VARCHAR" />
-        <result column="email" property="email" jdbcType="VARCHAR" />
-        <result column="state" property="state" jdbcType="VARCHAR" />
-        <result column="delFlg" property="delFlg" jdbcType="CHAR" />
-        <result column="creator" property="creator" jdbcType="VARCHAR" />
-        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
-        <result column="updater" property="updater" jdbcType="VARCHAR" />
-        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
-        <result column="comments" property="comments" jdbcType="VARCHAR" />
-    </resultMap>
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="account" property="account" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="salt" property="salt" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
+		<result column="sex" property="sex" jdbcType="INTEGER" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="roleid" property="roleid" jdbcType="VARCHAR" />
+		<result column="deptid" property="deptid" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="avatar" property="avatar" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+        id, account, password, salt, name, birthday, sex, email, phone, roleid, deptid, status, createtime, version, avatar
+    </sql>
     <sql id="Example_Where_Clause">
         <where>
             <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -48,378 +52,82 @@
             </foreach>
         </where>
     </sql>
-    <sql id="Update_By_Example_Where_Clause">
-        <where>
-            <foreach collection="example.oredCriteria" item="criteria" separator="or">
-                <if test="criteria.valid">
-                    <trim prefix="(" suffix=")" prefixOverrides="and">
-                        <foreach collection="criteria.criteria" item="criterion">
-                            <choose>
-                                <when test="criterion.noValue">
-                                    and ${criterion.condition}
-                                </when>
-                                <when test="criterion.singleValue">
-                                    and ${criterion.condition} #{criterion.value}
-                                </when>
-                                <when test="criterion.betweenValue">
-                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                                </when>
-                                <when test="criterion.listValue">
-                                    and ${criterion.condition}
-                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator=",">
-                                        #{listItem}
-                                    </foreach>
-                                </when>
-                            </choose>
-                        </foreach>
-                    </trim>
-                </if>
-            </foreach>
-        </where>
-    </sql>
-    <sql id="Base_Column_List">
-        id, loginName, password, userName, idNumber, station, telphone, email, state, delFlg, creator, createTime, updater, updateTime, comments
-    </sql>
-    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.UserExample">
-        select
-        <if test="distinct">
-            distinct
-        </if>
-        <include refid="Base_Column_List" />
-        from user
-        <if test="_parameter != null">
-            <include refid="Example_Where_Clause" />
-        </if>
-        <if test="orderByClause != null">
-            order by ${orderByClause}
-        </if>
-    </select>
-    <select id="findAllUsers" resultMap="BaseResultMap" >
-        select
-        <if test="distinct">
-            distinct
-        </if>
-        <include refid="Base_Column_List" />
-        from user
-        <if test="_parameter != null">
-            <include refid="Example_Where_Clause" />
-        </if>
-        <if test="orderByClause != null">
-            order by ${orderByClause}
-        </if>
-    </select>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
-        select
-        <include refid="Base_Column_List" />
-        from user
-        where id = #{id,jdbcType=VARCHAR}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-        delete from user
-        where id = #{id,jdbcType=VARCHAR}
-    </delete>
-    <!-- 逻辑删除 -->
-    <delete id="deleteUsers" parameterType="java.util.List">
-    	<!-- delete from user where id in -->
-    	update user set delFlg = '1' where id in 
-        <foreach item="idList" collection="list" open="(" close=")" separator=",">
-            #{idList}
-        </foreach>
-    </delete>
-    <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.UserExample">
-        delete from user
-        <if test="_parameter != null">
-            <include refid="Example_Where_Clause" />
-        </if>
-    </delete>
-    <insert id="insert" parameterType="com.congmai.zhgj.web.model.User">
-        insert into user (id, loginName, password, userName, idNumber, station, telphone, email, 
-        state, delFlg, creator, createTime, updater, updateTime, comments)
-        values (#{id,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, #{password,jdbcType=CHAR},#{userName,jdbcType=VARCHAR}, 
-        #{idNumber,jdbcType=VARCHAR},#{station,jdbcType=VARCHAR},#{telphone,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},
-        #{state,jdbcType=VARCHAR},#{delFlg,jdbcType=CHAR},#{creator,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},
-        #{updater,jdbcType=VARCHAR},#{updateTime,jdbcType=TIMESTAMP},#{comments,jdbcType=VARCHAR})
-    </insert>
-    <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.User">
-        insert into user
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
-            <if test="loginName != null">
-                loginName,
-            </if>
-            <if test="password != null">
-                password,
-            </if>
-            <if test="userName != null">
-                userName,
-            </if>
-            <if test="idNumber != null">
-                idNumber,
-            </if>
-            <if test="station != null">
-                station,
-            </if>
-            <if test="telphone != null">
-                telphone,
-            </if>
-            <if test="email != null">
-                email,
-            </if>
-            <if test="state != null">
-                state,
-            </if>
-            <if test="delFlg != null">
-                delFlg,
-            </if>
-            <if test="creator != null">
-                creator,
-            </if>
-            
-            <if test="createTime != null">
-                createTime,
-            </if>
-            <if test="updater != null">
-                updater,
-            </if>
-            <if test="updateTime != null">
-                updateTime,
-            </if>
-            <if test="comments != null">
-                comments,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=VARCHAR},
-            </if>
-            <if test="loginName != null">
-                #{loginName,jdbcType=VARCHAR},
-            </if>
-            <if test="password != null">
-                #{password,jdbcType=CHAR},
-            </if>
-            
-            <if test="userName != null">
-                #{userName,jdbcType=VARCHAR},
-            </if>
-            <if test="idNumber != null">
-                #{idNumber,jdbcType=VARCHAR},
-            </if>
-            <if test="station != null">
-               #{station,jdbcType=VARCHAR},
-            </if>
-            
-            <if test="telphone != null">
-                #{telphone,jdbcType=VARCHAR},
-            </if>
-            <if test="email != null">
-                #{email,jdbcType=VARCHAR},
-            </if>            
-            <if test="state != null">
-                #{state,jdbcType=VARCHAR},
-            </if>
-             <if test="delFlg != null">
-                #{delFlg,jdbcType=CHAR},
-            </if>
-            <if test="creator != null">
-                #{creator,jdbcType=VARCHAR},
-            </if>
-            <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updater != null">
-               #{updater,jdbcType=VARCHAR},
-            </if>
-            <if test="updateTime != null">
-                #{updateTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="comments != null">
-                #{comments,jdbcType=VARCHAR},
-            </if>
-        </trim>
-    </insert>
-    <select id="countByExample" parameterType="com.congmai.zhgj.web.model.UserExample" resultType="java.lang.Integer">
-        select count(*) from user
-        <if test="_parameter != null">
-            <include refid="Example_Where_Clause" />
-        </if>
-    </select>
-    <update id="updateByExampleSelective" parameterType="map">
+	
+	<!-- 用户登录验证查询 -->
+	<select id="authentication" resultMap="BaseResultMap"
+		parameterType="map">
+		select
+		*
+		from user
+		where account = #{record.account,jdbcType=VARCHAR} and password =
+		#{record.password,jdbcType=VARCHAR}
+	</select>
+    
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.congmai.zhgj.web.model.UserExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	
+	<update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.User">
         update user
         <set>
-            <if test="user.id != null">
-                id = #{user.id,jdbcType=VARCHAR},
+            <if test="avatar != null">
+                avatar = #{avatar,jdbcType=VARCHAR},
             </if>
-            <if test="user.loginName != null">
-                loginName = #{loginName,jdbcType=VARCHAR},
-            </if>
-            <if test="user.password != null">
-                password = #{user.password,jdbcType=CHAR},
-            </if>
-            <if test="user.userName != null">
-                userName = #{userName,jdbcType=VARCHAR},
-            </if>
-            <if test="user.idNumber != null">
-                idNumber = #{idNumber,jdbcType=VARCHAR},
-            </if>
-            
-            <if test="user.station != null">
-                station = #{station,jdbcType=VARCHAR},
-            </if>
-            <if test="user.telphone != null">
-                telphone = #{telphone,jdbcType=VARCHAR},
-            </if>
-            <if test="user.email != null">
-                email = #{email,jdbcType=VARCHAR},
-            </if>
-            <if test="user.state != null">
-                state = #{user.state,jdbcType=VARCHAR},
-            </if>
-            <if test="user.delFlg != null">
-                delFlg = #{delFlg,jdbcType=CHAR},
-            </if>
-            
-            <if test="user.creator != null">
-                creator = #{creator,jdbcType=VARCHAR},
-            </if>
-            <if test="user.createTime != null">
-                createTime = #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="user.updater != null">
-                updater = #{updater,jdbcType=VARCHAR},
-            </if>
-            <if test="user.updateTime != null">
-                updateTime = #{updateTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="user.comments != null">
-                comments = #{comments,jdbcType=VARCHAR},
-            </if>
-        </set>
-        <if test="_parameter != null">
-            <include refid="Update_By_Example_Where_Clause" />
-        </if>
-    </update>
-    <update id="updateByExample" parameterType="map">
-        update user
-        set id = #{id,jdbcType=VARCHAR},
-        loginName = #{loginName,jdbcType=VARCHAR},
-        password = #{password,jdbcType=CHAR},
-        userName = #{userName,jdbcType=VARCHAR},
-        idNumber = #{idNumber,jdbcType=VARCHAR},
-        station = #{station,jdbcType=VARCHAR},
-        telphone = #{telphone,jdbcType=VARCHAR},
-        email = #{email,jdbcType=VARCHAR},
-        state = #{state,jdbcType=VARCHAR},
-        delFlg = #{delFlg,jdbcType=CHAR},
-        creator = #{creator,jdbcType=VARCHAR},
-        createTime = #{createTime,jdbcType=TIMESTAMP},
-        updater = #{updater,jdbcType=VARCHAR},
-        updateTime = #{updateTime,jdbcType=TIMESTAMP},
-        comments = #{comments,jdbcType=VARCHAR}
-        <if test="_parameter != null">
-            <include refid="Update_By_Example_Where_Clause" />
-        </if>
-    </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.User">
-        update user
-        <set>
-            <if test="loginName != null">
-                loginName = #{loginName,jdbcType=VARCHAR},
+            <if test="account != null">
+                account = #{account,jdbcType=VARCHAR},
             </if>
             <if test="password != null">
-                password = #{password,jdbcType=CHAR},
+                password = #{password,jdbcType=VARCHAR},
             </if>
-            <if test="userName != null">
-                userName = #{userName,jdbcType=VARCHAR},
-            </if>
-            <if test="idNumber != null">
-                idNumber = #{idNumber,jdbcType=VARCHAR},
+            <if test="salt != null">
+                salt = #{salt,jdbcType=VARCHAR},
             </if>
             
-            <if test="station != null">
-                station = #{station,jdbcType=VARCHAR},
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
             </if>
-            <if test="telphone != null">
-                telphone = #{telphone,jdbcType=VARCHAR},
+            <if test="birthday != null">
+                birthday = #{birthday,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sex != null">
+                sex = #{sex,jdbcType=INTEGER},
             </if>
             <if test="email != null">
                 email = #{email,jdbcType=VARCHAR},
             </if>
-            <if test="state != null">
-                state = #{state,jdbcType=VARCHAR},
-            </if>
-            <if test="delFlg != null">
-                delFlg = #{delFlg,jdbcType=CHAR},
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
             </if>
             
-            <if test="creator != null">
-                creator = #{creator,jdbcType=VARCHAR},
+            <if test="roleid != null">
+                roleid = #{roleid,jdbcType=VARCHAR},
             </if>
-            <if test="createTime != null">
-                createTime = #{createTime,jdbcType=TIMESTAMP},
+            <if test="deptid != null">
+                deptid = #{deptid,jdbcType=INTEGER},
             </if>
-            <if test="updater != null">
-                updater = #{updater,jdbcType=VARCHAR},
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
             </if>
-            <if test="updateTime != null">
-                updateTime = #{updateTime,jdbcType=TIMESTAMP},
+            <if test="createtime != null">
+                createtime = #{createtime,jdbcType=TIMESTAMP},
             </if>
-            <if test="comments != null">
-                comments = #{comments,jdbcType=VARCHAR},
+            <if test="version != null">
+                version = #{version,jdbcType=INTEGER},
             </if>
         </set>
-        where id = #{id,jdbcType=VARCHAR}
-    </update>
-    
-   <select id="isUserExist" parameterType="com.congmai.zhgj.web.model.User" resultType="java.lang.Integer">
-        select count(*) from user
-        where loginName = #{loginName,jdbcType=VARCHAR}
-    </select>
-    
-    
-    <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.User">
-        update user
-        set loginName = #{loginName,jdbcType=VARCHAR},
-        password = #{password,jdbcType=CHAR},
-        userName = #{userName,jdbcType=VARCHAR},
-        idNumber = #{idNumber,jdbcType=VARCHAR},
-        station = #{station,jdbcType=VARCHAR},
-        telphone = #{telphone,jdbcType=VARCHAR},
-        email = #{email,jdbcType=VARCHAR},
-        state = #{state,jdbcType=VARCHAR},
-        delFlg = #{delFlg,jdbcType=CHAR},
-        creator = #{creator,jdbcType=VARCHAR},
-        createTime = #{createTime,jdbcType=TIMESTAMP},
-        updater = #{updater,jdbcType=VARCHAR},
-        updateTime = #{updateTime,jdbcType=TIMESTAMP},
-        comments = #{comments,jdbcType=VARCHAR}
-        where id = #{id,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <!-- 用户登录验证查询 -->
-    <select id="authentication" resultMap="BaseResultMap" parameterType="map">
-        select
-        <include refid="Base_Column_List" />
-        from user
-        where loginName = #{record.loginName,jdbcType=VARCHAR} and password = #{record.password,jdbcType=CHAR}
-    </select>
-
-    <!-- 分页条件查询 -->
-    <select id="selectByExampleAndPage" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.UserExample">
-        select
-        <if test="distinct">
-            distinct
-        </if>
-        <include refid="Base_Column_List" />
-        from user
-        <if test="_parameter != null">
-            <include refid="Example_Where_Clause" />
-        </if>
-        <if test="orderByClause != null">
-            order by ${orderByClause}
-        </if>
-    </select>
-    
 </mapper>

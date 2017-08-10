@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+=======
+<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8" %>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
+>>>>>>> 20170809
 <!-- BEGIN PAGE HEADER-->
 <h3 class="page-title"> 物料列表
     <small></small>
@@ -40,15 +45,24 @@
 					<i class="fa fa-globe"></i>物料列表
 				</div>
 				<div class="actions">
+					 <shiro:hasPermission name="materiel_add"> 
 					<a href="javascript:;" ui-sref="addMateriel"
 						 class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-plus"></i> 添加
 					</a> 
+					</shiro:hasPermission>
+					<shiro:hasPermission name="materiel_edit"> 
 					<a href="javascript:;" ng-click="editMateriel()"
 						 class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-edit"></i> 修改
 					</a>
+<<<<<<< HEAD
 					<a href="javascript:;" ng-click="deleteMateriel()"
+=======
+					</shiro:hasPermission>
+					<a href="javascript:;" data-target="#delMaterielModal"
+						data-toggle="modal" 
+>>>>>>> 20170809
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-minus"></i> 删除
 					</a>
