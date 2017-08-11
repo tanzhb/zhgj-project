@@ -13,7 +13,7 @@ import com.congmai.zhgj.web.model.User;
  * @Date 2017年7月26日 下午2:55:25
  * @version 1.0.0
  */
-public interface UserService extends GenericService<User, String> {
+public interface UserService extends GenericService<User, Integer> {
 
     /**
      * 用户验证
@@ -22,28 +22,7 @@ public interface UserService extends GenericService<User, String> {
      * @return
      */
     User authentication(User user);
-
-    /**
-     * 
-     * @Description 查找所有用户信息
-     * @return
-     */
-    List<User> findAllUsers();
-    
-    /**
-     * 
-     * @Description 某用户是否存在
-     * @param user
-     * @return
-     */
-    boolean isUserExist(User user);
-    /**
-     * 
-     * @Description 通过id找用户
-     * @param id
-     * @return
-     */
-    User selectById(String id);
+ 
     /**
      * 
      * @Description 通过用户名找用户
@@ -51,13 +30,7 @@ public interface UserService extends GenericService<User, String> {
      * @return
      */
 	User selectByUsername(String name);
-    /**
-     * 
-     * @Description 添加用户
-     * @param id
-     * @return
-     */
-	int insert(User user);
+	
     /**
      * 
      * @Description 更新用户
@@ -65,18 +38,5 @@ public interface UserService extends GenericService<User, String> {
      * @return
      */
 	int update(User user);
-    /**
-     * 
-     * @Description 根据id删除某用户
-     * @param id
-     * @return
-     */
-	int delete(String id);
-    /**
-     * 
-     * @Description 批量删除
-     * @param ids
-     * @return
-     */
-	void deleteUsers(String ids);
+ 
 }

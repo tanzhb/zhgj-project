@@ -2,18 +2,22 @@
  * 
  */
 
-angular.module('MetronicApp').controller('CompanyController',['$rootScope','$scope','$state','$http','companyService','$location','$compile','$stateParams',function($rootScope,$scope,$state,$http,companyService,$location,$compile,$stateParams) {
+angular.module('MetronicApp').controller('CompanyController',['$rootScope','$scope','$state','$http','companyService','$location','$compile','$stateParams','FileUploader',function($rootScope,$scope,$state,$http,companyService,$location,$compile,$stateParams,FileUploader) {
 	 $scope.$on('$viewContentLoaded', function() {   
 	    	// initialize core components
+		 	
 		    handle = new pageHandle();
 	    	App.initAjax();
 	    	if($location.path()=="/companyAdd"){
 	    		handle.pageRepeater();
 	    		_index = 0; 
 	    		$scope.companyQualifications =[{}];
-	    		 handle.datePickersInit();
-	    		 
+	    		handle.datePickersInit();
 	    		getCompanyInfo($stateParams.comId);
+	    		//qualificationFormValid();
+	    		validatorInit();
+	    		
+	    		
 	 		}else{
 	 			//createTable(15,1,true);
 	 			loadTable();
@@ -29,10 +33,84 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        $rootScope.settings.layout.pageBodySolid = false;
 	        $rootScope.settings.layout.pageSidebarClosed = false;
 	        console.log("------------->"+$scope.company);
-	       
 	    	
 	 });
 	 
+	 var validatorInit= function(){
+		 
+		 if ($.validator) {
+	           $.validator.prototype.elements = function () {
+	               var validator = this,
+	                 rulesCache = {};
+	 
+	               // select all valid inputs inside the form (no submit or reset buttons)
+	               return $(this.currentForm)
+	               .find("input, select, textarea")
+	               .not(":submit, :reset, :image, [disabled]")
+	               .not(this.settings.ignore)
+	               .filter(function () {
+	                   if (!this.name && validator.settings.debug && window.console) {
+	                       console.error("%o has no name assigned", this);
+	                   }
+	                   //注释这行代码
+	                   // select only the first element for each name, and only those with rules specified
+	                   //if ( this.name in rulesCache || !validator.objectLength($(this).rules()) ) {
+	                   //    return false;
+	                   //}
+	                   rulesCache[this.name] = true;
+	                   return true;
+	               });
+	           }
+	    }
+		 
+	 }
+	 
+	  //创建对象
+	  var uploader = $scope.uploader = new FileUploader({url:'rest/fileOperate/uploadSingleFile'});
+	 
+	  uploader.onAfterAddingFile = function(item){
+		  if(item.file.size>10000000){
+			  //toastr.warning("文件大小超过10M！");
+			  uploader.cancelAll();
+		  }
+	  }
+	  //添加文件到上传队列后
+	  uploader.onCompleteAll = function () {
+		  uploader.clearQueue();
+	  };
+	  //上传成功
+	  uploader.onSuccessItem = function (fileItem,response, status, headers) {
+		  if (status == 200){ 
+			  if(response==""){
+				  toastr.error("上传失败！");
+				  return;
+			  }
+		  		toastr.success("上传成功！");
+		  	  for(var i=0;i < $scope.companyQualifications.length;i++){
+		  		  if($scope.qualification_temp==$scope.companyQualifications[i]){
+		  			$scope.companyQualifications[i].qualificatioImage = response;
+		  		  }
+		  	  }
+		  }else{
+			  toastr.error("上传失败！");
+			  $scope.qualification_temp.qualificatioImage = response;
+		  }
+		};
+	  //上传失败
+	  uploader.onErrorItem = function (fileItem, response, status, headers) {
+			toastr.error("上传失败！");
+	  };
+	  
+	  $scope.uploadFile = function(item){
+		  $scope.qualification_temp = item;
+	  }
+	  
+	  $scope.up = function(file){
+		  uploader.clearQueue();
+		  uploader.addToQueue(file);
+		  uploader.uploadAll();
+	  }
+		
 	 var table;
 	 /** 加载列表 Start**/
 	 var loadTable = function(){
@@ -247,141 +325,75 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		
 		// 页面加载完成后调用，验证输入框
 		$scope.$watch('$viewContentLoaded', function() {  
-		            var form1 = $('#qualificationForm');
-		            var error1 = $('.alert-danger', form1);
-		            var success1 = $('.alert-success', form1);
-		            /*form1.validator.prototype.elements = function () {
-		                var validator = this,
-		                 rulesCache = {};
-		                return $(this.currentForm)
-		                .find("input, select, textarea")
-		                .not(":submit, :reset, :image, [disabled]")
-		                .not(this.settings.ignore)
-		                .filter(function () {
-		                 if (!this.name && validator.settings.debug && window.console) {
-		                  console.error("%o has no name assigned", this);
-		                 }
-		                 rulesCache[this.name] = true;
-		                 return true;
-		                });
-		           }*/
-		            form1.validate({
-		                errorElement: 'span', //default input error message container
-		                errorClass: 'help-block help-block-error', // default input error message class
-		                focusInvalid: false, // do not focus the last invalid input
-		                ignore: "",  // validate all fields including form hidden input
-		                messages:  {
-		                	qualificationName:{required:"资质名称不能为空！"},
-		                	qualificationNum:{required:"资质号码不能为空！"},
-		                	validityDate:{required:"有效期不能为空！"}
-			            },
-		                rules: {
-		                	qualificationName: {
-								required: !0
-							},
-							qualificationNum: {
-								required: !0
-							},
-							validityDate: {
-								required: !0
-							}
-		                },
-
-		                invalidHandler: function (event, validator) { //display error alert on form submit              
-		                    success1.hide();
-		                    error1.show();
-		                    App.scrollTo(error1, -200);
-		                },
-
-		                errorPlacement: function (error, element) { // render error placement for each input type
-		                    var cont = $(element).parent('.input-group');
-		                    if (cont.size() > 0) {
-		                        cont.after(error);
-		                    } else {
-		                        element.after(error);
-		                    }
-		                },
-
-		                highlight: function (element) { // hightlight error inputs
-
-		                    $(element)
-		                        .closest('.form-group').addClass('has-error'); // set error class to the control group
-		                },
-
-		                unhighlight: function (element) { // revert the change done by hightlight
-		                    $(element)
-		                        .closest('.form-group').removeClass('has-error'); // set error class to the control group
-		                },
-
-		                success: function (label) {
-		                    label
-		                        .closest('.form-group').removeClass('has-error'); // set success class to the control group
-		                },
-
-		                submitHandler: function (form) {
-		                    success1.show();
-		                    error1.hide();
-		                }
-		            });
-
-			
-		           
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			/*var e = $("#qualificationForm"),
-			r = $(".alert-danger", e),
-			i = $(".alert-success", e);
-			e.validate({
-				errorElement: "span",
-				errorClass: "help-block help-block-error",
-				focusInvalid: !1,
-				ignore: "",
-				messages: {
-					qualificationName:{required:"资质名称不能为空！"},
-					qualificationNum:{required:"资质号码不能为空！"},
-					validityDate:{required:"有效期不能为空！"}
-				},
-				rules: {
-					qualificationName: {
-						required: !0
-					},
-					qualificationNum: {
-						required: !0
-					},
-					validityDate: {
-						required: !0
-					}
-				},
-				invalidHandler: function(e, t) {
-					i.hide(),
-					r.show(),
-					App.scrollTo(r, -200)
-				},
-				errorPlacement: function(e, r) {
-					r.is(":checkbox") ? e.insertAfter(r.closest(".md-checkbox-list, .md-checkbox-inline, .checkbox-list, .checkbox-inline")) : r.is(":radio") ? e.insertAfter(r.closest(".md-radio-list, .md-radio-inline, .radio-list,.radio-inline")) : e.insertAfter(r)
-				},
-				highlight: function(e) {
-					$(e).closest(".form-group").addClass("has-error")
-				},
-				unhighlight: function(e) {
-					$(e).closest(".form-group").removeClass("has-error")
-				},
-				success: function(e) {
-					e.closest(".form-group").removeClass("has-error")
-				},
-				submitHandler: function(e) {
-					i.show(),
-					r.hide()
-				}
-			})   */
+			qualificationFormValid();
 		}); 
+		
+		
+		var qualificationFormValid = function(){
+			 var form1 = $('#qualificationForm');
+	            var error1 = $('.alert-danger', form1);
+	            var success1 = $('.alert-success', form1);
+	            form1.validate({
+	                errorElement: 'span', //default input error message container
+	                errorClass: 'help-block help-block-error', // default input error message class
+	                focusInvalid: false, // do not focus the last invalid input
+	                ignore: "",  // validate all fields including form hidden input
+	                messages:  {
+	                	qualificationName:{required:"资质名称不能为空！"},
+	                	qualificationNum:{required:"资质号码不能为空！"},
+	                	validityDate:{required:"有效期不能为空！"}
+		            },
+	                rules: {
+	                	qualificationName: {
+							required: !0
+						},
+						qualificationNum: {
+							required: !0
+						},
+						validityDate: {
+							required: !0
+						}
+	                },
+
+	                invalidHandler: function (event, validator) { //display error alert on form submit              
+	                    success1.hide();
+	                    error1.show();
+	                    App.scrollTo(error1, -200);
+	                },
+
+	                errorPlacement: function (error, element) { // render error placement for each input type
+	                    var cont = $(element).parent('.input-group');
+	                    if (cont.size() > 0) {
+	                        cont.after(error);
+	                    } else {
+	                        element.after(error);
+	                    }
+	                },
+
+	                highlight: function (element) { // hightlight error inputs
+
+	                    $(element)
+	                        .closest('.form-group').addClass('has-error'); // set error class to the control group
+	                },
+
+	                unhighlight: function (element) { // revert the change done by hightlight
+	                    $(element)
+	                        .closest('.form-group').removeClass('has-error'); // set error class to the control group
+	                },
+
+	                success: function (label) {
+	                    label
+	                        .closest('.form-group').removeClass('has-error'); // set success class to the control group
+	                },
+
+	                submitHandler: function (form) {
+	                    success1.show();
+	                    error1.hide();
+	                }
+	            });
+		}
+		
+		
 		// 页面加载完成后调用，验证输入框
 		$scope.$watch('$viewContentLoaded', function() {  
 			var e = $("#contactForm"),
@@ -568,7 +580,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        		promise.then(function(data){
 	        			if(!handle.isNull(data.data)){
 	        				$(".modal-backdrop").remove();
-		        			handle.toastr.success("保存成功");
+		        			toastr.success("保存成功");
 		        			handle.unblockUI();
 		        			var company = data.data;
 		        			//$state.go('companyAdd',company,{reload:true});
@@ -583,7 +595,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        			}else{
 	        				$(".modal-backdrop").remove();
 		        			handle.unblockUI();
-	        				handle.toastr.error("保存失败！请联系管理员");
+	        				toastr.error("保存失败！请联系管理员");
 			            	console.log(data);
 	        			}
 	        			
@@ -591,7 +603,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        			//调用承诺接口reject();
 	        			$(".modal-backdrop").remove();
 	        			handle.unblockUI();
-	        			handle.toastr.error("保存失败！请联系管理员");
+	        			toastr.error("保存失败！请联系管理员");
 		            	console.log(data);
 	        		});
 	        	}
@@ -624,9 +636,9 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 				// Iterate over all checkboxes in the table
 				var id_count = table.$('input[type="checkbox"]:checked').length;
 				if(id_count==0){
-					handle.toastr.warning("请选择您要编辑的记录");
+					toastr.warning("请选择您要编辑的记录");
 				}else if(id_count>1){
-					handle.toastr.warning("只能选择一条数据进行编辑");
+					toastr.warning("只能选择一条数据进行编辑");
 				}else{
 					var comId = table.$('input[type="checkbox"]:checked').val();
 					$state.go("companyAdd",{comId:comId});
@@ -643,17 +655,17 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        		var promise = companyService.deleteCompany(comId);
 	        		promise.then(function(data){
 	        			if(data.data == "1"){
-	        				handle.toastr.success("删除成功");
+	        				toastr.success("删除成功");
 		        			handle.unblockUI();
 			        		 $state.go('company',{},{reload:true}); 
 	        			}else{
-	        				handle.toastr.error("保存失败！请联系管理员");
+	        				toastr.error("保存失败！请联系管理员");
 			            	console.log(data);
 	        			}
 	        			
 	 	            },function(data){
 	 	               //调用承诺接口reject();
-	 	            	handle.toastr.error("保存失败！请联系管理员");
+	 	            	toastr.error("保存失败！请联系管理员");
 		            	console.log(data);
 	 	            });
 	        		
@@ -668,7 +680,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        $scope.deleteCompanyBatch=function () {
 	        	var id_count = table.$('input[type="checkbox"]:checked').length;
 				if(id_count==0){
-					handle.toastr.warning("请选择您要删除的记录");
+					toastr.warning("请选择您要删除的记录");
 					return;
 				}
 	        	handle.confirm("确定删除吗？",function(){
@@ -692,7 +704,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        		handle.blockUI();
 	        		var promise = companyService.deleteCompanyBatch(ids);
 	        		promise.then(function(data){
-	        			handle.toastr.success("删除成功");
+	        			toastr.success("删除成功");
 	        			handle.unblockUI();
 	        			table.ajax.reload(); // 重新加载datatables数据
 	        			/*$state.go('company',{},{reload:true}); */
@@ -749,8 +761,11 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        * 保存企业资质信息
 	        */
 	       $scope.saveCompanyQualification = function(){
+	    	   //$.validator.unobtrusive.parse($("#qualificationForm"));
+	    	    //qualificationFormValid();
+	    		//validatorInit();
 		    	if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
-		    		 handle.toastr.warning("您的企业信息还未保存！");
+		    		 toastr.warning("您的企业信息还未保存！");
 		    		 return;
 		    	}else{
 		    		for(var i=0;i<$scope.companyQualifications.length;i++){
@@ -766,7 +781,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		        	promise.then(function(data){
 		        		//$(".modal-backdrop").remove();
 		        		if(!handle.isNull(data.data)){
-			        		handle.toastr.success("保存成功");
+			        		toastr.success("保存成功");
 			        		handle.unblockUI();
 			        		//$scope.companyQualifications = data.data;
 			        		getCompanyInfo($scope.company.comId,'companyQualification');
@@ -774,13 +789,13 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 			        		$scope.companyQualificationAdd = true;
 			        		$scope.companyQualificationEdit = false;
 		        		}else{
-		        			handle.toastr.error("保存失败！请联系管理员");
+		        			toastr.error("保存失败！请联系管理员");
 			        		handle.unblockUI();
 		        		}
 		            },function(data){
 		            	handle.unblockUI();
 		               //调用承诺接口reject();
-		            	handle.toastr.error("保存失败！请联系管理员");
+		            	toastr.error("保存失败！请联系管理员");
 		            	console.log(data);
 		            });
 		    	}
@@ -792,6 +807,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        * 编辑企业资质信息
 	        */
 	       $scope.editCompanyQualification = function(){
+	    	    getCompanyInfo($scope.company.comId,'companyQualification');
 	    	   	$scope.companyQualificationView = false;
        			$scope.companyQualificationAdd = false;
        			$scope.companyQualificationEdit = true;
@@ -806,7 +822,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        		var promise = companyService.deleteCompanyQualification(serialNum);
 	        		promise.then(function(data){
 	        			//handle.showMesssage("success","删除成功","提示");
-	        			handle.toastr.success("删除成功");
+	        			toastr.success("删除成功");
 	        			handle.unblockUI();
 		        		// $state.go('company',{},{reload:true}); 
 	 	            },function(data){
@@ -831,7 +847,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        */
 	       $scope.saveCompanyContact = function(){
 		    	if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
-		    		 handle.toastr.warning("您的企业信息还未保存");
+		    		 toastr.warning("您的企业信息还未保存");
 		    		 return;
 		    	}else{
 		    		if(handle.isNull($scope.companyContact)){
@@ -847,17 +863,17 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		        	promise.then(function(data){
 		        		//$(".modal-backdrop").remove();
 		        		if(!handle.isNull(data.data)){
-			        		handle.toastr.success("保存成功");
+			        		toastr.success("保存成功");
 			        		$("#contactor").modal("hide");
 			        		$scope.companyContact = {};
 			        		$scope.companyContacts = data.data;
 		        		}else{
 		        			$("#contactor").modal("hide");
-		        			handle.toastr.error("保存失败！请联系管理员");
+		        			toastr.error("保存失败！请联系管理员");
 		        		}
 		            },function(data){
 		               //调用承诺接口reject();
-		            	handle.toastr.error("保存失败！请联系管理员");
+		            	toastr.error("保存失败！请联系管理员");
 		            	console.log(data);
 		            });
 		    	}
@@ -869,7 +885,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        */
 	       $scope.addCompanyContact = function(){
 	    	   if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
-		    		 handle.toastr.warning("您的企业信息还未保存");
+		    		 toastr.warning("您的企业信息还未保存");
 		    		 return;
 		       }else{
 		    	   $scope.companyContact = {};
@@ -902,7 +918,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        		var promise = companyService.deleteCompanyContact(serialNum);
 	        		promise.then(function(data){
 	        			//handle.showMesssage("success","删除成功","提示");
-	        			handle.toastr.success("删除成功");
+	        			toastr.success("删除成功");
 	        			handle.unblockUI();
 	        			 for(var i=0;i<$scope.companyContacts.length;i++){
 		       	    		   if($scope.companyContacts[i].serialNum==serialNum){
@@ -923,7 +939,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        */
 	       $scope.saveCompanyFinance = function(){
 	    		if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
-		    		 handle.toastr.warning("您的企业信息还未保存");
+		    		 toastr.warning("您的企业信息还未保存");
 		    		 return;
 		    	}else{
 		    		if(handle.isNull($scope.companyFinance)){
@@ -939,19 +955,19 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		        	promise.then(function(data){
 		        		//$(".modal-backdrop").remove();
 		        		if(!handle.isNull(data.data)){
-		        			handle.toastr.success("保存成功");
+		        			toastr.success("保存成功");
 			        		$("#finance").modal("hide");
 			        		$scope.companyFinance = {};
 			        		$scope.companyFinances = data.data;
 		        		}else{
 		        			$("#finance").modal("hide");
-		        			handle.toastr.error("保存失败！请联系管理员");
+		        			toastr.error("保存失败！请联系管理员");
 		        			console.log(data);
 		        		}
 		        		
 		            },function(data){
 		               //调用承诺接口reject();
-		            	handle.toastr.error("保存失败！请联系管理员");
+		            	toastr.error("保存失败！请联系管理员");
 		            	console.log(data);
 		            });
 	    		}
@@ -963,7 +979,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        */
 	       $scope.addCompanyFinance = function(){
 	    	   if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
-		    		 handle.toastr.warning("您的企业信息还未保存");
+		    		 toastr.warning("您的企业信息还未保存");
 		    		 return;
 		       }else{
 		    	   $scope.companyFinance = {};
@@ -995,7 +1011,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        		var promise = companyService.deleteCompanyFinance(serialNum);
 	        		promise.then(function(data){
 	        			//handle.showMesssage("success","删除成功","提示");
-	        			handle.toastr.success("删除成功");
+	        			toastr.success("删除成功");
 	        			handle.unblockUI();
 	        			  for(var i=0;i<$scope.companyFinances.length;i++){
 		       	    		   if($scope.companyFinances[i].serialNum==serialNum){
@@ -1029,7 +1045,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        */
 	       $scope.addRepeat = function(){
 	    	   if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
-		    		 handle.toastr.warning("您的企业信息还未保存");
+		    		 toastr.warning("您的企业信息还未保存");
 		    		 return;
 		       }else{
 		    	   _index++;
@@ -1040,8 +1056,14 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	       /**
 	        * 企业资质删除一行
 	        */
-	       $scope.deleteRepeat = function(){
-	    	   $scope.companyQualifications.splice(_index,1);
+	       $scope.deleteRepeat = function(obj){
+	    	   //$scope.companyQualifications.splice(_index,1);
+	    	   for(var i=0;i<$scope.companyQualifications.length;i++){
+   	    		   if($scope.companyQualifications[i]==obj){
+   	    			   $scope.companyQualifications.splice(i,1);
+   	    			   break;
+   	    		   }
+	    	   }
 	    	   _index--;
 	       };
 	       
@@ -1050,6 +1072,12 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        */
 	       $scope.repeatDone = function(){
 	    	   handle.datePickersInit();
+	    	   //$("#qualificationForm").removeData("validator").removeData("unobtrusiveValidation");
+	    	 
+	    	   //$.validator.parse($("#qualificationForm"));
+	    	   //qualificationFormValid();
+	    	  // validatorInit();
+	    	  
 	       };
 	       
 	       /**
@@ -1160,12 +1188,12 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	       $scope.uploadExcel = function(){
 	    	    var file = document.querySelector('input[type=file]').files[0];
 	    	    if(handle.isNull(file)){
-	    	    	handle.toastr.warning("请选择Excel文件！");
+	    	    	toastr.warning("请选择Excel文件！");
 	    	    }
 	    	    console.log(file.name);
 	    	    var type = file.name.substring(file.name.lastIndexOf("."));
 	    	   if(type != ".xls"){
-	    		   handle.toastr.warning("文件格式不正确，需要xls类型的Excel文档");
+	    		   toastr.warning("文件格式不正确，需要xls类型的Excel文档");
 	    		   return;
 	    	   }
 	    	   	handle.blockUI("正在导入中，请不要进行其他操作"); 
@@ -1173,15 +1201,15 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
        			promise.then(function(data){
        				handle.unblockUI(); 
        				if(data.data.data=="success"){
-       					handle.toastr.success("导入成功");
+       					toastr.success("导入成功");
        					table.ajax.reload();
        				}else{
-       					handle.toastr.error(data.data.data);
+       					toastr.error(data.data.data);
        				}
        				$('#import').modal('hide'); 
 	            },function(data){
 	               //调用承诺接口reject();
-	            	handle.toastr.error("操作失败");
+	            	toastr.error("操作失败");
 	            	$('#import').modal('hide'); 
 	            });
 	    	   
@@ -1192,8 +1220,25 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    	  //$(".fileinput-filename").val("");
 	    	  //$("#file_span").appendTo('<input type="file" file-model="excelFile" accept=".xls" name="...">');
 	       })
+	       
+	       
+	       $scope.downloadFile = function(obj){
+	    	   if(!handle.isNull(obj)){
+	    		   window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+obj.qualificatioImage;
+	    	   }else{
+	    		   toastr.error("下载失败!");
+	    	   }
+	       }
+	       
+	       $scope.removefile = function(obj){
+	    	   for(var i=0;i < $scope.companyQualifications.length;i++){
+			  		  if(obj == $scope.companyQualifications[i]){
+			  			$scope.companyQualifications[i].qualificatioImage = "";
+			  		  }
+			  	}
+	       }
 
-	         
+	   
 	       
 
 	       

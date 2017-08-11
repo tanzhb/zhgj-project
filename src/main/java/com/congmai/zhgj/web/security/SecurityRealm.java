@@ -12,14 +12,17 @@ import org.apache.shiro.authc.credential.DefaultPasswordService;
 import org.apache.shiro.authc.credential.PasswordService;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.stereotype.Component;
 
-import com.congmai.zhgj.web.model.Permission;
+import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.web.model.Menu;
 import com.congmai.zhgj.web.model.Role;
 import com.congmai.zhgj.web.model.User;
-import com.congmai.zhgj.web.service.PermissionService;
+import com.congmai.zhgj.web.service.MenuService;
 import com.congmai.zhgj.web.service.RoleService;
 import com.congmai.zhgj.web.service.UserService;
 
@@ -41,7 +44,7 @@ public class SecurityRealm extends AuthorizingRealm {
     private RoleService roleService;
 
     @Resource
-    private PermissionService permissionService;
+    private MenuService menuService;
 
     /**
      * 权限检查
@@ -50,21 +53,27 @@ public class SecurityRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         String loginName = String.valueOf(principals.getPrimaryPrincipal());
+        List<String> roleIdList = null;
+        
 
         final User user = userService.selectByUsername(loginName);
-        final List<Role> roleInfos = roleService.selectRolesByUserId(user.getId());
-        for (Role role : roleInfos) {
-            // 添加角色
-            System.err.println(role);
-            authorizationInfo.addRole(role.getRoleSign());
-
-            final List<Permission> permissions = permissionService.selectPermissionsByRoleId(role.getId());
-            for (Permission permission : permissions) {
-                // 添加权限
-                System.err.println(permission);
-                authorizationInfo.addStringPermission(permission.getPermissionSign());
-            }
+        if(user.getRoleid() != null){
+        	roleIdList = ApplicationUtils.getIdList(user.getRoleid());
+        	if(roleIdList != null && roleIdList.size() > 0 ){
+        		for(String roleId : roleIdList){
+        			Role role = roleService.selectRoleById(Integer.valueOf(roleId));
+        			authorizationInfo.addRole(role.getTips());// 添加角色
+        			
+        			final List<Menu> menus = menuService.selectMenusByRoleId(Integer.valueOf(roleId));
+        			
+        			for(Menu menu : menus){
+        				authorizationInfo.addStringPermission(menu.getCode());// 添加权限
+        			}
+        		}
+        	}
+        	
         }
+        
         return authorizationInfo;
     }
 
@@ -74,31 +83,22 @@ public class SecurityRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         String loginName = String.valueOf(token.getPrincipal());
-        String password = new String((char[]) token.getCredentials());
-        
-        PasswordService svc = new DefaultPasswordService();
-        
+        String credentials = new String((char[]) token.getCredentials());
         
         // 通过数据库进行验证
         final User authentication = userService.selectByUsername(loginName);
-        
-        if(authentication != null){  
-        	if(svc.passwordsMatch(password, authentication.getPassword())){
-        		return new SimpleAuthenticationInfo(loginName,password,getName());
-        	}else{  
-            	throw new AuthenticationException("用户名或密码错误.") ;
-            } 
-        }else{  
+        if(authentication == null){ 
         	throw new AuthenticationException("用户名或密码错误.") ;
-        }  
-//        String password = new String((char[]) token.getCredentials());
-//        // 通过数据库进行验证
-//        final User authentication = userService.authentication(new User(loginName, password));
-//        if (authentication == null) {
-//            throw new AuthenticationException("用户名或密码错误.");
-//        }
-//        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(loginName, password, getName());
-//        return authenticationInfo;
+        }
+        
+        String source = authentication.getSalt();        
+        if(!authentication.getPassword().equals(ShiroKit.md5(credentials, source))){
+        	throw new AuthenticationException("用户名或密码错误.") ;
+        }
+        
+        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(loginName, credentials, new Md5Hash(source), getName());
+        
+        return authenticationInfo;
     }
 
 }

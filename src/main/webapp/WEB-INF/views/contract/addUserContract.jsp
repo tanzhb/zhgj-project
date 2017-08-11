@@ -19,7 +19,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 		<div class="portlet-body form"  >
 			<!-- BEGIN FORM-->
-			<form class="horizontal-form" id="form_sample_1" name="myForm">
+			<form class="horizontal-form" id="form_sample_1" enctype="multipart/form-data" name="myForm"  ng-submit="saveUserContract()">
 				<div class="form-body">
 					<h3 class="form-section">基本信息</h3>
 					<div class="row">
@@ -44,7 +44,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         </label>
                         
                           <div class="col-md-9">
-                              <select class="form-control" ng-model="contractVO.contractType" name="contractType">
+                              <select class="form-control" ng-model="contractVO.contractType" id="contractType" name="contractType">
                                   <option value="">合同类型</option>
                                   <option value="采购合同">采购合同</option>
 								  <option value="销售合同">销售合同</option>
@@ -54,7 +54,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                               <span class="help-block">合同类型</span>
                           </div>
                       </div>
-						<!--/span-->
 					</div>
 					<!--/row-->
 					<div class="row">
@@ -65,7 +64,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         </label>
                         
                           <div class="col-md-9">
-                              <select class="form-control" ng-model="contractVO.serviceModel" name="serviceModel">
+                              <select class="form-control" ng-model="contractVO.serviceModel" id="serviceModel" name="serviceModel">
                                   <option value="">服务模式</option>
                                   <option value="仓储服务">仓储服务</option>
 								  <option value="仓储+垫资服务">仓储+垫资服务</option>
@@ -81,7 +80,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         </label>
                         
                           <div class="col-md-9">
-                              <select class="form-control" ng-model="contractVO.settlementClause" name="settlementClause">
+                              <select class="form-control" ng-model="contractVO.settlementClause" id="settlementClause" name="settlementClause">
                                   <option value="">结算条款</option>
                                   <option value="进销差">进销差</option>
 								  <option value="服务费">服务费</option>
@@ -94,7 +93,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                       </div>
 					
 					</div>
-					<!--/row-->
 					<div class="row">
 						<div class="form-group form-md-line-input col-md-6">
 						<label class="col-md-3 control-label" for="form_control_1">供应商
@@ -103,7 +101,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         
 							<div class="col-md-9">
 								<input type="text" class="form-control"
-									 ng-model="contractVO.comId" placeholder="供应商" name="comId"/>
+									 ng-model="contractVO.comId" placeholder="供应商" id="comId" name="comId"/>
 								<div class="form-control-focus"></div>
 								<span class="help-block">供应商</span>
 							</div>
@@ -161,7 +159,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         </label>
 							<div class="col-md-9">
 								<input type="text" class="form-control"
-									ng-model="contractVO.signer" placeholder="签订人" name="signer"/>
+									ng-model="contractVO.signer" placeholder="签订人" id="signer" name="signer"/>
 								<div class="form-control-focus"></div>
 								<span class="help-block">签订人</span>
 							</div>
@@ -172,39 +170,44 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         </label>
 							<div class="col-md-9">
 								<input type="text" class="form-control"
-									ng-model="contractVO.remark" placeholder="备注"/>
+									ng-model="contractVO.remark" id="remark" placeholder="备注"/>
 								<div class="form-control-focus"></div>
 								<span class="help-block">备注</span>
 							</div>
 						</div>
-						<!--/span-->
 					</div>
-					
+<!-- <img alt="" src="http://localhost:8080/zhgj-web/uploadAttachFiles/DD35839D47A74215935094E5FA9D4729.jpg"> -->
+
+
 					<div class="row">
 						<div class="form-group form-md-line-input col-md-6">
-						<label class="col-md-3 control-label" for="form_control_1">电子合同
-                            <span class="required">*</span>
-                        </label>
+							<label class="col-md-3 control-label" for="form_control_1">电子合同
+								<span class="required">*</span>
+							</label>
 							<div class="col-md-9">
-							 <input type="file" id="electric" onchange="uploadElectric(this)" class="form-control" /> 
-							<input type="hidden" ng-model="contractVO.electronicContract"/>
+								<input type="file" id="electric"  ng-model="files" name="files"
+									class="form-control" /> 
+									<div class="form-control-focus"></div>
+								<span class="help-block">电子合同</span>
 							</div>
 						</div>
-						
+
 						<div class="form-group form-md-line-input col-md-6">
-						<label class="col-md-3 control-label" for="form_control_1">签字合同
-                            <span class="required">*</span>
-                        </label>
+							<label class="col-md-3 control-label" for="form_control_1">签字合同
+								<span class="required">*</span>
+							</label>
 							<div class="col-md-9">
-								<input type="file" id="" onchange="uploadSign(this)" class="form-control" /> 
-								<input type="hidden" ng-model="contractVO.signContract"/>
+									<input type="file" id="signContract" ng-model="files" name="file"
+									class="form-control" /> 
+								<div class="form-control-focus"></div>
+								<span class="help-block">签字合同</span>
 							</div>
 						</div>
 					</div>
-					
-				 <div class="form-actions right">
+
+					<div class="form-actions right">
 					<button type="button" ng-click="goback()" class="btn default"><i class="fa fa-reply"></i>取消</button>
-					<button type="button" ng-click="saveUserContract()" class="btn blue"><i class="fa fa-check"></i> 保存</button>
+					<button type="submit"  class="btn blue"><i class="fa fa-check"></i> 保存</button>
 				</div>
 				
 			</form>
@@ -216,7 +219,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!-- BEGIN MAIN JS -->
  <script>
 
-     TableDatatablesManaged.init();
+/*      TableDatatablesManaged.init(); */
     
        $('#signDate').datepicker({
     	   language:"zh-CN",

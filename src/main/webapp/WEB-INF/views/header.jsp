@@ -275,12 +275,12 @@
 					</span> <i class="fa fa-angle-down"></i>
 				</a>
 					<ul class="dropdown-menu dropdown-menu-default">
-						<li><a href="#" ng-click="editPassword()"> <i class="icon-rocket"></i> 修改密码 
+						<li><a href="#" ng-click="editPassword()"> <i class="glyphicon glyphicon-edit"></i> 修改密码 
 						</a></li>
 						<li class="divider"></li>
-						<li><a href="#"> <i class="icon-lock"></i> 锁屏
+						<li><a href="#" ng-click="toggleFullScreen()"> <i class="glyphicon glyphicon-fullscreen"></i> 全 屏
 						</a></li>
-						<li><a href="rest/user/logout"> <i class="icon-key"></i>
+						<li><a href="rest/user/logout"> <i class="glyphicon glyphicon-off"></i>
 								退 出
 						</a></li>
 					</ul></li>

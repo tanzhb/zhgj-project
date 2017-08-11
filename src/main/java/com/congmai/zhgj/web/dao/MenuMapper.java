@@ -2,11 +2,9 @@ package com.congmai.zhgj.web.dao;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-
 import com.congmai.zhgj.core.generic.GenericDao;
+import com.congmai.zhgj.web.model.Menu;
 import com.congmai.zhgj.web.model.Role;
-import com.congmai.zhgj.web.model.RoleExample;
 
 /**
  * 
@@ -16,12 +14,12 @@ import com.congmai.zhgj.web.model.RoleExample;
  * @Date 2017年7月26日 下午2:47:18
  * @version 1.0.0
  */
-public interface RoleMapper extends GenericDao<Role, Integer> {
+public interface MenuMapper extends GenericDao<Menu, Integer> {
     /**
-     * 通过角色roleId 查询角色信息
+     * 通过角色id 查询角色 拥有的菜单
      * 
      * @param roleId
      * @return
      */
-    Role selectRoleById(Integer roleId);
+    List<Menu> selectMenusByRoleId(Integer roleId);
 }

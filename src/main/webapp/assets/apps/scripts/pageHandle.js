@@ -1,36 +1,7 @@
 pageHandle = (function(){
 	
-	var _showMesssage = function(status,message,title){
-            	Command:toastr[status](message, title);
-		     	toastr.options = {
-		     		  "closeButton": true,
-		     		  "debug": false,
-		     		  "positionClass": "toast-top-center",
-		     		  "showDuration": "1000",
-		     		  "hideDuration": "1000",
-		     		  "timeOut": "5000",
-		     		  "extendedTimeOut": "1000",
-		     		  "showEasing": "swing",
-		     		  "hideEasing": "linear",
-		     		  "showMethod": "fadeIn",
-		     		  "hideMethod": "fadeOut"
-		     	}  
-	}
 	
-	toastr.options = {
-			"closeButton": true,
-			"debug": false,
-			"positionClass": "toast-top-center",
-			"showDuration": "1000",
-			"hideDuration": "1000",
-			"timeOut": "5000",
-			"extendedTimeOut": "1000",
-			"showEasing": "swing",
-			"hideEasing": "linear",
-			"showMethod": "fadeIn",
-			"hideMethod": "fadeOut"
-	} 
-	
+
 	var _confirm = function(message,callbackOK,callbackCANCEL){
 		bootbox.confirm({
 			title: "提示",
@@ -167,7 +138,7 @@ pageHandle = (function(){
 	}
 	
 	var  constructor=function(){
-		this.showMesssage= _showMesssage;
+		//this.showMesssage= _showMesssage;
 		this.confirm = _confirm;
 		this.createPage = _createPage;
 		this.blockUI = _blockUI;
@@ -175,7 +146,7 @@ pageHandle = (function(){
 		this.datePickersInit = _datePickersInit;
 		this.pageRepeater = _pageRepeater;
 		this.isNull = _isNull;
-		this.toastr = toastr;
+		//this.toastr = toastr;
 		
 	}
 	

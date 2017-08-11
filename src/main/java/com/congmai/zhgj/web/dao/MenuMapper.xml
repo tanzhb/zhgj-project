@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.congmai.zhgj.web.dao.MenuMapper">
+    <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.Menu">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="code" property="code" jdbcType="VARCHAR" />
+        <result column="pcode" property="pcode" jdbcType="VARCHAR" />
+        <result column="pcodes" property="pcodes" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="icon" property="icon" jdbcType="VARCHAR" />
+        <result column="url" property="url" jdbcType="VARCHAR" />
+        <result column="num" property="num" jdbcType="INTEGER" />
+        <result column="levels" property="levels" jdbcType="INTEGER" />
+        <result column="ismenu" property="ismenu" jdbcType="INTEGER" />
+        <result column="tips" property="tips" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="isopen" property="isopen" jdbcType="INTEGER" />
+    </resultMap>
+    <!-- 通过角色id 查询角色信息 -->
+    <select id="selectMenusByRoleId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT m.* FROM menu m LEFT JOIN relation r ON m.id = r.menuid
+        WHERE r.roleid = #{roleid,jdbcType=INTEGER}
+    </select>
+</mapper>

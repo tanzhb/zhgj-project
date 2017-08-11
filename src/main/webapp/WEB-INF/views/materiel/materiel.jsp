@@ -4,6 +4,7 @@
     <small></small>
 </h3>
 <div class="page-bar">
+
     <ul class="page-breadcrumb">
         <li>
             <i class="fa fa-home"></i>
@@ -12,6 +13,7 @@
         </li>
         <li>
             <a ui-sref="materiel">基础数据</a>
+            <i class="fa fa-angle-right"></i>
         </li>
         <li>
             <a ui-sref="materiel">物料信息</a>
@@ -142,6 +144,7 @@
          </div>
 	</div> -->
 	<div class="col-md-12">
+
         	<div class="portlet light ">
                 <div class="portlet-body">
                     <ul class="nav nav-pills">
@@ -237,7 +240,7 @@
 					                        </tr>
 					                    </thead>
 					                    <tbody>
-					                    	<tr>
+					                    	<tr ng-if="materiel!=null&&materiel.packageNum!=nullmateriel.packageNum!=''">
 					                            <td> {{materiel.packageNum}} </td>
 					                            <td> {{materiel.packageSpecifications}} </td>
 					                            <td> {{materiel.packageUnit}}</td>

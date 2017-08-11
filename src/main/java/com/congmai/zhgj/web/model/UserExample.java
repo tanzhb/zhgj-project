@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author tanzb
+ * @version 2017年8月9日 下午11:00:51
+ */
 public class UserExample {
     protected String orderByClause;
 
@@ -166,72 +170,72 @@ public class UserExample {
         }
 
         public Criteria andUsernameIsNull() {
-            addCriterion("username is null");
+            addCriterion("account is null");
             return (Criteria) this;
         }
 
         public Criteria andUsernameIsNotNull() {
-            addCriterion("username is not null");
+            addCriterion("account is not null");
             return (Criteria) this;
         }
 
         public Criteria andUsernameEqualTo(String value) {
-            addCriterion("username =", value, "username");
+            addCriterion("account =", value, "account");
             return (Criteria) this;
         }
 
         public Criteria andUsernameNotEqualTo(String value) {
-            addCriterion("username <>", value, "username");
+            addCriterion("account <>", value, "account");
             return (Criteria) this;
         }
 
         public Criteria andUsernameGreaterThan(String value) {
-            addCriterion("username >", value, "username");
+            addCriterion("account >", value, "account");
             return (Criteria) this;
         }
 
         public Criteria andUsernameGreaterThanOrEqualTo(String value) {
-            addCriterion("username >=", value, "username");
+            addCriterion("account >=", value, "account");
             return (Criteria) this;
         }
 
         public Criteria andUsernameLessThan(String value) {
-            addCriterion("username <", value, "username");
+            addCriterion("account <", value, "account");
             return (Criteria) this;
         }
 
         public Criteria andUsernameLessThanOrEqualTo(String value) {
-            addCriterion("username <=", value, "username");
+            addCriterion("account <=", value, "account");
             return (Criteria) this;
         }
 
         public Criteria andUsernameLike(String value) {
-            addCriterion("username like", value, "username");
+            addCriterion("account like", value, "account");
             return (Criteria) this;
         }
 
         public Criteria andUsernameNotLike(String value) {
-            addCriterion("username not like", value, "username");
+            addCriterion("account not like", value, "account");
             return (Criteria) this;
         }
 
         public Criteria andUsernameIn(List<String> values) {
-            addCriterion("username in", values, "username");
+            addCriterion("account in", values, "account");
             return (Criteria) this;
         }
 
         public Criteria andUsernameNotIn(List<String> values) {
-            addCriterion("username not in", values, "username");
+            addCriterion("account not in", values, "account");
             return (Criteria) this;
         }
 
         public Criteria andUsernameBetween(String value1, String value2) {
-            addCriterion("username between", value1, value2, "username");
+            addCriterion("account between", value1, value2, "account");
             return (Criteria) this;
         }
 
         public Criteria andUsernameNotBetween(String value1, String value2) {
-            addCriterion("username not between", value1, value2, "username");
+            addCriterion("account not between", value1, value2, "account");
             return (Criteria) this;
         }
 
