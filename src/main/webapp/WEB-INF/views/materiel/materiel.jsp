@@ -61,26 +61,12 @@
 							class="fa fa-angle-down"></i>
 						</a>
 						<ul class="dropdown-menu pull-right" id="sample_3_tools">
-							<li><a href="javascript:;" data-action="0"
-								class="tool-action"> <i class="icon-printer"></i> Print
-							</a></li>
+							<li><a data-action="0"
+								class="tool-action" data-toggle="modal" data-target="#import"> <i class="fa fa-upload"></i> 导入
+							</a></li> 
 							<li><a href="javascript:;" data-action="1"
-								class="tool-action"> <i class="icon-check"></i> Copy
+								class="tool-action" ng-click="exportMateriel()"> <i class="fa fa-file-excel-o"></i> 导出
 							</a></li>
-							<li><a href="javascript:;" data-action="2"
-								class="tool-action"> <i class="icon-doc"></i> PDF
-							</a></li>
-							<li><a href="javascript:;" data-action="3"
-								class="tool-action"> <i class="icon-paper-clip"></i> Excel
-							</a></li>
-							<li><a href="javascript:;" data-action="4"
-								class="tool-action"> <i class="icon-cloud-upload"></i> CSV
-							</a></li>
-							<li class="divider"></li>
-							<li><a href="javascript:;" data-action="5"
-								class="tool-action"> <i class="icon-refresh"></i> Reload
-							</a></li>
-							</li>
 						</ul>
 					</div>
 				</div>
@@ -155,6 +141,9 @@
                             <a href="#" data-target="#tab_2_2" data-toggle="tab"> 使用采购商 </a>
                         </li>
                         <li>
+                            <a href="#" data-target="#tab_2_7"  data-toggle="tab"> 附件 </a>
+                        </li>
+                        <li>
                             <a href="#" data-target="#tab_2_3"  data-toggle="tab"> BOM </a>
                         </li>
                         <li>
@@ -191,6 +180,44 @@
 					    </div>
                         <div class="tab-pane fade" id="tab_2_2">
 					            未关联
+                        </div>
+                        <div class="tab-pane fade" id="tab_2_7">
+					            <div class="portlet-body">
+                          <table class="table table-striped table-bordered table-hover table-checkable order-column">
+                              <thead>
+                                  <tr>
+                                      <th>附件类型</th>
+                                      <th>描述</th>
+                                      <th>文件</th>
+                                      <th>备注</th>
+                                      <th>上传人</th>
+                                      <th>上传时间</th>
+                                  </tr>
+                              </thead>
+                              <tbody ng-repeat="_file in file track by $index">
+                                  <tr>
+										<td>
+											<p class="form-control-static">{{_file.fileType}}</p>
+										</td>
+										<td>
+											<p class="form-control-static">{{_file.fileDescribe}}</p>
+										</td>
+										<td>
+											<p class="form-control-static">{{_file.file}}</p>
+										</td>
+										<td>
+											<p class="form-control-static">{{_file.remark}}</p>
+										</td>
+										<td>
+											<p class="form-control-static"> {{_file.uploader}}</p>
+										</td>
+										<td>
+											<p class="form-control-static"> {{_file.uploadDate}}</p>
+										</td>
+									</tr>
+                              </tbody>
+                          </table>
+					            </div>
                         </div>
                         <div class="tab-pane fade" id="tab_2_3">
 					            <div class="portlet-body">
@@ -623,3 +650,5 @@
 		</div>
 	</div>
 <!-- 基本信息modal 结束 -->
+
+<jsp:include  page="importMateriel.jsp"/>
