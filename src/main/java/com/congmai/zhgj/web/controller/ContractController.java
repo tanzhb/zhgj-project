@@ -32,15 +32,20 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;  
 import org.springframework.stereotype.Component;  
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;  
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.alibaba.druid.util.StringUtils;
+import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.User;
@@ -118,7 +123,7 @@ public class ContractController {
 		}
 		//如果id为空执行保存
 		if(StringUtils.isEmpty(contractVO.getId())){
-			String serialNum=UUID.randomUUID().toString().toUpperCase().replaceAll("-", ""); 
+			String serialNum=ApplicationUtils.random32UUID(); 
 
 			contractVO.setId(serialNum);
 
@@ -297,6 +302,68 @@ public class ContractController {
 	public String editUserContractPage(String id,String view) {
 		return "contract/editUserContractPage";
 	}
+	
+	
+	 /**
+     * @Description (下载导入模板)
+     * @param request
+     * @return
+     */
+    @RequestMapping("downloadImportTemp")
+    public void downloadContractTemp(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+    	ExcelUtil.importTempDownLoad(request, response, "contractImport");
+    }
+    
+    
+    /**
+     * @Description (合同信息导入)
+     * @param request
+     * @return
+     */
+    @RequestMapping("contractImport")
+    @ResponseBody
+    public Map<String,String> contractImport(@RequestParam(value = "excelFile") MultipartFile excelFile,HttpServletRequest request,HttpServletResponse response) {
+    	Map<String,String> map = new HashMap<String, String>();
+    	 try {
+		     
+			ExcelReader excelReader = new ExcelReader(excelFile.getInputStream());
+			excelReader.readExcelContent(new RowHandler() {
+				@Override
+				public void handle(List<Object> row,int i) throws Exception {
+					if(!CollectionUtils.isEmpty(row)){
+						try{
+							ContractVO contract = new ContractVO();
+							contract.setId(ApplicationUtils.random32UUID());
+							contract.setContractNum(row.get(0).toString());
+							contract.setComId(row.get(1).toString());
+							contract.setContractType(row.get(2).toString());
+							contract.setServiceModel(row.get(3).toString());
+							
+							SimpleDateFormat sdf=new SimpleDateFormat("yyyy-mm-dd");
+							contract.setSignDate(sdf.parse(row.get(4).toString()));
+							contract.setSigner(row.get(5).toString());
+							contract.setStartDate(sdf.parse(row.get(6).toString()));
+							contract.setEndDate(sdf.parse(row.get(7).toString()));
+							contract.setSettlementClause(row.get(8).toString());
+							Subject currentUser = SecurityUtils.getSubject();
+							String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+							contract.setCreator(currenLoginName);
+							contractService.insertContract(contract);
+						}catch(Exception  e){
+							throw new Exception("第"+i+"行数据异常请检查，数据内容："+row.toString());
+						}
+						
+					}
+					
+				}
+			}, 2);
+			map.put("data", "success");
+		} catch (Exception e1) {
+			map.put("data", e1.getMessage());
+		}
+    	
+         return map;
+    }
 
 
 	/**
