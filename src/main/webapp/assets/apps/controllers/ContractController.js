@@ -455,7 +455,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
             ignore: "",
             messages: {
             	
-            	contractNum:{required:"合同编号不能为空！",rangelength:jQuery.validator.format("合同编号位数必须在{0}到{1}字符之间！"),
+            	contractNum:{required:"合同编号不能为空！",rangelength:jQuery.validator.format("合同编号位数必须在{0}到{1}字符之间！")
             		/*remote:jQuery.validator.format("用户名已经被注册")*/},
             	contractType:{required:"合同类型不能为空！"},
             	serviceModel:{required:"服务模式不能为空！"},
