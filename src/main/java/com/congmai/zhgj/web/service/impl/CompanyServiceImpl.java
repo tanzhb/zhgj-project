@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericDao;
@@ -60,6 +61,12 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 	@Override
 	public void deleteBatch(List<String> comIdList) {
 		companyMapper.deleteCompanyBatch(comIdList);
+	}
+
+	@Transactional
+	@Override
+	public void insertBatch(List<Company> companyList) {
+		companyMapper.insertSelectiveBatch(companyList);
 	}
 
 

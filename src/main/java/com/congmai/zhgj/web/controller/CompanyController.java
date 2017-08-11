@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -421,6 +422,7 @@ public class CompanyController {
     	 try {
 		     
 			ExcelReader excelReader = new ExcelReader(excelFile.getInputStream());
+			final List<Company> companyList = new ArrayList<Company>(); 
 			excelReader.readExcelContent(new RowHandler() {
 				@Override
 				public void handle(List<Object> row,int i) throws Exception {
@@ -448,7 +450,7 @@ public class CompanyController {
 							company.setCreator(currenLoginName);
 							company.setUpdateTime(new Date());
 							company.setUpdater(currenLoginName);
-							companyService.insert(company);
+							companyList.add(company);
 						}catch(Exception  e){
 							throw new Exception("第"+i+"行数据异常请检查，数据内容："+row.toString());
 						}
@@ -456,7 +458,20 @@ public class CompanyController {
 					}
 					
 				}
-			}, 1);
+			}, 2);
+				Company company = new Company();
+				company.setComId("");
+				companyList.add(company);
+				/*
+			   //创建线程执行批量插入
+				Runnable companyRunnable = new  Runnable() {
+					@Override
+					public void run() {*/
+						companyService.insertBatch(companyList);
+				/*	}
+				};
+				new Thread(companyRunnable).start();*/
+			
 			map.put("data", "success");
 		} catch (Exception e1) {
 			map.put("data", e1.getMessage());
