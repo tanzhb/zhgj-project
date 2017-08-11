@@ -88,7 +88,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
        		     },
        		     function(error){
        		         $scope.error = error;
-       		      toastr.error('数据保存出错！');
+       		         toastr.error('数据保存出错！');
        		     }
        		 );
     	}
@@ -168,6 +168,18 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     		     }
     		 );
     	};*/
+    /**
+     * 点击CheckBox加载物料信息
+     */	
+    $scope.getMaterielInfo_  = function(serialNum) {
+    	//tab内容置为空
+    	$scope.materiel = null;
+    	$scope.BOM = null;
+    	if($("#"+serialNum).is(':checked')){//选中时加载
+    		$scope.getMaterielInfo(serialNum);
+    	}
+    }; 
+    
     /**
      * 获取物料信息
      */	
@@ -264,12 +276,12 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 							'orderable' : false,
 							'render' : function(data,
 									type, full, meta) {
-								return '<input type="checkbox" ng-click="getMaterielInfo(\''+data+'\')" name="serialNum[]" value="'
-										+ $('<div/>')
-												.text(
-														data)
-												.html()
-										+ '">';
+								return '<input type="checkbox" id="'+data+'" ng-click="getMaterielInfo_(\''+data+'\')" name="serialNum[]" value="'
+													+ $('<div/>')
+													.text(
+															data)
+													.html()
+											+ '">';
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
