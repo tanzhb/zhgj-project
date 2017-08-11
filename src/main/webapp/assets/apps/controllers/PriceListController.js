@@ -31,6 +31,9 @@ angular
 										        	})//初始化日期控件
 										    		getPriceListInfo($stateParams.priceListSerialNum);
 														 $scope.isChecked=false;
+														 $scope.priceListAdd=true;
+														 $scope.priceListEdit=true;//隐藏取消
+														 $scope.priceList.isLadderPrice='0';
 														 $scope.ladderprices=[{}];
 														 _index = 0; 
 														 handle.pageRepeater();
@@ -104,11 +107,11 @@ angular
 														"sLast" : "尾页"
 													}
 												},
-												fixedHeader : {// 固定表头、表底
+											/*	fixedHeader : {// 固定表头、表底
 													header : !0,
 													footer : !0,
 													headerOffset : a
-												},
+												},*/
 												// select: true,行多选
 												order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
 												bRetrieve : true,
@@ -139,15 +142,29 @@ angular
 													}, {
 														mData : 'unit'
 													}, {
-														mData : 'price'
+														mData : 'unitPrice'
 													},{
 														mData : 'rate'
 													},{
 														mData : 'currency'
 													}, {
-														mData : 'priceEffectiveDate'
+														mData : 'priceEffectiveDate',
+														mRender:function(data){
+						                            		if(data!=""&&data!=null){
+						                            			return timeStamp2String(data).replace('0:0:0','');
+						                            		}else{
+						                            			return "";
+						                            		}
+						                            	}
 													},{
-													mData : 'priceExpirationDate'
+													mData : 'priceExpirationDate',
+													mRender:function(data){
+					                            		if(data!=""&&data!=null){
+					                            			return timeStamp2String(data).replace('0:0:0','');
+					                            		}else{
+					                            			return "";
+					                            		}
+					                            	}
 														},{
 													mData : 'status'
 														}],
@@ -224,36 +241,38 @@ angular
 							// 添加价格开始***************************************
 						$scope.addPriceList = function() {
 							debugger;
-							$scope.priceListAdd=true;
 							 $state.go('addPriceList',{},{reload:true}); 
 						}
 						$scope.editPriceList = function(){
 							debugger;
 							var priceList=$scope.priceList;
+							getLadderPriceInfo($scope.priceList.serialNum);
 							$scope.priceList=priceList;
-							$scope.priceListView = false;
-		        			$scope.priceListAdd = false;
-		        			$scope.PriceListEdit = true;
+							$scope.priceListView =false;
+		        			$scope.priceListAdd =true ;
+		        			$scope.priceListEdit =false;
 						}
 						$scope.cancelEditPriceList = function(){
 							getPriceListInfo($scope.priceList.serialNum);
-							$scope.priceListView = true;
-		        			$scope.priceListAdd = true;
-		        			$scope.priceListEdit = false;
+							$scope.priceListView =true;
+		        			$scope.priceListAdd =false;
+		        			$scope.priceListEdit =true;
 						}		
 								$scope.savePriceList= function() {
 									
 									console.log($('#priceListForm').valid());
+									debugger;
 									//$scope.priceList=null;
 									if($('#priceListForm').valid()){//表单验证通过则执行添加功能
 									priceListService.savePriceList($scope.priceList)
 									.then(
-											function(data) {debugger;
+											function(data) {
+												debugger;
 												toastr.success("保存价格数据成功！");
-												$scope.priceList = $scope.priceList;
-												$scope.priceListView = true;
-							        			$scope.priceListAdd = true;
-							        			$scope.priceListEdit = false;
+												$scope.priceList =data;
+												$scope.priceListView =true;
+							        			$scope.priceListAdd =false;
+							        			$scope.priceListEdit =true;
 							        			$("#priceListTips").hide();
 											},
 											function(errResponse) {
@@ -324,8 +343,13 @@ angular
 							};
 							// 修改价格结束***************************************							
 							$scope.showOrHide = function() {//控制阶梯div的显示与隐藏
+								debugger
 								 $scope.isChecked=!$scope.isChecked;
-								 
+								 if($scope.isChecked){
+									 $scope.priceList.isLadderPrice='1';
+								 }else{
+									 $scope.priceList.isLadderPrice='0'; 
+								 }
 							 }
 						
 							// 页面加载完成后调用，验证输入框
@@ -346,12 +370,13 @@ angular
 						            	supplyComId:{required:"未选择供应商商！"},
 						            	currency:{required:"未选择币种！"},
 						            	rate:{digits:"必须是数字！",required:"税率不能为空！"},
-						            	price: {digits:"必须是数字！",required:"单价不能为空！"},
-						            	inclusiveprice:{digits:"必须是数字！"},
-						            	topprice:{digits:"必须是数字！"},
-						            	floorprice:{digits:"必须是数字！"},
+						            	unitPrice: {digits:"必须是数字！",required:"单价不能为空！"},
+						            	inclusivePrice:{digits:"必须是数字！"},
+						            	topPrice:{digits:"必须是数字！"},
+						            	floorPrice:{digits:"必须是数字！"},
 						            	priceEffectiveDate: {required:"价格生效期未选择！" },
-						            	priceExpirationDate: {required:"价格失效期未选择！" }
+						            	priceExpirationDate: {required:"价格失效期未选择！" },
+						            	ladderType:{required:"未选择阶梯类型！" }
 						            },
 						            rules: {
 						            	priceNum:{required:true},
@@ -361,12 +386,13 @@ angular
 						            	supplyComId:{required:true},
 						            	currency:{required:true},
 						            	rate:{digits:true,required:!0},
-						            	price: {digits:true,required:!0},
-						            	inclusiveprice:{digits:true},
-						            	topprice:{digits:true},
-						            	floorprice:{digits:true},
+						            	unitPrice: {digits:true,required:!0},
+						            	inclusivePrice:{digits:true},
+						            	topPrice:{digits:true},
+						            	floorPrice:{digits:true},
 						            	priceEffectiveDate: {required:true },
-						            	priceExpirationDate: {required:true }
+						            	priceExpirationDate: {required:true },
+						            	ladderType:{required:true }
 						            },
 						            invalidHandler: function(e, t) {
 						                i.hide(),
@@ -392,19 +418,32 @@ angular
 						        })   							}); 
 							
 							
-							 function getPriceListInfo(serialNum){
+							 function getPriceListInfo(serialNum){//获取价格详情
 						    	   if(!handle.isNull(serialNum)){
 						    		   debugger;
 						    			 var promise =priceListService.selectBySerialNum(serialNum);
 						 	        	promise.then(function(data){
 						 	        		  debugger;
+						 	        		 data.priceEffectiveDate=timeStamp2String(data.priceEffectiveDate).replace('0:0:0','');
+						 	        		data.priceExpirationDate=timeStamp2String(data.priceExpirationDate).replace('0:0:0','');
 						 	        		$scope.priceList = data;
 						 	            },function(data){
 						 	               //调用承诺接口reject();
 						 	            });
 						    		 }
 						       }
-							 
+							 function getLadderPriceInfo(serialNum){//获取阶梯价格详情
+						    	   if(!handle.isNull(serialNum)){
+						    		   debugger;
+						    			 var promise =priceListService.getLadderPriceInfo(serialNum);
+						 	        	promise.then(function(data){
+						 	        		  debugger;
+						 	        		$scope.ladderprices = data;
+						 	            },function(data){
+						 	               //调用承诺接口reject();
+						 	            });
+						    		 }
+						       }
 							  /**
 						        * 阶梯价格加一行
 						        */
@@ -414,7 +453,7 @@ angular
 							    		 return;
 							       }else{
 							    	   _index++;
-							    	   $scope.ladderprices[_index] = {}
+							    	   $scope.ladderprices[_index] = {};
 							       }
 						       };
 						       
@@ -598,5 +637,107 @@ angular
 						 	    			$('#basicMaterielInfo').modal('hide');// 删除成功后关闭模态框
 						 	    			$(".modal-backdrop").remove();
 						 	    		};
+						 	    		
+						 	    		  /**
+						 		        * 保存阶梯价格信息
+						 		        */
+						 		       $scope.saveLadderPrice = function(){
+						 			    	if(handle.isNull($scope.priceList)||handle.isNull($scope.priceList.serialNum)){
+						 			    		 handle.toastr.warning("您的价格信息还未保存！");
+						 			    		 return;
+						 			    	}else{
+						 			    		 debugger;
+						 			    		for(var i=0;i<$scope.ladderprices.length;i++){
+						 			    			$scope.ladderprices[i].priceSerial = $scope.priceList.serialNum;
+						 			    			$scope.ladderprices[i].createTime = null;
+						 			    			$scope.ladderprices[i].updateTime = null;
+						 			    		}
+						 			    	}
+						 			    	if($('#ladderpriceForm').valid()){
+						 			    		handle.blockUI();
+						 			        	var promise = priceListService.saveLadderPrice($scope.ladderprices);
+						 			        	promise.then(function(data){
+						 			        		if(!handle.isNull(data)){
+						 				        		handle.toastr.success("保存成功");
+						 				        		handle.unblockUI();
+						 				        		$scope.ladderprices = data;
+						 				        		$scope.ladderpriceView = false;
+						 				        		$scope.ladderpriceEdit = false;
+						 				        		$scope.ladderpriceAdd = false;
+						 			        		}else{
+						 			        			handle.toastr.error("保存失败！");
+						 				        		handle.unblockUI();
+						 			        		}
+						 			            },function(data){
+						 			            	handle.unblockUI();
+						 			            	handle.toastr.error("保存失败！");
+						 			            	console.log(data);
+						 			            });
+						 			    	}
+						 		    	   
+						 		       }
+						 		   // 页面加载完成后调用，验证输入框
+						 				$scope.$watch('$viewContentLoaded', function() {  
+						 				            var form1 = $('#ladderpriceForm');
+						 				            var error1 = $('.alert-danger', form1);
+						 				            var success1 = $('.alert-success', form1);
+						 				         debugger;
+						 				            form1.validate({
+						 				                errorElement: 'span', //default input error message container
+						 				                errorClass: 'help-block help-block-error', // default input error message class
+						 				                focusInvalid: false, // do not focus the last invalid input
+						 				                ignore: "",  // validate all fields including form hidden input
+						 				                messages:  {
+						 				                	countStart:{digits:"必须是数字！"},
+						 				                	countEnd:{digits:"必须是数字！"},
+						 				                	price:{digits:"必须是数字！"},
+						 				                	inclusivePrice:{digits:"必须是数字！"}
+						 					            },
+						 				                rules: {
+						 				                	countStart:{digits:true},
+						 				                	countEnd:{digits:true},
+						 				                	price:{digits:true},
+						 				                	inclusivePrice:{digits:true}
+						 				                },
+
+						 				                invalidHandler: function (event, validator) { //display error alert on form submit              
+						 				                    success1.hide();
+						 				                    error1.show();
+						 				                    App.scrollTo(error1, -200);
+						 				                },
+
+						 				                errorPlacement: function (error, element) { // render error placement for each input type
+						 				                    var cont = $(element).parent('.input-group');
+						 				                    if (cont.size() > 0) {
+						 				                        cont.after(error);
+						 				                    } else {
+						 				                        element.after(error);
+						 				                    }
+						 				                },
+
+						 				                highlight: function (element) { // hightlight error inputs
+
+						 				                    $(element)
+						 				                        .closest('.form-group').addClass('has-error'); // set error class to the control group
+						 				                },
+
+						 				                unhighlight: function (element) { // revert the change done by hightlight
+						 				                    $(element)
+						 				                        .closest('.form-group').removeClass('has-error'); // set error class to the control group
+						 				                },
+
+						 				                success: function (label) {
+						 				                    label
+						 				                        .closest('.form-group').removeClass('has-error'); // set success class to the control group
+						 				                },
+
+						 				                submitHandler: function (form) {
+						 				                    success1.show();
+						 				                    error1.hide();
+						 				                }
+						 				            });
+
+						 					
+						 				}); 
 						 	    		
 						} ]);

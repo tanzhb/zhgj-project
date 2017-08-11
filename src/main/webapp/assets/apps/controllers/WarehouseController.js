@@ -232,7 +232,7 @@ angular
 															'hide');// 保存成功后关闭模态框
 													toastr.success("保存仓库数据成功！");
 													// $state.go('warehouse',{},{reload:true});  // 重新加载datatables数据
-													$scope.warehouse = $scope.warehouse;
+													$scope.warehouse = data;
 								        			$scope.warehouseView = true;
 								        			$scope.warehouseAdd = true;
 								        			$scope.warehouseEdit = false;

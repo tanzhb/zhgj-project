@@ -3,20 +3,33 @@
 <mapper namespace="com.congmai.zhgj.web.dao.PriceListMapper" >
   <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.PriceList" >
     <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="priceNum" property="priceNum" jdbcType="VARCHAR" />
     <result column="supplyComId" property="supplyComId" jdbcType="VARCHAR" />
     <result column="buyComId" property="buyComId" jdbcType="VARCHAR" />
     <result column="priceDescribe" property="priceDescribe" jdbcType="VARCHAR" />
     <result column="materielSerial" property="materielSerial" jdbcType="VARCHAR" />
+    <result column="rate" property="rate" jdbcType="VARCHAR" />
+    <result column="isLadderPrice" property="isLadderPrice" jdbcType="VARCHAR" />
+    <result column="ladderType" property="ladderType" jdbcType="VARCHAR" />
+    <result column="inclusivePrice" property="inclusivePrice" jdbcType="VARCHAR" />
     <result column="price" property="price" jdbcType="VARCHAR" />
+    <result column="priceType" property="priceType" jdbcType="VARCHAR" />
     <result column="priceEffectiveDate" property="priceEffectiveDate" jdbcType="DATE" />
     <result column="priceExpirationDate" property="priceExpirationDate" jdbcType="DATE" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="file" property="file" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="versionNO" property="versionNO" jdbcType="VARCHAR" />
+    <result column="isLatestVersion" property="isLatestVersion" jdbcType="VARCHAR" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="currency" property="currency" jdbcType="VARCHAR" />
+    <result column="unitPrice" property="unitPrice" jdbcType="VARCHAR" />
+    <result column="topPrice" property="topPrice" jdbcType="VARCHAR" />
+    <result column="floorPrice" property="floorPrice" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -77,8 +90,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    serialNum, supplyComId, buyComId, priceDescribe, materielSerial, price, priceEffectiveDate, 
-    priceExpirationDate, remark, file, delFlg, creator, createTime, updater, updateTime
+    serialNum, priceNum, supplyComId, buyComId, priceDescribe, materielSerial, rate, 
+    isLadderPrice, ladderType, inclusivePrice, price, priceType, priceEffectiveDate, 
+    priceExpirationDate, remark, file, status, delFlg, creator, createTime, versionNO, 
+    isLatestVersion, updater, updateTime, currency, unitPrice, topPrice, floorPrice
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.PriceListExample" >
     select
@@ -111,24 +126,35 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.congmai.zhgj.web.model.PriceList" >
-    insert into priceList (serialNum, supplyComId, buyComId, 
-      priceDescribe, materielSerial, price, 
+    insert into priceList (serialNum, priceNum, supplyComId, 
+      buyComId, priceDescribe, materielSerial, 
+      rate, isLadderPrice, ladderType, 
+      inclusivePrice, price, priceType, 
       priceEffectiveDate, priceExpirationDate, remark, 
-      file, delFlg, creator, 
-      createTime, updater, updateTime
-      )
-    values (#{serialNum,jdbcType=VARCHAR}, #{supplyComId,jdbcType=VARCHAR}, #{buyComId,jdbcType=VARCHAR}, 
-      #{priceDescribe,jdbcType=VARCHAR}, #{materielSerial,jdbcType=VARCHAR}, #{price,jdbcType=VARCHAR}, 
+      file, status, delFlg, 
+      creator, createTime, versionNO, 
+      isLatestVersion, updater, updateTime, 
+      currency, unitPrice, topPrice, 
+      floorPrice)
+    values (#{serialNum,jdbcType=VARCHAR}, #{priceNum,jdbcType=VARCHAR}, #{supplyComId,jdbcType=VARCHAR}, 
+      #{buyComId,jdbcType=VARCHAR}, #{priceDescribe,jdbcType=VARCHAR}, #{materielSerial,jdbcType=VARCHAR}, 
+      #{rate,jdbcType=VARCHAR}, #{isLadderPrice,jdbcType=VARCHAR}, #{ladderType,jdbcType=VARCHAR}, 
+      #{inclusivePrice,jdbcType=VARCHAR}, #{price,jdbcType=VARCHAR}, #{priceType,jdbcType=VARCHAR}, 
       #{priceEffectiveDate,jdbcType=DATE}, #{priceExpirationDate,jdbcType=DATE}, #{remark,jdbcType=VARCHAR}, 
-      #{file,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+      #{file,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{versionNO,jdbcType=VARCHAR}, 
+      #{isLatestVersion,jdbcType=VARCHAR}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{currency,jdbcType=VARCHAR}, #{unitPrice,jdbcType=VARCHAR}, #{topPrice,jdbcType=VARCHAR}, 
+      #{floorPrice,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.PriceList" >
     insert into priceList
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
         serialNum,
+      </if>
+      <if test="priceNum != null" >
+        priceNum,
       </if>
       <if test="supplyComId != null" >
         supplyComId,
@@ -142,8 +168,23 @@
       <if test="materielSerial != null" >
         materielSerial,
       </if>
+      <if test="rate != null" >
+        rate,
+      </if>
+      <if test="isLadderPrice != null" >
+        isLadderPrice,
+      </if>
+      <if test="ladderType != null" >
+        ladderType,
+      </if>
+      <if test="inclusivePrice != null" >
+        inclusivePrice,
+      </if>
       <if test="price != null" >
         price,
+      </if>
+      <if test="priceType != null" >
+        priceType,
       </if>
       <if test="priceEffectiveDate != null" >
         priceEffectiveDate,
@@ -157,6 +198,9 @@
       <if test="file != null" >
         file,
       </if>
+      <if test="status != null" >
+        status,
+      </if>
       <if test="delFlg != null" >
         delFlg,
       </if>
@@ -166,16 +210,37 @@
       <if test="createTime != null" >
         createTime,
       </if>
+      <if test="versionNO != null" >
+        versionNO,
+      </if>
+      <if test="isLatestVersion != null" >
+        isLatestVersion,
+      </if>
       <if test="updater != null" >
         updater,
       </if>
       <if test="updateTime != null" >
         updateTime,
       </if>
+      <if test="currency != null" >
+        currency,
+      </if>
+      <if test="unitPrice != null" >
+        unitPrice,
+      </if>
+      <if test="topPrice != null" >
+        topPrice,
+      </if>
+      <if test="floorPrice != null" >
+        floorPrice,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
         #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="priceNum != null" >
+        #{priceNum,jdbcType=VARCHAR},
       </if>
       <if test="supplyComId != null" >
         #{supplyComId,jdbcType=VARCHAR},
@@ -189,8 +254,23 @@
       <if test="materielSerial != null" >
         #{materielSerial,jdbcType=VARCHAR},
       </if>
+      <if test="rate != null" >
+        #{rate,jdbcType=VARCHAR},
+      </if>
+      <if test="isLadderPrice != null" >
+        #{isLadderPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="ladderType != null" >
+        #{ladderType,jdbcType=VARCHAR},
+      </if>
+      <if test="inclusivePrice != null" >
+        #{inclusivePrice,jdbcType=VARCHAR},
+      </if>
       <if test="price != null" >
         #{price,jdbcType=VARCHAR},
+      </if>
+      <if test="priceType != null" >
+        #{priceType,jdbcType=VARCHAR},
       </if>
       <if test="priceEffectiveDate != null" >
         #{priceEffectiveDate,jdbcType=DATE},
@@ -204,6 +284,9 @@
       <if test="file != null" >
         #{file,jdbcType=VARCHAR},
       </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
       <if test="delFlg != null" >
         #{delFlg,jdbcType=VARCHAR},
       </if>
@@ -213,11 +296,29 @@
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="versionNO != null" >
+        #{versionNO,jdbcType=VARCHAR},
+      </if>
+      <if test="isLatestVersion != null" >
+        #{isLatestVersion,jdbcType=VARCHAR},
+      </if>
       <if test="updater != null" >
         #{updater,jdbcType=VARCHAR},
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="currency != null" >
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null" >
+        #{unitPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="topPrice != null" >
+        #{topPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="floorPrice != null" >
+        #{floorPrice,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -233,6 +334,9 @@
       <if test="record.serialNum != null" >
         serialNum = #{record.serialNum,jdbcType=VARCHAR},
       </if>
+      <if test="record.priceNum != null" >
+        priceNum = #{record.priceNum,jdbcType=VARCHAR},
+      </if>
       <if test="record.supplyComId != null" >
         supplyComId = #{record.supplyComId,jdbcType=VARCHAR},
       </if>
@@ -245,8 +349,23 @@
       <if test="record.materielSerial != null" >
         materielSerial = #{record.materielSerial,jdbcType=VARCHAR},
       </if>
+      <if test="record.rate != null" >
+        rate = #{record.rate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isLadderPrice != null" >
+        isLadderPrice = #{record.isLadderPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ladderType != null" >
+        ladderType = #{record.ladderType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inclusivePrice != null" >
+        inclusivePrice = #{record.inclusivePrice,jdbcType=VARCHAR},
+      </if>
       <if test="record.price != null" >
         price = #{record.price,jdbcType=VARCHAR},
+      </if>
+      <if test="record.priceType != null" >
+        priceType = #{record.priceType,jdbcType=VARCHAR},
       </if>
       <if test="record.priceEffectiveDate != null" >
         priceEffectiveDate = #{record.priceEffectiveDate,jdbcType=DATE},
@@ -260,6 +379,9 @@
       <if test="record.file != null" >
         file = #{record.file,jdbcType=VARCHAR},
       </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
       <if test="record.delFlg != null" >
         delFlg = #{record.delFlg,jdbcType=VARCHAR},
       </if>
@@ -269,11 +391,29 @@
       <if test="record.createTime != null" >
         createTime = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.versionNO != null" >
+        versionNO = #{record.versionNO,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isLatestVersion != null" >
+        isLatestVersion = #{record.isLatestVersion,jdbcType=VARCHAR},
+      </if>
       <if test="record.updater != null" >
         updater = #{record.updater,jdbcType=VARCHAR},
       </if>
       <if test="record.updateTime != null" >
         updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.currency != null" >
+        currency = #{record.currency,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unitPrice != null" >
+        unitPrice = #{record.unitPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.topPrice != null" >
+        topPrice = #{record.topPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.floorPrice != null" >
+        floorPrice = #{record.floorPrice,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -283,20 +423,33 @@
   <update id="updateByExample" parameterType="map" >
     update priceList
     set serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      priceNum = #{record.priceNum,jdbcType=VARCHAR},
       supplyComId = #{record.supplyComId,jdbcType=VARCHAR},
       buyComId = #{record.buyComId,jdbcType=VARCHAR},
       priceDescribe = #{record.priceDescribe,jdbcType=VARCHAR},
       materielSerial = #{record.materielSerial,jdbcType=VARCHAR},
+      rate = #{record.rate,jdbcType=VARCHAR},
+      isLadderPrice = #{record.isLadderPrice,jdbcType=VARCHAR},
+      ladderType = #{record.ladderType,jdbcType=VARCHAR},
+      inclusivePrice = #{record.inclusivePrice,jdbcType=VARCHAR},
       price = #{record.price,jdbcType=VARCHAR},
+      priceType = #{record.priceType,jdbcType=VARCHAR},
       priceEffectiveDate = #{record.priceEffectiveDate,jdbcType=DATE},
       priceExpirationDate = #{record.priceExpirationDate,jdbcType=DATE},
       remark = #{record.remark,jdbcType=VARCHAR},
       file = #{record.file,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
       delFlg = #{record.delFlg,jdbcType=VARCHAR},
       creator = #{record.creator,jdbcType=VARCHAR},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      versionNO = #{record.versionNO,jdbcType=VARCHAR},
+      isLatestVersion = #{record.isLatestVersion,jdbcType=VARCHAR},
       updater = #{record.updater,jdbcType=VARCHAR},
-      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      currency = #{record.currency,jdbcType=VARCHAR},
+      unitPrice = #{record.unitPrice,jdbcType=VARCHAR},
+      topPrice = #{record.topPrice,jdbcType=VARCHAR},
+      floorPrice = #{record.floorPrice,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -304,6 +457,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.PriceList" >
     update priceList
     <set >
+      <if test="priceNum != null" >
+        priceNum = #{priceNum,jdbcType=VARCHAR},
+      </if>
       <if test="supplyComId != null" >
         supplyComId = #{supplyComId,jdbcType=VARCHAR},
       </if>
@@ -316,8 +472,23 @@
       <if test="materielSerial != null" >
         materielSerial = #{materielSerial,jdbcType=VARCHAR},
       </if>
+      <if test="rate != null" >
+        rate = #{rate,jdbcType=VARCHAR},
+      </if>
+      <if test="isLadderPrice != null" >
+        isLadderPrice = #{isLadderPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="ladderType != null" >
+        ladderType = #{ladderType,jdbcType=VARCHAR},
+      </if>
+      <if test="inclusivePrice != null" >
+        inclusivePrice = #{inclusivePrice,jdbcType=VARCHAR},
+      </if>
       <if test="price != null" >
         price = #{price,jdbcType=VARCHAR},
+      </if>
+      <if test="priceType != null" >
+        priceType = #{priceType,jdbcType=VARCHAR},
       </if>
       <if test="priceEffectiveDate != null" >
         priceEffectiveDate = #{priceEffectiveDate,jdbcType=DATE},
@@ -331,6 +502,9 @@
       <if test="file != null" >
         file = #{file,jdbcType=VARCHAR},
       </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
       <if test="delFlg != null" >
         delFlg = #{delFlg,jdbcType=VARCHAR},
       </if>
@@ -340,34 +514,65 @@
       <if test="createTime != null" >
         createTime = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="versionNO != null" >
+        versionNO = #{versionNO,jdbcType=VARCHAR},
+      </if>
+      <if test="isLatestVersion != null" >
+        isLatestVersion = #{isLatestVersion,jdbcType=VARCHAR},
+      </if>
       <if test="updater != null" >
         updater = #{updater,jdbcType=VARCHAR},
       </if>
       <if test="updateTime != null" >
         updateTime = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="currency != null" >
+        currency = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null" >
+        unitPrice = #{unitPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="topPrice != null" >
+        topPrice = #{topPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="floorPrice != null" >
+        floorPrice = #{floorPrice,jdbcType=VARCHAR},
+      </if>
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.PriceList" >
     update priceList
-    set supplyComId = #{supplyComId,jdbcType=VARCHAR},
+    set priceNum = #{priceNum,jdbcType=VARCHAR},
+      supplyComId = #{supplyComId,jdbcType=VARCHAR},
       buyComId = #{buyComId,jdbcType=VARCHAR},
       priceDescribe = #{priceDescribe,jdbcType=VARCHAR},
       materielSerial = #{materielSerial,jdbcType=VARCHAR},
+      rate = #{rate,jdbcType=VARCHAR},
+      isLadderPrice = #{isLadderPrice,jdbcType=VARCHAR},
+      ladderType = #{ladderType,jdbcType=VARCHAR},
+      inclusivePrice = #{inclusivePrice,jdbcType=VARCHAR},
       price = #{price,jdbcType=VARCHAR},
+      priceType = #{priceType,jdbcType=VARCHAR},
       priceEffectiveDate = #{priceEffectiveDate,jdbcType=DATE},
       priceExpirationDate = #{priceExpirationDate,jdbcType=DATE},
       remark = #{remark,jdbcType=VARCHAR},
       file = #{file,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
       delFlg = #{delFlg,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP},
+      versionNO = #{versionNO,jdbcType=VARCHAR},
+      isLatestVersion = #{isLatestVersion,jdbcType=VARCHAR},
       updater = #{updater,jdbcType=VARCHAR},
-      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      currency = #{currency,jdbcType=VARCHAR},
+      unitPrice = #{unitPrice,jdbcType=VARCHAR},
+      topPrice = #{topPrice,jdbcType=VARCHAR},
+      floorPrice = #{floorPrice,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
-  <delete id="deletePriceList" parameterType="java.util.List">
+   <delete id="deletePriceList" parameterType="java.util.List">
     	delete from priceList where serialNum in
         <foreach item="idList" collection="list" open="(" close=")" separator=",">
             #{idList}

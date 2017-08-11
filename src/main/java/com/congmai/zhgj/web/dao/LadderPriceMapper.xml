@@ -303,4 +303,21 @@
       updateTime = #{updateTime,jdbcType=TIMESTAMP}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
+  <update id="deleteByPriceSerial" parameterType="com.congmai.zhgj.web.model.LadderPrice" >
+    update  ladderPrice set delFlg =1 
+    where priceSerial = #{priceSerial,jdbcType=VARCHAR}
+  </update>
+  <insert id="insertLadderPriceList"  parameterType="java.util.List"> 
+   insert into ladderPrice (serialNum, priceSerial, countStart, 
+      countEnd, inclusivePrice, price, 
+      creator, createTime, 
+      updater, updateTime) 
+    values  
+    <foreach collection="list" item="item" index="index" separator="," >  
+       (#{item.serialNum,jdbcType=VARCHAR}, #{item.priceSerial,jdbcType=VARCHAR}, #{item.countStart,jdbcType=VARCHAR}, 
+      #{item.countEnd,jdbcType=DATE}, #{item.inclusivePrice,jdbcType=VARCHAR}, #{item.price,jdbcType=VARCHAR}, 
+      #{item.creator,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
+      #{item.updater,jdbcType=VARCHAR}, #{item.updateTime,jdbcType=TIMESTAMP})  
+    </foreach>  
+</insert>  
 </mapper>

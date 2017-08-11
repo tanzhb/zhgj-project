@@ -94,7 +94,7 @@
 													class="tool-action" data-toggle="modal" data-target="#import"> <i class="fa fa-upload"></i> 导入
 												</a></li> 
 												<li><a href="javascript:;" data-action="1"
-													class="tool-action" ng-click="exportCompany()"> <i class="fa fa-file-excel-o"></i> 导出
+													class="tool-action" ng-click="exportWarehouse()"> <i class="fa fa-file-excel-o"></i> 导出
 												</a></li>
 												<li><a href="javascript:;" data-action="2"
 													class="tool-action" > <i class="fa fa-print"></i> 打印

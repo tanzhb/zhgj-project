@@ -110,7 +110,7 @@ public class WareHouseController {
      * @return
      */
     @RequestMapping(value = "/saveWarehouseInfo", method = RequestMethod.POST)
-	public ResponseEntity<Void> saveWarehouseDetail(@RequestBody  Warehouse warehouse,UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<Warehouse> saveWarehouseDetail(@RequestBody  Warehouse warehouse,UriComponentsBuilder ucBuilder) {
     	try{
     		if(StringUtils.isEmpty(warehouse.getSerialNum())){
     			warehouse.setSerialNum(UUID.randomUUID().toString().replace("-",""));
@@ -121,10 +121,7 @@ public class WareHouseController {
     	}catch(Exception e){
     		System.out.println(e.getMessage());
     	}
-    	HttpHeaders headers = new HttpHeaders();
-		/*headers.setLocation(ucBuilder.path("/warehouse/{id}")
-				.buildAndExpand(warehouse.getSerialNum()).toUri());*/
-		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+		return new ResponseEntity<Warehouse>(warehouse, HttpStatus.OK);
     }
   
     @RequestMapping(value = "/getWarehouseList", method = RequestMethod.GET)

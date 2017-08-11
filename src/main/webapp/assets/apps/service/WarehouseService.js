@@ -8,7 +8,8 @@ angular.module('MetronicApp').factory('WarehouseService', ['$rootScope', '$http'
         saveWarehouse: saveWarehouse,
         delWarehouses:delWarehouses,
         selectByWarehouseName:selectByWarehouseName,
-        selectBySerialNum:selectBySerialNum
+        selectBySerialNum:selectBySerialNum,
+        uploadExcel:uploadExcel
     };
 
     return factory;
@@ -85,18 +86,6 @@ debugger;
         return deferred.promise;  
           
     };
-    function exportCompany {
-		$http({
-			url:'rest/warehouse/exportWarehouse',
-			method:'GET'
-			}).success(function(data,header,config,status){
-			//响应成功
-
-			}).error(function(data,header,config,status){
-			//处理响应失败
-			});
-	}
-	
     function  uploadExcel(params){
 		var deferred = $q.defer();
 		var fd = new FormData();

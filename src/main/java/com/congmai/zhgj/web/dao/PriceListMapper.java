@@ -1,7 +1,6 @@
 package com.congmai.zhgj.web.dao;
 
 import com.congmai.zhgj.core.generic.GenericDao;
-import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.PriceListExample;
 
@@ -9,7 +8,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-public interface PriceListMapper extends GenericDao<PriceList,String> {
+public interface PriceListMapper extends GenericDao<PriceList, String>{
     int countByExample(PriceListExample example);
 
     int deleteByExample(PriceListExample example);
@@ -32,4 +31,5 @@ public interface PriceListMapper extends GenericDao<PriceList,String> {
 
     int updateByPrimaryKey(PriceList record);
     int deletePriceList(List<String>serialNums);
+    
 }
