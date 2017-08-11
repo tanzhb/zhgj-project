@@ -59,12 +59,14 @@ public class UserController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(@Valid User user, BindingResult result, Model model,
 			HttpServletRequest request) {
+		String rememberMe = request.getParameter("rememberMe");
 		try {
 			Subject subject = SecurityUtils.getSubject();
 			// 已登陆则 跳到首页
-			if (subject.isAuthenticated()) {
+			if (subject.isAuthenticated() || subject.isRemembered()) {
 				return "redirect:/";
 			}
+			boolean b = subject.isRemembered();
 			if (result.hasErrors()) {
 				model.addAttribute("error", "参数错误！");
 				return "login";
@@ -73,9 +75,16 @@ public class UserController {
 			try{
 				UsernamePasswordToken upt = new UsernamePasswordToken(user.getAccount(), user
 						.getPassword());
+				if("on".equals(rememberMe)){//记住我
+					upt.setRememberMe(true);
+				}
 				subject.login(upt);
+				// 身份验证失败
+				
 			}catch(Exception e){
-				e.printStackTrace();
+//				e.printStackTrace();
+				model.addAttribute("error", "用户名或密码错误 ！");
+				return "login";
 			}
 			
 			// 验证成功在Session中保存用户信息
