@@ -7,6 +7,8 @@ import java.io.IOException;
 
 import java.io.InputStream;
 import java.io.StringReader;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +23,8 @@ import javax.validation.Valid;
 import org.apache.commons.io.FileUtils;  
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.context.annotation.Scope;  
 import org.springframework.http.HttpHeaders;  
 import org.springframework.http.HttpStatus;  
@@ -36,6 +40,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.alibaba.druid.util.StringUtils;
+import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.ContractService;
@@ -93,50 +99,41 @@ public class ContractController {
 	@RequestMapping(value = "/saveUserContract", method = RequestMethod.POST)
 	   public ResponseEntity<Void> saveUserContract(@Valid ContractVO contractVO, HttpServletRequest request,
 			   UriComponentsBuilder ucBuilder,@RequestParam(value = "files")MultipartFile files[]) {
+		   Subject currentUser = SecurityUtils.getSubject();
+		   String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
+		   
+		   
+		   String electronicContract=null;
+		   String signContract=null;
+		   //只有在文件组不为空时上传文件
+		   if(files.length>0){
+		   if(files[0]!=null){
+			   electronicContract=uploadFile(files[0]);   
+		   }
+		   
+		   
+		   if(files[1]!=null){
+			   signContract=uploadFile(files[1]); 
+		   }
+		   }
 		//如果id为空执行保存
 		if(StringUtils.isEmpty(contractVO.getId())){
 			  String serialNum=UUID.randomUUID().toString().toUpperCase().replaceAll("-", ""); 
 			  
 			   contractVO.setId(serialNum);
-			   String electronicContract=null;
-			   String signContract=null;
-			   //只有在文件组不为空时上传文件
-			   if(files.length>0){
-			   if(files[0]!=null){
-				   electronicContract=uploadFile(files[0]);   
-			   }
-			   
-			   
-			   if(files[1]!=null){
-				   signContract=uploadFile(files[1]); 
-			   }
-			   }
+			 
 			   
 			   //给各自的文件字段赋值文件名
 			   contractVO.setElectronicContract(electronicContract);
 			   contractVO.setSignContract(signContract);
 			   
-			   User user=(User) request.getSession().getAttribute("userInfo");   
-			   contractVO.setCreator("1");
+			   contractVO.setCreator(currenLoginName);
 			   contractService.insertContract(contractVO);
 		  }else{
 			  //如果id不为空执行更新
 			  User user1=(User) request.getSession().getAttribute("userInfo");
-			  contractVO.setUpdater("1");
+			  contractVO.setUpdater(currenLoginName);
 			  
-			  String electronicContract=null;
-			  String signContract=null;
-			//只有在文件组不为空时上传文件
-			  if(files.length>0){
-			   if(files[0]!=null){
-				   electronicContract=uploadFile(files[0]);   
-			   }
-			   
-			  
-			   if(files[1]!=null){
-				   signContract=uploadFile(files[1]); 
-			   }
-			  }
 			//给各自的文件字段赋值文件名
 			   contractVO.setElectronicContract(electronicContract);
 			   contractVO.setSignContract(signContract);
@@ -150,6 +147,35 @@ public class ContractController {
 					
 			return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	   }
+	
+	 /**
+     * @Description (导出企业信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping("exportContract")
+    public void exportContract(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+    		Map<String, Object> dataMap = new HashMap<String, Object>();
+    		List<ContractVO> contractList=contractService.queryContractList("");
+    		/*for(ContractVO contractVO:contractList){
+    			Date date=getNowDateShort(contractVO.getStartDate());
+    			contractVO.setStartDate(date);
+    		}*/
+    		
+    		dataMap.put("contractList",contractList);
+    		ExcelUtil.export(request, response, dataMap, "contract", "合同信息");
+    }
+    
+    
+    /** 
+     * 获取时间 
+     *  
+     * @return返回短时间格式 yyyy-MM-dd 
+     */  
+    public  Date getNowDateShort(Date date) {  
+    	 Date sqlDate = new java.sql.Date(date.getTime());  
+    	 return sqlDate;  
+    }
 	
 	
 	/**

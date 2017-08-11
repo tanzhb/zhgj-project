@@ -1,6 +1,7 @@
 angular.module('MetronicApp').controller('ContractController', ['$rootScope','$scope','$http', 'settings', '$q','ContractService','$state','$compile','$stateParams','$filter', function($rootScope,$scope,$http,settings, $q,ContractService,$state,$compile,$stateParams,$filter) {
 	$scope.$on('$viewContentLoaded', function() {   
 		// initialize core components
+		handle = new pageHandle();
 		App.initAjax();
 
 		// set default layout mode
@@ -140,6 +141,12 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 		};
 		
 		
+		 $scope.exportContract = function(){
+	    	 handle.blockUI("正在导出数据，请稍后"); 
+	    	 window.location.href=$rootScope.basePath+"/rest/contract/exportContract";
+	    	 handle.unblockUI(); 
+	       }
+		
 		var table;
 		var tableAjaxUrl = "rest/contract/findAllUserContract";
 		var loadMainTable = function() {
@@ -168,11 +175,11 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 									"sLast" : "尾页"
 								}
 							},
-							fixedHeader : {// 固定表头、表底
+							/*fixedHeader : {// 固定表头、表底
 								header : !0,
 								footer : !0,
 								headerOffset : a
-							},
+							},*/
 							// select: true,行多选
 							order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
 							bRetrieve : true,

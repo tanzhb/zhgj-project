@@ -285,8 +285,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         'assets/pages/scripts/ui-tree.min.js',
                         'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js',
                         'assets/apps/service/ContractService.js',
-	                    'assets/apps/controllers/ContractController.js',                 
-	                   
+	                    'assets/apps/controllers/ContractController.js',  
+	                    'assets/apps/scripts/pageHandle.js',
 	                        ]
 	                    });
 	                }]
@@ -297,7 +297,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         .state('addUserContract',{
             url: "/addUserContract",
             templateUrl: "rest/page/addUserContract",
-            data: {pageTitle: '合同管理'},
+            data: {pageTitle: '添加合同'},
             controller: "ContractController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -335,21 +335,11 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/pages/scripts/table-datatables-fixedheader.min.js',
 				
 				
-		        'assets/global/plugins/simple-line-icons/simple-line-icons.min.css',
-		        'assets/global/plugins/bootstrap/css/bootstrap.min.css',
-		        'assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css',
 		        'assets/global/plugins/fancybox/source/jquery.fancybox.css',
 		        'assets/global/plugins/jquery-file-upload/blueimp-gallery/blueimp-gallery.min.css',
 		        'assets/global/plugins/jquery-file-upload/css/jquery.fileupload.css',
 		        'assets/global/plugins/jquery-file-upload/css/jquery.fileupload-ui.css',
-		        'assets/global/css/components.min.css',
-		        'assets/global/css/plugins.min.css',
-		        'assets/layouts/layout2/css/layout.min.css',
 		        'assets/layouts/layout2/css/themes/blue.min.css',
-		        'assets/layouts/layout2/css/custom.min.css',
-		        
-				
-				
                         ]
                     });
                 }]
@@ -360,7 +350,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         	params:{data:null},
             url: "/editUserContractPage?:id",
             templateUrl: "rest/contract/editUserContractPage",
-            data: {pageTitle: '合同管理'},
+            data: {pageTitle: '修改合同'},
             reload:true,
             controller: "ContractController",
             resolve: {
@@ -397,6 +387,13 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 						'assets/global/plugins/datatables/datatables.all.min.js',
 						'assets/pages/scripts/table-datatables-fixedheader.min.js',
+						
+						
+				        'assets/global/plugins/fancybox/source/jquery.fancybox.css',
+				        'assets/global/plugins/jquery-file-upload/blueimp-gallery/blueimp-gallery.min.css',
+				        'assets/global/plugins/jquery-file-upload/css/jquery.fileupload.css',
+				        'assets/global/plugins/jquery-file-upload/css/jquery.fileupload-ui.css',
+				        'assets/layouts/layout2/css/themes/blue.min.css',
 				        
                         ]
                     });

@@ -57,19 +57,16 @@
 								class="tool-action"> <i class="icon-printer"></i> Print
 							</a></li>
 							<li><a href="javascript:;" data-action="1"
-								class="tool-action"> <i class="icon-check"></i> Copy
+								class="tool-action" ng-click="exportContract()"> <i class="fa fa-file-excel-o"></i> 导出
 							</a></li>
 							<li><a href="javascript:;" data-action="2"
-								class="tool-action"> <i class="icon-doc"></i> PDF
+								class="tool-action" > <i class="fa fa-print"></i> 打印
 							</a></li>
 							<li><a href="javascript:;" data-action="3"
-								class="tool-action"> <i class="icon-paper-clip"></i> Excel
-							</a></li>
-							<li><a href="javascript:;" data-action="4"
 								class="tool-action"> <i class="icon-cloud-upload"></i> CSV
 							</a></li>
 							<li class="divider"></li>
-							<li><a href="javascript:;" data-action="5"
+							<li><a href="javascript:;" data-action="4"
 								class="tool-action"> <i class="icon-refresh"></i> Reload
 							</a></li>
 							</li>
@@ -101,9 +98,7 @@
 			</div>
 
 			<div class="portlet-body" >
-				<table
-					class="table table-bordered"
-					id="sample_2">
+				<table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_2">
 					<thead>
 						<tr>
 							<th style="text-align: center"><input name="select_all"
