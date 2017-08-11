@@ -13,6 +13,41 @@
     display: none; }
   .page-footer {
     display: none; }
+  .form-control,.form-control-focus,.form-control-focus,.help-block,.btn,.input-group,.required{display:none}
+  .row {
+  margin-left: -15px;
+  margin-right: -15px; }
+  .row:before, .row:after {
+    content: " ";
+    display: table; }
+  .row:after {
+    clear: both; }
+    .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {
+    float: left; }
+  .col-md-1 {
+    width: 8.33333%; }
+  .col-md-2 {
+    width: 16.66667%; }
+  .col-md-3 {
+    width: 25%; }
+  .col-md-4 {
+    width: 33.33333%; }
+  .col-md-5 {
+    width: 41.66667%; }
+  .col-md-6 {
+    width: 50%; }
+  .col-md-7 {
+    width: 58.33333%; }
+  .col-md-8 {
+    width: 66.66667%; }
+  .col-md-9 {
+    width: 75%; }
+  .col-md-10 {
+    width: 83.33333%; }
+  .col-md-11 {
+    width: 91.66667%; }
+  .col-md-12 {
+    width: 100%; }
   .no-page-break {
     page-break-after: avoid; }
   .page-container {
@@ -21,14 +56,15 @@
   .page-content {
     padding: 0 !important;
     min-height: 300px !important;
-    padding: 0px 20px 20px !important;
+    padding: 0px 0px 0px !important;
     margin: 0 !important; }
     .page-content > .portlet {
       padding: 0;
       margin: 0; }
       .page-content > .portlet > .portlet-body {
         padding: 0;
-        margin: 0; } }
+        margin: 0; }
+ }
 
 /***
 Page Header

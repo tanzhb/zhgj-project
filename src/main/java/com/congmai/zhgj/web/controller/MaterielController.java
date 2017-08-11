@@ -10,7 +10,11 @@ import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -22,17 +26,26 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.ExcelReader;
+import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.web.model.BOMMateriel;
 import com.congmai.zhgj.web.model.BOMMaterielExample;
+import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyQualification;
 import com.congmai.zhgj.web.model.JsonTreeData;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
 import com.congmai.zhgj.web.model.MaterielExample.Criteria;
+import com.congmai.zhgj.web.model.MaterielFile;
+import com.congmai.zhgj.web.model.MaterielFileExample;
 import com.congmai.zhgj.web.model.User;
+import com.congmai.zhgj.web.service.MaterielFileService;
 import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.UserService;
 
@@ -53,25 +66,33 @@ public class MaterielController {
     
     @Resource
     private com.congmai.zhgj.web.service.BOMMaterielService BOMMaterielService;
+    
+    @Resource
+    private MaterielFileService materielFileService;
 
     /**
      * 保存物料
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
-    public Materiel save(@RequestBody Materiel materiel, HttpServletRequest request) {
+    public Materiel save(@RequestBody Materiel materiel) {
     	if(materiel.getSerialNum()==null||materiel.getSerialNum().isEmpty()){//新增
-    		insertNew(materiel, request);
+    		insertNew(materiel);
     	}else{//编辑升级
-    		updateVersion(materiel, request);
+    		updateVersion(materiel);
     	}
     	return materiel;
     }
     
-    
+    /**
+     * 
+     * @Description 保存BOM
+     * @param params
+     * @return
+     */
     @RequestMapping(value = "/saveBOM", method = RequestMethod.POST)
     @ResponseBody
-    public Map saveBOM(@RequestBody String params, HttpServletRequest request) {
+    public Map saveBOM(@RequestBody String params) {
     	params = params.replace("\\", "");
 		ObjectMapper objectMapper = new ObjectMapper();  
         JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, BOMMateriel.class);  
@@ -82,19 +103,18 @@ public class MaterielController {
 	    	if(!CollectionUtils.isEmpty(BOM)){
 	    		materiel = materielService.selectById(BOM.get(0).getBomMaterielSerial());
 	    		if(materiel!=null){
-		    		createNewVersion(materiel, request);
+		    		createNewVersion(materiel);
 		    	}
 	    		//生成新版本物料******↑↑↑↑↑↑********
-		    	User user = (User) request.getSession().getAttribute("userInfo");
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
 		    	for(BOMMateriel b:BOM){
 		    		b.setSerialNum(ApplicationUtils.random32UUID());
 		    		b.setBomMaterielSerial(materiel.getSerialNum());
-		    		if(user!=null){
-		    			b.setCreator(user.getId().toString());
-		    			b.setUpdater(user.getId().toString());
-		    		}
-		    			b.setCreateTime(new Date());
-		    			b.setUpdateTime(new Date());
+	    			b.setCreator(currenLoginName);
+	    			b.setUpdater(currenLoginName);
+	    			b.setCreateTime(new Date());
+	    			b.setUpdateTime(new Date());
 		    	}
 		    	//填充BOM******↑↑↑↑↑↑********
 		    	BOMMaterielService.betchInsertBOM(materiel,BOM);
@@ -113,15 +133,49 @@ public class MaterielController {
     	
     }
     
+    /**
+     * 
+     * @Description 保存附件
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/saveFile", method = RequestMethod.POST)
+    @ResponseBody
+    public void saveFile(@RequestBody String params) {
+    	params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+        JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, MaterielFile.class);  
+        List<MaterielFile> file;
+		try {
+			file = objectMapper.readValue(params, javaType);
+	    	if(!CollectionUtils.isEmpty(file)){
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		    	for(MaterielFile f:file){
+		    		f.setSerialNum(ApplicationUtils.random32UUID());
+		    		f.setUploader(currenLoginName);
+		    		f.setCreator(currenLoginName);
+	    			f.setUpdater(currenLoginName);
+	    			f.setUploadDate(new Date());
+	    			f.setCreateTime(new Date());
+	    			f.setUpdateTime(new Date());
+		    	}
+		    	//填充File******↑↑↑↑↑↑********
+		    	materielFileService.betchInsertMaterielFiles(file);
+		    	//数据插入******↑↑↑↑↑↑********
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
+    }
 	/**
 	 * 
 	 * @Description 升级版本
 	 * @param materiel
-	 * @param request
 	 */
-	private void updateVersion(Materiel materiel, HttpServletRequest request) {
-		createNewVersion(materiel, request);
-		
+	private void updateVersion(Materiel materiel) {
+		createNewVersion(materiel);
 		materielService.updateVersion(materiel);
 	}
 
@@ -129,15 +183,13 @@ public class MaterielController {
 	/**
 	 * @Description 构造新版本物料
 	 * @param materiel
-	 * @param request
 	 */
-	private void createNewVersion(Materiel materiel, HttpServletRequest request) {
+	private void createNewVersion(Materiel materiel) {
 		materiel.setSerialNum(ApplicationUtils.random32UUID());
-		User user = (User) request.getSession().getAttribute("userInfo");
-		if(user!=null){
-			materiel.setCreator(user.getId().toString());
-			materiel.setUpdater(user.getId().toString());
-		}
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		materiel.setCreator(currenLoginName);
+		materiel.setUpdater(currenLoginName);
 		materiel.setCreateTime(new Date());
 		materiel.setUpdateTime(new Date());
 		materiel.setIsLatestVersion("1");
@@ -156,27 +208,19 @@ public class MaterielController {
 	 * 
 	 * @Description 新增物料
 	 * @param materiel
-	 * @param request
 	 */
-	private void insertNew(Materiel materiel, HttpServletRequest request) {
+	private void insertNew(Materiel materiel) {
 		materiel.setSerialNum(ApplicationUtils.random32UUID());
 		materiel.setMaterielId(ApplicationUtils.random32UUID());
-		User user = (User) request.getSession().getAttribute("userInfo");
-		if(user!=null){
-			materiel.setCreator(user.getId().toString());
-			materiel.setUpdater(user.getId().toString());
-		}
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		materiel.setCreator(currenLoginName);
+		materiel.setUpdater(currenLoginName);
 		materiel.setCreateTime(new Date());
 		materiel.setUpdateTime(new Date());
 		materiel.setIsLatestVersion("1");
 		materiel.setVersionNO("1");
 		materiel.setStatus("1");
-		
-/*		if("true".equals(materiel.getIsBOM())){
-			materiel.setIsBOM("1");
-		}else{
-			materiel.setIsBOM("0");
-		}*/
 		
 		materielService.insert(materiel);
 	}
@@ -335,7 +379,7 @@ public class MaterielController {
 	 * @return
 	 */
 	@RequestMapping(value = "/deleteMateriels", method = RequestMethod.POST)
-	public ResponseEntity<Void> deleteMateriels(@RequestBody String ids, HttpServletRequest request) {
+	public ResponseEntity<Void> deleteMateriels(@RequestBody String ids) {
 		if ("".equals(ids) || ids == null) {
 			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
 		}
@@ -345,10 +389,9 @@ public class MaterielController {
 			m.setSerialNum(id);
 			m.setDelFlg("1");
 			m.setUpdateTime(new Date());
-			User user = (User) request.getSession().getAttribute("userInfo");
-	    	if(user!=null){
-	    		m.setUpdater(user.getId().toString());
-	    	}
+			Subject currentUser = SecurityUtils.getSubject();
+			String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+	    	m.setUpdater(currenLoginName);
 			materielService.update(m);
 		}
 
@@ -377,11 +420,115 @@ public class MaterielController {
 	    	map.put("BOM", BOM);
     	}
     	
+    	MaterielFileExample m =new MaterielFileExample();
+    	com.congmai.zhgj.web.model.MaterielFileExample.Criteria criteria =  m.createCriteria();
+    	criteria.andMaterielIdEqualTo(materiel.getMaterielId());
+    	criteria.andDelFlgEqualTo("0");
+    	List<MaterielFile> file = materielFileService.selectList(m);
+    	map.put("file", file);
+    	
     	return map;
 	}
     
-	
     
+	/**
+     * @Description (导出物料信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping("exportMateriel")
+    public void exportMateriel(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+    		Map<String, Object> dataMap = new HashMap<String, Object>();
+        	List<Materiel> materielList = new ArrayList<Materiel>();
+        	//查询全部物料
+        	MaterielExample m =new MaterielExample();
+    		//and 条件1
+        	Criteria criteria =  m.createCriteria();
+        	criteria.andIsLatestVersionEqualTo("1");
+        	criteria.andDelFlgEqualTo("0");
+    		//and 条件2,未发布可编辑的物料
+        	Criteria criteria2 =  m.createCriteria();
+        	criteria2.andStatusEqualTo("0");
+        	criteria2.andDelFlgEqualTo("0");
+        	//or 条件
+        	m.or(criteria2);
+        	//排序字段
+        	m.setOrderByClause("updateTime DESC");
+        	materielList = materielService.selectList(m);
+    		dataMap.put("materielList",materielList);
+    		ExcelUtil.export(request, response, dataMap, "materiel", "物料信息");
+    }
     
+    /**
+     * @Description (下载导入模板)
+     * @param request
+     * @return
+     */
+    @RequestMapping("downloadImportTemp")
+    public void downloadCompanyTemp(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+    	ExcelUtil.importTempDownLoad(request, response, "materiel");
+    }
+    
+    /**
+     * @Description (物料信息导入)
+     * @param request
+     * @return
+     */
+    @RequestMapping("materielImport")
+    @ResponseBody
+    public Map<String,String> materielImport(@RequestParam(value = "excelFile") MultipartFile excelFile,HttpServletRequest request,HttpServletResponse response) {
+    	Map<String,String> map = new HashMap<String, String>();
+    	 try {
+			ExcelReader excelReader = new ExcelReader(excelFile.getInputStream());
+			excelReader.readExcelContent(new RowHandler() {
+				@Override
+				public void handle(List<Object> row,int i) throws Exception {
+					if(!CollectionUtils.isEmpty(row)){
+						try{
+							Materiel materiel = new Materiel();
+
+							materiel.setMaterielNum(row.get(0).toString());
+							materiel.setMnemonicCode(row.get(1).toString());
+							materiel.setType(row.get(2).toString());
+							materiel.setMaterielName(row.get(3).toString());
+							materiel.setCategory(row.get(4).toString());
+							materiel.setUnit(row.get(5).toString());
+							materiel.setSpecifications(row.get(6).toString());
+							materiel.setProductionPlace(row.get(7).toString());
+							materiel.setStockUnit(row.get(8).toString());
+							/*materiel.setparentMateriel(row.get(9).toString());*/
+							materiel.setBrand(row.get(10).toString());
+							materiel.setOriginCountry(row.get(11).toString());
+							materiel.setLength(row.get(12).toString());
+							materiel.setWidth(row.get(13).toString());
+							materiel.setHeight(row.get(14).toString());
+							materiel.setCurrency(row.get(15).toString());
+							materiel.setUnitPrice(row.get(16).toString());
+							materiel.setFilingItemNo(row.get(17).toString());
+							materiel.setVolume(row.get(18).toString());
+							materiel.setCustomsSupervisionConditions(row.get(19).toString());
+							materiel.setWeight(row.get(20).toString());
+							materiel.setQualityDate(row.get(21).toString());
+							materiel.setPalletSpecification(row.get(22).toString());
+							materiel.setManufactureDate(StringUtils.isEmpty(row.get(23).toString())?null:(Date) row.get(23));
+							materiel.setPalletWeight(row.get(24).toString());
+							materiel.setRemark(row.get(25).toString());
+
+							insertNew(materiel);
+						}catch(Exception  e){
+							throw new Exception("第"+i+"行数据异常请检查，数据内容："+row.toString());
+						}
+						
+					}
+					
+				}
+			}, 2);
+			map.put("data", "success");
+		} catch (Exception e1) {
+			map.put("data", e1.getMessage());
+		}
+    	
+         return map;
+    }
     
 }
