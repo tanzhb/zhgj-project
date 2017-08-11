@@ -93,11 +93,11 @@ angular
 														"sLast" : "尾页"
 													}
 												},
-												fixedHeader : {// 固定表头、表底
+												/*fixedHeader : {// 固定表头、表底
 													header : !0,
 													footer : !0,
 													headerOffset : a
-												},
+												},*/
 												// select: true,行多选
 												order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
 												bRetrieve : true,
