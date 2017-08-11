@@ -271,7 +271,7 @@
                                                     <label class="col-md-4 control-label" for="isLadderPrice"> <!-- <span class="required"> * </span> -->是否阶梯单价 :</label>
                                                     <div class="col-md-8">
                                                                          <div class="icheck-inline"  ng-show="priceListAdd" >
-                                                                                <input type="checkbox"         ng-click="showOrHide()" name ="isLadderPrice"  class="icheck">是 
+                                                                                <label><input type="button"         ng-click="showOrHide()" name ="isLadderPrice"  class="icheck">是 </label>
                                                                             <input type="hidden"   ng-model="priceList.isLadderPrice"/>
                                                                         </div>
 												<div class="form-control-focus"> </div>

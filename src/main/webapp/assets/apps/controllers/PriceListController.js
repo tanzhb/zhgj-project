@@ -343,7 +343,6 @@ angular
 							};
 							// 修改价格结束***************************************							
 							$scope.showOrHide = function() {//控制阶梯div的显示与隐藏
-								debugger
 								 $scope.isChecked=!$scope.isChecked;
 								 if($scope.isChecked){
 									 $scope.priceList.isLadderPrice='1';
