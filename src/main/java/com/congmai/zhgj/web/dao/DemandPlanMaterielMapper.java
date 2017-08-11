@@ -1,11 +1,14 @@
 package com.congmai.zhgj.web.dao;
 
+import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.DemandPlanMaterielExample;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
-public interface DemandPlanMaterielMapper {
+public interface DemandPlanMaterielMapper extends GenericDao<DemandPlanMateriel, String>{
     int countByExample(DemandPlanMaterielExample example);
 
     int deleteByExample(DemandPlanMaterielExample example);

@@ -1,5 +1,6 @@
 package com.congmai.zhgj.web.controller;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -8,13 +9,13 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,7 +25,9 @@ import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.DemandPlan;
+import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.Materiel;
+import com.congmai.zhgj.web.service.DemandPlanMaterielService;
 import com.congmai.zhgj.web.service.DemandPlanService;
 
 /**
@@ -41,6 +44,9 @@ public class DemandPlanController {
 	
 	@Autowired
 	private DemandPlanService demandPlanService;
+	
+	@Autowired
+	private DemandPlanMaterielService demandPlanMaterielService;
 	
 	
 	@RequestMapping("demandPlanManage")
@@ -108,6 +114,51 @@ public class DemandPlanController {
     	return demandPlan;
     }
     
+    
+    /**
+     * @Description (查看需求计划)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="viewDemandPlan",method=RequestMethod.POST)
+    @ResponseBody
+    public DemandPlan viewDemandPlan(Map<String, Object> map,@RequestBody String serialNum,HttpServletRequest request) {
+    	
+    	DemandPlan demandPlan = null;
+        	try{
+        		if(StringUtils.isNotEmpty(serialNum)){
+        			demandPlan = demandPlanService.selectById(serialNum);
+        		}
+        		
+        		
+        	}catch(Exception e){
+        		System.out.println(e.getMessage());
+        		return null;
+        	}
+    	return demandPlan;
+    }
+
+    /**
+     * @Description (删除需求计划物料信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="deleteDemandPlan",method=RequestMethod.POST)
+    @ResponseBody
+    public String deleteDemandPlan(Map<String, Object> map,@RequestBody String serialNums,HttpServletRequest request) {
+    	String flag = "0"; //默认失败
+    	try{
+    		if(StringUtils.isNotEmpty(serialNums)){
+    			List<String> serialNumArray  = Arrays.asList(serialNums);
+    			demandPlanService.deleteBatch(serialNumArray);
+    		}
+    	}catch(Exception e){
+    		System.out.println(e.getMessage());
+    		flag = "1";
+    	}
+    	return flag;
+    }
+    
     /**
      * 
      * @Description (选择物料)
@@ -126,6 +177,86 @@ public class DemandPlanController {
     	
     	return list;
     }
+    
+    
+    /**
+     * @Description (保存续期计划物料信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="saveDemandPlanMateriel",method=RequestMethod.POST)
+    @ResponseBody
+    public DemandPlanMateriel saveDemandPlanMateriel(Map<String, Object> map,@RequestBody DemandPlanMateriel materiel,HttpServletRequest request) {
+    	String flag ="0"; //默认失败
+
+        	try{
+        		Subject currentUser = SecurityUtils.getSubject();
+        		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+        		if(StringUtils.isEmpty(materiel.getSerialNum())){
+        			materiel.setSerialNum(ApplicationUtils.random32UUID());
+        			materiel.setCreateTime(new Date());
+        			materiel.setCreator(currenLoginName);
+        			materiel.setUpdateTime(new Date());
+        			materiel.setUpdater(currenLoginName);
+        			demandPlanMaterielService.insert(materiel);
+        		}else{
+        			materiel.setUpdateTime(new Date());
+        			materiel.setUpdater(currenLoginName);
+        			demandPlanMaterielService.update(materiel);
+        		}
+        		
+        		flag = "1";
+        	}catch(Exception e){
+        		System.out.println(e.getMessage());
+        		return null;
+        	}
+    	return materiel;
+    }
+    
+    /**
+     * @Description (查看需求计划物料信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="viewDemandPlanMateriel",method=RequestMethod.POST)
+    @ResponseBody
+    public DemandPlanMateriel viewDemandPlanMateriel(Map<String, Object> map,@RequestBody String serialNum,HttpServletRequest request) {
+    	
+    	DemandPlanMateriel materiel = null;
+        	try{
+        		if(StringUtils.isNotEmpty(serialNum)){
+        			materiel = demandPlanMaterielService.selectById(serialNum);
+        		}
+        		
+        		
+        	}catch(Exception e){
+        		System.out.println(e.getMessage());
+        		return null;
+        	}
+    	return materiel;
+    }
+
+    /**
+     * @Description (删除需求计划物料信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="deleteDemandPlanMateriel",method=RequestMethod.POST)
+    @ResponseBody
+    public String deleteDemandPlanMateriel(Map<String, Object> map,@RequestBody String serialNums,HttpServletRequest request) {
+    	String flag = "0"; //默认失败
+    	try{
+    		if(StringUtils.isNotEmpty(serialNums)){
+    			List<String> serialNumArray  = Arrays.asList(serialNums);
+    			demandPlanMaterielService.deleteBatch(serialNumArray);
+    		}
+    	}catch(Exception e){
+    		System.out.println(e.getMessage());
+    		flag = "1";
+    	}
+    	return flag;
+    }
+    
     
 
 }

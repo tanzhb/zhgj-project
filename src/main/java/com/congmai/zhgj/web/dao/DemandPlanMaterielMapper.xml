@@ -15,6 +15,8 @@
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <association property="materiel" column="materielSerial" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByPrimaryKey" ></association>
+    <association property="supplyName" column="supplyMaterielSerial" select="com.congmai.zhgj.web.dao.DemandPlanMaterielMapper.selectSupplyName" ></association>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -335,4 +337,11 @@
       remark = #{remark,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
+  
+  
+   <select id="selectSupplyName" parameterType="java.lang.String" resultType="java.lang.String">
+    select
+     '上海'
+    from dual
+  </select>
 </mapper>

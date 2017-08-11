@@ -43,37 +43,37 @@
                         <div class="portlet-title">
                             <div class="caption">需求计划</div>
                             <div class="actions">
-                                <button   ng-show="companyView" class="btn blue  btn-outline  btn-sm " ng-click="editCompany()">
+                                <button   ng-show="demandPlanView" class="btn blue  btn-outline  btn-sm " ng-click="editCompany()">
                                             <i class="fa fa-edit"></i> 编辑 </button>
-                                <button   ng-show="companyEdit" class="btn red  btn-outline  btn-sm " ng-click="cancelCompany('company')">
+                                <button   ng-show="demandPlanEdit" class="btn red  btn-outline  btn-sm " ng-click="cancelCompany('company')">
                                             <i class="fa fa-undo"></i> 取消 </button>
-                                <button   ng-hide="companyAdd" class="btn blue  btn-outline  btn-sm " ng-click="saveCompany()">
+                                <button   ng-hide="demandPlanAdd" class="btn blue  btn-outline  btn-sm " ng-click="saveDemandPlan()">
                                             <i class="fa fa-save"></i> 保存 </button>
                             </div>
                         </div>
                         <div class="portlet-body form">
-                            <form  id="companyForm" class="form-horizontal" >
+                            <form  id="demandPlanForm" class="form-horizontal" >
 								<div class="form-body">
 									<div class="alert alert-danger display-hide">
                                                 <button class="close" data-close="alert"></button>请先输入正确数据！</div>
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="businessType"> <span class="required"> * </span>需求计划编号：</label>
-                                                    <div class="col-md-8">
-                                                        <input type="text" class="form-control" id="businessType" ng-model="company.businessType" ng-hide="companyAdd" >
+                                                    <label class="col-md-4 control-label" for="demandPlanNum"> <span class="required"> * </span>需求计划编号：</label>
+                                                    <div class="col-md-7">
+                                                        <input type="text" class="form-control" id="demandPlanNum" name="demandPlanNum" ng-model="demandPlan.demandPlanNum" ng-hide="demandPlanAdd" >
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="companyView">{{company.businessType}}</p>
+                                                         <p class="control-label left" ng-show="demandPlanView">{{demandPlan.demandPlanNum}}</p>
                                                     </div>
                                             </div>
 										</div>
 										<div class="col-md-6">
 											<div class="form-group form-md-line-input">
-                                                   <label class="col-md-4 control-label" for="businessType"> <span class="required"> * </span>客户名称：</label>
-                                                    <div class="col-md-8">
-                                                        <input type="text" class="form-control" id="businessType" ng-model="company.businessType" ng-hide="companyAdd" >
+                                                   <label class="col-md-4 control-label" for="buyComId"> <span class="required"> * </span>客户名称：</label>
+                                                    <div class="col-md-7">
+                                                        <input type="text" class="form-control" id="buyComId" name="buyComId" ng-model="demandPlan.buyComId" ng-hide="demandPlanAdd" >
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="companyView">{{company.businessType}}</p>
+                                                         <p class="control-label left" ng-show="demandPlanView">{{demandPlan.buyComId}}</p>
                                                   </div>
                                             </div>
 										</div>
@@ -83,20 +83,20 @@
 										<div class="col-md-6">
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="legalPerson">包含物料:</label>
-                                                    <div class="col-md-8">
-                                                        <input type="text" class="form-control" id="legalPerson" name="legalPerson" ng-model="company.legalPerson" ng-hide="companyAdd" >
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="companyView">{{company.legalPerson}}</p>
+                                                    <div class="col-md-7">
+                                                        <!-- <input type="text" class="form-control" id="legalPerson" name="legalPerson" ng-model="company.legalPerson" ng-hide="companyAdd" >
+                                                        <div class="form-control-focus"> </div> -->
+                                                         <p class="control-label left" >2</p>
                                                     </div>
                                             </div>
 										</div>
 										<div class="col-md-6">
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="address">包含供应商：</label>
-                                                    <div class="col-md-8">
-                                                        <input type="text" class="form-control" id="address" name="address" ng-model="company.address" ng-hide="companyAdd" >
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="companyView">{{company.address}}</p>
+                                                    <div class="col-md-7">
+                                                       <!--  <input type="text" class="form-control" id="address" name="address" ng-model="company.address" ng-hide="companyAdd" >
+                                                        <div class="form-control-focus"> </div> -->
+                                                         <p class="control-label left">2</p>
                                                     </div>
                                             </div>
 										</div>
@@ -105,21 +105,21 @@
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="taxpayeNumber"> <span class="required"> * </span>发布日期：</label>
-                                                    <div class="col-md-8">
-                                                        <input type="text" class="form-control" id="taxpayeNumber" name="taxpayeNumber" ng-model="company.taxpayeNumber" ng-hide="companyAdd" >
+                                                    <label class="col-md-4 control-label" for="releaseDate"> <span class="required"> * </span>发布日期：</label>
+                                                    <div class="col-md-7">
+                                                        <input type="text" class="form-control form-control-inline input-medium date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="releaseDate" name="releaseDate" ng-model="demandPlan.releaseDate" ng-hide="demandPlanAdd" >
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="companyView">{{company.taxpayeNumber}}</p>
+                                                         <p class="control-label left" ng-show="demandPlanView">{{demandPlan.releaseDate}}</p>
                                                     </div>
                                             </div>
 										</div>
 										<div class="col-md-6">
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="tel">备注：</label>
-                                                    <div class="col-md-8">
-                                                        <input type="text" class="form-control" id="tel" name="tel" ng-model="company.tel" ng-hide="companyAdd" >
+                                                    <div class="col-md-7">
+                                                        <input type="text" class="form-control" id="remark"  ng-model="demandPlan.remark" ng-hide="demandPlanAdd" >
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="companyView">{{company.tel}}</p>
+                                                         <p class="control-label left" ng-show="demandPlanView">{{demandPlan.remark}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -159,21 +159,42 @@
 			                                                    <td colspan="7" align="center" >暂无数据</td>
 			                                                </tr>
 			                                            </tbody>
-			                                            <tbody ng-repeat="materiel in materiel track by $index">
+			                                            <tbody ng-repeat="materiel in rootMateriels track by $index"  repeat-done="repeatDone()">
 			                                                <tr ng-mouseover="showOperation('contact',$index)" ng-mouseleave="hideOperation('contact',$index)">
 			                                                    <td>{{materiel.materielNum}}</td>
 			                                                    <td>{{materiel.materielName}}</td>
 			                                                    <td>{{materiel.specifications}}</td>
 			                                                    <td>{{materiel.unit}}</td>
-			                                                    <td>{{materiel.contactTel}}</td>
-			                                                    <td>{{materiel.wechat}}</td>
+			                                                    <td>
+			                                                    	<input type="text" ng-hide="demandPlanMaterielEdit{{$index}}" class="form-control  input-small" ng-model="demandPlanMateriel.amount" value="">
+			                                                   	 	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{demandPlanMateriel.amount}}</label>
+			                                                    </td>
+			                                                    <td>
+				                                                    <div  ng-hide="demandPlanMaterielEdit{{$index}}" class="input-group input-medium date date-picker"
+																		 data-date-format="yyyy-mm-dd"
+																		data-date-viewmode="years">
+																		<input type="text" class="form-control" readonly="" id="validityDate{{$index}}" ng-model="demandPlanMateriel.deliveryDate" name="validityDate"
+																			> <span class="input-group-btn">
+																			<button class="btn default " type="button">
+																				<i class="fa fa-calendar"></i>
+																			</button>
+																		</span>
+																		<span class="help-block"></span>
+																	</div>
+																	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{demandPlanMateriel.deliveryDate}}</label>
+			                                                    </td>
 			                                                    <td>{{materiel.contactEmail}}</td>
-			                                                    <td>{{materiel.remark}}</td>
+			                                                    <td>
+			                                                    	<input  ng-hide="demandPlanMaterielEdit{{$index}}" type="text" class="form-control" ng-model="demandPlanMateriel.deliveryAddress" value="">
+			                                                    	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{demandPlanMateriel.deliveryAddress}}</label>
+			                                                    </td>
 			                                                    <td>{{materiel.remark}}</td>
 			                                                    <td ng-show="operation_c{{$index}}">
-			                                                    	<a ng-click="editCompanyContact(_contact.serialNum)"><i class="fa fa-edit" title="编辑"></i></a>
+			                                                    	<a ng-click="saveDemandPlanMateriel(demandPlanMateriel,materiel,$index)">保存</a>
 			                                                    	&nbsp;&nbsp;&nbsp;
-			                                                    	<a ng-click="deleteCompanyContact(_contact.serialNum)"><i class="fa fa-trash" title="删除"></i></a>
+			                                                    	<a ng-click="editDemandPlanMateriel(demandPlanMateriel,materiel,$index)">变更</a>
+			                                                    	&nbsp;&nbsp;&nbsp;
+			                                                    	<a ng-click="deleteDemandPlanMateriel(demandPlanMateriel)">删除</a>
 			                                                    </td>
 			                                                </tr>
 			                                            </tbody>

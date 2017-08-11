@@ -75,4 +75,12 @@ public class DemandPlanServiceImpl extends GenericServiceImpl<DemandPlan,String>
 		return null;
 	}
 
+	@Override
+	public void deleteBatch(List<String> serialNumArray) {
+		DemandPlanExample example = new DemandPlanExample();
+		example.createCriteria().andSerialNumIn(serialNumArray);
+		demandPlanMapper.deleteByExample(example);
+		
+	}
+
 }

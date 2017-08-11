@@ -33,12 +33,12 @@ angular.module('MetronicApp').service('demandPlanService',['$http','$q',function
 	}
 	
 	/**
-	 * 保存
+	 * 保存需求计划
 	 */
-	this.saveCompany = function (company){
+	this.saveDemandPlan = function (demandPlan){
 		var deferred = $q.defer();
-		$http.post("rest/company/saveCompany", 
-			company//传整个表单数据  
+		$http.post("rest/demandPlan/saveDemandPlan", 
+			demandPlan//传整个表单数据  
 		).then(function success(result) {
 			deferred.resolve(result);//请求成功
 		}, function error(err) {
@@ -50,10 +50,42 @@ angular.module('MetronicApp').service('demandPlanService',['$http','$q',function
 	/**
 	 * 编辑
 	 */
-	this.editCompany = function(comId){
+	this.viewDemandPlan = function(serialNum){
 		var deferred = $q.defer();
-		$http.get("rest/company/viewCompany", {  
-    		params:{comId:comId,cache:false}//传整个表单数据  
+		$http.get("rest/demandPlan/viewDemandPlanMateriel", {  
+    		params:{serialNum:serialNum}//传整个表单数据  
+    	}).then(function success(result) {
+            deferred.resolve(result);//请求成功
+        }, function error(err) {
+            deferred.reject(err);//请求失败
+        });
+        return deferred.promise;//返回承诺
+    	
+	}
+
+	
+	/**
+	 * 保存物料
+	 */
+	this.saveDemandPlanMateriel = function (materiel){
+		var deferred = $q.defer();
+		$http.post("rest/demandPlan/saveDemandPlanMateriel", 
+				materiel//传整个表单数据  
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
+	
+	/**
+	 * 编辑
+	 */
+	this.editDemandPlanMateriel = function(serialNum){
+		var deferred = $q.defer();
+		$http.get("rest/demandPlan/viewDemandPlanMateriel", {  
+    		params:{serialNum:serialNum,cache:false}//传整个表单数据  
     	}).then(function success(result) {
             deferred.resolve(result);//请求成功
         }, function error(err) {
@@ -66,10 +98,10 @@ angular.module('MetronicApp').service('demandPlanService',['$http','$q',function
 	/**
 	 * 删除
 	 */
-	this.deleteCompany = function(comId){
+	this.deleteDemandPlanMateriel = function(serialNum){
 		var deferred = $q.defer();
-		 $http.get("rest/company/deleteCompany", {  
-	        	params:{comId:comId,cache:false}//传整个表单数据  
+		 $http.get("rest/demandPlan/deleteDemandPlanMateriel", {  
+	        	params:{serialNum:serialNum}//传整个表单数据  
 	        }).then(function success(result) {
                 deferred.resolve(result);//请求成功
             }, function error(err) {

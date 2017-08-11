@@ -3,6 +3,10 @@ package com.congmai.zhgj.web.model;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class DemandPlan {
     private String serialNum;
 
@@ -10,6 +14,7 @@ public class DemandPlan {
 
     private String demandPlanNum;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date releaseDate;
 
     private String remark;
@@ -50,6 +55,7 @@ public class DemandPlan {
         this.demandPlanNum = demandPlanNum == null ? null : demandPlanNum.trim();
     }
 
+    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
     public Date getReleaseDate() {
         return releaseDate;
     }

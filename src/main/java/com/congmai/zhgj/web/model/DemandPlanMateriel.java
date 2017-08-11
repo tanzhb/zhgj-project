@@ -2,6 +2,10 @@ package com.congmai.zhgj.web.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class DemandPlanMateriel {
     private String serialNum;
 
@@ -13,6 +17,7 @@ public class DemandPlanMateriel {
 
     private String amount;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date deliveryDate;
 
     private String deliveryAddress;
@@ -28,6 +33,10 @@ public class DemandPlanMateriel {
     private Date updateTime;
 
     private String remark;
+    
+    private Materiel materiel;
+    
+    private String supplyName;
 
     public String getSerialNum() {
         return serialNum;
@@ -69,6 +78,7 @@ public class DemandPlanMateriel {
         this.amount = amount == null ? null : amount.trim();
     }
 
+    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
     public Date getDeliveryDate() {
         return deliveryDate;
     }
@@ -132,4 +142,20 @@ public class DemandPlanMateriel {
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
     }
+
+	public String getSupplyName() {
+		return supplyName;
+	}
+
+	public void setSupplyName(String supplyName) {
+		this.supplyName = supplyName;
+	}
+
+	public Materiel getMateriel() {
+		return materiel;
+	}
+
+	public void setMateriel(Materiel materiel) {
+		this.materiel = materiel;
+	}
 }

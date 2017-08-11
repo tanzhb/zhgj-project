@@ -12,4 +12,6 @@ public interface DemandPlanService extends GenericService<DemandPlan, String>{
 		public Page<DemandPlan> getListByCondition(DemandPlan demandPlan,int start,int limit);
 
 		public List<Materiel> chooseMateriel(String ids);
+
+		public void deleteBatch(List<String> serialNumArray);
 }

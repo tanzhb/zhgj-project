@@ -511,6 +511,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        				        'assets/global/plugins/datatables/datatables.all.min.js',
 	        				        'assets/apps/controllers/DemandPlanController.js',
 	        				        'assets/apps/service/DemandPlanService.js',
+	        				        'assets/apps/directive/DemandPlanDirective.js',
 	        				        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
 	        				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css',
 	        				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js',

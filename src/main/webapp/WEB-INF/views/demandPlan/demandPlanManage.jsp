@@ -28,21 +28,22 @@
     <div class="col-md-12">
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
                 <div class="portlet light">
-                                <!-- <div class="portlet-title">
+                               <div class="portlet-title">
                                       <div class="caption">
                                         	需求计划
                                       </div>
-                                </div> -->
+                                       <div class="tools">
+				                             <button  class="btn blue  btn-outline  btn-sm " ng-click="addDemandPlan()">
+                                            <i class="fa fa-plus"></i>新增</button>
+				                       </div>
+                                </div>
                                 <div class="portlet-body" ng-repeat="demandPlan in demandPlans">
 										 <div class="portlet">
 				                                <div class="portlet-title">
 				                                    <div class="caption">
 				                                    	上海某公司
 				                                    </div>
-				                                    <div class="tools">
-				                                         <button  class="btn blue  btn-outline  btn-sm " ng-click="addDemandPlan()">
-                                            				<i class="fa fa-plus"></i>新增</button>
-				                                    </div>
+				                                   
 				                                </div>
 				                                <div class="portlet-body">
 				                                	<div class="row">
@@ -65,11 +66,12 @@
 					                                            </thead>
 					                                            <tbody ng-repeat="materiel in demandPlan.materiels">
 					                                                <tr>
-					                                                    <td>{{materiel.materielSerial}}</td>
-					                                                    <td>{{materiel.materielSerial}}</td>
-					                                                    <td>{{materiel.materielSerial}}</td>
-					                                                    <td>{{materiel.materielSerial}}</td>
-					                                                    <td>{{materiel.supplyMaterielSerial}}</td>
+					                                                    <td><input name="select_all" class="dt-body-center"
+																				value="1" type="checkbox" /></td>
+					                                                    <td>{{materiel.materiel.materielName}}</td>
+					                                                    <td>{{materiel.materiel.materielName}}</td>
+					                                                    <td>{{materiel.materiel.specifications}}</td>
+					                                                    <td>{{materiel.supplyName}}</td>
 					                                                    <td>{{materiel.deliveryDate}}</td>
 					                                                    <td>{{materiel.amount}}</td>
 					                                                    <td>{{materiel.deliveryAddress}}</td>
