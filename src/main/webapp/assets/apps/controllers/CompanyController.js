@@ -1210,6 +1210,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	            });
 	    	   
 	       }
+	       
 	       $('#import').on('hide.bs.modal', function (e) { 
 	    	   $("#resetFile").trigger("click");
 	    	  //$("#file_span input[type='file']").remove();
