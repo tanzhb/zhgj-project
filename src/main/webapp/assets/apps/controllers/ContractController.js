@@ -1,6 +1,7 @@
-angular.module('MetronicApp').controller('ContractController', ['$rootScope','$scope','$http', 'settings', 'ContractService','$state','$compile','$stateParams','$filter', function($rootScope,$scope,$http,settings, ContractService,$state,$compile,$stateParams,$filter) {
+angular.module('MetronicApp').controller('ContractController', ['$rootScope','$scope','$http', 'settings', '$q','ContractService','$state','$compile','$stateParams','$filter', function($rootScope,$scope,$http,settings, $q,ContractService,$state,$compile,$stateParams,$filter) {
 	$scope.$on('$viewContentLoaded', function() {   
 		// initialize core components
+		handle = new pageHandle();
 		App.initAjax();
 
 		// set default layout mode
@@ -25,12 +26,19 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 		debugger
 		if($('#form_sample_1').valid()){//表单验证通过则执行添加功能
 		var fd = new FormData();
-        var files = document.querySelector('input[name="files"]').files[0];
+		if($("input[name='files']").length){
+			var files = document.querySelector('input[name="files"]').files[0];
+			fd.append("files", files);
+		}
         
+		if($("input[name='file']").length){
         var file = document.querySelector('input[name="file"]').files[0];
-        fd.append("files", files);
         fd.append("files", file);
-
+		}
+		
+		if($("input[id='id']").length){
+		fd.append('id', $("#id").val()); 
+		}
 		
         fd.append('contractNum', $("#contractNum").val()); 
         fd.append('contractType', $("#contractType").val()); 
@@ -133,6 +141,12 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 		};
 		
 		
+		 $scope.exportContract = function(){
+	    	 handle.blockUI("正在导出数据，请稍后"); 
+	    	 window.location.href=$rootScope.basePath+"/rest/contract/exportContract";
+	    	 handle.unblockUI(); 
+	       }
+		
 		var table;
 		var tableAjaxUrl = "rest/contract/findAllUserContract";
 		var loadMainTable = function() {
@@ -161,11 +175,11 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 									"sLast" : "尾页"
 								}
 							},
-							fixedHeader : {// 固定表头、表底
+							/*fixedHeader : {// 固定表头、表底
 								header : !0,
 								footer : !0,
 								headerOffset : a
-							},
+							},*/
 							// select: true,行多选
 							order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
 							bRetrieve : true,
@@ -301,14 +315,95 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 				}								
 			};
 			
-			$scope.download=function(name){
-		    	alert(name);
-		    	/*ContractService.downLoad(name).then(
-		    			toastr.success("删除成功")
-		    	);*/
-		    	$http.get($rootScope.basePath + "/rest/contract/resourceDownload",  {filename:name}).success(function (data) {  
+			
+			//查看上传的文件
+			$scope.download=function(name) {
+	           /* $http({
+	                url: '/rest/contract/resourceDownload',
+	                method: "POST",
+	                data: $.param({
+	                }),
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	                responseType: 'arraybuffer'
+	            }).success(function (data, status, headers, config) {
+	                var blob = new Blob([data], {type: "application/vnd.ms-excel"});
+	                saveAs(blob, [headers('Content-Disposition').replace(/attachment;fileName=/,"")]);
+	            }).error(function (data, status, headers, config) {
+	                //upload failed
+	            });*/
+				window.open($rootScope.basePath+"/uploadAttachFiles/"+name);
+	        };
+				
+				
+				/*function(name){
+				 var deferred = $q.defer();  
+		    	ContractService.downLoad(name).then(
+		    			toastr.success("下载成功")
+		    	);
+		    	$http.get($rootScope.basePath + "/rest/contract/resourceDownload").success(function (data) {  
+		    		alert(data);
+		    		deferred.resolve(data); 
 		        })
-		  }
+		  }*/
+	        
+	        //修改电子合同
+	        $scope.editElectronicContract=function(myevent){
+	        	var htmlObj = $(myevent.target);
+	        	htmlObj.parent().parent().hide();
+	        	htmlObj.parent().parent().prev().show();
+	        	htmlObj.parent().parent().prev().find("input[type='file']").attr("name","files");
+	        }
+	        
+	        //修改签字合同
+	        $scope.editSignContract=function(myevent){
+	        	var htmlObj = $(myevent.target);
+	        	htmlObj.parent().parent().hide();
+	        	htmlObj.parent().parent().prev().show();
+	        	htmlObj.parent().parent().prev().find("input[type='file']").attr("name","file");
+	        }
+	        
+	        
+	        /**
+	        * 下载EXCEL模板
+	        */
+	       $scope.downloadImportTemp = function(){
+	    	   window.location.href=$rootScope.basePath+"/rest/contract/downloadImportTemp";
+	       }
+	       
+	       
+	       /**
+	        * 上传EXCEL
+	        */
+	       $scope.uploadExcel = function(){
+	    	    var file = document.querySelector('input[type=file]').files[0];
+	    	    if(handle.isNull(file)){
+	    	    	handle.toastr.warning("请选择Excel文件！");
+	    	    }
+	    	    console.log(file.name);
+	    	    var type = file.name.substring(file.name.lastIndexOf("."));
+	    	   if(type != ".xls"){
+	    		   handle.toastr.warning("文件格式不正确，需要xls类型的Excel文档");
+	    		   return;
+	    	   }
+	    	   	handle.blockUI("正在导入中，请不要进行其他操作"); 
+	    	   	var promise = ContractService.uploadExcel();
+       			promise.then(function(data){
+       				handle.unblockUI(); 
+       				if(data.data.data=="success"){
+       					handle.toastr.success("导入成功");
+       					$state.go('userContract',{},{reload:true});
+       					$(".modal-backdrop").remove();
+       				}else{
+       					handle.toastr.error(data.data.data);
+       				}
+       				$('#import').modal('hide'); 
+	            },function(data){
+	               //调用承诺接口reject();
+	            	handle.toastr.error("操作失败");
+	            	$('#import').modal('hide'); 
+	            });
+	    	   
+	       }
 		
 		//修改
 		$scope.jumpToEdit = function() {
@@ -403,7 +498,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
             ignore: "",
             messages: {
             	
-            	contractNum:{required:"合同编号不能为空！",rangelength:jQuery.validator.format("合同编号位数必须在{0}到{1}字符之间！"),
+            	contractNum:{required:"合同编号不能为空！",rangelength:jQuery.validator.format("合同编号位数必须在{0}到{1}字符之间！")
             		/*remote:jQuery.validator.format("用户名已经被注册")*/},
             	contractType:{required:"合同类型不能为空！"},
             	serviceModel:{required:"服务模式不能为空！"},

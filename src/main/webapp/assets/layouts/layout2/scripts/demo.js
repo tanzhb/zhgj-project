@@ -210,7 +210,7 @@ var Demo = function () {
         // set default theme options:
 
         if ($("body").hasClass("page-boxed")) {
-            $('.layout-option', panel).val("boxed");
+            $('.layout-option', panel).val("fluid");
         }
 
         if ($("body").hasClass("page-sidebar-fixed")) {
@@ -245,6 +245,13 @@ var Demo = function () {
             var sidebarMenuOption = $('.sidebar-menu-option', panel).val();
 
         $('.layout-option, .page-header-top-dropdown-style-option, .page-header-option, .sidebar-option, .page-footer-option, .sidebar-pos-option, .sidebar-style-option, .sidebar-menu-option', panel).change(setLayout);
+
+ /*       resetLayout();*/
+        //重新设置默认样式
+        $('.layout-option', panel).val("fluid");
+        $(".page-sidebar-menu").removeClass("page-sidebar-menu-compact");
+        $('.sidebar-style-option', panel).val("compact");
+        setLayout();
     };
 
     // handle theme style
@@ -265,7 +272,7 @@ var Demo = function () {
         init: function() {
             // handles style customer tool
             handleTheme(); 
-
+            
             // handle layout style change
             $('.theme-panel .layout-style-option').change(function() {
                  setThemeStyle($(this).val());

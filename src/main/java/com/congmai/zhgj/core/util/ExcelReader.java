@@ -86,8 +86,8 @@ public class ExcelReader {
      * @param xssfCell
      * @return
      */
-    private String getCellFormatValue(Cell cell) {
-        String cellvalue = "";
+    private Object getCellFormatValue(Cell cell) {
+    	Object cellvalue = null;
         if (cell != null) {
             // 判断当前Cell的Type
             switch (cell.getCellType()) {
@@ -97,7 +97,7 @@ public class ExcelReader {
                 // 判断当前的cell是否为Date
                 if (HSSFDateUtil.isCellDateFormatted(cell)) {
                     Date date = cell.getDateCellValue();
-                    cellvalue = sdf.format(date);
+                    cellvalue = date;
                 } else {
                     // 如果是纯数字取得当前Cell的数值
                 	DecimalFormat df = new DecimalFormat("0");  

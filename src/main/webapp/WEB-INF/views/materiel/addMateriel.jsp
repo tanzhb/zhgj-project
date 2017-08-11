@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!-- BEGIN PAGE HEADER-->
+
 <h3 class="page-title"> 物料信息
 </h3>
 <div class="page-bar">
@@ -11,13 +12,23 @@
         </li>
         <li>
             <a ui-sref="materiel">物料信息</a>
+            <i class="fa fa-angle-right"></i>
         </li>
         <li>
             <a>{{opration}}</a>
         </li>
     </ul>
+    <div class="page-toolbar">
+          <div class="btn-group pull-right">
+              <button type="button" class="btn btn-fit-height grey-salt dropdown-toggle" onclick="printdiv('materielPrint')"> 
+              	<i class="fa fa-print"></i>
+                  		打印
+              </button>
+              
+          </div>
+      </div>
 </div>
-<div class="row">
+<div class="row" id="materielPrint">
     <div class="col-md-12">
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
         <div class="portlet bordered">
@@ -25,7 +36,7 @@
 				<div class="portlet light ">
                         <div class="portlet-title">
                             <div class="caption">基本信息</div>
-                            <div class="tools">
+                            <div class="tools" id="noprintdiv">
                             	<button type="submit" ng-click="save()" ng-hide="materielInput" class="btn blue  btn-outline  btn-sm">
                                		<i class="fa fa-save"></i> 保存 </button>
                                <button ng-click="cancel()" type="button" ng-hide="materielInput" class="btn red  btn-outline  btn-sm">
@@ -591,7 +602,76 @@
 
           </div>
           
-          
+          <!-- 附件 start-->
+          <div class="portlet-title">
+               <div class="caption">附件</div>
+               <div class="tools">
+               	 	<button type="submit" ng-click="saveFile()" ng-hide="fileInfoInput" class="btn blue  btn-outline  btn-sm">
+                  		<i class="fa fa-save"></i> 保存 </button>
+                  <button ng-click="cancelFile()" type="button" ng-hide="fileInfoInput" class="btn red  btn-outline  btn-sm">
+                  		<i class="fa fa-undo"></i> 取消 </button>
+                  <button ng-click="editFile()" type="button" ng-show="fileInfoShow" class="btn blue  btn-outline  btn-sm">
+                  		<i class="fa fa-edit"></i> 编辑 </button>
+                </div>
+            </div>
+           <div class="portlet-body form">
+			     <form id="form_sample_4"   class="form-horizontal">
+			         <div class="table-scrollable">
+                          <table class="table table-bordered table-hover">
+                              <thead>
+                                  <tr>
+                                      <th>附件类型</th>
+                                      <th>描述</th>
+                                      <th>文件</th>
+                                      <th>备注</th>
+                                      <th>上传人</th>
+                                      <th>上传时间</th>
+                                      <th style="width:100px;"></th>
+                                  </tr>
+                              </thead>
+                              <tbody ng-repeat="_file in file track by $index">
+                                  <tr ng-mouseover="showOperation('file',$index)" ng-mouseleave="hideOperation('file',$index)">
+			                          <td>
+		                                 	<select class="form-control" id="fileType[$index]" name="fileType" class="form-control" ng-hide="fileInfoInput" ng-model="file[$index].fileType"  >
+                                              <option value=""></option>
+                                             	<option value="物料图片" >物料图片</option>
+                                               <option value="图纸" >图纸</option>
+                                               <option value="其他附件" >其他附件</option>
+                                             </select>
+			                                <p class="form-control-static" ng-show="fileInfoShow"> {{_file.fileType}} </p>
+			                          </td>
+			                           <td>
+                                      		<input type="text" id="fileDescribe[$index]" name="fileDescribe" class="form-control" ng-hide="fileInfoInput" ng-model="file[$index].fileDescribe"  >
+			                                <p class="form-control-static" ng-show="fileInfoShow"> {{_file.fileDescribe}} </p>
+			                          </td>
+                                       <td>
+                                      		<input type="text" name="file[$index]" name="file" class="form-control" ng-hide="fileInfoInput" ng-model="file[$index].file"  >
+			                                <p class="form-control-static" ng-show="fileInfoShow"> {{_file.file}} </p>
+			                          </td>
+			                           <td>
+                                      		<input type="text" name="remark[$index]" name="remark" class="form-control" ng-hide="fileInfoInput" ng-model="file[$index].remark"  >
+			                                <p class="form-control-static" ng-show="fileInfoShow"> {{_file.remark}} </p>
+			                          </td>
+                                      <td><p class="form-control-static"> {{_file.uploader}} </p></td>
+                                      <td><p class="form-control-static"> {{_file.uploadDate}} </p></td>
+                                      
+                                      <td ng-show="operation_f{{$index}}">
+                                      	<a href="javascript:;"  class="btn red btn-sm" ng-hide="fileInfoInput" ng-click="deleteFile($index)">
+                                    			<i class="fa fa-close"></i> 
+                             				</a>
+                                      </td>
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+                      <div class="form-actions right">
+							<a  class="btn blue btn-sm"  ng-click="addFile()"   >
+	                              <i class="fa fa-plus"></i> 增加
+	                       	</a> 
+                  		</div>
+                  </form>
+          </div>
+          <!-- 附件 end-->
           <!-- BOM start-->
           <div class="portlet-title" ng-show="BOMShow">
                <div class="caption">BOM</div>
@@ -639,7 +719,7 @@
 			                                <span class="help-block">请输入用量</span> -->
 			                                <p class="form-control-static" ng-show="BOMInfoShow"> {{_BOM.singleDose}} </p>
 			                          </td>
-                                      <td ng-show="operation_c{{$index}}">
+                                      <td ng-show="operation_b{{$index}}">
                                       	<a href="javascript:;"  class="btn red btn-sm" ng-hide="BOMInfoInput" ng-click="deleteBOM($index)">
                                     			<i class="fa fa-close"></i> 
                              				</a>
@@ -656,9 +736,7 @@
                   </form>
           </div>
           <!-- BOM end-->
-          <!-- 附件 start-->
-          			
-          <!-- 附件 end-->
+          
           </div>
       </div>
 </div>

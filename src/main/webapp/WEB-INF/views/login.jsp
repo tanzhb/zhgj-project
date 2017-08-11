@@ -71,7 +71,7 @@ License: You must have a valid license purchased only from themeforest(the above
                         <form action="rest/user/login" class="login-form" method="post">
                             <div class="alert alert-danger display-hide">
                                 <button class="close" data-close="alert"></button>
-                                <span>请输入用户名和密码. </span>
+                                <span id="error">${error}</span>
                             </div>
                             <div class="row">
                                 <div class="col-xs-6">
@@ -82,10 +82,14 @@ License: You must have a valid license purchased only from themeforest(the above
                             <div class="row">
                                 <div class="col-sm-4">
                                     <div class="rem-password">
-                                        <label class="rememberme mt-checkbox mt-checkbox-outline">
-                                            <input type="checkbox" name="remember" value="1" /> 记住我
+                                            <div class="md-checkbox">
+                                                    <input type="checkbox" name="rememberMe" id="checkbox6" class="md-check">
+                                                    <label for="checkbox6">
+                                                        <span></span>
+                                                        <span class="check"></span>
+                                                        <span class="box"></span> 记住我 </label>
+                                                </div>
                                             <span></span>
-                                        </label>
                                     </div>
                                 </div>
                                 <div class="col-sm-8 text-right">

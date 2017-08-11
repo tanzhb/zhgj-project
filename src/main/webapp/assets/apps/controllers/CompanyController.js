@@ -14,7 +14,9 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    		$scope.companyQualifications =[{}];
 	    		handle.datePickersInit();
 	    		getCompanyInfo($stateParams.comId);
+	    		//qualificationFormValid();
 	    		validatorInit();
+	    		
 	    		
 	 		}else{
 	 			//createTable(15,1,true);
@@ -759,7 +761,9 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        * 保存企业资质信息
 	        */
 	       $scope.saveCompanyQualification = function(){
-	    	    $.validator.unobtrusive.parse($("#qualificationForm"));
+	    	   //$.validator.unobtrusive.parse($("#qualificationForm"));
+	    	    //qualificationFormValid();
+	    		//validatorInit();
 		    	if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
 		    		 toastr.warning("您的企业信息还未保存！");
 		    		 return;
@@ -1210,6 +1214,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	            });
 	    	   
 	       }
+	       
 	       $('#import').on('hide.bs.modal', function (e) { 
 	    	   $("#resetFile").trigger("click");
 	    	  //$("#file_span input[type='file']").remove();

@@ -1,11 +1,15 @@
 package com.congmai.zhgj.web.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.File;  
+import java.io.IOException;  
+
+
+
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.StringReader;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,19 +20,33 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.apache.commons.io.FileUtils;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.apache.commons.io.FileUtils;  
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
+import org.springframework.context.annotation.Scope;  
+import org.springframework.http.HttpHeaders;  
+import org.springframework.http.HttpStatus;  
+import org.springframework.http.MediaType;  
+import org.springframework.http.ResponseEntity;  
+import org.springframework.stereotype.Component;  
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMapping;  
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.alibaba.druid.util.StringUtils;
+import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.ExcelReader;
+import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
+import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.ContractService;
@@ -39,30 +57,32 @@ import com.congmai.zhgj.web.service.ContractService;
  * @author czw
  *
  */
+@Component  
+@Scope("prototype")  
 @Controller
 @RequestMapping("/contract")
 public class ContractController {
-	
+
 	/**
 	 * 合同管理service
 	 */
 	@Resource
 	private ContractService contractService;
-	
+
 	/**
-     * 
-     * @Description 查找所有用户合同信息
-     * @return
-     */
+	 * 
+	 * @Description 查找所有用户合同信息
+	 * @return
+	 */
 	@RequestMapping(value = "/findAllUserContract", method = RequestMethod.GET)
 	public ResponseEntity<Map> findAllUserContract(HttpServletRequest request) {
-		
+
 		User user=(User) request.getSession().getAttribute("userInfo"); 
-    	List<ContractVO> contractList=contractService.queryContractList("");
-		
+		List<ContractVO> contractList=contractService.queryContractList("");
+
 		if (contractList.isEmpty()) {
 			return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);// You many
-			                                                             // HttpStatus.NOT_FOUND
+			// HttpStatus.NOT_FOUND
 		}
 		//封装datatables数据返回到前台
 		Map pageMap = new HashMap();
@@ -72,8 +92,8 @@ public class ContractController {
 		pageMap.put("data", contractList);
 		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 	}
-	
-	
+
+
 	/**
 	 * 保存用户合同
 	 * @param contractVO（合同对象）
@@ -82,37 +102,87 @@ public class ContractController {
 	 * @return 操作结果
 	 */
 	@RequestMapping(value = "/saveUserContract", method = RequestMethod.POST)
-	   public ResponseEntity<Void> saveUserContract(@Valid ContractVO contractVO, HttpServletRequest request,
-			   UriComponentsBuilder ucBuilder,@RequestParam(value = "files")MultipartFile files[]) {
+	public ResponseEntity<Void> saveUserContract(@Valid ContractVO contractVO, HttpServletRequest request,
+			UriComponentsBuilder ucBuilder,@RequestParam(value = "files")MultipartFile files[]) {
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
+
+
+		String electronicContract=null;
+		String signContract=null;
+		//只有在文件组不为空时上传文件
+		if(files.length>0){
+			if(files[0]!=null){
+				electronicContract=uploadFile(files[0]);   
+			}
+
+
+			if(files[1]!=null){
+				signContract=uploadFile(files[1]); 
+			}
+		}
 		//如果id为空执行保存
 		if(StringUtils.isEmpty(contractVO.getId())){
-			  String serialNum=UUID.randomUUID().toString().toUpperCase().replaceAll("-", ""); 
-			  
-			   contractVO.setId(serialNum);
-			   String electronicContract=uploadFile(files[0]);
-			   String signContract=uploadFile(files[1]);
-			   
-			   contractVO.setElectronicContract(electronicContract);
-			   contractVO.setSignContract(signContract);
-			   
-			   User user=(User) request.getSession().getAttribute("userInfo");   
-			   contractVO.setCreator("1");
-			   contractService.insertContract(contractVO);
-		  }else{
-			  //如果id不为空执行更新
-			  User user1=(User) request.getSession().getAttribute("userInfo");
-			  contractVO.setUpdater("1");
-			  contractService.updateContract(contractVO);
-		  }
-		    
-		   
-	    HttpHeaders headers = new HttpHeaders();
+			String serialNum=ApplicationUtils.random32UUID(); 
+
+			contractVO.setId(serialNum);
+
+
+			//给各自的文件字段赋值文件名
+			contractVO.setElectronicContract(electronicContract);
+			contractVO.setSignContract(signContract);
+
+			contractVO.setCreator(currenLoginName);
+			contractService.insertContract(contractVO);
+		}else{
+			//如果id不为空执行更新
+			User user1=(User) request.getSession().getAttribute("userInfo");
+			contractVO.setUpdater(currenLoginName);
+
+			//给各自的文件字段赋值文件名
+			contractVO.setElectronicContract(electronicContract);
+			contractVO.setSignContract(signContract);
+
+			contractService.updateContract(contractVO);
+		}
+
+
+		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("/userContract").buildAndExpand(contractVO.getId()).toUri());
-					
-			return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
-	   }
-	
-	
+
+		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+	}
+
+	/**
+	 * @Description (导出企业信息)
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("exportContract")
+	public void exportContract(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		List<ContractVO> contractList=contractService.queryContractList("");
+		/*for(ContractVO contractVO:contractList){
+    			Date date=getNowDateShort(contractVO.getStartDate());
+    			contractVO.setStartDate(date);
+    		}*/
+
+		dataMap.put("contractList",contractList);
+		ExcelUtil.export(request, response, dataMap, "contract", "合同信息");
+	}
+
+
+	/** 
+	 * 获取时间 
+	 *  
+	 * @return返回短时间格式 yyyy-MM-dd 
+	 */  
+	public  Date getNowDateShort(Date date) {  
+		Date sqlDate = new java.sql.Date(date.getTime());  
+		return sqlDate;  
+	}
+
+
 	/**
 	 * 上传执行
 	 * @param file（上传的文件）
@@ -125,8 +195,8 @@ public class ContractController {
 		System.out.println(fileName);
 		return fileName;
 	}
-	
-	
+
+
 	/**
 	 * 复制文件
 	 * @param file (文件对象）
@@ -149,8 +219,8 @@ public class ContractController {
 		}
 		return fileName+extName;
 	}
-	
-	
+
+
 	/**
 	 * 写文件到当前目录的upload目录中
 	 * @param in
@@ -163,8 +233,8 @@ public class ContractController {
 		FileUtils.copyInputStreamToFile(in, file);
 		return realName;
 	}
-	
-	
+
+
 	/**判断路径是否存在，否：创建此路径
 	 * @param dir  文件路径
 	 * @param realName  文件名
@@ -180,10 +250,10 @@ public class ContractController {
 		}
 		return file;
 	}
-	
-	
-	
-	
+
+
+
+
 	/**获取classpath1
 	 * @return
 	 */
@@ -194,51 +264,114 @@ public class ContractController {
 		}
 		return path;
 	}
-	
-	
-		 /**
-		 * 删除用户合同
-		 * @param contractVO
-		 * @param request
-		 * @return
-		 */
-		 @RequestMapping(value = "/deleteUserContractS", method = RequestMethod.POST)
-		   public ResponseEntity<Void> deleteUserContractS(@RequestBody String ids) {
-			 if ("".equals(ids) || ids == null) {
-					return new ResponseEntity<Void>(HttpStatus.CONFLICT);
-				}
-			 contractService.deleteUserContractS(ids); 
-			   return new ResponseEntity<Void>(HttpStatus.OK);
-		   }
-		 
-		 
-		 /**
-		  * 通过id查询合同详情
-		  * @param ids（前台所传递的id）
-		  * @return
-		  */
-		 @RequestMapping(value = "/selectConbtractById", method = RequestMethod.GET)
-	     public ResponseEntity<ContractVO> selectConbtractById(String ids) {
-			 
-			 ContractVO c=contractService.selectConbtractById(ids);
-			 return new ResponseEntity<ContractVO>(c, HttpStatus.OK);
-	     }
-		 
-		 /**
-		  * 跳转到编辑页面
-		  * @return
-		  */
-		 @RequestMapping(value = "/editUserContractPage")
-	     public String editUserContractPage(String id,String view) {
-			 return "contract/editUserContractPage";
-	     }
 
-		 
-		 /**
-		  * 附件下载
-		  * @return
-		  */
-		 /*@RequestMapping(value = "/resourceDownload", method = RequestMethod.GET)
+
+	/**
+	 * 删除用户合同
+	 * @param contractVO
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/deleteUserContractS", method = RequestMethod.POST)
+	public ResponseEntity<Void> deleteUserContractS(@RequestBody String ids) {
+		if ("".equals(ids) || ids == null) {
+			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		}
+		contractService.deleteUserContractS(ids); 
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+
+
+	/**
+	 * 通过id查询合同详情
+	 * @param ids（前台所传递的id）
+	 * @return
+	 */
+	@RequestMapping(value = "/selectConbtractById", method = RequestMethod.GET)
+	public ResponseEntity<ContractVO> selectConbtractById(String ids) {
+
+		ContractVO c=contractService.selectConbtractById(ids);
+		return new ResponseEntity<ContractVO>(c, HttpStatus.OK);
+	}
+
+	/**
+	 * 跳转到编辑页面
+	 * @return
+	 */
+	@RequestMapping(value = "/editUserContractPage")
+	public String editUserContractPage(String id,String view) {
+		return "contract/editUserContractPage";
+	}
+	
+	
+	 /**
+     * @Description (下载导入模板)
+     * @param request
+     * @return
+     */
+    @RequestMapping("downloadImportTemp")
+    public void downloadContractTemp(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+    	ExcelUtil.importTempDownLoad(request, response, "contractImport");
+    }
+    
+    
+    /**
+     * @Description (合同信息导入)
+     * @param request
+     * @return
+     */
+    @RequestMapping("contractImport")
+    @ResponseBody
+    public Map<String,String> contractImport(@RequestParam(value = "excelFile") MultipartFile excelFile,HttpServletRequest request,HttpServletResponse response) {
+    	Map<String,String> map = new HashMap<String, String>();
+    	 try {
+		     
+			ExcelReader excelReader = new ExcelReader(excelFile.getInputStream());
+			excelReader.readExcelContent(new RowHandler() {
+				@Override
+				public void handle(List<Object> row,int i) throws Exception {
+					if(!CollectionUtils.isEmpty(row)){
+						try{
+							ContractVO contract = new ContractVO();
+							contract.setId(ApplicationUtils.random32UUID());
+							contract.setContractNum(row.get(0).toString());
+							contract.setComId(row.get(1).toString());
+							contract.setContractType(row.get(2).toString());
+							contract.setServiceModel(row.get(3).toString());
+							
+							SimpleDateFormat sdf=new SimpleDateFormat("yyyy-mm-dd");
+							contract.setSignDate(sdf.parse(row.get(4).toString()));
+							contract.setSigner(row.get(5).toString());
+							contract.setStartDate(sdf.parse(row.get(6).toString()));
+							contract.setEndDate(sdf.parse(row.get(7).toString()));
+							contract.setSettlementClause(row.get(8).toString());
+							Subject currentUser = SecurityUtils.getSubject();
+							String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+							contract.setCreator(currenLoginName);
+							contractService.insertContract(contract);
+						}catch(Exception  e){
+							throw new Exception("第"+i+"行数据异常请检查，数据内容："+row.toString());
+						}
+						
+					}
+					
+				}
+			}, 2);
+			map.put("data", "success");
+		} catch (Exception e1) {
+			map.put("data", e1.getMessage());
+		}
+    	
+         return map;
+    }
+
+
+	/**
+	 * 附件下载
+	 * @return
+	 * @throws IOException 
+	 */
+	/*@RequestMapping(value = "/resourceDownload", method = RequestMethod.GET)
 	     public String upload(HttpSession session, HttpServletRequest request,String name,HttpServletResponse response) {
 			 if(session==null)
 			  {
@@ -278,24 +411,24 @@ public class ContractController {
 			     e.printStackTrace();
 			    }
 			   }
-			 
+
 			  }
 			  return null;
 			 }*/
-		 
-		  @RequestMapping(value="/resourceDownload",method=RequestMethod.GET) //匹配的是href中的download请求
-		  public String download(String fileName, HttpServletRequest request,
-		            HttpServletResponse response) {
-		        response.setCharacterEncoding("utf-8");
-		       /* response.setContentType("multipart/form-data");*/
+
+	@RequestMapping(value="/resourceDownload",method=RequestMethod.POST) //匹配的是href中的download请求
+	public void download(@RequestParam("project_id") Integer projectId, HttpServletResponse response) throws IOException {
+		/* response.setCharacterEncoding("utf-8");
+		        response.setContentType("multipart/form-data");
 		        response.setHeader("Content-Disposition", "attachment;fileName=" + "D2E2589B23CA4B0EA9035DA9FC7E4BB2.gif");
-		               
+
 		        try {
 		            String path = Thread.currentThread().getContextClassLoader()
 		                    .getResource("").getPath()//获得项目编译路径（MyEclipse的项目编译路径）
 		                    + "download";
 		            //D:\My Documents\GitHub\.metadata\.plugins\org.eclipse.wst.server.core\tmp1\wtpwebapps\zhgj-project\WEB-INF\classes\download
 		            InputStream inputStream = new FileInputStream(new File("D:\\userUploadFile\\Files\\" + "D2E2589B23CA4B0EA9035DA9FC7E4BB2.gif"));//path是在本项目webinfo下的classes下的download文件夹下下载文件
+		            FileInputStream in=new FileInputStream("D:\\userUploadFile\\Files\\" + "D2E2589B23CA4B0EA9035DA9FC7E4BB2.gif");
 		                                                  //若想在本机下载，把path去掉即可
 
 		            OutputStream os = response.getOutputStream();
@@ -316,25 +449,68 @@ public class ContractController {
 		        }
 		            //  返回值要注意，要不然就出现下面这句错误！
 		            //java+getOutputStream() has already been called for this response
-		        return null;
-		    }
-		}
-		  /*  public ResponseEntity<byte[]> download(HttpServletRequest request,@RequestParam("filename") String filename,
+		        return null;*/
+		/*  try {  
+			        // 清空response  
+			        response.reset();  
+			        //设置输出的格式  
+			        response.setContentType("application/x-download");// 设置为下载application/x-download   
+			        response.addHeader("content-type ","application/x-msdownload");   
+			        response.setContentType("application/octet-stream");  
+			        response.setHeader("content-disposition", "attachment; filename="+ "aaaa");//设定输出文件头  
+			        response.addHeader("Content-Length", "1024");  
+			        // 以流的形式下载文件。  
+			        InputStream fis = new BufferedInputStream(new FileInputStream("D:\\userUploadFile\\Files\\" + "D2E2589B23CA4B0EA9035DA9FC7E4BB2.gif"));  
+			        ServletOutputStream toClient = response.getOutputStream();  
+			        byte[] buffer = new byte[1024];  
+			        int n = 0;  
+			        while ((n = fis.read(buffer))!=-1) {  
+			            toClient.write(buffer,0,n);  
+			            toClient.flush();  
+			        }  
+			        fis.close();  
+			        //输出文件  
+			        toClient.close();  
+			    } catch (Exception ex) {  
+			        ex.printStackTrace();  
+			    }  */
+
+		/* String path="D:\\userUploadFile\\Files\\" + "D2E2589B23CA4B0EA9035DA9FC7E4BB2.xlsx";  
+		        File file=new File(path); 
+		        System.out.println(file.length());
+		        HttpHeaders headers = new HttpHeaders();    
+		        String fileName=new String("你好.xlsx".getBytes("UTF-8"),"iso-8859-1");//为了解决中文名称乱码问题  
+		        headers.setContentDispositionFormData("attachment", fileName); 
+		        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);  
+		        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),    
+		                                          headers, HttpStatus.CREATED); */
+		/* String filename = "rules_" + DateFormatUtils.ISO_DATE_FORMAT.format(new Date()) + ".txt";
+		        response.setCharacterEncoding("utf-8");
+		        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+		        response.setHeader("Content-Disposition", "attachment;filename=" + filename);
+		        response.setHeader("Transfer-Encoding", "chunked");
+		        IOUtils.copy(new StringReader(ruleService.export(projectId)), response.getOutputStream(), "utf-8");*/
+
+
+
+	}
+}
+/*  public ResponseEntity<byte[]> download(HttpServletRequest request,@RequestParam("filename") String filename,
 		            Model model) throws IOException{
-		        
+
 		        String downloadFilePath="D:\\userUploadFile\\Files";//从我们的上传文件夹中去取
 		        filename="D2E2589B23CA4B0EA9035DA9FC7E4BB2.gif";
 		        File file = new File(downloadFilePath+File.separator+filename);//新建一个文件
-		        
+
 		        HttpHeaders headers = new HttpHeaders();//http头信息
-		        
+
 		        String downloadFileName = new String(filename.getBytes("UTF-8"),"iso-8859-1");//设置编码
-		        
+
 		        headers.setContentDispositionFormData("attachment", downloadFileName);
-		        
-		        
+
+
 		        //MediaType:互联网媒介类型  contentType：具体请求中的媒体类型信息
-		        
+
 		        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),headers,HttpStatus.CREATED);
-		        
+
 		    }*/

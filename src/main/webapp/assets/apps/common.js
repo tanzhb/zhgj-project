@@ -133,3 +133,59 @@ var isNull = function(str) {
 	var re = new RegExp(regu);
 	return re.test(str);
 }
+
+
+//页面打印方法start********/
+function printdiv(printpage)
+{
+	var headstr = "<html><head><title></title></head><body>";
+	var footstr = "</body>";
+	var newstr = document.all.item(printpage).innerHTML;
+	var oldstr = document.body.innerHTML;
+	document.body.innerHTML = headstr+newstr+footstr;
+	 if(getExplorer() == "IE"){
+         pagesetup_null();
+     }
+	window.print(); 
+	document.body.innerHTML = oldstr;
+	return false;
+}
+
+
+function pagesetup_null(){                
+    var hkey_root,hkey_path,hkey_key;
+    hkey_root="HKEY_CURRENT_USER";
+    hkey_path="\\Software\\Microsoft\\Internet Explorer\\PageSetup\\";
+    try{
+        var RegWsh = new ActiveXObject("WScript.Shell");
+        hkey_key="header";
+        RegWsh.RegWrite(hkey_root+hkey_path+hkey_key,"");
+        hkey_key="footer";
+        RegWsh.RegWrite(hkey_root+hkey_path+hkey_key,"");
+    }catch(e){}
+}
+
+function getExplorer() {
+    var explorer = window.navigator.userAgent ;
+    //ie 
+    if (explorer.indexOf("MSIE") >= 0) {
+        return "IE";
+    }
+    //firefox 
+    else if (explorer.indexOf("Firefox") >= 0) {
+        return "Firefox";
+    }
+    //Chrome
+    else if(explorer.indexOf("Chrome") >= 0){
+        return "Chrome";
+    }
+    //Opera
+    else if(explorer.indexOf("Opera") >= 0){
+        return "Opera";
+    }
+    //Safari
+    else if(explorer.indexOf("Safari") >= 0){
+        return "Safari";
+    }
+}
+//页面打印方法end********/
