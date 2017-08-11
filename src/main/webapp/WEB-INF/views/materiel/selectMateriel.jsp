@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!-- 基本信息modal 开始 -->
+<!-- 选择物料modal 开始 -->
 	<div id="basicMaterielInfo" class="modal fade bs-modal-lg" tabindex="-1"
 		data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog modal-lg">
@@ -56,4 +56,4 @@
 			</div>
 		</div>
 	</div>
-<!-- 基本信息modal 结束 -->
+<!-- 选择物料信息modal 结束 -->

@@ -9,7 +9,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     	$rootScope.settings.layout.pageContentWhite = true;
         $rootScope.settings.layout.pageBodySolid = false;
         $rootScope.settings.layout.pageSidebarClosed = false;
-        
+        handle = new pageHandle();
         if($state.current.name=="materiel"){
         	loadMainTable();//加载物料列表
         	
@@ -41,6 +41,8 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
    		    	$scope.materielPackageShow = true;
    		    	$scope.BOMInfoInput = true;
    		    	$scope.BOMInfoShow = true;
+   		    	$scope.fileInfoInput = true;
+   		    	$scope.fileInfoShow = true;
    		    	$scope.opration = '查看';
 		    }
         	
@@ -51,8 +53,12 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
         	selectParentMateriel();//选择物料表格初始化
         	
         	validateBOMInit();//bom表单初始化
+        	
+        	validateFileInit();//file表单初始化
        	
         	$scope.BOM =[{}];//bom初始化
+        	
+/*        	$scope.file =[{}];//附件初始化*/
         	
         }
     });
@@ -65,12 +71,6 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     		if($scope.materiel.parentMaterielSerial=='') {//上级物料为空的处理
     			$scope.materiel.parentMaterielSerial=null;
     		}
-    		
-    		/*if($scope.materiel.isBOMcheck==true) {//是否物料选中处理
-    			$scope.materiel.isBOM="1";
-    		}else{
-    			$scope.materiel.isBOM="0";
-    		}*/
     		
     		//保存数据处理
     		$scope.materiel.parentMateriel=null;
@@ -175,6 +175,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     	//tab内容置为空
     	$scope.materiel = null;
     	$scope.BOM = null;
+    	$scope.file = null;
     	if($("#"+serialNum).is(':checked')){//选中时加载
     		$scope.getMaterielInfo(serialNum);
     	}
@@ -195,6 +196,10 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
       		    	if(!isNull(data.BOM)){
  	        			$scope.BOM = data.BOM;
  	        			_index = $scope.BOM.length-1;
+ 	        		}
+      		    	if(!isNull(data.file)){
+ 	        			$scope.file = data.file;
+ 	        			_fileIndex = $scope.file.length-1;
  	        		}
       		     },
       		     function(error){
@@ -266,7 +271,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
                               { mData: 'type' },
                               { mData: 'productionPlace' },
                               { mData: 'brand' },
-                              { mData: 'brand' },
+                              { mData: null },
                               { mData: 'versionNO' },
                               { mData: 'status' }
                         ],
@@ -311,7 +316,14 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 									return  data.materielName
 								}
 							}
-						} ]
+						},{
+							'targets' : 9,
+							/*'className' : 'dt-body-center',*/
+							'render' : function(data,
+									type, full, meta) {
+								return  ''
+							}
+						}  ]
 
             }).on('order.dt',
             function() {
@@ -818,8 +830,8 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
  	        * 显示编辑、删除操作
  	        */
  	       $scope.showOperation = function(type,index){
- 	    	   var call = "operation_c"+index;
- 	    	   if(type=='finance'){
+ 	    	   var call = "operation_b"+index;
+ 	    	   if(type=='file'){
  	    		   call =  "operation_f"+index;
  	    	   }
  	    	   $scope[call] = true;
@@ -829,8 +841,8 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
  	        * 隐藏编辑、删除操作
  	        */
  	       $scope.hideOperation = function(type,index){
- 	    	   var call = "operation_c"+index;
- 	    	   if(type=='finance'){
+ 	    	   var call = "operation_b"+index;
+ 	    	   if(type=='file'){
  	    		   call =  "operation_f"+index;
  	    	   }
  	    	   $scope[call]= false;
@@ -886,5 +898,158 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
  	       }
  	        
     	  //********bom  end****************//
-        	
+        
+ 	       //********导入导出start****************//
+ 	      /**
+	        * 下载EXCEL模板
+	        */
+	       $scope.downloadImportTemp = function(){
+	    	   window.location.href=$rootScope.basePath+"/rest/materiel/downloadImportTemp";
+	       }
+	       
+	       /**
+	        * 上传EXCEL
+	        */
+	       $scope.uploadExcel = function(){
+	    	    var file = document.querySelector('input[type=file]').files[0];
+	    	    if(handle.isNull(file)){
+	    	    	toastr.warning("请选择Excel文件！");
+	    	    }
+	    	    console.log(file.name);
+	    	    var type = file.name.substring(file.name.lastIndexOf("."));
+	    	   if(type != ".xls"){
+	    		   toastr.warning("文件格式不正确，需要xls类型的Excel文档");
+	    		   return;
+	    	   }
+	    	   	handle.blockUI("正在导入中，请不要进行其他操作"); 
+	    	   	var promise = materielService.uploadExcel();
+       			promise.then(function(data){
+       				handle.unblockUI(); 
+       				if(data.data.data=="success"){
+       					toastr.success("导入成功");
+       					table.ajax.reload();
+       				}else{
+       					toastr.error(data.data.data);
+       				}
+       				$('#import').modal('hide'); 
+	            },function(data){
+	               //调用承诺接口reject();
+	            	toastr.error("操作失败");
+	            	$('#import').modal('hide'); 
+	            });
+	    	   
+	       }
+	       $('#import').on('hide.bs.modal', function (e) { 
+	    	   $("#resetFile").trigger("click");
+	       })
+	       
+	       
+	       $scope.exportMateriel = function(){
+		    	 handle.blockUI("正在导出数据，请稍后"); 
+		    	 window.location.href=$rootScope.basePath+"/rest/materiel/exportMateriel";
+		    	 handle.unblockUI(); 
+		   }
+	       //********导入导出end****************//
+	       
+	       
+	       
+	     //********附件  start****************//
+   		var _fileIndex = 0;
+   	    $scope.saveFile  = function() {//保存File信息
+   	    	if($scope.materiel.serialNum==null||$scope.materiel.serialNum=='') {//上级物料为空的处理
+   	    		toastr.error('请先保存基本信息！');return
+   			}
+   	    	if($('#form_sample_4').valid()){
+   	    		materielService.saveFile($scope.file).then(
+   	       		     function(data){
+   	       		    	toastr.success('数据保存成功！');
+   	       		    	$scope.cancelFile();
+   	       		    	
+   	       		     },
+   	       		     function(error){
+   	       		    	toastr.error('数据保存出错！');
+   	       		         $scope.error = error;
+   	       		     }
+   	       		 );
+   	    	}
+   	    	
+   	    }; 	
+   	    
+   	    $scope.cancelFile  = function() {//取消编辑File信息
+   	    	$scope.fileInfoInput = true;
+   		    $scope.fileInfoShow = true;
+   	    };
+   	    
+   	    $scope.editFile  = function() {//进入编辑File信息
+   	    	$scope.fileInfoInput = false;
+   		    $scope.fileInfoShow = false;
+   	    };
+   	    /**
+ 	        * File新增一行
+ 	        */
+   	    $scope.addFile = function(){
+   	    	if($scope.materiel.serialNum==null||$scope.materiel.serialNum=='') {
+   	    		toastr.error('请先保存基本信息！');return
+   			}else{
+   		    	   if($scope.file){}else{$scope.file =[{}]}
+   		    	   $scope.file[_fileIndex] = {};
+   		    	   $scope.file[_fileIndex].materielId = $scope.materiel.materielId;
+   		    	   _fileIndex++;
+   		       }
+   	    };
+   	    
+   	    /**
+	        * File删除一行
+	        */
+	       $scope.deleteFile = function(index){
+	    	   $scope.file.splice(index,1);
+	    	   _fileIndex--;
+	       };
+	       
+	       
+	      var validateFileInit = function() {
+	        	var e = $("#form_sample_4");
+		        r = $(".alert-danger", e),
+		        i = $(".alert-success", e);
+		        e.validate({
+		            errorElement: "span",
+		            errorClass: "help-block help-block-error",
+		            focusInvalid: !1,
+		            ignore: "",
+		            messages: {
+		            },
+	            	rules: {
+	            			
+	            			},
+	            		invalidHandler: function(e, t) {
+	                    i.hide(), r.show(), App.scrollTo(r, -200)
+	                },
+		            invalidHandler: function(e, t) {
+		                i.hide(),
+		                r.show(),
+		                App.scrollTo(r, -200)
+		            },
+		            errorPlacement: function(e, r) {
+		                r.is(":checkbox") ? e.insertAfter(r.closest(".md-checkbox-list, .md-checkbox-inline, .checkbox-list, .checkbox-inline")) : r.is(":radio") ? e.insertAfter(r.closest(".md-radio-list, .md-radio-inline, .radio-list,.radio-inline")) : e.insertAfter(r)
+		            },
+		            highlight: function(e) {
+		                $(e).closest(".form-group").addClass("has-error")
+		            },
+		            unhighlight: function(e) {
+		                $(e).closest(".form-group").removeClass("has-error")
+		            },
+		            success: function(e) {
+		                e.closest(".form-group").removeClass("has-error")
+		            },
+		            submitHandler: function(e) {
+		                i.show(),
+		                r.hide()
+		            }})
+	        };
+	        var selectIndex;
+	       $scope.selectMateriel = function(index){
+	    	  selectIndex = index;
+	       }
+	        
+   	  //********附件  end****************//
 }]);
