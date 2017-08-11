@@ -63,14 +63,6 @@
 							<li><a href="javascript:;" data-action="2"
 								class="tool-action" > <i class="fa fa-print"></i> 打印
 							</a></li>
-							<li><a href="javascript:;" data-action="3"
-								class="tool-action"> <i class="icon-cloud-upload"></i> CSV
-							</a></li>
-							<li class="divider"></li>
-							<li><a href="javascript:;" data-action="4"
-								class="tool-action"> <i class="icon-refresh"></i> Reload
-							</a></li>
-							</li>
 						</ul>
 					</div>
 				</div>
