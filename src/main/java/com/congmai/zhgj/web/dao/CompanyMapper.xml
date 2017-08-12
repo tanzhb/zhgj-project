@@ -87,6 +87,27 @@
   </insert>
   
 
+
+ <insert id="insertSelectiveBatch"  parameterType="java.util.List"> 
+   insert into company (comId, comNum, comType, 
+      abbreviation, comName, registeredCapital, 
+      legalPerson, address, taxpayeNumber, 
+      tel, contact, businessNature, 
+      comNature, businessType, classification,remark, 
+      status, creator, 
+      createTime, updater, updateTime
+      )
+    values 
+    <foreach collection="list" item="item" index="index" separator="," >  
+      (#{item.comId,jdbcType=VARCHAR}, #{item.comNum,jdbcType=VARCHAR}, #{item.comType,jdbcType=VARCHAR}, 
+      #{item.abbreviation,jdbcType=VARCHAR}, #{item.comName,jdbcType=VARCHAR}, #{item.registeredCapital,jdbcType=VARCHAR}, 
+      #{item.legalPerson,jdbcType=VARCHAR}, #{item.address,jdbcType=VARCHAR}, #{item.taxpayeNumber,jdbcType=VARCHAR}, 
+      #{item.tel,jdbcType=VARCHAR}, #{item.contact,jdbcType=VARCHAR}, #{item.businessNature,jdbcType=VARCHAR}, 
+      #{item.comNature,jdbcType=VARCHAR}, #{item.businessType,jdbcType=VARCHAR}, #{item.classification,jdbcType=VARCHAR}, 
+      #{item.remark,jdbcType=VARCHAR}, #{item.status,jdbcType=VARCHAR}, #{item.creator,jdbcType=VARCHAR}, 
+      #{item.createTime,jdbcType=TIMESTAMP}, #{item.updater,jdbcType=VARCHAR}, #{item.updateTime,jdbcType=TIMESTAMP}) 
+    </foreach>  
+</insert>  
   
   <select id="countList" parameterType="com.congmai.zhgj.web.model.Company" resultType="java.lang.Integer" >
     select count(*) from company where delFlg = 0

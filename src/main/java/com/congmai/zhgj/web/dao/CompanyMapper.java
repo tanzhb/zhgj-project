@@ -1,9 +1,9 @@
 package com.congmai.zhgj.web.dao;
 
+import java.util.List;
+
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.web.model.Company;
-
-import java.util.List;
 
 public interface CompanyMapper extends GenericDao<Company,String>{
 	
@@ -12,5 +12,7 @@ public interface CompanyMapper extends GenericDao<Company,String>{
 	public Integer countList(Company company);
 	
 	public void deleteCompanyBatch(List<String> comIds);
+	
+	int insertSelectiveBatch(List<Company> list);
 	
 }

@@ -28,7 +28,11 @@
                 <!-- 登录页允许访问 -->
                 /rest/user/login = anon
                 <!-- 其他资源需要认证 -->
-                /** = authc
+                <!-- /** = authc -->
+                <!-- 表示访问该地址用户必须身份验证通过（Subject. isAuthenticated()==true） -->
+                <!-- /rest/index = authc --> 
+                <!-- 访问该地址的用户是身份验证通过或RememberMe登录的都可以 -->
+            	/** = user 
             </value>
         </property>
     </bean>
@@ -56,6 +60,9 @@
                 <ref bean="securityRealm"/>
             </list>
         </property>
+        
+        <property name="rememberMeManager" ref="rememberMeManager" />
+        
         <!-- cacheManager,集合spring缓存工厂 -->
         <!-- <property name="cacheManager" ref="shiroEhcacheManager" /> -->
         <!-- <property name="sessionManager" ref="sessionManager" /> -->
@@ -63,5 +70,18 @@
 
     <!-- Shiro生命周期处理器 -->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+	<!-- remenberMe配置 -->
+   <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+       <constructor-arg value="rememberMe" />
+       <property name="httpOnly" value="true" />
+       <!-- 默认记住7天（单位：秒） -->
+       <property name="maxAge" value="604800" />
+   </bean>
+   <!-- rememberMe管理器 -->
+   <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+       <property name="cipherKey" value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}" />
+       <property name="cookie" ref="rememberMeCookie" />
+   </bean>
 
 </beans>

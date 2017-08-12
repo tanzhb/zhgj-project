@@ -69,12 +69,20 @@ License: You must have a valid license purchased only from themeforest(the above
 	id="style_components" type="text/css" />
 <link href="assets/global/css/plugins-md.min.css" rel="stylesheet"
 	type="text/css" />
-<link href="assets/layouts/layout2/css/layout.css" rel="stylesheet"
+<link href="assets/layouts/layout2/css/layout.min.css" rel="stylesheet"
 	type="text/css" />
 <link href="assets/layouts/layout2/css/themes/default.min.css"
 	rel="stylesheet" type="text/css" id="style_color" />
 <link href="assets/layouts/layout2/css/custom.min.css" rel="stylesheet"
 	type="text/css" />
+<link href="assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet"
+	type="text/css" />
+<link href="assets/global/plugins/icheck/skins/all.css" rel="stylesheet"
+	type="text/css" />
+<!-- <link href="assets/global/plugins/datatables/datatables.min.css" rel="stylesheet"
+	type="text/css" />
+<link href="assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet"
+	type="text/css" /> -->
 <!-- END THEME STYLES -->
 <link rel="shortcut icon" href="favicon.ico" />
 </head>
@@ -209,6 +217,20 @@ License: You must have a valid license purchased only from themeforest(the above
 	<script src="assets/layouts/layout2/scripts/demo.min.js"
 		type="text/javascript"></script>
 	<!-- END APP LEVEL JQUERY SCRIPTS -->
+	<!-- BEGIN PAGE SCRIPTS -->
+ 
+    <script src="assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js" type="text/javascript"></script>
+    <script src="assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
+    <script src="assets/global/plugins/jquery-repeater/jquery.repeater.js" type="text/javascript"></script>
+    <script src="assets/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
+    <script src="assets/pages/scripts/ui-blockui.min.js" type="text/javascript"></script>
+    <script src="assets/apps/scripts/pageHandle.js" type="text/javascript"></script>
+	<script src="assets/global/plugins/icheck/icheck.min.js" type="text/javascript"></script>
+	<script src="assets/pages/scripts/form-icheck.min.js" type="text/javascript"></script>
+	<script src="assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+<!-- 	<script src="assets/global/plugins/datatables/datatables.all.min.js" type="text/javascript"></script>
+    <script src="assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script> -->
+	<!-- END  PAGE SCRIPTS -->
 	<!-- END JAVASCRIPTS -->
 	<!-- 修改密码modal开始  -->
 	<div id="editPasswordModal" class="modal fade" role="dialog"

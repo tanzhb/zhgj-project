@@ -25,6 +25,7 @@ public class ContractVO {
     
     private Date startDate;
     
+    
     private Date endDate;
     
     private Date signDate;

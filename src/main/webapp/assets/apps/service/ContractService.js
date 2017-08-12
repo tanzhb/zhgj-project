@@ -13,7 +13,9 @@ angular.module('MetronicApp').factory('ContractService', ['$rootScope', '$http',
     		//单个查找
     		selectUserContract:selectUserContract,
     		
-    		downLoad:downLoad
+    		downLoad:downLoad,
+    		
+    		uploadExcel:uploadExcel
     };
 
     return factory;
@@ -68,6 +70,24 @@ angular.module('MetronicApp').factory('ContractService', ['$rootScope', '$http',
     	$http.get($rootScope.basePath + "/rest/contract/resourceDownload",  {filename:name}).success(function (data) {  
         })
     }
+    
+    /**
+     * 导入
+     */
+    function uploadExcel(){
+		var deferred = $q.defer();
+		var fd = new FormData();
+        var file = document.querySelector('input[type=file]').files[0];
+        fd.append('excelFile', file);
+		$http.post("rest/contract/contractImport",  
+				fd,{headers:{'Content-Type': undefined},transformRequest: angular.identity}
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
     
   //删除用户
     function delUserContract(ids){
