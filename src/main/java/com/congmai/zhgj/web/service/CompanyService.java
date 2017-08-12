@@ -24,6 +24,18 @@ public interface CompanyService extends GenericService<Company, String>{
 	 */
 	Company selectOne(String id);
 
+	/**
+	 * 
+	 * @Description (批量删除)
+	 * @param comIdList
+	 */
 	void deleteBatch(List<String> comIdList);
+
+	/**
+	 * 批量插入
+	 * @Description (TODO这里用一句话描述这个方法的作用)
+	 * @param companyList
+	 */
+	void insertBatch(List<Company> companyList);
 	
 }

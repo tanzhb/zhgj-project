@@ -221,6 +221,9 @@ License: You must have a valid license purchased only from themeforest(the above
  
     <script src="assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js" type="text/javascript"></script>
     <script src="assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
+    <script src="assets/global/plugins/jquery-repeater/jquery.repeater.js" type="text/javascript"></script>
+    <script src="assets/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
+    <script src="assets/pages/scripts/ui-blockui.min.js" type="text/javascript"></script>
     <script src="assets/apps/scripts/pageHandle.js" type="text/javascript"></script>
 	<script src="assets/global/plugins/icheck/icheck.min.js" type="text/javascript"></script>
 	<script src="assets/pages/scripts/form-icheck.min.js" type="text/javascript"></script>

@@ -71,7 +71,7 @@ angular
 													"page-header-fixed")
 													&& (a = 64);
 
-						 table = $("#sample_1")
+						 table = $("#sample_warehouse")
 									.DataTable(
 											{
 												language : {
@@ -93,11 +93,11 @@ angular
 														"sLast" : "尾页"
 													}
 												},
-												fixedHeader : {// 固定表头、表底
+												/*fixedHeader : {// 固定表头、表底
 													header : !0,
 													footer : !0,
 													headerOffset : a
-												},
+												},*/
 												// select: true,行多选
 												order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
 												bRetrieve : true,
@@ -176,7 +176,7 @@ angular
 
 							// Handle click on checkbox to set state of "Select
 							// all" control
-							$('#sample_1 tbody')
+							$('#sample_warehouse tbody')
 									.on(
 											'change',
 											'input[type="checkbox"]',
@@ -232,7 +232,7 @@ angular
 															'hide');// 保存成功后关闭模态框
 													toastr.success("保存仓库数据成功！");
 													// $state.go('warehouse',{},{reload:true});  // 重新加载datatables数据
-													$scope.warehouse = $scope.warehouse;
+													$scope.warehouse = data;
 								        			$scope.warehouseView = true;
 								        			$scope.warehouseAdd = true;
 								        			$scope.warehouseEdit = false;
@@ -323,15 +323,17 @@ angular
 						            	warehouseCategory:{required:"未选择仓库分类！"},
 						            	owner:{required:"仓库持有者不能为空！"},
 						            	address:{required:"仓库地址不能为空！"},
-						            	area:{required:"仓库面积不能为空！"},
-						            	email: { email:"E-Mail格式不正确"},
+						            	area:{required:"仓库面积不能为空！",digits:"请输入正确的数字!"},
+						            	email: { required:"邮箱不能为空！",email:"E-Mail格式不正确"},
 						            	//email:{required:"邮箱不能为空！"},
 						            	 tel: { 
 						                    	digits:'请输入正确的电话, 必须为数字！',
+						                    	required:"电话不能为空！",
 				                        	    rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")
 						                    },
 						                   fax: { 
 						                    	digits:'请输入正确的传真, 必须为数字！',
+						                    	required:"传真不能为空！",
 				                        	    rangelength:jQuery.validator.format("传真必须在{0}到{1}位数字之间！")
 						                    },
 						            	//tel:{required:"电话不能为空！"},
@@ -346,14 +348,11 @@ angular
 						            	warehouseCategory:{required:true},
 						            	owner:{required:true},
 						            	address:{required:true},
-						            	area:{required:true},
-						            	//email:{required:true},
-						            	 email: {	email:true},
-						            	 tel: {digits:true, rangelength:[7,20] },
-						            	//tel:{required:true},
-				                         fax: {digits:true, rangelength:[7,20] },
-						            	remark:{required:true},
-						            	//fax:{required:true},
+						            	area:{required:!0,digits:true,},
+						            	 email: {	required:true,email:true},
+						            	 tel: {required:true,digits:true, rangelength:[7,20] },
+				                         fax: {required:true,digits:true, rangelength:[7,20] },
+						            	//remark:{required:true},
 						            	admin:{required:true}
 						               
 						            },
@@ -438,5 +437,55 @@ angular
 							    	   getWarehouseInfo(serialNum);
 							    	   $('#viewWarehouse').modal('show'); 
 							       };
+							       /**
+							        * 下载EXCEL模板
+							        */
+							       $scope.downloadImportTemp = function(){
+							    	   window.location.href=$rootScope.basePath+"/rest/warehouse/downloadImportTemp";
+							       }
 							       
+							       /**
+							        * 上传EXCEL
+							        */
+							       $scope.uploadExcel = function(){
+							    	    var file = document.querySelector('input[type=file]').files[0];
+							    	    if(handle.isNull(file)){
+							    	    	handle.toastr.warning("请选择Excel文件！");
+							    	    }
+							    	    console.log(file.name);
+							    	    var type = file.name.substring(file.name.lastIndexOf("."));
+							    	   if(type != ".xls"){
+							    		   handle.toastr.warning("文件格式不正确，需要xls类型的Excel文档");
+							    		   return;
+							    	   }
+							    	   	handle.blockUI("正在导入中，请不要进行其他操作"); 
+							    	   	var promise = WarehouseService.uploadExcel();
+						       			promise.then(function(data){
+						       				handle.unblockUI(); 
+						       				if(data.data.data=="success"){
+						       					handle.toastr.success("导入成功");
+						       					table.ajax.reload();
+						       				}else{
+						       					handle.toastr.error(data.data.data);
+						       				}
+						       				$('#import').modal('hide'); 
+							            },function(data){
+							               //调用承诺接口reject();
+							            	handle.toastr.error("操作失败");
+							            	$('#import').modal('hide'); 
+							            });
+							    	   
+							       }
+							       $scope.exportWarehouse = function(){
+								    	 handle.blockUI("正在导出数据，请稍后"); 
+								    	 window.location.href=$rootScope.basePath+"/rest/warehouse/exportWarehouse";
+								    	 handle.unblockUI(); 
+								       }
+								       
+							       $('#import').on('hide.bs.modal', function (e) { 
+							    	   $("#resetFile").trigger("click");
+							    	  //$("#file_span input[type='file']").remove();
+							    	  //$(".fileinput-filename").val("");
+							    	  //$("#file_span").appendTo('<input type="file" file-model="excelFile" accept=".xls" name="...">');
+							       })
 						} ]);

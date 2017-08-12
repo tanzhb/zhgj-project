@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.congmai.zhgj.web.dao.LadderPriceMapper" >
+  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.LadderPrice" >
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="priceSerial" property="priceSerial" jdbcType="VARCHAR" />
+    <result column="countStart" property="countStart" jdbcType="VARCHAR" />
+    <result column="countEnd" property="countEnd" jdbcType="VARCHAR" />
+    <result column="inclusivePrice" property="inclusivePrice" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    serialNum, priceSerial, countStart, countEnd, inclusivePrice, price, delFlg, creator, 
+    createTime, updater, updateTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.LadderPriceExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from ladderPrice
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from ladderPrice
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from ladderPrice
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.LadderPriceExample" >
+    delete from ladderPrice
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.congmai.zhgj.web.model.LadderPrice" >
+    insert into ladderPrice (serialNum, priceSerial, countStart, 
+      countEnd, inclusivePrice, price, 
+      delFlg, creator, createTime, 
+      updater, updateTime)
+    values (#{serialNum,jdbcType=VARCHAR}, #{priceSerial,jdbcType=VARCHAR}, #{countStart,jdbcType=VARCHAR}, 
+      #{countEnd,jdbcType=VARCHAR}, #{inclusivePrice,jdbcType=VARCHAR}, #{price,jdbcType=VARCHAR}, 
+      #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.LadderPrice" >
+    insert into ladderPrice
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        serialNum,
+      </if>
+      <if test="priceSerial != null" >
+        priceSerial,
+      </if>
+      <if test="countStart != null" >
+        countStart,
+      </if>
+      <if test="countEnd != null" >
+        countEnd,
+      </if>
+      <if test="inclusivePrice != null" >
+        inclusivePrice,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="delFlg != null" >
+        delFlg,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="updater != null" >
+        updater,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="priceSerial != null" >
+        #{priceSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="countStart != null" >
+        #{countStart,jdbcType=VARCHAR},
+      </if>
+      <if test="countEnd != null" >
+        #{countEnd,jdbcType=VARCHAR},
+      </if>
+      <if test="inclusivePrice != null" >
+        #{inclusivePrice,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.LadderPriceExample" resultType="java.lang.Integer" >
+    select count(*) from ladderPrice
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update ladderPrice
+    <set >
+      <if test="record.serialNum != null" >
+        serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.priceSerial != null" >
+        priceSerial = #{record.priceSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.countStart != null" >
+        countStart = #{record.countStart,jdbcType=VARCHAR},
+      </if>
+      <if test="record.countEnd != null" >
+        countEnd = #{record.countEnd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inclusivePrice != null" >
+        inclusivePrice = #{record.inclusivePrice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null" >
+        price = #{record.price,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlg != null" >
+        delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creator != null" >
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updater != null" >
+        updater = #{record.updater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update ladderPrice
+    set serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      priceSerial = #{record.priceSerial,jdbcType=VARCHAR},
+      countStart = #{record.countStart,jdbcType=VARCHAR},
+      countEnd = #{record.countEnd,jdbcType=VARCHAR},
+      inclusivePrice = #{record.inclusivePrice,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=VARCHAR},
+      delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      updater = #{record.updater,jdbcType=VARCHAR},
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.LadderPrice" >
+    update ladderPrice
+    <set >
+      <if test="priceSerial != null" >
+        priceSerial = #{priceSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="countStart != null" >
+        countStart = #{countStart,jdbcType=VARCHAR},
+      </if>
+      <if test="countEnd != null" >
+        countEnd = #{countEnd,jdbcType=VARCHAR},
+      </if>
+      <if test="inclusivePrice != null" >
+        inclusivePrice = #{inclusivePrice,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        delFlg = #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        updater = #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.LadderPrice" >
+    update ladderPrice
+    set priceSerial = #{priceSerial,jdbcType=VARCHAR},
+      countStart = #{countStart,jdbcType=VARCHAR},
+      countEnd = #{countEnd,jdbcType=VARCHAR},
+      inclusivePrice = #{inclusivePrice,jdbcType=VARCHAR},
+      price = #{price,jdbcType=VARCHAR},
+      delFlg = #{delFlg,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <update id="deleteByPriceSerial" parameterType="com.congmai.zhgj.web.model.LadderPrice" >
+    update  ladderPrice set delFlg =1 
+    where priceSerial = #{priceSerial,jdbcType=VARCHAR}
+  </update>
+  <insert id="insertLadderPriceList"  parameterType="java.util.List"> 
+   insert into ladderPrice (serialNum, priceSerial, countStart, 
+      countEnd, inclusivePrice, price, 
+      creator, createTime, 
+      updater, updateTime) 
+    values  
+    <foreach collection="list" item="item" index="index" separator="," >  
+       (#{item.serialNum,jdbcType=VARCHAR}, #{item.priceSerial,jdbcType=VARCHAR}, #{item.countStart,jdbcType=VARCHAR}, 
+      #{item.countEnd,jdbcType=DATE}, #{item.inclusivePrice,jdbcType=VARCHAR}, #{item.price,jdbcType=VARCHAR}, 
+      #{item.creator,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
+      #{item.updater,jdbcType=VARCHAR}, #{item.updateTime,jdbcType=TIMESTAMP})  
+    </foreach>  
+</insert>  
+</mapper>
