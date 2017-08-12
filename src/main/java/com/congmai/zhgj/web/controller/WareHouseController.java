@@ -2,6 +2,7 @@ package com.congmai.zhgj.web.controller;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -23,15 +25,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
+import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.ExcelReader;
+import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
+import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.JsonTreeData;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
@@ -100,7 +110,7 @@ public class WareHouseController {
      * @return
      */
     @RequestMapping(value = "/saveWarehouseInfo", method = RequestMethod.POST)
-	public ResponseEntity<Void> saveWarehouseDetail(@RequestBody  Warehouse warehouse,UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<Warehouse> saveWarehouseDetail(@RequestBody  Warehouse warehouse,UriComponentsBuilder ucBuilder) {
     	try{
     		if(StringUtils.isEmpty(warehouse.getSerialNum())){
     			warehouse.setSerialNum(UUID.randomUUID().toString().replace("-",""));
@@ -111,10 +121,7 @@ public class WareHouseController {
     	}catch(Exception e){
     		System.out.println(e.getMessage());
     	}
-    	HttpHeaders headers = new HttpHeaders();
-		/*headers.setLocation(ucBuilder.path("/warehouse/{id}")
-				.buildAndExpand(warehouse.getSerialNum()).toUri());*/
-		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+		return new ResponseEntity<Warehouse>(warehouse, HttpStatus.OK);
     }
   
     @RequestMapping(value = "/getWarehouseList", method = RequestMethod.GET)
@@ -197,4 +204,83 @@ public class WareHouseController {
        List<JsonTreeData> newTreeDataList = TreeNodeUtil.getfatherNode(treeDataList);*/
        return treeDataList;
     }
+    
+    /**
+     * @Description (导出仓库信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping("exportWarehouse")
+    public void exportWarehouse(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+    		Map<String, Object> dataMap = new HashMap<String, Object>();
+    		List<Warehouse> warehouseList = warehouseService.selectList();
+    		dataMap.put("warehouseList",warehouseList);
+    		ExcelUtil.export(request, response, dataMap, "warehouse", "仓库信息");
+    }
+    
+    /**
+     * @Description (下载导入模板)
+     * @param request
+     * @return
+     */
+    @RequestMapping("downloadImportTemp")
+    public void downloadWarehouseTemp(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+    	ExcelUtil.importTempDownLoad(request, response, "warehouse");
+    }
+    
+    /**
+     * @Description (仓库信息导入)
+     * @param request
+     * @return
+     */
+    @RequestMapping("warehouseImport")
+    @ResponseBody
+    public Map<String,String> companyImport(@RequestParam(value = "excelFile") MultipartFile excelFile,HttpServletRequest request,HttpServletResponse response) {
+    	Map<String,String> map = new HashMap<String, String>();
+    	 try {
+		     
+			ExcelReader excelReader = new ExcelReader(excelFile.getInputStream());
+			excelReader.readExcelContent(new RowHandler() {
+				@Override
+				public void handle(List<Object> row,int i) throws Exception {
+					if(!CollectionUtils.isEmpty(row)){
+						try{
+							Warehouse  warehouse = new Warehouse();
+							warehouse.setSerialNum(ApplicationUtils.random32UUID());
+							warehouse.setWarehouseNum(row.get(0).toString());
+							warehouse.setWarehouseName(row.get(1).toString());
+							warehouse.setWarehouseType(row.get(2).toString());
+							warehouse.setWarehouseCategory(row.get(3).toString());
+							warehouse.setOwner(row.get(4).toString());
+							warehouse.setAddress(row.get(5).toString());
+							warehouse.setArea(row.get(6).toString());
+							warehouse.setAdmin(row.get(7).toString());
+							warehouse.setTel(row.get(8).toString());
+							warehouse.setEmail(row.get(9).toString());
+							warehouse.setFax(row.get(10).toString());
+							warehouse.setRemark(row.get(11).toString());
+							Subject currentUser = SecurityUtils.getSubject();
+							String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+							warehouse.setCreateTime(new Date());
+							warehouse.setCreator(currenLoginName);
+							warehouse.setUpdateTime(new Date());
+							warehouse.setUpdater(currenLoginName);
+							warehouseService.insert(warehouse);
+						}catch(Exception  e){
+							throw new Exception("第"+i+"行数据异常请检查，数据内容："+row.toString());
+						}
+						
+					}
+					
+				}
+			}, 1);
+			map.put("data", "success");
+		} catch (Exception e1) {
+			map.put("data", e1.getMessage());
+		}
+    	
+         return map;
+    }
+    
+    
 }

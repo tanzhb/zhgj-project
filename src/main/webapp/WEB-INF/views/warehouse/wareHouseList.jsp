@@ -49,7 +49,7 @@
     <button   class="btn sbold green" data-toggle="modal"  ng-click="jumpToUrl('/addWarehouse')">新建仓库<i class="fa fa-plus"></i></button>
     
 </div> -->
- <a class="btn sbold green" data-toggle="modal"   ng-click="addWarehouse()">新建仓库 <i class="fa fa-plus"></i></a>
+ <!-- <a class="btn sbold green" data-toggle="modal"   ng-click="addWarehouse()">新建仓库 <i class="fa fa-plus"></i></a> -->
 					<button ui-sref="addWarehouse" 
 						data-toggle="modal" class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-plus"></i> 添加
@@ -67,7 +67,7 @@
 							class="fa fa-share"></i> <span class="hidden-xs"> 其它 </span> <i
 							class="fa fa-angle-down"></i>
 						</a>
-						<ul class="dropdown-menu pull-right" id="sample_3_tools">
+						<!-- <ul class="dropdown-menu pull-right" id="sample_3_tools">
 							<li><a href="javascript:;" data-action="0"
 								class="tool-action"> <i class="icon-printer"></i> Print
 							</a></li>
@@ -88,7 +88,18 @@
 								class="tool-action"> <i class="icon-refresh"></i> Reload
 							</a></li>
 							</li>
-						</ul>
+						</ul> -->
+						<ul class="dropdown-menu pull-right" id="sample_3_tools">
+												<li><a data-action="0"
+													class="tool-action" data-toggle="modal" data-target="#import"> <i class="fa fa-upload"></i> 导入
+												</a></li> 
+												<li><a href="javascript:;" data-action="1"
+													class="tool-action" ng-click="exportWarehouse()"> <i class="fa fa-file-excel-o"></i> 导出
+												</a></li>
+												<li><a href="javascript:;" data-action="2"
+													class="tool-action" > <i class="fa fa-print"></i> 打印
+												</a></li> 
+											</ul>
 					</div>
 				</div>
 			</div>
@@ -282,12 +293,83 @@
 				</div>
 			</div>
 			<!-- 删除用户modal 结束 -->
+			
+			<!-- 导入modal START -->
+<div class="modal fade" id="import" role="import" aria-hidden="true">
+     <div class="modal-dialog" >
+	    <div class="modal-content">
+	 		<div class="modal-header">
+	            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+	            <h4 class="modal-title" >仓库信息导入</h4>
+	        </div>
+	        <div class="modal-body">
+	          		<!-- <div class="col-md-12"> -->
+	          		 <div class="">
+                           <div class="portlet-body form">
+                              <!--  BEGIN FORM -->
+                               <form class="form-horizontal" role="form">
+                                   <div class="form-body">
+                                   		<form id="fileImport" method="post" enctype="multipart/form-data" >
+	                                       <div class="row">
+	                                           <div class="col-md-2">
+	                                               <div class="form-group">
+	                                               		<!-- <div class="col-md-4">
+	                                               		</div> -->
+	                                               		<div class="col-md-12">
+	                                               			<button type="button" class="btn blue" ng-click="downloadImportTemp()">下载模板</button>
+	                                               		</div>
+	                                               </div>
+	                                           </div>
+	                                           <div class="col-md-7">
+	                                               <div class="form-group">
+	                                               		 <div class="fileinput fileinput-new" data-provides="fileinput">
+	                                                        <div class="input-group input-large">
+	                                                            <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+	                                                                <i class="fa fa-file fileinput-exists"></i>&nbsp;
+	                                                                <span class="fileinput-filename"> </span>
+	                                                            </div>
+	                                                            <span class="input-group-addon btn default btn-file" id="file_span">
+	                                                                <span class="fileinput-new"> 选择文件 </span>
+	                                                                <span class="fileinput-exists">更换</span>
+	                                                                <input type="file" file-model="excelFile" accept=".xls" name="..."> </span>
+	                                                            <a href="javascript:;" id="resetFile" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> 移除 </a>
+	                                                        </div>
+	                                                    </div>
+	                                               </div>
+	                                           </div>
+	                                            <div class="col-md-2">
+	                                               <div class="form-group">
+	                                               		<div class="col-md-4">
+	                                               			
+	                                               		</div>
+	                                               		<div class="col-md-8">
+	                                               			<button type="button" class="btn blue" ng-click="uploadExcel()">导入</button>
+	                                               		</div>
+	                                               </div>
+	                                           </div>
+	                                           
+	                                         <!--   /span -->
+	                                       </div>
+	                                       <!-- /row -->
+                                       </form>
+                                   </div>
+                               </form>
+                              <!--  END FORM -->
+                           </div>
+                      </div>
+					<!-- </div> -->
+	        <!-- </div> -->
+	    </div>
+    </div>
+</div>
+</div>
+<!-- 导入modal END-->
 
 
 			<div class="portlet-body">
 				<table
-					class="table table-striped table-bordered table-hover table-header-fixed"
-					id="sample_1">
+					class="table table-striped table-bordered table-hover "
+					id="sample_warehouse">
 					<thead>
 						<tr>
 							<th style="text-align: center"><input name="select_all"

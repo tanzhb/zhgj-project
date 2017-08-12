@@ -153,25 +153,88 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
 
         // 价格目录
-        .state('jgml', {
-            url: "/jgml",
-            templateUrl: "rest/page/jgml",
+        .state('priceList', {
+            url: "/priceList",
+            templateUrl: "rest/priceList/viewPriceList",
             data: {pageTitle: '价格目录'},
-            controller: "GeneralPageController",
+            controller: "PriceListController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before' 
                         files: [
-                            'assets/global/plugins/datatables/datatables.min.css',
-                            'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-
-                            'assets/global/plugins/datatables/datatables.all.min.js',
-
-                            'assets/pages/scripts/table-datatables-managed.min.js',
-
-                            'assets/apps/controllers/GeneralPageController.js'
+                                'assets/global/plugins/jstree/dist/themes/default/style.min.css',
+  							  'assets/global/plugins/jstree/dist/jstree.min.js',
+                              'assets/pages/scripts/ui-tree.min.js',
+  							 'assets/apps/scripts/pageHandle.js',
+  							 'assets/global/plugins/bootstrap-toastr/toastr.js',
+          				        'assets/global/plugins/bootstrap-toastr/toastr.css',
+                             'assets/global/plugins/datatables/datatables.min.css', 
+                             'assets/global/plugins/datatables/datatables.min.js',
+  	                        'assets/apps/service/PriceListService.js',
+  	                        'assets/apps/controllers/PriceListController.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        
+          .state('addPriceList', {
+            url: "/addPriceList?:priceListSerialNum",
+            templateUrl: "rest/priceList/addOrEditPriceListInfo",
+            data: {pageTitle: '新增价格'},
+            controller: "PriceListController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [                             
+                            'assets/global/plugins/datatables/datatables.min.css', 
+    				        'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
+    				        'assets/global/plugins/datatables/datatables.all.min.js',//
+    				        'assets/global/plugins/bootstrap-toastr/toastr.js',
+    				        'assets/global/plugins/bootstrap-toastr/toastr.css',
+    				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js',
+    				        'assets/global/plugins/jquery-repeater/jquery.repeater.js',
+    				        'assets/pages/scripts/form-repeater.min.js',
+    				        'assets/pages/scripts/form-repeater.js',
+    				        'assets/apps/controllers/PriceListController.js',
+    				        'assets/apps/service/PriceListService.js',
+    				        'assets/global/plugins/bootbox/bootbox.min.js',
+    				        'assets/pages/scripts/ui-bootbox.min.js',
+    				        'assets/global/plugins/jquery.blockui.min.js',
+    				        'assets/pages/scripts/ui-blockui.min.js',
+    				        'assets/apps/scripts/pageHandle.js',
+    				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css',
+    				        'assets/global/plugins/bootstrap/css/bootstrap.min.css',
+    				        'assets/global/css/components.min.css',
+    				        'assets/global/css/plugins.min.css',
+    				        'assets/global/plugins/font-awesome/css/font-awesome.min.css',
+    				        'assets/global/plugins/simple-line-icons/simple-line-icons.min.css',
+    				        'assets/layouts/layout2/css/layout.min.css',
+    				        'assets/layouts/layout2/css/custom.min.css',
+    				        'assets/layouts/layout2/css/themes/blue.min.css',
+    				        'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
+    				        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js'
+    				        /*'assets/global/plugins/bootstrap-select/css/bootstrap-select.css',
+    				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
+    				        'assets/pages/scripts/components-bootstrap-select.min.js',
+    				        'assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js',
+    				        'assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js',
+    				        'assets/global/plugins/jquery.blockui.min.js',
+                            'assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css',
+                            'assets/global/plugins/bootstrap-select/css/bootstrap-select.css',
+                           'assets/layouts/layout2/css/layout.min.css',
+                           'assets/global/plugins/jquery.min.js',
+                          'assets/global/plugins/bootstrap/js/bootstrap.min.js',
+                        'assets/global/plugins/js.cookie.min.js',
+                          'assets/global/scripts/app.min.js',
+                          'assets/layouts/layout2/scripts/layout.min.js',
+                           'assets/layouts/layout2/scripts/demo.min.js',
+                           'assets/layouts/global/scripts/quick-sidebar.min.js',
+                          'assets/layouts/global/scripts/quick-nav.min.js'*/
                         ]
                     });
                 }]
@@ -274,7 +337,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	                }]
 	            }
 	        })
-        
         
         .state('addUserContract',{
             url: "/addUserContract",
@@ -433,7 +495,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        			});
 	        		}]
 	        	}
-
 	        })         
 	           .state('warehouse', {
 	        url: "/warehouse",
@@ -446,21 +507,21 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [   
-							/*'assets/global/plugins/jquery.min.js',
-							'assets/global/plugins/bootstrap/js/bootstrap.min.js',
-							'assets/global/plugins/js.cookie.min.js',
-							'assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js',
-							'assets/global/plugins/jquery.blockui.min.js',
-							'assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js',
-							'assets/global/scripts/datatable.js',
-							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
-							'assets/global/scripts/app.min.js',
-							
-							'assets/layouts/layout2/scripts/layout.min.js',
-							'assets/layouts/layout2/scripts/demo.min.js',
-							'assets/layouts/global/scripts/quick-sidebar.min.js',
-							'assets/layouts/global/scripts/quick-nav.min.js',*/
-							 'assets/global/plugins/jstree/dist/themes/default/style.min.css',
+							                        
+        				        'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+        				        'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+        				        'assets/global/plugins/datatables/datatables.all.min.js',
+        				        'assets/global/plugins/datatables/datatables.min.js',
+        				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css',
+        				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js',
+        				        'assets/global/plugins/bootbox/bootbox.min.js',
+        				        'assets/apps/scripts/pageHandle.js',
+        				        'assets/pages/scripts/table-datatables-buttons.min.js',
+        				        'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js',
+        				        'assets/apps/service/WarehouseService.js',
+	                        'assets/apps/controllers/WarehouseController.js'
+        				        
+							/* 'assets/global/plugins/jstree/dist/themes/default/style.min.css',
 							  'assets/global/plugins/jstree/dist/jstree.min.js',
                             'assets/pages/scripts/ui-tree.min.js',
 							 'assets/apps/scripts/pageHandle.js',
@@ -468,9 +529,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         				        'assets/global/plugins/bootstrap-toastr/toastr.css',
                            'assets/global/plugins/datatables/datatables.min.css', 
                            'assets/global/plugins/datatables/datatables.min.js',
-	                       /* 'assets/global/plugins/datatables/datatables.all.min.js',*/
-	                        'assets/apps/service/WarehouseService.js',
-	                        'assets/apps/controllers/WarehouseController.js'
+//	                        'assets/apps/service/WarehouseService.js'*/
                         ]
                     });
                 }]

@@ -2,6 +2,8 @@ package com.congmai.zhgj.web.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class Warehouse {
     private String serialNum;
 
@@ -32,11 +34,11 @@ public class Warehouse {
     private String delFlg;
 
     private String creator;
-
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     private String updater;
-
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
     public String getSerialNum() {

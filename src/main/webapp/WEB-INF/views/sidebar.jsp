@@ -35,7 +35,7 @@
                     </a>
                 </li>
                 <li>
-                    <a ui-sref="jgml">
+                    <a ui-sref="priceList">
                         <i class="icon-check"></i> 价格目录</span>
                     </a>
                 </li>
