@@ -2,7 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <!-- BEGIN HEADER INNER -->
-<div class="page-header-inner container">
+<!-- <div class="page-header-inner container"> 默认头为盒状的样式-->
+<div class="page-header-inner ">
 	<!-- BEGIN LOGO -->
 	<div class="page-logo">
 		<a ui-sref="dashboard"> <img
