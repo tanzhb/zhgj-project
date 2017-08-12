@@ -448,25 +448,15 @@ public class CompanyController {
 							company.setUpdater(currenLoginName);
 							companyList.add(company);
 						}catch(Exception  e){
-							throw new Exception("第"+i+"行数据异常请检查，数据内容："+row.toString());
+							throw new Exception("第"+(i+1)+"行数据异常请检查，数据内容："+row.toString());
 						}
 						
 					}
 					
 				}
 			}, 2);
-				Company company = new Company();
-				company.setComId("");
-				companyList.add(company);
-				/*
-			   //创建线程执行批量插入
-				Runnable companyRunnable = new  Runnable() {
-					@Override
-					public void run() {*/
-						companyService.insertBatch(companyList);
-				/*	}
-				};
-				new Thread(companyRunnable).start();*/
+				
+				companyService.insertBatch(companyList);
 			
 			map.put("data", "success");
 		} catch (Exception e1) {

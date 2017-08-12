@@ -63,7 +63,6 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 		companyMapper.deleteCompanyBatch(comIdList);
 	}
 
-	@Transactional
 	@Override
 	public void insertBatch(List<Company> companyList) {
 		companyMapper.insertSelectiveBatch(companyList);
