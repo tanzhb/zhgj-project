@@ -47,6 +47,7 @@ public class DemandPlanServiceImpl extends GenericServiceImpl<DemandPlan,String>
 		example.setOrderByClause("updateTime desc");
 		example.setStart(start);
 		example.setLimit(limit);
+		example.createCriteria().andDelFlgEqualTo("0");
 		List<DemandPlan> list = demandPlanMapper.selectByExample(example);
 		if(!CollectionUtils.isEmpty(list)){
 			for(DemandPlan vo : list){
@@ -78,8 +79,10 @@ public class DemandPlanServiceImpl extends GenericServiceImpl<DemandPlan,String>
 	@Override
 	public void deleteBatch(List<String> serialNumArray) {
 		DemandPlanExample example = new DemandPlanExample();
+		DemandPlan record = new DemandPlan();
+		record.setDelFlg("1");
 		example.createCriteria().andSerialNumIn(serialNumArray);
-		demandPlanMapper.deleteByExample(example);
+		demandPlanMapper.updateByExampleSelective(record, example);
 		
 	}
 

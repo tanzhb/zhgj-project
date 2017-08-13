@@ -358,6 +358,60 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 					});
 				}
 			}; 
+			
+			
+			 /**
+			 * 编辑模式
+			 */
+	        $scope.editDemandPlanBasic=function (comId) {
+	        	$scope.demandPlanView = false;
+	        	$scope.demandPlanAdd = false;
+	        	$scope.demandPlanEdit = true;
+	        	
+	        };
+	        
+	        
+	        /**
+	         * 取消
+	         */
+	        $scope.cancelDemandPlanBasic=function () {
+	        	getDemandPlanInfo($scope.demandPlan.serialNum);
+	        	$scope.demandPlanView = true;
+	        	$scope.demandPlanAdd = true;
+	        	$scope.demandPlanEdit = false;
+	        };
+	        
+	        var getDemandPlanInfo = function(serialNum,type){
+	    	   if(!handle.isNull(serialNum)){
+	    			 var promise = demandPlanService.getDemandPlanInfo(serialNum);
+	 	        	promise.then(function(data){
+	 	        		if(!handle.isNull(data.data.demandPlan)){
+		 	        		$scope.demandPlan = data.data.demandPlan;
+		 	        	}
+	 	        		if(!handle.isNull(data.data.demandPlanMateriels)){
+	 	        			$scope.rootMateriels = data.data.demandPlan;
+	 	        		}
+	 	            },function(data){
+	 	               //调用承诺接口reject();
+	 	            });
+	    		 }
+		    }
+	        
+	        var viewDemandPlan = function(serialNum){
+	        	if(!handle.isNull(serialNum)){
+	        		var promise = demandPlanService.viewDemandPlan(serialNum);
+	        		promise.then(function(data){
+	        			if(!handle.isNull(data.data)){
+	        				$scope.demandPlan = data.data;
+	        			}
+	        		},function(data){
+	        			//调用承诺接口reject();
+	        		});
+	        	}
+	        }
+	        
+	        
+	        
 
 			/**
 			 * 保存需求计划物料信息
@@ -469,8 +523,8 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	        /**
 	         * 批量删除
 	         */
-	        $scope.deleteCompanyBatch=function () {
-	        	var id_count = table.$('input[type="checkbox"]:checked').length;
+	        $scope.deleteDemandPlan = function () {
+	        	var id_count = $('#demandPlanTable input[type="checkbox"]:checked').length;
 				if(id_count==0){
 					toastr.warning("请选择您要删除的记录");
 					return;
@@ -478,7 +532,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	        	handle.confirm("确定删除吗？",function(){
 	        		var ids = '';
 					// Iterate over all checkboxes in the table
-					table.$('input[type="checkbox"]').each(
+	        		$('#demandPlanTable input[type="checkbox"]').each(
 							function() {
 								// If checkbox exist in DOM
 								if ($.contains(document, this)) {
@@ -494,11 +548,12 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 								}
 							});
 	        		handle.blockUI();
-	        		var promise = companyService.deleteCompanyBatch(ids);
+	        		var promise = demandPlanService.deleteDemandPlan(ids);
 	        		promise.then(function(data){
 	        			toastr.success("删除成功");
 	        			handle.unblockUI();
-	        			table.ajax.reload(); // 重新加载datatables数据
+	        			createTable(15,1);
+	        			//table.ajax.reload(); // 重新加载datatables数据
 	        			/*$state.go('company',{},{reload:true}); */
 	        		},function(data){
 	        			//调用承诺接口reject();
@@ -542,7 +597,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 		    	var promise = demandPlanService.createTable(pageSize,pageIndex,params);
 		    	promise.then(function(data){
 		    			$scope.demandPlans = data.data.result;
-		    			handle.createPage("#demandPlanTab",data.data,"rest/demandPlan/demandPlanList",createTable,init);
+		    			handle.createPage("#simple",data.data,"rest/demandPlan/demandPlanList",createTable,init);
 		            },function(data){
 		               //调用承诺接口reject();
 		         });
@@ -587,10 +642,12 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	        */
 	       $scope.showOperation = function(type,index){
 	    	   var call = "operation_c"+index;
+	    	   var call2 = "operation_d"+index;
 	    	   if(type=='finance'){
 	    		   call =  "operation_f"+index;
 	    	   }
 	    	   $scope[call] = true;
+	    	   $scope[call2] = true;
 	       };
 	       
 	       /**
@@ -598,10 +655,12 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	        */
 	       $scope.hideOperation = function(type,index){
 	    	   var call = "operation_c"+index;
+	    	   var call2 = "operation_d"+index;
 	    	   if(type=='finance'){
 	    		   call =  "operation_f"+index;
 	    	   }
 	    	   $scope[call]= false;
+	    	   $scope[call2]= false;
 	       };
 	       
 	       

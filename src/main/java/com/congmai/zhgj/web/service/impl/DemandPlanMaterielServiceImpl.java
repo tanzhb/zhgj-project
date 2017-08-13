@@ -41,9 +41,19 @@ public class DemandPlanMaterielServiceImpl extends GenericServiceImpl<DemandPlan
 
 	@Override
 	public void deleteBatch(List<String> serialNumArray) {
+		DemandPlanMateriel demandPlanMateriel = new DemandPlanMateriel();
+		demandPlanMateriel.setDelFlg("1");
 		DemandPlanMaterielExample example = new DemandPlanMaterielExample();
 		example.createCriteria().andSerialNumIn(serialNumArray);
-		demandPlanMaterielMapper.deleteByExample(example);
+		demandPlanMaterielMapper.updateByExampleSelective(demandPlanMateriel, example);
+	}
+
+	@Override
+	public List<DemandPlanMateriel> selectListByDemandPlanSerial(
+			String serialNum) {
+		DemandPlanMaterielExample example = new DemandPlanMaterielExample();
+		example.createCriteria().andDemandPlanSerialEqualTo(serialNum);
+		return demandPlanMaterielMapper.selectByExample(example);
 	}
 	
 

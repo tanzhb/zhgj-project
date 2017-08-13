@@ -8,4 +8,6 @@ import com.congmai.zhgj.web.model.DemandPlanMateriel;
 public interface DemandPlanMaterielService extends GenericService<DemandPlanMateriel, String>{
 
 	void deleteBatch(List<String> serialNumArray);
+
+	List<DemandPlanMateriel> selectListByDemandPlanSerial(String serialNum);
 }

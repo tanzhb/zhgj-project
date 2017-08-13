@@ -27,33 +27,40 @@
 <div class="row">
     <div class="col-md-12">
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
-                <div class="portlet light">
-                               <div class="portlet-title">
-                                      <div class="caption">
-                                        	需求计划
-                                      </div>
-                                       <div class="tools">
-				                             <button  class="btn blue  btn-outline  btn-sm " ng-click="addDemandPlan()">
-                                            <i class="fa fa-plus"></i>新增</button>
-				                       </div>
-                                </div>
-                                <div class="portlet-body" ng-repeat="demandPlan in demandPlans">
-										 <div class="portlet">
-				                                <div class="portlet-title">
-				                                    <div class="caption">
-				                                    	上海某公司
-				                                    </div>
-				                                   
-				                                </div>
-				                                <div class="portlet-body">
-				                                	<div class="row">
-				                                	<div class="col-md-12">
+                <div class="portlet box blue">
+                                <div class="portlet-title">
+									<div class="caption">
+										需求计划
+									</div>
+									<div class="actions">
+										<a href="javascript:;" class="btn btn-default btn-sm btn-circle"
+											ng-click="addDemandPlan()"> <i class="fa fa-plus"></i> 添加
+										</a>  <a href="javascript:;" class="btn btn-default btn-sm btn-circle"
+											ng-click="editDemandPlan()"> <i class="fa fa-edit"></i> 修改
+										</a> <a href="javascript:;" class="btn btn-default btn-sm btn-circle"
+											ng-click="deleteDemandPlan()"> <i class="fa fa-minus"></i>
+											删除  
+										</a>
+									</div>
+								</div>
+                                <div class="portlet-body" ng-repeat="demandPlan in demandPlans" id="demandPlanTable">
+                                 		<div class="row">
+	                                   	 	<div class="col-md-12">
+												<div class="portlet">
+					                                <div class="portlet-title">
+					                                    <div class="caption">
+					                                    		<input name="select_all" class="dt-body-center"
+																			value="{{demandPlan.serialNum}}" id="example-select-all" type="checkbox" />
+					                                    	上海某公司
+					                                    </div>
+					                                </div>
+					                                <div class="portlet-body">
 					                                 	<div class="table-scrollable">
 					                                        <table class="table table-striped table-bordered table-advance table-hover">
 					                                            <thead>
 					                                                <tr>
-					                                                   	<th><input name="select_all" class="dt-body-center"
-																				value="1" id="example-select-all" type="checkbox" /></th>
+					                                                   	<!-- <th><input name="select_all" class="dt-body-center"
+																				value="1" id="example-select-all" type="checkbox" /></th> -->
 																		<th>物料编号</th>
 																		<th>产品名称</th>
 																		<th>规格型号</th>
@@ -66,8 +73,8 @@
 					                                            </thead>
 					                                            <tbody ng-repeat="materiel in demandPlan.materiels">
 					                                                <tr>
-					                                                    <td><input name="select_all" class="dt-body-center"
-																				value="1" type="checkbox" /></td>
+					                                                   <!--  <td><input name="select_all" class="dt-body-center"
+																				value="1" type="checkbox" /></td> -->
 					                                                    <td>{{materiel.materiel.materielName}}</td>
 					                                                    <td>{{materiel.materiel.materielName}}</td>
 					                                                    <td>{{materiel.materiel.specifications}}</td>
@@ -81,29 +88,28 @@
 					                                        </table>
 					                                    </div>
 					                                </div>
-				                                    </div>
-				                                    <div class="row">
-					                                    <div class="col-md-12">
-															<div class="col-md-5 col-sm-5">
-																<div class="dataTables_info" id="demandPlanTab_info" role="status"></div>
-															</div>
-															<div class="col-md-7 col-sm-7">
-																<div class="dataTables_paginate paging_bootstrap_full_number">
-																	<ul id="demandPlanTab_paginator" ></ul>
-																</div>
-															</div>
-														</div>
-													</div>
-				                                </div>
-				                            </div>
+						                    </div>
+				                    	</div>
+                            		</div>   
+								</div>
+								<div class="portlet-body dataTables_wrapper" >
+									<div class="row">
+	                                    <div class="col-md-12">
+											<div class="col-md-5 col-sm-5">
+												<div class="dataTables_info" id="simple_info" role="status"></div>
+											</div>
+											<div class="col-md-7 col-sm-7">
+												<div class="dataTables_paginate paging_bootstrap_full_number">
+													<ul id="simple_paginator" ></ul>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
                             </div>
         <!-- END EXAMPLE TABLE PORTLET-->
 	</div>
 </div>
-
-
-
 <!-- 导入modal START -->
 <div class="modal fade" id="import" role="import" aria-hidden="true">
      <div class="modal-dialog" >

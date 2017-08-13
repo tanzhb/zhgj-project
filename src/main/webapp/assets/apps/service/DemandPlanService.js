@@ -52,7 +52,7 @@ angular.module('MetronicApp').service('demandPlanService',['$http','$q',function
 	 */
 	this.viewDemandPlan = function(serialNum){
 		var deferred = $q.defer();
-		$http.get("rest/demandPlan/viewDemandPlanMateriel", {  
+		$http.get("rest/demandPlan/viewDemandPlan", {  
     		params:{serialNum:serialNum}//传整个表单数据  
     	}).then(function success(result) {
             deferred.resolve(result);//请求成功
@@ -61,6 +61,23 @@ angular.module('MetronicApp').service('demandPlanService',['$http','$q',function
         });
         return deferred.promise;//返回承诺
     	
+	}
+	
+	
+	/**
+	 * 编辑
+	 */
+	this.demandPlanInfo = function(serialNum){
+		var deferred = $q.defer();
+		$http.get("rest/demandPlan/demandPlanInfo", {  
+			params:{serialNum:serialNum}//传整个表单数据  
+		}).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+		
 	}
 
 	
@@ -113,10 +130,10 @@ angular.module('MetronicApp').service('demandPlanService',['$http','$q',function
 	/**
 	 * 批量删除
 	 */
-	this.deleteCompanyBatch = function(comIds){
+	this.deleteDemandPlan = function(serialNums){
 		var deferred = $q.defer();
-		$http.post("rest/company/deleteCompanyBatch",  
-			comIds//传整个表单数据  
+		$http.post("rest/demandPlan/deleteDemandPlan",  
+		   serialNums//传整个表单数据  
 		).then(function success(result) {
 			deferred.resolve(result);//请求成功
 		}, function error(err) {

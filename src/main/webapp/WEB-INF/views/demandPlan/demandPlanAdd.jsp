@@ -43,9 +43,9 @@
                         <div class="portlet-title">
                             <div class="caption">需求计划</div>
                             <div class="actions">
-                                <button   ng-show="demandPlanView" class="btn blue  btn-outline  btn-sm " ng-click="editCompany()">
+                                <button   ng-show="demandPlanView" class="btn blue  btn-outline  btn-sm " ng-click="editDemandPlanBasic()">
                                             <i class="fa fa-edit"></i> 编辑 </button>
-                                <button   ng-show="demandPlanEdit" class="btn red  btn-outline  btn-sm " ng-click="cancelCompany('company')">
+                                <button   ng-show="demandPlanEdit" class="btn red  btn-outline  btn-sm " ng-click="cancelDemandPlanBasic()">
                                             <i class="fa fa-undo"></i> 取消 </button>
                                 <button   ng-hide="demandPlanAdd" class="btn blue  btn-outline  btn-sm " ng-click="saveDemandPlan()">
                                             <i class="fa fa-save"></i> 保存 </button>
@@ -86,7 +86,7 @@
                                                     <div class="col-md-7">
                                                         <!-- <input type="text" class="form-control" id="legalPerson" name="legalPerson" ng-model="company.legalPerson" ng-hide="companyAdd" >
                                                         <div class="form-control-focus"> </div> -->
-                                                         <p class="control-label left" >2</p>
+                                                         <p class="control-label left" >{{rootMateriels.length}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -96,7 +96,7 @@
                                                     <div class="col-md-7">
                                                        <!--  <input type="text" class="form-control" id="address" name="address" ng-model="company.address" ng-hide="companyAdd" >
                                                         <div class="form-control-focus"> </div> -->
-                                                         <p class="control-label left">2</p>
+                                                         <p class="control-label left">未知</p>
                                                     </div>
                                             </div>
 										</div>
@@ -107,7 +107,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="releaseDate"> <span class="required"> * </span>发布日期：</label>
                                                     <div class="col-md-7">
-                                                        <input type="text" class="form-control form-control-inline input-medium date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="releaseDate" name="releaseDate" ng-model="demandPlan.releaseDate" ng-hide="demandPlanAdd" >
+                                                        <input type="text" class="form-control form-control-inline input-medium date-picker" readonly="readonly" data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="releaseDate" name="releaseDate" ng-model="demandPlan.releaseDate" ng-hide="demandPlanAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="demandPlanView">{{demandPlan.releaseDate}}</p>
                                                     </div>
@@ -151,12 +151,12 @@
 			                                                    <th>距离交付</th>
 			                                                    <th>交付地点</th>
 			                                                    <th>供应商</th>
-			                                                    <th style="width:65px;"></th>
+			                                                    <th></th>
 			                                                </tr>
 			                                            </thead>
-			                                           <tbody ng-show="noContactData" ng-if="companyContact.length==0">
+			                                           <tbody ng-if="rootMateriels.length==0">
 			                                             	<tr>
-			                                                    <td colspan="7" align="center" >暂无数据</td>
+			                                                    <td colspan="10" align="center" >暂无数据</td>
 			                                                </tr>
 			                                            </tbody>
 			                                            <tbody ng-repeat="materiel in rootMateriels track by $index"  repeat-done="repeatDone()">
@@ -189,13 +189,17 @@
 			                                                    	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{demandPlanMateriel.deliveryAddress}}</label>
 			                                                    </td>
 			                                                    <td>{{materiel.remark}}</td>
-			                                                    <td ng-show="operation_c{{$index}}">
-			                                                    	<a ng-click="saveDemandPlanMateriel(demandPlanMateriel,materiel,$index)">保存</a>
-			                                                    	&nbsp;&nbsp;&nbsp;
-			                                                    	<a ng-click="editDemandPlanMateriel(demandPlanMateriel,materiel,$index)">变更</a>
-			                                                    	&nbsp;&nbsp;&nbsp;
-			                                                    	<a ng-click="deleteDemandPlanMateriel(demandPlanMateriel)">删除</a>
+			                                                    <td ng-show="operation_c{{$index}}" style="position: relative;">
+			                                                    	<span style="position: absolute;left: 0px;">
+				                                                    	<a ng-click="saveDemandPlanMateriel(demandPlanMateriel,materiel,$index)">保存</a>
+				                                                    	&nbsp;&nbsp;&nbsp;
+				                                                    	<a ng-click="editDemandPlanMateriel(demandPlanMateriel,materiel,$index)">变更</a>
+				                                                    	&nbsp;&nbsp;&nbsp;
+				                                                    	<a ng-click="deleteDemandPlanMateriel(demandPlanMateriel)">删除</a>
+			                                                    	</span>
 			                                                    </td>
+			                                                   <!--  <td ng-hide="operation_d{{$index}}"  >
+			                                                    </td> -->
 			                                                </tr>
 			                                            </tbody>
 			                                        </table>

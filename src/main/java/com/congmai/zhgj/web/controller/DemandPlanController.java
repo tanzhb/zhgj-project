@@ -64,8 +64,8 @@ public class DemandPlanController {
     @ResponseBody
     public Page<DemandPlan> companyList(Map<String, Object> map,HttpServletRequest request,DemandPlan demandPlan) {
     	
-    	Page<DemandPlan> demandPlans = demandPlanService.getListByCondition(demandPlan, 0, 10);
-
+    	Page<DemandPlan> demandPlans = demandPlanService.getListByCondition(demandPlan, 1, 10);
+    	System.out.println("dddddddddddddd");
 		return demandPlans;
     }
     
@@ -137,9 +137,34 @@ public class DemandPlanController {
         	}
     	return demandPlan;
     }
+    
+    /**
+     * @Description (查看需求计划)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="demandPlanInfo",method=RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> demandPlanInfo(@RequestBody String serialNum,HttpServletRequest request) {
+    	 Map<String,Object> map = new HashMap<String, Object>(); 
+    	DemandPlan demandPlan = null;
+    	List<DemandPlanMateriel> demandPlanMateriels = null;
+    	try{
+    		if(StringUtils.isNotEmpty(serialNum)){
+    			demandPlan = demandPlanService.selectById(serialNum);
+    			demandPlanMateriels = demandPlanMaterielService.selectListByDemandPlanSerial(serialNum);
+    		}
+    		map.put("demandPlan", demandPlan);
+    		map.put("demandPlanMateriels", demandPlanMateriels);
+    	}catch(Exception e){
+    		System.out.println(e.getMessage());
+    		return null;
+    	}
+    	return map;
+    }
 
     /**
-     * @Description (删除需求计划物料信息)
+     * @Description (删除需求计划信息)
      * @param request
      * @return
      */
@@ -149,7 +174,7 @@ public class DemandPlanController {
     	String flag = "0"; //默认失败
     	try{
     		if(StringUtils.isNotEmpty(serialNums)){
-    			List<String> serialNumArray  = Arrays.asList(serialNums);
+    			List<String> serialNumArray  = Arrays.asList(serialNums.split(","));
     			demandPlanService.deleteBatch(serialNumArray);
     		}
     	}catch(Exception e){
@@ -247,7 +272,7 @@ public class DemandPlanController {
     	String flag = "0"; //默认失败
     	try{
     		if(StringUtils.isNotEmpty(serialNums)){
-    			List<String> serialNumArray  = Arrays.asList(serialNums);
+    			List<String> serialNumArray  = Arrays.asList(serialNums.split(","));
     			demandPlanMaterielService.deleteBatch(serialNumArray);
     		}
     	}catch(Exception e){
