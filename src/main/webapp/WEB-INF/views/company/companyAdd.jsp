@@ -333,7 +333,7 @@
 	                                                            <span class="fileinput-new">上传附件</span>
 	                                                            <span class="fileinput-exists">更改</span>
 	                                                            <input type="file" name="..." nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="companyQualification" ng-click="uploadFile(companyQualification)" > </span>
-	                                                        <span class="fileinput-filename">{{companyQualification.qualificatioImage}}</span> &nbsp;
+	                                                        <span class="fileinput-filename">{{companyQualification.qualificatioImage.substring(companyQualification.qualificatioImage.indexOf("_")+1)}}</span> &nbsp;
 	                                                        <a href="javascript:;" class="close fileinput-exists" ng-click="removefile(companyQualification)" data-dismiss="fileinput"> </a>
 	                                                    </div>
 				                                         <div ng-hide="companyQualificationAdd"   ng-if="companyQualification.qualificatioImage!=null&&companyQualification.qualificatioImage!=''"  class="fileinput fileinput-exists" data-provides="fileinput">
@@ -341,11 +341,11 @@
 	                                                            <span class="fileinput-new">上传附件</span>
 	                                                            <span class="fileinput-exists">更改</span>
 	                                                            <input type="file" name="..." nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="companyQualification" ng-click="uploadFile(companyQualification)" > </span>
-	                                                        <span class="fileinput-filename">{{companyQualification.qualificatioImage}}</span> &nbsp;
+	                                                        <span class="fileinput-filename">{{companyQualification.qualificatioImage.substring(companyQualification.qualificatioImage.indexOf("_")+1)}}</span> &nbsp;
 	                                                        <a href="javascript:;" class="close fileinput-exists"  ng-click="removefile(companyQualification)" data-dismiss="fileinput"> </a>
 	                                                    </div>
                                                     	<label   ng-show="companyQualificationView" ng-if="companyQualification.qualificatioImage==null||companyQualification.qualificatioImage==''" class="c_edit" >未上传附件</label>
-                                                    	<label   ng-show="companyQualificationView" ng-if="companyQualification.qualificatioImage!=null&&companyQualification.qualificatioImage!=''" class="c_edit" ><a href="javascript:;" ng-click="downloadFile(companyQualification)">下载附件</a></label>
+                                                    	<label   ng-show="companyQualificationView" ng-if="companyQualification.qualificatioImage!=null&&companyQualification.qualificatioImage!=''" class="c_edit" ><a href="javascript:;" title="下载附件" ng-click="downloadFile(companyQualification)">{{companyQualification.qualificatioImage.substring(companyQualification.qualificatioImage.indexOf("_")+1)}}</a></label>
 												</div>
 											</div>
 										</div>

@@ -82,19 +82,19 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	  //上传成功
 	  uploader.onSuccessItem = function (fileItem,response, status, headers) {
 		  if (status == 200){ 
-			  if(response==""){
+			  if(response.filename==""){
 				  toastr.error("上传失败！");
 				  return;
 			  }
 		  		toastr.success("上传成功！");
 		  	  for(var i=0;i < $scope.companyQualifications.length;i++){
 		  		  if($scope.qualification_temp==$scope.companyQualifications[i]){
-		  			$scope.companyQualifications[i].qualificatioImage = response;
+		  			$scope.companyQualifications[i].qualificatioImage = response.filename;
 		  		  }
 		  	  }
 		  }else{
 			  toastr.error("上传失败！");
-			  $scope.qualification_temp.qualificatioImage = response;
+			  $scope.qualification_temp.qualificatioImage = "";
 		  }
 		};
 	  //上传失败

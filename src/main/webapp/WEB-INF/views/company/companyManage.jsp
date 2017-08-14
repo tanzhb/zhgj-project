@@ -338,7 +338,7 @@
 												<td
 													ng-if="companyQualification.qualificatioImage!=null&&companyQualification.qualificatioImage!=''">
 													<a href="javascript:;"
-													ng-click="downloadFile(companyQualification)">下载附件</a>
+													ng-click="downloadFile(companyQualification)">{{companyQualification.qualificatioImage.substring(companyQualification.qualificatioImage.indexOf("_")+1)}}</a>
 												</td>
 												<td>{{companyQualification.remark}}</td>
 												<td><span ng-if="companyQualification.status==0"
