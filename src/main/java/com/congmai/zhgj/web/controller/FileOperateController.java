@@ -4,10 +4,14 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URLDecoder;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -43,14 +47,14 @@ public class FileOperateController {
 	 */
 	@RequestMapping("uploadSingleFile")
 	@ResponseBody
-	public String uploadSingleFile(HttpServletRequest request,@RequestParam("file") MultipartFile uploadFile) {
+	public Map uploadSingleFile(HttpServletRequest request,@RequestParam("file") MultipartFile uploadFile) {
 		String filename = "";
 		
 		try {
 			String path = env.getProperty("upload_path");
 			String fileName = uploadFile.getOriginalFilename();
-			String prefix = "." + fileName.substring(fileName.lastIndexOf(".") + 1);
-			filename = ApplicationUtils.random32UUID() + prefix;
+			/*String prefix = "." + fileName.substring(fileName.lastIndexOf(".") + 1);*/
+			filename = ApplicationUtils.random32UUID() +"_"+ fileName;
 			File dst = null;
 			File uploadDir = new File(path); // 创建上传目录
 			if (!uploadDir.exists()) {
@@ -63,7 +67,9 @@ public class FileOperateController {
 			System.out.println("文件上传失败----------"+filename+"-------Exception:"+e.getMessage());
 			filename="";
 		}
-		return filename;
+		Map m = new HashMap();
+		m.put("filename", filename);
+		return m;
 	}
 
 	/**
@@ -79,15 +85,12 @@ public class FileOperateController {
 	public String downloadFile(HttpServletRequest request,HttpServletResponse response,String fileName) {
 		try {
 			String path = env.getProperty("upload_path");
-			String destFilePath = path + "/" + fileName;
+			String destFilePath = path + "/" + URLDecoder.decode(fileName,"UTF-8");
 			String agent = request.getHeader("USER-AGENT");
-        	if (null != agent && -1 != agent.indexOf("MSIE") || null != agent && -1 != agent.indexOf("Trident")) {
-        		destFilePath = java.net.URLEncoder.encode(destFilePath, "UTF8");  
-        	} else {// others
-        		destFilePath = new String(destFilePath.getBytes("utf-8"), "iso-8859-1");
-        	}
+
         	response.setContentType("application/file;charset=UTF-8");
         	//设置响应头和下载保存的文件名      用关键字命名        
+        	fileName = StringUtils.substringAfter(fileName, "_");
             response.setHeader("content-disposition","attachment;filename="+fileName);
 			byte[] buffer = new byte[1024];
 			int k = 0;

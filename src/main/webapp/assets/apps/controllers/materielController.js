@@ -1,6 +1,6 @@
 /* Setup general page controller */
 angular.module('MetronicApp').controller('materielController', ['$rootScope', '$scope', 'settings','materielService',
-    '$state',"$stateParams",'$compile','$location', function($rootScope, $scope, settings,materielService,$state,$stateParams,$compile,$location) {
+    '$state',"$stateParams",'$compile','$location','FileUploader', function($rootScope, $scope, settings,materielService,$state,$stateParams,$compile,$location,FileUploader) {
     $scope.$on('$viewContentLoaded', function() {   
     	// initialize core components
     	App.initAjax();
@@ -1046,9 +1046,60 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 		                r.hide()
 		            }})
 	        };
-	        var selectIndex;
-	       $scope.selectMateriel = function(index){
-	    	  selectIndex = index;
+
+	      //创建对象
+	  	  var uploader = $scope.uploader = new FileUploader({url:'rest/fileOperate/uploadSingleFile'});
+	  	 
+	  	  uploader.onAfterAddingFile = function(item){
+	  		  if(item.file.size>10000000){
+	  			  //toastr.warning("文件大小超过10M！");
+	  			  uploader.cancelAll();
+	  		  }
+	  	  }
+	  	  //添加文件到上传队列后
+	  	  uploader.onCompleteAll = function () {
+	  		  uploader.clearQueue();
+	  	  };
+	  	  //上传成功
+	  	  uploader.onSuccessItem = function (fileItem,response, status, headers) {
+	  		  if (status == 200){ 
+	  			  if(response==""){
+	  				  toastr.error("上传失败！");
+	  				  return;
+	  			  }
+	  		  		toastr.success("上传成功！");
+	  		  		$scope.file[uploadSelectIndex].file = response.filename;
+	  		  }else{
+	  			  toastr.error("上传失败！");
+	  			$scope.file[uploadSelectIndex].file = response.filename;
+	  		  }
+	  		};
+	  	  //上传失败
+	  	  uploader.onErrorItem = function (fileItem, response, status, headers) {
+	  			toastr.error("上传失败！");
+	  	  };
+	  	  
+
+	       var uploadSelectIndex;
+	  	  $scope.uploadFile = function(index){
+	  		uploadSelectIndex = index;
+	  	  }
+	  	  
+	  	  $scope.up = function(file){
+	  		  uploader.clearQueue();
+	  		  uploader.addToQueue(file);
+	  		  uploader.uploadAll();
+	  	  }
+	       $scope.downloadFile = function(obj){
+	    	   if(!handle.isNull(obj)){
+	    		   window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+encodeURI(encodeURI(obj.file));
+	    	   }else{
+	    		   toastr.error("下载失败!");
+	    	   }
+	       }
+	       
+	       $scope.removefile = function(index){
+	    	   $scope.file[index].file = "";
 	       }
 	        
    	  //********附件  end****************//

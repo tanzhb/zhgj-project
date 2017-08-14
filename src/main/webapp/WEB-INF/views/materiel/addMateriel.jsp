@@ -645,8 +645,26 @@
 			                                <p class="form-control-static" ng-show="fileInfoShow"> {{_file.fileDescribe}} </p>
 			                          </td>
                                        <td>
-                                      		<input type="text" name="file[$index]" name="file" class="form-control" ng-hide="fileInfoInput" ng-model="file[$index].file"  >
-			                                <p class="form-control-static" ng-show="fileInfoShow"> {{_file.file}} </p>
+                                         <div ng-hide="fileInfoInput"   ng-if="file[$index].file==null||file[$index].file==''"  class="fileinput fileinput-new" data-provides="fileinput">
+                                             <span class="btn blue btn-outline btn-file">
+                                                 <span class="fileinput-new">上传附件</span>
+                                                 <span class="fileinput-exists">更改</span>
+                                                 <input type="file" name="..." nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="file[$index].file" ng-click="uploadFile($index)" > </span>
+                                             <span class="fileinput-filename">{{_file.file.substring(_file.file.indexOf("_"))}}</span> &nbsp;
+                                             <a href="javascript:;" class="close fileinput-exists" ng-click="removefile($index)" data-dismiss="fileinput"> </a>
+                                         </div>
+                                         <div ng-hide="fileInfoInput"   ng-if="file[$index].file!=null&&file[$index].file!=''"  class="fileinput fileinput-exists" data-provides="fileinput">
+                                             <span class="btn blue btn-outline btn-file">
+                                                 <span class="fileinput-new">上传附件</span>
+                                                 <span class="fileinput-exists">更改</span>
+                                                 <input type="file" name="..." nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="file[$index].file" ng-click="uploadFile($index)" > </span>
+                                             <span class="fileinput-filename">{{_file.file.substring(_file.file.indexOf("_"))}}</span> &nbsp;
+                                             <a href="javascript:;" class="close fileinput-exists"  ng-click="removefile($index)" data-dismiss="fileinput"> </a>
+                                         </div>
+                                       	<label   ng-show="fileInfoShow" ng-if="file[$index].file==null||file[$index].file==''" class="c_edit" >未上传附件</label>
+                                       	<label   ng-show="fileInfoShow" ng-if="file[$index].file!=null&&file[$index].file!=''" class="c_edit" ><a href="javascript:;" ng-click="downloadFile(file[$index])">{{_file.file.substring(_file.file.indexOf("_")+1)}}</a></label>
+                                      		<!-- <input type="text" name="file[$index]" name="file" class="form-control" ng-hide="fileInfoInput" ng-model="file[$index].file"  >
+			                                <p class="form-control-static" ng-show="fileInfoShow"> {{_file.file}} </p> -->
 			                          </td>
 			                           <td>
                                       		<input type="text" name="remark[$index]" name="remark" class="form-control" ng-hide="fileInfoInput" ng-model="file[$index].remark"  >

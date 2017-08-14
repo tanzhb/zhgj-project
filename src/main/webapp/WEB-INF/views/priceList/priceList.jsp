@@ -2,8 +2,8 @@
 <!-- <meta http-equiv="cache-control" content="no-cache">   -->
 
  <!-- BEGIN PAGE HEADER-->
-<h3 class="page-title"> 仓库列表
-    <small> 仓库管理</small>
+<h3 class="page-title"> 价格列表
+    <small> 价格目录</small>
 </h3>
 <div class="page-bar">
     <ul class="page-breadcrumb">
@@ -16,47 +16,28 @@
             <a ui-sref="datatablesmanaged">基础数据</a>
         </li>
         <li>
-            <a ui-sref="datatablesmanaged"> 仓库列表</a>
+            <a ui-sref="datatablesmanaged">价格列表</a>
         </li>
     </ul>
 </div>
 
 <div class="row" >
-<!-- <div class="col-md-4">
-         <div class="portlet light ">
-             <div class="portlet-title">
-                 <div class="caption">
-                     <i class="icon-social-dribbble font-blue-sharp"></i>
-                     <span ng-click="reloadWarehouseTable()" class="caption-subject font-blue-sharp bold uppercase">仓库展示</span>
-                 </div>
-             </div>
-             <div class="portlet-body">
-                 <div id="warehouseTree" class="tree-demo">
-                 </div>
-             </div>
-         </div>
-	</div> -->
 	<div class="col-md-12">
 
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
 		<div class="portlet box blue">
 			<div class="portlet-title">
 				<div class="caption">
-					<i class="fa fa-globe"></i>仓库列表
+					<i class="fa fa-globe"></i>价格列表
 				</div>
-				<div class="actions">
-				<!-- <div ng-controller="MyCtrl">
-    <button   class="btn sbold green" data-toggle="modal"  ng-click="jumpToUrl('/addWarehouse')">新建仓库<i class="fa fa-plus"></i></button>
-    
-</div> -->
- <!-- <a class="btn sbold green" data-toggle="modal"   ng-click="addWarehouse()">新建仓库 <i class="fa fa-plus"></i></a> -->
-					<button ui-sref="addWarehouse" 
+				<div class="actions"><!-- ui-sref="addPrice"  -->
+					<button ng-click="addPriceList()"
 						data-toggle="modal" class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-plus"></i> 添加
-					</button><button ng-click="toEditWarehousePage()"
+					</button><button ng-click="toEditPriceListPage()"
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-edit"></i> 修改
-					</button> <button ng-click="delWarehouse()" 
+					</button> <button ng-click="delPriceList()" 
 						data-toggle="modal" 
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-minus"></i> 删除
@@ -67,7 +48,7 @@
 							class="fa fa-share"></i> <span class="hidden-xs"> 其它 </span> <i
 							class="fa fa-angle-down"></i>
 						</a>
-						<!-- <ul class="dropdown-menu pull-right" id="sample_3_tools">
+						<ul class="dropdown-menu pull-right" id="sample_3_tools">
 							<li><a href="javascript:;" data-action="0"
 								class="tool-action"> <i class="icon-printer"></i> Print
 							</a></li>
@@ -88,18 +69,7 @@
 								class="tool-action"> <i class="icon-refresh"></i> Reload
 							</a></li>
 							</li>
-						</ul> -->
-						<ul class="dropdown-menu pull-right" id="sample_3_tools">
-												<li><a data-action="0"
-													class="tool-action" data-toggle="modal" data-target="#import"> <i class="fa fa-upload"></i> 导入
-												</a></li> 
-												<li><a href="javascript:;" data-action="1"
-													class="tool-action" ng-click="exportWarehouse()"> <i class="fa fa-file-excel-o"></i> 导出
-												</a></li>
-												<li><a href="javascript:;" data-action="2"
-													class="tool-action" > <i class="fa fa-print"></i> 打印
-												</a></li> 
-											</ul>
+						</ul>
 					</div>
 				</div>
 			</div>
@@ -118,7 +88,7 @@
 						<div class="modal-body form">
 							<form action="#" class="form-horizontal form-row-seperated"  id="form_sample_1">
 								<div class="form-group">
-									<label class="col-sm-2 control-label">仓库编号</label>
+									<label class="col-sm-2 control-label">价格编号</label>
 									<div class="col-sm-4">
 										<div class="input-group">
 											<!-- <span class="input-group-addon"> <i class="fa fa-user"></i>
@@ -270,7 +240,7 @@
 			<!-- 添加用户modal 结束 -->
 
 			<!-- 删除用户modal 开始 -->
-			<div id="delWarehouseModal" class="modal fade" tabindex=
+			<div id="delPriceListModal" class="modal fade" tabindex=
 
 				data-backdrop="static" data-keyboard="false">
 				<div class="modal-dialog">
@@ -281,121 +251,58 @@
 							<h4 class="modal-title">确认</h4>
 						</div>
 						<div class="modal-body">
-							<p>是否删除已选仓库?</p>
+							<p>是否删除已选价格?</p>
 						</div>
 						<div class="modal-footer">
 							<button type="button" data-dismiss="modal"
 								class="btn dark btn-outline">取消</button>
-							<button type="button" ng-click="confirmDellWarehouse()" class="btn green">确定
+							<button type="button" ng-click="confirmDelPriceList()" class="btn green">确定
 								</button>
 						</div>
 					</div>
 				</div>
 			</div>
 			<!-- 删除用户modal 结束 -->
-			
-			<!-- 导入modal START -->
-<div class="modal fade" id="import" role="import" aria-hidden="true">
-     <div class="modal-dialog" >
-	    <div class="modal-content">
-	 		<div class="modal-header">
-	            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-	            <h4 class="modal-title" >仓库信息导入</h4>
-	        </div>
-	        <div class="modal-body">
-	          		<!-- <div class="col-md-12"> -->
-	          		 <div class="">
-                           <div class="portlet-body form">
-                              <!--  BEGIN FORM -->
-                               <form class="form-horizontal" role="form">
-                                   <div class="form-body">
-                                   		<form id="fileImport" method="post" enctype="multipart/form-data" >
-	                                       <div class="row">
-	                                           <div class="col-md-2">
-	                                               <div class="form-group">
-	                                               		<!-- <div class="col-md-4">
-	                                               		</div> -->
-	                                               		<div class="col-md-12">
-	                                               			<button type="button" class="btn blue" ng-click="downloadImportTemp()">下载模板</button>
-	                                               		</div>
-	                                               </div>
-	                                           </div>
-	                                           <div class="col-md-7">
-	                                               <div class="form-group">
-	                                               		 <div class="fileinput fileinput-new" data-provides="fileinput">
-	                                                        <div class="input-group input-large">
-	                                                            <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
-	                                                                <i class="fa fa-file fileinput-exists"></i>&nbsp;
-	                                                                <span class="fileinput-filename"> </span>
-	                                                            </div>
-	                                                            <span class="input-group-addon btn default btn-file" id="file_span">
-	                                                                <span class="fileinput-new"> 选择文件 </span>
-	                                                                <span class="fileinput-exists">更换</span>
-	                                                                <input type="file" file-model="excelFile" accept=".xls" name="..."> </span>
-	                                                            <a href="javascript:;" id="resetFile" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> 移除 </a>
-	                                                        </div>
-	                                                    </div>
-	                                               </div>
-	                                           </div>
-	                                            <div class="col-md-2">
-	                                               <div class="form-group">
-	                                               		<div class="col-md-4">
-	                                               			
-	                                               		</div>
-	                                               		<div class="col-md-8">
-	                                               			<button type="button" class="btn blue" ng-click="uploadExcel()">导入</button>
-	                                               		</div>
-	                                               </div>
-	                                           </div>
-	                                           
-	                                         <!--   /span -->
-	                                       </div>
-	                                       <!-- /row -->
-                                       </form>
-                                   </div>
-                               </form>
-                              <!--  END FORM -->
-                           </div>
-                      </div>
-					<!-- </div> -->
-	        <!-- </div> -->
-	    </div>
-    </div>
-</div>
-</div>
-<!-- 导入modal END-->
 
 
 			<div class="portlet-body">
 				<table
-					class="table table-striped table-bordered table-hover "
-					id="sample_warehouse">
+					class="table table-striped table-bordered table-hover table-header-fixed"
+					id="sample_priceList">
 					<thead>
 						<tr>
 							<th style="text-align: center"><input name="select_all"
 								value="1" id="example-select-all" type="checkbox" /></th>
-							<th>仓库编号 </th>
-                            <th> 仓库名称</th>
-                            <th> 仓库类型</th>
-                            <th>仓库地址</th>
-                            <th>管理员 </th>
-                            <th> 仓库面积 </th>
-                            <th>仓库分类 </th>
-                            <th> 所有者 </th>
+							<th>价格编号 </th>
+                            <th> 供应商名称</th>
+                            <th> 物料编号</th>
+                            <th>产品名称</th>
+                            <th>规格型号 </th>
+                            <th> 单位 </th>
+                            <th>单价 </th>
+                            <th> 税率 </th>
+                             <th>币种 </th>
+                            <th> 价格有效期 </th>
+                            <th>价格失效期 </th>
+                            <th> 状态 </th>
 						</tr>
 					</thead>
 					
 					<tfoot>
 						<tr>
 							<th></th>
-							<th>仓库编号 </th>
-                            <th> 仓库名称</th>
-                            <th> 仓库类型</th>
-                            <th> 仓库地址</th>
-                            <th>管理员 </th>
-                            <th> 仓库面积 </th>
-                            <th>仓库分类 </th>
-                            <th> 所有者 </th>
+							<th>价格编号 </th>
+                            <th> 供应商名称</th>
+                            <th> 物料编号</th>
+                            <th>产品名称</th>
+                            <th>规格型号 </th>
+                            <th> 单位 </th>
+                            <th>单价 </th>
+                            <th> 税率 </th>
+                             <th>币种 </th>
+                            <th> 价格有效期 </th>
+                            <th>价格失效期 </th>
+                            <th> 状态 </th>
 						</tr>
 					</tfoot>
 					<tbody>
@@ -406,62 +313,16 @@
 		<!-- END EXAMPLE TABLE PORTLET-->
 	</div>
 </div>
-<div class="row" ng-controller="WarehouseController">
+<div class="row" ng-controller="PriceListController">
 	<div class="col-md-12">
 
-		<!-- BEGIN EXAMPLE TABLE PORTLET-->
-		<div class="portlet box blue">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class="fa fa-globe"></i>库位管理
-				</div>
-				<div class="actions">
-					<a href="javascript:;" data-target="#addUserModal"
-						data-toggle="modal" class="btn btn-default btn-sm btn-circle">
-						<i class="fa fa-plus"></i> 添加
-					</a> <a href="javascript:;" data-target="#delUsersModal"
-						data-toggle="modal" 
-						class="btn btn-default btn-sm btn-circle"> <i
-						class="fa fa-minus"></i> 删除
-					</a>
-					<div class="btn-group">
-						<a class="btn btn-default btn-outline btn-circle"
-							href="javascript:;" data-toggle="dropdown"> <i
-							class="fa fa-share"></i> <span class="hidden-xs"> 其它 </span> <i
-							class="fa fa-angle-down"></i>
-						</a>
-						<ul class="dropdown-menu pull-right" id="sample_3_tools">
-							<li><a href="javascript:;" data-action="0"
-								class="tool-action"> <i class="icon-printer"></i> Print
-							</a></li>
-							<li><a href="javascript:;" data-action="1"
-								class="tool-action"> <i class="icon-check"></i> Copy
-							</a></li>
-							<li><a href="javascript:;" data-action="2"
-								class="tool-action"> <i class="icon-doc"></i> PDF
-							</a></li>
-							<li><a href="javascript:;" data-action="3"
-								class="tool-action"> <i class="icon-paper-clip"></i> Excel
-							</a></li>
-							<li><a href="javascript:;" data-action="4"
-								class="tool-action"> <i class="icon-cloud-upload"></i> CSV
-							</a></li>
-							<li class="divider"></li>
-							<li><a href="javascript:;" data-action="5"
-								class="tool-action"> <i class="icon-refresh"></i> Reload
-							</a></li>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
 			<!-- 仓库信息弹框查看开始 -->
-<div class="modal fade" id="viewWarehouse" role="basic" aria-hidden="true">
+<div class="modal fade" id="viewPriceList" role="basic" aria-hidden="true">
      <div class="modal-dialog" style="width: 750px;">
 	    <div class="modal-content">
 	 		<div class="modal-header">
 	            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-	            <h4 class="modal-title" >仓库信息</h4>
+	            <h4 class="modal-title" >价格信息</h4>
 	        </div>
 	        <div class="modal-body">
 	          		<!-- <div class="col-md-12"> -->
@@ -473,18 +334,18 @@
                                        <div class="row">
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label col-md-5">仓库编号：</label>
+                                                   <label class="control-label col-md-5">价格编号：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static" >{{warehouse.warehouseNum}}</p>
+                                                       <p class="form-control-static" >{{priceList.priceNum}}</p>
                                                    </div>
                                                </div>
                                            </div>
                                            <!-- /span -->
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label col-md-5">仓库名称：</label>
+                                                   <label class="control-label col-md-5">描述：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{warehouse.warehouseName}}</p>
+                                                       <p class="form-control-static">{{priceList.priceDescribe}}</p>
                                                    </div>
                                                </div>
                                            </div>
@@ -494,18 +355,18 @@
                                        <div class="row">
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label col-md-5">仓库类型：</label>
+                                                   <label class="control-label col-md-5">物料编号：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{warehouse.warehouseType}}</p>
+                                                       <p class="form-control-static">{{priceList.materielNum}}</p>
                                                    </div>
                                                </div>
                                            </div>
                                           <!--  /span -->
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label col-md-5">仓库分类：</label>
+                                                   <label class="control-label col-md-5">物料名称：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{warehouse.warehouseCategory}}</p>
+                                                       <p class="form-control-static">{{priceList.materielName}}</p>
                                                    </div>
                                                </div>
                                            </div>
@@ -515,18 +376,18 @@
                                        <div class="row">
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label col-md-5">仓库地址：</label>
+                                                   <label class="control-label col-md-5">规格型号：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{warehouse.address}}</p>
+                                                       <p class="form-control-static">{{priceList.specifications}}</p>
                                                    </div>
                                                </div>
                                            </div>
                                         <!--    /span -->
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label col-md-5">仓库所有者：</label>
+                                                   <label class="control-label col-md-5">单位：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{warehouse.owner}}</p>
+                                                       <p class="form-control-static">{{priceList.unit}}</p>
                                                    </div>
                                                </div>
                                            </div>
@@ -536,18 +397,24 @@
                                        <div class="row">
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label col-md-5">仓库管理员：</label>
+                                                   <label class="control-label col-md-5">价格类型：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{warehouse.admin}}</p>
+                                                       <p class="form-control-static">{{priceList.priceType}}</p>
                                                    </div>
                                                </div>
                                            </div>
                                       <!--      /span -->
                                            <div class="col-md-6">
-                                               <div class="form-group">
-                                                   <label class="control-label col-md-5">仓库面积：</label>
+                                               <div class="form-group"  ng-if="isBuy">
+                                                   <label class="control-label col-md-5">采购商：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{warehouse.area}}</p>
+                                                       <p class="form-control-static">{{priceList.buyComName}}</p>
+                                                   </div>
+                                               </div>
+                                               <div class="form-group" ng-if="isSupply">
+                                                   <label class="control-label col-md-5">供应商：</label>
+                                                   <div class="col-md-7">
+                                                       <p class="form-control-static">{{priceList.supplyComName}}</p>
                                                    </div>
                                                </div>
                                            </div>
@@ -557,18 +424,18 @@
                                        <div class="row">
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label col-md-5">邮件：</label>
+                                                   <label class="control-label col-md-5">币种：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{warehouse.email}}</p>
+                                                       <p class="form-control-static">{{priceList.currency}}</p>
                                                    </div>
                                                </div>
                                            </div>
                                            <!-- /span -->
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label col-md-5">电话：</label>
+                                                   <label class="control-label col-md-5">税率：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{warehouse.tel}}</p>
+                                                       <p class="form-control-static">{{priceList.rate}}%</p>
                                                    </div>
                                                </div>
                                            </div>
@@ -578,18 +445,18 @@
                                        <div class="row">
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label col-md-5">备注：</label>
+                                                   <label class="control-label col-md-5">单价：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{warehouse.remark}}</p>
+                                                       <p class="form-control-static">{{priceList.price}}</p>
                                                    </div>
                                                </div>
                                            </div>
                                          <!--   /span -->
                                            <div class="col-md-6">
                                                <div class="form-group">
-                                                   <label class="control-label col-md-5">传真：</label>
+                                                   <label class="control-label col-md-5">含税价格：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{warehouse.fax}}</p>
+                                                       <p class="form-control-static">{{priceList.inclusivePrice}}</p>
                                                    </div>
                                                </div>
                                            </div>
@@ -608,49 +475,6 @@
 </div>
 </div>
 <!-- 仓库信息查看modal END-->
-
-
-			<div class="portlet-body">
-				<table
-					class="table table-striped table-bordered table-hover table-header-fixed"
-					id="sample_2">
-					<thead>
-						<tr>
-							<th style="text-align: center"><input name="select_all"
-								value="1" id="example-select-all" type="checkbox" /></th>
-					<th> 库位编码</th>
-                     <th>存储类型</th>
-                     <th> 库位名称</th>
-                      <th> 存储属性</th>
-                      <th> 最大行数</th>
-                      <th> 最大列数</th>
-                       <th> 最大层数</th>
-                        <th>存储类型</th>
-                        <th> 存储方式</th>
-                         <th> 默认长宽高</th>
-                          <th> 默认承重</th>
-						</tr>
-					</thead>
-					<tfoot>
-					<tr>
-					<th> </th>
-						<th> 库位编码</th>
-                       <th>存储类型</th>
-                       <th> 库位名称</th>
-                        <th> 存储属性</th>
-                         <th> 最大行数</th>
-                         <th> 最大列数</th>
-                         <th> 最大层数</th>
-                          <th>存储类型</th>
-                          <th> 存储方式</th>
-                          <th> 默认长宽高</th>
-                           <th> 默认承重</th>
-                             </tr>
-						</tfoot>
-						<tbody>
-					</tbody>
-				</table>
-			</div>
 		</div>
 		<!-- END EXAMPLE TABLE PORTLET-->
 	</div>
