@@ -70,11 +70,23 @@
 										<div class="col-md-6">
 											<div class="form-group form-md-line-input">
                                                    <label class="col-md-4 control-label" for="buyComId"> <span class="required"> * </span>客户名称：</label>
-                                                    <div class="col-md-7">
+                                                   <!--  <div class="col-md-7">
                                                         <input type="text" class="form-control" id="buyComId" name="buyComId" ng-model="demandPlan.buyComId" ng-hide="demandPlanAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="demandPlanView">{{demandPlan.buyComId}}</p>
-                                                  </div>
+                                                  </div> -->
+	                                              <div class="col-md-7">
+	                                                    <select id="customer" class="bs-select form-control" data-live-search="true"  name="buyComId" ng-model="demandPlan.buyComId" data-size="8" ng-hide="demandPlanAdd">
+	                                                        <option value="WF">上海科技一</option>
+	                                                        <option value="EH">上海科技二</option>
+	                                                        <option value="YE">上海科技三</option>
+	                                                        <option value="ZM">上海科技四</option>
+	                                                        <option value="ZW">上海科技五</option>
+	                                                    </select>
+	                                                   <!--   <select id="customer" class="bs-select form-control" data-live-search="true" ng-repeat="customer in customers" data-size="8">
+	                                                        <option value="{{customer.comName}}">{{customer.comName}}</option>
+	                                                    </select> -->
+	                                              </div>
                                             </div>
 										</div>
 									</div>
@@ -151,7 +163,7 @@
 			                                                    <th>距离交付</th>
 			                                                    <th>交付地点</th>
 			                                                    <th>供应商</th>
-			                                                    <th></th>
+			                                                    <th style="width: 140px;"></th>
 			                                                </tr>
 			                                            </thead>
 			                                           <tbody ng-if="rootMateriels.length==0">
@@ -166,14 +178,14 @@
 			                                                    <td>{{materiel.specifications}}</td>
 			                                                    <td>{{materiel.unit}}</td>
 			                                                    <td>
-			                                                    	<input type="text" ng-hide="demandPlanMaterielEdit{{$index}}" class="form-control  input-small" ng-model="demandPlanMateriel.amount" value="">
-			                                                   	 	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{demandPlanMateriel.amount}}</label>
+			                                                    	<input type="text" ng-hide="demandPlanMaterielEdit{{$index}}" class="form-control  input-small" ng-model="materiel.amount" value="">
+			                                                   	 	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.amount}}</label>
 			                                                    </td>
 			                                                    <td>
 				                                                    <div  ng-hide="demandPlanMaterielEdit{{$index}}" class="input-group input-medium date date-picker"
 																		 data-date-format="yyyy-mm-dd"
 																		data-date-viewmode="years">
-																		<input type="text" class="form-control" readonly="" id="validityDate{{$index}}" ng-model="demandPlanMateriel.deliveryDate" name="validityDate"
+																		<input type="text" class="form-control" readonly="" id="validityDate{{$index}}" ng-model="materiel.deliveryDate" name="validityDate"
 																			> <span class="input-group-btn">
 																			<button class="btn default " type="button">
 																				<i class="fa fa-calendar"></i>
@@ -181,21 +193,21 @@
 																		</span>
 																		<span class="help-block"></span>
 																	</div>
-																	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{demandPlanMateriel.deliveryDate}}</label>
+																	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.deliveryDate}}</label>
 			                                                    </td>
 			                                                    <td>{{materiel.contactEmail}}</td>
 			                                                    <td>
-			                                                    	<input  ng-hide="demandPlanMaterielEdit{{$index}}" type="text" class="form-control" ng-model="demandPlanMateriel.deliveryAddress" value="">
-			                                                    	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{demandPlanMateriel.deliveryAddress}}</label>
+			                                                    	<input  ng-hide="demandPlanMaterielEdit{{$index}}" type="text" class="form-control" ng-model="materiel.deliveryAddress" value="">
+			                                                    	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.deliveryAddress}}</label>
 			                                                    </td>
 			                                                    <td>{{materiel.remark}}</td>
-			                                                    <td ng-show="operation_c{{$index}}" style="position: relative;">
-			                                                    	<span style="position: absolute;left: 0px;">
-				                                                    	<a ng-click="saveDemandPlanMateriel(demandPlanMateriel,materiel,$index)">保存</a>
+			                                                    <td ng-show="operation_c{{$index}}" style="width: 140px;">
+			                                                    	<span>
+				                                                    	<a ng-click="saveDemandPlanMateriel(materiel,$index)">保存</a>
 				                                                    	&nbsp;&nbsp;&nbsp;
-				                                                    	<a ng-click="editDemandPlanMateriel(demandPlanMateriel,materiel,$index)">变更</a>
+				                                                    	<a ng-click="editDemandPlanMateriel(materiel)">变更</a>
 				                                                    	&nbsp;&nbsp;&nbsp;
-				                                                    	<a ng-click="deleteDemandPlanMateriel(demandPlanMateriel)">删除</a>
+				                                                    	<a ng-click="deleteDemandPlanMateriel(materiel)">删除</a>
 			                                                    	</span>
 			                                                    </td>
 			                                                   <!--  <td ng-hide="operation_d{{$index}}"  >

@@ -520,7 +520,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        		}]
 	        	}
 	        }).state('demandPlanAdd', {
-	        	url: "/demandPlanAdd",
+	        	url: "/demandPlanAdd?:serialNum",
 	        	templateUrl: "rest/demandPlan/demandPlanAdd",
 	        	data: {pageTitle: '需求计划'},
 	        	reload:true, 
@@ -544,7 +544,10 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js',
 	        				        'assets/global/plugins/bootbox/bootbox.min.js',
 	        				        'assets/apps/scripts/pageHandle.js',
-	        				        'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js'
+	        				        'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js',
+	        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
+	        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css'
+	        				        /*'assets/pages/scripts/components-bootstrap-select.min.js'*/
 	        				        ]
 	        			});
 	        		}]

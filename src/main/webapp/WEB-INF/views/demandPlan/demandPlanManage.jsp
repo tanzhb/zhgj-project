@@ -36,7 +36,7 @@
 										<a href="javascript:;" class="btn btn-default btn-sm btn-circle"
 											ng-click="addDemandPlan()"> <i class="fa fa-plus"></i> 添加
 										</a>  <a href="javascript:;" class="btn btn-default btn-sm btn-circle"
-											ng-click="editDemandPlan()"> <i class="fa fa-edit"></i> 修改
+											ng-click="toEditDemandPlan()"> <i class="fa fa-edit"></i> 修改
 										</a> <a href="javascript:;" class="btn btn-default btn-sm btn-circle"
 											ng-click="deleteDemandPlan()"> <i class="fa fa-minus"></i>
 											删除  

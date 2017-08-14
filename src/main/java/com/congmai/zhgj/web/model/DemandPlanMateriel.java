@@ -37,6 +37,15 @@ public class DemandPlanMateriel {
     private Materiel materiel;
     
     private String supplyName;
+    
+    //冗余字段
+    private String materielNum;
+
+    private String materielName;
+
+    private String specifications;
+
+    private String unit;
 
     public String getSerialNum() {
         return serialNum;
@@ -157,5 +166,37 @@ public class DemandPlanMateriel {
 
 	public void setMateriel(Materiel materiel) {
 		this.materiel = materiel;
+	}
+
+	public String getMaterielNum() {
+		return materielNum;
+	}
+
+	public void setMaterielNum(String materielNum) {
+		this.materielNum = materielNum;
+	}
+
+	public String getMaterielName() {
+		return materielName;
+	}
+
+	public void setMaterielName(String materielName) {
+		this.materielName = materielName;
+	}
+
+	public String getSpecifications() {
+		return specifications;
+	}
+
+	public void setSpecifications(String specifications) {
+		this.specifications = specifications;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 }

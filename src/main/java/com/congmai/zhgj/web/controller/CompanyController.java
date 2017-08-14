@@ -468,7 +468,19 @@ public class CompanyController {
     
     
 
+    /**
+     * @Description (获取企业全部信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping("getCustomers")
+    @ResponseBody
+    public List<Company> getCustomers(HttpServletRequest request,String searchKey) {
+    	
+    	return companyService.selectCustomers(searchKey);
+    }
 	
 	
 
 }
+

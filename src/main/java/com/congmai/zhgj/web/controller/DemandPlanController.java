@@ -153,11 +153,21 @@ public class DemandPlanController {
     		if(StringUtils.isNotEmpty(serialNum)){
     			demandPlan = demandPlanService.selectById(serialNum);
     			demandPlanMateriels = demandPlanMaterielService.selectListByDemandPlanSerial(serialNum);
+    			for(DemandPlanMateriel materiel:demandPlanMateriels){
+    				if(materiel.getMateriel()!=null){
+    					materiel.setMaterielName(materiel.getMateriel().getMaterielName());
+        				materiel.setMaterielNum(materiel.getMateriel().getMaterielNum());
+        				materiel.setSpecifications(materiel.getMateriel().getSpecifications());
+        				materiel.setUnit(materiel.getMateriel().getUnit());
+        				materiel.setMaterielSerial(materiel.getMateriel().getSerialNum());
+        				materiel.setSupplyMaterielSerial(materiel.getMateriel().getSerialNum());
+    				}
+    			}
     		}
     		map.put("demandPlan", demandPlan);
     		map.put("demandPlanMateriels", demandPlanMateriels);
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		System.out.println("获取需求计划出错"+e.getMessage());
     		return null;
     	}
     	return map;
@@ -275,9 +285,10 @@ public class DemandPlanController {
     			List<String> serialNumArray  = Arrays.asList(serialNums.split(","));
     			demandPlanMaterielService.deleteBatch(serialNumArray);
     		}
+    		flag = "1";
     	}catch(Exception e){
     		System.out.println(e.getMessage());
-    		flag = "1";
+    		
     	}
     	return flag;
     }

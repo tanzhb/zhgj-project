@@ -52,7 +52,8 @@ public class DemandPlanMaterielServiceImpl extends GenericServiceImpl<DemandPlan
 	public List<DemandPlanMateriel> selectListByDemandPlanSerial(
 			String serialNum) {
 		DemandPlanMaterielExample example = new DemandPlanMaterielExample();
-		example.createCriteria().andDemandPlanSerialEqualTo(serialNum);
+		example.createCriteria().andDemandPlanSerialEqualTo(serialNum).andDelFlgEqualTo("0");
+		example.setOrderByClause("createTime desc");
 		return demandPlanMaterielMapper.selectByExample(example);
 	}
 	

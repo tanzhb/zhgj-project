@@ -5,18 +5,32 @@
 angular.module('MetronicApp').service('demandPlanService',['$http','$q',function($http,$q) {
 	
 	/**
+	 * 初始化客户
+	 */
+	this.initCustomers = function (comId){
+		var deferred = $q.defer();
+		$http.post("rest/company/getCustomers")
+		.then(function success(result) {
+            deferred.resolve(result);//请求成功
+        }, function error(err) {
+            deferred.reject(err);//请求失败
+        });
+        return deferred.promise;//返回承诺
+	}
+	
+	/**
 	 * 获取企业信息数据
 	 */
 	this.getCompanyInfo = function (comId){
 		var deferred = $q.defer();
 		$http.get("rest/company/getCompanyInfo", {  
 			params:{comId:comId}//传整个表单数据  
-    	}).then(function success(result) {
-            deferred.resolve(result);//请求成功
-        }, function error(err) {
-            deferred.reject(err);//请求失败
-        });
-        return deferred.promise;//返回承诺
+		}).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
 	}
 	
 	
@@ -69,9 +83,9 @@ angular.module('MetronicApp').service('demandPlanService',['$http','$q',function
 	 */
 	this.demandPlanInfo = function(serialNum){
 		var deferred = $q.defer();
-		$http.get("rest/demandPlan/demandPlanInfo", {  
-			params:{serialNum:serialNum}//传整个表单数据  
-		}).then(function success(result) {
+		$http.post("rest/demandPlan/demandPlanInfo", 
+			serialNum//传整个表单数据  
+		).then(function success(result) {
 			deferred.resolve(result);//请求成功
 		}, function error(err) {
 			deferred.reject(err);//请求失败
@@ -117,9 +131,9 @@ angular.module('MetronicApp').service('demandPlanService',['$http','$q',function
 	 */
 	this.deleteDemandPlanMateriel = function(serialNum){
 		var deferred = $q.defer();
-		 $http.get("rest/demandPlan/deleteDemandPlanMateriel", {  
-	        	params:{serialNum:serialNum}//传整个表单数据  
-	        }).then(function success(result) {
+		 $http.post("rest/demandPlan/deleteDemandPlanMateriel", 
+			 	serialNum//传整个表单数据  
+	        ).then(function success(result) {
                 deferred.resolve(result);//请求成功
             }, function error(err) {
                 deferred.reject(err);//请求失败

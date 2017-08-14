@@ -52,7 +52,8 @@ public class DemandPlanServiceImpl extends GenericServiceImpl<DemandPlan,String>
 		if(!CollectionUtils.isEmpty(list)){
 			for(DemandPlan vo : list){
 				DemandPlanMaterielExample example2 = new DemandPlanMaterielExample();
-				example2.createCriteria().andDemandPlanSerialEqualTo(vo.getSerialNum());
+				example2.createCriteria().andDemandPlanSerialEqualTo(vo.getSerialNum()).andDelFlgEqualTo("0");
+				example2.setOrderByClause("createTime desc");
 				List<DemandPlanMateriel> mList = demandPlanMaterielMapper.selectByExample(example2);
 				vo.setMateriels(mList);
 			}
