@@ -569,6 +569,44 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
+        
+        
+        .state('purchaseForecast', {
+	            url: "/purchaseForecast",
+	            templateUrl:"rest/page/purchaseForecast",
+	            data: {pageTitle: '采购预测'},
+	            controller: "ContractController",
+	            resolve: {
+	                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+	                    return $ocLazyLoad.load({
+	                        name: 'MetronicApp',
+	                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+	                        files: [                             
+	                    
+	                    'assets/global/plugins/datatables/datatables.min.css', 
+	                    'assets/global/plugins/datatables/datatables.min.js',
+	                    'assets/global/plugins/jquery-validation/js/jquery.validate.js',
+						'assets/global/plugins/datatables/datatables.all.min.js',
+                        'assets/pages/scripts/table-datatables-managed.min.js',
+	                    /*'assets/apps/service/ContractService.js',
+	                    'assets/apps/controllers/ContractController.js',*/
+	                    'assets/apps/scripts/pageHandle.js',
+	                    
+	                    'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+				        'assets/global/plugins/datatables/datatables.all.min.js',
+				        'assets/global/plugins/datatables/datatables.min.css', 
+				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css',
+				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js',
+				        'assets/global/plugins/bootbox/bootbox.min.js',
+				        'assets/apps/scripts/pageHandle.js',
+				        'assets/apps/scripts/angular-file-upload-shim.min.js',
+				        'assets/apps/scripts/angular-file-upload.min.js',
+				        'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js',
+	                   	                        ]
+	                    });
+	                }]
+	            }
+	        })
 }]);
 
 
