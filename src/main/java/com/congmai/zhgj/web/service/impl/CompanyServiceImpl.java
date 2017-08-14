@@ -69,6 +69,13 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 	}
 
 
+	@Override
+	public List<Company> selectCustomers(String searchKey) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 
 	
 }
