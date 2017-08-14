@@ -419,9 +419,9 @@
 			                                                    <th style="width:65px;"></th>
 			                                                </tr>
 			                                            </thead>
-			                                           <tbody ng-show="noContactData" ng-if="companyContact.length==0">
+			                                            <tbody  ng-if="companyContacts.length==0">
 			                                             	<tr>
-			                                                    <td colspan="7" align="center" >暂无数据</td>
+			                                                    <td colspan="9" align="center" >暂无数据</td>
 			                                                </tr>
 			                                            </tbody>
 			                                            <tbody ng-repeat="_contact in companyContacts track by $index">
@@ -474,6 +474,11 @@
                                                     <th style="width:65px;"></th>
                                                 </tr>
                                             </thead>
+                                            <tbody  ng-if="companyFinances.length==0">
+			                                             	<tr>
+			                                                    <td colspan="5" align="center" >暂无数据</td>
+			                                                </tr>
+			                                </tbody>
                                             <tbody ng-repeat="finance in companyFinances">
                                                 <tr ng-mouseover="showOperation('finance',$index)" ng-mouseleave="hideOperation('finance',$index)">
                                                     <td>{{finance.openingBank}}</td>

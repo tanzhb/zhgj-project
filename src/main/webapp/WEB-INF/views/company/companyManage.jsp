@@ -299,6 +299,9 @@
 													<td>{{companyContact.contactEmail}}</td>
 													<td>{{companyContact.remark}}</td>
 												</tr>
+												<tr ng-if="companyContacts==undefined||companyContacts.length==0">
+													<td colspan="8"  align="center">暂无数据</td>
+												</tr>
 											</tbody>
 										</table>
 									</div>
@@ -346,6 +349,9 @@
 													class="label label-sm label-warning">即将过期</span></td>
 
 											</tr>
+											<tr ng-if="companyQualifications==undefined||companyQualifications.length==0">
+													<td colspan="7"  align="center">暂无数据</td>
+											</tr>
 										</tbody>
 									</table>
 								</div>
@@ -375,6 +381,9 @@
 												<td>{{finance.accountName}}</td>
 												<td>{{finance.accountNumber}}</td>
 												<td>{{finance.remark}}</td>
+											</tr>
+											<tr ng-if="companyFinances==undefined||companyFinances.length==0">
+													<td colspan="4" align="center">暂无数据</td>
 											</tr>
 										</tbody>
 									</table>
