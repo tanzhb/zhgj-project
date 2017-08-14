@@ -51,7 +51,7 @@
 					                                    <div class="caption">
 					                                    		<input name="select_all" class="dt-body-center"
 																			value="{{demandPlan.serialNum}}" id="example-select-all" type="checkbox" />
-					                                    	上海某公司
+					                                    	{{demandPlan.buyComName}}
 					                                    </div>
 					                                </div>
 					                                <div class="portlet-body">
@@ -82,7 +82,7 @@
 					                                                    <td>{{materiel.deliveryDate}}</td>
 					                                                    <td>{{materiel.amount}}</td>
 					                                                    <td>{{materiel.deliveryAddress}}</td>
-					                                                    <td>10</td>
+					                                                    <td>{{materiel.remainTime}}</td>
 					                                                </tr>
 					                                            </tbody>
 					                                        </table>

@@ -46,6 +46,8 @@ public class DemandPlanMateriel {
     private String specifications;
 
     private String unit;
+    
+    private String remainTime;
 
     public String getSerialNum() {
         return serialNum;
@@ -198,5 +200,13 @@ public class DemandPlanMateriel {
 
 	public void setUnit(String unit) {
 		this.unit = unit;
+	}
+
+	public String getRemainTime() {
+		return remainTime;
+	}
+
+	public void setRemainTime(String remainTime) {
+		this.remainTime = remainTime;
 	}
 }

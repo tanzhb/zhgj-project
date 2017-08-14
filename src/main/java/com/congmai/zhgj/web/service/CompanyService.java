@@ -40,9 +40,9 @@ public interface CompanyService extends GenericService<Company, String>{
 
 	/**
 	 * 
-	 * @Description (获取客户)
+	 * @Description (根据公司类型获取公司)
 	 * @return
 	 */
-	List<Company> selectCustomers(String searchKey);
+	List<Company> selectCompanyByComType(String comType,String searchKey);
 	
 }

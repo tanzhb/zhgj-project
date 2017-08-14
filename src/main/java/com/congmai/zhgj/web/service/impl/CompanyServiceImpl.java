@@ -1,9 +1,12 @@
 package com.congmai.zhgj.web.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,9 +73,16 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 
 
 	@Override
-	public List<Company> selectCustomers(String searchKey) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Company> selectCompanyByComType(String comType,String searchKey) {
+		Map<String,Object> map =new HashMap<String, Object>();
+		map.put("comType", comType);
+		if(StringUtils.isNotBlank(searchKey)){
+			map.put("searchKey", searchKey);
+		}else{
+			map.put("searchKey", null);
+		}
+		
+		return companyMapper.selectCompanyByComType(map);
 	}
 
 

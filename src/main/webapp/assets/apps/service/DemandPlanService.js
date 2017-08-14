@@ -9,7 +9,7 @@ angular.module('MetronicApp').service('demandPlanService',['$http','$q',function
 	 */
 	this.initCustomers = function (comId){
 		var deferred = $q.defer();
-		$http.post("rest/company/getCustomers")
+		$http.get("rest/company/getCustomers")
 		.then(function success(result) {
             deferred.resolve(result);//请求成功
         }, function error(err) {

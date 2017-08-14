@@ -76,16 +76,12 @@
                                                          <p class="control-label left" ng-show="demandPlanView">{{demandPlan.buyComId}}</p>
                                                   </div> -->
 	                                              <div class="col-md-7">
-	                                                    <select id="customer" class="bs-select form-control" data-live-search="true"  name="buyComId" ng-model="demandPlan.buyComId" data-size="8" ng-hide="demandPlanAdd">
-	                                                        <option value="WF">上海科技一</option>
-	                                                        <option value="EH">上海科技二</option>
-	                                                        <option value="YE">上海科技三</option>
-	                                                        <option value="ZM">上海科技四</option>
-	                                                        <option value="ZW">上海科技五</option>
-	                                                    </select>
-	                                                   <!--   <select id="customer" class="bs-select form-control" data-live-search="true" ng-repeat="customer in customers" data-size="8">
-	                                                        <option value="{{customer.comName}}">{{customer.comName}}</option>
-	                                                    </select> -->
+	                                                   <select class="bs-select form-control customer" data-live-search="true"  id="buyComId"  name="buyComId" ng-model="demandPlan.buyComId" ng-hide="demandPlanAdd"  data-size="8">
+	                                                        <option value=""></option>
+	                                                        <option  ng-repeat="customer in customers" value="{{customer.comId}}">{{customer.comName}}</option>
+	                                                   </select>
+	                                                   <div class="form-control-focus"> </div>
+                                                        <p class="control-label left" ng-show="demandPlanView">{{demandPlan.buyComName}}</p>
 	                                              </div>
                                             </div>
 										</div>
@@ -195,7 +191,7 @@
 																	</div>
 																	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.deliveryDate}}</label>
 			                                                    </td>
-			                                                    <td>{{materiel.contactEmail}}</td>
+			                                                    <td>{{materiel.remainTime}}</td>
 			                                                    <td>
 			                                                    	<input  ng-hide="demandPlanMaterielEdit{{$index}}" type="text" class="form-control" ng-model="materiel.deliveryAddress" value="">
 			                                                    	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.deliveryAddress}}</label>
@@ -203,9 +199,9 @@
 			                                                    <td>{{materiel.remark}}</td>
 			                                                    <td ng-show="operation_c{{$index}}" style="width: 140px;">
 			                                                    	<span>
-				                                                    	<a ng-click="saveDemandPlanMateriel(materiel,$index)">保存</a>
+				                                                    	<a ng-hide="demandPlanMaterielEdit{{$index}}" ng-click="saveDemandPlanMateriel(materiel,$index)">保存</a>
 				                                                    	&nbsp;&nbsp;&nbsp;
-				                                                    	<a ng-click="editDemandPlanMateriel(materiel)">变更</a>
+				                                                    	<a ng-show="demandPlanMaterielView{{$index}}"   ng-click="editDemandPlanMateriel(materiel)">变更</a>
 				                                                    	&nbsp;&nbsp;&nbsp;
 				                                                    	<a ng-click="deleteDemandPlanMateriel(materiel)">删除</a>
 			                                                    	</span>
