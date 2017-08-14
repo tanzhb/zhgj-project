@@ -87,7 +87,7 @@ public class MaterielFileServiceImpl implements MaterielFileService {
     	Criteria criteria =  ex.createCriteria();
     	criteria.andMaterielIdEqualTo(Files.get(0).getMaterielId());
 		
-		MaterielFileMapper.updateByExample(m, ex);
+		MaterielFileMapper.updateByExampleSelective(m, ex);
 		
 		for(MaterielFile b:Files){
 			MaterielFileMapper.insert(b);
