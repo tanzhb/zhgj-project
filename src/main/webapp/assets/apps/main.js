@@ -492,8 +492,54 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        			});
 	        		}]
 	        	}
-	        })         
-	           .state('warehouse', {
+	        }).state('demandPlan', {
+	        	url: "/demandPlan",
+	        	templateUrl: "rest/demandPlan/demandPlanManage",
+	        	data: {pageTitle: '需求计划'},
+	        	reload:true, 
+	        	controller: "DemandPlanController",
+	        	resolve: {
+	        		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+	        			return $ocLazyLoad.load({
+	        				name: 'MetronicApp',
+	        				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+	        				files: [       
+	        				        'assets/global/plugins/datatables/datatables.min.css',                           
+	        				        'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+	        				        'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+	        				        'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
+	        				        'assets/global/plugins/datatables/datatables.all.min.js',
+	        				        'assets/apps/controllers/DemandPlanController.js',
+	        				        'assets/apps/service/DemandPlanService.js',
+	        				        'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js'
+	        				        ]
+	        			});
+	        		}]
+	        	}
+	        }).state('demandPlanAdd', {
+	        	url: "/demandPlanAdd?:serialNum",
+	        	templateUrl: "rest/demandPlan/demandPlanAdd",
+	        	data: {pageTitle: '需求计划'},
+	        	reload:true, 
+	        	controller: "DemandPlanController",
+	        	resolve: {
+	        		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+	        			return $ocLazyLoad.load({
+	        				name: 'MetronicApp',
+	        				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+	        				files: [       
+	        				        'assets/global/plugins/datatables/datatables.min.css',                  
+	        				        'assets/global/plugins/datatables/datatables.all.min.js',
+	        				        'assets/apps/controllers/DemandPlanController.js',
+	        				        'assets/apps/service/DemandPlanService.js',
+	        				        'assets/apps/directive/DemandPlanDirective.js',
+	        				        'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js',
+	        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
+	        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css'
+	        				        ]
+	        			});
+	        		}]
+	        	}	        })         	           .state('warehouse', {
 	        url: "/warehouse",
             templateUrl: "rest/warehouse/viewWarehouseList",
             data: {pageTitle: '仓库信息'},

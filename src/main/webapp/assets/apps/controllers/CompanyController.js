@@ -27,6 +27,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	 			            var e=$(this).attr("data-action");
 	 			           $("#companyTable").DataTable().button(e).trigger();
 	 			 })
+	 			$scope.companyInfo =[];
 	 		}
 	    	// set default layout mode
 	    	$rootScope.settings.layout.pageContentWhite = true;
@@ -81,19 +82,19 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	  //上传成功
 	  uploader.onSuccessItem = function (fileItem,response, status, headers) {
 		  if (status == 200){ 
-			  if(response==""){
+			  if(response.filename==""){
 				  toastr.error("上传失败！");
 				  return;
 			  }
 		  		toastr.success("上传成功！");
 		  	  for(var i=0;i < $scope.companyQualifications.length;i++){
 		  		  if($scope.qualification_temp==$scope.companyQualifications[i]){
-		  			$scope.companyQualifications[i].qualificatioImage = response;
+		  			$scope.companyQualifications[i].qualificatioImage = response.filename;
 		  		  }
 		  	  }
 		  }else{
 			  toastr.error("上传失败！");
-			  $scope.qualification_temp.qualificatioImage = response;
+			  $scope.qualification_temp.qualificatioImage = "";
 		  }
 		};
 	  //上传失败
@@ -210,12 +211,12 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 									'className' : 'dt-body-center',
 									'render' : function(data,
 											type, row, meta) {
-										return '<input type="checkbox" name="id[]" value="'
+										return '<input type="checkbox" id="'+data+'" name="id[]" value="'
 												+ $('<div/>')
 														.text(
 																data)
 														.html()
-												+ '"  ng-click="showCompanyInfo(\''+row.comId+'\')">';
+												+ '" data-check="false"  ng-click="showCompanyInfo(\''+row.comId+'\')">';
 									},"createdCell": function (td, cellData, rowData, row, col) {
 										 $compile(td)($scope);
 								    }
@@ -1084,8 +1085,33 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        * 显示企业信息
 	        */
 	       $scope.showCompanyInfo = function(comId){
-	    	   getCompanyInfo(comId);
-	    	  // $('#viewCompany').modal('show'); 
+	    	   var obj = $("#"+comId);
+	    	   if(obj.data("check")=="true"){//取消事件
+	    		   obj.data("check","false");
+	    		   if($scope.companyInfo.length>0){
+	    			   for(var i=0;i<$scope.companyInfo.length;i++){
+	    				   if($scope.companyInfo[i].comId==comId){
+	    					   $scope.companyInfo.splice(i,1);
+	    					   break;
+	    				   }
+	    			   }
+	    		   }
+	    	   }else{//选中事件
+	    		   obj.data("check","true");
+	    		   getCompanyInfo(comId);
+	    	   }
+	    	   if($scope.companyInfo.length>0){
+	    		   $scope.companyQualifications=[];
+	    		   $scope.companyQualifications = $scope.companyInfo[$scope.companyInfo.length-1].companyQualifications;
+	    		   $scope.companyContacts = $scope.companyInfo[$scope.companyInfo.length-1].companyContacts;
+		    	   $scope.companyFinances = $scope.companyInfo[$scope.companyInfo.length-1].companyFinances;
+	    	   }else{
+	    		   $scope.companyQualifications = [];
+	    		   $scope.companyContacts = [];
+	    		   $scope.companyFinances = [];
+	    	   }
+	    	  
+        		
 	       };
 	       
 	       /**
@@ -1137,6 +1163,9 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		 	        		
 		 	        		$scope.companyContacts = data.data.companyContacts;
 		 	        		$scope.companyFinances = data.data.companyFinances;
+		 	        		
+		 	        		data.data.comId = comId; //将企业id也放入数组，一边取消操作
+		 	        		$scope.companyInfo.push(data.data); //将返回信息添加至checkbox选中数组
 	 	        		}
 	 	        		
 	 	        		
