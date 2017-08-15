@@ -95,7 +95,21 @@ angular.module('MetronicApp').service('materielService',
 	                    deferred.reject('连接服务器出错！');
 	                })
 					return deferred.promise;
+				},//保存物料供应商
+				saveSupplyMateriel : function(supplyMateriel) {
+					var deferred = $q.defer();
+					var params = {};
+					params = JSON.stringify(supplyMateriel);
+					$http.post("rest/materiel/saveSupplyMateriel", params
+					).success(function (data) {
+		                // 如果连接成功，延时返回给调用者
+		                deferred.resolve(data);
+		            }).error(function () {
+	                    deferred.reject('连接服务器出错！');
+	                })
+					return deferred.promise;
 				}
+				
 				
 			}
 		} ]);

@@ -37,5 +37,12 @@ public interface CompanyService extends GenericService<Company, String>{
 	 * @param companyList
 	 */
 	void insertBatch(List<Company> companyList);
+
+	/**
+	 * 
+	 * @Description (根据公司类型获取公司)
+	 * @return
+	 */
+	List<Company> selectCompanyByComType(String comType,String searchKey);
 	
 }

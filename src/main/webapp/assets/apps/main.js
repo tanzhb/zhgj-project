@@ -91,6 +91,10 @@ MetronicApp.controller('QuickSidebarController', ['$scope', function($scope) {
 MetronicApp.controller('ThemePanelController', ['$scope', function($scope) {
     $scope.$on('$includeContentLoaded', function() {
         Demo.init(); // init theme panel
+        //设置默认样式
+        $('.layout-option', $('.theme-panel')).val("fluid");//设置布局为顺序
+        $('.sidebar-style-option', $('.theme-panel')).val("compact");//工具栏风格为紧凑
+        $('.layout-option').trigger("change");
     });
 }]);
 
@@ -259,7 +263,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 							'assets/global/plugins/datatables/datatables.all.min.js',
 							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
-
+							'assets/apps/scripts/angular-file-upload-shim.min.js',
+					        'assets/apps/scripts/angular-file-upload.min.js',
                             'assets/apps/service/materielService.js',
                             'assets/apps/controllers/materielController.js'
                         ]
@@ -291,7 +296,11 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 				'assets/global/plugins/datatables/datatables.all.min.js',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload-shim.min.js',
+		        'assets/apps/scripts/angular-file-upload.min.js',
+		        'assets/apps/scripts/FileUploader.js',
 	        	'assets/apps/service/materielService.js',
+	        	'assets/apps/directive/CompanyDirective.js',
 				'assets/apps/controllers/materielController.js'/*,
 				'http://www.jq22.com/jquery/jquery-migrate-1.2.1.min.js',
 				'assets/pages/scripts/jquery.jqprint-0.3.js'*/
@@ -482,8 +491,54 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        			});
 	        		}]
 	        	}
-	        })         
-	           .state('warehouse', {
+	        }).state('demandPlan', {
+	        	url: "/demandPlan",
+	        	templateUrl: "rest/demandPlan/demandPlanManage",
+	        	data: {pageTitle: '需求计划'},
+	        	reload:true, 
+	        	controller: "DemandPlanController",
+	        	resolve: {
+	        		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+	        			return $ocLazyLoad.load({
+	        				name: 'MetronicApp',
+	        				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+	        				files: [       
+	        				        'assets/global/plugins/datatables/datatables.min.css',                           
+	        				        'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+	        				        'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+	        				        'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
+	        				        'assets/global/plugins/datatables/datatables.all.min.js',
+	        				        'assets/apps/controllers/DemandPlanController.js',
+	        				        'assets/apps/service/DemandPlanService.js',
+	        				        'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js'
+	        				        ]
+	        			});
+	        		}]
+	        	}
+	        }).state('demandPlanAdd', {
+	        	url: "/demandPlanAdd?:serialNum",
+	        	templateUrl: "rest/demandPlan/demandPlanAdd",
+	        	data: {pageTitle: '需求计划'},
+	        	reload:true, 
+	        	controller: "DemandPlanController",
+	        	resolve: {
+	        		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+	        			return $ocLazyLoad.load({
+	        				name: 'MetronicApp',
+	        				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+	        				files: [       
+	        				        'assets/global/plugins/datatables/datatables.min.css',                  
+	        				        'assets/global/plugins/datatables/datatables.all.min.js',
+	        				        'assets/apps/controllers/DemandPlanController.js',
+	        				        'assets/apps/service/DemandPlanService.js',
+	        				        'assets/apps/directive/DemandPlanDirective.js',
+	        				        'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js',
+	        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
+	        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css'
+	        				        ]
+	        			});
+	        		}]
+	        	}	        })         	           .state('warehouse', {
 	        url: "/warehouse",
             templateUrl: "rest/warehouse/viewWarehouseList",
             data: {pageTitle: '仓库信息'},

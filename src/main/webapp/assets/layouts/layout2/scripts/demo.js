@@ -210,7 +210,7 @@ var Demo = function () {
         // set default theme options:
 
         if ($("body").hasClass("page-boxed")) {
-            $('.layout-option', panel).val("fluid");
+            $('.layout-option', panel).val("boxed");
         }
 
         if ($("body").hasClass("page-sidebar-fixed")) {
@@ -249,7 +249,6 @@ var Demo = function () {
  /*       resetLayout();*/
         //重新设置默认样式
         $('.layout-option', panel).val("fluid");
-        $(".page-sidebar-menu").removeClass("page-sidebar-menu-compact");
         $('.sidebar-style-option', panel).val("compact");
         setLayout();
     };

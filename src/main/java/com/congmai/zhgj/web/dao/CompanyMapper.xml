@@ -39,9 +39,27 @@
    	order by updateTime DESC
   </select>
   
+  <select id="selectCompanyByComType" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select
+    	comId,comName
+    from company
+   		where delFlg = 0 and comType= #{comType}
+   		<if test="searchKey!=null and searchKey!=''">
+   		 	and comName like CONCAT('%',#{searchKey},'%')
+   		</if>
+   	order by updateTime DESC
+  </select>
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
+    from company
+    where comId = #{comId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectComNameByPrimaryKey" resultType="java.lang.String" parameterType="java.lang.String" >
+    select 
+     comName
     from company
     where comId = #{comId,jdbcType=VARCHAR}
   </select>

@@ -299,6 +299,9 @@
 													<td>{{companyContact.contactEmail}}</td>
 													<td>{{companyContact.remark}}</td>
 												</tr>
+												<tr ng-if="companyContacts==undefined||companyContacts.length==0">
+													<td colspan="8"  align="center">暂无数据</td>
+												</tr>
 											</tbody>
 										</table>
 									</div>
@@ -335,7 +338,7 @@
 												<td
 													ng-if="companyQualification.qualificatioImage!=null&&companyQualification.qualificatioImage!=''">
 													<a href="javascript:;"
-													ng-click="downloadFile(companyQualification)">下载附件</a>
+													ng-click="downloadFile(companyQualification)">{{companyQualification.qualificatioImage.substring(companyQualification.qualificatioImage.indexOf("_")+1)}}</a>
 												</td>
 												<td>{{companyQualification.remark}}</td>
 												<td><span ng-if="companyQualification.status==0"
@@ -345,6 +348,9 @@
 													ng-if="companyQualification.status==2"
 													class="label label-sm label-warning">即将过期</span></td>
 
+											</tr>
+											<tr ng-if="companyQualifications==undefined||companyQualifications.length==0">
+													<td colspan="7"  align="center">暂无数据</td>
 											</tr>
 										</tbody>
 									</table>
@@ -375,6 +381,9 @@
 												<td>{{finance.accountName}}</td>
 												<td>{{finance.accountNumber}}</td>
 												<td>{{finance.remark}}</td>
+											</tr>
+											<tr ng-if="companyFinances==undefined||companyFinances.length==0">
+													<td colspan="4" align="center">暂无数据</td>
 											</tr>
 										</tbody>
 									</table>

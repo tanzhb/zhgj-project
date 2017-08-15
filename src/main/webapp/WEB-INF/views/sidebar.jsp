@@ -8,7 +8,8 @@
     <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
     <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
     <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-    <ul class="page-sidebar-menu" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" ng-class="{'page-sidebar-menu-closed': settings.layout.pageSidebarClosed}">
+    <ul class="page-sidebar-menu page-sidebar-menu-compact" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" ng-class="{'page-sidebar-menu-closed': settings.layout.pageSidebarClosed}">
+   <!-- class="page-sidebar-menu" 工具栏风格为默认时的样式，上面改成紧凑的样式-->
         <shiro:hasAnyRoles name="超级管理员,administrator,342"> 
 	        <li class="start">
 	            <a ui-sref="dashboard">
@@ -52,10 +53,18 @@
             </ul>
         </li>
         <li class="nav-item">
-            <a ui-sref="profile.dashboard" id="sidebar_menu_link_profile">
-                <i class="icon-user"></i>
+            <a href="javascript:;" class="nav-link nav-toggle" >
+             <i class="icon-settings"></i>
                 <span class="title">销售订单</span>
+                <span class="arrow "></span>
             </a>
+            <ul class="sub-menu">
+                <li>
+                    <a ui-sref="demandPlan">
+                        <i class="icon-puzzle"></i>需求计划</span>
+                    </a>
+                </li>
+            </ul>
         </li>
         <li class="nav-item">
             <a ui-sref="todo">

@@ -44,9 +44,12 @@ import com.congmai.zhgj.web.model.MaterielExample;
 import com.congmai.zhgj.web.model.MaterielExample.Criteria;
 import com.congmai.zhgj.web.model.MaterielFile;
 import com.congmai.zhgj.web.model.MaterielFileExample;
+import com.congmai.zhgj.web.model.SupplyMateriel;
+import com.congmai.zhgj.web.model.SupplyMaterielExample;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.MaterielFileService;
 import com.congmai.zhgj.web.service.MaterielService;
+import com.congmai.zhgj.web.service.SupplyMaterielService;
 import com.congmai.zhgj.web.service.UserService;
 
 /**
@@ -69,7 +72,10 @@ public class MaterielController {
     
     @Resource
     private MaterielFileService materielFileService;
-
+    
+    @Resource
+    private SupplyMaterielService supplyMaterielService;
+    
     /**
      * 保存物料
      */
@@ -169,6 +175,41 @@ public class MaterielController {
 		}
     	
     }
+    /**
+     * 
+     * @Description 保存附件物料供应商
+     * @param params
+     */
+    @RequestMapping(value = "/saveSupplyMateriel", method = RequestMethod.POST)
+    @ResponseBody
+    public void saveSupplyMateriel(@RequestBody String params) {
+    	params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+        JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, SupplyMateriel.class);  
+        List<SupplyMateriel> supplyMateriel;
+		try {
+			supplyMateriel = objectMapper.readValue(params, javaType);
+	    	if(!CollectionUtils.isEmpty(supplyMateriel)){
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		    	for(SupplyMateriel f:supplyMateriel){
+		    		f.setSerialNum(ApplicationUtils.random32UUID());
+		    		f.setCreator(currenLoginName);
+	    			f.setUpdater(currenLoginName);
+	    			f.setCreateTime(new Date());
+	    			f.setUpdateTime(new Date());
+		    	}
+		    	//填充物料供应商******↑↑↑↑↑↑********
+		    	supplyMaterielService.betchInsertSupplyMateriels(supplyMateriel);
+		    	//数据插入******↑↑↑↑↑↑********
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
+    }
+    
+    
 	/**
 	 * 
 	 * @Description 升级版本
@@ -426,6 +467,14 @@ public class MaterielController {
     	criteria.andDelFlgEqualTo("0");
     	List<MaterielFile> file = materielFileService.selectList(m);
     	map.put("file", file);
+    	
+    	
+    	SupplyMaterielExample m2 =new SupplyMaterielExample();
+    	com.congmai.zhgj.web.model.SupplyMaterielExample.Criteria criteria2 =  m2.createCriteria();
+    	criteria2.andMaterielIdEqualTo(materiel.getMaterielId());
+    	criteria2.andDelFlgEqualTo("0");
+    	List<SupplyMateriel> supplyMateriel = supplyMaterielService.selectList(m2);
+    	map.put("supplyMateriel", supplyMateriel);
     	
     	return map;
 	}

@@ -174,7 +174,30 @@
 					                        </tr>
 					                    </thead>
 					                    <tbody>
-					                    </tbody>
+			                                  <tr ng-repeat="_supplyMateriel in supplyMateriel track by $index" >
+						                          <td>
+						                                <p class="form-control-static"> {{_supplyMateriel.supplyMaterielNum}} </p>
+						                          </td>
+						                          <td>
+						                                <p class="form-control-static"> {{_supplyMateriel.supplyComId}} </p>
+						                          </td>
+						                          <td>
+						                          </td>
+						                          <td>
+						                          </td>
+						                          <td>
+						                          </td>
+						                          <td>
+						                          </td>
+						                          <td>
+						                          </td>
+						                          <td>
+						                          </td>
+						                          <td>
+						                          </td>
+						                          
+			                                  </tr>
+			                              </tbody>
 					                </table>
 					            </div>
 					    </div>
@@ -203,7 +226,7 @@
 											<p class="form-control-static">{{_file.fileDescribe}}</p>
 										</td>
 										<td>
-											<p class="form-control-static">{{_file.file}}</p>
+											<p class="form-control-static"><a href="javascript:;" ng-click="downloadFile(_file)">{{_file.file.substring(_file.file.indexOf("_")+1)}}</a></p>
 										</td>
 										<td>
 											<p class="form-control-static">{{_file.remark}}</p>

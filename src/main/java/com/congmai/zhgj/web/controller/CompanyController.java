@@ -468,7 +468,31 @@ public class CompanyController {
     
     
 
+    /**
+     * @Description (获取采购商)
+     * @param request
+     * @return
+     */
+    @RequestMapping("getCustomers")
+    @ResponseBody
+    public List<Company> getCustomers(HttpServletRequest request,String searchKey) {
+    	
+    	return companyService.selectCompanyByComType("采购商", searchKey);
+    }
 	
+    /**
+     * @Description (获取供应商)
+     * @param request
+     * @return
+     */
+    @RequestMapping("getSuppliers")
+    @ResponseBody
+    public List<Company> getSuppliers(HttpServletRequest request,String searchKey) {
+    	
+    	return companyService.selectCompanyByComType("供应商", searchKey);
+    }
+    
 	
 
 }
+
