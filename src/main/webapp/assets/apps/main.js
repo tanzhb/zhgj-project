@@ -300,6 +300,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        'assets/apps/scripts/angular-file-upload.min.js',
 		        'assets/apps/scripts/FileUploader.js',
 	        	'assets/apps/service/materielService.js',
+	        	'assets/apps/directive/CompanyDirective.js',
 				'assets/apps/controllers/materielController.js'/*,
 				'http://www.jq22.com/jquery/jquery-migrate-1.2.1.min.js',
 				'assets/pages/scripts/jquery.jqprint-0.3.js'*/

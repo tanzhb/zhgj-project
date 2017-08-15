@@ -19,9 +19,10 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 				rtl: App.isRTL(),
 				orientation: "left",
 				autoclose: true,
-				dateFormat:"yyyy-mm-dd"
-
-        	})//初始化日期控件
+				dateFormat:"yyyy-mm-dd",
+				language: "zh-CN"
+        	})
+        	//初始化日期控件
         	
         	diyFormiCheck();//初始化checkbox控件
         	
@@ -43,6 +44,8 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
    		    	$scope.BOMInfoShow = true;
    		    	$scope.fileInfoInput = true;
    		    	$scope.fileInfoShow = true;
+   		    	$scope.supplyMaterielInfoInput = true;
+   		    	$scope.supplyMaterielInfoShow = true;
    		    	$scope.opration = '查看';
 		    }
         	
@@ -55,11 +58,13 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
         	validateBOMInit();//bom表单初始化
         	
         	validateFileInit();//file表单初始化
+        	
+        	validateSupplyMaterielInit();//供应商表单初始化
        	
         	$scope.BOM =[{}];//bom初始化
         	
 /*        	$scope.file =[{}];//附件初始化*/
-        	
+        	 
         }
     });
     
@@ -176,6 +181,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     	$scope.materiel = null;
     	$scope.BOM = null;
     	$scope.file = null;
+    	$scope.supplyMateriel = null;
     	if($("#"+serialNum).is(':checked')){//选中时加载
     		$scope.getMaterielInfo(serialNum);
     	}
@@ -201,6 +207,10 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
  	        			$scope.file = data.file;
  	        			_fileIndex = $scope.file.length-1;
  	        		}
+      		    	if(!isNull(data.supplyMateriel)){
+ 	        			$scope.supplyMateriel = data.supplyMateriel;
+ 	        			_supplyMaterielIndex = $scope.supplyMateriel.length-1;
+ 	        		}
       		     },
       		     function(error){
       		         $scope.error = error;
@@ -215,11 +225,14 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     	$('#isBOMcheck').on('ifChecked', function(event){ //ifCreated 事件应该在插件初始化之前绑定 
     		$scope.materiel.isBOM="1";
     		$scope.BOMShow=true;
+    		$scope.$apply();
     	}); 
     	$('#isBOMcheck').on('ifUnchecked', function(event){ //ifCreated 事件应该在插件初始化之前绑定 
     		$scope.materiel.isBOM="0";
     		$scope.BOMShow=false;
+    		$scope.$apply();
     	}); 
+    	
     }
     
     var table;
@@ -834,6 +847,9 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
  	    	   if(type=='file'){
  	    		   call =  "operation_f"+index;
  	    	   }
+ 	    	  if(type=='supplyMateriel'){
+	    		   call =  "operation_s"+index;
+	    	   }
  	    	   $scope[call] = true;
  	       };
  	       
@@ -845,6 +861,9 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
  	    	   if(type=='file'){
  	    		   call =  "operation_f"+index;
  	    	   }
+ 	    	  if(type=='supplyMateriel'){
+	    		   call =  "operation_s"+index;
+	    	   }
  	    	   $scope[call]= false;
  	       };
  	       
@@ -1103,4 +1122,104 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 	       }
 	        
    	  //********附件  end****************//
+	       
+	       
+	       //********供应商  start****************//
+	   		var _supplyMaterielIndex = 0;
+	   	    $scope.saveSupplyMateriel  = function() {//保存供应商信息
+	   	    	if($scope.materiel.serialNum==null||$scope.materiel.serialNum=='') {//上级物料为空的处理
+	   	    		toastr.error('请先保存基本信息！');return
+	   			}
+	   	    	if($('#form_sample_5').valid()){
+	   	    		materielService.saveSupplyMateriel($scope.supplyMateriel).then(
+	   	       		     function(data){
+	   	       		    	toastr.success('数据保存成功！');
+	   	       		    	$scope.cancelSupplyMateriel();
+	   	       		    	
+	   	       		     },
+	   	       		     function(error){
+	   	       		    	toastr.error('数据保存出错！');
+	   	       		         $scope.error = error;
+	   	       		     }
+	   	       		 );
+	   	    	}
+	   	    	
+	   	    }; 	
+	   	    
+	   	    $scope.cancelSupplyMateriel  = function() {//取消编辑供应商信息
+	   	    	$scope.supplyMaterielInfoInput = true;
+	   		    $scope.supplyMaterielInfoShow = true;
+	   	    };
+	   	    
+	   	    $scope.editSupplyMateriel  = function() {//进入编辑供应商信息
+	   	    	$scope.supplyMaterielInfoInput = false;
+	   		    $scope.supplyMaterielInfoShow = false;
+	   	    };
+	   	    /**
+	 	        * 供应商新增一行
+	 	        */
+	   	    $scope.addSupplyMateriel = function(){
+	   	    	if($scope.materiel.serialNum==null||$scope.materiel.serialNum=='') {
+	   	    		toastr.error('请先保存基本信息！');return
+	   			}else{
+	   		    	   if($scope.supplyMateriel){}else{$scope.supplyMateriel =[{}]}
+	   		    	   $scope.supplyMateriel[_supplyMaterielIndex] = {};
+	   		    	   $scope.supplyMateriel[_supplyMaterielIndex].materielId = $scope.materiel.materielId;
+	   		    	   _supplyMaterielIndex++;
+	   		    	   $('.bs-select').selectpicker();
+	   		       }
+	   	    };
+	   	 $scope.repeatDone = function(){
+	   		$("select[name='supplyComId']").selectpicker();
+	       };
+	   	    
+	   	    /**
+		        * 供应商删除一行
+		        */
+		       $scope.deleteSupplyMateriel = function(index){
+		    	   $scope.supplyMateriel.splice(index,1);
+		    	   _supplyMaterielIndex--;
+		       };
+		       
+		       
+		      var validateSupplyMaterielInit = function() {
+		        	var e = $("#form_sample_5");
+			        r = $(".alert-danger", e),
+			        i = $(".alert-success", e);
+			        e.validate({
+			            errorElement: "span",
+			            errorClass: "help-block help-block-error",
+			            focusInvalid: !1,
+			            ignore: "",
+			            messages: {
+			            },
+		            	rules: {
+		            			
+		            			},
+		            		invalidHandler: function(e, t) {
+		                    i.hide(), r.show(), App.scrollTo(r, -200)
+		                },
+			            invalidHandler: function(e, t) {
+			                i.hide(),
+			                r.show(),
+			                App.scrollTo(r, -200)
+			            },
+			            errorPlacement: function(e, r) {
+			                r.is(":checkbox") ? e.insertAfter(r.closest(".md-checkbox-list, .md-checkbox-inline, .checkbox-list, .checkbox-inline")) : r.is(":radio") ? e.insertAfter(r.closest(".md-radio-list, .md-radio-inline, .radio-list,.radio-inline")) : e.insertAfter(r)
+			            },
+			            highlight: function(e) {
+			                $(e).closest(".form-group").addClass("has-error")
+			            },
+			            unhighlight: function(e) {
+			                $(e).closest(".form-group").removeClass("has-error")
+			            },
+			            success: function(e) {
+			                e.closest(".form-group").removeClass("has-error")
+			            },
+			            submitHandler: function(e) {
+			                i.show(),
+			                r.hide()
+			            }})
+		        };
+	   	  //********附件  end****************//
 }]);
