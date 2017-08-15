@@ -57,13 +57,15 @@ public class DemandPlanServiceImpl extends GenericServiceImpl<DemandPlan,String>
 				DemandPlanMaterielExample example2 = new DemandPlanMaterielExample();
 				example2.createCriteria().andDemandPlanSerialEqualTo(vo.getSerialNum()).andDelFlgEqualTo("0");
 				example2.setOrderByClause("createTime desc");
+				example2.setStart(0);
+				example2.setLimit(5);
 				List<DemandPlanMateriel> mList = demandPlanMaterielMapper.selectByExample(example2);
 				for(DemandPlanMateriel dm : mList){
 					int remainTime = 0;
 					try {
 						remainTime = DateUtil.daysBetween(new Date(), dm.getDeliveryDate());
 					} catch (Exception e) {
-						System.out.println("距离交付日期出错"+e.getMessage()+e.getCause());
+						System.out.println("deliveryDate-----"+e.getMessage());
 					}
 					dm.setRemainTime(String.valueOf(remainTime<0?0:remainTime));
 				}
