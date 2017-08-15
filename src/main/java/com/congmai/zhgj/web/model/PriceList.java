@@ -15,6 +15,8 @@ public class PriceList {
     private String serialNum;
 
     private String priceNum;
+    
+    private String priceId;
 
     private String supplyComId;
 
@@ -354,4 +356,13 @@ public class PriceList {
     public void setFloorPrice(String floorPrice) {
         this.floorPrice = floorPrice == null ? null : floorPrice.trim();
     }
+
+	public String getPriceId() {
+		return priceId;
+	}
+
+	public void setPriceId(String priceId) {
+		 this.priceId = priceId == null ? null : priceId.trim();
+	}
+    
 }

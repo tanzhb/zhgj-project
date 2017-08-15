@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
+import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.model.CompanyQualification;
 import com.congmai.zhgj.web.model.JsonTreeData;
 import com.congmai.zhgj.web.model.LadderPrice;
@@ -56,6 +57,7 @@ import com.congmai.zhgj.web.security.PermissionSign;
 import com.congmai.zhgj.web.security.RoleSign;
 import com.congmai.zhgj.web.service.CompanyQualificationService;
 import com.congmai.zhgj.web.service.LadderPriceService;
+import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.PriceListService;
 import com.congmai.zhgj.web.service.UserService;
 import com.congmai.zhgj.web.service.WarehouseService;
@@ -76,6 +78,8 @@ public class PriceListController {
     private PriceListService  priceListService;
     @Autowired
 	private LadderPriceService  ladderPriceService;
+    @Autowired
+	private MaterielService  materielService;
     
     
     /**
@@ -112,7 +116,8 @@ public class PriceListController {
 	public ResponseEntity<PriceList> savePriceDetail(@RequestBody PriceList priceList  ,UriComponentsBuilder ucBuilder){//
     	try{
     		if(StringUtils.isEmpty(priceList.getSerialNum())){
-    			priceList.setSerialNum(UUID.randomUUID().toString().replace("-",""));
+    			priceList.setSerialNum(ApplicationUtils.random32UUID());
+    			priceList.setPriceId(ApplicationUtils.random32UUID());
     			priceListService.insert(priceList);
     		}else{
     			priceListService.update(priceList);
@@ -143,11 +148,17 @@ public class PriceListController {
      * @return
      */
     @RequestMapping(value = "/viewPriceListDetail", method = RequestMethod.POST)
-    public ResponseEntity<PriceList> viewWarehouseDetail(Map<String, Object> map, @RequestBody String  serialNum) {
+    public ResponseEntity<PriceList> viewPriceListDetail(HttpServletRequest request, @RequestBody String  serialNum) {
+    	Map<String, Object> map = new HashMap<String, Object>();
     	PriceList priceList=priceListService.selectById(serialNum);
+    	Materiel m=materielService.selectById(priceList.getMaterielSerial());
+    	priceList.setMaterielNum(m.getMaterielNum());
+    	priceList.setMaterielName(m.getMaterielName());
+    	priceList.setSpecifications(m.getSpecifications());
+    	priceList.setUnit(m.getUnit());
     	return new ResponseEntity<PriceList>(priceList, HttpStatus.OK);
     }
-	
+   
     /**
 	 * 
 	 * @Description 批量删除价格
@@ -182,7 +193,7 @@ public class PriceListController {
             ladderPrices = objectMapper.readValue(params, javaType);
             if(!CollectionUtils.isEmpty(ladderPrices)){
             	ladderPriceService.deleteByPriceSerial(ladderPrices.get(0));
-            	ladderPriceService.insertLadderPrices(ladderPrices);
+            	ladderPriceService.insertLadderPrices(ladderPrices,currenLoginName);
             }
             
     		flag = "1";
@@ -214,13 +225,41 @@ public class PriceListController {
 		 * @param ids
 		 * @return
 		 */
-		@RequestMapping(value = "/getLadderPriceList", method = RequestMethod.POST)
-		public List <LadderPrice>  getLadderPriceList(@RequestBody String id) {
-			if ("".equals(id) || id== null) {
+	 /* public ResponseEntity<Map> getWarehouseList(HttpServletRequest request) {
+			List<PriceList> priceLists = priceListService.selectPriceList(new  PriceListExample());
+			if (priceLists==null||priceLists.isEmpty()) {
+				return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);//判断是否为空,为空返回NO_CONTENT
+			}
+			// 封装datatables数据返回到前台
+			Map pageMap = new HashMap();
+			pageMap.put("draw", 1);
+			pageMap.put("recordsTotal", priceLists.size());
+			pageMap.put("recordsFiltered", priceLists.size());
+			pageMap.put("data", priceLists);
+			return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+		}*/
+		/*@RequestMapping(value = "/getLadderPrice", method = RequestMethod.POST)
+		public List <LadderPrice>  getLadderPriceList(HttpServletRequest request,@RequestBody String serialNum) {
+			Map<String, Object> map = new HashMap<String, Object>();
+	    	PriceList priceList=priceListService.selectById(serialNum);
+	    	return new ResponseEntity<PriceList>(priceList, HttpStatus.OK);
+			if ("".equals(serialNum) || serialNum== null) {
 				return new ArrayList<LadderPrice>();
 			}
 			LadderPrice ladderPrice=new LadderPrice();
-			ladderPrice.setPriceSerial(id);
+			ladderPrice.setPriceSerial(serialNum);
 			return ladderPriceService.selectListByPriceSerial(ladderPrice);
-		} 
+		} */
+		@RequestMapping(value = "/getLadderPrice", method = RequestMethod.POST)
+	    public ResponseEntity<Map> getLadderPriceList(HttpServletRequest request,@RequestBody String serialNum) {
+			if ("".equals(serialNum) || serialNum== null) {
+				return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);//判断是否为空,为空返回NO_CONTENT
+			}
+			// 封装datatables数据返回到前台
+			Map pageMap = new HashMap();
+			LadderPrice ladderPrice=new LadderPrice();
+			ladderPrice.setPriceSerial(serialNum);
+			pageMap.put("data", ladderPriceService.selectListByPriceSerial(ladderPrice));
+			return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+		}
 }

@@ -27,18 +27,29 @@ angular
 													$('.date-picker').datepicker({
 														rtl: App.isRTL(),
 														orientation: "left",
-														autoclose: true
-										        	})//初始化日期控件
-										    		getPriceListInfo($stateParams.priceListSerialNum);
-														 $scope.isChecked=false;
+														autoclose: true,
+														language:"zh-CN"
+										        	})//初始化icheck控件
+										        	initFormiCheck();
+										        	if($stateParams.priceListSerialNum==undefined){
+										        		 $scope.ladderprices=[{}];
+														 _index = 0; 
+														$scope.priceList.isLadderPrice="0";
+									 	        			$scope.isChecked=false;
+										        	}else{
+										        		initFormiCheck();
+										        		getPriceListInfo($stateParams.priceListSerialNum);
+										        		/*if($scope.priceList.isLadderPrice=='1'){
+									 	        			getLadderPriceInfo($scope.priceList.serialNum);
+									 	        			$('#isLadderPriceCheck').iCheck('check'); 
+									 	        			$scope.isChecked=true;
+									 	        		}*/
+										        	}
 														 $scope.priceListAdd=true;
 														 $scope.priceListEdit=true;//隐藏取消
-														 $scope.priceList.isLadderPrice='0';
-														 $scope.ladderprices=[{}];
-														 _index = 0; 
 														 handle.pageRepeater();
 														 selectParentMateriel();//选择物料表格初始化
-												    		
+														
 													 }
 												 if($location.path()=="/priceList"){
 													 debugger;
@@ -67,7 +78,20 @@ angular
 									"hideMethod" : "fadeOut"
 								}
 							//初始化toastr结束
-
+							 //checkbox初始化
+						    var initFormiCheck= function(){
+						    	FormiCheck.init();
+						    	$('#isLadderPriceCheck').on('ifChecked', function(event){ //ifCreated 事件应该在插件初始化之前绑定 
+						    		$scope.priceList.isLadderPrice="1";
+						    		$scope.isChecked=true;
+						    		$scope.$apply();
+						    	}); 
+						    	$('#isLadderPriceCheck').on('ifUnchecked', function(event){ //ifCreated 事件应该在插件初始化之前绑定 
+						    		$scope.priceList.isLadderPrice="0";
+						    		$scope.isChecked=false;
+						    		$scope.$apply();
+						    	});
+						    }
 							// 构建datatables开始***************************************
 							var tableAjaxUrl = "rest/priceList/getPriceList";
 							 var table;
@@ -283,7 +307,7 @@ angular
 											);
 									}
 							};	
-							// 删除仓库开始***************************************							
+							// 删除价格开始***************************************							
 							$scope.delPriceList= function() {
 								debugger;
 								var ids = '';
@@ -333,23 +357,23 @@ angular
 								debugger;
 								var id_count = table.$('input[type="checkbox"]:checked').length;
 								if(id_count==0){
-									handle.toastr.warning("请选择一条数据进行编辑");
+									toastr.warning("请选择一条数据进行编辑");
 								}else if(id_count>1){
-									handle.toastr.warning("只能选择一条数据进行编辑");
+									toastr.warning("只能选择一条数据进行编辑");
 								}else{
 									var serialNum = table.$('input[type="checkbox"]:checked').val();
 									$state.go("addPriceList",{priceListSerialNum:serialNum});
 								}
 							};
 							// 修改价格结束***************************************							
-							$scope.showOrHide = function() {//控制阶梯div的显示与隐藏
+							/*$scope.showOrHide = function() {//控制阶梯div的显示与隐藏
 								 $scope.isChecked=!$scope.isChecked;
 								 if($scope.isChecked){
 									 $scope.priceList.isLadderPrice='1';
 								 }else{
 									 $scope.priceList.isLadderPrice='0'; 
 								 }
-							 }
+							 }*/
 						
 							// 页面加载完成后调用，验证输入框
 							$scope.$watch('$viewContentLoaded', function() {  
@@ -426,8 +450,12 @@ angular
 						 	        		 data.priceEffectiveDate=timeStamp2String(data.priceEffectiveDate).replace('0:0:0','');
 						 	        		data.priceExpirationDate=timeStamp2String(data.priceExpirationDate).replace('0:0:0','');
 						 	        		$scope.priceList = data;
-						 	            },function(data){
-						 	               //调用承诺接口reject();
+						 	        		
+						 	        		if($scope.priceList.isLadderPrice=='1'){
+						 	        			getLadderPriceInfo($scope.priceList.serialNum);
+						 	        			$('#isLadderPriceCheck').iCheck('check'); 
+						 	        			$scope.isChecked=true;
+						 	        		}
 						 	            });
 						    		 }
 						       }
@@ -437,9 +465,9 @@ angular
 						    			 var promise =priceListService.getLadderPriceInfo(serialNum);
 						 	        	promise.then(function(data){
 						 	        		  debugger;
-						 	        		$scope.ladderprices = data;
-						 	            },function(data){
-						 	               //调用承诺接口reject();
+						 	        		$scope.ladderprices = data.data;
+						 	        		_index=data.data.length-1;
+						 	        		
 						 	            });
 						    		 }
 						       }
@@ -448,7 +476,7 @@ angular
 						        */
 						       $scope.addRepeat = function(){
 						    	   if(handle.isNull($scope.priceList)||handle.isNull($scope.priceList.serialNum)){
-							    		 handle.toastr.warning("您的价格信息还未保存");
+							    		 toastr.warning("您的价格信息还未保存");
 							    		 return;
 							       }else{
 							    	   _index++;
@@ -637,12 +665,24 @@ angular
 						 	    			$(".modal-backdrop").remove();
 						 	    		};
 						 	    		
+						 	    		
+						 	    		  $scope.editLadderPrice=function(){
+						 	    			 $scope.ladderpriceView = false;
+				 				        		$scope.ladderpriceEdit = true;
+				 				        		$scope.ladderpriceAdd = false;
+						 	    		  }
+						 	    		  $scope.cancelEditLadderPrice=function(){
+						 	    			 getPriceListInfo($scope.priceList.serialNum);
+							 	    			 $scope.ladderpriceView = true;
+					 				        		$scope.ladderpriceEdit = false;
+					 				        		$scope.ladderpriceAdd = true;
+							 	    		  }
 						 	    		  /**
 						 		        * 保存阶梯价格信息
 						 		        */
 						 		       $scope.saveLadderPrice = function(){
 						 			    	if(handle.isNull($scope.priceList)||handle.isNull($scope.priceList.serialNum)){
-						 			    		 handle.toastr.warning("您的价格信息还未保存！");
+						 			    		toastr.warning("您的价格信息还未保存！");
 						 			    		 return;
 						 			    	}else{
 						 			    		 debugger;
@@ -652,24 +692,29 @@ angular
 						 			    			$scope.ladderprices[i].updateTime = null;
 						 			    		}
 						 			    	}
-						 			    	if($('#ladderpriceForm').valid()){
+						 			    	if(true){//$('#ladderpriceForm').valid()
 						 			    		handle.blockUI();
 						 			        	var promise = priceListService.saveLadderPrice($scope.ladderprices);
 						 			        	promise.then(function(data){
 						 			        		if(!handle.isNull(data)){
-						 				        		handle.toastr.success("保存成功");
+						 				        		toastr.success("保存成功");
+						 				        		debugger;
 						 				        		handle.unblockUI();
-						 				        		$scope.ladderprices = data;
-						 				        		$scope.ladderpriceView = false;
+						 				        		$scope.ladderprices = data.data;
+						 				        		getPriceListInfo($scope.priceList.serialNum);
+						 				        		$scope.priceListAdd=false;
+														 $scope.priceListEdit=true;//隐藏取消
+														 $scope.priceListView=true;//隐藏取消
+						 				        		$scope.ladderpriceView = true;
 						 				        		$scope.ladderpriceEdit = false;
-						 				        		$scope.ladderpriceAdd = false;
+						 				        		$scope.ladderpriceAdd = true;
 						 			        		}else{
-						 			        			handle.toastr.error("保存失败！");
+						 			        			toastr.error("保存失败！");
 						 				        		handle.unblockUI();
 						 			        		}
 						 			            },function(data){
 						 			            	handle.unblockUI();
-						 			            	handle.toastr.error("保存失败！");
+						 			            	toastr.error("保存失败！");
 						 			            	console.log(data);
 						 			            });
 						 			    	}

@@ -15,7 +15,7 @@ public interface LadderPriceService extends GenericService<LadderPrice, String>{
 	PriceList selectOne(String priceSerial);
 	LadderPrice selectLadderPrice(String serialNum);//获取阶梯价格信息根据流水
 	void insertOrUpdateLadderPrices(List<LadderPrice> ladderPrices);
-	void insertLadderPrices(List<LadderPrice> ladderPrices);
+	void insertLadderPrices(List<LadderPrice> ladderPrices,String userName);
 //	void updateLadderPrices(List<LadderPrice> ladderPrices);
 	List<LadderPrice> selectListByPriceSerial(LadderPrice record);//根据价格流水查找阶梯价格信息
 

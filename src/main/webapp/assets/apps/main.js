@@ -222,6 +222,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
     				        'assets/layouts/layout2/css/themes/blue.min.css',
     				        'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
     				        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js'
+    				        /*'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+    				    	'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css'*/
     				        /*'assets/global/plugins/bootstrap-select/css/bootstrap-select.css',
     				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
     				        'assets/pages/scripts/components-bootstrap-select.min.js',

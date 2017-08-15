@@ -271,9 +271,11 @@
                                                     <label class="col-md-4 control-label" for="isLadderPrice"> <!-- <span class="required"> * </span> -->是否阶梯单价 :</label>
                                                     <div class="col-md-8">
                                                                          <div class="icheck-inline"  ng-show="priceListAdd" >
-                                                                                <label><input type="button"         ng-click="showOrHide()" name ="isLadderPrice"  class="icheck">是 </label>
-                                                                            <input type="hidden"   ng-model="priceList.isLadderPrice"/>
+                                                                                <label  ><input type="checkbox"     id="isLadderPriceCheck"    name ="isLadderPrice"  class="icheck"    >是 </label>
                                                                         </div>
+                                                                         <!-- <div class="icheck-inline"  ng-show="isChecked" >
+                                                                                <label  ><input type="checkbox"     id="isLadderPriceCheck"    name ="isLadderPrice"  class="icheck"    checked="isChecked">是 </label>
+                                                                        </div> --> 
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="priceListView"   ng-if="priceList.isLadderPrice=='1'">是</p>
                                                                          <p class="control-label left" ng-show="priceListView"   ng-if="priceList.isLadderPrice=='0'">否</p>
@@ -377,6 +379,89 @@
 							</form>
          				</div>
                                                         </div> -->
+                                             <div>          
+			                         <div class="row"  ng-show="isChecked">
+                                                         <div class="portlet-title">
+                            <div class="actions"  style="float: right;">
+                             
+                                <button   class="btn blue btn-outline  btn-sm "         ng-show="ladderpriceView"       ng-click="editLadderPrice()">
+                                            <i class="fa fa-edit"></i> 编辑 </button>
+                                <button   class="btn red  btn-outline  btn-sm "       ng-show="ladderpriceEdit"            ng-click="cancelEditLadderPrice()">
+                                            <i class="fa fa-undo"></i> 取消 </button>
+                                <button   class="btn blue btn-outline  btn-sm "       ng-hide="ladderpriceAdd"     ng-click="saveLadderPrice()">
+                                            <i class="fa fa-save"></i> 保存 </button>
+                            </div>
+                        </div></br></br>
+                                                                <div class="portlet-body form">
+                            <form  id="ladderpriceForm" class="page-repeater form-horizontal">
+								<div class="form-body" data-repeater-list="group-a"  >
+									<div  class="row" data-repeater-item  ng-repeat="ladderprice in ladderprices  track by $index" repeat-done="repeatDone()"  > 
+										<div class="col-md-3">
+											<div class="form-group">
+											<div class="col-md-5"> {{$index+1}}  :数量范围</div>
+												<div class="col-md-7 input-icon right">
+													<input  ng-hide="ladderpriceAdd" type="text" ng-model="ladderprice.countStart" name="countStart"   id="countStart"
+														class="form-control" placeholder="起始数量"><span
+														class="help-block"></span>
+														<label   ng-show="ladderpriceListView"  class="c_edit" >{{ladderprice.countStart}}</label>
+												</div>
+											</div>
+										</div>
+						
+										<div class="col-md-2">
+											<div class="form-group">
+												<div class="col-md-12">
+													<input  ng-hide="ladderpriceAdd" type="text" ng-model="ladderprice.countEnd" name="countEnd"  id="countEnd"
+														class="form-control" placeholder="截止数量"> <span
+														class="help-block"></span>
+														<label   ng-show="ladderpriceView"  class="c_edit" >{{ladderprice.countEnd}}</label>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+											<div class="col-md-4"> 价格 :</div>
+												<div class="col-md-8 input-icon right">
+													<input  ng-hide="ladderpriceAdd" type="text" ng-model="ladderprice.price" name="price"   id="price"
+														class="form-control" placeholder="价格"><span
+														class="help-block"></span>
+														<label   ng-show="ladderpriceView"  class="c_edit" >{{ladderprice.price}}</label>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+											<div class="col-md-5"> 含税价格 :</div>
+												<div class="col-md-7 input-icon right">
+													<input  ng-hide="ladderpriceAdd" type="text" ng-model="ladderprice.inclusivePrice" name="inclusivePrice"   id="inclusivePrice"
+														class="form-control" placeholder="含税价格"><span
+														class="help-block"></span>
+														<label   ng-show="ladderpriceView"  class="c_edit" >{{ladderprice.inclusivePrice}}</label>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<div class="form-group">
+												<div class="col-md-12">
+													 <a href="javascript:;"  class="btn red btn-sm" ng-hide="ladderpriceAdd" ng-click="deleteRepeat()">
+                                            			<i class="fa fa-close"></i> 
+                                     				</a>
+												</div>
+											</div>
+										</div>
+										 
+									</div>
+									
+								</div>
+								<div class="form-actions right" ng-hide="ladderpriceAdd">
+									<a href="javascript:;" data-repeater-create class="btn blue btn-sm" ng-click="addRepeat()" >
+                                            <i class="fa fa-plus"></i> 增加
+                                     </a>
+                                </div>
+							</form>
+         				</div>
+                                                        </div> 
+                                                        </div> 
                                                         <div class="row">
                                                             <div class="col-md-6">
                                                              <div class="form-group form-md-line-input">
@@ -444,7 +529,7 @@
 							</form>
          				</div>
 
-			                         <div class="row"  ng-show="isChecked">
+			                       <!--   <div class="row"  ng-show="isChecked">
                                                          <div class="portlet-title">
                             <div class="actions"  style="float: right;">
                              
@@ -525,7 +610,7 @@
 							</form>
          				</div>
                                                         </div>
-                       
+                        -->
 
 				
                     

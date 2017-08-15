@@ -3,6 +3,7 @@
 <mapper namespace="com.congmai.zhgj.web.dao.PriceListMapper" >
   <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.PriceList" >
     <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="priceId" property="priceId" jdbcType="VARCHAR" />
     <result column="priceNum" property="priceNum" jdbcType="VARCHAR" />
     <result column="supplyComId" property="supplyComId" jdbcType="VARCHAR" />
     <result column="buyComId" property="buyComId" jdbcType="VARCHAR" />
@@ -90,8 +91,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    serialNum, priceNum, supplyComId, buyComId, priceDescribe, materielSerial, rate, 
-    isLadderPrice, ladderType, inclusivePrice, price, priceType, priceEffectiveDate, 
+    serialNum, priceId, priceNum, supplyComId, buyComId, priceDescribe, materielSerial, 
+    rate, isLadderPrice, ladderType, inclusivePrice, price, priceType, priceEffectiveDate, 
     priceExpirationDate, remark, file, status, delFlg, creator, createTime, versionNO, 
     isLatestVersion, updater, updateTime, currency, unitPrice, topPrice, floorPrice
   </sql>
@@ -126,32 +127,35 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.congmai.zhgj.web.model.PriceList" >
-    insert into priceList (serialNum, priceNum, supplyComId, 
-      buyComId, priceDescribe, materielSerial, 
-      rate, isLadderPrice, ladderType, 
-      inclusivePrice, price, priceType, 
-      priceEffectiveDate, priceExpirationDate, remark, 
-      file, status, delFlg, 
-      creator, createTime, versionNO, 
-      isLatestVersion, updater, updateTime, 
-      currency, unitPrice, topPrice, 
-      floorPrice)
-    values (#{serialNum,jdbcType=VARCHAR}, #{priceNum,jdbcType=VARCHAR}, #{supplyComId,jdbcType=VARCHAR}, 
-      #{buyComId,jdbcType=VARCHAR}, #{priceDescribe,jdbcType=VARCHAR}, #{materielSerial,jdbcType=VARCHAR}, 
-      #{rate,jdbcType=VARCHAR}, #{isLadderPrice,jdbcType=VARCHAR}, #{ladderType,jdbcType=VARCHAR}, 
-      #{inclusivePrice,jdbcType=VARCHAR}, #{price,jdbcType=VARCHAR}, #{priceType,jdbcType=VARCHAR}, 
-      #{priceEffectiveDate,jdbcType=DATE}, #{priceExpirationDate,jdbcType=DATE}, #{remark,jdbcType=VARCHAR}, 
-      #{file,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, 
-      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{versionNO,jdbcType=VARCHAR}, 
-      #{isLatestVersion,jdbcType=VARCHAR}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{currency,jdbcType=VARCHAR}, #{unitPrice,jdbcType=VARCHAR}, #{topPrice,jdbcType=VARCHAR}, 
-      #{floorPrice,jdbcType=VARCHAR})
+    insert into priceList (serialNum, priceId, priceNum, 
+      supplyComId, buyComId, priceDescribe, 
+      materielSerial, rate, isLadderPrice, 
+      ladderType, inclusivePrice, price, 
+      priceType, priceEffectiveDate, priceExpirationDate, 
+      remark, file, status, 
+      delFlg, creator, createTime, 
+      versionNO, isLatestVersion, updater, 
+      updateTime, currency, unitPrice, 
+      topPrice, floorPrice)
+    values (#{serialNum,jdbcType=VARCHAR}, #{priceId,jdbcType=VARCHAR}, #{priceNum,jdbcType=VARCHAR}, 
+      #{supplyComId,jdbcType=VARCHAR}, #{buyComId,jdbcType=VARCHAR}, #{priceDescribe,jdbcType=VARCHAR}, 
+      #{materielSerial,jdbcType=VARCHAR}, #{rate,jdbcType=VARCHAR}, #{isLadderPrice,jdbcType=VARCHAR}, 
+      #{ladderType,jdbcType=VARCHAR}, #{inclusivePrice,jdbcType=VARCHAR}, #{price,jdbcType=VARCHAR}, 
+      #{priceType,jdbcType=VARCHAR}, #{priceEffectiveDate,jdbcType=DATE}, #{priceExpirationDate,jdbcType=DATE}, 
+      #{remark,jdbcType=VARCHAR}, #{file,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{versionNO,jdbcType=VARCHAR}, #{isLatestVersion,jdbcType=VARCHAR}, #{updater,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{currency,jdbcType=VARCHAR}, #{unitPrice,jdbcType=VARCHAR}, 
+      #{topPrice,jdbcType=VARCHAR}, #{floorPrice,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.PriceList" >
     insert into priceList
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
         serialNum,
+      </if>
+      <if test="priceId != null" >
+        priceId,
       </if>
       <if test="priceNum != null" >
         priceNum,
@@ -238,6 +242,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
         #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="priceId != null" >
+        #{priceId,jdbcType=VARCHAR},
       </if>
       <if test="priceNum != null" >
         #{priceNum,jdbcType=VARCHAR},
@@ -334,6 +341,9 @@
       <if test="record.serialNum != null" >
         serialNum = #{record.serialNum,jdbcType=VARCHAR},
       </if>
+      <if test="record.priceId != null" >
+        priceId = #{record.priceId,jdbcType=VARCHAR},
+      </if>
       <if test="record.priceNum != null" >
         priceNum = #{record.priceNum,jdbcType=VARCHAR},
       </if>
@@ -423,6 +433,7 @@
   <update id="updateByExample" parameterType="map" >
     update priceList
     set serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      priceId = #{record.priceId,jdbcType=VARCHAR},
       priceNum = #{record.priceNum,jdbcType=VARCHAR},
       supplyComId = #{record.supplyComId,jdbcType=VARCHAR},
       buyComId = #{record.buyComId,jdbcType=VARCHAR},
@@ -457,6 +468,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.PriceList" >
     update priceList
     <set >
+      <if test="priceId != null" >
+        priceId = #{priceId,jdbcType=VARCHAR},
+      </if>
       <if test="priceNum != null" >
         priceNum = #{priceNum,jdbcType=VARCHAR},
       </if>
@@ -543,7 +557,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.PriceList" >
     update priceList
-    set priceNum = #{priceNum,jdbcType=VARCHAR},
+    set priceId = #{priceId,jdbcType=VARCHAR},
+      priceNum = #{priceNum,jdbcType=VARCHAR},
       supplyComId = #{supplyComId,jdbcType=VARCHAR},
       buyComId = #{buyComId,jdbcType=VARCHAR},
       priceDescribe = #{priceDescribe,jdbcType=VARCHAR},
@@ -572,7 +587,7 @@
       floorPrice = #{floorPrice,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
-   <delete id="deletePriceList" parameterType="java.util.List">
+  <delete id="deletePriceList" parameterType="java.util.List">
     	delete from priceList where serialNum in
         <foreach item="idList" collection="list" open="(" close=")" separator=",">
             #{idList}
