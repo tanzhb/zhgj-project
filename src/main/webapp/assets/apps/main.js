@@ -635,7 +635,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	            url: "/purchaseForecast",
 	            templateUrl:"rest/page/purchaseForecast",
 	            data: {pageTitle: '采购预测'},
-	            controller: "ContractController",
+	            controller: "PurchaseForecastController",
 	            resolve: {
 	                deps: ['$ocLazyLoad', function($ocLazyLoad) {
 	                    return $ocLazyLoad.load({
@@ -648,8 +648,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	                    'assets/global/plugins/jquery-validation/js/jquery.validate.js',
 						'assets/global/plugins/datatables/datatables.all.min.js',
                         'assets/pages/scripts/table-datatables-managed.min.js',
-	                    /*'assets/apps/service/ContractService.js',
-	                    'assets/apps/controllers/ContractController.js',*/
+	                    'assets/apps/service/PurchaseForecastService.js',
+	                    'assets/apps/controllers/PurchaseForecastController.js',
 	                    'assets/apps/scripts/pageHandle.js',
 	                    
 	                    'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',

@@ -33,14 +33,14 @@
 					<i class="fa fa-globe"></i>合同列表
 				</div>
 				<div class="actions" ng-controller='MyCtrl'>
-					<a href="javascript:;" ng-click="jumpToUrl('addUserContract')"
+					<!-- <a href="javascript:;" ng-click="jumpToUrl('addUserContract')"
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-plus"></i> 添加
 					</a> 
 					<a href="javascript:;" ng-click="jumpToEdit()"
 						class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-edit"></i> 修改
-					</a>
+					</a> -->
 					<a href="javascript:;" ng-click="del()"
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-minus"></i> 删除
@@ -53,16 +53,16 @@
 							class="fa fa-angle-down"></i>
 						</a>
 						<ul class="dropdown-menu pull-right" id="sample_3_tools">
-							<li><a data-action="0" class="tool-action"
+							<!-- <li><a data-action="0" class="tool-action"
 								data-toggle="modal" data-target="#import"> <i
 									class="fa fa-upload"></i> 导入
-							</a></li>
+							</a></li> -->
 							<li><a href="javascript:;" data-action="1"
-								class="tool-action" ng-click="exportContract()"> <i class="fa fa-file-excel-o"></i> 导出
+								class="tool-action" ng-click="exportPurchaseForecast()"> <i class="fa fa-file-excel-o"></i> 导出
 							</a></li>
-							<li><a href="javascript:;" data-action="2"
+							<!-- <li><a href="javascript:;" data-action="2"
 								class="tool-action" > <i class="fa fa-print"></i> 打印
-							</a></li>
+							</a></li> -->
 						</ul>
 					</div>
 				</div>

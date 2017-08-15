@@ -1,13 +1,9 @@
 package com.congmai.zhgj.web.controller;
 
-import java.io.File;  
-import java.io.IOException;  
-
-
-
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
-import java.text.ParsePosition;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,78 +14,77 @@ import java.util.UUID;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
-import org.apache.commons.io.FileUtils;  
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.time.DateFormatUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
-import org.springframework.context.annotation.Scope;  
-import org.springframework.http.HttpHeaders;  
-import org.springframework.http.HttpStatus;  
-import org.springframework.http.MediaType;  
-import org.springframework.http.ResponseEntity;  
-import org.springframework.stereotype.Component;  
+import org.apache.commons.io.FileUtils;
+import org.springframework.context.annotation.Scope;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;  
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import com.alibaba.druid.util.StringUtils;
-import com.congmai.zhgj.core.util.ApplicationUtils;
-import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelUtil;
-import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
-import com.congmai.zhgj.web.model.Company;
-import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.User;
-import com.congmai.zhgj.web.service.ContractService;
+import com.congmai.zhgj.web.service.PurchaseForecastService;
 
 
 /**
- * 合同管理controller
+ * 采购预测controller
  * @author czw
  *
  */
 @Component  
 @Scope("prototype")  
 @Controller
-@RequestMapping("/contract")
+@RequestMapping("/purchaseForecast")
 public class PurchaseForecastController {
 
 	/**
-	 * 合同管理service
+	 * 采购预测service
 	 */
 	@Resource
-	private ContractService contractService;
+	private PurchaseForecastService purchaseForecastService;
 
 	/**
 	 * 
-	 * @Description 查找所有用户合同信息
+	 * @Description 查找所有采购预测信息
 	 * @return
+	 * @throws ParseException 
 	 */
-	@RequestMapping(value = "/findAllUserContract", method = RequestMethod.GET)
-	public ResponseEntity<Map> findAllUserContract(HttpServletRequest request) {
+	@RequestMapping(value = "/findAllPurchaseForecast", method = RequestMethod.GET)
+	public ResponseEntity<Map> findAllPurchaseForecast(HttpServletRequest request) throws ParseException {
 
-		User user=(User) request.getSession().getAttribute("userInfo"); 
-		List<ContractVO> contractList=contractService.queryContractList("");
+		List<DemandPlanMateriel> purchaseForecastList=purchaseForecastService.queryPurchaseForecastList("");
+		
+		if(purchaseForecastList.size()>0){
+			for(DemandPlanMateriel demandPlanMateriel:purchaseForecastList){
+				Date deliveryDate=demandPlanMateriel.getDeliveryDate();
+				Date now=null;
+				now=new Date();
+				SimpleDateFormat sdf=new  SimpleDateFormat("yyyy-MM-dd");
+				String nowString=sdf.format(now);
+				now=sdf.parse(nowString);
+				int daysBeforeDelivery=(int)((deliveryDate.getTime()-now.getTime())/1000/60/60/24);
+				demandPlanMateriel.setDaysBeforeDelivery(daysBeforeDelivery+"");
+			}
+			
+		}
 
-		if (contractList.isEmpty()) {
+		if (purchaseForecastList.isEmpty()) {
 			return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);// You many
 			// HttpStatus.NOT_FOUND
 		}
 		//封装datatables数据返回到前台
 		Map pageMap = new HashMap();
 		pageMap.put("draw", 1);
-		pageMap.put("recordsTotal", contractList.size());
-		pageMap.put("recordsFiltered", contractList.size());
-		pageMap.put("data", contractList);
+		pageMap.put("recordsTotal", purchaseForecastList.size());
+		pageMap.put("recordsFiltered", purchaseForecastList.size());
+		pageMap.put("data", purchaseForecastList);
 		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 	}
 
@@ -101,7 +96,7 @@ public class PurchaseForecastController {
 	 * @param ucBuilder
 	 * @return 操作结果
 	 */
-	@RequestMapping(value = "/saveUserContract", method = RequestMethod.POST)
+	/*@RequestMapping(value = "/saveUserContract", method = RequestMethod.POST)
 	public ResponseEntity<Void> saveUserContract(@Valid ContractVO contractVO, HttpServletRequest request,
 			UriComponentsBuilder ucBuilder,@RequestParam(value = "files")MultipartFile files[]) {
 		Subject currentUser = SecurityUtils.getSubject();
@@ -151,35 +146,33 @@ public class PurchaseForecastController {
 		headers.setLocation(ucBuilder.path("/userContract").buildAndExpand(contractVO.getId()).toUri());
 
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
-	}
+	}*/
 
 	/**
-	 * @Description (导出企业信息)
+	 * @Description (导出采购预测信息)
 	 * @param request
 	 * @return
+	 * @throws ParseException 
 	 */
-	@RequestMapping("exportContract")
-	public void exportContract(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+	@RequestMapping("/exportPurchaseForecast")
+	public void exportPurchaseForecast(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) throws ParseException {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
-		List<ContractVO> contractList=contractService.queryContractList("");
-		/*for(ContractVO contractVO:contractList){
-    			Date date=getNowDateShort(contractVO.getStartDate());
-    			contractVO.setStartDate(date);
-    		}*/
-
-		dataMap.put("contractList",contractList);
-		ExcelUtil.export(request, response, dataMap, "contract", "合同信息");
-	}
-
-
-	/** 
-	 * 获取时间 
-	 *  
-	 * @return返回短时间格式 yyyy-MM-dd 
-	 */  
-	public  Date getNowDateShort(Date date) {  
-		Date sqlDate = new java.sql.Date(date.getTime());  
-		return sqlDate;  
+	  List<DemandPlanMateriel> purchaseForecastList=purchaseForecastService.queryPurchaseForecastList("");
+		
+		if(purchaseForecastList.size()>0){
+			for(DemandPlanMateriel demandPlanMateriel:purchaseForecastList){
+				Date deliveryDate=demandPlanMateriel.getDeliveryDate();
+				Date now=null;
+				now=new Date();
+				SimpleDateFormat sdf=new  SimpleDateFormat("yyyy-MM-dd");
+				String nowString=sdf.format(now);
+				now=sdf.parse(nowString);
+				int daysBeforeDelivery=(int)((deliveryDate.getTime()-now.getTime())/1000/60/60/24);
+				demandPlanMateriel.setDaysBeforeDelivery(daysBeforeDelivery+"");
+			}
+		}
+		dataMap.put("purchaseForecastList",purchaseForecastList);
+		ExcelUtil.export(request, response, dataMap, "purchaseForecast", "采购预测信息");
 	}
 
 
@@ -267,17 +260,17 @@ public class PurchaseForecastController {
 
 
 	/**
-	 * 删除用户合同
-	 * @param contractVO
+	 * 删除采购预测
+	 * @param 
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "/deleteUserContractS", method = RequestMethod.POST)
-	public ResponseEntity<Void> deleteUserContractS(@RequestBody String ids) {
+	@RequestMapping(value = "/deletePurchaseForecast", method = RequestMethod.POST)
+	public ResponseEntity<Void> deletePurchaseForecast(@RequestBody String ids) {
 		if ("".equals(ids) || ids == null) {
 			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
 		}
-		contractService.deleteUserContractS(ids); 
+		purchaseForecastService.deletePurchaseForecast(ids); 
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
@@ -287,21 +280,21 @@ public class PurchaseForecastController {
 	 * @param ids（前台所传递的id）
 	 * @return
 	 */
-	@RequestMapping(value = "/selectConbtractById", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/selectConbtractById", method = RequestMethod.GET)
 	public ResponseEntity<ContractVO> selectConbtractById(String ids) {
 
 		ContractVO c=contractService.selectConbtractById(ids);
 		return new ResponseEntity<ContractVO>(c, HttpStatus.OK);
-	}
+	}*/
 
 	/**
 	 * 跳转到编辑页面
 	 * @return
 	 */
-	@RequestMapping(value = "/editUserContractPage")
+	/*@RequestMapping(value = "/editUserContractPage")
 	public String editUserContractPage(String id,String view) {
 		return "contract/editUserContractPage";
-	}
+	}*/
 	
 	
 	 /**
@@ -320,7 +313,7 @@ public class PurchaseForecastController {
      * @param request
      * @return
      */
-    @RequestMapping("contractImport")
+    /*@RequestMapping("contractImport")
     @ResponseBody
     public Map<String,String> contractImport(@RequestParam(value = "excelFile") MultipartFile excelFile,HttpServletRequest request,HttpServletResponse response) {
     	Map<String,String> map = new HashMap<String, String>();
@@ -363,7 +356,7 @@ public class PurchaseForecastController {
 		}
     	
          return map;
-    }
+    }*/
 
 
 	/**

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('MetronicApp').factory('PurchaseForecastService', ['$rootScope', '$http', '$q','$filter', function($rootScope, $http, $q,$filter){
-    var REST_SERVICE_URI = $rootScope.basePath + '/rest/contract/findAllUserContract';
+    var REST_SERVICE_URI = $rootScope.basePath + '/rest/purchaseForecast/findAllPurchaseForecast';
 
     var factory = {
     		//查询列表
@@ -9,13 +9,13 @@ angular.module('MetronicApp').factory('PurchaseForecastService', ['$rootScope', 
     		//添加
     		/*saveUserContract: saveUserContract,*/
     		//删除
-    		delPurchaseForecast:delPurchaseForecast,
-    		//单个查找
+    		delPurchaseForecast:delPurchaseForecast
+    		/*//单个查找
     		selectPurchaseForecast:selectPurchaseForecast,
     		
     		downLoad:downLoad,
     		
-    		uploadExcel:uploadExcel
+    		uploadExcel:uploadExcel*/
     };
 
     return factory;
@@ -36,15 +36,15 @@ angular.module('MetronicApp').factory('PurchaseForecastService', ['$rootScope', 
     }
     
     
-    function downLoad(name){
+   /* function downLoad(name){
     	$http.get($rootScope.basePath + "/rest/contract/resourceDownload",  {filename:name}).success(function (data) {  
         })
-    }
+    }*/
     
     /**
      * 导入
      */
-    function uploadExcel(){
+   /* function uploadExcel(){
 		var deferred = $q.defer();
 		var fd = new FormData();
         var file = document.querySelector('input[type=file]').files[0];
@@ -57,13 +57,13 @@ angular.module('MetronicApp').factory('PurchaseForecastService', ['$rootScope', 
 			deferred.reject(err);//请求失败
 		});
 		return deferred.promise;//返回承诺
-	}
+	}*/
     
-  //删除用户
-    function delUserContract(ids){
+  //删除采购预测
+    function delPurchaseForecast(ids){
         var deferred = $q.defer();  
 
-        $http.post($rootScope.basePath + "/rest/contract/deleteUserContractS", ids).success(function (data) {  
+        $http.post($rootScope.basePath + "/rest/purchaseForecast/deletePurchaseForecast", ids).success(function (data) {  
             // 如果连接成功，延时返回给调用者  
             deferred.resolve(data);  
         })  
@@ -74,7 +74,7 @@ angular.module('MetronicApp').factory('PurchaseForecastService', ['$rootScope', 
           
     };
     
-  //通过用户id查找用户
+    /* //通过用户id查找用户
     function selectPurchaseForecast(ids){
         var deferred = $q.defer();  
 
@@ -88,7 +88,7 @@ angular.module('MetronicApp').factory('PurchaseForecastService', ['$rootScope', 
             })  
         return deferred.promise;  
           
-    };
+    };*/
     
 }]);
 

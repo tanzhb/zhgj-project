@@ -77,8 +77,9 @@ public class ContractController {
 	@RequestMapping(value = "/findAllUserContract", method = RequestMethod.GET)
 	public ResponseEntity<Map> findAllUserContract(HttpServletRequest request) {
 
-		User user=(User) request.getSession().getAttribute("userInfo"); 
-		List<ContractVO> contractList=contractService.queryContractList("");
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
+		List<ContractVO> contractList=contractService.queryContractList(currenLoginName);
 
 		if (contractList.isEmpty()) {
 			return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);// You many
@@ -154,14 +155,16 @@ public class ContractController {
 	}
 
 	/**
-	 * @Description (导出企业信息)
+	 * @Description (导出合同信息)
 	 * @param request
 	 * @return
 	 */
 	@RequestMapping("exportContract")
 	public void exportContract(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
-		List<ContractVO> contractList=contractService.queryContractList("");
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
+		List<ContractVO> contractList=contractService.queryContractList(currenLoginName);
 		/*for(ContractVO contractVO:contractList){
     			Date date=getNowDateShort(contractVO.getStartDate());
     			contractVO.setStartDate(date);
