@@ -88,8 +88,8 @@ public class ContractController {
 		//封装datatables数据返回到前台
 		Map pageMap = new HashMap();
 		pageMap.put("draw", 1);
-		pageMap.put("recordsTotal", contractList.size());
-		pageMap.put("recordsFiltered", contractList.size());
+		pageMap.put("recordsTotal",contractList==null?0:contractList.size());
+		pageMap.put("recordsFiltered",contractList==null?0:contractList.size());
 		pageMap.put("data", contractList);
 		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 	}

@@ -82,8 +82,8 @@ public class PurchaseForecastController {
 		//封装datatables数据返回到前台
 		Map pageMap = new HashMap();
 		pageMap.put("draw", 1);
-		pageMap.put("recordsTotal", purchaseForecastList.size());
-		pageMap.put("recordsFiltered", purchaseForecastList.size());
+		pageMap.put("recordsTotal",purchaseForecastList==null?0:purchaseForecastList.size());
+		pageMap.put("recordsFiltered",purchaseForecastList==null?0:purchaseForecastList.size());
 		pageMap.put("data", purchaseForecastList);
 		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 	}
