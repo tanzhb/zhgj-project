@@ -110,11 +110,11 @@
   </delete>
   <insert id="insert" parameterType="com.congmai.zhgj.web.model.DemandPlan" >
     insert into demandPlan (serialNum, buyComId, demandPlanNum, 
-      releaseDate, remark, delFlg, 
+      releaseDate, remark, 
       creator, createTime, updater, 
       updateTime)
     values (#{serialNum,jdbcType=VARCHAR}, #{buyComId,jdbcType=VARCHAR}, #{demandPlanNum,jdbcType=VARCHAR}, 
-      #{releaseDate,jdbcType=DATE}, #{remark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, 
+      #{releaseDate,jdbcType=DATE}, #{remark,jdbcType=VARCHAR},
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>

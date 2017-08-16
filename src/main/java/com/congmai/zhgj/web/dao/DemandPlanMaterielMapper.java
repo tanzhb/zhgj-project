@@ -16,6 +16,8 @@ public interface DemandPlanMaterielMapper extends GenericDao<DemandPlanMateriel,
     int deleteByPrimaryKey(String serialNum);
 
     int insert(DemandPlanMateriel record);
+    
+    int insertBatch(List<DemandPlanMateriel> records);
 
     int insertSelective(DemandPlanMateriel record);
 

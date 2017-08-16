@@ -12,8 +12,11 @@ import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.web.dao.DemandPlanMaterielMapper;
+import com.congmai.zhgj.web.dao.MaterielMapper;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.DemandPlanMaterielExample;
+import com.congmai.zhgj.web.model.Materiel;
+import com.congmai.zhgj.web.model.MaterielExample;
 import com.congmai.zhgj.web.service.DemandPlanMaterielService;
 
 @Service
@@ -24,6 +27,9 @@ public class DemandPlanMaterielServiceImpl extends GenericServiceImpl<DemandPlan
 	
 	@Resource
 	private DemandPlanMaterielMapper demandPlanMaterielMapper;
+	
+	@Resource
+	private MaterielMapper materielMapper;
 
 	@Override
 	public GenericDao<DemandPlanMateriel, String> getDao() {
@@ -62,6 +68,17 @@ public class DemandPlanMaterielServiceImpl extends GenericServiceImpl<DemandPlan
 			}
 		}
 		return list;
+	}
+
+	@Override
+	public String selectMaterielSerialByMaterielNum(String materielNum) {
+		MaterielExample example = new MaterielExample();
+		example.createCriteria().andMaterielNumEqualTo(materielNum);
+		List<Materiel> list = materielMapper.selectByExample(example);
+		if(CollectionUtils.isNotEmpty(list)){
+			return list.get(0).getSerialNum();
+		}
+		return null;
 	}
 	
 

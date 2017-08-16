@@ -101,4 +101,12 @@ public class DemandPlanServiceImpl extends GenericServiceImpl<DemandPlan,String>
 		
 	}
 
+	@Override
+	public void insertDemandPlanInfo(DemandPlan demandPlan,
+			List<DemandPlanMateriel> demandPlanMateriels) {
+			demandPlanMapper.insert(demandPlan);
+			demandPlanMaterielMapper.insertBatch(demandPlanMateriels);
+		
+	}
+
 }

@@ -60,6 +60,7 @@ public class Company {
     private int pageSize;
     private int pageIndex;
     private String searchKey;
+    private String comTypeName;
 
     public String getComId() {
         return comId;
@@ -268,6 +269,14 @@ public class Company {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public String getComTypeName() {
+		return comTypeName;
+	}
+
+	public void setComTypeName(String comTypeName) {
+		this.comTypeName = comTypeName;
 	}
     
     
