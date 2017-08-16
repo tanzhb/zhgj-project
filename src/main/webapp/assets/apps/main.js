@@ -309,7 +309,55 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
-
+        //销售订单
+        .state('saleOrder', {
+            url: "/saleOrder",
+            templateUrl: "rest/page/saleOrder",
+            data: {pageTitle: '销售订单'},
+            controller: "saleOrderController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+							'assets/global/plugins/datatables/datatables.min.css',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+							'assets/global/plugins/datatables/datatables.all.min.js',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+                            'assets/apps/service/saleOrderService.js',
+                            'assets/apps/controllers/saleOrderController.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        // 新增物料
+        .state('addSaleOrder', {
+            url: "/addSaleOrder?:serialNum&:view",
+            templateUrl: "rest/page/addSaleOrder",
+            data: {pageTitle: '新增销售订单'},
+            controller: "saleOrderController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload-shim.min.js',
+		        'assets/apps/scripts/angular-file-upload.min.js',
+		        'assets/apps/scripts/FileUploader.js',
+	        	'assets/apps/service/saleOrderService.js',
+				'assets/apps/controllers/saleOrderController.js'
+                      ]
+                    });
+                }]
+            }
+        })
 	    .state('userContract', {
 	            url: "/userContract",
 	            templateUrl:"rest/page/userContract",
@@ -462,8 +510,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         				        'assets/global/plugins/bootbox/bootbox.min.js',
         				        'assets/apps/scripts/angular-file-upload.min.js',
         				        'assets/apps/controllers/CompanyController.js',
-        				        'assets/apps/service/CompanyService.js',
-        				        'assets/apps/directive/CompanyDirective.js'
+        				        'assets/apps/service/CompanyService.js'
         				        ]
         			});
         		}]
@@ -483,7 +530,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        				files: [                             
 	        				        'assets/apps/controllers/CompanyController.js',
 	        				        'assets/apps/service/CompanyService.js',
-	        				        'assets/apps/directive/CompanyDirective.js',
 	        				        'assets/apps/scripts/angular-file-upload-shim.min.js',
 	        				        'assets/apps/scripts/angular-file-upload.min.js',
 	        				        'assets/apps/scripts/FileUploader.js'
@@ -518,7 +564,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        }).state('demandPlanAdd', {
 	        	url: "/demandPlanAdd?:serialNum",
 	        	templateUrl: "rest/demandPlan/demandPlanAdd",
-	        	data: {pageTitle: '需求计划'},
+	        	data: {pageTitle: '新建需求计划'},
 	        	reload:true, 
 	        	controller: "DemandPlanController",
 	        	resolve: {
@@ -531,14 +577,37 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        				        'assets/global/plugins/datatables/datatables.all.min.js',
 	        				        'assets/apps/controllers/DemandPlanController.js',
 	        				        'assets/apps/service/DemandPlanService.js',
-	        				        'assets/apps/directive/DemandPlanDirective.js',
 	        				        'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js',
 	        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
 	        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css'
 	        				        ]
 	        			});
 	        		}]
-	        	}	        })         	           .state('warehouse', {
+	        	}	        
+	        }).state('demandPlanView', {
+		        	url: "/demandPlanView?:serialNum",
+		        	templateUrl: "rest/demandPlan/demandPlanView",
+		        	data: {pageTitle: '查看需求计划'},
+		        	reload:true, 
+		        	controller: "DemandPlanController",
+		        	resolve: {
+		        		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		        			return $ocLazyLoad.load({
+		        				name: 'MetronicApp',
+		        				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		        				files: [       
+		        				        'assets/global/plugins/datatables/datatables.min.css',                  
+		        				        'assets/global/plugins/datatables/datatables.all.min.js',
+		        				        'assets/apps/controllers/DemandPlanController.js',
+		        				        'assets/apps/service/DemandPlanService.js',
+		        				        'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js',
+		        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
+		        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css'
+		        				        ]
+		        			});
+		        		}]
+		        	}	        
+		    })         	           .state('warehouse', {
 	        url: "/warehouse",
             templateUrl: "rest/warehouse/viewWarehouseList",
             data: {pageTitle: '仓库信息'},
@@ -616,6 +685,44 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
+        
+        
+        .state('purchaseForecast', {
+	            url: "/purchaseForecast",
+	            templateUrl:"rest/page/purchaseForecast",
+	            data: {pageTitle: '采购预测'},
+	            controller: "PurchaseForecastController",
+	            resolve: {
+	                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+	                    return $ocLazyLoad.load({
+	                        name: 'MetronicApp',
+	                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+	                        files: [                             
+	                    
+	                    'assets/global/plugins/datatables/datatables.min.css', 
+	                    'assets/global/plugins/datatables/datatables.min.js',
+	                    'assets/global/plugins/jquery-validation/js/jquery.validate.js',
+						'assets/global/plugins/datatables/datatables.all.min.js',
+                        'assets/pages/scripts/table-datatables-managed.min.js',
+	                    'assets/apps/service/PurchaseForecastService.js',
+	                    'assets/apps/controllers/PurchaseForecastController.js',
+	                    'assets/apps/scripts/pageHandle.js',
+	                    
+	                    'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+				        'assets/global/plugins/datatables/datatables.all.min.js',
+				        'assets/global/plugins/datatables/datatables.min.css', 
+				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css',
+				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js',
+				        'assets/global/plugins/bootbox/bootbox.min.js',
+				        'assets/apps/scripts/pageHandle.js',
+				        'assets/apps/scripts/angular-file-upload-shim.min.js',
+				        'assets/apps/scripts/angular-file-upload.min.js',
+				        'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js',
+	                   	                        ]
+	                    });
+	                }]
+	            }
+	        })
 }]);
 
 

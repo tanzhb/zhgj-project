@@ -93,6 +93,9 @@
     <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
+    <if test="start !=0 or limit!=0">    
+     limit #{start},#{limit}
+     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -113,15 +116,32 @@
   <insert id="insert" parameterType="com.congmai.zhgj.web.model.DemandPlanMateriel" >
     insert into demandPlanMateriel (serialNum, demandPlanSerial, materielSerial, 
       supplyMaterielSerial, amount, deliveryDate, 
-      deliveryAddress, delFlg, creator, 
+      deliveryAddress, creator, 
       createTime, updater, updateTime, 
       remark)
     values (#{serialNum,jdbcType=VARCHAR}, #{demandPlanSerial,jdbcType=VARCHAR}, #{materielSerial,jdbcType=VARCHAR}, 
       #{supplyMaterielSerial,jdbcType=VARCHAR}, #{amount,jdbcType=VARCHAR}, #{deliveryDate,jdbcType=DATE}, 
-      #{deliveryAddress,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{deliveryAddress,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{remark,jdbcType=VARCHAR})
   </insert>
+  
+   <insert id="insertBatch"  parameterType="java.util.List"> 
+	    insert into demandPlanMateriel (serialNum, demandPlanSerial, materielSerial, 
+      	supplyMaterielSerial, amount, deliveryDate, 
+      	deliveryAddress, creator, 
+      	createTime, updater, updateTime, 
+      	remark)
+    	values 
+	    <foreach collection="list" item="item" index="index" separator="," >  
+	     (	#{item.serialNum,jdbcType=VARCHAR}, #{item.demandPlanSerial,jdbcType=VARCHAR}, #{item.materielSerial,jdbcType=VARCHAR}, 
+      		#{item.supplyMaterielSerial,jdbcType=VARCHAR}, #{item.amount,jdbcType=VARCHAR}, #{item.deliveryDate,jdbcType=DATE}, 
+      		#{item.deliveryAddress,jdbcType=VARCHAR}, #{item.creator,jdbcType=VARCHAR}, 
+     		#{item.createTime,jdbcType=TIMESTAMP}, #{item.updater,jdbcType=VARCHAR}, #{item.updateTime,jdbcType=TIMESTAMP}, 
+     		#{item.remark,jdbcType=VARCHAR})
+	    </foreach>  
+	</insert>  
+
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.DemandPlanMateriel" >
     insert into demandPlanMateriel
     <trim prefix="(" suffix=")" suffixOverrides="," >

@@ -117,4 +117,44 @@ public class ExcelUtil {
 		}
 	}
 
+	/**
+	 * 导入模板下载
+	 * @Description (TODO这里用一句话描述这个方法的作用)
+	 * @param request
+	 * @param response
+	 * @param tempName
+	 * @param fileName
+	 */
+	public static void importTempDownLoad(HttpServletRequest request,
+			HttpServletResponse response, String tempName, String fileName) {
+		try
+		{
+			String filePath = request.getSession().getServletContext().getRealPath("/temp/importTemp/");
+			String destFilePath = filePath + "/" + tempName + ".xls";
+			String agent = request.getHeader("USER-AGENT");
+        	if (null != agent && -1 != agent.indexOf("MSIE") || null != agent && -1 != agent.indexOf("Trident")) {
+        		destFilePath = java.net.URLEncoder.encode(destFilePath, "UTF8");  
+        	} else {// others
+        		destFilePath = new String(destFilePath.getBytes("utf-8"), "iso-8859-1");
+        	}
+        	response.setContentType("application/file;charset=UTF-8");
+        	//设置响应头和下载保存的文件名      用关键字命名        
+            response.setHeader("content-disposition","attachment;filename="+fileName+".xls");
+			byte[] buffer = new byte[1024];
+			int k = 0;
+			// 以流的形式下载文件
+			InputStream fis = new BufferedInputStream(new FileInputStream(destFilePath));
+			while ((k = fis.read(buffer)) > 0) {
+				response.getOutputStream().write(buffer, 0, k);
+			}
+			fis.close();
+			
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+		
+	}
+
 }

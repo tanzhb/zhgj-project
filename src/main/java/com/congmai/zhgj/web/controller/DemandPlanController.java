@@ -1,5 +1,6 @@
 package com.congmai.zhgj.web.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -16,17 +18,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.DateUtil;
+import com.congmai.zhgj.core.util.ExcelReader;
+import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.DemandPlan;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.Materiel;
+import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.DemandPlanMaterielService;
 import com.congmai.zhgj.web.service.DemandPlanService;
 
@@ -48,6 +58,11 @@ public class DemandPlanController {
 	@Autowired
 	private DemandPlanMaterielService demandPlanMaterielService;
 	
+	@Autowired
+	private CompanyService companyService;
+	
+	
+	
 	
 	@RequestMapping("demandPlanManage")
 	public String demandPlanManage() {
@@ -64,7 +79,7 @@ public class DemandPlanController {
     @ResponseBody
     public Page<DemandPlan> companyList(Map<String, Object> map,HttpServletRequest request,DemandPlan demandPlan,int pageIndex,int pageSize) {
     	
-    	Page<DemandPlan> demandPlans = demandPlanService.getListByCondition(demandPlan, pageIndex, 10);
+    	Page<DemandPlan> demandPlans = demandPlanService.getListByCondition(demandPlan, pageIndex, 5);
 		return demandPlans;
     }
     
@@ -115,15 +130,14 @@ public class DemandPlanController {
     
     
     /**
-     * @Description (查看需求计划)
+     * @Description (跳转至查看需求计划页面)
      * @param request
      * @return
      */
-    @RequestMapping(value="viewDemandPlan")
-    @ResponseBody
-    public DemandPlan viewDemandPlan(Map<String, Object> map,String serialNum,HttpServletRequest request) {
+    @RequestMapping(value="demandPlanView")
+    public String demandPlanView(Map<String, Object> map,String serialNum,HttpServletRequest request) {
     	
-    	DemandPlan demandPlan = null;
+    	/*DemandPlan demandPlan = null;
         	try{
         		if(StringUtils.isNotEmpty(serialNum)){
         			demandPlan = demandPlanService.selectById(serialNum);
@@ -133,7 +147,30 @@ public class DemandPlanController {
         	}catch(Exception e){
         		System.out.println(e.getMessage());
         		return null;
-        	}
+        	}*/
+    	return "demandPlan/demandPlanView";
+    }
+    
+    /**
+     * @Description (查看需求计划)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="viewDemandPlan")
+    @ResponseBody
+    public DemandPlan viewDemandPlan(Map<String, Object> map,String serialNum,HttpServletRequest request) {
+    	
+    	DemandPlan demandPlan = null;
+    	try{
+    		if(StringUtils.isNotEmpty(serialNum)){
+    			demandPlan = demandPlanService.selectById(serialNum);
+    		}
+    		
+    		
+    	}catch(Exception e){
+    		System.out.println(e.getMessage());
+    		return null;
+    	}
     	return demandPlan;
     }
     
@@ -238,6 +275,13 @@ public class DemandPlanController {
         			materiel.setUpdater(currenLoginName);
         			demandPlanMaterielService.update(materiel);
         		}
+        		int remainTime = 0;
+				try {
+					remainTime = DateUtil.daysBetween(new Date(), materiel.getDeliveryDate());
+				} catch (Exception e) {
+					System.out.println("deliverDate----"+e.getMessage());
+				}
+				materiel.setRemainTime(String.valueOf(remainTime<0?0:remainTime));
         		
         		flag = "1";
         	}catch(Exception e){
@@ -292,6 +336,98 @@ public class DemandPlanController {
     	return flag;
     }
     
+    /**
+     * @Description (下载导入模板)
+     * @param request
+     * @return
+     */
+    @RequestMapping("downloadImportTemp")
+    public void downloadCompanyTemp(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+    	ExcelUtil.importTempDownLoad(request, response, "demandPlan");
+    }
+    
+    /**
+     * @Description (需求计划导入)
+     * @param request
+     * @return
+     */
+    @RequestMapping("demandPlanImport")
+    @ResponseBody
+    public Map<String,String> demandPlanImport(@RequestParam(value = "excelFile") MultipartFile excelFile,HttpServletRequest request,HttpServletResponse response) {
+    	Map<String,String> map = new HashMap<String, String>();
+    	 try {
+		     
+			ExcelReader excelReader = new ExcelReader(excelFile.getInputStream());
+			//final List<Company> companyList = new ArrayList<Company>(); 
+			Subject currentUser = SecurityUtils.getSubject();
+    		final String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+			final DemandPlan demandPlan = new DemandPlan();
+			final String demandPlanSerial = ApplicationUtils.random32UUID();
+			final List<DemandPlanMateriel> demandPlanMateriels = new ArrayList<DemandPlanMateriel>();
+			excelReader.readExcelContent(new RowHandler() {
+				@Override
+				public void handle(List<Object> row,int i) throws Exception {
+					if(!CollectionUtils.isEmpty(row)){
+						try{
+							if(i==1){
+								demandPlan.setDemandPlanNum(row.get(1).toString());
+								demandPlan.setBuyComId(companyService.selectComIdByComName(row.get(4).toString()));
+							}else if(i==2){
+								demandPlan.setReleaseDate((Date)row.get(1));
+								demandPlan.setRemark(row.get(4).toString());
+							}else if(i==3){
+								
+							}else{
+								DemandPlanMateriel materiel = new DemandPlanMateriel();
+								materiel.setSerialNum(ApplicationUtils.random32UUID());
+								materiel.setDemandPlanSerial(demandPlanSerial);
+								String serialNum = demandPlanMaterielService.selectMaterielSerialByMaterielNum(row.get(1).toString());
+								materiel.setMaterielSerial(serialNum);
+								materiel.setSupplyMaterielSerial(serialNum);
+								materiel.setAmount(row.get(2).toString());
+								materiel.setDeliveryDate((Date)row.get(3));
+								materiel.setDeliveryAddress(row.get(4).toString());
+								materiel.setCreator(currenLoginName);
+								materiel.setCreateTime(new Date());
+								materiel.setUpdater(currenLoginName);
+								demandPlanMateriels.add(materiel);
+							}
+						}catch(Exception  e){
+							throw new Exception("第"+(i+1)+"行数据异常请检查，数据内容："+row.toString());
+						}
+						
+					}
+					
+				}
+			}, 1);
+			demandPlan.setSerialNum(demandPlanSerial);
+			demandPlan.setCreator(currenLoginName);
+			demandPlan.setCreateTime(new Date());
+			demandPlan.setUpdater(currenLoginName);
+			demandPlan.setUpdateTime(new Date());
+				//companyService.insertBatch(companyList);
+			demandPlanService.insertDemandPlanInfo(demandPlan,demandPlanMateriels);
+			map.put("data", "success");
+		} catch (Exception e1) {
+			map.put("data", e1.getMessage());
+		}
+    	
+         return map;
+    }
+    
+    /**
+     * @Description (导出需求计划)
+     * @param request
+     * @return
+     */
+    @RequestMapping("exportDemandPlan")
+    public void exportDemandPlan(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+    		Map<String, Object> dataMap = new HashMap<String, Object>();
+    		List<DemandPlan> demandPlanList = demandPlanService.getListByCondition(new DemandPlan(), 1, 99999999).getResult();
+    		dataMap.put("demandPlanList",demandPlanList);
+    		ExcelUtil.export(request, response, dataMap, "demandPlan", "需求计划");
+    }
+
     
 
 }

@@ -32,6 +32,7 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.web.enums.ComType;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyContact;
 import com.congmai.zhgj.web.model.CompanyFinance;
@@ -94,18 +95,11 @@ public class CompanyController {
     public ResponseEntity<Map<String,Object>> companyList(Map<String, Object> map,HttpServletRequest request,Company company) {
     	
     	List<Company> companys = companyService.selectByPage(new Company()).getResult();
-
-		if (companys.isEmpty()) {
-			return new ResponseEntity<Map<String,Object>>(HttpStatus.NO_CONTENT);// You many
-																	// decide to
-																	// return
-																	// HttpStatus.NOT_FOUND
-		}
 		// 封装datatables数据返回到前台
 		Map<String,Object> pageMap = new HashMap<String,Object>();
 		pageMap.put("draw", 1);
-		pageMap.put("recordsTotal", companys.size());
-		pageMap.put("recordsFiltered", companys.size());
+		pageMap.put("recordsTotal", company==null?0:companys.size());
+		pageMap.put("recordsFiltered", company==null?0:companys.size());
 		pageMap.put("data", companys);
 		return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
     }
@@ -120,7 +114,7 @@ public class CompanyController {
     @ResponseBody
     public Map<String,Object> getCompanyInfo(HttpServletRequest request,String comId) {
     	Map<String, Object> map = new HashMap<String, Object>();
-    	map.put("company", companyService.selectById(comId));
+    	map.put("company", companyService.selectOne(comId));
     	map.put("companyFinances", companyFinanceService.selectListByComId(comId));
      	map.put("companyQualifications", companyQualificationService.selectListByComId(comId));
     	map.put("companyContacts", companyContactService.selectListByComId(comId));
@@ -428,7 +422,11 @@ public class CompanyController {
 							company.setComId(ApplicationUtils.random32UUID());
 							company.setComNum(row.get(0).toString());
 							company.setComName(row.get(1).toString());
-							company.setComType(row.get(2).toString());
+							String comTypeName = ComType.getValueByInfo(row.get(2).toString().trim());
+							if(comTypeName==null){
+								throw new Exception("企业类型不存在");
+							}
+							company.setComType(ComType.getValueByInfo(row.get(2).toString().trim()));
 							company.setAbbreviation(row.get(3).toString());
 							company.setBusinessNature(row.get(4).toString());
 							company.setComNature(row.get(5).toString());
@@ -448,7 +446,7 @@ public class CompanyController {
 							company.setUpdater(currenLoginName);
 							companyList.add(company);
 						}catch(Exception  e){
-							throw new Exception("第"+(i+1)+"行数据异常请检查，数据内容："+row.toString());
+							throw new Exception("第"+(i+1)+"行数据异常请检查，数据内容："+row.toString()+e.getMessage());
 						}
 						
 					}
@@ -477,7 +475,7 @@ public class CompanyController {
     @ResponseBody
     public List<Company> getCustomers(HttpServletRequest request,String searchKey) {
     	
-    	return companyService.selectCompanyByComType("采购商", searchKey);
+    	return companyService.selectCompanyByComType(ComType.BUYER.getValue(), searchKey);
     }
 	
     /**
@@ -489,7 +487,7 @@ public class CompanyController {
     @ResponseBody
     public List<Company> getSuppliers(HttpServletRequest request,String searchKey) {
     	
-    	return companyService.selectCompanyByComType("供应商", searchKey);
+    	return companyService.selectCompanyByComType(ComType.SUPPLIER.getValue(), searchKey);
     }
     
 	

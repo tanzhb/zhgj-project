@@ -12,15 +12,18 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	    		//handle.pageRepeater();
 	    		//_index = 0; 
 	    		//$scope.companyQualifications =[{}];
-	    		
 	    		$scope.rootMateriels = [];
 	    		getDemandPlanInfo($stateParams.serialNum);
 	    		
 	    		selectParentMateriel();
 	    		//$('.customer').selectpicker();
+	    		
 	    		initCustomers();
+	 		}else if($location.path()=="/demandPlanView"){
+	 			getDemandPlanInfo($stateParams.serialNum);
+	 			selectParentMateriel();
 	 		}else{
-	 			createTable(10,1,true);
+	 			createTable(5,1,true);
 	 			//loadTable();
 	 		//	 $("#comViewPage").html($compile($("#comViewContent").html())($scope));
 	 			/*$("#sample_3_tools > li > a.tool-action").on("click",
@@ -91,12 +94,23 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
   							
   							'render' : function(data,
   									type, row, meta) {
-  								return '<input type="checkbox"  name="serialNum[]" value="'
-  										+ $('<div/>')
-  												.text(
-  														data)
-  												.html()
-  										+ '">';
+  								if($scope.modalType=='single'){
+  	  								return '<input type="radio"  name="serialNum" value="'
+										+ $('<div/>')
+												.text(
+														data)
+												.html()
+										+ '">';
+
+  								}else{
+  	  								return '<input type="checkbox"  name="serialNum[]" value="'
+										+ $('<div/>')
+												.text(
+														data)
+												.html()
+										+ '">';
+
+  								}
   							},
   							"createdCell": function (td, cellData, rowData, row, col) {
   								 $compile(td)($scope);
@@ -280,17 +294,54 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	        		$state.go("demandPlanAdd");
 	        }
 	        
-	    	$scope.addMateriel = function (){
-	    		if(!isNull($scope.demandPlan)&&!isNull($scope.demandPlan.serialNum)){
+	    	$scope.addMateriel = function (type,index){
+	    		if(type=="single"){
+	    			$scope.modalType = type;
+	    			$scope.materielSelectedIndex = index;
+	    			table.ajax.reload();
 	    			$("#basicMaterielInfo").modal("show");
 	    		}else{
-	    			toastr.warning("请先保存需求计划基本信息！");
+	    			$scope.modalType = 'multiple';
+	    			table.ajax.reload();
+	    			if(!isNull($scope.demandPlan)&&!isNull($scope.demandPlan.serialNum)){
+		    			$("#basicMaterielInfo").modal("show");
+		    		}else{
+		    			toastr.warning("请先保存需求计划基本信息！");
+		    		}
 	    		}
+	    		
 				
 			}
 	    	
 	    	
 	    	$scope.confirmSelect = function(){
+	    		if($scope.modalType=='single'){
+	    			var id_count = table.$('input[name="serialNum"]:checked').length;
+	    			if(id_count==0){
+						toastr.warning("请选择物料");
+						return;
+					}
+	    			var id =  $('input[name="serialNum"]:checked').val(); 
+	    			var promise = demandPlanService.chooseMateriels(id);
+	        		promise.then(function(data){
+	        			if($scope.materielSelectedIndex != undefined){
+	        				if(isNull($scope.rootMateriels[$scope.materielSelectedIndex].supplyMaterielSerial)){
+		        				$scope.rootMateriels[$scope.materielSelectedIndex].serialNum = data.data[0].serialNum;
+	        				}
+	        				$scope.rootMateriels[$scope.materielSelectedIndex].supplyMaterielSerial = data.data[0].serialNum;
+	        				$scope.rootMateriels[$scope.materielSelectedIndex].materielSerial = data.data[0].serialNum;
+	        				$scope.rootMateriels[$scope.materielSelectedIndex].materielNum = data.data[0].materielNum;
+	    					$scope.rootMateriels[$scope.materielSelectedIndex].materielName = data.data[0].materielName;
+	    					$scope.rootMateriels[$scope.materielSelectedIndex].specifications = data.data[0].specifications;
+	    					$scope.rootMateriels[$scope.materielSelectedIndex].unit = data.data[0].unit;
+	        				
+	        			}
+	        			$("#basicMaterielInfo").modal("hide");
+	        		},function(data){
+	        			//调用承诺接口reject();
+	        		});
+	    			return;
+	    		}
 	    		var id_count = table.$('input[type="checkbox"]:checked').length;
 				if(id_count==0){
 					toastr.warning("请选择物料");
@@ -322,12 +373,14 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	        			if($scope.rootMateriels.length==0){
 	        				for(var i = 0;i < data.data.length;i++){
 	        					$scope.rootMateriels.push((data.data)[i]);
+	        					//$scope.copyMateriels.push((data.data)[i]);
 	        					$scope["demandPlanMaterielEdit"+i] = false;
 	        					$scope["demandPlanMaterielView"+i] = false;
 	        				}
 	        			}else{
 			        		for(var i = 0;i < data.data.length;i++){
 		        				$scope.rootMateriels.splice(0,0,(data.data)[i]);
+		        				//$scope.copyMateriels.splice(0,0,(data.data)[i]);
 		        				$scope["demandPlanMaterielEdit"+i] = false;
 								$scope["demandPlanMaterielView"+i] = false;
 								$scope["demandPlanMaterielEdit" + ($scope.rootMateriels.length-1)] = true;
@@ -340,6 +393,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	 								$scope["demandPlanMaterielView"+i] = true;
 	 			        	}
 	 		    		}*/
+	        			$scope.copyMateriels = angular.copy($scope.rootMateriels);
 	        			$("#basicMaterielInfo").modal("hide");
 	        		},function(data){
 	        			//调用承诺接口reject();
@@ -407,9 +461,9 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 				// Iterate over all checkboxes in the table
 				var id_count = $('#demandPlanTable input[type="checkbox"]:checked').length;
 				if(id_count==0){
-					toastr.warning("请选择您要编辑的记录");
+					toastr.warning("请选择您要修改的记录");
 				}else if(id_count>1){
-					toastr.warning("只能选择一条数据进行编辑");
+					toastr.warning("只能选择一条数据进行修改");
 				}else{
 					var serialNum = $('#demandPlanTable input[type="checkbox"]:checked').val();
 					$state.go("demandPlanAdd",{serialNum:serialNum});
@@ -434,13 +488,12 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 			 /**
 			 * 编辑模式
 			 */
-	        $scope.editDemandPlanBasic=function (comId) {
+	        $scope.editDemandPlanBasic = function (comId) {
 	        	$scope.demandPlanView = false;
 	        	$scope.demandPlanAdd = false;
 	        	$scope.demandPlanEdit = true;
 	        	
 	        };
-	        
 	        
 	        /**
 	         * 取消
@@ -470,6 +523,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	 								$scope["demandPlanMaterielView"+i] = true;
 	 			        	}
 	 		    		}
+	 	        		$scope.copyMateriels = angular.copy($scope.rootMateriels);
 	 	            },function(data){
 	 	               //调用承诺接口reject();
 	 	            });
@@ -506,10 +560,16 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 					demandPlanMateriel.materielSerial = materiel.serialNum;
 				}else{
 					demandPlanMateriel.serialNum = materiel.serialNum;
+					demandPlanMateriel.supplyMaterielSerial = materiel.supplyMaterielSerial;
+					demandPlanMateriel.materielSerial = materiel.materielSerial;
 				}
 				demandPlanMateriel.deliveryDate = materiel.deliveryDate;
 				demandPlanMateriel.deliveryAddress = materiel.deliveryAddress;
 				demandPlanMateriel.amount = materiel.amount;
+				demandPlanMateriel.materielNum = materiel.materielNum;
+				demandPlanMateriel.materielName = materiel.materielName;
+				demandPlanMateriel.specifications = materiel.specifications;
+				demandPlanMateriel.unit = materiel.unit;
 				
 				var promise = demandPlanService
 				.saveDemandPlanMateriel(demandPlanMateriel);
@@ -518,9 +578,10 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 						$(".modal-backdrop").remove();
 						toastr.success("保存成功");
 						handle.unblockUI();
-						var company = data.data;
+						//var company = data.data;
 						// $state.go('companyAdd',company,{reload:true});
-						$scope.company = company
+						$scope.rootMateriels[index] = data.data;
+						$scope.copyMateriels[index] = data.data;
 						console.log(data.data);
 						$scope["demandPlanMaterielEdit"+index] = true;
 						$scope["demandPlanMaterielView"+index] = true;
@@ -545,14 +606,46 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 			}; 
 			
 	        /**
-			 * 编辑（列表）
+			 * 撤销物料编辑
 			 */
+	        $scope.cancelDemandPlanMateriel=function (materiel,index) {
+	        	//.show_materiels = false;
+	        	for(var i=0;i<$scope.copyMateriels.length;i++){
+	        		if(materiel.serialNum == $scope.copyMateriels[i].serialNum && !isNull(materiel.supplyMaterielSerial)){ //如果是以保存的物料，回滚
+	        			$scope.rootMateriels[$scope.rootMateriels.indexOf(materiel)] = $scope.copyMateriels[i];
+	        			$scope["demandPlanMaterielEdit"+index] = true;
+						$scope["demandPlanMaterielView"+index] = true;
+						break;
+	        		}
+	        		
+	        		if(i==$scope.copyMateriels.length-1){ //如果是已选择但未保存的物料，清空
+	        			$scope.rootMateriels[$scope.rootMateriels.indexOf(materiel)].deliveryDate = "";
+	        			$scope.rootMateriels[$scope.rootMateriels.indexOf(materiel)].deliveryAddress = "";
+	        			$scope.rootMateriels[$scope.rootMateriels.indexOf(materiel)].amount = "";
+	        		}
+	        	}
+	        };  
+	        
+
+
+			function indexOf(arr, item) {
+				for (var i = 0; i < arr.length; i++) {
+						if (arr[i] === item)
+							return i;
+						else
+							return -1;
+				}
+			}
+	        
+	        /**
+	         * 编辑需求计划物料
+	         */
 	        $scope.editDemandPlanMateriel=function (materiel) {
 	        	//.show_materiels = false;
 	        	for(var i=0;i<$scope.rootMateriels.length;i++){
 	        		if(materiel.serialNum == $scope.rootMateriels[i].serialNum){
 	        			$scope["demandPlanMaterielEdit"+i] = false;
-						$scope["demandPlanMaterielView"+i] = false;
+	        			$scope["demandPlanMaterielView"+i] = false;
 	        		}
 	        	}
 	        	
@@ -642,7 +735,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	        		promise.then(function(data){
 	        			toastr.success("删除成功");
 	        			handle.unblockUI();
-	        			createTable(10,1,true);
+	        			createTable(5,1,true);
 	        			//table.ajax.reload(); // 重新加载datatables数据
 	        			/*$state.go('company',{},{reload:true}); */
 	        		},function(data){
@@ -677,7 +770,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	        $scope.search=function () {
 	        	var params ={};
 	        	params.searchKey = $scope.searchKey;
-	        	createTable(15,1,false,params);
+	        	createTable(5,1,false,params);
 	        	
 	        };  
 	        
@@ -695,10 +788,8 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	       
 	      
 	       
-	       $scope.exportCompany = function(){
-	    	 handle.blockUI("正在导出数据，请稍后"); 
-	    	 window.location.href=$rootScope.basePath+"/rest/company/exportCompany";
-	    	 handle.unblockUI(); 
+	       $scope.exportDemandPlan = function(){
+	    	 window.location.href=$rootScope.basePath+"/rest/demandPlan/exportDemandPlan";
 	       }
 	       
 	       
@@ -793,7 +884,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	        * 下载EXCEL模板
 	        */
 	       $scope.downloadImportTemp = function(){
-	    	   window.location.href=$rootScope.basePath+"/rest/company/downloadImportTemp";
+	    	   window.location.href=$rootScope.basePath+"/rest/fileOperate/downloadImportTemp?tempName=demandPlan&fileName="+encodeURI(encodeURI('需求计划导入模板'));
 	       }
 	       
 	       /**
@@ -811,18 +902,19 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	    		   return;
 	    	   }
 	    	   	handle.blockUI("正在导入中，请不要进行其他操作"); 
-	    	   	var promise = companyService.uploadExcel();
+	    	   	var promise = demandPlanService.uploadExcel();
        			promise.then(function(data){
        				handle.unblockUI(); 
        				if(data.data.data=="success"){
        					toastr.success("导入成功");
-       					table.ajax.reload();
+       					createTable(5,1,true);
        				}else{
        					toastr.error(data.data.data);
        				}
        				$('#import').modal('hide'); 
 	            },function(data){
 	               //调用承诺接口reject();
+	            	handle.unblockUI(); 
 	            	toastr.error("操作失败");
 	            	$('#import').modal('hide'); 
 	            });

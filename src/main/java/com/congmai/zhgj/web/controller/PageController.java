@@ -118,6 +118,15 @@ public class PageController {
         return "contract/userContract";
     }
     
+    /**
+     * 采购预测
+     */
+    @RequestMapping("/purchaseForecast")
+    public String purchaseForecast(){
+    	return "purchase/purchaseForecast";
+    }
+    
+    
     
     /**
      * 添加合同页面
@@ -145,11 +154,27 @@ public class PageController {
     }
     
     /**
-     * 新增物料
+     * 物料信息
      */
     @RequestMapping("/materiel")
     public String materiel() {
         return "materiel/materiel";
+    }
+    
+    /**
+     * 新增销售订单
+     */
+    @RequestMapping("/addSaleOrder")
+    public String addSaleOrder(String serialNum,String view) {
+        return "order/addSaleOrder";
+    }
+    
+    /**
+     * 销售订单
+     */
+    @RequestMapping("/saleOrder")
+    public String saleOrder() {
+        return "order/saleOrder";
     }
     
     /**

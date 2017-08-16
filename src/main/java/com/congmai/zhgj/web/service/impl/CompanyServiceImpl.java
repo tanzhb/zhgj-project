@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,9 @@ import com.congmai.zhgj.web.dao.CompanyContactMapper;
 import com.congmai.zhgj.web.dao.CompanyFinanceMapper;
 import com.congmai.zhgj.web.dao.CompanyMapper;
 import com.congmai.zhgj.web.dao.CompanyQualificationMapper;
+import com.congmai.zhgj.web.enums.ComType;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.CompanyExample;
 import com.congmai.zhgj.web.service.CompanyService;
 
 @Service
@@ -46,6 +49,11 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 		Integer count = 0;
 		if(company != null){
 			list = companyMapper.selectList(company);
+			if(CollectionUtils.isNotEmpty(list)){
+				for(Company vo:list){
+					vo.setComTypeName(ComType.getInfo(vo.getComType()));
+				}
+			}
 			count = companyMapper.countList(company);
 		}
 		Page<Company>  page = new Page<Company>();
@@ -56,8 +64,11 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 
 	@Override
 	public Company selectOne(String id) {
-		
-		return companyMapper.selectByPrimaryKey(id);
+		Company com = companyMapper.selectByPrimaryKey(id);
+		if(com !=null){
+			com.setComTypeName(ComType.getInfo(com.getComType()));
+		}
+		return com;
 	}
 
 
@@ -83,6 +94,18 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 		}
 		
 		return companyMapper.selectCompanyByComType(map);
+	}
+
+
+	@Override
+	public String selectComIdByComName(String comName) {
+		CompanyExample example = new CompanyExample();
+		example.createCriteria().andComNameEqualTo(comName);
+		List<Company> list = companyMapper.selectByExample(example);
+		if(CollectionUtils.isNotEmpty(list)){
+			return list.get(0).getComId();
+		}
+		return null;
 	}
 
 

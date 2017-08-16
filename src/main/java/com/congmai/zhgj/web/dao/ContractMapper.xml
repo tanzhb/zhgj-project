@@ -24,16 +24,21 @@
 	status
 	FROM
 	contract
-	
+	WHERE
+	delFlg='0'
+	AND 
+	creator=#{userId}
     </select>
     
     <!--删除合同  -->
-    <delete id="deleteUserContractS" parameterType="java.util.List">
-    	delete from contract where serialNum in
+    <update id="deleteUserContractS" parameterType="java.util.List">
+    	UPDATE contract 
+    	SET delFlg='1'
+    	where serialNum in
         <foreach item="idList" collection="list" open="(" close=")" separator=",">
             #{idList}
         </foreach>
-    </delete>
+    </update>
     
     <!--查询合同对象  -->
     <select id="selectContractById" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ContractVO">

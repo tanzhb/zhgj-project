@@ -12,8 +12,11 @@ import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.web.dao.DemandPlanMaterielMapper;
+import com.congmai.zhgj.web.dao.MaterielMapper;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.DemandPlanMaterielExample;
+import com.congmai.zhgj.web.model.Materiel;
+import com.congmai.zhgj.web.model.MaterielExample;
 import com.congmai.zhgj.web.service.DemandPlanMaterielService;
 
 @Service
@@ -24,6 +27,9 @@ public class DemandPlanMaterielServiceImpl extends GenericServiceImpl<DemandPlan
 	
 	@Resource
 	private DemandPlanMaterielMapper demandPlanMaterielMapper;
+	
+	@Resource
+	private MaterielMapper materielMapper;
 
 	@Override
 	public GenericDao<DemandPlanMateriel, String> getDao() {
@@ -56,12 +62,23 @@ public class DemandPlanMaterielServiceImpl extends GenericServiceImpl<DemandPlan
 				try {
 					remainTime = DateUtil.daysBetween(new Date(), vo.getDeliveryDate());
 				} catch (Exception e) {
-					System.out.println("距离交付日期出错"+e.getMessage()+e.getCause());
+					System.out.println("deliverDate-----"+e.getMessage()+e.getCause());
 				}
 				vo.setRemainTime(String.valueOf(remainTime<0?0:remainTime));
 			}
 		}
 		return list;
+	}
+
+	@Override
+	public String selectMaterielSerialByMaterielNum(String materielNum) {
+		MaterielExample example = new MaterielExample();
+		example.createCriteria().andMaterielNumEqualTo(materielNum);
+		List<Materiel> list = materielMapper.selectByExample(example);
+		if(CollectionUtils.isNotEmpty(list)){
+			return list.get(0).getSerialNum();
+		}
+		return null;
 	}
 	
 

@@ -95,17 +95,17 @@
                                                     <div class="col-md-8">
                                                          <select class="form-control" id="comType"  ng-hide="companyAdd" name="comType"  ng-model="company.comType" >
                                                             <option value=""></option>
-                                                           	<option value="采购商" >采购商</option>
-                                                             <option value="供应商" >供应商</option>
-                                                             <option value="承运人" >承运人</option>
-                                                             <option value="外协仓" >外协仓</option>
-                                                             <option value="境外供应商" >境外供应商</option>
-                                                             <option value="装卸公司" >装卸公司</option>
-                                                             <option value="银行" >银行</option>
-                                                             <option value="保险公司" >保险公司</option>
+                                                           	<option value="1" >采购商</option>
+                                                             <option value="2" >供应商</option>
+                                                             <option value="3" >承运人</option>
+                                                             <option value="4" >外协仓</option>
+                                                             <option value="5" >境外供应商</option>
+                                                             <option value="6" >装卸公司</option>
+                                                             <option value="7" >银行</option>
+                                                             <option value="8" >保险公司</option>
                                                         </select>
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="companyView">{{company.comType}}</p>
+                                                         <p class="control-label left" ng-show="companyView">{{company.comTypeName}}</p>
                                                     </div>
                                             </div>
 										</div>

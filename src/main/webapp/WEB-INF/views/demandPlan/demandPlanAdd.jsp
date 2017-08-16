@@ -135,292 +135,113 @@
 								</div>
 							</form>
          				</div>
-                      
-				
-                        <div class="portlet-title">
-                            <div class="caption">物料</div>
-                            <div class="actions">
-                                <a href="javascript:;" data-repeater-create class="btn blue btn-sm" ng-click="addMateriel()" >
-                                     <i class="fa fa-plus"></i> 增加
-                                </a>
-                            </div>
-                        </div>
-                          <div class="portlet-body form">
-			                                    <div class="table-scrollable">
-			                                        <table class="table table-bordered table-hover">
-			                                            <thead>
-			                                                <tr>
-			                                                    <th>物料编号</th>
-			                                                    <th>物料名称</th>
-			                                                    <th>规格型号</th>
-			                                                    <th>单位</th>
-			                                                    <th>数量</th>
-			                                                    <th>交付日期</th>
-			                                                    <th>距离交付</th>
-			                                                    <th>交付地点</th>
-			                                                    <th>供应商</th>
-			                                                    <th style="width: 140px;"></th>
-			                                                </tr>
-			                                            </thead>
-			                                           <tbody ng-if="rootMateriels.length==0">
-			                                             	<tr>
-			                                                    <td colspan="10" align="center" >暂无数据</td>
-			                                                </tr>
-			                                            </tbody>
-			                                            <tbody ng-repeat="materiel in rootMateriels track by $index"  repeat-done="repeatDone()">
-			                                                <tr ng-mouseover="showOperation('contact',$index)" ng-mouseleave="hideOperation('contact',$index)">
-			                                                    <td>{{materiel.materielNum}}</td>
-			                                                    <td>{{materiel.materielName}}</td>
-			                                                    <td>{{materiel.specifications}}</td>
-			                                                    <td>{{materiel.unit}}</td>
-			                                                    <td>
-			                                                    	<input type="text" ng-hide="demandPlanMaterielEdit{{$index}}" class="form-control  input-small" ng-model="materiel.amount" value="">
-			                                                   	 	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.amount}}</label>
-			                                                    </td>
-			                                                    <td>
-				                                                    <div  ng-hide="demandPlanMaterielEdit{{$index}}" class="input-group input-medium date date-picker"
-																		 data-date-format="yyyy-mm-dd"
-																		data-date-viewmode="years">
-																		<input type="text" class="form-control" readonly="" id="validityDate{{$index}}" ng-model="materiel.deliveryDate" name="validityDate"
-																			> <span class="input-group-btn">
-																			<button class="btn default " type="button">
-																				<i class="fa fa-calendar"></i>
-																			</button>
-																		</span>
-																		<span class="help-block"></span>
-																	</div>
-																	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.deliveryDate}}</label>
-			                                                    </td>
-			                                                    <td>{{materiel.remainTime}}</td>
-			                                                    <td>
-			                                                    	<input  ng-hide="demandPlanMaterielEdit{{$index}}" type="text" class="form-control" ng-model="materiel.deliveryAddress" value="">
-			                                                    	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.deliveryAddress}}</label>
-			                                                    </td>
-			                                                    <td>{{materiel.remark}}</td>
-			                                                    <td ng-show="operation_c{{$index}}" style="width: 140px;">
-			                                                    	<span>
-				                                                    	<a ng-hide="demandPlanMaterielEdit{{$index}}" ng-click="saveDemandPlanMateriel(materiel,$index)">保存</a>
-				                                                    	&nbsp;&nbsp;&nbsp;
-				                                                    	<a ng-show="demandPlanMaterielView{{$index}}"   ng-click="editDemandPlanMateriel(materiel)">变更</a>
-				                                                    	&nbsp;&nbsp;&nbsp;
-				                                                    	<a ng-click="deleteDemandPlanMateriel(materiel)">删除</a>
-			                                                    	</span>
-			                                                    </td>
-			                                                   <!--  <td ng-hide="operation_d{{$index}}"  >
-			                                                    </td> -->
-			                                                </tr>
-			                                            </tbody>
-			                                        </table>
-			                                    </div>
-                             </div>
-				
-                       
 				</div>
 				
         </div>
         <!-- END EXAMPLE TABLE PORTLET-->
     </div>
 </div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light" id="comViewPage">
+			<div class="portlet-body" id="comViewContent">
+				<ul class="nav nav-pills">
+				 	<li class="active">
+                 		 <a data-target="#tab_1_1" data-toggle="tab">物料信息</a>
+              		</li> 
+					<li>
+						 <a href="javascript:;"  class="btn blue btn-outline" style="padding: 10px 15px;" ng-click="addMateriel()" >
+                              <i class="fa fa-plus"></i>新增物料
+                         </a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane fade active in" id="tab_1_1">
+                    	<div class="" id="tab2_c">
+                    		 <div class="portlet-body form">
+                                    <div class="table-scrollable">
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>物料编号</th>
+                                                    <th>物料名称</th>
+                                                    <th>规格型号</th>
+                                                    <th>单位</th>
+                                                    <th>数量</th>
+                                                    <th>交付日期</th>
+                                                    <th>距离交付</th>
+                                                    <th>交付地点</th>
+                                                    <th>供应商</th>
+                                                    <th style="width: 140px;"></th>
+                                                </tr>
+                                            </thead>
+                                           <tbody ng-if="rootMateriels.length==0">
+                                             	<tr>
+                                                    <td colspan="10" align="center" >暂无数据</td>
+                                                </tr>
+                                            </tbody>
+                                            <tbody ng-repeat="materiel in rootMateriels track by $index"  repeat-done="repeatDone()">
+                                                <tr ng-mouseover="showOperation('contact',$index)" ng-mouseleave="hideOperation('contact',$index)">
+                                                    <td>
+                                                    	<span ng-show="demandPlanMaterielView{{$index}}">{{materiel.materielNum}}</span>
+                                                    	<span ng-hide="demandPlanMaterielEdit{{$index}}"><a href="javascript:;" ng-click="addMateriel('single',$index)">{{materiel.materielNum}}</a></span>
+                                                    </td>
+                                                    <td>{{materiel.materielName}}</td>
+                                                    <td>{{materiel.specifications}}</td>
+                                                    <td>{{materiel.unit}}</td>
+                                                    <td>
+                                                    	<input type="text" ng-hide="demandPlanMaterielEdit{{$index}}" class="form-control  input-small" ng-model="materiel.amount" value="">
+                                                   	 	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.amount}}</label>
+                                                    </td>
+                                                    <td>
+	                                                    <div  ng-hide="demandPlanMaterielEdit{{$index}}" class="input-group input-medium date date-picker"
+															 data-date-format="yyyy-mm-dd"
+															data-date-viewmode="years">
+															<input type="text" class="form-control" readonly="" id="validityDate{{$index}}" ng-model="materiel.deliveryDate" name="validityDate"
+																> <span class="input-group-btn">
+																<button class="btn default " type="button">
+																	<i class="fa fa-calendar"></i>
+																</button>
+															</span>
+															<span class="help-block"></span>
+														</div>
+														<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.deliveryDate}}</label>
+                                                    </td>
+                                                    <td>{{materiel.remainTime}}</td>
+                                                    <td>
+                                                    	<input  ng-hide="demandPlanMaterielEdit{{$index}}" type="text" class="form-control" ng-model="materiel.deliveryAddress" value="">
+                                                    	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.deliveryAddress}}</label>
+                                                    </td>
+                                                    <td>{{materiel.remark}}</td>
+                                                    <td style="width: 140px;">
+                                                    	<span>
+                                                    		&nbsp;&nbsp;&nbsp;&nbsp;
+	                                                    	<a ng-hide="demandPlanMaterielEdit{{$index}}" ng-click="saveDemandPlanMateriel(materiel,$index)">保存</a>
+	                                                    	&nbsp;&nbsp;&nbsp;
+	                                                    	<a ng-hide="demandPlanMaterielEdit{{$index}}" ng-click="cancelDemandPlanMateriel(materiel,$index)">撤销</a>
+	                                                    </span>
+	                                                    <span  ng-show="operation_c{{$index}}">
+	                                                    	<a ng-show="demandPlanMaterielView{{$index}}"   ng-click="editDemandPlanMateriel(materiel)">变更</a>
+	                                                    	&nbsp;&nbsp;&nbsp;
+	                                                    	<a ng-show="demandPlanMaterielView{{$index}}"  ng-click="deleteDemandPlanMateriel(materiel)">删除</a>
+                                                    	</span>
+                                                    	
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                          				</div>
+							<!-- END SAMPLE TABLE PORTLET-->
+						</div>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
-
-<!-- 联系人modal START -->
- <div class="modal fade  modal-overflow in" id="contactor" tabindex="-1" role="contactor" aria-hidden="true" data-backdrop="static">
-     <div class="modal-dialog" >
-         <div class="modal-content">
-             <div class="modal-header">
-                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                 <h4 class="modal-title" >新建联系人</h4>
-             </div>
-             <div class="modal-body">
-               <div class="form-body" >
-               <div class="alert alert-danger display-hide">
-                                                <button class="close" data-close="alert"></button>表单数据未填写完整</div>
-               <form id="contactForm"  class="form-horizontal">
-                 <div class="row">
-                     <div class="col-md-12">
-                         <div class="form-group form-md-line-input">
-                                 <label class="col-md-4 control-label" for="contactName"><span class="required"> * </span>姓名：</label>
-                                 <div class="col-md-6">
-                                     <input type="text" class="form-control" id="contactName" name="contactName" ng-model="companyContact.contactName"  >
-                                     <div class="form-control-focus"> </div>
-                                 </div>
-                         </div>
-                     </div>
-                 </div>
-                 <!--/row-->
-                 <div class="row">
-                     <div class="col-md-12">
-                         <div class="form-group form-md-line-input">
-                                 <label class="col-md-4 control-label" for="contactTitle"><span class="required"> * </span>职位：</label>
-                                 <div class="col-md-6">
-                                     <input type="text" class="form-control" id="contactTitle" name="contactTitle" ng-model="companyContact.contactTitle"  >
-                                     <div class="form-control-focus"> </div>
-                                 </div>
-                         </div>
-                     </div>
-                 </div>
-                 <div class="row">
-                     <div class="col-md-12">
-                         <div class="form-group form-md-line-input">
-                                 <label class="col-md-4 control-label" for="department"><span class="required"> * </span>部门/公司：</label>
-                                 <div class="col-md-6">
-                                     <input type="text" class="form-control" id="department" name="department" ng-model="companyContact.department"  >
-                                     <div class="form-control-focus"> </div>
-                                 </div>
-                         </div>
-                     </div>
-                 </div>
-                 <!--/row-->
-                 <div class="row">
-                     <div class="col-md-12">
-                         <div class="form-group form-md-line-input">
-                                 <label class="col-md-4 control-label" for="department"><span class="required"> * </span>管理职责：</label>
-                                 <div class="col-md-6">
-                                     <input type="text" class="form-control" id="responsibility" name="responsibility" ng-model="companyContact.responsibility"  >
-                                     <div class="form-control-focus"> </div>
-                                 </div>
-                         </div>
-                     </div>
-                 </div>
-                 <!--/row-->
-                 <div class="row">
-                     <div class="col-md-12">
-                         <div class="form-group form-md-line-input">
-                                 <label class="col-md-4 control-label" for="contactTel"><span class="required"> * </span>电话：</label>
-                                 <div class="col-md-6">
-                                     <input type="text" class="form-control" id="contactTel" name="contactTel" ng-model="companyContact.contactTel"  >
-                                     <div class="form-control-focus"> </div>
-                                 </div>
-                         </div>
-                     </div>
-                 </div>
-                 <!--/row-->
-                 <div class="row">
-                     <div class="col-md-12">
-                         <div class="form-group form-md-line-input">
-                                 <label class="col-md-4 control-label" for="wechat">微信：</label>
-                                 <div class="col-md-6">
-                                     <input type="text" class="form-control" id="wechat"  ng-model="companyContact.wechat"  >
-                                     <div class="form-control-focus"> </div>
-                                 </div>
-                         </div>
-                     </div>
-                 </div>
-                 <!--/row-->
-                 <div class="row">
-                     <div class="col-md-12">
-                         <div class="form-group form-md-line-input">
-                                 <label class="col-md-4 control-label" for="contactEmail">邮箱：</label>
-                                 <div class="col-md-6">
-                                     <input type="text" class="form-control" id="contactEmail" name="contactEmail" ng-model="companyContact.contactEmail"  >
-                                     <div class="form-control-focus"> </div>
-                                 </div>
-                         </div>
-                     </div>
-                 </div>
-                 <!--/row-->
-                 <div class="row">
-                     <div class="col-md-12">
-                         <div class="form-group form-md-line-input">
-                                 <label class="col-md-4 control-label" for="remark">备注：</label>
-                                 <div class="col-md-6">
-                                     <input type="text" class="form-control" id="remark" ng-model="companyContact.remark"  >
-                                     <div class="form-control-focus"> </div>
-                                 </div>
-                         </div>
-                     </div>
-                 </div>
-                 <!--/row-->
-                 
-                 </form>
-             </div>
-             </div>
-             <div class="modal-footer">
-                 <button type="button" class="btn btn-outline sbold red" data-dismiss="modal">取消</button>
-                 <button type="button" class="btn btn-outline sbold blue" ng-click="saveCompanyContact()">保存</button>
-             </div>
-             
-         </div>
-         <!-- /.modal-content -->
-     </div>
-     <!-- /.modal-dialog -->
- </div>
-<!-- 联系人modal END -->
-
-<!-- 财务信息modal START -->
- <div class="modal fade modal-overflow in" id="finance" tabindex="-1" role="finance" aria-hidden="true" data-backdrop="static">
-     <div class="modal-dialog">
-         <div class="modal-content">
-             <div class="modal-header">
-                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                 <h4 class="modal-title" >新建账号</h4>
-             </div>
-             <div class="modal-body">
-               <div class="form-body" >
-               <div class="alert alert-danger display-hide">
-                                                <button class="close" data-close="alert"></button>表单数据未填写完整</div>
-               <form id="companyFinanceForm" class="form-horizontal">
-                 <div class="row">
-                     <div class="col-md-12">
-                         <div class="form-group form-md-line-input">
-                                 <label class="col-md-4 control-label" for="openingBank"><span class="required"> * </span>银行：</label>
-                                 <div class="col-md-6">
-                                     <input type="text" class="form-control" id="openingBank" name="openingBank" ng-model="companyFinance.openingBank"  >
-                                     <div class="form-control-focus"> </div>
-                                 </div>
-                         </div>
-                     </div>
-                 </div>
-                 <!--/row-->
-                 <div class="row">
-                     <div class="col-md-12">
-                         <div class="form-group form-md-line-input">
-                                 <label class="col-md-4 control-label" for="accountName"><span class="required"> * </span>户名：</label>
-                                 <div class="col-md-6">
-                                     <input type="text" class="form-control" id="accountName" name="accountName" ng-model="companyFinance.accountName"  >
-                                     <div class="form-control-focus"> </div>
-                                 </div>
-                         </div>
-                     </div>
-                 </div>
-                 <!--/row-->
-                 <div class="row">
-                     <div class="col-md-12">
-                         <div class="form-group form-md-line-input">
-                                 <label class="col-md-4 control-label" for="accountNumber"><span class="required"> * </span>账号：</label>
-                                 <div class="col-md-6">
-                                     <input type="text" class="form-control" id="accountNumber" name="accountNumber" ng-model="companyFinance.accountNumber"  >
-                                     <div class="form-control-focus"> </div>
-                                 </div>
-                         </div>
-                     </div>
-                 </div>
-                 <div class="row">
-                     <div class="col-md-12">
-                         <div class="form-group form-md-line-input">
-                                 <label class="col-md-4 control-label" for="remark">备注：</label>
-                                 <div class="col-md-6">
-                                     <input type="text" class="form-control" id="remark" ng-model="companyFinance.remark"  >
-                                     <div class="form-control-focus"> </div>
-                                 </div>
-                         </div>
-                     </div>
-                 </div>
-                 <!--/row-->
-                 </form>
-             </div>
-             </div>
-             <div class="modal-footer">
-                 <button type="button" class="btn btn-outline sbold red" data-dismiss="modal">取消</button>
-                 <button type="button" class="btn btn-outline sbold blue" ng-click="saveCompanyFinance()">保存</button>
-             </div>
-             
-         </div>
-         <!-- /.modal-content -->
-     </div>
-     <!-- /.modal-dialog -->
- </div>
-<!-- 财务信息modal END -->
 <jsp:include page="selectMateriel.jsp"></jsp:include>
 
 <!-- END MAIN CONTENT -->
