@@ -44,7 +44,9 @@ LadderPriceService {
 	}
 
 	@Override
-	public List<LadderPrice> selectListByPriceSerial(LadderPrice record) {
+	public List<LadderPrice> selectListByPriceSerial(String PriceSerial) {
+		LadderPrice record=new LadderPrice();
+		record.setPriceSerial(PriceSerial);
 		return ladderPriceMapper.selectByPriceSerial(record);
 	}
 

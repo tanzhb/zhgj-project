@@ -202,6 +202,76 @@ public class PriceListExample {
             return (Criteria) this;
         }
 
+        public Criteria andPriceIdIsNull() {
+            addCriterion("priceId is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceIdIsNotNull() {
+            addCriterion("priceId is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceIdEqualTo(String value) {
+            addCriterion("priceId =", value, "priceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceIdNotEqualTo(String value) {
+            addCriterion("priceId <>", value, "priceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceIdGreaterThan(String value) {
+            addCriterion("priceId >", value, "priceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceIdGreaterThanOrEqualTo(String value) {
+            addCriterion("priceId >=", value, "priceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceIdLessThan(String value) {
+            addCriterion("priceId <", value, "priceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceIdLessThanOrEqualTo(String value) {
+            addCriterion("priceId <=", value, "priceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceIdLike(String value) {
+            addCriterion("priceId like", value, "priceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceIdNotLike(String value) {
+            addCriterion("priceId not like", value, "priceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceIdIn(List<String> values) {
+            addCriterion("priceId in", values, "priceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceIdNotIn(List<String> values) {
+            addCriterion("priceId not in", values, "priceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceIdBetween(String value1, String value2) {
+            addCriterion("priceId between", value1, value2, "priceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPriceIdNotBetween(String value1, String value2) {
+            addCriterion("priceId not between", value1, value2, "priceId");
+            return (Criteria) this;
+        }
+
         public Criteria andPriceNumIsNull() {
             addCriterion("priceNum is null");
             return (Criteria) this;

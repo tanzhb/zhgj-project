@@ -207,7 +207,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								<span class="required">*</span>
 							</label>
 							<div class="col-md-9">
-									<input type="file" id="signContract" ng-model="files" name="file"
+									<input type="file" id="signContract" ng-model="file" name="file"
 									class="form-control" /> 
 								<div class="form-control-focus"></div>
 								<span class="help-block">签字合同</span>

@@ -593,4 +593,12 @@
             #{idList}
         </foreach>
     </delete>
+    <select id="selectByPriceType" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select
+      distinct
+    buyComId
+    from priceList
+    where priceType=#{priceType} and priceId=#{priceId}
+  
+  </select>
 </mapper>

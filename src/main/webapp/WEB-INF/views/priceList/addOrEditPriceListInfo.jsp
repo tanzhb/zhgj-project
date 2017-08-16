@@ -49,15 +49,15 @@
                                             <i class="fa fa-edit"></i> 编辑 </button>
                                 <button   ng-hide="priceListEdit"   class="btn red  btn-outline  btn-sm " ng-click="cancelEditPriceList()">
                                             <i class="fa fa-undo"></i> 取消 </button>
-                                <button  ng-show="priceListAdd"   type="submit"   class="btn blue  btn-outline  btn-sm " ng-click="savePriceList()">
+                                <button  ng-show="priceListAdd"   type="submit"   class="btn blue  btn-outline  btn-sm "   ng-click="savePriceList()">
                                             <i class="fa fa-save"></i> 保存 </button>
                             </div>
                         </div>
                         <div class="portlet-body form">
-                            <form  id="priceListForm" class="form-horizontal" >
+                            <form  id="priceListForm" class="form-horizontal"   >
 								<div class="form-body">
 									<div class="alert alert-danger display-hide">
-                                                <button id="priceListTips" class="close" data-close="alert"></button>请先输入正确数据！</div>
+                                               <button class="close" data-close="alert"></button>请先输入正确数据！</div>
 								           <div class="row">
                                                              <div class="col-md-6">
 											<div class="form-group form-md-line-input">
@@ -72,7 +72,7 @@
 										</div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group form-md-line-input">
-                                                                <label class="col-md-4 control-label" for="priceListName"><!--  <span class="required"> * </span> -->描述 :</label>
+                                                                <label class="col-md-4 control-label" for="priceDescribe"><!--  <span class="required"> * </span> -->描述 :</label>
                                                                     <div class="col-md-8">
                                                                        <input type="text" class="form-control" placeholder=""  id="priceDescribe" name ="priceDescribe"  ng-show="priceListAdd" 
 												ng-model="priceList.priceDescribe" > 
@@ -164,8 +164,8 @@
                                                              <div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="admin"> <span class="required"> * </span>采购商 :</label>
                                                      <div class="col-md-8">
-                                                     <select class="bs-select form-control" data-live-search="true" data-size=""   id="buyComId" name ="buyComId"  ng-show="priceListAdd"   ng-model="priceList.buyComId">
-                                                        <option value="AF">Afghanistan</option>
+                                                     <select class="bs-select form-control" data-live-search="true" data-size=""   id="buyComId"  name ="buyComId"  ng-show="priceListAdd"   ng-model="priceList.buyComId">
+                                                     <option  ng-repeat="op in buyCom " value="{{op.comId}}"  > {{op.comName}}</option>
                                                     </select>
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="priceListView">{{priceList.buyComName}}</p>  
@@ -178,7 +178,7 @@
                                                     <label class="col-md-4 control-label" for="admin"> <span class="required"> * </span>供应商 :</label>
                                                     <div class="col-md-8">
                                                      <select class="bs-select form-control" data-live-search="true" data-size=""   id="supplyComId" name ="supplyComId"  ng-show="priceListAdd"   ng-model="priceList.supplyComId">
-                                                        <option value="AF">Afghanistan</option>
+                                                        <option  ng-repeat="op in supplyCom " value="{{op.comId}}"  > {{op.comName}}</option>
                                                     </select>
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="priceListView">{{priceList.supplyComName}}</p>  
@@ -271,7 +271,7 @@
                                                     <label class="col-md-4 control-label" for="isLadderPrice"> <!-- <span class="required"> * </span> -->是否阶梯单价 :</label>
                                                     <div class="col-md-8">
                                                                          <div class="icheck-inline"  ng-show="priceListAdd" >
-                                                                                <label  ><input type="checkbox"     id="isLadderPriceCheck"    name ="isLadderPrice"  class="icheck"    >是 </label>
+                                                                                <label  ><input type="checkbox"     id="isLadderPriceCheck"    name ="isLadderPrice"  class="icheck"    checked="isChecked">是 </label>
                                                                         </div>
                                                                          <!-- <div class="icheck-inline"  ng-show="isChecked" >
                                                                                 <label  ><input type="checkbox"     id="isLadderPriceCheck"    name ="isLadderPrice"  class="icheck"    checked="isChecked">是 </label>
@@ -279,6 +279,7 @@
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="priceListView"   ng-if="priceList.isLadderPrice=='1'">是</p>
                                                                          <p class="control-label left" ng-show="priceListView"   ng-if="priceList.isLadderPrice=='0'">否</p>
+                                                                         <input type="hidden"   value="{{priceList.isLadderPrice}}"  id="hideIsLadderPrice"/>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -297,88 +298,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                               <!--                          <div class="row"  ng-show="isChecked">
-                                                         <div class="portlet-title">
-                            <div class="actions"  style="float: right;">
-                             
-                                <button   class="btn blue btn-outline  btn-sm "         ng-show="ladderpriceView"       ng-click="editLadderPrice()">
-                                            <i class="fa fa-edit"></i> 编辑 </button>
-                                <button   class="btn red  btn-outline  btn-sm "       ng-show="ladderpriceEdit"            ng-click="cancelEditLadderPrice()">
-                                            <i class="fa fa-undo"></i> 取消 </button>
-                                <button   class="btn blue btn-outline  btn-sm "       ng-hide="ladderpriceAdd"     ng-click="saveLadderPrice()">
-                                            <i class="fa fa-save"></i> 保存 </button>
-                            </div>
-                        </div></br></br>
-                                                               <div class="portlet-body form">
-                            <form  id="ladderpriceForm" class="page-repeater form-horizontal">
-								<div class="form-body" data-repeater-list="group-a"  >
-									<div  class="row" data-repeater-item  ng-repeat="ladderprice in ladderprices  track by $index" repeat-done="repeatDone()"  > 
-										<div class="col-md-3">
-											<div class="form-group">
-											<div class="col-md-5"> {{$index+1}}  :数量范围</div>
-												<div class="col-md-7 input-icon right">
-													<input  ng-hide="ladderpriceAdd" type="text" ng-model="ladderprice.countStart" name="countStart"
-														class="form-control" placeholder="起始数量"><span
-														class="help-block"></span>
-														<label   ng-show="ladderpriceListView"  class="c_edit" >{{ladderprice.countStart}}</label>
-												</div>
-											</div>
-										</div>
-						
-										/span
-										<div class="col-md-2">
-											<div class="form-group">
-												<div class="col-md-12">
-													<input  ng-hide="ladderpriceAdd" type="text" ng-model="ladderprice.countEnd" name="countEnd"
-														class="form-control" placeholder="截止数量"> <span
-														class="help-block"></span>
-														<label   ng-show="ladderpriceView"  class="c_edit" >{{ladderprice.countEnd}}</label>
-												</div>
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="form-group">
-											<div class="col-md-4"> 价格 :</div>
-												<div class="col-md-8 input-icon right">
-													<input  ng-hide="ladderpriceAdd" type="text" ng-model="ladderprice.price" name="price"
-														class="form-control" placeholder="价格"><span
-														class="help-block"></span>
-														<label   ng-show="ladderpriceView"  class="c_edit" >{{ladderprice.price}}</label>
-												</div>
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="form-group">
-											<div class="col-md-5"> 含税价格 :</div>
-												<div class="col-md-7 input-icon right">
-													<input  ng-hide="ladderpriceAdd" type="text" ng-model="ladderprice.inclusivePrice" name="inclusivePrice"
-														class="form-control" placeholder="含税价格"><span
-														class="help-block"></span>
-														<label   ng-show="ladderpriceView"  class="c_edit" >{{ladderprice.inclusivePrice}}</label>
-												</div>
-											</div>
-										</div>
-										<div class="col-md-1">
-											<div class="form-group">
-												<div class="col-md-12">
-													 <a href="javascript:;"  class="btn red btn-sm" ng-hide="ladderpriceAdd" ng-click="deleteRepeat()">
-                                            			<i class="fa fa-close"></i> 
-                                     				</a>
-												</div>
-											</div>
-										</div>
-										/span 
-									</div>
-									/row
-								</div>
-								<div class="form-actions right" ng-hide="ladderpriceAdd">
-									<a href="javascript:;" data-repeater-create class="btn blue btn-sm" ng-click="addRepeat()" >
-                                            <i class="fa fa-plus"></i> 增加
-                                     </a>
-                                </div>
-							</form>
-         				</div>
-                                                        </div> -->
                                              <div>          
 			                         <div class="row"  ng-show="isChecked">
                                                          <div class="portlet-title">
@@ -393,49 +312,50 @@
                             </div>
                         </div></br></br>
                                                                 <div class="portlet-body form">
-                            <form  id="ladderpriceForm" class="page-repeater form-horizontal">
+                           <!--  <form  id="ladderpriceForm" class="page-repeater form-horizontal"> -->
 								<div class="form-body" data-repeater-list="group-a"  >
 									<div  class="row" data-repeater-item  ng-repeat="ladderprice in ladderprices  track by $index" repeat-done="repeatDone()"  > 
 										<div class="col-md-3">
 											<div class="form-group">
+											<div class="col-md-2"> </div>
 											<div class="col-md-5"> {{$index+1}}  :数量范围</div>
-												<div class="col-md-7 input-icon right">
-													<input  ng-hide="ladderpriceAdd" type="text" ng-model="ladderprice.countStart" name="countStart"   id="countStart"
-														class="form-control" placeholder="起始数量"><span
-														class="help-block"></span>
-														<label   ng-show="ladderpriceListView"  class="c_edit" >{{ladderprice.countStart}}</label>
+												<div class="col-md-5 input-icon right">
+													<input  ng-hide="ladderpriceAdd" type="text" ng-model="ladderprice.countStart" name="countStart"   id="countStart"  onblur="judge()"
+														class="form-control" placeholder="起始数量">	
+														<div class="form-control-focus"> </div>
+														<label   ng-show="ladderpriceView"  class="c_edit" >{{ladderprice.countStart}}</label>
 												</div>
 											</div>
 										</div>
 						
 										<div class="col-md-2">
 											<div class="form-group">
-												<div class="col-md-12">
+												<div class="col-md-7">
 													<input  ng-hide="ladderpriceAdd" type="text" ng-model="ladderprice.countEnd" name="countEnd"  id="countEnd"
-														class="form-control" placeholder="截止数量"> <span
-														class="help-block"></span>
+														class="form-control" placeholder="截止数量"> 
+														<div class="form-control-focus"> </div>
 														<label   ng-show="ladderpriceView"  class="c_edit" >{{ladderprice.countEnd}}</label>
 												</div>
 											</div>
 										</div>
-										<div class="col-md-3">
+										<div class="col-md-2">
 											<div class="form-group">
-											<div class="col-md-4"> 价格 :</div>
-												<div class="col-md-8 input-icon right">
+											<div class="col-md-3"> 价格 :</div>
+												<div class="col-md-6 input-icon right">
 													<input  ng-hide="ladderpriceAdd" type="text" ng-model="ladderprice.price" name="price"   id="price"
-														class="form-control" placeholder="价格"><span
-														class="help-block"></span>
+														class="form-control" placeholder="价格">
+														<div class="form-control-focus"> </div>
 														<label   ng-show="ladderpriceView"  class="c_edit" >{{ladderprice.price}}</label>
 												</div>
 											</div>
 										</div>
-										<div class="col-md-3">
+										<div class="col-md-2">
 											<div class="form-group">
 											<div class="col-md-5"> 含税价格 :</div>
 												<div class="col-md-7 input-icon right">
 													<input  ng-hide="ladderpriceAdd" type="text" ng-model="ladderprice.inclusivePrice" name="inclusivePrice"   id="inclusivePrice"
-														class="form-control" placeholder="含税价格"><span
-														class="help-block"></span>
+														class="form-control" placeholder="含税价格">
+														<div class="form-control-focus"> </div>
 														<label   ng-show="ladderpriceView"  class="c_edit" >{{ladderprice.inclusivePrice}}</label>
 												</div>
 											</div>
@@ -458,7 +378,7 @@
                                             <i class="fa fa-plus"></i> 增加
                                      </a>
                                 </div>
-							</form>
+							<!-- </form> -->
          				</div>
                                                         </div> 
                                                         </div> 
@@ -467,7 +387,7 @@
                                                              <div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="priceEffectiveDate"> <span class="required"> * </span>价格生效期 :</label>
                                                     <div class="col-md-8">
-                                                                        <input class="form-control form-control-inline date-picker"  ng-show="priceListAdd"   data-date-format="yyyy-mm-dd"    data-date-viewmode="years"  id="priceEffectiveDate"  name="priceEffectiveDate"    ng-model="priceList.priceEffectiveDate" size="16" type="text" />
+                                                                        <input class="form-control form-control-inline date-picker"  ng-show="priceListAdd"      data-date-format="yyyy-mm-dd"    data-date-viewmode="years"  id="priceEffectiveDate"  name="priceEffectiveDate"    ng-model="priceList.priceEffectiveDate" size="16" type="text" />
                                                      <div class="form-control-focus"> </div>
                                       <!-- <span class="help-block">请选择价格生效期</span>  -->
                                                                         <p class="control-label left" ng-show="priceListView">{{priceList.priceEffectiveDate}}</p>
@@ -478,7 +398,7 @@
                                                            <div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="priceExpirationDate"> <span class="required"> * </span>价格失效期 :</label>
                                                     <div class="col-md-8">
-                                                     <input class="form-control form-control-inline  date-picker"   ng-show="priceListAdd"  data-date-format="yyyy-mm-dd"    data-date-viewmode="years"  id="priceExpirationDate"  name="priceExpirationDate"   ng-model="priceList.priceExpirationDate"  size="16" type="text" />
+                                                     <input class="form-control form-control-inline  date-picker"   ng-show="priceListAdd"     data-date-format="yyyy-mm-dd"    data-date-viewmode="years"  id="priceExpirationDate"  name="priceExpirationDate"   ng-model="priceList.priceExpirationDate"  size="16" type="text" />
                                                      <div class="form-control-focus"> </div>
                                       <!-- <span class="help-block">请选择价格失效期</span> -->
                                       <p class="control-label left" ng-show="priceListView">{{priceList.priceExpirationDate}}</p>
@@ -498,119 +418,38 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                           <div class="col-md-6">
-                                                           <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="file"> <!-- <span class="required"> * </span> -->附件 :</label>
-                                                    <div class="col-md-8">
-                                                        <div class="form-group">
-                                                <div class="col-md-1">
-                                                    <div class="fileinput fileinput-new" data-provides="fileinput">
-                                                        <div class="input-group input-small">
-                                                            <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
-                                                                <i class="fa fa-file fileinput-exists"></i>&nbsp;
-                                                                <span class="fileinput-filename" > </span>
-                                                            </div>
-                                                            <span class="input-group-addon btn default btn-file">
-                                                                <span class="fileinput-new" > 上传文件 </span>
-                                                                <span class="fileinput-exists" > 修改 </span>
-                                                                <input type="file" name="..."> </span>
-                                                            <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput" > 删除 </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.file}}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                                           <!-- <div class="col-md-6"> -->
+                                                           <div class="form-group form-md-line-input col-md-6">
+							<label class="col-md-3 control-label" for="file">附件
+							</label>
+							<div class="col-md-9">
+							<div class="col-md-12">
+				                                         <div ng-show="priceListAdd"   ng-if="priceList.file==null||priceList.file==''"  class="fileinput fileinput-new" data-provides="fileinput">
+	                                                        <span class="btn blue btn-outline btn-file">
+	                                                            <span class="fileinput-new">上传附件</span>
+	                                                            <span class="fileinput-exists">更改</span>
+	                                                            <input type="file" name="..." nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="priceList" ng-click="uploadFile(priceList)" > </span>
+	                                                        <span class="fileinput-filename">{{priceList.file.substring(priceList.file.indexOf("_")+1)}}</span> &nbsp;
+	                                                        <a href="javascript:;" class="close fileinput-exists" ng-click="removefile(priceList)" data-dismiss="fileinput"> </a>
+	                                                    </div>
+				                                         <div ng-show="priceListAdd"   ng-if="priceList.file!=null&&priceList.file!=''"  class="fileinput fileinput-exists" data-provides="fileinput">
+	                                                        <span class="btn blue btn-outline btn-file">
+	                                                            <span class="fileinput-new">上传附件</span>
+	                                                            <span class="fileinput-exists">更改</span>
+	                                                            <input type="file" name="..." nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="companyQualification" ng-click="uploadFile(companyQualification)" > </span>
+	                                                        <span class="fileinput-filename">{{priceList.file.substring(priceList.file.indexOf("_")+1)}}</span> &nbsp;
+	                                                        <a href="javascript:;" class="close fileinput-exists"  ng-click="removefile(priceList)" data-dismiss="fileinput"> </a>
+	                                                    </div>
+                                                    	<label   ng-show="priceListView" ng-if="priceList.file==null||priceList.file==''" class="c_edit" >未上传附件</label>
+                                                    	<label   ng-show="priceListView" ng-if="priceList.file!=null&&priceList.file!=''" class="c_edit" ><a href="javascript:;" title="下载附件" ng-click="downloadFile(priceList)">{{priceList.file.substring(priceList.file.indexOf("_")+1)}}</a></label>
+												</div>
+							</div>
+						</div>
                                                         </div>
 								</div>
 							</form>
          				</div>
 
-			                       <!--   <div class="row"  ng-show="isChecked">
-                                                         <div class="portlet-title">
-                            <div class="actions"  style="float: right;">
-                             
-                                <button   class="btn blue btn-outline  btn-sm "         ng-show="ladderpriceView"       ng-click="editLadderPrice()">
-                                            <i class="fa fa-edit"></i> 编辑 </button>
-                                <button   class="btn red  btn-outline  btn-sm "       ng-show="ladderpriceEdit"            ng-click="cancelEditLadderPrice()">
-                                            <i class="fa fa-undo"></i> 取消 </button>
-                                <button   class="btn blue btn-outline  btn-sm "       ng-hide="ladderpriceAdd"     ng-click="saveLadderPrice()">
-                                            <i class="fa fa-save"></i> 保存 </button>
-                            </div>
-                        </div></br></br>
-                                                               <div class="portlet-body form">
-                            <form  id="ladderpriceForm" class="page-repeater form-horizontal">
-								<div class="form-body" data-repeater-list="group-a"  >
-									<div  class="row" data-repeater-item  ng-repeat="ladderprice in ladderprices  track by $index" repeat-done="repeatDone()"  > 
-										<div class="col-md-3">
-											<div class="form-group">
-											<div class="col-md-5"> {{$index+1}}  :数量范围</div>
-												<div class="col-md-7 input-icon right">
-													<input  ng-hide="ladderpriceAdd" type="text" ng-model="ladderprice.countStart" name="countStart"   id="countStart"
-														class="form-control" placeholder="起始数量"><span
-														class="help-block"></span>
-														<label   ng-show="ladderpriceListView"  class="c_edit" >{{ladderprice.countStart}}</label>
-												</div>
-											</div>
-										</div>
-						
-										<div class="col-md-2">
-											<div class="form-group">
-												<div class="col-md-12">
-													<input  ng-hide="ladderpriceAdd" type="text" ng-model="ladderprice.countEnd" name="countEnd"  id="countEnd"
-														class="form-control" placeholder="截止数量"> <span
-														class="help-block"></span>
-														<label   ng-show="ladderpriceView"  class="c_edit" >{{ladderprice.countEnd}}</label>
-												</div>
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="form-group">
-											<div class="col-md-4"> 价格 :</div>
-												<div class="col-md-8 input-icon right">
-													<input  ng-hide="ladderpriceAdd" type="text" ng-model="ladderprice.price" name="price"   id="price"
-														class="form-control" placeholder="价格"><span
-														class="help-block"></span>
-														<label   ng-show="ladderpriceView"  class="c_edit" >{{ladderprice.price}}</label>
-												</div>
-											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="form-group">
-											<div class="col-md-5"> 含税价格 :</div>
-												<div class="col-md-7 input-icon right">
-													<input  ng-hide="ladderpriceAdd" type="text" ng-model="ladderprice.inclusivePrice" name="inclusivePrice"   id="inclusivePrice"
-														class="form-control" placeholder="含税价格"><span
-														class="help-block"></span>
-														<label   ng-show="ladderpriceView"  class="c_edit" >{{ladderprice.inclusivePrice}}</label>
-												</div>
-											</div>
-										</div>
-										<div class="col-md-1">
-											<div class="form-group">
-												<div class="col-md-12">
-													 <a href="javascript:;"  class="btn red btn-sm" ng-hide="ladderpriceAdd" ng-click="deleteRepeat()">
-                                            			<i class="fa fa-close"></i> 
-                                     				</a>
-												</div>
-											</div>
-										</div>
-										 
-									</div>
-									
-								</div>
-								<div class="form-actions right" ng-hide="ladderpriceAdd">
-									<a href="javascript:;" data-repeater-create class="btn blue btn-sm" ng-click="addRepeat()" >
-                                            <i class="fa fa-plus"></i> 增加
-                                     </a>
-                                </div>
-							</form>
-         				</div>
-                                                        </div>
-                        -->
 
 				
                     
@@ -626,6 +465,5 @@
 <!-- END MAIN CONTENT -->
 <!-- BEGIN MAIN JS -->
  <script>
-
 </script> 
 <!-- END MAIN JS -->

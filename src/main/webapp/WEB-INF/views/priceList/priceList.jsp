@@ -405,13 +405,13 @@
                                            </div>
                                       <!--      /span -->
                                            <div class="col-md-6">
-                                               <div class="form-group"  ng-if="isBuy">
+                                               <div class="form-group"  ng-if="priceList.priceType=='销售价格'">
                                                    <label class="control-label col-md-5">采购商：</label>
                                                    <div class="col-md-7">
                                                        <p class="form-control-static">{{priceList.buyComName}}</p>
                                                    </div>
                                                </div>
-                                               <div class="form-group" ng-if="isSupply">
+                                               <div class="form-group" ng-if="priceList.priceType=='采购价格'">
                                                    <label class="control-label col-md-5">供应商：</label>
                                                    <div class="col-md-7">
                                                        <p class="form-control-static">{{priceList.supplyComName}}</p>
@@ -447,7 +447,7 @@
                                                <div class="form-group">
                                                    <label class="control-label col-md-5">单价：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{priceList.price}}</p>
+                                                       <p class="form-control-static">{{priceList.unitPrice}}</p>
                                                    </div>
                                                </div>
                                            </div>

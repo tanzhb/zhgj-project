@@ -177,7 +177,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                              'assets/global/plugins/datatables/datatables.min.css', 
                              'assets/global/plugins/datatables/datatables.min.js',
   	                        'assets/apps/service/PriceListService.js',
-  	                        'assets/apps/controllers/PriceListController.js'
+  	                        'assets/apps/controllers/PriceListController.js',
+  	                      'assets/apps/scripts/angular-file-upload-shim.min.js',
+					        'assets/apps/scripts/angular-file-upload.min.js'
                         ]
                     });
                 }]
@@ -206,22 +208,25 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
     				        'assets/pages/scripts/form-repeater.js',
     				        'assets/apps/controllers/PriceListController.js',
     				        'assets/apps/service/PriceListService.js',
-    				        'assets/global/plugins/bootbox/bootbox.min.js',
+    				       /* 'assets/global/plugins/bootbox/bootbox.min.js',
     				        'assets/pages/scripts/ui-bootbox.min.js',
     				        'assets/global/plugins/jquery.blockui.min.js',
-    				        'assets/pages/scripts/ui-blockui.min.js',
+    				        'assets/pages/scripts/ui-blockui.min.js',*/
     				        'assets/apps/scripts/pageHandle.js',
-    				        'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css',
-    				        'assets/global/plugins/bootstrap/css/bootstrap.min.css',
-    				        'assets/global/css/components.min.css',
+    				       /* 'assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css',
+    				        'assets/global/plugins/bootstrap/css/bootstrap.min.css',*/
+    				       /* 'assets/global/css/components.min.css',
     				        'assets/global/css/plugins.min.css',
     				        'assets/global/plugins/font-awesome/css/font-awesome.min.css',
     				        'assets/global/plugins/simple-line-icons/simple-line-icons.min.css',
     				        'assets/layouts/layout2/css/layout.min.css',
     				        'assets/layouts/layout2/css/custom.min.css',
-    				        'assets/layouts/layout2/css/themes/blue.min.css',
+    				        'assets/layouts/layout2/css/themes/blue.min.css',*/
     				        'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
-    				        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js'
+    				        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+    				        'assets/apps/scripts/angular-file-upload-shim.min.js',
+    				        'assets/apps/scripts/angular-file-upload.min.js',
+    				        'assets/apps/scripts/FileUploader.js'
     				        /*'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
     				    	'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css'*/
     				        /*'assets/global/plugins/bootstrap-select/css/bootstrap-select.css',
