@@ -79,6 +79,15 @@ License: You must have a valid license purchased only from themeforest(the above
 	type="text/css" />
 <link href="assets/global/plugins/icheck/skins/all.css" rel="stylesheet"
 	type="text/css" />
+<link href="assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css" rel="stylesheet"
+	type="text/css" />
+<link href="assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet"
+	type="text/css" />
+<link href="assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet"
+	type="text/css" />
+<link href="assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet"
+	type="text/css" />
+<link href="assets/global/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" type="text/css" />
 <!-- <link href="assets/global/plugins/datatables/datatables.min.css" rel="stylesheet"
 	type="text/css" />
 <link href="assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet"
@@ -228,6 +237,10 @@ License: You must have a valid license purchased only from themeforest(the above
 	<script src="assets/global/plugins/icheck/icheck.min.js" type="text/javascript"></script>
 	<script src="assets/pages/scripts/form-icheck.min.js" type="text/javascript"></script>
 	<script src="assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+	<script src="assets/global/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js" type="text/javascript"></script>
+	<script src="assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
+	<script src="assets/global/plugins/bootstrap-select/js/i18n/defaults-zh_CN.js" type="text/javascript"></script>
+
 <!-- 	<script src="assets/global/plugins/datatables/datatables.all.min.js" type="text/javascript"></script>
     <script src="assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script> -->
 	<!-- END  PAGE SCRIPTS -->

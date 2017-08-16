@@ -629,8 +629,8 @@
                                       <th style="width:100px;"></th>
                                   </tr>
                               </thead>
-                              <tbody ng-repeat="_file in file track by $index">
-                                  <tr ng-mouseover="showOperation('file',$index)" ng-mouseleave="hideOperation('file',$index)">
+                              <tbody>
+                                  <tr ng-repeat="_file in file track by $index" ng-mouseover="showOperation('file',$index)" ng-mouseleave="hideOperation('file',$index)">
 			                          <td>
 		                                 	<select class="form-control" id="fileType[$index]" name="fileType" class="form-control" ng-hide="fileInfoInput" ng-model="file[$index].fileType"  >
                                               <option value=""></option>
@@ -717,8 +717,8 @@
                                       <th style="width:100px;"></th>
                                   </tr>
                               </thead>
-                              <tbody ng-repeat="_BOM in BOM track by $index">
-                                  <tr ng-mouseover="showOperation('BOM',$index)" ng-mouseleave="hideOperation('BOM',$index)">
+                              <tbody>
+                                  <tr ng-repeat="_BOM in BOM track by $index" ng-mouseover="showOperation('BOM',$index)" ng-mouseleave="hideOperation('BOM',$index)">
                                       <td>
                                       		<input type="text" id="BOMMaterielNum[$index]" name="BOMMaterielNum" readonly data-target="#basicMaterielInfo" data-toggle="modal" ng-click="selectMateriel($index)" class="form-control" ng-hide="BOMInfoInput" ng-model="BOM[$index].materiel.materielNum"  >
 			                                <!-- <div class="form-control-focus"> </div>
@@ -754,7 +754,68 @@
                   </form>
           </div>
           <!-- BOM end-->
-          
+           <!-- 供应商 start-->
+          <div class="portlet-title">
+               <div class="caption">供应商</div>
+               <div class="tools">
+               	 	<button type="submit" ng-click="saveSupplyMateriel()" ng-hide="supplyMaterielInfoInput" class="btn blue  btn-outline  btn-sm">
+                  		<i class="fa fa-save"></i> 保存 </button>
+                  <button ng-click="cancelSupplyMateriel()" type="button" ng-hide="supplyMaterielInfoInput" class="btn red  btn-outline  btn-sm">
+                  		<i class="fa fa-undo"></i> 取消 </button>
+                  <button ng-click="editSupplyMateriel()" type="button" ng-show="supplyMaterielInfoShow" class="btn blue  btn-outline  btn-sm">
+                  		<i class="fa fa-edit"></i> 编辑 </button>
+                </div>
+            </div>
+           <div class="portlet-body form">
+			     <form id="form_sample_5"   class="form-horizontal">
+			         <div class="table-scrollable">
+                          <table class="table table-bordered table-hover">
+                              <thead>
+                                  <tr>
+                                      <th>供应商</th>
+                                      <th>供应商名称</th>
+                                      <th>供应商物料编号</th>
+                                      <th style="width:100px;"></th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <tr ng-repeat="_supplyMateriel in supplyMateriel track by $index" ng-mouseover="showOperation('supplyMateriel',$index)" ng-mouseleave="hideOperation('supplyMateriel',$index)"  repeat-done="repeatDone()">
+			                          <td>
+		                                 	<div ng-hide="supplyMaterielInfoInput">
+			                                 	<select class="form-control" id="supplyComId[$index]" name="supplyComId" class="bs-select form-control diySelectCss" data-live-search="true" data-size="8"  ng-model="supplyMateriel[$index].supplyComId"  >
+	                                              <option value=""></option>
+	                                             	<option value="1" >供应商1</option>
+	                                               <option value="2" >供应商2</option>
+	                                               <option value="3" >供应商3</option>
+	                                             </select>
+                                             </div>
+			                                <p class="form-control-static" ng-show="supplyMaterielInfoShow"> {{_supplyMateriel.supplyComId}} </p>
+			                          </td>
+			                          <td>
+		                                 	<p class="form-control-static" ng-show="supplyMaterielInfoShow"> {{_supplyMateriel.supply.comName}} </p>
+			                          </td>
+			                           <td>
+                                      		<input type="text" id="supplyMaterielNum[$index]" name="supplyMaterielNum" class="form-control" ng-hide="supplyMaterielInfoInput" ng-model="supplyMateriel[$index].supplyMaterielNum"  >
+			                                <p class="form-control-static" ng-show="supplyMaterielInfoShow"> {{_supplyMateriel.supplyMaterielNum}} </p>
+			                          </td>
+                                      
+                                      <td ng-show="operation_s{{$index}}">
+                                      	<a href="javascript:;"  class="btn red btn-sm" ng-hide="supplyMaterielInfoInput" ng-click="deleteSupplyMateriel($index)">
+                                    			<i class="fa fa-close"></i> 
+                             				</a>
+                                      </td>
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+                      <div class="form-actions right">
+							<a  class="btn blue btn-sm"  ng-click="addSupplyMateriel()"   >
+	                              <i class="fa fa-plus"></i> 增加
+	                       	</a> 
+                  		</div>
+                  </form>
+          </div>
+          <!-- 附件 end-->
           </div>
       </div>
 </div>

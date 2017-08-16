@@ -107,6 +107,7 @@ public class DemandPlan {
         this.updater = updater == null ? null : updater.trim();
     }
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     public Date getUpdateTime() {
         return updateTime;
     }
