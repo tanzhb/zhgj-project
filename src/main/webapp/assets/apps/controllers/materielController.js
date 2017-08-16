@@ -87,9 +87,8 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
        		     function(data){
        		    	toastr.success('数据保存成功！');
        		    	$location.search({serialNum:data.serialNum,view:1});
-       		    	/*$scope.materiel=data;
        		    	$scope.materielInput = true;
-       		    	$scope.materielShow = true;*/
+    		    	$scope.materielShow = true;
        		     },
        		     function(error){
        		         $scope.error = error;
