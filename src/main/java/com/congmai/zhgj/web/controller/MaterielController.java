@@ -315,15 +315,11 @@ public class MaterielController {
         	//查询下级物料
         	findChildList(parent,materielList);
     	}
-    	
-    	if (materielList==null||materielList.isEmpty()) {
-			return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);
-		}
     	//封装datatables数据返回到前台
 		Map pageMap = new HashMap();
 		pageMap.put("draw", 1);
-		pageMap.put("recordsTotal", materielList.size());
-		pageMap.put("recordsFiltered", materielList.size());
+		pageMap.put("recordsTotal", materielList==null?0:materielList.size());
+		pageMap.put("recordsFiltered", materielList==null?0:materielList.size());
 		pageMap.put("data", materielList);
 		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 

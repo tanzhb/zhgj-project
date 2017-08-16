@@ -55,13 +55,18 @@
         <li class="nav-item">
             <a href="javascript:;" class="nav-link nav-toggle" >
              <i class="icon-settings"></i>
-                <span class="title">销售订单</span>
+                <span class="title">销售管理</span>
                 <span class="arrow "></span>
             </a>
             <ul class="sub-menu">
                 <li>
                     <a ui-sref="demandPlan">
                         <i class="icon-puzzle"></i>需求计划</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="saleOrder">
+                        <i class="icon-puzzle"></i>销售订单</span>
                     </a>
                 </li>
             </ul>

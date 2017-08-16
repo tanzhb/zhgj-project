@@ -145,11 +145,27 @@ public class PageController {
     }
     
     /**
-     * 新增物料
+     * 物料信息
      */
     @RequestMapping("/materiel")
     public String materiel() {
         return "materiel/materiel";
+    }
+    
+    /**
+     * 新增销售订单
+     */
+    @RequestMapping("/addSaleOrder")
+    public String addSaleOrder(String serialNum,String view) {
+        return "order/addSaleOrder";
+    }
+    
+    /**
+     * 销售订单
+     */
+    @RequestMapping("/saleOrder")
+    public String saleOrder() {
+        return "order/saleOrder";
     }
     
     /**
