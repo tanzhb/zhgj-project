@@ -12,6 +12,7 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <association property="buyComName" column="buyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey" ></association>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >

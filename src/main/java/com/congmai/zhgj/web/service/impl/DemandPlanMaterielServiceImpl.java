@@ -1,28 +1,20 @@
 package com.congmai.zhgj.web.service.impl;
 
-import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
-import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
-import com.congmai.zhgj.web.dao.DemandPlanMapper;
+import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.web.dao.DemandPlanMaterielMapper;
-import com.congmai.zhgj.web.dao.MaterielMapper;
-import com.congmai.zhgj.web.model.DemandPlan;
-import com.congmai.zhgj.web.model.DemandPlanExample;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.DemandPlanMaterielExample;
-import com.congmai.zhgj.web.model.Materiel;
-import com.congmai.zhgj.web.model.MaterielExample;
 import com.congmai.zhgj.web.service.DemandPlanMaterielService;
-import com.congmai.zhgj.web.service.DemandPlanService;
 
 @Service
 public class DemandPlanMaterielServiceImpl extends GenericServiceImpl<DemandPlanMateriel,String>
@@ -54,7 +46,22 @@ public class DemandPlanMaterielServiceImpl extends GenericServiceImpl<DemandPlan
 		DemandPlanMaterielExample example = new DemandPlanMaterielExample();
 		example.createCriteria().andDemandPlanSerialEqualTo(serialNum).andDelFlgEqualTo("0");
 		example.setOrderByClause("createTime desc");
-		return demandPlanMaterielMapper.selectByExample(example);
+		return this.listHandle(demandPlanMaterielMapper.selectByExample(example));
+	}
+	
+	protected List<DemandPlanMateriel> listHandle(List<DemandPlanMateriel> list){
+		if(CollectionUtils.isNotEmpty(list)){
+			for(DemandPlanMateriel vo : list){
+				int remainTime = 0;
+				try {
+					remainTime = DateUtil.daysBetween(new Date(), vo.getDeliveryDate());
+				} catch (Exception e) {
+					System.out.println("距离交付日期出错"+e.getMessage()+e.getCause());
+				}
+				vo.setRemainTime(String.valueOf(remainTime<0?0:remainTime));
+			}
+		}
+		return list;
 	}
 	
 

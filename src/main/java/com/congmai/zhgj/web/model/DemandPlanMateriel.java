@@ -47,10 +47,11 @@ public class DemandPlanMateriel {
 
     private String unit;
     
+    private String remainTime;
+
     private String comName;
     
     private String daysBeforeDelivery;
-
     public String getSerialNum() {
         return serialNum;
     }
@@ -204,6 +205,14 @@ public class DemandPlanMateriel {
 		this.unit = unit;
 	}
 
+	public String getRemainTime() {
+		return remainTime;
+	}
+
+	public void setRemainTime(String remainTime) {
+		this.remainTime = remainTime;
+	}
+
 	public String getComName() {
 		return comName;
 	}
@@ -219,4 +228,4 @@ public class DemandPlanMateriel {
 	public void setDaysBeforeDelivery(String daysBeforeDelivery) {
 		this.daysBeforeDelivery = daysBeforeDelivery;
 	}
-}
+	}

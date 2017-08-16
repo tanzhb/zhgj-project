@@ -30,6 +30,9 @@ public class DemandPlan {
     private Date updateTime;
     
     private List<DemandPlanMateriel> materiels;
+    
+    //冗余字段
+    private String buyComName;
 
     public String getSerialNum() {
         return serialNum;
@@ -118,5 +121,13 @@ public class DemandPlan {
 
 	public void setMateriels(List<DemandPlanMateriel> materiels) {
 		this.materiels = materiels;
+	}
+
+	public String getBuyComName() {
+		return buyComName;
+	}
+
+	public void setBuyComName(String buyComName) {
+		this.buyComName = buyComName;
 	}
 }

@@ -62,10 +62,9 @@ public class DemandPlanController {
      */
     @RequestMapping("demandPlanList")
     @ResponseBody
-    public Page<DemandPlan> companyList(Map<String, Object> map,HttpServletRequest request,DemandPlan demandPlan) {
+    public Page<DemandPlan> companyList(Map<String, Object> map,HttpServletRequest request,DemandPlan demandPlan,int pageIndex,int pageSize) {
     	
-    	Page<DemandPlan> demandPlans = demandPlanService.getListByCondition(demandPlan, 1, 10);
-    	System.out.println("dddddddddddddd");
+    	Page<DemandPlan> demandPlans = demandPlanService.getListByCondition(demandPlan, pageIndex, 10);
 		return demandPlans;
     }
     
@@ -120,9 +119,9 @@ public class DemandPlanController {
      * @param request
      * @return
      */
-    @RequestMapping(value="viewDemandPlan",method=RequestMethod.POST)
+    @RequestMapping(value="viewDemandPlan")
     @ResponseBody
-    public DemandPlan viewDemandPlan(Map<String, Object> map,@RequestBody String serialNum,HttpServletRequest request) {
+    public DemandPlan viewDemandPlan(Map<String, Object> map,String serialNum,HttpServletRequest request) {
     	
     	DemandPlan demandPlan = null;
         	try{

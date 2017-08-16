@@ -1,14 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <h3 class="page-title">
-	合同信息 <small></small>
+	采购预测信息 <small></small>
 </h3>
 <div class="page-bar">
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
 			class="fa fa-angle-right"></i></li>
-		<li><a ui-sref="userContract">基础数据</a></li>
-		<li><a ui-sref="userContract">合同信息</a></li>
+		<li><a ui-sref="purchaseForecast">采购订单</a></li>
+		<li><a ui-sref="purchaseForecast">采购预测</a></li>
 	</ul>
 </div>
 
@@ -30,7 +30,7 @@
 		<div class="portlet box red">
 			<div class="portlet-title">
 			<div class="caption">
-					<i class="fa fa-globe"></i>合同列表
+					<i class="fa fa-globe"></i>采购预测列表
 				</div>
 				<div class="actions" ng-controller='MyCtrl'>
 					<!-- <a href="javascript:;" ng-click="jumpToUrl('addUserContract')"

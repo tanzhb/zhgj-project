@@ -1,6 +1,8 @@
 package com.congmai.zhgj.web.service.impl;
 
+import java.text.ParseException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -12,6 +14,7 @@ import org.springframework.util.CollectionUtils;
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
+import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.web.dao.DemandPlanMapper;
 import com.congmai.zhgj.web.dao.DemandPlanMaterielMapper;
 import com.congmai.zhgj.web.dao.MaterielMapper;
@@ -45,7 +48,7 @@ public class DemandPlanServiceImpl extends GenericServiceImpl<DemandPlan,String>
 	public Page<DemandPlan> getListByCondition(DemandPlan demandPlan,int start,int limit) {
 		DemandPlanExample example = new DemandPlanExample();
 		example.setOrderByClause("updateTime desc");
-		example.setStart(start);
+		example.setStart((start-1)*limit);
 		example.setLimit(limit);
 		example.createCriteria().andDelFlgEqualTo("0");
 		List<DemandPlan> list = demandPlanMapper.selectByExample(example);
@@ -55,6 +58,15 @@ public class DemandPlanServiceImpl extends GenericServiceImpl<DemandPlan,String>
 				example2.createCriteria().andDemandPlanSerialEqualTo(vo.getSerialNum()).andDelFlgEqualTo("0");
 				example2.setOrderByClause("createTime desc");
 				List<DemandPlanMateriel> mList = demandPlanMaterielMapper.selectByExample(example2);
+				for(DemandPlanMateriel dm : mList){
+					int remainTime = 0;
+					try {
+						remainTime = DateUtil.daysBetween(new Date(), dm.getDeliveryDate());
+					} catch (Exception e) {
+						System.out.println("距离交付日期出错"+e.getMessage()+e.getCause());
+					}
+					dm.setRemainTime(String.valueOf(remainTime<0?0:remainTime));
+				}
 				vo.setMateriels(mList);
 			}
 		}

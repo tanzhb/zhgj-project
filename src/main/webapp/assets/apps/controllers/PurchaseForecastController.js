@@ -136,7 +136,7 @@ angular.module('MetronicApp').controller('PurchaseForecastController', ['$rootSc
 						                            	'className' : 'dt-body-center',
 						                            	'render' : function(data,
 						                            			type, row, meta) {
-						                            		return '<a data-toggle="modal">'+data+'</a>';
+						                            		return data;
 						                            	},
 						                            	"createdCell": function (td, cellData, rowData, row, col) {
 						                            		$compile(td)($scope);
