@@ -77,21 +77,21 @@
                 <span class="arrow "></span>
             </a>
             <ul class="sub-menu">
-                <li>
+                <!-- <li>
                     <a ui-sref="">
                         <i class="icon-puzzle"></i> 采购订单</span>
                     </a>
-                </li>
+                </li> -->
                 <li>
                     <a ui-sref="purchaseForecast">
                         <i class="icon-paper-clip"></i>采购预测</span>
                     </a>
                 </li>
-                <li>
+               <!--  <li>
                     <a ui-sref="">
                         <i class="icon-check"></i>收货单</span>
                     </a>
-                </li>
+                </li> -->
             </ul>
         </li>
         <li class="nav-item">
