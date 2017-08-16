@@ -94,18 +94,11 @@ public class CompanyController {
     public ResponseEntity<Map<String,Object>> companyList(Map<String, Object> map,HttpServletRequest request,Company company) {
     	
     	List<Company> companys = companyService.selectByPage(new Company()).getResult();
-
-		if (companys.isEmpty()) {
-			return new ResponseEntity<Map<String,Object>>(HttpStatus.NO_CONTENT);// You many
-																	// decide to
-																	// return
-																	// HttpStatus.NOT_FOUND
-		}
 		// 封装datatables数据返回到前台
 		Map<String,Object> pageMap = new HashMap<String,Object>();
 		pageMap.put("draw", 1);
-		pageMap.put("recordsTotal", companys.size());
-		pageMap.put("recordsFiltered", companys.size());
+		pageMap.put("recordsTotal", company==null?0:companys.size());
+		pageMap.put("recordsFiltered", company==null?0:companys.size());
 		pageMap.put("data", companys);
 		return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
     }

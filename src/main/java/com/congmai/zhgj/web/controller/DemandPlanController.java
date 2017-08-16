@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.DemandPlan;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
@@ -64,7 +65,7 @@ public class DemandPlanController {
     @ResponseBody
     public Page<DemandPlan> companyList(Map<String, Object> map,HttpServletRequest request,DemandPlan demandPlan,int pageIndex,int pageSize) {
     	
-    	Page<DemandPlan> demandPlans = demandPlanService.getListByCondition(demandPlan, pageIndex, 10);
+    	Page<DemandPlan> demandPlans = demandPlanService.getListByCondition(demandPlan, pageIndex, 5);
 		return demandPlans;
     }
     
@@ -115,15 +116,14 @@ public class DemandPlanController {
     
     
     /**
-     * @Description (查看需求计划)
+     * @Description (跳转至查看需求计划页面)
      * @param request
      * @return
      */
-    @RequestMapping(value="viewDemandPlan")
-    @ResponseBody
-    public DemandPlan viewDemandPlan(Map<String, Object> map,String serialNum,HttpServletRequest request) {
+    @RequestMapping(value="demandPlanView")
+    public String demandPlanView(Map<String, Object> map,String serialNum,HttpServletRequest request) {
     	
-    	DemandPlan demandPlan = null;
+    	/*DemandPlan demandPlan = null;
         	try{
         		if(StringUtils.isNotEmpty(serialNum)){
         			demandPlan = demandPlanService.selectById(serialNum);
@@ -133,7 +133,30 @@ public class DemandPlanController {
         	}catch(Exception e){
         		System.out.println(e.getMessage());
         		return null;
-        	}
+        	}*/
+    	return "demandPlan/demandPlanView";
+    }
+    
+    /**
+     * @Description (查看需求计划)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="viewDemandPlan")
+    @ResponseBody
+    public DemandPlan viewDemandPlan(Map<String, Object> map,String serialNum,HttpServletRequest request) {
+    	
+    	DemandPlan demandPlan = null;
+    	try{
+    		if(StringUtils.isNotEmpty(serialNum)){
+    			demandPlan = demandPlanService.selectById(serialNum);
+    		}
+    		
+    		
+    	}catch(Exception e){
+    		System.out.println(e.getMessage());
+    		return null;
+    	}
     	return demandPlan;
     }
     
@@ -238,6 +261,13 @@ public class DemandPlanController {
         			materiel.setUpdater(currenLoginName);
         			demandPlanMaterielService.update(materiel);
         		}
+        		int remainTime = 0;
+				try {
+					remainTime = DateUtil.daysBetween(new Date(), materiel.getDeliveryDate());
+				} catch (Exception e) {
+					System.out.println("deliverDate----"+e.getMessage());
+				}
+				materiel.setRemainTime(String.valueOf(remainTime<0?0:remainTime));
         		
         		flag = "1";
         	}catch(Exception e){

@@ -56,7 +56,7 @@ public class DemandPlanMaterielServiceImpl extends GenericServiceImpl<DemandPlan
 				try {
 					remainTime = DateUtil.daysBetween(new Date(), vo.getDeliveryDate());
 				} catch (Exception e) {
-					System.out.println("距离交付日期出错"+e.getMessage()+e.getCause());
+					System.out.println("deliverDate-----"+e.getMessage()+e.getCause());
 				}
 				vo.setRemainTime(String.valueOf(remainTime<0?0:remainTime));
 			}

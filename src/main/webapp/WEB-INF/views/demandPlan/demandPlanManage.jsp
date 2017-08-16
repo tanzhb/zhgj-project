@@ -47,16 +47,19 @@
                                  		<div class="row">
 	                                   	 	<div class="col-md-12">
 												<div class="portlet">
-					                                <div class="portlet-title">
-					                                    <div class="caption">
-					                                    		<input name="select_all" class="dt-body-center"
-																			value="{{demandPlan.serialNum}}" id="example-select-all" type="checkbox" />
-					                                    	{{demandPlan.buyComName}}
+													<div class="portlet-title">
+					                                    <div class="caption" style="width: 100%;">
+					                                    	<div style="float:left;width:70%;">
+					                                    		<input name="select_all" class="dt-body-center" value="{{demandPlan.serialNum}}" id="example-select-all" type="checkbox" />
+					                                    		{{demandPlan.buyComName}}&nbsp;&nbsp;&nbsp;十日计划表&nbsp;&nbsp;&nbsp;更新日期：{{demandPlan.updateTime.substring(0,10)}}
+					                                    	</div>
+					                                    		
+					                                    	<div style="float:left;width:30%;text-align:right;"><a href="javascript:;" ui-sref="demandPlanView({serialNum:demandPlan.serialNum})" >全部计划>></a></div>
 					                                    </div>
 					                                </div>
 					                                <div class="portlet-body">
-					                                 	<div class="table-scrollable">
-					                                        <table class="table table-striped table-bordered table-advance table-hover">
+										                <div class="table-scrollable">
+															<table class="table table-striped table-bordered table-advance table-hover">
 					                                            <thead>
 					                                                <tr>
 					                                                   	<!-- <th><input name="select_all" class="dt-body-center"

@@ -174,7 +174,30 @@
 					                        </tr>
 					                    </thead>
 					                    <tbody>
-					                    </tbody>
+			                                  <tr ng-repeat="_supplyMateriel in supplyMateriel track by $index" >
+						                          <td>
+						                                <p class="form-control-static"> {{_supplyMateriel.supplyMaterielNum}} </p>
+						                          </td>
+						                          <td>
+						                                <p class="form-control-static"> {{_supplyMateriel.supplyComId}} </p>
+						                          </td>
+						                          <td>
+						                          </td>
+						                          <td>
+						                          </td>
+						                          <td>
+						                          </td>
+						                          <td>
+						                          </td>
+						                          <td>
+						                          </td>
+						                          <td>
+						                          </td>
+						                          <td>
+						                          </td>
+						                          
+			                                  </tr>
+			                              </tbody>
 					                </table>
 					            </div>
 					    </div>
