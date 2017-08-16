@@ -41,6 +41,26 @@
 											ng-click="deleteDemandPlan()"> <i class="fa fa-minus"></i>
 											删除  
 										</a>
+										<div class="btn-group">
+											<a class="btn btn-default btn-outline btn-circle"
+												href="javascript:;" data-toggle="dropdown"> <i
+												class="fa fa-share"></i> <span class="hidden-xs"> 其它 </span> <i
+												class="fa fa-angle-down"></i>
+											</a>
+											<ul class="dropdown-menu pull-right" id="sample_3_tools">
+												<li><a data-action="0" class="tool-action"
+													data-toggle="modal" data-target="#import"> <i
+														class="fa fa-upload"></i> 导入
+												</a></li>
+												<li><a href="javascript:;" data-action="1"
+													class="tool-action" ng-click="exportDemandPlan()"> <i
+														class="fa fa-file-excel-o"></i> 导出
+												</a></li>
+												<!-- <li><a href="javascript:;" data-action="2"
+													class="tool-action"> <i class="fa fa-print"></i> 打印
+												</a></li> -->
+											</ul>
+										</div>
 									</div>
 								</div>
                                 <div class="portlet-body" ng-repeat="demandPlan in demandPlans" id="demandPlanTable">
@@ -119,7 +139,7 @@
 	    <div class="modal-content">
 	 		<div class="modal-header">
 	            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-	            <h4 class="modal-title" >企业信息导入</h4>
+	            <h4 class="modal-title" >需求计划导入</h4>
 	        </div>
 	        <div class="modal-body">
 	          		<!-- <div class="col-md-12"> -->
@@ -135,7 +155,7 @@
 	                                               		<!-- <div class="col-md-4">
 	                                               		</div> -->
 	                                               		<div class="col-md-12">
-	                                               			<button type="button" class="btn red" ng-click="downloadImportTemp()">下载模板</button>
+	                                               			<button type="button" class="btn blue" ng-click="downloadImportTemp()">下载模板</button>
 	                                               		</div>
 	                                               </div>
 	                                           </div>
@@ -162,7 +182,7 @@
 	                                               			
 	                                               		</div>
 	                                               		<div class="col-md-8">
-	                                               			<button type="button" class="btn red" ng-click="uploadExcel()">导入</button>
+	                                               			<button type="button" class="btn blue" ng-click="uploadExcel()">导入</button>
 	                                               		</div>
 	                                               </div>
 	                                           </div>

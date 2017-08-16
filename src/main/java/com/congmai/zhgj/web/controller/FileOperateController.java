@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.ExcelUtil;
 /**
  * 
  * @ClassName FileOperateController
@@ -107,5 +109,16 @@ public class FileOperateController {
 		
 		return null;
 	}
+	
+	 /**
+     * @Description (下载导入模板)
+     * @param request
+     * @return
+     */
+    @RequestMapping("downloadImportTemp")
+    public void downloadCompanyTemp(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,String tempName,String fileName) {
+    	 
+    	ExcelUtil.importTempDownLoad(request, response,tempName,fileName);
+    }
 	
 }

@@ -173,7 +173,7 @@ angular.module('MetronicApp').service('demandPlanService',['$http','$q',function
 		var fd = new FormData();
         var file = document.querySelector('input[type=file]').files[0];
         fd.append('excelFile', file);
-		$http.post("rest/company/companyImport",  
+		$http.post("rest/demandPlan/demandPlanImport",  
 				fd,{headers:{'Content-Type': undefined},transformRequest: angular.identity}
 		).then(function success(result) {
 			deferred.resolve(result);//请求成功

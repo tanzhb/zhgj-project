@@ -23,7 +23,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	 			getDemandPlanInfo($stateParams.serialNum);
 	 			selectParentMateriel();
 	 		}else{
-	 			createTable(10,1,true);
+	 			createTable(5,1,true);
 	 			//loadTable();
 	 		//	 $("#comViewPage").html($compile($("#comViewContent").html())($scope));
 	 			/*$("#sample_3_tools > li > a.tool-action").on("click",
@@ -735,7 +735,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	        		promise.then(function(data){
 	        			toastr.success("删除成功");
 	        			handle.unblockUI();
-	        			createTable(10,1,true);
+	        			createTable(5,1,true);
 	        			//table.ajax.reload(); // 重新加载datatables数据
 	        			/*$state.go('company',{},{reload:true}); */
 	        		},function(data){
@@ -770,7 +770,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	        $scope.search=function () {
 	        	var params ={};
 	        	params.searchKey = $scope.searchKey;
-	        	createTable(15,1,false,params);
+	        	createTable(5,1,false,params);
 	        	
 	        };  
 	        
@@ -788,10 +788,8 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	       
 	      
 	       
-	       $scope.exportCompany = function(){
-	    	 handle.blockUI("正在导出数据，请稍后"); 
-	    	 window.location.href=$rootScope.basePath+"/rest/company/exportCompany";
-	    	 handle.unblockUI(); 
+	       $scope.exportDemandPlan = function(){
+	    	 window.location.href=$rootScope.basePath+"/rest/demandPlan/exportDemandPlan";
 	       }
 	       
 	       
@@ -886,7 +884,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	        * 下载EXCEL模板
 	        */
 	       $scope.downloadImportTemp = function(){
-	    	   window.location.href=$rootScope.basePath+"/rest/company/downloadImportTemp";
+	    	   window.location.href=$rootScope.basePath+"/rest/fileOperate/downloadImportTemp?tempName=demandPlan&fileName="+encodeURI(encodeURI('需求计划导入模板'));
 	       }
 	       
 	       /**
@@ -904,18 +902,19 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	    		   return;
 	    	   }
 	    	   	handle.blockUI("正在导入中，请不要进行其他操作"); 
-	    	   	var promise = companyService.uploadExcel();
+	    	   	var promise = demandPlanService.uploadExcel();
        			promise.then(function(data){
        				handle.unblockUI(); 
        				if(data.data.data=="success"){
        					toastr.success("导入成功");
-       					table.ajax.reload();
+       					createTable(5,1,true);
        				}else{
        					toastr.error(data.data.data);
        				}
        				$('#import').modal('hide'); 
 	            },function(data){
 	               //调用承诺接口reject();
+	            	handle.unblockUI(); 
 	            	toastr.error("操作失败");
 	            	$('#import').modal('hide'); 
 	            });

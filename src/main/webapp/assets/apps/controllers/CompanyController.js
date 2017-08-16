@@ -190,7 +190,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 								}, {
 									mData : 'comName'
 								}, {
-									mData : 'comType'
+									mData : 'comTypeName'
 								}, {
 									mData : 'comNature'
 								}, {
@@ -585,7 +585,8 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		        			handle.unblockUI();
 		        			var company = data.data;
 		        			//$state.go('companyAdd',company,{reload:true});
-		        			$scope.company = company
+		        			//$scope.company = company
+		        			getCompanyInfo(company.comId,"company");
 		        			console.log(data.data);
 		        			$scope.companyView = true;
 		        			$scope.companyAdd = true;
@@ -1154,6 +1155,8 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		 	        			$scope.companyQualifications = data.data.companyQualifications;
 		 	        			_index = data.data.companyQualifications.length-1;
 		 	        		}
+	 	        		}else if(type=="company"){
+	 	        			$scope.company = data.data.company;
 	 	        		}else{
 	 	        			$scope.company = data.data.company;
 		 	        		if(!handle.isNull(data.data.companyQualifications)){

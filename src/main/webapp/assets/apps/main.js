@@ -316,7 +316,55 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
-
+        //销售订单
+        .state('saleOrder', {
+            url: "/saleOrder",
+            templateUrl: "rest/page/saleOrder",
+            data: {pageTitle: '销售订单'},
+            controller: "saleOrderController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+							'assets/global/plugins/datatables/datatables.min.css',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+							'assets/global/plugins/datatables/datatables.all.min.js',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+                            'assets/apps/service/saleOrderService.js',
+                            'assets/apps/controllers/saleOrderController.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        // 新增物料
+        .state('addSaleOrder', {
+            url: "/addSaleOrder?:serialNum&:view",
+            templateUrl: "rest/page/addSaleOrder",
+            data: {pageTitle: '新增销售订单'},
+            controller: "saleOrderController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload-shim.min.js',
+		        'assets/apps/scripts/angular-file-upload.min.js',
+		        'assets/apps/scripts/FileUploader.js',
+	        	'assets/apps/service/saleOrderService.js',
+				'assets/apps/controllers/saleOrderController.js'
+                      ]
+                    });
+                }]
+            }
+        })
 	    .state('userContract', {
 	            url: "/userContract",
 	            templateUrl:"rest/page/userContract",
