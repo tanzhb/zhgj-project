@@ -127,14 +127,11 @@ public class WareHouseController {
     @RequestMapping(value = "/getWarehouseList", method = RequestMethod.GET)
     public ResponseEntity<Map> getWarehouseList(HttpServletRequest request) {
 		List<Warehouse> warehouses = warehouseService.selectList();
-		if (warehouses.isEmpty()) {
-			return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);//判断是否为空,为空返回NO_CONTENT
-		}
 		// 封装datatables数据返回到前台
 		Map pageMap = new HashMap();
 		pageMap.put("draw", 1);
-		pageMap.put("recordsTotal", warehouses.size());
-		pageMap.put("recordsFiltered", warehouses.size());
+		pageMap.put("recordsTotal", warehouses==null?0:warehouses.size());
+		pageMap.put("recordsFiltered", warehouses==null?0:warehouses.size());
 		pageMap.put("data", warehouses);
 		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 	}

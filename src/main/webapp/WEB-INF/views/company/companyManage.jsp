@@ -140,7 +140,7 @@
                                               <div class="form-group">
                                                   <label class="control-label col-md-5">企业类型：</label>
                                                   <div class="col-md-7">
-                                                      <p class="form-control-static">{{company.comType}}</p>
+                                                      <p class="form-control-static">{{company.comName}}</p>
                                                   </div>
                                               </div>
                                           </div>
@@ -443,7 +443,7 @@
 										<div class="form-group">
 											<label class="control-label col-md-5">企业类型：</label>
 											<div class="col-md-7">
-												<p class="form-control-static">{{company.comType}}</p>
+												<p class="form-control-static">{{company.comTypeName}}</p>
 											</div>
 										</div>
 									</div>

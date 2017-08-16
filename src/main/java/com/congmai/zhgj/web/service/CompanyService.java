@@ -45,4 +45,11 @@ public interface CompanyService extends GenericService<Company, String>{
 	 */
 	List<Company> selectCompanyByComType(String comType,String searchKey);
 	
+	/**
+	 * 
+	 * @Description (根据公司名获取公司Id)
+	 * @return
+	 */
+	String selectComIdByComName(String comName);
+	
 }

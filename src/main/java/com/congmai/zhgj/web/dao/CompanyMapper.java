@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.CompanyExample;
 
 public interface CompanyMapper extends GenericDao<Company,String>{
 	
@@ -17,5 +18,7 @@ public interface CompanyMapper extends GenericDao<Company,String>{
 	int insertSelectiveBatch(List<Company> list);
 	
 	List<Company> selectCompanyByComType(Map<String,Object> map);
+	
+	List<Company> selectByExample(CompanyExample example);
 	
 }
