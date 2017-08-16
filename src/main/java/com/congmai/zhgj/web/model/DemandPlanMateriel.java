@@ -49,6 +49,9 @@ public class DemandPlanMateriel {
     
     private String remainTime;
 
+    private String comName;
+    
+    private String daysBeforeDelivery;
     public String getSerialNum() {
         return serialNum;
     }
@@ -209,4 +212,20 @@ public class DemandPlanMateriel {
 	public void setRemainTime(String remainTime) {
 		this.remainTime = remainTime;
 	}
-}
+
+	public String getComName() {
+		return comName;
+	}
+
+	public void setComName(String comName) {
+		this.comName = comName;
+	}
+
+	public String getDaysBeforeDelivery() {
+		return daysBeforeDelivery;
+	}
+
+	public void setDaysBeforeDelivery(String daysBeforeDelivery) {
+		this.daysBeforeDelivery = daysBeforeDelivery;
+	}
+	}

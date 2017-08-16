@@ -118,6 +118,15 @@ public class PageController {
         return "contract/userContract";
     }
     
+    /**
+     * 采购预测
+     */
+    @RequestMapping("/purchaseForecast")
+    public String purchaseForecast(){
+    	return "purchase/purchaseForecast";
+    }
+    
+    
     
     /**
      * 添加合同页面

@@ -1,39 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.congmai.zhgj.web.dao.ContractMapper">
+<mapper namespace="com.congmai.zhgj.web.dao.PurchaseForecastMapper">
     
     <!--添加合同  -->
-    <insert id="insertContract" parameterType="com.congmai.zhgj.web.model.ContractVO">
+    <!-- <insert id="insertContract" parameterType="com.congmai.zhgj.web.model.ContractVO">
     INSERT INTO contract(serialNum,  comId,   contractNum,    contractType,  serviceModel,   settlementClause,  startDate,  endDate,   signDate,   signer,    remark,  electronicContract,  signContract,versionNO,status, isLatestVersion,creator,createTime,updater,updateTime) 
                 VALUES(#{id},#{comId},#{contractNum},#{contractType},#{serviceModel},#{settlementClause},#{startDate},#{endDate},#{signDate},#{signer},#{remark},#{electronicContract},#{signContract},   '1','0',  '1',        #{creator},NOW(),#{creator},NOW())
-    </insert>
+    </insert> -->
     
-    <!--查询合同列表  -->
-   <select id="queryContractList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ContractVO">
+    <!--查询采购预测列表  -->
+   <select id="queryPurchaseForecastList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.DemandPlanMateriel">
     SELECT 
-    serialNum AS Id,
-	contractNum,
-	comId,
-	contractType,
-	serviceModel,
-	signDate,
-	signer,
-	startDate,
-	endDate,
-	versionNO,
-	status
+	c.materielNum,c.materielName,c.specifications,(SELECT comName FROM company WHERE comId=b.buyComId) AS comName,
+	a.deliveryDate,a.deliveryAddress,a.creator,a.serialNum,a.amount
 	FROM
-	contract
-	WHERE
-	delFlg='0'
-	AND 
-	creator=#{userId}
+	demandPlanMateriel a 
+	LEFT JOIN demandPlan b ON a.demandPlanSerial=b.serialNum AND a.delFlg='0' AND b.delFlg='0'
+	LEFT JOIN materiel c ON a.materielSerial=c.serialNum  AND c.delFlg='0'
+	WHERE a.deliveryDate&gt;=NOW()
+	AND a.delFlg='0'
     </select>
     
-    <!--删除合同  -->
-    <update id="deleteUserContractS" parameterType="java.util.List">
-    	UPDATE contract 
-    	SET delFlg='1'
+    <!--删除采购预测  -->
+    <update id="deletePurchaseForecast" parameterType="java.util.List">
+    	UPDATE demandPlanMateriel set delFlg='1'
     	where serialNum in
         <foreach item="idList" collection="list" open="(" close=")" separator=",">
             #{idList}
@@ -41,7 +31,7 @@
     </update>
     
     <!--查询合同对象  -->
-    <select id="selectContractById" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ContractVO">
+    <!-- <select id="selectContractById" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ContractVO">
     SELECT 
     serialNum AS Id,
 	contractNum,
@@ -60,10 +50,10 @@
 	contract
 	WHERE 
 	serialNum=#{id}
-    </select>
+    </select> -->
     
     <!--更新合同  -->
-    <update id="updateContract" parameterType="com.congmai.zhgj.web.model.ContractVO">
+    <!-- <update id="updateContract" parameterType="com.congmai.zhgj.web.model.ContractVO">
     UPDATE
 	contract
 	SET
@@ -91,5 +81,5 @@
 	updateTime=NOW()
 	WHERE
 	serialNum=#{id}
-    </update>
+    </update> -->
 </mapper>
