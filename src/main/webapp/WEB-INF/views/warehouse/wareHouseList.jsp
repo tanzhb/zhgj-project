@@ -385,19 +385,6 @@
 						</tr>
 					</thead>
 					
-					<tfoot>
-						<tr>
-							<th></th>
-							<th>仓库编号 </th>
-                            <th> 仓库名称</th>
-                            <th> 仓库类型</th>
-                            <th> 仓库地址</th>
-                            <th>管理员 </th>
-                            <th> 仓库面积 </th>
-                            <th>仓库分类 </th>
-                            <th> 所有者 </th>
-						</tr>
-					</tfoot>
 					<tbody>
 					</tbody>
 				</table>
