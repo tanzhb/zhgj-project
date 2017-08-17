@@ -3,8 +3,6 @@ package com.congmai.zhgj.web.service;
 import java.util.List;
 
 import com.congmai.zhgj.core.generic.GenericService;
-import com.congmai.zhgj.web.model.Materiel;
-import com.congmai.zhgj.web.model.MaterielExample;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.WarehouseExample;
 

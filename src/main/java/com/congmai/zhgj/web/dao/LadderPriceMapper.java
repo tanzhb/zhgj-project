@@ -1,13 +1,12 @@
 package com.congmai.zhgj.web.dao;
 
-import com.congmai.zhgj.core.generic.GenericDao;
-import com.congmai.zhgj.web.model.CompanyQualification;
-import com.congmai.zhgj.web.model.LadderPrice;
-import com.congmai.zhgj.web.model.LadderPriceExample;
-
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+
+import com.congmai.zhgj.core.generic.GenericDao;
+import com.congmai.zhgj.web.model.LadderPrice;
+import com.congmai.zhgj.web.model.LadderPriceExample;
 
 public interface LadderPriceMapper extends GenericDao<LadderPrice, String> {
     int countByExample(LadderPriceExample example);

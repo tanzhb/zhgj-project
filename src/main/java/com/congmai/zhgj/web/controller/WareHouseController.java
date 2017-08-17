@@ -1,6 +1,5 @@
 package com.congmai.zhgj.web.controller;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,23 +10,14 @@ import java.util.UUID;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,23 +26,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
-import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
-import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.model.JsonTreeData;
-import com.congmai.zhgj.web.model.Materiel;
-import com.congmai.zhgj.web.model.MaterielExample;
-import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.WarehouseExample;
-import com.congmai.zhgj.web.model.Warehouseposition;
 import com.congmai.zhgj.web.model.WarehouseExample.Criteria;
-import com.congmai.zhgj.web.security.PermissionSign;
-import com.congmai.zhgj.web.security.RoleSign;
-import com.congmai.zhgj.web.service.UserService;
 import com.congmai.zhgj.web.service.WarehouseService;
 
 

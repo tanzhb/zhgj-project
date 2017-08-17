@@ -1,7 +1,6 @@
 package com.congmai.zhgj.web.controller;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,23 +28,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
-
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
-import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
+import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.enums.ComType;
-import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.LadderPrice;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.PriceListExample;
-import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.LadderPriceService;
 import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.PriceListService;
-import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
 
 
 /**

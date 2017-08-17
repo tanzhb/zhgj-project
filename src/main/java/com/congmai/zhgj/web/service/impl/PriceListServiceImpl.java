@@ -17,8 +17,6 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.dao.CompanyContactMapper;
 import com.congmai.zhgj.web.dao.CompanyMapper;
 import com.congmai.zhgj.web.dao.PriceListMapper;
-import com.congmai.zhgj.web.model.Materiel;
-import com.congmai.zhgj.web.model.MaterielExample;
 import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.PriceListExample;
 import com.congmai.zhgj.web.model.PriceListExample.Criteria;
