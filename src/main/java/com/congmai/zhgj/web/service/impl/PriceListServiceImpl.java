@@ -11,8 +11,6 @@ import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.dao.MaterielMapper;
 import com.congmai.zhgj.web.dao.PriceListMapper;
-import com.congmai.zhgj.web.model.Materiel;
-import com.congmai.zhgj.web.model.MaterielExample;
 import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.PriceListExample;
 import com.congmai.zhgj.web.service.PriceListService;
