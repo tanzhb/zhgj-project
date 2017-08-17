@@ -49,195 +49,91 @@
 							class="fa fa-angle-down"></i>
 						</a>
 						<ul class="dropdown-menu pull-right" id="sample_3_tools">
-							<li><a href="javascript:;" data-action="0"
-								class="tool-action"> <i class="icon-printer"></i> Print
-							</a></li>
-							<li><a href="javascript:;" data-action="1"
-								class="tool-action"> <i class="icon-check"></i> Copy
-							</a></li>
-							<li><a href="javascript:;" data-action="2"
-								class="tool-action"> <i class="icon-doc"></i> PDF
-							</a></li>
-							<li><a href="javascript:;" data-action="3"
-								class="tool-action"> <i class="icon-paper-clip"></i> Excel
-							</a></li>
-							<li><a href="javascript:;" data-action="4"
-								class="tool-action"> <i class="icon-cloud-upload"></i> CSV
-							</a></li>
-							<li class="divider"></li>
-							<li><a href="javascript:;" data-action="5"
-								class="tool-action"> <i class="icon-refresh"></i> Reload
-							</a></li>
-							</li>
-						</ul>
+												<li><a data-action="0"
+													class="tool-action" data-toggle="modal" data-target="#import"> <i class="fa fa-upload"></i> 导入
+												</a></li> 
+												<li><a href="javascript:;" data-action="1"
+													class="tool-action" ng-click="exportPriceList()"> <i class="fa fa-file-excel-o"></i> 导出
+												</a></li>
+												<li><a href="javascript:;" data-action="2"
+													class="tool-action" > <i class="fa fa-print"></i> 打印
+												</a></li> 
+											</ul>
 					</div>
 				</div>
 			</div>
 
 
-			<!-- 添加用户modal 开始 -->
-			<div id="addWarehouseModal" class="modal fade" role="dialog"
-				aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal"
-								aria-hidden="true"></button>
-							<h4 id="pageTitle" class="modal-title">仓库详情</h4>
-						</div>
-						<div class="modal-body form">
-							<form action="#" class="form-horizontal form-row-seperated"  id="form_sample_1">
-								<div class="form-group">
-									<label class="col-sm-2 control-label">价格编号</label>
-									<div class="col-sm-4">
-										<div class="input-group">
-											<!-- <span class="input-group-addon"> <i class="fa fa-user"></i>
-											</span> --> <input type="text" id="warehouseNum" name ="warehouseNum" 
-												ng-model="warehouse.warehouseNum" 
-												class="form-control" />
-										</div>
-										
-									</div>
-									<label class="col-sm-2 control-label">仓库名称</label>
-									<div class="col-sm-4">
-										<div class="input-group">
-											<!-- <span class="input-group-addon"> <i class="fa fa-user"></i>
-											</span> --> <input type="text" id="warehouseName" name ="warehouseName" 
-												ng-model="warehouse.warehouseName" 
-												class="form-control" />
-										</div>
-										
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-2 control-label">仓库类型</label>
-									<div class="col-sm-4">
-										<div class="input-group">
-									<select class="form-control" data-placeholder="Choose a Category" tabindex="1"  id="warehouseType" name ="warehouseType"  ng-model="warehouse.warehouseType" >
-                                                                         <option value="">	选择仓库</option>
-                                                                        <option value="1">	自建仓库</option>
-                                                                        <option value="2">代管仓库</option>
-                                                                        <option value="3">境外仓库</option>
-                                                                    </select>
-										</div>
-										
-									</div>
-									<label class="col-sm-2 control-label">仓库分类</label>
-									<div class="col-sm-4">
-										<div class="input-group">
-										<select class="form-control" data-placeholder="Choose a Category" tabindex="1"  id="warehouseCategory" name ="warehouseCategory" ng-model="warehouse.warehouseCategory" >
-                                                                          <option value="">选择分类</option>
-                                                                        <option value="A">机加工</option>
-                                                                        <option value="B">备品备件</option>
-                                                                        <option value="C">标准品</option>
-                                                                    </select>
-											
-										</div>
-										
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-2 control-label">仓库地址</label>
-									<div class="col-sm-4">
-										<div class="input-group">
-											<!-- <span class="input-group-addon"> <i class="fa fa-user"></i>
-											</span> --> <input type="text" id="address" name ="address" 
-												ng-model="warehouse.address" 
-												class="form-control" />
-										</div>
-										
-									</div>
-									<label class="col-sm-2 control-label">仓库所有者</label>
-									<div class="col-sm-4">
-										<div class="input-group">
-											<!-- <span class="input-group-addon"> <i class="fa fa-user"></i>
-											</span> --> <input type="text" id="owner" name ="owner" 
-												ng-model="warehouse.owner" 
-												class="form-control" />
-										</div>
-										
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-2 control-label">仓库管理员</label>
-									<div class="col-sm-4">
-										<div class="input-group">
-											<!-- <span class="input-group-addon"> <i class="fa fa-user"></i>
-											</span> --> <input type="text" id="admin" name ="admin" 
-												ng-model="warehouse.admin" 
-												class="form-control" />
-										</div>
-										
-									</div>
-									<label class="col-sm-2 control-label">仓库面积</label>
-									<div class="col-sm-4">
-										<div class="input-group">
-											<!-- <span class="input-group-addon"> <i class="fa fa-user"></i>
-											</span> --> <input type="text" id="area" name ="area" 
-												ng-model="warehouse.area" 
-												class="form-control" />
-										</div>
-										
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-2 control-label">邮件</label>
-									<div class="col-sm-4">
-										<div class="input-group">
-											<!-- <span class="input-group-addon"> <i class="fa fa-user"></i>
-											</span> --> <input type="text" id="email" name ="email" 
-												ng-model="warehouse.email" 
-												class="form-control" />
-										</div>
-										
-									</div>
-									<label class="col-sm-2 control-label">电话</label>
-									<div class="col-sm-4">
-										<div class="input-group">
-											<!-- <span class="input-group-addon"> <i class="fa fa-user"></i>
-											</span> --> <input type="text" id="tel" name ="tel" 
-												ng-model="warehouse.tel" 
-												class="form-control" />
-										</div>
-										
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-2 control-label">备注</label>
-									<div class="col-sm-4">
-										<div class="input-group">
-											<!-- <span class="input-group-addon"> <i class="fa fa-user"></i>
-											</span> --> <input type="text" id="remark" name ="remark" 
-												ng-model="warehouse.remark" 
-												class="form-control" />
-										</div>
-										
-									</div>
-									<label class="col-sm-2 control-label">传真</label>
-									<div class="col-sm-4">
-										<div class="input-group">
-											<!-- <span class="input-group-addon"> <i class="fa fa-user"></i>
-											</span> --> <input type="text" id="fax" name ="fax" 
-												ng-model="warehouse.fax" 
-												class="form-control" />
-										</div>
-										
-									</div>
-								</div>
-							</form>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default"
-								data-dismiss="modal">取消</button>
-							<button type="button" ng-click="saveWarehouse()"
-								class="btn btn-primary">
-								<i class="fa fa-check"></i> 保存
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- 添加用户modal 结束 -->
+					<!-- 导入modal START -->
+<div class="modal fade" id="import" role="import" aria-hidden="true">
+     <div class="modal-dialog" >
+	    <div class="modal-content">
+	 		<div class="modal-header">
+	            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+	            <h4 class="modal-title" >	价格信息导入</h4>
+	        </div>
+	        <div class="modal-body">
+	          		<!-- <div class="col-md-12"> -->
+	          		 <div class="">
+                           <div class="portlet-body form">
+                              <!--  BEGIN FORM -->
+                               <form class="form-horizontal" role="form">
+                                   <div class="form-body">
+                                   		<form id="fileImport" method="post" enctype="multipart/form-data" >
+	                                       <div class="row">
+	                                           <div class="col-md-2">
+	                                               <div class="form-group">
+	                                               		<!-- <div class="col-md-4">
+	                                               		</div> -->
+	                                               		<div class="col-md-12">
+	                                               			<button type="button" class="btn blue" ng-click="downloadImportTemp()">下载模板</button>
+	                                               		</div>
+	                                               </div>
+	                                           </div>
+	                                           <div class="col-md-7">
+	                                               <div class="form-group">
+	                                               		 <div class="fileinput fileinput-new" data-provides="fileinput">
+	                                                        <div class="input-group input-large">
+	                                                            <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+	                                                                <i class="fa fa-file fileinput-exists"></i>&nbsp;
+	                                                                <span class="fileinput-filename"> </span>
+	                                                            </div>
+	                                                            <span class="input-group-addon btn default btn-file" id="file_span">
+	                                                                <span class="fileinput-new"> 选择文件 </span>
+	                                                                <span class="fileinput-exists">更换</span>
+	                                                                <input type="file" file-model="excelFile" accept=".xls" name="..."> </span>
+	                                                            <a href="javascript:;" id="resetFile" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> 移除 </a>
+	                                                        </div>
+	                                                    </div>
+	                                               </div>
+	                                           </div>
+	                                            <div class="col-md-2">
+	                                               <div class="form-group">
+	                                               		<div class="col-md-4">
+	                                               			
+	                                               		</div>
+	                                               		<div class="col-md-8">
+	                                               			<button type="button" class="btn blue" ng-click="uploadExcel()">导入</button>
+	                                               		</div>
+	                                               </div>
+	                                           </div>
+	                                           
+	                                         <!--   /span -->
+	                                       </div>
+	                                       <!-- /row -->
+                                       </form>
+                                   </div>
+                               </form>
+                              <!--  END FORM -->
+                           </div>
+                      </div>
+					<!-- </div> -->
+	        <!-- </div> -->
+	    </div>
+    </div>
+</div>
+</div>
+<!-- 导入modal END-->
 
 			<!-- 删除用户modal 开始 -->
 			<div id="delPriceListModal" class="modal fade" tabindex=
@@ -399,19 +295,21 @@
                                                <div class="form-group">
                                                    <label class="control-label col-md-5">价格类型：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{priceList.priceType}}</p>
+                                                   <p class="form-control-static"  ng-if="priceList.priceType=='buyPrice'" >采购价格</p>
+                                                     <p class="form-control-static"   ng-if="priceList.priceType=='salePrice'" >  销售价格</p>
+                                                      
                                                    </div>
                                                </div>
                                            </div>
                                       <!--      /span -->
                                            <div class="col-md-6">
-                                               <div class="form-group"  ng-if="isBuy">
+                                               <div class="form-group"  ng-if="priceList.priceType=='salePrice'">
                                                    <label class="control-label col-md-5">采购商：</label>
                                                    <div class="col-md-7">
                                                        <p class="form-control-static">{{priceList.buyComName}}</p>
                                                    </div>
                                                </div>
-                                               <div class="form-group" ng-if="isSupply">
+                                               <div class="form-group" ng-if="priceList.priceType=='buyPrice'">
                                                    <label class="control-label col-md-5">供应商：</label>
                                                    <div class="col-md-7">
                                                        <p class="form-control-static">{{priceList.supplyComName}}</p>
@@ -447,7 +345,7 @@
                                                <div class="form-group">
                                                    <label class="control-label col-md-5">单价：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{priceList.price}}</p>
+                                                       <p class="form-control-static">{{priceList.unitPrice}}</p>
                                                    </div>
                                                </div>
                                            </div>

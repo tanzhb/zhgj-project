@@ -1,14 +1,13 @@
 package com.congmai.zhgj.web.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -25,13 +24,22 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
-
+import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.ExcelReader;
+import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
+import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.web.enums.ComType;
 import com.congmai.zhgj.web.model.LadderPrice;
+import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.PriceListExample;
+import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.LadderPriceService;
+import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.PriceListService;
 
 
@@ -50,6 +58,10 @@ public class PriceListController {
     private PriceListService  priceListService;
     @Autowired
 	private LadderPriceService  ladderPriceService;
+    @Autowired
+	private MaterielService  materielService;
+    @Autowired
+   	private CompanyService  companyService;
     
     
     /**
@@ -83,25 +95,66 @@ public class PriceListController {
      * @throws JsonParseException 
      */
     @RequestMapping(value = "/savePriceListInfo", method = RequestMethod.POST)
-	public ResponseEntity<PriceList> savePriceDetail(@RequestBody PriceList priceList  ,UriComponentsBuilder ucBuilder){//
+	public ResponseEntity<PriceList> savePriceDetail(@RequestBody PriceList priceList,UriComponentsBuilder ucBuilder){//
+    	Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
     	try{
     		if(StringUtils.isEmpty(priceList.getSerialNum())){
-    			priceList.setSerialNum(UUID.randomUUID().toString().replace("-",""));
+    			priceList.setSerialNum(ApplicationUtils.random32UUID());
+    			priceList.setPriceId(ApplicationUtils.random32UUID());
+    			priceList.setVersionNO("1");
+    			priceList.setIsLatestVersion("1");
+    			priceList.setStatus("0");//待审批
     			priceListService.insert(priceList);
     		}else{
-    			priceListService.update(priceList);
+    			PriceList latest=priceListService.getPriceListInfoByPriceId(priceList.getPriceId());//获取最新版本
+    			priceListService.updateVersion(priceList);//将之前版本更新为老版本
+    			List<LadderPrice>ladderPrices=ladderPriceService.selectListByPriceSerial(priceList.getSerialNum());
+    			String serialNum=ApplicationUtils.random32UUID();
+    			priceList.setSerialNum(serialNum);
+    			for(LadderPrice ladderPrice:ladderPrices ){
+    				ladderPrice.setPriceSerial(serialNum);
+    			}
+    			if("buyPrice".equals(priceList.getPriceType())){
+    				priceList.setBuyComId(null);
+    			}else{
+    				priceList.setSupplyComId(null);
+    			}
+    			priceList.setVersionNO(Integer.parseInt(latest.getVersionNO())+1+"");
+    			priceList.setIsLatestVersion("1");
+    			priceList.setStatus("0");//待审批
+    			priceListService.insert(priceList);
+    			ladderPriceService.insertLadderPrices(ladderPrices,currenLoginName);
     		}
     	}catch(Exception e){
     		System.out.println(e.getMessage());
+    	}
+    	if("buyPrice".equals(priceList.getPriceType())){
+    		priceList.setSupplyComName(companyService.selectOne(priceList.getSupplyComId()).getComName());
+    	}else{
+    		priceList.setBuyComName(companyService.selectOne(priceList.getBuyComId()).getComName());
     	}
 		return new ResponseEntity<PriceList>(priceList, HttpStatus.OK);
     }
   
     @RequestMapping(value = "/getPriceList", method = RequestMethod.GET)
-    public ResponseEntity<Map> getWarehouseList(HttpServletRequest request) {
+    public ResponseEntity<Map> getPriceList(HttpServletRequest request) {
 		List<PriceList> priceLists = priceListService.selectPriceList(new  PriceListExample());
 		if (priceLists==null||priceLists.isEmpty()) {
 			return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);//判断是否为空,为空返回NO_CONTENT
+		}
+		for(PriceList priceList:priceLists){
+			if(StringUtils.isEmpty(priceList.getBuyComId())){
+				priceList.setSupplyComName(companyService.selectOne(priceList.getSupplyComId()).getComName());
+			}else{
+				priceList.setSupplyComName(companyService.selectOne(priceList.getBuyComId()).getComName());
+			}
+			Materiel m=materielService.getMaterielInfoByMaterielId(materielService.selectById(priceList.getMaterielSerial()).getMaterielId());
+			priceList.setMaterielName(m.getMaterielName());
+			priceList.setMaterielNum(m.getMaterielNum());
+			priceList.setUnit(m.getUnit());
+			priceList.setSpecifications(m.getSpecifications());
+			priceList.setPriceNum(priceList.getPriceNum()+"-V"+priceList.getVersionNO());
 		}
 		// 封装datatables数据返回到前台
 		Map pageMap = new HashMap();
@@ -116,12 +169,41 @@ public class PriceListController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/viewPriceListDetail", method = RequestMethod.POST)
-    public ResponseEntity<PriceList> viewWarehouseDetail(Map<String, Object> map, @RequestBody String  serialNum) {
+   /* @RequestMapping(value = "/viewPriceListDetail", method = RequestMethod.POST)
+    public ResponseEntity<PriceList> viewPriceListDetail(HttpServletRequest request, @RequestBody String  serialNum) {
+    	Map<String, Object> map = new HashMap<String, Object>();
     	PriceList priceList=priceListService.selectById(serialNum);
+    	Materiel m=materielService.selectById(priceList.getMaterielSerial());
+    	priceList.setMaterielNum(m.getMaterielNum());
+    	priceList.setMaterielName(m.getMaterielName());
+    	priceList.setSpecifications(m.getSpecifications());
+    	priceList.setUnit(m.getUnit());
     	return new ResponseEntity<PriceList>(priceList, HttpStatus.OK);
+    }*/
+    @RequestMapping(value = "/viewPriceListDetail", method = RequestMethod.POST)
+    public ResponseEntity<Map> viewPriceListDetail(HttpServletRequest request, @RequestBody String  serialNum) {
+    	Map<String, Object> map = new HashMap<String, Object>();
+    	PriceList priceList=priceListService.selectById(serialNum);
+    	if(priceList!=null){
+    	Materiel m=materielService.selectById(priceList.getMaterielSerial());
+    	priceList.setMaterielNum(m.getMaterielNum());
+    	priceList.setMaterielName(m.getMaterielName());
+    	priceList.setSpecifications(m.getSpecifications());
+    	priceList.setUnit(m.getUnit());
+    	if("buyPrice".equals(priceList.getPriceType())){
+    		priceList.setSupplyComName(companyService.selectOne(priceList.getSupplyComId()).getComName());
+    	}else{
+    		priceList.setBuyComName(companyService.selectOne(priceList.getBuyComId()).getComName());
+    	}
+    	map.put("priceList", priceList);
+    	map.put("ladderPrices", ladderPriceService.selectListByPriceSerial(serialNum));
+    	map.put("priceLists", priceListService.getAllPriceListInfoByPriceIdOrPriceType(priceList.getPriceId(), null));//价格历史版本信息
+    	map.put("buyList", priceListService.getAllPriceListInfoByPriceIdOrPriceType(priceList.getPriceId(), "salePrice"));//获取历史价格中使用的采购商
     }
-	
+    	map.put("supplyCom", companyService.selectCompanyByComType(ComType.SUPPLIER.getValue(), null));
+    	map.put("buyCom", companyService.selectCompanyByComType(ComType.BUYER.getValue(), null));
+    	return new ResponseEntity<Map>(map, HttpStatus.OK);
+    }
     /**
 	 * 
 	 * @Description 批量删除价格
@@ -156,7 +238,7 @@ public class PriceListController {
             ladderPrices = objectMapper.readValue(params, javaType);
             if(!CollectionUtils.isEmpty(ladderPrices)){
             	ladderPriceService.deleteByPriceSerial(ladderPrices.get(0));
-            	ladderPriceService.insertLadderPrices(ladderPrices);
+            	ladderPriceService.insertLadderPrices(ladderPrices,currenLoginName);
             }
             
     		flag = "1";
@@ -188,13 +270,127 @@ public class PriceListController {
 		 * @param ids
 		 * @return
 		 */
-		@RequestMapping(value = "/getLadderPriceList", method = RequestMethod.POST)
-		public List <LadderPrice>  getLadderPriceList(@RequestBody String id) {
-			if ("".equals(id) || id== null) {
+	 /* public ResponseEntity<Map> getWarehouseList(HttpServletRequest request) {
+			List<PriceList> priceLists = priceListService.selectPriceList(new  PriceListExample());
+			if (priceLists==null||priceLists.isEmpty()) {
+				return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);//判断是否为空,为空返回NO_CONTENT
+			}
+			// 封装datatables数据返回到前台
+			Map pageMap = new HashMap();
+			pageMap.put("draw", 1);
+			pageMap.put("recordsTotal", priceLists.size());
+			pageMap.put("recordsFiltered", priceLists.size());
+			pageMap.put("data", priceLists);
+			return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+		}*/
+		/*@RequestMapping(value = "/getLadderPrice", method = RequestMethod.POST)
+		public List <LadderPrice>  getLadderPriceList(HttpServletRequest request,@RequestBody String serialNum) {
+			Map<String, Object> map = new HashMap<String, Object>();
+	    	PriceList priceList=priceListService.selectById(serialNum);
+	    	return new ResponseEntity<PriceList>(priceList, HttpStatus.OK);
+			if ("".equals(serialNum) || serialNum== null) {
 				return new ArrayList<LadderPrice>();
 			}
 			LadderPrice ladderPrice=new LadderPrice();
-			ladderPrice.setPriceSerial(id);
+			ladderPrice.setPriceSerial(serialNum);
 			return ladderPriceService.selectListByPriceSerial(ladderPrice);
-		} 
+		} */
+		@RequestMapping(value = "/getLadderPrice", method = RequestMethod.POST)
+	    public ResponseEntity<Map> getLadderPriceList(HttpServletRequest request,@RequestBody String serialNum) {
+			if ("".equals(serialNum) || serialNum== null) {
+				return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);//判断是否为空,为空返回NO_CONTENT
+			}
+			// 封装datatables数据返回到前台
+			Map pageMap = new HashMap();
+			pageMap.put("data", ladderPriceService.selectListByPriceSerial(serialNum));
+			return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+		}
+		/**
+	     * @Description (导出仓库信息)
+	     * @param request
+	     * @return
+	     */
+	    @RequestMapping("exportPriceList")
+	    public void exportWarehouse(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+	    		Map<String, Object> dataMap = new HashMap<String, Object>();
+	    		List<PriceList> priceListList= priceListService.selectPriceList(new PriceListExample());
+	    		for(PriceList p:priceListList){
+	    			if("buyPrice".equals(p.getPriceType())){
+	    				p.setComName(companyService.selectOne(p.getSupplyComId()).getComName());
+	    			}else{
+	    				p.setComName(companyService.selectOne(p.getBuyComId()).getComName());
+	    			}
+	    			Materiel m=materielService.selectById(p.getMaterielSerial());
+	    			p.setMaterielNum(m.getMaterielNum());
+	    			p.setMaterielName(m.getMaterielName());
+	    			p.setSpecifications(m.getSpecifications());
+	    			p.setUnit(m.getUnit());
+	    		}
+	    		dataMap.put("priceListList",priceListList);
+	    		ExcelUtil.export(request, response, dataMap, "priceList", "价格信息");
+	    }
+	    
+	    /**
+	     * @Description (下载导入模板)
+	     * @param request
+	     * @return
+	     */
+	    @RequestMapping("downloadImportTemp")
+	    public void downloadWarehouseTemp(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+	    	ExcelUtil.importTempDownLoad(request, response, "priceList");
+	    }
+	    
+	    /**
+	     * @Description (仓库信息导入)
+	     * @param request
+	     * @return
+	     */
+	    @RequestMapping("priceListImport")
+	    @ResponseBody
+	    public Map<String,String> companyImport(@RequestParam(value = "excelFile") MultipartFile excelFile,HttpServletRequest request,HttpServletResponse response) {
+	    	Map<String,String> map = new HashMap<String, String>();
+	    	 try {
+			     
+				ExcelReader excelReader = new ExcelReader(excelFile.getInputStream());
+				excelReader.readExcelContent(new RowHandler() {
+					@Override
+					public void handle(List<Object> row,int i) throws Exception {
+						/*if(!CollectionUtils.isEmpty(row)){
+							try{
+								Warehouse  warehouse = new Warehouse();
+								warehouse.setSerialNum(ApplicationUtils.random32UUID());
+								warehouse.setWarehouseNum(row.get(0).toString());
+								warehouse.setWarehouseName(row.get(1).toString());
+								warehouse.setWarehouseType(row.get(2).toString());
+								warehouse.setWarehouseCategory(row.get(3).toString());
+								warehouse.setOwner(row.get(4).toString());
+								warehouse.setAddress(row.get(5).toString());
+								warehouse.setArea(row.get(6).toString());
+								warehouse.setAdmin(row.get(7).toString());
+								warehouse.setTel(row.get(8).toString());
+								warehouse.setEmail(row.get(9).toString());
+								warehouse.setFax(row.get(10).toString());
+								warehouse.setRemark(row.get(11).toString());
+								Subject currentUser = SecurityUtils.getSubject();
+								String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+								warehouse.setCreateTime(new Date());
+								warehouse.setCreator(currenLoginName);
+								warehouse.setUpdateTime(new Date());
+								warehouse.setUpdater(currenLoginName);
+								warehouseService.insert(warehouse);
+							}catch(Exception  e){
+								throw new Exception("第"+i+"行数据异常请检查，数据内容："+row.toString());
+							}
+							
+						}*/
+						
+					}
+				}, 1);
+				map.put("data", "success");
+			} catch (Exception e1) {
+				map.put("data", e1.getMessage());
+			}
+	    	
+	         return map;
+	    }
 }

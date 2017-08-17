@@ -97,7 +97,7 @@
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from ladderPrice
+    update  from ladderPrice set   delFlg ='1'
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.LadderPriceExample" >
@@ -320,4 +320,13 @@
       #{item.updater,jdbcType=VARCHAR}, #{item.updateTime,jdbcType=TIMESTAMP})  
     </foreach>  
 </insert>  
+<select id="selectByPriceSerial" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.LadderPrice" >
+    select 
+    <include refid="Base_Column_List" />
+    from ladderPrice
+       	where delFlg ='0'
+     <if test="priceSerial != null" >
+        and priceSerial = #{priceSerial,jdbcType=VARCHAR}
+      </if>
+  </select>
 </mapper>

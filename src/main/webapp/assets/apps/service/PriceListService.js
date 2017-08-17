@@ -44,7 +44,9 @@ angular.module('MetronicApp').factory('priceListService', ['$rootScope', '$http'
   //通过价格流水查找阶梯价格
     function getLadderPriceInfo(serialNum){
         var deferred = $q.defer();  
-        $http.post($rootScope.basePath + "/rest/priceList/getLadderPriceList", serialNum).success(function (data) { 
+        debugger;
+        $http.post($rootScope.basePath + "/rest/priceList/getLadderPrice", serialNum).success(function (data) { 
+        	  debugger;
             // 如果连接成功，延时返回给调用者 
             deferred.resolve(data);  
         })  
