@@ -262,7 +262,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     /*  TableDatatablesManaged.init(); */
     
      $('#signDate').datepicker({
-  	   language:"zh-CN",
+  	   /* language:"zh-CN", */
   	   autoclose:true,
   	   pickerPosition:"top-right",
   	   todayHighlight: true

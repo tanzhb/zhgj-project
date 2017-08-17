@@ -270,7 +270,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 							                            }
 							                            ]}).on('order.dt',
 							                            		function() {
-							                            	console.log('排序');
+							                            	/*console.log('排序');*/
 							                            })
 		}
 		
