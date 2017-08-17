@@ -84,6 +84,8 @@ public class PriceList {
     
     private String comNum;//企业编号
     
+    private String comName;//企业名称
+    
     
     
 
@@ -373,6 +375,14 @@ public class PriceList {
 
 	public void setComNum(String comNum) {
 		this.comNum = comNum;
+	}
+
+	public String getComName() {
+		return comName;
+	}
+
+	public void setComName(String comName) {
+		this.comName = comName;
 	}
     
 }

@@ -271,7 +271,7 @@ angular
 						$scope.editPriceList = function(){
 							debugger;
 							var priceList=$scope.priceList;
-							getLadderPriceInfo($scope.priceList.serialNum);
+							getPriceListInfo($scope.priceList.serialNum);
 							$scope.priceList=priceList;
 							$scope.priceListView =false;
 		        			$scope.priceListAdd =true ;
@@ -287,20 +287,8 @@ angular
 							 var priceEffectiveDate=$scope.priceList.priceEffectiveDate;
 								var priceExpirationDate=$scope.priceList.priceExpirationDate;
 								debugger;
-								var d =daysBetween(priceEffectiveDate,priceExpirationDate);
-								if(d>0&&priceExpirationDate!=null&&priceExpirationDate!=""){
-									toastr.warning("价格生效期时间不能大于价格失效期时间  ！");
-								$("#priceEffectiveDate").focus();
-								return false;
-								}
-								return true;
-						}
-						function judgeLadderPrice (){
-							 var priceEffectiveDate=$scope.priceList.priceEffectiveDate;
-								var priceExpirationDate=$scope.priceList.priceExpirationDate;
-								debugger;
-								var d =daysBetween(priceEffectiveDate,priceExpirationDate);
-								if(d>0&&priceExpirationDate!=null&&priceExpirationDate!=""){
+								var d =daysBetween(priceExpirationDate,priceEffectiveDate);
+								if(d<0&&priceExpirationDate!=null&&priceExpirationDate!=""){
 									toastr.warning("价格生效期时间不能大于价格失效期时间  ！");
 								$("#priceEffectiveDate").focus();
 								return false;
@@ -484,6 +472,8 @@ angular
 							 	        		$scope.ladderprices=data.ladderPrices;
 							 	        		$scope.buyCom=data.buyCom;
 							 	        		$scope.supplyCom=data.supplyCom;
+							 	        		$scope.buyComs=data.buyList;
+							 	        		$scope.priceLists=data.priceLists;
 							 	        		_index=data.ladderPrices.length-1;
 							 	        		if($scope.priceList.isLadderPrice=='1'){
 							 	        			$('#isLadderPriceCheck').iCheck('check'); 
@@ -797,6 +787,58 @@ angular
 						 			    	}
 						 		    	   
 						 		       }
+						 		       
+						 		      /**
+								        * 下载EXCEL模板
+								        */
+								       $scope.downloadImportTemp = function(){
+								    	   window.location.href=$rootScope.basePath+"/rest/priceList/downloadImportTemp";
+								       }
+								       
+								       /**
+								        * 上传EXCEL
+								        */
+								       $scope.uploadExcel = function(){
+								    	    var file = document.querySelector('input[type=file]').files[0];
+								    	    if(handle.isNull(file)){
+								    	    	toastr.warning("请选择Excel文件！");
+								    	    }
+								    	    console.log(file.name);
+								    	    var type = file.name.substring(file.name.lastIndexOf("."));
+								    	   if(type != ".xls"){
+								    		toastr.warning("文件格式不正确，需要xls类型的Excel文档");
+								    		   return;
+								    	   }
+								    	   	handle.blockUI("正在导入中，请不要进行其他操作"); 
+								    	   	var promise = WarehouseService.uploadExcel();
+							       			promise.then(function(data){
+							       				handle.unblockUI(); 
+							       				if(data.data.data=="success"){
+							       					toastr.success("导入成功");
+							       					table.ajax.reload();
+							       				}else{
+							       					toastr.error(data.data.data);
+							       				}
+							       				$('#import').modal('hide'); 
+								            },function(data){
+								               //调用承诺接口reject();
+								            	toastr.error("操作失败");
+								            	$('#import').modal('hide'); 
+								            });
+								    	   
+								       }
+								       $scope.exportPriceList = function(){
+									    	 handle.blockUI("正在导出数据，请稍后"); 
+									    	 window.location.href=$rootScope.basePath+"/rest/priceList/exportPriceList";
+									    	 handle.unblockUI(); 
+									       }
+									       
+								       $('#import').on('hide.bs.modal', function (e) { 
+								    	   $("#resetFile").trigger("click");
+								    	  //$("#file_span input[type='file']").remove();
+								    	  //$(".fileinput-filename").val("");
+								    	  //$("#file_span").appendTo('<input type="file" file-model="excelFile" accept=".xls" name="...">');
+								       })
 						 		   // 页面加载完成后调用，验证输入框
 						 				$scope.$watch('$viewContentLoaded', function() {  
 						 				            var form1 = $('#ladderpriceForm');

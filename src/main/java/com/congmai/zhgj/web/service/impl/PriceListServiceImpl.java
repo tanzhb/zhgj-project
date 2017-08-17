@@ -111,7 +111,7 @@ public class PriceListServiceImpl extends GenericServiceImpl<PriceList, String> 
 			
 		}
 		for(PriceList priceList:priceLists ){
-			priceList.setVersionNO("V-"+priceList.getVersionNO());
+			priceList.setVersionNO("V"+priceList.getVersionNO());
 			priceList.setRate(priceList.getRate()+"%");
 			if(	!StringUtils.isEmpty(priceList.getBuyComId())){
 				priceList.setBuyComName(companyMapper.selectByPrimaryKey(priceList.getBuyComId()).getComName());

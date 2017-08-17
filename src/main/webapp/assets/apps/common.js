@@ -130,7 +130,7 @@ function daysBetween(DateOne, DateTwo) {
 
 	var cha = ((Date.parse(OneMonth + '/' + OneDay + '/' + OneYear) - Date
 			.parse(TwoMonth + '/' + TwoDay + '/' + TwoYear)) / 86400000);
-	return Math.abs(cha);
+	return cha;
 }
 
 //初始化toastr开始

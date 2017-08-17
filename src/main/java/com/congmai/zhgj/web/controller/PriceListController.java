@@ -1,12 +1,14 @@
 package com.congmai.zhgj.web.controller;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -23,14 +25,22 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.ExcelReader;
+import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
+import com.congmai.zhgj.web.enums.ComType;
+import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.LadderPrice;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.PriceListExample;
+import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.LadderPriceService;
 import com.congmai.zhgj.web.service.MaterielService;
@@ -102,10 +112,20 @@ public class PriceListController {
     			priceList.setStatus("0");//待审批
     			priceListService.insert(priceList);
     		}else{
+    			PriceList latest=priceListService.getPriceListInfoByPriceId(priceList.getPriceId());//获取最新版本
     			priceListService.updateVersion(priceList);//将之前版本更新为老版本
     			List<LadderPrice>ladderPrices=ladderPriceService.selectListByPriceSerial(priceList.getSerialNum());
-    			priceList.setSerialNum(ApplicationUtils.random32UUID());
-    			priceList.setVersionNO(Integer.parseInt(priceList.getVersionNO())+1+"");
+    			String serialNum=ApplicationUtils.random32UUID();
+    			priceList.setSerialNum(serialNum);
+    			for(LadderPrice ladderPrice:ladderPrices ){
+    				ladderPrice.setPriceSerial(serialNum);
+    			}
+    			if("buyPrice".equals(priceList.getPriceType())){
+    				priceList.setBuyComId(null);
+    			}else{
+    				priceList.setSupplyComId(null);
+    			}
+    			priceList.setVersionNO(Integer.parseInt(latest.getVersionNO())+1+"");
     			priceList.setIsLatestVersion("1");
     			priceList.setStatus("0");//待审批
     			priceListService.insert(priceList);
@@ -113,6 +133,11 @@ public class PriceListController {
     		}
     	}catch(Exception e){
     		System.out.println(e.getMessage());
+    	}
+    	if("buyPrice".equals(priceList.getPriceType())){
+    		priceList.setSupplyComName(companyService.selectOne(priceList.getSupplyComId()).getComName());
+    	}else{
+    		priceList.setBuyComName(companyService.selectOne(priceList.getBuyComId()).getComName());
     	}
 		return new ResponseEntity<PriceList>(priceList, HttpStatus.OK);
     }
@@ -170,7 +195,7 @@ public class PriceListController {
     	priceList.setMaterielName(m.getMaterielName());
     	priceList.setSpecifications(m.getSpecifications());
     	priceList.setUnit(m.getUnit());
-    	if("采购价格".equals(priceList.getPriceType())){
+    	if("buyPrice".equals(priceList.getPriceType())){
     		priceList.setSupplyComName(companyService.selectOne(priceList.getSupplyComId()).getComName());
     	}else{
     		priceList.setBuyComName(companyService.selectOne(priceList.getBuyComId()).getComName());
@@ -178,10 +203,10 @@ public class PriceListController {
     	map.put("priceList", priceList);
     	map.put("ladderPrices", ladderPriceService.selectListByPriceSerial(serialNum));
     	map.put("priceLists", priceListService.getAllPriceListInfoByPriceIdOrPriceType(priceList.getPriceId(), null));//价格历史版本信息
-    	map.put("buyList", priceListService.getAllPriceListInfoByPriceIdOrPriceType(priceList.getPriceId(), "销售价格"));//获取历史价格中使用的采购商
+    	map.put("buyList", priceListService.getAllPriceListInfoByPriceIdOrPriceType(priceList.getPriceId(), "salePrice"));//获取历史价格中使用的采购商
     }
-    	map.put("supplyCom", companyService.selectCompanyByComType("供应商", null));
-    	map.put("buyCom", companyService.selectCompanyByComType("采购商", null));
+    	map.put("supplyCom", companyService.selectCompanyByComType(ComType.SUPPLIER.getValue(), null));
+    	map.put("buyCom", companyService.selectCompanyByComType(ComType.BUYER.getValue(), null));
     	return new ResponseEntity<Map>(map, HttpStatus.OK);
     }
     /**
@@ -285,4 +310,92 @@ public class PriceListController {
 			pageMap.put("data", ladderPriceService.selectListByPriceSerial(serialNum));
 			return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 		}
+		/**
+	     * @Description (导出仓库信息)
+	     * @param request
+	     * @return
+	     */
+	    @RequestMapping("exportPriceList")
+	    public void exportWarehouse(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+	    		Map<String, Object> dataMap = new HashMap<String, Object>();
+	    		List<PriceList> priceListList= priceListService.selectPriceList(new PriceListExample());
+	    		for(PriceList p:priceListList){
+	    			if("buyPrice".equals(p.getPriceType())){
+	    				p.setComName(companyService.selectOne(p.getSupplyComId()).getComName());
+	    			}else{
+	    				p.setComName(companyService.selectOne(p.getBuyComId()).getComName());
+	    			}
+	    			Materiel m=materielService.selectById(p.getMaterielSerial());
+	    			p.setMaterielNum(m.getMaterielNum());
+	    			p.setMaterielName(m.getMaterielName());
+	    			p.setSpecifications(m.getSpecifications());
+	    			p.setUnit(m.getUnit());
+	    		}
+	    		dataMap.put("priceListList",priceListList);
+	    		ExcelUtil.export(request, response, dataMap, "priceList", "价格信息");
+	    }
+	    
+	    /**
+	     * @Description (下载导入模板)
+	     * @param request
+	     * @return
+	     */
+	    @RequestMapping("downloadImportTemp")
+	    public void downloadWarehouseTemp(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+	    	ExcelUtil.importTempDownLoad(request, response, "priceList");
+	    }
+	    
+	    /**
+	     * @Description (仓库信息导入)
+	     * @param request
+	     * @return
+	     */
+	    @RequestMapping("priceListImport")
+	    @ResponseBody
+	    public Map<String,String> companyImport(@RequestParam(value = "excelFile") MultipartFile excelFile,HttpServletRequest request,HttpServletResponse response) {
+	    	Map<String,String> map = new HashMap<String, String>();
+	    	 try {
+			     
+				ExcelReader excelReader = new ExcelReader(excelFile.getInputStream());
+				excelReader.readExcelContent(new RowHandler() {
+					@Override
+					public void handle(List<Object> row,int i) throws Exception {
+						/*if(!CollectionUtils.isEmpty(row)){
+							try{
+								Warehouse  warehouse = new Warehouse();
+								warehouse.setSerialNum(ApplicationUtils.random32UUID());
+								warehouse.setWarehouseNum(row.get(0).toString());
+								warehouse.setWarehouseName(row.get(1).toString());
+								warehouse.setWarehouseType(row.get(2).toString());
+								warehouse.setWarehouseCategory(row.get(3).toString());
+								warehouse.setOwner(row.get(4).toString());
+								warehouse.setAddress(row.get(5).toString());
+								warehouse.setArea(row.get(6).toString());
+								warehouse.setAdmin(row.get(7).toString());
+								warehouse.setTel(row.get(8).toString());
+								warehouse.setEmail(row.get(9).toString());
+								warehouse.setFax(row.get(10).toString());
+								warehouse.setRemark(row.get(11).toString());
+								Subject currentUser = SecurityUtils.getSubject();
+								String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+								warehouse.setCreateTime(new Date());
+								warehouse.setCreator(currenLoginName);
+								warehouse.setUpdateTime(new Date());
+								warehouse.setUpdater(currenLoginName);
+								warehouseService.insert(warehouse);
+							}catch(Exception  e){
+								throw new Exception("第"+i+"行数据异常请检查，数据内容："+row.toString());
+							}
+							
+						}*/
+						
+					}
+				}, 1);
+				map.put("data", "success");
+			} catch (Exception e1) {
+				map.put("data", e1.getMessage());
+			}
+	    	
+	         return map;
+	    }
 }

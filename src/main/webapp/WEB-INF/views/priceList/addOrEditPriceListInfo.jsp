@@ -1,5 +1,5 @@
 <%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="/tags" prefix="date"%>
 <!-- BEGIN PAGE HEADER-->
 <style>
 .box_card{
@@ -151,16 +151,17 @@
                                                     <div class="col-md-8">
                                                                         <select class="form-control" id="priceType" name ="priceType" ng-model="priceList.priceType"  ng-show="priceListAdd"  >
                                                                           <option value=""></option>
-                                                                        <option value="采购价格">采购价格</option>
-                                                                        <option value="销售价格">销售价格</option>
+                                                                        <option value="buyPrice">采购价格</option>
+                                                                        <option value="salePrice">销售价格</option>
                                                                         </select>
                                                                          <div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.priceType}}</p> 
+                                                                           <p class="control-label left" ng-show="priceListView"  ng-if="priceList.priceType=='buyPrice'" >采购价格</p>
+                                                                        <p class="control-label left" ng-show="priceListView"   ng-if="priceList.priceType=='salePrice'" >  销售价格</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <!--/span-->
-                                                            <div class="col-md-6"  ng-if="priceList.priceType=='销售价格'">
+                                                            <div class="col-md-6"  ng-if="priceList.priceType=='salePrice'">
                                                              <div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="admin"> <span class="required"> * </span>采购商 :</label>
                                                      <div class="col-md-8">
@@ -173,7 +174,7 @@
                                                             </div>
                                                             <!--/span-->
                                                         </div>
-                                                        <div class="col-md-6"  ng-if="priceList.priceType=='采购价格'"">
+                                                        <div class="col-md-6"  ng-if="priceList.priceType=='buyPrice'">
                                                              <div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="admin"> <span class="required"> * </span>供应商 :</label>
                                                     <div class="col-md-8">
@@ -270,12 +271,9 @@
                                                              <div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="isLadderPrice"> <!-- <span class="required"> * </span> -->是否阶梯单价 :</label>
                                                     <div class="col-md-8">
-                                                                         <div class="icheck-inline"  ng-show="priceListAdd" >
-                                                                                <label  ><input type="checkbox"     id="isLadderPriceCheck"    name ="isLadderPrice"  class="icheck"    checked="isChecked">是 </label>
+                                                                         <div class="icheck-inline"  ng-show="priceListAdd"   >
+                                                                                <label  ><input type="checkbox"     id="isLadderPriceCheck"    name ="isLadderPrice"  class="icheck"    ng-checked="priceList.isLadderPrice=='1'">是 </label>
                                                                         </div>
-                                                                         <!-- <div class="icheck-inline"  ng-show="isChecked" >
-                                                                                <label  ><input type="checkbox"     id="isLadderPriceCheck"    name ="isLadderPrice"  class="icheck"    checked="isChecked">是 </label>
-                                                                        </div> --> 
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="priceListView"   ng-if="priceList.isLadderPrice=='1'">是</p>
                                                                          <p class="control-label left" ng-show="priceListView"   ng-if="priceList.isLadderPrice=='0'">否</p>
@@ -289,11 +287,12 @@
                                                     <div class="col-md-8">
                                                                        <select class="form-control" id="ladderType" name ="ladderType" ng-model="priceList.ladderType"  ng-show="priceListAdd"  >
                                                                           <option value=""></option>
-                                                                        <option value="单笔阶梯单价">单笔阶梯单价</option>
-                                                                        <option value="累计阶梯单价">累计阶梯单价</option>
+                                                                        <option value="oneStagePrice">单笔阶梯单价</option>
+                                                                        <option value="moreStagePrice">累计阶梯单价</option>
                                                                         </select>
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.ladderType}} </p>
+                                                                        <p class="control-label left" ng-show="priceListView"  ng-if="priceList.ladderType=='oneStagePrice'" >单笔阶梯单价 </p>
+                                                                        <p class="control-label left" ng-show="priceListView"   ng-if="priceList.ladderType=='moreStagePrice'" >  累计阶梯单价</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -303,11 +302,11 @@
                                                          <div class="portlet-title">
                             <div class="actions"  style="float: right;">
                              
-                                <button   class="btn blue btn-outline  btn-sm "         ng-show="ladderpriceView"       ng-click="editLadderPrice()">
+                                <button   class="btn blue btn-outline  btn-sm "         ng-show="ladderpriceView"       ng-click="editLadderPrice()"><!--ng-show="ladderpriceView"   -->
                                             <i class="fa fa-edit"></i> 编辑 </button>
-                                <button   class="btn red  btn-outline  btn-sm "       ng-show="ladderpriceEdit"            ng-click="cancelEditLadderPrice()">
+                                <button   class="btn red  btn-outline  btn-sm "       ng-show="ladderpriceEdit"            ng-click="cancelEditLadderPrice()"><!--  ng-show="ladderpriceEdit"  -->
                                             <i class="fa fa-undo"></i> 取消 </button>
-                                <button   class="btn blue btn-outline  btn-sm "       ng-hide="ladderpriceAdd"     ng-click="saveLadderPrice()">
+                                <button   class="btn blue btn-outline  btn-sm "       ng-hide="ladderpriceAdd"     ng-click="saveLadderPrice()"><!--  ng-hide="ladderpriceAdd"  -->
                                             <i class="fa fa-save"></i> 保存 </button>
                             </div>
                         </div></br></br>
@@ -450,9 +449,76 @@
 							</form>
          				</div>
 
-
+  <div class="portlet-title"><!-- 使用采购商 START -->
+                            <div class="caption">使用采购商</div>
+                            <div class="actions">
+                            </div>
+                        </div>
+                          <div class="portlet-body form">
+                                    <div class="table-scrollable">
+                                        <table class="table table-bordered table-hover"  >
+                                            <thead>
+                                                <tr>
+                                                    <th>客户编号</th>
+                                                    <th>客户名称</th>
+                                                  
+                                                </tr>
+                                            </thead>
+                                            <tbody  ng-if="buyComs.length==0">
+			                                             	<tr>
+			                                                    <td colspan="2" align="center" >暂无数据</td>
+			                                                </tr>
+			                                </tbody>
+                                            <tbody ng-repeat="buycom in buyComs">
+                                                <tr >
+                                                    <td  class="col-md-1">{{buycom.comNum}}</td>
+                                                    <td class="col-md-1">{{buycom.buyComName}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div><!-- 使用采购商 END-->
 				
-                    
+                    <div class="portlet-title"><!-- 价格日志START-->
+                            <div class="caption">价格日志</div>
+                            <div class="actions">
+                            </div>
+                        </div>
+                          <div class="portlet-body form">
+                                    <div class="table-scrollable">
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>版本号</th>
+                                                    <th>生效日期</th>
+                                                     <th>币种</th>
+                                                    <th>价格</th>
+                                                     <th>税率</th>
+                                                    <th>含税单价</th>
+                                                     <th>交易笔数</th>
+                                                  
+                                                </tr>
+                                            </thead>
+                                            <tbody  ng-if="priceLists.length==0">
+			                                             	<tr>
+			                                                    <td colspan="7" align="center" >暂无数据</td>
+			                                                </tr>
+			                                </tbody>
+                                            <tbody ng-repeat="priceList in priceLists">
+                                            
+                                                <tr >
+                                                    <td>{{priceList.versionNO}}</td>
+                                                    <td>{{priceList.priceEffectiveDate | date:'yyyy-MM-dd' }}</td>
+                                                    <td>{{priceList.currency}}</td>
+                                                    <td>{{priceList.unitPrice}}</td>
+                                                    <td>{{priceList.rate}}</td>
+                                                    <td>{{priceList.inclusivePrice}}</td>
+                                                    <td>--</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div><!-- 价格日志END-->
 				
 				
 				</div>
