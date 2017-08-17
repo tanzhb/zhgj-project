@@ -71,6 +71,11 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 		$state.go('userContract');
 	}
 	
+	//打印
+	$scope.print=function(){
+		window.print();  
+	}
+	
 	//根据参数查询对象
 	$scope.getUserContractInfo  = function(id) {
 		debugger

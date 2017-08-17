@@ -81,10 +81,6 @@ public class ContractController {
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
 		List<ContractVO> contractList=contractService.queryContractList(currenLoginName);
 
-		if (contractList.isEmpty()) {
-			return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);// You many
-			// HttpStatus.NOT_FOUND
-		}
 		//封装datatables数据返回到前台
 		Map pageMap = new HashMap();
 		pageMap.put("draw", 1);

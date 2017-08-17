@@ -232,7 +232,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 /*      TableDatatablesManaged.init(); */
     
        $('#signDate').datepicker({
-    	   language:"zh-CN",
+    	   /* language:"zh-CN",
+    	   dateFormat:"yyyy-mm-dd", */
     	   autoclose:true,
     	   pickerPosition:"top-right",
     	   todayHighlight: true
@@ -246,8 +247,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		var startDate=$("#startDate").val();
     		var endDate=$("#endDate").val();
     		if(startDate>endDate&&endDate!=null&&endDate!=""){
-    		alert("开始时间不能大于结束时间  ！");
-    		$("#startDate").focus();
+    		/* alert("开始时间不能大于结束时间  ！"); */
+    		toastr.warning('开始时间不能大于结束时间  ！');
+    		/* $("#startDate").focus(); */
+    		$("#startDate").val("");
     		}
     		});
     	
@@ -261,8 +264,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		var endDate=$("#endDate").val();
     		
     		if(endDate<startDate){
-    		alert("结束时间不能小于开始时间 ！");
-    		$("#endDate").focus();
+    		/* alert("结束时间不能小于开始时间 ！"); */
+    		toastr.warning('结束时间不能小于开始时间 ！');
+    		$("#endDate").val("");
     		}else{
     		}
     		}); 
