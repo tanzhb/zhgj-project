@@ -184,23 +184,6 @@
 						</tr>
 					</thead>
 					
-					<tfoot>
-						<tr>
-							<th></th>
-							<th>价格编号 </th>
-                            <th> 供应商名称</th>
-                            <th> 物料编号</th>
-                            <th>产品名称</th>
-                            <th>规格型号 </th>
-                            <th> 单位 </th>
-                            <th>单价 </th>
-                            <th> 税率 </th>
-                             <th>币种 </th>
-                            <th> 价格有效期 </th>
-                            <th>价格失效期 </th>
-                            <th> 状态 </th>
-						</tr>
-					</tfoot>
 					<tbody>
 					</tbody>
 				</table>
