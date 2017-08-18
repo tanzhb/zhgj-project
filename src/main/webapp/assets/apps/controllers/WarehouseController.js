@@ -253,9 +253,9 @@ angular
 								debugger;
 								var id_count = table.$('input[type="checkbox"]:checked').length;
 								if(id_count==0){
-									handle.toastr.warning("请选择一条数据进行编辑");
+									toastr.warning("请选择一条数据进行编辑");
 								}else if(id_count>1){
-									handle.toastr.warning("只能选择一条数据进行编辑");
+									toastr.warning("只能选择一条数据进行编辑");
 								}else{
 									var serialNum = table.$('input[type="checkbox"]:checked').val();
 									$state.go("addWarehouse",{warehouseSerialNum:serialNum});
@@ -450,12 +450,12 @@ angular
 							       $scope.uploadExcel = function(){
 							    	    var file = document.querySelector('input[type=file]').files[0];
 							    	    if(handle.isNull(file)){
-							    	    	handle.toastr.warning("请选择Excel文件！");
+							    	    	toastr.warning("请选择Excel文件！");
 							    	    }
 							    	    console.log(file.name);
 							    	    var type = file.name.substring(file.name.lastIndexOf("."));
 							    	   if(type != ".xls"){
-							    		   handle.toastr.warning("文件格式不正确，需要xls类型的Excel文档");
+							    		toastr.warning("文件格式不正确，需要xls类型的Excel文档");
 							    		   return;
 							    	   }
 							    	   	handle.blockUI("正在导入中，请不要进行其他操作"); 
@@ -463,15 +463,15 @@ angular
 						       			promise.then(function(data){
 						       				handle.unblockUI(); 
 						       				if(data.data.data=="success"){
-						       					handle.toastr.success("导入成功");
+						       					toastr.success("导入成功");
 						       					table.ajax.reload();
 						       				}else{
-						       					handle.toastr.error(data.data.data);
+						       					toastr.error(data.data.data);
 						       				}
 						       				$('#import').modal('hide'); 
 							            },function(data){
 							               //调用承诺接口reject();
-							            	handle.toastr.error("操作失败");
+							            	toastr.error("操作失败");
 							            	$('#import').modal('hide'); 
 							            });
 							    	   

@@ -8,6 +8,10 @@
 					<button type="button" class="close" data-dismiss="modal"
 						aria-hidden="true"></button>
 					<h4 class="modal-title">选择物料</h4>
+					<!-- <a href="javascript:;" ng-repeat="serialNum in serialNums" class="btn btn-xs green">{{serialNum}}<i class="fa fa-close"></i></a> -->
+					<a href="javascript:;" style="margin:0px 5px 2px 0px;" class="btn btn-xs green" ng-repeat="data in serialNums" ng-click="getCheckedIds(data.serialNum)">
+                           {{data.materielNum}}<i class="fa fa-close"></i>
+                    </a>
 				</div>
 				<div class="modal-body">
 					<table class="table table-striped table-bordered table-hover table-checkable order-column" id="select_sample_2">

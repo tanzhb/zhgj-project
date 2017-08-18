@@ -106,7 +106,32 @@ function timeStamp2String (time){
      var mseconds = datetime.getMilliseconds();
      return year + "-" + month + "-" + date+" "+hour+":"+minute+":"+second;
 };
+function timeStamp2ShortString (time){
+    var datetime = new Date();
+     datetime.setTime(time);
+     var year = datetime.getFullYear();
+     var month = datetime.getMonth() + 1;
+     var date = datetime.getDate();
+     return year + "-" + month + "-" + date;
+};
+//+---------------------------------------------------
+//| 求两个时间的天数差 日期格式为 YYYY-MM-dd
+//+---------------------------------------------------
+function daysBetween(DateOne, DateTwo) {
+	var OneMonth = DateOne.substring(5, DateOne.lastIndexOf('-'));
+	var OneDay = DateOne
+			.substring(DateOne.length, DateOne.lastIndexOf('-') + 1);
+	var OneYear = DateOne.substring(0, DateOne.indexOf('-'));
 
+	var TwoMonth = DateTwo.substring(5, DateTwo.lastIndexOf('-'));
+	var TwoDay = DateTwo
+			.substring(DateTwo.length, DateTwo.lastIndexOf('-') + 1);
+	var TwoYear = DateTwo.substring(0, DateTwo.indexOf('-'));
+
+	var cha = ((Date.parse(OneMonth + '/' + OneDay + '/' + OneYear) - Date
+			.parse(TwoMonth + '/' + TwoDay + '/' + TwoYear)) / 86400000);
+	return cha;
+}
 
 //初始化toastr开始
 toastr.options = {
@@ -189,3 +214,16 @@ function getExplorer() {
     }
 }
 //页面打印方法end********/
+
+/*******自定义验证辅助方法START*********/
+//取消表单元素警告状态
+function changeTextInputBorder(obj){
+	 $(obj).parent().removeClass("has-error");
+	 $(obj).next().text("");
+}
+//取消表单元素警告状态
+function changeDateInputBorder(obj){
+	 $(obj).parent().parent().removeClass("has-error");
+	 $(obj).parent().next().text("");
+}
+/********自定义验证辅助方法END**********/

@@ -15,6 +15,8 @@ public class PriceList {
     private String serialNum;
 
     private String priceNum;
+    
+    private String priceId;
 
     private String supplyComId;
 
@@ -79,6 +81,10 @@ public class PriceList {
     private String supplyComName;
     
     private String buyComName;
+    
+    private String comNum;//企业编号
+    
+    private String comName;//企业名称
     
     
     
@@ -354,4 +360,29 @@ public class PriceList {
     public void setFloorPrice(String floorPrice) {
         this.floorPrice = floorPrice == null ? null : floorPrice.trim();
     }
+
+	public String getPriceId() {
+		return priceId;
+	}
+
+	public void setPriceId(String priceId) {
+		 this.priceId = priceId == null ? null : priceId.trim();
+	}
+
+	public String getComNum() {
+		return comNum;
+	}
+
+	public void setComNum(String comNum) {
+		this.comNum = comNum;
+	}
+
+	public String getComName() {
+		return comName;
+	}
+
+	public void setComName(String comName) {
+		this.comName = comName;
+	}
+    
 }

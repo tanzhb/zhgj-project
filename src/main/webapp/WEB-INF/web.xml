@@ -101,5 +101,10 @@
         <exception-type>org.apache.shiro.authz.AuthorizationException</exception-type>
         <location>/rest/page/401</location>
     </error-page>
-
+<jsp-config>
+        <taglib>
+            <taglib-uri>/tags</taglib-uri>
+            <taglib-location>/WEB-INF/tld/dateTag.tld</taglib-location>
+        </taglib>
+    </jsp-config>
 </web-app>

@@ -385,19 +385,6 @@
 						</tr>
 					</thead>
 					
-					<tfoot>
-						<tr>
-							<th></th>
-							<th>仓库编号 </th>
-                            <th> 仓库名称</th>
-                            <th> 仓库类型</th>
-                            <th> 仓库地址</th>
-                            <th>管理员 </th>
-                            <th> 仓库面积 </th>
-                            <th>仓库分类 </th>
-                            <th> 所有者 </th>
-						</tr>
-					</tfoot>
 					<tbody>
 					</tbody>
 				</table>
@@ -631,22 +618,6 @@
                           <th> 默认承重</th>
 						</tr>
 					</thead>
-					<tfoot>
-					<tr>
-					<th> </th>
-						<th> 库位编码</th>
-                       <th>存储类型</th>
-                       <th> 库位名称</th>
-                        <th> 存储属性</th>
-                         <th> 最大行数</th>
-                         <th> 最大列数</th>
-                         <th> 最大层数</th>
-                          <th>存储类型</th>
-                          <th> 存储方式</th>
-                          <th> 默认长宽高</th>
-                           <th> 默认承重</th>
-                             </tr>
-						</tfoot>
 						<tbody>
 					</tbody>
 				</table>

@@ -5,6 +5,7 @@ import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.PriceListExample;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -31,5 +32,6 @@ public interface PriceListMapper extends GenericDao<PriceList, String>{
 
     int updateByPrimaryKey(PriceList record);
     int deletePriceList(List<String>serialNums);
+    List<PriceList> selectByPriceType(Map<String,String>map);
     
 }

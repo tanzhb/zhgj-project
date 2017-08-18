@@ -33,6 +33,8 @@ public class DemandPlan {
     
     //冗余字段
     private String buyComName;
+    
+    private String searchKey;
 
     public String getSerialNum() {
         return serialNum;
@@ -130,5 +132,13 @@ public class DemandPlan {
 
 	public void setBuyComName(String buyComName) {
 		this.buyComName = buyComName;
+	}
+
+	public String getSearchKey() {
+		return searchKey;
+	}
+
+	public void setSearchKey(String searchKey) {
+		this.searchKey = searchKey;
 	}
 }

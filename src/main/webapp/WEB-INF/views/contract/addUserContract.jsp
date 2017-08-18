@@ -207,7 +207,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								<span class="required">*</span>
 							</label>
 							<div class="col-md-9">
-									<input type="file" id="signContract" ng-model="files" name="file"
+									<input type="file" id="signContract" ng-model="file" name="file"
 									class="form-control" /> 
 								<div class="form-control-focus"></div>
 								<span class="help-block">签字合同</span>
@@ -247,8 +247,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		var startDate=$("#startDate").val();
     		var endDate=$("#endDate").val();
     		if(startDate>endDate&&endDate!=null&&endDate!=""){
-    		alert("开始时间不能大于结束时间  ！");
-    		$("#startDate").focus();
+    		/* alert("开始时间不能大于结束时间  ！"); */
+    		toastr.warning('开始时间不能大于结束时间  ！');
+    		/* $("#startDate").focus(); */
+    		$("#startDate").val("");
     		}
     		});
     	
@@ -262,8 +264,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		var endDate=$("#endDate").val();
     		
     		if(endDate<startDate){
-    		alert("结束时间不能小于开始时间 ！");
-    		$("#endDate").focus();
+    		/* alert("结束时间不能小于开始时间 ！"); */
+    		toastr.warning('结束时间不能小于开始时间 ！');
+    		$("#endDate").val("");
     		}else{
     		}
     		}); 
