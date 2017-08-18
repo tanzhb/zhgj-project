@@ -39,6 +39,28 @@ angular.module('MetronicApp').service('saleOrderService',
 			            })  
 			        return deferred.promise;  
 			          
-			    }
+			    },//保存订单物料
+			    saveOrderMateriel : function (orderMateriel){
+					var deferred = $q.defer();
+					$http.post("rest/order/saveOrderMateriel", 
+							orderMateriel//传整个表单数据  
+					).then(function success(result) {
+						deferred.resolve(result);//请求成功
+					}, function error(err) {
+						deferred.reject(err);//请求失败
+					});
+					return deferred.promise;//返回承诺
+				},//删除订单物料
+				deleteOrderMateriel : function(serialNum){
+					var deferred = $q.defer();
+					 $http.post("rest/order/deleteOrderMateriel", 
+						 	serialNum//传整个表单数据  
+				        ).then(function success(result) {
+			                deferred.resolve(result);//请求成功
+			            }, function error(err) {
+			                deferred.reject(err);//请求失败
+			            });
+			            return deferred.promise;//返回承诺
+				}
 			}
 		} ]);

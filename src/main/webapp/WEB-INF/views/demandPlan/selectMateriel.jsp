@@ -13,7 +13,7 @@
 					<table class="table table-striped table-bordered table-hover table-checkable order-column" id="select_sample_2">
 	                    <thead>
 	                        <tr>
-	                            <th style="text-align: center"><input ng-if="modalType!='single'" name="select_all" value="1" id="example-select-all" type="checkbox"/></th>
+	                            <th style="text-align: center"><input ng-if="modalType!='single'" ng-click="allClick" name="select_all" value="1" id="example-select-all" type="checkbox"/></th>
 	                            <th> 物料编码 </th>
 	                            <th> 物料名称 </th>
 	                            <th> 规格型号 </th>

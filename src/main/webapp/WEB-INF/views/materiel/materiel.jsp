@@ -163,7 +163,7 @@
 						                                <p class="form-control-static"> {{_supplyMateriel.supplyMaterielNum}} </p>
 						                          </td>
 						                          <td>
-						                                <p class="form-control-static"> {{_supplyMateriel.supplyComId}} </p>
+						                                <p class="form-control-static"> {{_supplyMateriel.supply.comName}} </p>
 						                          </td>
 						                          <td>
 						                          </td>

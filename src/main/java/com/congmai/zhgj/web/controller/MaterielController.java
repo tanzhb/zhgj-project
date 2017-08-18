@@ -179,14 +179,15 @@ public class MaterielController {
      * 
      * @Description 保存附件物料供应商
      * @param params
+     * @return 
      */
     @RequestMapping(value = "/saveSupplyMateriel", method = RequestMethod.POST)
     @ResponseBody
-    public void saveSupplyMateriel(@RequestBody String params) {
+    public List<SupplyMateriel> saveSupplyMateriel(@RequestBody String params) {
     	params = params.replace("\\", "");
 		ObjectMapper objectMapper = new ObjectMapper();  
         JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, SupplyMateriel.class);  
-        List<SupplyMateriel> supplyMateriel;
+        List<SupplyMateriel> supplyMateriel = null;
 		try {
 			supplyMateriel = objectMapper.readValue(params, javaType);
 	    	if(!CollectionUtils.isEmpty(supplyMateriel)){
@@ -202,10 +203,19 @@ public class MaterielController {
 		    	//填充物料供应商******↑↑↑↑↑↑********
 		    	supplyMaterielService.betchInsertSupplyMateriels(supplyMateriel);
 		    	//数据插入******↑↑↑↑↑↑********
+		    	
+		    	SupplyMaterielExample m2 =new SupplyMaterielExample();
+		    	com.congmai.zhgj.web.model.SupplyMaterielExample.Criteria criteria2 =  m2.createCriteria();
+		    	criteria2.andMaterielIdEqualTo(supplyMateriel.get(0).getMaterielId());
+		    	criteria2.andDelFlgEqualTo("0");
+		    	supplyMateriel = supplyMaterielService.selectList(m2);
+		    	//查询数据返回******↑↑↑↑↑↑********
 	        }
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+    	return supplyMateriel;
     	
     }
     
@@ -576,4 +586,23 @@ public class MaterielController {
          return map;
     }
     
+    
+    /**
+     * 
+     * @Description (选择物料)
+     * @param ids
+     * @return
+     */
+    @RequestMapping(value="chooseMateriel",method=RequestMethod.POST)
+    @ResponseBody
+    public List<SupplyMateriel> chooseMateriel(@RequestBody String ids){
+    	List<SupplyMateriel> list = null;
+    	try {
+    		list = supplyMaterielService.chooseMateriel(ids);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+    	
+    	return list;
+    }
 }

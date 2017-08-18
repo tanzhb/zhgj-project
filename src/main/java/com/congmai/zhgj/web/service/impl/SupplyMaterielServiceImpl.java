@@ -1,10 +1,12 @@
 package com.congmai.zhgj.web.service.impl;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.congmai.zhgj.web.dao.SupplyMaterielMapper;
@@ -93,6 +95,17 @@ public class SupplyMaterielServiceImpl implements SupplyMaterielService {
 			SupplyMaterielMapper.insert(b);
 		}
 		
+	}
+
+	@Override
+	public List<SupplyMateriel> chooseMateriel(String ids) {
+		if(StringUtils.isNotEmpty(ids)){
+			List<String> idList = Arrays.asList(ids.split(","));
+			SupplyMaterielExample example = new SupplyMaterielExample();
+			example.createCriteria().andSerialNumIn(idList).andDelFlgEqualTo("0");
+			return SupplyMaterielMapper.selectByExample(example);
+		}
+		return null;
 	}
 
 }

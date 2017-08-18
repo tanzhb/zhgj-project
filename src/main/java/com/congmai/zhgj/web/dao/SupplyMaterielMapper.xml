@@ -19,6 +19,31 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <association property="supply" column="supplyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectByPrimaryKey"/>
+    <association property="materiel" column="materielId" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByMaterielId"/> 
+    
+  </resultMap>
+  
+  
+  <resultMap id="SupplyMaterielMap" type="com.congmai.zhgj.web.model.SupplyMateriel" >
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="materielId" property="materielId" jdbcType="VARCHAR" />
+    <result column="supplyComId" property="supplyComId" jdbcType="VARCHAR" />
+    <result column="supplyMaterielNum" property="supplyMaterielNum" jdbcType="VARCHAR" />
+    <result column="packageNum" property="packageNum" jdbcType="VARCHAR" />
+    <result column="packageSpecifications" property="packageSpecifications" jdbcType="VARCHAR" />
+    <result column="packageUnit" property="packageUnit" jdbcType="VARCHAR" />
+    <result column="packagewidth" property="packagewidth" jdbcType="VARCHAR" />
+    <result column="packageheight" property="packageheight" jdbcType="VARCHAR" />
+    <result column="packagelength" property="packagelength" jdbcType="VARCHAR" />
+    <result column="packagevolume" property="packagevolume" jdbcType="VARCHAR" />
+    <result column="packageUnitConversion" property="packageUnitConversion" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <association property="supply" column="supplyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectByPrimaryKey"/>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -97,6 +122,18 @@
       order by ${orderByClause}
     </if>
   </select>
+  
+  
+  <select id="selectSupplyMaterielByMaterielId" resultMap="SupplyMaterielMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from supplyMateriel
+    where 
+    materielId = #{materielId,jdbcType=VARCHAR}
+    and delFlg = '0'
+  </select>
+  
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />

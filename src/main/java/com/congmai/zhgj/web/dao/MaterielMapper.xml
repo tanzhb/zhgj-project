@@ -48,6 +48,7 @@
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <association property="parentMateriel" column="parentMaterielSerial" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByPrimaryKey"/> 
+    <collection property="supplyMateriels" column="materielId" select="com.congmai.zhgj.web.dao.SupplyMaterielMapper.selectSupplyMaterielByMaterielId"/> 
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -136,6 +137,17 @@
     from materiel
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </select>
+  
+  
+    <select id="selectByMaterielId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from materiel
+    where materielId = #{materielId,jdbcType=VARCHAR}
+    and delFlg = 0
+    and isLatestVersion = 1
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from materiel
     where serialNum = #{serialNum,jdbcType=VARCHAR}

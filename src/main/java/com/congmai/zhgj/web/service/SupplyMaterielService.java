@@ -3,6 +3,7 @@ package com.congmai.zhgj.web.service;
 import java.util.List;
 
 import com.congmai.zhgj.core.generic.GenericService;
+import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.SupplyMateriel;
 import com.congmai.zhgj.web.model.SupplyMaterielExample;
 
@@ -25,6 +26,8 @@ public interface SupplyMaterielService extends GenericService<SupplyMateriel, St
 	public void deleteSupplyMateriels(String ids);
 
 	void betchInsertSupplyMateriels(List<SupplyMateriel> supplyMateriels);
+
+	List<SupplyMateriel> chooseMateriel(String ids);
 
 
 }

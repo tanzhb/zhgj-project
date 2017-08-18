@@ -234,9 +234,124 @@
                   </div>
 				</form>
              </div>   
+             
+             <!-- 供应商 start-->
+          <div class="portlet-title">
+               <div class="caption">物料信息</div>
+               <div class="tools">
+                  <button ng-click="addOrderMateriel()" type="button"  class="btn blue  btn-outline  btn-sm">
+                  		<i class="fa fa-edit"></i> 添加物料 </button>
+                </div>
+            </div>
+           <div class="portlet-body form">
+			     <form id="form_sample_5"   class="form-horizontal">
+			         <div class="table-scrollable">
+                          <table class="table table-bordered table-hover">
+                              <thead>
+                                  <tr>
+									<th>物料编号</th>
+									<th>物料名称</th>
+									<th>规格型号</th>
+									<th>单位</th>
+									<th>供应商</th>
+									<th>库存数量</th>
+									<th>销售数量</th>
+									<th>单价</th>
+									<th>销售单价</th>
+									<th>含税销售单价</th>
+									<th>金额</th>
+									<th>税额</th>
+									<th>价税合计</th>
+									<th>交付日期</th>
+									<th>最晚交付日期</th>
+									<th>交付/提货地点</th>
+									<th style="width:100px;">操作</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <tr ng-repeat="_orderMateriel in orderMateriel track by $index" ng-mouseover="showOperation('orderMateriel',$index)" ng-mouseleave="hideOperation('orderMateriel',$index)"  repeat-done="repeatDone()">
+			                          <td>
+                                            <span ng-hide="orderMaterielInput{{$index}}"><a href="javascript:;" ng-click="addMateriel('single',$index)">{{_orderMateriel.materiel.materielNum}}</a></span>
+			                                <p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.materiel.materielNum}} </p>
+			                          </td>
+			                          <td>
+		                                 	<p class="form-control-static" > {{_orderMateriel.materiel.materielName}} </p>
+			                          </td>
+			                           <td>
+                                      		<p class="form-control-static" > {{_orderMateriel.materiel.specifications}} </p>
+			                          </td>
+			                          <td>
+                                      		<p class="form-control-static" > {{_orderMateriel.materiel.unit}} </p>
+			                          </td>
+			                          <td>
+                                      		<p class="form-control-static" > {{_orderMateriel.supplyMateriel.supply.comName}} </p>
+			                          </td>
+			                          <td>
+                                      		<p class="form-control-static" > 库存数量... </p>
+			                          </td>
+			                          <td>  
+			                          		<input type="text"  name="amount{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].amount"  >
+                                      		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.amount}} </p>
+			                          </td>
+			                          <td>  
+                                      		<p class="form-control-static" > {{_orderMateriel.materiel.unitPrice}} </p>
+			                          </td>
+			                          <td>  
+			                          		<input type="text"  name="orderUnitPrice{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].orderUnitPrice"  >
+                                      		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.orderUnitPrice}} </p>
+			                          </td>
+			                          <td>  
+                                      		<p class="form-control-static"> {{_orderMateriel.orderUnitPrice?_orderMateriel.orderUnitPrice*17/100:0}} </p>
+			                          </td>
+			                          <td>  
+                                      		<p class="form-control-static" > {{_orderMateriel.orderUnitPrice&&_orderMateriel.amount?_orderMateriel.orderUnitPrice*_orderMateriel.amount:0}} </p>
+			                          </td>
+			                          <td>  
+                                      		<p class="form-control-static"> {{_orderMateriel.orderUnitPrice&&_orderMateriel.amount?_orderMateriel.orderUnitPrice*_orderMateriel.amount*17/100:0}} </p>
+			                          </td>
+			                          <td>  
+                                      		<p class="form-control-static"> {{_orderMateriel.orderUnitPrice&&_orderMateriel.amount?(_orderMateriel.orderUnitPrice*_orderMateriel.amount+_orderMateriel.orderUnitPrice*_orderMateriel.amount*17/100):0}} </p>
+			                          </td>
+			                          <td>  
+			                          		<input type="text"  name="deliveryDate{{$index}}" class="form-control form-control-inline input-medium date-picker" 
+                                      data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].deliveryDate"  >
+                                      		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.deliveryDate}} </p>
+			                          </td>
+			                          <td>  
+			                          		<input type="text"  name="lastDeliveryDate{{$index}}" class="form-control form-control-inline input-medium date-picker" 
+                                      data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].lastDeliveryDate"  >
+                                      		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.lastDeliveryDate}} </p>
+			                          </td>
+			                          <td>  
+			                          		<input type="text"  name="deliveryAddress{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].deliveryAddress"  >
+                                      		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.deliveryAddress}} </p>
+			                          </td>
+                                      
+                                      <td>
+                                      	<span ng-hide="orderMaterielInput{{$index}}">
+                                       		&nbsp;&nbsp;&nbsp;&nbsp;
+                                        	<a  ng-click="saveOrderMateriel(_orderMateriel,$index)"><i class="fa fa-save"></i></a>
+                                        	&nbsp;&nbsp;&nbsp;
+                                        	<a  ng-click="cancelOrderMateriel(_orderMateriel,$index)"><i class="fa fa-undo"></i></a>
+                                        </span>
+                                        <span  ng-show="operation_o{{$index}}">
+                                        	&nbsp;&nbsp;&nbsp;&nbsp;
+                                        	<a ng-show="orderMaterielShow{{$index}}"   ng-click="editOrderMateriel(_orderMateriel)"><i class="fa fa-edit"></i></a>
+                                        	&nbsp;&nbsp;&nbsp;
+                                        	<a ng-show="orderMaterielShow{{$index}}"  ng-click="deleteOrderMateriel(_orderMateriel)"><i class="fa fa-minus"></i></a>
+                                       	</span>
+                                      </td>
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+                  </form>
+          </div>
+          <!-- 供应商 end-->
           </div>
       </div>
 </div>
 </div>
 </div> 
 
+<jsp:include  page="../demandPlan/selectMateriel.jsp"/>
