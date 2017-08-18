@@ -66,6 +66,9 @@
     from company
    		where delFlg = 0
    	order by updateTime DESC
+   	<if test="pageSize!=-1">    
+     	limit #{pageIndex},#{pageSize}
+    </if>
   </select>
   
   <select id="selectCompanyByComType" resultMap="BaseResultMap" parameterType="java.util.Map" >

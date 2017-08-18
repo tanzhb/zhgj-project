@@ -17,6 +17,7 @@
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <association property="materiel" column="materielSerial" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByPrimaryKey" ></association>
     <association property="supplyName" column="supplyMaterielSerial" select="com.congmai.zhgj.web.dao.DemandPlanMaterielMapper.selectSupplyName" ></association>
+    <association property="demandPlan" column="demandPlanSerial" select="com.congmai.zhgj.web.dao.DemandPlanMapper.selectByPrimaryKey" ></association>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >

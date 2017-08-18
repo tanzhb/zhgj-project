@@ -189,3 +189,16 @@ function getExplorer() {
     }
 }
 //页面打印方法end********/
+
+/*******自定义验证辅助方法START*********/
+//取消表单元素警告状态
+function changeTextInputBorder(obj){
+	 $(obj).parent().removeClass("has-error");
+	 $(obj).next().text("");
+}
+//取消表单元素警告状态
+function changeDateInputBorder(obj){
+	 $(obj).parent().parent().removeClass("has-error");
+	 $(obj).parent().next().text("");
+}
+/********自定义验证辅助方法END**********/
