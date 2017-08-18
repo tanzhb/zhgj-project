@@ -177,10 +177,16 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 										[ 5, 10, 15, 30, "All" ] ],
 								pageLength : 10,// 每页显示数量
 								processing : true,// loading等待框
-								// serverSide: true,
-								ajax : $rootScope.basePath
-										+ "/rest/company/companyList",// 加载数据中user表数据
-
+								//serverSide: true,
+								//ajax : $rootScope.basePath
+										//+ "/rest/company/companyList",// 加载数据中user表数据    
+								ajax :{ "url":$rootScope.basePath
+										+ "/rest/company/companyList",// 加载数据中user表数据    
+										"contentType": "application/json",
+									    "type": "POST",
+									    "data": function ( d ) {
+									      return JSON.stringify( d );
+									    }},
 								"aoColumns" : [
 
 								{
@@ -239,12 +245,32 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 								    }
 								}*/ ],
 
-							})
+							}).on('order.dt',
+						              function() {
+				                  console.log('排序');
+				              }).on('page.dt', 
+				              function () {
+				            	  console.log('翻页');
+					          })
 			// 构建datatables结束***************************************
 	 }
 	/**加载列表结束**/
 	 
-		
+	 function retrieveData( sSource, aoData, fnCallback ) {   
+		    //将客户名称加入参数数组   
+		    aoData.push( { "name": "customerName", "value": $("#customerName").val() } );   
+		  
+		    $.ajax( {   
+		        "type": "POST",    
+		        "contentType": "application/json",   
+		        "url": sSource,    
+		        "dataType": "json",   
+		        "data": JSON.stringify(aoData), //以json格式传递   
+		        "success": function(resp) {   
+		            fnCallback(resp); //服务器端返回的对象的returnObject部分是要求的格式  
+		        }   
+		    });   
+		} 
 						
 			// 页面加载完成后调用，验证输入框
 				$scope.$watch('$viewContentLoaded', function() {  
@@ -758,6 +784,29 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		         });
 	       }
 	       
+	      /* function qualificationValid(){
+	    	   var flag = true;
+	    	   if($("#qualificationForm input[name='qualificationName']").length==0){
+	    		   toastr.warning("没有可保存的资质信息！");
+	    		   return false;
+	    	   }
+	    	   for(var i=0;i<$("#qualificationForm input[name='qualificationName']").length;i++){
+	    		   if(isNull($("#qualificationName"+i).val())){
+	    			   handle.paramCheck("qualificationName"+i,"资质类型不能为空！");
+	    			   flag = false;
+	    		   }
+	    		   if(isNull($("#qualificationNum"+i).val())){
+	    			   handle.paramCheck("qualificationNum"+i,"资质号码不能为空！");
+	    			   flag = false;
+	    		   }
+	    		   if(isNull($("#validityDate"+i).val())){
+	    			   handle.paramCheck("validityDate"+i,"有效期不能为空！");
+	    			   flag = false;
+	    		   }
+	    	   }
+	    	   
+	    	   return flag;
+	       }*/
 	       
 	       /**
 	        * 保存企业资质信息
@@ -769,14 +818,18 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		    	if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
 		    		 toastr.warning("您的企业信息还未保存！");
 		    		 return;
-		    	}else{
+		    	}else if($scope.companyQualifications.length == 0){
+		    		 toastr.warning("没有可保存的资质信息！");
+		    		 return;
+		    	}{
 		    		for(var i=0;i<$scope.companyQualifications.length;i++){
 		    			$scope.companyQualifications[i].comId = $scope.company.comId;
 		    			$scope.companyQualifications[i].createTime = null;
 		    			$scope.companyQualifications[i].updateTime = null;
 		    		}
 		    	}
-		    	if($('#qualificationForm').valid()){
+		    	//var flag = qualificationValid();
+		    	if($("#qualificationForm").valid()){
 		    		handle.blockUI();
 		    	    console.log($scope.companyQualifications);
 		        	var promise = companyService.saveCompanyQualification($scope.companyQualifications);
@@ -1168,7 +1221,9 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		 	        		$scope.companyFinances = data.data.companyFinances;
 		 	        		
 		 	        		data.data.comId = comId; //将企业id也放入数组，一边取消操作
-		 	        		$scope.companyInfo.push(data.data); //将返回信息添加至checkbox选中数组
+		 	        		if($scope.companyInfo!=undefined){
+		 	        			$scope.companyInfo.push(data.data); //将返回信息添加至checkbox选中数组
+		 	        		}
 	 	        		}
 	 	        		
 	 	        		

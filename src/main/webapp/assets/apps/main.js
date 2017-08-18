@@ -492,8 +492,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        				        'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
 	        				        'assets/global/plugins/datatables/datatables.all.min.js',
 	        				        'assets/apps/controllers/DemandPlanController.js',
-	        				        'assets/apps/service/DemandPlanService.js',
-	        				        'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js'
+	        				        'assets/apps/service/DemandPlanService.js'
 	        				        ]
 	        			});
 	        		}]
@@ -514,7 +513,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        				        'assets/global/plugins/datatables/datatables.all.min.js',
 	        				        'assets/apps/controllers/DemandPlanController.js',
 	        				        'assets/apps/service/DemandPlanService.js',
-	        				        'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js',
 	        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
 	        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css'
 	        				        ]
@@ -537,9 +535,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        				        'assets/global/plugins/datatables/datatables.all.min.js',
 		        				        'assets/apps/controllers/DemandPlanController.js',
 		        				        'assets/apps/service/DemandPlanService.js',
-		        				        'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js',
 		        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
-		        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css'
+		        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css',
+		        				        'assets/pages/scripts/table-datatables-scroller.min.js'
 		        				        ]
 		        			});
 		        		}]

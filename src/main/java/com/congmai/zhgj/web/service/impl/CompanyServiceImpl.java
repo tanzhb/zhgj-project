@@ -56,7 +56,7 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 			}
 			count = companyMapper.countList(company);
 		}
-		Page<Company>  page = new Page<Company>();
+		Page<Company>  page = new Page<Company>(company.getPageIndex(),company.getPageSize());
 		page.setResult(list);
 		page.setTotalCount(count);
 		return page;

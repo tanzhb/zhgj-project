@@ -384,7 +384,7 @@
 									<!-- /row -->
 								</div>
 								<div class="form-actions right" ng-hide="companyQualificationAdd">
-									<a href="javascript:;" data-repeater-create class="btn blue btn-sm" ng-click="addRepeat()" >
+									<a href="javascript:;"  class="btn blue btn-sm" ng-click="addRepeat()" >
                                             <i class="fa fa-plus"></i> 增加
                                      </a>
                                 </div>
