@@ -683,7 +683,7 @@
                           </table>
                       </div>
                       <div class="form-actions right">
-							<a  class="btn blue btn-sm"  ng-click="addFile()"   >
+							<a  class="btn blue btn-sm"  ng-hide="fileInfoInput" ng-click="addFile()"   >
 	                              <i class="fa fa-plus"></i> 增加
 	                       	</a> 
                   		</div>
@@ -747,7 +747,7 @@
                           </table>
                       </div>
                       <div class="form-actions right">
-							<a  class="btn blue btn-sm"  ng-click="addBOM()"   >
+							<a  class="btn blue btn-sm" ng-hide="BOMInfoInput" ng-click="addBOM()"   >
 	                              <i class="fa fa-plus"></i> 增加
 	                       	</a> 
                   		</div>
@@ -772,28 +772,25 @@
                           <table class="table table-bordered table-hover">
                               <thead>
                                   <tr>
-                                      <th>供应商</th>
+<!--                                       <th>供应商</th> -->
                                       <th>供应商名称</th>
                                       <th>供应商物料编号</th>
                                       <th style="width:100px;"></th>
                                   </tr>
                               </thead>
                               <tbody>
-                                  <tr ng-repeat="_supplyMateriel in supplyMateriel track by $index" ng-mouseover="showOperation('supplyMateriel',$index)" ng-mouseleave="hideOperation('supplyMateriel',$index)"  repeat-done="repeatDone()">
+                                  <tr ng-repeat="_supplyMateriel in supplyMateriel track by $index" ng-mouseover="showOperation('supplyMateriel',$index)" ng-mouseleave="hideOperation('supplyMateriel',$index)" >
 			                          <td>
 		                                 	<div ng-hide="supplyMaterielInfoInput">
 			                                 	<select class="form-control" id="supplyComId[$index]" name="supplyComId" class="bs-select form-control diySelectCss" data-live-search="true" data-size="8"  ng-model="supplyMateriel[$index].supplyComId"  >
-	                                              <option value=""></option>
-	                                             	<option value="1" >供应商1</option>
-	                                               <option value="2" >供应商2</option>
-	                                               <option value="3" >供应商3</option>
+	                                              	<option ng-repeat="_supplier in suppliers" value="{{_supplier.comId}}" repeat-done="repeatDone()">{{_supplier.comName}}</option>
 	                                             </select>
                                              </div>
-			                                <p class="form-control-static" ng-show="supplyMaterielInfoShow"> {{_supplyMateriel.supplyComId}} </p>
+			                                <p class="form-control-static" ng-show="supplyMaterielInfoShow"> {{_supplyMateriel.supply.comName}} </p>
 			                          </td>
-			                          <td>
+<!-- 			                          <td>
 		                                 	<p class="form-control-static" ng-show="supplyMaterielInfoShow"> {{_supplyMateriel.supply.comName}} </p>
-			                          </td>
+			                          </td> -->
 			                           <td>
                                       		<input type="text" id="supplyMaterielNum[$index]" name="supplyMaterielNum" class="form-control" ng-hide="supplyMaterielInfoInput" ng-model="supplyMateriel[$index].supplyMaterielNum"  >
 			                                <p class="form-control-static" ng-show="supplyMaterielInfoShow"> {{_supplyMateriel.supplyMaterielNum}} </p>
@@ -809,13 +806,13 @@
                           </table>
                       </div>
                       <div class="form-actions right">
-							<a  class="btn blue btn-sm"  ng-click="addSupplyMateriel()"   >
+							<a  class="btn blue btn-sm"  ng-hide="supplyMaterielInfoInput" ng-click="addSupplyMateriel()"   >
 	                              <i class="fa fa-plus"></i> 增加
 	                       	</a> 
                   		</div>
                   </form>
           </div>
-          <!-- 附件 end-->
+          <!-- 供应商 end-->
           </div>
       </div>
 </div>

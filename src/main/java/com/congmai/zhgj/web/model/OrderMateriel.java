@@ -6,21 +6,36 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class DemandPlanMateriel {
+public class OrderMateriel {
     private String serialNum;
 
-    private String demandPlanSerial;
+    private String orderSerial;
 
+    private Materiel materiel;
+    
     private String materielSerial;
+    
+    private SupplyMateriel supplyMateriel;
 
     private String supplyMaterielSerial;
 
     private String amount;
 
+    private String orderUnitPrice;
+
+    private String money;
+
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date deliveryDate;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date lastDeliveryDate;
+
     private String deliveryAddress;
+
+    private String discount;
+
+    private String afterDiscountMoney;
 
     private String delFlg;
 
@@ -32,32 +47,6 @@ public class DemandPlanMateriel {
 
     private Date updateTime;
 
-    private String remark;
-    
-    private Materiel materiel;
-    
-    private String supplyName;
-    
-    //冗余字段
-    private String materielNum;
-
-    private String materielName;
-
-    private String specifications;
-
-    private String unit;
-    
-    private String remainTime;//距离交付时间
-    
-    private Date startTime;
-    
-    private Date endTime;
-    
-    private DemandPlan demandPlan;
-
-    private String comName;
-    
-    private String daysBeforeDelivery;
     public String getSerialNum() {
         return serialNum;
     }
@@ -66,12 +55,12 @@ public class DemandPlanMateriel {
         this.serialNum = serialNum == null ? null : serialNum.trim();
     }
 
-    public String getDemandPlanSerial() {
-        return demandPlanSerial;
+    public String getOrderSerial() {
+        return orderSerial;
     }
 
-    public void setDemandPlanSerial(String demandPlanSerial) {
-        this.demandPlanSerial = demandPlanSerial == null ? null : demandPlanSerial.trim();
+    public void setOrderSerial(String orderSerial) {
+        this.orderSerial = orderSerial == null ? null : orderSerial.trim();
     }
 
     public String getMaterielSerial() {
@@ -98,6 +87,21 @@ public class DemandPlanMateriel {
         this.amount = amount == null ? null : amount.trim();
     }
 
+    public String getOrderUnitPrice() {
+        return orderUnitPrice;
+    }
+
+    public void setOrderUnitPrice(String orderUnitPrice) {
+        this.orderUnitPrice = orderUnitPrice == null ? null : orderUnitPrice.trim();
+    }
+
+    public String getMoney() {
+        return money;
+    }
+
+    public void setMoney(String money) {
+        this.money = money == null ? null : money.trim();
+    }
     @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
     public Date getDeliveryDate() {
         return deliveryDate;
@@ -106,6 +110,14 @@ public class DemandPlanMateriel {
     public void setDeliveryDate(Date deliveryDate) {
         this.deliveryDate = deliveryDate;
     }
+    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
+    public Date getLastDeliveryDate() {
+        return lastDeliveryDate;
+    }
+
+    public void setLastDeliveryDate(Date lastDeliveryDate) {
+        this.lastDeliveryDate = lastDeliveryDate;
+    }
 
     public String getDeliveryAddress() {
         return deliveryAddress;
@@ -113,6 +125,22 @@ public class DemandPlanMateriel {
 
     public void setDeliveryAddress(String deliveryAddress) {
         this.deliveryAddress = deliveryAddress == null ? null : deliveryAddress.trim();
+    }
+
+    public String getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(String discount) {
+        this.discount = discount == null ? null : discount.trim();
+    }
+
+    public String getAfterDiscountMoney() {
+        return afterDiscountMoney;
+    }
+
+    public void setAfterDiscountMoney(String afterDiscountMoney) {
+        this.afterDiscountMoney = afterDiscountMoney == null ? null : afterDiscountMoney.trim();
     }
 
     public String getDelFlg() {
@@ -155,22 +183,6 @@ public class DemandPlanMateriel {
         this.updateTime = updateTime;
     }
 
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
-
-	public String getSupplyName() {
-		return supplyName;
-	}
-
-	public void setSupplyName(String supplyName) {
-		this.supplyName = supplyName;
-	}
-
 	public Materiel getMateriel() {
 		return materiel;
 	}
@@ -179,83 +191,12 @@ public class DemandPlanMateriel {
 		this.materiel = materiel;
 	}
 
-	public String getMaterielNum() {
-		return materielNum;
+	public SupplyMateriel getSupplyMateriel() {
+		return supplyMateriel;
 	}
 
-	public void setMaterielNum(String materielNum) {
-		this.materielNum = materielNum;
+	public void setSupplyMateriel(SupplyMateriel supplyMateriel) {
+		this.supplyMateriel = supplyMateriel;
 	}
-
-	public String getMaterielName() {
-		return materielName;
-	}
-
-	public void setMaterielName(String materielName) {
-		this.materielName = materielName;
-	}
-
-	public String getSpecifications() {
-		return specifications;
-	}
-
-	public void setSpecifications(String specifications) {
-		this.specifications = specifications;
-	}
-
-	public String getUnit() {
-		return unit;
-	}
-
-	public void setUnit(String unit) {
-		this.unit = unit;
-	}
-
-	public String getRemainTime() {
-		return remainTime;
-	}
-
-	public void setRemainTime(String remainTime) {
-		this.remainTime = remainTime;
-	}
-
-	public String getComName() {
-		return comName;
-	}
-
-	public void setComName(String comName) {
-		this.comName = comName;
-	}
-
-	public String getDaysBeforeDelivery() {
-		return daysBeforeDelivery;
-	}
-
-	public void setDaysBeforeDelivery(String daysBeforeDelivery) {
-		this.daysBeforeDelivery = daysBeforeDelivery;
-	}
-
-	public DemandPlan getDemandPlan() {
-		return demandPlan;
-	}
-
-	public void setDemandPlan(DemandPlan demandPlan) {
-		this.demandPlan = demandPlan;
-	}
-
-	public Date getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
-	}
-
-	public Date getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
-	}
-	}
+    
+}

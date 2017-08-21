@@ -231,7 +231,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 							'assets/global/plugins/datatables/datatables.all.min.js',
 							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
-							'assets/apps/scripts/angular-file-upload-shim.min.js',
+//							'assets/apps/scripts/angular-file-upload-shim.min.js',
 					        'assets/apps/scripts/angular-file-upload.min.js',
                             'assets/apps/service/materielService.js',
                             'assets/apps/controllers/materielController.js'
@@ -264,9 +264,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 				'assets/global/plugins/datatables/datatables.all.min.js',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
-				'assets/apps/scripts/angular-file-upload-shim.min.js',
+//				'assets/apps/scripts/angular-file-upload-shim.min.js',
 		        'assets/apps/scripts/angular-file-upload.min.js',
-		        'assets/apps/scripts/FileUploader.js',
+//		        'assets/apps/scripts/FileUploader.js',
 	        	'assets/apps/service/materielService.js',
 	        	'assets/apps/directive/CompanyDirective.js',
 				'assets/apps/controllers/materielController.js'/*,
@@ -293,6 +293,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 							'assets/global/plugins/datatables/datatables.all.min.js',
 							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+							'assets/apps/service/materielService.js',
                             'assets/apps/service/saleOrderService.js',
                             'assets/apps/controllers/saleOrderController.js'
                         ]
@@ -316,9 +317,11 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 				'assets/global/plugins/datatables/datatables.all.min.js',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
-				'assets/apps/scripts/angular-file-upload-shim.min.js',
-		        'assets/apps/scripts/angular-file-upload.min.js',
-		        'assets/apps/scripts/FileUploader.js',
+//				'assets/apps/scripts/angular-file-upload-shim.min.js',
+//		        'assets/apps/scripts/angular-file-upload.min.js',
+//		        'assets/apps/scripts/FileUploader.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
 	        	'assets/apps/service/saleOrderService.js',
 				'assets/apps/controllers/saleOrderController.js'
                       ]
@@ -493,8 +496,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        				        'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
 	        				        'assets/global/plugins/datatables/datatables.all.min.js',
 	        				        'assets/apps/controllers/DemandPlanController.js',
-	        				        'assets/apps/service/DemandPlanService.js',
-	        				        'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js'
+	        				        'assets/apps/service/DemandPlanService.js'
 	        				        ]
 	        			});
 	        		}]
@@ -515,7 +517,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        				        'assets/global/plugins/datatables/datatables.all.min.js',
 	        				        'assets/apps/controllers/DemandPlanController.js',
 	        				        'assets/apps/service/DemandPlanService.js',
-	        				        'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js',
 	        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
 	        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css'
 	        				        ]
@@ -538,9 +539,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        				        'assets/global/plugins/datatables/datatables.all.min.js',
 		        				        'assets/apps/controllers/DemandPlanController.js',
 		        				        'assets/apps/service/DemandPlanService.js',
-		        				        'assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js',
 		        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
-		        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css'
+		        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css',
+		        				        'assets/pages/scripts/table-datatables-scroller.min.js'
 		        				        ]
 		        			});
 		        		}]

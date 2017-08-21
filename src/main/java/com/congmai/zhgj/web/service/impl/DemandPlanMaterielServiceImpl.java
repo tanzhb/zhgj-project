@@ -8,13 +8,16 @@ import javax.annotation.Resource;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
+import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.DateUtil;
+import com.congmai.zhgj.web.dao.CompanyMapper;
 import com.congmai.zhgj.web.dao.DemandPlanMaterielMapper;
 import com.congmai.zhgj.web.dao.MaterielMapper;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.DemandPlanMaterielExample;
+import com.congmai.zhgj.web.model.DemandPlanMaterielExample.Criteria;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
 import com.congmai.zhgj.web.service.DemandPlanMaterielService;
@@ -30,6 +33,9 @@ public class DemandPlanMaterielServiceImpl extends GenericServiceImpl<DemandPlan
 	
 	@Resource
 	private MaterielMapper materielMapper;
+	
+	@Resource
+	private CompanyMapper companyMapper;
 
 	@Override
 	public GenericDao<DemandPlanMateriel, String> getDao() {
@@ -79,6 +85,43 @@ public class DemandPlanMaterielServiceImpl extends GenericServiceImpl<DemandPlan
 			return list.get(0).getSerialNum();
 		}
 		return null;
+	}
+
+	@Override
+	public Page<DemandPlanMateriel> getListByCondition(
+			DemandPlanMateriel demandPlanMateriel, int start, int limit) {
+		DemandPlanMaterielExample example = new DemandPlanMaterielExample();
+		Criteria criteria= example.createCriteria();
+		if(demandPlanMateriel!=null){
+			if(demandPlanMateriel.getStartTime()!=null){
+				criteria.andDeliveryDateGreaterThanOrEqualTo(demandPlanMateriel.getStartTime());
+			}
+			
+			if(demandPlanMateriel.getEndTime()!=null){
+				criteria.andDeliveryDateLessThanOrEqualTo(demandPlanMateriel.getEndTime());
+			}
+		}
+		example.setOrderByClause("updateTime desc");
+		example.setStart((start-1)*limit);
+		example.setLimit(limit);
+		criteria.andDelFlgEqualTo("0");
+		List<DemandPlanMateriel> list = demandPlanMaterielMapper.selectByExample(example);
+		if(!CollectionUtils.isEmpty(list)){
+			for(DemandPlanMateriel vo : list){
+					int remainTime = 0;
+					try {
+						remainTime = DateUtil.daysBetween(new Date(), vo.getDeliveryDate());
+					} catch (Exception e) {
+						System.out.println("demandPlanService---getListByCondition-----"+e.getMessage());
+					}
+					vo.setRemainTime(String.valueOf(remainTime<0?0:remainTime));
+			}
+		}
+		int count = demandPlanMaterielMapper.countByExample(example);
+		Page<DemandPlanMateriel> page = new Page<DemandPlanMateriel>(start, limit);
+		page.setResult(list);
+		page.setTotalCount(count);
+		return page;
 	}
 	
 

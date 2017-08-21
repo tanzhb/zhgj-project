@@ -1,5 +1,8 @@
 package com.congmai.zhgj.web.controller;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -11,8 +14,12 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONObject;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
@@ -37,6 +45,7 @@ import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyContact;
 import com.congmai.zhgj.web.model.CompanyFinance;
 import com.congmai.zhgj.web.model.CompanyQualification;
+import com.congmai.zhgj.web.model.DataTablesParams;
 import com.congmai.zhgj.web.service.CompanyContactService;
 import com.congmai.zhgj.web.service.CompanyFinanceService;
 import com.congmai.zhgj.web.service.CompanyQualificationService;
@@ -91,16 +100,40 @@ public class CompanyController {
      * @param request
      * @return
      */
-    @RequestMapping("companyList")
-    public ResponseEntity<Map<String,Object>> companyList(Map<String, Object> map,HttpServletRequest request,Company company) {
-    	
-    	List<Company> companys = companyService.selectByPage(new Company()).getResult();
+    @RequestMapping(value="companyList",method=RequestMethod.POST)
+    public ResponseEntity<Map<String,Object>> companyList(Map<String, Object> map,HttpServletRequest request,@RequestBody String params,Company company) {
+    	//远程分页代码
+    	/*try {
+    		params = URLDecoder.decode(params, "UTF-8");
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	 ObjectMapper objectMapper = new ObjectMapper();
+    	 objectMapper.configure(org.codehaus.jackson.map.DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+  	   		DataTablesParams  dataTablesParams = null;
+		   try {
+			   JSONObject a = JSONObject.fromObject(params);
+			   dataTablesParams = objectMapper.readValue(params,DataTablesParams.class);
+			} catch (JsonParseException e) {
+				System.out.println(this.getClass()+"---------"+ e.getMessage());
+			} catch (JsonMappingException e) {
+				System.out.println(this.getClass()+"---------"+ e.getMessage());
+			} catch (IOException e) {
+				System.out.println(this.getClass()+"---------"+ e.getMessage());
+			} catch (Exception e) {
+		    	System.out.println(this.getClass()+"---------"+ e.getMessage());
+			}*/
+		 company.setPageIndex(0);
+		 company.setPageSize(-1);
+    	Page<Company> companys = companyService.selectByPage(company);
+    	//List<Company> companys = companyService.selectByPage(company).getResult();
 		// 封装datatables数据返回到前台
 		Map<String,Object> pageMap = new HashMap<String,Object>();
 		pageMap.put("draw", 1);
-		pageMap.put("recordsTotal", company==null?0:companys.size());
-		pageMap.put("recordsFiltered", company==null?0:companys.size());
-		pageMap.put("data", companys);
+		pageMap.put("recordsTotal", company==null?0:companys.getTotalCount());
+		pageMap.put("recordsFiltered", company==null?0:companys.getTotalCount());
+		pageMap.put("data", companys.getResult());
 		return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
     }
     

@@ -57,8 +57,10 @@ public class DemandPlanServiceImpl extends GenericServiceImpl<DemandPlan,String>
 				DemandPlanMaterielExample example2 = new DemandPlanMaterielExample();
 				example2.createCriteria().andDemandPlanSerialEqualTo(vo.getSerialNum()).andDelFlgEqualTo("0");
 				example2.setOrderByClause("createTime desc");
-				example2.setStart(0);
-				example2.setLimit(5);
+				if(limit!=99999999){
+					example2.setStart(0);
+					example2.setLimit(5);
+				}
 				List<DemandPlanMateriel> mList = demandPlanMaterielMapper.selectByExample(example2);
 				for(DemandPlanMateriel dm : mList){
 					int remainTime = 0;

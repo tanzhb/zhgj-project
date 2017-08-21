@@ -6,8 +6,12 @@ public class SupplyMateriel {
     private String serialNum;
 
     private String materielId;
+    
+    private Materiel materiel;
 
     private String supplyComId;
+    
+    private Company supply;
 
     private String supplyMaterielNum;
 
@@ -172,4 +176,21 @@ public class SupplyMateriel {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public Company getSupply() {
+		return supply;
+	}
+
+	public void setSupply(Company supply) {
+		this.supply = supply;
+	}
+
+	public Materiel getMateriel() {
+		return materiel;
+	}
+
+	public void setMateriel(Materiel materiel) {
+		this.materiel = materiel;
+	}
+    
 }

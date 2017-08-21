@@ -89,22 +89,6 @@
 	                            <th> 状态 </th>
 	                        </tr>
 	                    </thead>
-	                    <tfoot>
-	                        <tr>
-	                            <th></th>
-	                            <th> 物料编码 </th>
-	                            <th> 物料名称 </th>
-	                            <th> 规格型号 </th>
-	                            <th> 单位 </th>
-	                            <th> 上级物料 </th>
-	                            <th> 类别 </th>
-	                            <th> 产地 </th>
-	                            <th> 品牌 </th>
-	                            <th> 供应商 </th>
-	                            <th> 版本 </th>
-	                            <th> 状态 </th>
-	                        </tr>
-	                    </tfoot>
 	                    <tbody>
 	                    </tbody>
 	                </table>
@@ -179,7 +163,7 @@
 						                                <p class="form-control-static"> {{_supplyMateriel.supplyMaterielNum}} </p>
 						                          </td>
 						                          <td>
-						                                <p class="form-control-static"> {{_supplyMateriel.supplyComId}} </p>
+						                                <p class="form-control-static"> {{_supplyMateriel.supply.comName}} </p>
 						                          </td>
 						                          <td>
 						                          </td>

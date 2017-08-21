@@ -48,6 +48,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
    		    	$scope.supplyMaterielInfoShow = true;
    		    	$scope.opration = '查看';
 		    }
+        	$scope.getSuppliers();//加载供应商
         	
         	validateInit();//加载表单验证控件
 
@@ -187,6 +188,21 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     }; 
     
     /**
+     * 获取供应商信息
+     */	
+    $scope.getSuppliers  = function(serialNum) {
+    	//tab内容置为空
+    	$scope.suppliers = null;
+    	materielService.getSuppliers().then(
+     		     function(data){
+     		    	$scope.suppliers=data.data;
+     		     },
+     		     function(error){
+     		         $scope.error = error;
+     		     }
+     		 );
+    }; 
+    /**
      * 获取物料信息
      */	
     $scope.getMaterielInfo  = function(serialNum) {
@@ -200,15 +216,15 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
       		    	
       		    	if(!isNull(data.BOM)){
  	        			$scope.BOM = data.BOM;
- 	        			_index = $scope.BOM.length-1;
+ 	        			_index = $scope.BOM.length;
  	        		}
       		    	if(!isNull(data.file)){
  	        			$scope.file = data.file;
- 	        			_fileIndex = $scope.file.length-1;
+ 	        			_fileIndex = $scope.file.length;
  	        		}
       		    	if(!isNull(data.supplyMateriel)){
  	        			$scope.supplyMateriel = data.supplyMateriel;
- 	        			_supplyMaterielIndex = $scope.supplyMateriel.length-1;
+ 	        			_supplyMaterielIndex = $scope.supplyMateriel.length;
  	        		}
       		     },
       		     function(error){
@@ -1132,6 +1148,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 	   	    	if($('#form_sample_5').valid()){
 	   	    		materielService.saveSupplyMateriel($scope.supplyMateriel).then(
 	   	       		     function(data){
+	   	       		    	 $scope.supplyMateriel = data;
 	   	       		    	toastr.success('数据保存成功！');
 	   	       		    	$scope.cancelSupplyMateriel();
 	   	       		    	
@@ -1165,11 +1182,12 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 	   		    	   $scope.supplyMateriel[_supplyMaterielIndex] = {};
 	   		    	   $scope.supplyMateriel[_supplyMaterielIndex].materielId = $scope.materiel.materielId;
 	   		    	   _supplyMaterielIndex++;
-	   		    	   $('.bs-select').selectpicker();
+	   		    	   /*$('.bs-select').selectpicker();*/
 	   		       }
 	   	    };
-	   	 $scope.repeatDone = function(){
-	   		$("select[name='supplyComId']").selectpicker();
+	   	    $scope.repeatDone = function(){
+//	   	    	$compile($("select[name='supplyComId']"))($scope);
+//	   	    	$("select[name='supplyComId']").selectpicker();
 	       };
 	   	    
 	   	    /**

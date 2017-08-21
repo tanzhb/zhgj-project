@@ -24,7 +24,7 @@
 		<div class="portlet box blue">
 			<div class="portlet-title">
 				<div class="caption">
-					<i class="fa fa-cogs"></i>企业信息列表
+					<i class="fa fa-globe"></i>企业信息列表
 				</div>
 				<!--  <div class="actions">
                                         <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#basic">
@@ -68,7 +68,7 @@
 				<table class="table table-bordered" id="companyTable">
 					<thead>
 						<tr>
-							<th><input name="select_all" class="dt-body-center"
+							<th style="text-align: center"><input name="select_all" 
 								value="1" id="example-select-all" type="checkbox" /></th>
 							<th>企业编码</th>
 							<th>企业名称</th>

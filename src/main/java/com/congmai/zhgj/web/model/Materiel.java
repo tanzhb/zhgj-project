@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.model;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -22,6 +23,8 @@ public class Materiel {
     private String parentMaterielSerial;
     
     private Materiel parentMateriel;
+    
+    private List<SupplyMateriel> supplyMateriels;
 
     private String type;
 
@@ -469,6 +472,14 @@ public class Materiel {
 
 	public void setParentMateriel(Materiel parentMateriel) {
 		this.parentMateriel = parentMateriel;
+	}
+
+	public List<SupplyMateriel> getSupplyMateriels() {
+		return supplyMateriels;
+	}
+
+	public void setSupplyMateriels(List<SupplyMateriel> supplyMateriels) {
+		this.supplyMateriels = supplyMateriels;
 	}
 
 /*	public boolean getIsBOMcheck() {

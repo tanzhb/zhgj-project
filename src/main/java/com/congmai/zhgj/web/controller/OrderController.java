@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.http.HttpStatus;
@@ -21,17 +23,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.model.BOMMateriel;
 import com.congmai.zhgj.web.model.BOMMaterielExample;
+import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielFile;
 import com.congmai.zhgj.web.model.MaterielFileExample;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderInfoExample;
+import com.congmai.zhgj.web.model.OrderMateriel;
+import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.SupplyMateriel;
 import com.congmai.zhgj.web.model.SupplyMaterielExample;
 import com.congmai.zhgj.web.model.OrderInfoExample.Criteria;
+import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
 
 /**
@@ -48,7 +55,8 @@ public class OrderController {
 	
     @Resource
     private OrderService orderService;
-    
+    @Resource
+    private OrderMaterielService orderMaterielService;
     
     /**
      * 保存销售订单
@@ -154,7 +162,7 @@ public class OrderController {
 	
 	/**
 	 * 
-	 * @Description 获取订单信息
+	 * @Description 获取销售订单信息
 	 * @param ids
 	 * @return
 	 */
@@ -164,7 +172,97 @@ public class OrderController {
 		orderInfo = orderService.selectById(serialNum);
 		Map<String, Object> map = new HashMap<String, Object>();
     	map.put("orderInfo", orderInfo);
+    	
+    	OrderMaterielExample m =new OrderMaterielExample();
+    	//and 条件1
+    	com.congmai.zhgj.web.model.OrderMaterielExample.Criteria criteria =  m.createCriteria();
+    	criteria.andDelFlgEqualTo("0");
+    	criteria.andOrderSerialEqualTo(serialNum);
+    	List<OrderMateriel> orderMateriel = orderMaterielService.selectList(m);
+    	map.put("orderMateriel", orderMateriel);
+    	
     	return map;
 	}
+	
+	
+	/**
+     * @Description (保存订单物料信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="saveOrderMateriel",method=RequestMethod.POST)
+    @ResponseBody
+    public OrderMateriel saveOrderMateriel(Map<String, Object> map,@RequestBody OrderMateriel orderMateriel,HttpServletRequest request) {
+    	String flag ="0"; //默认失败
+        	try{
+        		Subject currentUser = SecurityUtils.getSubject();
+        		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+        		if(StringUtils.isEmpty(orderMateriel.getSerialNum())){
+        			orderMateriel.setSerialNum(ApplicationUtils.random32UUID());
+        			orderMateriel.setCreateTime(new Date());
+        			orderMateriel.setCreator(currenLoginName);
+        			orderMateriel.setUpdateTime(new Date());
+        			orderMateriel.setUpdater(currenLoginName);
+        			orderMaterielService.insert(orderMateriel);
+        		}else{
+        			orderMateriel.setUpdateTime(new Date());
+        			orderMateriel.setUpdater(currenLoginName);
+        			orderMaterielService.update(orderMateriel);
+        		}
+        		flag = "1";
+        	}catch(Exception e){
+        		System.out.println(e.getMessage());
+        		return null;
+        	}
+        	orderMateriel = orderMaterielService.selectById(orderMateriel.getSerialNum());
+    	return orderMateriel;
+    }
+    
+    /**
+     * @Description (查看订单物料信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="viewOrderMateriel",method=RequestMethod.POST)
+    @ResponseBody
+    public OrderMateriel viewOrderMateriel(Map<String, Object> map,@RequestBody String serialNum,HttpServletRequest request) {
+    	
+    	OrderMateriel materiel = null;
+        	try{
+        		if(StringUtils.isNotEmpty(serialNum)){
+        			materiel = orderMaterielService.selectById(serialNum);
+        		}
+        		
+        	}catch(Exception e){
+        		System.out.println(e.getMessage());
+        		return null;
+        	}
+    	return materiel;
+    }
+
+    /**
+     * @Description (删除订单物料信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="deleteOrderMateriel",method=RequestMethod.POST)
+    @ResponseBody
+    public String deleteOrderMateriel(Map<String, Object> map,@RequestBody String serialNums,HttpServletRequest request) {
+    	String flag = "0"; //默认失败
+    	try{
+    		if(StringUtils.isNotEmpty(serialNums)){
+    			orderMaterielService.deleteOrderMateriels(serialNums);
+    		}
+    		flag = "1";
+    	}catch(Exception e){
+    		System.out.println(e.getMessage());
+    		
+    	}
+    	return flag;
+    }
+	
+	
+	
+	
     
 }
