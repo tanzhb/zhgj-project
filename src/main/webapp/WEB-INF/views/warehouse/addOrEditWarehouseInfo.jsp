@@ -381,20 +381,20 @@
 											<div class="form-group">
 											<div class="col-md-6" >
 													 <a href="javascript:;"  ng-hide="warehousepositionEdit{{$index}}"              ng-click="savewarehouseposition($index)">
-                                            			<i class="fa fa-save"></i> 
+                                            			<i class="fa fa-save"  title="保存"></i> 
                                      				</a>
                                      			
                                      				<a href="javascript:;"  ng-hide="warehousepositionEdit{{$index}}"       ng-click="cancelWarehouseposition(warehouseposition,$index)">
-                                            			<i class="fa fa-undo"></i>
+                                            			<i class="fa fa-undo"  title="取消"></i>
                                      				</a>
 												</div>
 												<div class="col-md-6"  >
 												 <a href="javascript:;"  ng-show="warehousepositionEdit{{$index}}"      ng-click="editwarehouseposition($index)">
-                                            			<i class="fa fa-edit"></i> 
+                                            			<i class="fa fa-edit"  title="编辑"></i> 
                                      				</a>
                                      				
 													 <a href="javascript:;"   ng-show="warehousepositionEdit{{$index}}"       ng-click="deleteWarehouseposition(warehouseposition)">
-                                            			<i class="fa fa-close"></i> 
+                                            			<i class="fa fa-close"  title="删除"></i> 
                                      				</a>
 												</div>
 											</div>
