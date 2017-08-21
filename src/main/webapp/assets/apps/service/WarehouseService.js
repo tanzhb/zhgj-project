@@ -9,7 +9,9 @@ angular.module('MetronicApp').factory('WarehouseService', ['$rootScope', '$http'
         delWarehouses:delWarehouses,
         selectByWarehouseName:selectByWarehouseName,
         selectBySerialNum:selectBySerialNum,
-        uploadExcel:uploadExcel
+        uploadExcel:uploadExcel,
+        saveWarehousePosition:saveWarehousePosition,
+        deleteWarehousePosition:deleteWarehousePosition
     };
 
     return factory;
@@ -100,6 +102,37 @@ debugger;
 		});
 		return deferred.promise;//返回承诺
 	}
-    
+    /**
+	 * 保存仓库区位信息
+	 */
+    function saveWarehousePosition(warehouseposition){
+		var deferred = $q.defer();
+		/*var params = {};  
+	    params = JSON.stringify(warehousepositions); */
+		debugger;
+		$http.post("rest/warehouse/saveWarehousePositionInfo",  
+				warehouseposition//传整个表单数据  
+    	).then(function success(result) {
+            deferred.resolve(result);//请求成功
+        }, function error(err) {
+            deferred.reject(err);//请求失败
+        });
+        return deferred.promise;//返回承诺
+	};
+	
+	/**
+	 * 删除仓库区位信息
+	 */
+	 function   deleteWarehousePosition(serialNum){
+		var deferred = $q.defer();
+		 $http.post("rest/warehouse/deleteWarehousePosition", 
+			 	serialNum//传整个表单数据  
+	        ).then(function success(result) {
+                deferred.resolve(result);//请求成功
+            }, function error(err) {
+                deferred.reject(err);//请求失败
+            });
+            return deferred.promise;//返回承诺
+	}
 
 }]);

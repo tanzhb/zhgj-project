@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.JavaType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,10 +33,13 @@ import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.model.JsonTreeData;
+import com.congmai.zhgj.web.model.LadderPrice;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.WarehouseExample;
 import com.congmai.zhgj.web.model.WarehouseExample.Criteria;
+import com.congmai.zhgj.web.model.Warehouseposition;
 import com.congmai.zhgj.web.service.WarehouseService;
+import com.congmai.zhgj.web.service.WarehousepositionService;
 
 
 /**
@@ -50,6 +55,8 @@ public class WareHouseController {
 
     @Resource
     private WarehouseService  warehouseService;
+    @Resource
+    private WarehousepositionService  warehousepositionService;
     
     
     /**
@@ -122,9 +129,13 @@ public class WareHouseController {
      * @return
      */
     @RequestMapping(value = "/viewWarehouseDetail", method = RequestMethod.POST)
-    public ResponseEntity<Warehouse> viewWarehouseDetail(Map<String, Object> map, @RequestBody String  serialNum) {
+    public ResponseEntity<Map> viewWarehouseDetail(@RequestBody String  serialNum) {
+    	Map<String,Object> map = new HashMap<String,Object>();
     	Warehouse warehouse=warehouseService.selectOne(serialNum);
-    	return new ResponseEntity<Warehouse>(warehouse, HttpStatus.OK);
+    	map.put("warehouse", warehouse);
+    	List<Warehouseposition>warehousepositionList=warehousepositionService.selectList(serialNum);
+    	map.put("warehousepositions", warehousepositionList);
+    	return new ResponseEntity<Map>(map, HttpStatus.OK);
     }
 	
     /**
@@ -260,5 +271,39 @@ public class WareHouseController {
          return map;
     }
     
-    
+    /**
+     * @Description (保存库位信息)
+     * @param request
+     * @return
+     */
+   
+    @RequestMapping(value = "/saveWarehousePositionInfo", method = RequestMethod.POST)
+	public ResponseEntity<List> saveWarehousePositionInfo(@RequestBody  Warehouseposition warehouseposition,UriComponentsBuilder ucBuilder) {
+    	try{
+    		if(StringUtils.isEmpty(warehouseposition.getSerialNum())){
+    			warehouseposition.setSerialNum(UUID.randomUUID().toString().replace("-",""));
+    			warehousepositionService.insert(warehouseposition);
+    		}else{
+    			warehousepositionService.update(warehouseposition);
+    		}
+    	}catch(Exception e){
+    		System.out.println(e.getMessage());
+    	}
+    	List <Warehouseposition>warehousepositions=warehousepositionService.selectList(warehouseposition.getWarehouseSerial());
+		return new ResponseEntity<List>(warehousepositions, HttpStatus.OK);
+    }
+    /**
+   	 * 
+   	 * @Description 删除仓库区位
+   	 * @param ids
+   	 * @return
+   	 */
+   	@RequestMapping(value = "/deleteWarehousePosition", method = RequestMethod.POST)
+   	public ResponseEntity<String> deleteWarehousePosition(@RequestBody String id) {
+   		if ("".equals(id) || id == null) {
+   			return new ResponseEntity<String>("0",HttpStatus.CONFLICT);
+   		}
+   		warehousepositionService.delete(id);
+   		return new ResponseEntity<String>("1",HttpStatus.OK);
+   	}
 }
