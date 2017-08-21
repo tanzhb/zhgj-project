@@ -223,20 +223,20 @@
 
 			
                         <div class="portlet-title">
-                            <div class="caption">库位管理</div>
+                            <div class="caption">区位管理</div>
                             <div class="actions">
-                                <button   ng-show="warehousepositionView" class="btn blue btn-outline  btn-sm " ng-click="editwarehouseposition()">
+                               <!--  <button   ng-show="warehousepositionView" class="btn blue btn-outline  btn-sm " ng-click="editwarehouseposition()">
                                             <i class="fa fa-edit"></i> 编辑 </button>
                                 <button   ng-show="warehousepositionEdit" class="btn red  btn-outline  btn-sm " ng-click="cancelCompany('warehouseposition')">
                                             <i class="fa fa-undo"></i> 取消 </button>
                                 <button   ng-hide="warehousepositionAdd" class="btn blue btn-outline  btn-sm " ng-click="savewarehouseposition()">
-                                            <i class="fa fa-save"></i> 保存 </button>
+                                            <i class="fa fa-save"></i> 保存 </button> -->
                             </div>
                         </div>
                         <div class="portlet-body form">
                         <div class="portlet-body">
 				<table
-					class="table table-striped table-bordered table-hover table-header-fixed">
+					class="table table-striped  table-hover table-header-fixed">
 					<thead>
 						<tr>
 							<th >仓库区位编码</th>
@@ -259,116 +259,151 @@
 			</div>
                             <form  id="warehousepositionForm" class="page-repeater form-horizontal">
 								<div class="form-body" data-repeater-list="group-a"  >
-									<!-- <div  class="row" data-repeater-item repeat-done="repeatDone()">ng-repeat="warehouseposition in warehousepositions  track by $index"  
+									 <div  class="row" data-repeater-item repeat-done="repeatDone()"  ng-repeat="warehouseposition in warehousepositions  track by $index"  >
 										<div class="col-md-1">
 											<div class="form-group">
 												<div class="col-md-12 input-icon right">
-													<input  type="text" ng-model="warehouseposition.qualificationName" name="qualificationName" 
+												 <input  type="hidden"    id="serialNum{{$index}}"      value="{{warehouseposition.serialNum}}" />
+													<input  type="text"   ng-model="warehouseposition.positionNum"     name="positionNum"    id="positionNum{{$index}}"     ng-hide="warehousepositionAdd{{$index}}"       
 														class="form-control" placeholder=""> <span
 														class="help-block"></span>
-														<label   ng-show="warehousepositionView"  class="c_edit" >{{warehouseposition.qualificationName}}</label>
+														<label   ng-show="warehousepositionView{{$index}}"  class="c_edit" >{{warehouseposition.positionNum}}</label>
 												</div>
 											</div>
 										</div>
-						<div class="col-md-2">
+						<div class="col-md-1">
 											<div class="form-group">
-												<div class="col-md-22 input-icon right">
-													<input  type="text" ng-model="warehouseposition.qualificationName" name="qualificationName" 
+												<div class="col-md-12 input-icon right" style="margin-left:45px">
+													<input  type="text"   ng-model="warehouseposition.positionName"    name="positionName"   id="positionName{{$index}}"  ng-hide="warehousepositionAdd{{$index}}"
 														class="form-control" placeholder=""> <span
 														class="help-block"></span>
-														<label   ng-show="warehousepositionView"  class="c_edit" >{{warehouseposition.qualificationName}}</label>
+														<label   ng-show="warehousepositionView{{$index}}"  class="c_edit" >{{warehouseposition.positionName}}</label>
 												</div>
 											</div>
 										</div>
-										<div class="col-md-2">
+										<div class="col-md-1">
 											<div class="form-group">
-												<div class="col-md-22 input-icon right">
-													<input  type="text" ng-model="warehouseposition.qualificationName" name="qualificationName" 
+												<div class="col-md-12 input-icon right"  style="margin-left:90px">
+													<input  type="text" ng-model="warehouseposition.storageAttribute" name="storageAttribute"    id="storageAttribute{{$index}}"  ng-hide="warehousepositionAdd{{$index}}"
 														class="form-control" placeholder=""> <span
 														class="help-block"></span>
-														<label   ng-show="warehousepositionView"  class="c_edit" >{{warehouseposition.qualificationName}}</label>
+														<label   ng-show="warehousepositionView{{$index}}"  class="c_edit" >{{warehouseposition.storageAttribute}}</label>
 												</div>
 											</div>
 										</div>
-										<div class="col-md-2">
+									<div class="col-md-1">
 											<div class="form-group">
-												<div class="col-md-22 input-icon right">
-													<input  type="text" ng-model="warehouseposition.qualificationName" name="qualificationName" 
+												<div class="col-md-8 input-icon right"  style="margin-left:110px">
+													<input  type="text" ng-model="warehouseposition.maxRows" name="maxRows"    id="maxRows{{$index}}"  ng-hide="warehousepositionAdd{{$index}}"
 														class="form-control" placeholder=""> <span
 														class="help-block"></span>
-														<label   ng-show="warehousepositionView"  class="c_edit" >{{warehouseposition.qualificationName}}</label>
+														<label   ng-show="warehousepositionView{{$index}}"  class="c_edit" >{{warehouseposition.maxRows}}</label>
 												</div>
 											</div>
 										</div>
-										<div class="col-md-2">
+										<div class="col-md-1">
 											<div class="form-group">
-												<div class="col-md-22 input-icon right">
-													<input  type="text" ng-model="warehouseposition.qualificationName" name="qualificationName" 
+												<div class="col-md-8 input-icon right" style="margin-left:100px">
+													<input  type="text" ng-model="warehouseposition.maxCols" name="maxCols"  id="maxCols{{$index}}"   ng-hide="warehousepositionAdd{{$index}}"
 														class="form-control" placeholder=""> <span
 														class="help-block"></span>
-														<label   ng-show="warehousepositionView"  class="c_edit" >{{warehouseposition.qualificationName}}</label>
+														<label   ng-show="warehousepositionView{{$index}}"  class="c_edit" >{{warehouseposition.maxCols}}</label>
 												</div>
 											</div>
 										</div>
-										<div class="col-md-2">
+										<div class="col-md-1">
 											<div class="form-group">
-												<div class="col-md-22 input-icon right">
-													<input  type="text" ng-model="warehouseposition.qualificationName" name="qualificationName" 
+												<div class="col-md-8 input-icon right"  style="margin-left:50px">
+													<input  type="text" ng-model="warehouseposition.maxLayers" name="maxLayers"   id="maxLayers{{$index}}"  ng-hide="warehousepositionAdd{{$index}}"
 														class="form-control" placeholder=""> <span
 														class="help-block"></span>
-														<label   ng-show="warehousepositionView"  class="c_edit" >{{warehouseposition.qualificationName}}</label>
+														<label   ng-show="warehousepositionView{{$index}}"  class="c_edit" >{{warehouseposition.maxLayers}}</label>
 												</div>
 											</div>
 										</div>
-										<div class="col-md-2">
+										<div class="col-md-1">
 											<div class="form-group">
-												<div class="col-md-22 input-icon right">
-													<input  type="text" ng-model="warehouseposition.qualificationName" name="qualificationName" 
-														class="form-control" placeholder=""> <span
+												<div class="col-md-12 input-icon right">
+												 <select class="form-control" id="storageType"  name="storageType"    id="storageType{{$index}}"  ng-model="warehouseposition.storageType"   ng-hide="warehousepositionAdd{{$index}}">
+                                                            			<option value="">未定</option>
+                                                        </select>
+													<!-- <input  type="text" ng-model="warehouseposition.storageType" name="storageType" 
+														class="form-control" placeholder=""/> --> <span
 														class="help-block"></span>
-														<label   ng-show="warehousepositionView"  class="c_edit" >{{warehouseposition.qualificationName}}</label>
+														<label   ng-show="warehousepositionView{{$index}}"  class="c_edit" >{{warehouseposition.storageType}}</label>
 												</div>
 											</div>
 										</div>
-										<div class="col-md-2">
+										<div class="col-md-1">
 											<div class="form-group">
-												<div class="col-md-22 input-icon right">
-													<input  type="text" ng-model="warehouseposition.qualificationName" name="qualificationName" 
-														class="form-control" placeholder=""> <span
+												<div class="col-md-12 input-icon right">
+												<select class="form-control" id="storageMode"  name="storageMode"    id="storageMode{{$index}}"   ng-model="warehouseposition.storageMode"  ng-hide="warehousepositionAdd{{$index}}">
+                                                            			<option value="">未定</option>
+                                                        </select>
+													<!-- <input  type="text" ng-model="warehouseposition.storageMode" name="storageMode" 
+														class="form-control" placeholder=""/> --> <span
 														class="help-block"></span>
-														<label   ng-show="warehousepositionView"  class="c_edit" >{{warehouseposition.qualificationName}}</label>
+														<label   ng-show="warehousepositionView{{$index}}"  class="c_edit" >{{warehouseposition.storageMode}}</label>
 												</div>
 											</div>
 										</div>
-										<div class="col-md-2">
+										<div class="col-md-1">
 											<div class="form-group">
-												<div class="col-md-22 input-icon right">
-													<input  type="text" ng-model="warehouseposition.qualificationName" name="qualificationName" 
+												<div class="col-md-12 input-icon right">
+													<input  type="text"   ng-model="warehouseposition.defaultLWH"   name="defaultLWH"   id="defaultLWH{{$index}}"   ng-hide="warehousepositionAdd{{$index}}"
 														class="form-control" placeholder=""> <span
 														class="help-block"></span>
-														<label   ng-show="warehousepositionView"  class="c_edit" >{{warehouseposition.qualificationName}}</label>
+														<label   ng-show="warehousepositionView{{$index}}"  class="c_edit" >{{warehouseposition.defaultLWH}}</label>
 												</div>
 											</div>
 										</div>
-										<div class="col-md-2">
+										<div class="col-md-1">
 											<div class="form-group">
-												<div class="col-md-22 input-icon right">
-													<input  type="text" ng-model="warehouseposition.qualificationName" name="qualificationName" 
+												<div class="col-md-12 input-icon right">
+													<input  type="text"   ng-model="warehouseposition.defaultVolume"   name="defaultVolume"     id="defaultVolume{{$index}}"   ng-hide="warehousepositionAdd{{$index}}"
 														class="form-control" placeholder=""> <span
 														class="help-block"></span>
-														<label   ng-show="warehousepositionView"  class="c_edit" >{{warehouseposition.qualificationName}}</label>
+														<label   ng-show="warehousepositionView{{$index}}"  class="c_edit" >{{warehouseposition.defaultVolume}}</label>
+												</div>
+											</div>
+										</div> 
+										<div class="col-md-1">
+											<div class="form-group">
+												<div class="col-md-12 input-icon right">
+													<input  type="text" ng-model="warehouseposition.defaultBearing" name="defaultBearing"    id="defaultBearing{{$index}}"   ng-hide="warehousepositionAdd{{$index}}"
+														class="form-control" placeholder=""> <span
+														class="help-block"></span>
+														<label   ng-show="warehousepositionView{{$index}}"  class="c_edit" >{{warehouseposition.defaultBearing}}</label>
+												</div>
+											</div>
+										</div> 
+									<div class="col-md-1">
+											<div class="form-group">
+											<div class="col-md-6" >
+													 <a href="javascript:;"  ng-hide="warehousepositionEdit{{$index}}"              ng-click="savewarehouseposition($index)">
+                                            			<i class="fa fa-save"  title="保存"></i> 
+                                     				</a>
+                                     			
+                                     				<a href="javascript:;"  ng-hide="warehousepositionEdit{{$index}}"       ng-click="cancelWarehouseposition(warehouseposition,$index)">
+                                            			<i class="fa fa-undo"  title="取消"></i>
+                                     				</a>
+												</div>
+												<div class="col-md-6"  >
+												 <a href="javascript:;"  ng-show="warehousepositionEdit{{$index}}"      ng-click="editwarehouseposition($index)">
+                                            			<i class="fa fa-edit"  title="编辑"></i> 
+                                     				</a>
+                                     				
+													 <a href="javascript:;"   ng-show="warehousepositionEdit{{$index}}"       ng-click="deleteWarehouseposition(warehouseposition)">
+                                            			<i class="fa fa-close"  title="删除"></i> 
+                                     				</a>
 												</div>
 											</div>
 										</div>
-										
-										
-									
 										
 									</div>
-									/row -->
 								</div>
 								<div class="form-actions right" ng-hide="warehousepositionAdd">
-									<a href="javascript:;" data-repeater-create class="btn blue btn-sm" ng-click="addRepeat()" >
+									<a href="javascript:;"  class="btn blue btn-sm" ng-click="addRepeat()" >
                                             <i class="fa fa-plus"></i> 增加
                                      </a>
                                 </div>

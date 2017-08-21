@@ -403,43 +403,25 @@
 					<i class="fa fa-globe"></i>库位管理
 				</div>
 				<div class="actions">
-					<a href="javascript:;" data-target="#addUserModal"
-						data-toggle="modal" class="btn btn-default btn-sm btn-circle">
-						<i class="fa fa-plus"></i> 添加
-					</a> <a href="javascript:;" data-target="#delUsersModal"
-						data-toggle="modal" 
-						class="btn btn-default btn-sm btn-circle"> <i
-						class="fa fa-minus"></i> 删除
-					</a>
-					<div class="btn-group">
+					
+					<!-- <div class="btn-group">
 						<a class="btn btn-default btn-outline btn-circle"
 							href="javascript:;" data-toggle="dropdown"> <i
 							class="fa fa-share"></i> <span class="hidden-xs"> 其它 </span> <i
 							class="fa fa-angle-down"></i>
 						</a>
 						<ul class="dropdown-menu pull-right" id="sample_3_tools">
-							<li><a href="javascript:;" data-action="0"
-								class="tool-action"> <i class="icon-printer"></i> Print
-							</a></li>
-							<li><a href="javascript:;" data-action="1"
-								class="tool-action"> <i class="icon-check"></i> Copy
-							</a></li>
-							<li><a href="javascript:;" data-action="2"
-								class="tool-action"> <i class="icon-doc"></i> PDF
-							</a></li>
-							<li><a href="javascript:;" data-action="3"
-								class="tool-action"> <i class="icon-paper-clip"></i> Excel
-							</a></li>
-							<li><a href="javascript:;" data-action="4"
-								class="tool-action"> <i class="icon-cloud-upload"></i> CSV
-							</a></li>
-							<li class="divider"></li>
-							<li><a href="javascript:;" data-action="5"
-								class="tool-action"> <i class="icon-refresh"></i> Reload
-							</a></li>
-							</li>
-						</ul>
-					</div>
+												<li><a data-action="0"
+													class="tool-action" data-toggle="modal" data-target="#import"> <i class="fa fa-upload"></i> 导入
+												</a></li> 
+												<li><a href="javascript:;" data-action="1"
+													class="tool-action" ng-click=""> <i class="fa fa-file-excel-o"></i> 导出
+												</a></li>
+												<li><a href="javascript:;" data-action="2"
+													class="tool-action" > <i class="fa fa-print"></i> 打印
+												</a></li> 
+											</ul>
+					</div> -->
 				</div>
 			</div>
 			<!-- 仓库信息弹框查看开始 -->
@@ -603,10 +585,9 @@
 					id="sample_2">
 					<thead>
 						<tr>
-							<th style="text-align: center"><input name="select_all"
-								value="1" id="example-select-all" type="checkbox" /></th>
+							<!-- <th style="text-align: center"><input name="select_all"
+								value="1" id="example-select-all" type="checkbox" /></th> -->
 					<th> 库位编码</th>
-                     <th>存储类型</th>
                      <th> 库位名称</th>
                       <th> 存储属性</th>
                       <th> 最大行数</th>
@@ -615,10 +596,29 @@
                         <th>存储类型</th>
                         <th> 存储方式</th>
                          <th> 默认长宽高</th>
+                         <th> 默认容积</th>
                           <th> 默认承重</th>
 						</tr>
 					</thead>
 						<tbody>
+						<tr ng-repeat="warehouseposition in warehousepositions  track by $index" >
+													<!-- <td></td> -->
+												<td>{{warehouseposition.positionNum}}</td>
+												<td>{{warehouseposition.positionName}}</td>
+												<td>{{warehouseposition.storageAttribute}}</td>
+												<td>{{warehouseposition.maxRows}}</td>
+												<td>{{warehouseposition.maxCols}}</td>
+												<td>{{warehouseposition.maxLayers}}</td>
+												<td><span ng-if="warehouseposition.storageType==null">暂无</span><span ng-if="warehouseposition.storageType!=null">{{warehouseposition.storageType}}</span></td>
+												<td><span ng-if="warehouseposition.storageMode==null">暂无</span><span ng-if="warehouseposition.storageMode!=null">{{warehouseposition.storageMode}}</span></td>
+												<td>{{warehouseposition.defaultLWH}}</td>
+												<td>{{warehouseposition.defaultVolume}}</td>
+												<td>{{warehouseposition.defaultBearing}}</td>
+
+											</tr>
+											<tr ng-if="warehousepositions==undefined||warehousepositions.length==0">
+													<td colspan="11"  align="center">暂无数据</td>
+											</tr>
 					</tbody>
 				</table>
 			</div>
@@ -626,75 +626,7 @@
 		<!-- END EXAMPLE TABLE PORTLET-->
 	</div>
 </div>
-<!-- <div class="row">
-                        <div class="col-md-12">
-                            BEGIN EXAMPLE TABLE PORTLET
-                            <div class="portlet light portlet-fit ">
-                                <div class="portlet-title">
-                                    <div class="caption">
-                                        <i class="icon-settings font-red"></i>
-                                        <span class="caption-subject font-red sbold uppercase">Editable Table</span>
-                                    </div>
-                                    <div class="actions">
-                                        <div class="btn-group btn-group-devided" data-toggle="buttons">
-                                            <label class="btn btn-transparent red btn-outline btn-circle btn-sm active">
-                                                <input type="radio" name="options" class="toggle" id="option1">Actions</label>
-                                            <label class="btn btn-transparent red btn-outline btn-circle btn-sm">
-                                                <input type="radio" name="options" class="toggle" id="option2">Settings</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="portlet-body">
-                                    <div class="table-toolbar">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="btn-group">
-                                                    <button id="sample_editable_1_new" class="btn green"> Add New
-                                                        <i class="fa fa-plus"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="btn-group pull-right">
-                                                    <button class="btn green btn-outline dropdown-toggle" data-toggle="dropdown">Tools
-                                                        <i class="fa fa-angle-down"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu pull-right">
-                                                        <li>
-                                                            <a href="javascript:;"> Print </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="javascript:;"> Save as PDF </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="javascript:;"> Export to Excel </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <table class="table table-striped table-hover table-bordered" id="sample_editable_1">
-                                        <thead>
-                                            <tr>
-                                                <th> 库位编码 </th>
-                                                <th>存储类型 </th>
-                                                <th> 库位名称 </th>
-                                                <th> 存储属性</th>
-                                                <th> 最大行数 </th>
-                                                <th> 最大列数 </th>
-                                                <th> 最大层数 </th>
-                                                <th>存储类型 </th>
-                                                <th> 存储方式 </th>
-                                                <th> 默认长宽高</th>
-                                                <th> 默认承重 </th>
-                                            </tr>
-                                        </thead>
-                                    </table>
-                                </div>
-                            </div>
-                            END EXAMPLE TABLE PORTLET
-                        </div> -->
+
        <script>
     /* TableDatatablesManaged.init(); */
     function MyCtrl($scope, $location) {
