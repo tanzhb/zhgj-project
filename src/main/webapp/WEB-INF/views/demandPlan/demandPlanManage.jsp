@@ -77,7 +77,7 @@
 											</div>
 
 
-											<div class="portlet-body" style="display: none;">
+											<div class="portlet-body">
 												<div class="row">
 													<div class="col-md-6 col-sm-6">
 													</div>

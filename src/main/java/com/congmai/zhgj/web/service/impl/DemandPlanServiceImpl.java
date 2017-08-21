@@ -55,8 +55,8 @@ public class DemandPlanServiceImpl extends GenericServiceImpl<DemandPlan,String>
 	public Page<DemandPlan> getListByCondition(DemandPlan demandPlan,int start,int limit) {
 		DemandPlanExample example = new DemandPlanExample();
 		example.setOrderByClause("updateTime desc");
-		example.setStart((start-1)*limit);
-		example.setLimit(limit);
+		example.setStart((demandPlan.getPageIndex()-1)*demandPlan.getPageSize());
+		example.setLimit(demandPlan.getPageSize());
 		example.createCriteria().andDelFlgEqualTo("0");
 		List<DemandPlan> list = demandPlanMapper.selectByExample(example);
 		if(!CollectionUtils.isEmpty(list)){
