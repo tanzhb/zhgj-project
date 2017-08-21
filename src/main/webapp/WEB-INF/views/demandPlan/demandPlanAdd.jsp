@@ -215,7 +215,14 @@
                                                     	<span class="help-block"></span>
                                                     	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.deliveryAddress}}</label>
                                                     </td>
-                                                    <td>{{materiel.remark}}</td>
+                                                    <td>
+	                                                    <select ng-hide="demandPlanMaterielEdit{{$index}}"  class="form-control" ng-model="materiel.supplyMaterielSerial" >
+	                                                    	<option ng-repeat="m in materiel.supplyMateriels" value="{{m.serialNum}}"  >
+	                                                    		{{m.supply.comName}}
+	                                                    	</option>
+	                                                    </select>
+	                                                    <label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.supplyName}}</label>
+                                                    </td>
                                                     <td style="width: 140px;">
                                                     	<span>
                                                     		&nbsp;&nbsp;&nbsp;&nbsp;

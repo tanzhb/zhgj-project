@@ -205,7 +205,8 @@ public class DemandPlanController {
         				materiel.setSpecifications(materiel.getMateriel().getSpecifications());
         				materiel.setUnit(materiel.getMateriel().getUnit());
         				materiel.setMaterielSerial(materiel.getMateriel().getSerialNum());
-        				materiel.setSupplyMaterielSerial(materiel.getMateriel().getSerialNum());
+        				materiel.setSupplyMateriels(materiel.getMateriel().getSupplyMateriels());
+        				
     				}
     			}
     		}
@@ -326,6 +327,7 @@ public class DemandPlanController {
         			materiel.setUpdater(currenLoginName);
         			demandPlanMaterielService.update(materiel);
         		}
+        		materiel.setSupplyName(demandPlanMaterielService.selectSupplyName(materiel.getSupplyMaterielSerial()));
         		int remainTime = 0;
 				try {
 					remainTime = DateUtil.daysBetween(new Date(), materiel.getDeliveryDate());

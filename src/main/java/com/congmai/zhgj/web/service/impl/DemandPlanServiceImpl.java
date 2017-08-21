@@ -1,15 +1,16 @@
 package com.congmai.zhgj.web.service.impl;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericDao;
@@ -18,12 +19,15 @@ import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.web.dao.DemandPlanMapper;
 import com.congmai.zhgj.web.dao.DemandPlanMaterielMapper;
 import com.congmai.zhgj.web.dao.MaterielMapper;
+import com.congmai.zhgj.web.dao.SupplyMaterielMapper;
 import com.congmai.zhgj.web.model.DemandPlan;
 import com.congmai.zhgj.web.model.DemandPlanExample;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.DemandPlanMaterielExample;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
+import com.congmai.zhgj.web.model.SupplyMateriel;
+import com.congmai.zhgj.web.model.SupplyMaterielExample;
 import com.congmai.zhgj.web.service.DemandPlanService;
 
 @Service
@@ -35,6 +39,9 @@ public class DemandPlanServiceImpl extends GenericServiceImpl<DemandPlan,String>
 	
 	@Resource
 	private MaterielMapper materielMapper;
+	
+	@Resource
+	private SupplyMaterielMapper supplyMaterielMapper;
 	
 	@Resource
 	private DemandPlanMaterielMapper demandPlanMaterielMapper;
@@ -83,14 +90,28 @@ public class DemandPlanServiceImpl extends GenericServiceImpl<DemandPlan,String>
 
 	@Override
 	public List<Materiel> chooseMateriel(String ids) {
-		
-		if(StringUtils.isNotEmpty(ids)){
-			List<String> idList = Arrays.asList(ids.split(","));
-			MaterielExample example = new MaterielExample();
-			example.createCriteria().andSerialNumIn(idList).andDelFlgEqualTo("0");
-			return materielMapper.selectByExample(example);
+		List<Materiel> materiels = new ArrayList<Materiel>();
+		try {
+			if(StringUtils.isNotEmpty(ids)){
+				List<String> idList = Arrays.asList(ids.split(","));
+				SupplyMaterielExample example2 = new SupplyMaterielExample();
+				example2.createCriteria().andSerialNumIn(idList).andDelFlgEqualTo("0");
+				List<SupplyMateriel> list = supplyMaterielMapper.selectByExample(example2);
+				if(CollectionUtils.isNotEmpty(list)){
+					for(SupplyMateriel supplyMateriel : list){
+						MaterielExample example = new MaterielExample();
+						example.createCriteria().andMaterielIdEqualTo(supplyMateriel.getMaterielId()).andIsLatestVersionEqualTo("1").andDelFlgEqualTo("0");
+						List<Materiel> materielList = materielMapper.selectByExample(example);
+						if(CollectionUtils.isNotEmpty(materielList)){
+							materiels.add(materielList.get(0));
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			System.out.println(this.getClass()+"============"+e.getMessage());
 		}
-		return null;
+		return materiels;
 	}
 
 	@Override
