@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.congmai.zhgj.core.generic.GenericDao;
+import com.congmai.zhgj.web.model.LadderPrice;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.WarehouseExample;
 
