@@ -224,14 +224,10 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [
-//                           'assets/global/plugins/jstree/dist/themes/default/style.min.css',
-//                            'assets/global/plugins/jstree/dist/jstree.min.js',
-//                            'assets/pages/scripts/ui-tree.min.js',
 							'assets/global/plugins/datatables/datatables.min.css',
 							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 							'assets/global/plugins/datatables/datatables.all.min.js',
 							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
-//							'assets/apps/scripts/angular-file-upload-shim.min.js',
 					        'assets/apps/scripts/angular-file-upload.min.js',
                             'assets/apps/service/materielService.js',
                             'assets/apps/controllers/materielController.js'
@@ -252,25 +248,14 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [
-//	        	'assets/global/plugins/icheck/skins/all.css',
-//	        	'assets/global/plugins/icheck/icheck.min.js',
-//				'assets/pages/scripts/form-icheck.min.js',
-//		        'assets/global/plugins/datatables/datatables.min.css', 
-//		        'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
-//		        'assets/global/plugins/datatables/datatables.all.min.js',
-//		        'assets/global/plugins/bootstrap-toastr/toastr.js',
-//		        'assets/global/plugins/bootstrap-toastr/toastr.css',
 				'assets/global/plugins/datatables/datatables.min.css',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 				'assets/global/plugins/datatables/datatables.all.min.js',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
-//				'assets/apps/scripts/angular-file-upload-shim.min.js',
 		        'assets/apps/scripts/angular-file-upload.min.js',
-//		        'assets/apps/scripts/FileUploader.js',
 	        	'assets/apps/service/materielService.js',
 	        	'assets/apps/directive/CompanyDirective.js',
 				'assets/apps/controllers/materielController.js'/*,
-				'http://www.jq22.com/jquery/jquery-migrate-1.2.1.min.js',
 				'assets/pages/scripts/jquery.jqprint-0.3.js'*/
                       ]
                     });
@@ -293,6 +278,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 							'assets/global/plugins/datatables/datatables.all.min.js',
 							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+							'assets/apps/scripts/angular-file-upload.min.js',
 							'assets/apps/service/materielService.js',
                             'assets/apps/service/saleOrderService.js',
                             'assets/apps/controllers/saleOrderController.js'
@@ -317,9 +303,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 				'assets/global/plugins/datatables/datatables.all.min.js',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
-//				'assets/apps/scripts/angular-file-upload-shim.min.js',
-//		        'assets/apps/scripts/angular-file-upload.min.js',
-//		        'assets/apps/scripts/FileUploader.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/materielService.js',
 	        	'assets/apps/service/saleOrderService.js',

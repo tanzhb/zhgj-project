@@ -55,6 +55,8 @@ public class ContractVO {
     
     private String signContract;
     
+    private String contractNumber;
+    
     private String versionNO;
     
     
@@ -76,6 +78,8 @@ public class ContractVO {
     
     private Date updateTime;
 
+    private String orderSerial;
+    
 	public String getId() {
 		return id;
 	}
@@ -300,6 +304,22 @@ public class ContractVO {
 
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public String getContractNumber() {
+		return contractNumber;
+	}
+
+	public void setContractNumber(String contractNumber) {
+		this.contractNumber = contractNumber;
+	}
+
+	public String getOrderSerial() {
+		return orderSerial;
+	}
+
+	public void setOrderSerial(String orderSerial) {
+		this.orderSerial = orderSerial;
 	}
     
     

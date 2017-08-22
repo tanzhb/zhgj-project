@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.congmai.zhgj.web.dao.OrderInfoMapper" >
-  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.OrderInfo" >
+<mapper namespace="com.congmai.zhgj.web.dao.ClauseAfterSalesMapper" >
+  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.ClauseAfterSales" >
     <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
     <result column="contractSerial" property="contractSerial" jdbcType="VARCHAR" />
-    <result column="supplyComId" property="supplyComId" jdbcType="VARCHAR" />
-    <result column="buyComId" property="buyComId" jdbcType="VARCHAR" />
-    <result column="orderNum" property="orderNum" jdbcType="VARCHAR" />
-    <result column="orderType" property="orderType" jdbcType="VARCHAR" />
-    <result column="serviceModel" property="serviceModel" jdbcType="VARCHAR" />
-    <result column="settlementClause" property="settlementClause" jdbcType="VARCHAR" />
-    <result column="salesOrderSerial" property="salesOrderSerial" jdbcType="VARCHAR" />
-    <result column="deliveryMode" property="deliveryMode" jdbcType="VARCHAR" />
-    <result column="transportMode" property="transportMode" jdbcType="VARCHAR" />
-    <result column="orderDate" property="orderDate" jdbcType="DATE" />
-    <result column="maker" property="maker" jdbcType="VARCHAR" />
+    <result column="qualityRequirements" property="qualityRequirements" jdbcType="VARCHAR" />
+    <result column="afterSaleResponse" property="afterSaleResponse" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
@@ -82,17 +73,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    serialNum,contractSerial, supplyComId, buyComId, orderNum, orderType, serviceModel, settlementClause, 
-    salesOrderSerial, deliveryMode, transportMode, orderDate, maker, remark, status, 
+    serialNum, contractSerial, qualityRequirements, afterSaleResponse, remark, status, 
     delFlg, creator, createTime, updater, updateTime
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.OrderInfoExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.ClauseAfterSalesExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from orderInfo
+    from clauseAfterSales
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -103,73 +93,43 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from orderInfo
+    from clauseAfterSales
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from orderInfo
+    delete from clauseAfterSales
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.OrderInfoExample" >
-    delete from orderInfo
+  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.ClauseAfterSalesExample" >
+    delete from clauseAfterSales
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.congmai.zhgj.web.model.OrderInfo" >
-    insert into orderInfo (serialNum, supplyComId, buyComId, 
-      orderNum, orderType, serviceModel, 
-      settlementClause, salesOrderSerial, deliveryMode, 
-      transportMode, orderDate, maker, 
-      remark, status, 
-      creator, createTime, updater, 
-      updateTime)
-    values (#{serialNum,jdbcType=VARCHAR}, #{supplyComId,jdbcType=VARCHAR}, #{buyComId,jdbcType=VARCHAR}, 
-      #{orderNum,jdbcType=VARCHAR}, #{orderType,jdbcType=VARCHAR}, #{serviceModel,jdbcType=VARCHAR}, 
-      #{settlementClause,jdbcType=VARCHAR}, #{salesOrderSerial,jdbcType=VARCHAR}, #{deliveryMode,jdbcType=VARCHAR}, 
-      #{transportMode,jdbcType=VARCHAR}, #{orderDate,jdbcType=DATE}, #{maker,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},  
-      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+  <insert id="insert" parameterType="com.congmai.zhgj.web.model.ClauseAfterSales" >
+    insert into clauseAfterSales (serialNum, contractSerial, qualityRequirements, 
+      afterSaleResponse, remark, status, 
+      delFlg, creator, createTime, 
+      updater, updateTime)
+    values (#{serialNum,jdbcType=VARCHAR}, #{contractSerial,jdbcType=VARCHAR}, #{qualityRequirements,jdbcType=VARCHAR}, 
+      #{afterSaleResponse,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.OrderInfo" >
-    insert into orderInfo
+  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.ClauseAfterSales" >
+    insert into clauseAfterSales
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
         serialNum,
       </if>
-      <if test="supplyComId != null" >
-        supplyComId,
+      <if test="contractSerial != null" >
+        contractSerial,
       </if>
-      <if test="buyComId != null" >
-        buyComId,
+      <if test="qualityRequirements != null" >
+        qualityRequirements,
       </if>
-      <if test="orderNum != null" >
-        orderNum,
-      </if>
-      <if test="orderType != null" >
-        orderType,
-      </if>
-      <if test="serviceModel != null" >
-        serviceModel,
-      </if>
-      <if test="settlementClause != null" >
-        settlementClause,
-      </if>
-      <if test="salesOrderSerial != null" >
-        salesOrderSerial,
-      </if>
-      <if test="deliveryMode != null" >
-        deliveryMode,
-      </if>
-      <if test="transportMode != null" >
-        transportMode,
-      </if>
-      <if test="orderDate != null" >
-        orderDate,
-      </if>
-      <if test="maker != null" >
-        maker,
+      <if test="afterSaleResponse != null" >
+        afterSaleResponse,
       </if>
       <if test="remark != null" >
         remark,
@@ -197,38 +157,14 @@
       <if test="serialNum != null" >
         #{serialNum,jdbcType=VARCHAR},
       </if>
-      <if test="supplyComId != null" >
-        #{supplyComId,jdbcType=VARCHAR},
+      <if test="contractSerial != null" >
+        #{contractSerial,jdbcType=VARCHAR},
       </if>
-      <if test="buyComId != null" >
-        #{buyComId,jdbcType=VARCHAR},
+      <if test="qualityRequirements != null" >
+        #{qualityRequirements,jdbcType=VARCHAR},
       </if>
-      <if test="orderNum != null" >
-        #{orderNum,jdbcType=VARCHAR},
-      </if>
-      <if test="orderType != null" >
-        #{orderType,jdbcType=VARCHAR},
-      </if>
-      <if test="serviceModel != null" >
-        #{serviceModel,jdbcType=VARCHAR},
-      </if>
-      <if test="settlementClause != null" >
-        #{settlementClause,jdbcType=VARCHAR},
-      </if>
-      <if test="salesOrderSerial != null" >
-        #{salesOrderSerial,jdbcType=VARCHAR},
-      </if>
-      <if test="deliveryMode != null" >
-        #{deliveryMode,jdbcType=VARCHAR},
-      </if>
-      <if test="transportMode != null" >
-        #{transportMode,jdbcType=VARCHAR},
-      </if>
-      <if test="orderDate != null" >
-        #{orderDate,jdbcType=DATE},
-      </if>
-      <if test="maker != null" >
-        #{maker,jdbcType=VARCHAR},
+      <if test="afterSaleResponse != null" >
+        #{afterSaleResponse,jdbcType=VARCHAR},
       </if>
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
@@ -253,53 +189,26 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.OrderInfoExample" resultType="java.lang.Integer" >
-    select count(*) from orderInfo
+  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.ClauseAfterSalesExample" resultType="java.lang.Integer" >
+    select count(*) from clauseAfterSales
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update orderInfo
+    update clauseAfterSales
     <set >
       <if test="record.serialNum != null" >
         serialNum = #{record.serialNum,jdbcType=VARCHAR},
       </if>
       <if test="record.contractSerial != null" >
-        serialNum = #{record.contractSerial,jdbcType=VARCHAR},
+        contractSerial = #{record.contractSerial,jdbcType=VARCHAR},
       </if>
-      <if test="record.supplyComId != null" >
-        supplyComId = #{record.supplyComId,jdbcType=VARCHAR},
+      <if test="record.qualityRequirements != null" >
+        qualityRequirements = #{record.qualityRequirements,jdbcType=VARCHAR},
       </if>
-      <if test="record.buyComId != null" >
-        buyComId = #{record.buyComId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.orderNum != null" >
-        orderNum = #{record.orderNum,jdbcType=VARCHAR},
-      </if>
-      <if test="record.orderType != null" >
-        orderType = #{record.orderType,jdbcType=VARCHAR},
-      </if>
-      <if test="record.serviceModel != null" >
-        serviceModel = #{record.serviceModel,jdbcType=VARCHAR},
-      </if>
-      <if test="record.settlementClause != null" >
-        settlementClause = #{record.settlementClause,jdbcType=VARCHAR},
-      </if>
-      <if test="record.salesOrderSerial != null" >
-        salesOrderSerial = #{record.salesOrderSerial,jdbcType=VARCHAR},
-      </if>
-      <if test="record.deliveryMode != null" >
-        deliveryMode = #{record.deliveryMode,jdbcType=VARCHAR},
-      </if>
-      <if test="record.transportMode != null" >
-        transportMode = #{record.transportMode,jdbcType=VARCHAR},
-      </if>
-      <if test="record.orderDate != null" >
-        orderDate = #{record.orderDate,jdbcType=DATE},
-      </if>
-      <if test="record.maker != null" >
-        maker = #{record.maker,jdbcType=VARCHAR},
+      <if test="record.afterSaleResponse != null" >
+        afterSaleResponse = #{record.afterSaleResponse,jdbcType=VARCHAR},
       </if>
       <if test="record.remark != null" >
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -328,19 +237,11 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update orderInfo
+    update clauseAfterSales
     set serialNum = #{record.serialNum,jdbcType=VARCHAR},
-      supplyComId = #{record.supplyComId,jdbcType=VARCHAR},
-      buyComId = #{record.buyComId,jdbcType=VARCHAR},
-      orderNum = #{record.orderNum,jdbcType=VARCHAR},
-      orderType = #{record.orderType,jdbcType=VARCHAR},
-      serviceModel = #{record.serviceModel,jdbcType=VARCHAR},
-      settlementClause = #{record.settlementClause,jdbcType=VARCHAR},
-      salesOrderSerial = #{record.salesOrderSerial,jdbcType=VARCHAR},
-      deliveryMode = #{record.deliveryMode,jdbcType=VARCHAR},
-      transportMode = #{record.transportMode,jdbcType=VARCHAR},
-      orderDate = #{record.orderDate,jdbcType=DATE},
-      maker = #{record.maker,jdbcType=VARCHAR},
+      contractSerial = #{record.contractSerial,jdbcType=VARCHAR},
+      qualityRequirements = #{record.qualityRequirements,jdbcType=VARCHAR},
+      afterSaleResponse = #{record.afterSaleResponse,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
       delFlg = #{record.delFlg,jdbcType=VARCHAR},
@@ -352,44 +253,17 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.OrderInfo" >
-    update orderInfo
+  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.ClauseAfterSales" >
+    update clauseAfterSales
     <set >
       <if test="contractSerial != null" >
         contractSerial = #{contractSerial,jdbcType=VARCHAR},
       </if>
-      <if test="supplyComId != null" >
-        supplyComId = #{supplyComId,jdbcType=VARCHAR},
+      <if test="qualityRequirements != null" >
+        qualityRequirements = #{qualityRequirements,jdbcType=VARCHAR},
       </if>
-      <if test="buyComId != null" >
-        buyComId = #{buyComId,jdbcType=VARCHAR},
-      </if>
-      <if test="orderNum != null" >
-        orderNum = #{orderNum,jdbcType=VARCHAR},
-      </if>
-      <if test="orderType != null" >
-        orderType = #{orderType,jdbcType=VARCHAR},
-      </if>
-      <if test="serviceModel != null" >
-        serviceModel = #{serviceModel,jdbcType=VARCHAR},
-      </if>
-      <if test="settlementClause != null" >
-        settlementClause = #{settlementClause,jdbcType=VARCHAR},
-      </if>
-      <if test="salesOrderSerial != null" >
-        salesOrderSerial = #{salesOrderSerial,jdbcType=VARCHAR},
-      </if>
-      <if test="deliveryMode != null" >
-        deliveryMode = #{deliveryMode,jdbcType=VARCHAR},
-      </if>
-      <if test="transportMode != null" >
-        transportMode = #{transportMode,jdbcType=VARCHAR},
-      </if>
-      <if test="orderDate != null" >
-        orderDate = #{orderDate,jdbcType=DATE},
-      </if>
-      <if test="maker != null" >
-        maker = #{maker,jdbcType=VARCHAR},
+      <if test="afterSaleResponse != null" >
+        afterSaleResponse = #{afterSaleResponse,jdbcType=VARCHAR},
       </if>
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
@@ -415,19 +289,11 @@
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.OrderInfo" >
-    update orderInfo
-    set supplyComId = #{supplyComId,jdbcType=VARCHAR},
-      buyComId = #{buyComId,jdbcType=VARCHAR},
-      orderNum = #{orderNum,jdbcType=VARCHAR},
-      orderType = #{orderType,jdbcType=VARCHAR},
-      serviceModel = #{serviceModel,jdbcType=VARCHAR},
-      settlementClause = #{settlementClause,jdbcType=VARCHAR},
-      salesOrderSerial = #{salesOrderSerial,jdbcType=VARCHAR},
-      deliveryMode = #{deliveryMode,jdbcType=VARCHAR},
-      transportMode = #{transportMode,jdbcType=VARCHAR},
-      orderDate = #{orderDate,jdbcType=DATE},
-      maker = #{maker,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.ClauseAfterSales" >
+    update clauseAfterSales
+    set contractSerial = #{contractSerial,jdbcType=VARCHAR},
+      qualityRequirements = #{qualityRequirements,jdbcType=VARCHAR},
+      afterSaleResponse = #{afterSaleResponse,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
       delFlg = #{delFlg,jdbcType=VARCHAR},
