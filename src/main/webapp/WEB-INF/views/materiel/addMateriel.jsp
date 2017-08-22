@@ -650,7 +650,7 @@
                                                  <span class="fileinput-new">上传附件</span>
                                                  <span class="fileinput-exists">更改</span>
                                                  <input type="file" name="..." nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="file[$index].file" ng-click="uploadFile($index)" > </span>
-                                             <span class="fileinput-filename">{{_file.file.substring(_file.file.indexOf("_"))}}</span> &nbsp;
+                                             <span class="fileinput-filename">{{_file.file.substring(_file.file.indexOf("_")+1)}}</span> &nbsp;
                                              <a href="javascript:;" class="close fileinput-exists" ng-click="removefile($index)" data-dismiss="fileinput"> </a>
                                          </div>
                                          <div ng-hide="fileInfoInput"   ng-if="file[$index].file!=null&&file[$index].file!=''"  class="fileinput fileinput-exists" data-provides="fileinput">
@@ -658,7 +658,7 @@
                                                  <span class="fileinput-new">上传附件</span>
                                                  <span class="fileinput-exists">更改</span>
                                                  <input type="file" name="..." nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="file[$index].file" ng-click="uploadFile($index)" > </span>
-                                             <span class="fileinput-filename">{{_file.file.substring(_file.file.indexOf("_"))}}</span> &nbsp;
+                                             <span class="fileinput-filename">{{_file.file.substring(_file.file.indexOf("_")+1)}}</span> &nbsp;
                                              <a href="javascript:;" class="close fileinput-exists"  ng-click="removefile($index)" data-dismiss="fileinput"> </a>
                                          </div>
                                        	<label   ng-show="fileInfoShow" ng-if="file[$index].file==null||file[$index].file==''" class="c_edit" >未上传附件</label>

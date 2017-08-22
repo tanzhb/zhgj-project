@@ -8,7 +8,9 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.web.dao.ContractMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
+import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderInfoExample;
 import com.congmai.zhgj.web.model.OrderInfo;
@@ -28,6 +30,9 @@ import com.congmai.zhgj.web.service.OrderService;
 public class OrderServiceImpl implements OrderService {
     @Resource
     private OrderInfoMapper OrderInfoMapper;
+  //合同的dao
+  	@Resource
+  	private ContractMapper contractMapper;
     
 	@Override
 	public int insert(OrderInfo model) {
@@ -77,6 +82,22 @@ public class OrderServiceImpl implements OrderService {
 			OrderInfoMapper.updateByPrimaryKeySelective(m);
 		}
 
+	}
+
+	@Override
+	public void insertContract(ContractVO contract) {
+		OrderInfo m = new OrderInfo();
+		m.setSerialNum(contract.getOrderSerial());
+		m.setContractSerial(contract.getId());
+		m.setUpdateTime(new Date());
+		OrderInfoMapper.updateByPrimaryKeySelective(m);
+		
+		contractMapper.insertContract(contract);
+	}
+
+	@Override
+	public void updateContract(ContractVO contract) {
+		contractMapper.updateContract(contract);
 	}
 	
 
