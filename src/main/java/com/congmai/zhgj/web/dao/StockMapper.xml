@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.congmai.zhgj.web.dao.StockMapper" >
+  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.Stock" >
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="materielSerial" property="materielSerial" jdbcType="VARCHAR" />
+    <result column="stockNum" property="stockNum" jdbcType="VARCHAR" />
+    <result column="maxStock" property="maxStock" jdbcType="VARCHAR" />
+    <result column="minStock" property="minStock" jdbcType="VARCHAR" />
+    <result column="manageType" property="manageType" jdbcType="VARCHAR" />
+    <result column="materielOwner" property="materielOwner" jdbcType="VARCHAR" />
+    <result column="serviceParty" property="serviceParty" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    serialNum, materielSerial, stockNum, maxStock, minStock, manageType, materielOwner, 
+    serviceParty, remark, delFlg, creator, createTime, updater, updateTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.StockExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from stock
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from stock
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from stock
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.StockExample" >
+    delete from stock
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.congmai.zhgj.web.model.Stock" >
+    insert into stock (serialNum, materielSerial, stockNum, 
+      maxStock, minStock, manageType, 
+      materielOwner, serviceParty, remark, 
+      delFlg, creator, createTime, 
+      updater, updateTime)
+    values (#{serialNum,jdbcType=VARCHAR}, #{materielSerial,jdbcType=VARCHAR}, #{stockNum,jdbcType=VARCHAR}, 
+      #{maxStock,jdbcType=VARCHAR}, #{minStock,jdbcType=VARCHAR}, #{manageType,jdbcType=VARCHAR}, 
+      #{materielOwner,jdbcType=VARCHAR}, #{serviceParty,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.Stock" >
+    insert into stock
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        serialNum,
+      </if>
+      <if test="materielSerial != null" >
+        materielSerial,
+      </if>
+      <if test="stockNum != null" >
+        stockNum,
+      </if>
+      <if test="maxStock != null" >
+        maxStock,
+      </if>
+      <if test="minStock != null" >
+        minStock,
+      </if>
+      <if test="manageType != null" >
+        manageType,
+      </if>
+      <if test="materielOwner != null" >
+        materielOwner,
+      </if>
+      <if test="serviceParty != null" >
+        serviceParty,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="delFlg != null" >
+        delFlg,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="updater != null" >
+        updater,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="materielSerial != null" >
+        #{materielSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="stockNum != null" >
+        #{stockNum,jdbcType=VARCHAR},
+      </if>
+      <if test="maxStock != null" >
+        #{maxStock,jdbcType=VARCHAR},
+      </if>
+      <if test="minStock != null" >
+        #{minStock,jdbcType=VARCHAR},
+      </if>
+      <if test="manageType != null" >
+        #{manageType,jdbcType=VARCHAR},
+      </if>
+      <if test="materielOwner != null" >
+        #{materielOwner,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceParty != null" >
+        #{serviceParty,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.StockExample" resultType="java.lang.Integer" >
+    select count(*) from stock
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update stock
+    <set >
+      <if test="record.serialNum != null" >
+        serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materielSerial != null" >
+        materielSerial = #{record.materielSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stockNum != null" >
+        stockNum = #{record.stockNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maxStock != null" >
+        maxStock = #{record.maxStock,jdbcType=VARCHAR},
+      </if>
+      <if test="record.minStock != null" >
+        minStock = #{record.minStock,jdbcType=VARCHAR},
+      </if>
+      <if test="record.manageType != null" >
+        manageType = #{record.manageType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materielOwner != null" >
+        materielOwner = #{record.materielOwner,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceParty != null" >
+        serviceParty = #{record.serviceParty,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlg != null" >
+        delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creator != null" >
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updater != null" >
+        updater = #{record.updater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update stock
+    set serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      materielSerial = #{record.materielSerial,jdbcType=VARCHAR},
+      stockNum = #{record.stockNum,jdbcType=VARCHAR},
+      maxStock = #{record.maxStock,jdbcType=VARCHAR},
+      minStock = #{record.minStock,jdbcType=VARCHAR},
+      manageType = #{record.manageType,jdbcType=VARCHAR},
+      materielOwner = #{record.materielOwner,jdbcType=VARCHAR},
+      serviceParty = #{record.serviceParty,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      updater = #{record.updater,jdbcType=VARCHAR},
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.Stock" >
+    update stock
+    <set >
+      <if test="materielSerial != null" >
+        materielSerial = #{materielSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="stockNum != null" >
+        stockNum = #{stockNum,jdbcType=VARCHAR},
+      </if>
+      <if test="maxStock != null" >
+        maxStock = #{maxStock,jdbcType=VARCHAR},
+      </if>
+      <if test="minStock != null" >
+        minStock = #{minStock,jdbcType=VARCHAR},
+      </if>
+      <if test="manageType != null" >
+        manageType = #{manageType,jdbcType=VARCHAR},
+      </if>
+      <if test="materielOwner != null" >
+        materielOwner = #{materielOwner,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceParty != null" >
+        serviceParty = #{serviceParty,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        delFlg = #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        updater = #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.Stock" >
+    update stock
+    set materielSerial = #{materielSerial,jdbcType=VARCHAR},
+      stockNum = #{stockNum,jdbcType=VARCHAR},
+      maxStock = #{maxStock,jdbcType=VARCHAR},
+      minStock = #{minStock,jdbcType=VARCHAR},
+      manageType = #{manageType,jdbcType=VARCHAR},
+      materielOwner = #{materielOwner,jdbcType=VARCHAR},
+      serviceParty = #{serviceParty,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      delFlg = #{delFlg,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <delete id="deleteStock" parameterType="java.util.List">
+    	update  stock   set delFlg=1  where serialNum in
+        <foreach item="idList" collection="list" open="(" close=")" separator=",">
+            #{idList}
+        </foreach>
+    </delete>
+</mapper>

@@ -597,11 +597,11 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         
         
-        .state('purchaseForecast', {
-	            url: "/purchaseForecast",
-	            templateUrl:"rest/page/purchaseForecast",
-	            data: {pageTitle: '采购预测'},
-	            controller: "PurchaseForecastController",
+        .state('stock', {
+	            url: "/stock",
+	            templateUrl:"rest/stock/viewStockList",
+	            data: {pageTitle: '库存'},
+	            controller: "StockController",
 	            resolve: {
 	                deps: ['$ocLazyLoad', function($ocLazyLoad) {
 	                    return $ocLazyLoad.load({
@@ -612,15 +612,61 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 						'assets/global/plugins/datatables/datatables.all.min.js',
 						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
-						'assets/apps/scripts/angular-file-upload-shim.min.js',
-				        'assets/apps/scripts/angular-file-upload.min.js',
-				        'assets/apps/service/PurchaseForecastService.js',
-						'assets/apps/controllers/PurchaseForecastController.js',
+						  'assets/global/plugins/bootbox/bootbox.min.js',
+				        'assets/apps/service/StockService.js',
+						'assets/apps/controllers/StockController.js',
 	                   	                        ]
 	                    });
 	                }]
 	            }
 	        })
+	        .state('addOrEditStock', {//库存新建编辑
+	        	url: "/addOrEditStock?:stockSerialNum",
+	        	templateUrl: "rest/stock/addOrEditStock",
+	        	data: {pageTitle: '新建库存'},
+	        	reload:true, 
+	        	controller: "StockController",
+	        	resolve: {
+	        		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+	        			return $ocLazyLoad.load({
+	        				name: 'MetronicApp',
+	        				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+	        				files: [       
+	        				        'assets/global/plugins/datatables/datatables.min.css',                  
+	        				        'assets/global/plugins/datatables/datatables.all.min.js',
+	        				        'assets/apps/service/StockService.js',
+	        						'assets/apps/controllers/StockController.js',
+	        						 'assets/apps/scripts/pageHandle.js',
+	        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
+	        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css'
+	        				        ]
+	        			});
+	        		}]
+	        	}	        
+	        }).state('stockView', {//库存查看
+		        	url: "/stockView?:stockSerialNum",
+		        	templateUrl: "rest/stock/stockView",
+		        	data: {pageTitle: '库存详情'},
+		        	reload:true, 
+		        	controller: "StockController",
+		        	resolve: {
+		        		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		        			return $ocLazyLoad.load({
+		        				name: 'MetronicApp',
+		        				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		        				files: [       
+		        				        'assets/global/plugins/datatables/datatables.min.css',                  
+		        				        'assets/global/plugins/datatables/datatables.all.min.js',
+		        				        'assets/apps/service/StockService.js',
+		        						'assets/apps/controllers/StockController.js',
+		        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
+		        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css',
+		        				        'assets/pages/scripts/table-datatables-scroller.min.js'
+		        				        ]
+		        			});
+		        		}]
+		        	}	        
+		    })   
 }]);
 
 
