@@ -123,6 +123,12 @@ public class DemandPlanMaterielServiceImpl extends GenericServiceImpl<DemandPlan
 		page.setTotalCount(count);
 		return page;
 	}
+
+	@Override
+	public String selectSupplyName(String materielSerial) {
+		
+		return demandPlanMaterielMapper.selectSupplyName(materielSerial);
+	}
 	
 
 
