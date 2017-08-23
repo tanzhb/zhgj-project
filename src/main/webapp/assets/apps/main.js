@@ -658,6 +658,56 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	                }]
 	            }
 	        })
+	    // 新增发货
+        .state('addDelivery', {
+            url: "/addDelivery",
+            templateUrl: "rest/page/addDelivery",
+            data: {pageTitle: '新增发货'},
+            controller: "DeliveryController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/pageHandle.js',
+	        	'assets/apps/service/DeliveryService.js',
+				'assets/apps/controllers/DeliveryController.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        
+        // 新增发货
+        .state('delivery', {
+            url: "/delivery",
+            templateUrl: "rest/page/delivery",
+            data: {pageTitle: '新增发货'},
+            controller: "DeliveryController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/pageHandle.js',
+	        	'assets/apps/service/DeliveryService.js',
+				'assets/apps/controllers/DeliveryController.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        
 }]);
 
 

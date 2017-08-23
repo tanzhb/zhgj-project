@@ -177,6 +177,26 @@ public class PageController {
         return "order/saleOrder";
     }
     
+    
+    /**
+     * 添加发货页面
+     * @return 添加发货页面url
+     */
+    @RequestMapping("/addDelivery")
+    public String addDelivery() {
+        return "delivery/addDelivery";
+    }
+    
+    
+    /**
+     * 添加发货页面
+     * @return 添加发货页面url
+     */
+    @RequestMapping("/delivery")
+    public String delivery() {
+        return "delivery/delivery";
+    }
+    
     /**
      * 404页
      */

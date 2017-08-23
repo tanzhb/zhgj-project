@@ -100,10 +100,27 @@
             </ul>
         </li>
         <li class="nav-item">
-            <a ui-sref="profile.dashboard" id="sidebar_menu_link_profile">
+            <!-- <a ui-sref="profile.dashboard" id="sidebar_menu_link_profile">
                 <i class="icon-user"></i>
                 <span class="title">库存</span>
+            </a> -->
+            <a href="javascript:;" class="nav-link nav-toggle" >
+             <i class="icon-settings"></i>
+                <span class="title">库存</span>
+                <span class="arrow "></span>
             </a>
+            <ul class="sub-menu">
+                <li>
+                    <a ui-sref="delivery">
+                        <i class="icon-puzzle"></i>发货</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="#">
+                        <i class="icon-puzzle"></i>收货</span>
+                    </a>
+                </li>
+            </ul>
         </li>
         <li class="nav-item">
             <a ui-sref="todo">

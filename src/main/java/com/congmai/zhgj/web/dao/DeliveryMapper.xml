@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.congmai.zhgj.web.dao.DeliveryMapper">
+    
+    <!--添加合同  -->
+    <insert id="insertDeliveryMateriel" parameterType="com.congmai.zhgj.web.model.DeliveryMaterielVO">
+    INSERT INTO deliveryMateriel
+    (serialNum,  deliverSerial,   orderMaterielSerial, 
+     batchNum,  manufactureDate,   deliverCount,  
+     deliverRemark, creator,createTime,updater,updateTime) 
+     VALUES
+     (#{serialNum},#{deliverSerial},#{orderMaterielSerial},#{batchNum},
+     #{manufactureDate},#{deliverCount},#{deliverRemark},
+     #{creator},NOW(),#{creator},NOW())
+    </insert>
+    
+    
+    <insert id="insertBasicInfo" parameterType="com.congmai.zhgj.web.model.DeliveryVO">
+    INSERT INTO delivery
+    (serialNum,orderSerial,deliverNum,supplyComId,shipper,receiver,maker,makeDate,approval,approvalDate,warehouseSerial,remark,deliverDate,
+    materielCount,packageCount,packageType,packageSpecifications,materielWeight,serviceMoney,deliverer,contactNum,deliverRemark,creator,createTime,updater,updateTime) VALUES
+    (#{serialNum},#{orderSerial},#{deliverNum},#{supplyComId},#{shipper},#{receiver},#{maker},#{makeDate},#{approval},#{approvalDate},#{warehouseSerial},#{remark},#{deliverDate},#{materielCount},
+    #{packageCount},#{packageType},#{packageSpecifications},#{materielWeight},#{serviceMoney},#{deliverer},#{contactNum},#{deliverRemark},#{creator},NOW(),#{creator},NOW())
+    </insert>
+    
+    
+    <insert id="insertBasicInfoPartII" parameterType="com.congmai.zhgj.web.model.DeliveryTransportVO">
+    INSERT INTO deliveryTransport
+    (serialNum,deliverSerial,transportType,transport,port,shipNumber,playArrivalDate,playWarehouseDate,remark,creator,createTime,updater,updateTime,contact,contactNum) VALUES
+    (#{serialNum},#{deliverSerial},#{transportType},#{transport},#{port},#{shipNumber},#{playArrivalDate},#{playWarehouseDate},#{transportRemark},
+    #{creator},NOW(),#{creator},NOW(),#{transportContact},#{transportContactNum})
+    </insert>
+    
+    
+    <insert id="insertBasicInfoPartIII" parameterType="com.congmai.zhgj.web.model.TakeDeliveryVO">
+    INSERT INTO takeDelivery
+    (serialNum,deliverSerial,warehouseSerial,takeDeliverDate,receiver,contactNum,remark,creator,createTime,updater,updateTime) VALUES
+    (#{serialNum},#{deliverSerial},#{takeDeliveryWarehouseSerial},#{takeDeliverDate},#{takeDeliveryReceiver},#{takeDeliveryContactNum},#{takeDeliveryRemark},#{creator},NOW(),#{creator},NOW())
+    </insert>
+    
+    
+    <select id="selectByExample" resultType="com.congmai.zhgj.web.model.DeliveryMaterielVO" parameterType="java.lang.String">
+    SELECT
+	b.materielName,b.materielNum,b.specifications,b.unit,a.amount,a.serialNum AS orderMaterielSerialNum
+	FROM
+	orderMateriel a
+	LEFT JOIN materiel b ON a.materielSerial=b.serialNum
+	WHERE orderSerial=#{serialNum}
+    </select>
+    
+    
+    <select id="selectDetailById" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.DeliveryVO">
+    SELECT
+	a.serialNum,a.deliverNum,f.orderNum,a.supplyComId,a.shipper,a.receiver,a.maker,a.makeDate,a.approval,a.approvalDate,
+	a.remark,d.warehouseName deliveryWarehouseName,d.address deliveryAddress,a.deliverDate,a.materielCount,a.packageCount,a.packageType,a.packageSpecifications,
+	a.materielWeight,a.serviceMoney,a.deliverer,a.contactNum,a.deliverRemark,
+	b.transportType,b.transport,b.port,b.shipNumber,b.playArrivalDate,b.playWarehouseDate,
+	b.contact transportContact,b.contactNum transportContactNum,b.remark transportRemark,
+	e.warehouseName takeWarehouseName,e.address takeAddress,c.takeDeliverDate,c.receiver takeDeliveryReceiver,
+	c.contactNum takeDeliveryContactNum,c.remark takeDeliveryRemark
+	FROM delivery a
+	LEFT JOIN deliveryTransport b ON b.deliverSerial=a.serialNum
+	LEFT JOIN warehouse d ON a.warehouseSerial=d.serialNum AND d.delFlg='0'
+	LEFT JOIN takeDelivery c ON c.deliverSerial=a.serialNum
+	LEFT JOIN warehouse e ON c.warehouseSerial=e.serialNum AND e.delFlg='0'
+	LEFT JOIN orderInfo f ON a.orderSerial=f.serialNum AND f.delFlg='0'
+	WHERE a.serialNum=#{id}
+    </select>
+    
+    <!--查询合同列表  -->
+   <select id="findAllDeliveryList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.DeliveryVO">
+   SELECT
+	a.serialNum,a.deliverNum,b.orderNum,COUNT(DISTINCT c.serialNum) AS materielCount,a.packageCount,
+	a.receiver,(SELECT address FROM warehouse WHERE serialNum=a.warehouseSerial) AS deliveryAddress,
+	(SELECT address FROM warehouse WHERE serialNum=d.warehouseSerial) AS takeAddress,a.deliverDate,
+	e.transportType,a.remark
+	FROM delivery a 
+	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
+	LEFT JOIN deliveryMateriel c ON a.serialNum=c.deliverSerial
+	LEFT JOIN takeDelivery d ON a.serialNum=d.deliverSerial 
+	LEFT JOIN deliveryTransport e ON e.deliverSerial=a.serialNum
+	WHERE a.delFlg='0' AND a.creator=#{userName}
+	GROUP BY(a.serialNum)
+	ORDER BY a.createTime DESC
+    </select>
+    
+    <!--删除合同  -->
+    <update id="deleteDeliveryS" parameterType="java.util.List">
+    	UPDATE delivery 
+    	SET delFlg='1'
+    	where serialNum in
+        <foreach item="idList" collection="list" open="(" close=")" separator=",">
+            #{idList}
+        </foreach>
+    </update>
+    
+    <!--查询合同对象  -->
+    <select id="selectDeliveryMaterielById" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.DeliveryMaterielVO">
+    SELECT 
+	a.serialNum,
+	a.orderMaterielSerial,
+	a.batchNum,
+	a.deliverCount,
+	a.deliverRemark,
+	b.amount,
+	c.materielName,
+	c.materielNum,
+	c.specifications,
+	c.unit,
+	a.manufactureDate
+	FROM
+	deliveryMateriel a
+	LEFT JOIN orderMateriel b ON a.orderMaterielSerial=b.serialNum
+	LEFT JOIN materiel c ON b.materielSerial=c.serialNum
+	WHERE 
+	a.serialNum=#{id}
+    </select>
+    
+    
+    <select id="queryAddressById" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.Warehouse">
+    SELECT
+	address
+	FROM
+	warehouse
+	WHERE
+	serialNum=#{serialNum}
+    </select>
+    
+    <!--更新合同  -->
+    <update id="updateContract" parameterType="com.congmai.zhgj.web.model.ContractVO">
+    UPDATE
+	contract
+	SET
+	contractNum=#{contractNum},
+	comId=#{comId},
+	contractType=#{contractType},
+	serviceModel=#{serviceModel},
+	settlementClause=#{settlementClause},
+	startDate=#{startDate},
+	endDate=#{endDate},
+	signDate=#{signDate},
+	signer=#{signer},
+	
+	<if test="electronicContract!=null and electronicContract!=''">  
+    electronicContract = #{electronicContract},  
+    </if> 
+    
+    <if test="electronicContract!=null and electronicContract!=''">  
+    signContract = #{signContract},  
+    </if> 
+	
+	versionNO=versionNO+1,
+	remark=#{remark},
+	updater=#{updater},
+	updateTime=NOW()
+	WHERE
+	serialNum=#{id}
+    </update>
+</mapper>
