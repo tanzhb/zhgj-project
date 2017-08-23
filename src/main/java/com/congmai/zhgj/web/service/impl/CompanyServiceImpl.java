@@ -109,6 +109,13 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 	}
 
 
+	@Override
+	public int countCompanybySelective(CompanyExample example) {
+	
+		return companyMapper.countByExample(example);
+	}
+
+
 
 	
 }

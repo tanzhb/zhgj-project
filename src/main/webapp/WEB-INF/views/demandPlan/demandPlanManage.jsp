@@ -77,7 +77,7 @@
 											</div>
 
 
-											<div class="portlet-body">
+											<div class="portlet-body" style="display: none;">
 												<div class="row">
 													<div class="col-md-6 col-sm-6">
 													</div>
@@ -174,13 +174,15 @@
 					<div class="portlet light ">
 	                        <div class="portlet-title">
 	                            <div class="caption">
-	                            	<div class="input-group input-large date-picker input-daterange" data-date-format="yyyy-mm-dd">
-                                          <input type="text" class="form-control" ng-model="startTime" name="from">
-                                          <span class="input-group-addon"> to </span>
-                                          <input type="text" class="form-control" ng-model="endTime" name="to"> 
-                                    </div>
+			                            	<div class="input-group input-large date-picker input-daterange" data-date-format="yyyy-mm-dd">
+		                                          <input type="text" class="form-control" ng-model="startTime" name="from">
+		                                          <span class="input-group-addon"> to </span>
+		                                          <input type="text" class="form-control" ng-model="endTime" name="to"> 
+		                                          
+		                                    </div>
+	                            		
 	                            </div>
-	                             <div class="actions">
+	                             <div class="caption" style="margin-left: 20px;">
                                     	    <button  class="btn blue  btn-outline  btn-sm " ng-click="searchDemandPlanCalendar()">
                                             	<i class="fa fa-search"></i> 查询 </button>
                                 			<button  class="btn red  btn-outline  btn-sm " ng-click="resetSearchForm()">

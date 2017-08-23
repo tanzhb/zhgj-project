@@ -1,8 +1,5 @@
 package com.congmai.zhgj.web.controller;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -14,12 +11,9 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +21,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,9 +36,10 @@ import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.enums.ComType;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyContact;
+import com.congmai.zhgj.web.model.CompanyExample;
+import com.congmai.zhgj.web.model.CompanyExample.Criteria;
 import com.congmai.zhgj.web.model.CompanyFinance;
 import com.congmai.zhgj.web.model.CompanyQualification;
-import com.congmai.zhgj.web.model.DataTablesParams;
 import com.congmai.zhgj.web.service.CompanyContactService;
 import com.congmai.zhgj.web.service.CompanyFinanceService;
 import com.congmai.zhgj.web.service.CompanyQualificationService;
@@ -194,6 +188,11 @@ public class CompanyController {
     	String flag ="0"; //默认失败
 
         	try{
+        		String isExist = checkComNumIsExist(company.getComId(),company.getComNum());
+        		if("2".equals(isExist)){
+        			company.setComNum("isExist");
+        			return company;
+        		}
         		Subject currentUser = SecurityUtils.getSubject();
         		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
         		if(StringUtils.isEmpty(company.getComId())){
@@ -215,6 +214,37 @@ public class CompanyController {
         		return null;
         	}
     	return company;
+    }
+    
+    /**
+     * @Description (检查编号唯一性)
+     * @param comNum
+     * @param comId
+     * @return
+     */
+    @RequestMapping("checkComNumIsExist")
+    @ResponseBody
+    public String checkComNumIsExist(String comId,String comNum){
+    	String flag  = "0"; //默认失败
+    	try {
+    		CompanyExample example = new CompanyExample();
+        	Criteria criteria = example.createCriteria();
+        	criteria.andDelFlgEqualTo("0");
+        	criteria.andComNumEqualTo(comNum);
+        	if(StringUtils.isNotEmpty(comId)){
+        		criteria.andComIdNotEqualTo(comId);
+        	}
+        	int count = companyService.countCompanybySelective(example);
+        	if(count > 0){
+        				flag = "2"; //存在重复
+        	}else{
+        				flag = "1"; //合法
+        	}
+		} catch (Exception e) {
+			System.out.println(this.getClass()+"----------"+e.getMessage());
+		}
+    	
+    	return flag;
     }
     
     /**
@@ -418,7 +448,9 @@ public class CompanyController {
     @RequestMapping("exportCompany")
     public void exportCompany(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
     		Map<String, Object> dataMap = new HashMap<String, Object>();
-    		List<Company> companyList = companyService.selectByPage(new Company()).getResult();
+    		Company company = new Company();
+    		company.setPageSize(-1);
+    		List<Company> companyList = companyService.selectByPage(company).getResult();
     		dataMap.put("companyList",companyList);
     		ExcelUtil.export(request, response, dataMap, "company", "企业信息");
     }
