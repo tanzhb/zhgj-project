@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class OrderInfo {
     private String serialNum;
 
+    private String contractSerial;
+    
     private String supplyComId;
 
     private String buyComId;
@@ -196,4 +198,13 @@ public class OrderInfo {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public String getContractSerial() {
+		return contractSerial;
+	}
+
+	public void setContractSerial(String contractSerial) {
+		this.contractSerial = contractSerial;
+	}
+    
 }

@@ -61,6 +61,61 @@ angular.module('MetronicApp').service('saleOrderService',
 			                deferred.reject(err);//请求失败
 			            });
 			            return deferred.promise;//返回承诺
+				},//订单保存合同
+				saveContract : function (contract){
+					var deferred = $q.defer();
+					$http.post("rest/order/saveContract", 
+							contract//传整个表单数据  
+					).then(function success(result) {
+						deferred.resolve(result);//请求成功
+					}, function error(err) {
+						deferred.reject(err);//请求失败
+					});
+					return deferred.promise;//返回承诺
+				},//保存售后条款
+				saveClauseAfterSales : function (clauseAfterSales){
+					var deferred = $q.defer();
+					$http.post("rest/order/saveClauseAfterSales", 
+							clauseAfterSales//传整个表单数据  
+					).then(function success(result) {
+						deferred.resolve(result);//请求成功
+					}, function error(err) {
+						deferred.reject(err);//请求失败
+					});
+					return deferred.promise;//返回承诺
+				},//保存交付条款
+				saveClauseDelivery : function (clauseDelivery){
+					var deferred = $q.defer();
+					$http.post("rest/order/saveClauseDelivery", 
+							clauseDelivery//传整个表单数据  
+					).then(function success(result) {
+						deferred.resolve(result);//请求成功
+					}, function error(err) {
+						deferred.reject(err);//请求失败
+					});
+					return deferred.promise;//返回承诺
+				},//保存验收条款
+				saveClauseCheckAccept : function (clauseCheckAccept){
+					var deferred = $q.defer();
+					$http.post("rest/order/saveClauseCheckAccept", 
+							clauseCheckAccept//传整个表单数据  
+					).then(function success(result) {
+						deferred.resolve(result);//请求成功
+					}, function error(err) {
+						deferred.reject(err);//请求失败
+					});
+					return deferred.promise;//返回承诺
+				},//保存垫资条款
+				saveClauseAdvance : function (clauseAdvance){
+					var deferred = $q.defer();
+					$http.post("rest/order/saveClauseAdvance", 
+							clauseAdvance//传整个表单数据  
+					).then(function success(result) {
+						deferred.resolve(result);//请求成功
+					}, function error(err) {
+						deferred.reject(err);//请求失败
+					});
+					return deferred.promise;//返回承诺
 				}
 			}
 		} ]);
