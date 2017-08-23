@@ -290,8 +290,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 					            		legalPerson:{required:"企业法人姓名不能为空！"},
 					            		address:{required:"注册地址不能为空！"},
 					            		taxpayeNumber:{required:"纳税人识别号不能为空！"},
-					            		contact:{required:"维护人员不能为空！"},
-					            		tel:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")}
+					            		contact:{required:"维护人员不能为空！"}
 						            },
 						            rules: {
 						            	comNum: {
@@ -309,9 +308,6 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 						                taxpayeNumber: {
 						                	required: !0
 						                },
-						                tel: {
-						                	required: !0
-						                },
 						                address: {
 						                	required: !0
 						                },
@@ -322,8 +318,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 						                	required:true,
 						                },
 						                tel:{
-						                	digits:true,
-						                	rangelength:[7,20]
+						                	isPhone:!0
 						                }
 						            },
 						            invalidHandler: function(e, t) {
@@ -436,7 +431,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 					contactTitle:{required:"职位不能为空！"},
 					department:{required:"部门/公司不能为空！"},
 					responsibility:{required:"管理职责不能为空！"},
-					contactTel:{required:"电话不能为空！",digits:"请输入正确的电话, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
+					contactTel:{required:"电话不能为空！"},
 					contactEmail:{email:"请输入正确的邮箱！"}
 				},
 				rules: {
@@ -454,8 +449,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 					},
 					contactTel: {
 						required: !0,
-						digits:true,
-						rangelength:[7,20]
+						isPhone: !0
 					},
 					contactEmail:{
 						email:true
@@ -595,17 +589,37 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        		$scope.companyFinances = null;
 	        		$state.go("companyAdd");
 	        }; 
+	        
 	        /**
 	         * 保存
 	         */
 	        $scope.saveCompany=function () { 
 	        	if($('#companyForm').valid()){
+	        		/*var isExist = false;
+	        		var promise2 = companyService.checkComNumIsExist(($scope.company.comId==undefined?"":$scope.company.comId),$scope.company.comNum);
+	        		promise2.then(function(data){
+	        			if(data.data == "2"){
+	        				isExist = true;
+	        			}
+	        		},function(data){
+	        			//调用承诺接口reject();
+	        		});
+	        		if(isExist){
+	        			$(".alert-danger").html("企业编号已存在！");
+	        			return;
+	        		}*/
 	        		handle.blockUI();
 	        		$scope.company.createTime=null;
 	        		$scope.company.updateTime=null;
 	        		var promise = companyService.saveCompany($scope.company);
 	        		promise.then(function(data){
 	        			if(!handle.isNull(data.data)){
+	        				if(data.data.comNum=="isExist"){
+	        					handle.unblockUI();
+	        					$(".alert-danger").html("企业编号已存在！");
+	        					$(".alert-danger").show();
+	        					return;
+	        				}
 	        				$(".modal-backdrop").remove();
 		        			toastr.success("保存成功");
 		        			handle.unblockUI();
@@ -617,6 +631,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		        			$scope.companyView = true;
 		        			$scope.companyAdd = true;
 		        			$scope.companyEdit = false;
+		        			$(".alert-danger").html("请输入正确的数据！");
 		        			$(".alert-danger").hide();
 		        			//$stateParams.comId = company.comId;
 		        			//$location.search('comId',company.comId);
