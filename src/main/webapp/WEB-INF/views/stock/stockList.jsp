@@ -14,6 +14,7 @@
         </li>
         <li>
             <a ui-sref="datatablesmanaged">物流管理</a>
+            <i class="fa fa-angle-right"></i>
         </li>
         <li>
             <a ui-sref="datatablesmanaged"> 库存列表</a>

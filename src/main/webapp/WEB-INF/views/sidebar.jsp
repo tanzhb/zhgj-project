@@ -117,7 +117,7 @@
                     </a>
                 </li>
                 <li>
-                    <a ui-sref="profile.dashboard">
+                    <a ui-sref="check">
                         <i class="icon-check"></i> 检验</span>
                     </a>
                 </li>

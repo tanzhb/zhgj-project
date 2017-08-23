@@ -14,6 +14,7 @@
         </li>
         <li>
             <a ui-sref="datatablesmanaged">基础数据</a>
+            <i class="fa fa-angle-right"></i>
         </li>
         <li>
             <a ui-sref="datatablesmanaged"> 仓库列表</a>
