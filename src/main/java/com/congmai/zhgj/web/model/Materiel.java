@@ -52,6 +52,8 @@ public class Materiel {
 
     private String unitPrice;
 
+    private String deliveryCycle;
+    
     private String filingItemNo;
 
     private String volume;
@@ -480,6 +482,14 @@ public class Materiel {
 
 	public void setSupplyMateriels(List<SupplyMateriel> supplyMateriels) {
 		this.supplyMateriels = supplyMateriels;
+	}
+
+	public String getDeliveryCycle() {
+		return deliveryCycle;
+	}
+
+	public void setDeliveryCycle(String deliveryCycle) {
+		this.deliveryCycle = deliveryCycle;
 	}
 
 /*	public boolean getIsBOMcheck() {

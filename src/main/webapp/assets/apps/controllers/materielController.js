@@ -463,7 +463,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 			if(ids==''){
     			toastr.warning('未选择物料！');return;
     		}else{
-    			$('#addUserModal').modal('show');// 弹出删除确认模态框
+    			$('#delMaterielModal').modal('show');// 弹出删除确认模态框
     		}
 			
 		};
@@ -524,15 +524,16 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 	            	materielName:{required:"物料名称不能为空！"},
 	            	category:{required:"物料分类不能为空！"},
 	            	specifications:{required:"物料规格不能为空！"},
-	            	stockUnit:{required:"库存单位不能为空！"}
-            		
+	            	stockUnit:{required:"库存单位不能为空！"},
+	            	deliveryCycle:{required:"一般交付周期不能为空！"}
 	            },
             	rules: {materielNum: {required: !0,maxlength: 20},
             			type: {required: !0,maxlength: 20},
             			materielName: {required: !0,maxlength: 20},
             			category: {required: !0,maxlength: 20},
             			specifications: {required: !0,maxlength: 20},
-            			stockUnit: {required: !0,maxlength: 20}
+            			stockUnit: {required: !0,maxlength: 20},
+            			deliveryCycle:{required: !0,maxlength: 20}
             			},
             		invalidHandler: function(e, t) {
                     i.hide(), r.show(), App.scrollTo(r, -200)
