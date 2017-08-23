@@ -294,12 +294,12 @@
                           <!--/span-->
                           <div class="col-md-6">
                               <div class="form-group form-md-line-input">
-                                  <label class="control-label col-md-3">备案项号</label>
+                                  <label class="control-label col-md-3">一般交付周期<span class="required" aria-required="true"> * </span></label>
                                   <div class="col-md-9">
-                                      <input type="text" ng-hide="materielInput" ng-model="materiel.filingItemNo" class="form-control" >
+                                      <input type="text" name="deliveryCycle" ng-hide="materielInput" ng-model="materiel.deliveryCycle" class="form-control" >
                                       <div class="form-control-focus"> </div>
-                                      <span class="help-block">请输入备案项号</span>
-                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.filingItemNo}} </p>
+                                      <span class="help-block">请输入一般交付周期</span>
+                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.deliveryCycle}} </p>
                                   </div>
                               </div>
                           </div>
@@ -322,12 +322,12 @@
                           <!--/span-->
                           <div class="col-md-6">
                               <div class="form-group form-md-line-input">
-                                  <label class="control-label col-md-3">海关监管条件</label>
+                                  <label class="control-label col-md-3">备案项号</label>
                                   <div class="col-md-9">
-                                      <input type="text" ng-hide="materielInput" ng-model="materiel.customsSupervisionConditions" class="form-control" >
+                                      <input type="text" ng-hide="materielInput" ng-model="materiel.filingItemNo" class="form-control" >
                                       <div class="form-control-focus"> </div>
-                                      <span class="help-block">请输入海关监管条件</span>
-                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.customsSupervisionConditions}} </p>
+                                      <span class="help-block">请输入备案项号</span>
+                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.filingItemNo}} </p>
                                   </div>
                               </div>
                           </div>
@@ -350,12 +350,12 @@
                           <!--/span-->
                           <div class="col-md-6">
                               <div class="form-group form-md-line-input">
-                                  <label class="control-label col-md-3">保质期</label>
+                                  <label class="control-label col-md-3">海关监管条件</label>
                                   <div class="col-md-9">
-                                      <input type="text" ng-hide="materielInput" ng-model="materiel.qualityDate" class="form-control" >
+                                      <input type="text" ng-hide="materielInput" ng-model="materiel.customsSupervisionConditions" class="form-control" >
                                       <div class="form-control-focus"> </div>
-                                      <span class="help-block">请输入保质期</span>
-                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.qualityDate}} </p>
+                                      <span class="help-block">请输入海关监管条件</span>
+                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.customsSupervisionConditions}} </p>
                                   </div>
                               </div>
                           </div>
@@ -378,13 +378,12 @@
                           <!--/span-->
                           <div class="col-md-6">
                               <div class="form-group form-md-line-input">
-                                  <label class="control-label col-md-3">生产日期</label>
+                                  <label class="control-label col-md-3">保质期</label>
                                   <div class="col-md-9">
-                                      <input class="form-control form-control-inline input-medium date-picker" 
-                                      data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="materielInput" ng-model="materiel.manufactureDate" type="text" value="" />
+                                      <input type="text" ng-hide="materielInput" ng-model="materiel.qualityDate" class="form-control" >
                                       <div class="form-control-focus"> </div>
-                                      <span class="help-block">请选择生产日期</span>
-                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.manufactureDate}} </p>
+                                      <span class="help-block">请输入保质期</span>
+                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.qualityDate}} </p>
                                   </div>
                               </div>
                           </div>
@@ -407,6 +406,22 @@
                           <!--/span-->
                           <div class="col-md-6">
                               <div class="form-group form-md-line-input">
+                                  <label class="control-label col-md-3">生产日期</label>
+                                  <div class="col-md-9">
+                                      <input class="form-control form-control-inline input-medium date-picker" 
+                                      data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="materielInput" ng-model="materiel.manufactureDate" type="text" value="" />
+                                      <div class="form-control-focus"> </div>
+                                      <span class="help-block">请选择生产日期</span>
+                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.manufactureDate}} </p>
+                                  </div>
+                              </div>
+                          </div>
+                          <!--/span-->
+                      </div>
+                      <!--/row-->
+                      <div class="row">
+                      		<div class="col-md-6">
+                              <div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3">备注</label>
                                   <div class="col-md-9">
                                       <input type="text" ng-hide="materielInput" ng-model="materiel.remark" class="form-control" >
@@ -416,10 +431,6 @@
                                   </div>
                               </div>
                           </div>
-                          <!--/span-->
-                      </div>
-                      <!--/row-->
-                      <div class="row">
                           <div class="col-md-6">
                               <div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3">是否BOM物料</label>
@@ -434,6 +445,9 @@
                               </div>
                           </div>
                           <!--/span-->
+                      </div>
+                      <!--/row-->
+                      <div class="row">
                           <div class="col-md-6">
                               <div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3">版本</label>

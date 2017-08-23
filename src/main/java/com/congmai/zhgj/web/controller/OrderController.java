@@ -15,10 +15,13 @@ import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.JavaType;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,7 +39,11 @@ import com.congmai.zhgj.web.model.ClauseAdvance;
 import com.congmai.zhgj.web.model.ClauseAfterSales;
 import com.congmai.zhgj.web.model.ClauseCheckAccept;
 import com.congmai.zhgj.web.model.ClauseDelivery;
+import com.congmai.zhgj.web.model.ClauseSettlement;
+import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.OrderFile;
+import com.congmai.zhgj.web.model.OrderFileExample;
 import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielFile;
@@ -53,7 +60,10 @@ import com.congmai.zhgj.web.service.ClauseAdvanceService;
 import com.congmai.zhgj.web.service.ClauseAfterSalesService;
 import com.congmai.zhgj.web.service.ClauseCheckAcceptService;
 import com.congmai.zhgj.web.service.ClauseDeliveryService;
+import com.congmai.zhgj.web.service.ClauseSettlementDetailService;
+import com.congmai.zhgj.web.service.ClauseSettlementService;
 import com.congmai.zhgj.web.service.ContractService;
+import com.congmai.zhgj.web.service.OrderFileService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
 
@@ -81,6 +91,12 @@ public class OrderController {
     private ClauseCheckAcceptService clauseCheckAcceptService;
     @Resource
     private ClauseDeliveryService clauseDeliveryService;
+    @Resource
+    private ClauseSettlementService clauseSettlementService;
+    @Resource
+    private ClauseSettlementDetailService clauseSettlementDetailService;
+    @Resource
+    private OrderFileService orderFileService;
     
 	/**
 	 * 合同管理service
@@ -218,6 +234,7 @@ public class OrderController {
     	}
     	map.put("contract", contract);
     	if(contract!=null&&StringUtils.isNotEmpty(contract.getId())){
+    		//获取合同条款信息
     		ClauseAfterSales clauseAfterSales = clauseAfterSalesService.selectByContractId(contract.getId());
     		map.put("clauseAfterSales", clauseAfterSales);
     		ClauseAdvance clauseAdvance = clauseAdvanceService.selectByContractId(contract.getId());
@@ -226,11 +243,19 @@ public class OrderController {
     		map.put("clauseCheckAccept", clauseCheckAccept);
     		ClauseDelivery clauseDelivery = clauseDeliveryService.selectByContractId(contract.getId());
     		map.put("clauseDelivery", clauseDelivery);
+    		ClauseSettlement clauseSettlement = clauseSettlementService.selectByContractId(contract.getId());
+    		map.put("clauseSettlement", clauseSettlement);
     	}
     	
+    	//获取订单附件
+    	OrderFileExample om =new OrderFileExample();
+    	com.congmai.zhgj.web.model.OrderFileExample.Criteria criteria2 =  om.createCriteria();
+    	criteria2.andOrderSerialEqualTo(serialNum);
+    	criteria2.andDelFlgEqualTo("0");
+    	List<OrderFile> file = orderFileService.selectList(om);
+    	map.put("file", file);
     	
     	
-    	//获取合同条款信息
     	
     	return map;
 	}
@@ -457,5 +482,107 @@ public class OrderController {
     	}
 		return clauseDelivery;
 	}
+	
+	
+	/**
+	 * 订单保存合同结算条款
+	 * @param clauseSettlement（结算条款）
+	 * @param request（http 请求对象）
+	 * @return 操作结果
+	 */
+	@RequestMapping(value = "/saveClauseSettlement", method = RequestMethod.POST)
+	@ResponseBody
+	public ClauseSettlement saveClauseSettlement(@RequestBody ClauseSettlement clauseSettlement, HttpServletRequest request) {
+		if(clauseSettlement.getSerialNum()==null||clauseSettlement.getSerialNum().isEmpty()){//新增
+			clauseSettlement.setSerialNum(ApplicationUtils.random32UUID());
+    		Subject currentUser = SecurityUtils.getSubject();
+    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+    		clauseSettlement.setCreator(currenLoginName);
+    		clauseSettlement.setUpdater(currenLoginName);
+    		clauseSettlement.setCreateTime(new Date());
+    		clauseSettlement.setUpdateTime(new Date());
+
+    		clauseSettlementService.insert(clauseSettlement);
+    	}else{//更新
+    		Subject currentUser = SecurityUtils.getSubject();
+    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+    		clauseSettlement.setUpdater(currenLoginName);
+    		clauseSettlement.setUpdateTime(new Date());
+    		clauseSettlementService.update(clauseSettlement);
+    	}
+		return clauseSettlement;
+	}
+	
+	/**
+	 * 订单保存合同结算条款明细
+	 * @param params（结算条款）明细
+	 * @param request（http 请求对象）
+	 * @return 操作结果
+	 */
+	@RequestMapping(value = "/saveClauseSettlementDetail", method = RequestMethod.POST)
+	@ResponseBody
+	public List<ClauseSettlementDetail> saveClauseSettlementDetail(@RequestBody String params, HttpServletRequest request) {
+    	params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+        JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, ClauseSettlementDetail.class);  
+        List<ClauseSettlementDetail> clauseSettlementDetail = null;
+		try {
+			clauseSettlementDetail = objectMapper.readValue(params, javaType);
+			if(!CollectionUtils.isEmpty(clauseSettlementDetail)){
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		    	for(ClauseSettlementDetail f:clauseSettlementDetail){
+		    		f.setSerialNum(ApplicationUtils.random32UUID());
+		    		f.setCreator(currenLoginName);
+	    			f.setUpdater(currenLoginName);
+	    			f.setCreateTime(new Date());
+	    			f.setUpdateTime(new Date());
+		    	}
+		    	//填充File******↑↑↑↑↑↑********
+		    	clauseSettlementDetailService.betchInsertClauseSettlementDetails(clauseSettlementDetail);
+		    	//数据插入******↑↑↑↑↑↑********
+	        }
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return clauseSettlementDetail;
+	}
     
+	/**
+     * 
+     * @Description 保存附件
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/saveFile", method = RequestMethod.POST)
+    @ResponseBody
+    public void saveFile(@RequestBody String params) {
+    	params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+        JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, OrderFile.class);  
+        List<OrderFile> file;
+		try {
+			file = objectMapper.readValue(params, javaType);
+	    	if(!CollectionUtils.isEmpty(file)){
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		    	for(OrderFile f:file){
+		    		f.setSerialNum(ApplicationUtils.random32UUID());
+		    		f.setUploader(currenLoginName);
+		    		f.setCreator(currenLoginName);
+	    			f.setUpdater(currenLoginName);
+	    			f.setUploadDate(new Date());
+	    			f.setCreateTime(new Date());
+	    			f.setUpdateTime(new Date());
+		    	}
+		    	//填充File******↑↑↑↑↑↑********
+		    	orderFileService.betchInsertOrderFiles(file);
+		    	//数据插入******↑↑↑↑↑↑********
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
+    }
 }

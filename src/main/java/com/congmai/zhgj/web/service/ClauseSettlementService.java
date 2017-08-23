@@ -12,5 +12,7 @@ import com.congmai.zhgj.web.model.ClauseSettlement;
  * @version 1.0.0
  */
 public interface ClauseSettlementService extends GenericService<ClauseSettlement, String> {
+
+	ClauseSettlement selectByContractId(String id);
 	
 }
