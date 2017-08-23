@@ -79,16 +79,16 @@ public class DemandPlanController {
      * @param request
      * @return
      */
-    @RequestMapping("demandPlanList")
+    @RequestMapping(value="demandPlanList",method=RequestMethod.POST)
     @ResponseBody
-    public Page<DemandPlan> companyList(Map<String, Object> map,HttpServletRequest request,DemandPlan demandPlan,int pageIndex,int pageSize,String searchKey) {
-    	try {
+    public Page<DemandPlan> companyList(Map<String, Object> map,HttpServletRequest request,@RequestBody DemandPlan demandPlan) {
+    	/*try {
 			searchKey = URLDecoder.decode(searchKey, "UTF-8");
 			demandPlan.setSearchKey(searchKey);
 		} catch (Exception e) {
 			System.out.println(this.getClass()+"----------"+e.getMessage());
-		}
-    	Page<DemandPlan> demandPlans = demandPlanService.getListByCondition(demandPlan, pageIndex, 5);
+		}*/
+    	Page<DemandPlan> demandPlans = demandPlanService.getListByCondition(demandPlan, demandPlan.getPageIndex(), 5);
 		return demandPlans;
     }
     

@@ -7,7 +7,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	    	// initialize core components
 		    handle = new pageHandle();
 	    	App.initAjax();
-	    	handle.datePickersInit();
+	    	
 	    	if($location.path()=="/demandPlanAdd"){
 	    		//handle.pageRepeater();
 	    		//_index = 0; 
@@ -18,17 +18,19 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	    		
 	    		selectParentMateriel();
 	    		//$('.customer').selectpicker();
-	    		
+	    		handle.datePickersInit();
 	    		initCustomers();
 	 		}else if($location.path()=="/demandPlanView"){
 	 			getDemandPlanInfo($stateParams.serialNum);
 	 			selectParentMateriel();
 	 			$scope.serialNums = [];
+	 			handle.datePickersInit();
 	 			//TableDatatablesScroller.init();
 	 		}else{
 	 			demandPlanMaterielList();
 	 			$scope.params = [];
 	 			createTable(5,1,true,$scope.params);
+	 			handle.datePickersInit("bottom");
 	 		}
 	    	// set default layout mode
 	    	$rootScope.settings.layout.pageContentWhite = true;

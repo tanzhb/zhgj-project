@@ -119,10 +119,13 @@ pageHandle = (function(){
 		        
 	}
 	
-	var _datePickersInit = function(){
+	var _datePickersInit = function(_type){
+				if(_type!="bottom"){
+					_type = "left"; 
+				}
 				$('.date-picker').datepicker({
 						rtl: App.isRTL(),
-						orientation: "bottom",
+						orientation: _type,
 						autoclose: true,
 						language: "zh-CN",changeDate:function(){
 							alert(234);

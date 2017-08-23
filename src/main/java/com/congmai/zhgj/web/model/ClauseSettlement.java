@@ -1,11 +1,14 @@
 package com.congmai.zhgj.web.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class ClauseSettlement {
     private String serialNum;
 
     private String contractSerial;
+    
+    private List<ClauseSettlementDetail> clauseSettlementDetails;
 
     private String payee;
 
@@ -142,4 +145,14 @@ public class ClauseSettlement {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public List<ClauseSettlementDetail> getClauseSettlementDetails() {
+		return clauseSettlementDetails;
+	}
+
+	public void setClauseSettlementDetails(
+			List<ClauseSettlementDetail> clauseSettlementDetails) {
+		this.clauseSettlementDetails = clauseSettlementDetails;
+	}
+    
 }

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.congmai.zhgj.web.dao.ClauseSettlementMapper;
 import com.congmai.zhgj.web.model.ClauseSettlement;
+import com.congmai.zhgj.web.model.ClauseSettlementExample;
+import com.congmai.zhgj.web.model.ClauseSettlementExample.Criteria;
 import com.congmai.zhgj.web.service.ClauseSettlementService;
 
 /**
@@ -55,6 +57,19 @@ public class ClauseSettlementServiceImpl  implements
 	@Override
 	public List<ClauseSettlement> selectList() {
 		return clauseSettlementMapper.selectByExample(null);
+	}
+
+	@Override
+	public ClauseSettlement selectByContractId(String id) {
+		ClauseSettlementExample ex = new ClauseSettlementExample();
+		Criteria criteria =  ex.createCriteria();
+    	criteria.andContractSerialEqualTo(id);
+		List<ClauseSettlement> list = clauseSettlementMapper.selectByExample(ex);
+		if(list!=null&&list.size()>0){
+			return list.get(0);
+		}else{
+			return null;
+		}
 	}
 
 }

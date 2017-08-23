@@ -21,4 +21,6 @@ public interface CompanyMapper extends GenericDao<Company,String>{
 	
 	List<Company> selectByExample(CompanyExample example);
 	
+	 int countByExample(CompanyExample example);
+	
 }
