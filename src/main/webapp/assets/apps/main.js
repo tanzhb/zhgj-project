@@ -598,7 +598,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 						  'assets/global/plugins/bootbox/bootbox.min.js',
 				        'assets/apps/service/StockService.js',
-						'assets/apps/controllers/StockController.js',
+						'assets/apps/controllers/StockController.js'
 	                   	                        ]
 	                    });
 	                }]
@@ -643,6 +643,77 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        				        'assets/global/plugins/datatables/datatables.all.min.js',
 		        				        'assets/apps/service/StockService.js',
 		        						'assets/apps/controllers/StockController.js',
+		        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
+		        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css',
+		        				        'assets/pages/scripts/table-datatables-scroller.min.js'
+		        				        ]
+		        			});
+		        		}]
+		        	}	        
+		    })   
+		    .state('stockInOutCheck', {
+	            url: "/stockInOutCheck",
+	            templateUrl:"rest/stockInOut/viewStockInOutCheckList",
+	            data: {pageTitle: '出入库检验'},
+	            controller: "StockInOutController",
+	            resolve: {
+	                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+	                    return $ocLazyLoad.load({
+	                        name: 'MetronicApp',
+	                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+	                        files: [                             
+						'assets/global/plugins/datatables/datatables.min.css',
+						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+						'assets/global/plugins/datatables/datatables.all.min.js',
+						 'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
+						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+						  'assets/global/plugins/bootbox/bootbox.min.js',
+				        'assets/apps/service/StockInOutService.js',
+						'assets/apps/controllers/StockInOutController.js'
+	                   	                        ]
+	                    });
+	                }]
+	            }
+	        })
+	        .state('addOrEditStockInOutCheck', {//出入库检验新建编辑
+	        	url: "/addOrEditStockInOutCheck?:inOrOut",
+	        	templateUrl: "rest/stockInOut/addOrEditStockInOutCheck",
+	        	data: {pageTitle: '新建出入库检验'},
+	        	reload:true, 
+	        	controller: "StockInOutController",
+	        	resolve: {
+	        		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+	        			return $ocLazyLoad.load({
+	        				name: 'MetronicApp',
+	        				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+	        				files: [       
+	        				        'assets/global/plugins/datatables/datatables.min.css',                  
+	        				        'assets/global/plugins/datatables/datatables.all.min.js',
+	        				        'assets/apps/service/StockInOutService.js',
+	        						'assets/apps/controllers/StockInOutController.js',
+	        						 'assets/apps/scripts/pageHandle.js',
+	        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
+	        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css'
+	        				        ]
+	        			});
+	        		}]
+	        	}	        
+	        }).state('stockInOutCheckView', {//出入库检验查看
+		        	url: "/stockInOutCheckView?:stockInOutCheckSerialNum",
+		        	templateUrl: "rest/stockInOut/stockInOutCheckView",
+		        	data: {pageTitle: '出入库检验详情'},
+		        	reload:true, 
+		        	controller: "StockInOutController",
+		        	resolve: {
+		        		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		        			return $ocLazyLoad.load({
+		        				name: 'MetronicApp',
+		        				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		        				files: [       
+		        				        'assets/global/plugins/datatables/datatables.min.css',                  
+		        				        'assets/global/plugins/datatables/datatables.all.min.js',
+		        				        'assets/apps/service/StockInOutService.js',
+		        						'assets/apps/controllers/StockInOutController.js',
 		        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
 		        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css',
 		        				        'assets/pages/scripts/table-datatables-scroller.min.js'

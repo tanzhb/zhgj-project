@@ -117,7 +117,7 @@
                     </a>
                 </li>
                 <li>
-                    <a ui-sref="check">
+                    <a ui-sref="stockInOutCheck">
                         <i class="icon-check"></i> 检验</span>
                     </a>
                 </li>
