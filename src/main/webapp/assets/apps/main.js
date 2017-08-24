@@ -280,14 +280,14 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 							'assets/apps/scripts/angular-file-upload.min.js',
 							'assets/apps/service/materielService.js',
-                            'assets/apps/service/saleOrderService.js',
+                            'assets/apps/service/orderService.js',
                             'assets/apps/controllers/saleOrderController.js'
                         ]
                     });
                 }]
             }
         })
-        // 新增物料
+        // 新增销售订单
         .state('addSaleOrder', {
             url: "/addSaleOrder?:serialNum&:view",
             templateUrl: "rest/page/addSaleOrder",
@@ -306,7 +306,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/angular-file-upload.min.js',
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/materielService.js',
-	        	'assets/apps/service/saleOrderService.js',
+	        	'assets/apps/service/orderService.js',
 				'assets/apps/controllers/saleOrderController.js'
                       ]
                     });

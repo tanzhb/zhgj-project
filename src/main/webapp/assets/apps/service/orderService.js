@@ -1,10 +1,10 @@
-angular.module('MetronicApp').service('saleOrderService',
+angular.module('MetronicApp').service('orderService',
 		[ '$http', '$q', function($http, $q) {
 			return {
 				//保存销售订单
 				save : function(orderInfo) {
 					var deferred = $q.defer();
-					$http.post("rest/order/saveSaleOrder", orderInfo
+					$http.post("rest/order/saveOrder", orderInfo
 					).success(function (data) {
 		                // 如果连接成功，延时返回给调用者
 		                deferred.resolve(data);
@@ -13,10 +13,10 @@ angular.module('MetronicApp').service('saleOrderService',
 	                })
 					return deferred.promise;
 				},//删除订单
-			    delSaleOrder : function(ids){
+			    delOrder : function(ids){
 			        var deferred = $q.defer();  
 	
-			        $http.post("rest/order/deleteSaleOrders", ids)
+			        $http.post("rest/order/deleteOrders", ids)
 			        .success(function (data) {  
 			            // 如果连接成功，延时返回给调用者  
 			            deferred.resolve(data);  
@@ -26,10 +26,10 @@ angular.module('MetronicApp').service('saleOrderService',
 			            })  
 			        return deferred.promise;  
 			    },//获取订单信息
-			    getSaleOrderInfo : function(serialNum){
+			    getOrderInfo : function(serialNum){
 			        var deferred = $q.defer();  
 
-			        $http.get("rest/order/getSaleOrderInfo", {params:{serialNum:serialNum}})
+			        $http.get("rest/order/getOrderInfo", {params:{serialNum:serialNum}})
 			        .success(function (data) {  
 			            // 如果连接成功，延时返回给调用者  
 			            deferred.resolve(data);  
@@ -146,6 +146,19 @@ angular.module('MetronicApp').service('saleOrderService',
 					var params = {};
 					params = JSON.stringify(File);
 					$http.post("rest/order/saveFile", params
+					).success(function (data) {
+		                // 如果连接成功，延时返回给调用者
+		                deferred.resolve(data);
+		            }).error(function () {
+	                    deferred.reject('连接服务器出错！');
+	                })
+					return deferred.promise;
+				},//保存框架条款
+				saveClauseFramework : function(ClauseFramework) {
+					var deferred = $q.defer();
+					var params = {};
+					params = JSON.stringify(ClauseFramework);
+					$http.post("rest/order/saveClauseFramework", params
 					).success(function (data) {
 		                // 如果连接成功，延时返回给调用者
 		                deferred.resolve(data);

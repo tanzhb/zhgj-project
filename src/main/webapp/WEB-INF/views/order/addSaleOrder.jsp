@@ -41,7 +41,7 @@
                                		<i class="fa fa-save"></i> 保存 </button>
                                <button ng-click="cancel()" type="button" ng-hide="saleOrderInput" class="btn red  btn-outline  btn-sm">
                                		<i class="fa fa-undo"></i> 取消 </button>
-                               <button ng-click="edit()" type="button" ng-show="saleOrderShow" class="btn blue  btn-outline  btn-sm">
+                               <button ng-click="edit()" type="button" ng-show="saleOrderShow&&noShow" class="btn blue  btn-outline  btn-sm">
                                		<i class="fa fa-edit"></i> 编辑 </button>
                                  <!-- <a href="javascript：;" class="collapse"> </a> -->
                              </div>
@@ -67,6 +67,17 @@
                           </div>
                           <!--/span-->
                           <div class="col-md-4">
+                          		<div class="form-group form-md-line-input">
+                                  <label class="control-label col-md-3"><span class="required" aria-required="true"> * </span>合同类型：</label>
+                                  <div class="col-md-9">
+                                  	<div ng-hide="contractInput">
+                                	<input type="radio" ng-click="hidnClauseFramework()"  ng-model="contract.contractType" name="contractType" ng-checked="contract.contractType!='框架合同'" value="普通合同"> 普通合同
+                        			<input type="radio" ng-click="showClauseFramework()"  ng-model="contract.contractType" name="contractType" ng-checked="contract.contractType=='框架合同'" value="框架合同"> 框架合同
+                                    </div>
+                                    <p class="form-control-static" ng-show="contractShow"> {{contract.contractType}} </p>
+                                  </div>
+                              </div>
+                          		
                           </div>
                           <!--/span-->
                           <div class="col-md-4">
@@ -223,6 +234,50 @@
                       </div>
                       <div class="row">
                           <div class="col-md-4">
+                              <div class="form-group form-md-line-input">
+                                  <label class="control-label col-md-3"><span class="required" aria-required="true"> * </span>税率：</label>
+                                  <div class="col-md-9">
+                                  	<select class="form-control" id="rate"  ng-hide="saleOrderInput" name="rate"  ng-model="saleOrder.rate" >
+                                           	<option value="17" >17%</option>
+                                             <option value="6" >6%</option>
+                                        </select>
+                                      <div class="form-control-focus"> </div>
+                                      <span class="help-block">请选择入税率</span>
+                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.rate}}% </p>
+                                  </div>
+                              </div>
+                          </div>
+                          <!--/span-->
+                          <div class="col-md-4">
+                          	<div class="form-group form-md-line-input">
+                                  <label class="control-label col-md-3"><span class="required" aria-required="true"> * </span>币种：</label>
+                                  <div class="col-md-9">
+                                  		<select class="form-control" id="currency"  ng-hide="saleOrderInput" name="currency"  ng-model="saleOrder.currency" >
+                                           	<option value="人民币" >人民币</option>
+                                             <option value="美元" >美元</option>
+                                        </select>
+                                      <div class="form-control-focus"> </div>
+                                      <span class="help-block">请选择币种</span>
+                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.currency}} </p>
+                                  </div>
+                              </div>
+                          </div>
+                          <!--/span-->
+                          <div class="col-md-4">
+                              <div class="form-group form-md-line-input">
+                                  <label class="control-label col-md-3">汇率：</label>
+                                  <div class="col-md-9">
+                                        <input type="text" name="exchangeRate" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.exchangeRate"  >
+                                        <div class="form-control-focus"> </div>
+                              			<span class="help-block">请输入汇率</span>
+                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.exchangeRate}} </p>
+                                  </div>
+                              </div>
+                          </div>
+                          <!--/span-->
+                      </div>
+                      <div class="row">
+                          <div class="col-md-4">
                           	<div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3">制单人：</label>
                                   <div class="col-md-9">
@@ -262,7 +317,7 @@
                                		<i class="fa fa-save"></i> 保存 </button>
                                <button ng-click="cancelContract()" type="button" ng-hide="contractInput" class="btn red  btn-outline  btn-sm">
                                		<i class="fa fa-undo"></i> 取消 </button>
-                               <button ng-click="editContract()" type="button" ng-show="contractShow" class="btn blue  btn-outline  btn-sm">
+                               <button ng-click="editContract()" type="button" ng-show="contractShow&&noShow" class="btn blue  btn-outline  btn-sm">
                                		<i class="fa fa-edit"></i> 编辑 </button>
                              </div>
                         </div>
@@ -301,7 +356,7 @@
                           <!--/span-->
                           <div class="col-md-4">
                               <div class="form-group form-md-line-input">
-                                  <label class="control-label col-md-3"><span class="required" aria-required="true"> * </span>开始日期：</label>
+                                  <label class="control-label col-md-3"><span class="required" aria-required="true"> * </span>结束日期：</label>
                                   <div class="col-md-9">
                                   		<input type="text" class="form-control form-control-inline input-medium date-picker" 
                                       data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-model="contract.endDate"  ng-hide="contractInput" id="endDate" name="endDate"/>
@@ -435,11 +490,83 @@
 				</form>
              </div>   
              <!--合同信息end-->
-             <!-- 供应商 start-->
+             <!-- 框架条款start-->
+          <div class="portlet-title" ng-show="ClauseFrameworkShow">
+               <div class="caption">框架条款</div>
+               <div class="tools">
+               	 	<button type="submit" ng-click="saveClauseFramework()" ng-hide="ClauseFrameworkInfoInput" class="btn blue  btn-outline  btn-sm">
+                  		<i class="fa fa-save"></i> 保存 </button>
+                  <button ng-click="cancelClauseFramework()" type="button" ng-hide="ClauseFrameworkInfoInput" class="btn red  btn-outline  btn-sm">
+                  		<i class="fa fa-undo"></i> 取消 </button>
+                  <button ng-click="editClauseFramework()" type="button" ng-show="ClauseFrameworkInfoShow&&noShow" class="btn blue  btn-outline  btn-sm">
+                  		<i class="fa fa-edit"></i> 编辑 </button>
+                </div>
+            </div>
+           <div class="portlet-body form"  ng-show="ClauseFrameworkShow">
+			     <form id="form_sample_framework"   class="form-horizontal">
+			         <div class="table-scrollable">
+                          <table class="table table-bordered table-hover">
+                              <thead>
+                                  <tr>
+                                      <th>选择条款</th>
+                                      <th>条款内容</th>
+                                      <th>是否继承</th>
+                                      <th>是否审批</th>
+                                      <th>备注</th>
+                                      <th style="width:100px;"></th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <tr ng-repeat="_ClauseFramework in ClauseFramework track by $index" ng-mouseover="showOperation('ClauseFramework',$index)" ng-mouseleave="hideOperation('ClauseFramework',$index)">
+                                      <td>
+                                      		<input type="text" id="clauseType[$index]" name="clauseType" class="form-control" ng-hide="ClauseFrameworkInfoInput" ng-model="ClauseFramework[$index].clauseType"  >
+			                                <!-- <div class="form-control-focus"> </div> -->
+			                               <!--  <span class="help-block">请输入选择条款</span> -->
+			                                <p class="form-control-static" ng-show="ClauseFrameworkInfoShow"> {{_ClauseFramework.clauseType}} </p>
+			                          </td>
+			                          <td>
+			                                <input type="text" id="clauseContent[$index]" name="clauseContent" class="form-control" ng-hide="ClauseFrameworkInfoInput" ng-model="ClauseFramework[$index].clauseContent"  >
+			                                <!-- <div class="form-control-focus"> </div> -->
+			                                <!-- <span class="help-block">请输入条款内容</span> -->
+			                                <p class="form-control-static" ng-show="ClauseFrameworkInfoShow"> {{_ClauseFramework.clauseContent}} </p>
+			                          </td>
+                                      <td><input type="text" id="isExtends[$index]" name="isExtends" class="form-control" ng-hide="ClauseFrameworkInfoInput" ng-model="ClauseFramework[$index].isExtends"  >
+			                                <!-- <div class="form-control-focus"> </div> -->
+			                                <p class="form-control-static" ng-show="ClauseFrameworkInfoShow"> {{_ClauseFramework.isExtends}} </p>
+			                           </td>
+                                      <td>
+											<input type="text" id="isApproval[$index]" name="isApproval" class="form-control" ng-hide="ClauseFrameworkInfoInput" ng-model="ClauseFramework[$index].isApproval"  >
+			                                <!-- <div class="form-control-focus"> </div> -->
+			                                <p class="form-control-static" ng-show="ClauseFrameworkInfoShow"> {{_ClauseFramework.isApproval}} </p>
+										</td>
+                                      <td>
+                                      		<input type="text" id="remark[$index]" name="remark" class="form-control" ng-hide="ClauseFrameworkInfoInput" ng-model="ClauseFramework[$index].remark"  >
+			                                <!-- <div class="form-control-focus"> </div> -->
+			                                <!-- <span class="help-block">请输入备注</span> -->
+			                                <p class="form-control-static" ng-show="ClauseFrameworkInfoShow"> {{_ClauseFramework.remark}} </p>
+			                          </td>
+                                      <td ng-show="operation_b{{$index}}">
+                                      	<a href="javascript:;"  class="btn red btn-sm" ng-hide="ClauseFrameworkInfoInput" ng-click="deleteClauseFramework($index)">
+                                    			<i class="fa fa-close"></i> 
+                             				</a>
+                                      </td>
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+                      <div class="form-actions right">
+							<a  class="btn blue btn-sm" ng-hide="ClauseFrameworkInfoInput" ng-click="addClauseFramework()"   >
+	                              <i class="fa fa-plus"></i> 增加
+	                       	</a> 
+                  		</div>
+                  </form>
+          </div>
+          <!-- 框架条款 end-->
+             <!-- 订单物料 start-->
           <div class="portlet-title">
                <div class="caption">物料信息</div>
                <div class="tools">
-                  <button ng-click="addOrderMateriel()" type="button"  class="btn blue  btn-outline  btn-sm">
+                  <button ng-click="addOrderMateriel()" type="button"  ng-show="noShow" class="btn blue  btn-outline  btn-sm">
                   		<i class="fa fa-edit"></i> 添加物料 </button>
                 </div>
             </div>
@@ -501,16 +628,16 @@
                                       		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.orderUnitPrice}} </p>
 			                          </td>
 			                          <td>  
-                                      		<p class="form-control-static"> {{_orderMateriel.orderUnitPrice?_orderMateriel.orderUnitPrice*17/100：0}} </p>
+                                      		<p class="form-control-static"> {{_orderMateriel.orderUnitPrice?_orderMateriel.orderUnitPrice*saleOrder.rate/100:0}} </p>
 			                          </td>
 			                          <td>  
-                                      		<p class="form-control-static" > {{_orderMateriel.orderUnitPrice&&_orderMateriel.amount?_orderMateriel.orderUnitPrice*_orderMateriel.amount：0}} </p>
+                                      		<p class="form-control-static" > {{_orderMateriel.orderUnitPrice&&_orderMateriel.amount?_orderMateriel.orderUnitPrice*_orderMateriel.amount:0}} </p>
 			                          </td>
 			                          <td>  
-                                      		<p class="form-control-static"> {{_orderMateriel.orderUnitPrice&&_orderMateriel.amount?_orderMateriel.orderUnitPrice*_orderMateriel.amount*17/100：0}} </p>
+                                      		<p class="form-control-static"> {{_orderMateriel.orderUnitPrice&&_orderMateriel.amount?_orderMateriel.orderUnitPrice*_orderMateriel.amount*saleOrder.rate/100:0}} </p>
 			                          </td>
 			                          <td>  
-                                      		<p class="form-control-static"> {{_orderMateriel.orderUnitPrice&&_orderMateriel.amount?(_orderMateriel.orderUnitPrice*_orderMateriel.amount+_orderMateriel.orderUnitPrice*_orderMateriel.amount*17/100)：0}} </p>
+                                      		<p class="form-control-static"> {{_orderMateriel.orderUnitPrice&&_orderMateriel.amount?(_orderMateriel.orderUnitPrice*_orderMateriel.amount+_orderMateriel.orderUnitPrice*_orderMateriel.amount*saleOrder.rate/100):0}} </p>
 			                          </td>
 			                          <td>  
 			                          		<input type="text"  name="deliveryDate{{$index}}" class="form-control form-control-inline input-medium date-picker" 
@@ -534,7 +661,7 @@
                                         	&nbsp;&nbsp;&nbsp;
                                         	<a  ng-click="cancelOrderMateriel(_orderMateriel,$index)"><i class="fa fa-undo"></i></a>
                                         </span>
-                                        <span  ng-show="operation_o{{$index}}">
+                                        <span  ng-show="operation_o{{$index}}&&noShow">
                                         	&nbsp;&nbsp;&nbsp;&nbsp;
                                         	<a ng-show="orderMaterielShow{{$index}}"   ng-click="editOrderMateriel(_orderMateriel)"><i class="fa fa-edit"></i></a>
                                         	&nbsp;&nbsp;&nbsp;
@@ -547,7 +674,7 @@
                       </div>
                   </form>
           </div>
-          <!-- 供应商 end-->
+          <!-- 订单物料 end-->
           <!--结算条款start-->
              <div class="portlet-title">
                             <div class="caption">结算条款</div>
@@ -556,7 +683,7 @@
                                		<i class="fa fa-save"></i> 保存 </button>
                                <button ng-click="cancelClauseSettlement()" type="button" ng-hide="clauseSettlementInput" class="btn red  btn-outline  btn-sm">
                                		<i class="fa fa-undo"></i> 取消 </button>
-                               <button ng-click="editClauseSettlement()" type="button" ng-show="clauseSettlementShow" class="btn blue  btn-outline  btn-sm">
+                               <button ng-click="editClauseSettlement()" type="button" ng-show="clauseSettlementShow&&noShow" class="btn blue  btn-outline  btn-sm">
                                		<i class="fa fa-edit"></i> 编辑 </button>
                              </div>
                         </div>
@@ -720,7 +847,7 @@
                                		<i class="fa fa-save"></i> 保存 </button>
                                <button ng-click="cancelClauseAdvance()" type="button" ng-hide="clauseAdvanceInput" class="btn red  btn-outline  btn-sm">
                                		<i class="fa fa-undo"></i> 取消 </button>
-                               <button ng-click="editClauseAdvance()" type="button" ng-show="clauseAdvanceShow" class="btn blue  btn-outline  btn-sm">
+                               <button ng-click="editClauseAdvance()" type="button" ng-show="clauseAdvanceShow&&noShow" class="btn blue  btn-outline  btn-sm">
                                		<i class="fa fa-edit"></i> 编辑 </button>
                              </div>
                         </div>
@@ -849,7 +976,7 @@
                                		<i class="fa fa-save"></i> 保存 </button>
                                <button ng-click="cancelClauseDelivery()" type="button" ng-hide="clauseDeliveryInput" class="btn red  btn-outline  btn-sm">
                                		<i class="fa fa-undo"></i> 取消 </button>
-                               <button ng-click="editClauseDelivery()" type="button" ng-show="clauseDeliveryShow" class="btn blue  btn-outline  btn-sm">
+                               <button ng-click="editClauseDelivery()" type="button" ng-show="clauseDeliveryShow&&noShow" class="btn blue  btn-outline  btn-sm">
                                		<i class="fa fa-edit"></i> 编辑 </button>
                              </div>
                         </div>
@@ -911,7 +1038,7 @@
                                		<i class="fa fa-save"></i> 保存 </button>
                                <button ng-click="cancelClauseCheckAccept()" type="button" ng-hide="clauseCheckAcceptInput" class="btn red  btn-outline  btn-sm">
                                		<i class="fa fa-undo"></i> 取消 </button>
-                               <button ng-click="editClauseCheckAccept()" type="button" ng-show="clauseCheckAcceptShow" class="btn blue  btn-outline  btn-sm">
+                               <button ng-click="editClauseCheckAccept()" type="button" ng-show="clauseCheckAcceptShow&&noShow" class="btn blue  btn-outline  btn-sm">
                                		<i class="fa fa-edit"></i> 编辑 </button>
                              </div>
                         </div>
@@ -973,7 +1100,7 @@
                                		<i class="fa fa-save"></i> 保存 </button>
                                <button ng-click="cancelClauseAfterSales()" type="button" ng-hide="clauseAfterSalesInput" class="btn red  btn-outline  btn-sm">
                                		<i class="fa fa-undo"></i> 取消 </button>
-                               <button ng-click="editClauseAfterSales()" type="button" ng-show="clauseAfterSalesShow" class="btn blue  btn-outline  btn-sm">
+                               <button ng-click="editClauseAfterSales()" type="button" ng-show="clauseAfterSalesShow&&noShow" class="btn blue  btn-outline  btn-sm">
                                		<i class="fa fa-edit"></i> 编辑 </button>
                              </div>
                         </div>
@@ -1023,7 +1150,7 @@
                   		<i class="fa fa-save"></i> 保存 </button>
                   <button ng-click="cancelFile()" type="button" ng-hide="fileInfoInput" class="btn red  btn-outline  btn-sm">
                   		<i class="fa fa-undo"></i> 取消 </button>
-                  <button ng-click="editFile()" type="button" ng-show="fileInfoShow" class="btn blue  btn-outline  btn-sm">
+                  <button ng-click="editFile()" type="button" ng-show="fileInfoShow&&noShow" class="btn blue  btn-outline  btn-sm">
                   		<i class="fa fa-edit"></i> 编辑 </button>
                 </div>
             </div>
@@ -1089,6 +1216,39 @@
                   		</div>
             </div>
           <!-- 附件 end-->
+          <!-- 备注 start-->
+          <div class="portlet-title">
+               <div class="caption">备注</div>
+            </div>
+           <div class="portlet-body form">
+			     <form class="form-horizontal">
+				     <div class="form-body">
+	                      <div class="row">
+	                          <div class="col-md-8">
+	                          		<div class="form-group form-md-line-input">
+		                              	<label class="control-label col-md-3">备注：</label>
+		                                <div class="col-md-9">
+		                                  <input type="text" name="remark" ng-hide="orderStatusInput" class="form-control"  ng-model="saleOrder.remark"  >
+	                                      <div class="form-control-focus"> </div>
+	                                      <span class="help-block">请输入备注</span>
+	                                      <p class="form-control-static" ng-show="orderStatusShow"> {{saleOrder.remark}} </p>
+		                               	</div>
+	                               </div>
+	                          </div>
+	                      </div>
+	                      <!--/row-->
+	                  </div>
+	                </form>
+            </div>
+          <!-- 附件 end-->
+          <div class="form-actions">
+              <div class="row">
+                  <div class="col-md-offset-4 col-md-8">
+               		<button type="button" ng-click="submitPage()" ng-hide="orderStatusInput" class="btn blue">提交审核</button>
+                   	<button type="button" ng-click="cancelPage()" class="btn default">取消</button>
+                  </div>
+              </div>
+          </div>
           </div>
       </div>
 </div>
