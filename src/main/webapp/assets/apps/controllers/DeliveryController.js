@@ -345,7 +345,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 							                            	'className' : 'dt-body-center',
 							                            	'render' : function(data,
 							                            			type, row, meta) {
-							                            		return '<a data-target="#basicContractInfo" data-toggle="modal" ng-click="getUserContractInfo(\''+row.id+'\')" ">'+data+'</a>';
+							                            		return '<a data-target="#basicContractInfo" data-toggle="modal">'+data+'</a>';
 							                            	},
 							                            	"createdCell": function (td, cellData, rowData, row, col) {
 							                            		$compile(td)($scope);
