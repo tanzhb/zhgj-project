@@ -10,7 +10,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		$rootScope.settings.layout.pageSidebarClosed = false;
 		
 		loadMainTable();
-		/*loadMainTable1();*/
+		loadMainTable1();
 	
 		$scope.span =false;
 		$scope.input = true;
@@ -275,9 +275,9 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	       }
 		
 	
-		var table;
-		var tableAjaxUrl = "rest/delivery/findAllDeliveryList";
+	var table;
 		var loadMainTable = function() {
+			
 			var a = 0;
 			App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile")&& (a = $(".page-header").outerHeight(!0)): 
 				$(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0): $("body").hasClass("page-header-fixed")&& (a = 64);
@@ -322,7 +322,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 							              pageLength : 10,// 每页显示数量
 							              processing : true,// loading等待框
 							              // serverSide: true,
-							              ajax: tableAjaxUrl,//加载数据中user表数据
+							              ajax:"rest/delivery/findAllDeliveryList",//加载数据中user表数据
 							              "aoColumns": [
 							                            { mData: 'serialNum'},
 							                            { mData: 'deliverNum' },
@@ -496,7 +496,6 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			        	var warehouseSerial=$scope.takeDelivery.warehouseSerial;
 			        	DeliveryService.selectAddress(warehouseSerial).then(
 			          		     function(data){
-			          		    	 debugger
 			          		    	$scope.takeDeliveryWarehouseAddress=data.address;
 			          		    	
 			          		    	/*var orderSerial=data.orderInfo.serialNum;

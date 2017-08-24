@@ -721,7 +721,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        			});
 		        		}]
 		        	}	        
-		    })           .state('addDelivery', {
+		    })   
+		    
+		    .state('addDelivery', {
             url: "/addDelivery",
             templateUrl: "rest/page/addDelivery",
             data: {pageTitle: '新增发货'},
@@ -749,7 +751,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         .state('delivery', {
             url: "/delivery",
             templateUrl: "rest/page/delivery",
-            data: {pageTitle: '新增发货'},
+            data: {pageTitle: '发货列表'},
             controller: "DeliveryController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -774,7 +776,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         	params:{data:null},
             url: "/viewDelivery:serialNum",
             templateUrl: "rest/delivery/viewDelivery",
-            data: {pageTitle: '查看合同'},
+            data: {pageTitle: '查看发货'},
             controller: "DeliveryController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -799,7 +801,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         	params:{data:null},
             url: "/editDeliveryPage:serialNumEdit",
             templateUrl: "rest/delivery/editDeliveryPage",
-            data: {pageTitle: '查看合同'},
+            data: {pageTitle: '编辑发货'},
             controller: "DeliveryController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -819,23 +821,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }]);
 
