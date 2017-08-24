@@ -72,8 +72,8 @@ public class ContractVO {
     private String signContract;
     
     private String contractNumber;
-        private String contractNumber;
-        private String versionNO;
+    
+    private String versionNO;
     
     //最新版本（1是0否）
     private String isLatestVersion;
