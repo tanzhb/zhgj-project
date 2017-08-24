@@ -35,6 +35,10 @@ public class DemandPlan {
     private String buyComName;
     
     private String searchKey;
+    
+    private int pageSize;
+    
+    private int pageIndex;
 
     public String getSerialNum() {
         return serialNum;
@@ -141,4 +145,23 @@ public class DemandPlan {
 	public void setSearchKey(String searchKey) {
 		this.searchKey = searchKey;
 	}
+
+	public int getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	public int getPageIndex() {
+		return pageIndex;
+	}
+
+	public void setPageIndex(int pageIndex) {
+		this.pageIndex = pageIndex;
+	}
+	
+	
+	
 }

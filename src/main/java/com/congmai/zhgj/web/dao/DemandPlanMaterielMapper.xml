@@ -362,7 +362,9 @@
   
    <select id="selectSupplyName" parameterType="java.lang.String" resultType="java.lang.String">
     select
-     '上海'
-    from dual
+     c.comName
+    from supplyMateriel sm
+    left join company c 
+    on c.comId = sm.supplyComId where sm.serialNum = #{value}
   </select>
 </mapper>

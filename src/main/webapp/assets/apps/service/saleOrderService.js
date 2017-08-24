@@ -61,6 +61,98 @@ angular.module('MetronicApp').service('saleOrderService',
 			                deferred.reject(err);//请求失败
 			            });
 			            return deferred.promise;//返回承诺
+				},//订单保存合同
+				saveContract : function (contract){
+					var deferred = $q.defer();
+					$http.post("rest/order/saveContract", 
+							contract//传整个表单数据  
+					).then(function success(result) {
+						deferred.resolve(result);//请求成功
+					}, function error(err) {
+						deferred.reject(err);//请求失败
+					});
+					return deferred.promise;//返回承诺
+				},//保存售后条款
+				saveClauseAfterSales : function (clauseAfterSales){
+					var deferred = $q.defer();
+					$http.post("rest/order/saveClauseAfterSales", 
+							clauseAfterSales//传整个表单数据  
+					).then(function success(result) {
+						deferred.resolve(result);//请求成功
+					}, function error(err) {
+						deferred.reject(err);//请求失败
+					});
+					return deferred.promise;//返回承诺
+				},//保存交付条款
+				saveClauseDelivery : function (clauseDelivery){
+					var deferred = $q.defer();
+					$http.post("rest/order/saveClauseDelivery", 
+							clauseDelivery//传整个表单数据  
+					).then(function success(result) {
+						deferred.resolve(result);//请求成功
+					}, function error(err) {
+						deferred.reject(err);//请求失败
+					});
+					return deferred.promise;//返回承诺
+				},//保存验收条款
+				saveClauseCheckAccept : function (clauseCheckAccept){
+					var deferred = $q.defer();
+					$http.post("rest/order/saveClauseCheckAccept", 
+							clauseCheckAccept//传整个表单数据  
+					).then(function success(result) {
+						deferred.resolve(result);//请求成功
+					}, function error(err) {
+						deferred.reject(err);//请求失败
+					});
+					return deferred.promise;//返回承诺
+				},//保存垫资条款
+				saveClauseAdvance : function (clauseAdvance){
+					var deferred = $q.defer();
+					$http.post("rest/order/saveClauseAdvance", 
+							clauseAdvance//传整个表单数据  
+					).then(function success(result) {
+						deferred.resolve(result);//请求成功
+					}, function error(err) {
+						deferred.reject(err);//请求失败
+					});
+					return deferred.promise;//返回承诺
+				},//保存结算条款
+				saveClauseSettlement : function (clauseSettlement){
+					var deferred = $q.defer();
+					$http.post("rest/order/saveClauseSettlement", 
+							clauseSettlement//传整个表单数据  
+					).then(function success(result) {
+						deferred.resolve(result);//请求成功
+					}, function error(err) {
+						deferred.reject(err);//请求失败
+					});
+					return deferred.promise;//返回承诺
+				},//保存结算条款明细
+				saveClauseSettlementDetail : function (clauseSettlementDetail){
+					var deferred = $q.defer();
+					var params = {};
+					params = JSON.stringify(clauseSettlementDetail);
+					$http.post("rest/order/saveClauseSettlementDetail", 
+							params//传整个表单数据  
+					).then(function success(result) {
+						deferred.resolve(result);//请求成功
+					}, function error(err) {
+						deferred.reject(err);//请求失败
+					});
+					return deferred.promise;//返回承诺
+				},//保存附件
+				saveFile : function(File) {
+					var deferred = $q.defer();
+					var params = {};
+					params = JSON.stringify(File);
+					$http.post("rest/order/saveFile", params
+					).success(function (data) {
+		                // 如果连接成功，延时返回给调用者
+		                deferred.resolve(data);
+		            }).error(function () {
+	                    deferred.reject('连接服务器出错！');
+	                })
+					return deferred.promise;
 				}
 			}
 		} ]);

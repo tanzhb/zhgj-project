@@ -6,15 +6,13 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.congmai.zhgj.web.dao.MaterielFileMapper;
-import com.congmai.zhgj.web.model.Materiel;
-import com.congmai.zhgj.web.model.MaterielExample;
 import com.congmai.zhgj.web.model.MaterielFile;
 import com.congmai.zhgj.web.model.MaterielFileExample;
 import com.congmai.zhgj.web.model.MaterielFileExample.Criteria;
 import com.congmai.zhgj.web.service.MaterielFileService;
-import com.congmai.zhgj.web.service.MaterielService;
 
 /**
  * 
@@ -28,9 +26,6 @@ import com.congmai.zhgj.web.service.MaterielService;
 public class MaterielFileServiceImpl implements MaterielFileService {
     @Resource
     private MaterielFileMapper MaterielFileMapper;
-    
-    @Resource
-    private MaterielService materielService;
     
 	@Override
 	public int insert(MaterielFile model) {
@@ -77,22 +72,23 @@ public class MaterielFileServiceImpl implements MaterielFileService {
 
 	@Override
 	public void betchInsertMaterielFiles(List<MaterielFile> Files) {
-		//删除之前的附件
-		MaterielFile m = new MaterielFile();
-		m.setDelFlg("1");
-		m.setUpdateTime(new Date());
-		m.setUpdater(Files.get(0).getCreator());
-		
-		MaterielFileExample ex =new MaterielFileExample();
-    	Criteria criteria =  ex.createCriteria();
-    	criteria.andMaterielIdEqualTo(Files.get(0).getMaterielId());
-		
-		MaterielFileMapper.updateByExampleSelective(m, ex);
-		
-		for(MaterielFile b:Files){
-			MaterielFileMapper.insert(b);
+		if(!CollectionUtils.isEmpty(Files)){
+			//删除之前的附件
+			MaterielFile m = new MaterielFile();
+			m.setDelFlg("1");
+			m.setUpdateTime(new Date());
+			m.setUpdater(Files.get(0).getCreator());
+			
+			MaterielFileExample ex =new MaterielFileExample();
+	    	Criteria criteria =  ex.createCriteria();
+	    	criteria.andMaterielIdEqualTo(Files.get(0).getMaterielId());
+			
+			MaterielFileMapper.updateByExampleSelective(m, ex);
+			
+			for(MaterielFile b:Files){
+				MaterielFileMapper.insert(b);
+			}
 		}
-		
 	}
 
 }

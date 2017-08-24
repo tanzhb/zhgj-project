@@ -194,9 +194,9 @@ angular.module('MetronicApp').service('demandPlanService',['$http','$q',function
 		if(params!=undefined){
 			demandPlan.searchKey = params.searchKey; 
 		}
-		$http.get("rest/demandPlan/demandPlanList", {  
-			params:demandPlan
-    	}).then(function success(result) {
+		$http.post("rest/demandPlan/demandPlanList",   
+			demandPlan
+    	).then(function success(result) {
             deferred.resolve(result);//请求成功
         }, function error(err) {
             deferred.reject(err);//请求失败

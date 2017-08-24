@@ -71,8 +71,9 @@ public class ContractVO {
     //签字合同(线下合同)
     private String signContract;
     
-    //版本号
-    private String versionNO;
+    private String contractNumber;
+        private String contractNumber;
+        private String versionNO;
     
     //最新版本（1是0否）
     private String isLatestVersion;
@@ -95,6 +96,8 @@ public class ContractVO {
     //更新时间
     private Date updateTime;
 
+    private String orderSerial;
+    
 	public String getId() {
 		return id;
 	}
@@ -319,6 +322,22 @@ public class ContractVO {
 
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public String getContractNumber() {
+		return contractNumber;
+	}
+
+	public void setContractNumber(String contractNumber) {
+		this.contractNumber = contractNumber;
+	}
+
+	public String getOrderSerial() {
+		return orderSerial;
+	}
+
+	public void setOrderSerial(String orderSerial) {
+		this.orderSerial = orderSerial;
 	}
     
     

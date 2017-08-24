@@ -34,5 +34,6 @@ public interface DemandPlanMaterielService extends GenericService<DemandPlanMate
 	
 	String selectMaterielSerialByMaterielNum(String materielNum);
 	
+	String selectSupplyName(String materielSerial);
 	
 }

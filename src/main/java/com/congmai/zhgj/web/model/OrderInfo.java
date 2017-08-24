@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class OrderInfo {
     private String serialNum;
 
+    private String contractSerial;
+
     private String supplyComId;
 
     private String buyComId;
@@ -17,11 +19,19 @@ public class OrderInfo {
 
     private String orderType;
 
+    private String seller;
+
+    private String entrustParty;
+
     private String serviceModel;
+
+    private String demandPlanSerial;
+
+    private String saleApplySerial;
 
     private String settlementClause;
 
-    private String salesOrderSerial;
+    private String orderSerial;
 
     private String deliveryMode;
 
@@ -30,6 +40,12 @@ public class OrderInfo {
     private Date orderDate;
 
     private String maker;
+
+    private String rate;
+
+    private String currency;
+
+    private String exchangeRate;
 
     private String remark;
 
@@ -51,6 +67,14 @@ public class OrderInfo {
 
     public void setSerialNum(String serialNum) {
         this.serialNum = serialNum == null ? null : serialNum.trim();
+    }
+
+    public String getContractSerial() {
+        return contractSerial;
+    }
+
+    public void setContractSerial(String contractSerial) {
+        this.contractSerial = contractSerial == null ? null : contractSerial.trim();
     }
 
     public String getSupplyComId() {
@@ -85,12 +109,44 @@ public class OrderInfo {
         this.orderType = orderType == null ? null : orderType.trim();
     }
 
+    public String getSeller() {
+        return seller;
+    }
+
+    public void setSeller(String seller) {
+        this.seller = seller == null ? null : seller.trim();
+    }
+
+    public String getEntrustParty() {
+        return entrustParty;
+    }
+
+    public void setEntrustParty(String entrustParty) {
+        this.entrustParty = entrustParty == null ? null : entrustParty.trim();
+    }
+
     public String getServiceModel() {
         return serviceModel;
     }
 
     public void setServiceModel(String serviceModel) {
         this.serviceModel = serviceModel == null ? null : serviceModel.trim();
+    }
+
+    public String getDemandPlanSerial() {
+        return demandPlanSerial;
+    }
+
+    public void setDemandPlanSerial(String demandPlanSerial) {
+        this.demandPlanSerial = demandPlanSerial == null ? null : demandPlanSerial.trim();
+    }
+
+    public String getSaleApplySerial() {
+        return saleApplySerial;
+    }
+
+    public void setSaleApplySerial(String saleApplySerial) {
+        this.saleApplySerial = saleApplySerial == null ? null : saleApplySerial.trim();
     }
 
     public String getSettlementClause() {
@@ -101,12 +157,12 @@ public class OrderInfo {
         this.settlementClause = settlementClause == null ? null : settlementClause.trim();
     }
 
-    public String getSalesOrderSerial() {
-        return salesOrderSerial;
+    public String getOrderSerial() {
+        return orderSerial;
     }
 
-    public void setSalesOrderSerial(String salesOrderSerial) {
-        this.salesOrderSerial = salesOrderSerial == null ? null : salesOrderSerial.trim();
+    public void setOrderSerial(String orderSerial) {
+        this.orderSerial = orderSerial == null ? null : orderSerial.trim();
     }
 
     public String getDeliveryMode() {
@@ -139,6 +195,30 @@ public class OrderInfo {
 
     public void setMaker(String maker) {
         this.maker = maker == null ? null : maker.trim();
+    }
+
+    public String getRate() {
+        return rate;
+    }
+
+    public void setRate(String rate) {
+        this.rate = rate == null ? null : rate.trim();
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency == null ? null : currency.trim();
+    }
+
+    public String getExchangeRate() {
+        return exchangeRate;
+    }
+
+    public void setExchangeRate(String exchangeRate) {
+        this.exchangeRate = exchangeRate == null ? null : exchangeRate.trim();
     }
 
     public String getRemark() {

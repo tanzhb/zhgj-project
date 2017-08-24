@@ -49,6 +49,7 @@
 	serviceModel,
 	comId,
 	settlementClause,
+	signerAddress,
 	startDate,
 	endDate,
 	signDate,
@@ -70,8 +71,15 @@
 	contractNum=#{contractNum},
 	comId=#{comId},
 	contractType=#{contractType},
-	serviceModel=#{serviceModel},
-	settlementClause=#{settlementClause},
+	<if test="serviceModel!=null and serviceModel!=''">  
+    serviceModel=#{serviceModel},
+    </if> 
+	<if test="settlementClause!=null and settlementClause!=''">  
+    settlementClause=#{settlementClause},
+    </if> 
+    <if test="signerAddress!=null and signerAddress!=''">  
+    signerAddress=#{signerAddress},
+    </if>
 	startDate=#{startDate},
 	endDate=#{endDate},
 	signDate=#{signDate},
