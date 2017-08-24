@@ -64,6 +64,42 @@ public class DeliveryMaterielVO {
 	
 	
 	private String deliverRemark;
+	
+	
+	private String stockCount;
+	
+	
+	private String unstockCount;
+	
+	
+	private String warehouseName;
+	
+	
+	private String positionName;
+	
+	
+	private String stockRemark;
+	
+	
+	private String qualifiedCount;
+	
+	
+	private String unqualifiedCount;
+	
+	
+	private String checkRemark;
+	
+	
+	private String acceptCount;
+	
+	
+	private String refuseCount;
+	
+	
+	private String takeRemark;
+	
+	
+	private String status;
 
 
 	public String getSerialNum() {
@@ -217,5 +253,101 @@ public class DeliveryMaterielVO {
 
 	public void setDeliverRemark(String deliverRemark) {
 		this.deliverRemark = deliverRemark;
+	}
+
+	public String getStockCount() {
+		return stockCount;
+	}
+
+	public void setStockCount(String stockCount) {
+		this.stockCount = stockCount;
+	}
+
+	public String getUnstockCount() {
+		return unstockCount;
+	}
+
+	public void setUnstockCount(String unstockCount) {
+		this.unstockCount = unstockCount;
+	}
+
+	public String getWarehouseName() {
+		return warehouseName;
+	}
+
+	public void setWarehouseName(String warehouseName) {
+		this.warehouseName = warehouseName;
+	}
+
+	public String getPositionName() {
+		return positionName;
+	}
+
+	public void setPositionName(String positionName) {
+		this.positionName = positionName;
+	}
+
+	public String getStockRemark() {
+		return stockRemark;
+	}
+
+	public void setStockRemark(String stockRemark) {
+		this.stockRemark = stockRemark;
+	}
+
+	public String getQualifiedCount() {
+		return qualifiedCount;
+	}
+
+	public void setQualifiedCount(String qualifiedCount) {
+		this.qualifiedCount = qualifiedCount;
+	}
+
+	public String getUnqualifiedCount() {
+		return unqualifiedCount;
+	}
+
+	public void setUnqualifiedCount(String unqualifiedCount) {
+		this.unqualifiedCount = unqualifiedCount;
+	}
+
+	public String getCheckRemark() {
+		return checkRemark;
+	}
+
+	public void setCheckRemark(String checkRemark) {
+		this.checkRemark = checkRemark;
+	}
+
+	public String getAcceptCount() {
+		return acceptCount;
+	}
+
+	public void setAcceptCount(String acceptCount) {
+		this.acceptCount = acceptCount;
+	}
+
+	public String getRefuseCount() {
+		return refuseCount;
+	}
+
+	public void setRefuseCount(String refuseCount) {
+		this.refuseCount = refuseCount;
+	}
+
+	public String getTakeRemark() {
+		return takeRemark;
+	}
+
+	public void setTakeRemark(String takeRemark) {
+		this.takeRemark = takeRemark;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

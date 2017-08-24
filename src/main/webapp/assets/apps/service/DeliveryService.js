@@ -21,7 +21,9 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     		
     		selectAddress:selectAddress,
     		
-    		saveBasicInfo:saveBasicInfo
+    		saveBasicInfo:saveBasicInfo,
+    		
+    		getDeliveryInfo:getDeliveryInfo
     };
 
     return factory;
@@ -196,6 +198,20 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
         return deferred.promise;  
           
     };
+    
+    
+    function getDeliveryInfo(serialNum){
+    	var deferred = $q.defer();  
+
+        $http.get("rest/delivery/getDeliveryInfo", {params:{serialNum:serialNum}})
+        .success(function (data) {  
+            // 如果连接成功，延时返回给调用者  
+            deferred.resolve(data);  
+        }).error(function () {  
+            deferred.reject('连接服务器出错！');  
+        })  
+        return deferred.promise; 
+    }
     
 }]);
 

@@ -18,9 +18,9 @@
     <insert id="insertBasicInfo" parameterType="com.congmai.zhgj.web.model.DeliveryVO">
     INSERT INTO delivery
     (serialNum,orderSerial,deliverNum,supplyComId,shipper,receiver,maker,makeDate,approval,approvalDate,warehouseSerial,remark,deliverDate,
-    materielCount,packageCount,packageType,packageSpecifications,materielWeight,serviceMoney,deliverer,contactNum,deliverRemark,creator,createTime,updater,updateTime) VALUES
+    materielCount,packageCount,packageType,packageSpecifications,materielWeight,serviceMoney,deliverer,contactNum,deliverRemark,creator,createTime,updater,updateTime,status) VALUES
     (#{serialNum},#{orderSerial},#{deliverNum},#{supplyComId},#{shipper},#{receiver},#{maker},#{makeDate},#{approval},#{approvalDate},#{warehouseSerial},#{remark},#{deliverDate},#{materielCount},
-    #{packageCount},#{packageType},#{packageSpecifications},#{materielWeight},#{serviceMoney},#{deliverer},#{contactNum},#{deliverRemark},#{creator},NOW(),#{creator},NOW())
+    #{packageCount},#{packageType},#{packageSpecifications},#{materielWeight},#{serviceMoney},#{deliverer},#{contactNum},#{deliverRemark},#{creator},NOW(),#{creator},NOW(),'0')
     </insert>
     
     
@@ -49,9 +49,25 @@
     </select>
     
     
+    <select id="selectListForDetail" resultType="com.congmai.zhgj.web.model.DeliveryMaterielVO" parameterType="java.lang.String">
+    SELECT
+	c.materielNum,c.materielName,c.specifications,c.unit,a.batchNum,a.manufactureDate,b.amount,a.deliverCount,a.remark,
+	a.stockCount,a.unstockCount,d.warehouseName,e.positionName,a.stockRemark,a.qualifiedCount,a.unqualifiedCount,a.checkRemark,
+	a.acceptCount,a.refuseCount,a.takeRemark,f.status
+	FROM
+	deliveryMateriel a
+	LEFT JOIN orderMateriel b ON a.orderMaterielSerial=b.serialNum
+	LEFT JOIN materiel c ON b.materielSerial=c.serialNum
+	LEFT JOIN warehouse d ON a.warehouseSerial=d.serialNum
+	LEFT JOIN warehousePosition e ON a.positionSerial=e.serialNum
+	LEFT JOIN delivery f ON a.deliverSerial=f.serialNum
+	WHERE a.deliverSerial=#{serialNum}
+    </select>
+    
+    
     <select id="selectDetailById" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.DeliveryVO">
     SELECT
-	a.serialNum,a.deliverNum,f.orderNum,a.supplyComId,a.shipper,a.receiver,a.maker,a.makeDate,a.approval,a.approvalDate,
+	a.serialNum,a.deliverNum,f.orderNum,a.supplyComId,a.shipper,a.receiver,a.maker,a.makeDate,a.approval,a.approvalDate,a.warehouseSerial,
 	a.remark,d.warehouseName deliveryWarehouseName,d.address deliveryAddress,a.deliverDate,a.materielCount,a.packageCount,a.packageType,a.packageSpecifications,
 	a.materielWeight,a.serviceMoney,a.deliverer,a.contactNum,a.deliverRemark,
 	b.transportType,b.transport,b.port,b.shipNumber,b.playArrivalDate,b.playWarehouseDate,

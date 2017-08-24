@@ -145,6 +145,13 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		// TODO Auto-generated method stub
 		return deliveryMapper.findAllDeliveryList(username);
 	}
+
+
+	@Override
+	public List<DeliveryMaterielVO> selectListForDetail(String serialNum) {
+		// TODO Auto-generated method stub
+		return deliveryMapper.selectListForDetail(serialNum);
+	}
 	
 	/**
 	 * 更新用户对象

@@ -21,6 +21,34 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 	});
 	
 	
+	//修改
+	$scope.jumpToEdit = function() {
+		var ids = '';
+		// Iterate over all checkboxes in the table
+		table.$('input[type="checkbox"]').each(
+				function() {
+					// If checkbox exist in DOM
+					if ($.contains(document, this)) {
+						// If checkbox is checked
+						if (this.checked) {
+							// 将选中数据id放入ids中
+							if (ids == '') {
+								ids = this.value;
+							} else{
+								ids = "more"
+							}
+						}
+					}
+				});
+		if(ids==''){
+			toastr.warning('请选择一个合同！');return;
+		}else if(ids=='more'){
+			toastr.warning('只能选择一个合同！');return;
+		}
+		$state.go('editUserContractPage',{id:ids});
+	};
+	
+	
 	//添加合同
 	$scope.saveUserContract = function() {
 		debugger
@@ -410,35 +438,6 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 	    	   
 	       }
 		
-		//修改
-		$scope.jumpToEdit = function() {
-			var ids = '';
-    		// Iterate over all checkboxes in the table
-    		table.$('input[type="checkbox"]').each(
-    				function() {
-    					// If checkbox exist in DOM
-    					if ($.contains(document, this)) {
-    						// If checkbox is checked
-    						if (this.checked) {
-    							// 将选中数据id放入ids中
-    							if (ids == '') {
-    								ids = this.value;
-    							} else{
-    								ids = "more"
-    							}
-    						}
-    					}
-    				});
-    		if(ids==''){
-    			toastr.warning('请选择一个合同！');return;
-    		}else if(ids=='more'){
-    			toastr.warning('只能选择一个合同！');return;
-    		}
-			$state.go('editUserContractPage',{id:ids});
-		};
-		
-			
-			
 			//格式化日期
 			function timeStamp2String(time){
 	        var datetime = new Date();

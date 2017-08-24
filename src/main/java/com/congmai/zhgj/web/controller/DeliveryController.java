@@ -65,7 +65,7 @@ import com.congmai.zhgj.web.service.WarehouseService;
 
 
 /**
- * 合同管理controller
+ * 发货管理controller
  * @author czw
  *
  */
@@ -125,6 +125,11 @@ public class DeliveryController {
 	}
     
     
+    /**
+     * 查询发货列表
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/findAllDeliveryList", method = RequestMethod.GET)
     public ResponseEntity<Map> findAllDeliveryList(HttpServletRequest request) {
 
@@ -259,6 +264,14 @@ public class DeliveryController {
     	return new ResponseEntity<DeliveryMaterielVO>(deliveryMateriel, HttpStatus.CREATED);
     }
     
+    
+    
+    
+    /**
+     * 查询仓库地址
+     * @param warehouseSerial
+     * @return
+     */
     @RequestMapping(value="selectAddress",method=RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<Warehouse> selectAddress(String warehouseSerial){
@@ -269,59 +282,81 @@ public class DeliveryController {
     }
     
     
+    /**
+     * 保存基本信息
+     * @param delivery
+     * @param deliveryTransport
+     * @param takeDeliveryVO
+     * @return
+     */
     @RequestMapping(value="saveBasicInfo",method=RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<DeliveryVO>  saveBasicInfo(DeliveryVO delivery,DeliveryTransportVO deliveryTransport,TakeDeliveryVO takeDeliveryVO){
+    	//保存基本信息第一部分
     	delivery.setSerialNum(ApplicationUtils.random32UUID());
     	Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
 		delivery.setCreator(currenLoginName);
     	deliveryService.insertBasicInfo(delivery);
     	
+    	//保存基本信息第二部分
     	deliveryTransport.setSerialNum(ApplicationUtils.random32UUID());
     	deliveryTransport.setCreator(currenLoginName);
     	deliveryTransport.setDeliverSerial(delivery.getSerialNum());
     	deliveryService.insertBasicInfoPartII(deliveryTransport);
     	
+    	//保存基本信息第三部分
     	takeDeliveryVO.setSerialNum(ApplicationUtils.random32UUID());
     	takeDeliveryVO.setDeliverSerial(delivery.getSerialNum());
     	takeDeliveryVO.setCreator(currenLoginName);
     	deliveryService.insertBasicInfoPartIII(takeDeliveryVO);
     	
+    	//保存之后查询
     	delivery=deliveryService.selectDetailById(delivery.getSerialNum());
     	return new ResponseEntity<DeliveryVO>(delivery, HttpStatus.OK);
     }
+    
+    
+    /**
+   	 * 
+   	 * @Description 获取发货详情信息
+   	 * @param ids
+   	 * @return
+   	 */
+   	@RequestMapping(value = "/getDeliveryInfo")
+   	@ResponseBody
+   	public Map<String, Object> getDeliveryInfo(String serialNum) {
+   		DeliveryVO delivery=deliveryService.selectDetailById(serialNum);
+   		Map<String, Object> map = new HashMap<String, Object>();
+       	map.put("delivery", delivery);
+       	
+       	List<DeliveryMaterielVO> deliveryMateriels = deliveryService.selectListForDetail(serialNum);
+       	map.put("deliveryMateriels", deliveryMateriels);
+       	return map;
+   	}
 
 	/**
-	 * @Description (导出合同信息)
+	 * @Description (导出发货信息)
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("exportContract")
-	public void exportContract(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+	@RequestMapping("exportDelivery")
+	public void exportDelivery(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
-		List<ContractVO> contractList=contractService.queryContractList(currenLoginName);
-		/*for(ContractVO contractVO:contractList){
-    			Date date=getNowDateShort(contractVO.getStartDate());
-    			contractVO.setStartDate(date);
-    		}*/
+		List<DeliveryVO> deliveryList=deliveryService.findAllDeliveryList(currenLoginName);
 
-		dataMap.put("contractList",contractList);
-		ExcelUtil.export(request, response, dataMap, "contract", "合同信息");
+		dataMap.put("deliveryList",deliveryList);
+		ExcelUtil.export(request, response, dataMap, "delivery", "发货信息");
 	}
+	
+	
+	@RequestMapping("/viewDelivery")
+    public String viewDelivery() {
+        return "delivery/viewDelivery";
+    }
 
-
-	/** 
-	 * 获取时间 
-	 *  
-	 * @return返回短时间格式 yyyy-MM-dd 
-	 */  
-	public  Date getNowDateShort(Date date) {  
-		Date sqlDate = new java.sql.Date(date.getTime());  
-		return sqlDate;  
-	}
 
 
 	/**
@@ -408,7 +443,7 @@ public class DeliveryController {
 
 
 	/**
-	 * 删除用户合同
+	 * 删除发货
 	 * @param contractVO
 	 * @param request
 	 * @return
@@ -439,9 +474,9 @@ public class DeliveryController {
 	 * 跳转到编辑页面
 	 * @return
 	 */
-	@RequestMapping(value = "/editUserContractPage")
-	public String editUserContractPage(String id,String view) {
-		return "contract/editUserContractPage";
+	@RequestMapping(value = "/editDeliveryPage")
+	public String editDeliveryPage(String id,String view) {
+		return "delivery/editDeliveryPage";
 	}
 	
 	

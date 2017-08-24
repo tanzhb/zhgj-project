@@ -77,6 +77,9 @@ public interface DeliveryService extends GenericService<DeliveryMaterielVO, Stri
 	
 	public List<DeliveryVO> findAllDeliveryList(String username);
 	
+	
+	List<DeliveryMaterielVO> selectListForDetail(String serialNum);
+	
 	/**
 	 * 更新用户对象
 	 * @param contractVO

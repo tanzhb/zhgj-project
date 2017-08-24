@@ -54,6 +54,9 @@ public interface DeliveryMapper extends GenericDao<DeliveryMaterielVO, String> {
     
     public List<DeliveryVO> findAllDeliveryList(String username);
     
+    
+    public List<DeliveryMaterielVO> selectListForDetail(String serialNum);
+    
     //更新合同
    /* public void updateContract(ContractVO record);*/
 }

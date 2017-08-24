@@ -105,6 +105,12 @@ public class WareHouseController {
 		return new ResponseEntity<Warehouse>(warehouse, HttpStatus.OK);
     }
   
+    
+    /**
+     * @Description (查看列表)
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/getWarehouseList", method = RequestMethod.GET)
     public ResponseEntity<Map> getWarehouseList(HttpServletRequest request) {
 		List<Warehouse> warehouses = warehouseService.selectList();
