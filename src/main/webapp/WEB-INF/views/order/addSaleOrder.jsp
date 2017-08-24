@@ -67,12 +67,6 @@
                           </div>
                           <!--/span-->
                           <div class="col-md-4">
-                              <div class="form-group form-md-line-input">
-                                  <label class="control-label col-md-3">销售方：</label>
-                                  <div class="col-md-9">
-                                      <p class="form-control-static"> 中航能科 </p>
-                                  </div>
-                              </div>
                           </div>
                           <!--/span-->
                           <div class="col-md-4">
@@ -109,28 +103,26 @@
                           </div>
                           <!--/span-->
                           <div class="col-md-4">
-                              <div class="form-group form-md-line-input">
-                                  <label class="control-label col-md-3">关联需求计划单号：</label>
+                          	<div class="form-group form-md-line-input">
+                                  <label class="control-label col-md-3">销售方：</label>
                                   <div class="col-md-9">
-                                  <input type="text"  class="form-control" ng-hide="saleOrderInput"   >
+                                  <input type="text" name="seller" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.seller"  >
                                       <div class="form-control-focus"> </div>
-                                      <span class="help-block">请选择需求计划单号</span>
-                                      <p class="form-control-static" ng-show="saleOrderShow"> </p>
+                                      <span class="help-block">请输入销售方</span>
+                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.seller}} </p>
                                   </div>
-                                  
                               </div>
                           </div>
                           <!--/span-->
                           <div class="col-md-4">
-                              <div class="form-group form-md-line-input">
-                                  <label class="control-label col-md-3">关联采购单号：</label>
+                          	<div class="form-group form-md-line-input">
+                                  <label class="control-label col-md-3">委托方：</label>
                                   <div class="col-md-9">
-                                  <input type="text"  class="form-control" ng-hide="saleOrderInput"   >
+                                  <input type="text" name="entrustParty" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.entrustParty"  >
                                       <div class="form-control-focus"> </div>
-                                      <span class="help-block">请选择采购单号</span>
-                                      <p class="form-control-static" ng-show="saleOrderShow">  </p>
+                                      <span class="help-block">请输入委托方</span>
+                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.entrustParty}} </p>
                                   </div>
-                                  
                               </div>
                           </div>
                           <!--/span-->
@@ -156,7 +148,7 @@
                           <!--/span-->
                           <div class="col-md-4">
                               <div class="form-group form-md-line-input">
-                                  <label class="control-label col-md-3"><span class="required" aria-required="true"> * </span>结算条款：</label>
+                                  <label class="control-label col-md-3"><span class="required" aria-required="true"> * </span>结算方式：</label>
                                   <div class="col-md-9">
                                   		<select class="form-control" id="settlementClause"  ng-hide="saleOrderInput" name="settlementClause"  ng-model="saleOrder.settlementClause" >
                                             <option value=""></option>
@@ -192,14 +184,13 @@
                       </div>
                       <div class="row">
                           <div class="col-md-4">
-                              <div class="form-group form-md-line-input">
-                                  <label class="control-label col-md-3">下单日期：</label>
+                          	<div class="form-group form-md-line-input">
+                                  <label class="control-label col-md-3">关联需求计划单号：</label>
                                   <div class="col-md-9">
-                                  <input type="text" name="orderDate" class="form-control form-control-inline input-medium date-picker" 
-                                      data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="saleOrderInput" ng-model="saleOrder.orderDate"  >
+                                  <input type="text"  name="demandPlanSerial" class="form-control" ng-hide="saleOrderInput"  ng-model="saleOrder.demandPlanSerial"  >
                                       <div class="form-control-focus"> </div>
-                                      <span class="help-block">请选择下单日期</span>
-                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.orderDate}} </p>
+                                      <span class="help-block">请选择需求计划单号</span>
+                                      <p class="form-control-static" ng-show="saleOrderShow">{{saleOrder.demandPlanSerial}} </p>
                                   </div>
                                   
                               </div>
@@ -207,6 +198,32 @@
                           <!--/span-->
                           <div class="col-md-4">
                               <div class="form-group form-md-line-input">
+                                  <label class="control-label col-md-3">关联销售申请单号：</label>
+                                  <div class="col-md-9">
+                                  <input type="text" name="saleApplySerial" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.saleApplySerial"  >
+                                      <div class="form-control-focus"> </div>
+                                      <span class="help-block">请输入关联销售申请单号</span>
+                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.saleApplySerial}} </p>
+                                  </div>
+                              </div>
+                          </div>
+                          <!--/span-->
+                          <div class="col-md-4">
+                              <div class="form-group form-md-line-input">
+                                  <label class="control-label col-md-3">关联采购单号：</label>
+                                  <div class="col-md-9">
+                                  <input type="text" name="orderSerial" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.orderSerial"  >
+                                      <div class="form-control-focus"> </div>
+                                      <span class="help-block">请输入关联采购单号</span>
+                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.orderSerial}} </p>
+                                  </div>
+                              </div>
+                          </div>
+                          <!--/span-->
+                      </div>
+                      <div class="row">
+                          <div class="col-md-4">
+                          	<div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3">制单人：</label>
                                   <div class="col-md-9">
                                   <input type="text" name="maker" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.maker"  >
@@ -219,13 +236,15 @@
                           <!--/span-->
                           <div class="col-md-4">
                               <div class="form-group form-md-line-input">
-                                  <label class="control-label col-md-3">审批人：</label>
+                                  <label class="control-label col-md-3">下单日期：</label>
                                   <div class="col-md-9">
-                                  <input type="text"  class="form-control" ng-hide="saleOrderInput"  >
+                                  <input type="text" name="orderDate" class="form-control form-control-inline input-medium date-picker" 
+                                      data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="saleOrderInput" ng-model="saleOrder.orderDate"  >
                                       <div class="form-control-focus"> </div>
-                                      <span class="help-block">请输入审批人</span>
-                                      <p class="form-control-static" ng-show="saleOrderShow"> </p>
+                                      <span class="help-block">请选择下单日期</span>
+                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.orderDate}} </p>
                                   </div>
+                                  
                               </div>
                           </div>
                           <!--/span-->
