@@ -722,6 +722,106 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        		}]
 		        	}	        
 		    })   
+		    
+		    .state('addDelivery', {
+            url: "/addDelivery",
+            templateUrl: "rest/page/addDelivery",
+            data: {pageTitle: '新增发货'},
+            controller: "DeliveryController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/pageHandle.js',
+	        	'assets/apps/service/DeliveryService.js',
+				'assets/apps/controllers/DeliveryController.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        
+        // 新增发货
+        .state('delivery', {
+            url: "/delivery",
+            templateUrl: "rest/page/delivery",
+            data: {pageTitle: '发货列表'},
+            controller: "DeliveryController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/pageHandle.js',
+	        	'assets/apps/service/DeliveryService.js',
+				'assets/apps/controllers/DeliveryController.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        
+        .state('viewDelivery', {
+        	params:{data:null},
+            url: "/viewDelivery:serialNum",
+            templateUrl: "rest/delivery/viewDelivery",
+            data: {pageTitle: '查看发货'},
+            controller: "DeliveryController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [                             
+			'assets/global/plugins/datatables/datatables.min.css',
+			'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+			'assets/global/plugins/datatables/datatables.all.min.js',
+			'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+			'assets/apps/scripts/pageHandle.js',
+			'assets/apps/service/DeliveryService.js',
+			'assets/apps/controllers/DeliveryController.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        
+        .state('editDeliveryPage', {
+        	params:{data:null},
+            url: "/editDeliveryPage:serialNumEdit",
+            templateUrl: "rest/delivery/editDeliveryPage",
+            data: {pageTitle: '编辑发货'},
+            controller: "DeliveryController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [                             
+			'assets/global/plugins/datatables/datatables.min.css',
+			'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+			'assets/global/plugins/datatables/datatables.all.min.js',
+			'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+			'assets/apps/scripts/pageHandle.js',
+			'assets/apps/service/DeliveryService.js',
+			'assets/apps/controllers/DeliveryController.js'
+                        ]
+                    });
+                }]
+            }
+        })
+
 }]);
 
 
