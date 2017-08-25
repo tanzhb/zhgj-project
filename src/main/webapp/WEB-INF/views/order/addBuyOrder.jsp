@@ -11,7 +11,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a ui-sref="saleOrder">销售订单</a>
+            <a ui-sref="buyOrder">采购订单</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
@@ -20,7 +20,7 @@
     </ul>
     <div class="page-toolbar">
           <div class="btn-group pull-right">
-              <button type="button" class="btn btn-fit-height grey-salt dropdown-toggle" onclick="printdiv('saleOrderPrint')"> 
+              <button type="button" class="btn btn-fit-height grey-salt dropdown-toggle" onclick="printdiv('buyOrderPrint')"> 
               	<i class="fa fa-print"></i>
                   		打印
               </button>
@@ -28,7 +28,7 @@
           </div>
       </div>
 </div>
-<div class="row" id="saleOrderPrint">
+<div class="row" id="buyOrderPrint">
     <div class="col-md-12">
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
         <div class="portlet bordered">
@@ -37,11 +37,11 @@
                         <div class="portlet-title">
                             <div class="caption">订单信息</div>
                             <div class="tools" id="noprintdiv">
-                            	<button type="submit" ng-click="save()" ng-hide="saleOrderInput" class="btn blue  btn-outline  btn-sm">
+                            	<button type="submit" ng-click="save()" ng-hide="buyOrderInput" class="btn blue  btn-outline  btn-sm">
                                		<i class="fa fa-save"></i> 保存 </button>
-                               <button ng-click="cancel()" type="button" ng-hide="saleOrderInput" class="btn red  btn-outline  btn-sm">
+                               <button ng-click="cancel()" type="button" ng-hide="buyOrderInput" class="btn red  btn-outline  btn-sm">
                                		<i class="fa fa-undo"></i> 取消 </button>
-                               <button ng-click="edit()" type="button" ng-show="saleOrderShow&&noShow" class="btn blue  btn-outline  btn-sm">
+                               <button ng-click="edit()" type="button" ng-show="buyOrderShow&&noShow" class="btn blue  btn-outline  btn-sm">
                                		<i class="fa fa-edit"></i> 编辑 </button>
                                 <a href="javascript：;" class="collapse"> </a>
                              </div>
@@ -55,12 +55,12 @@
                       <div class="row">
                           <div class="col-md-4">
                               <div class="form-group form-md-line-input">
-                                  <label class="control-label col-md-3"><span class="required" aria-required="true"> * </span>销售订单号：</label>
+                                  <label class="control-label col-md-3"><span class="required" aria-required="true"> * </span>采购订单号：</label>
                                   <div class="col-md-9">
-                                  <input type="text" name="orderNum" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.orderNum"  >
+                                  <input type="text" name="orderNum" class="form-control" ng-hide="buyOrderInput" ng-model="buyOrder.orderNum"  >
                                       <div class="form-control-focus"> </div>
                                       <span class="help-block">请输入销售订单号</span>
-                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.orderNum}} </p>
+                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.orderNum}} </p>
                                   </div>
                                   
                               </div>
@@ -84,7 +84,7 @@
                               <div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3"><span class="required" aria-required="true"> * </span>销售类型：</label>
                                   <div class="col-md-9">
-                                  		<select class="form-control" id="orderType"  ng-hide="saleOrderInput" name="orderType"  ng-model="saleOrder.orderType" >
+                                  		<select class="form-control" id="orderType"  ng-hide="buyOrderInput" name="orderType"  ng-model="buyOrder.orderType" >
                                             <option value=""></option>
                                            	<option value="标准销售" >标准销售</option>
                                              <option value="委托销售" >委托销售</option>
@@ -92,7 +92,7 @@
                                         </select>
                                         <div class="form-control-focus"> </div>
                               			<span class="help-block">请选择销售类型</span>
-                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.orderType}} </p>
+                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.orderType}} </p>
                                   </div>
                               </div>
                           </div>
@@ -104,10 +104,10 @@
                               <div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3"><span class="required" aria-required="true"> * </span>采购方：</label>
                                   <div class="col-md-9">
-                                  <input type="text" name="buyComId" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.buyComId"  >
+                                  <input type="text" name="buyComId" class="form-control" ng-hide="buyOrderInput" ng-model="buyOrder.buyComId"  >
                                       <div class="form-control-focus"> </div>
                                       <span class="help-block">请选择采购商</span>
-                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.buyComId}} </p>
+                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.buyComId}} </p>
                                   </div>
                                   
                               </div>
@@ -117,10 +117,10 @@
                           	<div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3">销售方：</label>
                                   <div class="col-md-9">
-                                  <input type="text" name="seller" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.seller"  >
+                                  <input type="text" name="seller" class="form-control" ng-hide="buyOrderInput" ng-model="buyOrder.seller"  >
                                       <div class="form-control-focus"> </div>
                                       <span class="help-block">请输入销售方</span>
-                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.seller}} </p>
+                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.seller}} </p>
                                   </div>
                               </div>
                           </div>
@@ -129,10 +129,10 @@
                           	<div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3">委托方：</label>
                                   <div class="col-md-9">
-                                  <input type="text" name="entrustParty" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.entrustParty"  >
+                                  <input type="text" name="entrustParty" class="form-control" ng-hide="buyOrderInput" ng-model="buyOrder.entrustParty"  >
                                       <div class="form-control-focus"> </div>
                                       <span class="help-block">请输入委托方</span>
-                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.entrustParty}} </p>
+                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.entrustParty}} </p>
                                   </div>
                               </div>
                           </div>
@@ -144,14 +144,14 @@
                               <div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3"><span class="required" aria-required="true"> * </span>服务模式：</label>
                                   <div class="col-md-9">
-                                  		<select class="form-control" id="serviceModel"  ng-hide="saleOrderInput" name="serviceModel"  ng-model="saleOrder.serviceModel" >
+                                  		<select class="form-control" id="serviceModel"  ng-hide="buyOrderInput" name="serviceModel"  ng-model="buyOrder.serviceModel" >
                                             <option value="无">无</option>
                                            	<option value="仓储服务" >仓储服务</option>
                                              <option value="仓储+垫资服务" >仓储+垫资服务</option>
                                         </select>
                                         <div class="form-control-focus"> </div>
                               			<span class="help-block">请选择服务模式</span>
-                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.serviceModel}} </p>
+                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.serviceModel}} </p>
                                   </div>
                                   
                               </div>
@@ -161,7 +161,7 @@
                               <div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3"><span class="required" aria-required="true"> * </span>结算方式：</label>
                                   <div class="col-md-9">
-                                  		<select class="form-control" id="settlementClause"  ng-hide="saleOrderInput" name="settlementClause"  ng-model="saleOrder.settlementClause" >
+                                  		<select class="form-control" id="settlementClause"  ng-hide="buyOrderInput" name="settlementClause"  ng-model="buyOrder.settlementClause" >
                                             <option value=""></option>
                                            	<option value="进销差" >进销差</option>
                                              <option value="服务费" >服务费</option>
@@ -170,7 +170,7 @@
                                         </select>
                                         <div class="form-control-focus"> </div>
                               			<span class="help-block">请选择结算条款</span>
-                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.settlementClause}} </p>
+                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.settlementClause}} </p>
                                   </div>
                                   
                               </div>
@@ -180,14 +180,14 @@
                               <div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3"><span class="required" aria-required="true"> * </span>提货方式：</label>
                                   <div class="col-md-9">
-                                  		<select class="form-control" id="deliveryMode"  ng-hide="saleOrderInput" name="deliveryMode"  ng-model="saleOrder.deliveryMode" >
+                                  		<select class="form-control" id="deliveryMode"  ng-hide="buyOrderInput" name="deliveryMode"  ng-model="buyOrder.deliveryMode" >
                                             <option value=""></option>
                                            	<option value="仓库自提" >仓库自提</option>
                                              <option value="物料配送" >物料配送</option>
                                         </select>
                                         <div class="form-control-focus"> </div>
                               			<span class="help-block">请选择提货方式</span>
-                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.deliveryMode}} </p>
+                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.deliveryMode}} </p>
                                   </div>
                               </div>
                           </div>
@@ -198,14 +198,14 @@
                               <div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3"><span class="required" aria-required="true"> * </span>税率：</label>
                                   <div class="col-md-9">
-                                  	<select class="form-control" id="rate"  ng-hide="saleOrderInput" name="rate"  ng-model="saleOrder.rate" >
+                                  	<select class="form-control" id="rate"  ng-hide="buyOrderInput" name="rate"  ng-model="buyOrder.rate" >
                                            	<option value=""></option>
                                            	<option value="17" >17%</option>
                                              <option value="6" >6%</option>
                                         </select>
                                       <div class="form-control-focus"> </div>
                                       <span class="help-block">请选择入税率</span>
-                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.rate}}% </p>
+                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.rate}}% </p>
                                   </div>
                               </div>
                           </div>
@@ -214,14 +214,14 @@
                           	<div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3"><span class="required" aria-required="true"> * </span>币种：</label>
                                   <div class="col-md-9">
-                                  		<select class="form-control" id="currency"  ng-hide="saleOrderInput" name="currency"  ng-model="saleOrder.currency" >
+                                  		<select class="form-control" id="currency"  ng-hide="buyOrderInput" name="currency"  ng-model="buyOrder.currency" >
                                            	<option value=""></option>
                                            	<option value="人民币" >人民币</option>
                                              <option value="美元" >美元</option>
                                         </select>
                                       <div class="form-control-focus"> </div>
                                       <span class="help-block">请选择币种</span>
-                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.currency}} </p>
+                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.currency}} </p>
                                   </div>
                               </div>
                           </div>
@@ -230,10 +230,10 @@
                               <div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3">结算汇率：</label>
                                   <div class="col-md-9">
-                                        <input type="text" name="exchangeRate" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.exchangeRate"  >
+                                        <input type="text" name="exchangeRate" class="form-control" ng-hide="buyOrderInput" ng-model="buyOrder.exchangeRate"  >
                                         <div class="form-control-focus"> </div>
                               			<span class="help-block">请输入结算汇率</span>
-                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.exchangeRate}} </p>
+                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.exchangeRate}} </p>
                                   </div>
                               </div>
                           </div>
@@ -244,10 +244,10 @@
                           	<div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3">关联需求计划单号：</label>
                                   <div class="col-md-9">
-                                  <input type="text"  name="demandPlanSerial" class="form-control" ng-hide="saleOrderInput"  ng-model="saleOrder.demandPlanSerial"  >
+                                  <input type="text"  name="demandPlanSerial" class="form-control" ng-hide="buyOrderInput"  ng-model="buyOrder.demandPlanSerial"  >
                                       <div class="form-control-focus"> </div>
                                       <span class="help-block">请选择需求计划单号</span>
-                                      <p class="form-control-static" ng-show="saleOrderShow">{{saleOrder.demandPlanSerial}} </p>
+                                      <p class="form-control-static" ng-show="buyOrderShow">{{buyOrder.demandPlanSerial}} </p>
                                   </div>
                                   
                               </div>
@@ -257,10 +257,10 @@
                               <div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3">关联销售申请单号：</label>
                                   <div class="col-md-9">
-                                  <input type="text" name="saleApplySerial" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.saleApplySerial"  >
+                                  <input type="text" name="saleApplySerial" class="form-control" ng-hide="buyOrderInput" ng-model="buyOrder.saleApplySerial"  >
                                       <div class="form-control-focus"> </div>
                                       <span class="help-block">请输入关联销售申请单号</span>
-                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.saleApplySerial}} </p>
+                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.saleApplySerial}} </p>
                                   </div>
                               </div>
                           </div>
@@ -269,10 +269,10 @@
                               <div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3">关联采购单号：</label>
                                   <div class="col-md-9">
-                                  <input type="text" name="orderSerial" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.orderSerial"  >
+                                  <input type="text" name="orderSerial" class="form-control" ng-hide="buyOrderInput" ng-model="buyOrder.orderSerial"  >
                                       <div class="form-control-focus"> </div>
                                       <span class="help-block">请输入关联采购单号</span>
-                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.orderSerial}} </p>
+                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.orderSerial}} </p>
                                   </div>
                               </div>
                           </div>
@@ -283,10 +283,10 @@
                           	<div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3">制单人：</label>
                                   <div class="col-md-9">
-                                  <input type="text" name="maker" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.maker"  >
+                                  <input type="text" name="maker" class="form-control" ng-hide="buyOrderInput" ng-model="buyOrder.maker"  >
                                       <div class="form-control-focus"> </div>
                                       <span class="help-block">请输入制单人</span>
-                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.maker}} </p>
+                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.maker}} </p>
                                   </div>
                               </div>
                           </div>
@@ -296,10 +296,10 @@
                                   <label class="control-label col-md-3">下单日期：</label>
                                   <div class="col-md-9">
                                   <input type="text" name="orderDate" class="form-control form-control-inline input-medium date-picker" 
-                                      data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="saleOrderInput" ng-model="saleOrder.orderDate"  >
+                                      data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="buyOrderInput" ng-model="buyOrder.orderDate"  >
                                       <div class="form-control-focus"> </div>
                                       <span class="help-block">请选择下单日期</span>
-                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.orderDate}} </p>
+                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.orderDate}} </p>
                                   </div>
                                   
                               </div>
@@ -628,26 +628,26 @@
                                       		<p class="form-control-static" > {{_orderMateriel.materiel.unitPrice}} </p>
 			                          </td>
 			                          <td>  
-                                      		<p class="form-control-static" > {{saleOrder.currency}} </p>
+                                      		<p class="form-control-static" > {{buyOrder.currency}} </p>
 			                          </td>
 			                          <td>  
-                                      		<p class="form-control-static" > {{saleOrder.rate}}% </p>
+                                      		<p class="form-control-static" > {{buyOrder.rate}}% </p>
 			                          </td>
 			                          <td>  
 			                          		<input type="text"  name="orderUnitPrice{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].orderUnitPrice"  >
                                       		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.orderUnitPrice}} </p>
 			                          </td>
 			                          <td>  
-                                      		<p class="form-control-static"> {{_orderMateriel.orderUnitPrice?_orderMateriel.orderUnitPrice*saleOrder.rate/100:0}} </p>
+                                      		<p class="form-control-static"> {{_orderMateriel.orderUnitPrice?_orderMateriel.orderUnitPrice*buyOrder.rate/100:0}} </p>
 			                          </td>
 			                          <td>  
                                       		<p class="form-control-static" > {{_orderMateriel.orderUnitPrice&&_orderMateriel.amount?_orderMateriel.orderUnitPrice*_orderMateriel.amount:0}} </p>
 			                          </td>
 			                          <td>  
-                                      		<p class="form-control-static"> {{_orderMateriel.orderUnitPrice&&_orderMateriel.amount?_orderMateriel.orderUnitPrice*_orderMateriel.amount*saleOrder.rate/100:0}} </p>
+                                      		<p class="form-control-static"> {{_orderMateriel.orderUnitPrice&&_orderMateriel.amount?_orderMateriel.orderUnitPrice*_orderMateriel.amount*buyOrder.rate/100:0}} </p>
 			                          </td>
 			                          <td>  
-                                      		<p class="form-control-static"> {{_orderMateriel.orderUnitPrice&&_orderMateriel.amount?(_orderMateriel.orderUnitPrice*_orderMateriel.amount+_orderMateriel.orderUnitPrice*100*_orderMateriel.amount*saleOrder.rate/10000):0}} </p>
+                                      		<p class="form-control-static"> {{_orderMateriel.orderUnitPrice&&_orderMateriel.amount?(_orderMateriel.orderUnitPrice*_orderMateriel.amount+_orderMateriel.orderUnitPrice*100*_orderMateriel.amount*buyOrder.rate/10000):0}} </p>
 			                          </td>
 			                          <td>  
 			                          		<input type="text"  name="deliveryDate{{$index}}" class="form-control form-control-inline input-medium date-picker" 
@@ -1238,10 +1238,10 @@
 	                          		<div class="form-group form-md-line-input">
 		                              	<label class="control-label col-md-3">备注：</label>
 		                                <div class="col-md-9">
-		                                  <input type="text" name="remark" ng-hide="orderStatusInput" class="form-control"  ng-model="saleOrder.remark"  >
+		                                  <input type="text" name="remark" ng-hide="orderStatusInput" class="form-control"  ng-model="buyOrder.remark"  >
 	                                      <div class="form-control-focus"> </div>
 	                                      <span class="help-block">请输入备注</span>
-	                                      <p class="form-control-static" ng-show="orderStatusShow"> {{saleOrder.remark}} </p>
+	                                      <p class="form-control-static" ng-show="orderStatusShow"> {{buyOrder.remark}} </p>
 		                               	</div>
 	                               </div>
 	                          </div>

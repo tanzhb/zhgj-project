@@ -12,11 +12,11 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a ui-sref="saleOrder">销售管理</a>
+            <a ui-sref="buyOrder">采购管理</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a ui-sref="saleOrder">销售订单</a>
+            <a ui-sref="buyOrder">采购订单</a>
         </li>
     </ul>
 </div>
@@ -26,18 +26,18 @@
 	        <div class="portlet box red">
 	            <div class="portlet-title">
 				<div class="caption">
-					<i class="fa fa-globe"></i>销售订单
+					<i class="fa fa-globe"></i>采购订单
 				</div>
 				<div class="actions">
-					<a href="javascript:;" ui-sref="addSaleOrder"
+					<a href="javascript:;" ui-sref="addBuyOrder"
 						 class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-plus"></i> 添加
 					</a> 
-					<a href="javascript:;" ng-click="editSaleOrder()"
+					<a href="javascript:;" ng-click="editBuyOrder()"
 						 class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-edit"></i> 修改
 					</a>
-					<a href="javascript:;" ng-click="deleteSaleOrder()"
+					<a href="javascript:;" ng-click="deleteBuyOrder()"
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-minus"></i> 删除
 					</a>
@@ -52,7 +52,7 @@
 								class="tool-action" data-toggle="modal" data-target="#import"> <i class="fa fa-upload"></i> 导入
 							</a></li> 
 							<li><a href="javascript:;" data-action="1"
-								class="tool-action" ng-click="exportSaleOrder()"> <i class="fa fa-file-excel-o"></i> 导出
+								class="tool-action" ng-click="exportBuyOrder()"> <i class="fa fa-file-excel-o"></i> 导出
 							</a></li>
 						</ul>
 					</div>
@@ -63,9 +63,9 @@
 	                    <thead>
 	                        <tr>
 	                            <th style="text-align: center"><input name="select_all" id="example-select-all" type="checkbox"/></th>
-	                            <th> 销售订单号 </th>
+	                            <th> 采购订单号 </th>
 	                            <th> 采购方 </th>
-	                            <th> 销售商品 </th>
+	                            <th> 采购商品 </th>
 	                            <th> 金额 </th>
 	                            <th> 配送 </th>
 	                            <th> 服务模式 </th>
@@ -85,7 +85,7 @@
 
  
  <!-- 删除订单modal 开始 -->
-	<div id="delSaleOrderModal" class="modal fade" tabindex="-1"
+	<div id="delBuyOrderModal" class="modal fade" tabindex="-1"
 		data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog">
 			<div class="modal-content">
