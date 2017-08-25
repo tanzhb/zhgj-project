@@ -351,7 +351,7 @@
 								value="1" id="example-select-out-all" type="checkbox" /></th>
 							<th>检验编号 </th>
                             <th> 发货单号</th>
-                            <th>采购订单号</th>
+                            <th>销售订单号</th>
                             <th>物料</th>
                             <th>合格数量 </th>
                             <th> 不合格数量</th>

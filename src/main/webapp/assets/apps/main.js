@@ -701,8 +701,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        		}]
 	        	}	        
 	        }).state('stockInOutCheckView', {//出入库检验查看
-		        	url: "/stockInOutCheckView?:stockInOutCheckSerialNum",
-		        	templateUrl: "rest/stockInOut/stockInOutCheckView",
+		        	url: "/stockInOutCheckView?:inOrOut",
+		        	templateUrl: "rest/stockInOut/viewStockInOutCheck",
 		        	data: {pageTitle: '出入库检验详情'},
 		        	reload:true, 
 		        	controller: "StockInOutController",

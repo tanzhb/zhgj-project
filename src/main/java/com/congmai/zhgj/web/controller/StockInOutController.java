@@ -64,7 +64,16 @@ public class StockInOutController {
     public String addOrEditCheckInOutInfo( ) {
         return "stockInOutCheck/addOrEditStockInOutCheckInfo";
     }
-    
+    /**
+     * 出入库详情展示
+     * 
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/viewStockInOutCheck")
+    public String viewStockInOutCheck(HttpServletRequest request) {
+        return "stockInOutCheck/viewStockInOutCheckDetailInfo";
+    }
     /**
      * 保存出入库检验信息
      * 
@@ -140,7 +149,7 @@ public class StockInOutController {
     	Map<String, Object> map = new HashMap<String, Object>();
     	StockInOutCheck stockInOutCheck=stockInOutCheckService.selectById(serialNum);
     	if(stockInOutCheck!=null){
-    	
+    	map.put("stockInOutCheck",stockInOutCheck);
     }
     	
     	return new ResponseEntity<Map>(map, HttpStatus.OK);

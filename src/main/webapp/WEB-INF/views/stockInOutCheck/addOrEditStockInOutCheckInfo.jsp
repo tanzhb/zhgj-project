@@ -41,12 +41,14 @@
         <div class="portlet bordered">
             <div class="portlet-body">
 				<div class="portlet light ">
-                        <div class="portlet-title">
-                            <div class="caption"><span  ng-if="inOrOut=='in'"  >入库检验</span><span   ng-if="inOrOut=='out'" >出库检验</span></div>
+                        <div class="portlet-title"><!--  ng-if="inOrOut.indexOf('in')>-1"   ng-if="inOrOut.indexOf('out')>-1"  -->
+                            <div class="caption"><span ng-if="inOrOut.indexOf('in')>-1" >入库检验</span><span  ng-if="inOrOut.indexOf('out')>-1">出库检验</span></div>    
                             <div class="actions">
                                 <button  ng-show="stockInOutCheckView"    class="btn blue  btn-outline  btn-sm " ng-click="editStockInOutCheck()">
                                             <i class="fa fa-edit"></i> 编辑 </button>
-                                <button   ng-show="stockInOutCheckEdit"   class="btn red  btn-outline  btn-sm " ng-click="cancelEditStockInOutCheck()">
+                                <button   ng-hide="stockInOutCheckEdit"    ng-if="inOrOut.length>3"   class="btn red  btn-outline  btn-sm " ng-click="cancelEditStockInOutCheck()">
+                                            <i class="fa fa-undo"></i> 取消 </button>
+                                            <button   ng-hide="stockInOutCheckEdit"    ng-if="inOrOut.length<=3"   class="btn blue  btn-outline  btn-sm " ui-sref="stockInOutCheck">
                                             <i class="fa fa-undo"></i> 取消 </button>
                                 <button  ng-hide="stockInOutCheckAdd"   type="submit"   class="btn blue  btn-outline  btn-sm "   ng-click="saveStockInOutCheck()">
                                             <i class="fa fa-save"></i> 保存 </button>
@@ -73,16 +75,16 @@
 										<input type="hidden"     id="takeDeliverSerial" ng-model="stockInOutCheck.takeDeliverSerial"  />
                                                            <div class="col-md-4">
                                                                 <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for=""><span class="required"> * </span> <span  ng-if="inOrOut=='in'"  >收货单号</span><span   ng-if="inOrOut=='out'" >发货单号</span> :</label>
+                                                    <label class="col-md-4 control-label" for=""><span class="required"> * </span> <span  ng-if="inOrOut.indexOf('in')>-1"  >收货单号</span><span   ng-if="inOrOut.indexOf('out')>-1" >发货单号</span> :</label>
                                                     <div class="col-md-6">
-                                                     <input type="text" class="form-control"   id="takeDeliverNum" name ="takeDeliverNum"  readonly    ng-if="inOrOut=='in'"  ng-hide="stockInOutCheckAdd"   readonly="readonly"
+                                                     <input type="text" class="form-control"   id="takeDeliverNum" name ="takeDeliverNum"  readonly    ng-if="inOrOut.indexOf('in')>-1"  ng-hide="stockInOutCheckAdd"   readonly="readonly"
 												ng-model="stockInOutCheck.takeDeliverNum" /> 
-												 <input type="text" class="form-control"   id="deliverNum" name ="deliverNum"  readonly      ng-if="inOrOut=='out'"  ng-hide="stockInOutCheckAdd"   readonly="readonly"
+												 <input type="text" class="form-control"   id="deliverNum" name ="deliverNum"  readonly      ng-if="inOrOut.indexOf('out')>-1"  ng-hide="stockInOutCheckAdd"   readonly="readonly"
 												ng-model="stockInOutCheck.deliverNum" />
 												<div class="form-control-focus"> </div>
 												 
-                                                                        <p class="control-label left" ng-show="stockInOutCheckView"   ng-if="inOrOut=='out'"  >{{stockInOutCheck.deliverNum}}</p> 
-                                                                         <p class="control-label left" ng-show="stockInOutCheckView"  ng-if="inOrOut=='in'"  >{{stockInOutCheck.takeDeliverNum}}</p> 
+                                                                        <p class="control-label left" ng-show="stockInOutCheckView"   ng-if="inOrOut.indexOf('out')>-1"  >{{stockInOutCheck.deliverNum}}</p> 
+                                                                         <p class="control-label left" ng-show="stockInOutCheckView"  ng-if="inOrOut.indexOf('in')>-1"  >{{stockInOutCheck.takeDeliverNum}}</p> 
                                                                     </div>
                                                                     <div class="col-md-1"><span class="input-inline-btn"  ng-hide="stockInOutCheckAdd"  >
                                                             <button class="btn default" type="button"   ng-click="selectDeliverInfo()" data-target="#basicMaterielInfo" data-toggle="modal" >
@@ -93,15 +95,15 @@
                                                             </div> 
                                                             <div class="col-md-4">
                                                                 <div class="form-group form-md-line-input">
-                                                                <label class="col-md-4 control-label" for="materielName">  <span  ng-if="inOrOut=='in'"  > 采购订单号</span><span   ng-if="inOrOut=='out'" > 销售订单号</span> :</label>
+                                                                <label class="col-md-4 control-label" for="materielName">  <span  ng-if="inOrOut.indexOf('in')>-1"  > 采购订单号</span><span   ng-if="inOrOut.indexOf('out')>-1" > 销售订单号</span> :</label>
                                                                     <div class="col-md-8">
-                                                                       <input type="text" class="form-control" placeholder=""  id="relationSaleNum"     ng-if="inOrOut=='out'"  name ="relationSaleNum"  ng-hide="stockInOutCheckAdd"   readonly
+                                                                       <input type="text" class="form-control" placeholder=""  id="relationSaleNum"     ng-if="inOrOut.indexOf('out')>-1"  name ="relationSaleNum"  ng-hide="stockInOutCheckAdd"   readonly
 												ng-model="stockInOutCheck.relationSaleNum" > 
-												 <input type="text" class="form-control" placeholder=""  id="relationBuyNum" name ="relationBuyNum"   ng-if="inOrOut=='in'"  ng-hide="stockInOutCheckAdd"   readonly
+												 <input type="text" class="form-control" placeholder=""  id="relationBuyNum" name ="relationBuyNum"   ng-if="inOrOut.indexOf('in')>-1"  ng-hide="stockInOutCheckAdd"   readonly
 												ng-model="stockInOutCheck.relationBuyNum" > 
                                                                        <div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="stockInOutCheckView"  ng-if="inOrOut=='out'" >{{stockInOutCheck.relationSaleNum}}</p> 
-                                                                        <p class="control-label left" ng-show="stockInOutCheckView"  ng-if="inOrOut=='in'" >{{stockInOutCheck.relationBuyNum}}</p> 
+                                                                        <p class="control-label left" ng-show="stockInOutCheckView"  ng-if="inOrOut.indexOf('out')>-1" >{{stockInOutCheck.relationSaleNum}}</p> 
+                                                                        <p class="control-label left" ng-show="stockInOutCheckView"  ng-if="inOrOut.indexOf('in')>-1" >{{stockInOutCheck.relationBuyNum}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>  
@@ -110,7 +112,7 @@
                                                             <!--/span-->
                                                             <div class="col-md-4">
                                                             <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="stockCategory"><span  ng-if="inOrOut=='in'"  >供应商</span><span   ng-if="inOrOut=='out'" >采购商</span> :</label>
+                                                    <label class="col-md-4 control-label" for="stockCategory"><span  ng-if="inOrOut.indexOf('in')>-1"  >供应商</span><span   ng-if="inOrOut.indexOf('out')>-1" >采购商</span> :</label>
                                                     <div class="col-md-8">
                                                                     <input type="text" class="form-control"   id="comName" name ="comName"  ng-hide="stockInOutCheckAdd"  readonly="readonly"
 												ng-model="stockInOutCheck.comName" > 
@@ -172,12 +174,13 @@
                                                             </div>
                                                             <div class="col-md-4">
                                                              <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="status"> <!-- <span class="required"> * </span> -->状态:</label>
+                                                    <label class="col-md-4 control-label" for="status">  <span  ng-show="stockInOutCheckView" > 状态:</span> </label>
                                                     <div class="col-md-8">
-                                                                        <input type="text" class="form-control"   id="status" name ="status"  ng-hide="stockInOutCheckAdd"  
-												ng-model="stockInOutCheck.status" > 
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="stockInOutCheckView">{{stockInOutCheck.status}}</p> 
+												 					<span class="label label-sm label-success"  ng-if="stockInOutCheck.status==0" ng-show="stockInOutCheckView" >待检验</span>
+                                                                    <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==1"  ng-show="stockInOutCheckView" >待审批</span>
+                                                                    <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==2"  ng-show="stockInOutCheckView" >已检验</span>
+                                                                       
                                                                     </div>
                                                                 </div>
                                                             </div>
