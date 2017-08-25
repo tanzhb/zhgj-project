@@ -1,15 +1,9 @@
 package com.congmai.zhgj.web.controller;
 
-import java.io.File;  
-import java.io.IOException;  
-
-
-
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,23 +12,19 @@ import java.util.UUID;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
-import org.apache.commons.io.FileUtils;  
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
-import org.springframework.context.annotation.Scope;  
-import org.springframework.http.HttpHeaders;  
-import org.springframework.http.HttpStatus;  
-import org.springframework.http.MediaType;  
-import org.springframework.http.ResponseEntity;  
-import org.springframework.stereotype.Component;  
+import org.springframework.context.annotation.Scope;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;  
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -44,9 +34,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.alibaba.druid.util.StringUtils;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
-import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
-import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryTransportVO;
@@ -55,7 +44,6 @@ import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
-import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.DeliveryService;
@@ -93,10 +81,15 @@ public class DeliveryController {
 	@Resource
     private WarehouseService  warehouseService;
 	
+	/**
+	 * 订单物料service
+	 */
 	@Resource
     private OrderMaterielService orderMaterielService;
 	
-	
+	/**
+	 * 发货service
+	 */
 	@Resource
     private DeliveryService deliveryService;
 
@@ -154,8 +147,7 @@ public class DeliveryController {
 
 
 	/**
-	 * 保存用户合同
-	 * @param contractVO（合同对象）
+	 * 确认发货
 	 * @param request（http 请求对象）
 	 * @param ucBuilder
 	 * @return 操作结果
@@ -234,7 +226,7 @@ public class DeliveryController {
     
     
     /**
-     * @Description (保存订单物料信息)
+     * @Description (编辑订单物料信息)
      * @param request
      * @return
      */
@@ -326,7 +318,7 @@ public class DeliveryController {
     
     
     /**
-     * 保存基本信息
+     * 编辑基本信息
      * @param delivery
      * @param deliveryTransport
      * @param takeDeliveryVO
