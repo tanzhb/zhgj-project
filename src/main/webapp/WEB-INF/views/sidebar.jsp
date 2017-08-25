@@ -113,7 +113,7 @@
                     </a>
                 </li>
                 <li>
-                    <a ui-sref="profile.dashboard">
+                    <a ui-sref="takeDelivery">
                         <i class="icon-paper-clip"></i> 收货</span>
                     </a>
                 </li>

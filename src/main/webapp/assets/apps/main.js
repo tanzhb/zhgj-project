@@ -581,6 +581,67 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        			});
 		        		}]
 		        	}	        
+		    }) .state('takeDelivery', {
+		    	url: "/takeDelivery",
+		    	templateUrl: "rest/takeDelivery/takeDeliveryManage",
+		    	data: {pageTitle: '收货计划'},
+		    	reload:true, 
+		    	controller: "TakeDeliveryController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [       
+		    				        'assets/global/plugins/datatables/datatables.min.css',                  
+		    				        'assets/global/plugins/datatables/datatables.all.min.js',
+		    				        'assets/apps/controllers/TakeDeliveryController.js',
+		    				        'assets/apps/service/TakeDeliveryService.js',
+		    				        'assets/apps/service/orderService.js',
+		    				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
+		    				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css'
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
+		    }) .state('takeDeliveryAdd', {
+		    	url: "/takeDeliveryAdd?:serialNum",
+		    	templateUrl: "rest/takeDelivery/takeDeliveryAdd",
+		    	data: {pageTitle: '新增收货'},
+		    	reload:true, 
+		    	controller: "TakeDeliveryController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [       
+		    				        'assets/apps/controllers/TakeDeliveryController.js',
+		    				        'assets/apps/service/TakeDeliveryService.js',
+		    				        'assets/apps/service/orderService.js'
+		    				        ]
+		    			});
+		    		}]
+		    	}
+		    }) .state('takeDeliveryView', {
+		    	url: "/takeDeliveryView?:serialNum",
+		    	templateUrl: "rest/takeDelivery/takeDeliveryView",
+		    	data: {pageTitle: '查看收货详情'},
+		    	reload:true, 
+		    	controller: "TakeDeliveryController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [       
+		    				        'assets/apps/controllers/TakeDeliveryController.js',
+		    				        'assets/apps/service/TakeDeliveryService.js',
+		    				        'assets/apps/service/orderService.js'
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
 		    })         	           .state('warehouse', {
 	        url: "/warehouse",
             templateUrl: "rest/warehouse/viewWarehouseList",
@@ -703,7 +764,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        	}	        
 		    })   
 		    .state('stockInOutCheck', {
-	            url: "/stockInOutCheck",
+	            url: "/stockInOutCheck?:inOrOut",
 	            templateUrl:"rest/stockInOut/viewStockInOutCheckList",
 	            data: {pageTitle: '出入库检验'},
 	            controller: "StockInOutController",
@@ -743,6 +804,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        				        'assets/apps/service/StockInOutService.js',
 	        						'assets/apps/controllers/StockInOutController.js',
 	        						 'assets/apps/scripts/pageHandle.js',
+	        						 'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
+	         				        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
 	        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
 	        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css'
 	        				        ]
@@ -750,8 +813,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        		}]
 	        	}	        
 	        }).state('stockInOutCheckView', {//出入库检验查看
-		        	url: "/stockInOutCheckView?:stockInOutCheckSerialNum",
-		        	templateUrl: "rest/stockInOut/stockInOutCheckView",
+		        	url: "/stockInOutCheckView?:inOrOut",
+		        	templateUrl: "rest/stockInOut/viewStockInOutCheck",
 		        	data: {pageTitle: '出入库检验详情'},
 		        	reload:true, 
 		        	controller: "StockInOutController",

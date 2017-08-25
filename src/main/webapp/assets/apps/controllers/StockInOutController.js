@@ -22,14 +22,35 @@ angular
 												// initialize core components
 												 handle = new pageHandle();
 												App.initAjax();
-												if($location.path()=="/addOrEditStockInOutCheck"){
+												if($location.path()=="/addOrEditStockInOutCheck"&&$stateParams.inOrOut!='showOut'){
+													$('.date-picker').datepicker({
+														rtl: App.isRTL(),
+														orientation: "left",
+														autoclose: true,
+														language:"zh-CN"
+										        	})
+										        	debugger;
 													$scope.inOrOut=$stateParams.inOrOut;
+												if($scope.inOrOut.length>3){
+													getStockInOutCheckInfo($stateParams.inOrOut.substring(0,32));
+												}
 										 		}else if($location.path()=="/stockInOutCheckView"){
 										 			debugger;
-										 			getStockDetailInfo($stateParams.stockSerialNum);//查看出入库检验详情页面
+										 			$scope.inOrOut=$stateParams.inOrOut;
+										 			getStockInOutCheckInfo($stateParams.inOrOut.substring(0,32));//查看出入库检验详情页面
 									 		}else{
-										 			loadStockInOutCheckTable('in');//加载入库检验列表
-										 			loadStockInOutCheckTable('out');//加载出库检验列表
+									 			if($stateParams.inOrOut=='showOut'&&$scope.isInit!='1'){
+									 				debugger;
+									 				$("#in").removeClass("active");
+									 				$("#out").addClass("active");
+									 				$scope.isInit='1';
+									 				loadStockInOutCheckTable('out');
+									 				//加载入库检验列表
+									 			}else{
+									 				$("#in").addClass("active");
+									 				$("#out").removeClass("active");
+									 				loadStockInOutCheckTable('in');//加载入库检验列表
+									 			}
 										 		}
 												selectMaterielStock();//选择物料表格初始化
 												// set default layout mode
@@ -111,7 +132,7 @@ angular
 												pageLength : 10,// 每页显示数量
 												processing : true,// loading等待框
 												// serverSide: true,
-												ajax : tableAjaxUrl,// 加载数据中库存表数据
+												ajax : tableAjaxUrl,// 加载数据中检验表数据
 
 												"aoColumns" : [
 													{
@@ -122,15 +143,22 @@ angular
 													},  {
 														mData : 'takeDeliverNum'
 													},{
-														mData : 'orderNum'
+														mData : 'relationBuyNum'
 													}, {
 														mData : 'materialNum'
 													},{
 														mData : 'qualifiedCount'
 													}, {
 														mData : 'unQualifiedCount'
-													}, {
-														mData : 'checkDate'
+													}, { 
+														mData : 'checkDate',
+														mRender:function(data){
+						                            		if(data!=""&&data!=null){
+						                            			return timeStamp2ShortString(data);
+						                            		}else{
+						                            			return "";
+						                            		}
+						                            	}
 													}, {
 														mData : 'checker'
 													},{
@@ -157,7 +185,7 @@ angular
 													'targets' : 1,
 													'render' : function(data,
 															type, row, meta) {
-														return '<a   ng-click="showStockInfo(\''+row.serialNum+'\')">'+data+'</a>';
+														return '<a   ng-click="showStockInOutCheckInfo(\''+row.serialNum+'\',\''+judgeString+'\')">'+data+'</a>';
 														//return data;
 													},"createdCell": function (td, cellData, rowData, row, col) {
 														 $compile(td)($scope);
@@ -168,14 +196,13 @@ angular
 															type, row, meta) {
 														var statusIcon='';//状态
 				 	    								if(row.status==0){
-				 	    									statusIcon = '<span class="label label-sm label-success"  >缺料</span> '
+				 	    									statusIcon = '<span class="label label-sm label-success"  >待检验</span> '
 				 	    								}else if(row.status==1){
-				 	    									statusIcon = '<span class="label label-sm label-success">报警</span> '
+				 	    									statusIcon = '<span class="label label-sm label-success">待审批</span> '
 				 	    								}else if(row.status==2){
-				 	    									statusIcon = '<span class="label label-sm label-success">正常</span> '
+				 	    									statusIcon = '<span class="label label-sm label-success">已检验</span> '
 				 	    								}
 				 	    								return statusIcon ;
-														
 													}
 												}  ],
 
@@ -218,7 +245,7 @@ angular
 														pageLength : 10,// 每页显示数量
 														processing : true,// loading等待框
 														// serverSide: true,
-														ajax : tableAjaxUrl,// 加载数据中库存表数据
+														ajax : tableAjaxUrl,// 加载数据中检验表数据
 
 														"aoColumns" : [
 																{
@@ -229,15 +256,22 @@ angular
 													},  {
 														mData : 'deliverNum'
 													},{
-														mData : 'orderNum'
+														mData : 'relationSaleNum'
 													}, {
 														mData : 'materialNum'
 													},{
 														mData : 'qualifiedCount'
 													}, {
 														mData : 'unQualifiedCount'
-													}, {
-														mData : 'checkDate'
+													},  { 
+														mData : 'checkDate',
+														mRender:function(data){
+						                            		if(data!=""&&data!=null){
+						                            			return timeStamp2ShortString(data);
+						                            		}else{
+						                            			return "";
+						                            		}
+						                            	}
 													}, {
 														mData : 'checker'
 													},{
@@ -264,7 +298,7 @@ angular
 															'targets' : 1,
 															'render' : function(data,
 																	type, row, meta) {
-																return '<a   ng-click="showStockInfo(\''+row.serialNum+'\')">'+data+'</a>';
+																return '<a   ng-click="showStockInOutCheckInfo(\''+row.serialNum+'\',\''+judgeString+'\' )">'+data+'</a>';
 																//return data;
 															},"createdCell": function (td, cellData, rowData, row, col) {
 																 $compile(td)($scope);
@@ -275,14 +309,13 @@ angular
 																	type, row, meta) {
 																var statusIcon='';//状态
 						 	    								if(row.status==0){
-						 	    									statusIcon = '<span class="label label-sm label-success"  >缺料</span> '
+						 	    									statusIcon = '<span class="label label-sm label-success"  >待检验</span> '
 						 	    								}else if(row.status==1){
-						 	    									statusIcon = '<span class="label label-sm label-success">报警</span> '
+						 	    									statusIcon = '<span class="label label-sm label-success">待审批</span> '
 						 	    								}else if(row.status==2){
-						 	    									statusIcon = '<span class="label label-sm label-success">正常</span> '
+						 	    									statusIcon = '<span class="label label-sm label-success">已检验</span> '
 						 	    								}
 						 	    								return statusIcon ;
-																
 															}
 														}  ],
 
@@ -296,7 +329,7 @@ angular
 
 							// 添加checkbox功能***************************************
 							// Handle click on "Select all" control
-							$('#example-select-all').on(
+							$('#example-select-'+judgeString+'-all').on(
 									'click',
 									function() {
 										// Check/uncheck all checkboxes in the
@@ -318,7 +351,7 @@ angular
 												// If checkbox is not checked
 												if (!this.checked) {
 													var el = $(
-															'#example-select-all')
+															'#example-select-'+judgeString+'-all')
 															.get(0);
 													// If "Select all" control
 													// is checked and has
@@ -336,42 +369,57 @@ angular
 							// 添加checkbox功能
 							// ***************************************
 							}
-							// 添加库存开始***************************************
+			
+			$scope.showOut=function(judgeString){
+				 $state.go('stockInOutCheck',{inOrOut:judgeString}); //显示出库检验
+			}
+							// 添加检验开始***************************************
 			$scope.addStockInOutCheck = function(judgeString) {
 				debugger;
 				 $state.go('addOrEditStockInOutCheck',{inOrOut:judgeString}); 
 			}
 						$scope.editStockInOutCheck = function(){
 							debugger;
-							var stock=$scope.stock;
-							$scope.stock=stock;
-							$scope.stockView = false;
-		        			$scope.stockAdd = false;
-		        			$scope.stockEdit = true;
+							var stockInOutCheck=$scope.stockInOutCheck;
+							$scope.stockInOutCheck=stockInOutCheck;
+							$scope.stockInOutCheckView = false;
+		        			$scope.stockInOutCheckAdd = false;
+		        			$scope.stockInOutCheckEdit = false;
 						}
 						$scope.cancelEditStockInOutCheck = function(){
 							debugger;
-							getStockInfo($scope.stock.serialNum);
-							$scope.stockView = true;
-		        			$scope.stockAdd = true;
-		        			$scope.stockEdit = false;
+							getStockInOutCheckInfo($scope.stockInOutCheck.serialNum);
+							$scope.stockInOutCheckView = true;
+		        			$scope.stockInOutCheckAdd = true;
+		        			$scope.stockInOutCheckEdit = true;
 						}	
-								$scope.saveStockInOutCheck= function() {
-									debugger;
-									$scope.stock.materielSerial=$("#materielSerial").val();
-									if($('#stockForm').valid()&&judgeData()){//表单验证通过则执行添加功能
-										StockService
-										.saveStock($scope.stock)
+						
+						function judgeIsExist (){//判断是否已有收货单/发货单相关的出入库检验
+							var serialNum;
+							if($scope.inOrOut=='in'){
+								serialNum=$scope.stockInOutCheck.takeDeliverSerial+"in";
+							}else{
+								serialNum=$scope.stockInOutCheck.deliverSerial+"out";
+							}
+							StockInOutService.judgeIsExistBySerialNum(serialNum)
+							.then(
+									function(data) {debugger;
+										if(data=='1'){
+											if($scope.inOrOut=='in'){
+											toastr.warning("该收货单已建入库检验！");
+											}else{
+												toastr.warning("该发货单已建出库检验！");	
+											}
+											return ;
+										}
+										StockInOutService.saveStockInOutCheck($scope.stockInOutCheck)
 										.then(
 												function(data) {debugger;
-													$('#addStockModal').modal(
-															'hide');// 保存成功后关闭模态框
-													toastr.success("保存库存数据成功！");
-													// $state.go('warehouse',{},{reload:true});  // 重新加载datatables数据
-													$scope.stock = data;
-								        			$scope.stockView = true;
-								        			$scope.stockAdd = true;
-								        			$scope.stockEdit = false;
+													toastr.success("保存检验数据成功！");
+													$scope.stockInOutCheck = data;
+								        			$scope.stockInOutCheckView = true;
+								        			$scope.stockInOutCheckAdd = true;
+								        			$scope.stockInOutCheckEdit = false;
 								        			$(".alert-danger").hide();
 												},
 												function(errResponse) {
@@ -381,11 +429,20 @@ angular
 												}
 										);
 									}
+							);	
+						}
+								$scope.saveStockInOutCheck= function() {
+									debugger;
+									$scope.stockInOutCheck.deliverSerial=$("#deliverSerial").val();
+									$scope.stockInOutCheck.takeDeliverSerial=$("#takeDeliverSerial").val();
+									if($('#stockInOutCheckForm').valid()){//表单验证通过则执行添加功能
+										 judgeIsExist ();
+									}
 							};	
-							// 添加库存结束***************************************
+							// 添加检验结束***************************************
 							
-							// 修改库存开始***************************************							
-							$scope.toEditStockPage = function() {//弹出框修改库存信息
+							// 修改检验开始***************************************							
+							$scope.toEditStockInOutPage = function(judgeString) {//弹出框修改检验信息
 								debugger;
 								var id_count = table.$('input[type="checkbox"]:checked').length;
 								if(id_count==0){
@@ -394,13 +451,13 @@ angular
 									toastr.warning("只能选择一条数据进行编辑");
 								}else{
 									var serialNum = table.$('input[type="checkbox"]:checked').val();
-									$state.go("addOrEditStock",{stockSerialNum:serialNum});
+									$state.go("addOrEditStockInOutCheck",{inOrOut:serialNum+judgeString});
 								}
 							};
-							// 修改库存结束***************************************							
+							// 修改检验结束***************************************							
 
-							// 删除库存开始***************************************							
-							$scope.delStock = function() {
+							// 删除检验开始***************************************							
+							$scope.delStockInOutCheck = function(judString) {
 								debugger;
 								var ids = '';
 								// Iterate over all checkboxes in the table
@@ -421,14 +478,14 @@ angular
 								if (ids == '') {// 未勾选删除数据									
 									toastr.warning("未勾选要删除数据！");
 								} else {
-									$('#delStockModal').modal('show');// 打开确认删除模态框
+									$('#delStock'+judString+'CheckModal').modal('show');// 打开确认删除模态框
 									
-									$scope.confirmDellStock = function() {										
-										StockService
-												.delStocks(ids)
+									$scope.confirmDelStockInOutCheck = function() {										
+										StockInOutService
+												.delStockInOutChecks(ids)
 												.then(
 														function(data) {
-															$('#delStockModal').modal(
+															$('#delStock'+judString+'CheckModal').modal(
 																	'hide');// 删除成功后关闭模态框
 															toastr.success("删除成功！");
 															table.ajax.reload(); // 重新加载datatables数据
@@ -442,13 +499,13 @@ angular
 									}
 								}								
 							};
-							$scope.showStockInfo=function(serialNum){
+							$scope.showStockInOutCheckInfo=function(serialNum,judgeString){
 								debugger;
-								 $state.go('stockView',{stockSerialNum:serialNum},{reload:true}); 
+								 $state.go('stockInOutCheckView',{inOrOut:serialNum+judgeString},{reload:true}); 
 								
 							}
 							  var selectIndex;
-					 	       $scope.selectMateriel = function(index){
+					 	       $scope.selectDeliverInfo = function(index){
 					 	    	  selectIndex = index;
 					 	       }
 						     var selectMaterielTable;
@@ -581,19 +638,24 @@ angular
 		 	        			toastr.warning('请选择一个物料！');return;
 		 	        		}
 		 	    			//为前台五个参数赋值
-		 	    			$("#materielSerial").val($scope.row.serialNum) ;//物料流水
-		 	    			$("#materielName").val($scope.row.materielName);
-		 	    			$("#materielNum").val($scope.row.materielNum);
-		 	    			$("#specifications").val($scope.row.specifications);
-		 	    		/*	$scope.stock.materielName=;//物料名称
-		 	            	$scope.stock.materielNum=;//物料编号
-		 	            	$scope.stock.specifications=;//规格型号
-*/		 	    			$('#basicMaterielInfo').modal('hide');// 删除成功后关闭模态框
+		 	    			if($scope.inOrOut=='in'){
+		 	    				$("#deliverSerial").val('111111');//发货单流水
+			 	            	$("#takeDeliverSerial").val($scope.row.serialNum);//收货单流水
+			 	            	$("#takeDeliverNum").val('td');//收货单号
+			 	            	$("#relationBuyNum").val('b');//采购单号
+		 	    			}else{
+		 	    				$("#deliverSerial").val($scope.row.serialNum);//发货单流水
+			 	            	$("#takeDeliverSerial").val('111111') ;//收货单流水
+			 	           	$("#deliverNum").val('d');//发货单号
+		 	            	$("#relationSaleNum").val('s');//销售单号
+		 	    			}
+		 	    			$("#comName").val('公司');
+		 	            	$('#basicMaterielInfo').modal('hide');// 选择成功后关闭模态框
 		 	    			$(".modal-backdrop").remove();
 		 	    		};
 							// 页面加载完成后调用，验证输入框
 							$scope.$watch('$viewContentLoaded', function() {  
-								var e = $("#stockForm"),
+								var e = $("#stockInOutCheckForm"),
 						        r = $(".alert-danger", e),
 						        i = $(".alert-success", e);
 						        e.validate({
@@ -602,22 +664,22 @@ angular
 						            focusInvalid: !1,
 						            ignore: "",
 						            messages: {
-						            	stockNum:{required:"库存编号不能为空！"},
-						            	materielNum:{required:"未选择物料！"},
-						            	maxStock:{required:"最高库存不能为空！",digits:"请输入正确的数字!"},
-						            	minStock:{required:"最低库存不能为空！",digits:"请输入正确的数字!"},
-						            	manageType:{required:"未选择管理类型！"},
-						            	materielOwner: { required:"未选择物权方！"},
-						            	serviceParty:{required:"未选择服务方！"}
+						            	checkNum:{required:"检验编号不能为空！"},
+						            	takeDeliverNum:{required:"收货单号不能为空！"},
+						            	deliverNum:{required:"发货单号不能为空！"},
+						            	checkParty:{required:"检验方不能为空！"},
+						            	checkDate:{required:"检验日期不能为空！"},
+						            	checker: { required:"检验员不能为空！"},
+						            	contactNum:{required:"联系电话不能为空！",digits:"请输入正确的联系电话, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")}
 						            },
 						            rules: {
-						            	stockNum:{required:true},
-						            	materielNum:{required:true},
-						            	maxStock:{required:true,digits:true},
-						            	minStock:{required:true,digits:true},
-						            	manageType:{required:true},
-						            	materielOwner:{required:true},
-						            	serviceParty:{required:!0,digits:true,}
+						            	checkNum:{required:true},
+						            	takeDeliverNum:{required:true},
+						            	deliverNum:{required:true},
+						            	checkParty:{required:true,digits:true},
+						            	checkDate:{required:true},
+						            	checker:{required:true},
+						            	contactNum:{required:true,digits:true,rangelength:[7,20]}
 						            },
 						            invalidHandler: function(e, t) {
 						                i.hide(),
@@ -643,14 +705,21 @@ angular
 						        })   							}); 
 							
 							
-							 function getStockInfo(serialNum){//查看库位
+							 function getStockInOutCheckInfo(serialNum){//获取出入库检验信息
 						    	   if(!handle.isNull(serialNum)){
 						    		   debugger;
-						    			 var promise =StockService .selectBySerialNum(serialNum);
+						    			 var promise =StockInOutService .selectDetailBySerialNum(serialNum);
 						 	        	promise.then(function(data){
 						 	        		  debugger;
-						 	        			 $scope.stock = data.stock;
-						 	        			 $("#materielSerial").val(data.stock.materielSerial);
+						 	        			 $scope.stockInOutCheck = data.stockInOutCheck;
+						 	        			 $scope.stockInOutCheck.checkDate=timeStamp2ShortString(data.stockInOutCheck.checkDate);
+						 	        			 $scope.materials=null;
+						 	        			 if($stateParams.inOrOut.indexOf("in")>-1){
+						 	        				 $("#takeDeliverSerial").val(data.stockInOutCheck.takeDeliverSerial);
+						 	        			 }else{
+						 	        				 $("#deliverSerial").val(data.stockInOutCheck.deliverSerial);
+						 	        			 }
+						 	        			
 						 	            },function(data){
 						 	               //调用承诺接口reject();
 						 	            });
