@@ -833,18 +833,10 @@
 											<td><span ng-hide="orderMaterielInput{{$index}}">
 													&nbsp;&nbsp;&nbsp;&nbsp; <a
 													ng-click="saveOrderMateriel(_deliveryMateriel,$index)"><i
-														class="fa fa-save"></i></a> &nbsp;&nbsp;&nbsp; <a
+														class="fa fa-save"></i></a> <!-- &nbsp;&nbsp;&nbsp; <a
 													ng-click="cancelOrderMateriel(_orderMateriel,$index)"><i
-														class="fa fa-undo"></i></a>
-											</span> <span ng-show="operation_o{{$index}}">
-													&nbsp;&nbsp;&nbsp;&nbsp; <a
-													ng-show="orderMaterielShow{{$index}}"
-													ng-click="editOrderMateriel(_orderMateriel)"><i
-														class="fa fa-edit"></i></a> &nbsp;&nbsp;&nbsp; <a
-													ng-show="orderMaterielShow{{$index}}"
-													ng-click="deleteOrderMateriel(_orderMateriel)"><i
-														class="fa fa-minus"></i></a>
-											</span></td>
+														class="fa fa-undo"></i></a> -->
+											</span> </td>
 										</tr>
 									</tbody>
 								</table>
