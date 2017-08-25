@@ -4,20 +4,22 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class TakeDelivery {
+public class DeliveryTransport {
     private String serialNum;
 
     private String deliverSerial;
 
-    private String warehouseSerial;
+    private String transportType;
 
-    private Date takeDeliverDate;
+    private String transport;
 
-    private String receiver;
+    private String port;
 
-    private String contactNum;
+    private String shipNumber;
 
-    private String takeDeliverNum;
+    private Date playArrivalDate;
+
+    private Date playWarehouseDate;
 
     private String remark;
 
@@ -30,8 +32,10 @@ public class TakeDelivery {
     private String updater;
 
     private Date updateTime;
-    
-    private Warehouse warehouse;
+
+    private String contact;
+
+    private String contactNum;
 
     public String getSerialNum() {
         return serialNum;
@@ -49,45 +53,54 @@ public class TakeDelivery {
         this.deliverSerial = deliverSerial == null ? null : deliverSerial.trim();
     }
 
-    public String getWarehouseSerial() {
-        return warehouseSerial;
+    public String getTransportType() {
+        return transportType;
     }
 
-    public void setWarehouseSerial(String warehouseSerial) {
-        this.warehouseSerial = warehouseSerial == null ? null : warehouseSerial.trim();
+    public void setTransportType(String transportType) {
+        this.transportType = transportType == null ? null : transportType.trim();
+    }
+
+    public String getTransport() {
+        return transport;
+    }
+
+    public void setTransport(String transport) {
+        this.transport = transport == null ? null : transport.trim();
+    }
+
+    public String getPort() {
+        return port;
+    }
+
+    public void setPort(String port) {
+        this.port = port == null ? null : port.trim();
+    }
+
+    public String getShipNumber() {
+        return shipNumber;
+    }
+
+    public void setShipNumber(String shipNumber) {
+        this.shipNumber = shipNumber == null ? null : shipNumber.trim();
     }
 
     @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
-    public Date getTakeDeliverDate() {
-        return takeDeliverDate;
+    public Date getPlayArrivalDate() {
+        return playArrivalDate;
     }
 
-    public void setTakeDeliverDate(Date takeDeliverDate) {
-        this.takeDeliverDate = takeDeliverDate;
+    public void setPlayArrivalDate(Date playArrivalDate) {
+        this.playArrivalDate = playArrivalDate;
     }
 
-    public String getReceiver() {
-        return receiver;
+    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
+    public Date getPlayWarehouseDate() {
+        return playWarehouseDate;
     }
 
-    public void setReceiver(String receiver) {
-        this.receiver = receiver == null ? null : receiver.trim();
-    }
-
-    public String getContactNum() {
-        return contactNum;
-    }
-
-    public void setContactNum(String contactNum) {
-        this.contactNum = contactNum == null ? null : contactNum.trim();
-    }
-
-    public String getTakeDeliverNum() {
-        return takeDeliverNum;
-    }
-
-    public void setTakeDeliverNum(String takeDeliverNum) {
-        this.takeDeliverNum = takeDeliverNum == null ? null : takeDeliverNum.trim();
+    public void setPlayWarehouseDate(Date playWarehouseDate) {
+        this.playWarehouseDate = playWarehouseDate;
     }
 
     public String getRemark() {
@@ -138,13 +151,19 @@ public class TakeDelivery {
         this.updateTime = updateTime;
     }
 
-	public Warehouse getWarehouse() {
-		return warehouse;
-	}
+    public String getContact() {
+        return contact;
+    }
 
-	public void setWarehouse(Warehouse warehouse) {
-		this.warehouse = warehouse;
-	}
-    
-    
+    public void setContact(String contact) {
+        this.contact = contact == null ? null : contact.trim();
+    }
+
+    public String getContactNum() {
+        return contactNum;
+    }
+
+    public void setContactNum(String contactNum) {
+        this.contactNum = contactNum == null ? null : contactNum.trim();
+    }
 }

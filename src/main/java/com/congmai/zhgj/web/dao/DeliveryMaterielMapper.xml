@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.congmai.zhgj.web.dao.DeliveryMaterielMapper" >
+  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.DeliveryMateriel" >
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="deliverSerial" property="deliverSerial" jdbcType="VARCHAR" />
+    <result column="orderMaterielSerial" property="orderMaterielSerial" jdbcType="VARCHAR" />
+    <result column="batchNum" property="batchNum" jdbcType="VARCHAR" />
+    <result column="manufactureDate" property="manufactureDate" jdbcType="DATE" />
+    <result column="deliverCount" property="deliverCount" jdbcType="VARCHAR" />
+    <result column="deliverRemark" property="deliverRemark" jdbcType="VARCHAR" />
+    <result column="acceptCount" property="acceptCount" jdbcType="VARCHAR" />
+    <result column="refuseCount" property="refuseCount" jdbcType="VARCHAR" />
+    <result column="takeRemark" property="takeRemark" jdbcType="VARCHAR" />
+    <result column="qualifiedCount" property="qualifiedCount" jdbcType="VARCHAR" />
+    <result column="unqualifiedCount" property="unqualifiedCount" jdbcType="VARCHAR" />
+    <result column="checkRemark" property="checkRemark" jdbcType="VARCHAR" />
+    <result column="warehouseSerial" property="warehouseSerial" jdbcType="VARCHAR" />
+    <result column="positionSerial" property="positionSerial" jdbcType="VARCHAR" />
+    <result column="stockCount" property="stockCount" jdbcType="VARCHAR" />
+    <result column="unstockCount" property="unstockCount" jdbcType="VARCHAR" />
+    <result column="stockRemark" property="stockRemark" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    serialNum, deliverSerial, orderMaterielSerial, batchNum, manufactureDate, deliverCount, 
+    deliverRemark, acceptCount, refuseCount, takeRemark, qualifiedCount, unqualifiedCount, 
+    checkRemark, warehouseSerial, positionSerial, stockCount, unstockCount, stockRemark, 
+    remark, delFlg, creator, createTime, updater, updateTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.DeliveryMaterielExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from deliveryMateriel
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from deliveryMateriel
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from deliveryMateriel
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.DeliveryMaterielExample" >
+    delete from deliveryMateriel
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.congmai.zhgj.web.model.DeliveryMateriel" >
+    insert into deliveryMateriel (serialNum, deliverSerial, orderMaterielSerial, 
+      batchNum, manufactureDate, deliverCount, 
+      deliverRemark, acceptCount, refuseCount, 
+      takeRemark, qualifiedCount, unqualifiedCount, 
+      checkRemark, warehouseSerial, positionSerial, 
+      stockCount, unstockCount, stockRemark, 
+      remark, delFlg, creator, 
+      createTime, updater, updateTime
+      )
+    values (#{serialNum,jdbcType=VARCHAR}, #{deliverSerial,jdbcType=VARCHAR}, #{orderMaterielSerial,jdbcType=VARCHAR}, 
+      #{batchNum,jdbcType=VARCHAR}, #{manufactureDate,jdbcType=DATE}, #{deliverCount,jdbcType=VARCHAR}, 
+      #{deliverRemark,jdbcType=VARCHAR}, #{acceptCount,jdbcType=VARCHAR}, #{refuseCount,jdbcType=VARCHAR}, 
+      #{takeRemark,jdbcType=VARCHAR}, #{qualifiedCount,jdbcType=VARCHAR}, #{unqualifiedCount,jdbcType=VARCHAR}, 
+      #{checkRemark,jdbcType=VARCHAR}, #{warehouseSerial,jdbcType=VARCHAR}, #{positionSerial,jdbcType=VARCHAR}, 
+      #{stockCount,jdbcType=VARCHAR}, #{unstockCount,jdbcType=VARCHAR}, #{stockRemark,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.DeliveryMateriel" >
+    insert into deliveryMateriel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        serialNum,
+      </if>
+      <if test="deliverSerial != null" >
+        deliverSerial,
+      </if>
+      <if test="orderMaterielSerial != null" >
+        orderMaterielSerial,
+      </if>
+      <if test="batchNum != null" >
+        batchNum,
+      </if>
+      <if test="manufactureDate != null" >
+        manufactureDate,
+      </if>
+      <if test="deliverCount != null" >
+        deliverCount,
+      </if>
+      <if test="deliverRemark != null" >
+        deliverRemark,
+      </if>
+      <if test="acceptCount != null" >
+        acceptCount,
+      </if>
+      <if test="refuseCount != null" >
+        refuseCount,
+      </if>
+      <if test="takeRemark != null" >
+        takeRemark,
+      </if>
+      <if test="qualifiedCount != null" >
+        qualifiedCount,
+      </if>
+      <if test="unqualifiedCount != null" >
+        unqualifiedCount,
+      </if>
+      <if test="checkRemark != null" >
+        checkRemark,
+      </if>
+      <if test="warehouseSerial != null" >
+        warehouseSerial,
+      </if>
+      <if test="positionSerial != null" >
+        positionSerial,
+      </if>
+      <if test="stockCount != null" >
+        stockCount,
+      </if>
+      <if test="unstockCount != null" >
+        unstockCount,
+      </if>
+      <if test="stockRemark != null" >
+        stockRemark,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="delFlg != null" >
+        delFlg,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="updater != null" >
+        updater,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverSerial != null" >
+        #{deliverSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="orderMaterielSerial != null" >
+        #{orderMaterielSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="batchNum != null" >
+        #{batchNum,jdbcType=VARCHAR},
+      </if>
+      <if test="manufactureDate != null" >
+        #{manufactureDate,jdbcType=DATE},
+      </if>
+      <if test="deliverCount != null" >
+        #{deliverCount,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverRemark != null" >
+        #{deliverRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="acceptCount != null" >
+        #{acceptCount,jdbcType=VARCHAR},
+      </if>
+      <if test="refuseCount != null" >
+        #{refuseCount,jdbcType=VARCHAR},
+      </if>
+      <if test="takeRemark != null" >
+        #{takeRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="qualifiedCount != null" >
+        #{qualifiedCount,jdbcType=VARCHAR},
+      </if>
+      <if test="unqualifiedCount != null" >
+        #{unqualifiedCount,jdbcType=VARCHAR},
+      </if>
+      <if test="checkRemark != null" >
+        #{checkRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseSerial != null" >
+        #{warehouseSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="positionSerial != null" >
+        #{positionSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="stockCount != null" >
+        #{stockCount,jdbcType=VARCHAR},
+      </if>
+      <if test="unstockCount != null" >
+        #{unstockCount,jdbcType=VARCHAR},
+      </if>
+      <if test="stockRemark != null" >
+        #{stockRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.DeliveryMaterielExample" resultType="java.lang.Integer" >
+    select count(*) from deliveryMateriel
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update deliveryMateriel
+    <set >
+      <if test="record.serialNum != null" >
+        serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deliverSerial != null" >
+        deliverSerial = #{record.deliverSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderMaterielSerial != null" >
+        orderMaterielSerial = #{record.orderMaterielSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.batchNum != null" >
+        batchNum = #{record.batchNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.manufactureDate != null" >
+        manufactureDate = #{record.manufactureDate,jdbcType=DATE},
+      </if>
+      <if test="record.deliverCount != null" >
+        deliverCount = #{record.deliverCount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deliverRemark != null" >
+        deliverRemark = #{record.deliverRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.acceptCount != null" >
+        acceptCount = #{record.acceptCount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.refuseCount != null" >
+        refuseCount = #{record.refuseCount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.takeRemark != null" >
+        takeRemark = #{record.takeRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qualifiedCount != null" >
+        qualifiedCount = #{record.qualifiedCount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unqualifiedCount != null" >
+        unqualifiedCount = #{record.unqualifiedCount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.checkRemark != null" >
+        checkRemark = #{record.checkRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.warehouseSerial != null" >
+        warehouseSerial = #{record.warehouseSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.positionSerial != null" >
+        positionSerial = #{record.positionSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stockCount != null" >
+        stockCount = #{record.stockCount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unstockCount != null" >
+        unstockCount = #{record.unstockCount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stockRemark != null" >
+        stockRemark = #{record.stockRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlg != null" >
+        delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creator != null" >
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updater != null" >
+        updater = #{record.updater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update deliveryMateriel
+    set serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      deliverSerial = #{record.deliverSerial,jdbcType=VARCHAR},
+      orderMaterielSerial = #{record.orderMaterielSerial,jdbcType=VARCHAR},
+      batchNum = #{record.batchNum,jdbcType=VARCHAR},
+      manufactureDate = #{record.manufactureDate,jdbcType=DATE},
+      deliverCount = #{record.deliverCount,jdbcType=VARCHAR},
+      deliverRemark = #{record.deliverRemark,jdbcType=VARCHAR},
+      acceptCount = #{record.acceptCount,jdbcType=VARCHAR},
+      refuseCount = #{record.refuseCount,jdbcType=VARCHAR},
+      takeRemark = #{record.takeRemark,jdbcType=VARCHAR},
+      qualifiedCount = #{record.qualifiedCount,jdbcType=VARCHAR},
+      unqualifiedCount = #{record.unqualifiedCount,jdbcType=VARCHAR},
+      checkRemark = #{record.checkRemark,jdbcType=VARCHAR},
+      warehouseSerial = #{record.warehouseSerial,jdbcType=VARCHAR},
+      positionSerial = #{record.positionSerial,jdbcType=VARCHAR},
+      stockCount = #{record.stockCount,jdbcType=VARCHAR},
+      unstockCount = #{record.unstockCount,jdbcType=VARCHAR},
+      stockRemark = #{record.stockRemark,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      updater = #{record.updater,jdbcType=VARCHAR},
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.DeliveryMateriel" >
+    update deliveryMateriel
+    <set >
+      <if test="deliverSerial != null" >
+        deliverSerial = #{deliverSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="orderMaterielSerial != null" >
+        orderMaterielSerial = #{orderMaterielSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="batchNum != null" >
+        batchNum = #{batchNum,jdbcType=VARCHAR},
+      </if>
+      <if test="manufactureDate != null" >
+        manufactureDate = #{manufactureDate,jdbcType=DATE},
+      </if>
+      <if test="deliverCount != null" >
+        deliverCount = #{deliverCount,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverRemark != null" >
+        deliverRemark = #{deliverRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="acceptCount != null" >
+        acceptCount = #{acceptCount,jdbcType=VARCHAR},
+      </if>
+      <if test="refuseCount != null" >
+        refuseCount = #{refuseCount,jdbcType=VARCHAR},
+      </if>
+      <if test="takeRemark != null" >
+        takeRemark = #{takeRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="qualifiedCount != null" >
+        qualifiedCount = #{qualifiedCount,jdbcType=VARCHAR},
+      </if>
+      <if test="unqualifiedCount != null" >
+        unqualifiedCount = #{unqualifiedCount,jdbcType=VARCHAR},
+      </if>
+      <if test="checkRemark != null" >
+        checkRemark = #{checkRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseSerial != null" >
+        warehouseSerial = #{warehouseSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="positionSerial != null" >
+        positionSerial = #{positionSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="stockCount != null" >
+        stockCount = #{stockCount,jdbcType=VARCHAR},
+      </if>
+      <if test="unstockCount != null" >
+        unstockCount = #{unstockCount,jdbcType=VARCHAR},
+      </if>
+      <if test="stockRemark != null" >
+        stockRemark = #{stockRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        delFlg = #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        updater = #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.DeliveryMateriel" >
+    update deliveryMateriel
+    set deliverSerial = #{deliverSerial,jdbcType=VARCHAR},
+      orderMaterielSerial = #{orderMaterielSerial,jdbcType=VARCHAR},
+      batchNum = #{batchNum,jdbcType=VARCHAR},
+      manufactureDate = #{manufactureDate,jdbcType=DATE},
+      deliverCount = #{deliverCount,jdbcType=VARCHAR},
+      deliverRemark = #{deliverRemark,jdbcType=VARCHAR},
+      acceptCount = #{acceptCount,jdbcType=VARCHAR},
+      refuseCount = #{refuseCount,jdbcType=VARCHAR},
+      takeRemark = #{takeRemark,jdbcType=VARCHAR},
+      qualifiedCount = #{qualifiedCount,jdbcType=VARCHAR},
+      unqualifiedCount = #{unqualifiedCount,jdbcType=VARCHAR},
+      checkRemark = #{checkRemark,jdbcType=VARCHAR},
+      warehouseSerial = #{warehouseSerial,jdbcType=VARCHAR},
+      positionSerial = #{positionSerial,jdbcType=VARCHAR},
+      stockCount = #{stockCount,jdbcType=VARCHAR},
+      unstockCount = #{unstockCount,jdbcType=VARCHAR},
+      stockRemark = #{stockRemark,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      delFlg = #{delFlg,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+</mapper>

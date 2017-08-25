@@ -530,6 +530,67 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        			});
 		        		}]
 		        	}	        
+		    }) .state('takeDelivery', {
+		    	url: "/takeDelivery",
+		    	templateUrl: "rest/takeDelivery/takeDeliveryManage",
+		    	data: {pageTitle: '收货计划'},
+		    	reload:true, 
+		    	controller: "TakeDeliveryController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [       
+		    				        'assets/global/plugins/datatables/datatables.min.css',                  
+		    				        'assets/global/plugins/datatables/datatables.all.min.js',
+		    				        'assets/apps/controllers/TakeDeliveryController.js',
+		    				        'assets/apps/service/TakeDeliveryService.js',
+		    				        'assets/apps/service/saleOrderService.js',
+		    				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
+		    				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css'
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
+		    }) .state('takeDeliveryAdd', {
+		    	url: "/takeDeliveryAdd?:serialNum",
+		    	templateUrl: "rest/takeDelivery/takeDeliveryAdd",
+		    	data: {pageTitle: '新增收货'},
+		    	reload:true, 
+		    	controller: "TakeDeliveryController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [       
+		    				        'assets/apps/controllers/TakeDeliveryController.js',
+		    				        'assets/apps/service/TakeDeliveryService.js',
+		    				        'assets/apps/service/saleOrderService.js'
+		    				        ]
+		    			});
+		    		}]
+		    	}
+		    }) .state('takeDeliveryView', {
+		    	url: "/takeDeliveryView?:serialNum",
+		    	templateUrl: "rest/takeDelivery/takeDeliveryView",
+		    	data: {pageTitle: '查看收货详情'},
+		    	reload:true, 
+		    	controller: "TakeDeliveryController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [       
+		    				        'assets/apps/controllers/TakeDeliveryController.js',
+		    				        'assets/apps/service/TakeDeliveryService.js',
+		    				        'assets/apps/service/saleOrderService.js'
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
 		    })         	           .state('warehouse', {
 	        url: "/warehouse",
             templateUrl: "rest/warehouse/viewWarehouseList",
