@@ -407,7 +407,12 @@
             <groupId>net.sf.ezmorph</groupId>  
             <artifactId>ezmorph</artifactId>  
             <version>1.0.6</version>  
-        </dependency>  
+        </dependency>
+        <dependency>
+		     <groupId>com.alibaba</groupId>
+		     <artifactId>fastjson</artifactId>
+		     <version>1.2.21</version>
+		</dependency>  
         
         
         <dependency>

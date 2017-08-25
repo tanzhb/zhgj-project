@@ -7,7 +7,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    	// initialize core components
 		    handle = new pageHandle();
 	    	App.initAjax();
-	    	handle.datePickersInit();debugger;
+	    	handle.datePickersInit();
 	    	if($location.path()=="/takeDeliveryAdd"){
 	    		//handle.pageRepeater();
 	    		//_index = 0; 
@@ -22,8 +22,11 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    		initSuppliers();
 	    		initWarehouse();
 	    		validatorInit();
+	    		if(!isNull($stateParams.serialNum)){
+	    			takeDeliveryInfo($stateParams.serialNum,"edit");
+	    		}
 	 		}else if($location.path()=="/takeDeliveryView"){
-	 			takeDeliveryInfo($stateParams.serialNum);
+	 				takeDeliveryInfo($stateParams.serialNum);
 	 		}else{
 	 			loadTakeDelieryTable();
 	 		}
@@ -40,7 +43,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
      var loadTakeDelieryTable = function() {
               a = 0;
               App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
-              table = $("#select_sample_2").DataTable({
+              table = $("#takeDeliveryTable").DataTable({
                   language: {
                       aria: {
                           sortAscending: ": activate to sort column ascending",
@@ -66,11 +69,20 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
                       headerOffset: a
                   },*/
                   order: [[1, "asc"]],//默认排序列及排序方式
+                  bRetrieve : true,
+					'scrollX': false,
+					  buttons: [
+				                {
+				                	 extend: "print",
+					                 className: "btn dark btn-outline"
+				                }
+				            ],
                   searching: true,//是否过滤检索
                   ordering:  true,//是否排序
                   lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
                   pageLength: 5,//每页显示数量
                   processing: true,//loading等待框
+                  bRetrieve : true,
 //                  serverSide: true,
                  // ajax: "rest/takeDelivery/takeDeliveryList",//加载数据中
                   ajax :{ "url":$rootScope.basePath
@@ -81,7 +93,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					      return JSON.stringify( d );
 					    }},
                   "aoColumns": [
-                                { mData: 'serialNum' },
+                                { mData: 'takeDelivery.serialNum' },
                                 { mData: 'takeDelivery.takeDeliverNum' },
                                 { mData: 'orderNum' },
                                 { mData: 'shipper' },
@@ -119,6 +131,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
   							'orderable' : false,
   							'render' : function(data,
   									type, row, meta) {
+  										if(data==null){
+  											data="未收货";
+  										}
 	  	  								return '<a href="javascript:void(0);" ng-click="takeDeliveryView(\''+row.takeDelivery.serialNum+'\')">'+data+'</a>';
 	
   							},
@@ -172,8 +187,13 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
   							'className' : 'dt-body-center',
   							'render' : function(data,
   									type, row, meta) {
-	  	  							return '<span  class="label label-sm label-warning ng-scope">未收货</span>';
-	
+  									if(data=="1"){
+  										return '<span  class="label label-sm label-warning ng-scope">未收货</span>';
+  									}else if(data=="2"){
+  										return '<span  class="label label-sm label-warning ng-scope">待检验</span>';
+  									}else{
+  										return data;
+  									}
   							}
   						}]
 
@@ -232,16 +252,16 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 						var rows = table.rows({
 							'search' : 'applied'
 						}).nodes();
-						$('input[name="material_serial"]', rows).prop(
+						$('input[name="serialNum"]', rows).prop(
 								'checked', this.checked);
 					});
 	
 			// Handle click on checkbox to set state of "Select
 			// all" control
-			$('#select_sample_2 tbody')
+			$('#takeDeliveryTable tbody')
 					.on(
 							'change',
-							'input[name="material_serial"]',
+							'input[name="serialNum"]',
 							function() {
 								// If checkbox is not checked
 								if (!this.checked) {
@@ -471,7 +491,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		/**
 		 * 加载订单数据
 		 */
-			var initOrders = function(){debugger;
+			var initOrders = function(){
 				var promise = takeDeliveryService.initOrders();
         		promise.then(function(data){
         			$scope.orders = data.data;
@@ -509,7 +529,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	 		/**
 	 		 *加载订单物料
 	 		 */
-	        $scope.getOrderMateriel=function () { debugger;
+	        $scope.getOrderMateriel=function () { 
 	            var sd = $scope.deliver.orderSerial;
 	        	var promise = saleOrderService.getSaleOrderInfo(sd);
         		promise.then(function(data){
@@ -530,11 +550,24 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        /**
 	         * 查看收货详情
 	         */
-	        var takeDeliveryInfo = function(serialNum){
+	        var takeDeliveryInfo = function(serialNum,type){
 	        	var promise = takeDeliveryService.getTakeDeliveryInfo(serialNum);
-	        	promise.then(function(data){debugger;
+	        	promise.then(function(data){
 	        	$scope.deliver = data.data;
-	        	
+	        	$scope.deliver.warehouseSerial = data.data.warehouse.serialNum;
+	        	$scope.deliver.warehouseName = data.data.warehouse.address;
+	        	if(type="edit"){
+	        		$scope.deliverTransport = data.data.deliveryTransport;
+	        		$scope.orderMateriels = data.data.deliveryMateriels;
+	        		for(var i in data.data.deliveryMateriels){
+	        			$scope.orderMateriels[i].materiel = data.data.deliveryMateriels[i].orderMateriel.materiel;
+	        			$scope.orderMateriels[i].amount = data.data.deliveryMateriels[i].orderMateriel.amount;
+	        			$scope.orderMateriels[i].serialNum = data.data.deliveryMateriels[i].orderMateriel.serialNum;
+	        		}
+	        		$scope.takeDeliver = data.data.takeDelivery;
+	        		//$scope.takeDeliver.warehouseSerial = $scope.takeDeliver.warehouse.serialNum;
+	        		$scope.takeDeliver.warehouseName = $scope.takeDeliver.warehouse.address;
+	        	}
 	        	},function(data){
 	        		//调用承诺接口reject();
 	        	});
@@ -605,47 +638,26 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 			}
 			
 			/**
-			 * 去编辑需求计划
+			 * 去编辑收货计划
 			 */
-			$scope.toEditDemandPlan = function () {
-				// Iterate over all checkboxes in the table
-				var id_count = $('#demandPlanTable input[type="checkbox"]:checked').length;
+			$scope.takeDeliveryEdit = function(){
+				var id_count = $('#takeDeliveryTable input[type="checkbox"]:checked').length;
 				if(id_count==0){
 					toastr.warning("请选择您要修改的记录");
 				}else if(id_count>1){
 					toastr.warning("只能选择一条数据进行修改");
 				}else{
-					var serialNum = $('#demandPlanTable input[type="checkbox"]:checked').val();
-					$state.go("demandPlanAdd",{serialNum:serialNum});
+					var serialNum = $('#takeDeliveryTable input[type="checkbox"]:checked').val();
+					$state.go("takeDeliveryAdd",{serialNum:serialNum});
 				}
-				
-	        };
+			}
 	        		
-			 /**
-			 * 编辑模式
-			 */
-	        $scope.editDemandPlanBasic = function (comId) {
-	        	$scope.demandPlanView = false;
-	        	$scope.demandPlanAdd = false;
-	        	$scope.demandPlanEdit = true;
-	        	
-	        };
 	        
 	        /**
-	         * 取消
+	         * 批量删除收货计划
 	         */
-	        $scope.cancelDemandPlanBasic=function () {
-	        	getDemandPlanInfo($scope.demandPlan.serialNum);
-	        	$scope.demandPlanView = true;
-	        	$scope.demandPlanAdd = true;
-	        	$scope.demandPlanEdit = false;
-	        };
-	        
-	        /**
-	         * 批量删除需求计划
-	         */
-	        $scope.deleteDemandPlan = function () {
-	        	var id_count = $('#demandPlanTable input[type="checkbox"]:checked').length;
+	        $scope.takeDeliveryDelete = function () {
+	        	var id_count = $('#takeDeliveryTable input[type="checkbox"]:checked').length;
 				if(id_count==0){
 					toastr.warning("请选择您要删除的记录");
 					return;
@@ -653,7 +665,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        	handle.confirm("确定删除吗？",function(){
 	        		var ids = '';
 					// Iterate over all checkboxes in the table
-	        		$('#demandPlanTable input[type="checkbox"]').each(
+	        		$('#takeDeliveryTable input[type="checkbox"]').each(
 							function() {
 								// If checkbox exist in DOM
 								if ($.contains(document, this)) {
@@ -669,12 +681,12 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 								}
 							});
 	        		handle.blockUI();
-	        		var promise = demandPlanService.deleteDemandPlan(ids);
+	        		var promise = takeDeliveryService.deleteTakeDelivery(ids);
 	        		promise.then(function(data){
 	        			toastr.success("删除成功");
 	        			handle.unblockUI();
-	        			createTable(5,1,true,$scope.params);
-	        			//table.ajax.reload(); // 重新加载datatables数据
+	        			//createTable(5,1,true,$scope.params);
+	        			table.ajax.reload(); // 重新加载datatables数据
 	        			/*$state.go('company',{},{reload:true}); */
 	        		},function(data){
 	        			//调用承诺接口reject();
@@ -756,7 +768,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 			/**
 			 * 保存需求计划物料信息
 			 */
-			$scope.saveDemandPlanMateriel = function(materiel,index) {debugger;
+			$scope.saveDemandPlanMateriel = function(materiel,index) {
 				if(!demandPlanMaterielValid(index)){
 					return;
 				}
@@ -944,8 +956,10 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	       /**
 	        * 需求物料初始化日期控件
 	        */
-	       $scope.repeatDone = function(){
-	    	   handle.datePickersInit();
+	       $scope.repeatDone = function(scope){
+	       		var date= scope.materiel.manufactureDate;
+	    	    handle.datePickersInit();
+	    	    scope.materiel.manufactureDate = date;
 	       };
 	       
 	       
@@ -980,7 +994,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        * 下载EXCEL模板
 	        */
 	       $scope.downloadImportTemp = function(){
-	    	   window.location.href=$rootScope.basePath+"/rest/fileOperate/downloadImportTemp?tempName=demandPlan&fileName="+encodeURI(encodeURI('需求计划导入模板'));
+	    	   window.location.href=$rootScope.basePath+"/rest/fileOperate/downloadImportTemp?tempName=takeDelivery&fileName="+encodeURI(encodeURI('收货导入模板'));
 	       }
 	       
 	       /**
@@ -1018,10 +1032,10 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	       }
 	       
 	       /**
-	        * 导出需求计划
+	        * 导出收货计划
 	        */
-	       $scope.exportDemandPlan = function(){
-		    	 window.location.href=$rootScope.basePath+"/rest/demandPlan/exportDemandPlan";
+	       $scope.exportTakeDelivery = function(){
+		    	 window.location.href=$rootScope.basePath+"/rest/takeDelivery/exportTakeDelivery";
 		   }
 
 	       

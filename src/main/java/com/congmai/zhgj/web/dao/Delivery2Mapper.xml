@@ -156,19 +156,15 @@
   </select>
   <select id="selectListByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.DeliverySelectExample" >
     select
-    d.serialNum, d.deliverNum, d.orderSerial, d.supplyComId, d.shipper, d.receiver, d.makeDate, d.maker, 
+    d.serialNum, d.deliverNum, d.orderSerial, d.shipper, d.receiver, d.makeDate, d.maker, 
     d.remark, d.status, d.approval, d.approvalDate, d.warehouseSerial, d.materielCount, d.deliverDate, 
     d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, 
-    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.batchNum,
-    dm.manufactureDate,dm.deliverCount,dm.deliverRemark,
-    dm.acceptCount,dm.refuseCount,dm.takeRemark,dm.qualifiedCount,dm.unqualifiedCount,dm.checkRemark,dm.warehouseSerial,
-	dm.positionSerial,dm.stockCount,dm.unstockCount,dm.stockRemark,dm.remark as dmRemark,dm.warehouseSerial as dmWarehouseSerial,dm.orderMaterielSerial,
-    dt.transportType,dt.transport,dt.port,dt.shipNumber,dt.playArrivalDate,dt.playWarehouseDate,dt.remark as delivery_transport_remark,
+    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,
+    dt.transportType,
 	td.serialNum as tdSerialNum,td.warehouseSerial as tdWarehouseSerial,td.takeDeliverDate,td.receiver,td.contactNum,td.takeDeliverNum,td.remark as take_delivery_remark
-    from delivery d
-    left join deliveryMateriel dm on d.serialNum = dm.deliverSerial
+    from takeDelivery td
+    left join delivery  d on d.serialNum = td.deliverSerial
     left join deliveryTransport dt on d.serialNum = dt.deliverSerial
-    left join takeDelivery  td on d.serialNum = td.deliverSerial
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -659,7 +655,7 @@
   
   <select id="selectWarehouseByWarehouseSerial" resultType="com.congmai.zhgj.web.model.Warehouse" parameterType="java.lang.String" >
     select 
-      warehouseName,address
+      serialNum,warehouseName,address
     from warehouse
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </select>

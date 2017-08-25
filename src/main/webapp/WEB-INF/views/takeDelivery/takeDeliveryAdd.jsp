@@ -29,11 +29,12 @@
 <!-- BEGIN MAIN CONTENT -->
 <div class="row">
     <div class="col-md-12">
+    	<form  id="takeDeliveryForm" class="form-horizontal"  >
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
         <div class="portlet bordered">
             <div class="portlet-body">
 				<div class="portlet light ">
-				 	<form  id="takeDeliveryForm" class="form-horizontal" >
+				 	
 					<!-- 基本信息START -->
                         <div class="portlet-title">
                             <div class="caption">基本信息</div>
@@ -147,7 +148,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="makerDate"> <span class="required"> * </span>制单日期：</label>
                                                     <div class="col-md-8">
-                                                        <input type="text" class="form-control  form-control-inline input-medium date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years"
+                                                        <input type="text" class="form-control  date-picker" size="16"  data-date-format="yyyy-mm-dd" data-date-viewmode="years"
                                                          id="makeDate"  name="makeDate" ng-model="deliver.makeDate" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.makeDate}}</p>
@@ -173,7 +174,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="approvalDate"> <span class="required"> * </span>审批日期：</label>
                                                     <div class="col-md-8">
-                                                        <input type="text" class="form-control  form-control-inline input-medium date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="approvalDate" name="approvalDate" ng-model="deliver.approvalDate" ng-hide="deliverAdd" >
+                                                        <input type="text" class="form-control date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="approvalDate" name="approvalDate" ng-model="deliver.approvalDate" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.approvalDate}}</p>
                                                     </div>
@@ -253,7 +254,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="deliverDate"> <span class="required"> * </span>发货日期：</label>
                                                     <div class="col-md-8">
-                                                        <input type="text" class="form-control  form-control-inline input-medium date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="deliverDate"  name="deliverDate" ng-model="deliver.deliverDate" ng-hide="deliverAdd" >
+                                                        <input type="text" class="form-control  date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="deliverDate"  name="deliverDate" ng-model="deliver.deliverDate" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.deliverDate}}</p>
                                                     </div>
@@ -444,7 +445,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="playArrivalDate"> <span class="required"> * </span>预计到港日期：</label>
                                                     <div class="col-md-8">
-                                                        <input type="text" class="form-control  form-control-inline input-medium date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="playArrivalDate"  name="playArrivalDate" ng-model="deliverTransport.playArrivalDate" ng-hide="deliverAdd" >
+                                                        <input type="text" class="form-control  date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="playArrivalDate"  name="playArrivalDate" ng-model="deliverTransport.playArrivalDate" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliverTransport.playArrivalDate}}</p>
                                                     </div>
@@ -455,7 +456,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="playWarehouseDate"> <span class="required"> * </span>预计到库日期：</label>
                                                     <div class="col-md-8">
-                                                        <input type="text" class="form-control  form-control-inline input-medium date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="playWarehouseDate"  name="playWarehouseDate" ng-model="deliverTransport.playWarehouseDate" ng-hide="deliverAdd" >
+                                                        <input type="text" class="form-control date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="playWarehouseDate"  name="playWarehouseDate" ng-model="deliverTransport.playWarehouseDate" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliverTransport.playWarehouseDate}}</p>
                                                     </div>
@@ -548,7 +549,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="takeDeliverDate"> <span class="required"> * </span>收货日期：</label>
                                                     <div class="col-md-8">
-                                                        <input type="text" class="form-control  form-control-inline input-medium date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="takeDeliverDate"  name="takeDeliverDate" ng-model="takeDeliver.takeDeliverDate" ng-hide="deliverAdd" >
+                                                        <input type="text" class="form-control date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="takeDeliverDate"  name="takeDeliverDate" ng-model="takeDeliver.takeDeliverDate" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{takeDeliver.takeDeliverDate}}</p>
                                                     </div>
@@ -617,9 +618,9 @@
 										<th  rowspan="2">生产日期</th>
 										<th colspan="3" style="text-align: center;">发货</th>
 										<th colspan="3"  style="text-align: center;">收货</th>
-										<th colspan="3"  style="text-align: center;">检验</th>
+										<!-- <th colspan="3"  style="text-align: center;">检验</th>
 										<th colspan="5"  style="text-align: center;">入库</th>
-										<th rowspan="2">状态</th>
+										<th rowspan="2">状态</th> -->
 									</tr>
 									<tr>
 										<th>订单数量</th>
@@ -628,18 +629,18 @@
 										<th>实收数量</th>
 										<th>拒收数量</th>
 										<th>备注</th>
-										<th>合格数量</th>
+										<!-- <th>合格数量</th>
 										<th>不合格数量</th>
 										<th>备注</th>
 										<th>入库数量</th>
 										<th>未入数量</th>
 										<th>仓库</th>
 										<th>库位</th>
-										<th>备注</th>
+										<th>备注</th> -->
 									</tr>
 								</thead>
 								<tbody data-repeater-list="group-a"> 
-									<tr data-repeater-item ng-repeat="materiel in orderMateriels track by $index" repeat-done="repeatDone()">
+									<tr data-repeater-item ng-repeat="materiel in orderMateriels track by $index" repeat-done="repeatDone(this)">
 										<td>{{materiel.materiel.materielNum}}</td>
 										<td>{{materiel.materiel.materielName}}</td>
 										<td>{{materiel.materiel.specifications}}</td>
@@ -652,6 +653,17 @@
                                         </td>
 										<td>
 											<div class="col-md-12 form-group">
+												  <!-- <div  class="input-group date date-picker"
+														 data-date-format="yyyy-mm-dd"
+														data-date-viewmode="years" size="8">
+														<input type="text" class="form-control" size="8" readonly="" id="manufactureDate{{$index}}" ng-model="materiel.manufactureDate" name="manufactureDate"
+															> <span class="input-group-btn">
+															<button class="btn default " type="button">
+																<i class="fa fa-calendar"></i>
+															</button>
+														</span>
+														<span class="help-block"></span>
+													</div> -->
 													<input type="text" class="form-control  input-small date date-picker" data-date-format="yyyy-mm-dd"
 													data-date-viewmode="years" readonly="" id="manufactureDate{{$index}}" ng-model="materiel.manufactureDate" name="manufactureDate"
 														placeholder=""> 
@@ -686,6 +698,7 @@
                                                  <div class="form-control-focus"> </div>
                                             </div>
 										</td>
+										<!-- <td></td>
 										<td></td>
 										<td></td>
 										<td></td>
@@ -693,11 +706,10 @@
 										<td></td>
 										<td></td>
 										<td></td>
-										<td></td>
-										<td></td>
+										<td></td> -->
 									</tr>
 									<tr ng-if="orderMateriels==undefined||orderMateriels.length==0">
-											<td colspan="22" align="center">暂无数据</td>
+											<td colspan="12" align="center">暂无数据</td>
 									</tr>
 								</tbody>
 							</table>
@@ -708,18 +720,19 @@
          				<div class="col-md-5"></div>
          				<div class="col-md-1">
          					 <button   ng-hide="deliverAdd" class="btn blue" ng-click="saveTakeDelivery()">
-                                            <i class="fa fa-save"></i> 确认收货 </button>
+                                            <i class="fa fa-check"></i> 确认收货 </button>
          				</div>
          				<div class="col-md-1">
-         					 <button   ng-hide="deliverAdd" class="btn red outline" ng-click="cancelTakeDelivery()">
+         					 <button   ng-hide="deliverAdd" class="btn red btn-outline" ng-click="cancelTakeDelivery()">
                                             <i class="fa fa-undo"></i> 取消 </button>
          				</div>
          				<div class="col-md-5"></div>
          			</div>
        			 </div>
-       			 </form>
+       			
     		</div>
 		</div>
+		 </form>
 	</div>
 </div>
 <!-- END MAIN CONTENT -->

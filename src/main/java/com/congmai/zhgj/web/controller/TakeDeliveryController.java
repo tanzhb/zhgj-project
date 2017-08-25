@@ -1,11 +1,13 @@
 package com.congmai.zhgj.web.controller;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONObject;
 
@@ -24,12 +26,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
+import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderInfoExample;
 import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
+import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.model.TakeDeliveryParams;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.WarehouseExample;
@@ -199,27 +204,47 @@ public class TakeDeliveryController {
     	 objectMapper.configure(org.codehaus.jackson.map.DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
   	   		TakeDeliveryParams  takeDeliveryParams = null;
 		   try {
-			   JSONObject a = JSONObject.fromObject(params);
-			   takeDeliveryParams = objectMapper.readValue(params,TakeDeliveryParams.class);
-			} catch (JsonParseException e) {
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
-			} catch (JsonMappingException e) {
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
-			} catch (IOException e) {
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
+			   //JSONObject a = JSONObject.fromObject(params);
+			  // takeDeliveryParams = objectMapper.readValue(params,TakeDeliveryParams.class);
+			   takeDeliveryParams = JSON.parseObject(params, TakeDeliveryParams.class);
 			} catch (Exception e) {
 		    	System.out.println(this.getClass()+"---------"+ e.getMessage());
 			}
         	try{
         		Subject currentUser = SecurityUtils.getSubject();
         		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-        		takeDeliveryService.insertTakeDelivery(takeDeliveryParams,currenLoginName);
-        		
+        		if(StringUtils.isNotEmpty(takeDeliveryParams.getTakeDelivery().getSerialNum())){
+        			takeDeliveryService.updateTakeDelivery(takeDeliveryParams,currenLoginName);
+        		}else{
+        			takeDeliveryService.insertTakeDelivery(takeDeliveryParams,currenLoginName);
+        		}
         		flag = "1";
         	}catch(Exception e){
         		System.out.println(e.getMessage());
         		return null;
         	}
+    	return flag;
+    }
+    
+    
+    /**
+     * @Description (删除收货计划信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="deleteTakeDelivery",method=RequestMethod.POST)
+    @ResponseBody
+    public String deleteTakeDelivery(Map<String, Object> map,@RequestBody String serialNums,HttpServletRequest request) {
+    	String flag = "0"; //默认失败
+    	try{
+    		if(StringUtils.isNotEmpty(serialNums)){
+    			List<String> serialNumArray  = Arrays.asList(serialNums.split(","));
+    			takeDeliveryService.deleteBatch(serialNumArray);
+    		}
+    	}catch(Exception e){
+    		System.out.println(e.getMessage());
+    		flag = "1";
+    	}
     	return flag;
     }
     /*
@@ -554,18 +579,22 @@ public class TakeDeliveryController {
          return map;
     }
     
-    *//**
+    */
+    /**
      * @Description (导出需求计划)
      * @param request
      * @return
-     *//*
-    @RequestMapping("exportDemandPlan")
-    public void exportDemandPlan(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+     */
+    @RequestMapping("exportTakeDelivery")
+    public void exportTakeDelivery(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
     		Map<String, Object> dataMap = new HashMap<String, Object>();
-    		List<DemandPlan> demandPlanList = demandPlanService.getListByCondition(new DemandPlan(), 1, 99999999).getResult();
-    		dataMap.put("demandPlanList",demandPlanList);
-    		ExcelUtil.export(request, response, dataMap, "demandPlan", "需求计划");
-    }*/
+    		Delivery takeDelivery = new Delivery();
+    		takeDelivery.setPageIndex(0);
+        	takeDelivery.setPageSize(-1);
+    		List<Delivery> takeDeliveryList = takeDeliveryService.selectByPage(takeDelivery).getResult();
+    		dataMap.put("takeDeliveryList",takeDeliveryList);
+    		ExcelUtil.export(request, response, dataMap, "takeDelivery", "收货计划");
+    }
 
     
 

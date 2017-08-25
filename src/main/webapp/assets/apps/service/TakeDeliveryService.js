@@ -187,9 +187,9 @@ angular.module('MetronicApp').service('takeDeliveryService',['$http','$q',functi
 	/**
 	 * 批量删除
 	 */
-	this.deleteDemandPlan = function(serialNums){
+	this.deleteTakeDelivery = function(serialNums){
 		var deferred = $q.defer();
-		$http.post("rest/demandPlan/deleteDemandPlan",  
+		$http.post("rest/takeDelivery/deleteTakeDelivery",  
 		   serialNums//传整个表单数据  
 		).then(function success(result) {
 			deferred.resolve(result);//请求成功

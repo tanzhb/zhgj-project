@@ -35,12 +35,12 @@
 				<div class="actions">
 					<a href="javascript:;" class="btn btn-default btn-sm btn-circle"
 						ui-sref="takeDeliveryAdd" > <i class="fa fa-plus"></i> 添加
-					</a><!--  <a href="javascript:;" class="btn btn-default btn-sm btn-circle"
-						ng-click="toEditCompany()"> <i class="fa fa-edit"></i> 修改
 					</a> <a href="javascript:;" class="btn btn-default btn-sm btn-circle"
-						ng-click="deleteCompanyBatch()"> <i class="fa fa-minus"></i>
+						ng-click="takeDeliveryEdit()"> <i class="fa fa-edit"></i> 修改
+					</a> <a href="javascript:;" class="btn btn-default btn-sm btn-circle"
+						ng-click="takeDeliveryDelete()"> <i class="fa fa-minus"></i>
 						删除
-					</a> -->
+					</a> 
 					<div class="btn-group">
 						<a class="btn btn-default btn-outline btn-circle"
 							href="javascript:;" data-toggle="dropdown"> <i
@@ -48,24 +48,24 @@
 							class="fa fa-angle-down"></i>
 						</a>
 						<ul class="dropdown-menu pull-right" id="sample_3_tools">
-							<li><a data-action="0" class="tool-action"
+							<!-- <li><a data-action="0" class="tool-action"
 								data-toggle="modal" data-target="#import"> <i
 									class="fa fa-upload"></i> 导入
-							</a></li>
-							<li><a href="javascript:;" data-action="1"
-								class="tool-action" ng-click="exportCompany()"> <i
+							</a></li> -->
+							<li><a href="javascript:;" data-action="0"
+								class="tool-action" ng-click="exportTakeDelivery()"> <i
 									class="fa fa-file-excel-o"></i> 导出
 							</a></li>
-							<li><a href="javascript:;" data-action="2"
+							<!-- <li><a href="javascript:;" data-action="2"
 								class="tool-action"> <i class="fa fa-print"></i> 打印
-							</a></li>
+							</a></li> -->
 						</ul>
 					</div>
 				</div>
 			</div>
 			<div class="portlet-body">
 				<!-- <div class="table-responsive"> -->
-				<table class="table table-bordered" id="select_sample_2">
+				<table class="table table-bordered" id="takeDeliveryTable">
 					<thead>
 						<tr>
 							<th style="text-align: center"><input name="select_all" 
