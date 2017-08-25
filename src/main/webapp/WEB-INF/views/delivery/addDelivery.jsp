@@ -7,7 +7,7 @@
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
 			class="fa fa-angle-right"></i></li>
-		<li><a ui-sref="saleOrder">发货</a> <i class="fa fa-angle-right"></i>
+		<li><a ui-sref="delivery">发货</a> <i class="fa fa-angle-right"></i>
 		</li>
 		<li><a>新增发货</a></li>
 	</ul>
@@ -36,7 +36,7 @@
 								class="btn blue  btn-outline  btn-sm">
 								<i class="fa fa-save"></i> 保存
 							</button>
-							<button ng-click="cancel()" type="button"
+							<button ng-click="goBack()" type="button"
 								ng-hide="saleOrderInput" class="btn red  btn-outline  btn-sm">
 								<i class="fa fa-undo"></i> 取消
 							</button>

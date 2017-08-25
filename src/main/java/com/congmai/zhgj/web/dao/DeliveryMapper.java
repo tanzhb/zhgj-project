@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.web.model.ContractVO;
@@ -22,6 +23,12 @@ public interface DeliveryMapper extends GenericDao<DeliveryMaterielVO, String> {
     
 	//添加合同
     int insertDeliveryMateriel(DeliveryMaterielVO record);
+    
+    
+    public void deleteOldDeliveryMateriel(List<String> list);
+    
+    
+    public void updateDeliveryMateriel(DeliveryMaterielVO deliveryMaterielVO);
 
     //查询合同列表
     /*List<ContractVO> queryContractList(String userId);*/
@@ -49,6 +56,15 @@ public interface DeliveryMapper extends GenericDao<DeliveryMaterielVO, String> {
     public void insertBasicInfoPartIII(TakeDeliveryVO takeDelivery);
     
     
+    public void updateBasicInfo(DeliveryVO record);
+    
+    
+    public void updateBasicInfoPartII(DeliveryTransportVO deliveryTransport);
+    
+    
+    public void updateBasicInfoPartIII(TakeDeliveryVO takeDelivery);
+    
+    
     public DeliveryVO selectDetailById(String id);
     
     
@@ -57,6 +73,12 @@ public interface DeliveryMapper extends GenericDao<DeliveryMaterielVO, String> {
     
     public List<DeliveryMaterielVO> selectListForDetail(String serialNum);
     
-    //更新合同
-   /* public void updateContract(ContractVO record);*/
+    
+    public String selectOrderId(String orderMaterielSerialNum);
+    
+    
+    public List<String> queryDeliveryMaterielDelete(Map<String,Object> map);
+    
+    
+    public void goDelivery(Map<String,Object> map);
 }

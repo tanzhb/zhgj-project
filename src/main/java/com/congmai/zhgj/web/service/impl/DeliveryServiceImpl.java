@@ -2,7 +2,9 @@ package com.congmai.zhgj.web.service.impl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -56,8 +58,17 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		// TODO Auto-generated method stub
 		deliveryMapper.insertDeliveryMateriel(deliveryMaterielVO);
 	}
+	
+	
 	 
-	 /**
+	 @Override
+	public void deleteOldDeliveryMateriel(List<String> idList){
+		// TODO Auto-generated method stub
+		 deliveryMapper.deleteOldDeliveryMateriel(idList);
+	}
+
+
+	/**
 	  * 查询用户合同
 	  * @param userId（用户id）
 	  * @return
@@ -70,6 +81,13 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 
 	
 	
+
+
+	@Override
+	public void updateDeliveryMateriel(DeliveryMaterielVO deliveryMaterielVO) {
+		// TODO Auto-generated method stub
+		deliveryMapper.updateDeliveryMateriel(deliveryMaterielVO);
+	}
 
 
 	/**
@@ -131,6 +149,27 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		// TODO Auto-generated method stub
 		deliveryMapper.insertBasicInfoPartIII(takeDelivery);
 	}
+	
+	
+	@Override
+	public void updateBasicInfo(DeliveryVO record) {
+		// TODO Auto-generated method stub
+		deliveryMapper.updateBasicInfo(record);
+	}
+
+
+	@Override
+	public void updateBasicInfoPartII(DeliveryTransportVO deliveryTransport) {
+		// TODO Auto-generated method stub
+		deliveryMapper.updateBasicInfoPartII(deliveryTransport);
+	}
+
+
+	@Override
+	public void updateBasicInfoPartIII(TakeDeliveryVO takeDelivery) {
+		// TODO Auto-generated method stub
+		deliveryMapper.updateBasicInfoPartIII(takeDelivery);
+	}
 
 
 	@Override
@@ -152,14 +191,29 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		// TODO Auto-generated method stub
 		return deliveryMapper.selectListForDetail(serialNum);
 	}
-	
-	/**
-	 * 更新用户对象
-	 * @param contractVO
-	 */
-	/*@Override
-	public void updateContract(ContractVO contractVO) {
+
+
+	@Override
+	public String selectOrderId(String orderMaterielSerialNum) {
 		// TODO Auto-generated method stub
-		deliveryMapper.updateContract(contractVO);
-	}*/
+		return deliveryMapper.selectOrderId(orderMaterielSerialNum);
+	}
+
+
+	@Override
+	public List<String> queryDeliveryMaterielDelete(String deliverySerial,String orderSerial) {
+		// TODO Auto-generated method stub
+		Map<String,Object> map=new HashMap<String,Object>();
+		 map.put("deliverySerial", deliverySerial);
+		 map.put("orderSerial", orderSerial);
+		 
+		return deliveryMapper.queryDeliveryMaterielDelete(map);
+	}
+
+
+	@Override
+	public void goDelivery(Map<String,Object> map) {
+		// TODO Auto-generated method stub
+		deliveryMapper.goDelivery(map);
+	}
 }

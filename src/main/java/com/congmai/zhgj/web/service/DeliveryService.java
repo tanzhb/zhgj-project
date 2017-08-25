@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.congmai.zhgj.core.generic.GenericService;
 import com.congmai.zhgj.web.model.ContractVO;
@@ -27,6 +28,15 @@ public interface DeliveryService extends GenericService<DeliveryMaterielVO, Stri
 	 */
     public void insertDeliveryMateriel(DeliveryMaterielVO deliveryMaterielVO);
     
+    
+    
+    public void deleteOldDeliveryMateriel(List<String> idList);
+    
+    /**
+	 * 保存发货物料
+	 * @param contractVO
+	 */
+    public void updateDeliveryMateriel(DeliveryMaterielVO deliveryMaterielVO);
     
     /**
      * 查询用户合同
@@ -71,6 +81,15 @@ public interface DeliveryService extends GenericService<DeliveryMaterielVO, Stri
 	public void insertBasicInfoPartIII(TakeDeliveryVO takeDelivery);
 	
 	
+	public void updateBasicInfo(DeliveryVO record);
+	
+	
+	public void updateBasicInfoPartII(DeliveryTransportVO deliveryTransport);
+	
+	
+	public void updateBasicInfoPartIII(TakeDeliveryVO takeDelivery);
+	
+	
 	public DeliveryVO selectDetailById(String id);
 	
 	
@@ -80,9 +99,14 @@ public interface DeliveryService extends GenericService<DeliveryMaterielVO, Stri
 	
 	List<DeliveryMaterielVO> selectListForDetail(String serialNum);
 	
-	/**
-	 * 更新用户对象
-	 * @param contractVO
-	 */
-	/*public void updateContract(ContractVO contractVO);*/
+	
+	
+   public String selectOrderId(String orderMaterielSerialNum);
+   
+   
+   
+   public List<String> queryDeliveryMaterielDelete(String deliverySerial,String orderSerial);
+	
+  
+   public void goDelivery(Map<String,Object> map);
 }

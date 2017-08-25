@@ -155,57 +155,20 @@ public class DeliveryController {
 	 * @param ucBuilder
 	 * @return 操作结果
 	 */
-	/*@RequestMapping(value = "/saveUserContract", method = RequestMethod.POST)
-	public ResponseEntity<Void> saveUserContract(@Valid ContractVO contractVO, HttpServletRequest request,
-			UriComponentsBuilder ucBuilder,@RequestParam(value = "files")MultipartFile files[]) {
+	@RequestMapping(value = "/goDelivery", method = RequestMethod.GET)
+	public ResponseEntity<Void> goDelivery(String serialNum, HttpServletRequest request,UriComponentsBuilder ucBuilder) {
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
 
-
-		String electronicContract=null;
-		String signContract=null;
-		//只有在文件组不为空时上传文件
-		if(files.length>0){
-			if(files[0]!=null){
-				electronicContract=uploadFile(files[0]);   
-			}
-
-
-			if(files[1]!=null){
-				signContract=uploadFile(files[1]); 
-			}
-		}
-		//如果id为空执行保存
-		if(StringUtils.isEmpty(contractVO.getId())){
-			String serialNum=ApplicationUtils.random32UUID(); 
-
-			contractVO.setId(serialNum);
-
-
-			//给各自的文件字段赋值文件名
-			contractVO.setElectronicContract(electronicContract);
-			contractVO.setSignContract(signContract);
-
-			contractVO.setCreator(currenLoginName);
-			contractService.insertContract(contractVO);
-		}else{
-			//如果id不为空执行更新
-			User user1=(User) request.getSession().getAttribute("userInfo");
-			contractVO.setUpdater(currenLoginName);
-
-			//给各自的文件字段赋值文件名
-			contractVO.setElectronicContract(electronicContract);
-			contractVO.setSignContract(signContract);
-
-			contractService.updateContract(contractVO);
-		}
-
-
+		Map<String,Object> map=new HashMap<String,Object>();
+		map.put("serialNum", serialNum);
+		map.put("updater", currenLoginName);
+		deliveryService.goDelivery(map);
 		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(ucBuilder.path("/userContract").buildAndExpand(contractVO.getId()).toUri());
+		headers.setLocation(ucBuilder.path("/delivery").buildAndExpand(serialNum).toUri());
 
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
-	}*/
+	}
     
     
     /**
@@ -265,6 +228,46 @@ public class DeliveryController {
     }
     
     
+    /**
+     * @Description (保存订单物料信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="editDeliveryMateriel",method=RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<DeliveryMaterielVO> editDeliveryMateriel(Map<String, Object> map,DeliveryMaterielVO deliveryMateriel,HttpServletRequest request) {
+    	String flag ="0"; //默认失败
+        	try{
+        		Subject currentUser = SecurityUtils.getSubject();
+        		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+        		if(!StringUtils.isEmpty(deliveryMateriel.getSerialNum())){
+        			deliveryMateriel.setUpdater(currenLoginName);
+        			
+        			deliveryService.updateDeliveryMateriel(deliveryMateriel);
+        		}else{
+        			String orderId=deliveryService.selectOrderId(deliveryMateriel.getOrderMaterielSerial());
+        			
+        			List<String> idList=deliveryService.queryDeliveryMaterielDelete(deliveryMateriel.getDeliverSerial(), orderId);
+        			
+        			if(idList.size()!=0){
+        				deliveryService.deleteOldDeliveryMateriel(idList);	
+        			}
+        			
+        			deliveryMateriel.setSerialNum(ApplicationUtils.random32UUID());
+        			deliveryMateriel.setCreator(currenLoginName);
+        			deliveryMateriel.setUpdater(currenLoginName);
+        			deliveryService.insertDeliveryMateriel(deliveryMateriel);
+        		}
+        		flag = "1";
+        	}catch(Exception e){
+        		System.out.println(e.getMessage());
+        		return null;
+        	}
+        	deliveryMateriel =deliveryService.selectDeliveryMaterielById(deliveryMateriel.getSerialNum());
+    	return new ResponseEntity<DeliveryMaterielVO>(deliveryMateriel, HttpStatus.CREATED);
+    }
+    
+    
     
     
     /**
@@ -310,6 +313,42 @@ public class DeliveryController {
     	takeDeliveryVO.setDeliverSerial(delivery.getSerialNum());
     	takeDeliveryVO.setCreator(currenLoginName);
     	deliveryService.insertBasicInfoPartIII(takeDeliveryVO);
+    	
+    	//保存之后查询
+    	delivery=deliveryService.selectDetailById(delivery.getSerialNum());
+    	return new ResponseEntity<DeliveryVO>(delivery, HttpStatus.OK);
+    }
+    
+    
+    /**
+     * 保存基本信息
+     * @param delivery
+     * @param deliveryTransport
+     * @param takeDeliveryVO
+     * @return
+     */
+    @RequestMapping(value="editBasicInfo",method=RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<DeliveryVO>  editBasicInfo(DeliveryVO delivery,DeliveryTransportVO deliveryTransport,TakeDeliveryVO takeDeliveryVO){
+    	//保存基本信息第一部分
+    	String transportserialNum=delivery.getTransportserialNum();
+    	String takeDeliverSerialNum=delivery.getTakeDeliverSerialNum();
+    	
+    	Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		delivery.setUpdater(currenLoginName);
+    	deliveryService.updateBasicInfo(delivery);
+    	
+    	
+    	//保存基本信息第二部分
+    	deliveryTransport.setSerialNum(transportserialNum);
+    	deliveryTransport.setUpdater(currenLoginName);
+    	deliveryService.updateBasicInfoPartII(deliveryTransport);
+    	
+    	//保存基本信息第三部分
+    	takeDeliveryVO.setSerialNum(takeDeliverSerialNum);
+    	takeDeliveryVO.setUpdater(currenLoginName);
+    	deliveryService.updateBasicInfoPartIII(takeDeliveryVO);
     	
     	//保存之后查询
     	delivery=deliveryService.selectDetailById(delivery.getSerialNum());
@@ -542,151 +581,11 @@ public class DeliveryController {
     }
 
 
-	/**
-	 * 附件下载
-	 * @return
-	 * @throws IOException 
-	 */
-	/*@RequestMapping(value = "/resourceDownload", method = RequestMethod.GET)
-	     public String upload(HttpSession session, HttpServletRequest request,String name,HttpServletResponse response) {
-			 if(session==null)
-			  {
-			  return "redirect:/";
-			  }
-			  String dataDirectory = request.getServletContext().getRealPath("/uploadAttachFiles");
-			  File file = new File(dataDirectory,"D2E2589B23CA4B0EA9035DA9FC7E4BB2.gif");
-			  if(file.exists())
-			  {
-			   response.setContentType("application/octet-stream");
-			   response.addHeader("Content-Disposition","attachment;filename=D2E2589B23CA4B0EA9035DA9FC7E4BB2.gif");
-			   byte[] buffer = new byte[1024];
-			   FileInputStream fis =null;
-			   BufferedInputStream bis =null;
-			   try {
-			    fis = new FileInputStream(file);
-			    bis = new BufferedInputStream(fis);
-			    OutputStream os =response.getOutputStream();
-			    int i =bis.read(buffer);
-			    while (i!=-1) {
-			     os.write(buffer, 0, i);
-			     i=bis.read(buffer);
-			    }
-			   } catch (FileNotFoundException e) {
-			    e.printStackTrace();
-			   } catch (IOException e) {
-			    e.printStackTrace();
-			   }finally {
-			    try {
-			     bis.close();
-			    } catch (IOException e) {
-			     e.printStackTrace();
-			    }
-			    try {
-			     fis.close();
-			    } catch (IOException e) {
-			     e.printStackTrace();
-			    }
-			   }
-
-			  }
-			  return null;
-			 }*/
 
 	@RequestMapping(value="/resourceDownload",method=RequestMethod.POST) //匹配的是href中的download请求
 	public void download(@RequestParam("project_id") Integer projectId, HttpServletResponse response) throws IOException {
-		/* response.setCharacterEncoding("utf-8");
-		        response.setContentType("multipart/form-data");
-		        response.setHeader("Content-Disposition", "attachment;fileName=" + "D2E2589B23CA4B0EA9035DA9FC7E4BB2.gif");
-
-		        try {
-		            String path = Thread.currentThread().getContextClassLoader()
-		                    .getResource("").getPath()//获得项目编译路径（MyEclipse的项目编译路径）
-		                    + "download";
-		            //D:\My Documents\GitHub\.metadata\.plugins\org.eclipse.wst.server.core\tmp1\wtpwebapps\zhgj-project\WEB-INF\classes\download
-		            InputStream inputStream = new FileInputStream(new File("D:\\userUploadFile\\Files\\" + "D2E2589B23CA4B0EA9035DA9FC7E4BB2.gif"));//path是在本项目webinfo下的classes下的download文件夹下下载文件
-		            FileInputStream in=new FileInputStream("D:\\userUploadFile\\Files\\" + "D2E2589B23CA4B0EA9035DA9FC7E4BB2.gif");
-		                                                  //若想在本机下载，把path去掉即可
-
-		            OutputStream os = response.getOutputStream();
-		            byte[] b = new byte[2048];
-		            int length;
-		            while ((length = inputStream.read(b)) > 0) {
-		                os.write(b, 0, length);
-		            }
-
-		             // 这里主要关闭。
-		            os.close();
-
-		            inputStream.close();
-		        } catch (FileNotFoundException e) {
-		            e.printStackTrace();
-		        } catch (IOException e) {
-		            e.printStackTrace();
-		        }
-		            //  返回值要注意，要不然就出现下面这句错误！
-		            //java+getOutputStream() has already been called for this response
-		        return null;*/
-		/*  try {  
-			        // 清空response  
-			        response.reset();  
-			        //设置输出的格式  
-			        response.setContentType("application/x-download");// 设置为下载application/x-download   
-			        response.addHeader("content-type ","application/x-msdownload");   
-			        response.setContentType("application/octet-stream");  
-			        response.setHeader("content-disposition", "attachment; filename="+ "aaaa");//设定输出文件头  
-			        response.addHeader("Content-Length", "1024");  
-			        // 以流的形式下载文件。  
-			        InputStream fis = new BufferedInputStream(new FileInputStream("D:\\userUploadFile\\Files\\" + "D2E2589B23CA4B0EA9035DA9FC7E4BB2.gif"));  
-			        ServletOutputStream toClient = response.getOutputStream();  
-			        byte[] buffer = new byte[1024];  
-			        int n = 0;  
-			        while ((n = fis.read(buffer))!=-1) {  
-			            toClient.write(buffer,0,n);  
-			            toClient.flush();  
-			        }  
-			        fis.close();  
-			        //输出文件  
-			        toClient.close();  
-			    } catch (Exception ex) {  
-			        ex.printStackTrace();  
-			    }  */
-
-		/* String path="D:\\userUploadFile\\Files\\" + "D2E2589B23CA4B0EA9035DA9FC7E4BB2.xlsx";  
-		        File file=new File(path); 
-		        System.out.println(file.length());
-		        HttpHeaders headers = new HttpHeaders();    
-		        String fileName=new String("你好.xlsx".getBytes("UTF-8"),"iso-8859-1");//为了解决中文名称乱码问题  
-		        headers.setContentDispositionFormData("attachment", fileName); 
-		        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);  
-		        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),    
-		                                          headers, HttpStatus.CREATED); */
-		/* String filename = "rules_" + DateFormatUtils.ISO_DATE_FORMAT.format(new Date()) + ".txt";
-		        response.setCharacterEncoding("utf-8");
-		        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
-		        response.setHeader("Content-Disposition", "attachment;filename=" + filename);
-		        response.setHeader("Transfer-Encoding", "chunked");
-		        IOUtils.copy(new StringReader(ruleService.export(projectId)), response.getOutputStream(), "utf-8");*/
 
 
 
 	}
 }
-/*  public ResponseEntity<byte[]> download(HttpServletRequest request,@RequestParam("filename") String filename,
-		            Model model) throws IOException{
-
-		        String downloadFilePath="D:\\userUploadFile\\Files";//从我们的上传文件夹中去取
-		        filename="D2E2589B23CA4B0EA9035DA9FC7E4BB2.gif";
-		        File file = new File(downloadFilePath+File.separator+filename);//新建一个文件
-
-		        HttpHeaders headers = new HttpHeaders();//http头信息
-
-		        String downloadFileName = new String(filename.getBytes("UTF-8"),"iso-8859-1");//设置编码
-
-		        headers.setContentDispositionFormData("attachment", downloadFileName);
-
-
-		        //MediaType:互联网媒介类型  contentType：具体请求中的媒体类型信息
-
-		        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),headers,HttpStatus.CREATED);
-
-		    }*/

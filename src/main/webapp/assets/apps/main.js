@@ -394,6 +394,30 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             }
         })
         
+        .state('purchaseForecast', {
+            url: "/purchaseForecast",
+            templateUrl: "rest/page/purchaseForecast",
+            data: {pageTitle: '采购预测'},
+            controller: "PurchaseForecastController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+							'assets/global/plugins/datatables/datatables.min.css',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+							'assets/global/plugins/datatables/datatables.all.min.js',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+					        'assets/apps/scripts/angular-file-upload.min.js',
+                            'assets/apps/service/PurchaseForecastService.js',
+                            'assets/apps/controllers/PurchaseForecastController.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        
         // 用户管理
             .state('user', {
             url: "/user",
