@@ -652,7 +652,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        	}	        
 		    })   
 		    .state('stockInOutCheck', {
-	            url: "/stockInOutCheck",
+	            url: "/stockInOutCheck?:inOrOut",
 	            templateUrl:"rest/stockInOut/viewStockInOutCheckList",
 	            data: {pageTitle: '出入库检验'},
 	            controller: "StockInOutController",
@@ -692,6 +692,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        				        'assets/apps/service/StockInOutService.js',
 	        						'assets/apps/controllers/StockInOutController.js',
 	        						 'assets/apps/scripts/pageHandle.js',
+	        						 'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
+	         				        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
 	        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
 	        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css'
 	        				        ]

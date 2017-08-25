@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
@@ -48,16 +49,22 @@ public class StockInOutCheckServiceImpl extends GenericServiceImpl<StockInOutChe
 	}
 
 	@Override
-	public List<StockInOutCheck> getAllStockInOutCheck(String  InOut) {
+	public List<StockInOutCheck> getAllStockInOutCheck(String  InOut,String serialNum) {
 		StockInOutCheckExample sore=new  StockInOutCheckExample();
     	Criteria criteria=sore.createCriteria();
     	criteria.andDelFlgEqualTo("0");
     	if("in".equals(InOut)){
-    		criteria.andDeliverSerialIsNull();
+    		criteria.andDeliverSerialLike("111111");
     		criteria.andTakeDeliverSerialIsNotNull();
+    		if(!StringUtils.isEmpty(serialNum)){
+    			criteria.andTakeDeliverSerialEqualTo(serialNum);
+    		}
     	}else if("out".equals(InOut)){
+    		criteria.andTakeDeliverSerialLike("111111");
     		criteria.andDeliverSerialIsNotNull();
-    		criteria.andTakeDeliverSerialIsNull();
+    		if(!StringUtils.isEmpty(serialNum)){
+    			criteria.andDeliverSerialEqualTo(serialNum);
+    		}
     	}
 		return stockInOutCheckMapper.selectByExample(sore);
 	}

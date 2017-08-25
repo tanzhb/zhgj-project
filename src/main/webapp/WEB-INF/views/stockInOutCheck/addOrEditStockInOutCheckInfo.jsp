@@ -62,28 +62,30 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="checkNum"> <span class="required"> * </span>	检验单号 :</label>
                                                     <div class="col-md-8">
-                                                     <input type="hidden"     id="materielSerial" ng-model="stock.materielSerial"  />
-                                                        <input type="text" class="form-control" id="checkNum" name="checkNum" ng-model="stock.stockNum"  ng-hide="stockAdd" />
+                                                        <input type="text" class="form-control" id="checkNum" name="checkNum" ng-model="stockInOutCheck.checkNum"  ng-hide="stockInOutCheckAdd" />
                                                         <div class="form-control-focus"> </div>
-                                                          <p class="control-label left" ng-show="stockView">{{stockInOutCheck.checkNum}}</p> 
+                                                          <p class="control-label left" ng-show="stockInOutCheckView">{{stockInOutCheck.checkNum}}</p> 
                                                          <!--  存放物料流水号-->
                                                     </div>
                                             </div>
 										</div>
+										<input type="hidden"   id="deliverSerial" ng-model="stockInOutCheck.deliverSerial"  />
+										<input type="hidden"     id="takeDeliverSerial" ng-model="stockInOutCheck.takeDeliverSerial"  />
                                                            <div class="col-md-4">
                                                                 <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="materielNum"><span class="required"> * </span> <span  ng-if="inOrOut=='in'"  >收货单号</span><span   ng-if="inOrOut=='out'" >发货单号</span> :</label>
+                                                    <label class="col-md-4 control-label" for=""><span class="required"> * </span> <span  ng-if="inOrOut=='in'"  >收货单号</span><span   ng-if="inOrOut=='out'" >发货单号</span> :</label>
                                                     <div class="col-md-6">
-                                                     <input type="text" class="form-control"   id="takeDeliverSerial" name ="takeDeliverSerial"  readonly    ng-if="inOrOut=='in'"  ng-hide="stockInOutCheckAdd"   readonly="readonly"
+                                                     <input type="text" class="form-control"   id="takeDeliverNum" name ="takeDeliverNum"  readonly    ng-if="inOrOut=='in'"  ng-hide="stockInOutCheckAdd"   readonly="readonly"
 												ng-model="stockInOutCheck.takeDeliverNum" /> 
-												 <input type="text" class="form-control"   id="deliverSerial" name ="deliverSerial"  readonly      ng-if="inOrOut=='out'"  ng-hide="stockInOutCheckAdd"   readonly="readonly"
+												 <input type="text" class="form-control"   id="deliverNum" name ="deliverNum"  readonly      ng-if="inOrOut=='out'"  ng-hide="stockInOutCheckAdd"   readonly="readonly"
 												ng-model="stockInOutCheck.deliverNum" />
 												<div class="form-control-focus"> </div>
+												 
                                                                         <p class="control-label left" ng-show="stockInOutCheckView"   ng-if="inOrOut=='out'"  >{{stockInOutCheck.deliverNum}}</p> 
                                                                          <p class="control-label left" ng-show="stockInOutCheckView"  ng-if="inOrOut=='in'"  >{{stockInOutCheck.takeDeliverNum}}</p> 
                                                                     </div>
                                                                     <div class="col-md-1"><span class="input-inline-btn"  ng-hide="stockInOutCheckAdd"  >
-                                                            <button class="btn default" type="button"   ng-click="selectMateriel()" data-target="#basicMaterielInfo" data-toggle="modal" >
+                                                            <button class="btn default" type="button"   ng-click="selectDeliverInfo()" data-target="#basicMaterielInfo" data-toggle="modal" >
                                                                 <i class="fa fa-search"></i>
                                                             </button>
                                                         </span></div>
@@ -134,8 +136,8 @@
                                                             <div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="checkDate"> <span class="required"> * </span>检验日期 :</label>
                                                     <div class="col-md-8">
-                                                                        <input type="text"  class="form-control" placeholder=""  id="checkDate" name ="checkDate"   ng-hide="stockInOutCheckAdd"  
-												ng-model="stockInOutCheck.checkDate" > 
+                                                                        <input type="text"  class="form-control form-control-inline date-picker"     data-date-format="yyyy-mm-dd"  data-date-viewmode="years"   placeholder=""  id="checkDate" name ="checkDate"   ng-hide="stockInOutCheckAdd"  
+												ng-model="stockInOutCheck.checkDate" /> 
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="stockInOutCheckView">{{stockInOutCheck.checkDate}}</p> 
                                                                     </div>
@@ -150,7 +152,7 @@
                                                     <label class="col-md-4 control-label" for="checker"> <span class="required"> * </span>检验员:</label>
                                                     <div class="col-md-8">
                                                        <input type="text"  class="form-control" placeholder=""  id="checker" name ="checker"   ng-hide="stockInOutCheckAdd"  
-												ng-model="stockInOutCheck.cchecker" > 
+												ng-model="stockInOutCheck.checker" > 
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="stockInOutCheckView">{{stockInOutCheck.checker}}</p> 
                                                                     </div>
