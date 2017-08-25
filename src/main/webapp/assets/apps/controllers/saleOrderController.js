@@ -1,6 +1,6 @@
 /* Setup general page controller */
-angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '$scope', 'settings','saleOrderService','$filter',
-    '$state',"$stateParams",'$compile','$location','materielService','FileUploader', function($rootScope, $scope, settings,saleOrderService,$filter,$state,$stateParams,$compile,$location,materielService,FileUploader) {
+angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '$scope', 'settings','orderService','$filter',
+    '$state',"$stateParams",'$compile','$location','materielService','FileUploader', function($rootScope, $scope, settings,orderService,$filter,$state,$stateParams,$compile,$location,materielService,FileUploader) {
     $scope.$on('$viewContentLoaded', function() {   
     	// initialize core components
     	App.initAjax();
@@ -31,9 +31,26 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
             		$scope.orderMateriel={};
             	}
             	
-            	if($stateParams.view==1){// 切换为查看
+            	if($stateParams.view==1){// 订单切换为查看
             		$scope.saleOrderInput = true;
     		    	$scope.saleOrderShow = true;
+       		    	$scope.opration = '查看';
+    		    }
+            	if($stateParams.view=='all'){// 订单全体切换为查看
+            		$scope.cancelOrder();
+            		$scope.cancelOrderMateriel();
+            		$scope.cancelContract();
+            		$scope.cancelClauseSettlement();
+            		$scope.cancelClauseAdvance();
+            		$scope.cancelClauseDelivery();
+            		$scope.cancelClauseCheckAccept();
+            		$scope.cancelClauseFramework();
+       		    	$scope.cancelClauseAfterSales();
+   	       		    $scope.cancelFile();
+            		
+            		$scope.cancelOrderStatus();
+            		
+            		$scope.noShow = false;
        		    	$scope.opration = '查看';
     		    }
             	
@@ -47,7 +64,8 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
             	validateClauseAfterSalesInit();// 加载售后条款表单验证
             	validateClauseSettlementInit();// 加载结算条款表单验证
             	validateCSDInit();// 加载结算条款明细表单验证
-            	validateFileInit;//加载订单附件表单验证
+            	validateFileInit();//加载订单附件表单验证
+            	validateClauseFrameworkInit();// 加载框架条款表单验证
         	}
     });
     
@@ -74,7 +92,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 // $scope.saleOrder.updateTime=null;
     		// **********//
 
-    		saleOrderService.save($scope.saleOrder).then(
+    		orderService.save($scope.saleOrder).then(
        		     function(data){
        		    	toastr.success('数据保存成功！');
        		    	$location.search({serialNum:data.serialNum,view:1});
@@ -96,6 +114,10 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     		return;
 		}
     	$scope.getSaleOrderInfo($scope.saleOrder.serialNum);
+    	$scope.cancelOrder();
+    	
+    };
+    $scope.cancelOrder  = function() {// 取消编辑订单信息
     	$scope.saleOrderInput = true;
 	    $scope.saleOrderShow = true;
     };
@@ -106,7 +128,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     };
     
     var table;
-    var tableAjaxUrl = "rest/order/findSaleOrderList";
+    var tableAjaxUrl = "rest/order/findOrderList";
     var loadMainTable = function() {
             a = 0;
             App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
@@ -299,8 +321,8 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 							}
 						}
 					});
-			saleOrderService
-					.delSaleOrder(ids)
+			orderService
+					.delOrder(ids)
 					.then(
 							function(data) {
 								$('#delSaleOrderModal').modal(
@@ -338,15 +360,18 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 	            	buyComId:{required:"采购方不能为空！"},
 	            	serviceModel:{required:"服务模式不能为空！"},
 	            	settlementClause:{required:"结算条款不能为空！"},
-	            	deliveryMode:{required:"提货方式不能为空！"}
-            		
+	            	deliveryMode:{required:"提货方式不能为空！"},
+	            	rate:{required:"税率不能为空！"},
+	            	currency:{required:"币种不能为空！"}
 	            },
             	rules: {orderNum: {required: !0,maxlength: 20},
             		orderType: {required: !0,maxlength: 20},
             		buyComId: {required: !0,maxlength: 20},
             		serviceModel: {required: !0,maxlength: 20},
             		settlementClause: {required: !0,maxlength: 20},
-            		deliveryMode: {required: !0,maxlength: 20}
+            		deliveryMode: {required: !0,maxlength: 20},
+            		rate: {required: !0,maxlength: 20},
+            		currency: {required: !0,maxlength: 20}
             			},
             		invalidHandler: function(e, t) {
                     i.hide(), r.show(), App.scrollTo(r, -200)
@@ -379,7 +404,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 		 * 获取订单信息
 		 */	
         $scope.getSaleOrderInfo  = function(serialNum) {
-        	saleOrderService.getSaleOrderInfo(serialNum).then(
+        	orderService.getOrderInfo(serialNum).then(
           		     function(data){//加载页面对象
           		    	$scope.saleOrder=data.orderInfo;
           		    	$scope.orderMateriel=data.orderMateriel;
@@ -399,10 +424,19 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
           		    		$scope.clauseSettlement = {}
           		    	}
           		    	
+          		    	if($scope.saleOrder.status==1){//已提交的不能做提交
+          		    		$scope.cancelOrderStatus();
+          		    	}
+          		    	
           		    	if(!isNull(data.file)){
      	        			$scope.file = data.file;
      	        			_fileIndex = $scope.file.length;
      	        		}
+          		    	if(!isNull(data.ClauseFramework)){
+     	        			$scope.ClauseFramework = data.ClauseFramework;
+     	        			_indexClauseFramework = $scope.ClauseFramework.length;
+     	        		}
+          		    	
           		    	if(!isNull($scope.contract)){
           		    		var myJsDate=$filter('date')($scope.contract.startDate,'yyyy-MM-dd');
         					$scope.contract.startDate=myJsDate;
@@ -412,6 +446,10 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
         					
         					var myJsDate2=$filter('date')($scope.contract.signDate,'yyyy-MM-dd');
         					$scope.contract.signDate=myJsDate2;
+        					
+        					if($scope.contract.contractType=="框架合同"){
+        						$scope.showClauseFramework();
+              	        	}
           		    	}else{
           		    		$scope.contract = {};
           		    	}
@@ -507,11 +545,11 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
      							'targets' : 1,
      							'render' : function(data,
      									type, row, meta) {
-     								var bomIcon='';// bom图标
+     								var ClauseFrameworkIcon='';// ClauseFramework图标
      								if(row.isCSD==1){
-     									bomIcon = '<span class="label label-sm label-success">B</span> '
+     									ClauseFrameworkIcon = '<span class="label label-sm label-success">B</span> '
      								}
-     								return bomIcon + data;
+     								return ClauseFrameworkIcon + data;
      							}
 
      						},{
@@ -733,6 +771,9 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 	    	   if(type=='csd'){
 	    		   call =  "operation_csd"+index;
 	    	   }
+	    	   if(type=='ClauseFramework'){
+	    		   call =  "operation_b"+index;
+	    	   }
 	    	   
 	    	   $scope[call] = true;
 	       };
@@ -749,6 +790,9 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 	    	   }
 	    	   if(type=='csd'){
 	    		   call =  "operation_csd"+index;
+	    	   }
+	    	   if(type=='ClauseFramework'){
+	    		   call =  "operation_b"+index;
 	    	   }
 	    	   $scope[call]= false;
 	       };
@@ -773,7 +817,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 				delete orderMateriel.supplyMateriel;
 				delete orderMateriel.supply;
 				
-				var promise = saleOrderService
+				var promise = orderService
 				.saveOrderMateriel(orderMateriel);
 				promise.then(function(data) {
 					if (!handle.isNull(data.data)) {
@@ -866,7 +910,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 	        			}
 	        		}
 	        		if(!isNull(materiel.supplyMaterielSerial)){
-	        			var promise = saleOrderService.deleteOrderMateriel(materiel.serialNum);
+	        			var promise = orderService.deleteOrderMateriel(materiel.serialNum);
 		        		promise.then(function(data){
 		        			if(data.data == "1"){
 		        				toastr.success("删除成功");
@@ -946,7 +990,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 		   	    	if($('#form_contract').valid()){
 		   	    		$scope.contract.orderSerial = $scope.saleOrder.serialNum;
 		   	    		$scope.contract.comId = $scope.saleOrder.buyComId;
-		   	    		saleOrderService.saveContract($scope.contract).then(
+		   	    		orderService.saveContract($scope.contract).then(
 		   	       		     function(data){
 		   	       		    	toastr.success('数据保存成功！');
 		   	       		    	$scope.contract = data.data;
@@ -1093,14 +1137,14 @@ var e = $("#form_clauseSettlement"),
     		$scope.clauseSettlement.contractSerial = $scope.contract.id;
     		$scope.clauseSettlementDetail = $scope.clauseSettlement.CSD;
     		delete $scope.clauseSettlement.CSD;
-    		saleOrderService.saveClauseSettlement($scope.clauseSettlement).then(//保存结算条款
+    		orderService.saveClauseSettlement($scope.clauseSettlement).then(//保存结算条款
        		     function(data){
        		    	$scope.clauseSettlement = data.data;
        		    	if(!isNull(data.data)){
       		    		for(var i=0;i<$scope.clauseSettlementDetail.length;i++){
       		    			$scope.clauseSettlementDetail[i].clauseSettlementSerial = data.data.serialNum;
       		    		}
-      		    		saleOrderService.saveClauseSettlementDetail($scope.clauseSettlementDetail).then(//保存结算条款明细
+      		    		orderService.saveClauseSettlementDetail($scope.clauseSettlementDetail).then(//保存结算条款明细
       		        		     function(data){
       		        		    	toastr.success('数据保存成功！');
       		        		    	$scope.cancelClauseSettlement();
@@ -1140,7 +1184,7 @@ var e = $("#form_clauseSettlement"),
     
     var _index = 0;
     /**
-      * bom新增一行
+      * ClauseFramework新增一行
       */
     $scope.addCSD = function(){
     	if($scope.clauseSettlement.CSD){}else{$scope.clauseSettlement.CSD =[{}]}
@@ -1149,7 +1193,7 @@ var e = $("#form_clauseSettlement"),
     };
     
     /**
-     * bom删除一行
+     * ClauseFramework删除一行
      */
     $scope.deleteCSD = function(index){
  	   $scope.clauseSettlement.CSD.splice(index,1);
@@ -1242,7 +1286,7 @@ var e = $("#form_clauseSettlement"),
  			}
    	    	if($('#form_clauseAdvance').valid()){
    	    		$scope.clauseAdvance.contractSerial = $scope.contract.id;
-   	    		saleOrderService.saveClauseAdvance($scope.clauseAdvance).then(
+   	    		orderService.saveClauseAdvance($scope.clauseAdvance).then(
    	       		     function(data){
    	       		    	toastr.success('数据保存成功！');
    	       		    	$scope.clauseAdvance = data.data;
@@ -1315,7 +1359,7 @@ var e = $("#form_clauseSettlement"),
    	   			}
    	   	    	if($('#form_clauseDelivery').valid()){
    	   	    		$scope.clauseDelivery.contractSerial = $scope.contract.id;
-   	   	    		saleOrderService.saveClauseDelivery($scope.clauseDelivery).then(
+   	   	    		orderService.saveClauseDelivery($scope.clauseDelivery).then(
    	   	       		     function(data){
    	   	       		    	toastr.success('数据保存成功！');
    	   	       		    	$scope.clauseDelivery = data.data;
@@ -1388,7 +1432,7 @@ var e = $("#form_clauseSettlement"),
 		   			}
    	   	   	    	if($('#form_clauseCheckAccept').valid()){
    	   	   	    		$scope.clauseCheckAccept.contractSerial = $scope.contract.id;
-   	   	   	    		saleOrderService.saveClauseCheckAccept($scope.clauseCheckAccept).then(
+   	   	   	    		orderService.saveClauseCheckAccept($scope.clauseCheckAccept).then(
    	   	   	       		     function(data){
    	   	   	       		    	toastr.success('数据保存成功！');
    	   	   	       		    	$scope.clauseCheckAccept = data.data;
@@ -1461,7 +1505,7 @@ var e = $("#form_clauseSettlement"),
 	 			}
    	   	    	if($('#form_clauseAfterSales').valid()){
    	   	    		$scope.clauseAfterSales.contractSerial = $scope.contract.id;
-   	   	    		saleOrderService.saveClauseAfterSales($scope.clauseAfterSales).then(
+   	   	    		orderService.saveClauseAfterSales($scope.clauseAfterSales).then(
    	   	       		     function(data){
    	   	       		    	toastr.success('数据保存成功！');
 	   	   	       		    $scope.clauseAfterSales = data.data;
@@ -1495,7 +1539,7 @@ var e = $("#form_clauseSettlement"),
    	   	    		toastr.error('请先保存订单信息！');return
    	    		}
    	   	    	if($('#form_sample_4').valid()){
-   	   	    	saleOrderService.saveFile($scope.file).then(
+   	   	    	orderService.saveFile($scope.file).then(
    	   	       		     function(data){
    	   	       		    	toastr.success('数据保存成功！');
    	   	       		    	$scope.cancelFile();
@@ -1593,6 +1637,137 @@ var e = $("#form_clauseSettlement"),
    		      
    		        
    	   	  //********附件  end****************//
+   		  //********框架条款 start****************//
+   		    $scope.hidnClauseFramework  = function() {//隐藏框架条款
+   	   	    	$scope.ClauseFrameworkShow = false;
+   	   	    };
+   	   	    
+   	   	    $scope.showClauseFramework  = function() {//显示框架条款
+   	   	    	$scope.ClauseFrameworkShow = true;
+   	   	    };
+   	   	    
+   	   	var _indexClauseFramework = 0;
+	    $scope.saveClauseFramework  = function() {//保存ClauseFramework信息
+	    	if($scope.contract.id==null||$scope.contract.id=='') {// 合同信息为空的处理
+	   	    		toastr.error('请先保存合同信息！');return
+	   			}
+	    	if($('#form_sample_framework').valid()){
+	    		orderService.saveClauseFramework($scope.ClauseFramework).then(
+	       		     function(data){
+	       		    	toastr.success('数据保存成功！');
+//	       		    	if(!isNull(data.ClauseFramework)){
+//	 	        			$scope.ClauseFramework = data.ClauseFramework;
+//	 	        			_indexClauseFramework = $scope.ClauseFramework.length-1;
+//	 	        		}
+	       		    	$scope.cancelClauseFramework();
+	       		     },
+	       		     function(error){
+	       		    	toastr.error('数据保存出错！');
+	       		         $scope.error = error;
+	       		     }
+	       		 );
+	    	}
+	    	
+	    }; 	
+	    
+	    $scope.cancelClauseFramework  = function() {//取消编辑ClauseFramework信息
+	    	$scope.ClauseFrameworkInfoInput = true;
+		    $scope.ClauseFrameworkInfoShow = true;
+	    };
+	    
+	    $scope.editClauseFramework  = function() {//进入编辑ClauseFramework信息
+	    	$scope.ClauseFrameworkInfoInput = false;
+		    $scope.ClauseFrameworkInfoShow = false;
+	    };
+	    /**
+	        * ClauseFramework新增一行
+	        */
+	    $scope.addClauseFramework = function(){
+	    	if($scope.contract.id==null||$scope.contract.id=='') {// 合同信息为空的处理
+   	    		toastr.error('请先保存合同信息！');return
+   			}else{
+		    	   if($scope.ClauseFramework){}else{$scope.ClauseFramework =[{}]}
+	   		    	   $scope.ClauseFramework[_indexClauseFramework] = {};
+	   		    	   $scope.ClauseFramework[_indexClauseFramework].contractSerial = $scope.contract.id;
+	   		    	_indexClauseFramework++;
+		       }
+	    };
+	    
+	    /**
+	        * ClauseFramework删除一行
+	        */
+	       $scope.deleteClauseFramework = function(index){
+	    	   $scope.ClauseFramework.splice(index,1);
+	    	   _indexClauseFramework--;
+	       };
+	       
+	       
+	       
+	      var validateClauseFrameworkInit = function() {
+	        	var e = $("#form_sample_framework");
+		        r = $(".alert-danger", e),
+		        i = $(".alert-success", e);
+		        e.validate({
+		            errorElement: "span",
+		            errorClass: "help-block help-block-error",
+		            focusInvalid: !1,
+		            ignore: "",
+		            messages: {},
+	            	rules: {},
+	            		invalidHandler: function(e, t) {
+	                    i.hide(), r.show(), App.scrollTo(r, -200)
+	                },
+		            invalidHandler: function(e, t) {
+		                i.hide(),
+		                r.show(),
+		                App.scrollTo(r, -200)
+		            },
+		            errorPlacement: function(e, r) {
+		                r.is(":checkbox") ? e.insertAfter(r.closest(".md-checkbox-list, .md-checkbox-inline, .checkbox-list, .checkbox-inline")) : r.is(":radio") ? e.insertAfter(r.closest(".md-radio-list, .md-radio-inline, .radio-list,.radio-inline")) : e.insertAfter(r)
+		            },
+		            highlight: function(e) {
+		                $(e).closest(".form-group").addClass("has-error")
+		            },
+		            unhighlight: function(e) {
+		                $(e).closest(".form-group").removeClass("has-error")
+		            },
+		            success: function(e) {
+		                e.closest(".form-group").removeClass("has-error")
+		            },
+		            submitHandler: function(e) {
+		                i.show(),
+		                r.hide()
+		            }})
+	        };
+   		  //********框架条款  end****************//
+	        
+	        $scope.cancelPage  = function() {// 取消编辑
+	        	$state.go("saleOrder");
+	        };
+	        $scope.submitPage  = function() {// 取消编辑
+	        	$scope.submitOrder = {}
+	        	$scope.submitOrder.serialNum = $scope.saleOrder.serialNum;
+	        	$scope.submitOrder.remark = $scope.saleOrder.remark;
+	        	$scope.submitOrder.status = 1;
+	        	$scope.saleOrder.status = 1;
+	        	orderService.save($scope.submitOrder).then(
+	          		     function(data){
+	          		    	toastr.success('数据保存成功！');
+	          		    	$scope.cancelOrderStatus();
+//	          		    	$location.search({serialNum:data.serialNum,view:'all'});
+	          		     },
+	          		     function(error){
+	          		         $scope.error = error;
+	          		         toastr.error('数据保存出错！');
+	          		     }
+	          		 );
+	        };
+	        
+	        $scope.cancelOrderStatus  = function() {//隐藏编辑备注及提交
+	        	$scope.orderStatusShow = true;
+	        	$scope.orderStatusInput = true;
+		    };
+	        
     	 
 }]);
 

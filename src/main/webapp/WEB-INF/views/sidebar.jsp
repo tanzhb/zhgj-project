@@ -99,12 +99,13 @@
                 </li> -->
             </ul>
         </li>
-          <li class="nav-item">
+       <li class="nav-item">
             <a href="javascript:;" class="nav-link nav-toggle">
                 <i class="icon-settings"></i>
                 <span class="title">物流管理</span>
                 <span class="arrow "></span>
-            </a>
+            </a> 
+            
             <ul class="sub-menu">
             <li>
                     <a ui-sref="stock">
@@ -122,12 +123,12 @@
                     </a>
                 </li>
                 <li>
-                    <a ui-sref="profile.dashboard">
-                        <i class="icon-check"></i> 发货</span>
+                    <a ui-sref="delivery">
+                        <i class="icon-puzzle"></i>发货</span>
                     </a>
                 </li>
-                
             </ul>
+
         </li>
         <li class="nav-item">
             <a ui-sref="todo">
