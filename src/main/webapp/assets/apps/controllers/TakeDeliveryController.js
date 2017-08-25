@@ -2,7 +2,7 @@
  * 
  */
 
-angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope','$scope','$state','$http','takeDeliveryService','saleOrderService','$location','$compile','$stateParams',function($rootScope,$scope,$state,$http,takeDeliveryService,saleOrderService,$location,$compile,$stateParams) {
+angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope','$scope','$state','$http','takeDeliveryService','orderService','$location','$compile','$stateParams',function($rootScope,$scope,$state,$http,takeDeliveryService,orderService,$location,$compile,$stateParams) {
 	 $scope.$on('$viewContentLoaded', function() {   
 	    	// initialize core components
 		    handle = new pageHandle();
@@ -531,7 +531,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	 		 */
 	        $scope.getOrderMateriel=function () { 
 	            var sd = $scope.deliver.orderSerial;
-	        	var promise = saleOrderService.getSaleOrderInfo(sd);
+	        	var promise = orderService.getSaleOrderInfo(sd);
         		promise.then(function(data){
         			$scope.orderMateriels = data.orderMateriel;
         			$scope.deliver.materielCount = data.orderMateriel.length;
