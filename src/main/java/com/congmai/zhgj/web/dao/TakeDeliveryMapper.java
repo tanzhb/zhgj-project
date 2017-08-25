@@ -5,11 +5,13 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.congmai.zhgj.core.generic.GenericDao;
+import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.model.TakeDeliveryExample;
+import com.congmai.zhgj.web.model.TakeDeliverySelectExample;
 
 public interface TakeDeliveryMapper extends GenericDao<TakeDelivery, String>{
-    int countByExample(TakeDeliveryExample example);
+    int countByExample(TakeDeliverySelectExample example);
 
     int deleteByExample(TakeDeliveryExample example);
 
@@ -19,9 +21,13 @@ public interface TakeDeliveryMapper extends GenericDao<TakeDelivery, String>{
 
     int insertSelective(TakeDelivery record);
 
-    List<TakeDelivery> selectByExample(TakeDeliveryExample example);
+    List<Delivery> selectByExample(TakeDeliveryExample example);
+    
+    List<Delivery> selectListByExample(TakeDeliverySelectExample example);
 
     TakeDelivery selectByPrimaryKey(String serialNum);
+    
+    Delivery selectByTakeDeliveryPrimaryKey(String serialNum);
 
     int updateByExampleSelective(@Param("record") TakeDelivery record, @Param("example") TakeDeliveryExample example);
 
@@ -30,4 +36,6 @@ public interface TakeDeliveryMapper extends GenericDao<TakeDelivery, String>{
     int updateByPrimaryKeySelective(TakeDelivery record);
 
     int updateByPrimaryKey(TakeDelivery record);
+
+	int countListByExample(TakeDeliverySelectExample example);
 }
