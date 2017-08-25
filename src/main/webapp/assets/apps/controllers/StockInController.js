@@ -2,34 +2,16 @@
  * 
  */
 
-angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope','$scope','$state','$http','takeDeliveryService','orderService','$location','$compile','$stateParams',function($rootScope,$scope,$state,$http,takeDeliveryService,orderService,$location,$compile,$stateParams) {
+angular.module('MetronicApp').controller('StockInController',['$rootScope','$scope','$state','$http','takeDeliveryService','$location','$compile','$stateParams',function($rootScope,$scope,$state,$http,takeDeliveryService,$location,$compile,$stateParams) {
 	 $scope.$on('$viewContentLoaded', function() {   
 	    	// initialize core components
 		    handle = new pageHandle();
 	    	App.initAjax();
 	    	handle.datePickersInit();
-	    	if($location.path()=="/takeDeliveryAdd"){
-	    		//handle.pageRepeater();
-	    		//_index = 0; 
-	    		//$scope.companyQualifications =[{}];
-	    		//$scope.rootMateriels = [];
-	    		//$scope.serialNums = [];
-	    		//getDemandPlanInfo($stateParams.serialNum);
-	    		
-	    		//selectParentMateriel();
-	    		
-	    		initOrders();
-	    		initSuppliers();
+	    	
 	    		initWarehouse();
 	    		validatorInit();
-	    		if(!isNull($stateParams.serialNum)){
-	    			takeDeliveryInfo($stateParams.serialNum,"edit");
-	    		}
-	 		}else if($location.path()=="/takeDeliveryView"){
-	 				takeDeliveryInfo($stateParams.serialNum);
-	 		}else{
-	 			loadTakeDelieryTable();
-	 		}
+	    		initTakeDelviery();
 	    	// set default layout mode
 	    	$rootScope.settings.layout.pageContentWhite = true;
 	        $rootScope.settings.layout.pageBodySolid = false;
@@ -491,7 +473,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		/**
 		 * 加载订单数据
 		 */
-			var initOrders = function(){
+			var initOrders = function(){debugger;
 				var promise = takeDeliveryService.initOrders();
         		promise.then(function(data){
         			$scope.orders = data.data;
@@ -503,7 +485,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 			/**
 			 * 加载供应商数据
 			 */
-			var initSuppliers = function(){
+			var initSuppliers = function(){debugger;
 			var promise = takeDeliveryService.initSuppliers();
 			promise.then(function(data){
 				$scope.suppliers = data.data;
@@ -515,7 +497,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 			/**
 			 * 加载仓库数据
 			 */
-			var initWarehouse = function(){
+			var initWarehouse = function(){debugger;
 			var promise = takeDeliveryService.initWarehouse();
 			promise.then(function(data){
 				$scope.warehouses = data.data;
@@ -523,21 +505,63 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 				//调用承诺接口reject();
 			});
 			}
+			
+			/**
+			 * 加载库位数据
+			 */
+			var initPosition = function(serialNum){debugger;
+				var promise = takeDeliveryService.initPosition(serialNum);
+				promise.then(function(data){
+					$scope.warehousePositions = data.data;
+				},function(data){
+					//调用承诺接口reject();
+				});
+			}
 		
+			/**
+			 * 加载收货单数据
+			 */
+			var initTakeDelviery = function(){
+				var promise = takeDeliveryService.initTakeDelviery();
+				promise.then(function(data){debugger;
+					$scope.takeDeliverys = data.data;
+				},function(data){
+					//调用承诺接口reject();
+				});
+			}
 		
 		
 	 		/**
-	 		 *加载订单物料
+	 		 *加载发货物料信息
 	 		 */
-	        $scope.getOrderMateriel=function () { 
-	            var sd = $scope.deliver.orderSerial;
-	        	var promise = orderService.getOrderInfo(sd);
+	        $scope.getTakeDeliverMateriel=function () {
+	            var sd = $scope.record.takeDeliverSerial;
+	            for(var i in $scope.takeDeliverys){
+		            if(sd == $scope.takeDeliverys[i].takeDelivery.serialNum){
+						sd = $scope.takeDeliverys[i].serialNum;
+					}
+	            }
+	        	var promise = orderService.getTakeDeliveryMaterielList(sd);
         		promise.then(function(data){
-        			$scope.orderMateriels = data.orderMateriel;
-        			$scope.deliver.materielCount = data.orderMateriel.length;
+        			$scope.takeDeliveryMateriels = data.data;
+        			//$scope.deliver.materielCount = data.orderMateriel.length;
         		},function(data){
         			//调用承诺接口reject();
         		});
+	        }
+	        
+	        /**
+	         *加载订单物料
+	         */
+	        $scope.getOrderMateriel=function () { 
+	        	var sd = $scope.deliver.orderSerial;
+	        	var promise = orderService.getSaleOrderInfo(sd);
+	        	promise.then(function(data){
+	        		$scope.orderMateriels = data.orderMateriel;
+	        		$scope.deliver.materielCount = data.orderMateriel.length;
+	        	},function(data){
+	        		//调用承诺接口reject();
+	        	});
 	        }
 	        
 	        /**

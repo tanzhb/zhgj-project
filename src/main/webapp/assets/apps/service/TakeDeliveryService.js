@@ -5,11 +5,9 @@
 angular.module('MetronicApp').service('takeDeliveryService',['$http','$q',function($http,$q) {
 	
 	
-	this.getTakeDeliveryInfo = function(serialNum){
+	this.initTakeDelviery = function(){
 		var deferred = $q.defer();
-		$http.get("rest/takeDelivery/getTakeDeliveryInfo", {  
-			params:{serialNum:serialNum}//传整个表单数据  
-		})
+		$http.get("rest/takeDelivery/initTakeDelviery")
 		.then(function success(result) {
             deferred.resolve(result);//请求成功
         }, function error(err) {

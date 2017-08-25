@@ -23,6 +23,7 @@ import com.congmai.zhgj.web.dao.MaterielMapper;
 import com.congmai.zhgj.web.dao.SupplyMaterielMapper;
 import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
+import com.congmai.zhgj.web.model.DeliveryMaterielExample;
 import com.congmai.zhgj.web.model.DemandPlan;
 import com.congmai.zhgj.web.model.DemandPlanExample;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
@@ -45,6 +46,13 @@ public class DeliveryMaterielServiceImpl extends GenericServiceImpl<DeliveryMate
 	public GenericDao<DeliveryMateriel, String> getDao() {
 		
 		return this.deliveryMaterielMapper;
+	}
+
+	@Override
+	public List<DeliveryMateriel> selectByExample(
+			DeliveryMaterielExample example) {
+		
+		return deliveryMaterielMapper.selectByExample(example);
 	}
 
 

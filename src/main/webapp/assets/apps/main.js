@@ -591,6 +591,24 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    			});
 		    		}]
 		    	}	        
+		    }).state('stockInAdd', {
+		    	url: "/stockInAdd",
+		    	templateUrl: "rest/takeDelivery/stockInAdd",
+		    	data: {pageTitle: '新建入库单'},
+		    	reload:true, 
+		    	controller: "StockInController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [       
+		    				        'assets/apps/controllers/StockInController.js',
+		    				        'assets/apps/service/TakeDeliveryService.js'
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
 		    })         	           .state('warehouse', {
 	        url: "/warehouse",
             templateUrl: "rest/warehouse/viewWarehouseList",
