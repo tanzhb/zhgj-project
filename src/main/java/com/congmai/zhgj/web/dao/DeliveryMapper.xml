@@ -27,6 +27,7 @@
     <update id="updateBasicInfo" parameterType="com.congmai.zhgj.web.model.DeliveryVO">
     UPDATE delivery SET
     orderSerial=#{orderSerial},
+    deliverNum=#{deliverNum},
     warehouseSerial=#{warehouseSerial},
     supplyComId=#{supplyComId},
     shipper=#{shipper},

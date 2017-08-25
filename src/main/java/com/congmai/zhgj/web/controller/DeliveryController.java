@@ -81,10 +81,15 @@ public class DeliveryController {
 	@Resource
 	private ContractService contractService;
 	
+	/**
+	 * 订单service
+	 */
 	@Resource
     private OrderService orderService;
 	
-	
+	/**
+	 * 仓库service
+	 */
 	@Resource
     private WarehouseService  warehouseService;
 	

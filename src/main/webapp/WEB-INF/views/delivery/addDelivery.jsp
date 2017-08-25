@@ -776,7 +776,7 @@
 									</thead>
 									<tbody>
 										<tr
-											ng-repeat="_deliveryMateriel in deliveryMateriel track by $index"
+											ng-repeat="_deliveryMateriel in deliveryMaterielE track by $index"
 											ng-mouseover="showOperation('deliveryMateriel',$index)"
 											ng-mouseleave="hideOperation('deliveryMateriel',$index)"
 											repeat-done="repeatDone()">
@@ -799,7 +799,7 @@
 											</td>
 											<td><input type="text" name="batchNum"
 												class="form-control" ng-hide="orderMaterielInput{{$index}}"
-												ng-model="deliveryMateriel[$index].batchNum">
+												ng-model="deliveryMaterielE[$index].batchNum">
 												<p class="form-control-static"
 													ng-show="orderMaterielShow{{$index}}">
 													{{_deliveryMateriel.batchNum}}</p></td>
@@ -807,7 +807,7 @@
 												class="form-control form-control-inline input-medium date-picker"
 												data-date-format="yyyy-mm-dd" data-date-viewmode="years"
 												size="16" ng-hide="orderMaterielInput{{$index}}"
-												ng-model="deliveryMateriel[$index].manufactureDate" />
+												ng-model="deliveryMaterielE[$index].manufactureDate" />
 
 												<p class="form-control-static"
 													ng-show="orderMaterielShow{{$index}}">
@@ -820,16 +820,16 @@
 											</td>
 											<td><input type="text" name="deliverCount{{$index}}"
 												class="form-control" ng-hide="orderMaterielInput{{$index}}"
-												ng-model="deliveryMateriel[$index].deliverCount">
+												ng-model="deliveryMaterielE[$index].deliverCount">
 												<p class="form-control-static"
 													ng-show="orderMaterielShow{{$index}}">
 													{{_deliveryMateriel.deliverCount}}</p></td>
 											<td><input type="text" name="deliverRemark{{$index}}"
 												class="form-control" ng-hide="orderMaterielInput{{$index}}"
-												ng-model="deliveryMateriel[$index].deliverRemark">
+												ng-model="deliveryMaterielE[$index].remark">
 												<p class="form-control-static"
 													ng-show="orderMaterielShow{{$index}}">
-													{{_deliveryMateriel.deliverRemark}}</p></td>
+													{{_deliveryMateriel.remark}}</p></td>
 											<td><span ng-hide="orderMaterielInput{{$index}}">
 													&nbsp;&nbsp;&nbsp;&nbsp; <a
 													ng-click="saveOrderMateriel(_deliveryMateriel,$index)"><i

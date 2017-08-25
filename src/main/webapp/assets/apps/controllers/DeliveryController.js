@@ -9,9 +9,12 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		$rootScope.settings.layout.pageBodySolid = false;
 		$rootScope.settings.layout.pageSidebarClosed = false;
 		
+		//加载发货列表
 		loadMainTable();
+		//加载销售订单表
 		loadMainTable1();
 	
+		//控制输入框和span标签的显示
 		$scope.span =false;
 		$scope.input = true;
 		
@@ -20,16 +23,17 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
     	$scope.getDeliveryInfo($stateParams.serialNum);	
     }
     
-  //根据参数查询对象
+       //根据参数查询对象
     if($stateParams.serialNumEdit){
     	$scope.getDeliveryEditInfo($stateParams.serialNumEdit);	
     }
     
-    
+    //查询仓库列表
 		$scope.getWarehouseList();
     
 	});
 	
+	//添加页面的ng-repeat加载完成事件
 	$scope.repeatDone = function(){
     	$('.date-picker').datepicker({
 			rtl: App.isRTL(),
@@ -37,30 +41,11 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			autoclose: true,
 			dateFormat:"yyyy-mm-dd",
 			language: "zh-CN",
-    		/*autoclose: true,
-    	    beforeShowDay: $.noop,
-    	    calendarWeeks: false,
-    	    clearBtn: false,
-    	    daysOfWeekDisabled: [],
-    	    endDate: Infinity,
-    	    forceParse: true,
-    	    format: 'mm/dd/yyyy',
-    	    keyboardNavigation: true,
-    	    language: 'en',
-    	    minViewMode: 0,
-    	    orientation: "auto",
-    	    rtl: false,
-    	    startDate: -Infinity,
-    	    startView: 2,
-    	    todayBtn: false,
-    	    todayHighlight: false,
-    	    weekStart: 0,
-    	    defaultDate:$scope.deliveryMateriel[0].manufactureDate,*/
-			
     	})
     	
    };
    
+   //编辑页面的ng-repeat完成
    $scope.repeatDone1 = function(){
 	   $('.date-picker').datepicker({
 			rtl: App.isRTL(),
@@ -68,27 +53,8 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			autoclose: true,
 			dateFormat:"yyyy-mm-dd",
 			language: "zh-CN",
-   		/*autoclose: true,
-   	    beforeShowDay: $.noop,
-   	    calendarWeeks: false,
-   	    clearBtn: false,
-   	    daysOfWeekDisabled: [],
-   	    endDate: Infinity,
-   	    forceParse: true,
-   	    format: 'mm/dd/yyyy',
-   	    keyboardNavigation: true,
-   	    language: 'en',
-   	    minViewMode: 0,
-   	    orientation: "auto",
-   	    rtl: false,
-   	    startDate: -Infinity,
-   	    startView: 2,
-   	    todayBtn: false,
-   	    todayHighlight: false,
-   	    weekStart: 0,
-   	    defaultDate:$scope.deliveryMateriel[0].manufactureDate,*/
-			
    	})
+   	//给date-picker default赋值
    	for(var i=0;i<$scope.deliveryMaterielE.length;i++){
    		if($scope.deliveryMaterielE[i].manufactureDate!=null&&$scope.deliveryMaterielE[i].manufactureDate!=""){
    			var datee="'"+$scope.deliveryMaterielE[i].manufactureDate+"'";
@@ -96,14 +62,11 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
    		}else{
    			$('.date-picker').eq(i).datepicker('setDate',new Date());
    		}
-   		
-   			
-   		/*$scope.deliveryMateriel[i].manufactureDate*/
    	}
    	
   };
 	
-	
+	//确认发货
 	$scope.goDelivery=function (serialNum){
 		var promise = DeliveryService.goDelivery(serialNum);
 		promise.then(function(data) {
@@ -160,7 +123,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		}
 		
 		var amount=deliveryMateriel.amount;
-		if(deliverCount>amount){
+		if(parseInt(deliverCount)>parseInt(amount)){
 			toastr.error("发货数量不能大于订单数量！");	
 			return;
 		}
@@ -173,10 +136,8 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 				$(".modal-backdrop").remove();
 				toastr.success("保存成功");
 				handle.unblockUI();
-				//var company = data.data;
-				// $state.go('companyAdd',company,{reload:true});
-				$scope.deliveryMateriel[index] = data;
-				$scope.deliveryMateriel[index] = data;
+				$scope.deliveryMaterielE[index] = data;
+				$scope.deliveryMaterielE[index] = data;
 				console.log(data.data);
 				$scope["orderMaterielInput"+index] = true;
 				$scope["orderMaterielShow"+index] = true;
@@ -223,7 +184,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	
 	
 	/**
-	 * 保存销售订单物料信息
+	 * 编辑销售订单物料信息
 	 */
 	$scope.editOrderMateriel = function(deliveryMateriel,index) {
 		debugger
@@ -231,6 +192,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		delete deliveryMateriel.supplyMateriel;
 		delete deliveryMateriel.supply;
 		
+		//判断基本信息是否保存，未保存先保存基本信息
 		if($scope.isBasicInfoSaved!='1'){
 			toastr.error("请先保存基本信息！");	
 			return;
@@ -261,7 +223,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		}
 		
 		var amount=deliveryMateriel.amount;
-		if(deliverCount>amount){
+		if(parseInt(deliverCount)>parseInt(amount)){
 			toastr.error("发货数量不能大于订单数量！");	
 			return;
 		}
@@ -276,8 +238,6 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 				$(".modal-backdrop").remove();
 				toastr.success("保存成功");
 				handle.unblockUI();
-				//var company = data.data;
-				// $state.go('companyAdd',company,{reload:true});
 				$scope.deliveryMaterielE[index] = data;
 				$scope.deliveryMaterielE[index] = data;
 				console.log(data.data);
@@ -300,7 +260,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		});
 	};
 	
-	
+	//保存基本信息
 	$scope.saveBasicInfo=function(){
 		var promise = DeliveryService.saveBasicInfo($scope);
 		promise.then(function(data) {
@@ -331,6 +291,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	}
 	
 	
+	//编辑基本信息
 	$scope.editBasicInfo=function(){
 		var promise = DeliveryService.editBasicInfo($scope);
 		promise.then(function(data) {
@@ -372,7 +333,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		window.print();  
 	}
 	
-	//根据参数查询对象
+	//查询仓库集合
 	$scope.getWarehouseList  = function() {
 		DeliveryService.getWarehouseList().then(
       		     function(data){
@@ -439,7 +400,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	       }
 		
 	
-	var table;
+	    var table;
 		var loadMainTable = function() {
 			
 			var a = 0;
@@ -563,7 +524,8 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 				
 			 };
 			 
-			        
+			   
+			 //获取订单物料的信息
 	        $scope.getSaleOrderInfo  = function(serialNum) {
 	        	DeliveryService.getSaleOrderInfo(serialNum).then(
 	          		     function(data){
@@ -577,7 +539,6 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	}
 	          		    	
 	          		    	
-	          		    	debugger
 	          		    	var orderSerial=data.orderInfo.serialNum;
 	          		    	$scope.orderSerial=data.orderInfo.serialNum;
 	          		    	$scope.deliveryMaterielE=data.orderMateriel;
@@ -589,11 +550,12 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	        	
 	        }; 
 			        
+	        //跳转到查看详情页面
 			        $scope.jumpToGetDeliveryInfo  = function(serialNum) {
 			        	$state.go('viewDelivery',{serialNum:serialNum});
 			        }; 
 			        
-			        
+			//通过id查询发货详情
 			        $scope.getDeliveryInfo  = function(serialNum) {
 			        	DeliveryService.getDeliveryInfo(serialNum).then(
 			          		     function(data){
@@ -611,18 +573,12 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			          		 );
 			        };
 			        
-			        
+			        //查询编辑时的发货信息
 			        $scope.getDeliveryEditInfo  = function(serialNumEdit) {
 			        	DeliveryService.getDeliveryInfo(serialNumEdit).then(
 			          		     function(data){
 			          		    	$scope.delivery=data.delivery;
 			          		    	$scope.deliveryMaterielE=data.deliveryMateriels;
-			          		    	/*debugger
-			          		    	for(var i=0;i<$scope.deliveryDetailMateriel.length;i++){
-			          		    		if($scope.deliveryDetailMateriel[i].status=='0'){$scope.deliveryDetailMateriel[i].status='待发货'};
-			          		    		if($scope.deliveryDetailMateriel[i].status=='1'){$scope.deliveryDetailMateriel[i].status='已发货'}
-			          		    	}*/
-			          		    	
 			          		     },
 			          		     function(error){
 			          		         $scope.error = error;
@@ -630,16 +586,13 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			          		 );
 			        };
 			        
+			        //通过选择发货仓库改变地址（新增）
 			        $scope.selectAddress=function(){
 			        	var warehouseSerial=$scope.delivery.warehouseSerial;
 			        	DeliveryService.selectAddress(warehouseSerial).then(
 			          		     function(data){
 			          		    	 debugger
 			          		    	$scope.warehouseAddress=data.address;
-			          		    	
-			          		    	/*var orderSerial=data.orderInfo.serialNum;
-			          		    	$scope.orderSerial=data.orderInfo.serialNum;
-			          		    	$scope.deliveryMateriel=data.orderMateriel;*/
 			          		     },
 			          		     function(error){
 			          		         $scope.error = error;
@@ -647,16 +600,13 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			          		 );
 			        }
 			        
+			        //通过选择发货仓库改变地址（编辑）
 			        $scope.selectAddressEdit=function(){
 			        	var warehouseSerial=$scope.delivery.warehouseSerial;
 			        	DeliveryService.selectAddress(warehouseSerial).then(
 			          		     function(data){
 			          		    	 debugger
 			          		    	$scope.delivery.deliveryAddress=data.address;
-			          		    	
-			          		    	/*var orderSerial=data.orderInfo.serialNum;
-			          		    	$scope.orderSerial=data.orderInfo.serialNum;
-			          		    	$scope.deliveryMateriel=data.orderMateriel;*/
 			          		     },
 			          		     function(error){
 			          		         $scope.error = error;
@@ -664,15 +614,12 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			          		 );
 			        }
 			        
+			      //通过选择收货仓库改变地址（新增）
 			        $scope.selectAddressTakeDelivery=function(){
 			        	var warehouseSerial=$scope.takeDelivery.warehouseSerial;
 			        	DeliveryService.selectAddress(warehouseSerial).then(
 			          		     function(data){
 			          		    	$scope.takeDeliveryWarehouseAddress=data.address;
-			          		    	
-			          		    	/*var orderSerial=data.orderInfo.serialNum;
-			          		    	$scope.orderSerial=data.orderInfo.serialNum;
-			          		    	$scope.deliveryMateriel=data.orderMateriel;*/
 			          		     },
 			          		     function(error){
 			          		         $scope.error = error;
@@ -680,7 +627,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			          		 );
 			        }
 			        
-			        
+			      //通过选择收货仓库改变地址（编辑）
 			        $scope.selectAddressTakeDeliveryEdit=function(){
 			        	var warehouseSerial=$scope.delivery.takeWarehouseSerial;
 			        	DeliveryService.selectAddress(warehouseSerial).then(
@@ -717,7 +664,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 					$('#delUsersModal').modal('show');// 打开确认删除模态框
 					
 					$scope.confirmDel = function() {										
-						DeliveryService.delUserContract(ids).then(
+						DeliveryService.deleteDeliveryS(ids).then(
 										function(data) {
 											$('#delUsersModal').modal('hide');// 删除成功后关闭模态框
 											$(".modal-backdrop").remove();
@@ -765,6 +712,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		        })
 		  }*/
 	        
+	        //销售订单列表
 	        var table1;
 		    var tableAjaxUrl = "rest/order/findSaleOrderList";
 		    var loadMainTable1 = function() {
@@ -884,6 +832,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	    	   
 	       }
 		
+	       
 		//修改
 		$scope.jumpToEdit = function() {
 			var ids = '';
