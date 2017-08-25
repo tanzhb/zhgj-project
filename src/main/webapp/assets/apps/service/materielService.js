@@ -68,7 +68,7 @@ angular.module('MetronicApp').service('materielService',
 	                    deferred.reject('连接服务器出错！');
 	                })
 					return deferred.promise;
-				},
+				},//物料导入
 				uploadExcel : function(params){
 					var deferred = $q.defer();
 					var fd = new FormData();

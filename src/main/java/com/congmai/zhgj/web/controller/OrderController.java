@@ -22,10 +22,14 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.web.model.BOMMateriel;
 import com.congmai.zhgj.web.model.BOMMaterielExample;
 import com.congmai.zhgj.web.model.ClauseFramework;
@@ -37,6 +41,7 @@ import com.congmai.zhgj.web.model.ClauseFrameworkExample;
 import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.MaterielExample;
 import com.congmai.zhgj.web.model.OrderFile;
 import com.congmai.zhgj.web.model.OrderFileExample;
 import com.congmai.zhgj.web.model.OrderMateriel;
@@ -160,17 +165,6 @@ public class OrderController {
 
     }
 
-    
-    /**
-     * @Description (下载导入模板)
-     * @param request
-     * @return
-     */
-    @RequestMapping("downloadImportTemp")
-    public void downloadCompanyTemp(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
-    	ExcelUtil.importTempDownLoad(request, response, "orderInfo");
-    }
-    
     /**
 	 * 
 	 * @Description 批量删除订单
@@ -625,5 +619,102 @@ public class OrderController {
 			return null;
 		}
     	
+    }
+    
+    /**
+     * @Description (导出订单信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping("exportOrder")
+    public void exportOrder(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+    		Map<String, Object> dataMap = new HashMap<String, Object>();
+    		OrderInfoExample m =new OrderInfoExample();
+        	List<OrderInfo> orderInfoList = new ArrayList<OrderInfo>();
+        	//and 条件1
+        	Criteria criteria =  m.createCriteria();
+        	criteria.andDelFlgEqualTo("0");
+        	//and 条件2,未发布可编辑的物料
+        	Criteria criteria2 =  m.createCriteria();
+        	criteria2.andStatusEqualTo("0");
+        	criteria2.andDelFlgEqualTo("0");
+        	//or 条件
+        	m.or(criteria2);
+        	//排序字段
+        	m.setOrderByClause("updateTime DESC");
+        	orderInfoList = orderService.selectList(m);
+    		dataMap.put("orderInfoList",orderInfoList);
+    		ExcelUtil.export(request, response, dataMap, "orderInfo", "订单信息");
+    }
+    
+    /**
+     * @Description (下载导入模板)
+     * @param request
+     * @return
+     */
+    @RequestMapping("downloadImportTemp")
+    public void downloadCompanyTemp(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+    	ExcelUtil.importTempDownLoad(request, response, "orderInfo");
+    }
+    
+    /**
+     * @Description (订单信息导入)
+     * @param request
+     * @return
+     */
+    @RequestMapping("orderImport")
+    @ResponseBody
+    public Map<String,String> orderImport(@RequestParam(value = "excelFile") MultipartFile excelFile,HttpServletRequest request,HttpServletResponse response) {
+    	Map<String,String> map = new HashMap<String, String>();
+    	 try {
+			ExcelReader excelReader = new ExcelReader(excelFile.getInputStream());
+			excelReader.readExcelContent(new RowHandler() {
+				@Override
+				public void handle(List<Object> row,int i) throws Exception {
+					if(!CollectionUtils.isEmpty(row)){
+						try{
+							OrderInfo orderInfo = new OrderInfo();
+
+							orderInfo.setOrderNum(row.get(0).toString());
+							orderInfo.setOrderType(row.get(1).toString());
+							orderInfo.setBuyComId(row.get(2).toString());
+							orderInfo.setSeller(row.get(3).toString());
+							orderInfo.setEntrustParty(row.get(4).toString());
+							orderInfo.setServiceModel(row.get(5).toString());
+							orderInfo.setSettlementClause(row.get(6).toString());
+							orderInfo.setDeliveryMode(row.get(7).toString());
+							orderInfo.setRate(row.get(8).toString());
+							orderInfo.setCurrency(row.get(9).toString());
+							orderInfo.setExchangeRate(row.get(10).toString());
+							orderInfo.setDemandPlanSerial(row.get(11).toString());
+							orderInfo.setSaleApplySerial(row.get(12).toString());
+							orderInfo.setOrderSerial(row.get(13).toString());
+							orderInfo.setMaker(row.get(14).toString());
+							orderInfo.setOrderDate(StringUtils.isEmpty(row.get(15).toString())?null:(Date) row.get(15));
+
+							orderInfo.setSerialNum(ApplicationUtils.random32UUID());
+				    		Subject currentUser = SecurityUtils.getSubject();
+				    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+				    		orderInfo.setCreator(currenLoginName);
+				    		orderInfo.setUpdater(currenLoginName);
+				    		orderInfo.setCreateTime(new Date());
+				    		orderInfo.setUpdateTime(new Date());
+				    		orderInfo.setStatus("1");
+				    		
+				    		orderService.insert(orderInfo);
+						}catch(Exception  e){
+							throw new Exception("第"+i+"行数据异常请检查，数据内容："+row.toString());
+						}
+						
+					}
+					
+				}
+			}, 2);
+			map.put("data", "success");
+		} catch (Exception e1) {
+			map.put("data", e1.getMessage());
+		}
+    	
+         return map;
     }
 }

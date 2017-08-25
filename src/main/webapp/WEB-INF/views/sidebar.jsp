@@ -78,15 +78,15 @@
             </a> -->
             <a href="javascript:;" class="nav-link nav-toggle">
                 <i class="icon-check"></i>
-                <span class="title">采购订单</span>
+                <span class="title">采购管理</span>
                 <span class="arrow "></span>
             </a>
             <ul class="sub-menu">
-                <!-- <li>
-                    <a ui-sref="">
+                <li>
+                    <a ui-sref="buyOrder">
                         <i class="icon-puzzle"></i> 采购订单</span>
                     </a>
-                </li> -->
+                </li>
                 <li>
                     <a ui-sref="purchaseForecast">
                         <i class="icon-paper-clip"></i>采购预测</span>
