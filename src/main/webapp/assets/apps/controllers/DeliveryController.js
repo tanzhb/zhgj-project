@@ -570,9 +570,13 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	 
 	          		    	$scope.saleOrder=data.orderInfo;
 	          		    	
-	          		    	if($scope.delivery.orderNum!=""&&$scope.delivery.orderNum!=null){
-	          		    		$scope.delivery.orderNum=$scope.saleOrder.orderNum;
+	          		    	if($scope.delivery!=null){
+	          		    		if($scope.delivery.orderNum!=""&&$scope.delivery.orderNum!=null){
+		          		    		$scope.delivery.orderNum=$scope.saleOrder.orderNum;
+		          		    	}	
 	          		    	}
+	          		    	
+	          		    	
 	          		    	debugger
 	          		    	var orderSerial=data.orderInfo.serialNum;
 	          		    	$scope.orderSerial=data.orderInfo.serialNum;
