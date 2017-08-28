@@ -7,7 +7,7 @@
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
 			class="fa fa-angle-right"></i></li>
-		<li><a ui-sref="saleOrder">发货</a> <i class="fa fa-angle-right"></i>
+		<li><a ui-sref="delivery">发货</a> <i class="fa fa-angle-right"></i>
 		</li>
 		<li><a>修改发货</a></li>
 	</ul>
@@ -32,11 +32,11 @@
 					<div class="portlet-title">
 						<div class="caption">基本信息</div>
 						<div class="tools" id="noprintdiv">
-							<button type="submit" ng-click="saveBasicInfo()" ng-show="input"
+							<button type="submit" ng-click="editBasicInfo()" ng-show="input"
 								class="btn blue  btn-outline  btn-sm">
 								<i class="fa fa-save"></i> 保存
 							</button>
-							<button ng-click="cancel()" type="button"
+							<button ng-click="goBack()" type="button"
 								ng-hide="saleOrderInput" class="btn red  btn-outline  btn-sm">
 								<i class="fa fa-undo"></i> 取消
 							</button>
@@ -75,7 +75,7 @@
 													ng-model="delivery.orderNum" ng-show="input"
 													style="width: 110%;" readonly />
 												<div class="form-control-focus"></div>
-												<input type="text" ng-model="orderSerial" ng-hide="true" />
+												<input type="text" ng-model="delivery.orderSerial" ng-hide="true" />
 												<span class="help-block">请输入销售订单号</span>
 
 												<p class="form-control-static" ng-show="span">
@@ -96,6 +96,7 @@
 									<!--/span-->
 								</div>
 								<!--/row-->
+								<input type="text" ng-model="isBasicInfoSaved" ng-hide="true" />
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
@@ -482,7 +483,7 @@
 												class="required" aria-required="true"> * </span>运输方式:</label>
 											<div class="col-md-9">
 												<input type="text" class="form-control" name="transportType"
-													ng-model="deliveryTransport.transportType" ng-show="input" />
+													ng-model="delivery.transportType" ng-show="input" />
 												<div class="form-control-focus"></div>
 												<span class="help-block">请输入运输方式</span>
 												<p class="form-control-static" ng-show="span">
@@ -497,11 +498,11 @@
 												class="required" aria-required="true"> * </span>运输方:</label>
 											<div class="col-md-9">
 												<input type="text" class="form-control" name="transport"
-													ng-model="deliveryTransport.transport" ng-show="input" />
+													ng-model="delivery.transport" ng-show="input" />
 												<div class="form-control-focus"></div>
 												<span class="help-block">请输入运输方</span>
 												<p class="form-control-static" ng-show="span">
-													{{deliveryTransport.transport}}</p>
+													{{delivery.transport}}</p>
 											</div>
 										</div>
 									</div>
@@ -512,11 +513,11 @@
 												class="required" aria-required="true"> * </span>港口:</label>
 											<div class="col-md-9">
 												<input type="text" class="form-control" name="port"
-													ng-model="deliveryTransport.port" ng-show="input" />
+													ng-model="delivery.port" ng-show="input" />
 												<div class="form-control-focus"></div>
 												<span class="help-block">请输入港口</span>
 												<p class="form-control-static" ng-show="span">
-													{{deliveryTransport.port}}</p>
+													{{delivery.port}}</p>
 											</div>
 										</div>
 									</div>
@@ -530,7 +531,7 @@
 												class="required" aria-required="true"> * </span>船号:</label>
 											<div class="col-md-9">
 												<input type="text" class="form-control" name="shipNumber"
-													ng-model="deliveryTransport.shipNumber" ng-show="input" />
+													ng-model="delivery.shipNumber" ng-show="input" />
 												<div class="form-control-focus"></div>
 												<span class="help-block">请输入船号</span>
 												<p class="form-control-static" ng-show="span">
@@ -549,7 +550,7 @@
 													data-date-format="yyyy-mm-dd" ng-show="input"
 													data-date-viewmode="years" size="16" name="playArrivalDate"
 													id="playArrivalDate"
-													ng-model="deliveryTransport.playArrivalDate" />
+													ng-model="delivery.playArrivalDate" />
 												<div class="form-control-focus"></div>
 												<span class="help-block">请选择预计到港日期</span>
 												<p class="form-control-static" ng-show="span">
@@ -568,7 +569,7 @@
 													data-date-format="yyyy-mm-dd" data-date-viewmode="years"
 													ng-show="input" size="16" name="playWarehouseDate"
 													id="playWarehouseDate"
-													ng-model="deliveryTransport.playWarehouseDate" />
+													ng-model="delivery.playWarehouseDate" />
 												<div class="form-control-focus"></div>
 												<span class="help-block">请选择预计到库日期</span>
 												<p class="form-control-static" ng-show="span">
@@ -586,7 +587,7 @@
 												class="required" aria-required="true"> * </span>联系人:</label>
 											<div class="col-md-9">
 												<input type="text" class="form-control" name="deliveryTransportContact"
-													ng-show="input" ng-model="deliveryTransport.contact" />
+													ng-show="input" ng-model="delivery.transportContact" />
 												<div class="form-control-focus"></div>
 												<span class="help-block">请输入联系人</span>
 												<p class="form-control-static" ng-show="span">
@@ -601,7 +602,7 @@
 												class="required" aria-required="true"> * </span>联系电话:</label>
 											<div class="col-md-9">
 												<input type="text" class="form-control" name="deliveryTransportContactNum"
-													ng-show="input" ng-model="deliveryTransport.contactNum" />
+													ng-show="input" ng-model="delivery.contactNum" />
 												<div class="form-control-focus"></div>
 												<span class="help-block">请输入联系电话</span>
 												<p class="form-control-static" ng-show="span">
@@ -616,7 +617,7 @@
 											<label class="control-label col-md-3">备注:</label>
 											<div class="col-md-9">
 												<input type="text" class="form-control" name="remark"
-													ng-show="input" ng-model="deliveryTransport.remark" />
+													ng-show="input" ng-model="delivery.transportRemark" />
 												<div class="form-control-focus"></div>
 												<span class="help-block">请输入备注</span>
 												<p class="form-control-static" ng-show="span">
@@ -647,8 +648,8 @@
 												<select class="form-control"
 													id="takeDeliveryWarehouseSerial"
 													name="takeDeliveryWarehouseSerial"
-													ng-model="takeDelivery.warehouseSerial"
-													ng-change="selectAddressTakeDelivery()" ng-show="input">
+													ng-model="delivery.takeWarehouseSerial"
+													ng-change="selectAddressTakeDeliveryEdit()" ng-show="input">
 													<option value="">收货仓库</option>
 													<option ng-repeat="item in warehouseList"
 														value="{{item.serialNum}}">{{item.warehouseName}}</option>
@@ -668,7 +669,7 @@
 											<div class="col-md-9">
 												<input type="text" name="takeDeliveryWarehouseAddress"
 													class="form-control"
-													ng-model="takeDeliveryWarehouseAddress" readonly
+													ng-model="delivery.takeAddress" readonly
 													ng-show="input" />
 
 												<div class="form-control-focus"></div>
@@ -687,7 +688,7 @@
 												<input type="text" name="takeDeliverDate"
 													id="takeDeliverDate" data-date-format="yyyy-mm-dd"
 													data-date-viewmode="years" size="16" class="form-control"
-													ng-model="takeDelivery.takeDeliverDate" ng-show="input" />
+													ng-model="delivery.takeDeliverDate" ng-show="input" />
 
 												<div class="form-control-focus"></div>
 												<span class="help-block">请选择收货日期</span>
@@ -706,7 +707,7 @@
 												class="required" aria-required="true"> * </span>收货人:</label>
 											<div class="col-md-9">
 												<input type="text" name="takeDeliveryReceiver"
-													class="form-control" ng-model="takeDelivery.receiver"
+													class="form-control" ng-model="delivery.takeDeliveryReceiver"
 													ng-show="input" />
 
 												<div class="form-control-focus"></div>
@@ -724,7 +725,7 @@
 												class="required" aria-required="true"> * </span>联系电话:</label>
 											<div class="col-md-9">
 												<input type="text" name="takeDeliveryContactNum"
-													class="form-control" ng-model="takeDelivery.contactNum"
+													class="form-control" ng-model="delivery.takeDeliveryContactNum"
 													ng-show="input" />
 												<div class="form-control-focus"></div>
 												<span class="help-block">请输入联系电话</span>
@@ -740,7 +741,7 @@
 											<label class="control-label col-md-3">备注:</label>
 											<div class="col-md-9">
 												<input type="text" name="remark" class="form-control"
-													ng-model="takeDelivery.remark" ng-show="input" />
+													ng-model="delivery.takeDeliveryRemark" ng-show="input" />
 												<div class="form-control-focus"></div>
 												<span class="help-block">请输入备注</span>
 												<p class="form-control-static" ng-show="span">
@@ -776,10 +777,10 @@
 									</thead>
 									<tbody>
 										<tr
-											ng-repeat="_deliveryMateriel in deliveryMateriel track by $index"
+											ng-repeat="_deliveryMateriel in deliveryMaterielE track by $index"
 											ng-mouseover="showOperation('deliveryMateriel',$index)"
 											ng-mouseleave="hideOperation('deliveryMateriel',$index)"
-											repeat-done="repeatDone()">
+											repeat-done="repeatDone1()"><!-- repeat-done="repeatDone()" -->
 											<td>
 												<!--  <span ><a href="javascript:;" ng-click="addMateriel('single',$index)">{{_orderMateriel.materiel.materielNum}}</a></span> -->
 												<p class="form-control-static">
@@ -799,11 +800,11 @@
 											</td>
 											<td><input type="text" name="batchNum"
 												class="form-control" ng-hide="orderMaterielInput{{$index}}"
-												ng-model="deliveryMateriel[$index].batchNum">
+												ng-model="deliveryMaterielE[$index].batchNum">
 												<p class="form-control-static"
 													ng-show="orderMaterielShow{{$index}}">
 													{{_deliveryMateriel.batchNum}}</p></td>
-											<td><input type="text" name="manufactureDate{{$index}}"
+											<td><input type="text" id="manufactureDate{{$index}}" name="manufactureDate{{$index}}"
 												class="form-control form-control-inline input-medium date-picker"
 												data-date-format="yyyy-mm-dd" data-date-viewmode="years"
 												size="16" ng-hide="orderMaterielInput{{$index}}"
@@ -811,40 +812,34 @@
 
 												<p class="form-control-static"
 													ng-show="orderMaterielShow{{$index}}">
-													{{_deliveryMateriel.manufactureDate}}</p></td>
+													{{_deliveryMateriel.manufactureDate}}</p>
+											</td>
 											<td>
-												<!-- <input type="text"  name="amount{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="deliveryMateriel[$index].amount">
-                                      		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> </p> -->
 												<p class="form-control-static">{{_deliveryMateriel.amount}}
 												</p>
 											</td>
 											<td><input type="text" name="deliverCount{{$index}}"
 												class="form-control" ng-hide="orderMaterielInput{{$index}}"
-												ng-model="deliveryMateriel[$index].deliverCount">
+												ng-model="deliveryMaterielE[$index].deliverCount">
 												<p class="form-control-static"
 													ng-show="orderMaterielShow{{$index}}">
-													{{_deliveryMateriel.deliverCount}}</p></td>
+													{{_deliveryMateriel.deliverCount}}</p>
+											</td>
 											<td><input type="text" name="deliverRemark{{$index}}"
 												class="form-control" ng-hide="orderMaterielInput{{$index}}"
-												ng-model="deliveryMateriel[$index].deliverRemark">
+												ng-model="deliveryMaterielE[$index].remark">
 												<p class="form-control-static"
 													ng-show="orderMaterielShow{{$index}}">
-													{{_deliveryMateriel.deliverRemark}}</p></td>
+													{{_deliveryMateriel.remark}}</p></td>
+													
 											<td><span ng-hide="orderMaterielInput{{$index}}">
 													&nbsp;&nbsp;&nbsp;&nbsp; <a
-													ng-click="saveOrderMateriel(_deliveryMateriel,$index)"><i
+													ng-click="editOrderMateriel(_deliveryMateriel,$index)"><i
 														class="fa fa-save"></i></a> &nbsp;&nbsp;&nbsp; <a
-													ng-click="cancelOrderMateriel(_orderMateriel,$index)"><i
+													ng-click="cancelOrderMateriel(_deliveryMateriel,$index)"><i
 														class="fa fa-undo"></i></a>
-											</span> <span ng-show="operation_o{{$index}}">
-													&nbsp;&nbsp;&nbsp;&nbsp; <a
-													ng-show="orderMaterielShow{{$index}}"
-													ng-click="editOrderMateriel(_orderMateriel)"><i
-														class="fa fa-edit"></i></a> &nbsp;&nbsp;&nbsp; <a
-													ng-show="orderMaterielShow{{$index}}"
-													ng-click="deleteOrderMateriel(_orderMateriel)"><i
-														class="fa fa-minus"></i></a>
-											</span></td>
+											</span> 
+											</td>
 										</tr>
 									</tbody>
 								</table>

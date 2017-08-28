@@ -1,51 +1,46 @@
 'use strict';
 
 angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http', '$q','$filter', function($rootScope, $http, $q,$filter){
-    var REST_SERVICE_URI = $rootScope.basePath + '/rest/contract/findAllUserContract';
 
     var factory = {
-    		//查询列表
-    		fetchAllUserContract: fetchAllUserContract,
-    		//添加
+    		//获取订单物料信息
     		getSaleOrderInfo: getSaleOrderInfo,
-    		//删除
-    		delUserContract:delUserContract,
-    		//单个查找
+    		
+    		//查询仓库集合
     		getWarehouseList:getWarehouseList,
     		
     		downLoad:downLoad,
     		
     		uploadExcel:uploadExcel,
     		
+    		//保存订单物料
     		saveDeliveryMateriel:saveDeliveryMateriel,
     		
+    		//编辑订单物料
+    		editDeliveryMateriel:editDeliveryMateriel,
+    		
+    		//查询仓库地址
     		selectAddress:selectAddress,
     		
+    		//保存基本信息
     		saveBasicInfo:saveBasicInfo,
     		
-    		getDeliveryInfo:getDeliveryInfo
+    		//编辑基本信息
+    		editBasicInfo:editBasicInfo,
+    		
+    		//查询发货详情
+    		getDeliveryInfo:getDeliveryInfo,
+    		
+    		//确认发货
+    		goDelivery:goDelivery,
+    		
+    		//删除发货信息
+    		deleteDeliveryS:deleteDeliveryS,
+    		
     };
 
     return factory;
 
-    function fetchAllUserContract() {
-        var deferred = $q.defer();
-        $http.get(REST_SERVICE_URI)
-            .then(
-            function (response) {
-            	/*for(var i=0;i<response.data.data.length;i++){
-            		var myJsDate=$filter('date')(response.data.data[i].startDate,'MM/dd/yyyy');
-                    response.data.data[i].startDate=myJsDate;	
-            	}*/
-            	deferred.resolve(response.data);
-            },
-            function(errResponse){
-                console.error('Error while fetching Users');
-                deferred.reject(errResponse);
-            }
-        );
-        return deferred.promise;
-    }
     
   //保存订单物料
     function saveDeliveryMateriel (deliveryMateriel){
@@ -54,7 +49,7 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 			batchNum:deliveryMateriel.batchNum,
 			manufactureDate:deliveryMateriel.manufactureDate,
 			deliverCount:deliveryMateriel.deliverCount,
-			deliverRemark:deliveryMateriel.deliverRemark,
+			remark:deliveryMateriel.remark,
 			deliverSerial:deliveryMateriel.deliverSerial,
 			orderMaterielSerial:deliveryMateriel.orderMaterielSerialNum//传整个表单数据  
 		}
@@ -66,6 +61,28 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 		return deferred.promise;//返回承诺
 	}
     
+    
+    //编辑订单物料
+    function editDeliveryMateriel (deliveryMateriel){
+		var deferred = $q.defer();
+		$.post("rest/delivery/editDeliveryMateriel", {
+			serialNum:deliveryMateriel.serialNum,
+			batchNum:deliveryMateriel.batchNum,
+			deliverSerial:deliveryMateriel.deliverSerial,
+			manufactureDate:deliveryMateriel.manufactureDate,
+			deliverCount:deliveryMateriel.deliverCount,
+			remark:deliveryMateriel.remark,
+			orderMaterielSerial:deliveryMateriel.orderMaterielSerialNum//传整个表单数据  
+		}
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
+    
+    //保存基本信息
     function saveBasicInfo($scope){
     	debugger
     	var deferred = $q.defer();
@@ -116,6 +133,63 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 		return deferred.promise;//返回承诺
     }
     
+    
+    //编辑基本信息
+    function editBasicInfo($scope){
+    	debugger
+    	var deferred = $q.defer();
+		$.post("rest/delivery/editBasicInfo", {
+			serialNum:$scope.delivery.serialNum,
+			orderSerial:$scope.delivery.orderSerial,
+			warehouseSerial:$scope.delivery.warehouseSerial,
+			deliverNum:$scope.delivery.deliverNum,
+			supplyComId:$scope.delivery.supplyComId,
+			shipper:$scope.delivery.shipper,
+			receiver:$scope.delivery.receiver,
+			maker:$scope.delivery.maker,
+			makeDate:$scope.delivery.makeDate,
+			approval:$scope.delivery.approval,
+			approvalDate:$scope.delivery.approvalDate,
+			remark:$scope.delivery.remark,
+			deliverDate:$scope.delivery.deliverDate,
+			materielCount:$scope.delivery.materielCount,
+			packageCount:$scope.delivery.packageCount,
+			packageType:$scope.delivery.packageType,
+			packageSpecifications:$scope.delivery.packageSpecifications,
+			materielWeight:$scope.delivery.materielWeight,
+			serviceMoney:$scope.delivery.serviceMoney,
+			deliverer:$scope.delivery.deliverer,
+			contactNum:$scope.delivery.contactNum,
+			deliverRemark:$scope.delivery.deliverRemark,
+			
+			transportserialNum:$scope.delivery.transportserialNum,
+			transportType:$scope.delivery.transportType,
+			transport:$scope.delivery.transport,
+			port:$scope.delivery.port,
+			shipNumber:$scope.delivery.shipNumber,
+			playArrivalDate:$scope.delivery.playArrivalDate,
+			playWarehouseDate:$scope.delivery.playWarehouseDate,
+			transportRemark:$scope.delivery.transportRemark,
+			transportContact:$scope.delivery.transportContact,
+			transportContactNum:$scope.delivery.contactNum,
+			
+			takeDeliverSerialNum:$scope.delivery.takeDeliverSerialNum,
+			takeDeliveryWarehouseSerial:$scope.delivery.takeWarehouseSerial,
+			takeDeliverDate:$scope.delivery.takeDeliverDate,
+			takeDeliveryReceiver:$scope.delivery.takeDeliveryReceiver,
+			takeDeliveryContactNum:$scope.delivery.takeDeliveryContactNum,
+			takeDeliveryRemark:$scope.delivery.takeDeliveryRemark
+		}
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+    }
+    
+    
+    //查询仓库地址
     function selectAddress (warehouseSerial){
     	var deferred = $q.defer();
 		$.post("rest/delivery/selectAddress", {
@@ -153,8 +227,8 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 		return deferred.promise;//返回承诺
 	}
     
-  //删除用户
-    function delUserContract(ids){
+  //删除发货信息
+    function deleteDeliveryS(ids){
         var deferred = $q.defer();  
 
         $http.post($rootScope.basePath + "/rest/delivery/deleteDeliveryS", ids).success(function (data) {  
@@ -168,7 +242,7 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
           
     };
     
-  //通过用户id查找用户
+  //通过仓库集合
     function getWarehouseList(){
         var deferred = $q.defer();  
         $.get("rest/delivery/getWarehouseList").success(function (data) { 
@@ -184,6 +258,7 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     };
     
     
+    //查询订单信息
     function getSaleOrderInfo(serialNum){
         var deferred = $q.defer();  
 
@@ -200,10 +275,26 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     };
     
     
-    function getDeliveryInfo(serialNum){
+    //查询发货详情
+    function getDeliveryInfo(serialNumEdit){
     	var deferred = $q.defer();  
 
-        $http.get("rest/delivery/getDeliveryInfo", {params:{serialNum:serialNum}})
+        $http.get("rest/delivery/getDeliveryInfo", {params:{serialNum:serialNumEdit}})
+        .success(function (data) {  
+            // 如果连接成功，延时返回给调用者  
+            deferred.resolve(data);  
+        }).error(function () {  
+            deferred.reject('连接服务器出错！');  
+        })  
+        return deferred.promise; 
+    }
+    
+    
+    //确认发货
+    function goDelivery(serialNum){
+    	var deferred = $q.defer();  
+
+        $http.get("rest/delivery/goDelivery", {params:{serialNum:serialNum}})
         .success(function (data) {  
             // 如果连接成功，延时返回给调用者  
             deferred.resolve(data);  

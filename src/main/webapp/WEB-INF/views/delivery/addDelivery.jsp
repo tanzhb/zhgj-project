@@ -7,7 +7,7 @@
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
 			class="fa fa-angle-right"></i></li>
-		<li><a ui-sref="saleOrder">发货</a> <i class="fa fa-angle-right"></i>
+		<li><a ui-sref="delivery">发货</a> <i class="fa fa-angle-right"></i>
 		</li>
 		<li><a>新增发货</a></li>
 	</ul>
@@ -36,7 +36,7 @@
 								class="btn blue  btn-outline  btn-sm">
 								<i class="fa fa-save"></i> 保存
 							</button>
-							<button ng-click="cancel()" type="button"
+							<button ng-click="goBack()" type="button"
 								ng-hide="saleOrderInput" class="btn red  btn-outline  btn-sm">
 								<i class="fa fa-undo"></i> 取消
 							</button>
@@ -776,7 +776,7 @@
 									</thead>
 									<tbody>
 										<tr
-											ng-repeat="_deliveryMateriel in deliveryMateriel track by $index"
+											ng-repeat="_deliveryMateriel in deliveryMaterielE track by $index"
 											ng-mouseover="showOperation('deliveryMateriel',$index)"
 											ng-mouseleave="hideOperation('deliveryMateriel',$index)"
 											repeat-done="repeatDone()">
@@ -799,7 +799,7 @@
 											</td>
 											<td><input type="text" name="batchNum"
 												class="form-control" ng-hide="orderMaterielInput{{$index}}"
-												ng-model="deliveryMateriel[$index].batchNum">
+												ng-model="deliveryMaterielE[$index].batchNum">
 												<p class="form-control-static"
 													ng-show="orderMaterielShow{{$index}}">
 													{{_deliveryMateriel.batchNum}}</p></td>
@@ -807,7 +807,7 @@
 												class="form-control form-control-inline input-medium date-picker"
 												data-date-format="yyyy-mm-dd" data-date-viewmode="years"
 												size="16" ng-hide="orderMaterielInput{{$index}}"
-												ng-model="deliveryMateriel[$index].manufactureDate" />
+												ng-model="deliveryMaterielE[$index].manufactureDate" />
 
 												<p class="form-control-static"
 													ng-show="orderMaterielShow{{$index}}">
@@ -820,31 +820,23 @@
 											</td>
 											<td><input type="text" name="deliverCount{{$index}}"
 												class="form-control" ng-hide="orderMaterielInput{{$index}}"
-												ng-model="deliveryMateriel[$index].deliverCount">
+												ng-model="deliveryMaterielE[$index].deliverCount">
 												<p class="form-control-static"
 													ng-show="orderMaterielShow{{$index}}">
 													{{_deliveryMateriel.deliverCount}}</p></td>
 											<td><input type="text" name="deliverRemark{{$index}}"
 												class="form-control" ng-hide="orderMaterielInput{{$index}}"
-												ng-model="deliveryMateriel[$index].deliverRemark">
+												ng-model="deliveryMaterielE[$index].remark">
 												<p class="form-control-static"
 													ng-show="orderMaterielShow{{$index}}">
-													{{_deliveryMateriel.deliverRemark}}</p></td>
+													{{_deliveryMateriel.remark}}</p></td>
 											<td><span ng-hide="orderMaterielInput{{$index}}">
 													&nbsp;&nbsp;&nbsp;&nbsp; <a
 													ng-click="saveOrderMateriel(_deliveryMateriel,$index)"><i
-														class="fa fa-save"></i></a> &nbsp;&nbsp;&nbsp; <a
+														class="fa fa-save"></i></a> <!-- &nbsp;&nbsp;&nbsp; <a
 													ng-click="cancelOrderMateriel(_orderMateriel,$index)"><i
-														class="fa fa-undo"></i></a>
-											</span> <span ng-show="operation_o{{$index}}">
-													&nbsp;&nbsp;&nbsp;&nbsp; <a
-													ng-show="orderMaterielShow{{$index}}"
-													ng-click="editOrderMateriel(_orderMateriel)"><i
-														class="fa fa-edit"></i></a> &nbsp;&nbsp;&nbsp; <a
-													ng-show="orderMaterielShow{{$index}}"
-													ng-click="deleteOrderMateriel(_orderMateriel)"><i
-														class="fa fa-minus"></i></a>
-											</span></td>
+														class="fa fa-undo"></i></a> -->
+											</span> </td>
 										</tr>
 									</tbody>
 								</table>

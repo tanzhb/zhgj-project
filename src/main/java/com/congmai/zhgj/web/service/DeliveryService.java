@@ -1,22 +1,19 @@
 package com.congmai.zhgj.web.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.congmai.zhgj.core.generic.GenericService;
-import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryTransportVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
-import com.congmai.zhgj.web.model.OrderMateriel;
-import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
-import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
 
 /**
  * 
- * @ClassName ContractService
- * @Description  合同 业务 接口
+ * @ClassName DeliveryService
+ * @Description  发货 业务 接口
  * @author czw
  */
 public interface DeliveryService extends GenericService<DeliveryMaterielVO, String> {
@@ -29,16 +26,19 @@ public interface DeliveryService extends GenericService<DeliveryMaterielVO, Stri
     
     
     /**
-     * 查询用户合同
-     * @param userId（用户id）
-     * @return
+     * 删除旧的发货物料
+     * @param idList
      */
-    /*public List<ContractVO> queryContractList(String userId);*/
-    
+    public void deleteOldDeliveryMateriel(List<String> idList);
     
     /**
-     * 
-     * @Description 批量删除 合同
+	 * 编辑发货物料
+	 * @param contractVO
+	 */
+    public void updateDeliveryMateriel(DeliveryMaterielVO deliveryMaterielVO);
+    
+    /**
+     * @Description 批量删除 发货
      * @param ids
      * @return
      */
@@ -46,43 +46,115 @@ public interface DeliveryService extends GenericService<DeliveryMaterielVO, Stri
 	
 	
 	/**
-	 * 根据id查询合同对象
+	 * 根据id查询发货对象
 	 * @param id
 	 * @return
 	 */
 	public DeliveryMaterielVO selectDeliveryMaterielById(String id);
 	
 	
-	
+	/**
+	 * 查询发货物料列表
+	 * @param serialNum
+	 * @return
+	 */
 	List<DeliveryMaterielVO> selectList(String serialNum);
 	
 	
-	
+	/**
+	 * 查询仓库地址
+	 * @param serialNum
+	 * @return
+	 */
 	public Warehouse queryAddressById(String serialNum);
 	
 	
-	
+	/**
+	 * 添加基本信息
+	 * @param record
+	 */
 	public void insertBasicInfo(DeliveryVO record);
 	
 	
+	/**
+	 * 添加基本信息第二部分
+	 * @param deliveryTransport
+	 */
 	public void insertBasicInfoPartII(DeliveryTransportVO deliveryTransport);
 	
 	
+	/**
+	 * 添加基本信息第三部分
+	 * @param takeDelivery
+	 */
 	public void insertBasicInfoPartIII(TakeDeliveryVO takeDelivery);
 	
 	
+	/**
+	 * 编辑基本信息
+	 * @param record
+	 */
+	public void updateBasicInfo(DeliveryVO record);
+	
+	
+	/**
+	 * 编辑基本信息第二部分
+	 * @param deliveryTransport
+	 */
+	public void updateBasicInfoPartII(DeliveryTransportVO deliveryTransport);
+	
+	
+	/**
+	 * 编辑基本信息第三部分
+	 * @param takeDelivery
+	 */
+	public void updateBasicInfoPartIII(TakeDeliveryVO takeDelivery);
+	
+	
+	/**
+	 * 通过id查询详情
+	 * @param id
+	 * @return
+	 */
 	public DeliveryVO selectDetailById(String id);
 	
 	
-	
+	/**
+	 * 查询发货列表
+	 * @param username
+	 * @return
+	 */
 	public List<DeliveryVO> findAllDeliveryList(String username);
 	
 	
+	/**
+	 * 查询发货详情的发货物料
+	 * @param serialNum
+	 * @return
+	 */
 	List<DeliveryMaterielVO> selectListForDetail(String serialNum);
 	
+	
 	/**
-	 * 更新用户对象
-	 * @param contractVO
+	 * 查询发货物料的归属订单id
+	 * @param orderMaterielSerialNum
+	 * @return
 	 */
-	/*public void updateContract(ContractVO contractVO);*/
+   public String selectOrderId(String orderMaterielSerialNum);
+   
+   
+   /**
+    * 查询需要删除的发货物料
+    * @param deliverySerial
+    * @param orderSerial
+    * @return
+    */
+   public List<String> queryDeliveryMaterielDelete(String deliverySerial,String orderSerial);
+	
+  
+   /**
+    * 确认发货
+    * @param map
+    */
+   public void goDelivery(Map<String,Object> map);
 }
