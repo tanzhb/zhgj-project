@@ -179,6 +179,23 @@ public class PageController {
     
     
     /**
+     * 新增采购订单
+     */
+    @RequestMapping("/addBuyOrder")
+    public String addBuyOrder(String serialNum,String view) {
+        return "order/addBuyOrder";
+    }
+    
+    /**
+     * 采购订单
+     */
+    @RequestMapping("/buyOrder")
+    public String buyOrder() {
+        return "order/buyOrder";
+    }
+    
+    
+    /**
      * 添加发货页面
      * @return 添加发货页面url
      */

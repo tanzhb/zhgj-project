@@ -2,6 +2,8 @@ package com.congmai.zhgj.web.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class TakeDelivery {
     private String serialNum;
 
@@ -28,6 +30,8 @@ public class TakeDelivery {
     private String updater;
 
     private Date updateTime;
+    
+    private Warehouse warehouse;
 
     public String getSerialNum() {
         return serialNum;
@@ -53,6 +57,7 @@ public class TakeDelivery {
         this.warehouseSerial = warehouseSerial == null ? null : warehouseSerial.trim();
     }
 
+    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
     public Date getTakeDeliverDate() {
         return takeDeliverDate;
     }
@@ -132,4 +137,14 @@ public class TakeDelivery {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public Warehouse getWarehouse() {
+		return warehouse;
+	}
+
+	public void setWarehouse(Warehouse warehouse) {
+		this.warehouse = warehouse;
+	}
+    
+    
 }

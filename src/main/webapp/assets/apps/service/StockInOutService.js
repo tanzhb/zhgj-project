@@ -3,19 +3,20 @@
 angular.module('MetronicApp').factory('StockInOutService', ['$rootScope', '$http', '$q', function($rootScope, $http, $q){
 
     var factory = {
-    		saveStockInOutRecord:saveStockInOutRecord,
-    		delStockInOutRecords:delStockInOutRecords,
+    		saveStockInOutCheck:saveStockInOutCheck,
+    		delStockInOutChecks:delStockInOutChecks,
             uploadExcel:uploadExcel,
-            selectDetailBySerialNum:selectDetailBySerialNum
+            selectDetailBySerialNum:selectDetailBySerialNum,
+            judgeIsExistBySerialNum:judgeIsExistBySerialNum
     };
 
     return factory;
    
     //保存出入库记录
-    function saveStockInOutRecord(stockInOutRecord){
+    function saveStockInOutCheck(stockInOutCheck){
         var deferred = $q.defer();  
 debugger;
-        $http.post($rootScope.basePath + "/rest/stockInOut/saveStockInOutCheckInfo", stockInOutRecord).success(function (data) {  
+        $http.post($rootScope.basePath + "/rest/stockInOut/saveStockInOutCheckInfo", stockInOutCheck).success(function (data) {  
             // 如果连接成功，延时返回给调用者  
         	debugger;
             deferred.resolve(data);  
@@ -28,7 +29,7 @@ debugger;
     };
     
     //删除出入库记录
-    function delStockInOutRecords(serialNums){
+    function delStockInOutChecks(serialNums){
         var deferred = $q.defer();  
 
         $http.post($rootScope.basePath + "/rest/stockInOut/deleteStockInOutCheck", serialNums).success(function (data) {  
@@ -70,6 +71,18 @@ debugger;
 		});
 		return deferred.promise;//返回承诺
 	}
-    
+    //通过发货单/收货单流水号判断是否已有关联的出入库检测存在
+    function judgeIsExistBySerialNum(serialNum){
+        var deferred = $q.defer();  
+        $http.post($rootScope.basePath + "/rest/stockInOut/stockInOutCheckIsExist", serialNum).success(function (data) {  
+            // 如果连接成功，延时返回给调用者  
+            deferred.resolve(data);  
+        })  
+            .error(function () {  
+                deferred.reject('连接服务器出错！');  
+            })  
+        return deferred.promise;  
+          
+    };
 
 }]);

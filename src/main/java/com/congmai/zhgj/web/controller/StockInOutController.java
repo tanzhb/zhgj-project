@@ -64,7 +64,16 @@ public class StockInOutController {
     public String addOrEditCheckInOutInfo( ) {
         return "stockInOutCheck/addOrEditStockInOutCheckInfo";
     }
-    
+    /**
+     * 出入库详情展示
+     * 
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/viewStockInOutCheck")
+    public String viewStockInOutCheck(HttpServletRequest request) {
+        return "stockInOutCheck/viewStockInOutCheckDetailInfo";
+    }
     /**
      * 保存出入库检验信息
      * 
@@ -77,7 +86,7 @@ public class StockInOutController {
     		if(StringUtils.isEmpty(stockInOutCheck.getSerialNum())){
     			stockInOutCheck.setSerialNum(ApplicationUtils.random32UUID());
     			stockInOutCheck.setStatus("0");//待审批
-    			
+    			stockInOutCheckService.insert(stockInOutCheck);
     		}else{
     			
     		}
@@ -86,7 +95,28 @@ public class StockInOutController {
     	}
 		return new ResponseEntity<StockInOutCheck>(stockInOutCheck, HttpStatus.OK);
     }
-
+    /**
+     * 判断出入库检验信息是否已经存在
+     * 
+     */
+    @RequestMapping(value = "/stockInOutCheckIsExist", method = RequestMethod.POST)
+	public ResponseEntity<String> stockInOutCheckIsExist(@RequestBody String  serialNum,UriComponentsBuilder ucBuilder){//
+    String flag="0";
+    List<StockInOutCheck>stockInOutChecks=null;
+    	try{
+    		if(serialNum.indexOf("in")>-1){
+    			stockInOutChecks=stockInOutCheckService.getAllStockInOutCheck("in", serialNum.substring(0, 32));
+    		}else{
+    			stockInOutChecks=stockInOutCheckService.getAllStockInOutCheck("out", serialNum.substring(0, 32));
+    		}
+    		if(stockInOutChecks.size()>0){
+    			 flag="1";
+    		}
+    	}catch(Exception e){
+    		System.out.println(e.getMessage());
+    	}
+		return new ResponseEntity<String>(flag, HttpStatus.OK);
+    }
     /**
      * 获取出入库检验列表
      * 
@@ -94,7 +124,7 @@ public class StockInOutController {
     @RequestMapping(value = "/getStockInOutCheckList")
     public ResponseEntity<Map> getStockInOutCheckList(HttpServletRequest request,String  inOrOut) {
     	
-		List<StockInOutCheck> stockInOutChecks = stockInOutCheckService.getAllStockInOutCheck(inOrOut);
+		List<StockInOutCheck> stockInOutChecks = stockInOutCheckService.getAllStockInOutCheck(inOrOut,null);
 		if (stockInOutChecks.size() != 0) {
 			for (StockInOutCheck stockInOutCheck : stockInOutChecks) {
 				
@@ -119,7 +149,7 @@ public class StockInOutController {
     	Map<String, Object> map = new HashMap<String, Object>();
     	StockInOutCheck stockInOutCheck=stockInOutCheckService.selectById(serialNum);
     	if(stockInOutCheck!=null){
-    	
+    	map.put("stockInOutCheck",stockInOutCheck);
     }
     	
     	return new ResponseEntity<Map>(map, HttpStatus.OK);
@@ -131,11 +161,11 @@ public class StockInOutController {
 	 * @return
 	 */
 	@RequestMapping(value = "/deleteStockInOutCheck", method = RequestMethod.POST)
-	public ResponseEntity<Void> deleteStockInOutCheck(@RequestBody String ids) {
-		if ("".equals(ids) || ids == null) {
+	public ResponseEntity<Void> deleteStockInOutCheck(@RequestBody String serialNums) {
+		if ("".equals(serialNums) || serialNums == null) {
 			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
 		}
-		stockInOutCheckService.deleteStockInOutCheck(ids);
+		stockInOutCheckService.deleteStockInOutCheck(serialNums);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
@@ -147,7 +177,7 @@ public class StockInOutController {
 	    @RequestMapping("exportStockInOutCheck")
 	    public void exportStockInOutCheck(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,@RequestBody String  inOrOut) {
 	    		Map<String, Object> dataMap = new HashMap<String, Object>();
-	    		List<StockInOutCheck> stockInOutCheckList= stockInOutCheckService.getAllStockInOutCheck(inOrOut);
+	    		List<StockInOutCheck> stockInOutCheckList= stockInOutCheckService.getAllStockInOutCheck(inOrOut,null);
 	    		for(StockInOutCheck s:stockInOutCheckList){
 	    			
 	    		}

@@ -119,17 +119,18 @@ pageHandle = (function(){
 		        
 	}
 	
-	var _datePickersInit = function(_type){
+	var _datePickersInit = function(_type,_id){
 				if(_type!="bottom"){
 					_type = "left"; 
 				}
-				$('.date-picker').datepicker({
+				if(this.isNull(_id)){
+					_id = ".date-picker"
+				}
+				$(_id).datepicker({
 						rtl: App.isRTL(),
 						orientation: _type,
 						autoclose: true,
-						language: "zh-CN",changeDate:function(){
-							alert(234);
-						}
+						language: "zh-CN"
 				});
 		
 	}

@@ -26,11 +26,11 @@
 <!-- BEGIN MAIN CONTENT -->
 <div class="tabbable-line">
     <ul class="nav nav-tabs">
-        <li class="active">
-            <a data-target="#tab_in" data-toggle="tab">入库检验</a>
+        <li  id="in" >
+            <a data-target="#tab_in" data-toggle="tab"  ng-click="showOut('showIn')">入库检验</a>
         </li>
-        <li>
-            <a data-target="#tab_out" data-toggle="tab">出库检验</a>
+        <li  id="out">
+            <a data-target="#tab_out" data-toggle="tab"   ng-click="showOut('showOut')">出库检验</a>
         </li>
     </ul>
     <div class="tab-content">
@@ -49,7 +49,7 @@
 					</button><button ng-click="toEditStockInOutPage('in')"
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-edit"></i> 修改
-					</button> <button ng-click="delStockInOutCheck()" 
+					</button> <button ng-click="delStockInOutCheck('In')" 
 						data-toggle="modal" 
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-minus"></i> 删除
@@ -76,8 +76,8 @@
 				</div>
 			</div>
 
-			<!-- 删除库存modal 开始 -->
-			<div id="delStockInOutCheckModal" class="modal fade" tabindex="-2"
+			<!-- 删除检验modal 开始 -->
+			<div id="delStockInCheckModal" class="modal fade" tabindex=""
 
 				data-backdrop="static" data-keyboard="false">
 				<div class="modal-dialog">
@@ -88,18 +88,18 @@
 							<h4 class="modal-title">确认</h4>
 						</div>
 						<div class="modal-body">
-							<p>是否删除已选库存?</p>
+							<p>是否删除已选入库检验?</p>
 						</div>
 						<div class="modal-footer">
 							<button type="button" data-dismiss="modal"
 								class="btn dark btn-outline">取消</button>
-							<button type="button" ng-click="confirmDellStock()" class="btn green">确定
+							<button type="button" ng-click="confirmDelStockInOutCheck()" class="btn green">确定
 								</button>
 						</div>
 					</div>
 				</div>
 			</div>
-			<!-- 删除库存modal 结束 -->
+			<!-- 删除检验modal 结束 -->
 			
 			<!-- 导入modal START -->
 <div class="modal fade" id="import" role="import" aria-hidden="true">
@@ -180,7 +180,7 @@
 					<thead>
 						<tr>
 							<th style="text-align: center"><input name="select_all"
-								value="1" id="example-select-all" type="checkbox" /></th>
+								value="1" id="example-select-in-all" type="checkbox" /></th>
 							<th>检验编号 </th>
                             <th> 收货单号</th>
                             <th>采购订单号</th>
@@ -217,7 +217,7 @@
 					</button><button ng-click="toEditStockInOutPage('out')"
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-edit"></i> 修改
-					</button> <button ng-click="delStockInOutCheck()" 
+					</button> <button ng-click="delStockInOutCheck('Out')" 
 						data-toggle="modal" 
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-minus"></i> 删除
@@ -244,8 +244,8 @@
 				</div>
 			</div>
 
-			<!-- 删除库存modal 开始 -->
-			<div id="delStockModal" class="modal fade" tabindex=
+			<!-- 删除检验modal 开始 -->
+			<div id="delStockOutCheckModal" class="modal fade" tabindex=""
 
 				data-backdrop="static" data-keyboard="false">
 				<div class="modal-dialog">
@@ -256,18 +256,18 @@
 							<h4 class="modal-title">确认</h4>
 						</div>
 						<div class="modal-body">
-							<p>是否删除已选库存?</p>
+							<p>是否删除已选出库检验?</p>
 						</div>
 						<div class="modal-footer">
 							<button type="button" data-dismiss="modal"
 								class="btn dark btn-outline">取消</button>
-							<button type="button" ng-click="confirmDellStock()" class="btn green">确定
+							<button type="button" ng-click="confirmDelStockInOutCheck()" class="btn green">确定
 								</button>
 						</div>
 					</div>
 				</div>
 			</div>
-			<!-- 删除库存modal 结束 -->
+			<!-- 删除检验modal 结束 -->
 			
 			<!-- 导入modal START -->
 <div class="modal fade" id="import" role="import" aria-hidden="true">
@@ -348,10 +348,10 @@
 					<thead>
 						<tr>
 							<th style="text-align: center"><input name="select_all"
-								value="1" id="example-select-all" type="checkbox" /></th>
+								value="1" id="example-select-out-all" type="checkbox" /></th>
 							<th>检验编号 </th>
                             <th> 发货单号</th>
-                            <th>采购订单号</th>
+                            <th>销售订单号</th>
                             <th>物料</th>
                             <th>合格数量 </th>
                             <th> 不合格数量</th>
