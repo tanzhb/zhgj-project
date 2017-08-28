@@ -1,5 +1,5 @@
 /* Setup general page controller */
-angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '$scope', 'settings','orderService','$filter',
+angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$scope', 'settings','orderService','$filter',
     '$state',"$stateParams",'$compile','$location','materielService','FileUploader', function($rootScope, $scope, settings,orderService,$filter,$state,$stateParams,$compile,$location,materielService,FileUploader) {
     $scope.$on('$viewContentLoaded', function() {   
     	// initialize core components
@@ -9,7 +9,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     	$rootScope.settings.layout.pageContentWhite = true;
         $rootScope.settings.layout.pageBodySolid = false;
         $rootScope.settings.layout.pageSidebarClosed = false;
-        if($state.current.name=="saleOrder"){
+        if($state.current.name=="buyOrder"){
         	loadMainTable();// 加载订单列表
         	}else{
             	$('.date-picker').datepicker({
@@ -26,15 +26,15 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
             	// 加载数据
             	if($stateParams.serialNum){
             		$scope.opration = '修改';
-            		$scope.getSaleOrderInfo($stateParams.serialNum)
+            		$scope.getBuyOrderInfo($stateParams.serialNum)
             	}else{
             		$scope.opration = '新增';
             		$scope.orderMateriel={};
             	}
             	$scope.noShow = true;
             	if($stateParams.view==1){// 订单切换为查看
-            		$scope.saleOrderInput = true;
-    		    	$scope.saleOrderShow = true;
+            		$scope.buyOrderInput = true;
+    		    	$scope.buyOrderShow = true;
        		    	$scope.opration = '查看';
     		    }
             	if($stateParams.view=='all'){// 订单全体切换为查看
@@ -83,22 +83,22 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
    
     $scope.save  = function() {
     	if($('#form_sample_1').valid()){
-    		if($scope.saleOrder.orderDate=='') {// 日期为空的处理
-    			$scope.saleOrder.orderDate=null;
+    		if($scope.buyOrder.orderDate=='') {// 日期为空的处理
+    			$scope.buyOrder.orderDate=null;
     		}
 
     		// 保存数据处理
-// $scope.saleOrder.parentSaleOrder=null;
-// $scope.saleOrder.createTime=null;
-// $scope.saleOrder.updateTime=null;
+// $scope.buyOrder.parentBuyOrder=null;
+// $scope.buyOrder.createTime=null;
+// $scope.buyOrder.updateTime=null;
     		// **********//
 
-    		orderService.save($scope.saleOrder).then(
+    		orderService.save($scope.buyOrder).then(
        		     function(data){
        		    	toastr.success('数据保存成功！');
        		    	$location.search({serialNum:data.serialNum,view:1});
-       		    	$scope.saleOrderInput = true;
-       			    $scope.saleOrderShow = true;
+       		    	$scope.buyOrderInput = true;
+       			    $scope.buyOrderShow = true;
        		     },
        		     function(error){
        		         $scope.error = error;
@@ -110,22 +110,22 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     }; 	
     
     $scope.cancel  = function() {// 取消编辑
-    	if($scope.saleOrder.serialNum==null || $scope.saleOrder.serialNum=='') {// 如果是取消新增，返回列表页面
-    		$state.go("saleOrder");
+    	if($scope.buyOrder.serialNum==null || $scope.buyOrder.serialNum=='') {// 如果是取消新增，返回列表页面
+    		$state.go("buyOrder");
     		return;
 		}
-    	$scope.getSaleOrderInfo($scope.saleOrder.serialNum);
+    	$scope.getBuyOrderInfo($scope.buyOrder.serialNum);
     	$scope.cancelOrder();
     	
     };
     $scope.cancelOrder  = function() {// 取消编辑订单信息
-    	$scope.saleOrderInput = true;
-	    $scope.saleOrderShow = true;
+    	$scope.buyOrderInput = true;
+	    $scope.buyOrderShow = true;
     };
     
     $scope.edit  = function() {// 进入编辑
-    	$scope.saleOrderInput = false;
-	    $scope.saleOrderShow = false;
+    	$scope.buyOrderInput = false;
+	    $scope.buyOrderShow = false;
     };
     
     var table;
@@ -184,7 +184,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 							'orderable' : false,
 							'render' : function(data,
 									type, full, meta) {
-								return '<input type="checkbox" id="'+data+'" ng-click="getSaleOrderInfo_(\''+data+'\')" name="serialNum[]" value="'
+								return '<input type="checkbox" id="'+data+'" ng-click="getBuyOrderInfo_(\''+data+'\')" name="serialNum[]" value="'
 													+ $('<div/>')
 													.text(
 															data)
@@ -250,7 +250,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
         
         
         // 弹出确认删除模态框
-        $scope.deleteSaleOrder = function() {
+        $scope.deleteBuyOrder = function() {
 			var ids = '';
 			// Iterate over all checkboxes in the table
 			table.$('input[type="checkbox"]').each(
@@ -271,12 +271,12 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 			if(ids==''){
     			toastr.warning('未选择订单！');return;
     		}else{
-    			$('#delSaleOrderModal').modal('show');// 弹出删除确认模态框
+    			$('#delBuyOrderModal').modal('show');// 弹出删除确认模态框
     		}
 			
 		};
 		
-		$scope.editSaleOrder  = function() {// 进入编辑页面
+		$scope.editBuyOrder  = function() {// 进入编辑页面
         	var ids = '';
     		// Iterate over all checkboxes in the table
     		table.$('input[type="checkbox"]').each(
@@ -300,7 +300,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     			toastr.warning('只能选择一个订单！');return;
     		}
     		
-    		$state.go("addSaleOrder",{serialNum:ids});
+    		$state.go("addBuyOrder",{serialNum:ids});
         };
         
      // 删除开始***************************************
@@ -326,12 +326,12 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 					.delOrder(ids)
 					.then(
 							function(data) {
-								$('#delSaleOrderModal').modal(
+								$('#delBuyOrderModal').modal(
 										'hide');// 删除成功后关闭模态框
 								$(".modal-backdrop").remove();
 								/* table.ajax.reload(); // 重新加载datatables数据 */
 								toastr.success('数据删除成功！');
-								 $state.go('saleOrder',{},{reload:true});
+								 $state.go('buyOrder',{},{reload:true});
 								 
 							},
 							function(errResponse) {
@@ -404,10 +404,10 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
         /**
 		 * 获取订单信息
 		 */	
-        $scope.getSaleOrderInfo  = function(serialNum) {
+        $scope.getBuyOrderInfo  = function(serialNum) {
         	orderService.getOrderInfo(serialNum).then(
           		     function(data){//加载页面对象
-          		    	$scope.saleOrder=data.orderInfo;
+          		    	$scope.buyOrder=data.orderInfo;
           		    	$scope.orderMateriel=data.orderMateriel;
           		    	$scope.contract=data.contract;
           		    	$scope.clauseAfterSales=data.clauseAfterSales;
@@ -425,7 +425,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
           		    		$scope.clauseSettlement = {}
           		    	}
           		    	
-          		    	if($scope.saleOrder.status==1){//已提交的不能做提交
+          		    	if($scope.buyOrder.status==1){//已提交的不能做提交
 //          		    		$scope.cancelOrderStatus();
           		    	}
           		    	
@@ -731,7 +731,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     			}else{
     				selectMateriel();
     			}
-    			if(!isNull($scope.saleOrder)&&!isNull($scope.saleOrder.serialNum)){
+    			if(!isNull($scope.buyOrder)&&!isNull($scope.buyOrder.serialNum)){
 	    			$("#basicMaterielInfo").modal("show");
 	    		}else{
 	    			toastr.warning("请先保存基本信息！");
@@ -808,7 +808,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
         				for(var i = 0;i < data.data.length;i++){// data.data为选择的供应物料
         					$scope.tempMateriel = {};
         					$scope.tempMateriel.materiel = (data.data)[i].materiel;
-        					$scope.tempMateriel.orderSerial = $scope.saleOrder.serialNum;
+        					$scope.tempMateriel.orderSerial = $scope.buyOrder.serialNum;
         					$scope.tempMateriel.materielSerial = (data.data)[i].materiel.serialNum;
         					$scope.tempMateriel.supplyMaterielSerial = (data.data)[i].serialNum;
         					$scope.tempMateriel.supplyMateriel = (data.data)[i];
@@ -820,7 +820,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
         				for(var i = 0;i < data.data.length;i++){// data.data为选择的供应物料
         					$scope.tempMateriel = {};
         					$scope.tempMateriel.materiel = (data.data)[i].materiel;
-        					$scope.tempMateriel.orderSerial = $scope.saleOrder.serialNum;
+        					$scope.tempMateriel.orderSerial = $scope.buyOrder.serialNum;
         					$scope.tempMateriel.materielSerial = (data.data)[i].materiel.serialNum;
         					$scope.tempMateriel.supplyMaterielSerial = (data.data)[i].serialNum;
         					$scope.tempMateriel.supplyMateriel = (data.data)[i];
@@ -1082,12 +1082,12 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 		        };
     	 
 		        $scope.saveContract  = function() {// 保存合同信息
-		   	    	if($scope.saleOrder.serialNum==null||$scope.saleOrder.serialNum=='') {// 订单信息为空的处理
+		   	    	if($scope.buyOrder.serialNum==null||$scope.buyOrder.serialNum=='') {// 订单信息为空的处理
 		   	    		toastr.error('请先保存订单信息！');return
 		   			}
 		   	    	if($('#form_contract').valid()){
-		   	    		$scope.contract.orderSerial = $scope.saleOrder.serialNum;
-		   	    		$scope.contract.comId = $scope.saleOrder.buyComId;
+		   	    		$scope.contract.orderSerial = $scope.buyOrder.serialNum;
+		   	    		$scope.contract.comId = $scope.buyOrder.buyComId;
 		   	    		orderService.saveContract($scope.contract).then(
 		   	       		     function(data){
 		   	       		    	toastr.success('数据保存成功！');
@@ -1633,7 +1633,7 @@ var e = $("#form_clauseSettlement"),
    	   	 //********附件  start****************//
    	   		var _fileIndex = 0;
    	   	    $scope.saveFile  = function() {//保存File信息
-   	   	    	if($scope.saleOrder.serialNum==null||$scope.saleOrder.serialNum=='') {// 订单信息为空的处理
+   	   	    	if($scope.buyOrder.serialNum==null||$scope.buyOrder.serialNum=='') {// 订单信息为空的处理
    	   	    		toastr.error('请先保存订单信息！');return
    	    		}
    	   	    	if($('#form_sample_4').valid()){
@@ -1665,12 +1665,12 @@ var e = $("#form_clauseSettlement"),
    	 	        * File新增一行
    	 	        */
    	   	    $scope.addFile = function(){
-		   	   	  if($scope.saleOrder.serialNum==null||$scope.saleOrder.serialNum=='') {// 订单信息为空的处理
+		   	   	  if($scope.buyOrder.serialNum==null||$scope.buyOrder.serialNum=='') {// 订单信息为空的处理
 		 	    		toastr.error('请先保存订单信息！');return
 		 			}else{
    	   		    	   if($scope.file){}else{$scope.file =[{}]}
    	   		    	   $scope.file[_fileIndex] = {};
-   	   		    	   $scope.file[_fileIndex].orderSerial = $scope.saleOrder.serialNum;
+   	   		    	   $scope.file[_fileIndex].orderSerial = $scope.buyOrder.serialNum;
    	   		    	   _fileIndex++;
    	   		       }
    	   	    };
@@ -1840,14 +1840,14 @@ var e = $("#form_clauseSettlement"),
    		  //********框架条款  end****************//
 	      //********订单提交start****************//
 	        $scope.cancelPage  = function() {// 取消编辑
-	        	$state.go("saleOrder");
+	        	$state.go("buyOrder");
 	        };
 	        $scope.submitPage  = function() {// 取消编辑
 	        	$scope.submitOrder = {}
-	        	$scope.submitOrder.serialNum = $scope.saleOrder.serialNum;
-	        	$scope.submitOrder.remark = $scope.saleOrder.remark;
+	        	$scope.submitOrder.serialNum = $scope.buyOrder.serialNum;
+	        	$scope.submitOrder.remark = $scope.buyOrder.remark;
 	        	$scope.submitOrder.status = 1;
-	        	$scope.saleOrder.status = 1;
+	        	$scope.buyOrder.status = 1;
 	        	orderService.save($scope.submitOrder).then(
 	          		     function(data){
 	          		    	toastr.success('数据保存成功！');
@@ -1912,7 +1912,7 @@ var e = $("#form_clauseSettlement"),
 		       })
 		       
 		       
-		       $scope.exportSaleOrder = function(){
+		       $scope.exportBuyOrder = function(){
 			    	 handle.blockUI("正在导出数据，请稍后"); 
 			    	 window.location.href=$rootScope.basePath+"/rest/order/exportOrder";
 			    	 handle.unblockUI(); 

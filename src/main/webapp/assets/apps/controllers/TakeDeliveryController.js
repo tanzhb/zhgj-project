@@ -531,7 +531,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	 		 */
 	        $scope.getOrderMateriel=function () { 
 	            var sd = $scope.deliver.orderSerial;
-	        	var promise = orderService.getSaleOrderInfo(sd);
+	        	var promise = orderService.getOrderInfo(sd);
         		promise.then(function(data){
         			$scope.orderMateriels = data.orderMateriel;
         			$scope.deliver.materielCount = data.orderMateriel.length;

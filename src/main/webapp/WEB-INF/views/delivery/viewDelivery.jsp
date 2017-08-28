@@ -7,7 +7,7 @@
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
 			class="fa fa-angle-right"></i></li>
-		<li><a ui-sref="saleOrder">发货</a> <i class="fa fa-angle-right"></i>
+		<li><a ui-sref="delivery">发货</a> <i class="fa fa-angle-right"></i>
 		</li>
 		<li><a>发货详情</a></li>
 	</ul>
@@ -32,11 +32,12 @@
 					<div class="portlet-title">
 						<div class="caption">基本信息</div>
 						<div class="tools" id="noprintdiv">
-							<button type="submit" ng-click="goDelivery('{{deliveryDetail.serialNum}}')" ng-show="input"
+						
+							<button type="button" ng-click="goDelivery(deliveryDetail.serialNum)" ng-if="deliveryDetail.status=='0'"
 								class="btn blue  btn-outline  btn-sm">
 								<i class="fa fa-save"></i> 确认发货
 							</button>
-							<button ng-click="cancel()" type="button"
+							<button ng-click="goBack()" type="button"
 								ng-hide="saleOrderInput" class="btn red  btn-outline  btn-sm">
 								<i class="fa fa-undo"></i> 取消
 							</button>

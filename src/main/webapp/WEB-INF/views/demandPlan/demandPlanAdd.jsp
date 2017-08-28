@@ -115,7 +115,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="releaseDate"> <span class="required"> * </span>发布日期：</label>
                                                     <div class="col-md-7">
-                                                        <input type="text" class="form-control form-control-inline input-medium date-picker" readonly="readonly" data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="releaseDate" name="releaseDate" ng-model="demandPlan.releaseDate" ng-hide="demandPlanAdd" >
+                                                        <input type="text" class="form-control date-picker" size="16" data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="releaseDate" name="releaseDate" ng-model="demandPlan.releaseDate" ng-hide="demandPlanAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="demandPlanView">{{demandPlan.releaseDate}}</p>
                                                     </div>

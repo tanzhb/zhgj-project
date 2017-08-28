@@ -313,6 +313,57 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
+        //采购订单
+        .state('buyOrder', {
+            url: "/buyOrder",
+            templateUrl: "rest/page/buyOrder",
+            data: {pageTitle: '采购订单'},
+            controller: "buyOrderController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+							'assets/global/plugins/datatables/datatables.min.css',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+							'assets/global/plugins/datatables/datatables.all.min.js',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+							'assets/apps/scripts/angular-file-upload.min.js',
+							'assets/apps/service/materielService.js',
+                            'assets/apps/service/orderService.js',
+                            'assets/apps/controllers/buyOrderController.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        // 新增采购订单
+        .state('addBuyOrder', {
+            url: "/addBuyOrder?:serialNum&:view",
+            templateUrl: "rest/page/addBuyOrder",
+            data: {pageTitle: '新增采购订单'},
+            controller: "buyOrderController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+	        	'assets/apps/service/orderService.js',
+				'assets/apps/controllers/buyOrderController.js'
+                      ]
+                    });
+                }]
+            }
+        })
 	    .state('userContract', {
 	            url: "/userContract",
 	            templateUrl:"rest/page/userContract",
@@ -388,6 +439,30 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 					'assets/apps/scripts/FileUploader.js',
 					'assets/apps/service/ContractService.js',
 					'assets/apps/controllers/ContractController.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        
+        .state('purchaseForecast', {
+            url: "/purchaseForecast",
+            templateUrl: "rest/page/purchaseForecast",
+            data: {pageTitle: '采购预测'},
+            controller: "PurchaseForecastController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+							'assets/global/plugins/datatables/datatables.min.css',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+							'assets/global/plugins/datatables/datatables.all.min.js',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+					        'assets/apps/scripts/angular-file-upload.min.js',
+                            'assets/apps/service/PurchaseForecastService.js',
+                            'assets/apps/controllers/PurchaseForecastController.js'
                         ]
                     });
                 }]
