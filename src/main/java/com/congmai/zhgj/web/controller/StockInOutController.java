@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -26,13 +27,18 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.web.model.Delivery;
+import com.congmai.zhgj.web.model.DeliveryMaterielVO;
+import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.StockInOutCheck;
+import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.StockInOutCheckService;
+import com.congmai.zhgj.web.service.TakeDeliveryService;
 
 
 /**
  * @ClassName StockInOutController
- * @Description TODO(出入库控制器(出入库记录/检验))
+ * @Description TODO(出入库控制器(出入库检验))
  * @author zhaichao
  * @Date 2017年8月23日 上午10:14:41
  * @version 1.0.0
@@ -43,6 +49,10 @@ public class StockInOutController {
 
     @Resource
     private StockInOutCheckService  stockInOutCheckService;
+    @Resource
+    private DeliveryService  deliveryService;
+    @Autowired
+	private TakeDeliveryService takeDeliveryService;
     
     
     
@@ -147,10 +157,31 @@ public class StockInOutController {
     @RequestMapping(value = "/stockInOutCheckView", method = RequestMethod.POST)
     public ResponseEntity<Map> viewStockInOutCheck(HttpServletRequest request, @RequestBody String  serialNum) {
     	Map<String, Object> map = new HashMap<String, Object>();
-    	StockInOutCheck stockInOutCheck=stockInOutCheckService.selectById(serialNum);
+    	StockInOutCheck stockInOutCheck=stockInOutCheckService.selectById(serialNum.substring(0, 32));
     	if(stockInOutCheck!=null){
     	map.put("stockInOutCheck",stockInOutCheck);
+    	if(serialNum.indexOf("in")>-1){//入库
+    		Delivery delivery= takeDeliveryService.selectByTakeDeliveryPrimaryKey(stockInOutCheck.getTakeDeliverSerial());
+    		map.put("materials", delivery.getDeliveryMateriels());
+    	}else if (serialNum.indexOf("out")>-1){//出库
+    	 	List<DeliveryMaterielVO> deliveryMateriels = deliveryService.selectListForDetail(stockInOutCheck.getDeliverSerial());
+    	 	map.put("materials", deliveryMateriels);
+    	}
     }
+    	
+    	return new ResponseEntity<Map>(map, HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "/getMaterialBySerialNum", method = RequestMethod.POST)
+    public ResponseEntity<Map> getMaterialBySerialNum(HttpServletRequest request, @RequestBody String  serialNum) {
+    	Map<String, Object> map = new HashMap<String, Object>();
+    	if(serialNum.indexOf("in")>-1){//入库
+    		Delivery delivery= takeDeliveryService.selectByTakeDeliveryPrimaryKey(serialNum.substring(0, 32));
+    		map.put("materials", delivery.getDeliveryMateriels());
+    	}else if (serialNum.indexOf("out")>-1){//出库
+    	 	List<DeliveryMaterielVO> deliveryMateriels = deliveryService.selectListForDetail(serialNum.substring(0, 32));
+    	 	map.put("materials", deliveryMateriels);
+    	}
     	
     	return new ResponseEntity<Map>(map, HttpStatus.OK);
     }
@@ -184,7 +215,6 @@ public class StockInOutController {
 	    		dataMap.put("stockInOutRecordList",stockInOutCheckList);
 	    		ExcelUtil.export(request, response, dataMap, "stockInOutRecord", "出入库信息");
 	    }
-	    
 	    /**
 	     * @Description (下载导入模板)
 	     * @param request

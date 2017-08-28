@@ -82,9 +82,9 @@
                                                         <div class="row"><!-- row START -->
                                                              <div class="col-md-4">
 											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="comName"> <span  ng-if="inOrOut.indexOf('in')>-1"  >供应商</span><span   ng-if="inOrOut.indexOf('out')>-1" >采购商</span> :</label>
+                                                    <label class="col-md-4 control-label" for="comName"> 供应商:</label>
                                                     <div class="col-md-8">
-                                                          <p class="control-label left" >{{stockInOutCheck.comName}}</p>
+                                                          <p class="control-label left" >{{stockInOutCheck.supplyName}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -183,10 +183,39 @@
 			                                                    <td colspan="16" align="center" >暂无数据</td>
 			                                                </tr>
 			                                </tbody>
-                                            <tbody ng-repeat="warehousePosition in warehousePositions">
-                                                <tr >
-                                                    <td  class="col-md-1">{{buycom.comNum}}</td>
-                                                    <td class="col-md-1">{{buycom.buyComName}}</td>
+                                            <tbody ng-repeat="materiel in materials">
+                                           <td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.materiel.materielNum}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.materielNum}}</td>
+										<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.materiel.materielName}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.materielName}}</td>
+										<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.materiel.specifications}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.specifications}}</td>
+										<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.materiel.unit}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.unit}}</td>
+										<td>
+                                            {{materiel.batchNum}}
+                                        </td>
+										<td>
+											{{materiel.manufactureDate}}
+										</td>
+										<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.amount}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.amount}}</td>
+										<td>
+                                            {{materiel.deliverCount}}
+										</td>
+										<td>
+                                            {{materiel.deliverRemark}}
+										</td>
+										<td>
+                                            {{materiel.acceptCount}}
+										</td>
+										<td>
+											{{materiel.refuseCount}}
+										</td>
+										<td>
+                                            {{materiel.takeRemark}}
+										</td>
+										<td>{{materiel.qualifiedCount}}</td>
+										<td>{{materiel.unqualifiedCount}}</td>
+										<td>{{materiel.checkRemark}}</td>
+										<td><span class="label label-sm label-success"  ng-if="stockInOutCheck.status==0" >待检验</span>
+                                                  <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==1" >待审批</span>
+                                                   <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==2" >已检验</span></td>
                                                 </tr>
                                             </tbody>
                                         </table>

@@ -50,7 +50,7 @@ private  String  deliverNum;//发货单号
     
     private  String  unQualifiedCount;//不合格数量
     
-    private  String  comName;//采购商/供应商名称
+    private  String  supplyName;//供应商名称
     
 private String  relationSaleNum;//关联销售单号
     
@@ -216,12 +216,12 @@ private String  relationSaleNum;//关联销售单号
 		this.unQualifiedCount = unQualifiedCount;
 	}
 
-	public String getComName() {
-		return comName;
+	public String getSupplyName() {
+		return supplyName;
 	}
 
-	public void setComName(String comName) {
-		this.comName = comName;
+	public void setSupplyName(String supplyName) {
+		this.supplyName = supplyName;
 	}
 
 	public String getRelationSaleNum() {

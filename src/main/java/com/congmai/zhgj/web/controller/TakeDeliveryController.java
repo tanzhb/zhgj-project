@@ -34,12 +34,11 @@ import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderInfoExample;
 import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
-import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.model.TakeDeliveryParams;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.WarehouseExample;
+import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.DeliveryMaterielService;
-import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.DeliveryTransportService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
@@ -76,7 +75,6 @@ public class TakeDeliveryController {
 	
 	@Autowired
 	private WarehouseService warehouseService; 
-	
 	
 	
 	
@@ -118,6 +116,8 @@ public class TakeDeliveryController {
     	takeDelivery.setPageIndex(0);
     	takeDelivery.setPageSize(-1);
     	Page<Delivery> takeDeliverys = takeDeliveryService.selectByPage(takeDelivery);
+    	
+    	
     	//List<Company> companys = companyService.selectByPage(company).getResult();
 		// 封装datatables数据返回到前台
 		Map<String,Object> pageMap = new HashMap<String,Object>();

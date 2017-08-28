@@ -7,7 +7,8 @@ angular.module('MetronicApp').factory('StockInOutService', ['$rootScope', '$http
     		delStockInOutChecks:delStockInOutChecks,
             uploadExcel:uploadExcel,
             selectDetailBySerialNum:selectDetailBySerialNum,
-            judgeIsExistBySerialNum:judgeIsExistBySerialNum
+            judgeIsExistBySerialNum:judgeIsExistBySerialNum,
+            getMaterialBySerialNum:getMaterialBySerialNum
     };
 
     return factory;
@@ -84,5 +85,16 @@ debugger;
         return deferred.promise;  
           
     };
-
+    function getMaterialBySerialNum(serialNum){
+        var deferred = $q.defer();  
+        $http.post($rootScope.basePath + "/rest/stockInOut/getMaterialBySerialNum", serialNum).success(function (data) { 
+            // 如果连接成功，延时返回给调用者 
+            deferred.resolve(data);  
+        })  
+            .error(function () {  
+                deferred.reject('连接服务器出错！');  
+            })  
+        return deferred.promise;  
+          
+    };
 }]);

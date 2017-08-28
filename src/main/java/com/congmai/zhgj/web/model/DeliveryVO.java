@@ -152,6 +152,9 @@ public class DeliveryVO {
 	
 	//收货信息备注
 	private String takeDeliveryRemark;
+	
+	//供应商名称
+		private String supplyName;
 
 	public String getSerialNum() {
 		return serialNum;
@@ -526,6 +529,14 @@ public class DeliveryVO {
 
 	public void setOrderNum(String orderNum) {
 		this.orderNum = orderNum;
+	}
+
+	public String getSupplyName() {
+		return supplyName;
+	}
+
+	public void setSupplyName(String supplyName) {
+		this.supplyName = supplyName;
 	}
 	
 }

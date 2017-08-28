@@ -71,7 +71,7 @@
 							<th style="text-align: center"><input name="select_all" 
 								value="1" id="example-select-all" type="checkbox" /></th>
 							<th>收货单编号</th>
-							<th>订单编号</th>
+							<th>采购订单号</th>
 							<th>发货方</th>
 							<th>物料</th>
 							<th>包装数量</th>

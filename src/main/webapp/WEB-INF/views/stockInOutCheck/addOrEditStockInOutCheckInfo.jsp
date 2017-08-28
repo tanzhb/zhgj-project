@@ -87,7 +87,10 @@
                                                                          <p class="control-label left" ng-show="stockInOutCheckView"  ng-if="inOrOut.indexOf('in')>-1"  >{{stockInOutCheck.takeDeliverNum}}</p> 
                                                                     </div>
                                                                     <div class="col-md-1"><span class="input-inline-btn"  ng-hide="stockInOutCheckAdd"  >
-                                                            <button class="btn default" type="button"   ng-click="selectDeliverInfo()" data-target="#basicMaterielInfo" data-toggle="modal" >
+                                                            <button class="btn default" type="button"   ng-if="inOrOut.indexOf('in')>-1"   ng-click="selectDeliverOrTakeDelivery('in')" data-target="#takeDeliveryInfo" data-toggle="modal" >
+                                                                <i class="fa fa-search"></i>
+                                                            </button>
+                                                              <button class="btn default" type="button"   ng-if="inOrOut.indexOf('out')>-1"   ng-click="selectDeliverOrTakeDelivery('out')" data-target="#deliverInfo" data-toggle="modal" >
                                                                 <i class="fa fa-search"></i>
                                                             </button>
                                                         </span></div>
@@ -112,12 +115,12 @@
                                                             <!--/span-->
                                                             <div class="col-md-4">
                                                             <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="stockCategory"><span  ng-if="inOrOut.indexOf('in')>-1"  >供应商</span><span   ng-if="inOrOut.indexOf('out')>-1" >采购商</span> :</label>
+                                                    <label class="col-md-4 control-label" for="supplyName">供应商 :</label>
                                                     <div class="col-md-8">
-                                                                    <input type="text" class="form-control"   id="comName" name ="comName"  ng-hide="stockInOutCheckAdd"  readonly="readonly"
-												ng-model="stockInOutCheck.comName" > 
+                                                                    <input type="text" class="form-control"   id="supplyName" name ="supplyName"  ng-hide="stockInOutCheckAdd"  readonly="readonly"
+												ng-model="stockInOutCheck.supplyName" > 
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="stockInOutCheckView">{{stockInOutCheck.comName}}</p> 
+                                                                        <p class="control-label left" ng-show="stockInOutCheckView">{{stockInOutCheck.supplyName}}</p> 
                                                                 </div>
                                                             </div>
                                                             <!--/span-->
@@ -192,13 +195,99 @@
 								</div>
 							</form>
          				</div>
+         				
+         				 <div class="portlet-title"><!-- 物料信息 START -->
+                            <div class="caption">物料信息</div>
+                            <div class="actions">
+                            </div>
+                        </div>
+                          <div class="portlet-body form">
+                                    <div class="table-scrollable">
+                                        <table class="table table-bordered table-hover"  >
+                                            <thead>
+                                                <tr >
+                                                    <th  style="text-align: center;">物料编号</th>
+                                                    <th  style="text-align: center;">物料名称</th>
+                                                    <th  style="text-align: center">规格型号</th>
+                                                    <th style="text-align: center">单位</th>
+                                                    <th  style="text-align: center">批次号</th>
+                                                     <th style="text-align: center">生产日期</th>
+                                                    <th   colspan="3"  style="text-align: center">发货</th>
+                                                    <th   colspan="3" style="text-align: center">收货</th>
+                                                    <th  colspan="3" style="text-align: center">检验</th>
+                                                    <th style="text-align: center">状态</th>
+                                                </tr>
+                                            
+                                             <tr >
+                                                <td style="border-top: none"></td>
+                                                <td style="border-top: none"></td>
+                                                <td style="border-top: none"></td>
+                                                <td style="border-top: none"></td>
+                                                <td style="border-top: none"></td>
+                                                <td style="border-top: none"></td>
+                                                 <td style="text-align: center">订单数量</td>
+                                                  <td style="text-align: center">发货数量</td>
+                                                  <td  style="text-align: center">备注</td>
+                                                  <td  style="text-align: center">实收数量</td>
+                                                  <td  style="text-align: center">拒收数量</td>
+                                                  <td  style="text-align: center">备注</td>
+                                                   <td  style="text-align: center">合格数量</td>
+                                                  <td   style="text-align: center">不合格数量</td>
+                                                   <td  style="text-align: center">备注</td>
+                                                  <td style="border-top: none"></td>
+                                                </tr> 
+                                                </thead>
+                                            <tbody  ng-if="materials==null">
+			                                             	<tr>
+			                                                    <td colspan="16" align="center" >暂无数据</td>
+			                                                </tr>
+			                                </tbody>
+                                                <tr  ng-repeat="materiel in materials track by $index" >
+                                                    	<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.materiel.materielNum}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.materielNum}}</td>
+										<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.materiel.materielName}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.materielName}}</td>
+										<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.materiel.specifications}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.specifications}}</td>
+										<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.materiel.unit}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.unit}}</td>
+										<td>
+                                            {{materiel.batchNum}}
+                                        </td>
+										<td>
+											{{materiel.manufactureDate}}
+										</td>
+										<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.amount}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.amount}}</td>
+										<td>
+                                            {{materiel.deliverCount}}
+										</td>
+										<td>
+                                            {{materiel.deliverRemark}}
+										</td>
+										<td>
+                                            {{materiel.acceptCount}}
+										</td>
+										<td>
+											{{materiel.refuseCount}}
+										</td>
+										<td>
+                                            {{materiel.takeRemark}}
+										</td>
+										<td>{{materiel.qualifiedCount}}</td>
+										<td>{{materiel.unqualifiedCount}}</td>
+										<td>{{materiel.checkRemark}}</td>
+										<td><span class="label label-sm label-success"  ng-if="stockInOutCheck.status==0" >待检验</span>
+                                                  <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==1" >待审批</span>
+                                                   <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==2" >已检验</span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div><!-- 物料信息 END-->
 				</div>
 				
         </div>
         <!-- END EXAMPLE TABLE PORTLET-->
     </div>
 </div>
-<jsp:include  page="../materiel/selectMateriel.jsp"/>
+<jsp:include  page="../stockInOutCheck/selectDeliverOrTakeDelivery.jsp"/>
+<%-- <jsp:include  page="../stockInOutCheck/selectDeliverOrTakeDelivery1.jsp"/> --%>
 <!-- END MAIN CONTENT -->
 <!-- BEGIN MAIN JS -->
  <script>
