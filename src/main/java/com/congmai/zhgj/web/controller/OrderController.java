@@ -139,18 +139,23 @@ public class OrderController {
      */
     @RequestMapping("/findOrderList")
     @ResponseBody
-    public ResponseEntity<Map> findOrderList() {
+    public ResponseEntity<Map> findOrderList(String type) {
     	OrderInfoExample m =new OrderInfoExample();
     	List<OrderInfo> orderInfoList = new ArrayList<OrderInfo>();
     	//and 条件1
     	Criteria criteria =  m.createCriteria();
     	criteria.andDelFlgEqualTo("0");
-    	//and 条件2,未发布可编辑的物料
+    	if("sale".equals(type)){//平台销售订单供应商为空
+    		criteria.andSupplyComIdIsNull();
+    	}else if("buy".equals(type)){//平台采购订单采购商为空
+    		criteria.andBuyComIdIsNull();
+    	}
+    	/*//and 条件2,未发布可编辑的物料
     	Criteria criteria2 =  m.createCriteria();
     	criteria2.andStatusEqualTo("0");
     	criteria2.andDelFlgEqualTo("0");
     	//or 条件
-    	m.or(criteria2);
+    	m.or(criteria2);*/
     	//排序字段
     	m.setOrderByClause("updateTime DESC");
     	orderInfoList = orderService.selectList(m);
