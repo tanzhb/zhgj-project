@@ -6,7 +6,7 @@
 	float: left;
 }
 </style>
-<h3 class="page-title"> 新建收货
+<h3 class="page-title d_tip"> 新建收货信息
 </h3>
 <div class="page-bar">
     <ul class="page-breadcrumb">
@@ -21,6 +21,10 @@
         </li>
         <li>
             <a ui-sref="takeDelivery">收货计划</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a class="d_tip">新建收货信息</a>
         </li>
     </ul>
 
