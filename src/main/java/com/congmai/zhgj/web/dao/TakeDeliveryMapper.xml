@@ -215,7 +215,7 @@
     d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, 
     d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.batchNum,    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.batchNum,dm.serialNum as dmSerialNum,
     dm.manufactureDate,dm.deliverCount,dm.deliverRemark,
-    dm.acceptCount,dm.refuseCount,dm.takeRemark,dm.qualifiedCount,dm.unqualifiedCount,dm.checkRemark,dm.warehouseSerial,
+    dm.acceptCount,dm.refuseCount,dm.takeRemark,dm.qualifiedCount,dm.unqualifiedCount,dm.checkRemark,dm.warehouseSerial,dm.orderMaterielSerial,
 
     	dt.serialNum as dtSerialNum,dt.transportType,dt.transport,dt.port,dt.shipNumber,dt.playArrivalDate,dt.playWarehouseDate,dt.remark as delivery_transport_remark,dt.contactNum as dtContactNum,dt.contact as dtContact,
 		td.serialNum as tdSerialNum,td.warehouseSerial as tdWarehouseSerial,td.takeDeliverDate,td.receiver as tdReceiver,td.contactNum as tdContactNum,td.takeDeliverNum,td.remark as take_delivery_remark
