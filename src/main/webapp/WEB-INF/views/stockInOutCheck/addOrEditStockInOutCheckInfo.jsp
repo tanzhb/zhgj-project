@@ -37,6 +37,7 @@
 <!-- BEGIN MAIN CONTENT -->
 <div class="row">
     <div class="col-md-12">
+     <form  id="stockInOutCheckForm" class="form-horizontal"   >
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
         <div class="portlet bordered">
             <div class="portlet-body">
@@ -55,7 +56,7 @@
                             </div>
                         </div>
                         <div class="portlet-body form">
-                            <form  id="stockInOutCheckForm" class="form-horizontal"   >
+                           
 								<div class="form-body">
 									<div class="alert alert-danger display-hide">
                                                <button class="close" data-close="alert"></button>请先输入正确数据！</div>
@@ -87,10 +88,10 @@
                                                                          <p class="control-label left" ng-show="stockInOutCheckView"  ng-if="inOrOut.indexOf('in')>-1"  >{{stockInOutCheck.takeDeliverNum}}</p> 
                                                                     </div>
                                                                     <div class="col-md-1"><span class="input-inline-btn"  ng-hide="stockInOutCheckAdd"  >
-                                                            <button class="btn default" type="button"   ng-if="inOrOut.indexOf('in')>-1"   ng-click="selectDeliverOrTakeDelivery('in')" data-target="#takeDeliveryInfo" data-toggle="modal" >
+                                                            <button class="btn default" type="button"   ng-if="inOrOut.indexOf('in')>-1&&nOrOut.length<=3"   ng-click="selectDeliverOrTakeDelivery('in')" data-target="#takeDeliveryInfo" data-toggle="modal" >
                                                                 <i class="fa fa-search"></i>
                                                             </button>
-                                                              <button class="btn default" type="button"   ng-if="inOrOut.indexOf('out')>-1"   ng-click="selectDeliverOrTakeDelivery('out')" data-target="#deliverInfo" data-toggle="modal" >
+                                                              <button class="btn default" type="button"   ng-if="inOrOut.indexOf('out')>-1&&nOrOut.length<=3"   ng-click="selectDeliverOrTakeDelivery('out')" data-target="#deliverInfo" data-toggle="modal" >
                                                                 <i class="fa fa-search"></i>
                                                             </button>
                                                         </span></div>
@@ -144,7 +145,7 @@
                                                                         <input type="text"  class="form-control form-control-inline date-picker"     data-date-format="yyyy-mm-dd"  data-date-viewmode="years"   placeholder=""  id="checkDate" name ="checkDate"   ng-hide="stockInOutCheckAdd"  
 												ng-model="stockInOutCheck.checkDate" /> 
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="stockInOutCheckView">{{stockInOutCheck.checkDate}}</p> 
+                                                                        <p class="control-label left" ng-show="stockInOutCheckView">{{stockInOutCheck.checkDate | date:'yyyy-MM-dd'}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -193,7 +194,7 @@
                                              <div>          
                                                         </div> 
 								</div>
-							</form>
+							
          				</div>
          				
          				 <div class="portlet-title"><!-- 物料信息 START -->
@@ -213,7 +214,7 @@
                                                     <th  style="text-align: center">批次号</th>
                                                      <th style="text-align: center">生产日期</th>
                                                     <th   colspan="3"  style="text-align: center">发货</th>
-                                                    <th   colspan="3" style="text-align: center">收货</th>
+                                                    <th   colspan="3" style="text-align: center"><span ng-if="inOrOut.indexOf('in')>-1" >收货</span><span  ng-if="inOrOut.indexOf('out')>-1">出库</span></th>
                                                     <th  colspan="3" style="text-align: center">检验</th>
                                                     <th style="text-align: center">状态</th>
                                                 </tr>
@@ -228,8 +229,8 @@
                                                  <td style="text-align: center">订单数量</td>
                                                   <td style="text-align: center">发货数量</td>
                                                   <td  style="text-align: center">备注</td>
-                                                  <td  style="text-align: center">实收数量</td>
-                                                  <td  style="text-align: center">拒收数量</td>
+                                                  <td  style="text-align: center"><span ng-if="inOrOut.indexOf('in')>-1" >实收数量</span><span  ng-if="inOrOut.indexOf('out')>-1">出库数量</span></td>
+                                                  <td  style="text-align: center"><span ng-if="inOrOut.indexOf('in')>-1" >拒收数量</span><span  ng-if="inOrOut.indexOf('out')>-1">未出数量</span></td>
                                                   <td  style="text-align: center">备注</td>
                                                    <td  style="text-align: center">合格数量</td>
                                                   <td   style="text-align: center">不合格数量</td>
@@ -242,7 +243,7 @@
 			                                                    <td colspan="16" align="center" >暂无数据</td>
 			                                                </tr>
 			                                </tbody>
-                                                <tr  ng-repeat="materiel in materials track by $index" >
+                                                <tr    ng-repeat="materiel in materials track by $index"   ng-init="value=0" >
                                                     	<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.materiel.materielNum}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.materielNum}}</td>
 										<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.materiel.materielName}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.materielName}}</td>
 										<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.materiel.specifications}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.specifications}}</td>
@@ -256,30 +257,40 @@
 										<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.amount}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.amount}}</td>
 										<td>
                                             {{materiel.deliverCount}}
+                                            
 										</td>
 										<td>
                                             {{materiel.deliverRemark}}
 										</td>
-										<td>
-                                            {{materiel.acceptCount}}
-										</td>
-										<td>
-											{{materiel.refuseCount}}
-										</td>
-										<td>
-                                            {{materiel.takeRemark}}
-										</td>
-										<td>{{materiel.qualifiedCount}}</td>
-										<td>{{materiel.unqualifiedCount}}</td>
-										<td>{{materiel.checkRemark}}</td>
+										<td ng-if="inOrOut.indexOf('in')>-1"  > {{materiel.acceptCount}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.stockCount}}</td>
+										
+										<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.refuseCount}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.unstockCount}}</td>
+										
+										<td ng-if="inOrOut.indexOf('in')>-1"  > {{materiel.takeRemark}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.stockRemark}}</td>
+										
+										<td><div class="col-md-12 form-group">
+                                                 <input type="text" class="form-control input-small" id="qualifiedCount{{$index}}"    ng-if="inOrOut.indexOf('in')>-1"   name="qualifiedCount"   data-acceptcount="{{materiel.acceptCount}}" ng-model="materiel.qualifiedCount" ng-hide="stockInOutCheckAdd"  />
+                                                  <input type="text" class="form-control input-small" id="qualifiedCount{{$index}}"    ng-if="inOrOut.indexOf('out')>-1"   name="qualifiedCount"   data-delivercount="{{materiel.deliverCount}}" ng-model="materiel.qualifiedCount" ng-hide="stockInOutCheckAdd"  />
+                                                 <div class="form-control-focus"> </div>
+                                                 <p class="control-label left" ng-show="stockInOutCheckView"> {{materiel.qualifiedCount}}</p>
+                                            </div></td>
+										<td><span id="unqualifiedCount{{$index}}"   ng-if="inOrOut.indexOf('in')>-1" >{{materiel.acceptCount-materiel.qualifiedCount}}</span>
+										<span id="unqualifiedCount{{$index}}"   ng-if="inOrOut.indexOf('out')>-1" >{{materiel.deliverCount-materiel.qualifiedCount}}</span></td>
+										<td><div class="col-md-12">
+                                                 <input type="text" class="form-control input-small" id="checkRemark{{$index}}" name="checkRemark"  ng-model="materiel.checkRemark" ng-hide="stockInOutCheckAdd" >
+                                                 <div class="form-control-focus"> </div>
+                                                 <p class="control-label left" ng-show="stockInOutCheckView">{{materiel.checkRemark}}</p>
+                                            </div>   </td>
 										<td><span class="label label-sm label-success"  ng-if="stockInOutCheck.status==0" >待检验</span>
                                                   <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==1" >待审批</span>
                                                    <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==2" >已检验</span></td>
                                                 </tr>
+                                                <tr ng-if="materials!=null"><td colspan="3">合计</td><td >{{materials.length}}</td><td></td><td></td><td></td><td   >{{stockInOutCheck.totalDeliverCount}}</td></tr>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div><!-- 物料信息 END-->
+                                </form>
 				</div>
 				
         </div>

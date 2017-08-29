@@ -483,31 +483,13 @@
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.DeliveryMateriel" >
+  <update id="updateDeliveryMateriel" parameterType="com.congmai.zhgj.web.model.DeliveryMateriel" >
     update deliveryMateriel
-    set deliverSerial = #{deliverSerial,jdbcType=VARCHAR},
-      orderMaterielSerial = #{orderMaterielSerial,jdbcType=VARCHAR},
-      batchNum = #{batchNum,jdbcType=VARCHAR},
-      manufactureDate = #{manufactureDate,jdbcType=DATE},
-      deliverCount = #{deliverCount,jdbcType=VARCHAR},
-      deliverRemark = #{deliverRemark,jdbcType=VARCHAR},
-      acceptCount = #{acceptCount,jdbcType=VARCHAR},
-      refuseCount = #{refuseCount,jdbcType=VARCHAR},
-      takeRemark = #{takeRemark,jdbcType=VARCHAR},
+    set 
       qualifiedCount = #{qualifiedCount,jdbcType=VARCHAR},
       unqualifiedCount = #{unqualifiedCount,jdbcType=VARCHAR},
-      checkRemark = #{checkRemark,jdbcType=VARCHAR},
-      warehouseSerial = #{warehouseSerial,jdbcType=VARCHAR},
-      positionSerial = #{positionSerial,jdbcType=VARCHAR},
-      stockCount = #{stockCount,jdbcType=VARCHAR},
-      unstockCount = #{unstockCount,jdbcType=VARCHAR},
-      stockRemark = #{stockRemark,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR},
-      delFlg = #{delFlg,jdbcType=VARCHAR},
-      creator = #{creator,jdbcType=VARCHAR},
-      createTime = #{createTime,jdbcType=TIMESTAMP},
-      updater = #{updater,jdbcType=VARCHAR},
-      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+      checkRemark = #{checkRemark,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
+  
 </mapper>

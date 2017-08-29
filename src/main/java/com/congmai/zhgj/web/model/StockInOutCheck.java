@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.model;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName StockInOutCheck
@@ -55,6 +56,16 @@ private  String  deliverNum;//发货单号
 private String  relationSaleNum;//关联销售单号
     
     private String  relationBuyNum;//关联采购单号
+    
+    private  String  totalDeliverCount;//合计发货数量
+    
+    private  String totalQualifiedCount;//合计合格数量
+    
+    private  String totalUnQualifiedCount;//合计不合格数量
+    
+    
+    
+    private List<DeliveryMateriel>deliverMaterials;
 
     public String getSerialNum() {
         return serialNum;
@@ -239,5 +250,39 @@ private String  relationSaleNum;//关联销售单号
 	public void setRelationBuyNum(String relationBuyNum) {
 		this.relationBuyNum = relationBuyNum;
 	}
+
+	public List<DeliveryMateriel> getDeliverMaterials() {
+		return deliverMaterials;
+	}
+
+	public void setDeliverMaterials(List<DeliveryMateriel> deliverMaterials) {
+		this.deliverMaterials = deliverMaterials;
+	}
+
+	public String getTotalDeliverCount() {
+		return totalDeliverCount;
+	}
+
+	public void setTotalDeliverCount(String totalDeliverCount) {
+		this.totalDeliverCount = totalDeliverCount;
+	}
+
+	public String getTotalQualifiedCount() {
+		return totalQualifiedCount;
+	}
+
+	public void setTotalQualifiedCount(String totalQualifiedCount) {
+		this.totalQualifiedCount = totalQualifiedCount;
+	}
+
+	public String getTotalUnQualifiedCount() {
+		return totalUnQualifiedCount;
+	}
+
+	public void setTotalUnQualifiedCount(String totalUnQualifiedCount) {
+		this.totalUnQualifiedCount = totalUnQualifiedCount;
+	}
+	
+	
     
 }

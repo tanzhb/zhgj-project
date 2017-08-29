@@ -34,22 +34,15 @@ angular
 												if($scope.inOrOut.length>3){
 													getStockInOutCheckInfo($stateParams.inOrOut);
 												}
-												/*if($scope.inOrOut.indexOf("in")>-1){
-													selectDeliverOrTakeDelivery("in");
-												}else if($scope.inOrOut.indexOf("out")>-1){
-													selectDeliverOrTakeDelivery("out");
-												}*/
-												
 										 		}else if($location.path()=="/stockInOutCheckView"){
 										 			debugger;
 										 			$scope.inOrOut=$stateParams.inOrOut;
 										 			getStockInOutCheckInfo($stateParams.inOrOut);//查看出入库检验详情页面
 									 		}else{
-									 			if($stateParams.inOrOut=='showOut'&&$scope.isInit!='1'){
+									 			if($stateParams.inOrOut=='showOut'){
 									 				debugger;
 									 				$("#in").removeClass("active");
 									 				$("#out").addClass("active");
-									 				$scope.isInit='1';
 									 				loadStockInOutCheckTable('out');
 									 				//加载入库检验列表
 									 			}else{
@@ -153,9 +146,9 @@ angular
 													}, {
 														mData : 'materialNum'
 													},{
-														mData : 'qualifiedCount'
+														mData : 'totalQualifiedCount'
 													}, {
-														mData : 'unQualifiedCount'
+														mData : 'totalUnQualifiedCount'
 													}, { 
 														mData : 'checkDate',
 														mRender:function(data){
@@ -266,9 +259,9 @@ angular
 													}, {
 														mData : 'materialNum'
 													},{
-														mData : 'qualifiedCount'
+														mData : 'totalQualifiedCount'
 													}, {
-														mData : 'unQualifiedCount'
+														mData : 'totalUnQualifiedCount'
 													},  { 
 														mData : 'checkDate',
 														mRender:function(data){
@@ -386,15 +379,14 @@ angular
 			}
 						$scope.editStockInOutCheck = function(){
 							debugger;
-							var stockInOutCheck=$scope.stockInOutCheck;
-							$scope.stockInOutCheck=stockInOutCheck;
+							getStockInOutCheckInfo($scope.inOrOut);
 							$scope.stockInOutCheckView = false;
 		        			$scope.stockInOutCheckAdd = false;
 		        			$scope.stockInOutCheckEdit = false;
 						}
 						$scope.cancelEditStockInOutCheck = function(){
 							debugger;
-							getStockInOutCheckInfo($scope.stockInOutCheck.serialNum);
+							getStockInOutCheckInfo($scope.inOrOut);
 							$scope.stockInOutCheckView = true;
 		        			$scope.stockInOutCheckAdd = true;
 		        			$scope.stockInOutCheckEdit = true;
@@ -413,11 +405,30 @@ angular
 										if(data=='1'){
 											if($scope.inOrOut=='in'){
 											toastr.warning("该收货单已建入库检验！");
-											}else{
-												toastr.warning("该发货单已建出库检验！");	
-											}
 											return ;
+											}else if($scope.inOrOut=='out'){
+												toastr.warning("该发货单已建出库检验！");
+												return ;
+											}
+											
 										}
+										var params = {};
+										params.deliveryMateriels = [];
+										var param
+										for(var i=0;i < $scope.materials.length;i++){
+											param = {};
+											param.serialNum = $scope.materials[i].serialNum;
+											param.qualifiedCount = $scope.materials[i].qualifiedCount;
+											if($scope.inOrOut.indexOf("in")){
+												param.unqualifiedCount= $scope.materials[i].acceptCount-$scope.materials[i].qualifiedCount;
+											}else{
+												param.unqualifiedCount= $scope.materials[i].deliverCount-$scope.materials[i].qualifiedCount;
+											}
+											param.checkRemark = $scope.materials[i].checkRemark;
+											params.deliveryMateriels.push(param);
+										}
+										$scope.stockInOutCheck.deliverMaterials=params.deliveryMateriels;
+										debugger;
 										StockInOutService.saveStockInOutCheck($scope.stockInOutCheck)
 										.then(
 												function(data) {debugger;
@@ -425,7 +436,7 @@ angular
 													$scope.stockInOutCheck = data;
 								        			$scope.stockInOutCheckView = true;
 								        			$scope.stockInOutCheckAdd = true;
-								        			$scope.stockInOutCheckEdit = false;
+								        			$scope.stockInOutCheckEdit = true;
 								        			$(".alert-danger").hide();
 												},
 												function(errResponse) {
@@ -441,6 +452,7 @@ angular
 									debugger;
 									$scope.stockInOutCheck.deliverSerial=$("#deliverSerial").val();
 									$scope.stockInOutCheck.takeDeliverSerial=$("#takeDeliverSerial").val();
+									$scope.materials;
 									if($('#stockInOutCheckForm').valid()){//表单验证通过则执行添加功能
 										 judgeIsExist ();
 									}
@@ -733,12 +745,6 @@ angular
 						StockInOutService.getMaterialBySerialNum($scope.row.serialNum).then(
 								function(data) {debugger;
 								$scope.row.materials=data.materials;
-								for(var i=0;i<$scope.row.materials.length;i++){
-									$scope.row.materials[i].status='待检验'
-		          		    		/*if($scope.row.materials[i].status=='0'){$scope.row.materials[i].status='待审批'};
-		          		    		if($scope.row.materials[i].status=='1'){$scope.row.materials[i].status='待检验'};
-		          		    		if($scope.row.materials[i].status=='2'){$scope.row.materials[i].status='已检验'}*/
-		          		    	}
 							},
 							function(errResponse) {
 								toastr.warning("获取失败！");
@@ -777,23 +783,46 @@ angular
 		 	    			if(judgeString=='in'){
 		 	    				$("#deliverSerial").val('111111');//发货单流水
 			 	            	$("#takeDeliverSerial").val($scope.row.serialNum.substring(0,32));//收货单流水
-			 	            	$("#takeDeliverNum").val($scope.row.deliverOrTakeDeliverNum);//收货单号
+			 	            	$scope.stockInOutCheck.takeDeliverNum=$scope.row.deliverOrTakeDeliverNum;
+			 	            	$scope.stockInOutCheck.relationBuyNum=$scope.row.orderNum;
+			 	            	$scope.stockInOutCheck.supplyName=$scope.row.supplyName;
+			 	            	/*$("#takeDeliverNum").val($scope.row.deliverOrTakeDeliverNum);//收货单号
 			 	            	$("#relationBuyNum").val($scope.row.orderNum);//采购单号
-			 	            	$("#supplyName").val($scope.row.supplyName);
+			 	            	$("#supplyName").val($scope.row.supplyName);*/
 			 	            	$('#takeDeliveryInfo').modal('hide');// 选择成功后关闭模态框
 		 	    			}else{
 		 	    				$("#deliverSerial").val($scope.row.serialNum.substring(0,32));//发货单流水
 			 	            	$("#takeDeliverSerial").val('111111') ;//收货单流水
-			 	           	$("#deliverNum").val($scope.row.deliverOrTakeDeliverNum);//发货单号
+			 	            	$scope.stockInOutCheck.deliverNum=$scope.row.deliverOrTakeDeliverNum;
+			 	            	$scope.stockInOutCheck.relationSaleNum=$scope.row.orderNum;
+			 	            	$scope.stockInOutCheck.supplyName=$scope.row.supplyName;
+			 	          /* 	$("#deliverNum").val($scope.row.deliverOrTakeDeliverNum);//发货单号
 		 	            	$("#relationSaleNum").val($scope.row.orderNum);//销售单号
-		 	            	$("#supplyName").val($scope.row.supplyName);
+		 	            	$("#supplyName").val($scope.row.supplyName);*/
 		 	            	$('#deliverInfo').modal('hide');// 选择成功后关闭模态框
 		 	    			}
 		 	    			$scope.materials=$scope.row.materials;
 		 	    			$(".modal-backdrop").remove();
 		 	    		};  // 确认选择发货单结束***************************************
+		 	    		jQuery.validator.addMethod("qualifiedNumCheck", function (value, element) {
+		 	    			debugger;
+		 					$(element).removeData();
+		 					return this.optional(element) || Number($(element).data("acceptcount")) == NaN?false:(Number($(element).data("acceptcount"))-value>= 0);
+		 				}, "合格数量不能超过实收数量");
+		 	    		jQuery.validator.addMethod("deliverNumCheck", function (value, element) {
+		 	    			debugger;
+		 					$(element).removeData();
+		 					return this.optional(element) || Number($(element).data("delivercount")) == NaN?false:(Number($(element).data("delivercount"))-value>= 0);
+		 				}, "合格数量不能超过发货数量");
+		 	    		
 							// 页面加载完成后调用，验证输入框
-							$scope.$watch('$viewContentLoaded', function() {  
+							$scope.$watch('$viewContentLoaded', function() { 
+								var  qualifiedCountData='';
+								if($scope.inOrOut!=undefined&&$scope.inOrOut.indexOf("in")>-1){
+									qualifiedCountData={required:true,digits:true,qualifiedNumCheck:!0};
+								}else if($scope.inOrOut!=undefined&&$scope.inOrOut.indexOf("out")>-1){
+									qualifiedCountData={required:true,digits:true,deliverNumCheck:!0};
+								}
 								var e = $("#stockInOutCheckForm"),
 						        r = $(".alert-danger", e),
 						        i = $(".alert-success", e);
@@ -809,7 +838,8 @@ angular
 						            	checkParty:{required:"检验方不能为空！"},
 						            	checkDate:{required:"检验日期不能为空！"},
 						            	checker: { required:"检验员不能为空！"},
-						            	contactNum:{required:"联系电话不能为空！",digits:"请输入正确的联系电话, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")}
+						            	contactNum:{required:"联系电话不能为空！",digits:"请输入正确的联系电话, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
+						            	qualifiedCount:{required:"合格数量不能为空！",digits:"请输入正确的合格数量, 必须为数字！"}
 						            },
 						            rules: {
 						            	checkNum:{required:true},
@@ -818,7 +848,8 @@ angular
 						            	checkParty:{required:true,digits:true},
 						            	checkDate:{required:true},
 						            	checker:{required:true},
-						            	contactNum:{required:true,digits:true,rangelength:[7,20]}
+						            	contactNum:{required:true,digits:true,rangelength:[7,20]},
+						            	qualifiedCount:qualifiedCountData
 						            },
 						            invalidHandler: function(e, t) {
 						                i.hide(),
@@ -855,8 +886,10 @@ angular
 						 	        			 $scope.materials=data.materials;
 						 	        			 if($stateParams.inOrOut.indexOf("in")>-1){
 						 	        				 $("#takeDeliverSerial").val(data.stockInOutCheck.takeDeliverSerial);
+						 	        				 $("#deliverSerial").val('111111');
 						 	        			 }else{
 						 	        				 $("#deliverSerial").val(data.stockInOutCheck.deliverSerial);
+						 	        				$("#takeDeliverSerial").val('111111');
 						 	        			 }
 						 	        			
 						 	            },function(data){

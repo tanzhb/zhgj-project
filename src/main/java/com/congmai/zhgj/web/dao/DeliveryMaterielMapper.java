@@ -30,4 +30,5 @@ public interface DeliveryMaterielMapper extends GenericDao<DeliveryMateriel, Str
     int updateByPrimaryKeySelective(DeliveryMateriel record);
 
     int updateByPrimaryKey(DeliveryMateriel record);
+    int updateDeliveryMateriel(DeliveryMateriel record);
 }
