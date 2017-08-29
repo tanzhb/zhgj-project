@@ -2,6 +2,8 @@ package com.congmai.zhgj.web.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * @ClassName StockInOutRecord
  * @Description TODO(出入库记录)
@@ -38,6 +40,15 @@ public class StockInOutRecord {
 
     private Date updateTime;
     
+    private int pageSize;
+    
+    private int pageIndex;  
+    
+    private Delivery delivery;
+    
+    private int warehouseCount;
+    
+    private int positionCount;
 
     public String getSerialNum() {
         return serialNum;
@@ -71,6 +82,7 @@ public class StockInOutRecord {
         this.inOutNum = inOutNum == null ? null : inOutNum.trim();
     }
 
+    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
     public Date getStockDate() {
         return stockDate;
     }
@@ -150,4 +162,44 @@ public class StockInOutRecord {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public int getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	public int getPageIndex() {
+		return pageIndex;
+	}
+
+	public void setPageIndex(int pageIndex) {
+		this.pageIndex = pageIndex;
+	}
+
+	public Delivery getDelivery() {
+		return delivery;
+	}
+
+	public void setDelivery(Delivery delivery) {
+		this.delivery = delivery;
+	}
+
+	public int getWarehouseCount() {
+		return warehouseCount;
+	}
+
+	public void setWarehouseCount(int warehouseCount) {
+		this.warehouseCount = warehouseCount;
+	}
+
+	public int getPositionCount() {
+		return positionCount;
+	}
+
+	public void setPositionCount(int positionCount) {
+		this.positionCount = positionCount;
+	}
 }

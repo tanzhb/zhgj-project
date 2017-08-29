@@ -3,6 +3,8 @@ package com.congmai.zhgj.web.dao;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryMaterielExample;
+import com.congmai.zhgj.web.model.StockInOutRecordExample;
+import com.congmai.zhgj.web.model.StockInOutRecordSelectExample;
 
 import java.util.List;
 
@@ -30,4 +32,8 @@ public interface DeliveryMaterielMapper extends GenericDao<DeliveryMateriel, Str
     int updateByPrimaryKeySelective(DeliveryMateriel record);
 
     int updateByPrimaryKey(DeliveryMateriel record);
+    
+    List<DeliveryMateriel> selectListByExample(StockInOutRecordSelectExample example);
+
+	int countListByExample(StockInOutRecordSelectExample example);
 }

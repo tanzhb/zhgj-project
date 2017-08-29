@@ -13,18 +13,18 @@
 			class="fa fa-angle-right"></i></li>
 		<li><a ui-sref="datatablesmanaged">物流管理</a> <i
 			class="fa fa-angle-right"></i></li>
-		<li><a ui-sref="datatablesmanaged">收货</a></li>
+		<li><a  id="tip" ui-sref="datatablesmanaged">收货</a></li>
 	</ul>
 </div>
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
 <div class="tabbable-line">
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-tabs" id="delivery_tab">
         <li class="active">
-            <a data-target="#tab_15_1" data-toggle="tab">收货计划</a>
+            <a data-target="#tab_15_1" data-toggle="tab" >收货计划</a>
         </li>
         <li>
-            <a data-target="#tab_15_2" data-toggle="tab">入库记录</a>
+            <a data-target="#tab_15_2" data-toggle="tab" >入库记录</a>
         </li>
     </ul>
 <div class="tab-content">
@@ -111,7 +111,7 @@
 		<div class="row">
 			<div class="col-md-12">
 				<!-- BEGIN EXAMPLE TABLE PORTLET-->
-				<div class="portlet box red">
+				<div class="portlet box blue">
 					<div class="portlet-title">
 						<div class="caption">
 							<i class="fa fa-globe"></i>入库记录
@@ -126,9 +126,9 @@
 							<a href="javascript:;" class="btn btn-default btn-sm btn-circle"
 								ui-sref="stockInAdd" > <i class="fa fa-plus"></i> 添加
 							</a> <a href="javascript:;" class="btn btn-default btn-sm btn-circle"
-								ng-click="takeDeliveryEdit()"> <i class="fa fa-edit"></i> 修改
+								ng-click="stockInEdit()"> <i class="fa fa-edit"></i> 修改
 							</a> <a href="javascript:;" class="btn btn-default btn-sm btn-circle"
-								ng-click="takeDeliveryDelete()"> <i class="fa fa-minus"></i>
+								ng-click="stockInDelete()"> <i class="fa fa-minus"></i>
 								删除
 							</a> 
 							<div class="btn-group">
@@ -143,7 +143,7 @@
 											class="fa fa-upload"></i> 导入
 									</a></li> -->
 									<li><a href="javascript:;" data-action="0"
-										class="tool-action" ng-click="exportTakeDelivery()"> <i
+										class="tool-action" ng-click="exportStockIn()"> <i
 											class="fa fa-file-excel-o"></i> 导出
 									</a></li>
 									<!-- <li><a href="javascript:;" data-action="2"
@@ -155,23 +155,20 @@
 					</div>
 					<div class="portlet-body">
 						<!-- <div class="table-responsive"> -->
-						<table class="table table-bordered" id="takeDeddliveryTable">
+						<table class="table table-bordered" id="stockInTable">
 							<thead>
 								<tr>
-									<th style="text-align: center"><input name="select_all" 
-										value="1" id="example-select-all" type="checkbox" /></th>
-									<th>收货单编号</th>
-									<th>订单编号</th>
-									<th>发货方</th>
-									<th>物料</th>
-									<th>包装数量</th>
-									<th>使用包装</th>
-									<th>发货地点</th>
-									<th>发货日期</th>
-									<th>运输方式</th>
-									<th>收货/提货点</th>
-									<th>备注</th>
-									<th>状态</th>
+									<th style="text-align: center"><input name="select_all_2" 
+										value="1" id="example-select-all-2" type="checkbox" /></th>
+									<th>入库明细号</th>
+									<th>入库类型</th>
+									<th>商品名称</th>
+									<th>规格型号</th>
+									<th>入库日期</th>
+									<th>入库数量</th>
+									<th>关联批次号</th>
+									<th>供应商</th>
+									<th>关联单据</th>
 								</tr>
 							</thead>
 							<tbody>

@@ -6,7 +6,7 @@
 	float: left;
 }
 </style>
-<h3 class="page-title s_tip"> 新建入库记录
+<h3 class="page-title"> 新建入库
 </h3>
 <div class="page-bar">
     <ul class="page-breadcrumb">
@@ -18,13 +18,13 @@
         <li>
             <a ui-sref="datatablesmanaged">物流管理</a>
             <i class="fa fa-angle-right"></i>
-        </li>
+        </li> 
         <li>
             <a ui-sref="takeDelivery({type:'stockIn'})">入库记录</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a class="s_tip">新建入库记录</a>
+            <a>查看入库记录</a>
         </li>
     </ul>
 
@@ -43,7 +43,7 @@
                         <div class="portlet-title">
                             <div class="caption">入库信息</div>
                             <div class="actions">
-                              <!--   <button   ng-show="deliverView" class="btn blue  btn-outline  btn-sm " ng-click="editdeliver()">
+                              <!--   <button    class="btn blue  btn-outline  btn-sm " ng-click="editdeliver()">
                                             <i class="fa fa-edit"></i> 编辑 </button>
                                 <button   ng-show="deliverEdit" class="btn red  btn-outline  btn-sm " ng-click="canceldeliver('deliver')">
                                             <i class="fa fa-undo"></i> 取消 </button>
@@ -53,16 +53,12 @@
                         </div>
                         <div class="portlet-body form">
 								<div class="form-body">
-									<div class="alert alert-danger display-hide">
-                                                <button class="close" data-close="alert"></button>请先输入正确数据！</div>
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="inOutNum"> <span class="required"> * </span>入库单号：</label>
                                                     <div class="col-md-8">
-                                                        <input type="text" class="form-control" id="inOutNum" name="inOutNum" ng-model="record.inOutNum" ng-hide="deliverAdd" >
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{record.inOutNum}}</p>
+                                                         <p class="control-label left" >{{record.inOutNum}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -72,12 +68,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="takeDeliverSerial"> <span class="required"> * </span>收货单号：</label>
                                                     <div class="col-md-8">
-                                                    	<select class="bs-select form-control order" data-live-search="true"  id="takeDeliverSerial"  name="takeDeliverSerial" ng-change="getTakeDeliverMateriel()" ng-model="record.takeDeliverSerial" ng-hide="deliverAdd"  data-size="8">
-	                                                        <option value=""></option>
-	                                                        <option  ng-repeat="takeDeliver in takeDeliverys" value="{{takeDeliver.takeDelivery.serialNum}}" data-deliveryserial="{{takeDeliver.serialNum}}" >{{takeDeliver.takeDelivery.takeDeliverNum}}</option>
-	                                                   	</select>
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.takeDeliverSerial}}</p>
+                                                         <p class="control-label left" >{{record.delivery.takeDelivery.takeDeliverNum}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -86,7 +77,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="orderSerial"> 采购订单号：</label>
                                                     <div class="col-md-8">
-                                                         <p class="control-label left" >{{record.orderNum}}</p>
+                                                         <p class="control-label left" >{{record.delivery.orderNum}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -98,7 +89,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="supplyComId"> 入库仓库：</label>
                                                     <div class="col-md-8">
-                                                         <p class="control-label left" >{{warehouseCount}}</p>
+                                                         <p class="control-label left" >{{record.warehouseCount}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -108,7 +99,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="shipper"> 入库库位：</label>
                                                     <div class="col-md-8">
-                                                         <p class="control-label left" >{{positionCount}}</p>
+                                                         <p class="control-label left" >{{record.positionCount}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -117,10 +108,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="stockDate"> <span class="required"> * </span>入库日期：</label>
                                                     <div class="col-md-8">
-                                                       <input type="text" class="form-control  date-picker" size="16"  data-date-format="yyyy-mm-dd" data-date-viewmode="years"
-                                                         id="stockDate"  name="stockDate" ng-model="record.stockDate" ng-hide="deliverAdd" >
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{record.stockDate}}</p>
+                                                         <p class="control-label left" >{{record.stockDate}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -132,9 +120,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="operator"> <span class="required"> * </span>操作员：</label>
                                                     <div class="col-md-8">
-                                                        <input type="text" class="form-control" id="operator" name="operator" ng-model="record.operator" ng-hide="deliverAdd" >
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.maker}}</p>
+                                                         <p class="control-label left" >{{record.operator}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -144,9 +130,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="contactNum"> <span class="required"> * </span>联系方式：</label>
                                                     <div class="col-md-8">
-                                                        <input type="text" class="form-control" id="contactNum"  name="contactNum" ng-model="record.contactNum" ng-hide="deliverAdd" >
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{record.contactNum}}</p>
+                                                         <p class="control-label left" >{{record.contactNum}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -155,7 +139,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="approval"> <span class="required"> * </span>状态：</label>
                                                     <div class="col-md-8">
-                                                         <p class="control-label left" ng-show="deliverView">待检验</p>
+                                                         <p class="control-label left" ><span class="label label-sm label-warning">待入库</span></p>
                                                     </div>
                                             </div>
 										</div>
@@ -199,7 +183,7 @@
 									</tr>
 								</thead>
 								<tbody data-repeater-list="group-a"> 
-									<tr data-repeater-item ng-repeat="materiel in takeDeliveryMateriels track by $index" >
+									<tr data-repeater-item ng-repeat="materiel in record.delivery.deliveryMateriels track by $index" >
 										<td>{{materiel.orderMateriel.materiel.materielNum}}</td>
 										<td>{{materiel.orderMateriel.materiel.materielName}}</td>
 										<td>{{materiel.orderMateriel.materiel.specifications}}</td>
@@ -210,40 +194,22 @@
 										<td>{{materiel.refuseCount}}</td>
 										<td>{{materiel.takeRemark}}</td>
 										<td>
-											<div class="col-md-12 form-group">
-                                                 <input type="text" class="form-control input-small" id="stockCount{{$index}}" name="stockCount" data-acceptcount="{{materiel.acceptCount}}"  ng-model="materiel.stockCount" ng-hide="deliverAdd" >
-                                                 <div class="form-control-focus"> </div>
-                                            </div>
+											{{materiel.stockCount}}
 										</td>
 										<td>
-											<span ng-if="materiel.acceptCount!=undefined && materiel.stockCount!=undedined">{{materiel.acceptCount-materiel.stockCount}}</span>
+											{{materiel.unstockCount}}
 										</td>
 										<td>
-											<div class="col-md-12 form-group">
-                                                <select class="bs-select form-control order" data-live-search="true"  id="warehouseSerial" ng-init="warehouses[0].serialNum" ng-change="getPositions(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
-	                                                 <!--  <option value=""></option> -->
-	                                                  <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
-	                                            </select>
-	                                            <div class="form-control-focus"></div>
-                                            </div>
+											{{materiel.warehouse.warehouseName}}
 										</td>
 										<td>
-											<div class="col-md-12">
-                                                <select class="bs-select form-control order" data-live-search="true"  id="positionSerial" ng-change="countPosition()" ng-init="materiel.warehousePositons[0].serialNum"   name="positionSerial" ng-model="materiel.positionSerial"    data-size="8">
-	                                                   <!-- <option value=""></option> -->
-	                                                   <option  ng-repeat="warehousePositon in materiel.warehousePositons" value="{{warehousePositon.serialNum}}">{{warehousePositon.positionName}}</option>
-	                                             </select>
-	                                             <div class="form-control-focus"> </div>
-                                            </div>
+											{{materiel.position.positionName}}
 										</td>
 										<td>
-											<div class="col-md-12 form-group">
-                                                 <input type="text" class="form-control input-small" id="stockRemark{{$index}}" name="stockRemark" data-delivercount="{{materiel.stockRemark}}"  ng-model="materiel.stockRemark"  >
-                                                 <div class="form-control-focus"> </div>
-                                            </div>
+											{{materiel.stockRemark}}
 										</td> 
 									</tr>
-									<tr ng-if="orderMateriels==undefined||orderMateriels.length==0">
+									<tr ng-if="record.delivery.deliveryMateriels==undefined||record.delivery.deliveryMateriels.length==0">
 											<td colspan="15" align="center">暂无数据</td>
 									</tr>
 								</tbody>
@@ -251,18 +217,6 @@
 						</div>
 					 </div>
          			<!-- 物料信息END -->
-         			<div class="row">
-         				<div class="col-md-5"></div>
-         				<div class="col-md-1">
-         					 <button   ng-hide="deliverAdd" class="btn blue" ng-click="saveStockIn()">
-                                            <i class="fa fa-check"></i> 确认入库 </button>
-         				</div>
-         				<div class="col-md-1">
-         					 <button   ng-hide="deliverAdd" class="btn red btn-outline" ng-click="cancelStockIn()">
-                                            <i class="fa fa-undo"></i> 取消 </button>
-         				</div>
-         				<div class="col-md-5"></div>
-         			</div>
        			 </div>
        			
     		</div>
