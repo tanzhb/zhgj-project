@@ -508,6 +508,7 @@
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
+  <update id="updateDeliveryMateriel"  parameterType="com.congmai.zhgj.web.model.DeliveryMateriel" >
     update deliveryMateriel
       qualifiedCount = #{qualifiedCount,jdbcType=VARCHAR},
       unqualifiedCount = #{unqualifiedCount,jdbcType=VARCHAR},
