@@ -56,6 +56,16 @@ public class DeliveryMateriel {
     private OrderMateriel orderMateriel;
     
     private Warehouse warehouse;
+    
+    private Warehouseposition position;
+    
+    private StockInOutRecord stockInOutRecord;
+    
+    private Delivery delivery;
+    
+    private int pageIndex;
+    
+    private int pageSize;
 
     public String getSerialNum() {
         return serialNum;
@@ -264,6 +274,46 @@ public class DeliveryMateriel {
 
 	public void setWarehouse(Warehouse warehouse) {
 		this.warehouse = warehouse;
+	}
+
+	public StockInOutRecord getStockInOutRecord() {
+		return stockInOutRecord;
+	}
+
+	public void setStockInOutRecord(StockInOutRecord stockInOutRecord) {
+		this.stockInOutRecord = stockInOutRecord;
+	}
+
+	public int getPageIndex() {
+		return pageIndex;
+	}
+
+	public void setPageIndex(int pageIndex) {
+		this.pageIndex = pageIndex;
+	}
+
+	public int getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	public Delivery getDelivery() {
+		return delivery;
+	}
+
+	public void setDelivery(Delivery delivery) {
+		this.delivery = delivery;
+	}
+
+	public Warehouseposition getPosition() {
+		return position;
+	}
+
+	public void setPosition(Warehouseposition position) {
+		this.position = position;
 	}
     
     

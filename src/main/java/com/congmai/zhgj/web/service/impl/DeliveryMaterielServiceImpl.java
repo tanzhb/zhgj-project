@@ -30,6 +30,9 @@ import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.DemandPlanMaterielExample;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
+import com.congmai.zhgj.web.model.StockInOutRecord;
+import com.congmai.zhgj.web.model.StockInOutRecordExample;
+import com.congmai.zhgj.web.model.StockInOutRecordSelectExample;
 import com.congmai.zhgj.web.model.SupplyMateriel;
 import com.congmai.zhgj.web.model.SupplyMaterielExample;
 import com.congmai.zhgj.web.service.DeliveryMaterielService;
@@ -49,11 +52,28 @@ public class DeliveryMaterielServiceImpl extends GenericServiceImpl<DeliveryMate
 	}
 
 	@Override
+	public List<DeliveryMateriel> selectByExample(
+			DeliveryMaterielExample example) {
+		
+		return deliveryMaterielMapper.selectByExample(example);
+	}
+
+	@Override
+	public Page<DeliveryMateriel> selectListByExample(StockInOutRecord record) {
+		StockInOutRecordSelectExample example = new StockInOutRecordSelectExample();
+		example.setPageIndex(0);
+		example.setPageSize(-1);
+		example.createCriteria().andDelFlgEqualTo("0");
+		Page<DeliveryMateriel> page = new Page<DeliveryMateriel>();
+		page.setResult(deliveryMaterielMapper.selectListByExample(example));
+		page.setTotalCount(deliveryMaterielMapper.countListByExample(example));
+		return page;
+	}
+@Override
 	public int updateDeliveryMateriel(DeliveryMateriel record) {
 		deliveryMaterielMapper.updateDeliveryMateriel(record);
 		return 1;
 	}
-
 
 	
 }

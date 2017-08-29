@@ -21,6 +21,10 @@
         </li>
         <li>
             <a ui-sref="takeDelivery">收货计划</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a ui-sref="takeDelivery">查看收货详情</a>
         </li>
     </ul>
 
