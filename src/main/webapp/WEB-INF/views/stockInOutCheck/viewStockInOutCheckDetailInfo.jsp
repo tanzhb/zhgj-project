@@ -183,7 +183,8 @@
 			                                                    <td colspan="16" align="center" >暂无数据</td>
 			                                                </tr>
 			                                </tbody>
-                                            <tbody ng-repeat="materiel in materials">
+                                            <tbody >
+                                            <tr  ng-repeat="materiel in materials">
                                            <td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.materiel.materielNum}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.materielNum}}</td>
 										<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.materiel.materielName}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.materielName}}</td>
 										<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.materiel.specifications}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.specifications}}</td>
@@ -213,53 +214,11 @@
                                                   <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==1" >待审批</span>
                                                    <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==2" >已检验</span></td>
                                                 </tr>
+                                                <tr ng-if="materials!=null"><td colspan="3">合计</td><td >{{materials.length}}</td><td></td><td></td><td></td><td   >{{stockInOutCheck.totalDeliverCount}}</td></tr>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div><!-- 物料信息 END-->
-				
-                 <!--    <div class="portlet-title">批次信息START
-                            <div class="caption">批次信息</div>
-                            <div class="actions">
-                            </div>
-                        </div>
-                          <div class="portlet-body form">
-                                    <div class="table-scrollable">
-                                        <table class="table table-bordered table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>商品批次号</th>
-                                                    <th>生效日期</th>
-                                                     <th>供应商</th>
-                                                    <th>入库日期</th>
-                                                     <th>总数量</th>
-                                                    <th>出库数量</th>
-                                                     <th>结存数量</th>
-                                                     <th>库龄</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody  ng-if="stocks.length==0">
-			                                             	<tr>
-			                                                    <td colspan="7" align="center" >暂无数据</td>
-			                                                </tr>
-			                                </tbody>
-                                            <tbody ng-repeat="stock in stocks">
-                                            
-                                                <tr >
-                                                    <td>{{stock.versionNO}}</td>
-                                                    <td>{{stock.priceEffectiveDate | date:'yyyy-MM-dd' }}</td>
-                                                    <td>{{stock.currency}}</td>
-                                                    <td>{{stock.unitPrice}}</td>
-                                                    <td>{{stock.rate}}</td>
-                                                    <td>{{stock.inclusivePrice}}</td>
-                                                    <td>--</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>批次信息END -->
-				
-				
 				</div>
 				
         </div>
