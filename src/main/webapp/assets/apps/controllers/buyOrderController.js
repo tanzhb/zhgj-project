@@ -70,7 +70,9 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
         	}
     });
     
-    $scope.repeatDone = function(){
+    $scope.repeatDone = function(scope){
+    	var date1= scope._orderMateriel.deliveryDate;
+    	var date2= scope._orderMateriel.lastDeliveryDate;
     	$('.date-picker').datepicker({
 			rtl: App.isRTL(),
 			orientation: "left",
@@ -78,7 +80,10 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 			dateFormat:"yyyy-mm-dd",
 			language: "zh-CN"
     	})
-    	
+    	if(scope._orderMateriel){
+    		scope._orderMateriel.deliveryDate = date1;
+    		scope._orderMateriel.lastDeliveryDate = date2;
+    	}
    };
    
     $scope.save  = function() {
@@ -129,7 +134,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     };
     
     var table;
-    var tableAjaxUrl = "rest/order/findOrderList";
+    var tableAjaxUrl = "rest/order/findOrderList?type=buy";
     var loadMainTable = function() {
             a = 0;
             App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
@@ -168,7 +173,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                 "aoColumns": [
                               { mData: 'serialNum' },
                               { mData: 'orderNum' },
-                              { mData: 'buyComId' },
+                              { mData: 'supplyComId' },
                               { mData: null },
                               { mData: null },
                               { mData: 'deliveryMode' },
@@ -506,8 +511,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                                    { mData: 'materielNum' },
                                    { mData: 'materielName' },
                                    { mData: 'specifications' },
-                                   { mData: 'unit' },
-                                   { mData: 'supplyMateriels' }
+                                   { mData: 'unit' }
                              ],
                     'aoColumnDefs' : [ {
      							'targets' : 0,
@@ -516,26 +520,22 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
      							
      							'render' : function(data,
      									type, row, meta) {
-     								if(row.supplyMateriels.length>0){
-     									if($scope.modalType=='single'){
-         	  								return '<input type="radio" id="'+ row.serialNum +'" ng-click="getCheckedIds(\''+data+'\','+meta.row+')" name="serialNum" value="'
-       										+ $('<div/>')
-       												.text(
-       														row.supplyMateriels[0].serialNum)
-       												.html()
-       										+ '">';
+     								if($scope.modalType=='single'){
+     	  								return '<input type="radio" id="'+ row.serialNum +'" ng-click="getCheckedIds(\''+data+'\','+meta.row+')" name="serialNum" value="'
+   										+ $('<div/>')
+   												.text(
+   														row.serialNum)
+   												.html()
+   										+ '">';
 
-         								}else{
-         	  								return '<input type="checkbox" data-checked=false id="'+ row.serialNum +'" ng-click="getCheckedIds(\''+data+'\','+meta.row+')" name="serialNum[]" value="'
-       										+ $('<div/>')
-       												.text(
-       														row.supplyMateriels[0].serialNum)
-       												.html()
-       										+ '">';
-
-         								}
      								}else{
-     									return '';
+     	  								return '<input type="checkbox" data-checked=false id="'+ row.serialNum +'" ng-click="getCheckedIds(\''+data+'\','+meta.row+')" name="material_serial" value="'
+   										+ $('<div/>')
+   												.text(
+   														row.serialNum)
+   												.html()
+   										+ '">';
+
      								}
      								
      							},
@@ -552,30 +552,6 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
      								}
      								return ClauseFrameworkIcon + data;
      							}
-
-     						},{
-     							'targets' : 5,
-     							'render' : function(data,
-     									type, row, meta) {
-     								if(data.length>0){
-     									var select='<select class="form-control" id="select'+row.serialNum+'" ng-model="model'+row.serialNum+'" ng-init="model'+row.serialNum+'=\''+data[0].serialNum+'\'" ng-change="changeSelectValue(\'select'+row.serialNum+'\',\''+row.serialNum+'\')">'
- 	 									for(var i=0;i<data.length;i++){
- 	 										if(data[i].supply){
- 	 											select = select + '<option value="'+data[i].serialNum+'">'+data[i].supply.comName+'</option>';
- 	 										}else{
- 	 											select = select + '<option value="'+data[i].serialNum+'"></option>';
- 	 										}
- 	 										
- 	 									}
- 	 									select = select + '</select>';	
- 	     								return select;
-     								}else{
-     									return '无供应商';
-     								}
-     							},
-     							"createdCell": function (td, cellData, rowData, row, col) {
-    								 $compile(td)($scope);
-    						       }
 
      						}]
 
@@ -599,8 +575,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
       			data.serialNum = serialNum;
       			data.materiel = table.row(index).data(); //获取一行数据
       			data.materiel.materielSerial = data.materiel.serialNum; //为保存操作做准备，新增物料serialNum为空
-      			data.materiel.serialNum = null
-      			data.materiel.supplyMaterielSerial = $("#"+serialNum).val();
+
       			if($("#"+serialNum).data("radio")==true){ //修改物料弹出框
       				$scope.serialNums = []; //清空选中数组
       				$scope.serialNums.push(data);
@@ -753,10 +728,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     			var promise = materielService.chooseMateriels(id);
         		promise.then(function(data){
         			if($scope.materielSelectedIndex != undefined){
-        				$scope.orderMateriel[$scope.materielSelectedIndex].supplyMaterielSerial = data.data[0].serialNum;
-        				$scope.orderMateriel[$scope.materielSelectedIndex].materielSerial = data.data[0].materiel.serialNum;
-        				$scope.orderMateriel[$scope.materielSelectedIndex].materiel = data.data[0].materiel;
-        				$scope.orderMateriel[$scope.materielSelectedIndex].supplyMateriel = data.data[0];
+        				$scope.orderMateriel[$scope.materielSelectedIndex].materielSerial = data.data[0].serialNum;
+        				$scope.orderMateriel[$scope.materielSelectedIndex].materiel = data.data[0];
         			}
         			$("#basicMaterielInfo").modal("hide");
         		},function(data){
@@ -794,36 +767,32 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     			var ids = '';
 				for(var i=0;i<$scope.serialNums.length;i++){
 					if (ids == '') {
-						ids = $scope.serialNums[i].materiel.supplyMaterielSerial;
+						ids = $scope.serialNums[i].materiel.serialNum;
 					} else{
-						ids = ids + ',' + $scope.serialNums[i].materiel.supplyMaterielSerial;
+						ids = ids + ',' + $scope.serialNums[i].materiel.serialNum;
 					}
 				}
         		handle.blockUI();
-        		var promise = materielService.chooseMateriels(ids);
+        		var promise = materielService.chooseBasicMateriels(ids);
         		promise.then(function(data){
         			toastr.success("添加成功！");
         			handle.unblockUI();
         			if($scope.orderMateriel.length==0){
-        				for(var i = 0;i < data.data.length;i++){// data.data为选择的供应物料
+        				for(var i = 0;i < data.data.length;i++){// data.data为选择的标准物料
         					$scope.tempMateriel = {};
-        					$scope.tempMateriel.materiel = (data.data)[i].materiel;
+        					$scope.tempMateriel.materiel = (data.data)[i];
         					$scope.tempMateriel.orderSerial = $scope.buyOrder.serialNum;
-        					$scope.tempMateriel.materielSerial = (data.data)[i].materiel.serialNum;
-        					$scope.tempMateriel.supplyMaterielSerial = (data.data)[i].serialNum;
-        					$scope.tempMateriel.supplyMateriel = (data.data)[i];
+        					$scope.tempMateriel.materielSerial = (data.data)[i].serialNum;
         					$scope.orderMateriel.push($scope.tempMateriel);
         					$scope["orderMaterielInput"+i] = false;
         					$scope["orderMaterielShow"+i] = false;
         				}
         			}else{
-        				for(var i = 0;i < data.data.length;i++){// data.data为选择的供应物料
+        				for(var i = 0;i < data.data.length;i++){// data.data为选择的标准物料
         					$scope.tempMateriel = {};
-        					$scope.tempMateriel.materiel = (data.data)[i].materiel;
+        					$scope.tempMateriel.materiel = (data.data)[i];
         					$scope.tempMateriel.orderSerial = $scope.buyOrder.serialNum;
-        					$scope.tempMateriel.materielSerial = (data.data)[i].materiel.serialNum;
-        					$scope.tempMateriel.supplyMaterielSerial = (data.data)[i].serialNum;
-        					$scope.tempMateriel.supplyMateriel = (data.data)[i];
+        					$scope.tempMateriel.materielSerial = (data.data)[i].serialNum;
         					$scope.orderMateriel.unshift($scope.tempMateriel);
 	        				$scope["orderMaterielInput"+i] = false;
 							$scope["orderMaterielShow"+i] = false;

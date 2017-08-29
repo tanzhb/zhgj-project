@@ -43,7 +43,7 @@
                                		<i class="fa fa-undo"></i> 取消 </button>
                                <button ng-click="edit()" type="button" ng-show="saleOrderShow&&noShow" class="btn blue  btn-outline  btn-sm">
                                		<i class="fa fa-edit"></i> 编辑 </button>
-                                <a href="javascript：;" class="collapse"> </a>
+                                <!-- <a href="javascript：;" class="collapse"> </a> -->
                              </div>
                         </div>
           <div class="portlet-body form">
@@ -592,6 +592,13 @@
 									<th>含税销售单价</th>
 									<th>金额</th>
 									<th>税额</th>
+									
+									<th ng-if="saleOrder.settlementClause =='服务费'">服务费率</th>
+									<th ng-if="saleOrder.settlementClause =='服务费'">服务费</th>
+									<th ng-if="saleOrder.settlementClause =='折扣折让'">折扣率</th>
+									<th ng-if="saleOrder.settlementClause =='折扣折让'">折后金额</th>
+									<th ng-if="saleOrder.settlementClause =='红票'">红票金额</th>
+									
 									<th>价税合计</th>
 									<th>交付日期</th>
 									<th>最晚交付日期</th>
@@ -600,7 +607,7 @@
                                   </tr>
                               </thead>
                               <tbody>
-                                  <tr ng-repeat="_orderMateriel in orderMateriel track by $index" ng-mouseover="showOperation('orderMateriel',$index)" ng-mouseleave="hideOperation('orderMateriel',$index)"  repeat-done="repeatDone()">
+                                  <tr ng-repeat="_orderMateriel in orderMateriel track by $index" ng-mouseover="showOperation('orderMateriel',$index)" ng-mouseleave="hideOperation('orderMateriel',$index)"  repeat-done="repeatDone(this)">
 			                          <td>
                                             <!-- <span ng-hide="orderMaterielInput{{$index}}"><a href="javascript：;" ng-click="addMateriel('single',$index)">{{_orderMateriel.materiel.materielNum}}</a></span> -->
 			                                <p class="form-control-static" > {{_orderMateriel.materiel.materielNum}} </p>
@@ -646,6 +653,22 @@
 			                          <td>  
                                       		<p class="form-control-static"> {{_orderMateriel.orderUnitPrice&&_orderMateriel.amount?_orderMateriel.orderUnitPrice*_orderMateriel.amount*saleOrder.rate/100:0}} </p>
 			                          </td>
+			                          
+			                          <td ng-if="saleOrder.settlementClause =='服务费'">
+			                          	<input type="text"  name="serviceRate{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].serviceRate"  >
+                                      	<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.serviceRate}} </p>
+			                          </td>
+									<td ng-if="saleOrder.settlementClause =='服务费'">服务费</td>
+									<td ng-if="saleOrder.settlementClause =='折扣折让'">
+										<input type="text"  name="discountRate{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].discountRate"  >
+                                      	<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.discountRate}} </p>
+									</td>
+									<td ng-if="saleOrder.settlementClause =='折扣折让'">折后金额</td>
+									<td ng-if="saleOrder.settlementClause =='红票'">
+										<input type="text"  name="redTicket{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].redTicket"  >
+                                      	<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.redTicket}} </p>
+									</td>
+									
 			                          <td>  
                                       		<p class="form-control-static"> {{_orderMateriel.orderUnitPrice&&_orderMateriel.amount?(_orderMateriel.orderUnitPrice*_orderMateriel.amount+_orderMateriel.orderUnitPrice*100*_orderMateriel.amount*saleOrder.rate/10000):0}} </p>
 			                          </td>
@@ -1265,4 +1288,4 @@
 </div>
 </div> 
 
-<jsp:include  page="../demandPlan/selectMateriel.jsp"/>
+<jsp:include  page="selectMateriel.jsp"/> <!-- 选择供应物料 -->

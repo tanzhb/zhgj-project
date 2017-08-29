@@ -33,9 +33,11 @@ public class OrderMateriel {
 
     private String deliveryAddress;
 
-    private String discount;
+    private String discountRate;
 
-    private String afterDiscountMoney;
+    private String serviceRate;
+    
+    private String redTicket;
 
     private String delFlg;
 
@@ -127,20 +129,20 @@ public class OrderMateriel {
         this.deliveryAddress = deliveryAddress == null ? null : deliveryAddress.trim();
     }
 
-    public String getDiscount() {
-        return discount;
+    public String getDiscountRate() {
+        return discountRate;
     }
 
-    public void setDiscount(String discount) {
-        this.discount = discount == null ? null : discount.trim();
+    public void setDiscountRate(String discountRate) {
+        this.discountRate = discountRate == null ? null : discountRate.trim();
     }
 
-    public String getAfterDiscountMoney() {
-        return afterDiscountMoney;
+    public String getServiceRate() {
+        return serviceRate;
     }
 
-    public void setAfterDiscountMoney(String afterDiscountMoney) {
-        this.afterDiscountMoney = afterDiscountMoney == null ? null : afterDiscountMoney.trim();
+    public void setServiceRate(String serviceRate) {
+        this.serviceRate = serviceRate == null ? null : serviceRate.trim();
     }
 
     public String getDelFlg() {
@@ -197,6 +199,14 @@ public class OrderMateriel {
 
 	public void setSupplyMateriel(SupplyMateriel supplyMateriel) {
 		this.supplyMateriel = supplyMateriel;
+	}
+
+	public String getRedTicket() {
+		return redTicket;
+	}
+
+	public void setRedTicket(String redTicket) {
+		this.redTicket = redTicket;
 	}
     
 }
