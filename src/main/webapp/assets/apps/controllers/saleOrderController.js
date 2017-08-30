@@ -1877,7 +1877,7 @@ var e = $("#form_clauseSettlement"),
 		        * 下载EXCEL模板
 		        */
 		       $scope.downloadImportTemp = function(){
-		    	   window.location.href=$rootScope.basePath+"/rest/order/downloadImportTemp";
+		    	   window.location.href=$rootScope.basePath+"/rest/order/downloadImportTemp?type=sale";
 		       }
 		       
 		       /**
@@ -1919,7 +1919,7 @@ var e = $("#form_clauseSettlement"),
 		       
 		       $scope.exportSaleOrder = function(){
 			    	 handle.blockUI("正在导出数据，请稍后"); 
-			    	 window.location.href=$rootScope.basePath+"/rest/order/exportOrder";
+			    	 window.location.href=$rootScope.basePath+"/rest/order/exportOrder?type=sale";
 			    	 handle.unblockUI(); 
 			   }
 		       //********导入导出end****************//
