@@ -2,6 +2,7 @@ package com.congmai.zhgj.web.dao;
 
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.web.model.CompanyContact;
+import com.congmai.zhgj.web.model.CompanyContactExample;
 
 import java.util.List;
 
@@ -18,11 +19,11 @@ public interface CompanyContactMapper extends GenericDao<CompanyContact, String>
 
     int insertSelective(CompanyContact record);
 
-   // List<CompanyContact> selectByExample(CompanyContactExample example);
+    List<CompanyContact> selectByExample(CompanyContactExample example);
 
     CompanyContact selectByPrimaryKey(String serialNum);
 
-    //int updateByExampleSelective(@Param("record") CompanyContact record, @Param("example") CompanyContactExample example);
+    int updateByExampleSelective(@Param("record") CompanyContact record, @Param("example") CompanyContactExample example);
 
     //int updateByExample(@Param("record") CompanyContact record, @Param("example") CompanyContactExample example);
 

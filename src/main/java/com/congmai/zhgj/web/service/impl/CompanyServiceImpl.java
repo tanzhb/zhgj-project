@@ -21,7 +21,13 @@ import com.congmai.zhgj.web.dao.CompanyMapper;
 import com.congmai.zhgj.web.dao.CompanyQualificationMapper;
 import com.congmai.zhgj.web.enums.ComType;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.CompanyContact;
+import com.congmai.zhgj.web.model.CompanyContactExample;
 import com.congmai.zhgj.web.model.CompanyExample;
+import com.congmai.zhgj.web.model.CompanyFinance;
+import com.congmai.zhgj.web.model.CompanyFinanceExample;
+import com.congmai.zhgj.web.model.CompanyQualification;
+import com.congmai.zhgj.web.model.CompanyQualificationExample;
 import com.congmai.zhgj.web.service.CompanyService;
 
 @Service
@@ -74,7 +80,27 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 
 	@Override
 	public void deleteBatch(List<String> comIdList) {
-		companyMapper.deleteCompanyBatch(comIdList);
+			companyMapper.deleteCompanyBatch(comIdList);
+	
+			//删除联系人
+			CompanyContact contact = new CompanyContact();
+			contact.setDelFlg("1");
+			CompanyContactExample contactExample = new CompanyContactExample();
+			contactExample.createCriteria().andComIdIn(comIdList);
+			companyContactMapper.updateByExampleSelective(contact, contactExample);
+			
+			//删除账号信息
+			CompanyFinance finance = new CompanyFinance();
+			finance.setDelFlg("1");
+			CompanyFinanceExample financeExample = new CompanyFinanceExample();
+			financeExample.createCriteria().andComIdIn(comIdList);
+			companyFinanceMapper.updateByExampleSelective(finance, financeExample);
+			//删除资质信息
+			CompanyQualification qualification = new CompanyQualification();
+			qualification.setDelFlg("1");
+			CompanyQualificationExample qualificationExample = new CompanyQualificationExample();
+			qualificationExample.createCriteria().andComIdIn(comIdList);
+			companyQualificationMapper.updateByExampleSelective(qualification, qualificationExample);
 	}
 
 	@Override
@@ -113,6 +139,32 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 	public int countCompanybySelective(CompanyExample example) {
 	
 		return companyMapper.countByExample(example);
+	}
+
+
+	@Override
+	public void deleteCompany(String comId) {
+		this.delete(comId);
+		//删除联系人
+		CompanyContact contact = new CompanyContact();
+		contact.setDelFlg("1");
+		CompanyContactExample contactExample = new CompanyContactExample();
+		contactExample.createCriteria().andComIdEqualTo(comId);
+		companyContactMapper.updateByExampleSelective(contact, contactExample);
+		
+		//删除账号信息
+		CompanyFinance finance = new CompanyFinance();
+		finance.setDelFlg("1");
+		CompanyFinanceExample financeExample = new CompanyFinanceExample();
+		financeExample.createCriteria().andComIdEqualTo(comId);
+		companyFinanceMapper.updateByExampleSelective(finance, financeExample);
+		//删除资质信息
+		CompanyQualification qualification = new CompanyQualification();
+		qualification.setDelFlg("1");
+		CompanyQualificationExample qualificationExample = new CompanyQualificationExample();
+		qualificationExample.createCriteria().andComIdEqualTo(comId);
+		companyQualificationMapper.updateByExampleSelective(qualification, qualificationExample);
+		
 	}
 
 

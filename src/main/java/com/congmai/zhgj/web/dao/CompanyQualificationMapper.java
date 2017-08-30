@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.web.model.CompanyQualification;
+import com.congmai.zhgj.web.model.CompanyQualificationExample;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -19,11 +20,11 @@ public interface CompanyQualificationMapper extends GenericDao<CompanyQualificat
 
     int insertSelective(CompanyQualification record);
 
-    //List<CompanyQualification> selectByExample(CompanyQualificationExample example);
+    List<CompanyQualification> selectByExample(CompanyQualificationExample example);
 
     CompanyQualification selectByPrimaryKey(String serialNum);
 
-    //int updateByExampleSelective(@Param("record") CompanyQualification record, @Param("example") CompanyQualificationExample example);
+    int updateByExampleSelective(@Param("record") CompanyQualification record, @Param("example") CompanyQualificationExample example);
 
     //int updateByExample(@Param("record") CompanyQualification record, @Param("example") CompanyQualificationExample example);
 

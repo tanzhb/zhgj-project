@@ -176,8 +176,12 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 							.saveStockInData(params);
 					promise.then(function(data) {
 						if(data.data == "1"){
-							toastr.success("入库成功！");
-							$state.go("takeDelivery",{type:"stockIn"});
+							if(isNull($scope.record.serialNum)){
+								toastr.success("入库成功！");
+							}else{
+								toastr.success("修改成功！");
+							}
+							$state.go("takeDelivery");
 						}else{
 							toastr.error("入库失败！请联系管理员");
 						}
@@ -192,7 +196,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 			}; 
 			
 			$scope.cancelStockIn = function(){
-				$state.go("takeDelivery",{type:"stockIn"});
+				$state.go("takeDelivery");
 			}
 			
 			$scope.getWarehouseName = function(type){

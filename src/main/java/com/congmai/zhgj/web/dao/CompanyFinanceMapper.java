@@ -2,6 +2,7 @@ package com.congmai.zhgj.web.dao;
 
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.web.model.CompanyFinance;
+import com.congmai.zhgj.web.model.CompanyFinanceExample;
 
 import java.util.List;
 
@@ -18,11 +19,11 @@ public interface CompanyFinanceMapper extends GenericDao<CompanyFinance, String>
 
     int insertSelective(CompanyFinance record);
 
-    //List<CompanyFinance> selectByExample(CompanyFinanceExample example);
+    List<CompanyFinance> selectByExample(CompanyFinanceExample example);
 
     CompanyFinance selectByPrimaryKey(String serialNum);
 
-    //int updateByExampleSelective(@Param("record") CompanyFinance record, @Param("example") CompanyFinanceExample example);
+    int updateByExampleSelective(@Param("record") CompanyFinance record, @Param("example") CompanyFinanceExample example);
 
     //int updateByExample(@Param("record") CompanyFinance record, @Param("example") CompanyFinanceExample example);
 

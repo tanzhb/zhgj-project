@@ -137,10 +137,18 @@
             </a>
         </li>
         <li class="nav-item">
-            <a ui-sref="profile.dashboard" id="sidebar_menu_link_profile">
+            <a ui-sref="profile.dashboard" id="sidebar_menu_link_profile"  class="nav-link nav-toggle">
                 <i class="icon-user"></i>
                 <span class="title">收付款</span>
+                <span class="arrow "></span>
             </a>
+            <ul class="sub-menu">
+	            	<li>
+	                    <a ui-sref="paymentRecord">
+	                        <i class="icon-paper-clip"></i>收付款记录</span>
+	                    </a>
+	                </li>
+	         </ul>
         </li>
         <li class="nav-item">
             <a ui-sref="todo">

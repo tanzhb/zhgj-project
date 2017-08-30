@@ -773,6 +773,27 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    			});
 		    		}]
 		    	}	        
+		    }).state('paymentRecord', {
+		    	url: "/paymentRecord",
+		    	templateUrl: "rest/paymentRecord/paymentRecordManage",
+		    	data: {pageTitle: '收付款记录'},
+		    	reload:true, 
+		    	controller: "PaymentRecordController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [   
+		    				        'assets/global/plugins/datatables/datatables.min.css',                  
+		    				        'assets/global/plugins/datatables/datatables.all.min.js',
+		    				        'assets/apps/controllers/PaymentRecordController.js',
+		    				        'assets/apps/service/PaymentRecordService.js'
+		    				       
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
 		    })         	           .state('warehouse', {
 	        url: "/warehouse",
             templateUrl: "rest/warehouse/viewWarehouseList",

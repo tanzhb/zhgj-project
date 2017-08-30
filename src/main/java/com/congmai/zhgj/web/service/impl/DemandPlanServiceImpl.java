@@ -122,6 +122,11 @@ public class DemandPlanServiceImpl extends GenericServiceImpl<DemandPlan,String>
 		example.createCriteria().andSerialNumIn(serialNumArray);
 		demandPlanMapper.updateByExampleSelective(record, example);
 		
+		DemandPlanMateriel materiel = new DemandPlanMateriel();
+		DemandPlanMaterielExample materielExample = new DemandPlanMaterielExample();
+		materiel.setDelFlg("1");
+		materielExample.createCriteria().andDemandPlanSerialIn(serialNumArray);
+		demandPlanMaterielMapper.updateByExampleSelective(materiel, materielExample);
 	}
 
 	@Override
