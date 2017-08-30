@@ -195,13 +195,13 @@
                                             </tbody>
                                             <tbody  style="position: relative; overflow: auto; height: 300px; width: 100%;">
                                                 <tr ng-repeat="materiel in rootMateriels track by $index"  repeat-done="repeatDone()" ng-mouseover="showOperation('contact',$index)" ng-mouseleave="hideOperation('contact',$index)">
-                                                    <td>
+                                                    <td><span class="help-block"></span>
                                                     	<span ng-show="demandPlanMaterielView{{$index}}">{{materiel.materielNum}}</span>
                                                     	<span ng-hide="demandPlanMaterielEdit{{$index}}"><a href="javascript:;" ng-click="addMateriel('single',$index)">{{materiel.materielNum}}</a></span>
                                                     </td>
-                                                    <td>{{materiel.materielName}}</td>
-                                                    <td>{{materiel.specifications}}</td>
-                                                    <td>{{materiel.unit}}</td>
+                                                    <td><span class="help-block"></span><label>{{materiel.materielName}}</label></td>
+                                                    <td><span class="help-block"></span><label>{{materiel.specifications}}</label></td>
+                                                    <td><span class="help-block"></span><label>{{materiel.unit}}</label></td>
                                                     <td>
                                                     	<input type="text" ng-hide="demandPlanMaterielEdit{{$index}}" class="form-control  input-small" id="amount{{$index}}" ng-model="materiel.amount" value="">
                                                    	 	<span class="help-block"></span>
@@ -227,7 +227,15 @@
                                                     	<span class="help-block"></span>
                                                     	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.deliveryAddress}}</label>
                                                     </td>
-                                                    <td>{{materiel.remark}}</td>
+                                                    <td>
+                                                    	<select ng-hide="demandPlanMaterielEdit{{$index}}"  class="form-control" ng-model="materiel.supplyMaterielSerial" >
+	                                                    	<option ng-repeat="m in materiel.supplyMateriels" value="{{m.serialNum}}"  >
+	                                                    		{{m.supply.comName}}
+	                                                    	</option>
+	                                                    </select>
+	                                                    <span class="help-block"></span>
+	                                                    <label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.supplyName}}</label>
+                                                    </td>
                                                     <td style="width: 140px;">
                                                     	<span>
                                                     		&nbsp;&nbsp;&nbsp;&nbsp;

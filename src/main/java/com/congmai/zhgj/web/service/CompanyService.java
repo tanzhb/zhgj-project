@@ -55,5 +55,12 @@ public interface CompanyService extends GenericService<Company, String>{
 	
 	
 	int countCompanybySelective(CompanyExample example);
+
+	/**
+	 * 
+	 * @Description (删除企业)
+	 * @param comId
+	 */
+	void deleteCompany(String comId);
 	
 }
