@@ -659,4 +659,25 @@
     from warehouse
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </select>
+  <select id="selectPositionByPositionSerial" resultType="com.congmai.zhgj.web.model.Warehouseposition" parameterType="java.lang.String" >
+    select 
+      serialNum,positionName
+    from warehousePosition
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  <select id="countWarehouseByDeliverSerial" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    select 
+       count(distinct dm.warehouseSerial)
+    from takeDelivery td
+    left join deliveryMateriel dm on td.deliverSerial = dm.deliverSerial and dm.delFlg = '0'
+    where td.serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  <select id="countPositionByDeliverSerial" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    select 
+       count(distinct dm.positionSerial)
+    from takeDelivery td
+    left join deliveryMateriel dm on td.deliverSerial = dm.deliverSerial and dm.delFlg = '0'
+    where td.serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  
 </mapper>

@@ -150,15 +150,16 @@
     <!--查询发货列表  -->
    <select id="findAllDeliveryList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.DeliveryVO">
    SELECT
-	a.serialNum,a.deliverNum,b.orderNum,COUNT(DISTINCT c.serialNum) AS materielCount,a.packageCount,
+	a.serialNum,a.deliverNum,a.orderSerial,b.orderNum,COUNT(DISTINCT c.serialNum) AS materielCount,a.packageCount,
 	a.receiver,(SELECT address FROM warehouse WHERE serialNum=a.warehouseSerial) AS deliveryAddress,
 	(SELECT address FROM warehouse WHERE serialNum=d.warehouseSerial) AS takeAddress,a.deliverDate,
-	e.transportType,a.remark
+	e.transportType,a.remark,com.comName AS supplyName
 	FROM delivery a 
 	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
 	LEFT JOIN deliveryMateriel c ON a.serialNum=c.deliverSerial
 	LEFT JOIN takeDelivery d ON a.serialNum=d.deliverSerial 
 	LEFT JOIN deliveryTransport e ON e.deliverSerial=a.serialNum
+	LEFT JOIN  company   com  ON  com.comId=a.supplyComId
 	WHERE a.delFlg='0' AND a.creator=#{userName}
 	GROUP BY(a.serialNum)
 	ORDER BY a.createTime DESC

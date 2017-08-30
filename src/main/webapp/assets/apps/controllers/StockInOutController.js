@@ -32,18 +32,17 @@ angular
 										        	debugger;
 													$scope.inOrOut=$stateParams.inOrOut;
 												if($scope.inOrOut.length>3){
-													getStockInOutCheckInfo($stateParams.inOrOut.substring(0,32));
+													getStockInOutCheckInfo($stateParams.inOrOut);
 												}
 										 		}else if($location.path()=="/stockInOutCheckView"){
 										 			debugger;
 										 			$scope.inOrOut=$stateParams.inOrOut;
-										 			getStockInOutCheckInfo($stateParams.inOrOut.substring(0,32));//查看出入库检验详情页面
+										 			getStockInOutCheckInfo($stateParams.inOrOut);//查看出入库检验详情页面
 									 		}else{
-									 			if($stateParams.inOrOut=='showOut'&&$scope.isInit!='1'){
+									 			if($stateParams.inOrOut=='showOut'){
 									 				debugger;
 									 				$("#in").removeClass("active");
 									 				$("#out").addClass("active");
-									 				$scope.isInit='1';
 									 				loadStockInOutCheckTable('out');
 									 				//加载入库检验列表
 									 			}else{
@@ -52,7 +51,7 @@ angular
 									 				loadStockInOutCheckTable('in');//加载入库检验列表
 									 			}
 										 		}
-												selectMaterielStock();//选择物料表格初始化
+											
 												// set default layout mode
 												$rootScope.settings.layout.pageContentWhite = true;
 												$rootScope.settings.layout.pageBodySolid = false;
@@ -147,9 +146,9 @@ angular
 													}, {
 														mData : 'materialNum'
 													},{
-														mData : 'qualifiedCount'
+														mData : 'totalQualifiedCount'
 													}, {
-														mData : 'unQualifiedCount'
+														mData : 'totalUnQualifiedCount'
 													}, { 
 														mData : 'checkDate',
 														mRender:function(data){
@@ -260,9 +259,9 @@ angular
 													}, {
 														mData : 'materialNum'
 													},{
-														mData : 'qualifiedCount'
+														mData : 'totalQualifiedCount'
 													}, {
-														mData : 'unQualifiedCount'
+														mData : 'totalUnQualifiedCount'
 													},  { 
 														mData : 'checkDate',
 														mRender:function(data){
@@ -380,15 +379,14 @@ angular
 			}
 						$scope.editStockInOutCheck = function(){
 							debugger;
-							var stockInOutCheck=$scope.stockInOutCheck;
-							$scope.stockInOutCheck=stockInOutCheck;
+							getStockInOutCheckInfo($scope.inOrOut);
 							$scope.stockInOutCheckView = false;
 		        			$scope.stockInOutCheckAdd = false;
 		        			$scope.stockInOutCheckEdit = false;
 						}
 						$scope.cancelEditStockInOutCheck = function(){
 							debugger;
-							getStockInOutCheckInfo($scope.stockInOutCheck.serialNum);
+							getStockInOutCheckInfo($scope.inOrOut);
 							$scope.stockInOutCheckView = true;
 		        			$scope.stockInOutCheckAdd = true;
 		        			$scope.stockInOutCheckEdit = true;
@@ -407,11 +405,30 @@ angular
 										if(data=='1'){
 											if($scope.inOrOut=='in'){
 											toastr.warning("该收货单已建入库检验！");
-											}else{
-												toastr.warning("该发货单已建出库检验！");	
-											}
 											return ;
+											}else if($scope.inOrOut=='out'){
+												toastr.warning("该发货单已建出库检验！");
+												return ;
+											}
+											
 										}
+										var params = {};
+										params.deliveryMateriels = [];
+										var param
+										for(var i=0;i < $scope.materials.length;i++){
+											param = {};
+											param.serialNum = $scope.materials[i].serialNum;
+											param.qualifiedCount = $scope.materials[i].qualifiedCount;
+											if($scope.inOrOut.indexOf("in")){
+												param.unqualifiedCount= $scope.materials[i].acceptCount-$scope.materials[i].qualifiedCount;
+											}else{
+												param.unqualifiedCount= $scope.materials[i].deliverCount-$scope.materials[i].qualifiedCount;
+											}
+											param.checkRemark = $scope.materials[i].checkRemark;
+											params.deliveryMateriels.push(param);
+										}
+										$scope.stockInOutCheck.deliverMaterials=params.deliveryMateriels;
+										debugger;
 										StockInOutService.saveStockInOutCheck($scope.stockInOutCheck)
 										.then(
 												function(data) {debugger;
@@ -419,7 +436,7 @@ angular
 													$scope.stockInOutCheck = data;
 								        			$scope.stockInOutCheckView = true;
 								        			$scope.stockInOutCheckAdd = true;
-								        			$scope.stockInOutCheckEdit = false;
+								        			$scope.stockInOutCheckEdit = true;
 								        			$(".alert-danger").hide();
 												},
 												function(errResponse) {
@@ -435,6 +452,7 @@ angular
 									debugger;
 									$scope.stockInOutCheck.deliverSerial=$("#deliverSerial").val();
 									$scope.stockInOutCheck.takeDeliverSerial=$("#takeDeliverSerial").val();
+									$scope.materials;
 									if($('#stockInOutCheckForm').valid()){//表单验证通过则执行添加功能
 										 judgeIsExist ();
 									}
@@ -504,16 +522,175 @@ angular
 								 $state.go('stockInOutCheckView',{inOrOut:serialNum+judgeString},{reload:true}); 
 								
 							}
-							  var selectIndex;
-					 	       $scope.selectDeliverInfo = function(index){
-					 	    	  selectIndex = index;
+							  var selectIndex,ajaxUrl;
+					 	       $scope.selectDeliverOrTakeDelivery = function(judgeString){
+					 	    	  selectDeliverOrTakeDelivery(judgeString);
 					 	       }
-						     var selectMaterielTable;
-					 	       var selectMaterielStock = function() {
+						     var selectDeliverOrTakeDeliveryTable,aoColumnsForInOrOut,aoColumnDefsForInOrOut;
+					 	       var selectDeliverOrTakeDelivery = function(	judgeString) {
+					 	    		debugger;
+					 	    	 if(selectDeliverOrTakeDeliveryTable!=undefined){
+					 	    		selectDeliverOrTakeDeliveryTable.destroy();
+					 	    	 }
+					 	    	 if(judgeString=='in'){
+					 	    		 ajaxUrl={ "url":$rootScope.basePath
+												+ "/rest/takeDelivery/takeDeliveryList",  
+												"contentType": "application/json",
+											    "type": "POST",
+											    "data": function ( d ) {
+											      return JSON.stringify( d );
+											    }};
+					 	    		aoColumnsForInOrOut= [
+				 	                                 { mData: 'takeDelivery.serialNum' },
+					 	                                { mData: 'takeDelivery.takeDeliverNum' },
+					 	                                { mData: 'orderNum' },
+					 	                               { mData: 'supplyName' },
+					 	                                { mData: 'shipper' },
+					 	                                { mData: 'materielCount' },
+					 	                                { mData: 'packageCount' },
+					 	                                { mData: 'packageType' },
+					 	                                { mData: 'warehouse.address' },
+					 	                                { mData: 'deliverDate' },
+					 	                                { mData: 'deliveryTransport.transportType' },
+					 	                                { mData: 'takeDelivery.warehouse.address' },
+					 	                                { mData: 'takeDelivery.remark' },
+					 	                                { mData: 'status' }
+					 	                            ];
+					 	    		aoColumnDefsForInOrOut=[ {
+			  							'targets' : 0,
+			  							'searchable' : false,
+			  							'orderable' : false,
+			  							'className' : 'dt-body-center',
+			  							'render' : function(data,
+			  									type, row, meta) {
+				  	  								return '<input type="radio"  ng-click="selectDeliverOrTakeDeliverInfo(\''+data+judgeString+'\',\''+row.takeDelivery.takeDeliverNum+'\',\''+row.orderNum+'\',\''+row.supplyName+'\')"   name="serialNum[]" value="'
+														+ $('<div/>')
+																.text(
+																		data)
+																.html()
+														+ '">';
+				
+			  							},
+			  							"createdCell": function (td, cellData, rowData, row, col) {
+			  								 $compile(td)($scope);
+			  						       }
+			  						},{
+			  							'targets' : 1,
+			  							'searchable' : false,
+			  							'orderable' : false,
+			  							'render' : function(data,
+			  									type, row, meta) {
+			  										if(data==null){
+			  											data="未收货";
+			  										}
+				  	  								return '<a href="javascript:void(0);" ng-click="takeDeliveryView(\''+row.takeDelivery.serialNum+'\')">'+data+'</a>';
+				
+			  							},
+			  							"createdCell": function (td, cellData, rowData, row, col) {
+			  								 $compile(td)($scope);
+			  						       }
+			  						},{
+			  							'targets' : 7,
+			  							'render' : function(data,
+			  									type, row, meta) {
+			  									if(data!=undefined){
+													return data;
+												}
+				  								return '';
+				
+			  							}
+			  						},{
+			  							'targets' : 9,
+			  							'render' : function(data,
+			  									type, row, meta) {
+			  									if(data!=undefined){
+													return data;
+												}
+				  								return '';
+				
+			  							}
+			  						},{
+			  							'targets' : 10,
+			  							'render' : function(data,
+			  									type, row, meta) {
+			  									if(data!=undefined){
+													return data;
+												}
+				  								return '';
+				
+			  							}
+			  						},{
+			  							'targets' : 11,
+			  							'render' : function(data,
+			  									type, row, meta) {
+			  										if(data!=undefined){
+			  											return data;
+			  										}
+				  	  								return '';
+				
+			  							}
+			  						},{
+			  							'targets' : 12,
+			  							'searchable' : false,
+			  							'orderable' : false,
+			  							'className' : 'dt-body-center',
+			  							'render' : function(data,
+			  									type, row, meta) {
+			  									if(data=="1"){
+			  										return '<span  class="label label-sm label-warning ng-scope">未收货</span>';
+			  									}else if(data=="2"){
+			  										return '<span  class="label label-sm label-warning ng-scope">待检验</span>';
+			  									}else{
+			  										return data;
+			  									}
+			  							}
+			  						}];
+					 	    	  }else if(judgeString=='out'){
+					 	    		 ajaxUrl="rest/delivery/findAllDeliveryList";  
+					 	    		aoColumnsForInOrOut=[
+							                            { mData: 'serialNum'},
+							                            { mData: 'deliverNum' },
+							                            { mData: 'orderNum' },
+							                            { mData: 'supplyName' },
+							                            { mData: 'materielCount' },
+							                            { mData: 'packageCount' },
+							                            { mData: 'receiver'},
+							                            { mData: 'deliveryAddress'},
+							                            { mData: 'deliverDate'},
+							                            { mData: 'transportType'},
+							                            { mData: 'takeAddress' },
+							                            { mData: 'remark'}
+							                            ];
+					 	    		aoColumnDefsForInOrOut= [ {
+		                            	'targets' : 0,
+		                            	'searchable' : false,
+		                            	'orderable' : false,
+		                            	'className' : 'dt-body-center',
+		                            	'render' : function(data,type, full, meta) {
+		                            		return '<input type="radio"  ng-click="selectDeliverOrTakeDeliverInfo(\''+data+judgeString+'\',\''+full.deliverNum+'\',\''+full.orderNum+'\',\''+full.supplyName+'\')"   name="serialNum[]" value="'+ $('<div/>').text(data).html()+ '">';
+		                            	},
+					 	    		"createdCell": function (td, cellData, rowData, row, col) {
+		  								 $compile(td)($scope);
+		  						       }
+		                            } ,
+		                            
+		                            {
+		                            	'targets' : 1,
+		                            	'className' : 'dt-body-center',
+		                            	'render' : function(data,
+		                            			type, row, meta) {
+		                            		return '<a data-toggle="modal" ng-click="jumpToGetDeliveryInfo(\''+row.serialNum+'\')" ">'+data+'</a>';
+		                            	},
+		                            	"createdCell": function (td, cellData, rowData, row, col) {
+		                            		$compile(td)($scope);
+		                            	}
+		                            }
+		                            ];
+					 	    	  }
 					 	    	   debugger;
 					 	                a = 0;
 					 	                App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
-					 	               selectMaterielTable = $("#select_sample_2")
+					 	               selectDeliverOrTakeDeliveryTable = $("#select_sample_"+judgeString)
 					 	    			.DataTable({
 					 	                    language: {
 					 	                        aria: {
@@ -546,115 +723,106 @@ angular
 					 	                    pageLength: 5,//每页显示数量
 					 	                    processing: true,//loading等待框
 //					 	                    serverSide: true,
-					 	                    ajax: "rest/materiel/findMaterielList",//加载数据中
-					 	                    "aoColumns": [
-					 	                                  { mData: 'serialNum' },
-					 	                                  { mData: 'materielNum' },
-					 	                                  { mData: 'materielName' },
-					 	                                  { mData: 'specifications' },
-					 	                                  { mData: 'unit' },
-					 	                                  { mData: 'parentMateriel' },
-					 	                                  { mData: 'type' },
-					 	                                  { mData: 'productionPlace' },
-					 	                                  { mData: 'brand' },
-					 	                                  { mData: 'brand' },
-					 	                                  { mData: 'versionNO' },
-					 	                                  { mData: 'status' }
-					 	                            ],
-					 	                   'aoColumnDefs' : [ {
-					 	    							'targets' : 0,
-					 	    							'searchable' : false,
-					 	    							'orderable' : false,
-					 	    							
-					 	    							'render' : function(data,
-					 	    									type, row, meta) {
-					 	    								return '<input type="radio" ng-click="selectMaterialForStock(\''+data+'\',\''+row.materielName+'\',\''+row.materielNum+'\',\''+row.specifications+'\')" name="serialNum[]" value="'
-					 	    										+ $('<div/>')
-					 	    												.text(
-					 	    														data)
-					 	    												.html()
-					 	    										+ '">';
-					 	    							},
-					 	    							"createdCell": function (td, cellData, rowData, row, col) {
-					 	    								 $compile(td)($scope);
-					 	    						       }
-					 	    						},{
-					 	    							'targets' : 1,
-					 	    							'render' : function(data,
-					 	    									type, row, meta) {
-					 	    								var bomIcon='';//bom图标
-					 	    								if(row.isBOM==1){
-					 	    									bomIcon = '<span class="label label-sm label-success">B</span> '
-					 	    								}
-					 	    								return bomIcon + data;
-					 	    							}
-
-					 	    						},{
-					 	    							'targets' : 5,
-					 	    							
-					 	    							'render' : function(data,
-					 	    									type, full, meta) {
-					 	    								if(data==null){
-					 	    									return  ''
-					 	    								}else{
-					 	    									return  data.materielName
-					 	    								}
-					 	    							}
-					 	    						} ]
+					 	                    ajax: ajaxUrl,//加载数据中
+					 	                    "aoColumns": aoColumnsForInOrOut,
+					 	                   'aoColumnDefs' :aoColumnDefsForInOrOut
 
 					 	                }).on('order.dt',
 					 	                function() {
 					 	                    console.log('排序');
 					 	                })
 					 	            };
-						$scope.selectMaterialForStock=function(serialNum,materielName,materielNum,specifications){
+						$scope.selectDeliverOrTakeDeliverInfo=function(serialNum,deliverOrTakeDeliverNum,orderNum,supplyName){
 							debugger;
 							$scope.row = {};
-		 	            	$scope.row.serialNum = serialNum;//物料流水
-		 	            	$scope.row.materielName=materielName;//物料名称
-		 	            	$scope.row.materielNum=materielNum;//物料编号
-		 	            	$scope.row.specifications=specifications;//规格型号
+		 	            	$scope.row.serialNum = serialNum;//发货单号流水/收货单号流水
+		 	            	$scope.row.deliverOrTakeDeliverNum=deliverOrTakeDeliverNum;//发货单号/收货单号
+		 	            	$scope.row.orderNum=orderNum;//销售订单号/采购订单号
+		 	            	$scope.row.supplyName=supplyName;//供应商名称
+		 	            	getMaterialInfo();
 						}
-						   // 确认选择开始***************************************
-		 	    		$scope.confirmSelect = function() {
+					function getMaterialInfo(){
+						StockInOutService.getMaterialBySerialNum($scope.row.serialNum).then(
+								function(data) {debugger;
+								$scope.row.materials=data.materials;
+							},
+							function(errResponse) {
+								toastr.warning("获取失败！");
+								console
+										.error('Error while creating User');
+							}
+					);
+					}
+						   // 确认选择发货单开始***************************************
+		 	    		$scope.confirmSelectDeliverOrTakeDeliveryInfo = function(judgeString) {
 		 	    			var ids = '';
 		 	    			// Iterate over all checkboxes in the table
-		 	    			selectMaterielTable.$('input[type="radio"]').each(
-		 	    					function() {
-		 	    						// If checkbox exist in DOM
-		 	    						if ($.contains(document, this)) {
-		 	    							// If checkbox is checked
-		 	    							if (this.checked) {
-		 	    								// 将选中数据id放入ids中
-		 	    								if (ids == '') {
-		 	    									ids = this.value;
-		 	    								} else
-		 	    									ids = ids + ','
-		 	    											+ this.value;
-		 	    							}
-		 	    						}
-		 	    					});
+		 	    				selectDeliverOrTakeDeliveryTable.$('input[type="radio"]').each(//[name="in[]"]
+			 	    					function() {
+			 	    						// If checkbox exist in DOM
+			 	    						if ($.contains(document, this)) {
+			 	    							// If checkbox is checked
+			 	    							if (this.checked) {
+			 	    								// 将选中数据id放入ids中
+			 	    								if (ids == '') {
+			 	    									ids = this.value;
+			 	    								} else
+			 	    									ids = ids + ','
+			 	    											+ this.value;
+			 	    							}
+			 	    						}
+			 	    					});
 		 	    			if(ids==''){
-		 	        			toastr.warning('请选择一个物料！');return;
+		 	    				if(judgeString=='in'){
+		 	    					toastr.warning('请选择一个收货单！');return;
+		 	    				}else{
+		 	    					toastr.warning('请选择一个发货单！');return;
+		 	    				}
 		 	        		}
-		 	    			//为前台五个参数赋值
-		 	    			if($scope.inOrOut=='in'){
+		 	    			//为前台四个参数赋值
+		 	    			if(judgeString=='in'){
 		 	    				$("#deliverSerial").val('111111');//发货单流水
-			 	            	$("#takeDeliverSerial").val($scope.row.serialNum);//收货单流水
-			 	            	$("#takeDeliverNum").val('td');//收货单号
-			 	            	$("#relationBuyNum").val('b');//采购单号
+			 	            	$("#takeDeliverSerial").val($scope.row.serialNum.substring(0,32));//收货单流水
+			 	            	$scope.stockInOutCheck.takeDeliverNum=$scope.row.deliverOrTakeDeliverNum;
+			 	            	$scope.stockInOutCheck.relationBuyNum=$scope.row.orderNum;
+			 	            	$scope.stockInOutCheck.supplyName=$scope.row.supplyName;
+			 	            	/*$("#takeDeliverNum").val($scope.row.deliverOrTakeDeliverNum);//收货单号
+			 	            	$("#relationBuyNum").val($scope.row.orderNum);//采购单号
+			 	            	$("#supplyName").val($scope.row.supplyName);*/
+			 	            	$('#takeDeliveryInfo').modal('hide');// 选择成功后关闭模态框
 		 	    			}else{
-		 	    				$("#deliverSerial").val($scope.row.serialNum);//发货单流水
+		 	    				$("#deliverSerial").val($scope.row.serialNum.substring(0,32));//发货单流水
 			 	            	$("#takeDeliverSerial").val('111111') ;//收货单流水
-			 	           	$("#deliverNum").val('d');//发货单号
-		 	            	$("#relationSaleNum").val('s');//销售单号
+			 	            	$scope.stockInOutCheck.deliverNum=$scope.row.deliverOrTakeDeliverNum;
+			 	            	$scope.stockInOutCheck.relationSaleNum=$scope.row.orderNum;
+			 	            	$scope.stockInOutCheck.supplyName=$scope.row.supplyName;
+			 	          /* 	$("#deliverNum").val($scope.row.deliverOrTakeDeliverNum);//发货单号
+		 	            	$("#relationSaleNum").val($scope.row.orderNum);//销售单号
+		 	            	$("#supplyName").val($scope.row.supplyName);*/
+		 	            	$('#deliverInfo').modal('hide');// 选择成功后关闭模态框
 		 	    			}
-		 	    			$("#comName").val('公司');
-		 	            	$('#basicMaterielInfo').modal('hide');// 选择成功后关闭模态框
+		 	    			$scope.materials=$scope.row.materials;
 		 	    			$(".modal-backdrop").remove();
-		 	    		};
+		 	    		};  // 确认选择发货单结束***************************************
+		 	    		jQuery.validator.addMethod("qualifiedNumCheck", function (value, element) {
+		 	    			debugger;
+		 					$(element).removeData();
+		 					return this.optional(element) || Number($(element).data("acceptcount")) == NaN?false:(Number($(element).data("acceptcount"))-value>= 0);
+		 				}, "合格数量不能超过实收数量");
+		 	    		jQuery.validator.addMethod("deliverNumCheck", function (value, element) {
+		 	    			debugger;
+		 					$(element).removeData();
+		 					return this.optional(element) || Number($(element).data("delivercount")) == NaN?false:(Number($(element).data("delivercount"))-value>= 0);
+		 				}, "合格数量不能超过发货数量");
+		 	    		
 							// 页面加载完成后调用，验证输入框
-							$scope.$watch('$viewContentLoaded', function() {  
+							$scope.$watch('$viewContentLoaded', function() { 
+								var  qualifiedCountData='';
+								if($scope.inOrOut!=undefined&&$scope.inOrOut.indexOf("in")>-1){
+									qualifiedCountData={required:true,digits:true,qualifiedNumCheck:!0};
+								}else if($scope.inOrOut!=undefined&&$scope.inOrOut.indexOf("out")>-1){
+									qualifiedCountData={required:true,digits:true,deliverNumCheck:!0};
+								}
 								var e = $("#stockInOutCheckForm"),
 						        r = $(".alert-danger", e),
 						        i = $(".alert-success", e);
@@ -670,7 +838,8 @@ angular
 						            	checkParty:{required:"检验方不能为空！"},
 						            	checkDate:{required:"检验日期不能为空！"},
 						            	checker: { required:"检验员不能为空！"},
-						            	contactNum:{required:"联系电话不能为空！",digits:"请输入正确的联系电话, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")}
+						            	contactNum:{required:"联系电话不能为空！",digits:"请输入正确的联系电话, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
+						            	qualifiedCount:{required:"合格数量不能为空！",digits:"请输入正确的合格数量, 必须为数字！"}
 						            },
 						            rules: {
 						            	checkNum:{required:true},
@@ -679,7 +848,8 @@ angular
 						            	checkParty:{required:true,digits:true},
 						            	checkDate:{required:true},
 						            	checker:{required:true},
-						            	contactNum:{required:true,digits:true,rangelength:[7,20]}
+						            	contactNum:{required:true,digits:true,rangelength:[7,20]},
+						            	qualifiedCount:qualifiedCountData
 						            },
 						            invalidHandler: function(e, t) {
 						                i.hide(),
@@ -713,11 +883,13 @@ angular
 						 	        		  debugger;
 						 	        			 $scope.stockInOutCheck = data.stockInOutCheck;
 						 	        			 $scope.stockInOutCheck.checkDate=timeStamp2ShortString(data.stockInOutCheck.checkDate);
-						 	        			 $scope.materials=null;
+						 	        			 $scope.materials=data.materials;
 						 	        			 if($stateParams.inOrOut.indexOf("in")>-1){
 						 	        				 $("#takeDeliverSerial").val(data.stockInOutCheck.takeDeliverSerial);
+						 	        				 $("#deliverSerial").val('111111');
 						 	        			 }else{
 						 	        				 $("#deliverSerial").val(data.stockInOutCheck.deliverSerial);
+						 	        				$("#takeDeliverSerial").val('111111');
 						 	        			 }
 						 	        			
 						 	            },function(data){

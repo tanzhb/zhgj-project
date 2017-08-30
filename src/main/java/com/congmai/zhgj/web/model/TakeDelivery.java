@@ -32,6 +32,8 @@ public class TakeDelivery {
     private Date updateTime;
     
     private Warehouse warehouse;
+    
+    private String supplyName;//供应商名称
 
     public String getSerialNum() {
         return serialNum;
@@ -144,6 +146,14 @@ public class TakeDelivery {
 
 	public void setWarehouse(Warehouse warehouse) {
 		this.warehouse = warehouse;
+	}
+
+	public String getSupplyName() {
+		return supplyName;
+	}
+
+	public void setSupplyName(String supplyName) {
+		this.supplyName = supplyName;
 	}
     
     

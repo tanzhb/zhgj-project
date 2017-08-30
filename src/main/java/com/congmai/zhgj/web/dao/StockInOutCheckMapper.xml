@@ -373,4 +373,14 @@
             #{idList}
         </foreach>
     </delete>
+    <update id="updateDeliverMateriel" parameterType="java.util.List" >
+    update deliveryMateriel
+    set qualifiedCount = #{idList.qualifiedCount,jdbcType=VARCHAR},
+    unqualifiedCount = #{idList.unqualifiedCount,jdbcType=VARCHAR}
+      checkRemark = #{idList.checkRemark,jdbcType=VARCHAR}
+    where serialNum in 
+     <foreach item="idList" collection="list" open="(" close=")" separator=",">
+            #{idList.serialNum}
+        </foreach>
+  </update>
 </mapper>
