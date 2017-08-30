@@ -194,6 +194,30 @@ public class PageController {
         return "order/buyOrder";
     }
     
+    /**
+     * 新增客户对账单
+     */
+    @RequestMapping("/addBuyStatement")
+    public String addBuyStatement(String serialNum,String view) {
+        return "statement/addBuyStatement";
+    }
+    
+    /**
+     * 新增供应商对账单
+     */
+    @RequestMapping("/addSupplyStatement")
+    public String addSupplyStatement(String serialNum,String view) {
+        return "statement/addSupplyStatement";
+    }
+    
+    /**
+     * 对账单
+     */
+    @RequestMapping("/statement")
+    public String statement() {
+        return "statement/statement";
+    }
+    
     
     /**
      * 添加发货页面

@@ -131,7 +131,7 @@
 
         </li>
         <li class="nav-item">
-            <a ui-sref="todo">
+            <a ui-sref="statement">
                 <i class="icon-check"></i>
                 <span class="title">对账单</span>
             </a>

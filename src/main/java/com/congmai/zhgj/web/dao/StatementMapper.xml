@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.congmai.zhgj.web.dao.StatementMapper" >
+  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.Statement" >
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="statementNum" property="statementNum" jdbcType="VARCHAR" />
+    <result column="statementDate" property="statementDate" jdbcType="DATE" />
+    <result column="supplyComId" property="supplyComId" jdbcType="VARCHAR" />
+    <result column="buyComId" property="buyComId" jdbcType="VARCHAR" />
+    <result column="totalAmount" property="totalAmount" jdbcType="VARCHAR" />
+    <result column="deliveryAmount" property="deliveryAmount" jdbcType="VARCHAR" />
+    <result column="paymentAmount" property="paymentAmount" jdbcType="VARCHAR" />
+    <result column="serviceAmount" property="serviceAmount" jdbcType="VARCHAR" />
+    <result column="reciveDate" property="reciveDate" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    serialNum, statementNum, statementDate, supplyComId, buyComId, totalAmount, deliveryAmount, 
+    paymentAmount, serviceAmount, reciveDate, status, remark, delFlg, creator, createTime, 
+    updater, updateTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.StatementExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from statement
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from statement
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from statement
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.StatementExample" >
+    delete from statement
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.congmai.zhgj.web.model.Statement" >
+    insert into statement (serialNum, statementNum, statementDate, 
+      supplyComId, buyComId, totalAmount, 
+      deliveryAmount, paymentAmount, serviceAmount, 
+      reciveDate, status, remark, 
+      delFlg, creator, createTime, 
+      updater, updateTime)
+    values (#{serialNum,jdbcType=VARCHAR}, #{statementNum,jdbcType=VARCHAR}, #{statementDate,jdbcType=DATE}, 
+      #{supplyComId,jdbcType=VARCHAR}, #{buyComId,jdbcType=VARCHAR}, #{totalAmount,jdbcType=VARCHAR}, 
+      #{deliveryAmount,jdbcType=VARCHAR}, #{paymentAmount,jdbcType=VARCHAR}, #{serviceAmount,jdbcType=VARCHAR}, 
+      #{reciveDate,jdbcType=DATE}, #{status,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.Statement" >
+    insert into statement
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        serialNum,
+      </if>
+      <if test="statementNum != null" >
+        statementNum,
+      </if>
+      <if test="statementDate != null" >
+        statementDate,
+      </if>
+      <if test="supplyComId != null" >
+        supplyComId,
+      </if>
+      <if test="buyComId != null" >
+        buyComId,
+      </if>
+      <if test="totalAmount != null" >
+        totalAmount,
+      </if>
+      <if test="deliveryAmount != null" >
+        deliveryAmount,
+      </if>
+      <if test="paymentAmount != null" >
+        paymentAmount,
+      </if>
+      <if test="serviceAmount != null" >
+        serviceAmount,
+      </if>
+      <if test="reciveDate != null" >
+        reciveDate,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="delFlg != null" >
+        delFlg,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="updater != null" >
+        updater,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="statementNum != null" >
+        #{statementNum,jdbcType=VARCHAR},
+      </if>
+      <if test="statementDate != null" >
+        #{statementDate,jdbcType=DATE},
+      </if>
+      <if test="supplyComId != null" >
+        #{supplyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="buyComId != null" >
+        #{buyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAmount != null" >
+        #{totalAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryAmount != null" >
+        #{deliveryAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentAmount != null" >
+        #{paymentAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceAmount != null" >
+        #{serviceAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="reciveDate != null" >
+        #{reciveDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.StatementExample" resultType="java.lang.Integer" >
+    select count(*) from statement
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update statement
+    <set >
+      <if test="record.serialNum != null" >
+        serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.statementNum != null" >
+        statementNum = #{record.statementNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.statementDate != null" >
+        statementDate = #{record.statementDate,jdbcType=DATE},
+      </if>
+      <if test="record.supplyComId != null" >
+        supplyComId = #{record.supplyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.buyComId != null" >
+        buyComId = #{record.buyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.totalAmount != null" >
+        totalAmount = #{record.totalAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deliveryAmount != null" >
+        deliveryAmount = #{record.deliveryAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paymentAmount != null" >
+        paymentAmount = #{record.paymentAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceAmount != null" >
+        serviceAmount = #{record.serviceAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reciveDate != null" >
+        reciveDate = #{record.reciveDate,jdbcType=DATE},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlg != null" >
+        delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creator != null" >
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updater != null" >
+        updater = #{record.updater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update statement
+    set serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      statementNum = #{record.statementNum,jdbcType=VARCHAR},
+      statementDate = #{record.statementDate,jdbcType=DATE},
+      supplyComId = #{record.supplyComId,jdbcType=VARCHAR},
+      buyComId = #{record.buyComId,jdbcType=VARCHAR},
+      totalAmount = #{record.totalAmount,jdbcType=VARCHAR},
+      deliveryAmount = #{record.deliveryAmount,jdbcType=VARCHAR},
+      paymentAmount = #{record.paymentAmount,jdbcType=VARCHAR},
+      serviceAmount = #{record.serviceAmount,jdbcType=VARCHAR},
+      reciveDate = #{record.reciveDate,jdbcType=DATE},
+      status = #{record.status,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      updater = #{record.updater,jdbcType=VARCHAR},
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.Statement" >
+    update statement
+    <set >
+      <if test="statementNum != null" >
+        statementNum = #{statementNum,jdbcType=VARCHAR},
+      </if>
+      <if test="statementDate != null" >
+        statementDate = #{statementDate,jdbcType=DATE},
+      </if>
+      <if test="supplyComId != null" >
+        supplyComId = #{supplyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="buyComId != null" >
+        buyComId = #{buyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAmount != null" >
+        totalAmount = #{totalAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryAmount != null" >
+        deliveryAmount = #{deliveryAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentAmount != null" >
+        paymentAmount = #{paymentAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceAmount != null" >
+        serviceAmount = #{serviceAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="reciveDate != null" >
+        reciveDate = #{reciveDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        delFlg = #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        updater = #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.Statement" >
+    update statement
+    set statementNum = #{statementNum,jdbcType=VARCHAR},
+      statementDate = #{statementDate,jdbcType=DATE},
+      supplyComId = #{supplyComId,jdbcType=VARCHAR},
+      buyComId = #{buyComId,jdbcType=VARCHAR},
+      totalAmount = #{totalAmount,jdbcType=VARCHAR},
+      deliveryAmount = #{deliveryAmount,jdbcType=VARCHAR},
+      paymentAmount = #{paymentAmount,jdbcType=VARCHAR},
+      serviceAmount = #{serviceAmount,jdbcType=VARCHAR},
+      reciveDate = #{reciveDate,jdbcType=DATE},
+      status = #{status,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      delFlg = #{delFlg,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+</mapper>
