@@ -204,6 +204,15 @@ public class PageController {
         return "delivery/addDelivery";
     }
     
+    /**
+     * 添加付款页面
+     * @return 添加付款页面url
+     */
+    @RequestMapping("/addPay")
+    public String addPay() {
+        return "pay/addPay";
+    }
+    
     
     /**
      * 添加发货页面
