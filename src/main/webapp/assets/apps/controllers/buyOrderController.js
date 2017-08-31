@@ -1841,7 +1841,7 @@ var e = $("#form_clauseSettlement"),
 		        * 下载EXCEL模板
 		        */
 		       $scope.downloadImportTemp = function(){
-		    	   window.location.href=$rootScope.basePath+"/rest/order/downloadImportTemp";
+		    	   window.location.href=$rootScope.basePath+"/rest/order/downloadImportTemp?type=buy";
 		       }
 		       
 		       /**
@@ -1859,7 +1859,7 @@ var e = $("#form_clauseSettlement"),
 		    		   return;
 		    	   }
 		    	   	handle.blockUI("正在导入中，请不要进行其他操作"); 
-		    	   	var promise = orderService.uploadExcel();
+		    	   	var promise = orderService.buyUploadExcel();
 	       			promise.then(function(data){
 	       				handle.unblockUI(); 
 	       				if(data.data.data=="success"){
@@ -1883,7 +1883,7 @@ var e = $("#form_clauseSettlement"),
 		       
 		       $scope.exportBuyOrder = function(){
 			    	 handle.blockUI("正在导出数据，请稍后"); 
-			    	 window.location.href=$rootScope.basePath+"/rest/order/exportOrder";
+			    	 window.location.href=$rootScope.basePath+"/rest/order/exportOrder?type=buy";
 			    	 handle.unblockUI(); 
 			   }
 		       //********导入导出end****************//

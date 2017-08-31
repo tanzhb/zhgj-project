@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.congmai.zhgj.web.dao.VacationMapper">
+	<resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.Vacation">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="apply_date" property="applyDate" jdbcType="TIMESTAMP" />
+		<result column="begin_date" property="beginDate" jdbcType="TIMESTAMP" />
+		<result column="work_days" property="days" jdbcType="INTEGER" />
+		<result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+		<result column="proc_inst_id" property="processInstanceId" jdbcType="VARCHAR" />
+		<result column="reason" property="reason" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="vac_type" property="vacationType" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, apply_date, begin_date, work_days,
+		end_date,proc_inst_id,reason, status, user_id, vac_type
+	</sql>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+
+
+	<insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.Vacation">
+	
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+
+			SELECT LAST_INSERT_ID() AS id
+		
+		</selectKey>
+	
+		insert into t_vacation
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="applyDate != null">
+				apply_date,
+			</if>
+			<if test="beginDate != null">
+				begin_date,
+			</if>
+			<if test="days != null">
+				work_days,
+			</if>
+			<if test="endDate != null">
+				end_date,
+			</if>
+			<if test="processInstanceId != null">
+				proc_inst_id,
+			</if>
+			<if test="reason != null">
+				reason,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="vacationType != null">
+				vac_type,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="applyDate != null">
+				#{applyDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="beginDate != null">
+				#{beginDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="days != null">
+				#{days,jdbcType=INTEGER},
+			</if>
+			<if test="endDate != null">
+				#{endDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="processInstanceId != null">
+				#{processInstanceId,jdbcType=VARCHAR},
+			</if>
+			<if test="reason != null">
+				#{reason,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=INTEGER},
+			</if>
+			<if test="vacationType != null">
+				#{vacationType,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.Vacation">
+		update t_vacation
+		<set>
+			<if test="applyDate != null">
+				apply_date = #{applyDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="beginDate != null">
+				begin_date = #{beginDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="days != null">
+				work_days = #{days,jdbcType=INTEGER},
+			</if>
+			<if test="endDate != null">
+				end_date = #{endDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="processInstanceId != null">
+				proc_inst_id = #{processInstanceId,jdbcType=VARCHAR},
+			</if>
+			<if test="reason != null">
+				reason = #{reason,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=INTEGER},
+			</if>
+			<if test="vacationType != null">
+				vac_type = #{vacationType,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="toList" resultMap="BaseResultMap"
+		parameterType="com.congmai.zhgj.web.model.Vacation">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from t_vacation
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from t_vacation
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="findByStatus" resultMap="BaseResultMap" >
+		select
+		<include refid="Base_Column_List" />
+		from t_vacation
+		where user_id = #{0} and status = #{1}
+	</select>
+
+	<select id="getAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_vacation
+	</select>
+
+</mapper>

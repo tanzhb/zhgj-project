@@ -8,22 +8,19 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
-import org.apache.shiro.authc.credential.DefaultPasswordService;
-import org.apache.shiro.authc.credential.PasswordService;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.crypto.hash.Md5Hash;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.stereotype.Component;
 
-import com.congmai.zhgj.core.util.ApplicationUtils;
-import com.congmai.zhgj.web.model.Menu;
-import com.congmai.zhgj.web.model.Role;
+import com.congmai.zhgj.web.model.Group;
 import com.congmai.zhgj.web.model.User;
-import com.congmai.zhgj.web.service.MenuService;
-import com.congmai.zhgj.web.service.RoleService;
+import com.congmai.zhgj.web.service.GroupService;
+import com.congmai.zhgj.web.service.ResourceService;
 import com.congmai.zhgj.web.service.UserService;
 
 /**
@@ -41,10 +38,10 @@ public class SecurityRealm extends AuthorizingRealm {
     private UserService userService;
 
     @Resource
-    private RoleService roleService;
+    private GroupService groupService;
 
     @Resource
-    private MenuService menuService;
+    private ResourceService resourceService;
 
     /**
      * 权限检查
@@ -53,25 +50,21 @@ public class SecurityRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         String loginName = String.valueOf(principals.getPrimaryPrincipal());
-        List<String> roleIdList = null;
-        
 
         final User user = userService.selectByUsername(loginName);
-        if(user.getRoleid() != null){
-        	roleIdList = ApplicationUtils.getIdList(user.getRoleid());
-        	if(roleIdList != null && roleIdList.size() > 0 ){
-        		for(String roleId : roleIdList){
-        			Role role = roleService.selectRoleById(Integer.valueOf(roleId));
-        			authorizationInfo.addRole(role.getTips());// 添加角色
-        			
-        			final List<Menu> menus = menuService.selectMenusByRoleId(Integer.valueOf(roleId));
-        			
-        			for(Menu menu : menus){
-        				authorizationInfo.addStringPermission(menu.getCode());// 添加权限
-        			}
-        		}
-        	}
+        
+        //本系统设计为一个用户属于一个用户组，即用户组就是用户的角色（employee、finance、hr、boss..）；每个用户组有不同的权限（资源）        
+        if(user.getGroupId() != null){
+        	Group group = groupService.selectGroupById(Integer.valueOf(user.getGroupId()));
         	
+        	if(group != null){
+        		authorizationInfo.addRole(group.getType());
+        		final List<com.congmai.zhgj.web.model.Resource> resources = resourceService.selectResourcesByGroupId(Integer.valueOf(user.getGroupId()));
+        		
+        		for(com.congmai.zhgj.web.model.Resource resource : resources){
+    				authorizationInfo.addStringPermission(resource.getPermission());// 添加权限
+    			}
+        	}
         }
         
         return authorizationInfo;
@@ -91,8 +84,10 @@ public class SecurityRealm extends AuthorizingRealm {
         	throw new AuthenticationException("用户名或密码错误.") ;
         }
         
-        String source = authentication.getSalt();        
-        if(!authentication.getPassword().equals(ShiroKit.md5(credentials, source))){
+        String source = authentication.getUserSalt();        
+        if(!authentication.getUserPwd().equals(new SimpleHash("md5", credentials
+				.toString(), ByteSource.Util.bytes(authentication
+				.getCredentialsSalt()), 2).toHex())){
         	throw new AuthenticationException("用户名或密码错误.") ;
         }
         

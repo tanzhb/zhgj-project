@@ -181,31 +181,6 @@
 		        </div> -->
 				<!-- END EXAMPLE TABLE PORTLET-->
 			</div>
-			<div class="portlet-body">
-				<!-- <div class="table-responsive"> -->
-				<table class="table table-bordered" id="takeDeliveryTable">
-					<thead>
-						<tr>
-							<th style="text-align: center"><input name="select_all" 
-								value="1" id="example-select-all" type="checkbox" /></th>
-							<th>收货单编号</th>
-							<th>采购订单号</th>
-							<th>发货方</th>
-							<th>物料</th>
-							<th>包装数量</th>
-							<th>使用包装</th>
-							<th>发货地点</th>
-							<th>发货日期</th>
-							<th>运输方式</th>
-							<th>收货/提货点</th>
-							<th>备注</th>
-							<th>状态</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-			</div>
 		</div>
 	</div>
 </div>

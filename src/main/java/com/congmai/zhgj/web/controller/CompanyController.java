@@ -257,7 +257,7 @@ public class CompanyController {
     public String deleteCompany(Map<String, Object> map,String comId) {
     	String flag ="0"; //默认失败
     	try{
-    		companyService.delete(comId);
+    		companyService.deleteCompany(comId);
     		flag = "1";
     	}catch(Exception e){
     		System.out.println(e.getMessage());
@@ -310,7 +310,7 @@ public class CompanyController {
             JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, CompanyQualification.class);  
             companyQualifications = objectMapper.readValue(params, javaType);
             if(!CollectionUtils.isEmpty(companyQualifications)){
-            	companyQualificationService.deleteByComId(companyQualifications.get(0).getComId());
+            	//companyQualificationService.deleteByComId(companyQualifications.get(0).getComId());
         		companyQualificationService.insertBatch(companyQualifications,currenLoginName);
             }
             
