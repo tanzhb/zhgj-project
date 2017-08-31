@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.congmai.zhgj.web.dao.UserTaskMapper">
+	<resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.UserTask">
+
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="proc_def_key" property="procDefKey" jdbcType="VARCHAR" />
+		<result column="proc_def_name" property="procDefName" jdbcType="VARCHAR" />
+		<result column="task_def_key" property="taskDefKey" jdbcType="VARCHAR" />
+		<result column="task_name" property="taskName" jdbcType="VARCHAR" />
+		<result column="task_type" property="taskType" jdbcType="VARCHAR" />
+		<result column="candidate_name" property="candidate_name"
+			jdbcType="VARCHAR" />
+		<result column="candidate_ids" property="candidate_ids"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, proc_def_key, proc_def_name, task_def_key, task_name,
+		task_type,
+		candidate_name, candidate_ids
+	</sql>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+
+
+	<insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.UserTask">
+		insert into t_user_task
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="procDefKey != null">
+				proc_def_key,
+			</if>
+			<if test="procDefName != null">
+				proc_def_name,
+			</if>
+			<if test="taskDefKey != null">
+				task_def_key,
+			</if>
+			<if test="taskName != null">
+				task_name,
+			</if>
+			<if test="taskType != null">
+				task_type,
+			</if>
+			<if test="candidate_name != null">
+				candidate_name,
+			</if>
+			<if test="candidate_ids != null">
+				candidate_ids,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="procDefKey != null">
+				#{proc_def_key,jdbcType=VARCHAR},
+			</if>
+			<if test="procDefName != null">
+				#{proc_def_name,jdbcType=VARCHAR},
+			</if>
+			<if test="taskDefKey != null">
+				#{task_def_key,jdbcType=VARCHAR},
+			</if>
+			<if test="taskName != null">
+				#{task_name,jdbcType=VARCHAR},
+			</if>
+			<if test="taskType != null">
+				#{task_type,jdbcType=VARCHAR},
+			</if>
+			<if test="candidate_name != null">
+				#{candidate_name,jdbcType=VARCHAR},
+			</if>
+			<if test="candidate_ids != null">
+				#{candidate_ids,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.UserTask">
+		update t_user_task
+		<set>
+			<if test="procDefKey != null">
+				proc_def_key = #{procDefKey,jdbcType=VARCHAR},
+			</if>
+			<if test="procDefName != null">
+				proc_def_name = #{procDefName,jdbcType=VARCHAR},
+			</if>
+			<if test="taskDefKey != null">
+				task_def_key = #{taskDefKey,jdbcType=VARCHAR},
+			</if>
+			<if test="taskName != null">
+				task_name = #{taskName,jdbcType=VARCHAR},
+			</if>
+			<if test="taskType != null">
+				task_type = #{taskType,jdbcType=VARCHAR},
+			</if>
+			<if test="candidate_name != null">
+				candidate_name = #{candidate_name,jdbcType=VARCHAR},
+			</if>
+			<if test="candidate_ids != null">
+				candidate_ids = #{candidate_ids,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="findByWhere" resultMap="BaseResultMap"
+		parameterType="com.congmai.zhgj.web.model.UserTask">
+		select 
+		<include refid="Base_Column_List" />
+		from t_user_task
+		
+		where proc_def_key = #{procDefKey,jdbcType=VARCHAR}
+		<!-- <if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if> -->
+	</select>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from t_user_task
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="getAll" resultMap="BaseResultMap" >
+		select
+		<include refid="Base_Column_List" />
+		from t_user_task
+	</select>
+
+</mapper>

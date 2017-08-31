@@ -185,12 +185,14 @@
                 </li>
             </ul>
         </li> -->
+        <shiro:hasAnyRoles name="lcsq,manager,hr,director">
         <li class="nav-item">
-            <a ui-sref="blank">
+            <a ui-sref="vacation">
                 <i class="icon-refresh"></i>
-                <span class="title">Blank Page</span>
+                <span class="title">请假</span>
             </a>
         </li>
+        </shiro:hasAnyRoles>
     </ul>
     <!-- END SIDEBAR MENU -->
 </div>

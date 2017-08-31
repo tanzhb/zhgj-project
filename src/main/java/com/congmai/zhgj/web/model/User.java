@@ -1,217 +1,107 @@
+/**
+ * Project Name:SpringOA
+ * File Name:User.java
+ * Package Name:com.zml.oa.entity
+ * Date:2014-11-8下午11:12:48
+ *
+ */
 package com.congmai.zhgj.web.model;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * 
+ * @ClassName User
+ * @Description 用户表
  * @author tanzb
- * @version 2017年8月9日 下午10:09:41
+ * @Date 2017年8月23日 上午9:37:42
+ * @version 1.0.0
  */
-public class User {
 
-    private static final long serialVersionUID = 1L;
+public class User implements Serializable{
 
-    /**
-     * 主键id
-     */
-	private Integer id;
-    /**
-     * 头像
-     */
-	private String avatar;
-    /**
-     * 账号
-     */
-	private String account;
-    /**
-     * 密码
-     */
-	private String password;
-    /**
-     * md5密码盐
-     */
-	private String salt;
-    /**
-     * 名字
-     */
-	private String name;
-    /**
-     * 生日
-     */
-	private Date birthday;
-    /**
-     * 性别（1：男 2：女）
-     */
-	private Integer sex;
-    /**
-     * 电子邮件
-     */
-	private String email;
-    /**
-     * 电话
-     */
-	private String phone;
-    /**
-     * 角色id
-     */
-	private String roleid;
-    /**
-     * 部门id
-     */
-	private Integer deptid;
-    /**
-     * 状态(1：启用  2：冻结  3：删除）
-     */
-	private Integer status;
-    /**
-     * 创建时间
-     */
-	private Date createtime;
-    /**
-     * 保留字段
-     */
-	private Integer version;
+	private static final long serialVersionUID = -6662232329895785824L;
 
+	private Integer userId;
+	
+	private String userName;
+	
+	private String userPwd;
+	
+	private String userSalt; // 加密密码的盐
 
-	public Integer getId() {
-		return id;
+	private Date regDate;
+
+    private Integer locked;	
+
+    private Integer groupId;
+    
+	public User(){
+		
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public Integer getUserId() {
+		return userId;
 	}
 
-	public String getAvatar() {
-		return avatar;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
+	public String getUserName() {
+		return userName;
 	}
 
-	public String getAccount() {
-		return account;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
-	public void setAccount(String account) {
-		this.account = account;
+	public String getUserPwd() {
+		return userPwd;
 	}
 
-	public String getPassword() {
-		return password;
+	public void setUserPwd(String userPwd) {
+		this.userPwd = userPwd;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public String getUserSalt() {
+		return userSalt;
 	}
 
-	public String getSalt() {
-		return salt;
+	public void setUserSalt(String userSalt) {
+		this.userSalt = userSalt;
 	}
 
-	public void setSalt(String salt) {
-		this.salt = salt;
+	public Date getRegDate() {
+		return regDate;
 	}
 
-	public String getName() {
-		return name;
+	public void setRegDate(Date regDate) {
+		this.regDate = regDate;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public Integer getLocked() {
+		return locked;
 	}
 
-	public Date getBirthday() {
-		return birthday;
+	public void setLocked(Integer locked) {
+		this.locked = locked;
 	}
 
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
+	public Integer getGroupId() {
+		return groupId;
 	}
 
-	public Integer getSex() {
-		return sex;
+	public void setGroupId(Integer groupId) {
+		this.groupId = groupId;
 	}
+	
+    public String getCredentialsSalt() {
+        return userName + userSalt;
+    }
 
-	public void setSex(Integer sex) {
-		this.sex = sex;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public String getRoleid() {
-		return roleid;
-	}
-
-	public void setRoleid(String roleid) {
-		this.roleid = roleid;
-	}
-
-	public Integer getDeptid() {
-		return deptid;
-	}
-
-	public void setDeptid(Integer deptid) {
-		this.deptid = deptid;
-	}
-
-	public Integer getStatus() {
-		return status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-
-	public Date getCreatetime() {
-		return createtime;
-	}
-
-	public void setCreatetime(Date createtime) {
-		this.createtime = createtime;
-	}
-
-	public Integer getVersion() {
-		return version;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
-
-
-	@Override
-	public String toString() {
-		return "User{" +
-			"id=" + id +
-			", avatar=" + avatar +
-			", account=" + account +
-			", password=" + password +
-			", salt=" + salt +
-			", name=" + name +
-			", birthday=" + birthday +
-			", sex=" + sex +
-			", email=" + email +
-			", phone=" + phone +
-			", roleid=" + roleid +
-			", deptid=" + deptid +
-			", status=" + status +
-			", createtime=" + createtime +
-			", version=" + version +
-			"}";
-	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}	
 }

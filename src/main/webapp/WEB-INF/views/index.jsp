@@ -8,6 +8,8 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 %>
+<%-- <c:set var="ctx" value="${pageContext.request.contextPath}" /> --%>
+<c:set var="ctx" value="<%=basePath%>" />
 <!DOCTYPE html>
 <!-- 
 Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.3.7
@@ -30,6 +32,9 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- BEGIN HEAD -->
 
 <head>
+<script type="text/javascript" charset="utf-8">
+    var ctx = "${ctx}";
+</script>
 <base href="<%=basePath%>">
 <title data-ng-bind="'中航国际 | ' + $state.current.data.pageTitle"></title>
 <meta charset="utf-8" />
@@ -88,6 +93,8 @@ License: You must have a valid license purchased only from themeforest(the above
 <link href="assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet"
 	type="text/css" />
 <link href="assets/global/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" type="text/css" />
+<link href="assets/apps/css/common.css"
+	rel="stylesheet" type="text/css" />
 <!-- <link href="assets/global/plugins/datatables/datatables.min.css" rel="stylesheet"
 	type="text/css" />
 <link href="assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet"
@@ -210,6 +217,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	<script src="assets/apps/main.js" type="text/javascript"></script>
 	<script src="assets/apps/directives.js" type="text/javascript"></script>
 	<script src="assets/apps/common.js" type="text/javascript"></script>
+	<script src="assets/apps/task.js" type="text/javascript"></script>
 	<script src="assets/apps/controllers/HeaderController.js"
 		type="text/javascript"></script>
 	<script src="assets/apps/service/UserService.js"
