@@ -88,10 +88,10 @@
                                                                          <p class="control-label left" ng-show="stockInOutCheckView"  ng-if="inOrOut.indexOf('in')>-1"  >{{stockInOutCheck.takeDeliverNum}}</p> 
                                                                     </div>
                                                                     <div class="col-md-1"><span class="input-inline-btn"  ng-hide="stockInOutCheckAdd"  >
-                                                            <button class="btn default" type="button"   ng-if="inOrOut.indexOf('in')>-1&&nOrOut.length<=3"   ng-click="selectDeliverOrTakeDelivery('in')" data-target="#takeDeliveryInfo" data-toggle="modal" >
+                                                            <button class="btn default" type="button"   ng-if="inOrOut.indexOf('in')>-1&&inOrOut.length<=3"   ng-click="selectDeliverOrTakeDelivery('in')" data-target="#takeDeliveryInfo" data-toggle="modal" >
                                                                 <i class="fa fa-search"></i>
                                                             </button>
-                                                              <button class="btn default" type="button"   ng-if="inOrOut.indexOf('out')>-1&&nOrOut.length<=3"   ng-click="selectDeliverOrTakeDelivery('out')" data-target="#deliverInfo" data-toggle="modal" >
+                                                              <button class="btn default" type="button"   ng-if="inOrOut.indexOf('out')>-1&&inOrOut.length<=3"   ng-click="selectDeliverOrTakeDelivery('out')" data-target="#deliverInfo" data-toggle="modal" >
                                                                 <i class="fa fa-search"></i>
                                                             </button>
                                                         </span></div>
