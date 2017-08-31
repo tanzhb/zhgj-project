@@ -66,6 +66,16 @@
     from company
    		where delFlg = 0
    	order by updateTime DESC
+   	<if test="pageSize!=-1">    
+     	limit #{pageIndex},#{pageSize}
+    </if>
+  </select>
+  
+   <select id="countByExample" parameterType="com.congmai.zhgj.web.model.CompanyExample" resultType="java.lang.Integer" >
+    select count(*) from company
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
   </select>
   
   <select id="selectCompanyByComType" resultMap="BaseResultMap" parameterType="java.util.Map" >

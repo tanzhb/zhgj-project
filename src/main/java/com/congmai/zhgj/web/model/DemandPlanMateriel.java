@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.model;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -47,11 +48,19 @@ public class DemandPlanMateriel {
 
     private String unit;
     
-    private String remainTime;
+    private String remainTime;//距离交付时间
+    
+    private Date startTime;
+    
+    private Date endTime;
+    
+    private DemandPlan demandPlan;
 
     private String comName;
     
     private String daysBeforeDelivery;
+    
+    private List<SupplyMateriel> supplyMateriels;
     public String getSerialNum() {
         return serialNum;
     }
@@ -227,5 +236,37 @@ public class DemandPlanMateriel {
 
 	public void setDaysBeforeDelivery(String daysBeforeDelivery) {
 		this.daysBeforeDelivery = daysBeforeDelivery;
+	}
+
+	public DemandPlan getDemandPlan() {
+		return demandPlan;
+	}
+
+	public void setDemandPlan(DemandPlan demandPlan) {
+		this.demandPlan = demandPlan;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+
+	public List<SupplyMateriel> getSupplyMateriels() {
+		return supplyMateriels;
+	}
+
+	public void setSupplyMateriels(List<SupplyMateriel> supplyMateriels) {
+		this.supplyMateriels = supplyMateriels;
 	}
 	}

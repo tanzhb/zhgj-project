@@ -1,0 +1,683 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.congmai.zhgj.web.dao.Delivery2Mapper" >
+  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.Delivery" >
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="deliverNum" property="deliverNum" jdbcType="VARCHAR" />
+    <result column="orderSerial" property="orderSerial" jdbcType="VARCHAR" />
+    <result column="supplyComId" property="supplyComId" jdbcType="VARCHAR" />
+    <result column="shipper" property="shipper" jdbcType="VARCHAR" />
+    <result column="receiver" property="receiver" jdbcType="VARCHAR" />
+    <result column="makeDate" property="makeDate" jdbcType="DATE" />
+    <result column="maker" property="maker" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="approval" property="approval" jdbcType="VARCHAR" />
+    <result column="approvalDate" property="approvalDate" jdbcType="DATE" />
+   <!--  <result column="warehouseSerial" property="warehouseSerial" jdbcType="VARCHAR" /> -->
+    <result column="materielCount" property="materielCount" jdbcType="VARCHAR" />
+    <result column="deliverDate" property="deliverDate" jdbcType="DATE" />
+    <result column="packageCount" property="packageCount" jdbcType="VARCHAR" />
+    <result column="materielWeight" property="materielWeight" jdbcType="VARCHAR" />
+    <result column="packageType" property="packageType" jdbcType="VARCHAR" />
+    <result column="packageSpecifications" property="packageSpecifications" jdbcType="VARCHAR" />
+    <result column="serviceMoney" property="serviceMoney" jdbcType="VARCHAR" />
+    <result column="deliverer" property="deliverer" jdbcType="VARCHAR" />
+    <result column="contactNum" property="contactNum" jdbcType="VARCHAR" />
+    <result column="deliverRemark" property="deliverRemark" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <association property="deliveryTransport"  javaType="com.congmai.zhgj.web.model.DeliveryTransport">
+    	 <result column="transportType" property="transportType" jdbcType="VARCHAR" />
+		 <result column="transport" property="transport" jdbcType="VARCHAR" />
+		 <result column="port" property="port" jdbcType="VARCHAR" />
+		 <result column="shipNumber" property="shipNumber" jdbcType="VARCHAR" />
+		 <result column="playArrivalDate" property="playArrivalDate" jdbcType="TIMESTAMP" />
+		 <result column="playWarehouseDate" property="playWarehouseDate" jdbcType="TIMESTAMP" />
+		 <result column="delivery_transport_remark" property="remark" jdbcType="VARCHAR" />
+		 <result column="dtContact" property="contact" jdbcType="VARCHAR" />
+    	 <result column="dtContactNum" property="contactNum" jdbcType="VARCHAR" />
+    </association>
+    <association property="takeDelivery" javaType="com.congmai.zhgj.web.model.TakeDelivery">
+    	 <result column="tdSerialNum" property="serialNum" jdbcType="VARCHAR" />
+    	 <result column="warehouseSerial" property="warehouseSerial" jdbcType="VARCHAR" />
+    	 <result column="takeDeliverDate" property="takeDeliverDate" jdbcType="DATE" />
+    	 <result column="receiver" property="receiver" jdbcType="VARCHAR" />
+         <result column="contactNum" property="contactNum" jdbcType="VARCHAR" />
+         <result column="takeDeliverNum" property="takeDeliverNum" jdbcType="VARCHAR" />
+         <result column="take_delivery_remark" property="remark" jdbcType="VARCHAR" />
+         <association column="tdWarehouseSerial" property="warehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>
+    </association>
+    <association column="warehouseSerial" property="warehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>
+    <association property="supplyName" column="supplyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
+    <association property="orderNum" column="orderSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectOrderNumByOrderSerial"></association>
+    <collection property="deliveryMateriels" ofType="com.congmai.zhgj.web.model.DeliveryMateriel">
+    	<!--  <result column="orderMaterielSerial" property="orderMaterielSerial" jdbcType="VARCHAR" /> -->
+	     <result column="batchNum" property="batchNum" jdbcType="VARCHAR" />
+	     <result column="manufactureDate" property="manufactureDate" jdbcType="DATE" />
+	     <result column="deliverCount" property="deliverCount" jdbcType="VARCHAR" />
+	     <result column="deliverRemark" property="deliverRemark" jdbcType="VARCHAR" />
+	     <result column="acceptCount" property="acceptCount" jdbcType="VARCHAR" />
+	     <result column="refuseCount" property="refuseCount" jdbcType="VARCHAR" />
+	     <result column="takeRemark" property="takeRemark" jdbcType="VARCHAR" />
+	     <result column="qualifiedCount" property="qualifiedCount" jdbcType="VARCHAR" />
+	     <result column="unqualifiedCount" property="unqualifiedCount" jdbcType="VARCHAR" />
+	     <result column="checkRemark" property="checkRemark" jdbcType="VARCHAR" />
+	     <result column="warehouseSerial" property="warehouseSerial" jdbcType="VARCHAR" />
+	     <result column="positionSerial" property="positionSerial" jdbcType="VARCHAR" />
+	     <result column="stockCount" property="stockCount" jdbcType="VARCHAR" />
+	     <result column="unstockCount" property="unstockCount" jdbcType="VARCHAR" />
+	     <result column="stockRemark" property="stockRemark" jdbcType="VARCHAR" />
+	     <result column="dmRemark" property="remark" jdbcType="VARCHAR" />
+	     <association column="dmWarehouseSerial" property="warehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>
+	     <association column="orderMaterielSerial" property="orderMateriel" select="com.congmai.zhgj.web.dao.OrderMaterielMapper.selectByPrimaryKey" ></association>
+    </collection>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    serialNum, deliverNum, orderSerial, supplyComId, shipper, receiver, makeDate, maker, 
+    remark, status, approval, approvalDate, warehouseSerial, materielCount, deliverDate, 
+    packageCount, materielWeight, packageType, packageSpecifications, serviceMoney, deliverer, 
+    contactNum, deliverRemark, delFlg, creator, createTime, updater, updateTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.DeliveryExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from delivery
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectListByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.DeliverySelectExample" >
+    select
+    d.serialNum, d.deliverNum, d.orderSerial, d.shipper, d.receiver, d.makeDate, d.maker, 
+    d.remark, d.status, d.approval, d.approvalDate, d.warehouseSerial, d.materielCount, d.deliverDate, 
+    d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, 
+    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,
+    dt.transportType,
+	td.serialNum as tdSerialNum,td.warehouseSerial as tdWarehouseSerial,td.takeDeliverDate,td.receiver,td.contactNum,td.takeDeliverNum,td.remark as take_delivery_remark
+    from takeDelivery td
+    left join delivery  d on d.serialNum = td.deliverSerial
+    left join deliveryTransport dt on d.serialNum = dt.deliverSerial
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByTakeDeliveryPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    d.serialNum, d.deliverNum, d.orderSerial, d.supplyComId, d.shipper, d.receiver, d.makeDate, d.maker, 
+    d.remark, d.status, d.approval, d.approvalDate, d.warehouseSerial as warehouseSerial, d.materielCount, d.deliverDate, 
+    d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, 
+    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.batchNum,
+    dm.manufactureDate,dm.deliverCount,dm.deliverRemark,
+    dm.acceptCount,dm.refuseCount,dm.takeRemark,dm.qualifiedCount,dm.unqualifiedCount,dm.checkRemark,dm.warehouseSerial,
+	dm.positionSerial,dm.stockCount,dm.unstockCount,dm.stockRemark,dm.remark as dmRemark,dm.warehouseSerial as dmWarehouseSerial,dm.orderMaterielSerial,
+    	dt.transportType,dt.transport,dt.port,dt.shipNumber,dt.playArrivalDate,dt.playWarehouseDate,dt.remark as delivery_transport_remark,dt.contactNum as dtContactNum,dt.contact as dtContact,
+		td.serialNum as tdSerialNum,td.warehouseSerial as tdWarehouseSerial,td.takeDeliverDate,td.receiver,td.contactNum,td.takeDeliverNum,td.remark as take_delivery_remark
+    from takeDelivery td
+    left join delivery  d on d.serialNum = td.deliverSerial
+    left join deliveryTransport dt on d.serialNum = dt.deliverSerial
+    left join deliveryMateriel dm on d.serialNum = dm.deliverSerial
+    where td.serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from delivery
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.DeliveryExample" >
+    delete from delivery
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.congmai.zhgj.web.model.Delivery" >
+    insert into delivery (serialNum, deliverNum, orderSerial, 
+      supplyComId, shipper, receiver, 
+      makeDate, maker, remark, 
+      status, approval, approvalDate, 
+      warehouseSerial, materielCount, deliverDate, 
+      packageCount, materielWeight, packageType, 
+      packageSpecifications, serviceMoney, deliverer, 
+      contactNum, deliverRemark, delFlg, 
+      creator, createTime, updater, 
+      updateTime)
+    values (#{serialNum,jdbcType=VARCHAR}, #{deliverNum,jdbcType=VARCHAR}, #{orderSerial,jdbcType=VARCHAR}, 
+      #{supplyComId,jdbcType=VARCHAR}, #{shipper,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, 
+      #{makeDate,jdbcType=DATE}, #{maker,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{approval,jdbcType=VARCHAR}, #{approvalDate,jdbcType=DATE}, 
+      #{warehouseSerial,jdbcType=VARCHAR}, #{materielCount,jdbcType=VARCHAR}, #{deliverDate,jdbcType=DATE}, 
+      #{packageCount,jdbcType=VARCHAR}, #{materielWeight,jdbcType=VARCHAR}, #{packageType,jdbcType=VARCHAR}, 
+      #{packageSpecifications,jdbcType=VARCHAR}, #{serviceMoney,jdbcType=VARCHAR}, #{deliverer,jdbcType=VARCHAR}, 
+      #{contactNum,jdbcType=VARCHAR}, #{deliverRemark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.Delivery" >
+    insert into delivery
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        serialNum,
+      </if>
+      <if test="deliverNum != null" >
+        deliverNum,
+      </if>
+      <if test="orderSerial != null" >
+        orderSerial,
+      </if>
+      <if test="supplyComId != null" >
+        supplyComId,
+      </if>
+      <if test="shipper != null" >
+        shipper,
+      </if>
+      <if test="receiver != null" >
+        receiver,
+      </if>
+      <if test="makeDate != null" >
+        makeDate,
+      </if>
+      <if test="maker != null" >
+        maker,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="approval != null" >
+        approval,
+      </if>
+      <if test="approvalDate != null" >
+        approvalDate,
+      </if>
+      <if test="warehouseSerial != null" >
+        warehouseSerial,
+      </if>
+      <if test="materielCount != null" >
+        materielCount,
+      </if>
+      <if test="deliverDate != null" >
+        deliverDate,
+      </if>
+      <if test="packageCount != null" >
+        packageCount,
+      </if>
+      <if test="materielWeight != null" >
+        materielWeight,
+      </if>
+      <if test="packageType != null" >
+        packageType,
+      </if>
+      <if test="packageSpecifications != null" >
+        packageSpecifications,
+      </if>
+      <if test="serviceMoney != null" >
+        serviceMoney,
+      </if>
+      <if test="deliverer != null" >
+        deliverer,
+      </if>
+      <if test="contactNum != null" >
+        contactNum,
+      </if>
+      <if test="deliverRemark != null" >
+        deliverRemark,
+      </if>
+      <if test="delFlg != null" >
+        delFlg,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="updater != null" >
+        updater,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverNum != null" >
+        #{deliverNum,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSerial != null" >
+        #{orderSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyComId != null" >
+        #{supplyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="shipper != null" >
+        #{shipper,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null" >
+        #{receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="makeDate != null" >
+        #{makeDate,jdbcType=DATE},
+      </if>
+      <if test="maker != null" >
+        #{maker,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="approval != null" >
+        #{approval,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalDate != null" >
+        #{approvalDate,jdbcType=DATE},
+      </if>
+      <if test="warehouseSerial != null" >
+        #{warehouseSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="materielCount != null" >
+        #{materielCount,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverDate != null" >
+        #{deliverDate,jdbcType=DATE},
+      </if>
+      <if test="packageCount != null" >
+        #{packageCount,jdbcType=VARCHAR},
+      </if>
+      <if test="materielWeight != null" >
+        #{materielWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="packageType != null" >
+        #{packageType,jdbcType=VARCHAR},
+      </if>
+      <if test="packageSpecifications != null" >
+        #{packageSpecifications,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceMoney != null" >
+        #{serviceMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverer != null" >
+        #{deliverer,jdbcType=VARCHAR},
+      </if>
+      <if test="contactNum != null" >
+        #{contactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverRemark != null" >
+        #{deliverRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.DeliveryExample" resultType="java.lang.Integer" >
+    select count(*) from delivery
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update delivery
+    <set >
+      <if test="record.serialNum != null" >
+        serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deliverNum != null" >
+        deliverNum = #{record.deliverNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderSerial != null" >
+        orderSerial = #{record.orderSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplyComId != null" >
+        supplyComId = #{record.supplyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shipper != null" >
+        shipper = #{record.shipper,jdbcType=VARCHAR},
+      </if>
+      <if test="record.receiver != null" >
+        receiver = #{record.receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="record.makeDate != null" >
+        makeDate = #{record.makeDate,jdbcType=DATE},
+      </if>
+      <if test="record.maker != null" >
+        maker = #{record.maker,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.approval != null" >
+        approval = #{record.approval,jdbcType=VARCHAR},
+      </if>
+      <if test="record.approvalDate != null" >
+        approvalDate = #{record.approvalDate,jdbcType=DATE},
+      </if>
+      <if test="record.warehouseSerial != null" >
+        warehouseSerial = #{record.warehouseSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materielCount != null" >
+        materielCount = #{record.materielCount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deliverDate != null" >
+        deliverDate = #{record.deliverDate,jdbcType=DATE},
+      </if>
+      <if test="record.packageCount != null" >
+        packageCount = #{record.packageCount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materielWeight != null" >
+        materielWeight = #{record.materielWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="record.packageType != null" >
+        packageType = #{record.packageType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.packageSpecifications != null" >
+        packageSpecifications = #{record.packageSpecifications,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceMoney != null" >
+        serviceMoney = #{record.serviceMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deliverer != null" >
+        deliverer = #{record.deliverer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactNum != null" >
+        contactNum = #{record.contactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deliverRemark != null" >
+        deliverRemark = #{record.deliverRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlg != null" >
+        delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creator != null" >
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updater != null" >
+        updater = #{record.updater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update delivery
+    set serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      deliverNum = #{record.deliverNum,jdbcType=VARCHAR},
+      orderSerial = #{record.orderSerial,jdbcType=VARCHAR},
+      supplyComId = #{record.supplyComId,jdbcType=VARCHAR},
+      shipper = #{record.shipper,jdbcType=VARCHAR},
+      receiver = #{record.receiver,jdbcType=VARCHAR},
+      makeDate = #{record.makeDate,jdbcType=DATE},
+      maker = #{record.maker,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      approval = #{record.approval,jdbcType=VARCHAR},
+      approvalDate = #{record.approvalDate,jdbcType=DATE},
+      warehouseSerial = #{record.warehouseSerial,jdbcType=VARCHAR},
+      materielCount = #{record.materielCount,jdbcType=VARCHAR},
+      deliverDate = #{record.deliverDate,jdbcType=DATE},
+      packageCount = #{record.packageCount,jdbcType=VARCHAR},
+      materielWeight = #{record.materielWeight,jdbcType=VARCHAR},
+      packageType = #{record.packageType,jdbcType=VARCHAR},
+      packageSpecifications = #{record.packageSpecifications,jdbcType=VARCHAR},
+      serviceMoney = #{record.serviceMoney,jdbcType=VARCHAR},
+      deliverer = #{record.deliverer,jdbcType=VARCHAR},
+      contactNum = #{record.contactNum,jdbcType=VARCHAR},
+      deliverRemark = #{record.deliverRemark,jdbcType=VARCHAR},
+      delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      updater = #{record.updater,jdbcType=VARCHAR},
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.Delivery" >
+    update delivery
+    <set >
+      <if test="deliverNum != null" >
+        deliverNum = #{deliverNum,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSerial != null" >
+        orderSerial = #{orderSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyComId != null" >
+        supplyComId = #{supplyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="shipper != null" >
+        shipper = #{shipper,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null" >
+        receiver = #{receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="makeDate != null" >
+        makeDate = #{makeDate,jdbcType=DATE},
+      </if>
+      <if test="maker != null" >
+        maker = #{maker,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="approval != null" >
+        approval = #{approval,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalDate != null" >
+        approvalDate = #{approvalDate,jdbcType=DATE},
+      </if>
+      <if test="warehouseSerial != null" >
+        warehouseSerial = #{warehouseSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="materielCount != null" >
+        materielCount = #{materielCount,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverDate != null" >
+        deliverDate = #{deliverDate,jdbcType=DATE},
+      </if>
+      <if test="packageCount != null" >
+        packageCount = #{packageCount,jdbcType=VARCHAR},
+      </if>
+      <if test="materielWeight != null" >
+        materielWeight = #{materielWeight,jdbcType=VARCHAR},
+      </if>
+      <if test="packageType != null" >
+        packageType = #{packageType,jdbcType=VARCHAR},
+      </if>
+      <if test="packageSpecifications != null" >
+        packageSpecifications = #{packageSpecifications,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceMoney != null" >
+        serviceMoney = #{serviceMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverer != null" >
+        deliverer = #{deliverer,jdbcType=VARCHAR},
+      </if>
+      <if test="contactNum != null" >
+        contactNum = #{contactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverRemark != null" >
+        deliverRemark = #{deliverRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        delFlg = #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        updater = #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.Delivery" >
+    update delivery
+    set deliverNum = #{deliverNum,jdbcType=VARCHAR},
+      orderSerial = #{orderSerial,jdbcType=VARCHAR},
+      supplyComId = #{supplyComId,jdbcType=VARCHAR},
+      shipper = #{shipper,jdbcType=VARCHAR},
+      receiver = #{receiver,jdbcType=VARCHAR},
+      makeDate = #{makeDate,jdbcType=DATE},
+      maker = #{maker,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      approval = #{approval,jdbcType=VARCHAR},
+      approvalDate = #{approvalDate,jdbcType=DATE},
+      warehouseSerial = #{warehouseSerial,jdbcType=VARCHAR},
+      materielCount = #{materielCount,jdbcType=VARCHAR},
+      deliverDate = #{deliverDate,jdbcType=DATE},
+      packageCount = #{packageCount,jdbcType=VARCHAR},
+      materielWeight = #{materielWeight,jdbcType=VARCHAR},
+      packageType = #{packageType,jdbcType=VARCHAR},
+      packageSpecifications = #{packageSpecifications,jdbcType=VARCHAR},
+      serviceMoney = #{serviceMoney,jdbcType=VARCHAR},
+      deliverer = #{deliverer,jdbcType=VARCHAR},
+      contactNum = #{contactNum,jdbcType=VARCHAR},
+      deliverRemark = #{deliverRemark,jdbcType=VARCHAR},
+      delFlg = #{delFlg,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <select id="selectOrderNumByOrderSerial" resultType="java.lang.String" parameterType="java.lang.String" >
+    select 
+      orderNum
+    from orderInfo
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectWarehouseByWarehouseSerial" resultType="com.congmai.zhgj.web.model.Warehouse" parameterType="java.lang.String" >
+    select 
+      serialNum,warehouseName,address
+    from warehouse
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  <select id="selectPositionByPositionSerial" resultType="com.congmai.zhgj.web.model.Warehouseposition" parameterType="java.lang.String" >
+    select 
+      serialNum,positionName
+    from warehousePosition
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  <select id="countWarehouseByDeliverSerial" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    select 
+       count(distinct dm.warehouseSerial)
+    from takeDelivery td
+    left join deliveryMateriel dm on td.deliverSerial = dm.deliverSerial and dm.delFlg = '0'
+    where td.serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  <select id="countPositionByDeliverSerial" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    select 
+       count(distinct dm.positionSerial)
+    from takeDelivery td
+    left join deliveryMateriel dm on td.deliverSerial = dm.deliverSerial and dm.delFlg = '0'
+    where td.serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  
+</mapper>

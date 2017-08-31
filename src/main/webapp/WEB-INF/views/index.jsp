@@ -240,7 +240,9 @@ License: You must have a valid license purchased only from themeforest(the above
 	<script src="assets/global/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js" type="text/javascript"></script>
 	<script src="assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
 	<script src="assets/global/plugins/bootstrap-select/js/i18n/defaults-zh_CN.js" type="text/javascript"></script>
-
+	<script src="assets/apps/scripts/angular-file-upload-shim.min.js" type="text/javascript"></script>
+	<script src="assets/apps/scripts/angular-file-upload.min.js" type="text/javascript"></script>
+	<script src="assets/apps/scripts/FileUploader.js" type="text/javascript"></script>
 <!-- 	<script src="assets/global/plugins/datatables/datatables.all.min.js" type="text/javascript"></script>
     <script src="assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script> -->
 	<!-- END  PAGE SCRIPTS -->

@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.congmai.zhgj.web.dao.ClauseFrameworkMapper" >
+  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.ClauseFramework" >
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="contractSerial" property="contractSerial" jdbcType="VARCHAR" />
+    <result column="clauseType" property="clauseType" jdbcType="VARCHAR" />
+    <result column="clauseContent" property="clauseContent" jdbcType="VARCHAR" />
+    <result column="isExtends" property="isExtends" jdbcType="VARCHAR" />
+    <result column="isApproval" property="isApproval" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    serialNum, contractSerial, clauseType, clauseContent, isExtends, isApproval, remark, 
+    status, delFlg, creator, createTime, updater, updateTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.ClauseFrameworkExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from clauseFramework
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from clauseFramework
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from clauseFramework
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.ClauseFrameworkExample" >
+    delete from clauseFramework
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.congmai.zhgj.web.model.ClauseFramework" >
+    insert into clauseFramework (serialNum, contractSerial, clauseType, 
+      clauseContent, isExtends, isApproval, 
+      remark, status, 
+      creator, createTime, updater, 
+      updateTime)
+    values (#{serialNum,jdbcType=VARCHAR}, #{contractSerial,jdbcType=VARCHAR}, #{clauseType,jdbcType=VARCHAR}, 
+      #{clauseContent,jdbcType=VARCHAR}, #{isExtends,jdbcType=VARCHAR}, #{isApproval,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.ClauseFramework" >
+    insert into clauseFramework
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        serialNum,
+      </if>
+      <if test="contractSerial != null" >
+        contractSerial,
+      </if>
+      <if test="clauseType != null" >
+        clauseType,
+      </if>
+      <if test="clauseContent != null" >
+        clauseContent,
+      </if>
+      <if test="isExtends != null" >
+        isExtends,
+      </if>
+      <if test="isApproval != null" >
+        isApproval,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="delFlg != null" >
+        delFlg,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="updater != null" >
+        updater,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="contractSerial != null" >
+        #{contractSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="clauseType != null" >
+        #{clauseType,jdbcType=VARCHAR},
+      </if>
+      <if test="clauseContent != null" >
+        #{clauseContent,jdbcType=VARCHAR},
+      </if>
+      <if test="isExtends != null" >
+        #{isExtends,jdbcType=VARCHAR},
+      </if>
+      <if test="isApproval != null" >
+        #{isApproval,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.ClauseFrameworkExample" resultType="java.lang.Integer" >
+    select count(*) from clauseFramework
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update clauseFramework
+    <set >
+      <if test="record.serialNum != null" >
+        serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contractSerial != null" >
+        contractSerial = #{record.contractSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clauseType != null" >
+        clauseType = #{record.clauseType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clauseContent != null" >
+        clauseContent = #{record.clauseContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isExtends != null" >
+        isExtends = #{record.isExtends,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isApproval != null" >
+        isApproval = #{record.isApproval,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlg != null" >
+        delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creator != null" >
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updater != null" >
+        updater = #{record.updater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update clauseFramework
+    set serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      contractSerial = #{record.contractSerial,jdbcType=VARCHAR},
+      clauseType = #{record.clauseType,jdbcType=VARCHAR},
+      clauseContent = #{record.clauseContent,jdbcType=VARCHAR},
+      isExtends = #{record.isExtends,jdbcType=VARCHAR},
+      isApproval = #{record.isApproval,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      updater = #{record.updater,jdbcType=VARCHAR},
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.ClauseFramework" >
+    update clauseFramework
+    <set >
+      <if test="contractSerial != null" >
+        contractSerial = #{contractSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="clauseType != null" >
+        clauseType = #{clauseType,jdbcType=VARCHAR},
+      </if>
+      <if test="clauseContent != null" >
+        clauseContent = #{clauseContent,jdbcType=VARCHAR},
+      </if>
+      <if test="isExtends != null" >
+        isExtends = #{isExtends,jdbcType=VARCHAR},
+      </if>
+      <if test="isApproval != null" >
+        isApproval = #{isApproval,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        delFlg = #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        updater = #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.ClauseFramework" >
+    update clauseFramework
+    set contractSerial = #{contractSerial,jdbcType=VARCHAR},
+      clauseType = #{clauseType,jdbcType=VARCHAR},
+      clauseContent = #{clauseContent,jdbcType=VARCHAR},
+      isExtends = #{isExtends,jdbcType=VARCHAR},
+      isApproval = #{isApproval,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      delFlg = #{delFlg,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+</mapper>

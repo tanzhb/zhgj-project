@@ -3,6 +3,7 @@ package com.congmai.zhgj.web.service;
 import java.util.List;
 
 import com.congmai.zhgj.core.generic.GenericService;
+import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
 import com.congmai.zhgj.web.model.OrderInfo;
@@ -11,8 +12,8 @@ import com.congmai.zhgj.web.model.User;
 
 /**
  * 
- * @ClassName MaterielService
- * @Description 物料Service
+ * @ClassName OrderService
+ * @Description 订单Service
  * @author qfzhao
  * @Date 2017年7月28日 下午3:04:17
  * @version 1.0.0
@@ -26,6 +27,10 @@ public interface OrderService extends GenericService<OrderInfo, String> {
     List<OrderInfo> selectList(OrderInfoExample m);
 
 	public void deleteOrderInfos(String ids);
+
+	void insertContract(ContractVO contract);
+
+	void updateContract(ContractVO contract);
 
 
 }

@@ -11,6 +11,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -20,7 +21,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
@@ -35,6 +36,8 @@ import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.enums.ComType;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyContact;
+import com.congmai.zhgj.web.model.CompanyExample;
+import com.congmai.zhgj.web.model.CompanyExample.Criteria;
 import com.congmai.zhgj.web.model.CompanyFinance;
 import com.congmai.zhgj.web.model.CompanyQualification;
 import com.congmai.zhgj.web.service.CompanyContactService;
@@ -91,16 +94,40 @@ public class CompanyController {
      * @param request
      * @return
      */
-    @RequestMapping("companyList")
-    public ResponseEntity<Map<String,Object>> companyList(Map<String, Object> map,HttpServletRequest request,Company company) {
-    	
-    	List<Company> companys = companyService.selectByPage(new Company()).getResult();
+    @RequestMapping(value="companyList",method=RequestMethod.POST)
+    public ResponseEntity<Map<String,Object>> companyList(Map<String, Object> map,HttpServletRequest request,@RequestBody String params,Company company) {
+    	//远程分页代码
+    	/*try {
+    		params = URLDecoder.decode(params, "UTF-8");
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	 ObjectMapper objectMapper = new ObjectMapper();
+    	 objectMapper.configure(org.codehaus.jackson.map.DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+  	   		DataTablesParams  dataTablesParams = null;
+		   try {
+			   JSONObject a = JSONObject.fromObject(params);
+			   dataTablesParams = objectMapper.readValue(params,DataTablesParams.class);
+			} catch (JsonParseException e) {
+				System.out.println(this.getClass()+"---------"+ e.getMessage());
+			} catch (JsonMappingException e) {
+				System.out.println(this.getClass()+"---------"+ e.getMessage());
+			} catch (IOException e) {
+				System.out.println(this.getClass()+"---------"+ e.getMessage());
+			} catch (Exception e) {
+		    	System.out.println(this.getClass()+"---------"+ e.getMessage());
+			}*/
+		 company.setPageIndex(0);
+		 company.setPageSize(-1);
+    	Page<Company> companys = companyService.selectByPage(company);
+    	//List<Company> companys = companyService.selectByPage(company).getResult();
 		// 封装datatables数据返回到前台
 		Map<String,Object> pageMap = new HashMap<String,Object>();
 		pageMap.put("draw", 1);
-		pageMap.put("recordsTotal", company==null?0:companys.size());
-		pageMap.put("recordsFiltered", company==null?0:companys.size());
-		pageMap.put("data", companys);
+		pageMap.put("recordsTotal", company==null?0:companys.getTotalCount());
+		pageMap.put("recordsFiltered", company==null?0:companys.getTotalCount());
+		pageMap.put("data", companys.getResult());
 		return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
     }
     
@@ -161,6 +188,11 @@ public class CompanyController {
     	String flag ="0"; //默认失败
 
         	try{
+        		String isExist = checkComNumIsExist(company.getComId(),company.getComNum());
+        		if("2".equals(isExist)){
+        			company.setComNum("isExist");
+        			return company;
+        		}
         		Subject currentUser = SecurityUtils.getSubject();
         		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
         		if(StringUtils.isEmpty(company.getComId())){
@@ -185,6 +217,37 @@ public class CompanyController {
     }
     
     /**
+     * @Description (检查编号唯一性)
+     * @param comNum
+     * @param comId
+     * @return
+     */
+    @RequestMapping("checkComNumIsExist")
+    @ResponseBody
+    public String checkComNumIsExist(String comId,String comNum){
+    	String flag  = "0"; //默认失败
+    	try {
+    		CompanyExample example = new CompanyExample();
+        	Criteria criteria = example.createCriteria();
+        	criteria.andDelFlgEqualTo("0");
+        	criteria.andComNumEqualTo(comNum);
+        	if(StringUtils.isNotEmpty(comId)){
+        		criteria.andComIdNotEqualTo(comId);
+        	}
+        	int count = companyService.countCompanybySelective(example);
+        	if(count > 0){
+        				flag = "2"; //存在重复
+        	}else{
+        				flag = "1"; //合法
+        	}
+		} catch (Exception e) {
+			System.out.println(this.getClass()+"----------"+e.getMessage());
+		}
+    	
+    	return flag;
+    }
+    
+    /**
      * @Description (删除)
      * @param request
      * @return
@@ -194,7 +257,7 @@ public class CompanyController {
     public String deleteCompany(Map<String, Object> map,String comId) {
     	String flag ="0"; //默认失败
     	try{
-    		companyService.delete(comId);
+    		companyService.deleteCompany(comId);
     		flag = "1";
     	}catch(Exception e){
     		System.out.println(e.getMessage());
@@ -247,7 +310,7 @@ public class CompanyController {
             JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, CompanyQualification.class);  
             companyQualifications = objectMapper.readValue(params, javaType);
             if(!CollectionUtils.isEmpty(companyQualifications)){
-            	companyQualificationService.deleteByComId(companyQualifications.get(0).getComId());
+            	//companyQualificationService.deleteByComId(companyQualifications.get(0).getComId());
         		companyQualificationService.insertBatch(companyQualifications,currenLoginName);
             }
             
@@ -385,7 +448,9 @@ public class CompanyController {
     @RequestMapping("exportCompany")
     public void exportCompany(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
     		Map<String, Object> dataMap = new HashMap<String, Object>();
-    		List<Company> companyList = companyService.selectByPage(new Company()).getResult();
+    		Company company = new Company();
+    		company.setPageSize(-1);
+    		List<Company> companyList = companyService.selectByPage(company).getResult();
     		dataMap.put("companyList",companyList);
     		ExcelUtil.export(request, response, dataMap, "company", "企业信息");
     }

@@ -10,7 +10,9 @@ import java.util.UUID;
 
 import javax.annotation.Resource;
 
+import org.springframework.aop.support.AopUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -49,10 +51,17 @@ public class CompanyQualificationServiceImpl extends GenericServiceImpl<CompanyQ
 	}
 
 
+	
 	@Override
 	public void insertBatch(List<CompanyQualification> insertList,String userId) {
 	if(!CollectionUtils.isEmpty(insertList)){
-			
+		try {
+			System.out.println("是否是代理调用，AopUtils.isAopProxy(this) : " + AopUtils.isAopProxy(this));  
+	        System.out.println("是否是cglib类代理调用，AopUtils.isCglibProxy(this) : " + AopUtils.isCglibProxy(this));  
+	        System.out.println("是否是jdk动态接口代理调用，AopUtils.isJdkDynamicProxy(this) : " + AopUtils.isJdkDynamicProxy(this));  
+			companyQualificationMapper.deleteByComId(insertList.get(0).getComId());
+			//String s=null;
+			//s.split(",");
 			for(CompanyQualification companyQualification:insertList){
 	    			companyQualification.setSerialNum(UUID.randomUUID().toString().replace("-",""));
 	    			companyQualification.setCreateTime(new Date());
@@ -60,6 +69,11 @@ public class CompanyQualificationServiceImpl extends GenericServiceImpl<CompanyQ
 	    			companyQualification.setUpdateTime(new Date());
 	    			companyQualification.setUpdater(userId);
     		}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+			
 		}
 		companyQualificationMapper.insertSelectiveBatch(insertList);
 	}

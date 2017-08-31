@@ -48,6 +48,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
    		    	$scope.supplyMaterielInfoShow = true;
    		    	$scope.opration = '查看';
 		    }
+        	$scope.getSuppliers();//加载供应商
         	
         	validateInit();//加载表单验证控件
 
@@ -187,6 +188,21 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     }; 
     
     /**
+     * 获取供应商信息
+     */	
+    $scope.getSuppliers  = function(serialNum) {
+    	//tab内容置为空
+    	$scope.suppliers = null;
+    	materielService.getSuppliers().then(
+     		     function(data){
+     		    	$scope.suppliers=data.data;
+     		     },
+     		     function(error){
+     		         $scope.error = error;
+     		     }
+     		 );
+    }; 
+    /**
      * 获取物料信息
      */	
     $scope.getMaterielInfo  = function(serialNum) {
@@ -200,15 +216,15 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
       		    	
       		    	if(!isNull(data.BOM)){
  	        			$scope.BOM = data.BOM;
- 	        			_index = $scope.BOM.length-1;
+ 	        			_index = $scope.BOM.length;
  	        		}
       		    	if(!isNull(data.file)){
  	        			$scope.file = data.file;
- 	        			_fileIndex = $scope.file.length-1;
+ 	        			_fileIndex = $scope.file.length;
  	        		}
       		    	if(!isNull(data.supplyMateriel)){
  	        			$scope.supplyMateriel = data.supplyMateriel;
- 	        			_supplyMaterielIndex = $scope.supplyMateriel.length-1;
+ 	        			_supplyMaterielIndex = $scope.supplyMateriel.length;
  	        		}
       		     },
       		     function(error){
@@ -447,7 +463,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 			if(ids==''){
     			toastr.warning('未选择物料！');return;
     		}else{
-    			$('#addUserModal').modal('show');// 弹出删除确认模态框
+    			$('#delMaterielModal').modal('show');// 弹出删除确认模态框
     		}
 			
 		};
@@ -508,15 +524,16 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 	            	materielName:{required:"物料名称不能为空！"},
 	            	category:{required:"物料分类不能为空！"},
 	            	specifications:{required:"物料规格不能为空！"},
-	            	stockUnit:{required:"库存单位不能为空！"}
-            		
+	            	stockUnit:{required:"库存单位不能为空！"},
+	            	deliveryCycle:{required:"一般交付周期不能为空！"}
 	            },
             	rules: {materielNum: {required: !0,maxlength: 20},
             			type: {required: !0,maxlength: 20},
             			materielName: {required: !0,maxlength: 20},
             			category: {required: !0,maxlength: 20},
             			specifications: {required: !0,maxlength: 20},
-            			stockUnit: {required: !0,maxlength: 20}
+            			stockUnit: {required: !0,maxlength: 20},
+            			deliveryCycle:{required: !0,maxlength: 20}
             			},
             		invalidHandler: function(e, t) {
                     i.hide(), r.show(), App.scrollTo(r, -200)
@@ -1132,6 +1149,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 	   	    	if($('#form_sample_5').valid()){
 	   	    		materielService.saveSupplyMateriel($scope.supplyMateriel).then(
 	   	       		     function(data){
+	   	       		    	 $scope.supplyMateriel = data;
 	   	       		    	toastr.success('数据保存成功！');
 	   	       		    	$scope.cancelSupplyMateriel();
 	   	       		    	
@@ -1165,11 +1183,12 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 	   		    	   $scope.supplyMateriel[_supplyMaterielIndex] = {};
 	   		    	   $scope.supplyMateriel[_supplyMaterielIndex].materielId = $scope.materiel.materielId;
 	   		    	   _supplyMaterielIndex++;
-	   		    	   $('.bs-select').selectpicker();
+	   		    	   /*$('.bs-select').selectpicker();*/
 	   		       }
 	   	    };
-	   	 $scope.repeatDone = function(){
-	   		$("select[name='supplyComId']").selectpicker();
+	   	    $scope.repeatDone = function(){
+//	   	    	$compile($("select[name='supplyComId']"))($scope);
+//	   	    	$("select[name='supplyComId']").selectpicker();
 	       };
 	   	    
 	   	    /**

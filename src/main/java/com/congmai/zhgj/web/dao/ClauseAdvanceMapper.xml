@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.congmai.zhgj.web.dao.ClauseAdvanceMapper" >
+  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.ClauseAdvance" >
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="contractSerial" property="contractSerial" jdbcType="VARCHAR" />
+    <result column="financing" property="financing" jdbcType="VARCHAR" />
+    <result column="advance" property="advance" jdbcType="VARCHAR" />
+    <result column="advanceAmount" property="advanceAmount" jdbcType="VARCHAR" />
+    <result column="serviceAmountRate" property="serviceAmountRate" jdbcType="VARCHAR" />
+    <result column="advanceTime" property="advanceTime" jdbcType="TIMESTAMP" />
+    <result column="serviceAmount" property="serviceAmount" jdbcType="VARCHAR" />
+    <result column="depositRate" property="depositRate" jdbcType="VARCHAR" />
+    <result column="depositAmount" property="depositAmount" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    serialNum, contractSerial, financing, advance, advanceAmount, serviceAmountRate, 
+    advanceTime, serviceAmount, depositRate, depositAmount, remark, status, delFlg, creator, 
+    createTime, updater, updateTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.ClauseAdvanceExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from clauseAdvance
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from clauseAdvance
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from clauseAdvance
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.ClauseAdvanceExample" >
+    delete from clauseAdvance
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.congmai.zhgj.web.model.ClauseAdvance" >
+    insert into clauseAdvance (serialNum, contractSerial, financing, 
+      advance, advanceAmount, serviceAmountRate, 
+      advanceTime, serviceAmount, depositRate, 
+      depositAmount, remark, status, 
+      delFlg, creator, createTime, 
+      updater, updateTime)
+    values (#{serialNum,jdbcType=VARCHAR}, #{contractSerial,jdbcType=VARCHAR}, #{financing,jdbcType=VARCHAR}, 
+      #{advance,jdbcType=VARCHAR}, #{advanceAmount,jdbcType=VARCHAR}, #{serviceAmountRate,jdbcType=VARCHAR}, 
+      #{advanceTime,jdbcType=TIMESTAMP}, #{serviceAmount,jdbcType=VARCHAR}, #{depositRate,jdbcType=VARCHAR}, 
+      #{depositAmount,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.ClauseAdvance" >
+    insert into clauseAdvance
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        serialNum,
+      </if>
+      <if test="contractSerial != null" >
+        contractSerial,
+      </if>
+      <if test="financing != null" >
+        financing,
+      </if>
+      <if test="advance != null" >
+        advance,
+      </if>
+      <if test="advanceAmount != null" >
+        advanceAmount,
+      </if>
+      <if test="serviceAmountRate != null" >
+        serviceAmountRate,
+      </if>
+      <if test="advanceTime != null" >
+        advanceTime,
+      </if>
+      <if test="serviceAmount != null" >
+        serviceAmount,
+      </if>
+      <if test="depositRate != null" >
+        depositRate,
+      </if>
+      <if test="depositAmount != null" >
+        depositAmount,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="delFlg != null" >
+        delFlg,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="updater != null" >
+        updater,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="contractSerial != null" >
+        #{contractSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="financing != null" >
+        #{financing,jdbcType=VARCHAR},
+      </if>
+      <if test="advance != null" >
+        #{advance,jdbcType=VARCHAR},
+      </if>
+      <if test="advanceAmount != null" >
+        #{advanceAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceAmountRate != null" >
+        #{serviceAmountRate,jdbcType=VARCHAR},
+      </if>
+      <if test="advanceTime != null" >
+        #{advanceTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serviceAmount != null" >
+        #{serviceAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="depositRate != null" >
+        #{depositRate,jdbcType=VARCHAR},
+      </if>
+      <if test="depositAmount != null" >
+        #{depositAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.ClauseAdvanceExample" resultType="java.lang.Integer" >
+    select count(*) from clauseAdvance
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update clauseAdvance
+    <set >
+      <if test="record.serialNum != null" >
+        serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contractSerial != null" >
+        contractSerial = #{record.contractSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.financing != null" >
+        financing = #{record.financing,jdbcType=VARCHAR},
+      </if>
+      <if test="record.advance != null" >
+        advance = #{record.advance,jdbcType=VARCHAR},
+      </if>
+      <if test="record.advanceAmount != null" >
+        advanceAmount = #{record.advanceAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceAmountRate != null" >
+        serviceAmountRate = #{record.serviceAmountRate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.advanceTime != null" >
+        advanceTime = #{record.advanceTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.serviceAmount != null" >
+        serviceAmount = #{record.serviceAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.depositRate != null" >
+        depositRate = #{record.depositRate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.depositAmount != null" >
+        depositAmount = #{record.depositAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlg != null" >
+        delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creator != null" >
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updater != null" >
+        updater = #{record.updater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update clauseAdvance
+    set serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      contractSerial = #{record.contractSerial,jdbcType=VARCHAR},
+      financing = #{record.financing,jdbcType=VARCHAR},
+      advance = #{record.advance,jdbcType=VARCHAR},
+      advanceAmount = #{record.advanceAmount,jdbcType=VARCHAR},
+      serviceAmountRate = #{record.serviceAmountRate,jdbcType=VARCHAR},
+      advanceTime = #{record.advanceTime,jdbcType=TIMESTAMP},
+      serviceAmount = #{record.serviceAmount,jdbcType=VARCHAR},
+      depositRate = #{record.depositRate,jdbcType=VARCHAR},
+      depositAmount = #{record.depositAmount,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      updater = #{record.updater,jdbcType=VARCHAR},
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.ClauseAdvance" >
+    update clauseAdvance
+    <set >
+      <if test="contractSerial != null" >
+        contractSerial = #{contractSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="financing != null" >
+        financing = #{financing,jdbcType=VARCHAR},
+      </if>
+      <if test="advance != null" >
+        advance = #{advance,jdbcType=VARCHAR},
+      </if>
+      <if test="advanceAmount != null" >
+        advanceAmount = #{advanceAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceAmountRate != null" >
+        serviceAmountRate = #{serviceAmountRate,jdbcType=VARCHAR},
+      </if>
+      <if test="advanceTime != null" >
+        advanceTime = #{advanceTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serviceAmount != null" >
+        serviceAmount = #{serviceAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="depositRate != null" >
+        depositRate = #{depositRate,jdbcType=VARCHAR},
+      </if>
+      <if test="depositAmount != null" >
+        depositAmount = #{depositAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        delFlg = #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        updater = #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.ClauseAdvance" >
+    update clauseAdvance
+    set contractSerial = #{contractSerial,jdbcType=VARCHAR},
+      financing = #{financing,jdbcType=VARCHAR},
+      advance = #{advance,jdbcType=VARCHAR},
+      advanceAmount = #{advanceAmount,jdbcType=VARCHAR},
+      serviceAmountRate = #{serviceAmountRate,jdbcType=VARCHAR},
+      advanceTime = #{advanceTime,jdbcType=TIMESTAMP},
+      serviceAmount = #{serviceAmount,jdbcType=VARCHAR},
+      depositRate = #{depositRate,jdbcType=VARCHAR},
+      depositAmount = #{depositAmount,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      delFlg = #{delFlg,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+</mapper>

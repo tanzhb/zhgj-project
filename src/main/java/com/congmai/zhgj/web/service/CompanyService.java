@@ -5,6 +5,7 @@ import java.util.List;
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericService;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.CompanyExample;
 
 public interface CompanyService extends GenericService<Company, String>{
 
@@ -51,5 +52,15 @@ public interface CompanyService extends GenericService<Company, String>{
 	 * @return
 	 */
 	String selectComIdByComName(String comName);
+	
+	
+	int countCompanybySelective(CompanyExample example);
+
+	/**
+	 * 
+	 * @Description (删除企业)
+	 * @param comId
+	 */
+	void deleteCompany(String comId);
 	
 }

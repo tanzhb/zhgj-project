@@ -294,12 +294,12 @@
                           <!--/span-->
                           <div class="col-md-6">
                               <div class="form-group form-md-line-input">
-                                  <label class="control-label col-md-3">备案项号</label>
+                                  <label class="control-label col-md-3">一般交付周期<span class="required" aria-required="true"> * </span></label>
                                   <div class="col-md-9">
-                                      <input type="text" ng-hide="materielInput" ng-model="materiel.filingItemNo" class="form-control" >
+                                      <input type="text" name="deliveryCycle" ng-hide="materielInput" ng-model="materiel.deliveryCycle" class="form-control" >
                                       <div class="form-control-focus"> </div>
-                                      <span class="help-block">请输入备案项号</span>
-                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.filingItemNo}} </p>
+                                      <span class="help-block">请输入一般交付周期</span>
+                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.deliveryCycle}} </p>
                                   </div>
                               </div>
                           </div>
@@ -322,12 +322,12 @@
                           <!--/span-->
                           <div class="col-md-6">
                               <div class="form-group form-md-line-input">
-                                  <label class="control-label col-md-3">海关监管条件</label>
+                                  <label class="control-label col-md-3">备案项号</label>
                                   <div class="col-md-9">
-                                      <input type="text" ng-hide="materielInput" ng-model="materiel.customsSupervisionConditions" class="form-control" >
+                                      <input type="text" ng-hide="materielInput" ng-model="materiel.filingItemNo" class="form-control" >
                                       <div class="form-control-focus"> </div>
-                                      <span class="help-block">请输入海关监管条件</span>
-                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.customsSupervisionConditions}} </p>
+                                      <span class="help-block">请输入备案项号</span>
+                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.filingItemNo}} </p>
                                   </div>
                               </div>
                           </div>
@@ -350,12 +350,12 @@
                           <!--/span-->
                           <div class="col-md-6">
                               <div class="form-group form-md-line-input">
-                                  <label class="control-label col-md-3">保质期</label>
+                                  <label class="control-label col-md-3">海关监管条件</label>
                                   <div class="col-md-9">
-                                      <input type="text" ng-hide="materielInput" ng-model="materiel.qualityDate" class="form-control" >
+                                      <input type="text" ng-hide="materielInput" ng-model="materiel.customsSupervisionConditions" class="form-control" >
                                       <div class="form-control-focus"> </div>
-                                      <span class="help-block">请输入保质期</span>
-                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.qualityDate}} </p>
+                                      <span class="help-block">请输入海关监管条件</span>
+                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.customsSupervisionConditions}} </p>
                                   </div>
                               </div>
                           </div>
@@ -378,13 +378,12 @@
                           <!--/span-->
                           <div class="col-md-6">
                               <div class="form-group form-md-line-input">
-                                  <label class="control-label col-md-3">生产日期</label>
+                                  <label class="control-label col-md-3">保质期</label>
                                   <div class="col-md-9">
-                                      <input class="form-control form-control-inline input-medium date-picker" 
-                                      data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="materielInput" ng-model="materiel.manufactureDate" type="text" value="" />
+                                      <input type="text" ng-hide="materielInput" ng-model="materiel.qualityDate" class="form-control" >
                                       <div class="form-control-focus"> </div>
-                                      <span class="help-block">请选择生产日期</span>
-                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.manufactureDate}} </p>
+                                      <span class="help-block">请输入保质期</span>
+                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.qualityDate}} </p>
                                   </div>
                               </div>
                           </div>
@@ -407,6 +406,22 @@
                           <!--/span-->
                           <div class="col-md-6">
                               <div class="form-group form-md-line-input">
+                                  <label class="control-label col-md-3">生产日期</label>
+                                  <div class="col-md-9">
+                                      <input class="form-control form-control-inline input-medium date-picker" 
+                                      data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="materielInput" ng-model="materiel.manufactureDate" type="text" value="" />
+                                      <div class="form-control-focus"> </div>
+                                      <span class="help-block">请选择生产日期</span>
+                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.manufactureDate}} </p>
+                                  </div>
+                              </div>
+                          </div>
+                          <!--/span-->
+                      </div>
+                      <!--/row-->
+                      <div class="row">
+                      		<div class="col-md-6">
+                              <div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3">备注</label>
                                   <div class="col-md-9">
                                       <input type="text" ng-hide="materielInput" ng-model="materiel.remark" class="form-control" >
@@ -416,10 +431,6 @@
                                   </div>
                               </div>
                           </div>
-                          <!--/span-->
-                      </div>
-                      <!--/row-->
-                      <div class="row">
                           <div class="col-md-6">
                               <div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3">是否BOM物料</label>
@@ -434,6 +445,9 @@
                               </div>
                           </div>
                           <!--/span-->
+                      </div>
+                      <!--/row-->
+                      <div class="row">
                           <div class="col-md-6">
                               <div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3">版本</label>
@@ -650,7 +664,7 @@
                                                  <span class="fileinput-new">上传附件</span>
                                                  <span class="fileinput-exists">更改</span>
                                                  <input type="file" name="..." nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="file[$index].file" ng-click="uploadFile($index)" > </span>
-                                             <span class="fileinput-filename">{{_file.file.substring(_file.file.indexOf("_"))}}</span> &nbsp;
+                                             <span class="fileinput-filename">{{_file.file.substring(_file.file.indexOf("_")+1)}}</span> &nbsp;
                                              <a href="javascript:;" class="close fileinput-exists" ng-click="removefile($index)" data-dismiss="fileinput"> </a>
                                          </div>
                                          <div ng-hide="fileInfoInput"   ng-if="file[$index].file!=null&&file[$index].file!=''"  class="fileinput fileinput-exists" data-provides="fileinput">
@@ -658,7 +672,7 @@
                                                  <span class="fileinput-new">上传附件</span>
                                                  <span class="fileinput-exists">更改</span>
                                                  <input type="file" name="..." nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="file[$index].file" ng-click="uploadFile($index)" > </span>
-                                             <span class="fileinput-filename">{{_file.file.substring(_file.file.indexOf("_"))}}</span> &nbsp;
+                                             <span class="fileinput-filename">{{_file.file.substring(_file.file.indexOf("_")+1)}}</span> &nbsp;
                                              <a href="javascript:;" class="close fileinput-exists"  ng-click="removefile($index)" data-dismiss="fileinput"> </a>
                                          </div>
                                        	<label   ng-show="fileInfoShow" ng-if="file[$index].file==null||file[$index].file==''" class="c_edit" >未上传附件</label>
@@ -683,7 +697,7 @@
                           </table>
                       </div>
                       <div class="form-actions right">
-							<a  class="btn blue btn-sm"  ng-click="addFile()"   >
+							<a  class="btn blue btn-sm"  ng-hide="fileInfoInput" ng-click="addFile()"   >
 	                              <i class="fa fa-plus"></i> 增加
 	                       	</a> 
                   		</div>
@@ -747,7 +761,7 @@
                           </table>
                       </div>
                       <div class="form-actions right">
-							<a  class="btn blue btn-sm"  ng-click="addBOM()"   >
+							<a  class="btn blue btn-sm" ng-hide="BOMInfoInput" ng-click="addBOM()"   >
 	                              <i class="fa fa-plus"></i> 增加
 	                       	</a> 
                   		</div>
@@ -772,28 +786,25 @@
                           <table class="table table-bordered table-hover">
                               <thead>
                                   <tr>
-                                      <th>供应商</th>
+<!--                                       <th>供应商</th> -->
                                       <th>供应商名称</th>
                                       <th>供应商物料编号</th>
                                       <th style="width:100px;"></th>
                                   </tr>
                               </thead>
                               <tbody>
-                                  <tr ng-repeat="_supplyMateriel in supplyMateriel track by $index" ng-mouseover="showOperation('supplyMateriel',$index)" ng-mouseleave="hideOperation('supplyMateriel',$index)"  repeat-done="repeatDone()">
+                                  <tr ng-repeat="_supplyMateriel in supplyMateriel track by $index" ng-mouseover="showOperation('supplyMateriel',$index)" ng-mouseleave="hideOperation('supplyMateriel',$index)" >
 			                          <td>
 		                                 	<div ng-hide="supplyMaterielInfoInput">
 			                                 	<select class="form-control" id="supplyComId[$index]" name="supplyComId" class="bs-select form-control diySelectCss" data-live-search="true" data-size="8"  ng-model="supplyMateriel[$index].supplyComId"  >
-	                                              <option value=""></option>
-	                                             	<option value="1" >供应商1</option>
-	                                               <option value="2" >供应商2</option>
-	                                               <option value="3" >供应商3</option>
+	                                              	<option ng-repeat="_supplier in suppliers" value="{{_supplier.comId}}" repeat-done="repeatDone()">{{_supplier.comName}}</option>
 	                                             </select>
                                              </div>
-			                                <p class="form-control-static" ng-show="supplyMaterielInfoShow"> {{_supplyMateriel.supplyComId}} </p>
+			                                <p class="form-control-static" ng-show="supplyMaterielInfoShow"> {{_supplyMateriel.supply.comName}} </p>
 			                          </td>
-			                          <td>
+<!-- 			                          <td>
 		                                 	<p class="form-control-static" ng-show="supplyMaterielInfoShow"> {{_supplyMateriel.supply.comName}} </p>
-			                          </td>
+			                          </td> -->
 			                           <td>
                                       		<input type="text" id="supplyMaterielNum[$index]" name="supplyMaterielNum" class="form-control" ng-hide="supplyMaterielInfoInput" ng-model="supplyMateriel[$index].supplyMaterielNum"  >
 			                                <p class="form-control-static" ng-show="supplyMaterielInfoShow"> {{_supplyMateriel.supplyMaterielNum}} </p>
@@ -809,13 +820,13 @@
                           </table>
                       </div>
                       <div class="form-actions right">
-							<a  class="btn blue btn-sm"  ng-click="addSupplyMateriel()"   >
+							<a  class="btn blue btn-sm"  ng-hide="supplyMaterielInfoInput" ng-click="addSupplyMateriel()"   >
 	                              <i class="fa fa-plus"></i> 增加
 	                       	</a> 
                   		</div>
                   </form>
           </div>
-          <!-- 附件 end-->
+          <!-- 供应商 end-->
           </div>
       </div>
 </div>

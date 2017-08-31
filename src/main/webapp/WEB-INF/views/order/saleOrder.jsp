@@ -52,7 +52,7 @@
 								class="tool-action" data-toggle="modal" data-target="#import"> <i class="fa fa-upload"></i> 导入
 							</a></li> 
 							<li><a href="javascript:;" data-action="1"
-								class="tool-action" ng-click="exportMateriel()"> <i class="fa fa-file-excel-o"></i> 导出
+								class="tool-action" ng-click="exportSaleOrder()"> <i class="fa fa-file-excel-o"></i> 导出
 							</a></li>
 						</ul>
 					</div>
@@ -74,20 +74,6 @@
 	                            <th> 下单日期 </th>
 	                        </tr>
 	                    </thead>
-	                    <tfoot>
-	                        <tr>
-	                            <th></th>
-	                            <th> 销售订单号 </th>
-	                            <th> 采购方 </th>
-	                            <th> 销售商品 </th>
-	                            <th> 金额 </th>
-	                            <th> 配送 </th>
-	                            <th> 服务模式 </th>
-	                            <th> 关联销售合同 </th>
-	                            <th> 关联采购单 </th>
-	                            <th> 下单日期 </th>
-	                        </tr>
-	                    </tfoot>
 	                    <tbody>
 	                    </tbody>
 	                </table>
@@ -98,7 +84,7 @@
  </div>
 
  
- <!-- 删除用户modal 开始 -->
+ <!-- 删除订单modal 开始 -->
 	<div id="delSaleOrderModal" class="modal fade" tabindex="-1"
 		data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog">
@@ -120,4 +106,6 @@
 			</div>
 		</div>
 	</div>
-<!-- 删除用户modal 结束 -->
+<!-- 删除订单modal 结束 -->
+<!-- 导入订单modal 开始 -->
+<jsp:include  page="importOrder.jsp"/>

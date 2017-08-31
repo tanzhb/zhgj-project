@@ -181,12 +181,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<div class="form-group form-md-line-input col-md-6">
 							<label class="col-md-3 control-label" for="form_control_1">备注
 							</label>
-							<div class="col-md-9">
+							<div class="col-md-9" ng-show="true" id="remarkInput">
 								<input type="text" class="form-control"
 									ng-model="contractVO.remark" placeholder="备注" id="remark"/>
 								<div class="form-control-focus"></div>
 								<span class="help-block">备注</span>
 							</div>
+							<!-- <div class="col-md-9" ng-show="false" id="remarkSpan">
+								<label class="col-md-12 control-label" for="form_control_1">{{contractVO.remark}}</label>
+							</div> -->
 						</div>
 						<!--/span-->
 					</div>
@@ -249,6 +252,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<button type="button" ng-click="saveUserContract()" class="btn blue">
 							<i class="fa fa-check"></i> 保存
 						</button>
+						<button type="button" class="btn default"
+							ng-click="print()">
+							<i class="fa fa-print"></i>打印
+						</button>
 					</div>
 			</form>
 			<!-- END FORM-->
@@ -268,34 +275,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	   todayHighlight: true
   	});  
    
-  	 $('#startDate').datepicker({
-  		autoclose: true,
-  		todayBtn: 'linked',
-  		 todayHighlight: true
-  		}).on('changeDate',function(ev){
-  		var startDate=$("#startDate").val();
-  		var endDate=$("#endDate").val();
-  		if(startDate>endDate&&endDate!=null&&endDate!=""){
-  		alert("开始时间不能大于结束时间  ！");
-  		$("#startDate").focus();
-  		}
-  		});
-  	
-  	
-  		$('#endDate').datepicker({
-  		autoclose: true,
-  		todayBtn: 'linked',
-  		todayHighlight: true
-  		}).on('changeDate',function(ev){
-  		var startDate=$("#startDate").val();
-  		var endDate=$("#endDate").val();
-  		
-  		if(endDate<startDate){
-  		alert("结束时间不能小于开始时间 ！");
-  		$("#endDate").focus();
-  		}else{
-  		}
-  		});
+     $('#startDate').datepicker({
+ 		autoclose: true,
+ 		todayBtn: 'linked',
+ 		 todayHighlight: true
+ 		}).on('changeDate',function(ev){
+ 		var startDate=$("#startDate").val();
+ 		var endDate=$("#endDate").val();
+ 		if(startDate>endDate&&endDate!=null&&endDate!=""){
+ 		/* alert("开始时间不能大于结束时间  ！"); */
+ 		toastr.warning('开始时间不能大于结束时间  ！');
+ 		/* $("#startDate").focus(); */
+ 		$("#startDate").val("");
+ 		}
+ 		});
+ 	
+ 	
+ 		$('#endDate').datepicker({
+ 		autoclose: true,
+ 		todayBtn: 'linked',
+ 		todayHighlight: true
+ 		}).on('changeDate',function(ev){
+ 		var startDate=$("#startDate").val();
+ 		var endDate=$("#endDate").val();
+ 		
+ 		if(endDate<startDate){
+ 		/* alert("结束时间不能小于开始时间 ！"); */
+ 		toastr.warning('结束时间不能小于开始时间 ！');
+ 		$("#endDate").val("");
+ 		}else{
+ 		}
+ 		}); 
      
      
      

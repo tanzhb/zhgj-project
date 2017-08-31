@@ -115,7 +115,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="releaseDate"> <span class="required"> * </span>发布日期：</label>
                                                     <div class="col-md-7">
-                                                        <input type="text" class="form-control form-control-inline input-medium date-picker" readonly="readonly" data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="releaseDate" name="releaseDate" ng-model="demandPlan.releaseDate" ng-hide="demandPlanAdd" >
+                                                        <input type="text" class="form-control date-picker" size="16" data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="releaseDate" name="releaseDate" ng-model="demandPlan.releaseDate" ng-hide="demandPlanAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="demandPlanView">{{demandPlan.releaseDate}}</p>
                                                     </div>
@@ -181,8 +181,8 @@
                                                     <td colspan="10" align="center" >暂无数据</td>
                                                 </tr>
                                             </tbody>
-                                            <tbody ng-repeat="materiel in rootMateriels track by $index"  repeat-done="repeatDone()">
-                                                <tr ng-mouseover="showOperation('contact',$index)" ng-mouseleave="hideOperation('contact',$index)">
+                                            <tbody>
+                                                <tr  ng-repeat="materiel in rootMateriels track by $index"  repeat-done="repeatDone()" ng-mouseover="showOperation('contact',$index)" ng-mouseleave="hideOperation('contact',$index)">
                                                     <td>
                                                     	<span ng-show="demandPlanMaterielView{{$index}}">{{materiel.materielNum}}</span>
                                                     	<span ng-hide="demandPlanMaterielEdit{{$index}}"><a href="javascript:;" ng-click="addMateriel('single',$index)">{{materiel.materielNum}}</a></span>
@@ -191,29 +191,38 @@
                                                     <td>{{materiel.specifications}}</td>
                                                     <td>{{materiel.unit}}</td>
                                                     <td>
-                                                    	<input type="text" ng-hide="demandPlanMaterielEdit{{$index}}" class="form-control  input-small" ng-model="materiel.amount" value="">
+                                                    	<input type="text" ng-hide="demandPlanMaterielEdit{{$index}}" class="form-control  input-small" id="amount{{$index}}" ng-model="materiel.amount" value="">
+                                                   	 	 <span class="help-block"></span>
                                                    	 	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.amount}}</label>
                                                     </td>
                                                     <td>
 	                                                    <div  ng-hide="demandPlanMaterielEdit{{$index}}" class="input-group input-medium date date-picker"
 															 data-date-format="yyyy-mm-dd"
 															data-date-viewmode="years">
-															<input type="text" class="form-control" readonly="" id="validityDate{{$index}}" ng-model="materiel.deliveryDate" name="validityDate"
+															<input type="text" class="form-control" readonly="" id="deliveryDate{{$index}}" ng-model="materiel.deliveryDate" name="deliveryDate"
 																> <span class="input-group-btn">
 																<button class="btn default " type="button">
 																	<i class="fa fa-calendar"></i>
 																</button>
 															</span>
-															<span class="help-block"></span>
 														</div>
+														<span class="help-block"></span>
 														<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.deliveryDate}}</label>
                                                     </td>
                                                     <td>{{materiel.remainTime}}</td>
                                                     <td>
-                                                    	<input  ng-hide="demandPlanMaterielEdit{{$index}}" type="text" class="form-control" ng-model="materiel.deliveryAddress" value="">
+                                                    	<input  ng-hide="demandPlanMaterielEdit{{$index}}" id="deliveryAddress{{$index}}" type="text" class="form-control" ng-model="materiel.deliveryAddress" value="">
+                                                    	<span class="help-block"></span>
                                                     	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.deliveryAddress}}</label>
                                                     </td>
-                                                    <td>{{materiel.remark}}</td>
+                                                    <td>
+	                                                    <select ng-hide="demandPlanMaterielEdit{{$index}}"  class="form-control" ng-model="materiel.supplyMaterielSerial" >
+	                                                    	<option ng-repeat="m in materiel.supplyMateriels" value="{{m.serialNum}}"  >
+	                                                    		{{m.supply.comName}}
+	                                                    	</option>
+	                                                    </select>
+	                                                    <label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.supplyName}}</label>
+                                                    </td>
                                                     <td style="width: 140px;">
                                                     	<span>
                                                     		&nbsp;&nbsp;&nbsp;&nbsp;

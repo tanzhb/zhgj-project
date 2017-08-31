@@ -32,4 +32,6 @@ public interface DemandPlanMaterielMapper extends GenericDao<DemandPlanMateriel,
     int updateByPrimaryKeySelective(DemandPlanMateriel record);
 
     int updateByPrimaryKey(DemandPlanMateriel record);
+    
+    String selectSupplyName(String materielSerial);
 }

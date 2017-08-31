@@ -100,11 +100,11 @@ public class WareHousepositionController {
 	 * @return
 	 */
 	@RequestMapping(value = "/deleteWarehouseposition", method = RequestMethod.POST)
-	public ResponseEntity<Void> deleteWarehouse(@RequestBody String ids) {
-		if ("".equals(ids) || ids == null) {
+	public ResponseEntity<Void> deleteWarehouse(@RequestBody String id) {
+		if ("".equals(id) || id == null) {
 			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
 		}
-		warehousepositionService.deleteWarehouseposition(ids);
+		warehousepositionService.delete(id);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }

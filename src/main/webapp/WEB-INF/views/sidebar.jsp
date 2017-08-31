@@ -78,15 +78,15 @@
             </a> -->
             <a href="javascript:;" class="nav-link nav-toggle">
                 <i class="icon-check"></i>
-                <span class="title">采购订单</span>
+                <span class="title">采购管理</span>
                 <span class="arrow "></span>
             </a>
             <ul class="sub-menu">
-                <!-- <li>
-                    <a ui-sref="">
+                <li>
+                    <a ui-sref="buyOrder">
                         <i class="icon-puzzle"></i> 采购订单</span>
                     </a>
-                </li> -->
+                </li>
                 <li>
                     <a ui-sref="purchaseForecast">
                         <i class="icon-paper-clip"></i>采购预测</span>
@@ -99,23 +99,56 @@
                 </li> -->
             </ul>
         </li>
-        <li class="nav-item">
-            <a ui-sref="profile.dashboard" id="sidebar_menu_link_profile">
-                <i class="icon-user"></i>
-                <span class="title">库存</span>
-            </a>
+       <li class="nav-item">
+            <a href="javascript:;" class="nav-link nav-toggle">
+                <i class="icon-settings"></i>
+                <span class="title">物流管理</span>
+                <span class="arrow "></span>
+            </a> 
+            
+            <ul class="sub-menu">
+            <li>
+                    <a ui-sref="stock">
+                        <i class="icon-paper-clip"></i> 库存</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="takeDelivery">
+                        <i class="icon-paper-clip"></i> 收货</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="stockInOutCheck">
+                        <i class="icon-check"></i> 检验</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="delivery">
+                        <i class="icon-puzzle"></i>发货</span>
+                    </a>
+                </li>
+            </ul>
+
         </li>
         <li class="nav-item">
-            <a ui-sref="todo">
+            <a ui-sref="statement">
                 <i class="icon-check"></i>
                 <span class="title">对账单</span>
             </a>
         </li>
         <li class="nav-item">
-            <a ui-sref="profile.dashboard" id="sidebar_menu_link_profile">
+            <a ui-sref="profile.dashboard" id="sidebar_menu_link_profile"  class="nav-link nav-toggle">
                 <i class="icon-user"></i>
                 <span class="title">收付款</span>
+                <span class="arrow "></span>
             </a>
+            <ul class="sub-menu">
+	            	<li>
+	                    <a ui-sref="paymentRecord">
+	                        <i class="icon-paper-clip"></i>收付款记录</span>
+	                    </a>
+	                </li>
+	         </ul>
         </li>
         <li class="nav-item">
             <a ui-sref="todo">

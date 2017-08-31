@@ -1,10 +1,12 @@
 package com.congmai.zhgj.web.service.impl;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.congmai.zhgj.core.util.ApplicationUtils;
@@ -120,6 +122,17 @@ public class MaterielServiceImpl implements MaterielService {
     		return null;
     	}
 		return materielList.get(0);
+	}
+
+	@Override
+	public List<Materiel> chooseMateriel(String ids) {
+		if(StringUtils.isNotEmpty(ids)){
+			List<String> idList = Arrays.asList(ids.split(","));
+			MaterielExample example = new MaterielExample();
+			example.createCriteria().andSerialNumIn(idList).andDelFlgEqualTo("0");
+			return MaterielMapper.selectByExample(example);
+		}
+		return null;
 	}
 
 }

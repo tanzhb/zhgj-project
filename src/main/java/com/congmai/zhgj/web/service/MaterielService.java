@@ -28,4 +28,6 @@ public interface MaterielService extends GenericService<Materiel, String> {
 	void updateVersion(Materiel materiel);
 
 	Materiel getMaterielInfoByMaterielId(String materielId);
+
+	List<Materiel> chooseMateriel(String ids);
 }

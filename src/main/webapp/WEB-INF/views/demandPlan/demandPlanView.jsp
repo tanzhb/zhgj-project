@@ -152,6 +152,26 @@
 					<div class="tab-pane fade active in" id="tab_1_1">
                     	<div class="" id="tab2_c">
                     		 <div class="portlet-body form">
+                    		 		<!-- <div class="dataTables_scrollHead" style="overflow: hidden; position: relative; border: 0px; width: 100%;">
+	                    		 		<div class="dataTables_scrollHeadInner" style="box-sizing: content-box;">
+		                    		 		<table class="table table-striped table-bordered table-hover order-column dataTable no-footer" role="grid" style="margin-left: 0px;">
+			                    		 		<thead>
+			                                            <tr role="row">
+				                                           <th>物料编号</th>
+		                                                    <th>物料名称</th>
+		                                                    <th>规格型号</th>
+		                                                    <th>单位</th>
+		                                                    <th>数量</th>
+		                                                    <th>交付日期</th>
+		                                                    <th>距离交付</th>
+		                                                    <th>交付地点</th>
+		                                                    <th>供应商</th>
+		                                                    <th style="width: 140px;"></th>
+			                                            </tr>
+			                                     </thead>
+		                                     </table>
+	                                     </div>
+                                     </div> -->
                                     <div class="table-scrollable">
                                         <table class="table table-bordered table-hover">
                                             <thead>
@@ -173,39 +193,49 @@
                                                     <td colspan="10" align="center" >暂无数据</td>
                                                 </tr>
                                             </tbody>
-                                            <tbody ng-repeat="materiel in rootMateriels track by $index"  repeat-done="repeatDone()">
-                                                <tr ng-mouseover="showOperation('contact',$index)" ng-mouseleave="hideOperation('contact',$index)">
-                                                    <td>
+                                            <tbody  style="position: relative; overflow: auto; height: 300px; width: 100%;">
+                                                <tr ng-repeat="materiel in rootMateriels track by $index"  repeat-done="repeatDone()" ng-mouseover="showOperation('contact',$index)" ng-mouseleave="hideOperation('contact',$index)">
+                                                    <td><span class="help-block"></span>
                                                     	<span ng-show="demandPlanMaterielView{{$index}}">{{materiel.materielNum}}</span>
                                                     	<span ng-hide="demandPlanMaterielEdit{{$index}}"><a href="javascript:;" ng-click="addMateriel('single',$index)">{{materiel.materielNum}}</a></span>
                                                     </td>
-                                                    <td>{{materiel.materielName}}</td>
-                                                    <td>{{materiel.specifications}}</td>
-                                                    <td>{{materiel.unit}}</td>
+                                                    <td><span class="help-block"></span><label>{{materiel.materielName}}</label></td>
+                                                    <td><span class="help-block"></span><label>{{materiel.specifications}}</label></td>
+                                                    <td><span class="help-block"></span><label>{{materiel.unit}}</label></td>
                                                     <td>
-                                                    	<input type="text" ng-hide="demandPlanMaterielEdit{{$index}}" class="form-control  input-small" ng-model="materiel.amount" value="">
+                                                    	<input type="text" ng-hide="demandPlanMaterielEdit{{$index}}" class="form-control  input-small" id="amount{{$index}}" ng-model="materiel.amount" value="">
+                                                   	 	<span class="help-block"></span>
                                                    	 	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.amount}}</label>
                                                     </td>
                                                     <td>
 	                                                    <div  ng-hide="demandPlanMaterielEdit{{$index}}" class="input-group input-medium date date-picker"
 															 data-date-format="yyyy-mm-dd"
 															data-date-viewmode="years">
-															<input type="text" class="form-control" readonly="" id="validityDate{{$index}}" ng-model="materiel.deliveryDate" name="validityDate"
+															<input type="text" class="form-control" readonly="" id="deliveryDate{{$index}}" ng-model="materiel.deliveryDate" name="deliveryDate"
 																> <span class="input-group-btn">
 																<button class="btn default " type="button">
 																	<i class="fa fa-calendar"></i>
 																</button>
 															</span>
-															<span class="help-block"></span>
 														</div>
+														<span class="help-block"></span>
 														<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.deliveryDate}}</label>
                                                     </td>
                                                     <td>{{materiel.remainTime}}</td>
                                                     <td>
-                                                    	<input  ng-hide="demandPlanMaterielEdit{{$index}}" type="text" class="form-control" ng-model="materiel.deliveryAddress" value="">
+                                                    	<input  ng-hide="demandPlanMaterielEdit{{$index}}" type="text" class="form-control" id="deliveryAddress{{$index}}" ng-model="materiel.deliveryAddress" value="">
+                                                    	<span class="help-block"></span>
                                                     	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.deliveryAddress}}</label>
                                                     </td>
-                                                    <td>{{materiel.remark}}</td>
+                                                    <td>
+                                                    	<select ng-hide="demandPlanMaterielEdit{{$index}}"  class="form-control" ng-model="materiel.supplyMaterielSerial" >
+	                                                    	<option ng-repeat="m in materiel.supplyMateriels" value="{{m.serialNum}}"  >
+	                                                    		{{m.supply.comName}}
+	                                                    	</option>
+	                                                    </select>
+	                                                    <span class="help-block"></span>
+	                                                    <label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.supplyName}}</label>
+                                                    </td>
                                                     <td style="width: 140px;">
                                                     	<span>
                                                     		&nbsp;&nbsp;&nbsp;&nbsp;

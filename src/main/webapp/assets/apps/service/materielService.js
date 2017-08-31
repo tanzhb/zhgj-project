@@ -68,7 +68,7 @@ angular.module('MetronicApp').service('materielService',
 	                    deferred.reject('连接服务器出错！');
 	                })
 					return deferred.promise;
-				},
+				},//物料导入
 				uploadExcel : function(params){
 					var deferred = $q.defer();
 					var fd = new FormData();
@@ -108,6 +108,35 @@ angular.module('MetronicApp').service('materielService',
 	                    deferred.reject('连接服务器出错！');
 	                })
 					return deferred.promise;
+				},chooseMateriels : function(ids){//选择的供应物料
+					var deferred = $q.defer();
+					$http.post("rest/materiel/chooseMateriel",
+						ids//传整个表单数据  
+			    	).then(function success(result) {
+			            deferred.resolve(result);//请求成功
+			        }, function error(err) {
+			            deferred.reject(err);//请求失败
+			        });
+			        return deferred.promise;//返回承诺
+				},chooseBasicMateriels : function(ids){//选择的标准物料
+					var deferred = $q.defer();
+					$http.post("rest/materiel/chooseBasicMateriels",
+						ids//传整个表单数据  
+			    	).then(function success(result) {
+			            deferred.resolve(result);//请求成功
+			        }, function error(err) {
+			            deferred.reject(err);//请求失败
+			        });
+			        return deferred.promise;//返回承诺
+				},getSuppliers : function(ids){//获取供应商
+					var deferred = $q.defer();
+					$http.post("rest/company/getSuppliers"
+			    	).then(function success(result) {
+			            deferred.resolve(result);//请求成功
+			        }, function error(err) {
+			            deferred.reject(err);//请求失败
+			        });
+			        return deferred.promise;//返回承诺
 				}
 				
 				

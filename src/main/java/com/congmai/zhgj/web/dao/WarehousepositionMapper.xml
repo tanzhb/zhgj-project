@@ -90,7 +90,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from warehouseposition
+    from warehousePosition
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -101,21 +101,21 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from warehouseposition
+    from warehousePosition
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from warehouseposition
+    delete from warehousePosition
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.WarehousepositionExample" >
-    delete from warehouseposition
+    delete from warehousePosition
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.congmai.zhgj.web.model.Warehouseposition" >
-    insert into warehouseposition (serialNum, warehouseSerial, positionNum, 
+    insert into warehousePosition (serialNum, warehouseSerial, positionNum, 
       positionName, storageAttribute, maxRows, 
       maxCols, maxLayers, storageType, 
       storageMode, defaultLWH, defaultVolume, 
@@ -131,7 +131,7 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.Warehouseposition" >
-    insert into warehouseposition
+    insert into warehousePosition
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
         serialNum,
@@ -246,13 +246,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.congmai.zhgj.web.model.WarehousepositionExample" resultType="java.lang.Integer" >
-    select count(*) from warehouseposition
+    select count(*) from warehousePosition
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update warehouseposition
+    update warehousePosition
     <set >
       <if test="record.serialNum != null" >
         serialNum = #{record.serialNum,jdbcType=VARCHAR},
@@ -314,7 +314,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update warehouseposition
+    update warehousePosition
     set serialNum = #{record.serialNum,jdbcType=VARCHAR},
       warehouseSerial = #{record.warehouseSerial,jdbcType=VARCHAR},
       positionNum = #{record.positionNum,jdbcType=VARCHAR},
@@ -338,7 +338,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.Warehouseposition" >
-    update warehouseposition
+    update warehousePosition
     <set >
       <if test="warehouseSerial != null" >
         warehouseSerial = #{warehouseSerial,jdbcType=VARCHAR},
@@ -395,7 +395,7 @@
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.Warehouseposition" >
-    update warehouseposition
+    update warehousePosition
     set warehouseSerial = #{warehouseSerial,jdbcType=VARCHAR},
       positionNum = #{positionNum,jdbcType=VARCHAR},
       positionName = #{positionName,jdbcType=VARCHAR},
@@ -416,9 +416,37 @@
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
   <delete id="deleteWarehouseposition" parameterType="java.util.List">
-    	delete from warehouseposition where serialNum in
+    	delete from warehousePosition where serialNum in
         <foreach item="idList" collection="list" open="(" close=")" separator=",">
             #{idList}
         </foreach>
     </delete>
+    <update id="deleteByWarehouseSerial" parameterType="com.congmai.zhgj.web.model.Warehouseposition" >
+    update  warehousePosition set delFlg =1 
+    where warehouseSerial = #{warehouseSerial,jdbcType=VARCHAR}
+  </update>
+  <insert id="insertWarehouseposition"  parameterType="java.util.List"> 
+   insert into warehousePosition (serialNum, warehouseSerial, positionNum, 
+      positionName, storageAttribute, maxRows, 
+      maxCols, maxLayers, storageType,storageMode,defaultLWH,defaultVolume,defaultBearing,creator,createTime,
+      updater, updateTime) 
+    values  
+    <foreach collection="list" item="item" index="index" separator="," >  
+       (#{item.serialNum,jdbcType=VARCHAR}, #{item.warehouseSerial,jdbcType=VARCHAR}, #{item.positionName,jdbcType=VARCHAR}, 
+      #{item.storageAttribute,jdbcType=DATE}, #{item.maxRows,jdbcType=VARCHAR}, #{item.maxCols,jdbcType=VARCHAR}, 
+      #{item.maxLayers,jdbcType=VARCHAR},#{item.storageType,jdbcType=VARCHAR},#{item.storageMode,jdbcType=VARCHAR},
+      #{item.defaultLWH,jdbcType=VARCHAR},#{item.defaultVolume,jdbcType=VARCHAR},#{item.defaultBearing,jdbcType=VARCHAR},
+      #{item.creator,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
+      #{item.updater,jdbcType=VARCHAR}, #{item.updateTime,jdbcType=TIMESTAMP})  
+    </foreach>  
+</insert>  
+<select id="selectlistByWarehouseSerial" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.Warehouseposition" >
+    select 
+    <include refid="Base_Column_List" />
+    from warehousePosition
+       	where delFlg ='0'
+     <if test="warehouseSerial != null" >
+        and warehouseSerial = #{warehouseSerial,jdbcType=VARCHAR}
+      </if>
+  </select>
 </mapper>

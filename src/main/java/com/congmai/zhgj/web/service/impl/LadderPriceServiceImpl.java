@@ -18,6 +18,7 @@ import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.web.dao.LadderPriceMapper;
+import com.congmai.zhgj.web.model.CompanyQualification;
 import com.congmai.zhgj.web.model. LadderPrice;
 import com.congmai.zhgj.web.model.LadderPriceExample;
 import com.congmai.zhgj.web.model.PriceList;
@@ -43,7 +44,9 @@ LadderPriceService {
 	}
 
 	@Override
-	public List<LadderPrice> selectListByPriceSerial(LadderPrice record) {
+	public List<LadderPrice> selectListByPriceSerial(String PriceSerial) {
+		LadderPrice record=new LadderPrice();
+		record.setPriceSerial(PriceSerial);
 		return ladderPriceMapper.selectByPriceSerial(record);
 	}
 
@@ -64,7 +67,17 @@ LadderPriceService {
 		return ladderPriceMapper.selectByPrimaryKey(serialNum);
 	}
 	@Override
-	public void insertLadderPrices(List<LadderPrice> ladderPrices) {
+	public void insertLadderPrices(List<LadderPrice> ladderPrices,String userName) {
+if(!CollectionUtils.isEmpty(ladderPrices)){
+			
+			for(LadderPrice ladderPrice:ladderPrices){
+				ladderPrice.setSerialNum(UUID.randomUUID().toString().replace("-",""));
+				ladderPrice.setCreateTime(new Date());
+				ladderPrice.setCreator(userName);
+				ladderPrice.setUpdateTime(new Date());
+				ladderPrice.setUpdater(userName);
+    		}
+		}
 		ladderPriceMapper.insertLadderPriceList(ladderPrices);
 	}
 	

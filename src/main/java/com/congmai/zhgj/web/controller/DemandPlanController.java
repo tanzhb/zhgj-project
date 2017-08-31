@@ -1,12 +1,14 @@
 package com.congmai.zhgj.web.controller;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +35,8 @@ import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.core.util.ExcelReader;
-import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
-import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.model.DemandPlan;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.Materiel;
@@ -75,11 +79,16 @@ public class DemandPlanController {
      * @param request
      * @return
      */
-    @RequestMapping("demandPlanList")
+    @RequestMapping(value="demandPlanList",method=RequestMethod.POST)
     @ResponseBody
-    public Page<DemandPlan> companyList(Map<String, Object> map,HttpServletRequest request,DemandPlan demandPlan,int pageIndex,int pageSize) {
-    	
-    	Page<DemandPlan> demandPlans = demandPlanService.getListByCondition(demandPlan, pageIndex, 5);
+    public Page<DemandPlan> companyList(Map<String, Object> map,HttpServletRequest request,@RequestBody DemandPlan demandPlan) {
+    	/*try {
+			searchKey = URLDecoder.decode(searchKey, "UTF-8");
+			demandPlan.setSearchKey(searchKey);
+		} catch (Exception e) {
+			System.out.println(this.getClass()+"----------"+e.getMessage());
+		}*/
+    	Page<DemandPlan> demandPlans = demandPlanService.getListByCondition(demandPlan, demandPlan.getPageIndex(), 5);
 		return demandPlans;
     }
     
@@ -196,7 +205,8 @@ public class DemandPlanController {
         				materiel.setSpecifications(materiel.getMateriel().getSpecifications());
         				materiel.setUnit(materiel.getMateriel().getUnit());
         				materiel.setMaterielSerial(materiel.getMateriel().getSerialNum());
-        				materiel.setSupplyMaterielSerial(materiel.getMateriel().getSerialNum());
+        				materiel.setSupplyMateriels(materiel.getMateriel().getSupplyMateriels());
+        				
     				}
     			}
     		}
@@ -250,6 +260,48 @@ public class DemandPlanController {
     }
     
     
+    
+    /**
+     * @Description (获取列表数据)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="demandPlanMaterialList",method=RequestMethod.POST)
+    public ResponseEntity<Map<String,Object>> demandPlanMaterialList(Map<String, Object> map,HttpServletRequest request,@RequestBody String params) {
+    	try {
+    		params = URLDecoder.decode(params, "UTF-8");
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	   ObjectMapper objectMapper = new ObjectMapper();
+    	   DemandPlanMateriel  demandPlanMateriel = null;
+		   try {
+			   demandPlanMateriel = objectMapper.readValue(params.substring(7),DemandPlanMateriel.class);
+			} catch (JsonParseException e) {
+				// TODO Auto-generated catch block
+				System.out.println(this.getClass()+"---------"+ e.getMessage());
+			} catch (JsonMappingException e) {
+				// TODO Auto-generated catch block
+				System.out.println(this.getClass()+"---------"+ e.getMessage());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println(this.getClass()+"---------"+ e.getMessage());
+			} catch (Exception e) {
+		    	// TODO Auto-generated catch block
+		    	System.out.println(this.getClass()+"---------"+ e.getMessage());
+			}
+
+    	List<DemandPlanMateriel> demandPlanMateriels = demandPlanMaterielService.getListByCondition(demandPlanMateriel,1, 99999999).getResult();
+		// 封装datatables数据返回到前台
+		Map<String,Object> pageMap = new HashMap<String,Object>();
+		pageMap.put("draw", 1);
+		pageMap.put("recordsTotal", demandPlanMateriel==null?0:demandPlanMateriels.size());
+		pageMap.put("recordsFiltered", demandPlanMateriel==null?0:demandPlanMateriels.size());
+		pageMap.put("data", demandPlanMateriels);
+		return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
+    }
+    
     /**
      * @Description (保存续期计划物料信息)
      * @param request
@@ -275,6 +327,7 @@ public class DemandPlanController {
         			materiel.setUpdater(currenLoginName);
         			demandPlanMaterielService.update(materiel);
         		}
+        		materiel.setSupplyName(demandPlanMaterielService.selectSupplyName(materiel.getSupplyMaterielSerial()));
         		int remainTime = 0;
 				try {
 					remainTime = DateUtil.daysBetween(new Date(), materiel.getDeliveryDate());
