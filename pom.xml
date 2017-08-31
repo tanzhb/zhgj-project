@@ -88,7 +88,7 @@
 		<!-- lib versions -->
 		<junit.version>4.11</junit.version>
 		<spring.version>4.0.2.RELEASE</spring.version>
-		<mybatis.version>3.3.0</mybatis.version>
+		<mybatis.version>3.2.5</mybatis.version>
 		<mybatis.spring.version>1.2.2</mybatis.spring.version>
 		<mysql.connector.version>5.1.30</mysql.connector.version>
 		<postgresql.version>9.1-901.jdbc4</postgresql.version>
@@ -365,6 +365,24 @@
 			<scope>compile</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.hibernate.common</groupId>
+			<artifactId>hibernate-commons-annotations</artifactId>
+			<version>4.0.2.Final</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.1-api</artifactId>
+			<version>1.0.0.Final</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-core</artifactId>
+		    <version>4.2.2.Final</version>
+		</dependency>
+
 
 		<!-- jackson -->
 		<dependency>
@@ -425,13 +443,37 @@
 		<dependency>
 			<groupId>org.activiti</groupId>
 			<artifactId>activiti-engine</artifactId>
-			<version>5.22.0</version>
+			<version>5.16</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.activiti</groupId>
 			<artifactId>activiti-spring</artifactId>
-			<version>5.22.0</version>
+			<version>5.16</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.activiti</groupId>
+		    <artifactId>activiti-bpmn-model</artifactId>
+		    <version>5.16</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.activiti</groupId>
+		    <artifactId>activiti-bpmn-converter</artifactId>
+		    <version>5.16</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.activiti</groupId>
+		    <artifactId>activiti-json-converter</artifactId>
+		    <version>5.16</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.activiti</groupId>
+		    <artifactId>activiti-bpmn-layout</artifactId>
+		    <version>5.16</version>
 		</dependency>
 
 	</dependencies>

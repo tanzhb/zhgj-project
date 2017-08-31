@@ -178,6 +178,14 @@ public class PageController {
     }
     
     /**
+     * 请假
+     */
+    @RequestMapping("/addVacation")
+    public String addVacation() {
+        return "vacation/addVacation";
+    }
+    
+    /**
      * 404页
      */
     @RequestMapping("/404")
