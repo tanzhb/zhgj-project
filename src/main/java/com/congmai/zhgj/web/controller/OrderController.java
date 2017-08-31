@@ -632,24 +632,35 @@ public class OrderController {
      * @return
      */
     @RequestMapping("exportOrder")
-    public void exportOrder(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+    public void exportOrder(String type,Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
     		Map<String, Object> dataMap = new HashMap<String, Object>();
     		OrderInfoExample m =new OrderInfoExample();
-        	List<OrderInfo> orderInfoList = new ArrayList<OrderInfo>();
+    		List<OrderInfo> orderInfoList = new ArrayList<OrderInfo>();
         	//and 条件1
         	Criteria criteria =  m.createCriteria();
         	criteria.andDelFlgEqualTo("0");
-        	//and 条件2,未发布可编辑的物料
+        	if("sale".equals(type)){//平台销售订单供应商为空
+        		criteria.andSupplyComIdIsNull();
+        	}else if("buy".equals(type)){//平台采购订单采购商为空
+        		criteria.andBuyComIdIsNull();
+        	}
+        	/*//and 条件2,未发布可编辑的物料
         	Criteria criteria2 =  m.createCriteria();
         	criteria2.andStatusEqualTo("0");
         	criteria2.andDelFlgEqualTo("0");
         	//or 条件
-        	m.or(criteria2);
+        	m.or(criteria2);*/
         	//排序字段
         	m.setOrderByClause("updateTime DESC");
         	orderInfoList = orderService.selectList(m);
+        	
     		dataMap.put("orderInfoList",orderInfoList);
-    		ExcelUtil.export(request, response, dataMap, "orderInfo", "订单信息");
+    		if("sale".equals(type)){
+    			ExcelUtil.export(request, response, dataMap, "orderInfo", "订单信息");
+        	}else if("buy".equals(type)){
+        		ExcelUtil.export(request, response, dataMap, "buyOrderInfo", "订单信息");
+        	}
+    		
     }
     
     /**
@@ -658,18 +669,84 @@ public class OrderController {
      * @return
      */
     @RequestMapping("downloadImportTemp")
-    public void downloadCompanyTemp(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
-    	ExcelUtil.importTempDownLoad(request, response, "orderInfo");
+    public void downloadCompanyTemp(String type,Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+    	if("sale".equals(type)){
+    		ExcelUtil.importTempDownLoad(request, response, "orderInfo");
+    	}else if("buy".equals(type)){
+    		ExcelUtil.importTempDownLoad(request, response, "buyOrderInfo");
+    	}
+    	
     }
     
     /**
-     * @Description (订单信息导入)
+     * @Description (采购订单信息导入)
+     * @param request
+     * @return
+     */
+    @RequestMapping("buyOrderImport")
+    @ResponseBody
+    public Map<String,String> buyOrderImport(@RequestParam(value = "excelFile") MultipartFile excelFile,HttpServletRequest request,HttpServletResponse response) {
+    	Map<String,String> map = new HashMap<String, String>();
+    	 try {
+			ExcelReader excelReader = new ExcelReader(excelFile.getInputStream());
+			excelReader.readExcelContent(new RowHandler() {
+				@Override
+				public void handle(List<Object> row,int i) throws Exception {
+					if(!CollectionUtils.isEmpty(row)){
+						try{
+							OrderInfo orderInfo = new OrderInfo();
+
+							orderInfo.setOrderNum(row.get(0).toString());
+							orderInfo.setOrderType(row.get(1).toString());
+							orderInfo.setSupplyComId(row.get(2).toString());
+							orderInfo.setSeller(row.get(3).toString());
+							orderInfo.setEntrustParty(row.get(4).toString());
+							orderInfo.setServiceModel(row.get(5).toString());
+							orderInfo.setSettlementClause(row.get(6).toString());
+							orderInfo.setDeliveryMode(row.get(7).toString());
+							orderInfo.setRate(row.get(8).toString());
+							orderInfo.setCurrency(row.get(9).toString());
+							orderInfo.setExchangeRate(row.get(10).toString());
+							orderInfo.setDemandPlanSerial(row.get(11).toString());
+							orderInfo.setOrderSerial(row.get(12).toString());
+							orderInfo.setMaker(row.get(13).toString());
+							orderInfo.setOrderDate(StringUtils.isEmpty(row.get(14).toString())?null:(Date) row.get(14));
+
+							orderInfo.setSerialNum(ApplicationUtils.random32UUID());
+				    		Subject currentUser = SecurityUtils.getSubject();
+				    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+				    		orderInfo.setCreator(currenLoginName);
+				    		orderInfo.setUpdater(currenLoginName);
+				    		orderInfo.setCreateTime(new Date());
+				    		orderInfo.setUpdateTime(new Date());
+				    		orderInfo.setStatus("1");
+				    		
+				    		orderService.insert(orderInfo);
+						}catch(Exception  e){
+							throw new Exception("第"+i+"行数据异常请检查，数据内容："+row.toString());
+						}
+						
+					}
+					
+				}
+			}, 2);
+			map.put("data", "success");
+		} catch (Exception e1) {
+			map.put("data", e1.getMessage());
+		}
+    	
+         return map;
+    }
+    
+    
+    /**
+     * @Description (销售订单信息导入)
      * @param request
      * @return
      */
     @RequestMapping("orderImport")
     @ResponseBody
-    public Map<String,String> orderImport(@RequestParam(value = "excelFile") MultipartFile excelFile,HttpServletRequest request,HttpServletResponse response) {
+    public Map<String,String> orderImport(@RequestParam(value = "excelFile") MultipartFile excelFile,String type,HttpServletRequest request,HttpServletResponse response) {
     	Map<String,String> map = new HashMap<String, String>();
     	 try {
 			ExcelReader excelReader = new ExcelReader(excelFile.getInputStream());

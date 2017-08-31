@@ -580,11 +580,11 @@
 									<th>金额</th>
 									<th>税额</th>
 									
-									<th ng-if="saleOrder.settlementClause =='服务费'">服务费率</th>
-									<th ng-if="saleOrder.settlementClause =='服务费'">服务费</th>
-									<th ng-if="saleOrder.settlementClause =='折扣折让'">折扣率</th>
-									<th ng-if="saleOrder.settlementClause =='折扣折让'">折后金额</th>
-									<th ng-if="saleOrder.settlementClause =='红票'">红票金额</th>
+									<th ng-if="buyOrder.settlementClause =='服务费'">服务费率</th>
+									<th ng-if="buyOrder.settlementClause =='服务费'">服务费</th>
+									<th ng-if="buyOrder.settlementClause =='折扣折让'">折扣率</th>
+									<th ng-if="buyOrder.settlementClause =='折扣折让'">折后金额</th>
+									<th ng-if="buyOrder.settlementClause =='红票'">红票金额</th>
 									
 									<th>价税合计</th>
 									<th>交付日期</th>
@@ -638,17 +638,17 @@
                                       		<p class="form-control-static"> {{_orderMateriel.orderUnitPrice&&_orderMateriel.amount?_orderMateriel.orderUnitPrice*_orderMateriel.amount*buyOrder.rate/100:0}} </p>
 			                          </td>
 			                          
-			                          <td ng-if="saleOrder.settlementClause =='服务费'">
+			                          <td ng-if="buyOrder.settlementClause =='服务费'">
 			                          	<input type="text"  name="serviceRate{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].serviceRate"  >
                                       	<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.serviceRate}} </p>
 			                          </td>
-									<td ng-if="saleOrder.settlementClause =='服务费'">服务费</td>
-									<td ng-if="saleOrder.settlementClause =='折扣折让'">
+									<td ng-if="buyOrder.settlementClause =='服务费'">服务费</td>
+									<td ng-if="buyOrder.settlementClause =='折扣折让'">
 										<input type="text"  name="discountRate{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].discountRate"  >
                                       	<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.discountRate}} </p>
 									</td>
-									<td ng-if="saleOrder.settlementClause =='折扣折让'">折后金额</td>
-									<td ng-if="saleOrder.settlementClause =='红票'">
+									<td ng-if="buyOrder.settlementClause =='折扣折让'">折后金额</td>
+									<td ng-if="buyOrder.settlementClause =='红票'">
 										<input type="text"  name="redTicket{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].redTicket"  >
                                       	<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.redTicket}} </p>
 									</td>

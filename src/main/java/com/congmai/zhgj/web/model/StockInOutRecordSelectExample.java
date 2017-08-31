@@ -787,6 +787,11 @@ public class StockInOutRecordSelectExample {
             addCriterion("s.delFlg =", value, "delFlg");
             return (Criteria) this;
         }
+        
+        public Criteria andDeliverMaterielDelFlgEqualTo(String value) {
+        	addCriterion("dm.delFlg =", value, "delFlg");
+        	return (Criteria) this;
+        }
 
         public Criteria andDelFlgNotEqualTo(String value) {
             addCriterion("s.delFlg <>", value, "delFlg");

@@ -2,7 +2,8 @@
  * 
  */
 
-angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope','$scope','$state','$http','takeDeliveryService','orderService','$location','$compile','$stateParams',function($rootScope,$scope,$state,$http,takeDeliveryService,orderService,$location,$compile,$stateParams) {
+angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope','$scope','$state','$http','takeDeliveryService','orderService','$location','$compile','$stateParams',
+                                                                   function($rootScope,$scope,$state,$http,takeDeliveryService,orderService,$location,$compile,$stateParams) {
 	 $scope.$on('$viewContentLoaded', function() {   
 	    	// initialize core components
 		    handle = new pageHandle();
@@ -29,23 +30,26 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	 		}else if($location.path()=="/takeDeliveryView"){
 	 				takeDeliveryInfo($stateParams.serialNum);
 	 		}else{
-	 			if($stateParams.type=="stockIn"){
-	 				loadStockInTable();
-	 				//$('#delivery_tab a:last').tab('show');
-	 				$('#delivery_tab a:last').parent().addClass('active');
-	 				$('#delivery_tab a:first').parent().removeClass('active');
-	 				$("#tab_15_2").addClass("active");
-	 				$("#tab_15_1").removeClass("active");
-	 				 $("#tip").text("入库记录");
-	 			}else{debugger;
-	 				loadTakeDelieryTable();
-	 				$('#delivery_tab a:first').parent().addClass('active');
-	 				$('#delivery_tab a:last').parent().removeClass('active');
-	 				$("#tab_15_1").addClass("active");
-	 				$("#tab_15_2").removeClass("active");
-	 				 $("#tip").text("收货计划");
-	 				//$('#delivery_tab a:first').tab('show');
-	 			}
+	 			var type = handle.getCookie("d_type");
+	 			if(type=="stockIn"){
+		 				//loadStockInTable();
+		 				//$('#delivery_tab a:last').tab('show');
+		 				$('#delivery_tab a:last').parent().addClass('active');
+		 				$('#delivery_tab a:first').parent().removeClass('active');
+		 				$("#tab_15_2").addClass("active");
+		 				$("#tab_15_1").removeClass("active");
+		 				 $("#tip").text("入库记录");
+		 		}else{
+		 				//loadTakeDelieryTable();
+		 				$('#delivery_tab a:first').parent().addClass('active');
+		 				$('#delivery_tab a:last').parent().removeClass('active');
+		 				$("#tab_15_1").addClass("active");
+		 				$("#tab_15_2").removeClass("active");
+		 				 $("#tip").text("收货计划");
+		 				//$('#delivery_tab a:first').tab('show');
+		 		}
+	 			loadStockInTable();
+	 			loadTakeDelieryTable();
 	 			
 	 			
 	 		}
@@ -360,6 +364,14 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 				}
 	        }
 	       	
+	        /**
+		        * 初始化日期控件
+		        */
+		       $scope.repeatDone = function(scope){
+		       		var date= scope.materiel.manufactureDate;
+		    	    handle.datePickersInit();
+		    	    scope.materiel.manufactureDate = date;
+		    };
 	        
 	        /**
 		        * 导出入库记录
@@ -374,14 +386,12 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		        var activeTab = $(e.target).text(); 
 		        // 获取前一个激活的标签页的名称
 		       // var previousTab = $(e.relatedTarget).text(); 
-		        
+		        var absurl = $location.absUrl();
 		        $("#tip").text(activeTab);
 		        if(activeTab=="入库记录"){
-		        	//$location.search("type","stockIn");
-		        	$state.go("takeDelivery",{"type":"stockIn"},{reload:true});
+		        	handle.addCookie("d_type","stockIn",24);
 		        }else{
-		        	//$location.search("type","");
-		        	$state.go("takeDelivery",{"type":""},{reload:true});
+		        	handle.addCookie("d_type","takeDeliver",24);
 		        }
 		     });
 	       

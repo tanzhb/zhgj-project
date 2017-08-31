@@ -16,7 +16,7 @@
         <result column="status" property="status" jdbcType="INTEGER" />
         <result column="isopen" property="isopen" jdbcType="INTEGER" />
     </resultMap>
-    <!-- 通过角色id 查询角色信息 -->
+    <!-- 通过角色id 查询菜单信息 -->
     <select id="selectMenusByRoleId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         SELECT m.* FROM menu m LEFT JOIN relation r ON m.id = r.menuid
         WHERE r.roleid = #{roleid,jdbcType=INTEGER}

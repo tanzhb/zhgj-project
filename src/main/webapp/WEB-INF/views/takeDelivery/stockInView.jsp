@@ -20,7 +20,7 @@
             <i class="fa fa-angle-right"></i>
         </li> 
         <li>
-            <a ui-sref="takeDelivery({type:'stockIn'})">入库记录</a>
+            <a ui-sref="takeDelivery">入库记录</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
