@@ -71,14 +71,20 @@
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="takeDeliverSerial"> <span class="required"> * </span>收货单号：</label>
-                                                    <div class="col-md-8">
-                                                    	<select class="bs-select form-control order" data-live-search="true"  id="takeDeliverSerial"  name="takeDeliverSerial" ng-change="getTakeDeliverMateriel()" ng-model="record.takeDeliverSerial" ng-hide="deliverAdd"  data-size="8">
+                                                   <!--  <div class="col-md-8"> -->
+                                                    	<!-- <select class="bs-select form-control order" data-live-search="true"  id="takeDeliverSerial"  name="takeDeliverSerial" ng-change="getTakeDeliverMateriel()" ng-model="record.takeDeliverSerial" ng-hide="deliverAdd"  data-size="8">
 	                                                        <option value=""></option>
 	                                                        <option  ng-repeat="takeDeliver in takeDeliverys" value="{{takeDeliver.takeDelivery.serialNum}}" data-deliveryserial="{{takeDeliver.serialNum}}" >{{takeDeliver.takeDelivery.takeDeliverNum}}</option>
-	                                                   	</select>
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.takeDeliverSerial}}</p>
-                                                    </div>
+	                                                   	</select> -->
+	                                                   	  <div class="col-md-6">
+	                                                    	<input id="takeDeliverSerial" data-toggle="modal" data-target="#takeDeliveryInfo"  name="takeDeliverSerial" type="text" class="form-control" ng-model="record.takeDeliverNum" readonly="readonly" >
+	                                                    	<div class="form-control-focus"> </div>
+                                                    	</div>
+                                                    	<div class="col-md-2">
+                                                    	<button class="btn btn-icon-only default" data-toggle="modal" data-target="#takeDeliveryInfo" onclick="return false;">
+                                            			<i class="fa fa-search" ></i></button>
+                                                    	</div>
+                                                   <!-- </div> -->
                                             </div>
 										</div>
 										<!--/span-->
@@ -271,3 +277,4 @@
 	</div>
 </div>
 <!-- END MAIN CONTENT -->
+<jsp:include page="selectTakeDelivery.jsp"></jsp:include>

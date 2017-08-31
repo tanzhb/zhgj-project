@@ -31,20 +31,21 @@ pageHandle = (function(){
 	}
 	
 	//加载遮罩
-	var _blockUI = function(_message){
+	var _blockUI = function(_message,id){
 		  var  message = '请稍等';
-		  if(_message!=undefined){
+		  if(_message!=undefined&&_message!=null){
 			  message = _message;
 		  }
 		  App.blockUI({
+			  target: id,
               boxed: true,
               message:message
           });
 	} 
 	
 	//解除遮罩
-	var _unblockUI = function(){
-		 App.unblockUI();
+	var _unblockUI = function(id){
+		 App.unblockUI(id);
 	}
 	
 	//自定义列表分页插件
@@ -74,11 +75,14 @@ pageHandle = (function(){
 			    }
 			if(pageModel.totalPages > 0){
 				$(formId+"_paginator").bootstrapPaginator(options);
+			}else{
+				pageModel.first = 0;
+				$(formId+"_paginator").empty();
 			}
 		}
 		var last = Number(pageModel.offset)+Number(pageModel.pageSize);
 		$(formId+"_info").text("显示  "+pageModel.first+" 到 "+ (last>pageModel.totalCount?pageModel.totalCount:last)+"条，   共 "+pageModel.totalCount+" 条记录");
-		this.unblockUI();
+		this.unblockUI(formId);
 	}
 	
 	//元素复制

@@ -913,7 +913,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	         */
 	       function createTable(pageSize,pageIndex,init,params){
 	    	 //初始化表格数据
-	    	   handle.blockUI();
+	    	   handle.blockUI(null,"#simple");
 		    	var promise = demandPlanService.createTable(pageSize,pageIndex,params);
 		    	promise.then(function(data){
 		    			$scope.demandPlans = data.data.result;

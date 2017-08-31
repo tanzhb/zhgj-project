@@ -82,13 +82,13 @@
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="orderSerial"> <span class="required"> * </span>采购订单号：</label>
-                                                    <div class="col-md-8">
-                                                       <select class="bs-select form-control order" data-live-search="true"  id="orderSerial"  name="orderSerial" ng-change="getOrderMateriel()" ng-model="deliver.orderSerial" ng-hide="deliverAdd"  data-size="8">
-	                                                        <option value=""></option>
-	                                                        <option  ng-repeat="order in orders" value="{{order.serialNum}}">{{order.orderNum}}</option>
-	                                                   </select>
-                                                       <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.orderNum}}</p>
+                                                    <div class="col-md-6">
+	                                                    	<input id="orderSerial" data-toggle="modal" data-target="#buyOrderInfo"  name="orderSerial" type="text" class="form-control" ng-model="deliver.orderNum" readonly="readonly" >
+	                                                    	<div class="form-control-focus"> </div>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                    <button class="btn btn-icon-only default" data-toggle="modal" data-target="#buyOrderInfo" onclick="return false;">
+                                            			<i class="fa fa-search" ></i></button>
                                                     </div>
                                             </div>
 										</div>
@@ -727,7 +727,7 @@
                                             <i class="fa fa-check"></i> 确认收货 </button>
          				</div>
          				<div class="col-md-1">
-         					 <button   ng-hide="deliverAdd" class="btn red btn-outline" ng-click="cancelTakeDelivery()">
+         					 <button   ng-hide="deliverAdd" class="btn red btn-outline" ng-click="cancelTakeDelivery()" onclick="return false;">
                                             <i class="fa fa-undo"></i> 取消 </button>
          				</div>
          				<div class="col-md-5"></div>
@@ -740,3 +740,4 @@
 	</div>
 </div>
 <!-- END MAIN CONTENT -->
+<jsp:include page="selectBuyOrder.jsp"></jsp:include>

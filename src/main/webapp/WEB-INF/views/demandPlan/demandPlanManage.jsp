@@ -77,7 +77,7 @@
 											</div>
 
 
-											<div class="portlet-body" style="display: none;">
+											<div class="portlet-body" style="padding:5px 15px 0px 15px;">
 												<div class="row">
 													<div class="col-md-6 col-sm-6">
 													</div>
@@ -93,58 +93,64 @@
 												</div>
 											</div>
 					
-					
-											<div class="portlet-body" ng-repeat="demandPlan in demandPlans" id="demandPlanTable">
-			                                 		<div class="row">
-				                                   	 	<div class="col-md-12">
-															<div class="portlet">
-																<div class="portlet-title">
-								                                    <div class="caption" style="width: 100%;font-size: 15px;">
-								                                    	<div style="float:left;width:70%;">
-								                                    		<input name="select_all" class="dt-body-center" value="{{demandPlan.serialNum}}" id="example-select-all" type="checkbox" />
-								                                    		{{demandPlan.buyComName}}&nbsp;&nbsp;&nbsp;&nbsp;近五条记录&nbsp;&nbsp;&nbsp;&nbsp;更新日期：{{demandPlan.updateTime.substring(0,10)}}
-								                                    	</div>
-								                                    		
-								                                    	<div style="float:left;width:30%;text-align:right;"><a href="javascript:;" ui-sref="demandPlanView({serialNum:demandPlan.serialNum})" >全部计划>></a></div>
-								                                    </div>
-								                                </div>
-								                                <div class="portlet-body">
-													                <div class="table-scrollable">
-																		<table class="table table-striped table-bordered table-advance table-hover">
-								                                            <thead>
-								                                                <tr>
-								                                                   	<!-- <th><input name="select_all" class="dt-body-center"
-																							value="1" id="example-select-all" type="checkbox" /></th> -->
-																					<th>物料编号</th>
-																					<th>产品名称</th>
-																					<th>规格型号</th>
-																					<th>供应商</th>
-																					<th>交付日期</th>
-																					<th>数量</th>
-																					<th>交付地点</th>
-																					<th>距离交付 （天）</th>
-								                                                </tr>
-								                                            </thead>
-								                                            <tbody ng-repeat="materiel in demandPlan.materiels">
-								                                                <tr>
-								                                                   <!--  <td><input name="select_all" class="dt-body-center"
-																							value="1" type="checkbox" /></td> -->
-								                                                    <td>{{materiel.materiel.materielName}}</td>
-								                                                    <td>{{materiel.materiel.materielName}}</td>
-								                                                    <td>{{materiel.materiel.specifications}}</td>
-								                                                    <td>{{materiel.supplyName}}</td>
-								                                                    <td>{{materiel.deliveryDate}}</td>
-								                                                    <td>{{materiel.amount}}</td>
-								                                                    <td>{{materiel.deliveryAddress}}</td>
-								                                                    <td>{{materiel.remainTime}}</td>
-								                                                </tr>
-								                                            </tbody>
-								                                        </table>
-								                                    </div>
-								                                </div>
-									                    </div>
-							                    	</div>
-			                            		</div>   
+											<div id="simple" style="background: white;">
+												<div ng-if="demandPlans==undefined||demandPlans.length==0">
+													<div class="row">
+					                                   	 	<div class="col-md-12" style="text-align: center;">暂无数据</div>
+					                                </div>
+												</div>
+												<div class="portlet-body" style="padding:0px 15px;" ng-repeat="demandPlan in demandPlans" id="demandPlanTable">
+				                                 		<div class="row">
+					                                   	 	<div class="col-md-12">
+																<div class="portlet">
+																	<div class="portlet-title">
+									                                    <div class="caption" style="width: 100%;font-size: 15px;">
+									                                    	<div style="float:left;width:70%;">
+									                                    		<input name="select_all" class="dt-body-center" value="{{demandPlan.serialNum}}" id="example-select-all" type="checkbox" />
+									                                    		{{demandPlan.buyComName}}&nbsp;&nbsp;&nbsp;&nbsp;近五条记录&nbsp;&nbsp;&nbsp;&nbsp;更新日期：{{demandPlan.updateTime.substring(0,10)}}
+									                                    	</div>
+									                                    		
+									                                    	<div style="float:left;width:30%;text-align:right;"><a href="javascript:;" ui-sref="demandPlanView({serialNum:demandPlan.serialNum})" >全部计划>></a></div>
+									                                    </div>
+									                                </div>
+									                                <div class="portlet-body">
+														                <div class="table-scrollable">
+																			<table class="table table-striped table-bordered table-advance table-hover" >
+									                                            <thead>
+									                                                <tr>
+									                                                   	<!-- <th><input name="select_all" class="dt-body-center"
+																								value="1" id="example-select-all" type="checkbox" /></th> -->
+																						<th>物料编号</th>
+																						<th>产品名称</th>
+																						<th>规格型号</th>
+																						<th>供应商</th>
+																						<th>交付日期</th>
+																						<th>数量</th>
+																						<th>交付地点</th>
+																						<th>距离交付 （天）</th>
+									                                                </tr>
+									                                            </thead>
+									                                            <tbody ng-repeat="materiel in demandPlan.materiels">
+									                                                <tr>
+									                                                   <!--  <td><input name="select_all" class="dt-body-center"
+																								value="1" type="checkbox" /></td> -->
+									                                                    <td>{{materiel.materiel.materielName}}</td>
+									                                                    <td>{{materiel.materiel.materielName}}</td>
+									                                                    <td>{{materiel.materiel.specifications}}</td>
+									                                                    <td>{{materiel.supplyName}}</td>
+									                                                    <td>{{materiel.deliveryDate}}</td>
+									                                                    <td>{{materiel.amount}}</td>
+									                                                    <td>{{materiel.deliveryAddress}}</td>
+									                                                    <td>{{materiel.remainTime}}</td>
+									                                                </tr>
+									                                            </tbody>
+									                                        </table>
+									                                    </div>
+									                                </div>
+										                    </div>
+								                    	</div>
+				                            		</div>   
+												</div>
 											</div>
 											<div class="portlet-body dataTables_wrapper" >
 												<div class="row">

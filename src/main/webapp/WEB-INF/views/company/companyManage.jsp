@@ -21,7 +21,7 @@
 <div class="row">
 	<div class="col-md-12">
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
-		<div class="portlet box blue">
+		<div class="portlet light">
 			<div class="portlet-title">
 				<div class="caption">
 					<i class="fa fa-globe"></i>企业信息列表
@@ -98,7 +98,7 @@
 	<div class="col-md-12">
 		<div class="portlet light " id="comViewPage">
 			<div class="portlet-body" id="comViewContent">
-				<ul class="nav nav-pills">
+				<ul class="nav nav-tabs">
 					<!--  <li class="active">
                   <a data-target="#tab_1_1" data-toggle="tab">基本信息</a>
               </li> -->
