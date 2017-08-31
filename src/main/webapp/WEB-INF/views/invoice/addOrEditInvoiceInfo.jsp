@@ -14,7 +14,7 @@
 	float: left;
 }
 </style>
-<h3 class="page-title"> 检验信息
+<h3 class="page-title"> 发票信息
 </h3>
 <div class="page-bar">
     <ul class="page-breadcrumb">
@@ -74,7 +74,7 @@
                                                                 <div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for=""><span class="required"> * </span> <span  ng-if="inOrOut.indexOf('in')>-1"  >开票方</span><span   ng-if="inOrOut.indexOf('out')>-1" >收票方</span> :</label>
                                                     <div class="col-md-6">
-                                                     <input type="text" class="form-control"   id="comName" name ="comName"  readonly     ng-hide="invoiceAdd"   readonly="readonly"
+                                                     <input type="text" class="form-control"   id="comName" name ="comName"      ng-hide="invoiceAdd"   
 												ng-model="invoice.comName" /> 
 												<div class="form-control-focus"> </div>
 												 
@@ -87,7 +87,7 @@
                                                                 <div class="form-group form-md-line-input">
                                                                 <label class="col-md-4 control-label" for="relationBuyOrSaleNum"><span class="required"> * </span>  <span  ng-if="inOrOut.indexOf('in')>-1"  > 关联采购单号</span><span   ng-if="inOrOut.indexOf('out')>-1" > 关联销售订单号</span> :</label>
                                                                     <div class="col-md-6">
-                                                                       <input type="text" class="form-control" placeholder=""  id="relationBuyOrSaleNum"      name ="relationBuyOrSaleNum"  ng-hide="invoiceAdd"   readonly
+                                                                       <input type="text" class="form-control" placeholder=""  id="relationBuyOrSaleNum"      name ="relationBuyOrSaleNum"  ng-hide="invoiceAdd"   
 												ng-model="invoice.relationBuyOrSaleNum" > 
 												 
                                                                        <div class="form-control-focus"> </div>
@@ -200,8 +200,13 @@
                                                             <div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="contactNum"> <span class="required"> * </span>发票类型 :</label>
                                                     <div class="col-md-8">
-                                                                        <input type="text"  class="form-control" placeholder=""  id="invoiceType" name ="invoiceType"   ng-hide="invoiceAdd"  
-												ng-model="invoice.invoiceType" /> 
+                                                    <select class="form-control" id="invoiceType"  ng-hide="invoiceAdd" name="invoiceType"  ng-model="invoice.invoiceType"  >
+                                            <option value=""></option>
+                                            <option value="服务费发票" >服务费发票</option>
+                                           	<option value="采购发票" >采购发票</option>
+                                             
+                                        </select>
+                                                 
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="invoiceView">{{invoice.invoiceType}}</p> 
                                                                     </div>

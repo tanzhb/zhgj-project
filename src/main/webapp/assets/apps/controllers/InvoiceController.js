@@ -462,10 +462,25 @@ angular
 						
 								$scope.saveInvoice= function() {
 									debugger;
-									if($('#stockInOutCheckForm').valid()){//表单验证通过则执行添加功能
-										 judgeIsExist ();
+									if($('#invoiceForm').valid()){//表单验证通过则执行添加功能
+										debugger;
+										InvoiceService.saveStockInOutCheck($scope.invoice).then(
+															function(data) {debugger;
+																toastr.success("保存发票数据成功！");
+																$scope.invoice = data;
+											        			$scope.invoiceView = true;
+											        			$scope.invoiceAdd = true;
+											        			$scope.invoiceEdit = true;
+											        			$(".alert-danger").hide();
+															},
+															function(errResponse) {
+																toastr.warning("保存失败！");
+																console
+																		.error('Error while creating User');
+															}
+													);
+												}
 									}
-							};	
 							// 添加发票结束***************************************
 							
 							// 修改发票开始***************************************							
@@ -790,14 +805,9 @@ angular
 		 	        		}
 		 	    			//为前台四个参数赋值
 		 	    			if(judgeString=='in'){
-		 	    				$("#deliverSerial").val('111111');//发货单流水
-			 	            	$("#takeDeliverSerial").val($scope.row.serialNum.substring(0,32));//收货单流水
 			 	            	$scope.stockInOutCheck.takeDeliverNum=$scope.row.deliverOrTakeDeliverNum;
 			 	            	$scope.stockInOutCheck.relationBuyNum=$scope.row.orderNum;
 			 	            	$scope.stockInOutCheck.supplyName=$scope.row.supplyName;
-			 	            	/*$("#takeDeliverNum").val($scope.row.deliverOrTakeDeliverNum);//收货单号
-			 	            	$("#relationBuyNum").val($scope.row.orderNum);//采购单号
-			 	            	$("#supplyName").val($scope.row.supplyName);*/
 			 	            	$('#takeDeliveryInfo').modal('hide');// 选择成功后关闭模态框
 		 	    			}else{
 		 	    				$("#deliverSerial").val($scope.row.serialNum.substring(0,32));//发货单流水
@@ -805,12 +815,8 @@ angular
 			 	            	$scope.stockInOutCheck.deliverNum=$scope.row.deliverOrTakeDeliverNum;
 			 	            	$scope.stockInOutCheck.relationSaleNum=$scope.row.orderNum;
 			 	            	$scope.stockInOutCheck.supplyName=$scope.row.supplyName;
-			 	          /* 	$("#deliverNum").val($scope.row.deliverOrTakeDeliverNum);//发货单号
-		 	            	$("#relationSaleNum").val($scope.row.orderNum);//销售单号
-		 	            	$("#supplyName").val($scope.row.supplyName);*/
 		 	            	$('#deliverInfo').modal('hide');// 选择成功后关闭模态框
 		 	    			}
-		 	    			$scope.materials=$scope.row.materials;
 		 	    			$(".modal-backdrop").remove();
 		 	    		};  // 确认选择发货单结束***************************************
 		 	    		jQuery.validator.addMethod("qualifiedNumCheck", function (value, element) {
@@ -826,13 +832,20 @@ angular
 		 	    		
 							// 页面加载完成后调用，验证输入框
 							$scope.$watch('$viewContentLoaded', function() { 
-								var  qualifiedCountData='';
+								var  comName,relationBuyOrSaleNum,relationReceiveOrPayNum,receiptDate;
 								if($scope.inOrOut!=undefined&&$scope.inOrOut.indexOf("in")>-1){
+									comName={required:"开票方不能为空！"};
+									relationBuyOrSaleNum={required:"关联采购单号不能为空！"};
+									relationReceiveOrPayNum={required:"关联付款单号不能为空！"};
+									receiptDate={required:"付款日期不能为空！"};
 									qualifiedCountData={required:true,digits:true,qualifiedNumCheck:!0};
 								}else if($scope.inOrOut!=undefined&&$scope.inOrOut.indexOf("out")>-1){
-									qualifiedCountData={required:true,digits:true,deliverNumCheck:!0};
+									comName={required:"收票方不能为空！"};
+									relationBuyOrSaleNum={required:"关联销售单号不能为空！"};
+									relationReceiveOrPayNum={required:"关联收款单号不能为空！"};
+									receiptDate={required:"收款日期不能为空！"};
 								}
-								var e = $("#stockInOutCheckForm"),
+								var e = $("#invoiceForm"),
 						        r = $(".alert-danger", e),
 						        i = $(".alert-success", e);
 						        e.validate({
@@ -841,24 +854,30 @@ angular
 						            focusInvalid: !1,
 						            ignore: "",
 						            messages: {
-						            	checkNum:{required:"发票编号不能为空！"},
-						            	takeDeliverNum:{required:"收货单号不能为空！"},
-						            	deliverNum:{required:"发货单号不能为空！"},
-						            	checkParty:{required:"发票方不能为空！"},
-						            	checkDate:{required:"发票日期不能为空！"},
-						            	checker: { required:"发票员不能为空！"},
-						            	contactNum:{required:"联系电话不能为空！",digits:"请输入正确的联系电话, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
-						            	qualifiedCount:{required:"合格数量不能为空！",digits:"请输入正确的合格数量, 必须为数字！"}
+						            	invoiceNum:{required:"发票编号不能为空！"},
+						            	comName:comName,
+						            	relationBuyOrSaleNum:relationBuyOrSaleNum,
+						            	relationReceiveOrPayNum:relationReceiveOrPayNum,
+						            	receiptDate:receiptDate,
+						            	invoiceAmount:{required:"发票金额不能为空！",digits:"必须为数字！"},
+						            	invoiceType: { required:"发票类型未选择！"},
+						            	billingDate:{required:"开票日期不能为空！"},
+						            	invoiceNO:{required:"发票号不能为空！"},
+						            	submitter:{required:"提交人不能为空！"},
+						            	submitDate:{required:"提交日期不能为空！"}
 						            },
 						            rules: {
-						            	checkNum:{required:true},
-						            	takeDeliverNum:{required:true},
-						            	deliverNum:{required:true},
-						            	checkParty:{required:true,digits:true},
-						            	checkDate:{required:true},
-						            	checker:{required:true},
-						            	contactNum:{required:true,digits:true,rangelength:[7,20]},
-						            	qualifiedCount:qualifiedCountData
+						            	invoiceNum:{required:true},
+						            	comName:{required:true},
+						            	relationBuyOrSaleNum:{required:true},
+						            	relationReceiveOrPayNum:{required:true},
+						            	receiptDate:{required:true},
+						            	invoiceAmount:{required:true,digits:true},
+						            	invoiceType:{required:true},
+						            	billingDate:{required:true},
+						            	invoiceNO:{required:true},
+						            	submitter:{required:true},
+						            	submitDate:{required:true}
 						            },
 						            invalidHandler: function(e, t) {
 						                i.hide(),
