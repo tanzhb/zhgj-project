@@ -13,6 +13,7 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.dao.StockInOutCheckMapper;
 import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
 import com.congmai.zhgj.web.dao.StockMapper;
+import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.Stock;
 import com.congmai.zhgj.web.model.StockExample;
 import com.congmai.zhgj.web.model.StockInOutCheck;
@@ -53,13 +54,13 @@ public class StockInOutCheckServiceImpl extends GenericServiceImpl<StockInOutChe
 		StockInOutCheckExample sore=new  StockInOutCheckExample();
     	Criteria criteria=sore.createCriteria();
     	criteria.andDelFlgEqualTo("0");
-    	if("in".equals(InOut)){
+    	if("in".equals(InOut)){//入库
     		criteria.andDeliverSerialLike("111111");
     		criteria.andTakeDeliverSerialIsNotNull();
     		if(!StringUtils.isEmpty(serialNum)){
     			criteria.andTakeDeliverSerialEqualTo(serialNum);
     		}
-    	}else if("out".equals(InOut)){
+    	}else if("out".equals(InOut)){//出库
     		criteria.andTakeDeliverSerialLike("111111");
     		criteria.andDeliverSerialIsNotNull();
     		if(!StringUtils.isEmpty(serialNum)){
@@ -68,6 +69,8 @@ public class StockInOutCheckServiceImpl extends GenericServiceImpl<StockInOutChe
     	}
 		return stockInOutCheckMapper.selectByExample(sore);
 	}
+
+
 
 	
 	

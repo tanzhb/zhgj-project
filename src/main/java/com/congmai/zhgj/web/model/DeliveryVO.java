@@ -140,9 +140,6 @@ public class DeliveryVO {
 	private String takeAddress;
 	
 	
-	private String takeWarehouseSerial;
-	
-	
 	//收货日期
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date takeDeliverDate;
@@ -156,11 +153,10 @@ public class DeliveryVO {
 	//收货信息备注
 	private String takeDeliveryRemark;
 	
-	
 	private String transportserialNum;
-	
-	
 	private String takeDeliverSerialNum;
+	
+	private String  supplyName;//供应商名称
 
 	public String getSerialNum() {
 		return serialNum;
@@ -537,14 +533,6 @@ public class DeliveryVO {
 		this.orderNum = orderNum;
 	}
 
-	public String getTakeWarehouseSerial() {
-		return takeWarehouseSerial;
-	}
-
-	public void setTakeWarehouseSerial(String takeWarehouseSerial) {
-		this.takeWarehouseSerial = takeWarehouseSerial;
-	}
-
 	public String getTransportserialNum() {
 		return transportserialNum;
 	}
@@ -559,6 +547,14 @@ public class DeliveryVO {
 
 	public void setTakeDeliverSerialNum(String takeDeliverSerialNum) {
 		this.takeDeliverSerialNum = takeDeliverSerialNum;
+	}
+
+	public String getSupplyName() {
+		return supplyName;
+	}
+
+	public void setSupplyName(String supplyName) {
+		this.supplyName = supplyName;
 	}
 	
 }

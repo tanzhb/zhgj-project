@@ -580,7 +580,7 @@ public class MaterielController {
     
     /**
      * 
-     * @Description (选择物料)
+     * @Description (选择的供应物料)
      * @param ids
      * @return
      */
@@ -590,6 +590,26 @@ public class MaterielController {
     	List<SupplyMateriel> list = null;
     	try {
     		list = supplyMaterielService.chooseMateriel(ids);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+    	
+    	return list;
+    }
+    
+    
+    /**
+     * 
+     * @Description (选择的标准物料)
+     * @param ids
+     * @return
+     */
+    @RequestMapping(value="chooseBasicMateriels",method=RequestMethod.POST)
+    @ResponseBody
+    public List<Materiel> chooseBasicMateriels(@RequestBody String ids){
+    	List<Materiel> list = null;
+    	try {
+    		list = materielService.chooseMateriel(ids);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}

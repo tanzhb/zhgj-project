@@ -11,6 +11,11 @@ public class StockInOutRecordExample {
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
+    
+    private int pageIndex;
+    
+    private int pageSize;
+    
 
     public StockInOutRecordExample() {
         oredCriteria = new ArrayList<Criteria>();
@@ -65,7 +70,23 @@ public class StockInOutRecordExample {
         distinct = false;
     }
 
-    protected abstract static class GeneratedCriteria {
+    public int getPageIndex() {
+		return pageIndex;
+	}
+
+	public void setPageIndex(int pageIndex) {
+		this.pageIndex = pageIndex;
+	}
+
+	public int getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	protected abstract static class GeneratedCriteria {
         protected List<Criterion> criteria;
 
         protected GeneratedCriteria() {

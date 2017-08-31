@@ -16,6 +16,8 @@ public class TakeDeliveryParams {
 	private TakeDelivery takeDelivery;
 	
 	private List<DeliveryMateriel> deliveryMateriels;
+	
+	private StockInOutRecord record;
 
 	public Delivery getDelivery() {
 		return delivery;
@@ -47,6 +49,14 @@ public class TakeDeliveryParams {
 
 	public void setDeliveryMateriels(List<DeliveryMateriel> deliveryMateriels) {
 		this.deliveryMateriels = deliveryMateriels;
+	}
+
+	public StockInOutRecord getRecord() {
+		return record;
+	}
+
+	public void setRecord(StockInOutRecord record) {
+		this.record = record;
 	}
 	
 	

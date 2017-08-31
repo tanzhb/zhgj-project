@@ -70,7 +70,9 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
         	}
     });
     
-    $scope.repeatDone = function(){
+    $scope.repeatDone = function(scope){
+    	var date1= scope._orderMateriel.deliveryDate;
+    	var date2= scope._orderMateriel.lastDeliveryDate;
     	$('.date-picker').datepicker({
 			rtl: App.isRTL(),
 			orientation: "left",
@@ -78,7 +80,10 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 			dateFormat:"yyyy-mm-dd",
 			language: "zh-CN"
     	})
-    	
+    	if(scope._orderMateriel){
+    		scope._orderMateriel.deliveryDate = date1;
+    		scope._orderMateriel.lastDeliveryDate = date2;
+    	}
    };
    
     $scope.save  = function() {
@@ -129,7 +134,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     };
     
     var table;
-    var tableAjaxUrl = "rest/order/findOrderList";
+    var tableAjaxUrl = "rest/order/findOrderList?type=sale";
     var loadMainTable = function() {
             a = 0;
             App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
@@ -526,7 +531,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
        										+ '">';
 
          								}else{
-         	  								return '<input type="checkbox" data-checked=false id="'+ row.serialNum +'" ng-click="getCheckedIds(\''+data+'\','+meta.row+')" name="serialNum[]" value="'
+         	  								return '<input type="checkbox" data-checked=false id="'+ row.serialNum +'" ng-click="getCheckedIds(\''+data+'\','+meta.row+')" name="material_serial" value="'
        										+ $('<div/>')
        												.text(
        														row.supplyMateriels[0].serialNum)
@@ -1872,7 +1877,7 @@ var e = $("#form_clauseSettlement"),
 		        * 下载EXCEL模板
 		        */
 		       $scope.downloadImportTemp = function(){
-		    	   window.location.href=$rootScope.basePath+"/rest/order/downloadImportTemp";
+		    	   window.location.href=$rootScope.basePath+"/rest/order/downloadImportTemp?type=sale";
 		       }
 		       
 		       /**
@@ -1914,7 +1919,7 @@ var e = $("#form_clauseSettlement"),
 		       
 		       $scope.exportSaleOrder = function(){
 			    	 handle.blockUI("正在导出数据，请稍后"); 
-			    	 window.location.href=$rootScope.basePath+"/rest/order/exportOrder";
+			    	 window.location.href=$rootScope.basePath+"/rest/order/exportOrder?type=sale";
 			    	 handle.unblockUI(); 
 			   }
 		       //********导入导出end****************//

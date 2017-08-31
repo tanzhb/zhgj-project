@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.dao;
 
 import com.congmai.zhgj.core.generic.GenericDao;
+import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.StockInOutRecordExample;
 
@@ -31,4 +32,8 @@ public interface StockInOutRecordMapper  extends GenericDao<StockInOutRecord,Str
 
     int updateByPrimaryKey(StockInOutRecord record);
     int deleteStockInOutRecord(List<String>serialNums);//批量删除出入库记录信息
+
+	List<Delivery> selectListByExample(StockInOutRecordExample example);
+	
+	StockInOutRecord selectStockInInfoByPrimaryKey(String serialNum);
 }

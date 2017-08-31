@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.dao;
 
 import com.congmai.zhgj.core.generic.GenericDao;
+import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.StockInOutCheckExample;
 
@@ -32,4 +33,6 @@ public interface StockInOutCheckMapper extends GenericDao<StockInOutCheck,String
     int updateByPrimaryKey(StockInOutCheck record);
     
     int deleteStockInOutCheck(List<String>serialNums);//批量删除出入库检验记录信息
+    
+    int updateDeliverMateriel(List<DeliveryMateriel>deliveryMateriels);//批量更新发货明细
 }

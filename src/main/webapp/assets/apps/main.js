@@ -364,6 +364,77 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
+        //采购订单
+        .state('statement', {
+            url: "/statement",
+            templateUrl: "rest/page/statement",
+            data: {pageTitle: '对账单'},
+            controller: "statementController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+							'assets/global/plugins/datatables/datatables.min.css',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+							'assets/global/plugins/datatables/datatables.all.min.js',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+                            'assets/apps/service/statementService.js',
+                            'assets/apps/controllers/statementController.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        // 新增客户对账单
+        .state('addBuyStatement', {
+            url: "/addBuyStatement?:serialNum&:view",
+            templateUrl: "rest/page/addBuyStatement",
+            data: {pageTitle: '新增客户对账单'},
+            controller: "statementController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/pageHandle.js',
+	        	'assets/apps/service/statemenService.js',
+				'assets/apps/controllers/statementController.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        // 新增供应商对账单
+        .state('addSupplyStatement', {
+            url: "/addSupplyStatement?:serialNum&:view",
+            templateUrl: "rest/page/addSupplyStatement",
+            data: {pageTitle: '新增供应商对账单'},
+            controller: "statementController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/pageHandle.js',
+	        	'assets/apps/service/statemenService.js',
+				'assets/apps/controllers/statementController.js'
+                      ]
+                    });
+                }]
+            }
+        })
 	    .state('userContract', {
 	            url: "/userContract",
 	            templateUrl:"rest/page/userContract",
@@ -606,7 +677,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        		}]
 		        	}	        
 		    }) .state('takeDelivery', {
-		    	url: "/takeDelivery",
+		    	url: "/takeDelivery?:type",
 		    	templateUrl: "rest/takeDelivery/takeDeliveryManage",
 		    	data: {pageTitle: '收货计划'},
 		    	reload:true, 
@@ -662,6 +733,63 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/apps/controllers/TakeDeliveryController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js',
 		    				        'assets/apps/service/orderService.js'
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
+		    }).state('stockInAdd', {
+		    	url: "/stockInAdd?:serialNum",
+		    	templateUrl: "rest/takeDelivery/stockInAdd",
+		    	data: {pageTitle: '新建入库单'},
+		    	reload:true, 
+		    	controller: "StockInController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [       
+		    				        'assets/apps/controllers/StockInController.js',
+		    				        'assets/apps/service/TakeDeliveryService.js'
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
+		    }).state('stockInView', {
+		    	url: "/stockInView?:serialNum",
+		    	templateUrl: "rest/takeDelivery/stockInView",
+		    	data: {pageTitle: '查看入库单'},
+		    	reload:true, 
+		    	controller: "StockInController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [       
+		    				        'assets/apps/controllers/StockInController.js',
+		    				        'assets/apps/service/TakeDeliveryService.js'
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
+		    }).state('paymentRecord', {
+		    	url: "/paymentRecord",
+		    	templateUrl: "rest/paymentRecord/paymentRecordManage",
+		    	data: {pageTitle: '收付款记录'},
+		    	reload:true, 
+		    	controller: "PaymentRecordController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [   
+		    				        'assets/global/plugins/datatables/datatables.min.css',                  
+		    				        'assets/global/plugins/datatables/datatables.all.min.js',
+		    				        'assets/apps/controllers/PaymentRecordController.js',
+		    				        'assets/apps/service/PaymentRecordService.js'
+		    				       
 		    				        ]
 		    			});
 		    		}]
