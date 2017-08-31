@@ -123,7 +123,6 @@ function daysBetween(DateOne, DateTwo) {
 			.substring(DateOne.length, DateOne.lastIndexOf('-') + 1);
 	var OneYear = DateOne.substring(0, DateOne.indexOf('-'));
 
-<<<<<<< HEAD
 	var TwoMonth = DateTwo.substring(5, DateTwo.lastIndexOf('-'));
 	var TwoDay = DateTwo
 			.substring(DateTwo.length, DateTwo.lastIndexOf('-') + 1);
@@ -133,7 +132,7 @@ function daysBetween(DateOne, DateTwo) {
 			.parse(TwoMonth + '/' + TwoDay + '/' + TwoYear)) / 86400000);
 	return cha;
 }
-=======
+
 //timestamp转换成datetime
 function timeStamp2String2 (time){
     var datetime = new Date();
@@ -148,7 +147,7 @@ function timeStamp2String2 (time){
      return year + "-" + month + "-" + date;
 };
 
->>>>>>> 20170817-activiti
+
 
 //初始化toastr开始
 toastr.options = {
@@ -261,7 +260,6 @@ function getExplorer() {
 }
 //页面打印方法end********/
 
-<<<<<<< HEAD
 /*******自定义验证辅助方法START*********/
 //取消表单元素警告状态
 function changeTextInputBorder(obj){
@@ -274,7 +272,7 @@ function changeDateInputBorder(obj){
 	 $(obj).parent().next().text("");
 }
 /********自定义验证辅助方法END**********/
-=======
+
 /*日期控件控制*/
 function initDatePicker(orientation){
 	$('.date-picker').datepicker({
@@ -284,6 +282,7 @@ function initDatePicker(orientation){
 	});
 }
 
+//流程图
 function graphTrace(id, ctx) {
     // 获取图片资源
     var imageUrl = ctx + "/rest/processAction/process/process-instance?pid=" + id + "&type=png";
@@ -416,4 +415,3 @@ function graphTrace(id, ctx) {
     
 
 }
->>>>>>> 20170817-activiti
