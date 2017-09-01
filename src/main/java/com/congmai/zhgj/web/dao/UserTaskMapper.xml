@@ -55,7 +55,7 @@
 
 
 	<insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.UserTask">
-		insert into t_user_task
+		insert into T_USER_TASK
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">
 				id,
@@ -111,7 +111,7 @@
 	</insert>
 
 	<update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.UserTask">
-		update t_user_task
+		update T_USER_TASK
 		<set>
 			<if test="procDefKey != null">
 				proc_def_key = #{procDefKey,jdbcType=VARCHAR},
@@ -142,7 +142,7 @@
 		parameterType="com.congmai.zhgj.web.model.UserTask">
 		select 
 		<include refid="Base_Column_List" />
-		from t_user_task
+		from T_USER_TASK
 		
 		where proc_def_key = #{procDefKey,jdbcType=VARCHAR}
 		<!-- <if test="_parameter != null">
@@ -157,14 +157,14 @@
 		parameterType="java.lang.Integer">
 		select
 		<include refid="Base_Column_List" />
-		from t_user_task
+		from T_USER_TASK
 		where id = #{id,jdbcType=INTEGER}
 	</select>
 
 	<select id="getAll" resultMap="BaseResultMap" >
 		select
 		<include refid="Base_Column_List" />
-		from t_user_task
+		from T_USER_TASK
 	</select>
 
 </mapper>
