@@ -60,7 +60,7 @@
 		
 		</selectKey>
 	
-		insert into t_vacation
+		insert into T_VACATION
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">
 				id,
@@ -128,7 +128,7 @@
 	</insert>
 
 	<update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.Vacation">
-		update t_vacation
+		update T_VACATION
 		<set>
 			<if test="applyDate != null">
 				apply_date = #{applyDate,jdbcType=TIMESTAMP},
@@ -168,7 +168,7 @@
 			distinct
 		</if>
 		<include refid="Base_Column_List" />
-		from t_vacation
+		from T_VACATION
 		<if test="_parameter != null">
 			<include refid="Example_Where_Clause" />
 		</if>
@@ -181,21 +181,21 @@
 		parameterType="java.lang.Integer">
 		select
 		<include refid="Base_Column_List" />
-		from t_vacation
+		from T_VACATION
 		where id = #{id,jdbcType=INTEGER}
 	</select>
 
 	<select id="findByStatus" resultMap="BaseResultMap" >
 		select
 		<include refid="Base_Column_List" />
-		from t_vacation
+		from T_VACATION
 		where user_id = #{0} and status = #{1}
 	</select>
 
 	<select id="getAll" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
-		from t_vacation
+		from T_VACATION
 	</select>
 
 </mapper>

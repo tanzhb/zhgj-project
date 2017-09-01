@@ -7,7 +7,7 @@
 	<!-- BEGIN LOGO -->
 	<div class="page-logo">
 		<a ui-sref="dashboard"> <img
-			src="assets/layouts/layout2/img/LOGO1.png" alt="logo"
+			src="assets/layouts/layout2/img/logo-default.png" alt="logo"
 			class="logo-default" />
 		</a>
 		<div class="menu-toggler sidebar-toggler">

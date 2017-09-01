@@ -8,7 +8,7 @@
     </resultMap>
     <!-- 通过组id 查询组信息 -->
     <select id="selectGroupById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-        SELECT g.* FROM t_group g 
+        SELECT g.* FROM T_GROUP g 
         WHERE g.group_id = #{id,jdbcType=INTEGER}
     </select>
 </mapper>
