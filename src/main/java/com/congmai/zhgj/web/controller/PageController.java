@@ -239,6 +239,26 @@ public class PageController {
     
     
     /**
+     * 添加付款页面
+     * @return 添加付款页面url
+     */
+    @RequestMapping("/viewPay")
+    public String viewPay() {
+        return "pay/viewPay";
+    }
+    
+    
+    /**
+     * 添加付款页面
+     * @return 添加付款页面url
+     */
+    @RequestMapping("/paymentRecord")
+    public String paymentRecord() {
+        return "pay/paymentRecord";
+    }
+    
+    
+    /**
      * 添加发货页面
      * @return 添加发货页面url
      */

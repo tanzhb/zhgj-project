@@ -1115,7 +1115,59 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
-
+        
+        .state('viewPay', {
+            url: "/viewPay:serialNum",
+            templateUrl: "rest/page/viewPay",
+            data: {pageTitle: '付款详情'},
+            controller: "PayController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/apps/css/special.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/PayService.js',
+				'assets/apps/controllers/PayController.js',
+                      ]
+                    });
+                }]
+            }
+        })
+        
+         .state('paymentRecordC', {
+            url: "/paymentRecordC",
+            templateUrl: "rest/page/paymentRecord",
+            data: {pageTitle: '付款列表'},
+            controller: "PayController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/apps/css/special.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/PayService.js',
+				'assets/apps/controllers/PayController.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js',
+                      ]
+                    });
+                }]
+            }
+        })
+        
 }]);
 
 

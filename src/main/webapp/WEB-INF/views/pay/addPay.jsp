@@ -30,7 +30,7 @@
 			<form action="#" id="form_sample_1" class="form-horizontal">
 				<div class="portlet light ">
 					<div class="portlet-title">
-						<div class="caption">支付信息</div>
+						<div class="caption">付款信息</div>
 						<div class="tools" id="noprintdiv">
 							<button type="submit" ng-click="saveBasicInfo()" ng-show="input"
 								class="btn blue  btn-outline  btn-sm">
@@ -53,37 +53,43 @@
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-4"><span
 												class="required" aria-required="true"> * </span>付款单号:</label>
-											<div class="col-md-9">
-												<input type="text" name="deliverNum" class="form-control"
-													ng-model="delivery.deliverNum" ng-show="input">
+											<div class="col-md-8">
+												<input type="text" name="paymentNum" class="form-control"
+													ng-model="paymentRecord.paymentNum">
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入发货单号</span>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.deliverNum}}</p>
+												<span class="help-block">请输入付款单号</span>
 											</div>
 										</div>
 									</div>
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
-												class="required" aria-required="true"> * </span>收款方:</label>
-											<div class="col-md-7">
+											<label class="control-label col-md-4"><span
+												class="required" aria-required="true"> * </span>付款计划编号:</label>
+											<div class="col-md-8">
+												<input type="text" name="paymentPlanNum" class="form-control"
+													ng-model="paymentRecord.paymentPlanNum">
+												<div class="form-control-focus"></div>
+												<span class="help-block">请输入付款计划编号</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group form-md-line-input">
+											<label class="control-label col-md-4"><span
+												class="required" aria-required="true"> * </span>关联采购订单号:</label>
+											<div class="col-md-6">
 												<input type="text" name="orderNum" class="form-control"
 													ng-model="saleOrder.orderNum" ng-show="input"
 													style="width: 110%;" readonly />
 												<div class="form-control-focus"></div>
-												<input type="text" ng-model="orderSerial" ng-hide="true" />
-												<span class="help-block">请输入销售订单号</span>
-
-												<p class="form-control-static" ng-show="span">
-													{{delivery.orderNum}}</p>
+												<input type="text" ng-model="orderSerial" ng-hide="true" name="orderSerial"/>
+												<span class="help-block">请选择关联采购订单号</span>
 											</div>
 											<div class="col-md-2" ng-show="input">
-												<input type="text" ng-model="delivery.serialNum"
-													ng-hide="true" /> <span class="input-inline-btn">
+												<span class="input-inline-btn">
 													<button class="btn default" type="button"
 														ng-click="selectMateriel()"
 														data-target="#basicMaterielInfo" data-toggle="modal">
@@ -94,410 +100,145 @@
 										</div>
 									</div>
 									<!--/span-->
+								</div>
+
+
+								<!--/row-->
+								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-4"><span
 												class="required" aria-required="true"> * </span>付款类型:</label>
-											<div class="col-md-9">
-												<input type="text" name="deliverNum" class="form-control"
-													ng-model="delivery.deliverNum" ng-show="input">
+											<div class="col-md-8">
+												<input type="text" name=paymentType class="form-control"
+													ng-model="paymentRecord.paymentType" ng-show="input" />
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入发货单号</span>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.deliverNum}}</p>
+												<span class="help-block">请选择付款类型</span>
 											</div>
+
 										</div>
 									</div>
+									<!--/span-->
+									<div class="col-md-4">
+										<div class="form-group form-md-line-input">
+											<label class="control-label col-md-4"><span
+												class="required" aria-required="true"> * </span>支付类型 :</label>
+											<div class="col-md-8">
+												<input type="text" name="paymentStyle" class="form-control"
+													ng-model="paymentRecord.paymentStyle" ng-show="input" />
+												<div class="form-control-focus"></div>
+												<span class="help-block">请选择支付类型</span>
+											</div>
+
+										</div>
+									</div>
+									<!--/span-->
+									<div class="col-md-4">
+										<div class="form-group form-md-line-input">
+											<label class="control-label col-md-4"><span
+												class="required" aria-required="true"> * </span>发票方式 :</label>
+											<div class="col-md-8">
+									<input type="radio"  ng-model="paymentRecord.billStyle" ng-checked="true" name="billStyle" value="1">先票后款
+									<input type="radio"  ng-model="paymentRecord.billStyle" name="billStyle" value="0">先款后票
+											</div>
+
+										</div>
+									</div>
+									<!--/span-->
 								</div>
-
-
 								<!--/row-->
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
 											<label class="control-label col-md-4"><span
-												class="required" aria-required="true"> * </span>关联采购订单号:</label>
+												class="required" aria-required="true"> * </span>是否开票:</label>
 											<div class="col-md-8">
-												<input type="text" name=supplyComId class="form-control"
-													ng-model="delivery.supplyComId" ng-show="input" />
-												<p class="form-control-static" ng-show="span">
-													{{delivery.supplyComId}}</p>
-												<div class="form-control-focus"></div>
-												<span class="help-block">请选择供应商</span>
-											</div>
-
-										</div>
-									</div>
-									<!--/span-->
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
-												class="required" aria-required="true"> * </span>支付节点:</label>
-											<div class="col-md-9">
-												<input type="text" name="shipper" class="form-control"
-													ng-model="delivery.shipper" ng-show="input" />
-												<p class="form-control-static" ng-show="span">
-													{{delivery.shipper}}</p>
-												<div class="form-control-focus"></div>
-												<span class="help-block">请输入发货方</span>
-											</div>
-
-										</div>
-									</div>
-									<!--/span-->
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
-												class="required" aria-required="true"> * </span>支付单据号:</label>
-											<div class="col-md-9">
-												<input type="text" class="form-control" name="receiver"
-													ng-model="delivery.receiver" ng-show="input" />
-												<p class="form-control-static" ng-show="span">
-													{{delivery.receiver}}</p>
-												<div class="form-control-focus"></div>
-												<span class="help-block">请选择收货方</span>
-											</div>
-
-										</div>
-									</div>
-									<!--/span-->
-								</div>
-								<!--/row-->
-								<div class="row">
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
-												class="required" aria-required="true"> * </span>支付比率:</label>
-											<div class="col-md-9">
-												<input type="text" class="form-control" name="maker"
-													ng-model="delivery.maker" ng-show="input" />
-												<p class="form-control-static" ng-show="span">
-													{{delivery.maker}}</p>
-												<div class="form-control-focus"></div>
-												<span class="help-block">请选择制单人</span>
+									<input type="radio"   ng-model="paymentRecord.isBill" ng-checked="true" name="isBill" value="1">是
+                        			<input type="radio"   ng-model="paymentRecord.isBill" name="isBill" value="0">否
 											</div>
 										</div>
 									</div>
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
-												class="required" aria-required="true"> * </span>支付金额:</label>
-											<div class="col-md-9">
-												<input type="text" id="makeDate" ng-show="input"
-													name="makeDate" data-date-format="yyyy-mm-dd"
-													data-date-viewmode="years" size="16"
-													ng-model="delivery.makeDate" class="form-control" />
-												<p class="form-control-static" ng-show="span">
-													{{delivery.makeDate}}</p>
-												<div class="form-control-focus"></div>
-												<span class="help-block">请选择制单日期</span>
-											</div>
-
-										</div>
-									</div>
-									<!--/span-->
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
-												class="required" aria-required="true"> * </span>账期:</label>
-											<div class="col-md-9">
-												<input type="text" class="form-control" name="approval"
-													ng-model="delivery.approval" ng-show="input" />
-												<p class="form-control-static" ng-show="span">
-													{{delivery.approval}}</p>
-												<div class="form-control-focus"></div>
-												<span class="help-block">请选择审批人</span>
-											</div>
-										</div>
-									</div>
-									<!--/span-->
-								</div>
-								<div class="row">
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
-												class="required" aria-required="true"> * </span>支付方式:</label>
-											<div class="col-md-9">
-												<input type="text" id="approvalDate"
-													data-date-format="yyyy-mm-dd" name="approvalDate"
-													ng-show="input" data-date-viewmode="years" size="16"
-													ng-model="delivery.approvalDate" class="form-control" />
-												<div class="form-control-focus"></div>
-												<span class="help-block">请选择审批日期</span>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.approvalDate}}</p>
-											</div>
-										</div>
-									</div>
-									<!--/span-->
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3">开票方式:</label>
-											<div class="col-md-9">
-												<input type="text" class="form-control"
-													ng-model="delivery.remark" ng-show="input" />
-												<div class="form-control-focus"></div>
-												<span class="help-block">请输入备注</span>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.remark}}</p>
-											</div>
-										</div>
-									</div>
-									<!--/span-->
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3">已开金额:</label>
-											<div class="col-md-9">
-												<input type="text" class="form-control"
-													ng-model="delivery.remark" ng-show="input" />
-												<div class="form-control-focus"></div>
-												<span class="help-block">请输入备注</span>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.remark}}</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<!--/row-->
-								
-								<div class="row">
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
-												class="required" aria-required="true"> * </span>未开金额:</label>
-											<div class="col-md-9">
-												<input type="text" id="approvalDate"
-													data-date-format="yyyy-mm-dd" name="approvalDate"
-													ng-show="input" data-date-viewmode="years" size="16"
-													ng-model="delivery.approvalDate" class="form-control" />
-												<div class="form-control-focus"></div>
-												<span class="help-block">请选择审批日期</span>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.approvalDate}}</p>
-											</div>
-										</div>
-									</div>
-									<!--/span-->
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3">发票单据号:</label>
-											<div class="col-md-9">
-												<input type="text" class="form-control"
-													ng-model="delivery.remark" ng-show="input" />
-												<div class="form-control-focus"></div>
-												<span class="help-block">请输入备注</span>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.remark}}</p>
-											</div>
-										</div>
-									</div>
-									<!--/span-->
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-4">计划付款日期:</label>
+											<label class="control-label col-md-4">关联发票单号:</label>
 											<div class="col-md-8">
-												<input type="text" class="form-control"
-													ng-model="delivery.remark" ng-show="input" />
+												<input type="text"  ng-show="input" name="makeDate" ng-model="paymentRecord.invoiceSerial" class="form-control" />
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入备注</span>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.remark}}</p>
+												<span class="help-block">请选择关联发票单号</span>
+											</div>
+
+										</div>
+									</div>
+									<!--/span-->
+									<div class="col-md-4">
+										<div class="form-group form-md-line-input">
+											<label class="control-label col-md-4">开票日期:</label>
+											<div class="col-md-8">
+												<input type="text" class="form-control" name="approval" readonly ng-show="input" />
+												<div class="form-control-focus"></div>
+												<span class="help-block">请选择开票日期</span>
 											</div>
 										</div>
 									</div>
+									<!--/span-->
 								</div>
-								<!--/row-->
-								
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-4"><span
+												class="required" aria-required="true"> * </span>申请人:</label>
+											<div class="col-md-8">
+												<input type="text"  name="applicant"
+													ng-model="paymentRecord.applicant" class="form-control" />
+												<div class="form-control-focus"></div>
+												<span class="help-block">请输入申请人</span>
+											</div>
+										</div>
+									</div>
+									<!--/span-->
+									<div class="col-md-4">
+										<div class="form-group form-md-line-input">
+											<label class="control-label col-md-4"><span
 												class="required" aria-required="true"> * </span>申请日期:</label>
-											<div class="col-md-9">
-												<input type="text" id="approvalDate"
-													data-date-format="yyyy-mm-dd" name="approvalDate"
-													ng-show="input" data-date-viewmode="years" size="16"
-													ng-model="delivery.approvalDate" class="form-control" />
-												<div class="form-control-focus"></div>
-												<span class="help-block">请选择审批日期</span>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.approvalDate}}</p>
-											</div>
-										</div>
-									</div>
-									<!--/span-->
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3">申请人:</label>
-											<div class="col-md-9">
-												<input type="text" class="form-control"
-													ng-model="delivery.remark" ng-show="input" />
-												<div class="form-control-focus"></div>
-												<span class="help-block">请输入备注</span>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.remark}}</p>
-											</div>
-										</div>
-									</div>
-									<!--/span-->
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3">审批日期:</label>
-											<div class="col-md-9">
-												<input type="text" class="form-control"
-													ng-model="delivery.remark" ng-show="input" />
-												<div class="form-control-focus"></div>
-												<span class="help-block">请输入备注</span>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.remark}}</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<!--/row-->
-								
-								<div class="row">
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
-												class="required" aria-required="true"> * </span>审批人:</label>
-											<div class="col-md-9">
-												<input type="text" id="approvalDate"
-													data-date-format="yyyy-mm-dd" name="approvalDate"
-													ng-show="input" data-date-viewmode="years" size="16"
-													ng-model="delivery.approvalDate" class="form-control" />
-												<div class="form-control-focus"></div>
-												<span class="help-block">请选择审批日期</span>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.approvalDate}}</p>
-											</div>
-										</div>
-									</div>
-									<!--/span-->
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3">备注:</label>
-											<div class="col-md-9">
-												<input type="text" class="form-control"
-													ng-model="delivery.remark" ng-show="input" />
-												<div class="form-control-focus"></div>
-												<span class="help-block">请输入备注</span>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.remark}}</p>
-											</div>
-										</div>
-									</div>
-									<!--/span-->
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3">状态:</label>
-											<div class="col-md-9">
-												<input type="text" class="form-control"
-													ng-model="delivery.remark" ng-show="input" />
-												<div class="form-control-focus"></div>
-												<span class="help-block">请输入备注</span>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.remark}}</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<!--/row-->
-							</div>
-						</div>
-
-
-						<div class="portlet-title">
-							<div class="caption">付款信息</div>
-						</div>
-						<div class="portlet-body form">
-							<!-- BEGIN FORM-->
-							<div class="form-body">
-								<div class="alert alert-danger display-hide">
-									<button class="close" data-close="alert"></button>
-									请先输入正确数据！
-								</div>
-								<div class="row">
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-4"><span
-												class="required" aria-required="true"> * </span>实际付款日期:</label>
 											<div class="col-md-8">
-												<input type="text" name="materielCount" class="form-control"
-													ng-model="delivery.materielCount" ng-show="input" />
-												<div class="form-control-focus"></div>
-												<span class="help-block">请选择物料数</span>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.materielCount}}</p>
-											</div>
-										</div>
-									</div>
-									<!--/span-->
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
-												class="required" aria-required="true"> * </span>付款金额:</label>
-											<div class="col-md-9">
-												<input type="text" name="warehouseAddress"
-													class="form-control" readonly ng-model="warehouseAddress"
-													ng-show="input" />
-												<div class="form-control-focus"></div>
-												<span class="help-block">请输入仓库地址</span>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.deliveryAddress}}</p>
-											</div>
-										</div>
-									</div>
-									<!--/span-->
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
-												class="required" aria-required="true"> * </span>操作人:</label>
-											<div class="col-md-9">
-												<input type="text" name="deliverDate" class="form-control"
-													id="deliverDate" data-date-format="yyyy-mm-dd"
+												<input type="text" id="approvalDate"
+													data-date-format="yyyy-mm-dd" name="applyDate" id="approvalDate"
 													ng-show="input" data-date-viewmode="years" size="16"
-													ng-model="delivery.deliverDate" />
+													ng-model="paymentRecord.applyDate" class="form-control" />
 												<div class="form-control-focus"></div>
-												<span class="help-block">请选择发货日期</span>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.deliverDate}}</p>
+												<span class="help-block">请选择申请日期</span>
 											</div>
 										</div>
 									</div>
 									<!--/span-->
+									<div class="col-md-4">
+										<div class="form-group form-md-line-input">
+											<label class="control-label col-md-4">备注:</label>
+											<div class="col-md-8">
+												<input type="text" class="form-control"
+													ng-model="paymentRecord.remark" ng-show="input" />
+												<div class="form-control-focus"></div>
+												<span class="help-block">请输入备注</span>
+											</div>
+										</div>
+									</div>
 								</div>
 								<!--/row-->
+								<!--/row-->
 								<div class="row">
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-4"><span
-												class="required" aria-required="true"> * </span>银行汇款编号:</label>
-											<div class="col-md-8">
-												<input type="text" name="materielCount" class="form-control"
-													ng-model="delivery.materielCount" ng-show="input" />
-												<div class="form-control-focus"></div>
-												<span class="help-block">请选择物料数</span>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.materielCount}}</p>
-											</div>
-
-										</div>
-									</div>
-									<!--/span-->
 									<div class="col-md-4" ng-app="app">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-4"><span
 												class="required" aria-required="true"> * </span>付款凭证:</label>
-											<div class="col-md-9" >
+											<div class="col-md-8" >
 												<div class="sp-page-content"
 													ng-controller="addPhotoCtrl as ctl">
 													<div class="sp-page-box">
 														<div class="sp-page-boxcolumn span2">
 															<span class="sp-upload"> <img
 																class="sp-upload-photo" alt=""
-																 ng-src="{{ctl.info.photo1}}" /> <input type="file"
+																 ng-src="{{ctl.info.photo1}}" /> <input type="file" name="paymentVoucher" id="paymentVoucher"
 																upload-img class="sp-upload-img" />
 															</span>
 														</div>
@@ -507,126 +248,54 @@
 
 										</div>
 									</div>
-									
-									<!--/span-->
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
-												class="required" aria-required="true"> * </span>备注:</label>
-											<div class="col-md-9">
-												<input type="text" name="materielCount" class="form-control"
-													ng-model="delivery.materielCount" ng-show="input" />
-												<div class="form-control-focus"></div>
-												<span class="help-block">请选择物料数</span>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.materielCount}}</p>
-											</div>
-										</div>
-									</div>
-									<!--/span-->
 								</div>
-								
-								<!-- <div class="row" ng-app="app">
-									<div class="sp-page-content" ng-controller="addPhotoCtrl as ctl">
-										<div class="sp-page-box">
-											<div class="sp-page-boxcolumn span1">付款凭证：</div>
-											<div class="sp-page-boxcolumn span2">
-												<span class="sp-upload"> <img class="sp-upload-photo"
-													alt="" ng-src="{{ctl.info.photo1}}" /> <input type="file"
-													upload-img class="sp-upload-img" />
-												</span>
-											</div>
-										</div>
-									</div>
-								</div> -->
-								
 							</div>
 						</div>
 
 					<!-- 物料信息 start-->
 					<div class="portlet-title">
-						<div class="caption">物料信息</div>
+						<div class="caption">订单结算条款</div>
 					</div>
 					<div class="portlet-body form">
 							<div class="table-scrollable">
-								<table class="table table-bordered table-hover">
+								<table class="table table-bordered table-hover" id="sample_22">
+								<thead>
+										<tr>
+										    <th colspan='4' style="text-align:center;">付款方:中航国际</th>
+											<th colspan='4' style="text-align:center;">收款方:{{saleOrder.supplyComId}}</th>
+											<th colspan='4' style="text-align:center;">本次应付:<font color="red">{{clauseSettlement.totalAmount|currency:'￥'}}</font></th>
+										</tr>
+									</thead>
 									<thead>
 										<tr>
-											<th>物料编号</th>
-											<th>物料名称</th>
-											<th>规格型号</th>
-											<th>单位</th>
-											<th>批次号</th>
-											<th>生产日期</th>
-											<th>订单数量</th>
-											<th>发货数量</th>
+										    <th></th>
+											<th>支付类型</th>
+											<th>支付节点</th>
+											<th>账期</th>
+											<th>支付比率%</th>
+											<th>支付金额</th>
+											<th>支付方式</th>
+											<th>开票方式</th>
+											<th>开票金额</th>
+											<th>未开金额</th>
 											<th>备注</th>
-											<th style="width: 100px;">操作</th>
+											<th>状态</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr
-											ng-repeat="_deliveryMateriel in deliveryMaterielE track by $index"
-											ng-mouseover="showOperation('deliveryMateriel',$index)"
-											ng-mouseleave="hideOperation('deliveryMateriel',$index)"
-											repeat-done="repeatDone()">
-											<td>
-												<!--  <span ><a href="javascript:;" ng-click="addMateriel('single',$index)">{{_orderMateriel.materiel.materielNum}}</a></span> -->
-												<p class="form-control-static">
-													{{_deliveryMateriel.materielNum}}</p>
-											</td>
-											<td>
-												<p class="form-control-static">
-													{{_deliveryMateriel.materielName}}</p>
-											</td>
-											<td>
-												<p class="form-control-static">
-													{{_deliveryMateriel.specifications}}</p>
-											</td>
-											<td>
-												<p class="form-control-static">
-													{{_deliveryMateriel.unit}}</p>
-											</td>
-											<td><input type="text" name="batchNum"
-												class="form-control" ng-hide="orderMaterielInput{{$index}}"
-												ng-model="deliveryMaterielE[$index].batchNum">
-												<p class="form-control-static"
-													ng-show="orderMaterielShow{{$index}}">
-													{{_deliveryMateriel.batchNum}}</p></td>
-											<td><input type="text" name="manufactureDate{{$index}}"
-												class="form-control form-control-inline input-medium date-picker"
-												data-date-format="yyyy-mm-dd" data-date-viewmode="years"
-												size="16" ng-hide="orderMaterielInput{{$index}}"
-												ng-model="deliveryMaterielE[$index].manufactureDate" />
-
-												<p class="form-control-static"
-													ng-show="orderMaterielShow{{$index}}">
-													{{_deliveryMateriel.manufactureDate}}</p></td>
-											<td>
-												<!-- <input type="text"  name="amount{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="deliveryMateriel[$index].amount">
-                                      		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> </p> -->
-												<p class="form-control-static">{{_deliveryMateriel.amount}}
-												</p>
-											</td>
-											<td><input type="text" name="deliverCount{{$index}}"
-												class="form-control" ng-hide="orderMaterielInput{{$index}}"
-												ng-model="deliveryMaterielE[$index].deliverCount">
-												<p class="form-control-static"
-													ng-show="orderMaterielShow{{$index}}">
-													{{_deliveryMateriel.deliverCount}}</p></td>
-											<td><input type="text" name="deliverRemark{{$index}}"
-												class="form-control" ng-hide="orderMaterielInput{{$index}}"
-												ng-model="deliveryMaterielE[$index].remark">
-												<p class="form-control-static"
-													ng-show="orderMaterielShow{{$index}}">
-													{{_deliveryMateriel.remark}}</p></td>
-											<td><span ng-hide="orderMaterielInput{{$index}}">
-													&nbsp;&nbsp;&nbsp;&nbsp; <a
-													ng-click="saveOrderMateriel(_deliveryMateriel,$index)"><i
-														class="fa fa-save"></i></a> <!-- &nbsp;&nbsp;&nbsp; <a
-													ng-click="cancelOrderMateriel(_orderMateriel,$index)"><i
-														class="fa fa-undo"></i></a> -->
-											</span> </td>
+										<tr ng-repeat="_deliveryMateriel in deliveryMaterielE track by $index" repeat-done="repeatDone()">
+										    <td><p class="form-control-static"><input type="radio" name="serialNumClause" value="{{_deliveryMateriel.serialNum}}" ng-click="selectClauseDetail(_deliveryMateriel.serialNum)"/> </p></td>
+											<td><p class="form-control-static">{{_deliveryMateriel.paymentType}}</p></td>
+											<td><p class="form-control-static">{{_deliveryMateriel.deliveryNode}}</p></td>
+											<td><p class="form-control-static">{{_deliveryMateriel.accountPeriod}}</p></td>
+											<td><p class="form-control-static">{{_deliveryMateriel.deliveryRate}}</p></td>
+											<td><p class="form-control-static">{{_deliveryMateriel.deliveryAmount|currency:'￥'}}</p></td>
+											<td><p class="form-control-static">{{_deliveryMateriel.paymentMethod}}</p></td>
+											<td><p class="form-control-static">{{_deliveryMateriel.billingMethod}}</p></td>
+											<td><p class="form-control-static">{{_deliveryMateriel.billingAmount|currency:'￥'}}</p></td>
+											<td><p class="form-control-static">{{_deliveryMateriel.unbilledAmount|currency:'￥'}}</p></td>
+											<td><p class="form-control-static">{{_deliveryMateriel.remark}}</p></td>
+											<td><p class="form-control-static">{{_deliveryMateriel.status}}</p></td>
 										</tr>
 									</tbody>
 								</table>
@@ -650,26 +319,24 @@
 				<h4 class="modal-title">选择销售订单</h4>
 			</div>
 			<div class="modal-body">
-				<table
-					class="table table-striped table-bordered table-hover table-checkable order-column"
-					id="sample_21">
-					<thead>
-						<tr>
-							<th style="text-align: center"></th>
-							<th>销售订单号</th>
-							<th>采购方</th>
-							<th>销售商品</th>
-							<th>金额</th>
-							<th>配送</th>
-							<th>服务模式</th>
-							<th>关联销售合同</th>
-							<th>关联采购单</th>
-							<th>下单日期</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
+				<table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_21">
+	                    <thead>
+	                        <tr>
+	                            <th style="text-align: center"><input name="select_all" id="example-select-all" type="checkbox"/></th>
+	                            <th> 采购订单号 </th>
+	                            <th> 供应方 </th>
+	                            <th> 采购商品 </th>
+	                            <th> 金额 </th>
+	                            <th> 配送 </th>
+	                            <th> 服务模式 </th>
+	                            <th> 关联采购合同 </th>
+	                            <th> 关联销售单 </th>
+	                            <th> 下单日期 </th>
+	                        </tr>
+	                    </thead>
+	                    <tbody>
+	                    </tbody>
+	                </table>
 			</div>
 			<div class="modal-footer">
 				<button type="button" data-dismiss="modal"

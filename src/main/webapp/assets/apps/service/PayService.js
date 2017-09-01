@@ -4,14 +4,20 @@ angular.module('MetronicApp').factory('PayService', ['$rootScope', '$http', '$q'
     var REST_SERVICE_URI = $rootScope.basePath + '/rest/contract/findAllUserContract';
 
     var factory = {
+    		//获取订单物料信息
+    		getSaleOrderInfo: getSaleOrderInfo,
+    		
+    		
+    		selectClauseDetail:selectClauseDetail,
+    		
     		//查询列表
     		fetchAllUserContract: fetchAllUserContract,
     		//添加
     		saveUserContract: saveUserContract,
     		//删除
-    		delUserContract:delUserContract,
+    		delPaymentRecord:delPaymentRecord,
     		//单个查找
-    		selectUserContract:selectUserContract,
+    		selectPay:selectPay,
     		
     		downLoad:downLoad,
     		
@@ -90,10 +96,10 @@ angular.module('MetronicApp').factory('PayService', ['$rootScope', '$http', '$q'
 	}
     
   //删除用户
-    function delUserContract(ids){
+    function delPaymentRecord(ids){
         var deferred = $q.defer();  
 
-        $http.post($rootScope.basePath + "/rest/contract/deleteUserContractS", ids).success(function (data) {  
+        $http.post($rootScope.basePath + "/rest/pay/delPaymentRecord", ids).success(function (data) {  
             // 如果连接成功，延时返回给调用者  
             deferred.resolve(data);  
         })  
@@ -105,10 +111,10 @@ angular.module('MetronicApp').factory('PayService', ['$rootScope', '$http', '$q'
     };
     
   //通过用户id查找用户
-    function selectUserContract(ids){
+    function selectPay(serialNum){
         var deferred = $q.defer();  
 
-        $.get("rest/contract/selectConbtractById", {ids:ids}).success(function (data) { 
+        $.get("rest/pay/selectPayById", {serialNum:serialNum}).success(function (data) { 
             // 如果连接成功，延时返回给调用者  
             deferred.resolve(data);
             
@@ -119,6 +125,37 @@ angular.module('MetronicApp').factory('PayService', ['$rootScope', '$http', '$q'
         return deferred.promise;  
           
     };
+    
+    //查询订单信息
+    function getSaleOrderInfo(serialNum){
+        var deferred = $q.defer();  
+
+        $http.get("rest/pay/getSaleOrderInfo", {params:{serialNum:serialNum}})
+        .success(function (data) {  
+            // 如果连接成功，延时返回给调用者  
+            deferred.resolve(data);  
+        })  
+            .error(function () {  
+                deferred.reject('连接服务器出错！');  
+            })  
+        return deferred.promise;  
+          
+    };
+    
+    
+    function selectClauseDetail(serialNum){
+    	 var deferred = $q.defer();  
+debugger
+         $http.get("rest/pay/selectClauseDetail", {params:{serialNum:serialNum}})
+         .success(function (data) {  
+             // 如果连接成功，延时返回给调用者  
+             deferred.resolve(data);  
+         })  
+             .error(function () {  
+                 deferred.reject('连接服务器出错！');  
+             })  
+         return deferred.promise; 
+    }
     
 }]);
 

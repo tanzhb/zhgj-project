@@ -262,6 +262,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	
 	//保存基本信息
 	$scope.saveBasicInfo=function(){
+		if($('#form_sample_1').valid()){
 		var promise = DeliveryService.saveBasicInfo($scope);
 		promise.then(function(data) {
 			if (!handle.isNull(data)) {
@@ -288,6 +289,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			toastr.error("保存失败！请联系管理员");
 			console.log(data);
 		});	
+		}
 	}
 	
 	

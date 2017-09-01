@@ -152,7 +152,7 @@
 
 
 
-
+       <li class="nav-item">
             <!-- <ul class="sub-menu">
 				<li><a ui-sref="#"><i class="icon-paper-clip"></i>应收款</span></a></li>
 				<li><a ui-sref="addPay"> <i class="icon-paper-clip"></i>应付款</span></a></li>
@@ -164,7 +164,7 @@
             </a> 
 			<ul class="sub-menu">
 				<li><a ui-sref="#"><i class="icon-paper-clip"></i>应收款</span></a></li>
-				<li><a ui-sref="addPay"> <i class="icon-paper-clip"></i>应付款</span></a></li>
+				<li><a ui-sref="paymentRecordC"> <i class="icon-paper-clip"></i>应付款</span></a></li>
 			</ul>
 		</li>        <li class="nav-item">
             <a ui-sref="todo">
