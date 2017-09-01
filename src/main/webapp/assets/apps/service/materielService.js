@@ -141,4 +141,4 @@ angular.module('MetronicApp').service('materielService',
 				
 				
 			}
-		} ]);
+} ]);
