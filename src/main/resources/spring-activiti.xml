@@ -18,7 +18,7 @@
 		<!-- 配置事务管理器，统一事务 -->
 		<property name="transactionManager" ref="transactionManager" />
 		<!-- 设置建表策略，如果没有表，自动创建表 -->
-		<property name="databaseSchemaUpdate" value="true" />
+		<property name="databaseSchemaUpdate" value="false" />
 		<!-- <property name="deploymentResources" value="classpath*:/autodeployment/*.bpmn20.xml" /> -->
 	</bean>
 

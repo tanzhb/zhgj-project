@@ -50,7 +50,7 @@
 		parameterType="map">
 		select
 		*
-		from t_user
+		from T_USER
 		where user_name = #{record.userName,jdbcType=VARCHAR} and user_pwd =
 		#{record.userPwd,jdbcType=VARCHAR}
 	</select>
@@ -59,7 +59,7 @@
 		parameterType="java.lang.Integer">
 		select
 		<include refid="Base_Column_List" />
-		from t_user
+		from T_USER
 		where user_id = #{userId,jdbcType=INTEGER}
 	</select>
     
@@ -70,7 +70,7 @@
 			distinct
 		</if>
 		<include refid="Base_Column_List" />
-		from t_user
+		from T_USER
 		<if test="_parameter != null">
 			<include refid="Example_Where_Clause" />
 		</if>
@@ -80,7 +80,7 @@
 	</select>
 	
 	<update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.User">
-        update t_user
+        update T_USER
         <set>
             <if test="userName != null">
                 user_name = #{userName,jdbcType=VARCHAR},
