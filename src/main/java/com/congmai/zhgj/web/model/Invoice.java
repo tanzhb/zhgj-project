@@ -332,6 +332,14 @@ public class Invoice {
 	public void setInvoiceCount(int invoiceCount) {
 		this.invoiceCount = invoiceCount;
 	}
+
+	public String getRelationReceiveOrPayNum() {
+		return relationReceiveOrPayNum;
+	}
+
+	public void setRelationReceiveOrPayNum(String relationReceiveOrPayNum) {
+		this.relationReceiveOrPayNum = relationReceiveOrPayNum;
+	}
     
     
 }

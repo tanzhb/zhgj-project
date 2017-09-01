@@ -13,8 +13,9 @@ angular
 						'$stateParams',
 						'settings',
 						'InvoiceService',
+						'FileUploader',
 						function($rootScope, $scope, $state, $compile,$http,$location,$stateParams,settings,
-								InvoiceService) {
+								InvoiceService,FileUploader) {
 							$scope
 									.$on(
 											'$viewContentLoaded',
@@ -32,7 +33,7 @@ angular
 										        	debugger;
 													$scope.inOrOut=$stateParams.inOrOut;
 												if($scope.inOrOut.length>3){
-													//getInvoiceInfo($stateParams.inOrOut);
+													getInvoiceInfo($stateParams.inOrOut);
 												}
 										 		}else if($location.path()=="/invoiceView"){
 										 			debugger;
@@ -464,7 +465,7 @@ angular
 									debugger;
 									if($('#invoiceForm').valid()){//表单验证通过则执行添加功能
 										debugger;
-										InvoiceService.saveStockInOutCheck($scope.invoice).then(
+										InvoiceService.saveInvoice($scope.invoice).then(
 															function(data) {debugger;
 																toastr.success("保存发票数据成功！");
 																$scope.invoice = data;
@@ -484,7 +485,7 @@ angular
 							// 添加发票结束***************************************
 							
 							// 修改发票开始***************************************							
-							$scope.toEditStockInOutPage = function(judgeString) {//跳转至修改发票信息页面
+							$scope.toEditInvoicePage = function(judgeString) {//跳转至修改发票信息页面
 								debugger;
 								var id_count = table.$('input[type="checkbox"]:checked').length;
 								if(id_count==0){
@@ -493,13 +494,13 @@ angular
 									toastr.warning("只能选择一条数据进行编辑");
 								}else{
 									var serialNum = table.$('input[type="checkbox"]:checked').val();
-									$state.go("addOrEditStockInOutCheck",{inOrOut:serialNum+judgeString});
+									$state.go("addOrEditInvoice",{inOrOut:serialNum+judgeString});
 								}
 							};
 							// 修改发票结束***************************************							
 
 							// 删除发票开始***************************************							
-							$scope.delStockInOutCheck = function(judString) {
+							$scope.delInvoice = function(judString) {
 								debugger;
 								var ids = '';
 								// Iterate over all checkboxes in the table
@@ -520,15 +521,14 @@ angular
 								if (ids == '') {// 未勾选删除数据									
 									toastr.warning("未勾选要删除数据！");
 								} else {
-									$('#delStock'+judString+'CheckModal').modal('show');// 打开确认删除模态框
+									$('#delInvoice'+judString+'Modal').modal('show');// 打开确认删除模态框
 									
-									$scope.confirmDelStockInOutCheck = function() {										
-										StockInOutService
-												.delStockInOutChecks(ids)
+									$scope.confirmDelInVoice = function() {										
+										InvoiceService
+												.delInvoices(ids)
 												.then(
 														function(data) {
-															$('#delStock'+judString+'CheckModal').modal(
-																	'hide');// 删除成功后关闭模态框
+															$('#delInvoice'+judString+'Modal').modal('hide');;// 删除成功后关闭模态框
 															toastr.success("删除成功！");
 															table.ajax.reload(); // 重新加载datatables数据
 														},
@@ -541,9 +541,9 @@ angular
 									}
 								}								
 							};
-							$scope.showStockInOutCheckInfo=function(serialNum,judgeString){
+							$scope.showInvoiceInfo=function(serialNum,judgeString){
 								debugger;
-								 $state.go('stockInOutCheckView',{inOrOut:serialNum+judgeString},{reload:true}); 
+								 $state.go('invoiceView',{inOrOut:serialNum+judgeString},{reload:true}); 
 								
 							}
 							  var selectIndex,ajaxUrl;
@@ -903,13 +903,14 @@ angular
 						        })   							}); 
 							
 							
-							 function getStockInOutCheckInfo(serialNum){//获取出发票信息
+							 function getInvoiceInfo(serialNum){//获取出发票信息
 						    	   if(!handle.isNull(serialNum)){
 						    		   debugger;
 						    			 var promise =InvoiceService .selectDetailBySerialNum(serialNum);
 						 	        	promise.then(function(data){
 						 	        		  debugger;
 						 	        			 $scope.invoice = data.invoice;
+						 	        			 $scope.invoice.receiptDate=timeStamp2ShortString(data.invoice.receiptDate);
 						 	        			 $scope.invoice.billingDate=timeStamp2ShortString(data.invoice.billingDate);
 						 	        			 $scope.invoice.submitDate=timeStamp2ShortString(data.invoice.submitDate);
 						 	        			 if($stateParams.inOrOut.indexOf("in")>-1){
@@ -923,6 +924,55 @@ angular
 						 	            });
 						    		 }
 						       }
+							 
+							 //创建对象(上传附件开始)
+							 var uploader = $scope.uploader = new FileUploader({url:'rest/fileOperate/uploadSingleFile'});
+
+							 uploader.onAfterAddingFile = function(item){
+								 if(item.file.size>10000000){
+									 //toastr.warning("文件大小超过10M！");
+									 uploader.cancelAll();
+								 }
+							 }
+							 //添加文件到上传队列后
+							 uploader.onCompleteAll = function () {
+								 uploader.clearQueue();
+							 };
+							 //上传成功
+							 uploader.onSuccessItem = function (fileItem,response, status, headers) {
+								 if (status == 200){ 
+									 if(response.filename==""){
+										 toastr.error("上传失败！");
+										 return;
+									 }
+									 toastr.success("上传成功！");
+									 $scope.invoice.invoiceVoucher=response.filename;
+								 }else{
+									 toastr.error("上传失败！");
+									 $scope.file_temp = "";
+								 }
+							 };
+							 //上传失败
+							 uploader.onErrorItem = function (fileItem, response, status, headers) {
+								 toastr.error("上传失败！");
+							 };
+
+							 $scope.uploadFile = function(item){
+								 $scope.file_temp = item;
+							 }
+
+							 $scope.up = function(file){
+								 uploader.clearQueue();
+								 uploader.addToQueue(file);
+								 uploader.uploadAll();
+							 }
+							 $scope.downloadFile = function(obj){
+								 if(!handle.isNull(obj)){
+									 window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+obj.file;
+								 }else{
+									 toastr.error("下载失败!");
+								 }
+							 }
 							       /**
 							        * 下载EXCEL模板
 							        */

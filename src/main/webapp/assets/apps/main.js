@@ -1141,7 +1141,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 					'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 					  'assets/global/plugins/bootbox/bootbox.min.js',
 			        'assets/apps/service/InvoiceService.js',
-					'assets/apps/controllers/InvoiceController.js'
+					'assets/apps/controllers/InvoiceController.js',
+					'assets/apps/scripts/angular-file-upload-shim.min.js',
+                	'assets/apps/scripts/angular-file-upload.min.js'
                    	                        ]
                     });
                 }]
@@ -1167,7 +1169,10 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         						 'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
          				        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
         				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
-        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css'
+        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css',
+        				        'assets/apps/scripts/angular-file-upload-shim.min.js',
+        				        'assets/apps/scripts/angular-file-upload.min.js',
+        				        'assets/apps/scripts/FileUploader.js'
         				        ]
         			});
         		}]
