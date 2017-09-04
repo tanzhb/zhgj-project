@@ -832,18 +832,21 @@ angular
 		 	    		
 							// 页面加载完成后调用，验证输入框
 							$scope.$watch('$viewContentLoaded', function() { 
-								var  comName,relationBuyOrSaleNum,relationReceiveOrPayNum,receiptDate;
+								var  comName,relationBuyOrSaleNum,relationReceiveOrPayNum,receiptDate,approver,approvalDate;
 								if($scope.inOrOut!=undefined&&$scope.inOrOut.indexOf("in")>-1){
 									comName={required:"开票方不能为空！"};
 									relationBuyOrSaleNum={required:"关联采购单号不能为空！"};
 									relationReceiveOrPayNum={required:"关联付款单号不能为空！"};
 									receiptDate={required:"付款日期不能为空！"};
-									qualifiedCountData={required:true,digits:true,qualifiedNumCheck:!0};
+									approver={required:"收票人不能为空！"};
+									approvalDate={required:"收票日期不能为空！"};
 								}else if($scope.inOrOut!=undefined&&$scope.inOrOut.indexOf("out")>-1){
 									comName={required:"收票方不能为空！"};
 									relationBuyOrSaleNum={required:"关联销售单号不能为空！"};
 									relationReceiveOrPayNum={required:"关联收款单号不能为空！"};
 									receiptDate={required:"收款日期不能为空！"};
+									approver={required:"审批人不能为空！"};
+									approvalDate={required:"审批日期不能为空！"};
 								}
 								var e = $("#invoiceForm"),
 						        r = $(".alert-danger", e),
@@ -864,7 +867,9 @@ angular
 						            	billingDate:{required:"开票日期不能为空！"},
 						            	invoiceNO:{required:"发票号不能为空！"},
 						            	submitter:{required:"提交人不能为空！"},
-						            	submitDate:{required:"提交日期不能为空！"}
+						            	submitDate:{required:"提交日期不能为空！"},
+						            	approver:approver,
+						            	approvalDate:approvalDate
 						            },
 						            rules: {
 						            	invoiceNum:{required:true},
@@ -877,7 +882,9 @@ angular
 						            	billingDate:{required:true},
 						            	invoiceNO:{required:true},
 						            	submitter:{required:true},
-						            	submitDate:{required:true}
+						            	submitDate:{required:true},
+						            	approver:{required:true},
+						            	approvalDate:{required:true}
 						            },
 						            invalidHandler: function(e, t) {
 						                i.hide(),

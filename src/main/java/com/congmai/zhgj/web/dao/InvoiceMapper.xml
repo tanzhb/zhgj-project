@@ -23,6 +23,8 @@
     <result column="receiptRemark" property="receiptRemark" jdbcType="VARCHAR" />
     <result column="invoiceVoucher" property="invoiceVoucher" jdbcType="VARCHAR" />
     <result column="billWay" property="billWay" jdbcType="VARCHAR" />
+    <result column="approver" property="approver" jdbcType="VARCHAR" />
+    <result column="approvalDate" property="approvalDate" jdbcType="DATE" />
     <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
@@ -91,7 +93,8 @@
     serialNum, invoiceNum, supplyComId, buyComId, orderSerial, clauseSettlementSerial, 
     paymentSerial, paymentAmount, paymentStatus, invoiceType, invoiceAmount, billingDate, 
     invoiceNO, submitter, submitDate, billingRemark, receiptDate, operator, receiptRemark, 
-    invoiceVoucher, billWay, delFlg, creator, createTime, updater, updateTime
+    invoiceVoucher, billWay, approver, approvalDate, delFlg, creator, createTime, updater, 
+    updateTime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.InvoiceExample" >
     select
@@ -131,8 +134,9 @@
       invoiceNO, submitter, submitDate, 
       billingRemark, receiptDate, operator, 
       receiptRemark, invoiceVoucher, billWay, 
-      delFlg, creator, createTime, 
-      updater, updateTime)
+      approver, approvalDate, delFlg, 
+      creator, createTime, updater, 
+      updateTime)
     values (#{serialNum,jdbcType=VARCHAR}, #{invoiceNum,jdbcType=VARCHAR}, #{supplyComId,jdbcType=VARCHAR}, 
       #{buyComId,jdbcType=VARCHAR}, #{orderSerial,jdbcType=VARCHAR}, #{clauseSettlementSerial,jdbcType=VARCHAR}, 
       #{paymentSerial,jdbcType=VARCHAR}, #{paymentAmount,jdbcType=VARCHAR}, #{paymentStatus,jdbcType=VARCHAR}, 
@@ -140,8 +144,9 @@
       #{invoiceNO,jdbcType=VARCHAR}, #{submitter,jdbcType=VARCHAR}, #{submitDate,jdbcType=DATE}, 
       #{billingRemark,jdbcType=VARCHAR}, #{receiptDate,jdbcType=DATE}, #{operator,jdbcType=VARCHAR}, 
       #{receiptRemark,jdbcType=VARCHAR}, #{invoiceVoucher,jdbcType=VARCHAR}, #{billWay,jdbcType=VARCHAR}, 
-      #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+      #{approver,jdbcType=VARCHAR}, #{approvalDate,jdbcType=DATE}, #{delFlg,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.Invoice" >
     insert into invoice
@@ -208,6 +213,12 @@
       </if>
       <if test="billWay != null" >
         billWay,
+      </if>
+      <if test="approver != null" >
+        approver,
+      </if>
+      <if test="approvalDate != null" >
+        approvalDate,
       </if>
       <if test="delFlg != null" >
         delFlg,
@@ -288,6 +299,12 @@
       </if>
       <if test="billWay != null" >
         #{billWay,jdbcType=VARCHAR},
+      </if>
+      <if test="approver != null" >
+        #{approver,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalDate != null" >
+        #{approvalDate,jdbcType=DATE},
       </if>
       <if test="delFlg != null" >
         #{delFlg,jdbcType=VARCHAR},
@@ -378,6 +395,12 @@
       <if test="record.billWay != null" >
         billWay = #{record.billWay,jdbcType=VARCHAR},
       </if>
+      <if test="record.approver != null" >
+        approver = #{record.approver,jdbcType=VARCHAR},
+      </if>
+      <if test="record.approvalDate != null" >
+        approvalDate = #{record.approvalDate,jdbcType=DATE},
+      </if>
       <if test="record.delFlg != null" >
         delFlg = #{record.delFlg,jdbcType=VARCHAR},
       </if>
@@ -421,6 +444,8 @@
       receiptRemark = #{record.receiptRemark,jdbcType=VARCHAR},
       invoiceVoucher = #{record.invoiceVoucher,jdbcType=VARCHAR},
       billWay = #{record.billWay,jdbcType=VARCHAR},
+      approver = #{record.approver,jdbcType=VARCHAR},
+      approvalDate = #{record.approvalDate,jdbcType=DATE},
       delFlg = #{record.delFlg,jdbcType=VARCHAR},
       creator = #{record.creator,jdbcType=VARCHAR},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
@@ -493,6 +518,12 @@
       <if test="billWay != null" >
         billWay = #{billWay,jdbcType=VARCHAR},
       </if>
+      <if test="approver != null" >
+        approver = #{approver,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalDate != null" >
+        approvalDate = #{approvalDate,jdbcType=DATE},
+      </if>
       <if test="delFlg != null" >
         delFlg = #{delFlg,jdbcType=VARCHAR},
       </if>
@@ -533,6 +564,8 @@
       receiptRemark = #{receiptRemark,jdbcType=VARCHAR},
       invoiceVoucher = #{invoiceVoucher,jdbcType=VARCHAR},
       billWay = #{billWay,jdbcType=VARCHAR},
+      approver = #{approver,jdbcType=VARCHAR},
+      approvalDate = #{approvalDate,jdbcType=DATE},
       delFlg = #{delFlg,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP},
@@ -540,4 +573,10 @@
       updateTime = #{updateTime,jdbcType=TIMESTAMP}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
+  <delete id="deleteInvoice" parameterType="java.util.List">
+    	update  invoice   set delFlg=1  where serialNum in
+        <foreach item="idList" collection="list" open="(" close=")" separator=",">
+            #{idList}
+        </foreach>
+    </delete>
 </mapper>
