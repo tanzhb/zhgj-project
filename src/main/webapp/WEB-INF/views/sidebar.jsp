@@ -157,7 +157,7 @@
 	         </ul>
         </li>
         <li class="nav-item">
-            <a ui-sref="todo">
+            <a ui-sref="invoice">
                 <i class="icon-check"></i>
                 <span class="title">发票</span>
             </a>

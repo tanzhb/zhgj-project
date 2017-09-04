@@ -1087,7 +1087,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
-        // 请假管理
+ // 请假管理
 		.state(
 									'vacation',
 									{
@@ -1123,7 +1123,86 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 													} ]
 										}
 									})
-
+        .state('invoice', {
+            url: "/invoice?:inOrOut",
+            templateUrl:"rest/invoice/viewInvoiceList",
+            data: {pageTitle: '发票'},
+            controller: "InvoiceController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [                             
+					'assets/global/plugins/datatables/datatables.min.css',
+					'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+					'assets/global/plugins/datatables/datatables.all.min.js',
+					 'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
+					'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+					  'assets/global/plugins/bootbox/bootbox.min.js',
+			        'assets/apps/service/InvoiceService.js',
+					'assets/apps/controllers/InvoiceController.js',
+					'assets/apps/scripts/angular-file-upload-shim.min.js',
+                	'assets/apps/scripts/angular-file-upload.min.js'
+                   	                        ]
+                    });
+                }]
+            }
+        })
+        .state('addOrEditInvoice', {//发票新建编辑
+        	url: "/addOrEditInvoice?:inOrOut",
+        	templateUrl: "rest/invoice/addOrEditInvoice",
+        	data: {pageTitle: '新建发票信息'},
+        	reload:true, 
+        	controller: "InvoiceController",
+        	resolve: {
+        		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+        			return $ocLazyLoad.load({
+        				name: 'MetronicApp',
+        				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+        				files: [       
+        				        'assets/global/plugins/datatables/datatables.min.css',                  
+        				        'assets/global/plugins/datatables/datatables.all.min.js',
+        				        'assets/apps/service/InvoiceService.js',
+        						'assets/apps/controllers/InvoiceController.js',
+        						 'assets/apps/scripts/pageHandle.js',
+        						 'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
+         				        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
+        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css',
+        				        'assets/apps/scripts/angular-file-upload-shim.min.js',
+        				        'assets/apps/scripts/angular-file-upload.min.js',
+        				        'assets/apps/scripts/FileUploader.js'
+        				        ]
+        			});
+        		}]
+        	}	        
+        })
+        
+        .state('invoiceView', {//出入库检验查看
+	        	url: "/invoiceView?:inOrOut",
+	        	templateUrl: "rest/invoice/viewInvoice",
+	        	data: {pageTitle: '发票详情'},
+	        	reload:true, 
+	        	controller: "InvoiceController",
+	        	resolve: {
+	        		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+	        			return $ocLazyLoad.load({
+	        				name: 'MetronicApp',
+	        				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+	        				files: [       
+	        				        'assets/global/plugins/datatables/datatables.min.css',                  
+	        				        'assets/global/plugins/datatables/datatables.all.min.js',
+	        				        'assets/apps/service/InvoiceService.js',
+	        						'assets/apps/controllers/InvoiceController.js',
+	        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
+	        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css',
+	        				        'assets/pages/scripts/table-datatables-scroller.min.js'
+	        				        ]
+	        			});
+	        		}]
+	        	}	        
+	    })   
 }]);
 
 

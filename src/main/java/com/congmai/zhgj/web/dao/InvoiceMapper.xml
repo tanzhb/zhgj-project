@@ -1,0 +1,582 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.congmai.zhgj.web.dao.InvoiceMapper" >
+  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.Invoice" >
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="invoiceNum" property="invoiceNum" jdbcType="VARCHAR" />
+    <result column="supplyComId" property="supplyComId" jdbcType="VARCHAR" />
+    <result column="buyComId" property="buyComId" jdbcType="VARCHAR" />
+    <result column="orderSerial" property="orderSerial" jdbcType="VARCHAR" />
+    <result column="clauseSettlementSerial" property="clauseSettlementSerial" jdbcType="VARCHAR" />
+    <result column="paymentSerial" property="paymentSerial" jdbcType="VARCHAR" />
+    <result column="paymentAmount" property="paymentAmount" jdbcType="VARCHAR" />
+    <result column="paymentStatus" property="paymentStatus" jdbcType="VARCHAR" />
+    <result column="invoiceType" property="invoiceType" jdbcType="VARCHAR" />
+    <result column="invoiceAmount" property="invoiceAmount" jdbcType="VARCHAR" />
+    <result column="billingDate" property="billingDate" jdbcType="DATE" />
+    <result column="invoiceNO" property="invoiceNO" jdbcType="VARCHAR" />
+    <result column="submitter" property="submitter" jdbcType="VARCHAR" />
+    <result column="submitDate" property="submitDate" jdbcType="DATE" />
+    <result column="billingRemark" property="billingRemark" jdbcType="VARCHAR" />
+    <result column="receiptDate" property="receiptDate" jdbcType="DATE" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="receiptRemark" property="receiptRemark" jdbcType="VARCHAR" />
+    <result column="invoiceVoucher" property="invoiceVoucher" jdbcType="VARCHAR" />
+    <result column="billWay" property="billWay" jdbcType="VARCHAR" />
+    <result column="approver" property="approver" jdbcType="VARCHAR" />
+    <result column="approvalDate" property="approvalDate" jdbcType="DATE" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    serialNum, invoiceNum, supplyComId, buyComId, orderSerial, clauseSettlementSerial, 
+    paymentSerial, paymentAmount, paymentStatus, invoiceType, invoiceAmount, billingDate, 
+    invoiceNO, submitter, submitDate, billingRemark, receiptDate, operator, receiptRemark, 
+    invoiceVoucher, billWay, approver, approvalDate, delFlg, creator, createTime, updater, 
+    updateTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.InvoiceExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from invoice
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from invoice
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from invoice
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.InvoiceExample" >
+    delete from invoice
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.congmai.zhgj.web.model.Invoice" >
+    insert into invoice (serialNum, invoiceNum, supplyComId, 
+      buyComId, orderSerial, clauseSettlementSerial, 
+      paymentSerial, paymentAmount, paymentStatus, 
+      invoiceType, invoiceAmount, billingDate, 
+      invoiceNO, submitter, submitDate, 
+      billingRemark, receiptDate, operator, 
+      receiptRemark, invoiceVoucher, billWay, 
+      approver, approvalDate, delFlg, 
+      creator, createTime, updater, 
+      updateTime)
+    values (#{serialNum,jdbcType=VARCHAR}, #{invoiceNum,jdbcType=VARCHAR}, #{supplyComId,jdbcType=VARCHAR}, 
+      #{buyComId,jdbcType=VARCHAR}, #{orderSerial,jdbcType=VARCHAR}, #{clauseSettlementSerial,jdbcType=VARCHAR}, 
+      #{paymentSerial,jdbcType=VARCHAR}, #{paymentAmount,jdbcType=VARCHAR}, #{paymentStatus,jdbcType=VARCHAR}, 
+      #{invoiceType,jdbcType=VARCHAR}, #{invoiceAmount,jdbcType=VARCHAR}, #{billingDate,jdbcType=DATE}, 
+      #{invoiceNO,jdbcType=VARCHAR}, #{submitter,jdbcType=VARCHAR}, #{submitDate,jdbcType=DATE}, 
+      #{billingRemark,jdbcType=VARCHAR}, #{receiptDate,jdbcType=DATE}, #{operator,jdbcType=VARCHAR}, 
+      #{receiptRemark,jdbcType=VARCHAR}, #{invoiceVoucher,jdbcType=VARCHAR}, #{billWay,jdbcType=VARCHAR}, 
+      #{approver,jdbcType=VARCHAR}, #{approvalDate,jdbcType=DATE}, #{delFlg,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.Invoice" >
+    insert into invoice
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        serialNum,
+      </if>
+      <if test="invoiceNum != null" >
+        invoiceNum,
+      </if>
+      <if test="supplyComId != null" >
+        supplyComId,
+      </if>
+      <if test="buyComId != null" >
+        buyComId,
+      </if>
+      <if test="orderSerial != null" >
+        orderSerial,
+      </if>
+      <if test="clauseSettlementSerial != null" >
+        clauseSettlementSerial,
+      </if>
+      <if test="paymentSerial != null" >
+        paymentSerial,
+      </if>
+      <if test="paymentAmount != null" >
+        paymentAmount,
+      </if>
+      <if test="paymentStatus != null" >
+        paymentStatus,
+      </if>
+      <if test="invoiceType != null" >
+        invoiceType,
+      </if>
+      <if test="invoiceAmount != null" >
+        invoiceAmount,
+      </if>
+      <if test="billingDate != null" >
+        billingDate,
+      </if>
+      <if test="invoiceNO != null" >
+        invoiceNO,
+      </if>
+      <if test="submitter != null" >
+        submitter,
+      </if>
+      <if test="submitDate != null" >
+        submitDate,
+      </if>
+      <if test="billingRemark != null" >
+        billingRemark,
+      </if>
+      <if test="receiptDate != null" >
+        receiptDate,
+      </if>
+      <if test="operator != null" >
+        operator,
+      </if>
+      <if test="receiptRemark != null" >
+        receiptRemark,
+      </if>
+      <if test="invoiceVoucher != null" >
+        invoiceVoucher,
+      </if>
+      <if test="billWay != null" >
+        billWay,
+      </if>
+      <if test="approver != null" >
+        approver,
+      </if>
+      <if test="approvalDate != null" >
+        approvalDate,
+      </if>
+      <if test="delFlg != null" >
+        delFlg,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="updater != null" >
+        updater,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceNum != null" >
+        #{invoiceNum,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyComId != null" >
+        #{supplyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="buyComId != null" >
+        #{buyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSerial != null" >
+        #{orderSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="clauseSettlementSerial != null" >
+        #{clauseSettlementSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentSerial != null" >
+        #{paymentSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentAmount != null" >
+        #{paymentAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentStatus != null" >
+        #{paymentStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceType != null" >
+        #{invoiceType,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceAmount != null" >
+        #{invoiceAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="billingDate != null" >
+        #{billingDate,jdbcType=DATE},
+      </if>
+      <if test="invoiceNO != null" >
+        #{invoiceNO,jdbcType=VARCHAR},
+      </if>
+      <if test="submitter != null" >
+        #{submitter,jdbcType=VARCHAR},
+      </if>
+      <if test="submitDate != null" >
+        #{submitDate,jdbcType=DATE},
+      </if>
+      <if test="billingRemark != null" >
+        #{billingRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="receiptDate != null" >
+        #{receiptDate,jdbcType=DATE},
+      </if>
+      <if test="operator != null" >
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="receiptRemark != null" >
+        #{receiptRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceVoucher != null" >
+        #{invoiceVoucher,jdbcType=VARCHAR},
+      </if>
+      <if test="billWay != null" >
+        #{billWay,jdbcType=VARCHAR},
+      </if>
+      <if test="approver != null" >
+        #{approver,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalDate != null" >
+        #{approvalDate,jdbcType=DATE},
+      </if>
+      <if test="delFlg != null" >
+        #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.InvoiceExample" resultType="java.lang.Integer" >
+    select count(*) from invoice
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update invoice
+    <set >
+      <if test="record.serialNum != null" >
+        serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.invoiceNum != null" >
+        invoiceNum = #{record.invoiceNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplyComId != null" >
+        supplyComId = #{record.supplyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.buyComId != null" >
+        buyComId = #{record.buyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderSerial != null" >
+        orderSerial = #{record.orderSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clauseSettlementSerial != null" >
+        clauseSettlementSerial = #{record.clauseSettlementSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paymentSerial != null" >
+        paymentSerial = #{record.paymentSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paymentAmount != null" >
+        paymentAmount = #{record.paymentAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paymentStatus != null" >
+        paymentStatus = #{record.paymentStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.invoiceType != null" >
+        invoiceType = #{record.invoiceType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.invoiceAmount != null" >
+        invoiceAmount = #{record.invoiceAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.billingDate != null" >
+        billingDate = #{record.billingDate,jdbcType=DATE},
+      </if>
+      <if test="record.invoiceNO != null" >
+        invoiceNO = #{record.invoiceNO,jdbcType=VARCHAR},
+      </if>
+      <if test="record.submitter != null" >
+        submitter = #{record.submitter,jdbcType=VARCHAR},
+      </if>
+      <if test="record.submitDate != null" >
+        submitDate = #{record.submitDate,jdbcType=DATE},
+      </if>
+      <if test="record.billingRemark != null" >
+        billingRemark = #{record.billingRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.receiptDate != null" >
+        receiptDate = #{record.receiptDate,jdbcType=DATE},
+      </if>
+      <if test="record.operator != null" >
+        operator = #{record.operator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.receiptRemark != null" >
+        receiptRemark = #{record.receiptRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.invoiceVoucher != null" >
+        invoiceVoucher = #{record.invoiceVoucher,jdbcType=VARCHAR},
+      </if>
+      <if test="record.billWay != null" >
+        billWay = #{record.billWay,jdbcType=VARCHAR},
+      </if>
+      <if test="record.approver != null" >
+        approver = #{record.approver,jdbcType=VARCHAR},
+      </if>
+      <if test="record.approvalDate != null" >
+        approvalDate = #{record.approvalDate,jdbcType=DATE},
+      </if>
+      <if test="record.delFlg != null" >
+        delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creator != null" >
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updater != null" >
+        updater = #{record.updater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update invoice
+    set serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      invoiceNum = #{record.invoiceNum,jdbcType=VARCHAR},
+      supplyComId = #{record.supplyComId,jdbcType=VARCHAR},
+      buyComId = #{record.buyComId,jdbcType=VARCHAR},
+      orderSerial = #{record.orderSerial,jdbcType=VARCHAR},
+      clauseSettlementSerial = #{record.clauseSettlementSerial,jdbcType=VARCHAR},
+      paymentSerial = #{record.paymentSerial,jdbcType=VARCHAR},
+      paymentAmount = #{record.paymentAmount,jdbcType=VARCHAR},
+      paymentStatus = #{record.paymentStatus,jdbcType=VARCHAR},
+      invoiceType = #{record.invoiceType,jdbcType=VARCHAR},
+      invoiceAmount = #{record.invoiceAmount,jdbcType=VARCHAR},
+      billingDate = #{record.billingDate,jdbcType=DATE},
+      invoiceNO = #{record.invoiceNO,jdbcType=VARCHAR},
+      submitter = #{record.submitter,jdbcType=VARCHAR},
+      submitDate = #{record.submitDate,jdbcType=DATE},
+      billingRemark = #{record.billingRemark,jdbcType=VARCHAR},
+      receiptDate = #{record.receiptDate,jdbcType=DATE},
+      operator = #{record.operator,jdbcType=VARCHAR},
+      receiptRemark = #{record.receiptRemark,jdbcType=VARCHAR},
+      invoiceVoucher = #{record.invoiceVoucher,jdbcType=VARCHAR},
+      billWay = #{record.billWay,jdbcType=VARCHAR},
+      approver = #{record.approver,jdbcType=VARCHAR},
+      approvalDate = #{record.approvalDate,jdbcType=DATE},
+      delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      updater = #{record.updater,jdbcType=VARCHAR},
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.Invoice" >
+    update invoice
+    <set >
+      <if test="invoiceNum != null" >
+        invoiceNum = #{invoiceNum,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyComId != null" >
+        supplyComId = #{supplyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="buyComId != null" >
+        buyComId = #{buyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSerial != null" >
+        orderSerial = #{orderSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="clauseSettlementSerial != null" >
+        clauseSettlementSerial = #{clauseSettlementSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentSerial != null" >
+        paymentSerial = #{paymentSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentAmount != null" >
+        paymentAmount = #{paymentAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentStatus != null" >
+        paymentStatus = #{paymentStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceType != null" >
+        invoiceType = #{invoiceType,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceAmount != null" >
+        invoiceAmount = #{invoiceAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="billingDate != null" >
+        billingDate = #{billingDate,jdbcType=DATE},
+      </if>
+      <if test="invoiceNO != null" >
+        invoiceNO = #{invoiceNO,jdbcType=VARCHAR},
+      </if>
+      <if test="submitter != null" >
+        submitter = #{submitter,jdbcType=VARCHAR},
+      </if>
+      <if test="submitDate != null" >
+        submitDate = #{submitDate,jdbcType=DATE},
+      </if>
+      <if test="billingRemark != null" >
+        billingRemark = #{billingRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="receiptDate != null" >
+        receiptDate = #{receiptDate,jdbcType=DATE},
+      </if>
+      <if test="operator != null" >
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="receiptRemark != null" >
+        receiptRemark = #{receiptRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceVoucher != null" >
+        invoiceVoucher = #{invoiceVoucher,jdbcType=VARCHAR},
+      </if>
+      <if test="billWay != null" >
+        billWay = #{billWay,jdbcType=VARCHAR},
+      </if>
+      <if test="approver != null" >
+        approver = #{approver,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalDate != null" >
+        approvalDate = #{approvalDate,jdbcType=DATE},
+      </if>
+      <if test="delFlg != null" >
+        delFlg = #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        updater = #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.Invoice" >
+    update invoice
+    set invoiceNum = #{invoiceNum,jdbcType=VARCHAR},
+      supplyComId = #{supplyComId,jdbcType=VARCHAR},
+      buyComId = #{buyComId,jdbcType=VARCHAR},
+      orderSerial = #{orderSerial,jdbcType=VARCHAR},
+      clauseSettlementSerial = #{clauseSettlementSerial,jdbcType=VARCHAR},
+      paymentSerial = #{paymentSerial,jdbcType=VARCHAR},
+      paymentAmount = #{paymentAmount,jdbcType=VARCHAR},
+      paymentStatus = #{paymentStatus,jdbcType=VARCHAR},
+      invoiceType = #{invoiceType,jdbcType=VARCHAR},
+      invoiceAmount = #{invoiceAmount,jdbcType=VARCHAR},
+      billingDate = #{billingDate,jdbcType=DATE},
+      invoiceNO = #{invoiceNO,jdbcType=VARCHAR},
+      submitter = #{submitter,jdbcType=VARCHAR},
+      submitDate = #{submitDate,jdbcType=DATE},
+      billingRemark = #{billingRemark,jdbcType=VARCHAR},
+      receiptDate = #{receiptDate,jdbcType=DATE},
+      operator = #{operator,jdbcType=VARCHAR},
+      receiptRemark = #{receiptRemark,jdbcType=VARCHAR},
+      invoiceVoucher = #{invoiceVoucher,jdbcType=VARCHAR},
+      billWay = #{billWay,jdbcType=VARCHAR},
+      approver = #{approver,jdbcType=VARCHAR},
+      approvalDate = #{approvalDate,jdbcType=DATE},
+      delFlg = #{delFlg,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <delete id="deleteInvoice" parameterType="java.util.List">
+    	update  invoice   set delFlg=1  where serialNum in
+        <foreach item="idList" collection="list" open="(" close=")" separator=",">
+            #{idList}
+        </foreach>
+    </delete>
+</mapper>
