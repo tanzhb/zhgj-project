@@ -18,6 +18,7 @@
 	            </a>
 	        </li>
         </shiro:hasAnyRoles>
+        <shiro:hasPermission name="zhgj:baseData">
         <li class="nav-item">
             <a href="javascript:;" class="nav-link nav-toggle">
                 <i class="icon-settings"></i>
@@ -25,16 +26,20 @@
                 <span class="arrow "></span>
             </a>
             <ul class="sub-menu">
+            	<shiro:hasPermission name="zhgj:materiel:*">
                 <li>
                     <a ui-sref="materiel">
                         <i class="icon-puzzle"></i> 物料信息</span>
                     </a>
                 </li>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="zhgj:companyManage:*">
                 <li>
                     <a ui-sref="company">
                         <i class="icon-paper-clip"></i> 企业信息</span>
                     </a>
                 </li>
+                </shiro:hasPermission>
                 <li>
                     <a ui-sref="priceList">
                         <i class="icon-check"></i> 价格目录</span>
@@ -52,6 +57,7 @@
                 </li>
             </ul>
         </li>
+        </shiro:hasPermission>
         <li class="nav-item">
             <a href="javascript:;" class="nav-link nav-toggle" >
              <i class="icon-settings"></i>
