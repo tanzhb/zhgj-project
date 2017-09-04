@@ -45,7 +45,7 @@
 					</button><button ng-click="toEditInvoicePage('in')"
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-edit"></i> 修改
-					</button> <button ng-click="delInvoice('In')" 
+					</button> <button ng-click="delInvoice('in')" 
 						data-toggle="modal" 
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-minus"></i> 删除
@@ -73,7 +73,7 @@
 			</div>
 
 			<!-- 删除进项票modal 开始 -->
-			<div id="delInVoiceInModal" class="modal fade" tabindex=""
+			<div id="delInvoiceinModal" class="modal fade" tabindex=""
 
 				data-backdrop="static" data-keyboard="false">
 				<div class="modal-dialog">
@@ -142,7 +142,7 @@
 					</button><button ng-click="toEditInvoicePage('out')"
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-edit"></i> 修改
-					</button> <button ng-click="delInvoice('Out')" 
+					</button> <button ng-click="delInvoice('out')" 
 						data-toggle="modal" 
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-minus"></i> 删除
@@ -170,7 +170,7 @@
 			</div>
 
 			<!-- 删除销项票modal 开始 -->
-			<div id="delInVoiceOutModal" class="modal fade" tabindex=""
+			<div id="delInvoiceoutModal" class="modal fade" tabindex=""
 
 				data-backdrop="static" data-keyboard="false">
 				<div class="modal-dialog">
