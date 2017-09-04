@@ -269,23 +269,23 @@
                                                                    <div class="row"><!-- row START -->
                                                              <div class="col-md-4">
 											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="checker"><span  ng-if="inOrOut.indexOf('in')>-1"  >收票人 </span><span   ng-if="inOrOut.indexOf('out')>-1" >审批人</span> :</label>
+                                                    <label class="col-md-4 control-label" for="approver"><span class="required"> * </span><span  ng-if="inOrOut.indexOf('in')>-1"  >收票人 </span><span   ng-if="inOrOut.indexOf('out')>-1" >审批人</span> :</label>
                                                        <div class="col-md-8">
-                                                       <input type="text"  class="form-control" placeholder=""  id="submitter" name ="submitter"   ng-hide="invoiceAdd"  
-												ng-model="invoice.submitter" > 
+                                                       <input type="text"  class="form-control" placeholder=""  id="approver" name ="approver"   ng-hide="invoiceAdd"  
+												ng-model="invoice.approver" > 
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="invoiceView">{{invoice.submitter}}</p> 
+                                                                        <p class="control-label left" ng-show="invoiceView">{{invoice.approver}}</p> 
                                                                     </div>
                                             </div>
 										</div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group form-md-line-input">
-                                                                <label class="col-md-4 control-label" for="contactNum"><span  ng-if="inOrOut.indexOf('in')>-1"  >收票日期 </span><span   ng-if="inOrOut.indexOf('out')>-1" >审批日期</span> : </label>
+                                                                <label class="col-md-4 control-label" for="approvalDate"><span class="required"> * </span><span  ng-if="inOrOut.indexOf('in')>-1"  >收票日期 </span><span   ng-if="inOrOut.indexOf('out')>-1" >审批日期</span> : </label>
                                                                        <div class="col-md-8">
-                                                       <input type="text"  class="form-control" placeholder=""  id="submitter" name ="submitter"   ng-hide="invoiceAdd"   
-												ng-model="invoice.submitter" > 
+                                                       <input type="text"  class="form-control form-control-inline date-picker"     data-date-format="yyyy-mm-dd"   placeholder=""  data-date-viewmode="years"  id="approvalDate" name ="approvalDate"  ng-hide="invoiceAdd"   
+												ng-model="invoice.approvalDate" > 
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="invoiceView">{{invoice.submitter}}</p> 
+                                                                        <p class="control-label left" ng-show="invoiceView">{{invoice.approvalDate| date:'yyyy-MM-dd'}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>

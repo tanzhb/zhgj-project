@@ -75,6 +75,10 @@ public class Invoice {
     private  String comName;//收票方/开票方名称  
     
     private  String unBillAmount;//未开金额
+    
+    private  String approver;
+    
+    private  Date approvalDate;
 
     public String getSerialNum() {
         return serialNum;
@@ -339,6 +343,22 @@ public class Invoice {
 
 	public void setRelationReceiveOrPayNum(String relationReceiveOrPayNum) {
 		this.relationReceiveOrPayNum = relationReceiveOrPayNum;
+	}
+
+	public String getApprover() {
+		return approver;
+	}
+
+	public void setApprover(String approver) {
+		this.approver = approver;
+	}
+
+	public Date getApprovalDate() {
+		return approvalDate;
+	}
+
+	public void setApprovalDate(Date approvalDate) {
+		this.approvalDate = approvalDate;
 	}
     
     
