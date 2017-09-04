@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.model;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -110,6 +111,12 @@ public class PaymentRecord {
     
     //结算条款的状态 
     private String clauseStatus;
+    
+    
+    private List<ClauseSettlementDetail> clauseSettList;
+    
+    
+    private String clauseSettlementDetailSerialNum;
 
     //删除标识
     private String delFlg;
@@ -460,5 +467,22 @@ public class PaymentRecord {
 
 	public void setClauseStatus(String clauseStatus) {
 		this.clauseStatus = clauseStatus;
+	}
+
+	public List<ClauseSettlementDetail> getClauseSettList() {
+		return clauseSettList;
+	}
+
+	public void setClauseSettList(List<ClauseSettlementDetail> clauseSettList) {
+		this.clauseSettList = clauseSettList;
+	}
+
+	public String getClauseSettlementDetailSerialNum() {
+		return clauseSettlementDetailSerialNum;
+	}
+
+	public void setClauseSettlementDetailSerialNum(
+			String clauseSettlementDetailSerialNum) {
+		this.clauseSettlementDetailSerialNum = clauseSettlementDetailSerialNum;
 	}
 }

@@ -33,6 +33,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.alibaba.druid.util.StringUtils;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.ContractVO;
@@ -47,7 +48,7 @@ import com.congmai.zhgj.web.service.PayService;
 
 
 /**
- * 合同管理controller
+ * 付款管理controller
  * @author czw
  *
  */
@@ -69,12 +70,15 @@ public class PayController {
 	@Resource
     private OrderService orderService;
 	
+	/**
+	 * 付款service
+	 */
 	@Resource
 	private PayService payService;
 
 	/**
 	 * 
-	 * @Description 查找所有用户合同信息
+	 * @Description 查找所有用户付款信息
 	 * @return
 	 */
 	@RequestMapping(value = "/findAllPaymentRecord", method = RequestMethod.GET)
@@ -96,7 +100,7 @@ public class PayController {
 	
 	/**
 	 * 
-	 * @Description 获取销售订单信息
+	 * @Description 获取采购订单信息
 	 * @param ids
 	 * @return
 	 */
@@ -120,15 +124,15 @@ public class PayController {
 
 
 	/**
-	 * 保存用户合同
-	 * @param contractVO（合同对象）
+	 * 保存用户付款信息
+	 * @param record（付款对象）
 	 * @param request（http 请求对象）
 	 * @param ucBuilder
 	 * @return 操作结果
 	 */
 	@RequestMapping(value = "/savePaymentRecord", method = RequestMethod.POST)
 	public ResponseEntity<Void> saveUserContract(@Valid PaymentRecord record, HttpServletRequest request,
-			UriComponentsBuilder ucBuilder,@RequestParam(value = "file")MultipartFile file) {
+			UriComponentsBuilder ucBuilder,MultipartFile file) {
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
 
@@ -138,6 +142,7 @@ public class PayController {
 
 			if(file!=null){
 				paymentVoucher=uploadFile(file); 
+				record.setPaymentVoucher(paymentVoucher);
 			}
 		//如果id为空执行保存
 		if(StringUtils.isEmpty(record.getSerialNum())){
@@ -151,40 +156,52 @@ public class PayController {
 			plan.setPaymentAmount(record.getPaymentAmount());
 			plan.setCreator(currenLoginName);
 			plan.setClauseSettlementSerial(record.getClauseSettlementSerial());
+			//添加付款计划
 			payService.insertPaymentPlan(plan);
 			
 			
 			String serialNum=ApplicationUtils.random32UUID(); 
 			record.setSerialNum(serialNum);
 			record.setCreator(currenLoginName);
-			record.setPaymentVoucher(paymentVoucher);
 			record.setPaymentPlanSerial(plan.getSerialNum());
 			record.setBuyComId(null);
+			//添加付款记录
 			payService.insertPaymentRecord(record);
-			
-			
-			
-		}/*else{
+		}else{
 			//如果id不为空执行更新
-			User user1=(User) request.getSession().getAttribute("userInfo");
-			contractVO.setUpdater(currenLoginName);
-
-			//给各自的文件字段赋值文件名
-			contractVO.setElectronicContract(electronicContract);
-			contractVO.setSignContract(signContract);
-
-			contractService.updateContract(contractVO);
-		}*/
+			PaymentPlan plan=new PaymentPlan();
+			plan.setSerialNum(record.getPaymentPlanSerial());
+			plan.setOrderSerial(record.getOrderSerial());
+			plan.setPaymentPlanNum(record.getPaymentPlanNum());
+			plan.setPaymentStyle(record.getPaymentStyle());
+			plan.setSupplyComId(record.getSupplyComId());
+			plan.setBuyComId(null);
+			plan.setPaymentAmount(record.getPaymentAmount());
+			plan.setClauseSettlementSerial(record.getClauseSettlementSerial());
+			plan.setUpdater(currenLoginName);
+			//更新付款计划
+			payService.updatePaymentPlan(plan);
+			
+			record.setUpdater(currenLoginName);
+			//更新付款记录
+			payService.updatePaymentRecord(record);
+		}
 
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(ucBuilder.path("/userContract").buildAndExpand(record.getSerialNum()).toUri());
+		headers.setLocation(ucBuilder.path("/paymentRecordC").buildAndExpand(record.getSerialNum()).toUri());
 
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 	
-	/**/
 	
+	/**
+	 * 查询结算条款详情
+	 * @param clauseSettlement （结算条款对象）
+	 * @param serialNum （结算条款的id）
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="selectClauseDetail")
     @ResponseBody
     public ResponseEntity<ClauseSettlement> selectClauseDetail(@Valid ClauseSettlement clauseSettlement,String serialNum,HttpServletRequest request) {
@@ -198,30 +215,30 @@ public class PayController {
     }
 
 	/**
-	 * @Description (导出合同信息)
+	 * @Description (导出付款信息)
 	 * @param request
 	 * @return
 	 */
-	/*@RequestMapping("exportContract")
-	public void exportContract(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+	@RequestMapping("exportPay")
+	public void exportPay(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
-		List<ContractVO> contractList=contractService.queryContractList(currenLoginName);
-
-		dataMap.put("contractList",contractList);
-		ExcelUtil.export(request, response, dataMap, "contract", "合同信息");
-	}*/
-
-
-	/** 
-	 * 获取时间 
-	 *  
-	 * @return返回短时间格式 yyyy-MM-dd 
-	 */  
-	public  Date getNowDateShort(Date date) {  
-		Date sqlDate = new java.sql.Date(date.getTime());  
-		return sqlDate;  
+		List<PaymentRecord> paymentRecordlist=payService.selectAllPaymentRecordList(currenLoginName);
+        for(PaymentRecord paymentRecord:paymentRecordlist){
+        	if("1".equals(paymentRecord.getBillStyle())){
+        		paymentRecord.setBillStyle("先票后款");
+        	}else{
+        		paymentRecord.setBillStyle("先款后票");
+        	}
+        	
+        	if("0".equals(paymentRecord.getStatus())){
+        		paymentRecord.setStatus("初始");
+        	}
+        	
+        }
+		dataMap.put("paymentRecordlist",paymentRecordlist);
+		ExcelUtil.export(request, response, dataMap, "pay", "付款信息");
 	}
 
 
@@ -309,8 +326,7 @@ public class PayController {
 
 
 	/**
-	 * 删除用户合同
-	 * @param contractVO
+	 * 删除用户付款
 	 * @param request
 	 * @return
 	 */
@@ -326,7 +342,7 @@ public class PayController {
 
 
 	/**
-	 * 通过id查询合同详情
+	 * 通过id查询付款详情
 	 * @param ids（前台所传递的id）
 	 * @return
 	 */
@@ -334,79 +350,11 @@ public class PayController {
 	public ResponseEntity<PaymentRecord> selectPayById(String serialNum) {
 
 		PaymentRecord c=payService.selectPayById(serialNum);
+		List<ClauseSettlementDetail> clauList=payService.selectClauseSettlementDetailList(c.getOrderSerial());
+		c.setClauseSettList(clauList);
 		return new ResponseEntity<PaymentRecord>(c, HttpStatus.OK);
 	}
 
-	/**
-	 * 跳转到编辑页面
-	 * @return
-	 */
-	/*@RequestMapping(value = "/editUserContractPage")
-	public String editUserContractPage(String id,String view) {
-		return "contract/editUserContractPage";
-	}*/
-	
-	
-	 /**
-     * @Description (下载导入模板)
-     * @param request
-     * @return
-     */
-   /* @RequestMapping("downloadImportTemp")
-    public void downloadContractTemp(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
-    	ExcelUtil.importTempDownLoad(request, response, "contractImport");
-    }*/
-    
-    
-    /**
-     * @Description (合同信息导入)
-     * @param request
-     * @return
-     */
-    /*@RequestMapping("contractImport")
-    @ResponseBody
-    public Map<String,String> contractImport(@RequestParam(value = "excelFile") MultipartFile excelFile,HttpServletRequest request,HttpServletResponse response) {
-    	Map<String,String> map = new HashMap<String, String>();
-    	 try {
-		     
-			ExcelReader excelReader = new ExcelReader(excelFile.getInputStream());
-			excelReader.readExcelContent(new RowHandler() {
-				@Override
-				public void handle(List<Object> row,int i) throws Exception {
-					if(!CollectionUtils.isEmpty(row)){
-						try{
-							ContractVO contract = new ContractVO();
-							contract.setId(ApplicationUtils.random32UUID());
-							contract.setContractNum(row.get(0).toString());
-							contract.setComId(row.get(1).toString());
-							contract.setContractType(row.get(2).toString());
-							contract.setServiceModel(row.get(3).toString());
-							
-							SimpleDateFormat sdf=new SimpleDateFormat("yyyy-mm-dd");
-							contract.setSignDate(sdf.parse(row.get(4).toString()));
-							contract.setSigner(row.get(5).toString());
-							contract.setStartDate(sdf.parse(row.get(6).toString()));
-							contract.setEndDate(sdf.parse(row.get(7).toString()));
-							contract.setSettlementClause(row.get(8).toString());
-							Subject currentUser = SecurityUtils.getSubject();
-							String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-							contract.setCreator(currenLoginName);
-							contractService.insertContract(contract);
-						}catch(Exception  e){
-							throw new Exception("第"+i+"行数据异常请检查，数据内容："+row.toString());
-						}
-						
-					}
-					
-				}
-			}, 2);
-			map.put("data", "success");
-		} catch (Exception e1) {
-			map.put("data", e1.getMessage());
-		}
-    	
-         return map;
-    }*/
 
 	@RequestMapping(value="/resourceDownload",method=RequestMethod.POST) //匹配的是href中的download请求
 	public void download(@RequestParam("project_id") Integer projectId, HttpServletResponse response) throws IOException {

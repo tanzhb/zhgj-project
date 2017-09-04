@@ -7,7 +7,7 @@
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
 			class="fa fa-angle-right"></i></li>
-		<li><a ui-sref="delivery">付款</a> <i class="fa fa-angle-right"></i>
+		<li><a ui-sref="paymentRecordC">付款</a> <i class="fa fa-angle-right"></i>
 		</li>
 		<li><a>付款详情</a></li>
 	</ul>

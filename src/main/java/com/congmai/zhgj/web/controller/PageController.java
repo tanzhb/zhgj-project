@@ -257,6 +257,15 @@ public class PageController {
         return "pay/paymentRecord";
     }
     
+    /**
+     * 编辑付款页面
+     * @return 编辑付款页面url
+     */
+    @RequestMapping("/editPay")
+    public String editPay() {
+        return "pay/editPay";
+    }
+    
     
     /**
      * 添加发货页面

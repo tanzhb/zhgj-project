@@ -9,7 +9,7 @@
 			class="fa fa-angle-right"></i></li>
 		<li><a ui-sref="paymentRecordC">付款</a> <i class="fa fa-angle-right"></i>
 		</li>
-		<li><a>新增付款</a></li>
+		<li><a>编辑付款</a></li>
 	</ul>
 	<div class="page-toolbar">
 		<div class="btn-group pull-right">
@@ -32,7 +32,7 @@
 					<div class="portlet-title">
 						<div class="caption">付款信息</div>
 						<div class="tools" id="noprintdiv">
-							<button type="submit" ng-click="saveBasicInfo()" ng-show="input"
+							<button type="submit" ng-click="editBasicInfo()" ng-show="input"
 								class="btn blue  btn-outline  btn-sm">
 								<i class="fa fa-save"></i> 保存
 							</button>
@@ -57,7 +57,7 @@
 												class="required" aria-required="true"> * </span>付款单号:</label>
 											<div class="col-md-8">
 												<input type="text" name="paymentNum" class="form-control"
-													ng-model="paymentRecord.paymentNum">
+													ng-model="pay.paymentNum">
 												<div class="form-control-focus"></div>
 												<span class="help-block">请输入付款单号</span>
 											</div>
@@ -70,7 +70,7 @@
 												class="required" aria-required="true"> * </span>付款计划编号:</label>
 											<div class="col-md-8">
 												<input type="text" name="paymentPlanNum" class="form-control"
-													ng-model="paymentRecord.paymentPlanNum">
+													ng-model="pay.paymentPlanNum">
 												<div class="form-control-focus"></div>
 												<span class="help-block">请输入付款计划编号</span>
 											</div>
@@ -82,10 +82,10 @@
 												class="required" aria-required="true"> * </span>关联采购订单号:</label>
 											<div class="col-md-6">
 												<input type="text" name="orderNum" class="form-control"
-													ng-model="saleOrder.orderNum" ng-show="input"
+													ng-model="pay.orderNum" ng-show="input"
 													style="width: 110%;" readonly />
 												<div class="form-control-focus"></div>
-												<input type="text" ng-model="orderSerial" ng-hide="true" name="orderSerial"/>
+												<input type="text" ng-model="pay.orderSerial" ng-hide="true" name="orderSerial"/>
 												<span class="help-block">请选择关联采购订单号</span>
 											</div>
 											<div class="col-md-2" ng-show="input">
@@ -101,8 +101,8 @@
 									</div>
 									<!--/span-->
 								</div>
-
-
+<input type="text" ng-model="pay.serialNum" ng-hide="true" name="orderSerial"/>
+<input type="text" ng-model="pay.paymentPlanSerial" ng-hide="true" name="orderSerial"/>
 								<!--/row-->
 								<div class="row">
 									<div class="col-md-4">
@@ -111,7 +111,7 @@
 												class="required" aria-required="true"> * </span>付款类型:</label>
 											<div class="col-md-8">
 												<input type="text" name=paymentType class="form-control"
-													ng-model="paymentRecord.paymentType" ng-show="input" />
+													ng-model="pay.paymentType" ng-show="input" />
 												<div class="form-control-focus"></div>
 												<span class="help-block">请选择付款类型</span>
 											</div>
@@ -125,7 +125,7 @@
 												class="required" aria-required="true"> * </span>支付类型 :</label>
 											<div class="col-md-8">
 												<input type="text" name="paymentStyle" class="form-control"
-													ng-model="paymentRecord.paymentStyle" ng-show="input" />
+													ng-model="pay.paymentStyle" ng-show="input" />
 												<div class="form-control-focus"></div>
 												<span class="help-block">请选择支付类型</span>
 											</div>
@@ -138,8 +138,8 @@
 											<label class="control-label col-md-4"><span
 												class="required" aria-required="true"> * </span>发票方式 :</label>
 											<div class="col-md-8">
-									<input type="radio"  ng-model="paymentRecord.billStyle" ng-checked="true" name="billStyle" value="1">先票后款
-									<input type="radio"  ng-model="paymentRecord.billStyle" name="billStyle" value="0">先款后票
+									<input type="radio"  ng-model="pay.billStyle" ng-checked="pay.billStyle=='1'" name="billStyle" value="1">先票后款
+									<input type="radio"  ng-model="pay.billStyle" ng-checked="pay.billStyle=='0'" name="billStyle" value="0">先款后票
 											</div>
 
 										</div>
@@ -153,8 +153,8 @@
 											<label class="control-label col-md-4"><span
 												class="required" aria-required="true"> * </span>是否开票:</label>
 											<div class="col-md-8">
-									<input type="radio"   ng-model="paymentRecord.isBill" ng-checked="true" name="isBill" value="1">是
-                        			<input type="radio"   ng-model="paymentRecord.isBill" name="isBill" value="0">否
+									<input type="radio"   ng-model="pay.isBill" ng-checked="pay.isBill=='1'" name="isBill" value="1">是
+                        			<input type="radio"   ng-model="pay.isBill" ng-checked="pay.isBill=='0'" name="isBill" value="0">否
 											</div>
 										</div>
 									</div>
@@ -163,7 +163,7 @@
 										<div class="form-group form-md-line-input">
 											<label class="control-label col-md-4">关联发票单号:</label>
 											<div class="col-md-8">
-												<input type="text"  ng-show="input" name="makeDate" ng-model="paymentRecord.invoiceSerial" class="form-control" />
+												<input type="text"  ng-show="input" name="makeDate" ng-model="pay.invoiceSerial" class="form-control" />
 												<div class="form-control-focus"></div>
 												<span class="help-block">请选择关联发票单号</span>
 											</div>
@@ -190,7 +190,7 @@
 												class="required" aria-required="true"> * </span>申请人:</label>
 											<div class="col-md-8">
 												<input type="text"  name="applicant"
-													ng-model="paymentRecord.applicant" class="form-control" />
+													ng-model="pay.applicant" class="form-control" />
 												<div class="form-control-focus"></div>
 												<span class="help-block">请输入申请人</span>
 											</div>
@@ -205,7 +205,7 @@
 												<input type="text" id="approvalDate"
 													data-date-format="yyyy-mm-dd" name="applyDate" id="approvalDate"
 													ng-show="input" data-date-viewmode="years" size="16"
-													ng-model="paymentRecord.applyDate" class="form-control" />
+													ng-model="pay.applyDate" class="form-control" />
 												<div class="form-control-focus"></div>
 												<span class="help-block">请选择申请日期</span>
 											</div>
@@ -217,7 +217,7 @@
 											<label class="control-label col-md-4">备注:</label>
 											<div class="col-md-8">
 												<input type="text" class="form-control"
-													ng-model="paymentRecord.remark" ng-show="input" />
+													ng-model="pay.remark" ng-show="input" />
 												<div class="form-control-focus"></div>
 												<span class="help-block">请输入备注</span>
 											</div>
@@ -238,7 +238,7 @@
 														<div class="sp-page-boxcolumn span2">
 															<span class="sp-upload"> <img
 																class="sp-upload-photo" alt=""
-																 ng-src="{{ctl.info.photo1}}" /> <input type="file" name="paymentVoucher" id="paymentVoucher"
+																 ng-src="uploadAttachFiles/{{pay.paymentVoucher}}" /> <input type="file" name="paymentVoucher" id="paymentVoucher"
 																upload-img class="sp-upload-img" />
 															</span>
 														</div>
@@ -262,8 +262,8 @@
 								<thead>
 										<tr>
 										    <th colspan='4' style="text-align:center;">付款方:中航国际</th>
-											<th colspan='4' style="text-align:center;">收款方:{{saleOrder.supplyComId}}</th>
-											<th colspan='4' style="text-align:center;">本次应付:<font color="red">{{clauseSettlement.totalAmount|currency:'￥'}}</font></th>
+											<th colspan='4' style="text-align:center;">收款方:{{pay.supplyComId}}</th>
+											<th colspan='4' style="text-align:center;">本次应付:<font color="red">{{pay.deliveryAmount|currency:'￥'}}</font></th>
 										</tr>
 									</thead>
 									<thead>
@@ -283,8 +283,8 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr ng-repeat="_deliveryMateriel in deliveryMaterielE track by $index" repeat-done="repeatDone()">
-										    <td><p class="form-control-static"><input type="radio" name="serialNumClause" value="{{_deliveryMateriel.serialNum}}" ng-click="selectClauseDetail(_deliveryMateriel.serialNum)"/> </p></td>
+										<tr ng-repeat="_deliveryMateriel in pay.clauseSettList track by $index" repeat-done="repeatDone()">
+										    <td><p class="form-control-static"><input type="radio" name="serialNumClause" ng-checked="_deliveryMateriel.serialNum==pay.clauseSettlementDetailSerialNum" value="{{_deliveryMateriel.serialNum}}" ng-click="selectClauseDetail(_deliveryMateriel.serialNum)"/> </p></td>
 											<td><p class="form-control-static">{{_deliveryMateriel.paymentType}}</p></td>
 											<td><p class="form-control-static">{{_deliveryMateriel.deliveryNode}}</p></td>
 											<td><p class="form-control-static">{{_deliveryMateriel.accountPeriod}}</p></td>

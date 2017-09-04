@@ -10,23 +10,15 @@ import com.congmai.zhgj.web.model.PaymentRecord;
 
 /**
  * 
- * @ClassName ContractService
- * @Description  合同 业务 接口
+ * @ClassName PayService
+ * @Description  付款 业务 接口
  * @author czw
  */
 public interface PayService extends GenericService<PaymentRecord, String> {
-	
-    /**
-     * 查询用户合同
-     * @param userId（用户id）
-     * @return
-     */
-   /* public List<ContractVO> queryContractList(String userId);*/
-    
     
     /**
      * 
-     * @Description 批量删除 合同
+     * @Description 批量删除 付款
      * @param ids
      * @return
      */
@@ -34,20 +26,19 @@ public interface PayService extends GenericService<PaymentRecord, String> {
 	
 	
 	/**
-	 * 根据id查询合同对象
+	 * 根据id查询付款对象
 	 * @param id
 	 * @return
 	 */
 	public PaymentRecord selectPayById(String serialNum);
 	
 	
+
 	/**
-	 * 更新用户对象
-	 * @param contractVO
+	 * 查询采购合同的结算条款列表
+	 * @param orderId （采购订单id）
+	 * @return
 	 */
-	/*public void updateContract(ContractVO contractVO);*/
-	
-	
 	public List<ClauseSettlementDetail> selectClauseSettlementDetailList(String orderId);
 	
 	/**
@@ -58,15 +49,38 @@ public interface PayService extends GenericService<PaymentRecord, String> {
     
     
     /**
-	 * 添加应付款
+	 * 添加应付款计划
 	 * @param contractVO
 	 */
     public void insertPaymentPlan(PaymentPlan record);
     
     
+    /**
+     * 查询结算条款详情
+     * @param serialNum
+     * @return
+     */
     public ClauseSettlement selectClauseDetail(String serialNum);
     
     
-    
+    /**
+     * 查询付款列表
+     * @param userId
+     * @return
+     */
     public List<PaymentRecord> selectAllPaymentRecordList(String userId);
+    
+    
+    /**
+	 * 更新应付款
+	 * @param contractVO
+	 */
+    public void updatePaymentPlan(PaymentPlan record);
+    
+    
+    /**
+	 * 更新应付款
+	 * @param contractVO
+	 */
+    public void updatePaymentRecord(PaymentRecord record);
 }

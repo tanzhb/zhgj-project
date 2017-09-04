@@ -10,13 +10,13 @@
     #{isBill},#{approver},#{approvalDate},#{applyDate},#{applicant},#{paymentVoucher},#{remark},'0',#{creator},NOW(),#{creator},NOW())
     </insert>
     
-    
+    <!--插入应付款计划  -->
     <insert id="insertPaymentPlan" parameterType="com.congmai.zhgj.web.model.PaymentPlan">
     INSERT INTO paymentPlan(serialNum,paymentPlanNum,paymentAmount,supplyComId,buyComId,paymentStyle,orderSerial,clauseSettlementSerial,creator,createTime,updater,updateTime)
     VALUES(#{serialNum},#{paymentPlanNum},#{paymentAmount},#{supplyComId},#{buyComId},#{paymentStyle},#{orderSerial},#{clauseSettlementSerial},#{creator},NOW(),#{creator},NOW())
     </insert>
     
-    <!--查询合同列表  -->
+    <!--查询结算条款列表  -->
    <select id="selectClauseSettlementDetailList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ClauseSettlementDetail">
     SELECT 
 	d.serialNum,d.paymentType,d.deliveryNode,d.accountPeriod,d.deliveryRate,d.deliveryAmount,d.paymentMethod,d.billingMethod,
@@ -30,7 +30,7 @@
 	AND d.delFlg='0'
     </select>
     
-    
+    <!--查询结算条款详情  -->
     <select id="selectClauseDetail" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ClauseSettlement">
     SELECT
 	serialNum,deliveryAmount AS totalAmount
@@ -41,6 +41,7 @@
 	AND delFlg='0'
     </select>
     
+    <!--查询付款列表  -->
     <select id="selectAllPaymentRecordList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.PaymentRecord">
     SELECT
 	a.serialNum,a.paymentNum,b.paymentPlanNum,c.orderNum,a.paymentType,b.paymentStyle,a.billStyle,
@@ -54,13 +55,13 @@
 	a.creator=#{userId}
     </select>
     
-    
+    <!--通过id查询付款详情  -->
     <select id="selectPayById" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.PaymentRecord">
      SELECT
-	a.serialNum,a.paymentNum,b.paymentPlanNum,c.orderNum,a.paymentType,b.paymentStyle,a.billStyle,a.invoiceSerial,a.applicant,
-	a.applyDate,a.supplyComId,b.paymentAmount,a.status,a.isBill,a.paymentVoucher,a.remark,d.paymentType AS clausePaymentType,
+	a.serialNum,a.paymentNum,b.paymentPlanNum,c.orderNum,c.serialNum AS orderSerial,a.paymentType,b.paymentStyle,a.billStyle,a.invoiceSerial,a.applicant,
+	a.applyDate,a.supplyComId,b.paymentAmount,a.status,a.isBill,a.paymentVoucher,a.remark,d.paymentType AS clausePaymentType,b.serialNum AS paymentPlanSerial,
 	d.deliveryNode,d.accountPeriod,d.deliveryRate,d.deliveryAmount,d.paymentMethod,d.billingMethod,d.billingAmount,
-	d.unbilledAmount,d.remark AS clauseRemark,d.status AS clauseStatus
+	d.unbilledAmount,d.remark AS clauseRemark,d.status AS clauseStatus,d.serialNum AS clauseSettlementDetailSerialNum
 	FROM
 	paymentRecord a
 	LEFT JOIN paymentPlan b ON a.paymentPlanSerial=b.serialNum
@@ -70,7 +71,7 @@
     </select>
     
     
-    <!--删除合同  -->
+    <!--删除付款  -->
     <update id="delPaymentRecord" parameterType="java.util.List">
     	UPDATE paymentRecord 
     	SET delFlg='1'
@@ -80,64 +81,45 @@
         </foreach>
     </update>
     
-    <!--查询合同对象  -->
-    <!-- <select id="selectContractById" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ContractVO">
-    SELECT 
-    serialNum AS Id,
-	contractNum,
-	contractType,
-	serviceModel,
-	comId,
-	settlementClause,
-	signerAddress,
-	startDate,
-	endDate,
-	signDate,
-	signer,
-	remark,
-	electronicContract,
-	signContract
-	FROM
-	contract
-	WHERE 
-	serialNum=#{id}
-    </select> -->
     
-    <!--更新合同  -->
-   <!--  <update id="updateContract" parameterType="com.congmai.zhgj.web.model.ContractVO">
+    <!--更新付款计划  -->
+    <update id="updatePaymentPlan" parameterType="com.congmai.zhgj.web.model.PaymentPlan">
     UPDATE
-	contract
+	paymentPlan
 	SET
-	contractNum=#{contractNum},
-	comId=#{comId},
-	contractType=#{contractType},
-	<if test="serviceModel!=null and serviceModel!=''">  
-    serviceModel=#{serviceModel},
-    </if> 
-	<if test="settlementClause!=null and settlementClause!=''">  
-    settlementClause=#{settlementClause},
-    </if> 
-    <if test="signerAddress!=null and signerAddress!=''">  
-    signerAddress=#{signerAddress},
-    </if>
-	startDate=#{startDate},
-	endDate=#{endDate},
-	signDate=#{signDate},
-	signer=#{signer},
-	
-	<if test="electronicContract!=null and electronicContract!=''">  
-    electronicContract = #{electronicContract},  
-    </if> 
-    
-    <if test="electronicContract!=null and electronicContract!=''">  
-    signContract = #{signContract},  
-    </if> 
-	
-	versionNO=versionNO+1,
-	remark=#{remark},
+	orderSerial=#{orderSerial},
+	paymentPlanNum=#{paymentPlanNum},
+	paymentStyle=#{paymentStyle},
+	supplyComId=#{supplyComId},
+	buyComId=#{buyComId},
+	paymentAmount=#{paymentAmount},
+	clauseSettlementSerial=#{clauseSettlementSerial},
 	updater=#{updater},
 	updateTime=NOW()
 	WHERE
-	serialNum=#{id}
-    </update> -->
+	serialNum=#{serialNum}
+    </update>
+    
+    
+    <!--更新付款  -->
+    <update id="updatePaymentRecord" parameterType="com.congmai.zhgj.web.model.PaymentRecord">
+    UPDATE
+	paymentRecord
+	SET
+	paymentNum=#{paymentNum},
+	paymentType=#{paymentType},
+	isBill=#{isBill},
+	billStyle=#{billStyle},
+	invoiceSerial=#{invoiceSerial},
+	applicant=#{applicant},
+	applyDate=#{applyDate},
+	remark=#{remark},
+	paymentVoucher=#{paymentVoucher},
+	supplyComId=#{supplyComId},
+	buyComId=#{buyComId},
+	updater=#{updater},
+	updateTime=NOW()
+	WHERE
+	serialNum=#{serialNum}
+    </update>
 </mapper>

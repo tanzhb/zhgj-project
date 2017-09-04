@@ -18,15 +18,15 @@ import com.congmai.zhgj.web.service.PayService;
 
 /**
  * 
- * @ClassName ContractServiceImpl
- * @Description 合同Service实现类
+ * @ClassName PayServiceImpl
+ * @Description 付款Service实现类
  * @author czw
  */
 @Service
 public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> implements
 		PayService {
 
-	//合同的dao
+	//付款的dao
 	@Resource
 	private PayMapper payMapper;
 
@@ -35,6 +35,11 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 		return payMapper;
 	}
 
+	/**
+	 * 查询采购合同的结算条款列表
+	 * @param orderId （采购订单id）
+	 * @return
+	 */
 	@Override
 	public List<ClauseSettlementDetail> selectClauseSettlementDetailList(
 			String orderId) {
@@ -55,12 +60,22 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 	}
 
  
+     /**
+	 * 添加应付款计划
+	 * @param contractVO
+	 */
 	@Override
 	public void insertPaymentPlan(PaymentPlan record) {
 		// TODO Auto-generated method stub
 		 payMapper.insertPaymentPlan(record);
 	}
 
+	
+	/**
+     * 查询结算条款详情
+     * @param serialNum
+     * @return
+     */
 	@Override
 	public ClauseSettlement selectClauseDetail(String serialNum) {
 		// TODO Auto-generated method stub
@@ -68,28 +83,23 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 		return payMapper.selectClauseDetail(serialNum);
 	}
 
+	
+	/**
+     * 查询付款列表
+     * @param userId
+     * @return
+     */
 	@Override
 	public List<PaymentRecord> selectAllPaymentRecordList(String userId) {
 		// TODO Auto-generated method stub
 		
 		return payMapper.selectAllPaymentRecordList(userId);
 	}
- 
-	 /**
-	  * 查询用户合同
-	  * @param userId（用户id）
-	  * @return
-	  */
-	/*public List<ContractVO> queryContractList(String userId) {
-		// TODO Auto-generated method stub
-		
-		return contractMapper.queryContractList(userId);
-	}*/
 
 	
 	/**
      * 
-     * @Description 批量删除 合同
+     * @Description 批量删除 付款
      * @param ids
      * @return
      */
@@ -101,7 +111,7 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 	
 
 	/**
-	 * 根据id查询合同对象
+	 * 根据id查询付款对象
 	 * @param id
 	 * @return
 	 */
@@ -112,14 +122,23 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 		return payMapper.selectPayById(serialNum);
 	}
 
-	
 	/**
-	 * 更新用户对象
+	 * 更新应付款
 	 * @param contractVO
 	 */
-	/*@Override
-	public void updateContract(ContractVO contractVO) {
+	@Override
+	public void updatePaymentPlan(PaymentPlan record) {
 		// TODO Auto-generated method stub
-		contractMapper.updateContract(contractVO);
-	}*/
+		payMapper.updatePaymentPlan(record);
+	}
+
+	/**
+	 * 更新应付款
+	 * @param contractVO
+	 */
+	@Override
+	public void updatePaymentRecord(PaymentRecord record) {
+		// TODO Auto-generated method stub
+		payMapper.updatePaymentRecord(record);
+	}
 }

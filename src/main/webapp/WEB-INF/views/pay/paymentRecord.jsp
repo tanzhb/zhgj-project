@@ -7,8 +7,8 @@
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i class="fa fa-angle-right"></i></li>
 			
-		<li><a ui-sref="userContract">收付款</a><i class="fa fa-angle-right"></i></li>
-		<li><a ui-sref="userContract">付款信息</a></li>
+		<li><a ui-sref="paymentRecordC">付款</a><i class="fa fa-angle-right"></i></li>
+		<li><a ui-sref="paymentRecordC">付款信息</a></li>
 	</ul>
 </div>
 
@@ -53,14 +53,14 @@
 							class="fa fa-angle-down"></i>
 						</a>
 						<ul class="dropdown-menu pull-right" id="sample_3_tools">
-							<li><a data-action="0" class="tool-action"
+							<!-- <li><a data-action="0" class="tool-action"
 								data-toggle="modal" data-target="#import"> <i
 									class="fa fa-upload"></i> 导入
+							</a></li> -->
+							<li><a href="javascript:;" data-action="0"
+								class="tool-action" ng-click="exportPay()"> <i class="fa fa-file-excel-o"></i> 导出
 							</a></li>
 							<li><a href="javascript:;" data-action="1"
-								class="tool-action" ng-click="exportContract()"> <i class="fa fa-file-excel-o"></i> 导出
-							</a></li>
-							<li><a href="javascript:;" data-action="2"
 								class="tool-action" > <i class="fa fa-print"></i> 打印
 							</a></li>
 						</ul>

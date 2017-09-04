@@ -11,39 +11,71 @@ import com.congmai.zhgj.web.model.PaymentRecord;
 
 /**
  * 
- * @ClassName 合同Dao接口
+ * @ClassName 付款Dao接口
  * @Description TODO(这里用一句话描述这个类的作用)
  * @author czw
  */
 public interface PayMapper extends GenericDao<PaymentRecord, String> {
     
+	/**
+	 * 查询采购订单的结算条款列表
+	 * @return
+	 */
 	public List<ClauseSettlementDetail> selectClauseSettlementDetailList(String orderId);
 			
-	//添加合同
+	/**
+	 * 添加付款记录
+	 * @param record
+	 */
 	public void insertPaymentRecord(PaymentRecord record);
 	
-	//添加付款计划
+	/**
+	 * 添加付款计划
+	 * @param record
+	 */
 	public void insertPaymentPlan(PaymentPlan record);
 	
-	
+	/**
+	 * 查询结算条款详情
+	 * @param serialNum
+	 * @return
+	 */
 	public ClauseSettlement selectClauseDetail(String serialNum);
 	
 	
+	/**
+	 * 查询付款记录列表
+	 * @param userId
+	 * @return
+	 */
 	public List<PaymentRecord> selectAllPaymentRecordList(String userId);
 	
 	
-	//删除合同
+	/**
+	 * 删除付款
+	 * @param ids
+	 */
     public void delPaymentRecord(List<String> ids);
     
+    
+    /**
+     * 查询付款详情
+     * @param serialNum
+     * @return
+     */
     public PaymentRecord selectPayById(String serialNum);
 
-    //查询合同列表
-    /*List<ContractVO> queryContractList(String userId);
     
-    //查询合同对象
-  
+    /**
+     * 更新付款计划
+     * @param record
+     */
+    public void updatePaymentPlan(PaymentPlan record);
     
     
-    //更新合同
-    public void updateContract(ContractVO record);*/
+    /**
+     * 更新付款
+     * @param record
+     */
+    public void updatePaymentRecord(PaymentRecord record);
 }

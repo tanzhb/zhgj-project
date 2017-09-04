@@ -44,11 +44,11 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 					}
 				});
 		if(ids==''){
-			toastr.warning('请选择一个合同！');return;
+			toastr.warning('请选择一个付款！');return;
 		}else if(ids=='more'){
-			toastr.warning('只能选择一个合同！');return;
+			toastr.warning('只能选择一个付款！');return;
 		}
-		$state.go('editUserContractPage',{id:ids});
+		$state.go('editPay',{serialNum:ids});
 	};
 
 
@@ -68,22 +68,25 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 
 
 	//返回按钮
-	$scope.goback=function(){
-		$state.go('userContract');
+	$scope.goBack=function(){
+		$state.go('paymentRecordC');
 	}
 
 	//打印
 	$scope.print=function(){
 		window.print();  
 	}
-	var paymentAmount;
+	var paymentAmount=null;
 	$scope.selectClauseDetail=function(serialNum){
 		PayService.selectClauseDetail(serialNum).then(
 				function(data){
-					debugger
-					$scope.clauseSettlement=data;
-					/*alert($scope.clauseSettlement.totalAmount);*/
-					paymentAmount=$scope.clauseSettlement.totalAmount;
+					if($scope.pay==null){
+						$scope.clauseSettlement=data;
+						paymentAmount=$scope.clauseSettlement.totalAmount;	
+					}else{
+						$scope.pay.deliveryAmount=data.totalAmount;
+						paymentAmount=data.totalAmount;
+					}
 				},
 				function(error){
 					$scope.error = error;
@@ -91,16 +94,25 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		);	
 	};
 	
-	var supplyComId;
+	var supplyComId=null;
 	//获取订单物料的信息
 	$scope.getSaleOrderInfo  = function(serialNum) {
 		PayService.getSaleOrderInfo(serialNum).then(
 				function(data){
-					$scope.saleOrder=data.orderInfo;
-					supplyComId=$scope.saleOrder.supplyComId;
-					var orderSerial=data.orderInfo.serialNum;
-					$scope.orderSerial=data.orderInfo.serialNum;
-					$scope.deliveryMaterielE=data.clauList;
+					if($scope.pay==null){
+						$scope.saleOrder=data.orderInfo;
+						supplyComId=$scope.saleOrder.supplyComId;
+						var orderSerial=data.orderInfo.serialNum;
+						$scope.orderSerial=data.orderInfo.serialNum;
+						$scope.deliveryMaterielE=data.clauList;
+					}else{
+						$scope.pay.orderNum=data.orderInfo.orderNum;
+						$scope.pay.orderSerial=data.orderInfo.serialNum;
+						$scope.pay.clauseSettList=data.orderInfo.clauseSettList;
+						$scope.pay.supplyComId=data.orderInfo.supplyComId;
+						$scope.pay.deliveryAmount=null;
+						supplyComId=data.orderInfo.supplyComId;
+					}
 				},
 				function(error){
 					$scope.error = error;
@@ -109,6 +121,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 
 	};
 
+	//添加付款
 	$scope.saveBasicInfo=function (){
 		if($('#form_sample_1').valid()){
 			var fd = new FormData();
@@ -128,9 +141,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 				toastr.warning("至少选择一个结算条款！");
 				return;
 			}
-
 			fd.append('paymentNum',$scope.paymentRecord.paymentNum); 
-
 			fd.append('paymentPlanNum',$scope.paymentRecord.paymentPlanNum); 
 			fd.append('orderSerial',$scope.orderSerial); 
 			fd.append('paymentStyle',$scope.paymentRecord.paymentStyle); 
@@ -144,6 +155,69 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 			fd.append('applyDate',$scope.paymentRecord.applyDate); 
 			fd.append('remark',$scope.paymentRecord.remark);
 			
+			$http({
+				method:'POST',
+				url:"rest/pay/savePaymentRecord",
+				data: fd,
+				headers: {'Content-Type':undefined}
+			})   
+			.success( function ( response )
+					{
+				//上传成功的操作
+				toastr.success("保存应付款数据成功！");
+				$state.go('paymentRecordC');
+					});
+		}
+	}
+	
+	
+	//更新付款
+	$scope.editBasicInfo=function (){
+		if($('#form_sample_1').valid()){
+			var fd = new FormData();
+			debugger
+			
+			if($.trim($("#paymentVoucher").val())!=''){
+				var file = document.querySelector('input[type="file"]').files[0];
+				fd.append("file", file);
+			}else{
+				/*toastr.warning("付款凭证不能为空！");
+				return;*/
+				fd.append("file",null);
+			}
+			
+			var clauseItem=$("input[name='serialNumClause']:checked").val();
+			if($.trim(clauseItem)!=''){
+				fd.append('clauseSettlementSerial',$("input[name='serialNumClause']:checked").val()); 
+			}else{
+				toastr.warning("至少选择一个结算条款！");
+				return;
+			}
+			fd.append('serialNum',$scope.pay.serialNum);
+			fd.append('paymentPlanSerial',$scope.pay.paymentPlanSerial);
+			fd.append('paymentNum',$scope.pay.paymentNum); 
+			fd.append('paymentPlanNum',$scope.pay.paymentPlanNum); 
+			fd.append('orderSerial',$scope.pay.orderSerial); 
+			fd.append('paymentStyle',$scope.pay.paymentStyle); 
+			if(paymentAmount!=null){
+				fd.append('paymentAmount',paymentAmount);	
+			}else{
+				fd.append('paymentAmount',$scope.pay.paymentAmount);
+			}
+			
+			if(supplyComId!=null){
+				fd.append('supplyComId',supplyComId);
+			}else{
+				fd.append('supplyComId',$scope.pay.supplyComId);
+			}
+			fd.append('paymentType',$scope.pay.paymentType);
+			fd.append('billStyle',$("input[name='billStyle']:checked").val()); 
+			fd.append('isBill',$("input[name='isBill']:checked").val());
+			fd.append('invoiceSerial',$scope.pay.invoiceSerial); 
+			fd.append('applicant',$scope.pay.applicant);
+			fd.append('applyDate',$scope.pay.applyDate); 
+			fd.append('remark',$scope.pay.remark);
+			fd.append('paymentVoucher',$scope.pay.paymentVoucher); 
 			$http({
 				method:'POST',
 				url:"rest/pay/savePaymentRecord",
@@ -210,12 +284,14 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	};
 
 
-	$scope.exportContract = function(){
+	//导出付款
+	$scope.exportPay = function(){
 		handle.blockUI("正在导出数据，请稍后"); 
-		window.location.href=$rootScope.basePath+"/rest/contract/exportContract";
+		window.location.href=$rootScope.basePath+"/rest/pay/exportPay";
 		handle.unblockUI(); 
 	}
 
+	//付款列表
 	var table;
 	var tableAjaxUrl = "rest/pay/findAllPaymentRecord";
 	var loadMainTable = function() {
@@ -310,6 +386,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	}
 
 
+	//采购订单列表
 	var table1;
 	var loadMainTable1 = function() {
 		a = 0;
@@ -763,25 +840,6 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		})   
 	});
 
-	var self = this;
-	self.contract={id:null,contractNum:'',contractType:'',serviceModel:'',settlementClause:'',startDate:''};
-	self.contractList=[];
-
-
-	//查询所有的用户合同
-	fetchAllUserContract();
-
-	function fetchAllUserContract(){
-		PayService.fetchAllUserContract()
-		.then(
-				function(d) {
-
-				},
-				function(errResponse){
-					/*console.error('Error while fetching Users');*/
-				}
-		);
-	}
 
 }]);
 
