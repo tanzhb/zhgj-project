@@ -341,7 +341,17 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 						                            { mData: 'orderNum' },
 						                            { mData: 'paymentType' },
 						                            { mData: 'paymentStyle'},
-						                            { mData: 'billStyle'},
+						                            { mData: 'billStyle',
+						                            	mRender:function(data){
+						                            		if(data!=""&&data!=null){
+						                            			if(data=='0'){
+						                            				return '先款后票';
+						                            			}else{
+							                            			return '先票后款';
+							                            		}
+						                            		}
+						                            	}},
+						                            
 						                            { mData: 'invoiceSerial'},
 						                            { mData: 'applicant'},
 						                            { mData: 'applyDate' },
