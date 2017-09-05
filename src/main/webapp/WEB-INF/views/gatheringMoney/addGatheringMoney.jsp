@@ -2,14 +2,14 @@
 	pageEncoding="UTF-8"%>
 <!-- BEGIN PAGE HEADER-->
 
-<h3 class="page-title">采购付款</h3>
+<h3 class="page-title">销售收款</h3>
 <div class="page-bar">
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
 			class="fa fa-angle-right"></i></li>
-		<li><a ui-sref="paymentRecordC">付款</a> <i class="fa fa-angle-right"></i>
+		<li><a ui-sref="gatheringMoneyRecord">收款</a> <i class="fa fa-angle-right"></i>
 		</li>
-		<li><a>新增付款</a></li>
+		<li><a>新增收款</a></li>
 	</ul>
 	<div class="page-toolbar">
 		<div class="btn-group pull-right">
@@ -30,7 +30,7 @@
 			<form action="#" id="form_sample_1" class="form-horizontal">
 				<div class="portlet light ">
 					<div class="portlet-title">
-						<div class="caption">付款信息</div>
+						<div class="caption">收款信息</div>
 						<div class="tools" id="noprintdiv">
 							<button type="submit" ng-click="saveBasicInfo()" ng-show="input"
 								class="btn blue  btn-outline  btn-sm">
@@ -54,12 +54,12 @@
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
 											<label class="control-label col-md-4"><span
-												class="required" aria-required="true"> * </span>付款单号:</label>
+												class="required" aria-required="true"> * </span>收款单号:</label>
 											<div class="col-md-8">
 												<input type="text" name="paymentNum" class="form-control"
 													ng-model="paymentRecord.paymentNum">
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入付款单号</span>
+												<span class="help-block">请输入收款单号</span>
 											</div>
 										</div>
 									</div>
@@ -67,26 +67,26 @@
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
 											<label class="control-label col-md-4"><span
-												class="required" aria-required="true"> * </span>付款计划编号:</label>
+												class="required" aria-required="true"> * </span>收款计划编号:</label>
 											<div class="col-md-8">
 												<input type="text" name="paymentPlanNum" class="form-control"
 													ng-model="paymentRecord.paymentPlanNum">
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入付款计划编号</span>
+												<span class="help-block">请输入收款计划编号</span>
 											</div>
 										</div>
 									</div>
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
 											<label class="control-label col-md-4"><span
-												class="required" aria-required="true"> * </span>关联采购订单号:</label>
+												class="required" aria-required="true"> * </span>关联销售订单号:</label>
 											<div class="col-md-6">
 												<input type="text" name="orderNum" class="form-control"
 													ng-model="saleOrder.orderNum" ng-show="input"
 													style="width: 110%;" readonly />
 												<div class="form-control-focus"></div>
 												<input type="text" ng-model="orderSerial" ng-hide="true" name="orderSerial"/>
-												<span class="help-block">请选择关联采购订单号</span>
+												<span class="help-block">请选择关联销售订单号</span>
 											</div>
 											<div class="col-md-2" ng-show="input">
 												<span class="input-inline-btn">
@@ -108,12 +108,12 @@
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
 											<label class="control-label col-md-4"><span
-												class="required" aria-required="true"> * </span>付款类型:</label>
+												class="required" aria-required="true"> * </span>收款类型:</label>
 											<div class="col-md-8">
 												<input type="text" name=paymentType class="form-control"
 													ng-model="paymentRecord.paymentType" ng-show="input" />
 												<div class="form-control-focus"></div>
-												<span class="help-block">请选择付款类型</span>
+												<span class="help-block">请选择收款类型</span>
 											</div>
 
 										</div>
@@ -230,7 +230,7 @@
 									<div class="col-md-4" ng-app="app">
 										<div class="form-group form-md-line-input">
 											<label class="control-label col-md-4"><span
-												class="required" aria-required="true"> * </span>付款凭证:</label>
+												class="required" aria-required="true"> * </span>收款凭证:</label>
 											<div class="col-md-8" >
 												<div class="sp-page-content"
 													ng-controller="addPhotoCtrl as ctl">
@@ -261,8 +261,8 @@
 								<table class="table table-bordered table-hover" id="sample_22">
 								<thead>
 										<tr>
-										    <th colspan='4' style="text-align:center;">付款方:中航国际</th>
-											<th colspan='4' style="text-align:center;">收款方:{{saleOrder.supplyComId}}</th>
+										    <th colspan='4' style="text-align:center;">付款方:{{saleOrder.buyComId}}</th>
+											<th colspan='4' style="text-align:center;">收款方:中航国际</th>
 											<th colspan='4' style="text-align:center;">本次应付:<font color="red">{{clauseSettlement.totalAmount|currency:'￥'}}</font></th>
 										</tr>
 									</thead>
@@ -316,7 +316,7 @@
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"
 					aria-hidden="true"></button>
-				<h4 class="modal-title">选择采购订单</h4>
+				<h4 class="modal-title">选择销售订单</h4>
 			</div>
 			<div class="modal-body">
 				<table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_21">

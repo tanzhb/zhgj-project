@@ -1,4 +1,4 @@
-angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope','$http', 'settings', '$q','PayService','$state','$compile','$stateParams','$filter', function($rootScope,$scope,$http,settings, $q,PayService,$state,$compile,$stateParams,$filter) {
+angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScope','$scope','$http', 'settings', '$q','GatheringMoneyService','$state','$compile','$stateParams','$filter', function($rootScope,$scope,$http,settings, $q,GatheringMoneyService,$state,$compile,$stateParams,$filter) {
 	$scope.$on('$viewContentLoaded', function() {   
 		// initialize core components
 		handle = new pageHandle();
@@ -48,14 +48,14 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		}else if(ids=='more'){
 			toastr.warning('只能选择一个付款！');return;
 		}
-		$state.go('editPay',{serialNum:ids});
+		$state.go('editGatheringMoney',{serialNum:ids});
 	};
 
 
 	//根据参数查询对象
 	$scope.getPayInfo  = function(serialNum) {
 		debugger
-		PayService.selectPay(serialNum).then(
+		GatheringMoneyService.selectPay(serialNum).then(
       		     function(data){
       		    	$scope.pay=data;
       		     },
@@ -69,7 +69,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 
 	//返回按钮
 	$scope.goBack=function(){
-		$state.go('paymentRecordC');
+		$state.go('gatheringMoneyRecord');
 	}
 
 	//打印
@@ -78,7 +78,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	}
 	var paymentAmount=null;
 	$scope.selectClauseDetail=function(serialNum){
-		PayService.selectClauseDetail(serialNum).then(
+		GatheringMoneyService.selectClauseDetail(serialNum).then(
 				function(data){
 					if($scope.pay==null){
 						$scope.clauseSettlement=data;
@@ -94,14 +94,14 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		);	
 	};
 	
-	var supplyComId=null;
+	var buyComId=null;
 	//获取订单物料的信息
 	$scope.getSaleOrderInfo  = function(serialNum) {
-		PayService.getSaleOrderInfo(serialNum).then(
+		GatheringMoneyService.getSaleOrderInfo(serialNum).then(
 				function(data){
 					if($scope.pay==null){
 						$scope.saleOrder=data.orderInfo;
-						supplyComId=$scope.saleOrder.supplyComId;
+						buyComId=$scope.saleOrder.buyComId;
 						var orderSerial=data.orderInfo.serialNum;
 						$scope.orderSerial=data.orderInfo.serialNum;
 						$scope.deliveryMaterielE=data.clauList;
@@ -111,7 +111,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 						$scope.pay.clauseSettList=data.orderInfo.clauseSettList;
 						$scope.pay.supplyComId=data.orderInfo.supplyComId;
 						$scope.pay.deliveryAmount=null;
-						supplyComId=data.orderInfo.supplyComId;
+						buyComId=data.orderInfo.buyComId;
 					}
 				},
 				function(error){
@@ -130,7 +130,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 			if($.trim($("#paymentVoucher").val())!=''){
 				fd.append("file", file);
 			}else{
-				toastr.warning("付款凭证不能为空！");
+				toastr.warning("收款凭证不能为空！");
 				return;
 			}
 			
@@ -146,7 +146,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 			fd.append('orderSerial',$scope.orderSerial); 
 			fd.append('paymentStyle',$scope.paymentRecord.paymentStyle); 
 			fd.append('paymentAmount',paymentAmount);
-			fd.append('supplyComId',supplyComId);
+			fd.append('buyComId',buyComId);
 			fd.append('paymentType',$scope.paymentRecord.paymentType);
 			fd.append('billStyle',$("input[name='billStyle']:checked").val()); 
 			fd.append('isBill',$("input[name='isBill']:checked").val());
@@ -164,8 +164,8 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 			.success( function ( response )
 					{
 				//上传成功的操作
-				toastr.success("保存应付款数据成功！");
-				$state.go('paymentRecordC');
+				toastr.success("保存应收款数据成功！");
+				$state.go('gatheringMoneyRecord');
 					});
 		}
 	}
@@ -205,10 +205,10 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 				fd.append('paymentAmount',$scope.pay.paymentAmount);
 			}
 			
-			if(supplyComId!=null){
-				fd.append('supplyComId',supplyComId);
+			if(buyComId!=null){
+				fd.append('buyComId',buyComId);
 			}else{
-				fd.append('supplyComId',$scope.pay.supplyComId);
+				fd.append('buyComId',$scope.pay.buyComId);
 			}
 			fd.append('paymentType',$scope.pay.paymentType);
 			fd.append('billStyle',$("input[name='billStyle']:checked").val()); 
@@ -227,14 +227,14 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 			.success( function ( response )
 					{
 				//上传成功的操作
-				toastr.success("保存应付款数据成功！");
-				$state.go('paymentRecordC');
+				toastr.success("保存应收款数据成功！");
+				$state.go('gatheringMoneyRecord');
 					});
 		}
 	}
 
 	$scope.jumpToGetPayInfo  = function(serialNum) {
-    	$state.go('viewPay',{serialNum:serialNum});
+    	$state.go('viewGatheringMoney',{serialNum:serialNum});
     }; 
 
 
@@ -256,44 +256,16 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 
 
 
-	//单个删除
-	$scope.jumpToDel = function(value) {
-		var ids=value;	
-		if (ids == '') {// 未勾选删除数据									
-			toastr.warning("未勾选要删除数据！");
-		} else {
-			Jquery('#delUsersModal').modal('show');// 打开确认删除模态框
-
-			$scope.confirmDel = function() {										
-				ContractService.delUsers(ids).then(
-						function(data) {
-
-							$('#delUsersModal').modal('hide');// 删除成功后关闭模态框
-							toastr.success("删除成功！");
-							var table = $('#sample_2').DataTable();
-							/*table.ajax.reload();*/
-							$("#sample_2").dataTable().fnDraw(false)
-						},
-						function(errResponse) {
-							/*console.error('Error while deleting Users');*/
-						}
-
-				);
-			}
-		}
-	};
-
-
 	//导出付款
 	$scope.exportPay = function(){
 		handle.blockUI("正在导出数据，请稍后"); 
-		window.location.href=$rootScope.basePath+"/rest/pay/exportPay";
+		window.location.href=$rootScope.basePath+"/rest/pay/exportGatheringMoney";
 		handle.unblockUI(); 
 	}
 
 	//付款列表
 	var table;
-	var tableAjaxUrl = "rest/pay/findAllPaymentRecord";
+	var tableAjaxUrl = "rest/pay/findAllGatheringMoneyRecord";
 	var loadMainTable = function() {
 		var a = 0;
 		App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile")&& (a = $(".page-header").outerHeight(!0)): 
@@ -346,7 +318,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 						                            { mData: 'applicant'},
 						                            { mData: 'applyDate' },
 						                            { mData: 'paymentAmount' },
-						                            { mData: 'supplyComId' },
+						                            { mData: 'buyComId' },
 						                            { mData: 'status',
 						                            	mRender:function(data){
 						                            		if(data!=""&&data!=null){
@@ -418,7 +390,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 			lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
 			pageLength: 5,// 每页显示数量
 			processing: true,// loading等待框
-			ajax:"rest/order/findOrderList?type=buy",// 加载数据中
+			ajax:"rest/order/findOrderList?type=sale",// 加载数据中
 			"aoColumns": [
 			              { mData: 'serialNum' },
 			              { mData: 'orderNum' },
@@ -555,12 +527,12 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 			$('#delUsersModal').modal('show');// 打开确认删除模态框
 
 			$scope.confirmDel = function() {										
-				PayService.delPaymentRecord(ids).then(
+				GatheringMoneyService.delPaymentRecord(ids).then(
 						function(data) {
 							$('#delUsersModal').modal('hide');// 删除成功后关闭模态框
 							$(".modal-backdrop").remove();
 							toastr.success("删除成功！");
-							$state.go('paymentRecordC',{},{reload:true}); // 重新加载datatables数据
+							$state.go('gatheringMoneyRecord',{},{reload:true}); // 重新加载datatables数据
 						},
 						function(errResponse) {
 							/*console.error('Error while deleting Users');*/

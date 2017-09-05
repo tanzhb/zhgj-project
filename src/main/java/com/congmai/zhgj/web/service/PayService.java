@@ -72,6 +72,14 @@ public interface PayService extends GenericService<PaymentRecord, String> {
     
     
     /**
+     * 查询收款列表
+     * @param userId
+     * @return
+     */
+    public List<PaymentRecord> findAllGatheringMoneyRecord(String userId);
+    
+    
+    /**
 	 * 更新应付款
 	 * @param contractVO
 	 */

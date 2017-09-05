@@ -95,8 +95,20 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 		
 		return payMapper.selectAllPaymentRecordList(userId);
 	}
-
 	
+	
+
+	/**
+     * 查询收款列表
+     * @param userId
+     * @return
+     */
+	@Override
+	public List<PaymentRecord> findAllGatheringMoneyRecord(String userId) {
+		// TODO Auto-generated method stub
+		return payMapper.findAllGatheringMoneyRecord(userId);
+	}
+
 	/**
      * 
      * @Description 批量删除 付款

@@ -52,6 +52,14 @@ public interface PayMapper extends GenericDao<PaymentRecord, String> {
 	
 	
 	/**
+	 * 查询收款记录列表
+	 * @param userId
+	 * @return
+	 */
+	public List<PaymentRecord> findAllGatheringMoneyRecord(String userId);
+	
+	
+	/**
 	 * 删除付款
 	 * @param ids
 	 */

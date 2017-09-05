@@ -98,6 +98,28 @@ public class PayController {
 	}
 	
 	
+	/**/
+	/**
+	 * 
+	 * @Description 查找所有用户收款信息
+	 * @return
+	 */
+	@RequestMapping(value = "/findAllGatheringMoneyRecord", method = RequestMethod.GET)
+	public ResponseEntity<Map> findAllGatheringMoneyRecord(HttpServletRequest request) {
+
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
+		List<PaymentRecord> paymentRecordlist=payService.findAllGatheringMoneyRecord(currenLoginName);
+
+		//封装datatables数据返回到前台
+		Map pageMap = new HashMap();
+		pageMap.put("draw", 1);
+		pageMap.put("recordsTotal",paymentRecordlist==null?0:paymentRecordlist.size());
+		pageMap.put("recordsFiltered",paymentRecordlist==null?0:paymentRecordlist.size());
+		pageMap.put("data", paymentRecordlist);
+		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+	}
+	
 	/**
 	 * 
 	 * @Description 获取采购订单信息
@@ -152,7 +174,7 @@ public class PayController {
 			plan.setPaymentPlanNum(record.getPaymentPlanNum());
 			plan.setPaymentStyle(record.getPaymentStyle());
 			plan.setSupplyComId(record.getSupplyComId());
-			plan.setBuyComId(null);
+			plan.setBuyComId(record.getBuyComId());
 			plan.setPaymentAmount(record.getPaymentAmount());
 			plan.setCreator(currenLoginName);
 			plan.setClauseSettlementSerial(record.getClauseSettlementSerial());
@@ -164,7 +186,6 @@ public class PayController {
 			record.setSerialNum(serialNum);
 			record.setCreator(currenLoginName);
 			record.setPaymentPlanSerial(plan.getSerialNum());
-			record.setBuyComId(null);
 			//添加付款记录
 			payService.insertPaymentRecord(record);
 		}else{
@@ -239,6 +260,34 @@ public class PayController {
         }
 		dataMap.put("paymentRecordlist",paymentRecordlist);
 		ExcelUtil.export(request, response, dataMap, "pay", "付款信息");
+	}
+	
+	
+	/**
+	 * @Description (导出收款信息)
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("exportGatheringMoney")
+	public void exportGatheringMoney(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
+		List<PaymentRecord> paymentRecordlist=payService.findAllGatheringMoneyRecord(currenLoginName);
+        for(PaymentRecord paymentRecord:paymentRecordlist){
+        	if("1".equals(paymentRecord.getBillStyle())){
+        		paymentRecord.setBillStyle("先票后款");
+        	}else{
+        		paymentRecord.setBillStyle("先款后票");
+        	}
+        	
+        	if("0".equals(paymentRecord.getStatus())){
+        		paymentRecord.setStatus("初始");
+        	}
+        	
+        }
+		dataMap.put("paymentRecordlist",paymentRecordlist);
+		ExcelUtil.export(request, response, dataMap, "gatheringMoney", "收款信息");
 	}
 
 

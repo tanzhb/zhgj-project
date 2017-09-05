@@ -239,12 +239,22 @@ public class PageController {
     
     
     /**
-     * 添加付款页面
-     * @return 添加付款页面url
+     * 付款详情页面
+     * @return 付款详情页面url
      */
     @RequestMapping("/viewPay")
     public String viewPay() {
         return "pay/viewPay";
+    }
+    
+    
+    /**
+     * 收款详情页面
+     * @return 收款详情页面url
+     */
+    @RequestMapping("/viewGatheringMoney")
+    public String viewGatheringMoney() {
+        return "gatheringMoney/viewGatheringMoney";
     }
     
     
@@ -266,6 +276,33 @@ public class PageController {
         return "pay/editPay";
     }
     
+    
+    /**
+     * 编辑收款页面
+     * @return 编辑收款页面url
+     */
+    @RequestMapping("/editGatheringMoney")
+    public String editGatheringMoney() {
+        return "gatheringMoney/editGatheringMoney";
+    }
+    
+    /**
+     * 添加收款页面
+     * @return 添加收款页面url
+     */
+    @RequestMapping("/addGatheringMoney")
+    public String addGatheringMoney() {
+        return "gatheringMoney/addGatheringMoney";
+    }
+    
+    /**
+     * 收款列表页面
+     * @return 收款列表页面url
+     */
+    @RequestMapping("/gatheringMoneyRecord")
+    public String gatheringMoneyRecord() {
+        return "gatheringMoney/gatheringMoneyRecord";
+    }
     
     /**
      * 添加发货页面
