@@ -34,6 +34,8 @@ angular
 													$scope.inOrOut=$stateParams.inOrOut;
 												if($scope.inOrOut.length>3){
 													getInvoiceInfo($stateParams.inOrOut);
+												}else{
+													$scope.clauseSettlementDetails=null;
 												}
 										 		}else if($location.path()=="/invoiceView"){
 										 			debugger;
@@ -150,7 +152,7 @@ angular
 															},{
 																mData : 'relationBuyOrSaleNum'
 															}, {
-																mData : 'comName'
+																mData : 'supplyComId'
 															},{
 																mData : 'invoiceAmount'
 															}, {
@@ -325,7 +327,7 @@ angular
 											},{
 												mData : 'relationBuyOrSaleNum'
 											}, {
-												mData : 'comName'
+												mData : 'buyComId'
 											},{
 												mData : 'invoiceAmount'
 											}, {
@@ -465,6 +467,13 @@ angular
 									debugger;
 									if($('#invoiceForm').valid()){//表单验证通过则执行添加功能
 										debugger;
+										if($scope.inOrOut.indexOf("in")>-1){
+											$scope.invoice.supplyComId=$scope.invoice.comName;
+											$scope.invoice.buyComId=null;
+										}else{
+											$scope.invoice.buyComId=$scope.invoice.comName;
+											$scope.invoice.supplyComId=null;
+										};
 										InvoiceService.saveInvoice($scope.invoice).then(
 															function(data) {debugger;
 																toastr.success("保存发票数据成功！");
@@ -547,174 +556,83 @@ angular
 								
 							}
 							  var selectIndex,ajaxUrl;
-					 	       $scope.selectDeliverOrTakeDelivery = function(judgeString){
-					 	    	  selectDeliverOrTakeDelivery(judgeString);
+					 	       $scope.selectBuyOrSaleOrderInfo = function(judgeString){
+					 	    	  selectBuyOrSaleOrder(judgeString);
 					 	       }
-						     var selectDeliverOrTakeDeliveryTable,aoColumnsForInOrOut,aoColumnDefsForInOrOut;
-					 	       var selectDeliverOrTakeDelivery = function(	judgeString) {
+						     var selectBuyOrSaleOrderTable,aoColumnsForBuyOrSale,aoColumnDefsForBuyOrSale;
+					 	       var selectBuyOrSaleOrder = function(	judgeString) {
 					 	    		debugger;
-					 	    	 if(selectDeliverOrTakeDeliveryTable!=undefined){
-					 	    		selectDeliverOrTakeDeliveryTable.destroy();
+					 	    	 if(selectBuyOrSaleOrderTable!=undefined){
+					 	    		selectBuyOrSaleOrderTable.destroy();
 					 	    	 }
-					 	    	 if(judgeString=='in'){
-					 	    		 ajaxUrl={ "url":$rootScope.basePath
-												+ "/rest/takeDelivery/takeDeliveryList",  
-												"contentType": "application/json",
-											    "type": "POST",
-											    "data": function ( d ) {
-											      return JSON.stringify( d );
-											    }};
-					 	    		aoColumnsForInOrOut= [
-				 	                                 { mData: 'takeDelivery.serialNum' },
-					 	                                { mData: 'takeDelivery.takeDeliverNum' },
-					 	                                { mData: 'orderNum' },
-					 	                               { mData: 'supplyName' },
-					 	                                { mData: 'shipper' },
-					 	                                { mData: 'materielCount' },
-					 	                                { mData: 'packageCount' },
-					 	                                { mData: 'packageType' },
-					 	                                { mData: 'warehouse.address' },
-					 	                                { mData: 'deliverDate' },
-					 	                                { mData: 'deliveryTransport.transportType' },
-					 	                                { mData: 'takeDelivery.warehouse.address' },
-					 	                                { mData: 'takeDelivery.remark' },
-					 	                                { mData: 'status' }
-					 	                            ];
-					 	    		aoColumnDefsForInOrOut=[ {
-			  							'targets' : 0,
-			  							'searchable' : false,
-			  							'orderable' : false,
-			  							'className' : 'dt-body-center',
-			  							'render' : function(data,
-			  									type, row, meta) {
-				  	  								return '<input type="radio"  ng-click="selectDeliverOrTakeDeliverInfo(\''+data+judgeString+'\',\''+row.takeDelivery.takeDeliverNum+'\',\''+row.orderNum+'\',\''+row.supplyName+'\')"   name="serialNum[]" value="'
-														+ $('<div/>')
+					 	    	 if(judgeString=='buy'){
+					 	    		 ajaxUrl="rest/order/findOrderList?type=buy";
+					 	    		aoColumnsForBuyOrSale=  [
+					 	    		                                    { mData: 'serialNum' },
+					 	    		                                   { mData: 'orderNum' },
+					 	    		                                   { mData: 'supplyComId' },
+					 	    		                                   { mData: 'orderAmount' },
+					 	    		                                   { mData: null },
+					 	    		                                   { mData: 'deliveryMode' },
+					 	    		                                   { mData: 'serviceModel' },
+					 	    		                                   { mData: 'saleApplySerial' },
+					 	    		                                   { mData: 'orderSerial' },
+					 	    		                                   { mData: 'orderDate' }
+
+					 	    		                             ],
+					 	    		                 aoColumnDefsForBuyOrSale=[ {
+					 	    							'targets' : 0,
+					 	   							'searchable' : false,
+					 	   							'orderable' : false,
+					 	   							'render' : function(data,
+					 	   									type, full, meta) {
+					 	   								return '<input type="radio" id="'+data+'" ng-click="getBuyOrSaleOrderInfo(\''+data+"in"+'\',\''+full.orderNum+'\',\''+full.orderAmount+'\')" name="serialNum[]" value="'
+					 	   													+ $('<div/>')
+					 	   													.text(
+					 	   															data)
+					 	   													.html()
+					 	   											+ '">';
+					 	   							},
+					 	   							"createdCell": function (td, cellData, rowData, row, col) {
+					 	   								 $compile(td)($scope);
+					 	   						       }
+					 	   						} ];
+					 	    	  }else if(judgeString=='sale'){
+					 	    		 ajaxUrl="rest/order/findOrderList?type=sale";
+					 	    		aoColumnsForBuyOrSale=[
+					 	                                { mData: 'serialNum' },
+					 	                               { mData: 'orderNum' },
+					 	                               { mData: 'buyComId' },
+					 	                              { mData: 'orderAmount' },
+					 	                               { mData: null },
+					 	                               { mData: 'deliveryMode' },
+					 	                               { mData: 'serviceModel' },
+					 	                               { mData: 'saleApplySerial' },
+					 	                               { mData: 'orderSerial' },
+					 	                               { mData: 'orderDate' }
+					 	                         ];
+					 	    		aoColumnDefsForBuyOrSale= [ {
+										'targets' : 0,
+										'searchable' : false,
+										'orderable' : false,
+										'render' : function(data,
+												type, full, meta) {
+											return '<input type="radio" id="'+data+'" ng-click="getBuyOrSaleOrderInfo(\''+data+"out"+'\',\''+full.orderNum+'\',\''+full.orderAmount+'\')" name="serialNum[]" value="'
+																+ $('<div/>')
 																.text(
 																		data)
 																.html()
 														+ '">';
-				
-			  							},
-			  							"createdCell": function (td, cellData, rowData, row, col) {
-			  								 $compile(td)($scope);
-			  						       }
-			  						},{
-			  							'targets' : 1,
-			  							'searchable' : false,
-			  							'orderable' : false,
-			  							'render' : function(data,
-			  									type, row, meta) {
-			  										if(data==null){
-			  											data="未收货";
-			  										}
-				  	  								return '<a href="javascript:void(0);" ng-click="takeDeliveryView(\''+row.takeDelivery.serialNum+'\')">'+data+'</a>';
-				
-			  							},
-			  							"createdCell": function (td, cellData, rowData, row, col) {
-			  								 $compile(td)($scope);
-			  						       }
-			  						},{
-			  							'targets' : 7,
-			  							'render' : function(data,
-			  									type, row, meta) {
-			  									if(data!=undefined){
-													return data;
-												}
-				  								return '';
-				
-			  							}
-			  						},{
-			  							'targets' : 9,
-			  							'render' : function(data,
-			  									type, row, meta) {
-			  									if(data!=undefined){
-													return data;
-												}
-				  								return '';
-				
-			  							}
-			  						},{
-			  							'targets' : 10,
-			  							'render' : function(data,
-			  									type, row, meta) {
-			  									if(data!=undefined){
-													return data;
-												}
-				  								return '';
-				
-			  							}
-			  						},{
-			  							'targets' : 11,
-			  							'render' : function(data,
-			  									type, row, meta) {
-			  										if(data!=undefined){
-			  											return data;
-			  										}
-				  	  								return '';
-				
-			  							}
-			  						},{
-			  							'targets' : 12,
-			  							'searchable' : false,
-			  							'orderable' : false,
-			  							'className' : 'dt-body-center',
-			  							'render' : function(data,
-			  									type, row, meta) {
-			  									if(data=="1"){
-			  										return '<span  class="label label-sm label-warning ng-scope">未收货</span>';
-			  									}else if(data=="2"){
-			  										return '<span  class="label label-sm label-warning ng-scope">待发票</span>';
-			  									}else{
-			  										return data;
-			  									}
-			  							}
-			  						}];
-					 	    	  }else if(judgeString=='out'){
-					 	    		 ajaxUrl="rest/delivery/findAllDeliveryList";  
-					 	    		aoColumnsForInOrOut=[
-							                            { mData: 'serialNum'},
-							                            { mData: 'deliverNum' },
-							                            { mData: 'orderNum' },
-							                            { mData: 'supplyName' },
-							                            { mData: 'materielCount' },
-							                            { mData: 'packageCount' },
-							                            { mData: 'receiver'},
-							                            { mData: 'deliveryAddress'},
-							                            { mData: 'deliverDate'},
-							                            { mData: 'transportType'},
-							                            { mData: 'takeAddress' },
-							                            { mData: 'remark'}
-							                            ];
-					 	    		aoColumnDefsForInOrOut= [ {
-		                            	'targets' : 0,
-		                            	'searchable' : false,
-		                            	'orderable' : false,
-		                            	'className' : 'dt-body-center',
-		                            	'render' : function(data,type, full, meta) {
-		                            		return '<input type="radio"  ng-click="selectDeliverOrTakeDeliverInfo(\''+data+judgeString+'\',\''+full.deliverNum+'\',\''+full.orderNum+'\',\''+full.supplyName+'\')"   name="serialNum[]" value="'+ $('<div/>').text(data).html()+ '">';
-		                            	},
-					 	    		"createdCell": function (td, cellData, rowData, row, col) {
-		  								 $compile(td)($scope);
-		  						       }
-		                            } ,
-		                            
-		                            {
-		                            	'targets' : 1,
-		                            	'className' : 'dt-body-center',
-		                            	'render' : function(data,
-		                            			type, row, meta) {
-		                            		return '<a data-toggle="modal" ng-click="jumpToGetDeliveryInfo(\''+row.serialNum+'\')" ">'+data+'</a>';
-		                            	},
-		                            	"createdCell": function (td, cellData, rowData, row, col) {
-		                            		$compile(td)($scope);
-		                            	}
-		                            }
-		                            ];
+										},
+										"createdCell": function (td, cellData, rowData, row, col) {
+											 $compile(td)($scope);
+									       }
+									} ];
 					 	    	  }
 					 	    	   debugger;
 					 	                a = 0;
 					 	                App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
-					 	               selectDeliverOrTakeDeliveryTable = $("#select_sample_"+judgeString)
+					 	               selectBuyOrSaleOrderTable = $("#select_sample_"+judgeString)
 					 	    			.DataTable({
 					 	                    language: {
 					 	                        aria: {
@@ -748,27 +666,52 @@ angular
 					 	                    processing: true,//loading等待框
 //					 	                    serverSide: true,
 					 	                    ajax: ajaxUrl,//加载数据中
-					 	                    "aoColumns": aoColumnsForInOrOut,
-					 	                   'aoColumnDefs' :aoColumnDefsForInOrOut
+					 	                    "aoColumns": aoColumnsForBuyOrSale,
+					 	                   'aoColumnDefs' :aoColumnDefsForBuyOrSale
 
 					 	                }).on('order.dt',
 					 	                function() {
 					 	                    console.log('排序');
 					 	                })
 					 	            };
-						$scope.selectDeliverOrTakeDeliverInfo=function(serialNum,deliverOrTakeDeliverNum,orderNum,supplyName){
+					 	            
+					 	       	// 订单结算条款***************************************							
+									$scope.judgeCount = function() {
+										debugger;
+										var id_count = $('input[type="checkbox"][name="select_all"]:checked').length;
+										if(id_count==0){
+											toastr.warning("请选择一条订单结算条款");
+										}else if(id_count>1){
+											toastr.warning("只能选择一条订单结算条款");
+										}else{
+											$scope.invoice.clauseSettlementSerial=$('input[type="checkbox"][name="select_all"]:checked').val();
+										}
+									};
+						$scope.getBuyOrSaleOrderInfo=function(serialNum,orderNum,orderAmount){
 							debugger;
 							$scope.row = {};
 		 	            	$scope.row.serialNum = serialNum;//发货单号流水/收货单号流水
-		 	            	$scope.row.deliverOrTakeDeliverNum=deliverOrTakeDeliverNum;//发货单号/收货单号
-		 	            	$scope.row.orderNum=orderNum;//销售订单号/采购订单号
-		 	            	$scope.row.supplyName=supplyName;//供应商名称
-		 	            	getMaterialInfo();
+		 	            //	$scope.row.orderAmount=orderAmount;//订单金额
+		 	            	$scope.row.orderNum=orderNum;//订单编号
+		 	            	getClauseSettlementInfo($scope.row.serialNum);//获取订单结算条款
 						}
-					function getMaterialInfo(){
-						StockInOutService.getMaterialBySerialNum($scope.row.serialNum).then(
+					function getClauseSettlementInfo(serialNum){
+						InvoiceService.getClauseSettlementBySerialNum(serialNum).then(
 								function(data) {debugger;
-								$scope.row.materials=data.materials;
+								if(serialNum.length>32){
+									$scope.row.clauseSettlement=data.clauseSettlement;
+									$scope.row.clauseSettlementDetails=data.clauseSettlementDetails;
+									$scope.row.orderInfo=data.orderInfo;
+									$scope.row.orderAmount=data.orderInfo.orderAmount;
+									$scope.row.unBillAmount=data.orderInfo.unBillAmount;
+								}else{
+									$scope.invoice.orderAmount=data.orderInfo.orderAmount;//订单金额
+			 	    				$scope.invoice.relationBuyOrSaleNum=data.orderInfo.orderNum;//订单编号
+			 	    				$scope.clauseSettlementDetails=data.clauseSettlementDetails;
+			 	    				$scope.invoice.unBillAmount=data.orderInfo.unBillAmount;
+			 	    				$scope.clauseSettlement=data.clauseSettlement;
+								}
+								
 							},
 							function(errResponse) {
 								toastr.warning("获取失败！");
@@ -778,10 +721,10 @@ angular
 					);
 					}
 						   // 确认选择发货单开始***************************************
-		 	    		$scope.confirmSelectDeliverOrTakeDeliveryInfo = function(judgeString) {
+		 	    		$scope.confirmSelectBuyOrSaleOrderInfo = function(judgeString) {
 		 	    			var ids = '';
 		 	    			// Iterate over all checkboxes in the table
-		 	    				selectDeliverOrTakeDeliveryTable.$('input[type="radio"]').each(//[name="in[]"]
+		 	    			selectBuyOrSaleOrderTable.$('input[type="radio"]').each(//[name="in[]"]
 			 	    					function() {
 			 	    						// If checkbox exist in DOM
 			 	    						if ($.contains(document, this)) {
@@ -797,25 +740,24 @@ angular
 			 	    						}
 			 	    					});
 		 	    			if(ids==''){
-		 	    				if(judgeString=='in'){
-		 	    					toastr.warning('请选择一个收货单！');return;
+		 	    				if(judgeString=='buy'){
+		 	    					toastr.warning('请选择一个采购单！');return;
 		 	    				}else{
-		 	    					toastr.warning('请选择一个发货单！');return;
+		 	    					toastr.warning('请选择一个销售单！');return;
 		 	    				}
 		 	        		}
 		 	    			//为前台四个参数赋值
-		 	    			if(judgeString=='in'){
-			 	            	$scope.stockInOutCheck.takeDeliverNum=$scope.row.deliverOrTakeDeliverNum;
-			 	            	$scope.stockInOutCheck.relationBuyNum=$scope.row.orderNum;
-			 	            	$scope.stockInOutCheck.supplyName=$scope.row.supplyName;
-			 	            	$('#takeDeliveryInfo').modal('hide');// 选择成功后关闭模态框
+		 	    			debugger;
+		 	    			$scope.invoice.orderSerial=$scope.row.orderInfo.serialNum;//订单流水
+	 	    				$scope.invoice.orderAmount=$scope.row.orderAmount;//订单金额
+	 	    				$scope.invoice.relationBuyOrSaleNum=$scope.row.orderNum;//订单编号
+	 	    				$scope.clauseSettlementDetails=$scope.row.clauseSettlementDetails;
+	 	    				$scope.invoice.unBillAmount=$scope.row.unBillAmount;
+	 	    				$scope.clauseSettlement=$scope.row.clauseSettlement;
+		 	    			if(judgeString=='buy'){
+			 	            	$('#buyOrderInfo').modal('hide');// 选择成功后关闭模态框
 		 	    			}else{
-		 	    				$("#deliverSerial").val($scope.row.serialNum.substring(0,32));//发货单流水
-			 	            	$("#takeDeliverSerial").val('111111') ;//收货单流水
-			 	            	$scope.stockInOutCheck.deliverNum=$scope.row.deliverOrTakeDeliverNum;
-			 	            	$scope.stockInOutCheck.relationSaleNum=$scope.row.orderNum;
-			 	            	$scope.stockInOutCheck.supplyName=$scope.row.supplyName;
-		 	            	$('#deliverInfo').modal('hide');// 选择成功后关闭模态框
+		 	            	$('#saleOrderInfo').modal('hide');// 选择成功后关闭模态框
 		 	    			}
 		 	    			$(".modal-backdrop").remove();
 		 	    		};  // 确认选择发货单结束***************************************
@@ -920,11 +862,10 @@ angular
 						 	        			 $scope.invoice.receiptDate=timeStamp2ShortString(data.invoice.receiptDate);
 						 	        			 $scope.invoice.billingDate=timeStamp2ShortString(data.invoice.billingDate);
 						 	        			 $scope.invoice.submitDate=timeStamp2ShortString(data.invoice.submitDate);
-						 	        			 if($stateParams.inOrOut.indexOf("in")>-1){
-						 	        				
-						 	        			 }else{
-						 	        				
-						 	        			 }
+						 	        			 $scope.invoice.approvalDate=timeStamp2ShortString(data.invoice.approvalDate);
+						 	        			getClauseSettlementInfo($scope.invoice.orderSerial);//获取订单结算条款
+						 	    				
+						 	        			
 						 	        			
 						 	            },function(data){
 						 	               //调用承诺接口reject();

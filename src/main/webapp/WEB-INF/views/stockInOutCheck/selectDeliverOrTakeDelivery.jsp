@@ -16,6 +16,7 @@
 	                            <th style="text-align: center"><input name="select_all" value="1" id="example-select-out-all" type="radio"/></th>
 	                        <th >发货单编号</th><!--  style="white-space: nowrap;"-->
 							<th >关联销售单号</th>
+							<th >订单金额</th>
 							<th >供应商</th>
 							<th >物料</th>
 							<th >包装数量</th>
@@ -58,6 +59,7 @@
 	                            <th style="text-align: center"><input name="select_all" value="1" id="example-select-in-all" type="radio"/></th>
 	                        <th>收货单编号</th>
 							<th>采购订单号</th>
+							<th >订单金额</th>
 							<th >供应商</th>
 							<th>发货方</th>
 							<th>物料</th>

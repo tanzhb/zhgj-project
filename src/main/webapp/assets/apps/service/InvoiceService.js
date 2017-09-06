@@ -5,7 +5,8 @@ angular.module('MetronicApp').factory('InvoiceService', ['$rootScope', '$http', 
     var factory = {
     		saveInvoice:saveInvoice,
     		delInvoices:delInvoices,
-            selectDetailBySerialNum:selectDetailBySerialNum
+            selectDetailBySerialNum:selectDetailBySerialNum,
+            getClauseSettlementBySerialNum:getClauseSettlementBySerialNum
     };
 
     return factory;
@@ -43,9 +44,23 @@ debugger;
     
     
     //通过发票serialNum查找发票记录
-    function selectDetailBySerialNum(serialNum){
+    function selectDetailBySerialNum(serialNum){//getClauseSettlementBySerialNum
         var deferred = $q.defer();  
         $http.post($rootScope.basePath + "/rest/invoice/invoiceView", serialNum).success(function (data) { 
+            // 如果连接成功，延时返回给调用者 
+            deferred.resolve(data);  
+        })  
+            .error(function () {  
+                deferred.reject('连接服务器出错！');  
+            })  
+        return deferred.promise;  
+          
+    };
+    //通过订单serialNum查找订单结算明细条款
+    function getClauseSettlementBySerialNum(serialNum){//getClauseSettlementBySerialNum
+        var deferred = $q.defer();  
+        debugger;
+        $http.post($rootScope.basePath + "/rest/invoice/clauseSettlement", serialNum).success(function (data) { 
             // 如果连接成功，延时返回给调用者 
             deferred.resolve(data);  
         })  
