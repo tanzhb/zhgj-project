@@ -679,5 +679,10 @@
     left join deliveryMateriel dm on td.deliverSerial = dm.deliverSerial and dm.delFlg = '0'
     where td.serialNum = #{serialNum,jdbcType=VARCHAR}
   </select>
-  
+   <select id="selectOrderAmountByOrderSerial" resultType="java.lang.String" parameterType="java.lang.String" ><!-- 取出订单金额 -->
+    select 
+      orderAmount
+    from orderInfo
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
 </mapper>

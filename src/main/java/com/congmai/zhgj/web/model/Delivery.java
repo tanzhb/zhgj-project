@@ -81,6 +81,7 @@ public class Delivery {
     
     private String orderNum;
     
+    private String orderAmount;//订单金额
 
     public String getSerialNum() {
         return serialNum;
@@ -372,6 +373,14 @@ public class Delivery {
 
 	public void setWarehouse(Warehouse warehouse) {
 		this.warehouse = warehouse;
+	}
+
+	public String getOrderAmount() {
+		return orderAmount;
+	}
+
+	public void setOrderAmount(String orderAmount) {
+		this.orderAmount = orderAmount;
 	}
     
     
