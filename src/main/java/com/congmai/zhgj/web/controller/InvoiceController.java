@@ -202,30 +202,7 @@ public class InvoiceController {
     		invoice.setOrderAmount(orderInfo.getOrderAmount());
     		invoice.setComName(invoice.getSupplyComId()==null?invoice.getBuyComId():invoice.getSupplyComId());
     		map.put("invoice",invoice);
-    		/*//获取合同信息
-        	ContractVO contract = null;
-    		if(!StringUtils.isEmpty(orderInfo.getContractSerial())){
-        		contract=contractService.selectConbtractById(orderInfo.getContractSerial());
-        	}
-        	if(contract!=null&&!StringUtils.isEmpty(contract.getId())){
-        		//获取结算条款信息
-        		ClauseSettlement clauseSettlement = clauseSettlementService.selectByContractId(contract.getId());
-        		map.put("clauseSettlement", clauseSettlement);
-        		
-            	//查询订单结算条款明细
-        		ClauseSettlementDetailExample cde=new ClauseSettlementDetailExample();
-        		com.congmai.zhgj.web.model.ClauseSettlementDetailExample.Criteria criteriaf=cde.createCriteria();
-        		criteriaf.andClauseSettlementSerialEqualTo(clauseSettlement.getSerialNum());
-        		criteriaf.andDelFlgEqualTo("0");
-        		List<ClauseSettlementDetail>csds=clauseSettlementDetailService.selectList(cde);
-        	BigDecimal num=BigDecimal.ZERO;
-        		for(ClauseSettlementDetail clauseSettlementDetail:csds){
-        			num=num.add(new BigDecimal(clauseSettlementDetail.getUnbilledAmount()));
-        		}
-        		orderInfo.setUnBillAmount(num.toString());
-        		map.put("orderInfo",orderInfo);
-        		map.put("clauseSettlementDetails", csds);
-        	}*/
+    	
     }
     	return map;
     }
