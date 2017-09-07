@@ -2,10 +2,6 @@ package com.congmai.zhgj.web.model;
 
 import java.util.Date;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 public class OrderInfo {
     private String serialNum;
 
@@ -36,7 +32,7 @@ public class OrderInfo {
     private String deliveryMode;
 
     private String transportMode;
-    @DateTimeFormat(pattern="yyyy-MM-dd")
+
     private Date orderDate;
 
     private String maker;
@@ -46,6 +42,8 @@ public class OrderInfo {
     private String currency;
 
     private String exchangeRate;
+
+    private String orderAmount;
 
     private String remark;
 
@@ -60,6 +58,8 @@ public class OrderInfo {
     private String updater;
 
     private Date updateTime;
+    
+    private String unBillAmount;//未开金额合计
 
     public String getSerialNum() {
         return serialNum;
@@ -180,7 +180,7 @@ public class OrderInfo {
     public void setTransportMode(String transportMode) {
         this.transportMode = transportMode == null ? null : transportMode.trim();
     }
-    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
+
     public Date getOrderDate() {
         return orderDate;
     }
@@ -219,6 +219,14 @@ public class OrderInfo {
 
     public void setExchangeRate(String exchangeRate) {
         this.exchangeRate = exchangeRate == null ? null : exchangeRate.trim();
+    }
+
+    public String getOrderAmount() {
+        return orderAmount;
+    }
+
+    public void setOrderAmount(String orderAmount) {
+        this.orderAmount = orderAmount == null ? null : orderAmount.trim();
     }
 
     public String getRemark() {
@@ -276,4 +284,13 @@ public class OrderInfo {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public String getUnBillAmount() {
+		return unBillAmount;
+	}
+
+	public void setUnBillAmount(String unBillAmount) {
+		this.unBillAmount = unBillAmount;
+	}
+    
 }

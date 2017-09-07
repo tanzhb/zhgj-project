@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <!-- BEGIN PAGE HEADER-->
 <h3 class="page-title"> 物料列表
     <small></small>
@@ -42,18 +43,24 @@
 					<i class="fa fa-globe"></i>物料列表
 				</div>
 				<div class="actions">
-					<a href="javascript:;" ui-sref="addMateriel"
-						 class="btn btn-default btn-sm btn-circle">
-						<i class="fa fa-plus"></i> 添加
-					</a> 
+					<shiro:hasPermission name="materiel:add">
+						<a href="javascript:;" ui-sref="addMateriel"
+							 class="btn btn-default btn-sm btn-circle">
+							<i class="fa fa-plus"></i> 添加
+						</a> 
+					</shiro:hasPermission>
+					<shiro:hasPermission name="materiel:edit">
 					<a href="javascript:;" ng-click="editMateriel()"
 						 class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-edit"></i> 修改
 					</a>
+					</shiro:hasPermission>
+					<shiro:hasPermission name="materiel:delete">
 					<a href="javascript:;" ng-click="deleteMateriel()"
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-minus"></i> 删除
 					</a>
+					</shiro:hasPermission>
 					<div class="btn-group">
 						<a class="btn btn-default btn-outline btn-circle"
 							href="javascript:;" data-toggle="dropdown"> <i

@@ -88,10 +88,10 @@
                                                                          <p class="control-label left" ng-show="stockInOutCheckView"  ng-if="inOrOut.indexOf('in')>-1"  >{{stockInOutCheck.takeDeliverNum}}</p> 
                                                                     </div>
                                                                     <div class="col-md-1"><span class="input-inline-btn"  ng-hide="stockInOutCheckAdd"  >
-                                                            <button class="btn default" type="button"   ng-if="inOrOut.indexOf('in')>-1&&nOrOut.length<=3"   ng-click="selectDeliverOrTakeDelivery('in')" data-target="#takeDeliveryInfo" data-toggle="modal" >
+                                                            <button class="btn default" type="button"   ng-if="inOrOut.indexOf('in')>-1&&inOrOut.length<=3"   ng-click="selectDeliverOrTakeDelivery('in')" data-target="#takeDeliveryInfo" data-toggle="modal" >
                                                                 <i class="fa fa-search"></i>
                                                             </button>
-                                                              <button class="btn default" type="button"   ng-if="inOrOut.indexOf('out')>-1&&nOrOut.length<=3"   ng-click="selectDeliverOrTakeDelivery('out')" data-target="#deliverInfo" data-toggle="modal" >
+                                                              <button class="btn default" type="button"   ng-if="inOrOut.indexOf('out')>-1&&inOrOut.length<=3"   ng-click="selectDeliverOrTakeDelivery('out')" data-target="#deliverInfo" data-toggle="modal" >
                                                                 <i class="fa fa-search"></i>
                                                             </button>
                                                         </span></div>
@@ -204,28 +204,22 @@
                         </div>
                           <div class="portlet-body form">
                                     <div class="table-scrollable">
-                                        <table class="table table-bordered table-hover"  >
+                                        <table class="table table-striped table-bordered table-advance table-hover"  >
                                             <thead>
                                                 <tr >
-                                                    <th  style="text-align: center;">物料编号</th>
-                                                    <th  style="text-align: center;">物料名称</th>
-                                                    <th  style="text-align: center">规格型号</th>
-                                                    <th style="text-align: center">单位</th>
-                                                    <th  style="text-align: center">批次号</th>
-                                                     <th style="text-align: center">生产日期</th>
+                                                      <th rowspan="2" style="text-align: center;vertical-align: middle">物料编号</th>
+                                                    <th  rowspan="2"  style="text-align: center;vertical-align: middle">物料名称</th>
+                                                    <th   rowspan="2" style="text-align: center;vertical-align: middle">规格型号</th>
+                                                    <th  rowspan="2" style="text-align: center;vertical-align: middle">单位</th>
+                                                    <th    rowspan="2"  style="text-align: center;vertical-align: middle">批次号</th>
+                                                     <th   rowspan="2"  style="text-align: center;vertical-align: middle">生产日期</th>
                                                     <th   colspan="3"  style="text-align: center">发货</th>
                                                     <th   colspan="3" style="text-align: center"><span ng-if="inOrOut.indexOf('in')>-1" >收货</span><span  ng-if="inOrOut.indexOf('out')>-1">出库</span></th>
                                                     <th  colspan="3" style="text-align: center">检验</th>
-                                                    <th style="text-align: center">状态</th>
+                                                    <th   rowspan="2"  style="text-align: center;vertical-align: middle">状态</th>
                                                 </tr>
                                             
                                              <tr >
-                                                <td style="border-top: none"></td>
-                                                <td style="border-top: none"></td>
-                                                <td style="border-top: none"></td>
-                                                <td style="border-top: none"></td>
-                                                <td style="border-top: none"></td>
-                                                <td style="border-top: none"></td>
                                                  <td style="text-align: center">订单数量</td>
                                                   <td style="text-align: center">发货数量</td>
                                                   <td  style="text-align: center">备注</td>
@@ -235,7 +229,6 @@
                                                    <td  style="text-align: center">合格数量</td>
                                                   <td   style="text-align: center">不合格数量</td>
                                                    <td  style="text-align: center">备注</td>
-                                                  <td style="border-top: none"></td>
                                                 </tr> 
                                                 </thead>
                                             <tbody  ng-if="materials==null">

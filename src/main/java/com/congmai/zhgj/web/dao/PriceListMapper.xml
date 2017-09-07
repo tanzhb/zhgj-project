@@ -588,7 +588,7 @@
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
   <delete id="deletePriceList" parameterType="java.util.List">
-    	delete from priceList where serialNum in
+    	update  priceList   set delFlg=1  where serialNum in
         <foreach item="idList" collection="list" open="(" close=")" separator=",">
             #{idList}
         </foreach>
