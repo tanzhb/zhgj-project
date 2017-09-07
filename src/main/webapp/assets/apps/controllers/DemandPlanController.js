@@ -1019,12 +1019,17 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	    	   $("#resetFile").trigger("click");
 	       })
 
-	         
-	       
-
-	       
-	       
-
+	       $scope.countSupplyCount = function(){
+	    	   if(!isNull($scope.rootMateriels)){
+		    		var arr = [];
+		    		for(var i in $scope.rootMateriels){
+		    			if(!isNull($scope.rootMateriels[i].supplyMaterielSerial)){
+		    				arr.push($scope.rootMateriels[i].supplyMaterielSerial);
+		    			}
+		    		}
+		    		$scope.supplyCount = handle.unique(arr).length;
+		    	}
+	       }  
 }]); 
 
 /*var changeSelectValue = function (value,obj){

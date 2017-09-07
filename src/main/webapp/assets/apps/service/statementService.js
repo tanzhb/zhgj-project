@@ -67,6 +67,36 @@ angular.module('MetronicApp').service('statementService',
 						deferred.reject(err);//请求失败
 					});
 					return deferred.promise;//返回承诺
-				}
+			  },
+			  initSuppliers : function (){
+				  var deferred = $q.defer();
+					$http.get("rest/company/getSuppliers")
+					.then(function success(result) {
+						deferred.resolve(result);//请求成功
+					}, function error(err) {
+						deferred.reject(err);//请求失败
+					});
+					return deferred.promise;//返回承诺  
+			  },
+			  initCustomers : function (){
+				  var deferred = $q.defer();
+					$http.get("rest/company/getCustomers")
+					.then(function success(result) {
+			            deferred.resolve(result);//请求成功
+			        }, function error(err) {
+			            deferred.reject(err);//请求失败
+			        });
+			        return deferred.promise;//返回承诺
+			  },
+			  getOrderAndPaymentRecords : function(supplyComId,buyComId,statementDate){
+				  var deferred = $q.defer();
+					$http.get("rest/statement/getOrderAndPaymentRecords",{params:{supplyComId:supplyComId,buyComId:buyComId,statementDate:statementDate}})
+					.then(function success(result) {
+						deferred.resolve(result);//请求成功
+					}, function error(err) {
+						deferred.reject(err);//请求失败
+					});
+					return deferred.promise;//返回承诺  
+			  }
 			}
 		} ]);

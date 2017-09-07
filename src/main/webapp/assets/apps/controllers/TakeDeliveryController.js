@@ -10,6 +10,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    	App.initAjax();
 	    	handle.datePickersInit();
 	    	if($location.path()=="/takeDeliveryAdd"){
+	    		
 	    		//handle.pageRepeater();
 	    		//_index = 0; 
 	    		//$scope.companyQualifications =[{}];
@@ -28,6 +29,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    			$(".d_tip").text("编辑收货信息");
 	    			takeDeliveryInfo($stateParams.serialNum,"edit");
 	    		}
+	    		playArrivalDateSetting();
+	    		playWarehouseDateSetting();
 	 		}else if($location.path()=="/takeDeliveryView"){
 	 				takeDeliveryInfo($stateParams.serialNum);
 	 		}else{
@@ -63,6 +66,20 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	 });
 	 
 	
+	 var playArrivalDateSetting = function() { 
+		    
+	        $("#playArrivalDate").datepicker().on('changeDate', function(ev){
+	        	$("#playWarehouseDate").datepicker('setStartDate',timeStamp2ShortString(ev.date));
+	        });  
+	    }  
+	 
+	 var playWarehouseDateSetting = function() {   
+		 	
+	        $("#playWarehouseDate").datepicker().
+	        on('changeDate', function(ev){
+	        	$("#playArrivalDate").datepicker('setEndDate',timeStamp2ShortString(ev.date));
+	        });  
+	}  
 
 		
 		/**
@@ -144,6 +161,19 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        		$scope.takeDeliver = data.data.takeDelivery;
 	        		//$scope.takeDeliver.warehouseSerial = $scope.takeDeliver.warehouse.serialNum;
 	        		$scope.takeDeliver.warehouseName = $scope.takeDeliver.warehouse.address;
+	        		
+	        		
+	        		var playWarehouseDate= $scope.deliverTransport.playWarehouseDate;
+	    		    if(!isNull(playWarehouseDate)){
+	    		    	$("#playWarehouseDate").datepicker('setDate',playWarehouseDate);
+	    		    	$("#playArrivalDate").datepicker('setEndDate',playWarehouseDate);
+	    		    }
+	    		    
+	    		    var playArrivalDate= $scope.deliverTransport.playArrivalDate;
+	    		 	if(!isNull(playArrivalDate)){
+	    		 		$("#playArrivalDate").datepicker('setDate',playArrivalDate);
+	    		    	$("#playWarehouseDate").datepicker('setStartDate',playArrivalDate);
+	    		    }
 	        	}
 	        	},function(data){
 	        		//调用承诺接口reject();
@@ -372,6 +402,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		       		var date= scope.materiel.manufactureDate;
 		    	    handle.datePickersInit();
 		    	    scope.materiel.manufactureDate = date;
+		    	    $("#manufactureDate"+index).datepicker('setDate',date);
 		    };
 	        
 	        /**
@@ -1107,7 +1138,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					//var serialNum = $('#buyOrder input[name="selecrOrderSerial"]:checked').val();
 					$scope.deliver.orderSerial = $('#buyOrder input[name="selecrOrderSerial"]:checked').val();
 					$scope.deliver.orderNum = $('#buyOrder input[name="selecrOrderSerial"]:checked').data("num");
-					getOrderMateriel();
+					$scope.getOrderMateriel();
 					$("#buyOrderInfo").modal('hide'); 
 				}
 				

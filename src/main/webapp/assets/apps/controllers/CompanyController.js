@@ -230,7 +230,8 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 									'targets' : 1,
 									'render' : function(data,
 											type, row, meta) {
-										return '<a   ng-click="showCompanyInfoModal(\''+row.comId+'\')">'+data+'</a>';
+										//return '<a   ng-click="showCompanyInfoModal(\''+row.comId+'\')">'+isNull(data)?"未设置编号":data+'</a>';
+										return (isNull(data)?"未设置编号":data);
 										//return data;
 									},"createdCell": function (td, cellData, rowData, row, col) {
 										 $compile(td)($scope);
@@ -633,6 +634,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		        			$scope.companyEdit = false;
 		        			$(".alert-danger").html("请输入正确的数据！");
 		        			$(".alert-danger").hide();
+		        			//$scope.saveCompanyQualification(true);
 		        			//$stateParams.comId = company.comId;
 		        			//$location.search('comId',company.comId);
 	        			}else{
@@ -649,6 +651,8 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        			toastr.error("保存失败！请联系管理员");
 		            	console.log(data);
 	        		});
+	        	}else{
+	        		//$('#companyTab a:eq(0)').tab('show');
 	        	}
 	        	
 	        }; 
@@ -669,6 +673,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        	$scope.companyAdd = false;
 	        	$scope.companyEdit = true;
 	        	//$state.go("companyAdd",{comId:comId});
+	        	//$scope.editCompanyQualification
 	        	
 	        };  
 	        
@@ -773,6 +778,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	       			$scope.companyQualificationAdd = true;
 	       			$scope.companyQualificationEdit = false;
 	        	}
+	        	//$scope.cancelCompanyQualification();
 	        };
 	        
 	        
@@ -854,10 +860,17 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 			        		toastr.success("保存成功");
 			        		handle.unblockUI();
 			        		//$scope.companyQualifications = data.data;
-			        		getCompanyInfo($scope.company.comId,'companyQualification');
+			        		//getCompanyInfo($scope.company.comId,'companyQualification');
+			        		getCompanyInfo($scope.company.comId);
 			        		$scope.companyQualificationView = true;
 			        		$scope.companyQualificationAdd = true;
 			        		$scope.companyQualificationEdit = false;
+			        		
+			        		//getCompanyInfo(company.comId,"company");
+		        			//console.log(data.data);
+		        			//$scope.companyView = true;
+		        			//$scope.companyAdd = true;
+		        			//$scope.companyEdit = false;
 		        		}else{
 		        			toastr.error("保存失败！请联系管理员");
 			        		handle.unblockUI();
@@ -868,6 +881,8 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		            	toastr.error("保存失败！请联系管理员");
 		            	console.log(data);
 		            });
+		    	}else{
+		    		//$('#companyTab a:eq(1)').tab('show');
 		    	}
 	    	   
 	       }
@@ -1165,20 +1180,34 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    				   }
 	    			   }
 	    		   }
+	    		   if($scope.companyInfo.length>0){
+		    		   $scope.companyQualifications=[];
+		    		   $scope.companyQualifications = $scope.companyInfo[$scope.companyInfo.length-1].companyQualifications;
+		    		   $scope.companyContacts = $scope.companyInfo[$scope.companyInfo.length-1].companyContacts;
+			    	   $scope.companyFinances = $scope.companyInfo[$scope.companyInfo.length-1].companyFinances;
+			    	   $scope.company = $scope.companyInfo[$scope.companyInfo.length-1].company;
+		    	   }else{
+		    		   $scope.companyQualifications = [];
+		    		   $scope.companyContacts = [];
+		    		   $scope.companyFinances = [];
+		    		   $scope.company = {};
+		    	   }
 	    	   }else{//选中事件
 	    		   obj.data("check","true");
 	    		   getCompanyInfo(comId);
 	    	   }
-	    	   if($scope.companyInfo.length>0){
+	    	 /*  if($scope.companyInfo.length>0){
 	    		   $scope.companyQualifications=[];
 	    		   $scope.companyQualifications = $scope.companyInfo[$scope.companyInfo.length-1].companyQualifications;
 	    		   $scope.companyContacts = $scope.companyInfo[$scope.companyInfo.length-1].companyContacts;
 		    	   $scope.companyFinances = $scope.companyInfo[$scope.companyInfo.length-1].companyFinances;
+		    	   $scope.c_company = $scope.companyInfo[$scope.companyInfo.length-1].company;
 	    	   }else{
 	    		   $scope.companyQualifications = [];
 	    		   $scope.companyContacts = [];
 	    		   $scope.companyFinances = [];
-	    	   }
+	    		   $scope.c_company = {};
+	    	   }*/
 	    	  
         		
 	       };
@@ -1340,8 +1369,41 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 			  		  }
 			  	}
 	       }
+	       
+	       
+	       $scope.saveData = function(){
+	    	   $scope.saveCompany();
+	       }
+	       
+	       $scope.editData = function(){
+	    	   
+	       }
+	       
+	       $scope.cancelData = function(){
+	    	   
+	       }
+	       
 
-	   
+	       $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+	        // 获取已激活的标签页的名称
+	        var activeTab = $(e.target).text(); 
+	        // 获取前一个激活的标签页的名称
+	       // var previousTab = $(e.relatedTarget).text(); 
+	        var absurl = $location.absUrl();debugger;
+	        if(activeTab=="企业信息"){
+	        	$scope.basicInfo = false;
+	        	$scope.qualificationInfo = false;
+	        	$scope.$apply();
+	        }else if(activeTab=="资质信息"){
+	        	$scope.basicInfo = true;
+	        	$scope.qualificationInfo = true;
+	        	$scope.$apply();
+	        }else{
+	        	$scope.basicInfo = true;
+	        	$scope.qualificationInfo = false;
+	        	$scope.$apply();
+	        }
+	     });
 	       
 
 	       

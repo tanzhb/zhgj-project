@@ -33,7 +33,7 @@
 <!-- BEGIN MAIN CONTENT -->
 <div class="row">
     <div class="col-md-12">
-    	<form  id="stockInForm" class="form-horizontal"  >
+    	<form  id="stockInForm" class=""  >
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
         <div class="portlet bordered">
             <div class="portlet-body">
@@ -49,6 +49,10 @@
                                             <i class="fa fa-undo"></i> 取消 </button>
                                 <button   ng-hide="deliverAdd" class="btn blue  btn-outline  btn-sm " ng-click="savedeliver()">
                                             <i class="fa fa-save"></i> 保存 </button> -->
+                                 <button   class="btn green  btn-sm btn-circle" ng-click="saveStockIn()">
+                              		<i class="fa fa-check"></i> 确认入库 </button>
+                      			 <button    class="btn defualt  btn-sm btn-circle" ng-click="cancelStockIn()" onclick="return false;">
+                              		<i class="fa fa-mail-reply"></i> 取消 </button>
                             </div>
                         </div>
                         <div class="portlet-body form">
@@ -57,9 +61,9 @@
                                                 <button class="close" data-close="alert"></button>请先输入正确数据！</div>
 									<div class="row">
 										<div class="col-md-4">
-											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="inOutNum"> <span class="required"> * </span>入库单号：</label>
-                                                    <div class="col-md-8">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="inOutNum">入库单号 <span class="required"> * </span></label>
+                                                    <div class="">
                                                         <input type="text" class="form-control" id="inOutNum" name="inOutNum" ng-model="record.inOutNum" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{record.inOutNum}}</p>
@@ -69,29 +73,27 @@
 						
 										<!--/span-->
 										<div class="col-md-4">
-											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="takeDeliverSerial"> <span class="required"> * </span>收货单号：</label>
-                                                   <!--  <div class="col-md-8"> -->
-                                                    	<!-- <select class="bs-select form-control order" data-live-search="true"  id="takeDeliverSerial"  name="takeDeliverSerial" ng-change="getTakeDeliverMateriel()" ng-model="record.takeDeliverSerial" ng-hide="deliverAdd"  data-size="8">
-	                                                        <option value=""></option>
-	                                                        <option  ng-repeat="takeDeliver in takeDeliverys" value="{{takeDeliver.takeDelivery.serialNum}}" data-deliveryserial="{{takeDeliver.serialNum}}" >{{takeDeliver.takeDelivery.takeDeliverNum}}</option>
-	                                                   	</select> -->
-	                                                   	  <div class="col-md-6">
-	                                                    	<input id="takeDeliverSerial" data-toggle="modal" data-target="#takeDeliveryInfo"  name="takeDeliverSerial" type="text" class="form-control" ng-model="record.takeDeliverNum" readonly="readonly" >
-	                                                    	<div class="form-control-focus"> </div>
-                                                    	</div>
-                                                    	<div class="col-md-2">
-                                                    	<button class="btn btn-icon-only default" data-toggle="modal" data-target="#takeDeliveryInfo" onclick="return false;">
-                                            			<i class="fa fa-search" ></i></button>
-                                                    	</div>
-                                                   <!-- </div> -->
+											<div class="form-group">
+                                                    <label class="control-label bold" for="takeDeliverSerial">收货单号 <span class="required"> * </span></label>
+	                                                 <div class="">
+	                                                 	<div class="input-group" data-toggle="modal" data-target="#takeDeliveryInfo" onclick="return false;">
+	                                                        <input id="takeDeliverSerial"   name="takeDeliverSerial" type="text" class="form-control" ng-model="record.takeDeliverNum" readonly="readonly" >
+	                                                        <span class="input-group-btn" style="vertical-align: top;">
+	                                                            <button class="btn default" type="button">
+	                                                                <i class="fa fa-search"></i>
+	                                                            </button>
+	                                                        </span>
+	                                                    </div>
+                                                     </div>
+                                                     <div class="form-control-focus"> </div>
                                             </div>
 										</div>
 										<!--/span-->
 										<div class="col-md-4">
-											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="orderSerial"> 采购订单号：</label>
-                                                    <div class="col-md-8">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="orderSerial"> 采购订单号</label>
+                                                    <div class="">
+                                                    		<input type="text" class="form-control" value="{{record.orderNum}}" readonly="readonly">
                                                          <p class="control-label left" >{{record.orderNum}}</p>
                                                     </div>
                                             </div>
@@ -101,30 +103,32 @@
 									<!--/row-->
 									<div class="row">
 										<div class="col-md-4">
-											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="supplyComId"> 入库仓库：</label>
-                                                    <div class="col-md-8">
-                                                         <p class="control-label left" >{{warehouseCount}}</p>
+											<div class="form-group">
+                                                    <label class="control-label bold" for="supplyComId"> 入库仓库</label>
+                                                    <div class="">
+                                                    	<input type="text" class="form-control" value="{{warehouseCount}}" readonly="readonly">
+                                                      <!--    <p class="control-label left" >{{warehouseCount}}</p> -->
                                                     </div>
                                             </div>
 										</div>
 						
 										<!--/span-->
 										<div class="col-md-4">
-											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="shipper"> 入库库位：</label>
-                                                    <div class="col-md-8">
-                                                         <p class="control-label left" >{{positionCount}}</p>
+											<div class="form-group">
+                                                    <label class="control-label bold" for="shipper"> 入库库位</label>
+                                                    <div class="">
+                                                    		<input type="text" class="form-control" value="{{positionCount}}" readonly="readonly">
+                                                      <!--    <p class="control-label left" >{{positionCount}}</p> -->
                                                     </div>
                                             </div>
 										</div>
 										<!--/span-->
 										<div class="col-md-4">
-											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="stockDate"> <span class="required"> * </span>入库日期：</label>
-                                                    <div class="col-md-8">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="stockDate">入库日期 <span class="required"> * </span></label>
+                                                    <div class="">
                                                        <input type="text" class="form-control  date-picker" size="16"  data-date-format="yyyy-mm-dd" data-date-viewmode="years"
-                                                         id="stockDate"  name="stockDate" ng-model="record.stockDate" ng-hide="deliverAdd" >
+                                                         id="stockDate"  name="stockDate" ng-model="record.stockDate" ng-hide="deliverAdd" readonly="readonly">
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{record.stockDate}}</p>
                                                     </div>
@@ -135,9 +139,9 @@
 									<!--/row-->
 									<div class="row">
 										<div class="col-md-4">
-											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="operator"> <span class="required"> * </span>操作员：</label>
-                                                    <div class="col-md-8">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="operator">操作员 <span class="required"> * </span></label>
+                                                    <div class="">
                                                         <input type="text" class="form-control" id="operator" name="operator" ng-model="record.operator" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.maker}}</p>
@@ -147,9 +151,9 @@
 						
 										<!--/span-->
 										<div class="col-md-4">
-											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="contactNum"> <span class="required"> * </span>联系方式：</label>
-                                                    <div class="col-md-8">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="contactNum">联系方式 <span class="required"> * </span></label>
+                                                    <div class="">
                                                         <input type="text" class="form-control" id="contactNum"  name="contactNum" ng-model="record.contactNum" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{record.contactNum}}</p>
@@ -158,9 +162,9 @@
 										</div>
 										<!--/span-->
 										<div class="col-md-4">
-											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="approval"> <span class="required"> * </span>状态：</label>
-                                                    <div class="col-md-8">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="approval">状态</label>
+                                                    <div class="">
                                                          <p class="control-label left" ng-show="deliverView">待检验</p>
                                                     </div>
                                             </div>
@@ -257,7 +261,7 @@
 						</div>
 					 </div>
          			<!-- 物料信息END -->
-         			<div class="row">
+         			<!-- <div class="row">
          				<div class="col-md-5"></div>
          				<div class="col-md-1">
          					 <button   ng-hide="deliverAdd" class="btn blue" ng-click="saveStockIn()">
@@ -268,7 +272,7 @@
                                             <i class="fa fa-undo"></i> 取消 </button>
          				</div>
          				<div class="col-md-5"></div>
-         			</div>
+         			</div> -->
        			 </div>
        			
     		</div>

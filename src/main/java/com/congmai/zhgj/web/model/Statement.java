@@ -2,15 +2,13 @@ package com.congmai.zhgj.web.model;
 
 import java.util.Date;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class Statement {
     private String serialNum;
 
     private String statementNum;
-    @DateTimeFormat(pattern="yyyy-MM-dd")
+
     private Date statementDate;
 
     private String supplyComId;
@@ -23,9 +21,21 @@ public class Statement {
 
     private String paymentAmount;
 
+    private String beginShouldPay;
+
+    private String nowShouldPay;
+
+    private String nowAlreadyPay;
+
+    private String endShouldPay;
+
+    private String overTimeAmout;
+
     private String serviceAmount;
-    @DateTimeFormat(pattern="yyyy-MM-dd")
+
     private Date reciveDate;
+
+    private String nowOtherAmout;
 
     private String status;
 
@@ -40,6 +50,18 @@ public class Statement {
     private String updater;
 
     private Date updateTime;
+
+    private String approver;
+
+    private Date approvalDate;
+
+    private Date makeDate;
+
+    private String maker;
+    
+    private String supplyName;
+    
+    private String buyName;
 
     public String getSerialNum() {
         return serialNum;
@@ -56,7 +78,8 @@ public class Statement {
     public void setStatementNum(String statementNum) {
         this.statementNum = statementNum == null ? null : statementNum.trim();
     }
-    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
+
+    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
     public Date getStatementDate() {
         return statementDate;
     }
@@ -105,6 +128,46 @@ public class Statement {
         this.paymentAmount = paymentAmount == null ? null : paymentAmount.trim();
     }
 
+    public String getBeginShouldPay() {
+        return beginShouldPay;
+    }
+
+    public void setBeginShouldPay(String beginShouldPay) {
+        this.beginShouldPay = beginShouldPay == null ? null : beginShouldPay.trim();
+    }
+
+    public String getNowShouldPay() {
+        return nowShouldPay;
+    }
+
+    public void setNowShouldPay(String nowShouldPay) {
+        this.nowShouldPay = nowShouldPay == null ? null : nowShouldPay.trim();
+    }
+
+    public String getNowAlreadyPay() {
+        return nowAlreadyPay;
+    }
+
+    public void setNowAlreadyPay(String nowAlreadyPay) {
+        this.nowAlreadyPay = nowAlreadyPay == null ? null : nowAlreadyPay.trim();
+    }
+
+    public String getEndShouldPay() {
+        return endShouldPay;
+    }
+
+    public void setEndShouldPay(String endShouldPay) {
+        this.endShouldPay = endShouldPay == null ? null : endShouldPay.trim();
+    }
+
+    public String getOverTimeAmout() {
+        return overTimeAmout;
+    }
+
+    public void setOverTimeAmout(String overTimeAmout) {
+        this.overTimeAmout = overTimeAmout == null ? null : overTimeAmout.trim();
+    }
+
     public String getServiceAmount() {
         return serviceAmount;
     }
@@ -116,9 +179,17 @@ public class Statement {
     public Date getReciveDate() {
         return reciveDate;
     }
-    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
+
     public void setReciveDate(Date reciveDate) {
         this.reciveDate = reciveDate;
+    }
+
+    public String getNowOtherAmout() {
+        return nowOtherAmout;
+    }
+
+    public void setNowOtherAmout(String nowOtherAmout) {
+        this.nowOtherAmout = nowOtherAmout == null ? null : nowOtherAmout.trim();
     }
 
     public String getStatus() {
@@ -176,4 +247,54 @@ public class Statement {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+    public String getApprover() {
+        return approver;
+    }
+
+    public void setApprover(String approver) {
+        this.approver = approver == null ? null : approver.trim();
+    }
+
+    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+    public Date getApprovalDate() {
+        return approvalDate;
+    }
+
+    public void setApprovalDate(Date approvalDate) {
+        this.approvalDate = approvalDate;
+    }
+
+    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+    public Date getMakeDate() {
+        return makeDate;
+    }
+
+    public void setMakeDate(Date makeDate) {
+        this.makeDate = makeDate;
+    }
+
+    public String getMaker() {
+        return maker;
+    }
+
+    public void setMaker(String maker) {
+        this.maker = maker == null ? null : maker.trim();
+    }
+
+	public String getSupplyName() {
+		return supplyName;
+	}
+
+	public void setSupplyName(String supplyName) {
+		this.supplyName = supplyName;
+	}
+
+	public String getBuyName() {
+		return buyName;
+	}
+
+	public void setBuyName(String buyName) {
+		this.buyName = buyName;
+	}
 }

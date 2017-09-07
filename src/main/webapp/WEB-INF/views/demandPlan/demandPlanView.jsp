@@ -135,7 +135,7 @@
 	<div class="col-md-12">
 		<div class="portlet light" id="comViewPage">
 			<div class="portlet-body" id="comViewContent">
-				<ul class="nav nav-pills">
+				<ul class="nav nav-tabs">
 				 	<li class="active">
                  		 <a data-target="#tab_1_1" data-toggle="tab">物料信息</a>
               		</li> 
@@ -173,7 +173,7 @@
 	                                     </div>
                                      </div> -->
                                     <div class="table-scrollable">
-                                        <table class="table table-bordered table-hover">
+                                        <table class="table table-striped table-bordered table-advance table-hover">
                                             <thead>
                                                 <tr>
                                                     <th>物料编号</th>

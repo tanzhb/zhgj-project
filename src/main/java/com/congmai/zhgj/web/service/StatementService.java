@@ -1,10 +1,13 @@
 package com.congmai.zhgj.web.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.congmai.zhgj.core.generic.GenericService;
 import com.congmai.zhgj.web.model.Statement;
 import com.congmai.zhgj.web.model.StatementExample;
+import com.congmai.zhgj.web.model.StatementOrderInfo;
+import com.congmai.zhgj.web.model.StatementPaymentInfo;
 
 /**
  * 
@@ -24,5 +27,9 @@ public interface StatementService extends GenericService<Statement, String> {
 
 	public void deleteStatements(String ids);
 
+	Map<String,Object> getOrderAndPaymentRecords(String supplyComId,
+			String buyComId, String statementDate);
+
+	boolean isExist(String supplyComId, String buyComId, String statementDate);
 
 }
