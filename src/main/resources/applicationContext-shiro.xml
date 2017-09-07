@@ -52,6 +52,13 @@
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
         <property name="sessionDAO" ref="sessionDAO"/>
     </bean>
+    
+    <!-- 会话验证调度器 -->  
+    <!-- <bean id="sessionValidationScheduler" class="org.apache.shiro.session.mgt.ExecutorServiceSessionValidationScheduler">  
+        <property name="sessionManager" ref="sessionManager"/>  
+        设置调度时间间隔，单位毫秒，默认就是1小时   
+        <property name="interval" value="60000"/>  
+    </bean>  --> 
 
     <!-- 安全管理器 -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">

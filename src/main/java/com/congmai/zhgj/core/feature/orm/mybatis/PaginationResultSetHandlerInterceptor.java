@@ -3,7 +3,6 @@ package com.congmai.zhgj.core.feature.orm.mybatis;
 import java.sql.Statement;
 import java.util.Properties;
 
-import org.apache.ibatis.executor.resultset.FastResultSetHandler;
 import org.apache.ibatis.executor.resultset.ResultSetHandler;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.plugin.Intercepts;
@@ -32,7 +31,7 @@ public class PaginationResultSetHandlerInterceptor implements Interceptor {
     private static final ObjectWrapperFactory DEFAULT_OBJECT_WRAPPER_FACTORY = new DefaultObjectWrapperFactory();
 
     public Object intercept(Invocation invocation) throws Throwable {
-        FastResultSetHandler resultSetHandler = (FastResultSetHandler) invocation.getTarget();
+    	ResultSetHandler resultSetHandler = (ResultSetHandler) invocation.getTarget();
         MetaObject metaStatementHandler = MetaObject.forObject(resultSetHandler, DEFAULT_OBJECT_FACTORY, DEFAULT_OBJECT_WRAPPER_FACTORY);
         RowBounds rowBounds = (RowBounds) metaStatementHandler.getValue("rowBounds");
 

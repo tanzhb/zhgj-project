@@ -26,7 +26,7 @@ public interface UserService extends GenericService<User, Integer> {
     /**
      * 
      * @Description 通过用户名找用户
-     * @param id
+     * @param name
      * @return
      */
 	User selectByUsername(String name);
@@ -34,7 +34,7 @@ public interface UserService extends GenericService<User, Integer> {
     /**
      * 
      * @Description 更新用户
-     * @param id
+     * @param user
      * @return
      */
 	int update(User user);

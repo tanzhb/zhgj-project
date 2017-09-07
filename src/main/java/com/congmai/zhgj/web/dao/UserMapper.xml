@@ -3,25 +3,17 @@
 <mapper namespace="com.congmai.zhgj.web.dao.UserMapper">
 	<resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.User">
 
-		<id column="id" property="id" jdbcType="INTEGER" />
-		<result column="account" property="account" jdbcType="VARCHAR" />
-		<result column="password" property="password" jdbcType="VARCHAR" />
-		<result column="salt" property="salt" jdbcType="VARCHAR" />
-		<result column="name" property="name" jdbcType="VARCHAR" />
-		<result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
-		<result column="sex" property="sex" jdbcType="INTEGER" />
-		<result column="email" property="email" jdbcType="VARCHAR" />
-		<result column="phone" property="phone" jdbcType="VARCHAR" />
-		<result column="roleid" property="roleid" jdbcType="VARCHAR" />
-		<result column="deptid" property="deptid" jdbcType="INTEGER" />
-		<result column="status" property="status" jdbcType="INTEGER" />
-		<result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
-		<result column="version" property="version" jdbcType="INTEGER" />
-		<result column="avatar" property="avatar" jdbcType="INTEGER" />
+		<id column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="user_pwd" property="userPwd" jdbcType="VARCHAR" />
+		<result column="reg_date" property="regDate" jdbcType="TIMESTAMP" />
+		<result column="group_id" property="groupId" jdbcType="INTEGER" />
+		<result column="locked" property="locked" jdbcType="INTEGER" />
+		<result column="user_salt" property="userSalt" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
-        id, account, password, salt, name, birthday, sex, email, phone, roleid, deptid, status, createtime, version, avatar
+        user_id, user_name, user_pwd, reg_date, group_id, locked, user_salt
     </sql>
     <sql id="Example_Where_Clause">
         <where>
@@ -58,9 +50,17 @@
 		parameterType="map">
 		select
 		*
-		from user
-		where account = #{record.account,jdbcType=VARCHAR} and password =
-		#{record.password,jdbcType=VARCHAR}
+		from T_USER
+		where user_name = #{record.userName,jdbcType=VARCHAR} and user_pwd =
+		#{record.userPwd,jdbcType=VARCHAR}
+	</select>
+	<!-- 根据用户id查询用户信息 -->
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from T_USER
+		where user_id = #{userId,jdbcType=INTEGER}
 	</select>
     
 	<select id="selectByExample" resultMap="BaseResultMap"
@@ -70,7 +70,7 @@
 			distinct
 		</if>
 		<include refid="Base_Column_List" />
-		from user
+		from T_USER
 		<if test="_parameter != null">
 			<include refid="Example_Where_Clause" />
 		</if>
@@ -80,54 +80,28 @@
 	</select>
 	
 	<update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.User">
-        update user
+        update T_USER
         <set>
-            <if test="avatar != null">
-                avatar = #{avatar,jdbcType=VARCHAR},
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
             </if>
-            <if test="account != null">
-                account = #{account,jdbcType=VARCHAR},
+            <if test="userPwd != null">
+                user_pwd = #{userPwd,jdbcType=VARCHAR},
             </if>
-            <if test="password != null">
-                password = #{password,jdbcType=VARCHAR},
+            <if test="regDate != null">
+                reg_date = #{regDate,jdbcType=TIMESTAMP},
             </if>
-            <if test="salt != null">
-                salt = #{salt,jdbcType=VARCHAR},
+            <if test="groupId != null">
+                group_id = #{groupId,jdbcType=INTEGER},
             </if>
-            
-            <if test="name != null">
-                name = #{name,jdbcType=VARCHAR},
-            </if>
-            <if test="birthday != null">
-                birthday = #{birthday,jdbcType=TIMESTAMP},
-            </if>
-            <if test="sex != null">
-                sex = #{sex,jdbcType=INTEGER},
-            </if>
-            <if test="email != null">
-                email = #{email,jdbcType=VARCHAR},
-            </if>
-            <if test="phone != null">
-                phone = #{phone,jdbcType=VARCHAR},
-            </if>
-            
-            <if test="roleid != null">
-                roleid = #{roleid,jdbcType=VARCHAR},
-            </if>
-            <if test="deptid != null">
-                deptid = #{deptid,jdbcType=INTEGER},
-            </if>
-            <if test="status != null">
-                status = #{status,jdbcType=INTEGER},
-            </if>
-            <if test="createtime != null">
-                createtime = #{createtime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="version != null">
-                version = #{version,jdbcType=INTEGER},
+            <if test="locked != null">
+                locked = #{locked,jdbcType=INTEGER},
+            </if>            
+            <if test="userSalt != null">
+                user_salt = #{userSalt,jdbcType=VARCHAR},
             </if>
         </set>
-        where id = #{id,jdbcType=INTEGER}
+        where user_id = #{userId,jdbcType=INTEGER}
     </update>
 
 </mapper>

@@ -18,6 +18,7 @@
 	            </a>
 	        </li>
         </shiro:hasAnyRoles>
+        <shiro:hasPermission name="zhgj:baseData">
         <li class="nav-item">
             <a href="javascript:;" class="nav-link nav-toggle">
                 <i class="icon-settings"></i>
@@ -25,16 +26,20 @@
                 <span class="arrow "></span>
             </a>
             <ul class="sub-menu">
+            	<shiro:hasPermission name="zhgj:materiel:*">
                 <li>
                     <a ui-sref="materiel">
                         <i class="icon-puzzle"></i> 物料信息</span>
                     </a>
                 </li>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="zhgj:companyManage:*">
                 <li>
                     <a ui-sref="company">
                         <i class="icon-paper-clip"></i> 企业信息</span>
                     </a>
                 </li>
+                </shiro:hasPermission>
                 <li>
                     <a ui-sref="priceList">
                         <i class="icon-check"></i> 价格目录</span>
@@ -52,6 +57,7 @@
                 </li>
             </ul>
         </li>
+        </shiro:hasPermission>
         <li class="nav-item">
             <a href="javascript:;" class="nav-link nav-toggle" >
              <i class="icon-settings"></i>
@@ -167,7 +173,7 @@
 				<li><a ui-sref="paymentRecordC"> <i class="icon-paper-clip"></i>应付款</span></a></li>
 			</ul>
 		</li>        <li class="nav-item">
-            <a ui-sref="todo">
+            <a ui-sref="invoice">
                 <i class="icon-check"></i>
                 <span class="title">发票</span>
             </a>
@@ -201,12 +207,14 @@
                 </li>
             </ul>
         </li> -->
+        <shiro:hasAnyRoles name="lcsq,manager,hr,director">
         <li class="nav-item">
-            <a ui-sref="blank">
+            <a ui-sref="vacation">
                 <i class="icon-refresh"></i>
-                <span class="title">Blank Page</span>
+                <span class="title">请假</span>
             </a>
         </li>
+        </shiro:hasAnyRoles>
     </ul>
     <!-- END SIDEBAR MENU -->
 </div>

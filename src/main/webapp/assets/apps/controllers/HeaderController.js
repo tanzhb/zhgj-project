@@ -57,13 +57,14 @@ angular.module('MetronicApp').controller('HeaderController', function($rootScope
             focusInvalid: !1,
             ignore: "",
             messages: {
-        		password1:{required:"密码不能为空！",rangelength:jQuery.validator.format("密码位数必须在{0}到{1}字符之间！")},
+//        		password1:{required:"密码不能为空！",rangelength:jQuery.validator.format("密码位数必须在{0}到{1}字符之间！")},
+            	password1:{required:"密码不能为空！"},
         		password2:{required:"密码不能为空！",rangelength:jQuery.validator.format("密码位数必须在{0}到{1}字符之间！")},
         		twoPass:{required: "请输入确认密码!",rangelength:jQuery.validator.format("密码位数必须在{0}到{1}字符之间！"), equalTo: "请再次输入相同的值!"}
             },
             rules: {
-                password1:{required:true,
-                	rangelength:[6,12]
+                password1:{required:true
+//                	,rangelength:[6,12]
                 },
                 password2:{required:true,
                 	rangelength:[6,12]
