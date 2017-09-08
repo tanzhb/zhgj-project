@@ -247,6 +247,10 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 									'className' : 'dt-body-center',
 									'render' : function(data,
 											type, row, meta) {
+										/*return '<label class="mt-checkbox mt-checkbox-outline"  >'+
+	                                    '<input type="checkbox"  ng-model="serialNums['+meta.row+']" id="'+data+'" value="'+data+'" data-check="false"  ng-click="showCompanyInfo(\''+row.comId+'\')">'+
+	                                    '<span></span>'+
+										'</label>';*/
 										return '<input type="checkbox"  class="checkbox-inline" id="'+data+'" name="id[]" value="'
 												+ $('<div/>')
 														.text(
@@ -1452,6 +1456,27 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        	$scope.$apply();
 	        }
 	     });
+	       
+	     $scope.checkedOrCancelAll = function() { 
+	    	 debugger;
+	    	   if($scope.allChecked){
+	    		   if(!isNull($scope.serialNums)){
+			    		for(var i in $scope.serialNums){
+			    			$scope.serialNums[i] = true;
+			    			console.log("===++++++=====>"+$scope.serialNums);
+			    		}
+			       }
+	    	   }else{
+	    		   if(!isNull($scope.serialNums)){
+			    		for(var i in $scope.serialNums){
+			    			$scope.serialNums[i] = false;
+			    			console.log("===++++++=====>"+$scope.serialNums);
+			    		}
+			       }
+	    	   }
+	    	   //debugger;
+	    	   //console.log("==============>"+$scope.materielAllChecked);
+	    };
 	       
 
 	       

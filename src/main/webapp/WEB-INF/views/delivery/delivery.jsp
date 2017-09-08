@@ -27,13 +27,24 @@
 		</script>
 		
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
-		<div class="portlet box red">
+		<div class="portlet light">
 			<div class="portlet-title">
 			<div class="caption">
-					<i class="fa fa-globe"></i>发货列表
+					<i class="fa fa-globe font-green"></i>
+					<span class="caption-subject font-green bold uppercase">发货列表</span>
 				</div>
 				<div class="actions" ng-controller='MyCtrl'>
-					<a href="javascript:;" ng-click="jumpToUrl('addDelivery')"
+						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="jumpToUrl('addDelivery')">
+	                                              <i class="fa fa-plus"></i> 添加</label>
+						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="jumpToEdit()">
+	                                              <i class="fa fa-edit"></i> 修改</label>
+						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="del()">
+	                                              <i class="fa fa-minus"></i> 删除</label>
+						<!-- <label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
+	                                              <i class="fa fa-upload"></i> 导入</label> -->
+						<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportContract()">
+	                                              <i class="fa fa-file-excel-o"></i> 导出</label>
+					<!-- <a href="javascript:;" ng-click="jumpToUrl('addDelivery')"
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-plus"></i> 添加
 					</a> 
@@ -53,10 +64,10 @@
 							class="fa fa-angle-down"></i>
 						</a>
 						<ul class="dropdown-menu pull-right" id="sample_3_tools">
-							<!-- <li><a data-action="0" class="tool-action"
+							<li><a data-action="0" class="tool-action"
 								data-toggle="modal" data-target="#import"> <i
 									class="fa fa-upload"></i> 导入
-							</a></li> -->
+							</a></li>
 							<li><a href="javascript:;" data-action="1"
 								class="tool-action" ng-click="exportContract()"> <i class="fa fa-file-excel-o"></i> 导出
 							</a></li>
@@ -64,7 +75,7 @@
 								class="tool-action" > <i class="fa fa-print"></i> 打印
 							</a></li>
 						</ul>
-					</div>
+					</div> -->
 				</div>
 			</div>
 

@@ -445,7 +445,7 @@
                                                     <th>户名</th>
                                                     <th>账号</th>
                                                     <th>备注</th>
-                                                    <th style="width:65px;"></th>
+                                                    <th style="min-width: 60px;"></th>
                                                 </tr>
                                             </thead>
                                             <tbody  ng-if="companyFinances.length==0">
@@ -460,15 +460,15 @@
                                                     <td>{{finance.accountNumber}}</td>
                                                     <td>{{finance.remark}}</td>
                                                     <td ng-show="operation_f{{$index}}">
-                                                    	<a class="btn btn-circle btn-icon-only btn-default" href="javascript:;" ng-click="editCompanyFinance(finance.serialNum)" title="编辑">
+                                                    	<!-- <a class="btn btn-circle btn-icon-only btn-default" href="javascript:;" ng-click="editCompanyFinance(finance.serialNum)" title="编辑">
                                                                 <i class="icon-wrench"></i>
                                                         </a>
                                                         <a class="btn btn-circle btn-icon-only btn-default" href="javascript:;" ng-click="deleteCompanyFinance(finance.serialNum)" title="删除">
                                                                 <i class="icon-trash"></i>
-                                                        </a>
-                                                    	<!-- <a ng-click="editCompanyFinance(finance.serialNum)"><i class="fa fa-edit" title="编辑"></i></a>
+                                                        </a> -->
+                                                    	<a ng-click="editCompanyFinance(finance.serialNum)"><i class="fa fa-edit" title="编辑"></i></a>
                                                     		&nbsp;&nbsp;&nbsp;
-                                                    	<a ng-click="deleteCompanyFinance(finance.serialNum)"><i class="fa fa-trash" title="删除"></i></a> -->
+                                                    	<a ng-click="deleteCompanyFinance(finance.serialNum)"><i class="fa fa-trash" title="删除"></i></a>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -954,7 +954,7 @@
          <div class="modal-content">
              <div class="modal-header">
                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                 <h4 class="modal-title" >新建联系人</h4>
+                 <h4 class="modal-title" >{{contactTitle==null?'新建':contactTitle}}联系人</h4>
              </div>
              <div class="modal-body">
                <div class="form-body" >
@@ -1078,7 +1078,7 @@
          <div class="modal-content">
              <div class="modal-header">
                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                 <h4 class="modal-title" >新建账号</h4>
+                 <h4 class="modal-title" >{{financeTitle==null?'新建':'financeTitle'}}账号</h4>
              </div>
              <div class="modal-body">
                <div class="form-body" >

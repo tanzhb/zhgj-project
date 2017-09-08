@@ -5,6 +5,11 @@
 .left{
 	float: left;
 }
+
+/* #deliveryMaterielTable thead tr th{
+	text-align: center;
+	vertical-align:middle;
+} */
 </style>
 <h3 class="page-title s_tip"> 新建入库记录
 </h3>
@@ -183,7 +188,7 @@
                         </div>
                         <div class="portlet-body">
 						<div class="table-scrollable">
-							<table
+							<table id="deliveryMaterielTable"
 								class="table table-striped table-bordered table-advance table-hover">
 								<thead>
 									<tr>

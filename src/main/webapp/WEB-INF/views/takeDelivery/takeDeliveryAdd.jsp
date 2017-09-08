@@ -8,6 +8,11 @@
 .required2{
 	color:red;
 }
+
+/* #deliveryMaterielTable thead tr th{
+	text-align: center;
+	vertical-align:middle;
+} */
 </style>
 <h3 class="page-title d_tip"> 新建收货信息
 </h3>
@@ -41,7 +46,7 @@
         <div class="portlet bordered">
             <div class="portlet-body">
 				<div class="portlet light ">
-				 	<ul class="nav nav-tabs" >
+				 <ul class="nav nav-tabs" >
 					<li class="dropdown pull-right tabdrop" >
                        <button   ng-hide="companyAdd" class="btn green  btn-sm btn-circle" ng-click="saveTakeDelivery()">
                               <i class="fa fa-check"></i> 确认收货 </button>
@@ -116,7 +121,7 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="supplyComId">供应商 <span class="required"> * </span></label>
                                                     <div class="">
-                                                    	<select class="bs-select form-control order" data-live-search="true"  id="supplyComId"  name="supplyComId" ng-model="deliver.supplyComId" ng-hide="deliverAdd"  data-size="8">
+                                                    	<select class="bs-select form-control order" selectpicker data-live-search="true"  id="supplyComId"  name="supplyComId" ng-model="deliver.supplyComId" ng-hide="deliverAdd"  data-size="8">
 	                                                        <option value=""></option>
 	                                                        <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}">{{supplier.comName}}</option>
 	                                                    </select>
@@ -654,17 +659,17 @@
                         <div class="portlet-body">
 						<div class="table-scrollable">
 							<table
-								class="table table-striped table-bordered table-advance table-hover">
+								class="table table-striped table-bordered table-advance table-hover" id="deliveryMaterielTable">
 								<thead>
 									<tr>
 										<th  rowspan="2">物料编号</th>
 										<th  rowspan="2">物料名称</th>
 										<th  rowspan="2">规格型号</th>
 										<th  rowspan="2">单位</th>
-										<th  rowspan="2">批次号<span class="required2"> * </span></th>
-										<th  rowspan="2">生产日期<span class="required2"> * </span></th>
-										<th colspan="3" style="text-align: center;">发货</th>
-										<th colspan="3"  style="text-align: center;">收货</th>
+										<th style="min-width: 120px;" rowspan="2">批次号<span class="required2"> * </span></th>
+										<th style="min-width: 120px;" rowspan="2">生产日期<span class="required2"> * </span></th>
+										<th colspan="3" style="text-align: center;min-width: 100px;">发货</th>
+										<th colspan="3"  style="text-align: center;min-width: 100px;">收货</th>
 										<!-- <th colspan="3"  style="text-align: center;">检验</th>
 										<th colspan="5"  style="text-align: center;">入库</th>
 										<th rowspan="2">状态</th> -->
@@ -672,10 +677,10 @@
 									<tr>
 										<th>订单数量</th>
 										<th>发货数量<span class="required2"> * </span></th>
-										<th>备注</th>
+										<th style="min-width: 120px;">备注</th>
 										<th>实收数量<span class="required2"> * </span></th>
 										<th>拒收数量</th>
-										<th>备注</th>
+										<th style="min-width: 120px;">备注</th>
 										<!-- <th>合格数量</th>
 										<th>不合格数量</th>
 										<th>备注</th>
@@ -686,20 +691,17 @@
 										<th>备注</th> -->
 									</tr>
 								</thead>
-								<tbody data-repeater-list="group-a"> 
-									<tr data-repeater-item ng-repeat="materiel in orderMateriels track by $index" repeat-done="repeatDone(this)">
-										<td>{{materiel.materiel.materielNum}}</td>
-										<td>{{materiel.materiel.materielName}}</td>
-										<td>{{materiel.materiel.specifications}}</td>
-										<td>{{materiel.materiel.unit}}</td>
-										<td>
-											<div class="col-md-12 form-group">
-                                                 <input type="text" class="form-control input-small" id="batchNum{{$index}}" name="batchNum"  ng-model="materiel.batchNum" ng-hide="deliverAdd" >
+								<tbody > 
+									<tr ng-repeat="materiel in orderMateriels track by $index" repeat-done="repeatDone(this)">
+										<td><span class="help-block"></span>{{materiel.materiel.materielNum}}</td>
+										<td><span class="help-block"></span>{{materiel.materiel.materielName}}</td>
+										<td><span class="help-block"></span>{{materiel.materiel.specifications}}</td>
+										<td><span class="help-block"></span>{{materiel.materiel.unit}}</td>
+										<td class="form-group">
+                                                 <input type="text" class="form-control" id="batchNum{{$index}}" name="batchNum"  ng-model="materiel.batchNum" ng-hide="deliverAdd" >
                                                  <div class="form-control-focus"> </div>
-                                            </div>
                                         </td>
-										<td>
-											<div class="col-md-12 form-group">
+										<td class="form-group">
 												  <!-- <div  class="input-group date date-picker"
 														 data-date-format="yyyy-mm-dd"
 														data-date-viewmode="years" size="8">
@@ -711,39 +713,30 @@
 														</span>
 														<span class="help-block"></span>
 													</div> -->
-													<input type="text" class="form-control  input-small date date-picker" data-date-format="yyyy-mm-dd"
+													<input type="text" class="form-control date date-picker" data-date-format="yyyy-mm-dd"
 													data-date-viewmode="years" readonly="" id="manufactureDate{{$index}}" ng-model="materiel.manufactureDate" name="manufactureDate"
 														placeholder="" > 
 													<span class="help-block"></span>
-											</div>
 										</td>
-										<td>{{materiel.amount}}</td>
-										<td>
-											<div class="col-md-12 form-group">
-                                                 <input type="text" class="form-control input-small" id="deliverCount{{$index}}" name="deliverCount" data-ordercount="{{materiel.amount}}"  ng-model="materiel.deliverCount" ng-hide="deliverAdd" >
+										<td><span class="help-block"></span>{{materiel.amount}}</td>
+										<td class="form-group">
+                                                 <input type="text" class="form-control" id="deliverCount{{$index}}" name="deliverCount" data-ordercount="{{materiel.amount}}"  ng-model="materiel.deliverCount" ng-hide="deliverAdd" >
                                                  <div class="form-control-focus"> </div>
-                                            </div>
 										</td>
-										<td>
-											<div class="col-md-12 form-group">
-                                                 <input type="text" class="form-control input-small" id="deliverRemark{{$index}}" name="deliverRemark"   ng-model="materiel.deliverRemark" ng-hide="deliverAdd" >
+										<td class="form-group">
+                                                 <input type="text" class="form-control" id="deliverRemark{{$index}}" name="deliverRemark"   ng-model="materiel.deliverRemark" ng-hide="deliverAdd" >
                                                  <div class="form-control-focus"> </div>
-                                            </div>
 										</td>
-										<td>
-											<div class="col-md-12 form-group">
-                                                 <input type="text" class="form-control input-small" id="acceptCount{{$index}}" name="acceptCount" data-delivercount="{{materiel.deliverCount}}"  ng-model="materiel.acceptCount" ng-hide="deliverAdd" >
+										<td class="form-group">
+                                                 <input type="text" class="form-control" id="acceptCount{{$index}}" name="acceptCount" data-delivercount="{{materiel.deliverCount}}"  ng-model="materiel.acceptCount" ng-hide="deliverAdd" >
                                                  <div class="form-control-focus"> </div>
-                                            </div>
 										</td>
-										<td>
+										<td><span class="help-block"></span>
 											<span ng-if="materiel.deliverCount!=undefined && materiel.acceptCount!=undedined">{{materiel.deliverCount-materiel.acceptCount}}</span>
 										</td>
 										<td>
-											<div class="col-md-12">
-                                                 <input type="text" class="form-control input-small" id="takeRemark{{$index}}" name="takeRemark"  ng-model="materiel.takeRemark" ng-hide="deliverAdd" >
+                                                 <input type="text" class="form-control" id="takeRemark{{$index}}" name="takeRemark"  ng-model="materiel.takeRemark" ng-hide="deliverAdd" >
                                                  <div class="form-control-focus"> </div>
-                                            </div>
 										</td>
 										<!-- <td></td>
 										<td></td>
