@@ -1,6 +1,6 @@
 <%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8" %>
 <!-- <meta http-equiv="cache-control" content="no-cache">   -->
-
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
  <!-- BEGIN PAGE HEADER-->
 <h3 class="page-title"> 仓库列表
     <small> 仓库管理</small>
@@ -48,16 +48,26 @@
 				</div>
 				<div class="actions">
 				<div class="btn-group btn-group-devided" data-toggle="buttons">
+						<shiro:hasPermission name="warehouse:add">
 						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addWarehouse()">
 	                                              <i class="fa fa-plus"></i> 添加</label>
+						</shiro:hasPermission>
+						<shiro:hasPermission name="warehouse:edit">
 						<label class="btn btn-transparent purple btn-circle btn-sm"  ng-click="toEditWarehousePage()">
 	                                              <i class="fa fa-edit"></i> 修改</label>
+						</shiro:hasPermission>
+						<shiro:hasPermission name="warehouse:delete">
 						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delWarehouse()" >
 	                                              <i class="fa fa-minus"></i> 删除</label>
+						</shiro:hasPermission>
+						<shiro:hasPermission name="warehouse:import">
 						<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
 	                                              <i class="fa fa-upload"></i> 导入</label>
+						</shiro:hasPermission>
+						<shiro:hasPermission name="warehouse:export">
 						<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportWarehouse()">
 	                                              <i class="fa fa-file-excel-o"></i> 导出</label>
+						</shiro:hasPermission>	                                              
 	                 </div>
 				<!-- <div ng-controller="MyCtrl">
     <button   class="btn sbold green" data-toggle="modal"  ng-click="jumpToUrl('/addWarehouse')">新建仓库<i class="fa fa-plus"></i></button>

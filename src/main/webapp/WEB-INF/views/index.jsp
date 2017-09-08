@@ -76,7 +76,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	type="text/css" />
 <link href="assets/layouts/layout2/css/layout.min.css" rel="stylesheet"
 	type="text/css" />
-<link href="assets/layouts/layout2/css/themes/default.min.css"
+<link href="assets/layouts/layout2/css/themes/blue.min.css"
 	rel="stylesheet" type="text/css" id="style_color" />
 <link href="assets/layouts/layout2/css/custom.min.css" rel="stylesheet"
 	type="text/css" />

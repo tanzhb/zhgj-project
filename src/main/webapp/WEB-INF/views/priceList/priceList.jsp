@@ -1,6 +1,6 @@
 <%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8" %>
 <!-- <meta http-equiv="cache-control" content="no-cache">   -->
-
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
  <!-- BEGIN PAGE HEADER-->
 <h3 class="page-title"> 价格列表
     <small> 价格目录</small>
@@ -23,12 +23,16 @@
 </div>
 <div class="tabbable-line">
     <ul class="nav nav-tabs">
+    	<shiro:hasPermission name="zhgj:buyPrice:*">
         <li  id="buy" >
             <a data-target="#tab_buy" data-toggle="tab"  ng-click="showBuyOrSale('buy')">采购价格</a>
         </li>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="zhgj:salePrice:*">
         <li  id="sale">
             <a data-target="#tab_sale" data-toggle="tab"   ng-click="showBuyOrSale('sale')">销售价格</a>
         </li>
+        </shiro:hasPermission>
     </ul>
     <div class="tab-content">
     	<!-- 进项票列表---START -->
@@ -42,16 +46,26 @@
 				</div>
 				<div class="actions">
 				<div class="btn-group btn-group-devided" data-toggle="buttons">
+					<shiro:hasPermission name="buyPrice:add">
 						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addPriceList('buy')">
 	                                              <i class="fa fa-plus"></i> 添加</label>
+	                </shiro:hasPermission>
+	                <shiro:hasPermission name="buyPrice:edit">
 						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditPriceListPage('buy')">
 	                                              <i class="fa fa-edit"></i> 修改</label>
+	                </shiro:hasPermission>
+	                <shiro:hasPermission name="buyPrice:delete">
 						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delPriceList('buy')" >
 	                                              <i class="fa fa-minus"></i> 删除</label>
+	                </shiro:hasPermission>
+	                <shiro:hasPermission name="buyPrice:import">
 						<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
 	                                              <i class="fa fa-upload"></i> 导入</label>
+					</shiro:hasPermission>	    
+					<shiro:hasPermission name="buyPrice:export">                                          
 						<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportPriceList('buy')">
 	                                              <i class="fa fa-file-excel-o"></i> 导出</label>
+	                 </shiro:hasPermission>
 	                 </div>
 				</div>
 			</div>
@@ -126,16 +140,26 @@
 				</div>
 				<div class="actions">
 				<div class="btn-group btn-group-devided" data-toggle="buttons">
+					<shiro:hasPermission name="salePrice:add">
 						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addPriceList('sale')">
 	                                              <i class="fa fa-plus"></i> 添加</label>
+	                </shiro:hasPermission>
+	                <shiro:hasPermission name="salePrice:edit">
 						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditPriceListPage('sale')">
 	                                              <i class="fa fa-edit"></i> 修改</label>
+	                </shiro:hasPermission>
+	                <shiro:hasPermission name="salePrice:delete">
 						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delPriceList('sale')" >
 	                                              <i class="fa fa-minus"></i> 删除</label>
+	                </shiro:hasPermission>
+	                <shiro:hasPermission name="salePrice:import">
 						<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
 	                                              <i class="fa fa-upload"></i> 导入</label>
+	                </shiro:hasPermission>
+	                <shiro:hasPermission name="salePrice:export">
 						<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportPriceList('sale')">
 	                                              <i class="fa fa-file-excel-o"></i> 导出</label>
+	                </shiro:hasPermission>
 	                 </div>
 				</div>
 			</div>

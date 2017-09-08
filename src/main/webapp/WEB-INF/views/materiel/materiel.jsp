@@ -87,11 +87,15 @@
                     <shiro:hasPermission name="materiel:delete">
 					<label class="btn btn-transparent red btn-circle btn-sm" ng-click="deleteMateriel()">
                                               <i class="fa fa-minus"></i> 删除</label>
-                    </shiro:hasPermission>                                              
+                    </shiro:hasPermission>   
+                    <shiro:hasPermission name="materiel:import">                                           
 					<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
                                               <i class="fa fa-upload"></i> 导入</label>
+                    </shiro:hasPermission> 
+                    <shiro:hasPermission name="materiel:export">        
 					<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportMateriel()">
                                               <i class="fa fa-file-excel-o"></i> 导出</label>
+                   	</shiro:hasPermission> 
 				</div>
 	            </div>
 	            <div class="portlet-body">
