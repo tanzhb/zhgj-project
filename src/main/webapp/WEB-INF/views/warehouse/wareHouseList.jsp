@@ -40,17 +40,30 @@
 	<div class="col-md-12">
 
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
-		<div class="portlet box blue">
+		<div class="portlet light">
 			<div class="portlet-title">
 				<div class="caption">
-					<i class="fa fa-globe"></i>仓库列表
+						<i class="fa fa-globe font-green"></i>
+					<span class="caption-subject font-green bold uppercase">仓库列表</span>
 				</div>
 				<div class="actions">
+				<div class="btn-group btn-group-devided" data-toggle="buttons">
+						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addWarehouse()">
+	                                              <i class="fa fa-plus"></i> 添加</label>
+						<label class="btn btn-transparent purple btn-circle btn-sm"  ng-click="toEditWarehousePage()">
+	                                              <i class="fa fa-edit"></i> 修改</label>
+						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delWarehouse()" >
+	                                              <i class="fa fa-minus"></i> 删除</label>
+						<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
+	                                              <i class="fa fa-upload"></i> 导入</label>
+						<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportWarehouse()">
+	                                              <i class="fa fa-file-excel-o"></i> 导出</label>
+	                 </div>
 				<!-- <div ng-controller="MyCtrl">
     <button   class="btn sbold green" data-toggle="modal"  ng-click="jumpToUrl('/addWarehouse')">新建仓库<i class="fa fa-plus"></i></button>
     
-</div> -->
- <!-- <a class="btn sbold green" data-toggle="modal"   ng-click="addWarehouse()">新建仓库 <i class="fa fa-plus"></i></a> -->
+</div>
+ <a class="btn sbold green" data-toggle="modal"   ng-click="addWarehouse()">新建仓库 <i class="fa fa-plus"></i></a>
 					<button ui-sref="addWarehouse" 
 						data-toggle="modal" class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-plus"></i> 添加
@@ -68,28 +81,6 @@
 							class="fa fa-share"></i> <span class="hidden-xs"> 其它 </span> <i
 							class="fa fa-angle-down"></i>
 						</a>
-						<!-- <ul class="dropdown-menu pull-right" id="sample_3_tools">
-							<li><a href="javascript:;" data-action="0"
-								class="tool-action"> <i class="icon-printer"></i> Print
-							</a></li>
-							<li><a href="javascript:;" data-action="1"
-								class="tool-action"> <i class="icon-check"></i> Copy
-							</a></li>
-							<li><a href="javascript:;" data-action="2"
-								class="tool-action"> <i class="icon-doc"></i> PDF
-							</a></li>
-							<li><a href="javascript:;" data-action="3"
-								class="tool-action"> <i class="icon-paper-clip"></i> Excel
-							</a></li>
-							<li><a href="javascript:;" data-action="4"
-								class="tool-action"> <i class="icon-cloud-upload"></i> CSV
-							</a></li>
-							<li class="divider"></li>
-							<li><a href="javascript:;" data-action="5"
-								class="tool-action"> <i class="icon-refresh"></i> Reload
-							</a></li>
-							</li>
-						</ul> -->
 						<ul class="dropdown-menu pull-right" id="sample_3_tools">
 												<li><a data-action="0"
 													class="tool-action" data-toggle="modal" data-target="#import"> <i class="fa fa-upload"></i> 导入
@@ -101,7 +92,7 @@
 													class="tool-action" > <i class="fa fa-print"></i> 打印
 												</a></li> 
 											</ul>
-					</div>
+					</div> -->
 				</div>
 			</div>
 
@@ -398,10 +389,11 @@
 	<div class="col-md-12">
 
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
-		<div class="portlet box blue">
+		<div class="portlet light ">
 			<div class="portlet-title">
 				<div class="caption">
-					<i class="fa fa-globe"></i>库位管理
+				<i class="fa fa-globe font-green"></i>
+					<span class="caption-subject font-green bold uppercase">库位管理</span>
 				</div>
 				<div class="actions">
 					

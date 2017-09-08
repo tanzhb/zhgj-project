@@ -33,13 +33,26 @@
     	<!-- 进项票列表---START -->
         <div class="tab-pane active" id="tab_in">
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
-		<div class="portlet box blue">
+		<div class="portlet light">
 			<div class="portlet-title">
 				<div class="caption">
-					<i class="fa fa-globe"></i>进项票列表
+					<i class="fa fa-globe font-green"></i>
+					<span class="caption-subject font-green bold uppercase">进项票列表</span>
 				</div>
 				<div class="actions">
-					<button ng-click="addInvoice('in')"
+				<div class="btn-group btn-group-devided" data-toggle="buttons">
+						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addInvoice('in')">
+	                                              <i class="fa fa-plus"></i> 添加</label>
+						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditInvoicePage('in')">
+	                                              <i class="fa fa-edit"></i> 修改</label>
+						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delInvoice('in')">
+	                                              <i class="fa fa-minus"></i> 删除</label>
+						<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
+	                                              <i class="fa fa-upload"></i> 导入</label>
+						<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportInvoice('in')">
+	                                              <i class="fa fa-file-excel-o"></i> 导出</label>
+	                 </div>
+					<!-- <button ng-click="addInvoice('in')"
 						data-toggle="modal" class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-plus"></i> 添加
 					</button><button ng-click="toEditInvoicePage('in')"
@@ -62,13 +75,13 @@
 													class="tool-action" data-toggle="modal" data-target="#import"> <i class="fa fa-upload"></i> 导入
 												</a></li> 
 												<li><a href="javascript:;" data-action="1"
-													class="tool-action" ng-click="exportStock()"> <i class="fa fa-file-excel-o"></i> 导出
+													class="tool-action" ng-click="exportInvoice('in')"> <i class="fa fa-file-excel-o"></i> 导出
 												</a></li>
 												<li><a href="javascript:;" data-action="2"
 													class="tool-action" > <i class="fa fa-print"></i> 打印
 												</a></li> 
 											</ul>
-					</div>
+					</div> -->
 				</div>
 			</div>
 
@@ -130,13 +143,26 @@
         <!-- 出库检验列表---START -->
         <div class="tab-pane" id="tab_out">
          <!-- BEGIN EXAMPLE TABLE PORTLET-->
-		<div class="portlet box blue">
+		<div class="portlet light">
 			<div class="portlet-title">
 				<div class="caption">
-					<i class="fa fa-globe"></i>销项票列表
+					<i class="fa fa-globe font-green"></i>
+					<span class="caption-subject font-green bold uppercase">销项票列表</span>
 				</div>
 				<div class="actions">
-					<button ng-click="addInvoice('out')"
+				<div class="btn-group btn-group-devided" data-toggle="buttons">
+						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addInvoice('out')">
+	                                              <i class="fa fa-plus"></i> 添加</label>
+						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditInvoicePage('out')">
+	                                              <i class="fa fa-edit"></i> 修改</label>
+						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delInvoice('out')" >
+	                                              <i class="fa fa-minus"></i> 删除</label>
+						<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
+	                                              <i class="fa fa-upload"></i> 导入</label>
+						<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportInvoice('out')">
+	                                              <i class="fa fa-file-excel-o"></i> 导出</label>
+	                 </div>
+				<!-- 	<button ng-click="addInvoice('out')"
 						data-toggle="modal" class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-plus"></i> 添加
 					</button><button ng-click="toEditInvoicePage('out')"
@@ -159,13 +185,13 @@
 													class="tool-action" data-toggle="modal" data-target="#import"> <i class="fa fa-upload"></i> 导入
 												</a></li> 
 												<li><a href="javascript:;" data-action="1"
-													class="tool-action" ng-click="exportStock()"> <i class="fa fa-file-excel-o"></i> 导出
+													class="tool-action" ng-click="exportInvoice('out')"> <i class="fa fa-file-excel-o"></i> 导出
 												</a></li>
 												<li><a href="javascript:;" data-action="2"
 													class="tool-action" > <i class="fa fa-print"></i> 打印
 												</a></li> 
 											</ul>
-					</div>
+					</div> -->
 				</div>
 			</div>
 

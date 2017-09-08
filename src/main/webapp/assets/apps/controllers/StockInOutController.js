@@ -600,6 +600,16 @@ angular
 				
 			  							}
 			  						},{
+			  							'targets' : 8,
+			  							'render' : function(data,
+			  									type, row, meta) {
+			  									if(data!=undefined){
+													return data;
+												}
+				  								return '';
+				
+			  							}
+			  						},{
 			  							'targets' : 9,
 			  							'render' : function(data,
 			  									type, row, meta) {
@@ -845,7 +855,7 @@ angular
 						            	checkNum:{required:true},
 						            	takeDeliverNum:{required:true},
 						            	deliverNum:{required:true},
-						            	checkParty:{required:true,digits:true},
+						            	checkParty:{required:true},
 						            	checkDate:{required:true},
 						            	checker:{required:true},
 						            	contactNum:{required:true,digits:true,rangelength:[7,20]},
@@ -948,9 +958,10 @@ angular
 							            });
 							    	   
 							       }
-							       $scope.exportStock = function(){
+							       $scope.exportStockInOutCheck = function(judgeString){
+							    	   debugger;
 								    	 handle.blockUI("正在导出数据，请稍后"); 
-								    	 window.location.href=$rootScope.basePath+"/rest/stock/exportStock";
+								    	 window.location.href=$rootScope.basePath+"/rest/stockInOut/exportStockInOutCheck?inOrOut="+judgeString;
 								    	 handle.unblockUI(); 
 								       }
 								       

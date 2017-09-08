@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
+
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
@@ -137,9 +138,9 @@ public class PriceListController {
 		return new ResponseEntity<PriceList>(priceList, HttpStatus.OK);
     }
   
-    @RequestMapping(value = "/getPriceList", method = RequestMethod.GET)
-    public ResponseEntity<Map> getPriceList(HttpServletRequest request) {
-		List<PriceList> priceLists = priceListService.selectPriceList(new  PriceListExample());
+    @RequestMapping(value = "/getPriceList")
+    public ResponseEntity<Map> getPriceList(HttpServletRequest request,String  buyOrSale) {
+		List<PriceList> priceLists = priceListService.selectPriceList(buyOrSale);
 		if (priceLists==null||priceLists.isEmpty()) {
 			return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);//判断是否为空,为空返回NO_CONTENT
 		}
@@ -183,7 +184,7 @@ public class PriceListController {
     @RequestMapping(value = "/viewPriceListDetail", method = RequestMethod.POST)
     public ResponseEntity<Map> viewPriceListDetail(HttpServletRequest request, @RequestBody String  serialNum) {
     	Map<String, Object> map = new HashMap<String, Object>();
-    	PriceList priceList=priceListService.selectById(serialNum);
+    	PriceList priceList=priceListService.selectById(serialNum.substring(0, 32));
     	if(priceList!=null){
     	Materiel m=materielService.selectById(priceList.getMaterielSerial());
     	priceList.setMaterielNum(m.getMaterielNum());
@@ -311,9 +312,9 @@ public class PriceListController {
 	     * @return
 	     */
 	    @RequestMapping("exportPriceList")
-	    public void exportWarehouse(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+	    public void exportWarehouse(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,String buyOrSale) {
 	    		Map<String, Object> dataMap = new HashMap<String, Object>();
-	    		List<PriceList> priceListList= priceListService.selectPriceList(new PriceListExample());
+	    		List<PriceList> priceListList= priceListService.selectPriceList(buyOrSale);
 	    		for(PriceList p:priceListList){
 	    			if("buyPrice".equals(p.getPriceType())){
 	    				p.setComName(companyService.selectOne(p.getSupplyComId()).getComName());
