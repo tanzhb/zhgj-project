@@ -143,8 +143,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a ui-sref="profile.dashboard" id="sidebar_menu_link_profile"  class="nav-link nav-toggle">
-                <i class="icon-user"></i>
+            <a ui-sref="profile.dashboard" id="sidebar_menu_link_profile"  class="nav-link nav-toggle">                <i class="icon-user"></i>
                 <span class="title">收付款</span>
                 <span class="arrow "></span>
             </a>
@@ -156,7 +155,24 @@
 	                </li>
 	         </ul>
         </li>
-        <li class="nav-item">
+
+
+
+       <li class="nav-item">
+            <!-- <ul class="sub-menu">
+				<li><a ui-sref="#"><i class="icon-paper-clip"></i>应收款</span></a></li>
+				<li><a ui-sref="addPay"> <i class="icon-paper-clip"></i>应付款</span></a></li>
+			</ul> -->
+			 <a href="javascript:;" class="nav-link nav-toggle">
+                <i class="icon-settings"></i>
+                <span class="title">收付款</span>
+                <span class="arrow "></span>
+            </a> 
+			<ul class="sub-menu">
+				<li><a ui-sref="gatheringMoneyRecord"><i class="icon-paper-clip"></i>应收款</span></a></li>
+				<li><a ui-sref="paymentRecordC"> <i class="icon-paper-clip"></i>应付款</span></a></li>
+			</ul>
+		</li>        <li class="nav-item">
             <a ui-sref="invoice">
                 <i class="icon-check"></i>
                 <span class="title">发票</span>
