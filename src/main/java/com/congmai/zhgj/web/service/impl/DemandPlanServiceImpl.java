@@ -24,6 +24,8 @@ import com.congmai.zhgj.web.model.DemandPlan;
 import com.congmai.zhgj.web.model.DemandPlanExample;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.DemandPlanMaterielExample;
+import com.congmai.zhgj.web.model.DemandPlanSelectExample;
+import com.congmai.zhgj.web.model.DemandPlanSelectExample.Criteria;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
 import com.congmai.zhgj.web.model.SupplyMateriel;
@@ -53,11 +55,15 @@ public class DemandPlanServiceImpl extends GenericServiceImpl<DemandPlan,String>
 
 	@Override
 	public Page<DemandPlan> getListByCondition(DemandPlan demandPlan,int start,int limit) {
-		DemandPlanExample example = new DemandPlanExample();
+		DemandPlanSelectExample example = new DemandPlanSelectExample();
 		example.setOrderByClause("updateTime desc");
 		example.setStart((demandPlan.getPageIndex()-1)*demandPlan.getPageSize());
 		example.setLimit(demandPlan.getPageSize());
-		example.createCriteria().andDelFlgEqualTo("0");
+		Criteria c = example.createCriteria().andDelFlgEqualTo("0");
+		if(StringUtils.isNotEmpty(demandPlan.getSearchKey())){
+			c.andSearchKeyLike(demandPlan.getSearchKey().trim().toUpperCase());
+		}
+		
 		List<DemandPlan> list = demandPlanMapper.selectByExample(example);
 		if(!CollectionUtils.isEmpty(list)){
 			for(DemandPlan vo : list){

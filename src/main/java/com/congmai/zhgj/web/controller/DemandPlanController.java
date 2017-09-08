@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -23,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,9 +37,14 @@ import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.web.dao.MaterielMapper;
+import com.congmai.zhgj.web.dao.SupplyMaterielMapper;
+import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.DemandPlan;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.Materiel;
+import com.congmai.zhgj.web.model.SupplyMateriel;
+import com.congmai.zhgj.web.model.SupplyMaterielExample;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.DemandPlanMaterielService;
 import com.congmai.zhgj.web.service.DemandPlanService;
@@ -65,7 +70,11 @@ public class DemandPlanController {
 	@Autowired
 	private CompanyService companyService;
 	
+	@Autowired
+	private MaterielMapper materielMapper;
 	
+	@Autowired
+	private SupplyMaterielMapper supplyMaterielMapper;
 	
 	
 	@RequestMapping("demandPlanManage")
@@ -424,7 +433,19 @@ public class DemandPlanController {
 						try{
 							if(i==1){
 								demandPlan.setDemandPlanNum(row.get(1).toString());
-								demandPlan.setBuyComId(companyService.selectComIdByComName(row.get(4).toString()));
+								String comId = companyService.selectComIdByComName(row.get(4).toString().trim());
+								if(comId==null){
+									Company company = new Company();
+									comId = ApplicationUtils.random32UUID();
+									company.setComId(comId);
+									company.setComType("1");//客户
+									company.setComName(row.get(4).toString()
+											);
+									companyService.insert(company);
+									demandPlan.setBuyComId(comId);
+								}else{
+									demandPlan.setBuyComId(comId);
+								}
 							}else if(i==2){
 								demandPlan.setReleaseDate((Date)row.get(1));
 								demandPlan.setRemark(row.get(4).toString());
@@ -434,9 +455,26 @@ public class DemandPlanController {
 								DemandPlanMateriel materiel = new DemandPlanMateriel();
 								materiel.setSerialNum(ApplicationUtils.random32UUID());
 								materiel.setDemandPlanSerial(demandPlanSerial);
-								String serialNum = demandPlanMaterielService.selectMaterielSerialByMaterielNum(row.get(1).toString());
-								materiel.setMaterielSerial(serialNum);
-								materiel.setSupplyMaterielSerial(serialNum);
+								String serialNum = demandPlanMaterielService.selectMaterielSerialByMaterielNum(row.get(1).toString()); //物料流水号
+								//String s_serialNum = ""; //供应物料流水号
+								if(serialNum==null){
+									Materiel m = new Materiel();
+									//s_serialNum = ApplicationUtils.random32UUID();
+									serialNum = ApplicationUtils.random32UUID();
+									String materiel_id = ApplicationUtils.random32UUID();
+									m.setSerialNum(serialNum);
+									m.setMaterielId(materiel_id);
+									m.setMaterielName(row.get(1).toString());
+									m.setMaterielNum(row.get(2).toString());
+									materielMapper.insert(m);
+									setSupplyMaterielSerial(materiel,materiel_id,row.get(5).toString());
+									materiel.setMaterielSerial(serialNum);
+								}else{
+									materiel.setMaterielSerial(serialNum);
+									String materiel_id = materielMapper.selectByPrimaryKey(serialNum).getMaterielId();
+									setSupplyMaterielSerial(materiel,materiel_id,row.get(5).toString());
+								}
+								
 								materiel.setAmount(row.get(2).toString());
 								materiel.setDeliveryDate((Date)row.get(3));
 								materiel.setDeliveryAddress(row.get(4).toString());
@@ -446,6 +484,7 @@ public class DemandPlanController {
 								demandPlanMateriels.add(materiel);
 							}
 						}catch(Exception  e){
+							e.printStackTrace();
 							throw new Exception("第"+(i+1)+"行数据异常请检查，数据内容："+row.toString());
 						}
 						
@@ -481,6 +520,35 @@ public class DemandPlanController {
     		ExcelUtil.export(request, response, dataMap, "demandPlan", "需求计划");
     }
 
+    private void setSupplyMaterielSerial(DemandPlanMateriel materiel,String materiel_id,String comName){
+    	String supplyComId = companyService.selectComIdByComName(comName);
+		if(supplyComId==null){
+			SupplyMateriel sm = new SupplyMateriel();
+			String serialNum = ApplicationUtils.random32UUID();
+			sm.setSerialNum(serialNum);
+			sm.setMaterielId(materiel_id);
+			
+			Company company = new Company();
+			String comId = ApplicationUtils.random32UUID();
+			company.setComId(comId);
+			company.setComType("2");//供应商
+			company.setComName(comName);
+			companyService.insert(company);
+			sm.setSupplyComId(comId);
+			supplyMaterielMapper.insert(sm);
+			materiel.setSupplyMaterielSerial(serialNum);
+		}else{
+			SupplyMaterielExample example = new SupplyMaterielExample();
+			example.createCriteria().andSupplyComIdEqualTo(supplyComId).andMaterielIdEqualTo(materiel_id).andDelFlgEqualTo("0");
+			List<SupplyMateriel> supplyMateriels = supplyMaterielMapper.selectByExample(example);
+			if(CollectionUtils.isNotEmpty(supplyMateriels)){
+				materiel.setSupplyMaterielSerial(supplyMateriels.get(0).getSerialNum());
+			}else{
+				setSupplyMaterielSerial(materiel,materiel_id,comName);
+			}
+		}
+    	
+    }
     
 
 }

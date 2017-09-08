@@ -76,13 +76,18 @@
     serialNum, buyComId, demandPlanNum, releaseDate, remark, delFlg, creator, createTime, 
     updater, updateTime
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.DemandPlanExample" >
+  <sql id="Base_Column_List2" >
+    d.serialNum, d.buyComId, d.demandPlanNum, d.releaseDate, d.remark, d.delFlg, d.creator, d.createTime, 
+    d.updater, d.updateTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.DemandPlanSelectExample" >
     select
     <if test="distinct" >
       distinct
     </if>
-    <include refid="Base_Column_List" />
-    from demandPlan
+    <include refid="Base_Column_List2" />
+    from demandPlan d
+    left join company c on c.comId = d.buyComId
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -185,8 +190,9 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.DemandPlanExample" resultType="java.lang.Integer" >
-    select count(*) from demandPlan
+  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.DemandPlanSelectExample" resultType="java.lang.Integer" >
+    select count(*) from demandPlan d
+    left join company c on c.comId = d.buyComId
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>

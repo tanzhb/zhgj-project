@@ -71,4 +71,24 @@ MetronicApp.directive('repeatDone', function() {
                 scope.$eval(attrs.repeatDone)    // 执行绑定的表达式
         }
     }
-})
+});
+
+MetronicApp.directive('selectpicker', function ($timeout) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attributes) {
+            $timeout(function () {
+                scope.$apply(function () {
+                    element.selectpicker({
+                        showSubtext: true
+                    });
+                });
+
+              /*  scope.$watch('itemSelected', function (newValue, old) {
+                    scope.idx = newValue
+                    console.log('selected ', newValue);
+                });*/
+            }, 50);
+        }
+    };
+});
