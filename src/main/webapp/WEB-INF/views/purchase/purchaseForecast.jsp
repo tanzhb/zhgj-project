@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <h3 class="page-title">
 	采购预测信息 <small></small>
 </h3>
@@ -33,8 +34,18 @@
 					<i class="fa fa-globe"></i>采购预测列表
 				</div>
 				<div class="actions" ng-controller='MyCtrl'>
-					<label class="btn btn-transparent red btn-circle btn-sm" ng-click="del()"> <i class="fa fa-minus"></i> 删除</label>	
-					<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportPurchaseForecast()"> <i class="fa fa-file-excel-o"></i> 导出</label>
+					<shiro:hasPermission name="purchaseForecast:delete">
+						<label class="btn btn-transparent red btn-circle btn-sm"
+							ng-click="del()"> <i class="fa fa-minus"></i> 删除
+						</label>
+					</shiro:hasPermission>
+					<shiro:hasPermission name="purchaseForecast:export">
+						<label
+							class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
+							ng-click="exportPurchaseForecast()"> <i
+							class="fa fa-file-excel-o"></i> 导出
+						</label>
+					</shiro:hasPermission>
 					<!-- <a href="javascript:;" ng-click="del()"
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-minus"></i> 删除

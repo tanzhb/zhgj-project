@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <!-- BEGIN PAGE HEADER-->
 <h3 class="page-title"> 对账单
     <small></small>
@@ -42,10 +43,14 @@
 							</div>
 							<div class="actions">
 								<div class="btn-group btn-group-devided" data-toggle="buttons">
+								<shiro:hasPermission name="statementSupply:add">
 									<label class="btn btn-transparent green btn-circle btn-sm" ui-sref="addSupplyStatement">
 				                                              <i class="fa fa-plus"></i> 添加</label>
+				                                              </shiro:hasPermission>
+				                                              <shiro:hasPermission name="statementSupply:delete">
 									<label class="btn btn-transparent red btn-circle btn-sm" ng-click="deleteSupplyStatement()">
 				                                              <i class="fa fa-minus"></i> 删除</label>
+				                                              </shiro:hasPermission>
 									<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportStatement('supply')">
 				                                              <i class="fa fa-file-excel-o"></i> 导出</label>
 				                </div>
@@ -117,10 +122,14 @@
 							</div>
 							<div class="actions">
 								<div class="btn-group btn-group-devided" data-toggle="buttons">
+								<shiro:hasPermission name="statementBuy:add">
 									<label class="btn btn-transparent green btn-circle btn-sm" ui-sref="addBuyStatement">
 				                                              <i class="fa fa-plus"></i> 添加</label>
+				                                              </shiro:hasPermission>
+				                                              <shiro:hasPermission name="statementBuy:delete">
 									<label class="btn btn-transparent red btn-circle btn-sm" ng-click="deleteBuyStatement()">
 				                                              <i class="fa fa-minus"></i> 删除</label>
+				                                              </shiro:hasPermission>
 									<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportStatement('buy')">
 				                                              <i class="fa fa-file-excel-o"></i> 导出</label>
 				                </div>
