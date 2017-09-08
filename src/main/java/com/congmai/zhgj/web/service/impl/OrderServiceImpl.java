@@ -70,6 +70,16 @@ public class OrderServiceImpl implements OrderService {
 	public List<OrderInfo> selectList(OrderInfoExample m) {
 		return OrderInfoMapper.selectByExample(m);
 	}
+	
+	@Override
+	public List<OrderInfo> selectFramList(OrderInfo m) {
+		return OrderInfoMapper.selectFramByExample(m);
+	}
+	
+	@Override
+	public List<OrderInfo> selectCommenList(OrderInfo m) {
+		return OrderInfoMapper.selectCommenByExample(m);
+	}
 
 	@Override
 	public void deleteOrderInfos(String ids) {

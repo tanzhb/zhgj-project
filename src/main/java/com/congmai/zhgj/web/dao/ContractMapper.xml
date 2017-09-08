@@ -71,13 +71,13 @@
 	contractNum=#{contractNum},
 	comId=#{comId},
 	contractType=#{contractType},
-	<if test="serviceModel!=null and serviceModel!=''">  
+	<if test="serviceModel!=null">  
     serviceModel=#{serviceModel},
     </if> 
-	<if test="settlementClause!=null and settlementClause!=''">  
+	<if test="settlementClause!=null">  
     settlementClause=#{settlementClause},
     </if> 
-    <if test="signerAddress!=null and signerAddress!=''">  
+    <if test="signerAddress!=null">  
     signerAddress=#{signerAddress},
     </if>
 	startDate=#{startDate},
@@ -85,11 +85,11 @@
 	signDate=#{signDate},
 	signer=#{signer},
 	
-	<if test="electronicContract!=null and electronicContract!=''">  
+	<if test="electronicContract!=null">  
     electronicContract = #{electronicContract},  
     </if> 
     
-    <if test="electronicContract!=null and electronicContract!=''">  
+    <if test="electronicContract!=null">  
     signContract = #{signContract},  
     </if> 
 	

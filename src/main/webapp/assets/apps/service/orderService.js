@@ -1,7 +1,7 @@
 angular.module('MetronicApp').service('orderService',
 		[ '$http', '$q', function($http, $q) {
 			return {
-				//保存销售订单
+				//保存订单
 				save : function(orderInfo) {
 					var deferred = $q.defer();
 					$http.post("rest/order/saveOrder", orderInfo

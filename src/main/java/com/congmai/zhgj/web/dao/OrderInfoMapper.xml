@@ -108,6 +108,49 @@
       order by ${orderByClause}
     </if>
   </select>
+  
+  <select id="selectFramByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.OrderInfoExample" >
+    select
+    orderInfo.serialNum, orderInfo.contractSerial, orderInfo.supplyComId, orderInfo.buyComId, orderInfo.orderNum, orderInfo.orderType, orderInfo.seller, orderInfo.entrustParty, 
+    orderInfo.serviceModel, orderInfo.demandPlanSerial, orderInfo.saleApplySerial, orderInfo.settlementClause, orderInfo.orderSerial, orderInfo.deliveryMode, 
+    orderInfo.transportMode, orderInfo.orderDate, orderInfo.maker, orderInfo.rate, orderInfo.currency, orderInfo.exchangeRate, orderInfo.remark, orderInfo.status, orderInfo.delFlg, 
+    orderInfo.creator, orderInfo.createTime, orderInfo.updater, orderInfo.updateTime
+    from orderInfo
+    left join contract on orderInfo.contractSerial = contract.serialNum
+    where
+		 orderInfo.delFlg = 0  
+		 <if test="buyComId == 'null'" >
+		 	AND orderInfo.buyComId IS NULL
+		 </if>
+		 <if test="supplyComId == 'null'" >
+		 	AND orderInfo.supplyComId IS NULL
+		 </if>
+		AND contract.contractType = '框架合同'
+		ORDER BY
+			updateTime DESC 
+  </select>
+  
+  <select id="selectCommenByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.OrderInfo" >
+    select
+    orderInfo.serialNum, orderInfo.contractSerial, orderInfo.supplyComId, orderInfo.buyComId, orderInfo.orderNum, orderInfo.orderType, orderInfo.seller, orderInfo.entrustParty, 
+    orderInfo.serviceModel, orderInfo.demandPlanSerial, orderInfo.saleApplySerial, orderInfo.settlementClause, orderInfo.orderSerial, orderInfo.deliveryMode, 
+    orderInfo.transportMode, orderInfo.orderDate, orderInfo.maker, orderInfo.rate, orderInfo.currency, orderInfo.exchangeRate, orderInfo.remark, orderInfo.status, orderInfo.delFlg, 
+    orderInfo.creator, orderInfo.createTime, orderInfo.updater, orderInfo.updateTime
+    from orderInfo
+    left join contract on orderInfo.contractSerial = contract.serialNum
+    where
+		 orderInfo.delFlg = 0  
+		 <if test="buyComId == 'null'" >
+		 	AND orderInfo.buyComId IS NULL
+		 </if>
+		 <if test="supplyComId == 'null'" >
+		 	AND orderInfo.supplyComId IS NULL
+		 </if>
+		AND (contract.contractType is null or
+	contract.contractType != '框架合同')
+		ORDER BY
+			updateTime DESC 
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />

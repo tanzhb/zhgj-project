@@ -6,8 +6,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class OrderInfo {
-    private String serialNum;
+public class OrderInfo extends BaseVO {
+    /**
+	 * @Field @serialVersionUID : 订单
+	 */
+	private static final long serialVersionUID = 4164102013915166314L;
+
+	private String serialNum;
 
     private String contractSerial;
 

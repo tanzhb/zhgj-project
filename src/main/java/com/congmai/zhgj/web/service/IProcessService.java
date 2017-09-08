@@ -9,6 +9,7 @@ import org.activiti.engine.runtime.ProcessInstance;
 
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
+import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Vacation;
 
@@ -170,5 +171,12 @@ public interface IProcessService {
      * @throws Exception
      */
     public void addProcessByDynamic() throws Exception;
+    
+    /**
+     * 激活订单流程
+     * @param processInstanceId
+     * @throws Exception
+     */
+	public String startOrderInfo(OrderInfo orderInfo);
 
 }
