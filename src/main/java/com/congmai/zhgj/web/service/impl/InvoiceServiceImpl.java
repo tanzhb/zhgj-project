@@ -43,6 +43,13 @@ public class InvoiceServiceImpl extends GenericServiceImpl<Invoice, String> impl
 		InvoiceExample ie=new InvoiceExample();
 		Criteria criteria=ie.createCriteria();
     	criteria.andDelFlgEqualTo("0");
+    	if(InOut.indexOf("in")>-1){
+    		criteria.andSupplyComIdIsNotNull();
+    		criteria.andBuyComIdIsNull();
+    	}else{
+    		criteria.andSupplyComIdIsNull();
+    		criteria.andBuyComIdIsNotNull();
+    	}
 		return invoiceMapper.selectByExample(ie);
 	}
 	}

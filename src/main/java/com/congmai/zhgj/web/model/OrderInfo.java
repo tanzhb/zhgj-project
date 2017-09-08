@@ -52,6 +52,8 @@ public class OrderInfo extends BaseVO {
 
     private String exchangeRate;
 
+    private String orderAmount;
+
     private String remark;
 
     private String status;
@@ -65,6 +67,8 @@ public class OrderInfo extends BaseVO {
     private String updater;
 
     private Date updateTime;
+    
+    private String unBillAmount;//未开金额合计
 
     public String getSerialNum() {
         return serialNum;
@@ -226,6 +230,14 @@ public class OrderInfo extends BaseVO {
         this.exchangeRate = exchangeRate == null ? null : exchangeRate.trim();
     }
 
+    public String getOrderAmount() {
+        return orderAmount;
+    }
+
+    public void setOrderAmount(String orderAmount) {
+        this.orderAmount = orderAmount == null ? null : orderAmount.trim();
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -281,4 +293,13 @@ public class OrderInfo extends BaseVO {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public String getUnBillAmount() {
+		return unBillAmount;
+	}
+
+	public void setUnBillAmount(String unBillAmount) {
+		this.unBillAmount = unBillAmount;
+	}
+    
 }

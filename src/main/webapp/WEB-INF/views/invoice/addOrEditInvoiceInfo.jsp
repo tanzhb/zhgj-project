@@ -74,11 +74,13 @@
                                                                 <div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for=""><span class="required"> * </span> <span  ng-if="inOrOut.indexOf('in')>-1"  >开票方</span><span   ng-if="inOrOut.indexOf('out')>-1" >收票方</span> :</label>
                                                     <div class="col-md-6">
-                                                     <input type="text" class="form-control"   id="comName" name ="comName"      ng-hide="invoiceAdd"   
+                                                     <input type="text" class="form-control"   id="comName" name ="comName"       ng-hide="invoiceAdd"   
 												ng-model="invoice.comName" /> 
+												 
 												<div class="form-control-focus"> </div>
 												 
-                                                                        <p class="control-label left"    ng-show="invoiceView"    >{{invoice.comName}}</p> 
+                                                                        <p class="control-label left"    ng-show="invoiceView"   ng-if="inOrOut.indexOf('out')>-1"   >{{invoice.buyComId}}</p> 
+                                                                         <p class="control-label left"    ng-show="invoiceView"   ng-if="inOrOut.indexOf('in')>-1"   >{{invoice.supplyComId}}</p> 
                                                                     </div>
                                                                       
                                                                 </div>
@@ -94,10 +96,10 @@
                                                                         <p class="control-label left" ng-show="invoiceView"  >{{invoice.relationBuyOrSaleNum}}</p> 
                                                                     </div>
                                                                     <div class="col-md-1"><span class="input-inline-btn"   >
-                                                            <button class="btn default" type="button"    ng-hide="invoiceAdd"  ng-if="inOrOut.indexOf('in')>-1&&inOrOut.length<=3"   ng-click="selectDeliverOrTakeDelivery('in')" data-target="#takeDeliveryInfo" data-toggle="modal" >
+                                                            <button class="btn default" type="button"    ng-hide="invoiceAdd"  ng-if="inOrOut.indexOf('in')>-1&&inOrOut.length<=3"   ng-click="selectBuyOrSaleOrderInfo('buy')" data-target="#buyOrderInfo" data-toggle="modal" >
                                                                 <i class="fa fa-search"></i>
                                                             </button>
-                                                              <button class="btn default" type="button"    ng-hide="invoiceAdd"  ng-if="inOrOut.indexOf('out')>-1&&inOrOut.length<=3"   ng-click="selectDeliverOrTakeDelivery('out')" data-target="#deliverInfo" data-toggle="modal" >
+                                                              <button class="btn default" type="button"    ng-hide="invoiceAdd"  ng-if="inOrOut.indexOf('out')>-1&&inOrOut.length<=3"   ng-click="selectBuyOrSaleOrderInfo('sale')" data-target="#saleOrderInfo" data-toggle="modal" >
                                                                 <i class="fa fa-search"></i>
                                                             </button>
                                                         </span></div>
@@ -113,7 +115,7 @@
                                                                     <input type="text" class="form-control"   id="orderAmount" name ="orderAmount"  ng-hide="invoiceAdd"  readonly="readonly"
 												ng-model="invoice.orderAmount" > 
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="invoiceView"  >{{invoice.orderAmount}}</p> 
+                                                                        <p class="control-label left" ng-show="invoiceView"  >{{invoice.orderAmount |currency:'￥'}}</p> 
                                                                 </div>
                                                             </div>
                                                             <!--/span-->
@@ -137,10 +139,10 @@
                                                             <div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="checkDate"> 未开金额 :</label>
                                                     <div class="col-md-8">
-                                                                        <input type="text"     class="form-control"   placeholder=""  id="unBillAmount" name ="unBillAmount"   ng-hide="invoiceAdd"  
+                                                                        <input type="text"     class="form-control"   placeholder=""  id="unBillAmount" name ="unBillAmount"   ng-hide="invoiceAdd"   readonly
 												ng-model="invoice.unBillAmount" /> 
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="invoiceView">{{invoice.checkDate | date:'yyyy-MM-dd'}}</p> 
+                                                                        <p class="control-label left" ng-show="invoiceView">{{invoice.unBillAmount | currency:'￥'}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -167,8 +169,9 @@
                                                             <div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="contactNum"> <span class="required"> * </span><span  ng-if="inOrOut.indexOf('in')>-1"  >关联付款单号</span><span   ng-if="inOrOut.indexOf('out')>-1" > 关联收款单号</span>:</label>
                                                     <div class="col-md-8">
-                                                                        <input type="text"  class="form-control" placeholder=""  id="relationReceiveOrPayNum" name ="relationReceiveOrPayNum"   ng-hide="invoiceAdd"  
+                                                                        <input type="text"  class="form-control" placeholder=""  id="relationReceiveOrPayNum" name ="relationReceiveOrPayNum"   ng-hide="invoiceAdd"   ng-if="invoice.paymentStatus=='是'" 
 												ng-model="invoice.relationReceiveOrPayNum" > 
+												<span  ng-if="invoice.paymentStatus!='是'" >----</span>
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="invoiceView">{{invoice.relationReceiveOrPayNum}}</p> 
                                                                     </div>
@@ -178,8 +181,9 @@
                                                              <div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="status"><span class="required"> * </span><span  ng-if="inOrOut.indexOf('in')>-1"  >付款日期</span><span   ng-if="inOrOut.indexOf('out')>-1" > 收款日期</span>:   </label>
                                                 <div class="col-md-8">
-                                                                        <input type="text"  class="form-control form-control-inline date-picker"     data-date-format="yyyy-mm-dd"  data-date-viewmode="years"   placeholder=""  id="receiptDate" name ="receiptDate"   ng-hide="invoiceAdd"  
+                                                                        <input type="text"  class="form-control form-control-inline date-picker"   ng-if="invoice.paymentStatus=='是'"   data-date-format="yyyy-mm-dd"  data-date-viewmode="years"   placeholder=""  id="receiptDate" name ="receiptDate"   ng-hide="invoiceAdd"  
 												ng-model="invoice.receiptDate" /> 
+												 <span  ng-if="invoice.paymentStatus!='是'" >----</span>
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="invoiceView">{{invoice.receiptDate | date:'yyyy-MM-dd'}}</p> 
                                                                     </div>
@@ -196,7 +200,7 @@
                                                        <input type="text"  class="form-control" placeholder=""  id="invoiceAmount" name ="invoiceAmount"   ng-hide="invoiceAdd"  
 												ng-model="invoice.invoiceAmount" > 
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="invoiceView">{{invoice.invoiceAmount}}</p> 
+                                                                        <p class="control-label left" ng-show="invoiceView">{{invoice.invoiceAmount|currency:'￥'}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -269,23 +273,23 @@
                                                                    <div class="row"><!-- row START -->
                                                              <div class="col-md-4">
 											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="checker"><span  ng-if="inOrOut.indexOf('in')>-1"  >收票人 </span><span   ng-if="inOrOut.indexOf('out')>-1" >审批人</span> :</label>
+                                                    <label class="col-md-4 control-label" for="approver"><span class="required"> * </span><span  ng-if="inOrOut.indexOf('in')>-1"  >收票人 </span><span   ng-if="inOrOut.indexOf('out')>-1" >审批人</span> :</label>
                                                        <div class="col-md-8">
-                                                       <input type="text"  class="form-control" placeholder=""  id="submitter" name ="submitter"   ng-hide="invoiceAdd"  
-												ng-model="invoice.submitter" > 
+                                                       <input type="text"  class="form-control" placeholder=""  id="approver" name ="approver"   ng-hide="invoiceAdd"  
+												ng-model="invoice.approver" > 
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="invoiceView">{{invoice.submitter}}</p> 
+                                                                        <p class="control-label left" ng-show="invoiceView">{{invoice.approver}}</p> 
                                                                     </div>
                                             </div>
 										</div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group form-md-line-input">
-                                                                <label class="col-md-4 control-label" for="contactNum"><span  ng-if="inOrOut.indexOf('in')>-1"  >收票日期 </span><span   ng-if="inOrOut.indexOf('out')>-1" >审批日期</span> : </label>
+                                                                <label class="col-md-4 control-label" for="approvalDate"><span class="required"> * </span><span  ng-if="inOrOut.indexOf('in')>-1"  >收票日期 </span><span   ng-if="inOrOut.indexOf('out')>-1" >审批日期</span> : </label>
                                                                        <div class="col-md-8">
-                                                       <input type="text"  class="form-control" placeholder=""  id="submitter" name ="submitter"   ng-hide="invoiceAdd"   
-												ng-model="invoice.submitter" > 
+                                                       <input type="text"  class="form-control form-control-inline date-picker"     data-date-format="yyyy-mm-dd"   placeholder=""  data-date-viewmode="years"  id="approvalDate" name ="approvalDate"  ng-hide="invoiceAdd"   
+												ng-model="invoice.approvalDate" > 
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="invoiceView">{{invoice.submitter}}</p> 
+                                                                        <p class="control-label left" ng-show="invoiceView">{{invoice.approvalDate| date:'yyyy-MM-dd'}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -350,9 +354,9 @@
                                         <table class="table table-striped table-bordered table-advance table-hover"  >
                                             <thead>
                                                 <tr >
-                                                      <td rowspan="2"  colspan="4"   style="text-align: center;vertical-align: middle">付款方:</td>
-                                                    <td  rowspan="2"    colspan="4" style="text-align: center;vertical-align: middle">收款方:</td>
-                                                    <td   rowspan="2"   colspan="4" style="text-align: center;vertical-align: middle">本次应付:</td>
+                                                      <td rowspan="2"  colspan="4"   style="text-align: center;vertical-align: middle">付款方:{{clauseSettlement.payee}}</td>
+                                                    <td  rowspan="2"    colspan="4" style="text-align: center;vertical-align: middle">收款方:{{clauseSettlement.payer}}</td>
+                                                    <td   rowspan="2"   colspan="4" style="text-align: center;vertical-align: middle">本次应付:{{invoice.orderAmount|currency:'￥'}}</td>
                                                 </tr>
                                                 <tr></tr>
                                             
@@ -365,18 +369,28 @@
                                                   <td  style="text-align: center">开票方式</td>
                                                   <td   style="text-align: center">开票金额</td>
                                                   <td colspan="2" style="text-align: center">未开金额</td>
-                                                   <td  style="text-align: center">合格数量</td>
                                                   <td   style="text-align: center">备注</td>
                                                    <td  style="text-align: center">状态</td>
                                                 </tr> 
                                                 </thead>
-                                            <tbody  ng-if="materials==null">
+                                            <tbody  ng-if="clauseSettlementDetails==null"   >
 			                                             	<tr>
 			                                                    <td colspan="16" align="center" >暂无数据</td>
 			                                                </tr>
 			                                </tbody>
-                                         
-                                            </tbody>
+                                         <tr  ng-if="clauseSettlementDetails!=null"  ng-repeat="clauseSettlementDetail in clauseSettlementDetails track by $index" >
+                                         <td style="text-align: center"><input name="select_all" ng-if="invoiceView!=true"  ng-checked="clauseSettlementDetail.serialNum==invoice.clauseSettlementSerial"
+								 type="checkbox"   ng-click="judgeCount(this)"  value="{{clauseSettlementDetail.serialNum}}"><span ng-if="clauseSettlementDetail.serialNum==invoice.clauseSettlementSerial"   ng-show="invoiceView" style="width:10px; background-color: #3598dc">已选</span>{{clauseSettlementDetail.paymentType}}</td>
+                                                  <td style="text-align: center">{{clauseSettlementDetail.deliveryNode}}</td>
+                                                  <td  style="text-align: center">{{clauseSettlementDetail.accountPeriod}}</td>
+                                                  <td  style="text-align: center">{{clauseSettlementDetail.deliveryRate}}</td>
+                                                  <td  style="text-align: center">{{clauseSettlementDetail.deliveryAmount|currency:'￥'}}</td>
+                                                  <td  style="text-align: center">{{clauseSettlementDetail.billingMethod}}</td>
+                                                  <td   style="text-align: center">{{clauseSettlementDetail.billingAmount|currency:'￥'}}</td>
+                                                  <td colspan="2" style="text-align: center">{{clauseSettlementDetail.unbilledAmount|currency:'￥'}}</td>
+                                                  <td   style="text-align: center">{{clauseSettlementDetail.remark}}</td>
+                                                   <td  style="text-align: center"><span ng-if="clauseSettlementDetail.serialNum==invoice.clauseSettlementSerial">待收票</span><span ng-if="clauseSettlementDetail.serialNum!=invoice.clauseSettlementSerial">未开启</span></td>
+                                            </tr>
                                         </table>
                                     </div>
                                 </div><!-- 订单结算条款END-->
@@ -385,7 +399,7 @@
 				
         </div>
         <!-- END EXAMPLE TABLE PORTLET-->
-<jsp:include  page="../stockInOutCheck/selectDeliverOrTakeDelivery.jsp"/>
+<jsp:include  page="../invoice/selectBuyOrSaleOrder.jsp"/>
 <!-- END MAIN CONTENT -->
 <!-- BEGIN MAIN JS -->
  <script>

@@ -1,5 +1,6 @@
 package com.congmai.zhgj.web.controller;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,12 +28,31 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.web.model.ClauseAdvance;
+import com.congmai.zhgj.web.model.ClauseAfterSales;
+import com.congmai.zhgj.web.model.ClauseCheckAccept;
+import com.congmai.zhgj.web.model.ClauseDelivery;
+import com.congmai.zhgj.web.model.ClauseFramework;
+import com.congmai.zhgj.web.model.ClauseFrameworkExample;
+import com.congmai.zhgj.web.model.ClauseSettlement;
+import com.congmai.zhgj.web.model.ClauseSettlementDetail;
+import com.congmai.zhgj.web.model.ClauseSettlementDetailExample;
+import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.Invoice;
+import com.congmai.zhgj.web.model.OrderFile;
+import com.congmai.zhgj.web.model.OrderFileExample;
+import com.congmai.zhgj.web.model.OrderInfo;
+import com.congmai.zhgj.web.model.OrderMateriel;
+import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.StockInOutCheck;
+import com.congmai.zhgj.web.service.ClauseSettlementDetailService;
+import com.congmai.zhgj.web.service.ClauseSettlementService;
+import com.congmai.zhgj.web.service.CompanyService;
+import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.DeliveryMaterielService;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.InvoiceService;
@@ -63,7 +83,14 @@ public class InvoiceController {
    	private OrderService orderService;
     @Autowired
    	private DeliveryMaterielService  deliveryMaterielService;
-    
+    @Resource
+	private ContractService contractService;
+    @Resource
+    private ClauseSettlementService clauseSettlementService;
+    @Resource
+    private ClauseSettlementDetailService clauseSettlementDetailService;
+    @Resource
+    private CompanyService  companyService;
     
     
     /**
@@ -145,6 +172,10 @@ public class InvoiceController {
     public ResponseEntity<Map> getInvoiceList(HttpServletRequest request,String  inOrOut) {
     	
 		List<Invoice> invoices = invoiceService.getAllInvoice(inOrOut,null);
+		for(Invoice invoice:invoices){
+			OrderInfo order=orderService.selectById(invoice.getOrderSerial());
+			invoice.setRelationBuyOrSaleNum(order.getOrderNum());
+		}
        
 		// 封装datatables数据返回到前台
 		Map<String,Object> pageMap = new HashMap<String,Object>();
@@ -160,13 +191,18 @@ public class InvoiceController {
      * @return
      */
   
-    @RequestMapping(value = "/invoiceView", method = RequestMethod.POST)
+    @RequestMapping(value = "/invoiceView")
     @ResponseBody
     public Map viewInvoice(HttpServletRequest request, @RequestBody String  serialNum) {
     	Map<String, Object> map = new HashMap<String, Object>();
     	Invoice invoice=invoiceService.selectById(serialNum.substring(0, 32));
     	if(invoice!=null){
-    	map.put("invoice",invoice);
+    	OrderInfo orderInfo=orderService.selectById(invoice.getOrderSerial());
+    		invoice.setRelationBuyOrSaleNum(orderInfo.getOrderNum());
+    		invoice.setOrderAmount(orderInfo.getOrderAmount());
+    		invoice.setComName(invoice.getSupplyComId()==null?invoice.getBuyComId():invoice.getSupplyComId());
+    		map.put("invoice",invoice);
+    	
     }
     	return map;
     }
@@ -201,5 +237,46 @@ public class InvoiceController {
 	    		dataMap.put("stockInOutRecordList",stockInOutCheckList);
 	    		ExcelUtil.export(request, response, dataMap, "stockInOutRecord", "发票信息");
 	    }*/
-	 
+	@RequestMapping(value = "/clauseSettlement",method = RequestMethod.POST)
+	@ResponseBody
+	public Map getClauseSettlementInfo( @RequestBody String serialNum) {
+		OrderInfo orderInfo =null;
+		if(serialNum.indexOf("in")>-1){
+			//Delivery delivery= takeDeliveryService.selectByTakeDeliveryPrimaryKey(serialNum.substring(0, 32));
+			orderInfo = orderService.selectById(serialNum.substring(0, 32));
+		}else if(serialNum.indexOf("out")>-1){
+			//DeliveryVO deliveryVO=deliveryService.selectDetailById(serialNum.substring(0, 32));
+			orderInfo = orderService.selectById(serialNum.substring(0, 32));
+		}else{
+			orderInfo= orderService.selectById(serialNum);
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+    	//获取合同信息
+    	ContractVO contract = null;
+		if(!StringUtils.isEmpty(orderInfo.getContractSerial())){
+    		contract=contractService.selectConbtractById(orderInfo.getContractSerial());
+    	}
+    	if(contract!=null&&!StringUtils.isEmpty(contract.getId())){
+    		//获取结算条款信息
+    		ClauseSettlement clauseSettlement = clauseSettlementService.selectByContractId(contract.getId());
+    		map.put("clauseSettlement", clauseSettlement);
+    		
+        	//查询订单结算条款明细
+    		ClauseSettlementDetailExample cde=new ClauseSettlementDetailExample();
+    		com.congmai.zhgj.web.model.ClauseSettlementDetailExample.Criteria criteriaf=cde.createCriteria();
+    		criteriaf.andClauseSettlementSerialEqualTo(clauseSettlement.getSerialNum());
+    		criteriaf.andDelFlgEqualTo("0");
+    		List<ClauseSettlementDetail>csds=clauseSettlementDetailService.selectList(cde);
+    	BigDecimal num=BigDecimal.ZERO;
+    		for(ClauseSettlementDetail clauseSettlementDetail:csds){
+    			num=num.add(new BigDecimal(clauseSettlementDetail.getUnbilledAmount()));
+    		}
+    		orderInfo.setUnBillAmount(num.toString());
+    		map.put("orderInfo", orderInfo);
+    		map.put("clauseSettlementDetails", csds);
+        	
+    	}
+    	return map;
+	}
+	
 }

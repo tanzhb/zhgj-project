@@ -107,6 +107,9 @@ function timeStamp2String (time){
      return year + "-" + month + "-" + date+" "+hour+":"+minute+":"+second;
 };
 function timeStamp2ShortString (time){
+	if(time==null){
+		return null;
+	}
     var datetime = new Date();
      datetime.setTime(time);
      var year = datetime.getFullYear();

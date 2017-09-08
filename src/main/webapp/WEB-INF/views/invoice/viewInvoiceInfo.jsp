@@ -61,8 +61,8 @@
                                                                 <div class="form-group form-md-line-input">
                                                                 <label class="col-md-4 control-label" for=""><span  ng-if="inOrOut.indexOf('in')>-1"  >开票方</span><span   ng-if="inOrOut.indexOf('out')>-1" >收票方</span> :</label>
                                                                     <div class="col-md-8">
-                                                                        <p class="control-label left"   ng-if="inOrOut.indexOf('out')>-1"  >{{invoice.comName}}</p> 
-                                                                         <p class="control-label left" ng-if="inOrOut.indexOf('in')>-1"  >{{invoice.comName}}</p> 
+                                                                        <p class="control-label left"   ng-if="inOrOut.indexOf('out')>-1"  >{{invoice.buyComId}}</p> 
+                                                                         <p class="control-label left" ng-if="inOrOut.indexOf('in')>-1"  >{{invoice.supplyComId}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -70,8 +70,8 @@
                                                                 <div class="form-group form-md-line-input">
                                                                 <label class="col-md-4 control-label" for=""><span  ng-if="inOrOut.indexOf('in')>-1"  > 关联采购订单号</span><span   ng-if="inOrOut.indexOf('out')>-1" > 关联销售订单号</span> :</label>
                                                                     <div class="col-md-8">
-                                                                        <p class="control-label left"  ng-if="inOrOut.indexOf('out')>-1" >{{invoice.relationBuyOrSaleNum}}</p> 
-                                                                        <p class="control-label left"  ng-if="inOrOut.indexOf('in')>-1" >{{invoice.relationBuyOrSaleNum}}</p>
+                                                                        <p class="control-label left"  >{{invoice.relationBuyOrSaleNum}}</p> 
+                                                                        
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -81,7 +81,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="comName"> 订单金额:</label>
                                                     <div class="col-md-8">
-                                                          <p class="control-label left" >{{invoice.orderAmount}}</p>
+                                                          <p class="control-label left" >{{invoice.orderAmount|currency:'￥'}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -98,7 +98,7 @@
                                                                 <div class="form-group form-md-line-input">
                                                                 <label class="col-md-4 control-label" for="checkDate">未开金额 :</label>
                                                                     <div class="col-md-8">
-                                                                       <p class="control-label left" >{{invoice.unBillAmount }}</p>
+                                                                       <p class="control-label left" >{{invoice.unBillAmount|currency:'￥'}}</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -116,7 +116,8 @@
                                                                 <div class="form-group form-md-line-input">
                                                                 <label class="col-md-4 control-label" for="contactNum"><span  ng-if="inOrOut.indexOf('in')>-1"  >关联付款单号</span><span   ng-if="inOrOut.indexOf('out')>-1" > 关联收款单号</span>  :</label>
                                                                     <div class="col-md-8">
-                                                                         <p class="control-label left" >{{invoice.relationReceiveOrPayNum}}</p>
+                                                                     <p class="control-label left"  ng-if="invoice.relationReceiveOrPayNum!=null">{{invoice.relationReceiveOrPayNum}}</p> 
+                                                                    <p class="control-label left"  ng-if="invoice.relationReceiveOrPayNum==null">----</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -124,7 +125,8 @@
                                                                 <div class="form-group form-md-line-input">
                                                                 <label class="col-md-4 control-label" for="status"><span  ng-if="inOrOut.indexOf('in')>-1"  >付款日期</span><span   ng-if="inOrOut.indexOf('out')>-1" >收款日期</span>  :</label>
                                                                     <div class="col-md-8">
-                                                                   <p class="control-label left" >{{invoice.receiptDate | date:'yyyy-MM-dd'}}</p> 
+                                                                   <p class="control-label left"  ng-if="invoice.receiptDate!=null">{{invoice.receiptDate | date:'yyyy-MM-dd'}}</p> 
+                                                                    <p class="control-label left"  ng-if="invoice.receiptDate==null">----</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -134,7 +136,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="checker"> 发票金额 :</label>
                                                     <div class="col-md-8">
-                                                         <p class="control-label left" >{{invoice.invoiceAmount}}</p> 
+                                                         <p class="control-label left" >{{invoice.invoiceAmount|currency:'￥'}}</p> 
                                                     </div>
                                             </div>
 										</div>
@@ -238,14 +240,14 @@
                             <div class="actions">
                             </div>
                         </div>
-                          <div class="portlet-body form">
+                           <div class="portlet-body form">
                                     <div class="table-scrollable">
                                         <table class="table table-striped table-bordered table-advance table-hover"  >
                                             <thead>
                                                 <tr >
-                                                      <td rowspan="2"  colspan="4"   style="text-align: center;vertical-align: middle">付款方:</td>
-                                                    <td  rowspan="2"    colspan="4" style="text-align: center;vertical-align: middle">收款方:</td>
-                                                    <td   rowspan="2"   colspan="4" style="text-align: center;vertical-align: middle">本次应付:</td>
+                                                      <td rowspan="2"  colspan="4"   style="text-align: center;vertical-align: middle">付款方:{{clauseSettlement.payee}}</td>
+                                                    <td  rowspan="2"    colspan="4" style="text-align: center;vertical-align: middle">收款方:{{clauseSettlement.payer}}</td>
+                                                    <td   rowspan="2"   colspan="4" style="text-align: center;vertical-align: middle">本次应付:{{invoice.orderAmount|currency:'￥'}}</td>
                                                 </tr>
                                                 <tr></tr>
                                             
@@ -258,18 +260,27 @@
                                                   <td  style="text-align: center">开票方式</td>
                                                   <td   style="text-align: center">开票金额</td>
                                                   <td colspan="2" style="text-align: center">未开金额</td>
-                                                   <td  style="text-align: center">合格数量</td>
                                                   <td   style="text-align: center">备注</td>
                                                    <td  style="text-align: center">状态</td>
                                                 </tr> 
                                                 </thead>
-                                            <tbody  ng-if="materials==null">
+                                            <tbody  ng-if="clauseSettlementDetails==null"   >
 			                                             	<tr>
 			                                                    <td colspan="16" align="center" >暂无数据</td>
 			                                                </tr>
 			                                </tbody>
-                                         
-                                            </tbody>
+                                         <tr  ng-if="clauseSettlementDetails!=null"  ng-repeat="clauseSettlementDetail in clauseSettlementDetails track by $index" >
+                                         <td style="text-align: center"><span ng-if="clauseSettlementDetail.serialNum==invoice.clauseSettlementSerial" style="width:10px; background-color: #3598dc">已选</span>{{clauseSettlementDetail.paymentType}}</td>
+                                                  <td style="text-align: center">{{clauseSettlementDetail.deliveryNode}}</td>
+                                                  <td  style="text-align: center">{{clauseSettlementDetail.accountPeriod}}</td>
+                                                  <td  style="text-align: center">{{clauseSettlementDetail.deliveryRate}}</td>
+                                                  <td  style="text-align: center">{{clauseSettlementDetail.deliveryAmount}}</td>
+                                                  <td  style="text-align: center">{{clauseSettlementDetail.billingMethod}}</td>
+                                                  <td   style="text-align: center">{{clauseSettlementDetail.billingAmount|currency:'￥'}}</td>
+                                                  <td colspan="2" style="text-align: center">{{clauseSettlementDetail.unbilledAmount|currency:'￥'}}</td>
+                                                  <td   style="text-align: center">{{clauseSettlementDetail.remark}}</td>
+                                                   <td  style="text-align: center"><span ng-if="clauseSettlementDetail.serialNum==invoice.clauseSettlementSerial">待收票</span><span ng-if="clauseSettlementDetail.serialNum!=invoice.clauseSettlementSerial">未开启</span></td>
+                                            </tr>
                                         </table>
                                     </div>
                                 </div><!-- 订单结算条款END-->
