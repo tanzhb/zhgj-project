@@ -492,10 +492,15 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
             	contractNum:{required:"合同编号不能为空！",rangelength:jQuery.validator.format("合同编号位数必须在{0}到{1}字符之间！")
             		/*remote:jQuery.validator.format("用户名已经被注册")*/},
             	contractType:{required:"合同类型不能为空！"},
-            	serviceModel:{required:"服务模式不能为空！"},
-            	settlementClause:{required:"结算条款不能为空！"},
-            	comId:{required:"供应商不能为空！"},
+            	otherPartyContractNum:{required:"对方合同号不能为空！"},
+            	firstParty:{required:"合同甲方不能为空！"},
+            	secondParty:{required:"合同乙方不能为空！"},
             	startDate:{required:"开始日期不能为空！"},
+            	
+            	firstPartySigner:{required:"甲方签订人不能为空！"},
+            	secondPartySigner:{required:"乙方签订人不能为空！"},
+            	signerAddress:{required:"签订地址不能为空！"},
+            	
             	endDate:{required:"结束日期不能为空！"},
             	signDate:{required:"签订日期不能为空！"},
             	signer:{required:"签订人不能为空！"},
@@ -537,14 +542,26 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
                 contractType:{required:true,
                 },
                 
-                serviceModel:{required:true,
+                otherPartyContractNum:{required:true,
                 },
                 
-                settlementClause:{required:true,
+                firstParty:{required:true,
                 },
                 
-                comId:{required:true,
+                secondParty:{required:true,
                 },
+                
+                
+                firstPartySigner:{required:true,
+                },
+                
+                secondPartySigner:{required:true,
+                },
+                
+                signerAddress:{required:true,
+                },
+                
+                
                 startDate:{required:true,
                 },
                 endDate:{required:true,
