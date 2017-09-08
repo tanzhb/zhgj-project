@@ -26,24 +26,32 @@
 	<div class="col-md-12">
 
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
-		<div class="portlet box blue">
+		<div class="portlet box light">
 			<div class="portlet-title">
 				<div class="caption">
 					<i class="fa fa-globe"></i>价格列表
 				</div>
 				<div class="actions"><!-- ui-sref="addPrice"  -->
 					<button ng-click="addPriceList()"
-						data-toggle="modal" class="btn btn-default btn-sm btn-circle">
+						data-toggle="modal" class="btn btn-circle btn-sm green">
 						<i class="fa fa-plus"></i> 添加
 					</button><button ng-click="toEditPriceListPage()"
-						class="btn btn-default btn-sm btn-circle"> <i
+						class="btn btn-circle btn-sm red"> <i
 						class="fa fa-edit"></i> 修改
 					</button> <button ng-click="delPriceList()" 
 						data-toggle="modal" 
-						class="btn btn-default btn-sm btn-circle"> <i
+						class="btn btn-circle btn-sm purple"> <i
 						class="fa fa-minus"></i> 删除
 					</button>
-					<div class="btn-group">
+					 <button ng-click="delPriceList()" 
+						data-toggle="modal" 
+						class="btn btn-circle blue btn-outline"> </i> 导入
+					</button>
+					 <button ng-click="delPriceList()" 
+						data-toggle="modal" 
+						class="btn btn-circle yellow btn-outline""> </i> 导出
+					</button>
+					<!-- <div class="btn-group">
 						<a class="btn btn-default btn-outline btn-circle"
 							href="javascript:;" data-toggle="dropdown"> <i
 							class="fa fa-share"></i> <span class="hidden-xs"> 其它 </span> <i
@@ -60,7 +68,7 @@
 													class="tool-action" > <i class="fa fa-print"></i> 打印
 												</a></li> 
 											</ul>
-					</div>
+					</div> -->
 				</div>
 			</div>
 

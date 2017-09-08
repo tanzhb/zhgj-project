@@ -308,7 +308,7 @@ angular
 								 $scope.priceListView =true;
 								 $scope.priceListAdd =false;
 								 $scope.priceListEdit =true;
-								 $("#priceListTips").hide();
+								 $(".alert-danger").hide();
 							 },
 							 function(errResponse) {
 								 toastr.warning("保存错误！");
@@ -406,15 +406,15 @@ angular
 						 rate:{digits:"必须是数字！",required:"税率不能为空！"},
 						 unitPrice: {digits:"必须是数字！",required:"单价不能为空！"},
 						 inclusivePrice:{digits:"必须是数字！"},
-						 topPrice:{digits:"必须是数字！"},
-						 floorPrice:{digits:"必须是数字！"},
+						 topPrice:{},
+						 floorPrice:{},
 						 priceEffectiveDate: {required:"价格生效期未选择！" },
 						 priceExpirationDate: {required:"价格失效期未选择！" },
 						 ladderType:{required:"未选择阶梯类型！" },
 						 countStart:{digits:"必须是数字！"},
 						 countEnd:{digits:"必须是数字！"},
 						 price:{digits:"必须是数字！"},
-						 inclusivePrice:{digits:"必须是数字！"}
+						 inclusivePrice:{}
 					 },
 					 rules: {
 						 priceNum:{required:true},
@@ -426,15 +426,15 @@ angular
 						 rate:{digits:true,required:!0},
 						 unitPrice: {digits:true,required:!0},
 						 inclusivePrice:{digits:true},
-						 topPrice:{digits:true},
-						 floorPrice:{digits:true},
+						 topPrice:{},
+						 floorPrice:{toppriceNumCheck:!0},
 						 priceEffectiveDate: {required:true },
 						 priceExpirationDate: {required:true },
 						 ladderType:{required:true },
 						 countStart:{digits:true},
 						 countEnd:{digits:true},
 						 price:{digits:true},
-						 inclusivePrice:{digits:true}
+						 inclusivePrice:{inclusivePriceNumCheck:!0}
 					 },
 					 invalidHandler: function(e, t) {
 						 i.hide(),
@@ -458,8 +458,20 @@ angular
 						 r.hide()
 					 }
 				 })   							}); 
-
-
+			 jQuery.validator.addMethod("inclusivePriceNumCheck", function (value, element) {//含税价格判断
+	    			debugger;
+					$(element).removeData();
+					if(/^[-\+]?\d+(\.\d+)?$/.test(value)==false||value==NaN||(Number(value)*100+"").indexOf(".")>-1){
+						toastr.warning("只能包含小数点和数字,且只能有两位小数");
+						$("#inclusivePrice").focus();
+						}
+					return this.optional(element) || Number($(element).data("unitprice")) == NaN?false:(Number($(element).data("unitprice"))-value<= 0);
+				}, "单价不能超过含税价格");
+			 jQuery.validator.addMethod("toppriceNumCheck", function (value, element) {//最低价最高价判断
+	    			debugger;
+					$(element).removeData();
+					return this.optional(element) || Number($(element).data("topprice")) == NaN?false:(Number($(element).data("topprice"))-value>= 0);
+				}, "最低限价不能超过最高限价");
 			 function getPriceListInfo(serialNum){//获取价格详情
 				 if(!handle.isNull(serialNum)){
 					 debugger;
@@ -768,6 +780,7 @@ angular
 							 toastr.success("保存成功");
 							 debugger;
 							 handle.unblockUI();
+							 $(".alert-danger").hide();
 							 $scope.ladderprices = data.data;
 							 getPriceListInfo($scope.priceList.serialNum);
 							 $scope.priceListAdd=false;

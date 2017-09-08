@@ -233,7 +233,7 @@
                                                            <div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="inclusiveprice"> <!-- <span class="required"> * </span> -->含税价格 :</label>
                                                     <div class="col-md-8">
-                                                                        <input type="text"   class="form-control" placeholder=""  id="inclusivePrice" name ="inclusivePrice"  ng-show="priceListAdd" 
+                                                                        <input type="text"   class="form-control" placeholder=""  id="inclusivePrice"    data-unitprice="{{priceList.unitPrice}}"   name ="inclusivePrice"  ng-show="priceListAdd" 
 												ng-model="priceList.inclusivePrice" >
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="priceListView">{{priceList.inclusivePrice}}</p>
@@ -246,7 +246,7 @@
                                                              <div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="topprice"> <!-- <span class="required"> * </span> -->最高限价 :</label>
                                                     <div class="col-md-8">
-                                                                        <input type="text"  class="form-control" placeholder=""  id="topPrice" name ="topPrice"  ng-show="priceListAdd" 
+                                                                        <input type="text"  class="form-control" placeholder=""  id="topPrice" name ="topPrice"   onkeyup="isNumberWithTwo(this)"   ng-show="priceListAdd" 
 												ng-model="priceList.topPrice">
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="priceListView">{{priceList.topPrice}}</p>
@@ -255,9 +255,9 @@
                                                             </div>
                                                            <div class="col-md-6">
                                                            <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="floorprice"> <!-- <span class="required"> * </span> -->最底限价 :</label>
+                                                    <label class="col-md-4 control-label" for="floorprice"> <!-- <span class="required"> * </span> -->最低限价 :</label>
                                                     <div class="col-md-8">
-                                                                        <input type="text"   class="form-control" placeholder=""  id="floorPrice" name ="floorPrice"  ng-show="priceListAdd" 
+                                                                        <input type="text"   class="form-control" placeholder=""  id="floorPrice" name ="floorPrice"  ng-show="priceListAdd"   onkeyup="isNumberWithTwo(this)"  data-topprice="{{priceList.topPrice}}"  
 												ng-model="priceList.floorPrice" >
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="priceListView">{{priceList.floorPrice}}</p>
@@ -309,8 +309,8 @@
                                             <i class="fa fa-save"></i> 保存 </button>
                             </div>
                         </div></br></br>
-                                                                <div class="portlet-body form">
-                           <!--  <form  id="ladderpriceForm" class="page-repeater form-horizontal"> -->
+                                                             <!--    <div class="portlet-body form"> -->
+                            <!--  <form  id="ladderpriceForm" class="page-repeater form-horizontal">  -->
 								<div class="form-body" data-repeater-list="group-a"  >
 									<div  class="row" data-repeater-item  ng-repeat="ladderprice in ladderprices  track by $index" repeat-done="repeatDone()"  > 
 										<div class="col-md-3">
@@ -376,7 +376,8 @@
                                             <i class="fa fa-plus"></i> 增加
                                      </a>
                                 </div>
-							<!-- </form> -->
+                                </div>
+							 </form>
          				</div>
                                                         </div> 
                                                         </div> 
@@ -445,7 +446,7 @@
 						</div>
                                                         </div>
 								</div>
-							</form>
+							<!-- </form> -->
          				</div>
 
   <div class="portlet-title"><!-- 使用采购商 START -->
@@ -530,5 +531,15 @@
 <!-- END MAIN CONTENT -->
 <!-- BEGIN MAIN JS -->
  <script>
+ var isNumberWithTwo = function(obj) {
+	 var value=$(obj).val();
+		if(/^[-\+]?\d+(\.\d+)?$/.test(value)==false||value==NaN||(Number(value)*100+"").indexOf(".")>-1){
+			toastr.warning("只能包含小数点和数字,且只能有两位小数");
+		//	$(obj).val('');
+			$(obj).focus();
+			return;
+			}
+		$(obj).val(Number(value));
+	}
 </script> 
 <!-- END MAIN JS -->
