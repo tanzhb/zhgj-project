@@ -1,14 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <h3 class="page-title">
-	发货信息 <small></small>
+	收款信息 <small></small>
 </h3>
 <div class="page-bar">
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i class="fa fa-angle-right"></i></li>
 			
-		<li><a ui-sref="delivery">基础数据</a><i class="fa fa-angle-right"></i></li>
-		<li><a ui-sref="delivery">发货信息</a></li>
+		<li><a ui-sref="gatheringMoneyRecord">收款</a><i class="fa fa-angle-right"></i></li>
+		<li><a ui-sref="gatheringMoneyRecord">收款信息</a></li>
 	</ul>
 </div>
 
@@ -27,24 +27,13 @@
 		</script>
 		
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
-		<div class="portlet light">
+		<div class="portlet box red">
 			<div class="portlet-title">
 			<div class="caption">
-					<i class="fa fa-globe font-green"></i>
-					<span class="caption-subject font-green bold uppercase">发货列表</span>
+					<i class="fa fa-globe"></i>收款列表
 				</div>
 				<div class="actions" ng-controller='MyCtrl'>
-						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="jumpToUrl('addDelivery')">
-	                                              <i class="fa fa-plus"></i> 添加</label>
-						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="jumpToEdit()">
-	                                              <i class="fa fa-edit"></i> 修改</label>
-						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="del()">
-	                                              <i class="fa fa-minus"></i> 删除</label>
-						<!-- <label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
-	                                              <i class="fa fa-upload"></i> 导入</label> -->
-						<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportContract()">
-	                                              <i class="fa fa-file-excel-o"></i> 导出</label>
-					<!-- <a href="javascript:;" ng-click="jumpToUrl('addDelivery')"
+					<a href="javascript:;" ng-click="jumpToUrl('addGatheringMoney')"
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-plus"></i> 添加
 					</a> 
@@ -64,18 +53,18 @@
 							class="fa fa-angle-down"></i>
 						</a>
 						<ul class="dropdown-menu pull-right" id="sample_3_tools">
-							<li><a data-action="0" class="tool-action"
+							<!-- <li><a data-action="0" class="tool-action"
 								data-toggle="modal" data-target="#import"> <i
 									class="fa fa-upload"></i> 导入
+							</a></li> -->
+							<li><a href="javascript:;" data-action="0"
+								class="tool-action" ng-click="exportPay()"> <i class="fa fa-file-excel-o"></i> 导出
 							</a></li>
 							<li><a href="javascript:;" data-action="1"
-								class="tool-action" ng-click="exportContract()"> <i class="fa fa-file-excel-o"></i> 导出
-							</a></li>
-							<li><a href="javascript:;" data-action="2"
 								class="tool-action" > <i class="fa fa-print"></i> 打印
 							</a></li>
 						</ul>
-					</div> -->
+					</div>
 				</div>
 			</div>
 
@@ -105,32 +94,22 @@
 				<table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_2">
 					<thead>
 						<tr>
-							<th style="text-align: center"><input name="select_all"
-								value="1" id="example-select-all" type="checkbox" /></th>
-
-							<th style="white-space: nowrap;">发货单编号</th>
-							<th style="white-space: nowrap;">关联销售单号</th>
-							<th style="white-space: nowrap;">物料</th>
-							<th style="white-space: nowrap;">包装数量</th>
-							<th style="white-space: nowrap;">收货方</th>
-							<th style="white-space: nowrap;">发货地点</th>
-							<th style="white-space: nowrap;">发货日期</th>
-							<th style="white-space: nowrap;">运输方式</th>
-							<th style="white-space: nowrap;">收货地点</th>
-							<th style="white-space: nowrap;">备注</th>
-							<!-- <th style="white-space: nowrap;"></th> -->
+							<th style="text-align: center"><input name="select_all" value="1" id="example-select-all" type="checkbox" /></th>
+							<th style="white-space: nowrap;">收款单号 </th>
+							<th style="white-space: nowrap;">收款计划编号</th>
+							<th style="white-space: nowrap;">关联销售订单号</th>
+							<th style="white-space: nowrap;">收款类型 </th>
+							<th style="white-space: nowrap;">支付类型</th>
+							<th style="white-space: nowrap;">发票方式 </th>
+							<th style="white-space: nowrap;">关联发票单号</th>
+							<th style="white-space: nowrap;">申请人</th>
+							<th style="white-space: nowrap;">申请日期</th>
+							<th style="white-space: nowrap;">收款金额</th>
+							<th style="white-space: nowrap;">付款方</th>
+							<th style="white-space: nowrap;">状态</th>
 						</tr>
 					</thead>
 					<tbody>
-
-						<!-- <tr ng-repeat="user in uTrl.users">
-			                <td>{{ user.id }}</td>
-			                <td>{{ user.username }}</td>
-			                <td>{{ user.password }}</td>
-			                <td>{{ user.state }}</td>
-			                <td>{{ user.createTime }}</td>			               
-			            </tr>
-						 -->
 					</tbody>
 				</table>
 			</div>

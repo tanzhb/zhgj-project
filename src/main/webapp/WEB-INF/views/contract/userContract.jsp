@@ -27,26 +27,32 @@
 		</script>
 		
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
-		<div class="portlet box red">
+		<div class="portlet light">
 			<div class="portlet-title">
-			<div class="caption">
+			<!-- <div class="caption">
 					<i class="fa fa-globe"></i>合同列表
+				</div> -->
+				<div class="caption">
+					<i class="fa fa-globe font-green"></i> <span
+						class="caption-subject font-green bold uppercase">合同列表</span>
 				</div>
 				<div class="actions" ng-controller='MyCtrl'>
-					<a href="javascript:;" ng-click="jumpToUrl('addUserContract')"
-						class="btn btn-default btn-sm btn-circle"> <i
-						class="fa fa-plus"></i> 添加
-					</a> 
-					<a href="javascript:;" ng-click="jumpToEdit()"
+					<label class="btn btn-transparent green btn-circle btn-sm" ng-click="jumpToUrl('addUserContract')"><i class="fa fa-plus"></i> 添加</label>
+			        <label class="btn btn-transparent purple btn-circle btn-sm" ng-click="jumpToEdit()"> <i class="fa fa-edit"></i>修改</label>  
+					<label class="btn btn-transparent red btn-circle btn-sm" ng-click="del()"> <i class="fa fa-minus"></i> 删除</label>	
+					<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import"><i class="fa fa-upload"></i> 导入</label>
+					<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportContract()"> <i class="fa fa-file-excel-o"></i> 导出</label>
+									                                   
+					<!-- <a href="javascript:;" ng-click="jumpToEdit()"
 						class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-edit"></i> 修改
-					</a>
-					<a href="javascript:;" ng-click="del()"
+					</a> -->
+					<!-- <a href="javascript:;" ng-click="del()"
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-minus"></i> 删除
-					</a>
+					</a> -->
 					
-					<div class="btn-group">
+					<!-- <div class="btn-group">
 						<a class="btn btn-default btn-outline btn-circle"
 							href="javascript:;" data-toggle="dropdown"> <i
 							class="fa fa-share"></i> <span class="hidden-xs"> 其它 </span> <i
@@ -64,7 +70,7 @@
 								class="tool-action" > <i class="fa fa-print"></i> 打印
 							</a></li>
 						</ul>
-					</div>
+					</div> -->
 				</div>
 			</div>
 
@@ -91,7 +97,7 @@
 			</div>
 
 			<div class="portlet-body" >
-				<table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_2">
+				<table class="table table-bordered" id="sample_2">
 					<thead>
 						<tr>
 							<th style="text-align: center"><input name="select_all"
@@ -163,17 +169,36 @@
 				<div class="row" style="line-height:60px;">
 					<div class="col-md-6">
 						<div class="form-group">
-							<label class="control-label col-md-5">服务模式</label> <label
+							<label class="control-label col-md-5">甲方</label> <label
 								class="control-label col-md-7">
-								{{contractVO.serviceModel}} </label>
+								{{contractVO.firstParty}} </label>
 
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label class="control-label col-md-5">结算条款</label> <label
+							<label class="control-label col-md-5">甲方签订人</label> <label
 								class="control-label col-md-7">
-								{{contractVO.settlementClause}} </label>
+								{{contractVO.firstPartySigner}} </label>
+
+						</div>
+					</div>
+				</div>
+				
+				<div class="row" style="line-height:60px;">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label col-md-5">乙方</label> <label
+								class="control-label col-md-7">
+								{{contractVO.secondParty}} </label>
+
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="control-label col-md-5">乙方签订人</label> <label
+								class="control-label col-md-7">
+								{{contractVO.secondPartySigner}} </label>
 
 						</div>
 					</div>
@@ -183,17 +208,17 @@
 				<div class="row" style="line-height:60px;">
 					<div class="col-md-6">
 						<div class="form-group">
-							<label class="control-label col-md-5">供应商</label> <label
+							<label class="control-label col-md-5">签订日期</label> <label
 								class="control-label col-md-7">
-								{{contractVO.comId}} </label>
+								{{contractVO.signDate}} </label>
 
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label class="control-label col-md-5">备注</label> <label
+							<label class="control-label col-md-5">签订地点</label> <label
 								class="control-label col-md-7">
-								{{contractVO.remark}} </label>
+								{{contractVO.signerAddress}} </label>
 
 						</div>
 					</div>
@@ -223,17 +248,17 @@
 				<div class="row" style="line-height:60px;">
 					<div class="col-md-6">
 						<div class="form-group">
-							<label class="control-label col-md-5">签订日期</label> <label
+							<label class="control-label col-md-5">备注</label> <label
 								class="control-label col-md-7">
-								{{contractVO.signDate}} </label>
+								{{contractVO.remark}} </label>
 
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label class="control-label col-md-5">签订人</label> <label
+							<label class="control-label col-md-5">对方合同号</label> <label
 								class="control-label col-md-7">
-								{{contractVO.signer}} </label>
+								{{contractVO.otherPartyContractNum}} </label>
 
 						</div>
 					</div>

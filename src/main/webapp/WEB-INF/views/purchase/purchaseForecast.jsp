@@ -27,44 +27,31 @@
 		</script>
 		
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
-		<div class="portlet box red">
+		<div class="portlet light">
 			<div class="portlet-title">
 			<div class="caption">
 					<i class="fa fa-globe"></i>采购预测列表
 				</div>
 				<div class="actions" ng-controller='MyCtrl'>
-					<!-- <a href="javascript:;" ng-click="jumpToUrl('addUserContract')"
-						class="btn btn-default btn-sm btn-circle"> <i
-						class="fa fa-plus"></i> 添加
-					</a> 
-					<a href="javascript:;" ng-click="jumpToEdit()"
-						class="btn btn-default btn-sm btn-circle">
-						<i class="fa fa-edit"></i> 修改
-					</a> -->
-					<a href="javascript:;" ng-click="del()"
+					<label class="btn btn-transparent red btn-circle btn-sm" ng-click="del()"> <i class="fa fa-minus"></i> 删除</label>	
+					<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportPurchaseForecast()"> <i class="fa fa-file-excel-o"></i> 导出</label>
+					<!-- <a href="javascript:;" ng-click="del()"
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-minus"></i> 删除
-					</a>
+					</a> -->
 					
-					<div class="btn-group">
+					<!-- <div class="btn-group">
 						<a class="btn btn-default btn-outline btn-circle"
 							href="javascript:;" data-toggle="dropdown"> <i
 							class="fa fa-share"></i> <span class="hidden-xs"> 其它 </span> <i
 							class="fa fa-angle-down"></i>
 						</a>
 						<ul class="dropdown-menu pull-right" id="sample_3_tools">
-							<!-- <li><a data-action="0" class="tool-action"
-								data-toggle="modal" data-target="#import"> <i
-									class="fa fa-upload"></i> 导入
-							</a></li> -->
 							<li><a href="javascript:;" data-action="1"
 								class="tool-action" ng-click="exportPurchaseForecast()"> <i class="fa fa-file-excel-o"></i> 导出
 							</a></li>
-							<!-- <li><a href="javascript:;" data-action="2"
-								class="tool-action" > <i class="fa fa-print"></i> 打印
-							</a></li> -->
 						</ul>
-					</div>
+					</div> -->
 				</div>
 			</div>
 

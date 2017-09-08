@@ -1128,40 +1128,40 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
  // 请假管理
 		.state(
-									'vacation',
-									{
-										url : "/vacation",
-										templateUrl : "rest/page/addVacation",
-										data : {
-											pageTitle : '请假'
-										},
-										controller : "AddVacationController",
-										resolve : {
-											deps : [
-													'$ocLazyLoad',
-													function($ocLazyLoad) {
-														return $ocLazyLoad
-																.load({
-																	name : 'MetronicApp',
-																	insertBefore : '#ng_load_plugins_before', 
-																	files : [
-																	         'assets/global/plugins/datatables/datatables.min.css',
-																	         'assets/global/css/dialog.css',
-																	         'assets/global/css/easyui.css',
-																	         'assets/global/css/datagrid.css',
-																	         'assets/global/css/jquery.qtip.min.css',
-																	         
-																	         'assets/global/plugins/jquery.easyui.min.js',
-																	         'assets/global/plugins/jquery.qtip.min.js',
-																	         'assets/global/plugins/jquery.outerhtml.js',
-																			'assets/global/plugins/datatables/datatables.all.min.js',
-																			'assets/apps/service/vacation/AddVacationService.js',
-																			'assets/apps/controllers/vacation/AddVacationController.js' 
-																			]
-																});
-													} ]
-										}
-									})
+				'vacation',
+				{
+					url : "/vacation",
+					templateUrl : "rest/page/addVacation",
+					data : {
+						pageTitle : '请假'
+					},
+					controller : "AddVacationController",
+					resolve : {
+						deps : [
+								'$ocLazyLoad',
+								function($ocLazyLoad) {
+									return $ocLazyLoad
+											.load({
+												name : 'MetronicApp',
+												insertBefore : '#ng_load_plugins_before', 
+												files : [
+												         'assets/global/plugins/datatables/datatables.min.css',
+												         'assets/global/css/dialog.css',
+												         'assets/global/css/easyui.css',
+												         'assets/global/css/datagrid.css',
+												         'assets/global/css/jquery.qtip.min.css',
+												         
+												         'assets/global/plugins/jquery.easyui.min.js',
+												         'assets/global/plugins/jquery.qtip.min.js',
+												         'assets/global/plugins/jquery.outerhtml.js',
+														'assets/global/plugins/datatables/datatables.all.min.js',
+														'assets/apps/service/vacation/AddVacationService.js',
+														'assets/apps/controllers/vacation/AddVacationController.js' 
+														]
+											});
+								} ]
+					}
+				})
         .state('invoice', {
             url: "/invoice?:inOrOut",
             templateUrl:"rest/invoice/viewInvoiceList",
@@ -1242,7 +1242,221 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        		}]
 	        	}	        
 	    })   
-}]);
+
+        .state('addPay', {
+            url: "/addPay",
+            templateUrl: "rest/page/addPay",
+            data: {pageTitle: '新增付款'},
+            controller: "PayController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/apps/css/special.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/pageHandle.js',
+	        	'assets/apps/service/PayService.js',
+				'assets/apps/controllers/PayController.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js',
+                      ]
+                    });
+                }]
+            }
+        })
+        
+        .state('viewPay', {
+            url: "/viewPay:serialNum",
+            templateUrl: "rest/page/viewPay",
+            data: {pageTitle: '付款详情'},
+            controller: "PayController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/apps/css/special.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/PayService.js',
+				'assets/apps/controllers/PayController.js',
+                      ]
+                    });
+                }]
+            }
+        })
+        
+         .state('paymentRecordC', {
+            url: "/paymentRecordC",
+            templateUrl: "rest/page/paymentRecord",
+            data: {pageTitle: '付款列表'},
+            controller: "PayController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/apps/css/special.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/PayService.js',
+				'assets/apps/controllers/PayController.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js',
+                      ]
+                    });
+                }]
+            }
+        })
+        
+        .state('editPay', {
+            url: "/editPay:serialNum",
+            templateUrl: "rest/page/editPay",
+            data: {pageTitle: '编辑付款'},
+            controller: "PayController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/apps/css/special.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/pageHandle.js',
+	        	'assets/apps/service/PayService.js',
+				'assets/apps/controllers/PayController.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js',
+                      ]
+                    });
+                }]
+            }
+        })
+        
+        
+        .state('addGatheringMoney', {
+            url: "/addGatheringMoney",
+            templateUrl: "rest/page/addGatheringMoney",
+            data: {pageTitle: '新增收款'},
+            controller: "GatheringMoneyController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/apps/css/special.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/pageHandle.js',
+	        	'assets/apps/service/GatheringMoneyService.js',
+				'assets/apps/controllers/GatheringMoneyController.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js',
+                      ]
+                    });
+                }]
+            }
+        })
+        
+        
+        .state('gatheringMoneyRecord', {
+            url: "/gatheringMoneyRecord",
+            templateUrl: "rest/page/gatheringMoneyRecord",
+            data: {pageTitle: '收款列表'},
+            controller: "GatheringMoneyController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/apps/css/special.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/pageHandle.js',
+	        	'assets/apps/service/GatheringMoneyService.js',
+				'assets/apps/controllers/GatheringMoneyController.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js',
+                      ]
+                    });
+                }]
+            }
+        })
+        
+        
+        .state('viewGatheringMoney', {
+            url: "/viewGatheringMoney:serialNum",
+            templateUrl: "rest/page/viewGatheringMoney",
+            data: {pageTitle: '收款详情'},
+            controller: "GatheringMoneyController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/apps/css/special.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/GatheringMoneyService.js',
+				'assets/apps/controllers/GatheringMoneyController.js',
+                      ]
+                    });
+                }]
+            }
+        })
+        
+        .state('editGatheringMoney', {
+            url: "/editGatheringMoney:serialNum",
+            templateUrl: "rest/page/editGatheringMoney",
+            data: {pageTitle: '编辑收款'},
+            controller: "GatheringMoneyController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/apps/css/special.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/GatheringMoneyService.js',
+				'assets/apps/controllers/GatheringMoneyController.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js',
+                      ]
+                    });
+                }]
+            }
+        })}]);
 
 
 

@@ -96,7 +96,7 @@
 													</div>
 													<div class="col-md-6 col-sm-6" style="text-align: right;">
 														<div id="companyTable_filter" class="dataTables_filter">
-															<label><input type="search" ng-model="params.searchKey"
+															<label><input type="search" ng-model="params.searchKey" style="padding:15px 0px;"
 																class="form-control input-sm input-small input-inline"
 																placeholder="" aria-controls="companyTable"></label>
 																<button  class="btn blue  btn-sm " ng-click="searchDemandPlan()">
