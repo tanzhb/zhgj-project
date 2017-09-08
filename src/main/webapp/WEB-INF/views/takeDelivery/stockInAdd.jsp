@@ -258,7 +258,7 @@
                                             </div>
 										</td> 
 									</tr>
-									<tr ng-if="orderMateriels==undefined||orderMateriels.length==0">
+									<tr ng-if="takeDeliveryMateriels==undefined||takeDeliveryMateriels.length==0">
 											<td colspan="15" align="center">暂无数据</td>
 									</tr>
 								</tbody>

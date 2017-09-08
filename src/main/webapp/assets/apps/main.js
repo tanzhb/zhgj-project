@@ -98,6 +98,11 @@ MetronicApp.controller('ThemePanelController', [ '$scope', function($scope) {
 		$('.layout-option', $('.theme-panel')).val("fluid");// 设置布局为顺序
 		$('.sidebar-style-option', $('.theme-panel')).val("compact");// 工具栏风格为紧凑
 		$('.layout-option').trigger("change");
+		
+		$('ul > li', $('.theme-panel')).removeClass("current");
+		$('.theme-colors > ul > .color-blue', $('.theme-panel')).addClass("current");
+        
+        
 	});
 } ]);
 

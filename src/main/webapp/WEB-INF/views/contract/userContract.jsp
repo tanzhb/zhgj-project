@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <h3 class="page-title">
 	合同信息 <small></small>
 </h3>
@@ -37,12 +38,21 @@
 						class="caption-subject font-green bold uppercase">合同列表</span>
 				</div>
 				<div class="actions" ng-controller='MyCtrl'>
+				<shiro:hasPermission name="contract:add">
 					<label class="btn btn-transparent green btn-circle btn-sm" ng-click="jumpToUrl('addUserContract')"><i class="fa fa-plus"></i> 添加</label>
+				</shiro:hasPermission>
+			    <shiro:hasPermission name="contract:edit">
 			        <label class="btn btn-transparent purple btn-circle btn-sm" ng-click="jumpToEdit()"> <i class="fa fa-edit"></i>修改</label>  
+				</shiro:hasPermission>
+				<shiro:hasPermission name="contract:delete">
 					<label class="btn btn-transparent red btn-circle btn-sm" ng-click="del()"> <i class="fa fa-minus"></i> 删除</label>	
+				</shiro:hasPermission>
+				<shiro:hasPermission name="contract:import">					
 					<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import"><i class="fa fa-upload"></i> 导入</label>
+				</shiro:hasPermission>
+				<shiro:hasPermission name="contract:export">	
 					<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportContract()"> <i class="fa fa-file-excel-o"></i> 导出</label>
-									                                   
+				</shiro:hasPermission>									                                   
 					<!-- <a href="javascript:;" ng-click="jumpToEdit()"
 						class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-edit"></i> 修改
