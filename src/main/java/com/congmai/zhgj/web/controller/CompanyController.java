@@ -1,5 +1,8 @@
 package com.congmai.zhgj.web.controller;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -11,9 +14,13 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONObject;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +47,7 @@ import com.congmai.zhgj.web.model.CompanyExample;
 import com.congmai.zhgj.web.model.CompanyExample.Criteria;
 import com.congmai.zhgj.web.model.CompanyFinance;
 import com.congmai.zhgj.web.model.CompanyQualification;
+import com.congmai.zhgj.web.model.DataTablesParams;
 import com.congmai.zhgj.web.service.CompanyContactService;
 import com.congmai.zhgj.web.service.CompanyFinanceService;
 import com.congmai.zhgj.web.service.CompanyQualificationService;
@@ -117,7 +125,10 @@ public class CompanyController {
 				System.out.println(this.getClass()+"---------"+ e.getMessage());
 			} catch (Exception e) {
 		    	System.out.println(this.getClass()+"---------"+ e.getMessage());
-			}*/
+			}
+		 company.setPageIndex(dataTablesParams.getStart());
+		 company.setPageSize(dataTablesParams.getLength());*/
+    	
 		 company.setPageIndex(0);
 		 company.setPageSize(-1);
     	Page<Company> companys = companyService.selectByPage(company);

@@ -56,7 +56,7 @@
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="inOutNum"> <span class="required"> * </span>入库单号：</label>
+                                                    <label class="col-md-4 control-label" for="inOutNum"> 入库单号：</label>
                                                     <div class="col-md-8">
                                                          <p class="control-label left" >{{record.inOutNum}}</p>
                                                     </div>
@@ -66,7 +66,7 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="takeDeliverSerial"> <span class="required"> * </span>收货单号：</label>
+                                                    <label class="col-md-4 control-label" for="takeDeliverSerial"> 收货单号：</label>
                                                     <div class="col-md-8">
                                                          <p class="control-label left" >{{record.delivery.takeDelivery.takeDeliverNum}}</p>
                                                     </div>
@@ -106,7 +106,7 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="stockDate"> <span class="required"> * </span>入库日期：</label>
+                                                    <label class="col-md-4 control-label" for="stockDate"> 入库日期：</label>
                                                     <div class="col-md-8">
                                                          <p class="control-label left" >{{record.stockDate}}</p>
                                                     </div>
@@ -118,7 +118,7 @@
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="operator"> <span class="required"> * </span>操作员：</label>
+                                                    <label class="col-md-4 control-label" for="operator"> 操作员：</label>
                                                     <div class="col-md-8">
                                                          <p class="control-label left" >{{record.operator}}</p>
                                                     </div>
@@ -128,7 +128,7 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="contactNum"> <span class="required"> * </span>联系方式：</label>
+                                                    <label class="col-md-4 control-label" for="contactNum"> 联系方式：</label>
                                                     <div class="col-md-8">
                                                          <p class="control-label left" >{{record.contactNum}}</p>
                                                     </div>
@@ -137,7 +137,7 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="approval"> <span class="required"> * </span>状态：</label>
+                                                    <label class="col-md-4 control-label" for="approval"> 状态：</label>
                                                     <div class="col-md-8">
                                                          <p class="control-label left" ><span class="label label-sm label-warning">待入库</span></p>
                                                     </div>

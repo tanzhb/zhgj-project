@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
@@ -45,7 +47,9 @@ import com.congmai.zhgj.web.model.MaterielExample;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.Statement;
 import com.congmai.zhgj.web.model.StatementExample;
+import com.congmai.zhgj.web.model.StatementPaymentInfo;
 import com.congmai.zhgj.web.model.StatementExample.Criteria;
+import com.congmai.zhgj.web.model.StatementOrderInfo;
 import com.congmai.zhgj.web.service.ClauseAdvanceService;
 import com.congmai.zhgj.web.service.ClauseAfterSalesService;
 import com.congmai.zhgj.web.service.ClauseCheckAcceptService;
@@ -71,6 +75,29 @@ public class StatementController {
     @Resource
     private StatementService statementService;
   
+    @RequestMapping("statementBuyAdd")
+    public String statementBuyAdd() {
+    	
+		return "statement/statementBuyAdd";
+	}
+    
+    @RequestMapping("statementSupplyAdd")
+    public String statementSupplyAdd() {
+    	
+    	return "statement/statementSupplyAdd";
+    }
+    
+    @RequestMapping("statementBuyView")
+    public String statementBuyView() {
+    	
+    	return "statement/statementBuyView";
+    }
+    
+    @RequestMapping("statementSupplyView")
+    public String statementSupplyView() {
+    	
+    	return "statement/statementSupplyView";
+    }
     
     /**
      * 保存客户对账单
@@ -88,14 +115,9 @@ public class StatementController {
     		statement.setCreateTime(new Date());
     		statement.setUpdateTime(new Date());
     		statement.setStatus("1");
+    		statement.setDelFlg("0");
     		
     		statementService.insert(statement);
-    	}else{//更新
-    		Subject currentUser = SecurityUtils.getSubject();
-    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-    		statement.setUpdater(currenLoginName);
-    		statement.setUpdateTime(new Date());
-    		statementService.update(statement);
     	}
     	
 		return statement;
@@ -178,11 +200,31 @@ public class StatementController {
 	@ResponseBody
 	public Map getStatement(String serialNum,Statement statement) {
 		statement = statementService.selectById(serialNum);
-		Map<String, Object> map = new HashMap<String, Object>();
+		//Map<String, Object> map = new HashMap<String, Object>();
+    	Map<String,Object> map = statementService.getOrderAndPaymentRecords(statement.getSupplyComId(),statement.getBuyComId(),DateUtil.format("yyyy-MM-dd", statement.getStatementDate()));
     	map.put("statement", statement);
-    	
-    	
     	return map;
+	}
+	
+	/**
+	 * 
+	 * @Description 获取订单及付款信息
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "/getOrderAndPaymentRecords")
+	@ResponseBody
+	public Map<String,Object> getOrderAndPaymentRecords(String supplyComId,String buyComId,String statementDate){
+		//判断是否已经存在对账单
+		boolean flag = statementService.isExist(supplyComId,buyComId,statementDate);
+		Map<String,Object> map = null;
+		if(flag){
+			map = new HashMap<String, Object>();
+			map.put("isExist", true);
+		}else{
+			map = statementService.getOrderAndPaymentRecords(supplyComId,buyComId,statementDate);
+		}
+		return map;
 	}
 	
     /**
@@ -214,10 +256,10 @@ public class StatementController {
         	statementList = statementService.selectList(m);
         	
     		dataMap.put("statementList",statementList);
-    		if("sale".equals(type)){
-    			ExcelUtil.export(request, response, dataMap, "statement", "对账单信息");
+    		if("supply".equals(type)){
+    			ExcelUtil.export(request, response, dataMap, "supplyStatement", "供应商对账单信息");
         	}else if("buy".equals(type)){
-        		ExcelUtil.export(request, response, dataMap, "buyStatement", "对账单信息");
+        		ExcelUtil.export(request, response, dataMap, "buyStatement", "客户对账单信息");
         	}
     		
     }
@@ -268,7 +310,7 @@ public class StatementController {
 				    		
 				    		statementService.insert(statement);
 						}catch(Exception  e){
-							throw new Exception("第"+i+"行数据异常请检查，数据内容："+row.toString());
+							throw new Exception("第"+(i+1)+"行数据异常请检查，数据内容："+row.toString());
 						}
 						
 					}

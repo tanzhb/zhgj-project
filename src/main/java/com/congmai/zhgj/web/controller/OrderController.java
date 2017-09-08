@@ -1,5 +1,6 @@
 package com.congmai.zhgj.web.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,11 +11,19 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.activiti.engine.ActivitiException;
+import org.activiti.engine.IdentityService;
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -29,9 +38,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.web.model.BOMMateriel;
 import com.congmai.zhgj.web.model.BOMMaterielExample;
+import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.ClauseFramework;
 import com.congmai.zhgj.web.model.ClauseAdvance;
 import com.congmai.zhgj.web.model.ClauseAfterSales;
@@ -49,6 +60,7 @@ import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderInfoExample;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
+import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.OrderInfoExample.Criteria;
 import com.congmai.zhgj.web.service.ClauseAdvanceService;
 import com.congmai.zhgj.web.service.ClauseAfterSalesService;
@@ -58,6 +70,8 @@ import com.congmai.zhgj.web.service.ClauseFrameworkService;
 import com.congmai.zhgj.web.service.ClauseSettlementDetailService;
 import com.congmai.zhgj.web.service.ClauseSettlementService;
 import com.congmai.zhgj.web.service.ContractService;
+import com.congmai.zhgj.web.service.IProcessService;
+import com.congmai.zhgj.web.service.IVacationService;
 import com.congmai.zhgj.web.service.OrderFileService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
@@ -73,7 +87,9 @@ import com.congmai.zhgj.web.service.OrderService;
 @Controller
 @RequestMapping("/order")
 public class OrderController {
-	
+	private static final Logger logger = Logger.getLogger(OrderController.class);
+	@Autowired
+	private IProcessService processService;
     @Resource
     private OrderService orderService;
     @Resource
@@ -102,12 +118,20 @@ public class OrderController {
 	private ContractService contractService;
     
     /**
-     * 保存销售订单
+     * 保存订单
      */
     @RequestMapping(value = "/saveOrder", method = RequestMethod.POST)
     @ResponseBody
-    public OrderInfo saveOrder(@RequestBody OrderInfo orderInfo) {
-    	
+    public OrderInfo saveOrder(@RequestBody String params) {
+        	params = params.replace("\\", "");
+    		ObjectMapper objectMapper = new ObjectMapper();  
+            OrderInfo orderInfo = new OrderInfo();
+			try {
+				orderInfo = objectMapper.readValue(params, OrderInfo.class);
+			}catch (Exception e1) {
+				e1.printStackTrace();
+			}
+            
     	if(orderInfo.getSerialNum()==null||orderInfo.getSerialNum().isEmpty()){//新增
     		orderInfo.setSerialNum(ApplicationUtils.random32UUID());
     		Subject currentUser = SecurityUtils.getSubject();
@@ -119,6 +143,41 @@ public class OrderController {
     		orderInfo.setStatus("1");
     		
     		orderService.insert(orderInfo);
+    		
+    		//启动订单审批测试流程-start
+    		User user = UserUtil.getUserFromSession();
+    		orderInfo.setUser_id(user.getUserId());
+    		orderInfo.setUser_name(user.getUserName());
+    		orderInfo.setTitle(user.getUserName()+" 的订单申请");
+    		orderInfo.setBusinessType(BaseVO.VACATION); 			//业务类型：请假申请
+    		orderInfo.setStatus(BaseVO.PENDING);					//审批中
+//    		orderInfo.setApplyDate(new Date());
+//    		orderService.insert(orderInfo);
+            String businessKey = orderInfo.getSerialNum().toString();
+            orderInfo.setBusinessKey(businessKey);
+            try {
+            	String processInstanceId = this.processService.startOrderInfo(orderInfo);
+//                message.setStatus(Boolean.TRUE);
+//    			message.setMessage("请假流程已启动，流程ID：" + processInstanceId);
+                logger.info("processInstanceId: "+processInstanceId);
+            } catch (ActivitiException e) {
+//            	message.setStatus(Boolean.FALSE);
+                if (e.getMessage().indexOf("no processes deployed with key") != -1) {
+                    logger.warn("没有部署流程!", e);
+//        			message.setMessage("没有部署流程，请联系系统管理员，在[流程定义]中部署相应流程文件！");
+                } else {
+                    logger.error("启动请假流程失败：", e);
+//                    message.setMessage("启动请假流程失败，系统内部错误！");
+                }
+                throw e;
+            } catch (Exception e) {
+                logger.error("启动请假流程失败：", e);
+//                message.setStatus(Boolean.FALSE);
+//                message.setMessage("启动请假流程失败，系统内部错误！");
+                throw e;
+            }
+          //启动订单审批测试流程-end
+    		
     	}else{//更新
     		Subject currentUser = SecurityUtils.getSubject();
     		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
@@ -139,26 +198,39 @@ public class OrderController {
      */
     @RequestMapping("/findOrderList")
     @ResponseBody
-    public ResponseEntity<Map> findOrderList(String type) {
-    	OrderInfoExample m =new OrderInfoExample();
+    public ResponseEntity<Map> findOrderList(String type,String fram) {
     	List<OrderInfo> orderInfoList = new ArrayList<OrderInfo>();
-    	//and 条件1
-    	Criteria criteria =  m.createCriteria();
-    	criteria.andDelFlgEqualTo("0");
+//    	OrderInfoExample m =new OrderInfoExample();
+//    	//and 条件1
+//    	Criteria criteria =  m.createCriteria();
+//    	criteria.andDelFlgEqualTo("0");
+//    	if("sale".equals(type)){//平台销售订单供应商为空
+//    		criteria.andSupplyComIdIsNull();
+//    	}else if("buy".equals(type)){//平台采购订单采购商为空
+//    		criteria.andBuyComIdIsNull();
+//    	}
+//    	/*//and 条件2,未发布可编辑的物料
+//    	Criteria criteria2 =  m.createCriteria();
+//    	criteria2.andStatusEqualTo("0");
+//    	criteria2.andDelFlgEqualTo("0");
+//    	//or 条件
+//    	m.or(criteria2);*/
+//    	//排序字段
+//    	m.setOrderByClause("updateTime DESC");
+    	
+    	
+    	OrderInfo parm =new OrderInfo();
     	if("sale".equals(type)){//平台销售订单供应商为空
-    		criteria.andSupplyComIdIsNull();
+    		parm.setSupplyComId("null");
     	}else if("buy".equals(type)){//平台采购订单采购商为空
-    		criteria.andBuyComIdIsNull();
+    		parm.setBuyComId("null");
     	}
-    	/*//and 条件2,未发布可编辑的物料
-    	Criteria criteria2 =  m.createCriteria();
-    	criteria2.andStatusEqualTo("0");
-    	criteria2.andDelFlgEqualTo("0");
-    	//or 条件
-    	m.or(criteria2);*/
-    	//排序字段
-    	m.setOrderByClause("updateTime DESC");
-    	orderInfoList = orderService.selectList(m);
+    	if("1".equals(fram)){
+    		orderInfoList = orderService.selectFramList(parm);
+    	}else{
+    		orderInfoList = orderService.selectCommenList(parm);
+    	}
+    	
     	
     	//封装datatables数据返回到前台
 		Map pageMap = new HashMap();
@@ -632,27 +704,41 @@ public class OrderController {
      * @return
      */
     @RequestMapping("exportOrder")
-    public void exportOrder(String type,Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+    public void exportOrder(String type,String fram,Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
     		Map<String, Object> dataMap = new HashMap<String, Object>();
-    		OrderInfoExample m =new OrderInfoExample();
     		List<OrderInfo> orderInfoList = new ArrayList<OrderInfo>();
-        	//and 条件1
-        	Criteria criteria =  m.createCriteria();
-        	criteria.andDelFlgEqualTo("0");
+//    		OrderInfoExample m =new OrderInfoExample();
+//        	//and 条件1
+//        	Criteria criteria =  m.createCriteria();
+//        	criteria.andDelFlgEqualTo("0");
+//        	if("sale".equals(type)){//平台销售订单供应商为空
+//        		criteria.andSupplyComIdIsNull();
+//        	}else if("buy".equals(type)){//平台采购订单采购商为空
+//        		criteria.andBuyComIdIsNull();
+//        	}
+//        	/*//and 条件2,未发布可编辑的物料
+//        	Criteria criteria2 =  m.createCriteria();
+//        	criteria2.andStatusEqualTo("0");
+//        	criteria2.andDelFlgEqualTo("0");
+//        	//or 条件
+//        	m.or(criteria2);*/
+//        	//排序字段
+//        	m.setOrderByClause("updateTime DESC");
+//        	orderInfoList = orderService.selectList(m);
+        	
+        	
+        	OrderInfo parm =new OrderInfo();
         	if("sale".equals(type)){//平台销售订单供应商为空
-        		criteria.andSupplyComIdIsNull();
+        		parm.setSupplyComId("null");
         	}else if("buy".equals(type)){//平台采购订单采购商为空
-        		criteria.andBuyComIdIsNull();
+        		parm.setBuyComId("null");
         	}
-        	/*//and 条件2,未发布可编辑的物料
-        	Criteria criteria2 =  m.createCriteria();
-        	criteria2.andStatusEqualTo("0");
-        	criteria2.andDelFlgEqualTo("0");
-        	//or 条件
-        	m.or(criteria2);*/
-        	//排序字段
-        	m.setOrderByClause("updateTime DESC");
-        	orderInfoList = orderService.selectList(m);
+        	if("1".equals(fram)){
+        		orderInfoList = orderService.selectFramList(parm);
+        	}else{
+        		orderInfoList = orderService.selectCommenList(parm);
+        	}
+        	
         	
     		dataMap.put("orderInfoList",orderInfoList);
     		if("sale".equals(type)){

@@ -11,10 +11,6 @@ public class PaymentRecordExample {
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
-    
-    private int pageIndex;
-    
-    private int pageSize;
 
     public PaymentRecordExample() {
         oredCriteria = new ArrayList<Criteria>();
@@ -69,23 +65,7 @@ public class PaymentRecordExample {
         distinct = false;
     }
 
-    public int getPageIndex() {
-		return pageIndex;
-	}
-
-	public void setPageIndex(int pageIndex) {
-		this.pageIndex = pageIndex;
-	}
-
-	public int getPageSize() {
-		return pageSize;
-	}
-
-	public void setPageSize(int pageSize) {
-		this.pageSize = pageSize;
-	}
-
-	protected abstract static class GeneratedCriteria {
+    protected abstract static class GeneratedCriteria {
         protected List<Criterion> criteria;
 
         protected GeneratedCriteria() {
@@ -769,6 +749,76 @@ public class PaymentRecordExample {
 
         public Criteria andPaymentDateNotBetween(Date value1, Date value2) {
             addCriterionForJDBCDate("paymentDate not between", value1, value2, "paymentDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBillIsNull() {
+            addCriterion("isBill is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBillIsNotNull() {
+            addCriterion("isBill is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBillEqualTo(String value) {
+            addCriterion("isBill =", value, "isBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBillNotEqualTo(String value) {
+            addCriterion("isBill <>", value, "isBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBillGreaterThan(String value) {
+            addCriterion("isBill >", value, "isBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBillGreaterThanOrEqualTo(String value) {
+            addCriterion("isBill >=", value, "isBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBillLessThan(String value) {
+            addCriterion("isBill <", value, "isBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBillLessThanOrEqualTo(String value) {
+            addCriterion("isBill <=", value, "isBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBillLike(String value) {
+            addCriterion("isBill like", value, "isBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBillNotLike(String value) {
+            addCriterion("isBill not like", value, "isBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBillIn(List<String> values) {
+            addCriterion("isBill in", values, "isBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBillNotIn(List<String> values) {
+            addCriterion("isBill not in", values, "isBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBillBetween(String value1, String value2) {
+            addCriterion("isBill between", value1, value2, "isBill");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsBillNotBetween(String value1, String value2) {
+            addCriterion("isBill not between", value1, value2, "isBill");
             return (Criteria) this;
         }
 

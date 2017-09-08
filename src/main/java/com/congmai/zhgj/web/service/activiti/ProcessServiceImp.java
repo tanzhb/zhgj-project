@@ -56,6 +56,7 @@ import com.congmai.zhgj.web.activiti.processTask.taskCommand.RevokeTaskCmd;
 import com.congmai.zhgj.web.activiti.processTask.taskCommand.StartActivityCmd;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
+import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Vacation;
 import com.congmai.zhgj.web.service.IProcessService;
@@ -631,5 +632,26 @@ public class ProcessServiceImp implements IProcessService{
 		ExclusiveGateway gateway = new ExclusiveGateway();
 		gateway.setId(id);
 		return gateway;
+	}
+
+	@Override
+	public String startOrderInfo(OrderInfo orderInfo) {
+
+		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
+        identityService.setAuthenticatedUserId(orderInfo.getUser_id().toString());
+        Map<String, Object> variables = new HashMap<String, Object>();
+        variables.put("entity", orderInfo);
+
+        String businessKey = orderInfo.getBusinessKey();
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("com.congmai.zhgj.test", businessKey, variables);
+        String processInstanceId = processInstance.getId();
+//        orderInfo.setProcessInstanceId(processInstanceId);
+//        this.vacationService.doUpdate(orderInfo);
+
+        logger.info("processInstanceId: "+processInstanceId);
+        //最后要设置null，就是这么做，还没研究为什么
+        this.identityService.setAuthenticatedUserId(null);
+        return processInstanceId;
+	
 	}
 }

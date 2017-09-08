@@ -11,6 +11,7 @@
     <result column="paymentPlanSerial" property="paymentPlanSerial" jdbcType="VARCHAR" />
     <result column="billStyle" property="billStyle" jdbcType="VARCHAR" />
     <result column="paymentDate" property="paymentDate" jdbcType="DATE" />
+    <result column="isBill" property="isBill" jdbcType="VARCHAR" />
     <result column="approver" property="approver" jdbcType="VARCHAR" />
     <result column="approvalDate" property="approvalDate" jdbcType="DATE" />
     <result column="applyDate" property="applyDate" jdbcType="DATE" />
@@ -23,8 +24,6 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
-    <association property="supplyComName" column="supplyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
-    <association property="buyComName" column="buyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -86,7 +85,7 @@
   </sql>
   <sql id="Base_Column_List" >
     serialNum, paymentNum, supplyComId, buyComId, invoiceSerial, paymentType, paymentPlanSerial, 
-    billStyle, paymentDate, approver, approvalDate, applyDate, applicant, paymentVoucher, 
+    billStyle, paymentDate, isBill, approver, approvalDate, applyDate, applicant, paymentVoucher, 
     remark, status, delFlg, creator, createTime, updateTime, updater
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.PaymentRecordExample" >
@@ -123,19 +122,19 @@
     insert into paymentRecord (serialNum, paymentNum, supplyComId, 
       buyComId, invoiceSerial, paymentType, 
       paymentPlanSerial, billStyle, paymentDate, 
-      approver, approvalDate, applyDate, 
-      applicant, paymentVoucher, remark, 
-      status, delFlg, creator, 
-      createTime, updateTime, updater
-      )
+      isBill, approver, approvalDate, 
+      applyDate, applicant, paymentVoucher, 
+      remark, status, delFlg, 
+      creator, createTime, updateTime, 
+      updater)
     values (#{serialNum,jdbcType=VARCHAR}, #{paymentNum,jdbcType=VARCHAR}, #{supplyComId,jdbcType=VARCHAR}, 
       #{buyComId,jdbcType=VARCHAR}, #{invoiceSerial,jdbcType=VARCHAR}, #{paymentType,jdbcType=VARCHAR}, 
       #{paymentPlanSerial,jdbcType=VARCHAR}, #{billStyle,jdbcType=VARCHAR}, #{paymentDate,jdbcType=DATE}, 
-      #{approver,jdbcType=VARCHAR}, #{approvalDate,jdbcType=DATE}, #{applyDate,jdbcType=DATE}, 
-      #{applicant,jdbcType=VARCHAR}, #{paymentVoucher,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{status,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}
-      )
+      #{isBill,jdbcType=VARCHAR}, #{approver,jdbcType=VARCHAR}, #{approvalDate,jdbcType=DATE}, 
+      #{applyDate,jdbcType=DATE}, #{applicant,jdbcType=VARCHAR}, #{paymentVoucher,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updater,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.PaymentRecord" >
     insert into paymentRecord
@@ -166,6 +165,9 @@
       </if>
       <if test="paymentDate != null" >
         paymentDate,
+      </if>
+      <if test="isBill != null" >
+        isBill,
       </if>
       <if test="approver != null" >
         approver,
@@ -231,6 +233,9 @@
       </if>
       <if test="paymentDate != null" >
         #{paymentDate,jdbcType=DATE},
+      </if>
+      <if test="isBill != null" >
+        #{isBill,jdbcType=VARCHAR},
       </if>
       <if test="approver != null" >
         #{approver,jdbcType=VARCHAR},
@@ -306,6 +311,9 @@
       <if test="record.paymentDate != null" >
         paymentDate = #{record.paymentDate,jdbcType=DATE},
       </if>
+      <if test="record.isBill != null" >
+        isBill = #{record.isBill,jdbcType=VARCHAR},
+      </if>
       <if test="record.approver != null" >
         approver = #{record.approver,jdbcType=VARCHAR},
       </if>
@@ -358,6 +366,7 @@
       paymentPlanSerial = #{record.paymentPlanSerial,jdbcType=VARCHAR},
       billStyle = #{record.billStyle,jdbcType=VARCHAR},
       paymentDate = #{record.paymentDate,jdbcType=DATE},
+      isBill = #{record.isBill,jdbcType=VARCHAR},
       approver = #{record.approver,jdbcType=VARCHAR},
       approvalDate = #{record.approvalDate,jdbcType=DATE},
       applyDate = #{record.applyDate,jdbcType=DATE},
@@ -400,6 +409,9 @@
       </if>
       <if test="paymentDate != null" >
         paymentDate = #{paymentDate,jdbcType=DATE},
+      </if>
+      <if test="isBill != null" >
+        isBill = #{isBill,jdbcType=VARCHAR},
       </if>
       <if test="approver != null" >
         approver = #{approver,jdbcType=VARCHAR},
@@ -450,6 +462,7 @@
       paymentPlanSerial = #{paymentPlanSerial,jdbcType=VARCHAR},
       billStyle = #{billStyle,jdbcType=VARCHAR},
       paymentDate = #{paymentDate,jdbcType=DATE},
+      isBill = #{isBill,jdbcType=VARCHAR},
       approver = #{approver,jdbcType=VARCHAR},
       approvalDate = #{approvalDate,jdbcType=DATE},
       applyDate = #{applyDate,jdbcType=DATE},

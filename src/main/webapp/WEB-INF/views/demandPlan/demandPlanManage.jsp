@@ -39,21 +39,34 @@
         	<div class="row">
 			    <div class="col-md-12">
 			        <!-- BEGIN EXAMPLE TABLE PORTLET-->
-			                <div class="portlet box blue">
+			                <div class="portlet light">
 			                                <div class="portlet-title">
 												<div class="caption">
-													<i class="fa fa-globe"></i>需求计划
+													<i class="fa fa-globe font-green"></i>
+													<span class="caption-subject font-green bold uppercase">需求计划</span>
 												</div>
 												<div class="actions">
-													<a href="javascript:;" class="btn btn-default btn-sm btn-circle"
+													<div class="btn-group btn-group-devided" data-toggle="buttons">
+														<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addDemandPlan()">
+									                                              <i class="fa fa-plus"></i> 添加</label>
+														<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditDemandPlan()">
+									                                              <i class="fa fa-edit"></i> 修改</label>
+														<label class="btn btn-transparent red btn-circle btn-sm" ng-click="deleteDemandPlan()">
+									                                              <i class="fa fa-minus"></i> 删除</label>
+														<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
+									                                              <i class="fa fa-upload"></i> 导入</label>
+														<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportDemandPlan()">
+									                                              <i class="fa fa-file-excel-o"></i> 导出</label>
+									                </div>
+													<!-- <a href="javascript:;" class="btn btn-default btn-sm btn-circle"
 														ng-click="addDemandPlan()"> <i class="fa fa-plus"></i> 添加
 													</a>  <a href="javascript:;" class="btn btn-default btn-sm btn-circle"
 														ng-click="toEditDemandPlan()"> <i class="fa fa-edit"></i> 修改
 													</a> <a href="javascript:;" class="btn btn-default btn-sm btn-circle"
 														ng-click="deleteDemandPlan()"> <i class="fa fa-minus"></i>
 														删除  
-													</a>
-													<div class="btn-group">
+													</a> -->
+													<!-- <div class="btn-group">
 														<a class="btn btn-default btn-outline btn-circle"
 															href="javascript:;" data-toggle="dropdown"> <i
 															class="fa fa-share"></i> <span class="hidden-xs"> 其它 </span> <i
@@ -68,16 +81,16 @@
 																class="tool-action" ng-click="exportDemandPlan()"> <i
 																	class="fa fa-file-excel-o"></i> 导出
 															</a></li>
-															<!-- <li><a href="javascript:;" data-action="2"
+															<li><a href="javascript:;" data-action="2"
 																class="tool-action"> <i class="fa fa-print"></i> 打印
-															</a></li> -->
+															</a></li>
 														</ul>
-													</div>
+													</div> -->
 												</div>
 											</div>
 
 
-											<div class="portlet-body" style="display: none;">
+											<div class="portlet-body" style="padding:5px 15px 0px 15px;">
 												<div class="row">
 													<div class="col-md-6 col-sm-6">
 													</div>
@@ -93,58 +106,64 @@
 												</div>
 											</div>
 					
-					
-											<div class="portlet-body" ng-repeat="demandPlan in demandPlans" id="demandPlanTable">
-			                                 		<div class="row">
-				                                   	 	<div class="col-md-12">
-															<div class="portlet">
-																<div class="portlet-title">
-								                                    <div class="caption" style="width: 100%;font-size: 15px;">
-								                                    	<div style="float:left;width:70%;">
-								                                    		<input name="select_all" class="dt-body-center" value="{{demandPlan.serialNum}}" id="example-select-all" type="checkbox" />
-								                                    		{{demandPlan.buyComName}}&nbsp;&nbsp;&nbsp;&nbsp;近五条记录&nbsp;&nbsp;&nbsp;&nbsp;更新日期：{{demandPlan.updateTime.substring(0,10)}}
-								                                    	</div>
-								                                    		
-								                                    	<div style="float:left;width:30%;text-align:right;"><a href="javascript:;" ui-sref="demandPlanView({serialNum:demandPlan.serialNum})" >全部计划>></a></div>
-								                                    </div>
-								                                </div>
-								                                <div class="portlet-body">
-													                <div class="table-scrollable">
-																		<table class="table table-striped table-bordered table-advance table-hover">
-								                                            <thead>
-								                                                <tr>
-								                                                   	<!-- <th><input name="select_all" class="dt-body-center"
-																							value="1" id="example-select-all" type="checkbox" /></th> -->
-																					<th>物料编号</th>
-																					<th>产品名称</th>
-																					<th>规格型号</th>
-																					<th>供应商</th>
-																					<th>交付日期</th>
-																					<th>数量</th>
-																					<th>交付地点</th>
-																					<th>距离交付 （天）</th>
-								                                                </tr>
-								                                            </thead>
-								                                            <tbody ng-repeat="materiel in demandPlan.materiels">
-								                                                <tr>
-								                                                   <!--  <td><input name="select_all" class="dt-body-center"
-																							value="1" type="checkbox" /></td> -->
-								                                                    <td>{{materiel.materiel.materielName}}</td>
-								                                                    <td>{{materiel.materiel.materielName}}</td>
-								                                                    <td>{{materiel.materiel.specifications}}</td>
-								                                                    <td>{{materiel.supplyName}}</td>
-								                                                    <td>{{materiel.deliveryDate}}</td>
-								                                                    <td>{{materiel.amount}}</td>
-								                                                    <td>{{materiel.deliveryAddress}}</td>
-								                                                    <td>{{materiel.remainTime}}</td>
-								                                                </tr>
-								                                            </tbody>
-								                                        </table>
-								                                    </div>
-								                                </div>
-									                    </div>
-							                    	</div>
-			                            		</div>   
+											<div id="simple" style="background: white;">
+												<div ng-if="demandPlans==undefined||demandPlans.length==0">
+													<div class="row">
+					                                   	 	<div class="col-md-12" style="text-align: center;">暂无数据</div>
+					                                </div>
+												</div>
+												<div class="portlet-body" style="padding:0px 15px;" ng-repeat="demandPlan in demandPlans" id="demandPlanTable">
+				                                 		<div class="row">
+					                                   	 	<div class="col-md-12">
+																<div class="portlet">
+																	<div class="portlet-title">
+									                                    <div class="caption" style="width: 100%;font-size: 15px;">
+									                                    	<div style="float:left;width:70%;">
+									                                    		<input name="select_all" class="dt-body-center" value="{{demandPlan.serialNum}}" id="example-select-all" type="checkbox" />
+									                                    		{{demandPlan.buyComName}}&nbsp;&nbsp;&nbsp;&nbsp;近五条记录&nbsp;&nbsp;&nbsp;&nbsp;更新日期：{{demandPlan.updateTime.substring(0,10)}}
+									                                    	</div>
+									                                    		
+									                                    	<div style="float:left;width:30%;text-align:right;"><a href="javascript:;" ui-sref="demandPlanView({serialNum:demandPlan.serialNum})" >全部计划>></a></div>
+									                                    </div>
+									                                </div>
+									                                <div class="portlet-body">
+														                <div class="table-scrollable">
+																			<table class="table table-striped table-bordered table-advance table-hover" >
+									                                            <thead>
+									                                                <tr>
+									                                                   	<!-- <th><input name="select_all" class="dt-body-center"
+																								value="1" id="example-select-all" type="checkbox" /></th> -->
+																						<th>物料编号</th>
+																						<th>产品名称</th>
+																						<th>规格型号</th>
+																						<th>供应商</th>
+																						<th>交付日期</th>
+																						<th>数量</th>
+																						<th>交付地点</th>
+																						<th>距离交付 （天）</th>
+									                                                </tr>
+									                                            </thead>
+									                                            <tbody ng-repeat="materiel in demandPlan.materiels">
+									                                                <tr>
+									                                                   <!--  <td><input name="select_all" class="dt-body-center"
+																								value="1" type="checkbox" /></td> -->
+									                                                    <td>{{materiel.materiel.materielName}}</td>
+									                                                    <td>{{materiel.materiel.materielName}}</td>
+									                                                    <td>{{materiel.materiel.specifications}}</td>
+									                                                    <td>{{materiel.supplyName}}</td>
+									                                                    <td>{{materiel.deliveryDate}}</td>
+									                                                    <td>{{materiel.amount}}</td>
+									                                                    <td>{{materiel.deliveryAddress}}</td>
+									                                                    <td>{{materiel.remainTime}}</td>
+									                                                </tr>
+									                                            </tbody>
+									                                        </table>
+									                                    </div>
+									                                </div>
+										                    </div>
+								                    	</div>
+				                            		</div>   
+												</div>
 											</div>
 											<div class="portlet-body dataTables_wrapper" >
 												<div class="row">

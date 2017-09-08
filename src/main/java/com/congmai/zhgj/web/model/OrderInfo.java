@@ -2,8 +2,17 @@ package com.congmai.zhgj.web.model;
 
 import java.util.Date;
 
-public class OrderInfo {
-    private String serialNum;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+public class OrderInfo extends BaseVO {
+    /**
+	 * @Field @serialVersionUID : 订单
+	 */
+	private static final long serialVersionUID = 4164102013915166314L;
+
+	private String serialNum;
 
     private String contractSerial;
 
@@ -32,7 +41,7 @@ public class OrderInfo {
     private String deliveryMode;
 
     private String transportMode;
-
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date orderDate;
 
     private String maker;
@@ -180,7 +189,7 @@ public class OrderInfo {
     public void setTransportMode(String transportMode) {
         this.transportMode = transportMode == null ? null : transportMode.trim();
     }
-
+    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
     public Date getOrderDate() {
         return orderDate;
     }

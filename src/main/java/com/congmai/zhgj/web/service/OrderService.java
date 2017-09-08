@@ -25,7 +25,12 @@ public interface OrderService extends GenericService<OrderInfo, String> {
      * @return 对象集合
      */
     List<OrderInfo> selectList(OrderInfoExample m);
-
+    
+    
+    List<OrderInfo> selectFramList(OrderInfo parm);
+    
+    List<OrderInfo> selectCommenList(OrderInfo m);
+    
 	public void deleteOrderInfos(String ids);
 
 	void insertContract(ContractVO contract);

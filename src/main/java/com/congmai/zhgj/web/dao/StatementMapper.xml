@@ -10,8 +10,14 @@
     <result column="totalAmount" property="totalAmount" jdbcType="VARCHAR" />
     <result column="deliveryAmount" property="deliveryAmount" jdbcType="VARCHAR" />
     <result column="paymentAmount" property="paymentAmount" jdbcType="VARCHAR" />
+    <result column="beginShouldPay" property="beginShouldPay" jdbcType="VARCHAR" />
+    <result column="nowShouldPay" property="nowShouldPay" jdbcType="VARCHAR" />
+    <result column="nowAlreadyPay" property="nowAlreadyPay" jdbcType="VARCHAR" />
+    <result column="endShouldPay" property="endShouldPay" jdbcType="VARCHAR" />
+    <result column="overTimeAmout" property="overTimeAmout" jdbcType="VARCHAR" />
     <result column="serviceAmount" property="serviceAmount" jdbcType="VARCHAR" />
     <result column="reciveDate" property="reciveDate" jdbcType="DATE" />
+    <result column="nowOtherAmout" property="nowOtherAmout" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
@@ -19,6 +25,12 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="approver" property="approver" jdbcType="VARCHAR" />
+    <result column="approvalDate" property="approvalDate" jdbcType="DATE" />
+    <result column="makeDate" property="makeDate" jdbcType="DATE" />
+    <result column="maker" property="maker" jdbcType="VARCHAR" />
+    <association property="buyName" column="buyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
+    <association property="supplyName" column="supplyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -80,8 +92,9 @@
   </sql>
   <sql id="Base_Column_List" >
     serialNum, statementNum, statementDate, supplyComId, buyComId, totalAmount, deliveryAmount, 
-    paymentAmount, serviceAmount, reciveDate, status, remark, delFlg, creator, createTime, 
-    updater, updateTime
+    paymentAmount, beginShouldPay, nowShouldPay, nowAlreadyPay, endShouldPay, overTimeAmout, 
+    serviceAmount, reciveDate, nowOtherAmout, status, remark, delFlg, creator, createTime, 
+    updater, updateTime, approver, approvalDate, makeDate, maker
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.StatementExample" >
     select
@@ -116,16 +129,24 @@
   <insert id="insert" parameterType="com.congmai.zhgj.web.model.Statement" >
     insert into statement (serialNum, statementNum, statementDate, 
       supplyComId, buyComId, totalAmount, 
-      deliveryAmount, paymentAmount, serviceAmount, 
-      reciveDate, status, remark, 
+      deliveryAmount, paymentAmount, beginShouldPay, 
+      nowShouldPay, nowAlreadyPay, endShouldPay, 
+      overTimeAmout, serviceAmount, reciveDate, 
+      nowOtherAmout, status, remark, 
       delFlg, creator, createTime, 
-      updater, updateTime)
+      updater, updateTime, approver, 
+      approvalDate, makeDate, maker
+      )
     values (#{serialNum,jdbcType=VARCHAR}, #{statementNum,jdbcType=VARCHAR}, #{statementDate,jdbcType=DATE}, 
       #{supplyComId,jdbcType=VARCHAR}, #{buyComId,jdbcType=VARCHAR}, #{totalAmount,jdbcType=VARCHAR}, 
-      #{deliveryAmount,jdbcType=VARCHAR}, #{paymentAmount,jdbcType=VARCHAR}, #{serviceAmount,jdbcType=VARCHAR}, 
-      #{reciveDate,jdbcType=DATE}, #{status,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{deliveryAmount,jdbcType=VARCHAR}, #{paymentAmount,jdbcType=VARCHAR}, #{beginShouldPay,jdbcType=VARCHAR}, 
+      #{nowShouldPay,jdbcType=VARCHAR}, #{nowAlreadyPay,jdbcType=VARCHAR}, #{endShouldPay,jdbcType=VARCHAR}, 
+      #{overTimeAmout,jdbcType=VARCHAR}, #{serviceAmount,jdbcType=VARCHAR}, #{reciveDate,jdbcType=DATE}, 
+      #{nowOtherAmout,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
       #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{approver,jdbcType=VARCHAR}, 
+      #{approvalDate,jdbcType=DATE}, #{makeDate,jdbcType=DATE}, #{maker,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.Statement" >
     insert into statement
@@ -154,11 +175,29 @@
       <if test="paymentAmount != null" >
         paymentAmount,
       </if>
+      <if test="beginShouldPay != null" >
+        beginShouldPay,
+      </if>
+      <if test="nowShouldPay != null" >
+        nowShouldPay,
+      </if>
+      <if test="nowAlreadyPay != null" >
+        nowAlreadyPay,
+      </if>
+      <if test="endShouldPay != null" >
+        endShouldPay,
+      </if>
+      <if test="overTimeAmout != null" >
+        overTimeAmout,
+      </if>
       <if test="serviceAmount != null" >
         serviceAmount,
       </if>
       <if test="reciveDate != null" >
         reciveDate,
+      </if>
+      <if test="nowOtherAmout != null" >
+        nowOtherAmout,
       </if>
       <if test="status != null" >
         status,
@@ -180,6 +219,18 @@
       </if>
       <if test="updateTime != null" >
         updateTime,
+      </if>
+      <if test="approver != null" >
+        approver,
+      </if>
+      <if test="approvalDate != null" >
+        approvalDate,
+      </if>
+      <if test="makeDate != null" >
+        makeDate,
+      </if>
+      <if test="maker != null" >
+        maker,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -207,11 +258,29 @@
       <if test="paymentAmount != null" >
         #{paymentAmount,jdbcType=VARCHAR},
       </if>
+      <if test="beginShouldPay != null" >
+        #{beginShouldPay,jdbcType=VARCHAR},
+      </if>
+      <if test="nowShouldPay != null" >
+        #{nowShouldPay,jdbcType=VARCHAR},
+      </if>
+      <if test="nowAlreadyPay != null" >
+        #{nowAlreadyPay,jdbcType=VARCHAR},
+      </if>
+      <if test="endShouldPay != null" >
+        #{endShouldPay,jdbcType=VARCHAR},
+      </if>
+      <if test="overTimeAmout != null" >
+        #{overTimeAmout,jdbcType=VARCHAR},
+      </if>
       <if test="serviceAmount != null" >
         #{serviceAmount,jdbcType=VARCHAR},
       </if>
       <if test="reciveDate != null" >
         #{reciveDate,jdbcType=DATE},
+      </if>
+      <if test="nowOtherAmout != null" >
+        #{nowOtherAmout,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         #{status,jdbcType=VARCHAR},
@@ -233,6 +302,18 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approver != null" >
+        #{approver,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalDate != null" >
+        #{approvalDate,jdbcType=DATE},
+      </if>
+      <if test="makeDate != null" >
+        #{makeDate,jdbcType=DATE},
+      </if>
+      <if test="maker != null" >
+        #{maker,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -269,11 +350,29 @@
       <if test="record.paymentAmount != null" >
         paymentAmount = #{record.paymentAmount,jdbcType=VARCHAR},
       </if>
+      <if test="record.beginShouldPay != null" >
+        beginShouldPay = #{record.beginShouldPay,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nowShouldPay != null" >
+        nowShouldPay = #{record.nowShouldPay,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nowAlreadyPay != null" >
+        nowAlreadyPay = #{record.nowAlreadyPay,jdbcType=VARCHAR},
+      </if>
+      <if test="record.endShouldPay != null" >
+        endShouldPay = #{record.endShouldPay,jdbcType=VARCHAR},
+      </if>
+      <if test="record.overTimeAmout != null" >
+        overTimeAmout = #{record.overTimeAmout,jdbcType=VARCHAR},
+      </if>
       <if test="record.serviceAmount != null" >
         serviceAmount = #{record.serviceAmount,jdbcType=VARCHAR},
       </if>
       <if test="record.reciveDate != null" >
         reciveDate = #{record.reciveDate,jdbcType=DATE},
+      </if>
+      <if test="record.nowOtherAmout != null" >
+        nowOtherAmout = #{record.nowOtherAmout,jdbcType=VARCHAR},
       </if>
       <if test="record.status != null" >
         status = #{record.status,jdbcType=VARCHAR},
@@ -296,6 +395,18 @@
       <if test="record.updateTime != null" >
         updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.approver != null" >
+        approver = #{record.approver,jdbcType=VARCHAR},
+      </if>
+      <if test="record.approvalDate != null" >
+        approvalDate = #{record.approvalDate,jdbcType=DATE},
+      </if>
+      <if test="record.makeDate != null" >
+        makeDate = #{record.makeDate,jdbcType=DATE},
+      </if>
+      <if test="record.maker != null" >
+        maker = #{record.maker,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -311,15 +422,25 @@
       totalAmount = #{record.totalAmount,jdbcType=VARCHAR},
       deliveryAmount = #{record.deliveryAmount,jdbcType=VARCHAR},
       paymentAmount = #{record.paymentAmount,jdbcType=VARCHAR},
+      beginShouldPay = #{record.beginShouldPay,jdbcType=VARCHAR},
+      nowShouldPay = #{record.nowShouldPay,jdbcType=VARCHAR},
+      nowAlreadyPay = #{record.nowAlreadyPay,jdbcType=VARCHAR},
+      endShouldPay = #{record.endShouldPay,jdbcType=VARCHAR},
+      overTimeAmout = #{record.overTimeAmout,jdbcType=VARCHAR},
       serviceAmount = #{record.serviceAmount,jdbcType=VARCHAR},
       reciveDate = #{record.reciveDate,jdbcType=DATE},
+      nowOtherAmout = #{record.nowOtherAmout,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       delFlg = #{record.delFlg,jdbcType=VARCHAR},
       creator = #{record.creator,jdbcType=VARCHAR},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
       updater = #{record.updater,jdbcType=VARCHAR},
-      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      approver = #{record.approver,jdbcType=VARCHAR},
+      approvalDate = #{record.approvalDate,jdbcType=DATE},
+      makeDate = #{record.makeDate,jdbcType=DATE},
+      maker = #{record.maker,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -348,11 +469,29 @@
       <if test="paymentAmount != null" >
         paymentAmount = #{paymentAmount,jdbcType=VARCHAR},
       </if>
+      <if test="beginShouldPay != null" >
+        beginShouldPay = #{beginShouldPay,jdbcType=VARCHAR},
+      </if>
+      <if test="nowShouldPay != null" >
+        nowShouldPay = #{nowShouldPay,jdbcType=VARCHAR},
+      </if>
+      <if test="nowAlreadyPay != null" >
+        nowAlreadyPay = #{nowAlreadyPay,jdbcType=VARCHAR},
+      </if>
+      <if test="endShouldPay != null" >
+        endShouldPay = #{endShouldPay,jdbcType=VARCHAR},
+      </if>
+      <if test="overTimeAmout != null" >
+        overTimeAmout = #{overTimeAmout,jdbcType=VARCHAR},
+      </if>
       <if test="serviceAmount != null" >
         serviceAmount = #{serviceAmount,jdbcType=VARCHAR},
       </if>
       <if test="reciveDate != null" >
         reciveDate = #{reciveDate,jdbcType=DATE},
+      </if>
+      <if test="nowOtherAmout != null" >
+        nowOtherAmout = #{nowOtherAmout,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=VARCHAR},
@@ -375,6 +514,18 @@
       <if test="updateTime != null" >
         updateTime = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="approver != null" >
+        approver = #{approver,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalDate != null" >
+        approvalDate = #{approvalDate,jdbcType=DATE},
+      </if>
+      <if test="makeDate != null" >
+        makeDate = #{makeDate,jdbcType=DATE},
+      </if>
+      <if test="maker != null" >
+        maker = #{maker,jdbcType=VARCHAR},
+      </if>
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
@@ -387,15 +538,25 @@
       totalAmount = #{totalAmount,jdbcType=VARCHAR},
       deliveryAmount = #{deliveryAmount,jdbcType=VARCHAR},
       paymentAmount = #{paymentAmount,jdbcType=VARCHAR},
+      beginShouldPay = #{beginShouldPay,jdbcType=VARCHAR},
+      nowShouldPay = #{nowShouldPay,jdbcType=VARCHAR},
+      nowAlreadyPay = #{nowAlreadyPay,jdbcType=VARCHAR},
+      endShouldPay = #{endShouldPay,jdbcType=VARCHAR},
+      overTimeAmout = #{overTimeAmout,jdbcType=VARCHAR},
       serviceAmount = #{serviceAmount,jdbcType=VARCHAR},
       reciveDate = #{reciveDate,jdbcType=DATE},
+      nowOtherAmout = #{nowOtherAmout,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       delFlg = #{delFlg,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP},
       updater = #{updater,jdbcType=VARCHAR},
-      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      approver = #{approver,jdbcType=VARCHAR},
+      approvalDate = #{approvalDate,jdbcType=DATE},
+      makeDate = #{makeDate,jdbcType=DATE},
+      maker = #{maker,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
 </mapper>
