@@ -42,9 +42,9 @@ public class PaymentRecordServiceImpl extends GenericServiceImpl<PaymentRecord, 
 		}else if(StringUtils.isNotBlank(record.getSupplyComId())){
 			c.andSupplyComIdEqualTo(record.getSupplyComId());
 		}
-		example.setPageIndex(0);
-		example.setPageSize(-1);
-		Page<PaymentRecord> page = new Page<PaymentRecord>(example.getPageIndex(), example.getPageSize());
+		//example.setPageIndex(0);
+		//example.setPageSize(-1);
+		Page<PaymentRecord> page = new Page<PaymentRecord>(0, -1);
 		page.setResult(paymentRecordMapper.selectByExample(example));
 		page.setTotalCount(paymentRecordMapper.countByExample(example));
 		return page;

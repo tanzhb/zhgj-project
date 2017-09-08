@@ -21,6 +21,8 @@ public class PaymentRecord {
 
     private Date paymentDate;
 
+    private String isBill;
+
     private String approver;
 
     private Date approvalDate;
@@ -44,10 +46,6 @@ public class PaymentRecord {
     private Date updateTime;
 
     private String updater;
-    
-    private String supplyComName;
-    
-    private String buyComName;
 
     public String getSerialNum() {
         return serialNum;
@@ -119,6 +117,14 @@ public class PaymentRecord {
 
     public void setPaymentDate(Date paymentDate) {
         this.paymentDate = paymentDate;
+    }
+
+    public String getIsBill() {
+        return isBill;
+    }
+
+    public void setIsBill(String isBill) {
+        this.isBill = isBill == null ? null : isBill.trim();
     }
 
     public String getApprover() {
@@ -216,20 +222,4 @@ public class PaymentRecord {
     public void setUpdater(String updater) {
         this.updater = updater == null ? null : updater.trim();
     }
-
-	public String getSupplyComName() {
-		return supplyComName;
-	}
-
-	public void setSupplyComName(String supplyComName) {
-		this.supplyComName = supplyComName;
-	}
-
-	public String getBuyComName() {
-		return buyComName;
-	}
-
-	public void setBuyComName(String buyComName) {
-		this.buyComName = buyComName;
-	}
 }
