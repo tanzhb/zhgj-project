@@ -719,26 +719,26 @@
 													<th></th>
 													<th></th>
 													<th></th>
-													<th>采购数量</th>
-													<th>单价</th>
-													<th>币种</th>
-													<th>税率</th>
-													<th>采购单价</th>
-													<th>含税采购单价</th>
-													<th>金额</th>
-													<th>税额</th>
+													<th></th>
+													<th></th>
+													<th></th>
+													<th></th>
+													<th></th>
+													<th></th>
+													<th></th>
+													<th></th>
 													
-													<th ng-if="saleOrder.settlementClause =='服务费'">服务费率</th>
-													<th ng-if="saleOrder.settlementClause =='服务费'">服务费</th>
-													<th ng-if="saleOrder.settlementClause =='折扣折让'">折扣率</th>
-													<th ng-if="saleOrder.settlementClause =='折扣折让'">折后金额</th>
-													<th ng-if="saleOrder.settlementClause =='红票'">红票金额</th>
+													<th ng-if="saleOrder.settlementClause =='服务费'"></th>
+													<th ng-if="saleOrder.settlementClause =='服务费'"></th>
+													<th ng-if="saleOrder.settlementClause =='折扣折让'"></th>
+													<th ng-if="saleOrder.settlementClause =='折扣折让'"></th>
+													<th ng-if="saleOrder.settlementClause =='红票'"></th>
 													
-													<th>价税合计</th>
-													<th>交付日期</th>
-													<th>最晚交付日期</th>
-													<th>交付/提货地点</th>
-													<th style="width：100px;">操作</th>
+													<th></th>
+													<th></th>
+													<th></th>
+													<th></th>
+													<th style="width：100px;"></th>
 				                                  </tr>
 				                              </tbody>
 				                          </table>
