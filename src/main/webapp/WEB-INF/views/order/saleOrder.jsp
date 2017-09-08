@@ -37,13 +37,13 @@
 <div class="row">
 
 	<div class="col-md-12">
-	        <div class="portlet box red">
+	        <div class="portlet light">
 	            <div class="portlet-title">
-				<div class="caption">
+<!-- 				<div class="caption">
 					<i class="fa fa-globe"></i>销售订单
-				</div>
+				</div> -->
 				<div class="actions">
-					<a href="javascript:;" ui-sref="addSaleOrder"
+					<!-- <a href="javascript:;" ui-sref="addSaleOrder"
 						 class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-plus"></i> 添加
 					</a> 
@@ -69,7 +69,17 @@
 								class="tool-action" ng-click="exportSaleOrder()"> <i class="fa fa-file-excel-o"></i> 导出
 							</a></li>
 						</ul>
-					</div>
+					</div> -->
+					<label class="btn btn-transparent green btn-circle btn-sm" ui-sref="addSaleOrder">
+	                                              <i class="fa fa-plus"></i> 添加</label>
+					<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="editSaleOrder()">
+                                              <i class="fa fa-edit"></i> 修改</label>
+					<label class="btn btn-transparent red btn-circle btn-sm" ng-click="deleteSaleOrder()">
+                                              <i class="fa fa-minus"></i> 删除</label>
+					<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
+                                              <i class="fa fa-upload"></i> 导入</label>
+					<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportSaleOrder()">
+                                              <i class="fa fa-file-excel-o"></i> 导出</label>
 				</div>
 	            </div>
 	            <div class="portlet-body">
@@ -103,13 +113,13 @@
         	<div class="row">
 
 	<div class="col-md-12">
-	        <div class="portlet box red">
+	        <div class="portlet light">
 	            <div class="portlet-title">
-				<div class="caption">
+				<!-- <div class="caption">
 					<i class="fa fa-globe"></i>销售订单
-				</div>
+				</div> -->
 				<div class="actions">
-					<a href="javascript:;" ui-sref="addSaleOrder"
+					<!-- <a href="javascript:;" ui-sref="addSaleOrder"
 						 class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-plus"></i> 添加
 					</a> 
@@ -128,14 +138,25 @@
 							class="fa fa-angle-down"></i>
 						</a>
 						<ul class="dropdown-menu pull-right" id="sample_3_tools">
-							<!-- <li><a data-action="0"
+							<li><a data-action="0"
 								class="tool-action" data-toggle="modal" data-target="#import"> <i class="fa fa-upload"></i> 导入
-							</a></li>  -->
+							</a></li> 
 							<li><a href="javascript:;" data-action="1"
 								class="tool-action" ng-click="exportSaleFramOrder()"> <i class="fa fa-file-excel-o"></i> 导出
 							</a></li>
 						</ul>
-					</div>
+					</div> -->
+					
+					<label class="btn btn-transparent green btn-circle btn-sm" ui-sref="addSaleOrder">
+	                                              <i class="fa fa-plus"></i> 添加</label>
+					<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="editSaleFramOrder()">
+                                              <i class="fa fa-edit"></i> 修改</label>
+					<label class="btn btn-transparent red btn-circle btn-sm" ng-click="deleteSaleFramOrder()">
+                                              <i class="fa fa-minus"></i> 删除</label>
+					<!-- <label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
+                                              <i class="fa fa-upload"></i> 导入</label> -->
+					<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportSaleFramOrder()">
+                                              <i class="fa fa-file-excel-o"></i> 导出</label>
 				</div>
 	            </div>
 	            <div class="portlet-body">

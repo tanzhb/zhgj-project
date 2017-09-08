@@ -67,12 +67,12 @@
             <ul class="sub-menu">
                 <li>
                     <a ui-sref="demandPlan">
-                        <i class="icon-puzzle"></i>需求计划</span>
+                        <i class="icon-puzzle"></i> 需求计划</span>
                     </a>
                 </li>
                 <li>
                     <a ui-sref="saleOrder">
-                        <i class="icon-puzzle"></i>销售订单</span>
+                        <i class="icon-puzzle"></i> 销售订单</span>
                     </a>
                 </li>
             </ul>
@@ -95,7 +95,7 @@
                 </li>
                 <li>
                     <a ui-sref="purchaseForecast">
-                        <i class="icon-paper-clip"></i>采购预测</span>
+                        <i class="icon-paper-clip"></i> 采购预测</span>
                     </a>
                 </li>
                <!--  <li>
@@ -130,7 +130,7 @@
                 </li>
                 <li>
                     <a ui-sref="delivery">
-                        <i class="icon-puzzle"></i>发货</span>
+                        <i class="icon-puzzle"></i> 发货</span>
                     </a>
                 </li>
             </ul>
@@ -142,21 +142,6 @@
                 <span class="title">对账单</span>
             </a>
         </li>
-        <li class="nav-item">
-            <a ui-sref="profile.dashboard" id="sidebar_menu_link_profile"  class="nav-link nav-toggle">                <i class="icon-user"></i>
-                <span class="title">收付款</span>
-                <span class="arrow "></span>
-            </a>
-            <ul class="sub-menu">
-	            	<li>
-	                    <a ui-sref="paymentRecord">
-	                        <i class="icon-paper-clip"></i>收付款记录</span>
-	                    </a>
-	                </li>
-	         </ul>
-        </li>
-
-
 
        <li class="nav-item">
             <!-- <ul class="sub-menu">
@@ -169,8 +154,8 @@
                 <span class="arrow "></span>
             </a> 
 			<ul class="sub-menu">
-				<li><a ui-sref="gatheringMoneyRecord"><i class="icon-paper-clip"></i>应收款</span></a></li>
-				<li><a ui-sref="paymentRecordC"> <i class="icon-paper-clip"></i>应付款</span></a></li>
+				<li><a ui-sref="gatheringMoneyRecord"><i class="icon-paper-clip"></i> 应收款</a></li>
+				<li><a ui-sref="paymentRecordC"> <i class="icon-paper-clip"></i> 应付款</a></li>
 			</ul>
 		</li>        <li class="nav-item">
             <a ui-sref="invoice">
