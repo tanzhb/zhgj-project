@@ -247,7 +247,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 									'className' : 'dt-body-center',
 									'render' : function(data,
 											type, row, meta) {
-										return '<input type="checkbox" id="'+data+'" name="id[]" value="'
+										return '<input type="checkbox"  class="checkbox-inline" id="'+data+'" name="id[]" value="'
 												+ $('<div/>')
 														.text(
 																data)

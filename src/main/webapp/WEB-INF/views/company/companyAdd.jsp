@@ -460,9 +460,15 @@
                                                     <td>{{finance.accountNumber}}</td>
                                                     <td>{{finance.remark}}</td>
                                                     <td ng-show="operation_f{{$index}}">
-                                                    	<a ng-click="editCompanyFinance(finance.serialNum)"><i class="fa fa-edit" title="编辑"></i></a>
+                                                    	<a class="btn btn-circle btn-icon-only btn-default" href="javascript:;" ng-click="editCompanyFinance(finance.serialNum)" title="编辑">
+                                                                <i class="icon-wrench"></i>
+                                                        </a>
+                                                        <a class="btn btn-circle btn-icon-only btn-default" href="javascript:;" ng-click="deleteCompanyFinance(finance.serialNum)" title="删除">
+                                                                <i class="icon-trash"></i>
+                                                        </a>
+                                                    	<!-- <a ng-click="editCompanyFinance(finance.serialNum)"><i class="fa fa-edit" title="编辑"></i></a>
                                                     		&nbsp;&nbsp;&nbsp;
-                                                    	<a ng-click="deleteCompanyFinance(finance.serialNum)"><i class="fa fa-trash" title="删除"></i></a>
+                                                    	<a ng-click="deleteCompanyFinance(finance.serialNum)"><i class="fa fa-trash" title="删除"></i></a> -->
                                                     </td>
                                                 </tr>
                                             </tbody>

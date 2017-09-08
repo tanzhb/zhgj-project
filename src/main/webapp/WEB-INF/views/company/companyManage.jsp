@@ -81,7 +81,7 @@
 				<table class="table table-bordered" id="companyTable">
 					<thead>
 						<tr>
-							<th style="text-align: center"><input name="select_all" 
+							<th style="text-align: center"><input name="select_all"  class="checkbox-inline"
 								value="1" id="example-select-all" data-check="false" type="checkbox" /></th>
 							<th>企业编码</th>
 							<th>企业名称</th>
