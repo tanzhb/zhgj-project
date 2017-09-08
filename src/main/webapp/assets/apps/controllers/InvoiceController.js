@@ -960,9 +960,10 @@ angular
 							            });
 							    	   
 							       }
-							       $scope.exportStock = function(){
+							       $scope.exportInvoice = function(judgeString){
+							    	   debugger;
 								    	 handle.blockUI("正在导出数据，请稍后"); 
-								    	 window.location.href=$rootScope.basePath+"/rest/stock/exportStock";
+								    	 window.location.href=$rootScope.basePath+"/rest/invoice/exportInvoice?inOrOut="+judgeString;
 								    	 handle.unblockUI(); 
 								       }
 								       

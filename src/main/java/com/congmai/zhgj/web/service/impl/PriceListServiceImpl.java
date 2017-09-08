@@ -48,6 +48,8 @@ public class PriceListServiceImpl extends GenericServiceImpl<PriceList, String> 
 	}
 	@Override
 	public List<PriceList> selectPriceList(PriceListExample ple) {
+		Criteria criteria= ple.createCriteria();
+		criteria.andDelFlgEqualTo("0");
 		// TODO Auto-generated method stub
 		return priceListMapper.selectByExample(ple);
 	}

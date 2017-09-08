@@ -249,17 +249,23 @@ public class InvoiceController {
 	     * @Description (导出发票检验信息)
 	     * @param request
 	     * @return
-	     *//*
-	    @RequestMapping("exportStockInOutCheck")
-	    public void exportStockInOutCheck(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,@RequestBody String  inOrOut) {
+	     */
+	    @RequestMapping("exportInvoice")
+	    @ResponseBody
+	    public void exportStockInOutCheck(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,String  inOrOut) {
 	    		Map<String, Object> dataMap = new HashMap<String, Object>();
-	    		List<StockInOutCheck> stockInOutCheckList= stockInOutCheckService.getAllStockInOutCheck(inOrOut,null);
-	    		for(StockInOutCheck s:stockInOutCheckList){
-	    			
+	    		List<Invoice> invoices = invoiceService.getAllInvoice(inOrOut,null);
+	    		for(Invoice invoice:invoices){
+	    			OrderInfo order=orderService.selectById(invoice.getOrderSerial());
+	    			invoice.setRelationBuyOrSaleNum(order.getOrderNum());
 	    		}
-	    		dataMap.put("stockInOutRecordList",stockInOutCheckList);
-	    		ExcelUtil.export(request, response, dataMap, "stockInOutRecord", "发票信息");
-	    }*/
+	    		dataMap.put("invoiceList",invoices);
+	    		if("in".equals(inOrOut)){
+		    		ExcelUtil.export(request, response, dataMap, "invoiceIn", "进项票信息");
+		    		}else{
+		    			ExcelUtil.export(request, response, dataMap, "invoiceOut", "销项票信息");
+		    		}
+	    }
 	@RequestMapping(value = "/clauseSettlement",method = RequestMethod.POST)
 	@ResponseBody
 	public Map getClauseSettlementInfo( @RequestBody String serialNum) {
