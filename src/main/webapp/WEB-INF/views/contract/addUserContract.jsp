@@ -71,7 +71,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         </label>
 							<div class="col-md-9">
 								<input type="text" class="form-control" placeholder="甲方"
-								  ng-model="contractVO.firstParty"/>
+								  ng-model="contractVO.firstParty" name="firstParty"/>
 								<div class="form-control-focus"></div>
 								
 								<span class="help-block">甲方</span>
@@ -84,7 +84,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         </label>
 							<div class="col-md-9">
 								<input type="text" class="form-control" placeholder="甲方签订人"
-								ng-model="contractVO.firstPartySigner"/>
+								ng-model="contractVO.firstPartySigner" name="firstPartySigner"/>
 								<div class="form-control-focus"></div>
 								<span class="help-block">甲方签订人</span>
 							</div>
@@ -100,7 +100,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         </label>
 							<div class="col-md-9">
 								<input type="text" class="form-control" placeholder="乙方"
-								  ng-model="contractVO.secondParty"/>
+								  ng-model="contractVO.secondParty" name="secondParty"/>
 								<div class="form-control-focus"></div>
 								
 								<span class="help-block">乙方</span>
@@ -113,7 +113,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         </label>
 							<div class="col-md-9">
 								<input type="text" class="form-control" placeholder="乙方签订人"
-								ng-model="contractVO.secondPartySigner"/>
+								ng-model="contractVO.secondPartySigner" name="secondPartySigner"/>
 								<div class="form-control-focus"></div>
 								<span class="help-block">乙方签订人</span>
 							</div>
@@ -140,7 +140,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                             <span class="required">*</span>
                         </label>
 							<div class="col-md-9">
-								<input type="text" class="form-control date-picker" placeholder="签订地点"
+								<input type="text" class="form-control" name="signerAddress" placeholder="签订地点"
 								 ng-model="contractVO.signerAddress"/>
 								<div class="form-control-focus"></div>
 								
@@ -185,7 +185,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                         </label>
 							<div class="col-md-9">
 								<input type="text" class="form-control"
-									ng-model="contractVO.otherPartyContractNum" id="remark" placeholder="对方合同号"/>
+									ng-model="contractVO.otherPartyContractNum" id="otherPartyContractNum" name="otherPartyContractNum" placeholder="对方合同号"/>
 								<div class="form-control-focus"></div>
 								<span class="help-block">对方合同号</span>
 							</div>
