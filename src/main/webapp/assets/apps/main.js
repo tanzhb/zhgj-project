@@ -1089,40 +1089,40 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
  // 请假管理
 		.state(
-									'vacation',
-									{
-										url : "/vacation",
-										templateUrl : "rest/page/addVacation",
-										data : {
-											pageTitle : '请假'
-										},
-										controller : "AddVacationController",
-										resolve : {
-											deps : [
-													'$ocLazyLoad',
-													function($ocLazyLoad) {
-														return $ocLazyLoad
-																.load({
-																	name : 'MetronicApp',
-																	insertBefore : '#ng_load_plugins_before', 
-																	files : [
-																	         'assets/global/plugins/datatables/datatables.min.css',
-																	         'assets/global/css/dialog.css',
-																	         'assets/global/css/easyui.css',
-																	         'assets/global/css/datagrid.css',
-																	         'assets/global/css/jquery.qtip.min.css',
-																	         
-																	         'assets/global/plugins/jquery.easyui.min.js',
-																	         'assets/global/plugins/jquery.qtip.min.js',
-																	         'assets/global/plugins/jquery.outerhtml.js',
-																			'assets/global/plugins/datatables/datatables.all.min.js',
-																			'assets/apps/service/vacation/AddVacationService.js',
-																			'assets/apps/controllers/vacation/AddVacationController.js' 
-																			]
-																});
-													} ]
-										}
-									})
+				'vacation',
+				{
+					url : "/vacation",
+					templateUrl : "rest/page/addVacation",
+					data : {
+						pageTitle : '请假'
+					},
+					controller : "AddVacationController",
+					resolve : {
+						deps : [
+								'$ocLazyLoad',
+								function($ocLazyLoad) {
+									return $ocLazyLoad
+											.load({
+												name : 'MetronicApp',
+												insertBefore : '#ng_load_plugins_before', 
+												files : [
+												         'assets/global/plugins/datatables/datatables.min.css',
+												         'assets/global/css/dialog.css',
+												         'assets/global/css/easyui.css',
+												         'assets/global/css/datagrid.css',
+												         'assets/global/css/jquery.qtip.min.css',
+												         
+												         'assets/global/plugins/jquery.easyui.min.js',
+												         'assets/global/plugins/jquery.qtip.min.js',
+												         'assets/global/plugins/jquery.outerhtml.js',
+														'assets/global/plugins/datatables/datatables.all.min.js',
+														'assets/apps/service/vacation/AddVacationService.js',
+														'assets/apps/controllers/vacation/AddVacationController.js' 
+														]
+											});
+								} ]
+					}
+				})
         .state('invoice', {
             url: "/invoice?:inOrOut",
             templateUrl:"rest/invoice/viewInvoiceList",
@@ -1203,103 +1203,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        		}]
 	        	}	        
 	    })   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         .state('addPay', {
             url: "/addPay",

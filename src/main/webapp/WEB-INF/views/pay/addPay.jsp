@@ -67,15 +67,22 @@
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
 											<label class="control-label col-md-4"><span
-												class="required" aria-required="true"> * </span>付款计划编号:</label>
+												class="required" aria-required="true"> * </span>付款类型:</label>
 											<div class="col-md-8">
-												<input type="text" name="paymentPlanNum" class="form-control"
-													ng-model="paymentRecord.paymentPlanNum">
+												<input type="text" name=paymentType class="form-control"
+													ng-model="paymentRecord.paymentType" ng-show="input" />
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入付款计划编号</span>
+												<span class="help-block">请选择付款类型</span>
 											</div>
+
 										</div>
 									</div>
+									
+								</div>
+
+
+								<!--/row-->
+								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
 											<label class="control-label col-md-4"><span
@@ -100,22 +107,120 @@
 										</div>
 									</div>
 									<!--/span-->
+									<div class="col-md-4">
+										<div class="form-group form-md-line-input">
+											<label class="control-label col-md-4"><span
+												class="required" aria-required="true"> * </span>订单金额:</label>
+											<div class="col-md-8">
+												<input type="text" name="paymentStyle" class="form-control"
+													ng-model="paymentRecord.paymentStyle" ng-show="input" />
+												<div class="form-control-focus"></div>
+												<span class="help-block">请选择订单金额</span>
+											</div>
+
+										</div>
+									</div>
+									<!--/span-->
+									<div class="col-md-4">
+										<div class="form-group form-md-line-input">
+											<label class="control-label col-md-4"><span
+												class="required" aria-required="true"> * </span>申请付款金额  :</label>
+											<div class="col-md-8">
+												<input type="text" name="paymentStyle" class="form-control"
+													ng-model="paymentRecord.paymentStyle" ng-show="input" />
+												<div class="form-control-focus"></div>
+												<span class="help-block">请输入申请付款金额</span>
+											</div>
+										</div>
+									</div>
+									<!--/span-->
 								</div>
-
-
+								<!--/row-->
+								
 								<!--/row-->
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
 											<label class="control-label col-md-4"><span
-												class="required" aria-required="true"> * </span>付款类型:</label>
+												class="required" aria-required="true"> * </span>大写金额:</label>
 											<div class="col-md-8">
-												<input type="text" name=paymentType class="form-control"
-													ng-model="paymentRecord.paymentType" ng-show="input" />
+												<input type="text" name="orderNum" class="form-control"
+													ng-model="saleOrder.orderNum" ng-show="input"
+													style="width: 110%;" readonly />
 												<div class="form-control-focus"></div>
-												<span class="help-block">请选择付款类型</span>
+												<input type="text" ng-model="orderSerial" ng-hide="true" name="orderSerial"/>
+												<span class="help-block">请选择大写金额</span>
 											</div>
-
+										</div>
+									</div>
+									<!--/span-->
+									<div class="col-md-4">
+										<div class="form-group form-md-line-input">
+											<label class="control-label col-md-4"><span
+												class="required" aria-required="true"> * </span>申请币种 :</label>
+											<!-- <div class="col-md-8">
+												<input type="text" name="paymentStyle" class="form-control"
+													ng-model="paymentRecord.paymentStyle" ng-show="input" />
+												<div class="form-control-focus"></div>
+												<span class="help-block">请选择支付类型</span>
+											</div> -->
+											<div class="col-md-8">
+												<select class="form-control" id="warehouseSerial"
+													name="deliveryWarehouseSerial"
+													ng-model="delivery.warehouseSerial"
+													ng-change="selectAddress()" ng-show="input">
+													<option value="">申请币种</option>
+													<option value="人民币">人民币</option>
+													<option value="美元">美元</option>
+													<option value="欧元">欧元</option>
+													<option value="日币">日币</option>
+												</select>
+												<div class="form-control-focus"></div>
+												<span class="help-block">请选择申请币种</span>
+											</div>
+										</div>
+									</div>
+									<!--/span-->
+									<div class="col-md-4">
+										<div class="form-group form-md-line-input">
+											<label class="control-label col-md-4"><span
+												class="required" aria-required="true"> * </span>计划付款日期 :</label>
+											<div class="col-md-8">
+												<input type="text" name="paymentStyle" class="form-control"
+													ng-model="paymentRecord.paymentStyle" ng-show="input" />
+												<div class="form-control-focus"></div>
+												<span class="help-block">请选择计划付款日期</span>
+											</div>
+										</div>
+									</div>
+									<!--/span-->
+								</div>
+								<!--/row-->
+								
+								
+								<!--/row-->
+								<div class="row">
+									<div class="col-md-4">
+										<div class="form-group form-md-line-input">
+											<label class="control-label col-md-4"><span
+												class="required" aria-required="true"> * </span>关联采购订单号:</label>
+											<div class="col-md-6">
+												<input type="text" name="orderNum" class="form-control"
+													ng-model="saleOrder.orderNum" ng-show="input"
+													style="width: 110%;" readonly />
+												<div class="form-control-focus"></div>
+												<input type="text" ng-model="orderSerial" ng-hide="true" name="orderSerial"/>
+												<span class="help-block">请选择关联采购订单号</span>
+											</div>
+											<div class="col-md-2" ng-show="input">
+												<span class="input-inline-btn">
+													<button class="btn default" type="button"
+														ng-click="selectMateriel()"
+														data-target="#basicMaterielInfo" data-toggle="modal">
+														<i class="fa fa-search"></i>
+													</button>
+												</span>
+											</div>
 										</div>
 									</div>
 									<!--/span-->
@@ -147,6 +252,7 @@
 									<!--/span-->
 								</div>
 								<!--/row-->
+								
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">

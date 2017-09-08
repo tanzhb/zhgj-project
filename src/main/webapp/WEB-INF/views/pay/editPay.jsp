@@ -238,7 +238,7 @@
 														<div class="sp-page-boxcolumn span2">
 															<span class="sp-upload"> <img
 																class="sp-upload-photo" alt=""
-																 ng-src="uploadAttachFiles/{{pay.paymentVoucher}}" /> <input type="file" name="paymentVoucher" id="paymentVoucher"
+																 ng-src="zhgj/upload/{{pay.paymentVoucher}}" /> <input type="file" name="paymentVoucher" id="paymentVoucher"
 																upload-img class="sp-upload-img" />
 															</span>
 														</div>

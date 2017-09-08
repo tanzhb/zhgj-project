@@ -194,7 +194,7 @@
 													<div class="sp-page-box">
 														<div class="sp-page-boxcolumn span2">
 															<span class="sp-upload"> 
-														<img class="sp-upload-photo" alt=""  ng-src="uploadAttachFiles/{{pay.paymentVoucher}}" /> 
+														<img class="sp-upload-photo" alt=""  ng-src="zhgj/upload/{{pay.paymentVoucher}}" /> 
 															</span>
 														</div>
 													</div>

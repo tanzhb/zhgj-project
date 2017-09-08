@@ -297,7 +297,7 @@ public class PayController {
 	 * @return
 	 */
 	public String uploadFile(MultipartFile file){
-		String filePath = getClasspath()+"uploadAttachFiles/";
+		String filePath = getClasspath()+"zhgj/upload";
 		String randomName=UUID.randomUUID().toString().toUpperCase().replaceAll("-", ""); 
 		String fileName = fileUp(file, filePath,randomName);
 		System.out.println(fileName);
