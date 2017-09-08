@@ -2,6 +2,10 @@ package com.congmai.zhgj.web.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * 
  * @ClassName Contract
@@ -30,12 +34,15 @@ public class ContractVO {
     private String settlementClause;
     
     //开始日期
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date startDate;
     
     //结束日期
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date endDate;
     
     //签订日期
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date signDate;
     
     //签订人
@@ -96,7 +103,23 @@ public class ContractVO {
     //更新时间
     private Date updateTime;
 
+    
     private String orderSerial;
+    
+    //甲方
+    private String firstParty;
+    
+    //乙方
+    private String secondParty;
+    
+    //甲方签订人
+    private String firstPartySigner;
+    
+    //乙方签订人
+    private String secondPartySigner;
+    
+    //对方合同号
+    private String otherPartyContractNum;
     
 	public String getId() {
 		return id;
@@ -145,9 +168,8 @@ public class ContractVO {
 	public void setSettlementClause(String settlementClause) {
 		this.settlementClause = settlementClause;
 	}
-
 	
-
+	@JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
 	public Date getStartDate() {
 		return startDate;
 	}
@@ -156,6 +178,7 @@ public class ContractVO {
 		this.startDate = startDate;
 	}
 
+	@JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
 	public Date getEndDate() {
 		return endDate;
 	}
@@ -164,6 +187,7 @@ public class ContractVO {
 		this.endDate = endDate;
 	}
 
+	@JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
 	public Date getSignDate() {
 		return signDate;
 	}
@@ -339,19 +363,46 @@ public class ContractVO {
 	public void setOrderSerial(String orderSerial) {
 		this.orderSerial = orderSerial;
 	}
+
+	public String getFirstParty() {
+		return firstParty;
+	}
+
+	public void setFirstParty(String firstParty) {
+		this.firstParty = firstParty;
+	}
+
+	public String getSecondParty() {
+		return secondParty;
+	}
+
+	public void setSecondParty(String secondParty) {
+		this.secondParty = secondParty;
+	}
+
+	public String getFirstPartySigner() {
+		return firstPartySigner;
+	}
+
+	public void setFirstPartySigner(String firstPartySigner) {
+		this.firstPartySigner = firstPartySigner;
+	}
+
+	public String getSecondPartySigner() {
+		return secondPartySigner;
+	}
+
+	public void setSecondPartySigner(String secondPartySigner) {
+		this.secondPartySigner = secondPartySigner;
+	}
+
+	public String getOtherPartyContractNum() {
+		return otherPartyContractNum;
+	}
+
+	public void setOtherPartyContractNum(String otherPartyContractNum) {
+		this.otherPartyContractNum = otherPartyContractNum;
+	}
     
-    
-
-   /* public Contract(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }*/
-
-
-
-    /*@Override
-    public String toString() {
-        return "User [id=" + id + ", username=" + username + ", password=" + password + ", state=" + state + ", createTime=" + createTime + "]";
-    }*/
 
 }

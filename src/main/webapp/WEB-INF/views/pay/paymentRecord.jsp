@@ -1,14 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <h3 class="page-title">
-	合同信息 <small></small>
+	付款信息 <small></small>
 </h3>
 <div class="page-bar">
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i class="fa fa-angle-right"></i></li>
 			
-		<li><a ui-sref="userContract">基础数据</a><i class="fa fa-angle-right"></i></li>
-		<li><a ui-sref="userContract">合同信息</a></li>
+		<li><a ui-sref="paymentRecordC">付款</a><i class="fa fa-angle-right"></i></li>
+		<li><a ui-sref="paymentRecordC">付款信息</a></li>
 	</ul>
 </div>
 
@@ -27,50 +27,44 @@
 		</script>
 		
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
-		<div class="portlet light">
+		<div class="portlet box red">
 			<div class="portlet-title">
-			<!-- <div class="caption">
-					<i class="fa fa-globe"></i>合同列表
-				</div> -->
-				<div class="caption">
-					<i class="fa fa-globe font-green"></i> <span
-						class="caption-subject font-green bold uppercase">合同列表</span>
+			<div class="caption">
+					<i class="fa fa-globe"></i>付款列表
 				</div>
 				<div class="actions" ng-controller='MyCtrl'>
-					<label class="btn btn-transparent green btn-circle btn-sm" ng-click="jumpToUrl('addUserContract')"><i class="fa fa-plus"></i> 添加</label>
-			        <label class="btn btn-transparent purple btn-circle btn-sm" ng-click="jumpToEdit()"> <i class="fa fa-edit"></i>修改</label>  
-					<label class="btn btn-transparent red btn-circle btn-sm" ng-click="del()"> <i class="fa fa-minus"></i> 删除</label>	
-					<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import"><i class="fa fa-upload"></i> 导入</label>
-					<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportContract()"> <i class="fa fa-file-excel-o"></i> 导出</label>
-									                                   
-					<!-- <a href="javascript:;" ng-click="jumpToEdit()"
+					<a href="javascript:;" ng-click="jumpToUrl('addPay')"
+						class="btn btn-default btn-sm btn-circle"> <i
+						class="fa fa-plus"></i> 添加
+					</a> 
+					<a href="javascript:;" ng-click="jumpToEdit()"
 						class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-edit"></i> 修改
-					</a> -->
-					<!-- <a href="javascript:;" ng-click="del()"
+					</a>
+					<a href="javascript:;" ng-click="del()"
 						class="btn btn-default btn-sm btn-circle"> <i
 						class="fa fa-minus"></i> 删除
-					</a> -->
+					</a>
 					
-					<!-- <div class="btn-group">
+					<div class="btn-group">
 						<a class="btn btn-default btn-outline btn-circle"
 							href="javascript:;" data-toggle="dropdown"> <i
 							class="fa fa-share"></i> <span class="hidden-xs"> 其它 </span> <i
 							class="fa fa-angle-down"></i>
 						</a>
 						<ul class="dropdown-menu pull-right" id="sample_3_tools">
-							<li><a data-action="0" class="tool-action"
+							<!-- <li><a data-action="0" class="tool-action"
 								data-toggle="modal" data-target="#import"> <i
 									class="fa fa-upload"></i> 导入
+							</a></li> -->
+							<li><a href="javascript:;" data-action="0"
+								class="tool-action" ng-click="exportPay()"> <i class="fa fa-file-excel-o"></i> 导出
 							</a></li>
 							<li><a href="javascript:;" data-action="1"
-								class="tool-action" ng-click="exportContract()"> <i class="fa fa-file-excel-o"></i> 导出
-							</a></li>
-							<li><a href="javascript:;" data-action="2"
 								class="tool-action" > <i class="fa fa-print"></i> 打印
 							</a></li>
 						</ul>
-					</div> -->
+					</div>
 				</div>
 			</div>
 
@@ -97,35 +91,25 @@
 			</div>
 
 			<div class="portlet-body" >
-				<table class="table table-bordered" id="sample_2">
+				<table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_2">
 					<thead>
 						<tr>
-							<th style="text-align: center"><input name="select_all"
-								value="1" id="example-select-all" type="checkbox" /></th>
-
-							<th style="white-space: nowrap;">合同编号</th>
-							<th style="white-space: nowrap;">企业名称</th>
-							<th style="white-space: nowrap;">合同类型</th>
-							<th style="white-space: nowrap;">服务模式</th>
-							<th style="white-space: nowrap;">签订日期</th>
-							<th style="white-space: nowrap;">签订人</th>
-							<th style="white-space: nowrap;">开始日期</th>
-							<th style="white-space: nowrap;">结束日期</th>
-							<th style="white-space: nowrap;">版本号</th>
+							<th style="text-align: center"><input name="select_all" value="1" id="example-select-all" type="checkbox" /></th>
+							<th style="white-space: nowrap;">付款单号 </th>
+							<th style="white-space: nowrap;">付款计划编号</th>
+							<th style="white-space: nowrap;">关联采购订单号</th>
+							<th style="white-space: nowrap;">付款类型 </th>
+							<th style="white-space: nowrap;">支付类型</th>
+							<th style="white-space: nowrap;">发票方式 </th>
+							<th style="white-space: nowrap;">关联发票单号</th>
+							<th style="white-space: nowrap;">申请人</th>
+							<th style="white-space: nowrap;">申请日期</th>
+							<th style="white-space: nowrap;">付款金额</th>
+							<th style="white-space: nowrap;">收款方</th>
 							<th style="white-space: nowrap;">状态</th>
-							<!-- <th style="white-space: nowrap;"></th> -->
 						</tr>
 					</thead>
 					<tbody>
-
-						<!-- <tr ng-repeat="user in uTrl.users">
-			                <td>{{ user.id }}</td>
-			                <td>{{ user.username }}</td>
-			                <td>{{ user.password }}</td>
-			                <td>{{ user.state }}</td>
-			                <td>{{ user.createTime }}</td>			               
-			            </tr>
-						 -->
 					</tbody>
 				</table>
 			</div>
@@ -169,36 +153,17 @@
 				<div class="row" style="line-height:60px;">
 					<div class="col-md-6">
 						<div class="form-group">
-							<label class="control-label col-md-5">甲方</label> <label
+							<label class="control-label col-md-5">服务模式</label> <label
 								class="control-label col-md-7">
-								{{contractVO.firstParty}} </label>
+								{{contractVO.serviceModel}} </label>
 
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label class="control-label col-md-5">甲方签订人</label> <label
+							<label class="control-label col-md-5">结算条款</label> <label
 								class="control-label col-md-7">
-								{{contractVO.firstPartySigner}} </label>
-
-						</div>
-					</div>
-				</div>
-				
-				<div class="row" style="line-height:60px;">
-					<div class="col-md-6">
-						<div class="form-group">
-							<label class="control-label col-md-5">乙方</label> <label
-								class="control-label col-md-7">
-								{{contractVO.secondParty}} </label>
-
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="form-group">
-							<label class="control-label col-md-5">乙方签订人</label> <label
-								class="control-label col-md-7">
-								{{contractVO.secondPartySigner}} </label>
+								{{contractVO.settlementClause}} </label>
 
 						</div>
 					</div>
@@ -208,17 +173,17 @@
 				<div class="row" style="line-height:60px;">
 					<div class="col-md-6">
 						<div class="form-group">
-							<label class="control-label col-md-5">签订日期</label> <label
+							<label class="control-label col-md-5">供应商</label> <label
 								class="control-label col-md-7">
-								{{contractVO.signDate}} </label>
+								{{contractVO.comId}} </label>
 
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label class="control-label col-md-5">签订地点</label> <label
+							<label class="control-label col-md-5">备注</label> <label
 								class="control-label col-md-7">
-								{{contractVO.signerAddress}} </label>
+								{{contractVO.remark}} </label>
 
 						</div>
 					</div>
@@ -248,17 +213,17 @@
 				<div class="row" style="line-height:60px;">
 					<div class="col-md-6">
 						<div class="form-group">
-							<label class="control-label col-md-5">备注</label> <label
+							<label class="control-label col-md-5">签订日期</label> <label
 								class="control-label col-md-7">
-								{{contractVO.remark}} </label>
+								{{contractVO.signDate}} </label>
 
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label class="control-label col-md-5">对方合同号</label> <label
+							<label class="control-label col-md-5">签订人</label> <label
 								class="control-label col-md-7">
-								{{contractVO.otherPartyContractNum}} </label>
+								{{contractVO.signer}} </label>
 
 						</div>
 					</div>
