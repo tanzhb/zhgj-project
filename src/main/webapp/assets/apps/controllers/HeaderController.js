@@ -119,4 +119,11 @@ angular.module('MetronicApp').controller('HeaderController', function($rootScope
 			    }
 	};
 	
+	//风格设置
+	$scope.setMainStyle = function() {		
+		$('.toggler').hide();
+        $('.toggler-close').show();
+        $('.theme-panel > .theme-options').show();
+	};
+	
 });

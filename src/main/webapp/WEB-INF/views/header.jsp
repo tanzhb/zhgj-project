@@ -281,6 +281,9 @@
 						<li class="divider"></li>
 						<li><a href="#" ng-click="toggleFullScreen()"> <i class="glyphicon glyphicon-fullscreen"></i> 全 屏
 						</a></li>
+						<li><a href="#" ng-click="setMainStyle()"><i class="icon-settings"></i>
+								页面风格设置</a>
+						</li>
 						<li><a href="rest/user/logout"> <i class="glyphicon glyphicon-off"></i>
 								退 出
 						</a></li>

@@ -1,7 +1,7 @@
 <%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8" %>
-<div class="toggler tooltips" data-container="body" data-placement="left" data-html="true" data-original-title="页面风格设置">
+<!-- <div class="toggler tooltips" data-container="body" data-placement="left" data-html="true" data-original-title="页面风格设置">
     <i class="icon-settings"></i>
-</div>
+</div> -->
 <div class="toggler-close">
     <i class="icon-close"></i>
 </div>
