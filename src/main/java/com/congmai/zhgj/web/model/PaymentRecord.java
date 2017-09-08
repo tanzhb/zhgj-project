@@ -8,139 +8,135 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class PaymentRecord {
-	//Á÷Ë®
+	//æµæ°´
     private String serialNum;
 
-    //ÊÕ/¸¶¿î¼ÇÂ¼µ¥ºÅ
+    //æ”¯ä»˜å•å·
     private String paymentNum;
     
-    //¸¶¿î¼Æ»®±àºÅ
+    //ä»˜æ¬¾è®¡åˆ’å•å·
     private String paymentPlanNum;
 
-    //¹©Ó¦ÉÌ
+    //ä¾›åº”å•†
     private String supplyComId;
 
-    //²É¹ºÉÌ
+    //é‡‡è´­å•†
     private String buyComId;
 
-    //·¢Æ±Á÷Ë®ºÅ
+    //å‘ç¥¨æµæ°´
     private String invoiceSerial;
     
-    //¶©µ¥Á÷Ë®
+    //è®¢å•æµæ°´
     private String orderSerial;
     
-    
+    //è®¢å•ç¼–å·
     private String orderNum;
 
-    //ÊÕ/¸¶¿îÀàĞÍ
+    //æ”¯ä»˜ç±»å‹
     private String paymentType;
     
-    //¸¶¿î½ğ¶î
+    //ä»˜æ¬¾é‡‘é¢
     private String paymentAmount;
     
-    
+    //ä»˜æ¬¾ç±»å‹
     private String paymentStyle;
 
-    //¸¶¿î¼Æ»®Á÷Ë®
+    //ä»˜æ¬¾è®¡åˆ’æµæ°´
     private String paymentPlanSerial;
     
-    //½áËãÌõ¿îÁ÷Ë®
+    //ç»“ç®—æ¡æ¬¾æµæ°´
     private String clauseSettlementSerial;
     
-    //¿ªÆ±·½Ê½
+    //å¼€ç¥¨æ–¹å¼
     private String billStyle;
 
-    //¸¶¿îÈÕÆÚ
+    //ä»˜æ¬¾æ—¥æœŸ
     private Date paymentDate;
 
-    private String isBill;
+    //ç”³è¯·äºº
     private String approver;
 
-    //ÉóÅúÈÕÆÚ
+    //å®¡æ‰¹æ—¥æœŸ
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date approvalDate;
 
-    //ÉêÇëÈÕÆÚ
+    //ç”³è¯·æ—¥æœŸ
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date applyDate;
 
-    //ÉêÇëÈË
+    //ç”³è¯·äºº
     private String applicant;
 
-    //ÊÕ/¸¶¿îÆ¾Ö¤
+    //ä»˜æ¬¾å‡­è¯Ö¤
     private String paymentVoucher;
 
-    //±¸×¢
+    //å¤‡æ³¨
     private String remark;
 
-    //×´Ì¬
+    //Ì¬çŠ¶æ€
     private String status;
     
-    //ÊÇ·ñ¿ªÆ±
+    //æ˜¯å¦å¼€ç¥¨
     private String isBill;
     
-    //½áËãÌõ¿îµÄ¸¶¿îÀàĞÍ
+    //ç»“ç®—æ¡æ¬¾çš„æ”¯ä»˜ç±»å‹
     private String clausePaymentType;
     
-    //½áËãÌõ¿îµÄÖ§¸¶½Úµã
+    //ç»“ç®—æ¡æ¬¾çš„ç»“ç®—èŠ‚ç‚¹
     private String deliveryNode;
     
-    //½áËãÌõ¿îµÄÕËÆÚ
+    //ç»“ç®—æ¡æ¬¾çš„è´¦æœŸ
     private String accountPeriod;
     
-    //½áËãÌõ¿îµÄÖ§¸¶±ÈÂÊ
+    //ç»“ç®—æ¡æ¬¾çš„æ”¯ä»˜æ¯”ä¾‹
     private String deliveryRate;
     
-    //½áËãÌõ¿îµÄÖ§¸¶×Ü½ğ¶î
+    //ç»“ç®—æ¡æ¬¾çš„æ€»é‡‘é¢
     private String deliveryAmount;
     
-    //½áËãÌõ¿îµÄÖ§¸¶·½Ê½
+    //ç»“ç®—æ¡æ¬¾çš„æ”¯ä»˜æ–¹å¼
     private String paymentMethod;
     
-    //½áËãÌõ¿îµÄ¿ªÆ±·½Ê½
+    //ç»“ç®—æ¡æ¬¾çš„å¼€ç¥¨æ–¹å¼
     private String billingMethod;
     
-    //½áËãÌõ¿îµÄ¿ªÆ±½ğ¶î
+    //ç»“ç®—æ¡æ¬¾çš„å¼€ç¥¨é‡‘é¢
     private String billingAmount;
     
-    //½áËãÌõ¿îµÄÎ´¿ªÆ±½ğ¶î
+    //ç»“ç®—æ¡æ¬¾çš„æœªå¼€ç¥¨é‡‘é¢
     private String unbilledAmount;
     
-    //½áËãÌõ¿îµÄ±¸×¢
+    //ç»“ç®—æ¡æ¬¾çš„å¤‡æ³¨
     private String clauseRemark;
     
-    //½áËãÌõ¿îµÄ×´Ì¬ 
+    //ç»“ç®—æ¡æ¬¾çš„çŠ¶æ€
     private String clauseStatus;
     
-    
+    //ç»“ç®—æ¡æ¬¾åˆ—è¡¨
     private List<ClauseSettlementDetail> clauseSettList;
     
-    
+    //ç»“ç®—æ˜ç»†æµæ°´
     private String clauseSettlementDetailSerialNum;
 
-    //É¾³ı±êÊ¶
+    //åˆ é™¤æ ‡ç¤º
     private String delFlg;
 
-    //´´½¨ÈË
+    //åˆ›å»ºäºº
     private String creator;
 
-    //´´½¨Ê±¼ä
+    //åˆ›å»ºæ—¶é—´
     private Date createTime;
 
-    //¸üĞÂÊ±¼ä
+    //æ›´æ–°æ—¶é—´
     private Date updateTime;
 
-    //¸üĞÂÈË
+    //æ›´æ–°äºº
     private String updater;
 
-
-
-
-
-    //¹©Ó¦ÉÌÃû³Æ
+    //ä¾›åº”å•†åç§°
     private String supplyComName;
     
-    //²É¹ºÉÌÃû³Æ
+    //é‡‡è´­å•†åç§°
     private String buyComName;
     public String getSerialNum() {
         return serialNum;
@@ -320,14 +316,6 @@ public class PaymentRecord {
         this.updater = updater == null ? null : updater.trim();
     }
 
-	public String getIsBill() {
-		return isBill;
-	}
-
-	public void setIsBill(String isBill) {
-		this.isBill = isBill;
-	}
-
 	public String getPaymentPlanNum() {
 		return paymentPlanNum;
 	}
@@ -479,5 +467,21 @@ public class PaymentRecord {
 	public void setClauseSettlementDetailSerialNum(
 			String clauseSettlementDetailSerialNum) {
 		this.clauseSettlementDetailSerialNum = clauseSettlementDetailSerialNum;
+	}
+
+	public String getSupplyComName() {
+		return supplyComName;
+	}
+
+	public void setSupplyComName(String supplyComName) {
+		this.supplyComName = supplyComName;
+	}
+
+	public String getBuyComName() {
+		return buyComName;
+	}
+
+	public void setBuyComName(String buyComName) {
+		this.buyComName = buyComName;
 	}
 }
