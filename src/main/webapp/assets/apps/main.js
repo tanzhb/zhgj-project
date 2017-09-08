@@ -158,7 +158,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 
         // 价格目录
         .state('priceList', {
-            url: "/priceList",
+            url: "/priceList?:buyOrSale",
             templateUrl: "rest/priceList/viewPriceList",
             data: {pageTitle: '价格目录'},
             controller: "PriceListController",
@@ -176,7 +176,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                                 	'assets/apps/controllers/PriceListController.js',
                                 	'assets/apps/scripts/angular-file-upload-shim.min.js',
                                 	'assets/apps/scripts/angular-file-upload.min.js',
-                                	  'assets/global/plugins/bootbox/bootbox.min.js'
+                                	 'assets/global/plugins/bootbox/bootbox.min.js'
                         ]
                     });
                 }]
@@ -184,7 +184,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         
           .state('addPriceList', {
-            url: "/addPriceList?:priceListSerialNum",
+            url: "/addPriceList?:buyOrSale",
             templateUrl: "rest/priceList/addOrEditPriceListInfo",
             data: {pageTitle: '新增价格'},
             controller: "PriceListController",

@@ -600,6 +600,16 @@ angular
 				
 			  							}
 			  						},{
+			  							'targets' : 8,
+			  							'render' : function(data,
+			  									type, row, meta) {
+			  									if(data!=undefined){
+													return data;
+												}
+				  								return '';
+				
+			  							}
+			  						},{
 			  							'targets' : 9,
 			  							'render' : function(data,
 			  									type, row, meta) {

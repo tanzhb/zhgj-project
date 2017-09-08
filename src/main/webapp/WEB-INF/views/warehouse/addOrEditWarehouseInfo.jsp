@@ -45,24 +45,26 @@
                         <div class="portlet-title">
                             <div class="caption">仓库信息</div>
                             <div class="actions">
-                                <button  ng-show="warehouseView"    class="btn blue  btn-outline  btn-sm " ng-click="editWarehouse()">
+                                <button  ng-show="warehouseView"    class="btn purple  btn-sm btn-circle" ng-click="editWarehouse()">
                                             <i class="fa fa-edit"></i> 编辑 </button>
-                                <button   ng-show="warehouseEdit"   class="btn red  btn-outline  btn-sm " ng-click="cancelEditWarehouse()">
+                                <button   ng-show="warehouseEdit"   class="btn defualt  btn-sm btn-circle " ng-click="cancelEditWarehouse()">
                                             <i class="fa fa-undo"></i> 取消 </button>
-                                <button  ng-hide="warehouseAdd"   type="submit"   class="btn blue  btn-outline  btn-sm " ng-click="saveWarehouse()">
+                                <button  ng-hide="warehouseAdd"   type="submit"   class="btn green  btn-sm btn-circle " ng-click="saveWarehouse()">
                                             <i class="fa fa-save"></i> 保存 </button>
                             </div>
                         </div>
+                            <div class="tab-content">
+				<div class="tab-pane fade active in" id="tab_1_1">
                         <div class="portlet-body form">
-                            <form  id="warehouseForm" class="form-horizontal" >
+                            <form  id="warehouseForm"  >
 								<div class="form-body">
 									<div class="alert alert-danger display-hide">
-                                                <button id="warehouseTips" class="close" data-close="alert"></button>请先输入正确数据！</div>
+                                                <button  class="close" data-close="alert"></button>请先输入正确数据！</div>
 								           <div class="row">
                                                              <div class="col-md-6">
-											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="warehouseNum"> <span class="required"> * </span>仓库编号 :</label>
-                                                    <div class="col-md-8">
+											<div class="form-group ">
+                                                    <label class="control-label bold" for="warehouseNum"> <span class="required"> * </span>仓库编号 :</label>
+                                                    <div class=" ">
                                                         <input type="text" class="form-control" id="warehouseNum" name="warehouseNum" ng-model="warehouse.warehouseNum"  ng-hide="warehouseAdd" >
                                                         <div class="form-control-focus"> </div>
                                                           <p class="control-label left" ng-show="warehouseView">{{warehouse.warehouseNum}}</p> 
@@ -70,9 +72,9 @@
                                             </div>
 										</div>
                                                             <div class="col-md-6">
-                                                                <div class="form-group form-md-line-input">
-                                                                <label class="col-md-4 control-label" for="warehouseName"> <span class="required"> * </span>仓库名称 :</label>
-                                                                    <div class="col-md-8">
+                                                                <div class="form-group ">
+                                                                <label class="control-label bold" for="warehouseName"> <span class="required"> * </span>仓库名称 :</label>
+                                                                    <div class=" ">
                                                                        <input type="text" class="form-control" placeholder=""  id="warehouseName" name ="warehouseName"  ng-hide="warehouseAdd" 
 												ng-model="warehouse.warehouseName" > 
                                                                        <div class="form-control-focus"> </div>
@@ -83,9 +85,9 @@
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-md-6">
-                                                                <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="warehouseType"> <span class="required"> * </span>仓库类型 :</label>
-                                                    <div class="col-md-8">
+                                                                <div class="form-group ">
+                                                    <label class="control-label bold" for="warehouseType"> <span class="required"> * </span>仓库类型 :</label>
+                                                    <div class=" ">
                                                     <select class="form-control" id="warehouseType"  name="warehouseType"  ng-model="warehouse.warehouseType"   ng-hide="warehouseAdd" >
                                                             			<option value=""></option>
                                                                         <option value="自建仓库">	自建仓库</option>
@@ -99,9 +101,9 @@
                                                             </div>
                                                             <!--/span-->
                                                             <div class="col-md-6">
-                                                            <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="warehouseCategory"> <span class="required"> * </span>仓库分类 :</label>
-                                                    <div class="col-md-8">
+                                                            <div class="form-group ">
+                                                    <label class="control-label bold" for="warehouseCategory"> <span class="required"> * </span>仓库分类 :</label>
+                                                    <div class=" ">
                                                                     <select class="form-control" id="warehouseCategory" name ="warehouseCategory" ng-model="warehouse.warehouseCategory"  ng-hide="warehouseAdd"  >
                                                                           <option value=""></option>
                                                                         <option value="机加工">机加工</option>
@@ -118,9 +120,9 @@
                                                         <!--/row-->
                                                         <div class="row">
                                                             <div class="col-md-6">
-                                                             <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="address"> <span class="required"> * </span>仓库地址:</label>
-                                                    <div class="col-md-8">
+                                                             <div class="form-group ">
+                                                    <label class="control-label bold" for="address"> <span class="required"> * </span>仓库地址:</label>
+                                                    <div class=" ">
                                                                         <input type="text" class="form-control"   id="address" name ="address"  ng-hide="warehouseAdd" 
 												ng-model="warehouse.address" > 
 												<div class="form-control-focus"> </div>
@@ -130,9 +132,9 @@
                                                             </div>
                                                             <!--/span-->
                                                             <div class="col-md-6">
-                                                            <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="owner"> <span class="required"> * </span>仓库所有者 :</label>
-                                                    <div class="col-md-8">
+                                                            <div class="form-group ">
+                                                    <label class="control-label bold" for="owner"> <span class="required"> * </span>仓库所有者 :</label>
+                                                    <div class=" ">
                                                                         <input type="text"  class="form-control" placeholder=""  id="owner" name ="owner"   ng-hide="warehouseAdd" 
 												ng-model="warehouse.owner" > 
 												<div class="form-control-focus"> </div>
@@ -144,9 +146,9 @@
                                                         </div>
                                                          <div class="row">
                                                             <div class="col-md-6">
-                                                            <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="admin"> <span class="required"> * </span>仓库管理员 :</label>
-                                                    <div class="col-md-8">
+                                                            <div class="form-group ">
+                                                    <label class="control-label bold" for="admin"> <span class="required"> * </span>仓库管理员 :</label>
+                                                    <div class=" ">
                                                                         <input type="text"  class="form-control" placeholder=""  id="admin" name ="admin"   ng-hide="warehouseAdd" 
 												ng-model="warehouse.admin" >
                                                                         <div class="form-control-focus"> </div>
@@ -156,9 +158,9 @@
                                                             </div>
                                                             <!--/span-->
                                                             <div class="col-md-6">
-                                                             <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="area"> <span class="required"> * </span>仓库面积 :</label>
-                                                    <div class="col-md-8">
+                                                             <div class="form-group ">
+                                                    <label class="control-label bold" for="area"> <span class="required"> * </span>仓库面积 :</label>
+                                                    <div class=" ">
                                                                         <input type="text"  class="form-control" placeholder=""  id="area" name ="area"  ng-hide="warehouseAdd" 
 												ng-model="warehouse.area" >
 												<div class="form-control-focus"> </div>
@@ -170,9 +172,9 @@
                                                         </div>
                                                          <div class="row">
                                                             <div class="col-md-6">
-                                                            <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="email"> <span class="required"> * </span>邮件 :</label>
-                                                    <div class="col-md-8">
+                                                            <div class="form-group ">
+                                                    <label class="control-label bold" for="email"> <span class="required"> * </span>邮件 :</label>
+                                                    <div class=" ">
                                                                         <input type="text"    id="email"      name="email" class="form-control" placeholder=""  ng-model="warehouse.email"  ng-hide="warehouseAdd" >
                                                                         <div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="warehouseView">{{warehouse.email}}</p>
@@ -181,9 +183,9 @@
                                                             </div>
                                                             <!--/span-->
                                                             <div class="col-md-6">
-                                                              <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="tel"> <span class="required"> * </span>电话 :</label>
-                                                    <div class="col-md-8">
+                                                              <div class="form-group ">
+                                                    <label class="control-label bold" for="tel"> <span class="required"> * </span>电话 :</label>
+                                                    <div class=" ">
                                                                         <input type="text"  class="form-control" placeholder=""  id="tel" name ="tel"  ng-hide="warehouseAdd" 
 												ng-model="warehouse.tel" >  
 												 <div class="form-control-focus"> </div>
@@ -195,9 +197,9 @@
                                                         </div>
                                                          <div class="row">
                                                             <div class="col-md-6">
-                                                             <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="tel"> <!-- <span class="required"> * </span> -->备注 :</label>
-                                                    <div class="col-md-8">
+                                                             <div class="form-group ">
+                                                    <label class="control-label bold" for="tel"> <!-- <span class="required"> * </span> -->备注 :</label>
+                                                    <div class=" ">
                                                                         <input type="text"  class="form-control" placeholder=""  id="remark" name ="remark"  ng-hide="warehouseAdd" 
 												ng-model="warehouse.remark">
 												<div class="form-control-focus"> </div>
@@ -206,9 +208,9 @@
                                                                 </div>
                                                             </div>
                                                            <div class="col-md-6">
-                                                           <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="fax"> <span class="required"> * </span>传真 :</label>
-                                                    <div class="col-md-8">
+                                                           <div class="form-group ">
+                                                    <label class="control-label bold" for="fax"> <span class="required"> * </span>传真 :</label>
+                                                    <div class=" ">
                                                                         <input type="text"   class="form-control" placeholder=""  id="fax" name ="fax"  ng-hide="warehouseAdd" 
 												ng-model="warehouse.fax" >
 												<div class="form-control-focus"> </div>
@@ -293,7 +295,7 @@
 										</div>
 									<div class="col-md-1">
 											<div class="form-group">
-												<div class="col-md-8 input-icon right"  style="margin-left:110px">
+												<div class="  input-icon right"  style="margin-left:110px">
 													<input  type="text" ng-model="warehouseposition.maxRows" name="maxRows"    id="maxRows{{$index}}"  ng-hide="warehousepositionAdd{{$index}}"
 														class="form-control" placeholder=""> <span
 														class="help-block"></span>
@@ -303,7 +305,7 @@
 										</div>
 										<div class="col-md-1">
 											<div class="form-group">
-												<div class="col-md-8 input-icon right" style="margin-left:100px">
+												<div class="  input-icon right" style="margin-left:100px">
 													<input  type="text" ng-model="warehouseposition.maxCols" name="maxCols"  id="maxCols{{$index}}"   ng-hide="warehousepositionAdd{{$index}}"
 														class="form-control" placeholder=""> <span
 														class="help-block"></span>
@@ -313,7 +315,7 @@
 										</div>
 										<div class="col-md-1">
 											<div class="form-group">
-												<div class="col-md-8 input-icon right"  style="margin-left:50px">
+												<div class="  input-icon right"  style="margin-left:50px">
 													<input  type="text" ng-model="warehouseposition.maxLayers" name="maxLayers"   id="maxLayers{{$index}}"  ng-hide="warehousepositionAdd{{$index}}"
 														class="form-control" placeholder=""> <span
 														class="help-block"></span>

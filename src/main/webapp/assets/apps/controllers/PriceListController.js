@@ -31,7 +31,8 @@ angular
 								 autoclose: true,
 								 language:"zh-CN"
 							 })//初始化icheck控件
-							 if($stateParams.priceListSerialNum==undefined){
+							 if($stateParams.buyOrSale.length<=4){
+								 debugger;
 								 $scope.ladderprices=[{}];
 								 _index = 0; 
 								 $scope.priceList.isLadderPrice="0";
@@ -39,7 +40,9 @@ angular
 								 $scope.priceListAdd=true;
 								 $scope.priceListView=false;
 								 $scope.priceListEdit=true;//隐藏取消
-							 }else{
+							 }else if($stateParams.buyOrSale.length>=4){//修改
+								 debugger;
+								 getPriceListInfo($stateParams.buyOrSale);
 								 $scope.priceListAdd=false;
 								 $scope.priceListView=true;
 								 $scope.priceListEdit=true;//隐藏取消
@@ -47,20 +50,41 @@ angular
 								 $scope.ladderpriceView=true;
 								 $scope.ladderpriceEdit=false;//隐藏取消
 							 }
+							 $scope.buyOrSale=$stateParams.buyOrSale;
 							 handle.pageRepeater();
 							 selectParentMateriel();//选择物料表格初始化
 							 initFormiCheck();
 
-						 }
-						 if($location.path()=="/priceList"){
+						 }else if($location.path()=="/invoiceView"){
+					 			debugger;
+					 			$scope.buyOrSale=$stateParams.priceList;
+					 			getInvoiceInfo($stateParams.priceList);//查看价格
+				 		}else if($location.path()=="/priceList"){
+				 			debugger;
+				 			if($stateParams.buyOrSale=='sale'){
+				 				debugger;
+				 				$("#buy").removeClass("active");
+				 				$("#sale").addClass("active");
+				 				$("#tab_buy").removeClass("active");
+				 				$("#tab_sale").addClass("active");
+				 				loadPriceListSaleTable();
+				 				//加载采购价格列表
+				 			}else{
+				 				$("#buy").addClass("active");
+				 				$("#sale").removeClass("active");
+				 				$("#tab_buy").addClass("active");
+				 				$("#tab_sale").removeClass("active")
+				 				loadPriceListBuyTable();//加载销售价格列表
+				 			}
+					 		}
+						/* if(){
 							 debugger;
 							 loadPriceListTable();//加载价格列表
-						 }
+						 }*/
 						 // set default layout mode
 						 $rootScope.settings.layout.pageContentWhite = true;
 						 $rootScope.settings.layout.pageBodySolid = false;
 						 $rootScope.settings.layout.pageSidebarClosed = false;
-						 getPriceListInfo($stateParams.priceListSerialNum);
 					 });
 
 			 //初始化toastr开始
@@ -93,7 +117,7 @@ angular
 					 $scope.$apply();
 				 });
 			 }
-			 // 构建datatables开始***************************************
+	/*		 // 构建datatables开始***************************************
 			 var tableAjaxUrl = "rest/priceList/getPriceList";
 			 var table;
 			 function loadPriceListTable(){
@@ -132,11 +156,11 @@ angular
 									 "sLast" : "尾页"
 								 }
 							 },
-							 /*	fixedHeader : {// 固定表头、表底
+							 	fixedHeader : {// 固定表头、表底
 													header : !0,
 													footer : !0,
 													headerOffset : a
-												},*/
+												},
 							 // select: true,行多选
 							 order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
 							 bRetrieve : true,
@@ -262,11 +286,352 @@ angular
 						 });
 				 // 添加checkbox功能
 				 // ***************************************
-			 }
+			 }*/
+			 
+				// 构建datatables开始***************************************
+				var tableAjaxUrl ;
+				 var table ;
+						
+function loadPriceListBuyTable(){
+				var a = 0,judgeString='buy';
+				  tableAjaxUrl = "rest/priceList/getPriceList?buyOrSale="+judgeString;
+				App.getViewPort().width < App
+						.getResponsiveBreakpoint("md") ? $(
+						".page-header").hasClass(
+						"page-header-fixed-mobile")
+						&& (a = $(".page-header").outerHeight(!0))
+						: $(".page-header").hasClass(
+								"navbar-fixed-top") ? a = $(
+								".page-header").outerHeight(!0)
+								: $("body").hasClass(
+										"page-header-fixed")
+										&& (a = 64);
+								
+								table = $("#sample_buy")
+								.DataTable(
+										{
+											language : {
+												aria : {
+													sortAscending : ": activate to sort column ascending",
+													sortDescending : ": activate to sort column descending"
+												},
+												emptyTable : "空表",
+												info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+												infoEmpty : "没有数据",
+												infoFiltered : "(从 _MAX_ 条数据中检索)",
+												lengthMenu : "每页显示 _MENU_ 条数据",
+												search : "查询:",
+												zeroRecords : "抱歉， 没有找到！",
+												paginate : {
+													"sFirst" : "首页",
+													"sPrevious" : "前一页",
+													"sNext" : "后一页",
+													"sLast" : "尾页"
+												}
+											},
+											/*fixedHeader : {// 固定表头、表底
+												header : !0,
+												footer : !0,
+												headerOffset : a
+											},*/
+											// select: true,行多选
+											order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+											bRetrieve : true,
+											// searching: true,//是否过滤检索
+											// ordering: true,//是否排序
+											lengthMenu : [
+													[ 5, 10, 15, 30, -1 ],
+													[ 5, 10, 15, 30, "All" ] ],
+											pageLength : 10,// 每页显示数量
+											processing : true,// loading等待框
+											// serverSide: true,
+											ajax : tableAjaxUrl,// 加载数据中发票表数据
+											   "aoColumns" : [
+								                              {
+								                            	  mData : 'serialNum'
+								                              },
+								                              {
+								                            	  mData : 'priceNum'
+								                              },  {
+								                            	  mData : 'supplyComName'
+								                              },{
+								                            	  mData : 'materielNum'
+								                              }, {
+								                            	  mData : 'materielName'
+								                              },{
+								                            	  mData : 'specifications'
+								                              }, {
+								                            	  mData : 'priceType'
+								                              },{
+								                            	  mData : 'unit'
+								                              }, {
+								                            	  mData : 'unitPrice'
+								                              },{
+								                            	  mData : 'rate'
+								                              },{
+								                            	  mData : 'currency'
+								                              }, {
+								                            	  mData : 'priceEffectiveDate',
+								                            	  mRender:function(data){
+								                            		  if(data!=""&&data!=null){
+								                            			  return timeStamp2ShortString(data);
+								                            		  }else{
+								                            			  return "";
+								                            		  }
+								                            	  }
+								                              },{
+								                            	  mData : 'priceExpirationDate',
+								                            	  mRender:function(data){
+								                            		  if(data!=""&&data!=null){
+								                            			  return timeStamp2ShortString(data);
+								                            		  }else{
+								                            			  return "";
+								                            		  }
+								                            	  }
+								                              },{
+								                            	  mData : 'status'
+								                              }],
+								                              'aoColumnDefs' : [ {
+								                            	  'targets' : 0,
+								                            	  'searchable' : false,
+								                            	  'orderable' : false,
+								                            	  'className' : 'dt-body-center',
+								                            	  'render' : function(data,
+								                            			  type, full, meta) {
+								                            		  return '<input type="checkbox" name="id[]" value="'
+								                            		  + $('<div/>')
+								                            		  .text(
+								                            				  data)
+								                            				  .html()
+								                            				  + '">';
+								                            	  }
+								                              },{
+								                            	  'targets' : 1,
+								                            	  'render' : function(data,
+								                            			  type, row, meta) {
+								                            		  return '<a   ng-click="showPriceListInfoModal(\''+row.serialNum+'\',\''+judgeString+'\')">'+data+'</a>';
+								                            		  //return data;
+								                            	  },"createdCell": function (td, cellData, rowData, row, col) {
+								                            		  $compile(td)($scope);
+								                            	  }
+								                              }  ],
+											
+										});
+								// 添加checkbox功能***************************************
+								// Handle click on "Select all" control
+								$('#example-select-'+judgeString+'-all').on(
+										'click',
+										function() {
+											// Check/uncheck all checkboxes in the
+											// table
+											var rows = table.rows({
+												'search' : 'applied'
+											}).nodes();
+											$('input[name="'+judgeString+'"]', rows).prop(
+													'checked', this.checked);
+										});
+
+								// Handle click on checkbox to set state of "Select
+								// all" control
+								$('#sample_'+judgeString+' tbody')
+										.on(
+												'change',
+												'input[name="'+judgeString+'"]',
+												function() {
+													// If checkbox is not checked
+													if (!this.checked) {
+														var el = $(
+																'#example-select-'+judgeString+'-all')
+																.get(0);
+														// If "Select all" control
+														// is checked and has
+														// 'indeterminate' property
+														if (el
+																&& el.checked
+																&& ('indeterminate' in el)) {
+															// Set visual state of
+															// "Select all" control
+															// as 'indeterminate'
+															el.indeterminate = true;
+														}
+													}
+												});
+								// 添加checkbox功能
+								// ***************************************
+				// 构建datatables结束***************************************
+				}
+
+function loadPriceListSaleTable(){
+	var a = 0,judgeString='sale';
+	 tableAjaxUrl = "rest/priceList/getPriceList?buyOrSale="+judgeString;
+	App.getViewPort().width < App
+			.getResponsiveBreakpoint("md") ? $(
+			".page-header").hasClass(
+			"page-header-fixed-mobile")
+			&& (a = $(".page-header").outerHeight(!0))
+			: $(".page-header").hasClass(
+					"navbar-fixed-top") ? a = $(
+					".page-header").outerHeight(!0)
+					: $("body").hasClass(
+							"page-header-fixed")
+							&& (a = 64);
+	table = $("#sample_sale")
+	.DataTable(
+			{
+				language : {
+					aria : {
+						sortAscending : ": activate to sort column ascending",
+						sortDescending : ": activate to sort column descending"
+					},
+					emptyTable : "空表",
+					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+					infoEmpty : "没有数据",
+					infoFiltered : "(从 _MAX_ 条数据中检索)",
+					lengthMenu : "每页显示 _MENU_ 条数据",
+					search : "查询:",
+					zeroRecords : "抱歉， 没有找到！",
+					paginate : {
+						"sFirst" : "首页",
+						"sPrevious" : "前一页",
+						"sNext" : "后一页",
+						"sLast" : "尾页"
+					}
+				},
+				/*fixedHeader : {// 固定表头、表底
+					header : !0,
+					footer : !0,
+					headerOffset : a
+				},*/
+				// select: true,行多选
+				order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+				bRetrieve : true,
+				// searching: true,//是否过滤检索
+				// ordering: true,//是否排序
+				lengthMenu : [
+						[ 5, 10, 15, 30, -1 ],
+						[ 5, 10, 15, 30, "All" ] ],
+				pageLength : 10,// 每页显示数量
+				processing : true,// loading等待框
+				// serverSide: true,
+				ajax : tableAjaxUrl,// 加载数据中发票表数据
+				"aoColumns" : [
+	                              {
+	                            	  mData : 'serialNum'
+	                              },
+	                              {
+	                            	  mData : 'priceNum'
+	                              },  {
+	                            	  mData : 'buyComName'
+	                              },{
+	                            	  mData : 'materielNum'
+	                              }, {
+	                            	  mData : 'materielName'
+	                              },{
+	                            	  mData : 'specifications'
+	                              }, {
+	                            	  mData : 'priceType'
+	                              },{
+	                            	  mData : 'unit'
+	                              }, {
+	                            	  mData : 'unitPrice'
+	                              },{
+	                            	  mData : 'rate'
+	                              },{
+	                            	  mData : 'currency'
+	                              }, {
+	                            	  mData : 'priceEffectiveDate',
+	                            	  mRender:function(data){
+	                            		  if(data!=""&&data!=null){
+	                            			  return timeStamp2ShortString(data);
+	                            		  }else{
+	                            			  return "";
+	                            		  }
+	                            	  }
+	                              },{
+	                            	  mData : 'priceExpirationDate',
+	                            	  mRender:function(data){
+	                            		  if(data!=""&&data!=null){
+	                            			  return timeStamp2ShortString(data);
+	                            		  }else{
+	                            			  return "";
+	                            		  }
+	                            	  }
+	                              },{
+	                            	  mData : 'status'
+	                              }],
+	                              'aoColumnDefs' : [ {
+	                            	  'targets' : 0,
+	                            	  'searchable' : false,
+	                            	  'orderable' : false,
+	                            	  'className' : 'dt-body-center',
+	                            	  'render' : function(data,
+	                            			  type, full, meta) {
+	                            		  return '<input type="checkbox" name="id[]" value="'
+	                            		  + $('<div/>')
+	                            		  .text(
+	                            				  data)
+	                            				  .html()
+	                            				  + '">';
+	                            	  }
+	                              },{
+	                            	  'targets' : 1,
+	                            	  'render' : function(data,
+	                            			  type, row, meta) {
+	                            		  return '<a   ng-click="showPriceListInfoModal(\''+row.serialNum+'\',\''+judgeString+'\')">'+data+'</a>';
+	                            		  //return data;
+	                            	  },"createdCell": function (td, cellData, rowData, row, col) {
+	                            		  $compile(td)($scope);
+	                            	  }
+	                              }  ],
+				
+			});
+	// 添加checkbox功能***************************************
+	// Handle click on "Select all" control
+	$('#example-select-'+judgeString+'-all').on(
+			'click',
+			function() {
+				// Check/uncheck all checkboxes in the
+				// table
+				var rows = table.rows({
+					'search' : 'applied'
+				}).nodes();
+				$('input[name="'+judgeString+'"]', rows).prop(
+						'checked', this.checked);
+			});
+
+	// Handle click on checkbox to set state of "Select
+	// all" control
+	$('#sample_'+judgeString+' tbody')
+			.on(
+					'change',
+					'input[name="'+judgeString+'"]',
+					function() {
+						// If checkbox is not checked
+						if (!this.checked) {
+							var el = $(
+									'#example-select-'+judgeString+'-all')
+									.get(0);
+							// If "Select all" control
+							// is checked and has
+							// 'indeterminate' property
+							if (el
+									&& el.checked
+									&& ('indeterminate' in el)) {
+								// Set visual state of
+								// "Select all" control
+								// as 'indeterminate'
+								el.indeterminate = true;
+							}
+						}
+					});
+	// 添加checkbox功能
+	// ***************************************
+	// 构建datatables结束***************************************
+	}
 			 // 添加价格开始***************************************
-			 $scope.addPriceList = function() {
+			 $scope.addPriceList = function(judgeString) {
 				 debugger;
-				 $state.go('addPriceList',{},{reload:true}); 
+				 $state.go('addPriceList',{buyOrSale:judgeString},{reload:true}); 
 			 }
 			 $scope.editPriceList = function(){
 				 debugger;
@@ -297,6 +662,11 @@ angular
 			 }
 			 $scope.savePriceList= function() {
 				 if($('#priceListForm').valid()&&judgeDate()){//表单验证通过则执行添加功能
+					 if($scope.buyOrSale.indexOf("buy")>-1){
+						 $scope.priceList.priceType='buyPrice';
+					 }else{
+						 $scope.priceList.priceType='salePrice';
+					 }
 					 priceListService.savePriceList($scope.priceList)
 					 .then(
 							 function(data) {
@@ -362,9 +732,11 @@ angular
 				 }								
 			 };
 			 // 添加价格结束***************************************
-
+			 $scope.showBuyOrSale=function(judgeString){
+				 $state.go('priceList',{buyOrSale:judgeString}); //切换tab
+			}
 			 // 修改价格开始***************************************							
-			 $scope.toEditPriceListPage = function() {//弹出框修改价格信息
+			 $scope.toEditPriceListPage = function(judgeString) {//弹出框修改价格信息
 				 debugger;
 				 var id_count = table.$('input[type="checkbox"]:checked').length;
 				 if(id_count==0){
@@ -373,7 +745,7 @@ angular
 					 toastr.warning("只能选择一条数据进行编辑");
 				 }else{
 					 var serialNum = table.$('input[type="checkbox"]:checked').val();
-					 $state.go("addPriceList",{priceListSerialNum:serialNum});
+					 $state.go("addPriceList",{buyOrSale:serialNum+judgeString});
 				 }
 			 };
 			 // 修改价格结束***************************************							
@@ -472,36 +844,7 @@ angular
 					$(element).removeData();
 					return this.optional(element) || Number($(element).data("topprice")) == NaN?false:(Number($(element).data("topprice"))-value>= 0);
 				}, "最低限价不能超过最高限价");
-			 function getPriceListInfo(serialNum){//获取价格详情
-				 if(!handle.isNull(serialNum)){
-					 debugger;
-					 var promise =priceListService.selectBySerialNum(serialNum);
-					 promise.then(function(data){
-						 debugger;
-						 data.priceList.priceEffectiveDate=timeStamp2ShortString(data.priceList.priceEffectiveDate);
-						 data.priceList.priceExpirationDate=timeStamp2ShortString(data.priceList.priceExpirationDate);
-						 $scope.priceList = data.priceList;
-						 $scope.ladderprices=data.ladderPrices;
-						 $scope.buyCom=data.buyCom;
-						 $scope.supplyCom=data.supplyCom;
-						 $scope.buyComs=data.buyList;
-						 $scope.priceLists=data.priceLists;
-						 _index=data.ladderPrices.length-1;
-						 if($scope.priceList.isLadderPrice=='1'){
-							 $('#isLadderPriceCheck').iCheck('check'); 
-							 $scope.isChecked=true;
-						 }  
-					 });
-				 }else{
-					 debugger;
-					 var promise =priceListService.selectBySerialNum(serialNum);
-					 promise.then(function(data){
-						 debugger;
-						 $scope.buyCom=data.buyCom;
-						 $scope.supplyCom=data.supplyCom;
-					 });
-				 }
-			 }
+			
 			 function getLadderPriceInfo(serialNum){//获取阶梯价格详情
 				 if(!handle.isNull(serialNum)){
 					 debugger;
@@ -538,9 +881,10 @@ angular
 			 /**
 			  * 显示价格信息(弹框)
 			  */
-			 $scope.showPriceListInfoModal = function(serialNum){
-				 getPriceListInfo(serialNum);
-				 $('#viewPriceList').modal('show'); 
+			 $scope.showPriceListInfoModal = function(serialNum,judgeString){
+				 $state.go("addPriceList",{buyOrSale:serialNum+judgeString});
+				 /*getPriceListInfo(serialNum);
+				 $('#viewPriceList').modal('show');*/ 
 			 };
 
 			 //创建对象(上传附件开始)
@@ -801,7 +1145,36 @@ angular
 				 }
 
 			  }
-
+			  function getPriceListInfo(serialNum){//获取价格详情
+					 if(!handle.isNull(serialNum)){
+						 debugger;
+						 var promise =priceListService.selectBySerialNum(serialNum);
+						 promise.then(function(data){
+							 debugger;
+							 data.priceList.priceEffectiveDate=timeStamp2ShortString(data.priceList.priceEffectiveDate);
+							 data.priceList.priceExpirationDate=timeStamp2ShortString(data.priceList.priceExpirationDate);
+							 $scope.priceList = data.priceList;
+							 $scope.ladderprices=data.ladderPrices;
+							 $scope.buyCom=data.buyCom;
+							 $scope.supplyCom=data.supplyCom;
+							 $scope.buyComs=data.buyList;
+							 $scope.priceLists=data.priceLists;
+							 _index=data.ladderPrices.length-1;
+							 if($scope.priceList.isLadderPrice=='1'){
+								 $('#isLadderPriceCheck').iCheck('check'); 
+								 $scope.isChecked=true;
+							 }  
+						 });
+					 }else{
+						 debugger;
+						 var promise =priceListService.selectBySerialNum(serialNum);
+						 promise.then(function(data){
+							 debugger;
+							 $scope.buyCom=data.buyCom;
+							 $scope.supplyCom=data.supplyCom;
+						 });
+					 }
+				 }
 			  /**
 			   * 下载EXCEL模板
 			   */
@@ -841,9 +1214,9 @@ angular
 				  });
 
 			  }
-			  $scope.exportPriceList = function(){
+			  $scope.exportPriceList = function(judgeString){
 				  handle.blockUI("正在导出数据，请稍后"); 
-				  window.location.href=$rootScope.basePath+"/rest/priceList/exportPriceList";
+				  window.location.href=$rootScope.basePath+"/rest/priceList/exportPriceList?buyOrSale="+judgeString;
 				  handle.unblockUI(); 
 			  }
 

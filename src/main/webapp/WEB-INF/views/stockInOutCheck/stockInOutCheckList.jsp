@@ -37,13 +37,27 @@
     	<!-- 入库检验列表---START -->
         <div class="tab-pane active" id="tab_in">
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
-		<div class="portlet box blue">
+		<div class="portlet light">
 			<div class="portlet-title">
 				<div class="caption">
-					<i class="fa fa-globe"></i>检验列表
+				<i class="fa fa-globe font-green"></i>
+					<span class="caption-subject font-green bold uppercase">入库检验 </span>
+				<!-- 	<i class="fa fa-globe"></i>检验列表 -->
 				</div>
 				<div class="actions">
-					<button ng-click="addStockInOutCheck('in')"
+				<div class="btn-group btn-group-devided" data-toggle="buttons">
+						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addStockInOutCheck('in')">
+	                                              <i class="fa fa-plus"></i> 添加</label>
+						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditStockInOutPage('in')">
+	                                              <i class="fa fa-edit"></i> 修改</label>
+						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delStockInOutCheck('In')" >
+	                                              <i class="fa fa-minus"></i> 删除</label>
+						<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
+	                                              <i class="fa fa-upload"></i> 导入</label>
+						<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportStockInOutCheck('in')">
+	                                              <i class="fa fa-file-excel-o"></i> 导出</label>
+	                 </div>
+					<!-- <button ng-click="addStockInOutCheck('in')"
 						data-toggle="modal" class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-plus"></i> 添加
 					</button><button ng-click="toEditStockInOutPage('in')"
@@ -72,7 +86,7 @@
 													class="tool-action" > <i class="fa fa-print"></i> 打印
 												</a></li> 
 											</ul>
-					</div>
+					</div> -->
 				</div>
 			</div>
 
@@ -205,13 +219,27 @@
         <!-- 出库检验列表---START -->
         <div class="tab-pane" id="tab_out">
          <!-- BEGIN EXAMPLE TABLE PORTLET-->
-		<div class="portlet box blue">
+		<div class="portlet light">
 			<div class="portlet-title">
 				<div class="caption">
-					<i class="fa fa-globe"></i>检验列表
+				<i class="fa fa-globe font-green"></i>
+					<span class="caption-subject font-green bold uppercase">出库检验</span>
+					<!-- <i class="fa fa-globe"></i>检验列表 -->
 				</div>
 				<div class="actions">
-					<button ng-click="addStockInOutCheck('out')"
+					<div class="btn-group btn-group-devided" data-toggle="buttons">
+						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addStockInOutCheck('out')">
+	                                              <i class="fa fa-plus"></i> 添加</label>
+						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditStockInOutPage('out')">
+	                                              <i class="fa fa-edit"></i> 修改</label>
+						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delStockInOutCheck('Out')" >
+	                                              <i class="fa fa-minus"></i> 删除</label>
+						<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
+	                                              <i class="fa fa-upload"></i> 导入</label>
+						<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportStockInOutCheck('out')">
+	                                              <i class="fa fa-file-excel-o"></i> 导出</label>
+	                 </div>
+					<!-- <button ng-click="addStockInOutCheck('out')"
 						data-toggle="modal" class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-plus"></i> 添加
 					</button><button ng-click="toEditStockInOutPage('out')"
@@ -240,7 +268,7 @@
 													class="tool-action" > <i class="fa fa-print"></i> 打印
 												</a></li> 
 											</ul>
-					</div>
+					</div> -->
 				</div>
 			</div>
 
