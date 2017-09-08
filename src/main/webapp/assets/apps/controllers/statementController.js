@@ -5,24 +5,46 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
     	// initialize core components
     	App.initAjax();
     	handle = new pageHandle();
+    	// $('[data-toggle="tooltip"]').tooltip();
     	// set default layout mode
     	$rootScope.settings.layout.pageContentWhite = true;
         $rootScope.settings.layout.pageBodySolid = false;
         $rootScope.settings.layout.pageSidebarClosed = false;
-        if($state.current.name=="statement"){
+        handle.datePickersInit("auto bottom");
+        	if($state.current.name=="statement"){      
         	loadSupplyMainTable();// 加载供应商对账单列表
         	loadBuyMainTable();// 加载采购商对账单列表
-        	}else{
-            	$('.date-picker').datepicker({
-    				rtl: App.isRTL(),
-    				orientation: "left",
-    				autoclose: true,
-    				dateFormat:"yyyy-mm-dd",
-    				language: "zh-CN"
-            	})
-            	// 初始化日期控件
-            	     	
-            	$scope.opration = {};
+        	var type = handle.getCookie("d_type");
+ 			if(type=="buyStatement"){
+	 				//loadStockInTable();
+	 				//$('#delivery_tab a:last').tab('show');
+	 				$('#statement_tab a:last').parent().addClass('active');
+	 				$('#statement_tab a:first').parent().removeClass('active');
+	 				$("#tab_15_2").addClass("active");
+	 				$("#tab_15_1").removeClass("active");
+	 				 $("#tip").text("客户对账单");
+	 		}else{
+	 				//loadTakeDelieryTable();
+	 				$('#statement_tab a:first').parent().addClass('active');
+	 				$('#statement_tab a:last').parent().removeClass('active');
+	 				$("#tab_15_1").addClass("active");
+	 				$("#tab_15_2").removeClass("active");
+	 				 $("#tip").text("供应商对账单");
+	 				//$('#delivery_tab a:first').tab('show');
+	 		}
+        	}else if($state.current.name=="addBuyStatement"){
+        		showdatepicker();
+        		supply_validateInit();
+        		initCustomers();    
+        	}else if($state.current.name=="addSupplyStatement"){
+        		showdatepicker();
+        		buy_validateInit();// 加载表单验证控件
+        		initSuppliers();
+        	}else if($state.current.name=="viewBuyStatement"){
+        		$scope.getStatement($stateParams.serialNum);
+        	}else if($state.current.name=="viewSupplyStatement"){
+        		$scope.getStatement($stateParams.serialNum);
+            	/*$scope.opration = {};
             	$scope.serialNums = [];
             	// 加载数据
             	if($stateParams.serialNum){
@@ -30,6 +52,7 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
             		$scope.getStatement($stateParams.serialNum)
             	}else{
             		$scope.opration = '新增';
+            		
             		$scope.statementMateriel={};
             	}
             	$scope.noShow = true;
@@ -37,31 +60,148 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
             		$scope.statementInput = true;
     		    	$scope.statementShow = true;
        		    	$scope.opration = '查看';
-    		    }
+    		    }*/
             	
-            	validateInit();// 加载表单验证控件
+            	
         	}
     });
     
+    var showdatepicker = function() {  
+        $("#statementDate").datepicker({       
+            orientation: "auto bottom",
+			autoclose: true,
+			language: "zh-CN"
+        }).on('hide', function(ev){
+    	  $('#statementDate').datepicker('setDate', handle.getLastMonthDay(ev.date));
+    	  $scope.getOrderRecords();
+    });  
+    }  
+    
+    $scope.createSelect = function(c_id){
+    	var obj = $('.'+c_id);
+    	var _select = $compile(obj)($scope);
+    	var select = $(_select).selectpicker();
+    }
+    
+    /**
+	 * 加载供应商数据
+	 */
+	var initSuppliers = function(){
+	var promise = statementService.initSuppliers();
+	promise.then(function(data){
+		$scope.suppliers = data.data;
+	},function(data){
+		//调用承诺接口reject();
+	});
+	}
+	
+	var initCustomers = function(){
+		var promise = statementService.initCustomers();
+		promise.then(function(data){
+			$scope.customers = data.data;
+		},function(data){
+			//调用承诺接口reject();
+		});
+	}
+    
+	$scope.getOrderRecords = function(){
+		var statementDate = $scope.statement.statementDate;
+		var supplyComId = $scope.statement.supplyComId;
+		var buyComId = $scope.statement.buyComId;
+		var comId='';
+		if(!isNull(supplyComId)){
+			comId = supplyComId;
+		}else{
+			supplyComId = null;
+		}
+		if(!isNull(buyComId)){
+			comId = buyComId;
+		}else{
+			buyComId = null;
+		}
+		console.log(statementDate+"------------->"+comId);
+		if(!isNull(statementDate)&&!isNull(comId)){
+			//statementService.getOrderAndPaymentRecords(supplyComId,statementDate);
+			statementService.getOrderAndPaymentRecords(supplyComId,buyComId,statementDate).then(
+         		     function(data){//加载页面对象
+         		    	 if(data.data.isExist==true){
+         		    		 toastr.warning("对账单已存在");
+         		    		$scope.orderList=[];
+             		    	$scope.paymentList=[];
+             		    	$scope.alreadyPaymentList=[];
+             		    	$scope.statement.beginShouldPay=0;
+             		    	getTotal();
+         		    	 }else{
+         		    		$scope.orderList=data.data.orderList;
+             		    	$scope.paymentList=data.data.paymentList;
+             		    	$scope.alreadyPaymentList=data.data.alreadyPaymentList;
+             		    	$scope.statement.beginShouldPay=data.data.endShouldPay;
+             		    	getTotal();
+         		    	 }
+         		     },
+         		     function(error){
+         		         $scope.error = error;
+         		     }
+         		 );
+		}else{
+			
+		}
+	}
+	
+	var getTotal = function(){
+			
+		    getOrderData();
+	    	$scope.statement.nowShouldPay = $scope.paymentMoney + $scope.statement.beginShouldPay;
+	    	$scope.statement.nowAlreadyPay = $scope.totalPaymentAmount;
+	    	$scope.statement.endShouldPay = $scope.totalUnPaymentMoney + $scope.statement.beginShouldPay;
+	    	$scope.statement.overTimeAmout = 0;
+	    	$scope.statement.serviceAmount = 0;
+	}
+	
+	var getOrderData = function(){
+		
+		$scope.totalMoney=0;
+    	$scope.paymentMoney=0;
+    	$scope.totalPaymentAmount=0;
+    	$scope.totalUnPaymentMoney=0;
+    	$scope.overDueMoney=0;
+    	$scope.totalServiceMoney=0;
+    	$scope.totalReadyAmount=0;
+    	$scope.totalUnReadyAmount=0;
+    	$scope.paymentTotal=0;
+    	$scope.alreadyPaymentTotal=0;
+    	for(var i in $scope.orderList){
+    		$scope.totalMoney += Number($scope.orderList[i].totalMoney);
+    		$scope.paymentMoney += Number($scope.orderList[i].paymentMoney);
+    		$scope.totalPaymentAmount += Number($scope.orderList[i].totalPaymentAmount);
+    		$scope.totalUnPaymentMoney += Number($scope.orderList[i].totalUnPaymentMoney);
+    		$scope.overDueMoney += Number($scope.orderList[i].overDueMoney);
+    		$scope.totalServiceMoney += Number($scope.orderList[i].totalServiceMoney);
+    		$scope.totalReadyAmount += Number($scope.orderList[i].totalReadyAmount);
+    		$scope.totalUnReadyAmount += Number($scope.orderList[i].totalUnReadyAmount);
+    	}
+    	
+    	for(var i in $scope.paymentList){
+    		$scope.paymentTotal += Number($scope.paymentList[i].paymentAmount);
+    	}
+    	for(var i in $scope.alreadyPaymentList){
+    		$scope.alreadyPaymentTotal += Number($scope.alreadyPaymentList[i].paymentAmount);
+    	}
+	}
    
-    $scope.save  = function() {
+	//供应商对账单
+    $scope.saveSupplyStatement  = function() {
     	if($('#form_sample_1').valid()){
-    		if($scope.statement.statementDate=='') {// 日期为空的处理
-    			$scope.statement.statementDate=null;
-    		}
-
-    		// 保存数据处理
-// $scope.statement.parentStatement=null;
-// $scope.statement.createTime=null;
-// $scope.statement.updateTime=null;
-    		// **********//
-
+    		$scope.statement.paymentAmount = $scope.statement.nowAlreadyPay;
+    		$scope.statement.totalAmount = $scope.statement.nowAlreadyPay;
+    		$scope.statement.deliveryAmount = $scope.statement.nowAlreadyPay;
     		statementService.save($scope.statement).then(
        		     function(data){
        		    	toastr.success('数据保存成功！');
-       		    	$location.search({serialNum:data.serialNum,view:1});
-       		    	$scope.statementInput = true;
-       			    $scope.statementShow = true;
+       		    	$state.go("statement");
+       		    	//$location.search({serialNum:data.serialNum,view:1});
+       		    	//$scope.statementInput = true;
+       			    //$scope.statementShow = true;
        		     },
        		     function(error){
        		         $scope.error = error;
@@ -69,10 +209,9 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
        		     }
        		 );
     	}
-    	
     }; 	
     
-    $scope.cancel  = function() {// 取消编辑
+    $scope.cancelSupplyStatement  = function() {// 取消编辑
     	if($scope.statement.serialNum==null || $scope.statement.serialNum=='') {// 如果是取消新增，返回列表页面
     		$state.go("statement");
     		return;
@@ -81,15 +220,46 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
     	$scope.cancelStatement();
     	
     };
-    $scope.cancelStatement  = function() {// 取消编辑对账单信息
-    	$scope.statementInput = true;
-	    $scope.statementShow = true;
+    
+    //采购商对账单
+    $scope.saveBuyStatement  = function() {
+    	if($('#form_sample_2').valid()){
+    		$scope.statement.paymentAmount = $scope.statement.nowAlreadyPay;
+    		$scope.statement.totalAmount = $scope.statement.nowAlreadyPay;
+    		$scope.statement.deliveryAmount = $scope.statement.nowAlreadyPay;
+    		statementService.save($scope.statement).then(
+    				function(data){
+    					toastr.success('数据保存成功！');
+    					$state.go("statement");
+    					//$location.search({serialNum:data.serialNum,view:1});
+    					//$scope.statementInput = true;
+    					//$scope.statementShow = true;
+    				},
+    				function(error){
+    					$scope.error = error;
+    					toastr.error('数据保存出错！');
+    				}
+    		);
+    	}
+    }; 	
+    
+    $scope.cancelBuyStatement  = function() {// 取消编辑
+    	if($scope.statement.serialNum==null || $scope.statement.serialNum=='') {// 如果是取消新增，返回列表页面
+    		$state.go("statement");
+    		return;
+    	}
+    	$scope.getStatement($scope.statement.serialNum);
+    	$scope.cancelStatement();
+    	
     };
     
-    $scope.edit  = function() {// 进入编辑
-    	$scope.statementInput = false;
-	    $scope.statementShow = false;
-    };
+    $scope.viewSupplyStatement = function(serialNum){
+    	$state.go("viewSupplyStatement",{serialNum,serialNum});
+    }
+    
+    $scope.viewBuyStatement = function(serialNum){
+    	$state.go("viewBuyStatement",{serialNum,serialNum});
+    }
     
     var buyTable;
     var loadBuyMainTable = function() {
@@ -119,9 +289,9 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 /*
  * fixedHeader: {//固定表头、表底 header: !0, footer: !0, headerOffset: a },
  */
-                statement: [[1, "asc"]],// 默认排序列及排序方式
                 searching: true,// 是否过滤检索
-                statementing:  true,// 是否排序
+                order: [[1, "asc"]],// 默认排序列及排序方式
+                ordering:  true,//是否排序
                 lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
                 pageLength: 5,// 每页显示数量
                 processing: true,// loading等待框
@@ -131,18 +301,18 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
                               { mData: 'serialNum' },
                               { mData: 'statementNum' },
                               { mData: 'statementDate' },
-                              { mData: 'buyComId' },
-                              { mData: 'totalAmount' },
-                              { mData: 'deliveryAmount' },
-                              { mData: 'paymentAmount' },
-                              { mData: 'serviceAmount' },
-                              { mData: 'reciveDate' },
+                              { mData: 'buyName' },
+                              { mData: 'beginShouldPay' },
+                              { mData: 'nowShouldPay' },
+                              { mData: 'nowAlreadyPay' },
+                              { mData: 'endShouldPay' },
                               { mData: 'status' }
                         ],
                'aoColumnDefs' : [ {
 							'targets' : 0,
 							'searchable' : false,
 							'orderable' : false,
+							'className' : 'dt-body-center',
 							'render' : function(data,
 									type, full, meta) {
 								return '<input type="checkbox" id="'+data+'" ng-click="getStatement_(\''+data+'\')" name="serialNum[]" value="'
@@ -155,7 +325,16 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
 						       }
-						} ]
+						},{
+							'targets' : 1,
+							'render' : function(data,
+									type, row, meta) {
+								return '<a href="javascript:void(0);" ng-click="viewBuyStatement(\''+row.serialNum+'\')">'+data+'</a>';
+							},
+							"createdCell": function (td, cellData, rowData, row, col) {
+								 $compile(td)($scope);
+						       }
+						}  ]
 
             }).on('statement.dt',
             function() {
@@ -237,9 +416,9 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
     /*
      * fixedHeader: {//固定表头、表底 header: !0, footer: !0, headerOffset: a },
      */
-                    statement: [[1, "asc"]],// 默认排序列及排序方式
+                    order: [[1, "asc"]],// 默认排序列及排序方式
+                    ordering:  true,//是否排序
                     searching: true,// 是否过滤检索
-                    statementing:  true,// 是否排序
                     lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
                     pageLength: 5,// 每页显示数量
                     processing: true,// loading等待框
@@ -249,19 +428,19 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
                                   { mData: 'serialNum' },
                               { mData: 'statementNum' },
                               { mData: 'statementDate' },
-                              { mData: 'supplyComId' },
+                              { mData: 'supplyName' },
                               { mData: 'totalAmount' },
                               { mData: 'deliveryAmount' },
                               { mData: 'paymentAmount' },
-                              { mData: 'serviceAmount' },
-                              { mData: 'reciveDate' },
+                              { mData: 'endShouldPay' },
+                              { mData: 'endShouldPay' },
                               { mData: 'status' }
-
                             ],
                    'aoColumnDefs' : [ {
     							'targets' : 0,
     							'searchable' : false,
     							'orderable' : false,
+    							'className' : 'dt-body-center',
     							'render' : function(data,
     									type, full, meta) {
     								return '<input type="checkbox" id="'+data+'" ng-click="getStatement_(\''+data+'\')" name="serialNum[]" value="'
@@ -270,6 +449,33 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
     															data)
     													.html()
     											+ '">';
+    							},
+    							"createdCell": function (td, cellData, rowData, row, col) {
+    								 $compile(td)($scope);
+    						       }
+    						},{
+    							'targets' : 1,
+    							'render' : function(data,
+    									type, row, meta) {
+    								return '<a href="javascript:void(0);" ng-click="viewSupplyStatement(\''+row.serialNum+'\')">'+data+'</a>';
+    							},
+    							"createdCell": function (td, cellData, rowData, row, col) {
+    								 $compile(td)($scope);
+    						       }
+    						},{
+    							'targets' : 7,
+    							'render' : function(data,
+    									type, row, meta) {
+    								return '0';
+    							},
+    							"createdCell": function (td, cellData, rowData, row, col) {
+    								 $compile(td)($scope);
+    						       }
+    						},{
+    							'targets' : 8,
+    							'render' : function(data,
+    									type, row, meta) {
+    								return '2017-12-12';
     							},
     							"createdCell": function (td, cellData, rowData, row, col) {
     								 $compile(td)($scope);
@@ -472,8 +678,21 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 		// 删除结束***************************************
         
 		
+		$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+	        // 获取已激活的标签页的名称
+	        var activeTab = $(e.target).text(); 
+	        // 获取前一个激活的标签页的名称
+	       // var previousTab = $(e.relatedTarget).text(); 
+	        var absurl = $location.absUrl();
+	        $("#tip").text(activeTab);
+	        if(activeTab=="客户对账单"){
+	        	handle.addCookie("d_type","buyStatement",24);
+	        }else{
+	        	handle.addCookie("d_type","supplyStatement",24);
+	        }
+	     });
 		
-		var validateInit = function() {
+		var buy_validateInit = function() {
         	var e = $("#form_sample_1"),
 	        r = $(".alert-danger", e),
 	        i = $(".alert-success", e);
@@ -484,22 +703,16 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 	            ignore: "",
 	            messages: {
 	            	statementNum:{required:"对账单号不能为空！"},
-	            	statementType:{required:"销售类型不能为空！"},
-	            	buyComId:{required:"采购方不能为空！"},
-	            	serviceModel:{required:"服务模式不能为空！"},
-	            	settlementClause:{required:"结算条款不能为空！"},
-	            	deliveryMode:{required:"提货方式不能为空！"},
-	            	rate:{required:"税率不能为空！"},
-	            	currency:{required:"币种不能为空！"}
+	            	supplyComId:{required:"供应商不能为空！"},
+	            	statementDate:{required:"对账日期不能为空！"},
+	            	maker:{required:"制单人不能为空！"},
+	            	makeDate:{required:"制单日期不能为空！"}
 	            },
             	rules: {statementNum: {required: !0,maxlength: 20},
-            		statementType: {required: !0,maxlength: 20},
-            		buyComId: {required: !0,maxlength: 20},
-            		serviceModel: {required: !0,maxlength: 20},
-            		settlementClause: {required: !0,maxlength: 20},
-            		deliveryMode: {required: !0,maxlength: 20},
-            		rate: {required: !0,maxlength: 20},
-            		currency: {required: !0,maxlength: 20}
+            		supplyComId: {required: !0,maxlength: 20},
+            		statementDate: {required: !0,maxlength: 20},
+            		maker: {required: !0,maxlength: 20},
+            		makeDate: {required: !0,maxlength: 20}
             			},
             		invalidHandler: function(e, t) {
                     i.hide(), r.show(), App.scrollTo(r, -200)
@@ -527,6 +740,54 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 	            }})
         };
         
+        var supply_validateInit = function() {
+        	var e = $("#form_sample_2"),
+        	r = $(".alert-danger", e),
+        	i = $(".alert-success", e);
+        	e.validate({
+        		errorElement: "span",
+        		errorClass: "help-block help-block-error",
+        		focusInvalid: !1,
+        		ignore: "",
+        		messages: {
+        			statementNum:{required:"对账单号不能为空！"},
+        			buyComId:{required:"采购商不能为空！"},
+        			statementDate:{required:"对账日期不能为空！"},
+        			maker:{required:"制单人不能为空！"},
+        			makeDate:{required:"制单日期不能为空！"}
+        		},
+        		rules: {statementNum: {required: !0,maxlength: 20},
+        			buyComId: {required: !0,maxlength: 40},
+        			statementDate: {required: !0,maxlength: 20},
+        			maker: {required: !0,maxlength: 20},
+        			makeDate: {required: !0,maxlength: 20}
+        		},
+        		invalidHandler: function(e, t) {
+        			i.hide(), r.show(), App.scrollTo(r, -200)
+        		},
+        		invalidHandler: function(e, t) {
+        			i.hide(),
+        			r.show(),
+        			App.scrollTo(r, -200)
+        		},
+        		errorPlacement: function(e, r) {
+        			r.is(":checkbox") ? e.insertAfter(r.closest(".md-checkbox-list, .md-checkbox-inline, .checkbox-list, .checkbox-inline")) : r.is(":radio") ? e.insertAfter(r.closest(".md-radio-list, .md-radio-inline, .radio-list,.radio-inline")) : e.insertAfter(r)
+        		},
+        		highlight: function(e) {
+        			$(e).closest(".form-group").addClass("has-error")
+        		},
+        		unhighlight: function(e) {
+        			$(e).closest(".form-group").removeClass("has-error")
+        		},
+        		success: function(e) {
+        			e.closest(".form-group").removeClass("has-error")
+        		},
+        		submitHandler: function(e) {
+        			i.show(),
+        			r.hide()
+        		}})
+        };
+        
         
         /**
 		 * 获取对账单信息
@@ -534,7 +795,11 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
         $scope.getStatement  = function(serialNum) {
         	statementService.getStatement(serialNum).then(
           		     function(data){//加载页面对象
-          		    	$scope.statement=data.statementInfo;
+          		    	$scope.statement=data.statement;
+          		    	$scope.orderList=data.orderList;
+         		    	$scope.paymentList=data.paymentList;
+         		    	$scope.alreadyPaymentList=data.alreadyPaymentList;
+         		    	getOrderData();
           		     },
           		     function(error){
           		         $scope.error = error;
@@ -588,9 +853,9 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 		       })
 		       
 		       
-		       $scope.exportStatement = function(){
+		       $scope.exportStatement = function(type){
 			    	 handle.blockUI("正在导出数据，请稍后"); 
-			    	 window.location.href=$rootScope.basePath+"/rest/statement/exportStatement?type=buy";
+			    	 window.location.href=$rootScope.basePath+"/rest/statement/exportStatement?type="+type;
 			    	 handle.unblockUI(); 
 			   }
 		       //********导入导出end****************//

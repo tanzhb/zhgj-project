@@ -389,8 +389,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         // 新增客户对账单
         .state('addBuyStatement', {
-            url: "/addBuyStatement?:serialNum&:view",
-            templateUrl: "rest/page/addBuyStatement",
+            url: "/statementBuyAdd?:serialNum&:view",
+            templateUrl: "rest/statement/statementBuyAdd",
             data: {pageTitle: '新增客户对账单'},
             controller: "statementController",
             resolve: {
@@ -403,18 +403,35 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 				'assets/global/plugins/datatables/datatables.all.min.js',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
-				'assets/apps/scripts/pageHandle.js',
-	        	'assets/apps/service/statemenService.js',
+	        	'assets/apps/service/statementService.js',
 				'assets/apps/controllers/statementController.js'
                       ]
                     });
                 }]
             }
         })
+        .state('viewBuyStatement', {
+        	url: "/statementBuyView?:serialNum&:view",
+        	templateUrl: "rest/statement/statementBuyView",
+        	data: {pageTitle: '新增客户对账单'},
+        	controller: "statementController",
+        	resolve: {
+        		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+        			return $ocLazyLoad.load({
+        				name: 'MetronicApp',
+        				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+        				files: [
+        				        'assets/apps/service/statementService.js',
+        				        'assets/apps/controllers/statementController.js'
+        				        ]
+        			});
+        		}]
+        	}
+        })
         // 新增供应商对账单
         .state('addSupplyStatement', {
-            url: "/addSupplyStatement?:serialNum&:view",
-            templateUrl: "rest/page/addSupplyStatement",
+            url: "/statementSupplyAdd?:serialNum&:view",
+            templateUrl: "rest/statement/statementSupplyAdd",
             data: {pageTitle: '新增供应商对账单'},
             controller: "statementController",
             resolve: {
@@ -427,13 +444,31 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 				'assets/global/plugins/datatables/datatables.all.min.js',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
-				'assets/apps/scripts/pageHandle.js',
-	        	'assets/apps/service/statemenService.js',
+	        	'assets/apps/service/statementService.js',
 				'assets/apps/controllers/statementController.js'
                       ]
                     });
                 }]
             }
+        })
+        // 查看供应商对账单
+        .state('viewSupplyStatement', {
+        	url: "/statementSupplyView?:serialNum&:view",
+        	templateUrl: "rest/statement/statementSupplyView",
+        	data: {pageTitle: '查看供应商对账单'},
+        	controller: "statementController",
+        	resolve: {
+        		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+        			return $ocLazyLoad.load({
+        				name: 'MetronicApp',
+        				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+        				files: [
+        				        'assets/apps/service/statementService.js',
+        				        'assets/apps/controllers/statementController.js'
+        				        ]
+        			});
+        		}]
+        	}
         })
 	    .state('userContract', {
 	            url: "/userContract",
@@ -632,7 +667,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        		}]
 	        	}
 	        }).state('demandPlanAdd', {
-	        	url: "/demandPlanAdd?:serialNum",
+	        	url: "/demandPlanAdd?:serialNum&:view",
 	        	templateUrl: "rest/demandPlan/demandPlanAdd",
 	        	data: {pageTitle: '新建需求计划'},
 	        	reload:true, 
@@ -710,7 +745,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    			return $ocLazyLoad.load({
 		    				name: 'MetronicApp',
 		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
-		    				files: [       
+		    				files: [     
+		    				        'assets/global/plugins/datatables/datatables.min.css',                  
+		    				        'assets/global/plugins/datatables/datatables.all.min.js',
 		    				        'assets/apps/controllers/TakeDeliveryController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js',
 		    				        'assets/apps/service/orderService.js'
@@ -748,7 +785,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    			return $ocLazyLoad.load({
 		    				name: 'MetronicApp',
 		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
-		    				files: [       
+		    				files: [
+		    				        'assets/global/plugins/datatables/datatables.min.css',                  
+		    				        'assets/global/plugins/datatables/datatables.all.min.js',
 		    				        'assets/apps/controllers/StockInController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js'
 		    				        ]

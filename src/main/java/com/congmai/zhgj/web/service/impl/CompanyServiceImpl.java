@@ -1,5 +1,6 @@
 package com.congmai.zhgj.web.service.impl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,10 +82,13 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 	@Override
 	public void deleteBatch(List<String> comIdList) {
 			companyMapper.deleteCompanyBatch(comIdList);
+			
+			
 	
 			//删除联系人
 			CompanyContact contact = new CompanyContact();
 			contact.setDelFlg("1");
+			contact.setUpdateTime(new Date());
 			CompanyContactExample contactExample = new CompanyContactExample();
 			contactExample.createCriteria().andComIdIn(comIdList);
 			companyContactMapper.updateByExampleSelective(contact, contactExample);
@@ -92,12 +96,14 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 			//删除账号信息
 			CompanyFinance finance = new CompanyFinance();
 			finance.setDelFlg("1");
+			finance.setUpdateTime(new Date());
 			CompanyFinanceExample financeExample = new CompanyFinanceExample();
 			financeExample.createCriteria().andComIdIn(comIdList);
 			companyFinanceMapper.updateByExampleSelective(finance, financeExample);
 			//删除资质信息
 			CompanyQualification qualification = new CompanyQualification();
 			qualification.setDelFlg("1");
+			qualification.setUpdateTime(new Date());
 			CompanyQualificationExample qualificationExample = new CompanyQualificationExample();
 			qualificationExample.createCriteria().andComIdIn(comIdList);
 			companyQualificationMapper.updateByExampleSelective(qualification, qualificationExample);

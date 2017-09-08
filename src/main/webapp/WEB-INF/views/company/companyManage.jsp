@@ -21,10 +21,11 @@
 <div class="row">
 	<div class="col-md-12">
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
-		<div class="portlet box blue">
+		<div class="portlet light">
 			<div class="portlet-title">
 				<div class="caption">
-					<i class="fa fa-globe"></i>企业信息列表
+					<i class="fa fa-globe font-green"></i>
+					<span class="caption-subject font-green bold uppercase">企业信息列表</span>
 				</div>
 				<!--  <div class="actions">
                                         <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#basic">
@@ -33,9 +34,21 @@
                                             <i class="fa fa-print"></i> 打印 </a>
                                     </div> -->
 				<div class="actions">
-					<a href="javascript:;" class="btn btn-default btn-sm btn-circle"
+					<div class="btn-group btn-group-devided" data-toggle="buttons">
+						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="toAddCompany()">
+	                                              <i class="fa fa-plus"></i> 添加</label>
+						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditCompany()">
+	                                              <i class="fa fa-edit"></i> 修改</label>
+						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="deleteCompanyBatch()">
+	                                              <i class="fa fa-minus"></i> 删除</label>
+						<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
+	                                              <i class="fa fa-upload"></i> 导入</label>
+						<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportCompany()">
+	                                              <i class="fa fa-file-excel-o"></i> 导出</label>
+	                 </div>
+					<!-- <a href="javascript:;" class="btn-transparent green btn-outline btn-sm btn-circle"
 						ng-click="toAddCompany()"> <i class="fa fa-plus"></i> 添加
-					</a> <a href="javascript:;" class="btn btn-default btn-sm btn-circle"
+					</a> <a href="javascript:;" class="btn btn-default btn-sm btn-circle label-info"
 						ng-click="toEditCompany()"> <i class="fa fa-edit"></i> 修改
 					</a> <a href="javascript:;" class="btn btn-default btn-sm btn-circle"
 						ng-click="deleteCompanyBatch()"> <i class="fa fa-minus"></i>
@@ -60,7 +73,7 @@
 								class="tool-action"> <i class="fa fa-print"></i> 打印
 							</a></li>
 						</ul>
-					</div>
+					</div> -->
 				</div>
 			</div>
 			<div class="portlet-body">
@@ -69,7 +82,7 @@
 					<thead>
 						<tr>
 							<th style="text-align: center"><input name="select_all" 
-								value="1" id="example-select-all" type="checkbox" /></th>
+								value="1" id="example-select-all" data-check="false" type="checkbox" /></th>
 							<th>企业编码</th>
 							<th>企业名称</th>
 							<th>合作分类</th>
@@ -98,20 +111,20 @@
 	<div class="col-md-12">
 		<div class="portlet light " id="comViewPage">
 			<div class="portlet-body" id="comViewContent">
-				<ul class="nav nav-pills">
-					<!--  <li class="active">
-                  <a data-target="#tab_1_1" data-toggle="tab">基本信息</a>
-              </li> -->
-					<li class="active"><a data-target="#tab_1_2" data-toggle="tab">联系人</a>
+				<ul class="nav nav-tabs">
+					<li class="active">
+                  	<a data-target="#tab_1_1" data-toggle="tab">基本信息</a>
+              		</li>
+					<li><a data-target="#tab_1_2" data-toggle="tab">联系人</a>
 					</li>
 					<li><a data-target="#tab_1_3" data-toggle="tab">资质信息</a></li>
 					<li><a data-target="#tab_1_4" data-toggle="tab">财务信息</a></li>
 				</ul>
 				<div class="tab-content">
-					<!-- <div class="tab-pane fade active in" id="tab_1_1">
+				<div class="tab-pane fade active in" id="tab_1_1">
                     <div class="">
                           <div class="portlet-body form">
-                              BEGIN FORM
+                             <!--  BEGIN FORM -->
                               <form class="form-horizontal" >
                                   <div class="form-body">
                                       <div class="row">
@@ -123,7 +136,7 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          /span
+                                          <!-- /span -->
                                           <div class="col-md-6">
                                               <div class="form-group">
                                                   <label class="control-label col-md-5">企业名称：</label>
@@ -132,9 +145,9 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          /span
+                                         <!--  /span -->
                                       </div>
-                                      /row
+                                      <!-- /row -->
                                       <div class="row">
                                           <div class="col-md-6">
                                               <div class="form-group">
@@ -144,7 +157,7 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          /span
+                                          <!-- /span -->
                                           <div class="col-md-6">
                                               <div class="form-group">
                                                   <label class="control-label col-md-5">企业简称：</label>
@@ -153,9 +166,9 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          /span
+                                          <!-- /span -->
                                       </div>
-                                      /row
+                                   <!--    /row -->
                                       <div class="row">
                                           <div class="col-md-6">
                                               <div class="form-group">
@@ -165,7 +178,7 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          /span
+                                          <!-- /span -->
                                           <div class="col-md-6">
                                               <div class="form-group">
                                                   <label class="control-label col-md-5">企业性质：</label>
@@ -174,9 +187,9 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          /span
+                                         <!--  /span -->
                                       </div>
-                                      /row
+                                     <!--  /row -->
                                       <div class="row">
                                           <div class="col-md-6">
                                               <div class="form-group">
@@ -186,7 +199,7 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          /span
+                                       <!--    /span -->
                                           <div class="col-md-6">
                                               <div class="form-group">
                                                   <label class="control-label col-md-5">注册资金：</label>
@@ -195,9 +208,9 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          /span
+                                         <!--  /span -->
                                       </div>
-                                      /row
+                                    <!--   /row -->
                                       <div class="row">
                                           <div class="col-md-6">
                                               <div class="form-group">
@@ -207,7 +220,7 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          /span
+                                          <!-- /span -->
                                           <div class="col-md-6">
                                               <div class="form-group">
                                                   <label class="control-label col-md-5">注册地址：</label>
@@ -216,9 +229,9 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          /span
+                                          <!-- /span -->
                                       </div>
-                                      /row
+                                     <!--  /row -->
                                       <div class="row">
                                           <div class="col-md-6">
                                               <div class="form-group">
@@ -228,7 +241,7 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          /span
+                                        <!--   /span -->
                                           <div class="col-md-6">
                                               <div class="form-group">
                                                   <label class="control-label col-md-5">联系电话：</label>
@@ -237,9 +250,9 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          /span
+                                          <!-- /span -->
                                       </div>
-                                      /row
+                                    <!--   /row -->
                                       <div class="row">
                                           <div class="col-md-6">
                                               <div class="form-group">
@@ -249,7 +262,7 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          /span
+                                         <!--  /span -->
                                           <div class="col-md-6">
                                               <div class="form-group">
                                                   <label class="control-label col-md-5">备注：</label>
@@ -258,16 +271,16 @@
                                                   </div>
                                               </div>
                                           </div>
-                                          /span
+                                         <!--  /span -->
                                       </div>
-                                      /row
+                                     <!--  /row -->
                                   </div>
                               </form>
-                              END FORM
+                             <!--  END FORM -->
                           </div>
                       </div>
-              </div> -->
-					<div class="tab-pane fade active in" id="tab_1_2">
+              		</div>
+					<div class="tab-pane fade" id="tab_1_2">
 						<div class="" id="tab2_c">
 
 							<!-- START SAMPLE TABLE PORTLET-->

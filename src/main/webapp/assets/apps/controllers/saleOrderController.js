@@ -10,7 +10,8 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
         $rootScope.settings.layout.pageBodySolid = false;
         $rootScope.settings.layout.pageSidebarClosed = false;
         if($state.current.name=="saleOrder"){
-        	loadMainTable();// 加载订单列表
+        	loadMainTable();// 加载订单列表(普通订单)
+        	loadMainFramTable();// 框架订单列表
         	}else{
             	$('.date-picker').datepicker({
     				rtl: App.isRTL(),
@@ -30,7 +31,10 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
             	}else{
             		$scope.opration = '新增';
             		$scope.orderMateriel={};
+            		dateSelectSetting();//日期选择限制
             	}
+            	
+            	
             	$scope.noShow = true;
             	if($stateParams.view==1){// 订单切换为查看
             		$scope.saleOrderInput = true;
@@ -253,7 +257,179 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
         };
         
         
+        var framTable;
+        var framTableAjaxUrl = "rest/order/findOrderList?type=sale&&fram=1";
+        var loadMainFramTable = function() {
+                a = 0;
+                App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
+                framTable = $("#sample_3")
+    			.DataTable({
+                    language: {
+                        aria: {
+                            sortAscending: ": activate to sort column ascending",
+                            sortDescending: ": activate to sort column descending"
+                        },
+                        emptyTable: "空表",
+                        info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                        infoEmpty: "没有数据",
+                        // infoFiltered: "(filtered1 from _MAX_ total entries)",
+                        lengthMenu: "每页显示 _MENU_ 条数据",
+                        search: "查询:",
+                        zeroRecords: "抱歉， 没有找到！",
+                        paginate: {
+                            "sFirst": "首页",
+                            "sPrevious": "前一页",
+                            "sNext": "后一页",
+                            "sLast": "尾页"
+                         }
+                    },
+    /*
+     * fixedHeader: {//固定表头、表底 header: !0, footer: !0, headerOffset: a },
+     */
+                    order: [[1, "asc"]],// 默认排序列及排序方式
+                    searching: true,// 是否过滤检索
+                    ordering:  true,// 是否排序
+                    lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
+                    pageLength: 5,// 每页显示数量
+                    processing: true,// loading等待框
+    // serverSide: true,
+                    ajax: framTableAjaxUrl,// 加载数据中
+                    "aoColumns": [
+                                  { mData: 'serialNum' },
+                                  { mData: 'orderNum' },
+                                  { mData: 'buyComId' },
+                                  { mData: null },
+                                  { mData: null },
+                                  { mData: 'deliveryMode' },
+                                  { mData: 'serviceModel' },
+                                  { mData: 'saleApplySerial' },
+                                  { mData: 'orderSerial' },
+                                  { mData: 'orderDate' }
+
+                            ],
+                   'aoColumnDefs' : [ {
+    							'targets' : 0,
+    							'searchable' : false,
+    							'orderable' : false,
+    							'render' : function(data,
+    									type, full, meta) {
+    								return '<input type="checkbox" id="'+data+'" ng-click="getSaleOrderInfo_(\''+data+'\')" name="serialNum[]" value="'
+    													+ $('<div/>')
+    													.text(
+    															data)
+    													.html()
+    											+ '">';
+    							},
+    							"createdCell": function (td, cellData, rowData, row, col) {
+    								 $compile(td)($scope);
+    						       }
+    						} ]
+
+                }).on('order.dt',
+                function() {
+                    console.log('排序');
+                })
+                
+                
+                
+                
+                // 添加checkbox功能***************************************
+    			// Handle click on "Select all" control
+    			$('#example-select-all').on(
+    					'click',
+    					function() {
+    						// Check/uncheck all checkboxes in the
+    						// table
+    						var rows = framTable.rows({
+    							'search' : 'applied'
+    						}).nodes();
+    						$('input[type="checkbox"]', rows).prop(
+    								'checked', this.checked);
+    					});
+    	
+    			// Handle click on checkbox to set state of "Select
+    			// all" control
+    			$('#sample_3 tbody')
+    					.on(
+    							'change',
+    							'input[type="checkbox"]',
+    							function() {
+    								// If checkbox is not checked
+    								if (!this.checked) {
+    									var el = $(
+    											'#example-select-all')
+    											.get(0);
+    									// If "Select all" control
+    									// is checked and has
+    									// 'indeterminate' property
+    									if (el
+    											&& el.checked
+    											&& ('indeterminate' in el)) {
+    										// Set visual state of
+    										// "Select all" control
+    										// as 'indeterminate'
+    										el.indeterminate = true;
+    									}
+    								}
+    							});
+    			// 添加checkbox功能
+    			// ***************************************
+            };
         
+         // 弹出确认删除模态框
+            $scope.deleteSaleFramOrder = function() {
+    			var ids = '';
+    			$scope.deleteType = 'fram';
+    			// Iterate over all checkboxes in the table
+    			framTable.$('input[type="checkbox"]').each(
+    					function() {
+    						// If checkbox exist in DOM
+    						if ($.contains(document, this)) {
+    							// If checkbox is checked
+    							if (this.checked) {
+    								// 将选中数据id放入ids中
+    								if (ids == '') {
+    									ids = this.value;
+    								} else
+    									ids = ids + ','
+    											+ this.value;
+    							}
+    						}
+    					});
+    			if(ids==''){
+        			toastr.warning('未选择订单！');return;
+        		}else{
+        			$('#delSaleOrderModal').modal('show');// 弹出删除确认模态框
+        		}
+    			
+    		};
+    		
+    		$scope.editSaleFramOrder  = function() {// 进入编辑页面
+            	var ids = '';
+        		// Iterate over all checkboxes in the table
+        		framTable.$('input[type="checkbox"]').each(
+        				function() {
+        					// If checkbox exist in DOM
+        					if ($.contains(document, this)) {
+        						// If checkbox is checked
+        						if (this.checked) {
+        							// 将选中数据id放入ids中
+        							if (ids == '') {
+        								ids = this.value;
+        							} else{
+        								ids = "more"
+        							}
+        						}
+        					}
+        				});
+        		if(ids==''){
+        			toastr.warning('请选择一个订单！');return;
+        		}else if(ids=='more'){
+        			toastr.warning('只能选择一个订单！');return;
+        		}
+        		
+        		$state.go("addSaleOrder",{serialNum:ids});
+            };
         // 弹出确认删除模态框
         $scope.deleteSaleOrder = function() {
 			var ids = '';
@@ -312,21 +488,40 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 		$scope.del = function() {
 			var ids = '';
 			// Iterate over all checkboxes in the table
-			table.$('input[type="checkbox"]').each(
-					function() {
-						// If checkbox exist in DOM
-						if ($.contains(document, this)) {
-							// If checkbox is checked
-							if (this.checked) {
-								// 将选中数据id放入ids中
-								if (ids == '') {
-									ids = this.value;
-								} else
-									ids = ids + ','
-											+ this.value;
+			if($scope.deleteType == 'fram'){
+				framTable.$('input[type="checkbox"]').each(
+						function() {
+							// If checkbox exist in DOM
+							if ($.contains(document, this)) {
+								// If checkbox is checked
+								if (this.checked) {
+									// 将选中数据id放入ids中
+									if (ids == '') {
+										ids = this.value;
+									} else
+										ids = ids + ','
+												+ this.value;
+								}
 							}
-						}
-					});
+						});
+			}else{
+				table.$('input[type="checkbox"]').each(
+						function() {
+							// If checkbox exist in DOM
+							if ($.contains(document, this)) {
+								// If checkbox is checked
+								if (this.checked) {
+									// 将选中数据id放入ids中
+									if (ids == '') {
+										ids = this.value;
+									} else
+										ids = ids + ','
+												+ this.value;
+								}
+							}
+						});
+			}
+			
 			orderService
 					.delOrder(ids)
 					.then(
@@ -412,6 +607,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
         $scope.getSaleOrderInfo  = function(serialNum) {
         	orderService.getOrderInfo(serialNum).then(
           		     function(data){//加载页面对象
+          		    	
           		    	$scope.saleOrder=data.orderInfo;
           		    	$scope.orderMateriel=data.orderMateriel;
           		    	$scope.contract=data.contract;
@@ -456,9 +652,25 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
         					if($scope.contract.contractType=="框架合同"){
         						$scope.showClauseFramework();
               	        	}
+        					
+        					dateSelectSetting();//日期选择限制
+             		    	if(!isNull($scope.contract.signDate)){
+             		    		$("#startDate").datepicker('setStartDate',$scope.contract.signDate);
+         			        	$("#endDate").datepicker('setStartDate',$scope.contract.signDate);
+             		    	}
+             		        
+             		    	if(!isNull($scope.contract.startDate)){
+             			        	$("#signDate").datepicker('setEndDate',$scope.contract.startDate);
+             			        	$("#endDate").datepicker('setStartDate',$scope.contract.startDate);
+             			    }  
+             		    	if(!isNull($scope.contract.signDate)){
+             			        	$("#signDate").datepicker('setEndDate',$scope.contract.signDate);
+             			        	$("#startDate").datepicker('setEndDate',$scope.contract.signDate);
+             				} 
           		    	}else{
           		    		$scope.contract = {};
           		    	}
+          		    	 
           		    	
           		     },
           		     function(error){
@@ -1035,6 +1247,40 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     	 /** *************订单物料操作 end*************** */
     	 
     	 /** ***************合同信息start******************** */
+	        //日期选择限制
+	        var dateSelectSetting = function() { //签订日期变化
+	        	startDateSetting();
+	        	endDateSetting();
+	        	signDateSetting();
+		    }  
+	        
+	        var signDateSetting = function() { //签订日期变化
+		        $("#signDate").datepicker().on('changeDate', function(ev){
+		        	$("#startDate").datepicker('setStartDate',timeStamp2ShortString(ev.date));
+		        	$("#endDate").datepicker('setStartDate',timeStamp2ShortString(ev.date));
+		        });  
+		    }  
+	        
+	        var startDateSetting = function() { //开始日期变化
+		        $("#startDate").datepicker().on('changeDate', function(ev){
+		        	$("#signDate").datepicker('setEndDate',timeStamp2ShortString(ev.date));
+		        	$("#endDate").datepicker('setStartDate',timeStamp2ShortString(ev.date));
+		        });  
+		    }  
+			 var endDateSetting = function() {   //结束日期变化
+		        $("#endDate").datepicker().on('changeDate', function(ev){
+		        	$("#signDate").datepicker('setEndDate',timeStamp2ShortString(ev.date));
+		        	$("#startDate").datepicker('setEndDate',timeStamp2ShortString(ev.date));
+		        });  
+			}  
+		 
+			jQuery.validator.addMethod("noFileFlag", function(value, element) {  
+					if($("#noFileFlag").length>0){
+						return false;    
+					}else{
+						return true;  
+					}
+				}, "文件不能为空");  
 	        var validateContractInit = function() {
 	        	var e = $("#form_contract"),
 		        r = $(".alert-danger", e),
@@ -1048,17 +1294,17 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 		            	contractNum:{required:"合同编号不能为空！",rangelength:jQuery.validator.format("合同编号位数必须在{0}到{1}字符之间！")},
 		            	startDate:{required:"开始日期不能为空！"},
 		            	endDate:{required:"结束日期不能为空！"},
-		            	electronicContract:{required:"合同附件不能为空！"}
+		            	electronicContract:{noFileFlag:"合同附件不能为空！"}
 		            },
 	            	rules: {contractNum:{required:true,
 			                	rangelength:[3,12]
 				                },
-				                startDate:{required:true,
+				                startDate:{required:true
 				                },
-				                endDate:{required:true,
-				                }/*,
-				                electronicContract:{required:true,
-				                }*/
+				                endDate:{required:true
+				                },
+				                electronicContract:{noFileFlag:true
+				                }
 	            			},
 	            		invalidHandler: function(e, t) {
 	                    i.hide(), r.show(), App.scrollTo(r, -200)
@@ -1188,7 +1434,11 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 			       }
 			       
 			       $scope.removefile = function(index){
-			    	   $scope.file[index].file = "";
+			    	   if(index=='electronicContract'||index=='signContract'){//合同附件
+		  		  			$scope.contract[index] = "";
+		  		  		}else{//订单附件
+		  		  			$scope.file[index].file = "";
+		  		  		}
 			       }
 /** ***************合同信息end******************** */
 /** ***************结算条款start******************** */
@@ -1920,6 +2170,12 @@ var e = $("#form_clauseSettlement"),
 		       $scope.exportSaleOrder = function(){
 			    	 handle.blockUI("正在导出数据，请稍后"); 
 			    	 window.location.href=$rootScope.basePath+"/rest/order/exportOrder?type=sale";
+			    	 handle.unblockUI(); 
+			   }
+		       
+		       $scope.exportSaleFramOrder = function(){
+			    	 handle.blockUI("正在导出数据，请稍后"); 
+			    	 window.location.href=$rootScope.basePath+"/rest/order/exportOrder?type=sale&&fram=1";
 			    	 handle.unblockUI(); 
 			   }
 		       //********导入导出end****************//

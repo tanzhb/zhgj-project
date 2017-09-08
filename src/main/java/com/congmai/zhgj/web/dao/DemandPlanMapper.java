@@ -3,13 +3,14 @@ package com.congmai.zhgj.web.dao;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.web.model.DemandPlan;
 import com.congmai.zhgj.web.model.DemandPlanExample;
+import com.congmai.zhgj.web.model.DemandPlanSelectExample;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
 public interface DemandPlanMapper extends GenericDao<DemandPlan, String>{
-    int countByExample(DemandPlanExample example);
+    int countByExample(DemandPlanSelectExample example);
 
     int deleteByExample(DemandPlanExample example);
 
@@ -19,7 +20,7 @@ public interface DemandPlanMapper extends GenericDao<DemandPlan, String>{
 
     int insertSelective(DemandPlan record);
 
-    List<DemandPlan> selectByExample(DemandPlanExample example);
+    List<DemandPlan> selectByExample(DemandPlanSelectExample example);
 
     DemandPlan selectByPrimaryKey(String serialNum);
 

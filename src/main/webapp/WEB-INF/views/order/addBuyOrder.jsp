@@ -102,30 +102,32 @@
                       <div class="row">
                           <div class="col-md-4">
                               <div class="form-group form-md-line-input">
-                                  <label class="control-label col-md-3"><span class="required" aria-required="true"> * </span>供应方：</label>
+                                  <label class="control-label col-md-3"><span class="required" aria-required="true"> * </span>卖方：</label>
                                   <div class="col-md-9">
                                   <input type="text" name="supplyComId" class="form-control" ng-hide="buyOrderInput" ng-model="buyOrder.supplyComId"  >
                                       <div class="form-control-focus"> </div>
-                                      <span class="help-block">请选择供应商</span>
+                                      <span class="help-block">请选择卖方</span>
                                       <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.supplyComId}} </p>
                                   </div>
-                                  
                               </div>
                           </div>
                           <!--/span-->
                           <div class="col-md-4">
                           	<div class="form-group form-md-line-input">
-                                  <label class="control-label col-md-3">销售方：</label>
+                                  <label class="control-label col-md-3">买方：</label>
                                   <div class="col-md-9">
                                   <input type="text" name="seller" class="form-control" ng-hide="buyOrderInput" ng-model="buyOrder.seller"  >
-                                      <div class="form-control-focus"> </div>
-                                      <span class="help-block">请输入销售方</span>
-                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.seller}} </p>
+                                      <div class="col-md-9">
+	                                  <!-- <input type="text" name="seller" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.seller"  >
+	                                      <div class="form-control-focus"> </div>
+	                                      <span class="help-block">请输入销售方</span> -->
+	                                      <p class="form-control-static"> 中航能科（上海）能源科技有限公司 </p>
+	                                  </div>
                                   </div>
                               </div>
                           </div>
                           <!--/span-->
-                          <div class="col-md-4">
+                          <!-- <div class="col-md-4">
                           	<div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3">委托方：</label>
                                   <div class="col-md-9">
@@ -135,7 +137,7 @@
                                       <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.entrustParty}} </p>
                                   </div>
                               </div>
-                          </div>
+                          </div> -->
                           <!--/span-->
                       </div>
                       <!--/row-->
@@ -424,7 +426,7 @@
                                              <span class="fileinput-filename">{{contract.electronicContract.substring(contract.electronicContract.indexOf("_")+1)}}</span> &nbsp;
                                              <a href="javascript：;" class="close fileinput-exists"  ng-click="removefile('electronicContract')" data-dismiss="fileinput"> </a>
                                          </div>
-                                       	<p class="form-control-static"  ng-show="contractShow" ng-if="contract.electronicContract==null||contract.electronicContract==''" class="c_edit" >未上传附件</p>
+                                       	<p class="form-control-static"  id="noFileFlag" ng-show="contractShow" ng-if="contract.electronicContract==null||contract.electronicContract==''" class="c_edit" >未上传附件</p>
                                        	<p class="form-control-static"  ng-show="contractShow" ng-if="contract.electronicContract!=null&&contract.electronicContract!=''" class="c_edit" ><a href="javascript：;" ng-click="downloadFile(contract.electronicContract)">{{contract.electronicContract.substring(contract.electronicContract.indexOf("_")+1)}}</a></p>
                                   </div>
                               </div>
@@ -857,7 +859,7 @@
              </div>   
           <!--结算条款end-->
           <!--垫资条款start-->
-             <div class="portlet-title">
+             <!-- <div class="portlet-title">
                             <div class="caption">垫资条款</div>
                             <div class="tools" id="noprintdiv">
                             	<button type="submit" ng-click="saveClauseAdvance()" ng-hide="clauseAdvanceInput" class="btn blue  btn-outline  btn-sm">
@@ -869,7 +871,7 @@
                              </div>
                         </div>
           <div class="portlet-body form">
-              <!-- BEGIN FORM-->
+              BEGIN FORM
               <form action="#" id="form_clauseAdvance"  class="form-horizontal">
                   <div class="form-body">
                       <div class="alert alert-danger display-hide">
@@ -887,7 +889,7 @@
                                   
                               </div>
                           </div>
-                          <!--/span-->
+                          /span
                           <div class="col-md-4">
                           		<div class="form-group form-md-line-input">
 	                              	<label class="control-label col-md-3">垫资方：</label>
@@ -899,9 +901,9 @@
 	                               	</div>
                                </div>
                           </div>
-                          <!--/span-->
+                          /span
                       </div>
-                      <!--/row-->
+                      /row
                       <div class="row">
                           <div class="col-md-4">
                               <div class="form-group form-md-line-input">
@@ -914,7 +916,7 @@
                                		</div>
                               </div>
                           </div>
-                          <!--/span-->
+                          /span
                           <div class="col-md-4">
                               <div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3">保证金比率：</label>
@@ -926,7 +928,7 @@
                                		</div>
                               </div>
                           </div>
-                          <!--/span-->
+                          /span
                           <div class="col-md-4">
                               <div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3">保证金金额：</label>
@@ -938,9 +940,9 @@
                                		</div>
                               </div>
                           </div>
-                          <!--/span-->
+                          /span
                       </div>
-                      <!--/row-->
+                      /row
                       <div class="row">
                           <div class="col-md-4">
                               <div class="form-group form-md-line-input">
@@ -953,7 +955,7 @@
                                		</div>
                               </div>
                           </div>
-                          <!--/span-->
+                          /span
                           <div class="col-md-4">
                               <div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3">垫资时间：</label>
@@ -966,7 +968,7 @@
                                		</div>
                               </div>
                           </div>
-                          <!--/span-->
+                          /span
                           <div class="col-md-4">
                               <div class="form-group form-md-line-input">
                                   <label class="control-label col-md-3">服务费：</label>
@@ -978,75 +980,13 @@
                                		</div>
                               </div>
                           </div>
-                          <!--/span-->
+                          /span
                       </div>
-                      <!--/row-->
+                      /row
                   </div>
 				</form>
-             </div>   
+             </div>   --> 
              <!--垫资条款end-->
-             <!--交付条款start-->
-             <div class="portlet-title">
-                            <div class="caption">交付条款</div>
-                            <div class="tools" id="noprintdiv">
-                            	<button type="submit" ng-click="saveClauseDelivery()" ng-hide="clauseDeliveryInput" class="btn blue  btn-outline  btn-sm">
-                               		<i class="fa fa-save"></i> 保存 </button>
-                               <button ng-click="cancelClauseDelivery()" type="button" ng-hide="clauseDeliveryInput" class="btn red  btn-outline  btn-sm">
-                               		<i class="fa fa-undo"></i> 取消 </button>
-                               <button ng-click="editClauseDelivery()" type="button" ng-show="clauseDeliveryShow&&noShow" class="btn blue  btn-outline  btn-sm">
-                               		<i class="fa fa-edit"></i> 编辑 </button>
-                             </div>
-                        </div>
-          <div class="portlet-body form">
-              <!-- BEGIN FORM-->
-              <form action="#" id="form_clauseDelivery"  class="form-horizontal">
-                  <div class="form-body">
-                      <div class="alert alert-danger display-hide">
-                          <button class="close" data-close="alert"></button> 请先输入正确数据！ </div>
-                      <!--/row-->
-                      <div class="row">
-                          <div class="col-md-4">
-                              <div class="form-group form-md-line-input">
-                                  <label class="control-label col-md-3">运输方式：</label>
-                                  <div class="col-md-9">
-                                  		<input type="text" name="transportType" class="form-control" ng-hide="clauseDeliveryInput" ng-model="clauseDelivery.transportType"  >
-                                      <div class="form-control-focus"> </div>
-                                      <span class="help-block">请输入运输方式</span>
-                                      <p class="form-control-static" ng-show="clauseDeliveryShow"> {{clauseDelivery.transportType}} </p>
-                               		</div>
-                              </div>
-                          </div>
-                          <!--/span-->
-                          <div class="col-md-4">
-                              <div class="form-group form-md-line-input">
-                                  <label class="control-label col-md-3">包装要求：</label>
-                                  <div class="col-md-9">
-                                  		<input type="text" name="packingRequire" class="form-control" ng-hide="clauseDeliveryInput" ng-model="clauseDelivery.packingRequire"  >
-                                      <div class="form-control-focus"> </div>
-                                      <span class="help-block">请输入包装要求</span>
-                                      <p class="form-control-static" ng-show="clauseDeliveryShow"> {{clauseDelivery.packingRequire}} </p>
-                               		</div>
-                              </div>
-                          </div>
-                          <!--/span-->
-                          <div class="col-md-4">
-                              <div class="form-group form-md-line-input">
-                                  <label class="control-label col-md-3">规格型号：</label>
-                                  <div class="col-md-9">
-                                  		<input type="text" name="specifications" class="form-control" ng-hide="clauseDeliveryInput" ng-model="clauseDelivery.specifications"  >
-                                      <div class="form-control-focus"> </div>
-                                      <span class="help-block">请输入规格型号</span>
-                                      <p class="form-control-static" ng-show="clauseDeliveryShow"> {{clauseDelivery.specifications}} </p>
-                               		</div>
-                              </div>
-                          </div>
-                          <!--/span-->
-                      </div>
-                      <!--/row-->
-                  </div>
-				</form>
-             </div>   
-             <!--交付条款end-->
              <!--验收条款start-->
              <div class="portlet-title">
                             <div class="caption">验收条款</div>
@@ -1109,6 +1049,68 @@
 				</form>
              </div>   
              <!--验收条款end-->
+             <!--交付条款start-->
+             <div class="portlet-title">
+                            <div class="caption">交付条款</div>
+                            <div class="tools" id="noprintdiv">
+                            	<button type="submit" ng-click="saveClauseDelivery()" ng-hide="clauseDeliveryInput" class="btn blue  btn-outline  btn-sm">
+                               		<i class="fa fa-save"></i> 保存 </button>
+                               <button ng-click="cancelClauseDelivery()" type="button" ng-hide="clauseDeliveryInput" class="btn red  btn-outline  btn-sm">
+                               		<i class="fa fa-undo"></i> 取消 </button>
+                               <button ng-click="editClauseDelivery()" type="button" ng-show="clauseDeliveryShow&&noShow" class="btn blue  btn-outline  btn-sm">
+                               		<i class="fa fa-edit"></i> 编辑 </button>
+                             </div>
+                        </div>
+          <div class="portlet-body form">
+              <!-- BEGIN FORM-->
+              <form action="#" id="form_clauseDelivery"  class="form-horizontal">
+                  <div class="form-body">
+                      <div class="alert alert-danger display-hide">
+                          <button class="close" data-close="alert"></button> 请先输入正确数据！ </div>
+                      <!--/row-->
+                      <div class="row">
+                          <div class="col-md-4">
+                              <div class="form-group form-md-line-input">
+                                  <label class="control-label col-md-3">运输方式：</label>
+                                  <div class="col-md-9">
+                                  		<input type="text" name="transportType" class="form-control" ng-hide="clauseDeliveryInput" ng-model="clauseDelivery.transportType"  >
+                                      <div class="form-control-focus"> </div>
+                                      <span class="help-block">请输入运输方式</span>
+                                      <p class="form-control-static" ng-show="clauseDeliveryShow"> {{clauseDelivery.transportType}} </p>
+                               		</div>
+                              </div>
+                          </div>
+                          <!--/span-->
+                          <div class="col-md-4">
+                              <div class="form-group form-md-line-input">
+                                  <label class="control-label col-md-3">包装要求：</label>
+                                  <div class="col-md-9">
+                                  		<input type="text" name="packingRequire" class="form-control" ng-hide="clauseDeliveryInput" ng-model="clauseDelivery.packingRequire"  >
+                                      <div class="form-control-focus"> </div>
+                                      <span class="help-block">请输入包装要求</span>
+                                      <p class="form-control-static" ng-show="clauseDeliveryShow"> {{clauseDelivery.packingRequire}} </p>
+                               		</div>
+                              </div>
+                          </div>
+                          <!--/span-->
+                          <div class="col-md-4">
+                              <div class="form-group form-md-line-input">
+                                  <label class="control-label col-md-3">规格型号：</label>
+                                  <div class="col-md-9">
+                                  		<input type="text" name="specifications" class="form-control" ng-hide="clauseDeliveryInput" ng-model="clauseDelivery.specifications"  >
+                                      <div class="form-control-focus"> </div>
+                                      <span class="help-block">请输入规格型号</span>
+                                      <p class="form-control-static" ng-show="clauseDeliveryShow"> {{clauseDelivery.specifications}} </p>
+                               		</div>
+                              </div>
+                          </div>
+                          <!--/span-->
+                      </div>
+                      <!--/row-->
+                  </div>
+				</form>
+             </div>   
+             <!--交付条款end-->
              <!--售后条款start-->
              <div class="portlet-title">
                             <div class="caption">售后条款</div>

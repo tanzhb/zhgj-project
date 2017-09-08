@@ -17,6 +17,10 @@ public interface OrderInfoMapper {
     int insertSelective(OrderInfo record);
 
     List<OrderInfo> selectByExample(OrderInfoExample example);
+    
+    List<OrderInfo> selectFramByExample(OrderInfo example);
+    
+    List<OrderInfo> selectCommenByExample(OrderInfo example);
 
     OrderInfo selectByPrimaryKey(String serialNum);
 

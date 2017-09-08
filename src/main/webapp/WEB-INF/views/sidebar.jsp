@@ -208,13 +208,14 @@
             </ul>
         </li> -->
         <shiro:hasAnyRoles name="lcsq,manager,hr,director">
+        
+        </shiro:hasAnyRoles>
         <li class="nav-item">
             <a ui-sref="vacation">
                 <i class="icon-refresh"></i>
                 <span class="title">请假</span>
             </a>
         </li>
-        </shiro:hasAnyRoles>
     </ul>
     <!-- END SIDEBAR MENU -->
 </div>
