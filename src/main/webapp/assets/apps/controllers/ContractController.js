@@ -68,16 +68,30 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 		fd.append('id', $("#id").val()); 
 		}
 		
-        fd.append('contractNum', $("#contractNum").val()); 
+        /*fd.append('contractNum', $("#contractNum").val()); 
         fd.append('contractType', $("#contractType").val()); 
-        fd.append('serviceModel', $("#serviceModel").val()); 
-        fd.append('settlementClause', $("#settlementClause").val()); 
-        fd.append('comId', $("#comId").val()); 
+        fd.append('firstParty',$scope.contractVO.firstParty); 
+        fd.append('firstPartySigner',$scope.contractVO.firstPartySigner); 
+        fd.append('secondParty',$scope.contractVO.secondParty); 
+        fd.append('secondPartySigner',$scope.contractVO.secondPartySigner);
+        fd.append('otherPartyContractNum',$scope.contractVO.otherPartyContractNum);
         fd.append('startDate', $("#startDate").val()); 
         fd.append('endDate', $("#endDate").val()); 
         fd.append('signDate', $("#signDate").val()); 
         fd.append('signer', $("#signer").val()); 
-        fd.append('remark', $("#remark").val()); 
+        fd.append('remark', $("#remark").val());*/ 
+		fd.append('contractNum',$scope.contractVO.contractNum); 
+        fd.append('contractType',$scope.contractVO.contractType); 
+        fd.append('firstParty',$scope.contractVO.firstParty); 
+        fd.append('firstPartySigner',$scope.contractVO.firstPartySigner); 
+        fd.append('secondParty',$scope.contractVO.secondParty); 
+        fd.append('secondPartySigner',$scope.contractVO.secondPartySigner);
+        fd.append('otherPartyContractNum',$scope.contractVO.otherPartyContractNum);
+        fd.append('startDate',$scope.contractVO.startDate); 
+        fd.append('endDate',$scope.contractVO.endDate); 
+        fd.append('signDate',$scope.contractVO.signDate); 
+        fd.append('remark',$scope.contractVO.remark);
+        fd.append('signerAddress',$scope.contractVO.signerAddress);
          $http({
         	  method:'POST',
               url:"rest/contract/saveUserContract",
@@ -111,13 +125,13 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
       		     function(data){
       		    	$scope.contractVO=data;
       		    	//将日期转换成标准格式
-      		    	var myJsDate=$filter('date')($scope.contractVO.startDate,'MM/dd/yyyy');
+      		    	var myJsDate=$filter('date')($scope.contractVO.startDate,'yyyy-MM-dd');
 					$scope.contractVO.startDate=myJsDate;
 					
-					var myJsDate1=$filter('date')($scope.contractVO.endDate,'MM/dd/yyyy');
+					var myJsDate1=$filter('date')($scope.contractVO.endDate,'yyyy-MM-dd');
 					$scope.contractVO.endDate=myJsDate1;
 					
-					var myJsDate2=$filter('date')($scope.contractVO.signDate,'MM/dd/yyyy');
+					var myJsDate2=$filter('date')($scope.contractVO.signDate,'yyyy-MM-dd');
 					$scope.contractVO.signDate=myJsDate2;
       		     },
       		     function(error){
@@ -234,37 +248,10 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 							                            { mData: 'comId' },
 							                            { mData: 'contractType' },
 							                            { mData: 'serviceModel' },
-							                            { mData: 'signDate',
-							                            	mRender:function(data){
-							                            		if(data!=""&&data!=null){
-							                            			return timeStamp2String(data);
-							                            		}else{
-							                            			return "";
-							                            		}
-							                            	}
-							                            }
-							                            ,
+							                            { mData: 'signDate'},
 							                            { mData: 'signer'},
-							                            { mData: 'startDate',
-							                            	mRender:function(data){
-							                            		if(data!=""&&data!=null){
-							                            			return timeStamp2String(data);
-							                            		}else{
-							                            			return "";
-							                            		}
-							                            	}
-							                            }
-							                            ,
-							                            { mData: 'endDate',
-							                            	mRender:function(data){
-							                            		if(data!=""&&data!=null){
-							                            			return timeStamp2String(data);
-							                            		}else{
-							                            			return "";
-							                            		}
-							                            	}
-							                            }
-							                            ,
+							                            { mData: 'startDate'},
+							                            { mData: 'endDate'},
 							                            { mData: 'versionNO' },
 							                            { mData: 'status',
 							                            	mRender:function(data){
@@ -505,10 +492,15 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
             	contractNum:{required:"合同编号不能为空！",rangelength:jQuery.validator.format("合同编号位数必须在{0}到{1}字符之间！")
             		/*remote:jQuery.validator.format("用户名已经被注册")*/},
             	contractType:{required:"合同类型不能为空！"},
-            	serviceModel:{required:"服务模式不能为空！"},
-            	settlementClause:{required:"结算条款不能为空！"},
-            	comId:{required:"供应商不能为空！"},
+            	otherPartyContractNum:{required:"对方合同号不能为空！"},
+            	firstParty:{required:"合同甲方不能为空！"},
+            	secondParty:{required:"合同乙方不能为空！"},
             	startDate:{required:"开始日期不能为空！"},
+            	
+            	firstPartySigner:{required:"甲方签订人不能为空！"},
+            	secondPartySigner:{required:"乙方签订人不能为空！"},
+            	signerAddress:{required:"签订地址不能为空！"},
+            	
             	endDate:{required:"结束日期不能为空！"},
             	signDate:{required:"签订日期不能为空！"},
             	signer:{required:"签订人不能为空！"},
@@ -550,14 +542,26 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
                 contractType:{required:true,
                 },
                 
-                serviceModel:{required:true,
+                otherPartyContractNum:{required:true,
                 },
                 
-                settlementClause:{required:true,
+                firstParty:{required:true,
                 },
                 
-                comId:{required:true,
+                secondParty:{required:true,
                 },
+                
+                
+                firstPartySigner:{required:true,
+                },
+                
+                secondPartySigner:{required:true,
+                },
+                
+                signerAddress:{required:true,
+                },
+                
+                
                 startDate:{required:true,
                 },
                 endDate:{required:true,

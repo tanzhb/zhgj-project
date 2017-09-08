@@ -1034,7 +1034,45 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 		    		}
 		    		$scope.supplyCount = handle.unique(arr).length;
 		    	}
-	       }  
+	       }
+	       
+	       $scope.checkedOrCancelAll = function() { 
+	    	   if($scope.materielAllChecked){
+	    		   if(!isNull($scope.rootMateriels)){
+			    		for(var i in $scope.rootMateriels){
+			    			$scope.rootMateriels[i].materielChecked = true;
+			    			console.log("===++++++=====>"+$scope.rootMateriels[i].materielChecked);
+			    		}
+			       }
+	    	   }else{
+	    		   if(!isNull($scope.rootMateriels)){
+			    		for(var i in $scope.rootMateriels){
+			    			$scope.rootMateriels[i].materielChecked = false;
+			    			console.log("===++++++=====>"+$scope.rootMateriels[i].materielChecked);
+			    		}
+			       }
+	    	   }
+	    	   //debugger;
+	    	   console.log("==============>"+$scope.materielAllChecked);
+	       };
+	       
+	       $scope.addToSaleOrder = function(){
+	    	   toastr.warning("开发中。。。");
+	    	   var arr = [];
+	    	   if(!isNull($scope.rootMateriels)){
+		    		for(var i in $scope.rootMateriels){
+		    			console.log("===++++++=====>"+$scope.rootMateriels[i].materielChecked);
+		    			if($scope.rootMateriels[i].materielChecked){
+		    				arr.push($scope.rootMateriels[i].serialNum);
+		    			}
+		    		}
+		       }
+	    	   console.log(arr);
+	       }
+	       
+	       $scope.cancel = function(){
+	    	   $state.go("demandPlan");
+	       }
 }]); 
 
 /*var changeSelectValue = function (value,obj){

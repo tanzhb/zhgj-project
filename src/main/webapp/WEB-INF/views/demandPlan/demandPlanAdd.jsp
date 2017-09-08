@@ -77,7 +77,7 @@
                                                          <p class="control-label left" ng-show="demandPlanView">{{demandPlan.buyComId}}</p>
                                                   </div> -->
 	                                              <div class="">
-	                                                   <select class="bs-select form-control customer" data-live-search="true"  id="buyComId"  name="buyComId" ng-model="demandPlan.buyComId" ng-hide="demandPlanAdd"  data-size="8">
+	                                                   <select class="form-control customer" selectpicker data-live-search="true"  id="buyComId"  name="buyComId" ng-model="demandPlan.buyComId" ng-hide="demandPlanAdd"  data-size="8">
 	                                                        <option value=""></option>
 	                                                        <option  ng-repeat="customer in customers" value="{{customer.comId}}">{{customer.comName}}</option>
 	                                                   </select>
@@ -178,11 +178,11 @@
                                                     <th>物料名称</th>
                                                     <th>规格型号</th>
                                                     <th>单位</th>
-                                                    <th>数量</th>
-                                                    <th>交付日期</th>
+                                                    <th width="10%">数量</th>
+                                                    <th width="15%">交付日期</th>
                                                     <th>距离交付</th>
                                                     <th>交付地点</th>
-                                                    <th>供应商</th>
+                                                    <th style="min-width: 100px;">供应商</th>
                                                     <th style="width: 140px;"></th>
                                                 </tr>
                                             </thead>
@@ -201,15 +201,15 @@
                                                     <td>{{materiel.specifications}}</td>
                                                     <td>{{materiel.unit}}</td>
                                                     <td>
-                                                    	<input type="text" ng-hide="demandPlanMaterielEdit{{$index}}" class="form-control  input-small" id="amount{{$index}}" ng-model="materiel.amount" value="">
+                                                    	<input type="text" ng-hide="demandPlanMaterielEdit{{$index}}" class="form-control" id="amount{{$index}}" ng-model="materiel.amount" value="">
                                                    	 	 <span class="help-block"></span>
                                                    	 	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.amount}}</label>
                                                     </td>
                                                     <td>
-	                                                    <div  ng-hide="demandPlanMaterielEdit{{$index}}" class="input-group input-medium date date-picker"
+	                                                    <div  ng-hide="demandPlanMaterielEdit{{$index}}" input-medium class="input-group date date-picker"
 															 data-date-format="yyyy-mm-dd"
 															data-date-viewmode="years">
-															<input type="text" class="form-control" readonly="" id="deliveryDate{{$index}}" ng-model="materiel.deliveryDate" name="deliveryDate"
+															<input type="text" class="form-control" style="min-width: 110px;" readonly="" id="deliveryDate{{$index}}" ng-model="materiel.deliveryDate" name="deliveryDate"
 																> <span class="input-group-btn">
 																<button class="btn default " type="button">
 																	<i class="fa fa-calendar"></i>
@@ -233,7 +233,7 @@
 	                                                    </select>
 	                                                    <label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.supplyName}}</label>
                                                     </td>
-                                                    <td style="width: 140px;">
+                                                    <td style="width: 140px;min-width: 120px;">
                                                     	<span>
                                                     		&nbsp;&nbsp;&nbsp;&nbsp;
 	                                                    	<a ng-hide="demandPlanMaterielEdit{{$index}}" ng-click="saveDemandPlanMateriel(materiel,$index)">保存</a>

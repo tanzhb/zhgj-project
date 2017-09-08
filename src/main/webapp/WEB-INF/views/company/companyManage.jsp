@@ -92,8 +92,14 @@
 				<table class="table table-bordered" id="companyTable">
 					<thead>
 						<tr>
-							<th style="text-align: center"><input name="select_all" 
-								value="1" id="example-select-all" data-check="false" type="checkbox" /></th>
+							<th style="text-align: center;width: 1px;">
+								<input name="select_all"  class="checkbox-inline"
+								value="1" id="example-select-all" data-check="false" type="checkbox" />
+								<!-- <label name="select_all" id="example-select-all"  class="mt-checkbox mt-checkbox-outline"  >
+                                    <input type="checkbox" ng-model="allChecked" ng-click="checkedOrCancelAll()">
+                                    <span></span>
+                                </label> -->
+							</th>
 							<th>企业编码</th>
 							<th>企业名称</th>
 							<th>合作分类</th>
