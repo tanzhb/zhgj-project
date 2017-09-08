@@ -242,7 +242,7 @@
 								</thead>
 								<tbody> 
 									<tr ng-repeat="info in orderList track by $index" >
-										<td>{{info.orderNum}}</td>
+										<td data-original-title="343434343">{{info.orderNum}}</td>
 										<td>{{info.orderNum}}</td>
 										<td>{{info.orderDate}}</td>
 										<td>{{info.totalMoney|currency:'￥'}}</td>

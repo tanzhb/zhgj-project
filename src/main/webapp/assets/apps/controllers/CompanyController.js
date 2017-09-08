@@ -69,16 +69,35 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	  //创建对象
 	  var uploader = $scope.uploader = new FileUploader({url:'rest/fileOperate/uploadSingleFile'});
 	 
-	  uploader.onAfterAddingFile = function(item){
-		  if(item.file.size>10000000){
-			  //toastr.warning("文件大小超过10M！");
-			  uploader.cancelAll();
+	  uploader.onAfterAddingFile = function(item){debugger;
+		  if($scope.cancelCheck){
+			  if(item.file.size>5242880){
+				  toastr.warning("上传文件大小不能超过5M！");
+				   //uploader.removeFromQueue(item);
+				  
+				    //uploader.clearQueue();
+				    uploader.cancelAll();
+				 
+				    uploader.clearQueue();
+				    uploader.cancelItem(item);
+				   
+			  }
 		  }
 	  }
 	  //添加文件到上传队列后
 	  uploader.onCompleteAll = function () {
 		  uploader.clearQueue();
 	  };
+	  
+	  uploader.onCancelItem = function(fileItem,response, status, headers){
+		  for(var i=0;i < $scope.companyQualifications.length;i++){
+	  		  if($scope.qualification_temp==$scope.companyQualifications[i]){
+	  			if(isNull($scope.companyQualifications[i].qualificatioImage)){
+	  			  $("#resetFile"+$scope.qualification_index).trigger("click");
+	  			}
+	  		  }
+	  	  }
+	  }
 	  //上传成功
 	  uploader.onSuccessItem = function (fileItem,response, status, headers) {
 		  if (status == 200){ 
@@ -102,15 +121,26 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 			toastr.error("上传失败！");
 	  };
 	  
-	  $scope.uploadFile = function(item){
+	  $scope.uploadFile = function(item,index){
 		  $scope.qualification_temp = item;
+		  $scope.qualification_index = index;
 	  }
 	  
 	  $scope.up = function(file){
 		  uploader.clearQueue();
+		  $scope.cancelCheck = true;
 		  uploader.addToQueue(file);
+		  $scope.cancelCheck = false;
 		  uploader.uploadAll();
 	  }
+	  
+      $scope.removefile = function(obj){
+   	   		for(var i=0;i < $scope.companyQualifications.length;i++){
+		  		  if(obj == $scope.companyQualifications[i]){
+		  			$scope.companyQualifications[i].qualificatioImage = "";
+		  		  }
+		  	}
+      }
 		
 	 var table;
 	 /** 加载列表 Start**/
@@ -548,6 +578,30 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 					}).nodes();
 					$('input[type="checkbox"]', rows).prop(
 							'checked', this.checked);
+					$scope.companyInfo = [];
+					if(!$('#example-select-all').data("check")){
+						$('#example-select-all').data("check",true);
+						$.each(rows,function(){
+							//console.log($(this).find('input[type="checkbox"]').val());
+							getCompanyInfo($(this).find('input[type="checkbox"]').val());
+							$(this).find('input[type="checkbox"]').data("check","true");
+						});
+					}else{
+						$('#example-select-all').data("check",false);
+						$scope.company = null;
+						$scope.companyQualifications = [];
+						$scope.companyContacts = [];
+						$scope.companyFinances = [];
+						$scope.companyInfo = [];
+						$.each(rows,function(){
+							//console.log($(this).find('input[type="checkbox"]').val());
+							
+							$(this).find('input[type="checkbox"]').data("check","false");
+						});
+						$scope.$apply();
+					}
+					
+					
 				});
 
 		// Handle click on checkbox to set state of "Select
@@ -1362,13 +1416,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    	   }
 	       }
 	       
-	       $scope.removefile = function(obj){
-	    	   for(var i=0;i < $scope.companyQualifications.length;i++){
-			  		  if(obj == $scope.companyQualifications[i]){
-			  			$scope.companyQualifications[i].qualificatioImage = "";
-			  		  }
-			  	}
-	       }
+
 	       
 	       
 	       $scope.saveData = function(){

@@ -5,12 +5,13 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
     	// initialize core components
     	App.initAjax();
     	handle = new pageHandle();
+    	// $('[data-toggle="tooltip"]').tooltip();
     	// set default layout mode
     	$rootScope.settings.layout.pageContentWhite = true;
         $rootScope.settings.layout.pageBodySolid = false;
         $rootScope.settings.layout.pageSidebarClosed = false;
         handle.datePickersInit("auto bottom");
-        	if($state.current.name=="statement"){
+        	if($state.current.name=="statement"){      
         	loadSupplyMainTable();// 加载供应商对账单列表
         	loadBuyMainTable();// 加载采购商对账单列表
         	var type = handle.getCookie("d_type");
@@ -191,6 +192,9 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 	//供应商对账单
     $scope.saveSupplyStatement  = function() {
     	if($('#form_sample_1').valid()){
+    		$scope.statement.paymentAmount = $scope.statement.nowAlreadyPay;
+    		$scope.statement.totalAmount = $scope.statement.nowAlreadyPay;
+    		$scope.statement.deliveryAmount = $scope.statement.nowAlreadyPay;
     		statementService.save($scope.statement).then(
        		     function(data){
        		    	toastr.success('数据保存成功！');
@@ -220,6 +224,9 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
     //采购商对账单
     $scope.saveBuyStatement  = function() {
     	if($('#form_sample_2').valid()){
+    		$scope.statement.paymentAmount = $scope.statement.nowAlreadyPay;
+    		$scope.statement.totalAmount = $scope.statement.nowAlreadyPay;
+    		$scope.statement.deliveryAmount = $scope.statement.nowAlreadyPay;
     		statementService.save($scope.statement).then(
     				function(data){
     					toastr.success('数据保存成功！');
@@ -422,12 +429,12 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
                               { mData: 'statementNum' },
                               { mData: 'statementDate' },
                               { mData: 'supplyName' },
-                              { mData: 'beginShouldPay' },
-                              { mData: 'nowShouldPay' },
-                              { mData: 'nowAlreadyPay' },
+                              { mData: 'totalAmount' },
+                              { mData: 'deliveryAmount' },
+                              { mData: 'paymentAmount' },
+                              { mData: 'endShouldPay' },
                               { mData: 'endShouldPay' },
                               { mData: 'status' }
-
                             ],
                    'aoColumnDefs' : [ {
     							'targets' : 0,
@@ -451,6 +458,24 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
     							'render' : function(data,
     									type, row, meta) {
     								return '<a href="javascript:void(0);" ng-click="viewSupplyStatement(\''+row.serialNum+'\')">'+data+'</a>';
+    							},
+    							"createdCell": function (td, cellData, rowData, row, col) {
+    								 $compile(td)($scope);
+    						       }
+    						},{
+    							'targets' : 7,
+    							'render' : function(data,
+    									type, row, meta) {
+    								return '0';
+    							},
+    							"createdCell": function (td, cellData, rowData, row, col) {
+    								 $compile(td)($scope);
+    						       }
+    						},{
+    							'targets' : 8,
+    							'render' : function(data,
+    									type, row, meta) {
+    								return '2017-12-12';
     							},
     							"createdCell": function (td, cellData, rowData, row, col) {
     								 $compile(td)($scope);

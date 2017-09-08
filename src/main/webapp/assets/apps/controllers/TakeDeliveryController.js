@@ -8,7 +8,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    	// initialize core components
 		    handle = new pageHandle();
 	    	App.initAjax();
-	    	handle.datePickersInit();
+	    	handle.datePickersInit("auto bottom");
 	    	if($location.path()=="/takeDeliveryAdd"){
 	    		
 	    		//handle.pageRepeater();

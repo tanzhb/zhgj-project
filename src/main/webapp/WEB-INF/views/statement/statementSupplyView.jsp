@@ -231,7 +231,7 @@
 										<td>{{totalPaymentAmount|currency:'￥'}}</td>
 										<td>{{totalUnPaymentMoney|currency:'￥'}}</td>
 										<td>{{overDueMoney|currency:'￥'}}</td>
-										<td>{{totalServiceMoney|currency:'￥'}}</td>
+										<td><span  data-toggle="tooltip" data-placement="top" title="Tooltip on top" >{{totalServiceMoney|currency:'￥'}}</span></td>
 										<td>{{totalReadyAmount|currency:'￥'}}</td>
 										<td>{{totalUnReadyAmount|currency:'￥'}}</td>
 										<td></td>

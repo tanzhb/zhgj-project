@@ -20,11 +20,14 @@ import org.springframework.stereotype.Service;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.core.util.Handle;
+import com.congmai.zhgj.web.dao.InvoiceMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
 import com.congmai.zhgj.web.dao.OrderMaterielMapper;
 import com.congmai.zhgj.web.dao.PaymentPlanViewMapper;
 import com.congmai.zhgj.web.dao.PaymentRecordMapper;
 import com.congmai.zhgj.web.dao.StatementMapper;
+import com.congmai.zhgj.web.model.Invoice;
+import com.congmai.zhgj.web.model.InvoiceExample;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderInfoExample;
 import com.congmai.zhgj.web.model.OrderMateriel;
@@ -65,6 +68,9 @@ public class StatementServiceImpl implements StatementService {
     
     @Resource
     private PaymentPlanViewMapper paymentPlanViewMapper;
+    
+    @Resource
+    private InvoiceMapper invoiceMapper;
     
     
 	@Override
@@ -298,6 +304,16 @@ public class StatementServiceImpl implements StatementService {
 												statementPaymentInfo.setPaymentAmount(String.valueOf(paymentAmount));//付款金额
 												statementPaymentInfo.setOrderNum(order.getOrderNum());//订单编号
 												statementPaymentInfo.setIsBill(record.getIsBill());//是否开票
+												//paymentSerial
+												InvoiceExample invoiceExample = new InvoiceExample();
+												invoiceExample.createCriteria().andPaymentSerialEqualTo(record.getSerialNum()).andDelFlgEqualTo("0");
+												List<Invoice> invoices = invoiceMapper.selectByExample(invoiceExample);
+												if(CollectionUtils.isNotEmpty(invoices)){
+													for(Invoice invoice : invoices){
+														
+													}
+												}
+												
 												statementPaymentInfo.setBillNum("施工中");//开票编号
 												statementPaymentInfo.setBillDate("施工中");//开票日期
 												statementPaymentInfo.setPeriod("1");//账期

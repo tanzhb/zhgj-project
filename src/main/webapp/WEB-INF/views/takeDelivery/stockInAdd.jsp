@@ -93,8 +93,8 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="orderSerial"> 采购订单号</label>
                                                     <div class="">
-                                                    		<input type="text" class="form-control" value="{{record.orderNum}}" readonly="readonly">
-                                                         <p class="control-label left" >{{record.orderNum}}</p>
+                                                    		<input type="text" class="form-control" value="{{record.orderNum}}" disabled="disabled">
+                                                         <!-- <p class="control-label left" >{{record.orderNum}}</p> -->
                                                     </div>
                                             </div>
 										</div>
@@ -106,7 +106,7 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="supplyComId"> 入库仓库</label>
                                                     <div class="">
-                                                    	<input type="text" class="form-control" value="{{warehouseCount}}" readonly="readonly">
+                                                    	<input type="text" class="form-control" value="{{warehouseCount}}" disabled="disabled">
                                                       <!--    <p class="control-label left" >{{warehouseCount}}</p> -->
                                                     </div>
                                             </div>
@@ -117,7 +117,7 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="shipper"> 入库库位</label>
                                                     <div class="">
-                                                    		<input type="text" class="form-control" value="{{positionCount}}" readonly="readonly">
+                                                    		<input type="text" class="form-control" value="{{positionCount}}" disabled="disabled">
                                                       <!--    <p class="control-label left" >{{positionCount}}</p> -->
                                                     </div>
                                             </div>

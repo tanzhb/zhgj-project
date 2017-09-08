@@ -77,7 +77,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="address">包含供应商：</label>
                                                     <div class="col-md-7">
-                                                         <p class="control-label left">未知</p>
+                                                         <p class="control-label left">{{supplyCount==null?0:supplyCount}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -142,11 +142,11 @@
 					<li>
 						<a data-target="#tab_1_2" data-toggle="tab">历史订单</a>
 					</li>
-					<li>
+					<!-- <li>
 						 <a href="javascript:;"  class="btn blue btn-outline" style="padding: 10px 15px;" ng-click="addMateriel()" >
                               <i class="fa fa-plus"></i>新增物料
                          </a>
-					</li>
+					</li> -->
 				</ul>
 				<div class="tab-content">
 					<div class="tab-pane fade active in" id="tab_1_1">
@@ -185,7 +185,7 @@
                                                     <th>距离交付</th>
                                                     <th>交付地点</th>
                                                     <th>供应商</th>
-                                                    <th style="width: 140px;"></th>
+                                                   <!--  <th style="width: 140px;"></th> -->
                                                 </tr>
                                             </thead>
                                            <tbody ng-if="rootMateriels.length==0">
@@ -236,7 +236,7 @@
 	                                                    <span class="help-block"></span>
 	                                                    <label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.supplyName}}</label>
                                                     </td>
-                                                    <td style="width: 140px;">
+                                                    <!-- <td style="width: 140px;">
                                                     	<span>
                                                     		&nbsp;&nbsp;&nbsp;&nbsp;
 	                                                    	<a ng-hide="demandPlanMaterielEdit{{$index}}" ng-click="saveDemandPlanMateriel(materiel,$index)">保存</a>
@@ -249,7 +249,7 @@
 	                                                    	<a ng-show="demandPlanMaterielView{{$index}}"  ng-click="deleteDemandPlanMateriel(materiel)">删除</a>
                                                     	</span>
                                                     	
-                                                    </td>
+                                                    </td> -->
                                                 </tr>
                                             </tbody>
                                         </table>

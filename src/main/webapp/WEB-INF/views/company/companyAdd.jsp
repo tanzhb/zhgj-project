@@ -328,17 +328,17 @@
 	                                                        <span class="btn blue btn-outline btn-file">
 	                                                            <span class="fileinput-new">上传附件</span>
 	                                                            <span class="fileinput-exists">更改</span>
-	                                                            <input type="file" name="..." nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="companyQualification" ng-click="uploadFile(companyQualification)" > </span>
+	                                                            <input type="file" name="..." nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="companyQualification" ng-click="uploadFile(companyQualification,$index)" > </span>
 	                                                        <span class="fileinput-filename">{{companyQualification.qualificatioImage.substring(companyQualification.qualificatioImage.indexOf("_")+1)}}</span> &nbsp;
-	                                                        <a href="javascript:;" class="close fileinput-exists" ng-click="removefile(companyQualification)" data-dismiss="fileinput"> </a>
+	                                                        <a href="javascript:;" class="close fileinput-exists" id="resetFile{{$index}}" ng-click="removefile(companyQualification)" data-dismiss="fileinput"> </a>
 	                                                    </div>
 				                                         <div ng-hide="companyQualificationAdd"   ng-if="companyQualification.qualificatioImage!=null&&companyQualification.qualificatioImage!=''"  class="fileinput fileinput-exists" data-provides="fileinput">
 	                                                        <span class="btn blue btn-outline btn-file">
 	                                                            <span class="fileinput-new">上传附件</span>
 	                                                            <span class="fileinput-exists">更改</span>
-	                                                            <input type="file" name="..." nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="companyQualification" ng-click="uploadFile(companyQualification)" > </span>
+	                                                            <input type="file" name="..." nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="companyQualification" ng-click="uploadFile(companyQualification,$index)" > </span>
 	                                                        <span class="fileinput-filename">{{companyQualification.qualificatioImage.substring(companyQualification.qualificatioImage.indexOf("_")+1)}}</span> &nbsp;
-	                                                        <a href="javascript:;" class="close fileinput-exists"  ng-click="removefile(companyQualification)" data-dismiss="fileinput"> </a>
+	                                                        <a href="javascript:;" class="close fileinput-exists" id="resetFile{{$index}}"  ng-click="removefile(companyQualification)" data-dismiss="fileinput"> </a>
 	                                                    </div>
                                                     	<label   ng-show="companyQualificationView" ng-if="companyQualification.qualificatioImage==null||companyQualification.qualificatioImage==''" class="c_edit" >未上传附件</label>
                                                     	<label   ng-show="companyQualificationView" ng-if="companyQualification.qualificatioImage!=null&&companyQualification.qualificatioImage!=''" class="c_edit" ><a href="javascript:;" title="下载附件" ng-click="downloadFile(companyQualification)">{{companyQualification.qualificatioImage.substring(companyQualification.qualificatioImage.indexOf("_")+1)}}</a></label>
@@ -390,7 +390,7 @@
 				<div class="tab-pane fade" id="tab_1_3">
 						<div class="portlet-body form">
 			                                    <div class="table-scrollable">
-			                                        <table class="table table-bordered table-hover">
+			                                        <table class="table table-striped table-bordered table-advance table-hover">
 			                                            <thead>
 			                                                <tr>
 			                                                    <th>姓名</th>
@@ -438,7 +438,7 @@
 				<div class="tab-pane fade" id="tab_1_4">
 						 <div class="portlet-body form">
                                     <div class="table-scrollable">
-                                        <table class="table table-bordered table-hover">
+                                        <table class="table table-striped table-bordered table-advance table-hover">
                                             <thead>
                                                 <tr>
                                                     <th>银行</th>

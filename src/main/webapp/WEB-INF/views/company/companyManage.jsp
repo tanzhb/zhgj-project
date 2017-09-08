@@ -82,7 +82,7 @@
 					<thead>
 						<tr>
 							<th style="text-align: center"><input name="select_all" 
-								value="1" id="example-select-all" type="checkbox" /></th>
+								value="1" id="example-select-all" data-check="false" type="checkbox" /></th>
 							<th>企业编码</th>
 							<th>企业名称</th>
 							<th>合作分类</th>

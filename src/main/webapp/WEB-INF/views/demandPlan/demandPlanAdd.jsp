@@ -43,12 +43,13 @@
                         <div class="portlet-title">
                             <div class="caption">需求计划</div>
                             <div class="actions">
-                                <button   ng-show="demandPlanView" class="btn blue  btn-outline  btn-sm " ng-click="editDemandPlanBasic()">
+                              
+                                <button   ng-hide="demandPlanAdd" class="btn green btn-sm btn-circle" ng-click="saveDemandPlan()">
+                                            <i class="fa fa-check"></i> 保存 </button>
+                                <button   ng-show="demandPlanView" class="btn purple  btn-sm btn-circle" ng-click="editDemandPlanBasic()">
                                             <i class="fa fa-edit"></i> 编辑 </button>
-                                <button   ng-show="demandPlanEdit" class="btn red  btn-outline  btn-sm " ng-click="cancelDemandPlanBasic()">
-                                            <i class="fa fa-undo"></i> 取消 </button>
-                                <button   ng-hide="demandPlanAdd" class="btn blue  btn-outline  btn-sm " ng-click="saveDemandPlan()">
-                                            <i class="fa fa-save"></i> 保存 </button>
+                                <button   ng-hide="demandPlanAdd" class="btn defualt  btn-sm btn-circle" ng-click="cancelDemandPlanBasic()">
+                                            <i class="fa fa-mail-reply"></i> 取消 </button>
                             </div>
                         </div>
                         <div class="portlet-body form">
@@ -89,12 +90,13 @@
 									<!--/row-->
 									<div class="row">
 										<div class="col-md-6">
-											<div class="form-group form-md-line-input">
+											<div class="form-group">
                                                     <label class="control-label bold" for="legalPerson">包含物料</label>
                                                     <div class="">
                                                         <!-- <input type="text" class="form-control" id="legalPerson" name="legalPerson" ng-model="company.legalPerson" ng-hide="companyAdd" >
                                                         <div class="form-control-focus"> </div> -->
-                                                         <p class="control-label left" >{{rootMateriels.length}}</p>
+                                                        <input type="text" class="form-control"  value="{{rootMateriels.length}}" disabled="disabled" ng-hide="demandPlanAdd">
+                                                       <p class="control-label left" ng-show="demandPlanView">{{rootMateriels.length}}</p> 
                                                     </div>
                                             </div>
 										</div>
@@ -104,7 +106,8 @@
                                                     <div class="">
                                                        <!--  <input type="text" class="form-control" id="address" name="address" ng-model="company.address" ng-hide="companyAdd" >
                                                         <div class="form-control-focus"> </div> -->
-                                                         <p class="control-label left">{{supplyCount}}</p>
+                                                        <input type="text" class="form-control"  value="{{supplyCount==null?0:supplyCount}}" disabled="disabled"  ng-hide="demandPlanAdd">
+                                                        <p class="control-label left"  ng-show="demandPlanView">{{supplyCount==null?0:supplyCount}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -115,7 +118,8 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="releaseDate">发布日期 <span class="required"> * </span></label>
                                                     <div class="">
-                                                        <input type="text" class="form-control date-picker" size="16" data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="releaseDate" name="releaseDate" ng-model="demandPlan.releaseDate" ng-hide="demandPlanAdd" >
+                                                        <input type="text" class="form-control date-picker" size="16" data-date-format="yyyy-mm-dd" data-date-viewmode="years"
+                                                         id="releaseDate" name="releaseDate" ng-model="demandPlan.releaseDate" ng-hide="demandPlanAdd" readonly="readonly">
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="demandPlanView">{{demandPlan.releaseDate}}</p>
                                                     </div>
@@ -152,7 +156,7 @@
                  		 <a data-target="#tab_1_1" data-toggle="tab">物料信息</a>
               		</li> 
               		<li>
-						 <a href="javascript:;"  class="btn blue btn-sm"  ng-click="addMateriel()" >
+						 <a href="javascript:;"  class="btn blue" style="padding: 10px 15px;"  ng-click="addMateriel()" >
                               <i class="fa fa-plus"></i>新增物料
                          </a>    
 					</li>

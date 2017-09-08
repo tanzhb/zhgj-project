@@ -667,7 +667,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        		}]
 	        	}
 	        }).state('demandPlanAdd', {
-	        	url: "/demandPlanAdd?:serialNum",
+	        	url: "/demandPlanAdd?:serialNum&:view",
 	        	templateUrl: "rest/demandPlan/demandPlanAdd",
 	        	data: {pageTitle: '新建需求计划'},
 	        	reload:true, 
