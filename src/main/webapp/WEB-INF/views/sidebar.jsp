@@ -40,43 +40,56 @@
                     </a>
                 </li>
                 </shiro:hasPermission>
+                <shiro:hasPermission name="zhgj:price:*">
                 <li>
                     <a ui-sref="priceList">
                         <i class="icon-check"></i> 价格目录</span>
                     </a>
                 </li>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="zhgj:contract:*">
                 <li>
                     <a ui-sref="userContract">
                         <i class="icon-check"></i> 合同管理</span>
                     </a>
                 </li>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="zhgj:warehouse:*">
                 <li>
                     <a ui-sref="warehouse">
                         <i class="icon-check"></i> 仓库管理</span>
                     </a>
                 </li>
+                </shiro:hasPermission>
             </ul>
         </li>
         </shiro:hasPermission>
+        <shiro:hasPermission name="zhgj:salesOrder">
         <li class="nav-item">
             <a href="javascript:;" class="nav-link nav-toggle" >
              <i class="icon-settings"></i>
-                <span class="title">销售管理</span>
+                <span class="title">销售订单</span>
                 <span class="arrow "></span>
             </a>
             <ul class="sub-menu">
+            	<shiro:hasPermission name="zhgj:demand:*">
                 <li>
                     <a ui-sref="demandPlan">
                         <i class="icon-puzzle"></i> 需求计划</span>
                     </a>
                 </li>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="zhgj:saleOrder:*">
                 <li>
                     <a ui-sref="saleOrder">
                         <i class="icon-puzzle"></i> 销售订单</span>
                     </a>
                 </li>
+                </shiro:hasPermission>
             </ul>
         </li>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="zhgj:purchaseOrder">
         <li class="nav-item">
             <!-- <a ui-sref="todo">
                 <i class="icon-check"></i>
@@ -84,20 +97,24 @@
             </a> -->
             <a href="javascript:;" class="nav-link nav-toggle">
                 <i class="icon-check"></i>
-                <span class="title">采购管理</span>
+                <span class="title">采购订单</span>
                 <span class="arrow "></span>
             </a>
             <ul class="sub-menu">
+            	<shiro:hasPermission name="zhgj:buyOrder:*">
                 <li>
                     <a ui-sref="buyOrder">
                         <i class="icon-puzzle"></i> 采购订单</span>
                     </a>
                 </li>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="zhgj:purchaseForecast:*">
                 <li>
                     <a ui-sref="purchaseForecast">
                         <i class="icon-paper-clip"></i> 采购预测</span>
                     </a>
                 </li>
+                </shiro:hasPermission>
                <!--  <li>
                     <a ui-sref="">
                         <i class="icon-check"></i>收货单</span>
@@ -105,6 +122,8 @@
                 </li> -->
             </ul>
         </li>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="zhgj:storeHouse">
        <li class="nav-item">
             <a href="javascript:;" class="nav-link nav-toggle">
                 <i class="icon-settings"></i>
@@ -113,36 +132,47 @@
             </a> 
             
             <ul class="sub-menu">
-            <li>
+            	<shiro:hasPermission name="zhgj:stock:*">
+            	<li>
                     <a ui-sref="stock">
                         <i class="icon-paper-clip"></i> 库存</span>
                     </a>
                 </li>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="zhgj:takeDelivery">
                 <li>
                     <a ui-sref="takeDelivery">
                         <i class="icon-paper-clip"></i> 收货</span>
                     </a>
                 </li>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="zhgj:check">
                 <li>
                     <a ui-sref="stockInOutCheck">
                         <i class="icon-check"></i> 检验</span>
                     </a>
                 </li>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="zhgj:delivery">
                 <li>
                     <a ui-sref="delivery">
                         <i class="icon-puzzle"></i> 发货</span>
                     </a>
                 </li>
+                </shiro:hasPermission>
             </ul>
 
         </li>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="zhgj:statement">
         <li class="nav-item">
             <a ui-sref="statement">
                 <i class="icon-check"></i>
                 <span class="title">对账单</span>
             </a>
         </li>
-
+		</shiro:hasPermission>
+		<shiro:hasPermission name="zhgj:paymentReceived">
        <li class="nav-item">
             <!-- <ul class="sub-menu">
 				<li><a ui-sref="#"><i class="icon-paper-clip"></i>应收款</span></a></li>
@@ -154,15 +184,23 @@
                 <span class="arrow "></span>
             </a> 
 			<ul class="sub-menu">
-				<li><a ui-sref="gatheringMoneyRecord"><i class="icon-paper-clip"></i> 应收款</a></li>
-				<li><a ui-sref="paymentRecordC"> <i class="icon-paper-clip"></i> 应付款</a></li>
+				<shiro:hasPermission name="zhgj:accountReceivable:*">
+					<li><a ui-sref="gatheringMoneyRecord"><i class="icon-paper-clip"></i> 应收款</a></li>
+				</shiro:hasPermission>
+				<shiro:hasPermission name="zhgj:accountsPayable:*">
+					<li><a ui-sref="paymentRecordC"> <i class="icon-paper-clip"></i> 应付款</a></li>
+				</shiro:hasPermission>
 			</ul>
-		</li>        <li class="nav-item">
+		</li>  
+		</shiro:hasPermission>  
+		<shiro:hasPermission name="zhgj:bill">   
+		<li class="nav-item">
             <a ui-sref="invoice">
                 <i class="icon-check"></i>
                 <span class="title">发票</span>
             </a>
         </li>
+        </shiro:hasPermission>
         <!-- <li class="nav-item">
             <a href="javascript:;" class="nav-link nav-toggle">
                 <i class="icon-settings"></i>
