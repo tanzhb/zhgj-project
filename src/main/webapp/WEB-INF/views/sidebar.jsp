@@ -10,14 +10,14 @@
     <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
     <ul class="page-sidebar-menu page-sidebar-menu-compact" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" ng-class="{'page-sidebar-menu-closed': settings.layout.pageSidebarClosed}">
    <!-- class="page-sidebar-menu" 工具栏风格为默认时的样式，上面改成紧凑的样式-->
-        <shiro:hasAnyRoles name="超级管理员,administrator,342"> 
+   
 	        <li class="start">
 	            <a ui-sref="dashboard">
 	                <i class="icon-home"></i>
 	                <span class="title">首页</span>
 	            </a>
 	        </li>
-        </shiro:hasAnyRoles>
+        
         <shiro:hasPermission name="zhgj:baseData">
         <li class="nav-item">
             <a href="javascript:;" class="nav-link nav-toggle">
@@ -52,7 +52,7 @@
                 </li>
                 <li>
                     <a ui-sref="warehouse">
-                        <i class="icon-check"></i> 仓库信息</span>
+                        <i class="icon-check"></i> 仓库管理</span>
                     </a>
                 </li>
             </ul>
@@ -108,7 +108,7 @@
        <li class="nav-item">
             <a href="javascript:;" class="nav-link nav-toggle">
                 <i class="icon-settings"></i>
-                <span class="title">物流管理</span>
+                <span class="title">仓储</span>
                 <span class="arrow "></span>
             </a> 
             
