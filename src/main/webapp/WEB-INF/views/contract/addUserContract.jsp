@@ -256,6 +256,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	});  
      
     	 $('#startDate').datepicker({
+    	   language: "zh-CN",
     		autoclose: true,
     		todayBtn: 'linked',
     		 todayHighlight: true
@@ -272,6 +273,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	
     	
     		$('#endDate').datepicker({
+    		language: "zh-CN",
     		autoclose: true,
     		todayBtn: 'linked',
     		todayHighlight: true
