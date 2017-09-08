@@ -598,12 +598,12 @@
 													<th>规格型号</th>
 													<th>单位</th>
 													<th>库存数量</th>
-													<th>采购数量</th>
+													<th>销售数量</th>
 													<th>单价</th>
 													<th>币种</th>
 													<th>税率</th>
-													<th>采购单价</th>
-													<th>含税采购单价</th>
+													<th>销售单价</th>
+													<th>含税销售单价</th>
 													<th>金额</th>
 													<th>税额</th>
 													
@@ -712,6 +712,33 @@
 				                                        	<a ng-show="orderMaterielShow{{$index}}"  ng-click="deleteOrderMateriel(_orderMateriel)"><i class="fa fa-minus"></i></a>
 				                                       	</span>
 				                                      </td>
+				                                  </tr>
+				                                  <tr>
+													<th></th>
+													<th>合计</th>
+													<th></th>
+													<th></th>
+													<th></th>
+													<th>采购数量</th>
+													<th>单价</th>
+													<th>币种</th>
+													<th>税率</th>
+													<th>采购单价</th>
+													<th>含税采购单价</th>
+													<th>金额</th>
+													<th>税额</th>
+													
+													<th ng-if="saleOrder.settlementClause =='服务费'">服务费率</th>
+													<th ng-if="saleOrder.settlementClause =='服务费'">服务费</th>
+													<th ng-if="saleOrder.settlementClause =='折扣折让'">折扣率</th>
+													<th ng-if="saleOrder.settlementClause =='折扣折让'">折后金额</th>
+													<th ng-if="saleOrder.settlementClause =='红票'">红票金额</th>
+													
+													<th>价税合计</th>
+													<th>交付日期</th>
+													<th>最晚交付日期</th>
+													<th>交付/提货地点</th>
+													<th style="width：100px;">操作</th>
 				                                  </tr>
 				                              </tbody>
 				                          </table>
