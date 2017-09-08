@@ -37,7 +37,7 @@
         <div class="tab-pane active" id="tab_15_1">
 <div class="row">
 	<div class="col-md-12">
-	        <div class="portlet box red">
+	        <div class="portlet light">
 	            <div class="portlet-title">
 				<div class="caption">
 					<i class="fa fa-globe"></i>采购订单
@@ -102,7 +102,7 @@
         <div class="tab-pane" id="tab_15_2">
         	<div class="row">
 	<div class="col-md-12">
-	        <div class="portlet box red">
+	        <div class="portlet light">
 	            <div class="portlet-title">
 				<div class="caption">
 					<i class="fa fa-globe"></i>采购订单

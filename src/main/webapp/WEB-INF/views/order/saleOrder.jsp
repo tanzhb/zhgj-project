@@ -37,11 +37,11 @@
 <div class="row">
 
 	<div class="col-md-12">
-	        <div class="portlet box red">
+	        <div class="portlet light">
 	            <div class="portlet-title">
-				<div class="caption">
+<!-- 				<div class="caption">
 					<i class="fa fa-globe"></i>销售订单
-				</div>
+				</div> -->
 				<div class="actions">
 					<a href="javascript:;" ui-sref="addSaleOrder"
 						 class="btn btn-default btn-sm btn-circle">
@@ -103,11 +103,11 @@
         	<div class="row">
 
 	<div class="col-md-12">
-	        <div class="portlet box red">
+	        <div class="portlet light">
 	            <div class="portlet-title">
-				<div class="caption">
+				<!-- <div class="caption">
 					<i class="fa fa-globe"></i>销售订单
-				</div>
+				</div> -->
 				<div class="actions">
 					<a href="javascript:;" ui-sref="addSaleOrder"
 						 class="btn btn-default btn-sm btn-circle">
