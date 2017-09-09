@@ -98,6 +98,11 @@ MetronicApp.controller('ThemePanelController', [ '$scope', function($scope) {
 		$('.layout-option', $('.theme-panel')).val("fluid");// 设置布局为顺序
 		$('.sidebar-style-option', $('.theme-panel')).val("compact");// 工具栏风格为紧凑
 		$('.layout-option').trigger("change");
+		
+		$('ul > li', $('.theme-panel')).removeClass("current");
+		$('.theme-colors > ul > .color-blue', $('.theme-panel')).addClass("current");
+        
+        
 	});
 } ]);
 
@@ -158,7 +163,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 
         // 价格目录
         .state('priceList', {
-            url: "/priceList",
+            url: "/priceList?:buyOrSale",
             templateUrl: "rest/priceList/viewPriceList",
             data: {pageTitle: '价格目录'},
             controller: "PriceListController",
@@ -176,7 +181,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                                 	'assets/apps/controllers/PriceListController.js',
                                 	'assets/apps/scripts/angular-file-upload-shim.min.js',
                                 	'assets/apps/scripts/angular-file-upload.min.js',
-                                	  'assets/global/plugins/bootbox/bootbox.min.js'
+                                	 'assets/global/plugins/bootbox/bootbox.min.js'
                         ]
                     });
                 }]
@@ -184,7 +189,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         
           .state('addPriceList', {
-            url: "/addPriceList?:priceListSerialNum",
+            url: "/addPriceList?:buyOrSale",
             templateUrl: "rest/priceList/addOrEditPriceListInfo",
             data: {pageTitle: '新增价格'},
             controller: "PriceListController",

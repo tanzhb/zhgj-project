@@ -267,14 +267,46 @@ public class StockInOutController {
 	     * @return
 	     */
 	    @RequestMapping("exportStockInOutCheck")
-	    public void exportStockInOutCheck(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,@RequestBody String  inOrOut) {
+	    @ResponseBody
+	    public void exportStockInOutCheck(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,String  inOrOut) {
 	    		Map<String, Object> dataMap = new HashMap<String, Object>();
 	    		List<StockInOutCheck> stockInOutCheckList= stockInOutCheckService.getAllStockInOutCheck(inOrOut,null);
 	    		for(StockInOutCheck s:stockInOutCheckList){
-	    			
+	    			  Integer totalQualifiedCount,totalUnQualifiedCount;
+	    				if ("in".equals(inOrOut)) {
+	    						totalQualifiedCount=0;totalUnQualifiedCount=0;
+	    						Delivery delivery= takeDeliveryService.selectByTakeDeliveryPrimaryKey(s.getTakeDeliverSerial());
+	    			    		for(DeliveryMateriel dm:delivery.getDeliveryMateriels()){
+	    			    			totalQualifiedCount+=Integer.parseInt(dm.getQualifiedCount()==null?"0":dm.getQualifiedCount());
+	    			    			totalUnQualifiedCount+=Integer.parseInt(dm.getUnqualifiedCount()==null?"0":dm.getUnqualifiedCount());
+	    			    		}
+	    			    		s.setMaterialNum(delivery.getDeliveryMateriels().size()+"");
+	    			    		s.setTotalQualifiedCount(totalQualifiedCount.toString());
+	    			    		s.setTotalUnQualifiedCount(totalUnQualifiedCount.toString());
+	    			    		s.setTakeDeliverNum(delivery.getTakeDelivery().getTakeDeliverNum());
+	    			    		s.setRelationBuyNum(orderService.selectById(delivery.getOrderSerial()).getOrderNum());
+	    				}
+	    				if ("out".equals(inOrOut)) {
+	    						totalQualifiedCount=0;totalUnQualifiedCount=0;
+	    						List<DeliveryMaterielVO> deliveryMateriels = deliveryService.selectListForDetail(s.getDeliverSerial());
+	    			    		for(DeliveryMaterielVO dmo:deliveryMateriels){
+	    			    			totalQualifiedCount+=Integer.parseInt(dmo.getQualifiedCount()==null?"0":dmo.getQualifiedCount());
+	    			    			totalUnQualifiedCount+=Integer.parseInt(dmo.getUnqualifiedCount()==null?"0":dmo.getUnqualifiedCount());
+	    			    		}
+	    			    		s.setMaterialNum(deliveryMateriels.size()+"");
+	    			    		s.setTotalQualifiedCount(totalQualifiedCount.toString());
+	    			    		s.setTotalUnQualifiedCount(totalUnQualifiedCount.toString());
+	    			    		DeliveryVO delivery=deliveryService.selectDetailById(s.getDeliverSerial());
+	    			    		s.setDeliverNum(delivery.getDeliverNum());
+	    			    	 	s.setRelationSaleNum(delivery.getOrderNum());
+	    					}
+	    				}
+	    		dataMap.put("stockInOutCheckList",stockInOutCheckList);
+	    		if("in".equals(inOrOut)){
+	    		ExcelUtil.export(request, response, dataMap, "stockInCheck", "入库信息");
+	    		}else{
+	    			ExcelUtil.export(request, response, dataMap, "stockOutCheck", "出库信息");
 	    		}
-	    		dataMap.put("stockInOutRecordList",stockInOutCheckList);
-	    		ExcelUtil.export(request, response, dataMap, "stockInOutRecord", "出入库信息");
 	    }
 	    /**
 	     * @Description (下载导入模板)

@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <!-- BEGIN PAGE HEADER-->
 <h3 class="page-title"> 采购订单
     <small></small>
@@ -25,25 +26,26 @@
 <!-- BEGIN MAIN CONTENT -->
 <div class="tabbable-line">
     <ul class="nav nav-tabs">
-        <li class="active">
-            <a data-target="#tab_15_1" data-toggle="tab">普通订单</a>
-        </li>
-        <li>
-            <a data-target="#tab_15_2" data-toggle="tab">框架订单</a>
-        </li>
-    </ul>
+		<shiro:hasPermission name="zhgj:buyNormalOrder">
+			<li class="active"><a data-target="#tab_15_1" data-toggle="tab">普通订单</a>
+			</li>
+		</shiro:hasPermission>
+		<shiro:hasPermission name="zhgj:buyFrameOrder">
+			<li><a data-target="#tab_15_2" data-toggle="tab">框架订单</a></li>
+		</shiro:hasPermission>
+	</ul>
     <div class="tab-content">
     	<!-- 普通订单---START -->
         <div class="tab-pane active" id="tab_15_1">
 <div class="row">
 	<div class="col-md-12">
-	        <div class="portlet box red">
+	        <div class="portlet light">
 	            <div class="portlet-title">
-				<div class="caption">
+<!-- 				<div class="caption">
 					<i class="fa fa-globe"></i>采购订单
-				</div>
+				</div> -->
 				<div class="actions">
-					<a href="javascript:;" ui-sref="addBuyOrder"
+					<!-- <a href="javascript:;" ui-sref="addBuyOrder"
 						 class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-plus"></i> 添加
 					</a> 
@@ -69,8 +71,38 @@
 								class="tool-action" ng-click="exportBuyOrder()"> <i class="fa fa-file-excel-o"></i> 导出
 							</a></li>
 						</ul>
-					</div>
-				</div>
+					</div> -->
+								<shiro:hasPermission name="buyNormalOrder:add">
+									<label class="btn btn-transparent green btn-circle btn-sm"
+										ui-sref="addBuyOrder"> <i class="fa fa-plus"></i> 添加
+									</label>
+								</shiro:hasPermission>
+								<shiro:hasPermission name="buyNormalOrder:edit">
+									<label class="btn btn-transparent purple btn-circle btn-sm"
+										ng-click="editBuyOrder()"> <i class="fa fa-edit"></i>
+										修改
+									</label></shiro:hasPermission>
+									<shiro:hasPermission name="buyNormalOrder:delete">
+										<label class="btn btn-transparent red btn-circle btn-sm"
+											ng-click="deleteBuyOrder()"> <i class="fa fa-minus"></i>
+											删除
+										</label>
+									</shiro:hasPermission>
+									<shiro:hasPermission name="buyNormalOrder:import">
+										<label
+											class="btn btn-transparent green btn-outline btn-circle btn-sm"
+											data-toggle="modal" data-target="#import"> <i
+											class="fa fa-upload"></i> 导入
+										</label>
+									</shiro:hasPermission>
+									<shiro:hasPermission name="buyNormalOrder:export">
+										<label
+											class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
+											ng-click="exportBuyOrder()"> <i
+											class="fa fa-file-excel-o"></i> 导出
+										</label>
+									</shiro:hasPermission>
+							</div>
 	            </div>
 	            <div class="portlet-body">
 	                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_2">
@@ -102,13 +134,13 @@
         <div class="tab-pane" id="tab_15_2">
         	<div class="row">
 	<div class="col-md-12">
-	        <div class="portlet box red">
+	        <div class="portlet light">
 	            <div class="portlet-title">
-				<div class="caption">
+<!-- 				<div class="caption">
 					<i class="fa fa-globe"></i>采购订单
-				</div>
+				</div> -->
 				<div class="actions">
-					<a href="javascript:;" ui-sref="addBuyOrder"
+					<!-- <a href="javascript:;" ui-sref="addBuyOrder"
 						 class="btn btn-default btn-sm btn-circle">
 						<i class="fa fa-plus"></i> 添加
 					</a> 
@@ -127,15 +159,42 @@
 							class="fa fa-angle-down"></i>
 						</a>
 						<ul class="dropdown-menu pull-right" id="sample_3_tools">
-							<!-- <li><a data-action="0"
+							<li><a data-action="0"
 								class="tool-action" data-toggle="modal" data-target="#import"> <i class="fa fa-upload"></i> 导入
-							</a></li>  -->
+							</a></li> 
 							<li><a href="javascript:;" data-action="1"
 								class="tool-action" ng-click="exportBuyFramOrder()"> <i class="fa fa-file-excel-o"></i> 导出
 							</a></li>
 						</ul>
-					</div>
-				</div>
+					</div> -->
+								<shiro:hasPermission name="buyFrameOrder:add">
+									<label class="btn btn-transparent green btn-circle btn-sm"
+										ui-sref="addBuyOrder"> <i class="fa fa-plus"></i> 添加
+									</label>
+								</shiro:hasPermission>
+								<shiro:hasPermission name="buyFrameOrder:edit">
+									<label class="btn btn-transparent purple btn-circle btn-sm"
+										ng-click="editBuyFramOrder()"> <i class="fa fa-edit"></i>
+										修改
+									</label>
+								</shiro:hasPermission>
+								<shiro:hasPermission name="buyFrameOrder:delete">
+									<label class="btn btn-transparent red btn-circle btn-sm"
+										ng-click="deleteBuyFramOrder()"> <i
+										class="fa fa-minus"></i> 删除
+									</label>
+								</shiro:hasPermission>
+								
+									<!-- <label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
+                                              <i class="fa fa-upload"></i> 导入</label> -->
+                                <shiro:hasPermission name="buyFrameOrder:export">
+									<label
+										class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
+										ng-click="exportBuyFramOrder()"> <i
+										class="fa fa-file-excel-o"></i> 导出
+									</label>
+								</shiro:hasPermission>
+							</div>
 	            </div>
 	            <div class="portlet-body">
 	                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_3">

@@ -1,6 +1,7 @@
 <%@ page language="java" import="java.util.*"
 	contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <head>
 <meta http-equiv="Content-Type"
 	content="multipart/form-data; charset=utf-8" />
@@ -35,16 +36,26 @@
                                     </div> -->
 				<div class="actions">
 					<div class="btn-group btn-group-devided" data-toggle="buttons">
-						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="toAddCompany()">
-	                                              <i class="fa fa-plus"></i> 添加</label>
-						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditCompany()">
-	                                              <i class="fa fa-edit"></i> 修改</label>
-						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="deleteCompanyBatch()">
-	                                              <i class="fa fa-minus"></i> 删除</label>
-						<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
-	                                              <i class="fa fa-upload"></i> 导入</label>
-						<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportCompany()">
-	                                              <i class="fa fa-file-excel-o"></i> 导出</label>
+						<shiro:hasPermission name="company:add">
+							<label class="btn btn-transparent green btn-circle btn-sm" ng-click="toAddCompany()">
+		                                              <i class="fa fa-plus"></i> 添加</label>
+	                    </shiro:hasPermission>
+	                    <shiro:hasPermission name="company:edit">
+							<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditCompany()">
+		                                              <i class="fa fa-edit"></i> 修改</label>
+	                    </shiro:hasPermission>
+	                    <shiro:hasPermission name="company:delete">                          
+							<label class="btn btn-transparent red btn-circle btn-sm" ng-click="deleteCompanyBatch()">
+		                                              <i class="fa fa-minus"></i> 删除</label>
+	                    </shiro:hasPermission>
+	                    <shiro:hasPermission name="company:import">
+							<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
+		                                              <i class="fa fa-upload"></i> 导入</label>
+	                    </shiro:hasPermission>
+	                    <shiro:hasPermission name="company:export">
+							<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportCompany()">
+		                                              <i class="fa fa-file-excel-o"></i> 导出</label>
+	                    </shiro:hasPermission>
 	                 </div>
 					<!-- <a href="javascript:;" class="btn-transparent green btn-outline btn-sm btn-circle"
 						ng-click="toAddCompany()"> <i class="fa fa-plus"></i> 添加
@@ -81,8 +92,14 @@
 				<table class="table table-bordered" id="companyTable">
 					<thead>
 						<tr>
-							<th style="text-align: center"><input name="select_all" 
-								value="1" id="example-select-all" data-check="false" type="checkbox" /></th>
+							<th style="text-align: center;width: 1px;">
+								<input name="select_all"  class="checkbox-inline"
+								value="1" id="example-select-all" data-check="false" type="checkbox" />
+								<!-- <label name="select_all" id="example-select-all"  class="mt-checkbox mt-checkbox-outline"  >
+                                    <input type="checkbox" ng-model="allChecked" ng-click="checkedOrCancelAll()">
+                                    <span></span>
+                                </label> -->
+							</th>
 							<th>企业编码</th>
 							<th>企业名称</th>
 							<th>合作分类</th>

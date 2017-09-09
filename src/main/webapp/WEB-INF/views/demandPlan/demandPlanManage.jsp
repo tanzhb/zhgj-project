@@ -1,5 +1,6 @@
 <%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <head>
 	<meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8" />
 </head>
@@ -47,17 +48,39 @@
 												</div>
 												<div class="actions">
 													<div class="btn-group btn-group-devided" data-toggle="buttons">
-														<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addDemandPlan()">
-									                                              <i class="fa fa-plus"></i> 添加</label>
-														<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditDemandPlan()">
-									                                              <i class="fa fa-edit"></i> 修改</label>
-														<label class="btn btn-transparent red btn-circle btn-sm" ng-click="deleteDemandPlan()">
-									                                              <i class="fa fa-minus"></i> 删除</label>
-														<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
-									                                              <i class="fa fa-upload"></i> 导入</label>
-														<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportDemandPlan()">
-									                                              <i class="fa fa-file-excel-o"></i> 导出</label>
-									                </div>
+														<shiro:hasPermission name="demand:add">
+															<label class="btn btn-transparent green btn-circle btn-sm"
+																ng-click="addDemandPlan()"> <i class="fa fa-plus"></i>
+																添加
+															</label>
+														</shiro:hasPermission>
+														<shiro:hasPermission name="demand:edit">
+															<label class="btn btn-transparent purple btn-circle btn-sm"
+																ng-click="toEditDemandPlan()"> <i class="fa fa-edit"></i>
+																修改
+															</label>
+														</shiro:hasPermission>
+														<shiro:hasPermission name="demand:delete">
+															<label class="btn btn-transparent red btn-circle btn-sm"
+																ng-click="deleteDemandPlan()"> <i class="fa fa-minus"></i>
+																删除
+															</label>
+														</shiro:hasPermission>
+														<shiro:hasPermission name="demand:import">
+															<label
+																class="btn btn-transparent green btn-outline btn-circle btn-sm"
+																data-toggle="modal" data-target="#import"> <i
+																class="fa fa-upload"></i> 导入
+															</label>
+														</shiro:hasPermission>
+														<shiro:hasPermission name="demand:export">
+															<label
+																class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
+																ng-click="exportDemandPlan()"> <i
+																class="fa fa-file-excel-o"></i> 导出
+															</label>
+														</shiro:hasPermission>
+													</div>
 													<!-- <a href="javascript:;" class="btn btn-default btn-sm btn-circle"
 														ng-click="addDemandPlan()"> <i class="fa fa-plus"></i> 添加
 													</a>  <a href="javascript:;" class="btn btn-default btn-sm btn-circle"
@@ -96,7 +119,7 @@
 													</div>
 													<div class="col-md-6 col-sm-6" style="text-align: right;">
 														<div id="companyTable_filter" class="dataTables_filter">
-															<label><input type="search" ng-model="params.searchKey"
+															<label><input type="search" ng-model="params.searchKey" style="padding:15px 0px;"
 																class="form-control input-sm input-small input-inline"
 																placeholder="" aria-controls="companyTable"></label>
 																<button  class="btn blue  btn-sm " ng-click="searchDemandPlan()">

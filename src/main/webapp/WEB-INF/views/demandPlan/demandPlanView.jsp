@@ -39,7 +39,7 @@
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
         <div class="portlet bordered">
             <div class="portlet-body">
-				<div class="portlet box blue">
+				<div class="portlet light">
                         <div class="portlet-body form">
                             <form  id="demandPlanForm" class="form-horizontal" >
 								<div class="form-body">
@@ -176,6 +176,13 @@
                                         <table class="table table-striped table-bordered table-advance table-hover">
                                             <thead>
                                                 <tr>
+                                                    <th width="1%" align="right">
+                                                    	<!-- <label><div class="checker"><span><input type="checkbox" ng-model="materielAllChecked" ></span></div></label> -->
+                                                    	<label class="mt-checkbox mt-checkbox-outline"  >
+                                                            <input type="checkbox" ng-model="materielAllChecked" ng-click="checkedOrCancelAll()">
+                                                            <span></span>
+                                                        </label>
+                                                    </th>
                                                     <th>物料编号</th>
                                                     <th>物料名称</th>
                                                     <th>规格型号</th>
@@ -195,6 +202,14 @@
                                             </tbody>
                                             <tbody  style="position: relative; overflow: auto; height: 300px; width: 100%;">
                                                 <tr ng-repeat="materiel in rootMateriels track by $index"  repeat-done="repeatDone()" ng-mouseover="showOperation('contact',$index)" ng-mouseleave="hideOperation('contact',$index)">
+                                                    <th>
+                                                    	<!-- <label><div class="checker"><span><input type="checkbox" ng-model="materielChecked"  value="1"></span></div></label> -->
+                                                    	<label class="mt-checkbox mt-checkbox-outline">
+                                                          <!--   <input type="checkbox" ng-checked="materielAllChecked"  ng-model="materiel.aaaaaa" ng-click="aa()"> -->
+                                                            <input type="checkbox" ng-checked="materielAllChecked"  ng-model="materiel.materielChecked" ng-click="aa()">
+                                                            <span></span>
+                                                        </label>
+                                                    </th>
                                                     <td><span class="help-block"></span>
                                                     	<span ng-show="demandPlanMaterielView{{$index}}">{{materiel.materielNum}}</span>
                                                     	<span ng-hide="demandPlanMaterielEdit{{$index}}"><a href="javascript:;" ng-click="addMateriel('single',$index)">{{materiel.materielNum}}</a></span>
@@ -254,7 +269,16 @@
                                             </tbody>
                                         </table>
                                     </div>
-                          				</div>
+                          	 </div>
+                          	 <div>
+                          	 	<div class="row" align="center">
+                          	 		 <button   ng-hide="companyAdd" class="btn green  btn-sm btn-circle" ng-click="addToSaleOrder()">
+                                            <!-- <i class="fa fa-check"></i> --> 加入销售单 </button>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;
+                                	<button   ng-hide="companyAdd" class="btn defualt  btn-sm btn-circle" ng-click="cancel()">
+                                            <!-- <i class="fa fa-mail-reply"></i> --> 返回 </button>
+                          	 	</div>
+                          	 </div>
 							<!-- END SAMPLE TABLE PORTLET-->
 						</div>
                     </div>
