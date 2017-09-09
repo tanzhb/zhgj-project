@@ -56,6 +56,7 @@
     <association property="orderNum" column="orderSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectOrderNumByOrderSerial"></association>
     <collection property="deliveryMateriels" ofType="com.congmai.zhgj.web.model.DeliveryMateriel">
     	<!--  <result column="orderMaterielSerial" property="orderMaterielSerial" jdbcType="VARCHAR" /> -->
+	     <result column="dmSerialNum" property="serialNum" jdbcType="VARCHAR" />
 	     <result column="batchNum" property="batchNum" jdbcType="VARCHAR" />
 	     <result column="manufactureDate" property="manufactureDate" jdbcType="DATE" />
 	     <result column="deliverCount" property="deliverCount" jdbcType="VARCHAR" />
@@ -177,7 +178,7 @@
     d.serialNum, d.deliverNum, d.orderSerial, d.supplyComId, d.shipper, d.receiver, d.makeDate, d.maker, 
     d.remark, d.status, d.approval, d.approvalDate, d.warehouseSerial as warehouseSerial, d.materielCount, d.deliverDate, 
     d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, 
-    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.batchNum,
+    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.serialNum as dmSerialNum,dm.batchNum,
     dm.manufactureDate,dm.deliverCount,dm.deliverRemark,
     dm.acceptCount,dm.refuseCount,dm.takeRemark,dm.qualifiedCount,dm.unqualifiedCount,dm.checkRemark,dm.warehouseSerial,
 	dm.positionSerial,dm.stockCount,dm.unstockCount,dm.stockRemark,dm.remark as dmRemark,dm.warehouseSerial as dmWarehouseSerial,dm.orderMaterielSerial,
@@ -188,6 +189,23 @@
     left join deliveryTransport dt on d.serialNum = dt.deliverSerial
     left join deliveryMateriel dm on d.serialNum = dm.deliverSerial
     where td.serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByDeliveryPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    d.serialNum, d.deliverNum, d.orderSerial, d.supplyComId, d.shipper, d.receiver, d.makeDate, d.maker, 
+    d.remark, d.status, d.approval, d.approvalDate, d.warehouseSerial as warehouseSerial, d.materielCount, d.deliverDate, 
+    d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, 
+    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.serialNum as dmSerialNum,dm.batchNum,
+    dm.manufactureDate,dm.deliverCount,dm.deliverRemark,
+    dm.acceptCount,dm.refuseCount,dm.takeRemark,dm.qualifiedCount,dm.unqualifiedCount,dm.checkRemark,dm.warehouseSerial,
+	dm.positionSerial,dm.stockCount,dm.unstockCount,dm.stockRemark,dm.remark as dmRemark,dm.warehouseSerial as dmWarehouseSerial,dm.orderMaterielSerial,
+    	dt.transportType,dt.transport,dt.port,dt.shipNumber,dt.playArrivalDate,dt.playWarehouseDate,dt.remark as delivery_transport_remark,dt.contactNum as dtContactNum,dt.contact as dtContact,
+		td.serialNum as tdSerialNum,td.warehouseSerial as tdWarehouseSerial,td.takeDeliverDate,td.receiver,td.contactNum,td.takeDeliverNum,td.remark as take_delivery_remark
+    from delivery  d
+    left join takeDelivery td on d.serialNum = td.deliverSerial
+    left join deliveryTransport dt on d.serialNum = dt.deliverSerial
+    left join deliveryMateriel dm on d.serialNum = dm.deliverSerial
+    where d.serialNum = #{serialNum,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from delivery

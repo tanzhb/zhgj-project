@@ -205,9 +205,13 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	}
 
 	@Override
-	public StockInOutRecord selectStockInOutRecordByPrimayKey(String serialNum) {
-	    
-		return stockInOutRecordMapper.selectStockInInfoByPrimaryKey(serialNum);
+	public StockInOutRecord selectStockInOutRecordByPrimayKey(String serialNum,String type) {
+	    if("in".equals("type")){
+	    	return stockInOutRecordMapper.selectStockInInfoByPrimaryKey(serialNum);
+	    }else{
+	    	return stockInOutRecordMapper.selectStockOutInfoByPrimaryKey(serialNum);
+	    }
+		
 	}
 
 	@Override
@@ -228,12 +232,10 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 
 	@Override
 	public void updateStockInData(TakeDeliveryParams takeDeliveryParams,
-			String currenLoginName) {
+			String currenLoginName,String type) {
 		StockInOutRecord record = takeDeliveryParams.getRecord();
 		
-		//获取更新前的收货id
-		StockInOutRecord takeDelivery = stockInOutRecordMapper.selectByPrimaryKey(record.getSerialNum());
-		String takeDeliverySerial = takeDelivery.getTakeDeliverSerial();
+		
 		
 		record.setUpdater(currenLoginName);
 		record.setUpdateTime(new Date());
@@ -241,8 +243,19 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		example.createCriteria().andSerialNumEqualTo(record.getSerialNum());
 		stockInOutRecordMapper.updateByExampleSelective(record, example);
 		
-		//清除之前的入库物料信息
-		Delivery old_delivery = takeDeliveryMapper.selectByTakeDeliveryPrimaryKey(takeDeliverySerial);
+		//清除之前的出入库物料信息
+		Delivery old_delivery = null;
+		if("in".equals(type)){
+			//获取更新前的收货id
+			StockInOutRecord stockInOutRecord = stockInOutRecordMapper.selectByPrimaryKey(record.getSerialNum());
+			String takeDeliverySerial = stockInOutRecord.getTakeDeliverSerial();
+			old_delivery = takeDeliveryMapper.selectByTakeDeliveryPrimaryKey(takeDeliverySerial);
+		}else{
+			//获取更新前的发货id
+			StockInOutRecord stockInOutRecord = stockInOutRecordMapper.selectByPrimaryKey(record.getSerialNum());
+			String deliverySerial = stockInOutRecord.getDeliverSerial();
+			old_delivery = delivery2Mapper.selectByDeliveryPrimaryKey(deliverySerial);
+		}
 		clearStockInInfoFormMateriels(old_delivery.getDeliveryMateriels());
 		
 		List<DeliveryMateriel> materiels = takeDeliveryParams.getDeliveryMateriels(); //这里是入库的物料信息

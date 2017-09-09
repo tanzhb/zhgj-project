@@ -1,17 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <h3 class="page-title">
-	发货信息 <small></small>
+	发货 <small></small>
 </h3>
 <div class="page-bar">
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i class="fa fa-angle-right"></i></li>
 			
-		<li><a ui-sref="delivery">基础数据</a><i class="fa fa-angle-right"></i></li>
-		<li><a ui-sref="delivery">发货信息</a></li>
+		<li><a ui-sref="delivery">仓储</a><i class="fa fa-angle-right"></i></li>
+		<li><a id="tip" >发货计划</a></li>
 	</ul>
 </div>
-
+<div class="tabbable-line">
+<ul class="nav nav-tabs" id="delivery_tab">
+		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">发货计划</a>
+		</li>
+		<li><a data-target="#tab_15_2" data-toggle="tab">出库记录</a></li>
+	</ul>
+	<div class="tab-content">
+		<div class="tab-pane active" id="tab_15_1">
 <div class="row" >
 	<div class="col-md-12">
 
@@ -138,7 +145,101 @@
 		<!-- END EXAMPLE TABLE PORTLET-->
 	</div>
 </div>
+</div>
+<div class="tab-pane" id="tab_15_2">
+			<div class="row">
+				<div class="col-md-12">
+					<!-- BEGIN EXAMPLE TABLE PORTLET-->
+					<div class="portlet light">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-globe font-green"></i> <span
+									class="caption-subject font-green bold uppercase">出库记录</span>
+							</div>
+							<!--  <div class="actions">
+		                                        <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#basic">
+		                                            <i class="fa fa-plus"></i> 新增 </a>
+		                                        <a href="javascript:;" class="btn btn-default btn-sm">
+		                                            <i class="fa fa-print"></i> 打印 </a>
+		                                    </div> -->
+							<div class="actions">
+								<div class="btn-group btn-group-devided" data-toggle="buttons">
+									<label class="btn btn-transparent green btn-circle btn-sm"
+										ui-sref="stockOutAdd"> <i class="fa fa-plus"></i> 添加
+									</label> <label class="btn btn-transparent purple btn-circle btn-sm"
+										ng-click="stockOutEdit()"> <i class="fa fa-edit"></i>
+										修改
+									</label> <label class="btn btn-transparent red btn-circle btn-sm"
+										ng-click="stockOutDelete()"> <i class="fa fa-minus"></i>
+										删除
+									</label> <label
+										class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
+										ng-click="exportStockOut()"> <i
+										class="fa fa-file-excel-o"></i> 导出
+									</label>
+								</div>
+								<!-- <a href="javascript:;" class="btn btn-default btn-sm btn-circle"
+								ui-sref="stockInAdd" > <i class="fa fa-plus"></i> 添加
+							</a> <a href="javascript:;" class="btn btn-default btn-sm btn-circle"
+								ng-click="stockInEdit()"> <i class="fa fa-edit"></i> 修改
+							</a> <a href="javascript:;" class="btn btn-default btn-sm btn-circle"
+								ng-click="stockInDelete()"> <i class="fa fa-minus"></i>
+								删除
+							</a>  -->
+								<!-- <div class="btn-group">
+								<a class="btn btn-default btn-outline btn-circle"
+									href="javascript:;" data-toggle="dropdown"> <i
+									class="fa fa-share"></i> <span class="hidden-xs"> 其它 </span> <i
+									class="fa fa-angle-down"></i>
+								</a>
+								<ul class="dropdown-menu pull-right" id="sample_3_tools">
+									<li><a data-action="0" class="tool-action"
+										data-toggle="modal" data-target="#import"> <i
+											class="fa fa-upload"></i> 导入
+									</a></li>
+									<li><a href="javascript:;" data-action="0"
+										class="tool-action" ng-click="exportStockIn()"> <i
+											class="fa fa-file-excel-o"></i> 导出
+									</a></li>
+									<li><a href="javascript:;" data-action="2"
+										class="tool-action"> <i class="fa fa-print"></i> 打印
+									</a></li>
+								</ul>
+							</div> -->
+							</div>
+						</div>
+						<div class="portlet-body">
+							<!-- <div class="table-responsive"> -->
+							<table class="table table-bordered" id="stockInTable">
+								<thead>
+									<tr>
+										<th style="text-align: center"><input name="select_all_2"
+											value="1" id="example-select-all-2" type="checkbox" /></th>
+										<th>出库明细号</th>
+										<th>销售订单号</th>
+										<th>商品名称</th>
+										<th>规格型号</th>
+										<th>批次号</th>
+										<th>出库日期</th>
+										<th>出库数量</th>
+										<th>库存数量</th>
+										<th>客户</th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+					</div>
 
+					<!--   </div>
+		        </div> -->
+					<!-- END EXAMPLE TABLE PORTLET-->
+				</div>
+			</div>
+		</div>
+</div>
+</div>
 <!-- 基本信息modal 开始 -->
 <div id="basicContractInfo" class="modal fade" tabindex="-1"
 	data-backdrop="static" data-keyboard="false">

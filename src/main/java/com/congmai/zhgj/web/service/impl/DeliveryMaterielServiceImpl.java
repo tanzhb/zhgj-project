@@ -59,14 +59,22 @@ public class DeliveryMaterielServiceImpl extends GenericServiceImpl<DeliveryMate
 	}
 
 	@Override
-	public Page<DeliveryMateriel> selectListByExample(StockInOutRecord record) {
+	public Page<DeliveryMateriel> selectListByExample(StockInOutRecord record,String type) {
 		StockInOutRecordSelectExample example = new StockInOutRecordSelectExample();
 		example.setPageIndex(0);
 		example.setPageSize(-1);
-		example.createCriteria().andDelFlgEqualTo("0").andDeliverMaterielDelFlgEqualTo("0");
 		Page<DeliveryMateriel> page = new Page<DeliveryMateriel>();
-		page.setResult(deliveryMaterielMapper.selectListByExample(example));
-		page.setTotalCount(deliveryMaterielMapper.countListByExample(example));
+		example.createCriteria().andDelFlgEqualTo("0").andDeliverMaterielDelFlgEqualTo("0");
+		if("in".equals(type)){
+			page.setResult(deliveryMaterielMapper.selectListByExampleForStockIn(example));
+			page.setTotalCount(deliveryMaterielMapper.countListByExampleForStockIn(example));
+		}else{
+			page.setResult(deliveryMaterielMapper.selectListByExample(example));
+			page.setTotalCount(deliveryMaterielMapper.countListByExample(example));
+		}
+		
+		
+		
 		return page;
 	}
 @Override

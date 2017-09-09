@@ -937,9 +937,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		                                  { mData: 'orderMateriel.materiel.specifications'},
 	  		                                  { mData: 'stockInOutRecord.stockDate' },
 	  		                                  { mData: 'stockCount' },
-	  		                                  { mData: 'stockInOutRecord.stockDate' },
+	  		                                  { mData: 'batchNum' },
 	  		                                  { mData: 'delivery.supplyName' },
-	  		                                  { mData: 'delivery.supplyName' }
+	  		                                  { mData: 'stockInOutRecord.order.orderNum' }
 	  		                            ],
 	  		                   'aoColumnDefs' : [ {
 	  		    							'targets' : 0,
@@ -974,30 +974,30 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		    							'targets' : 2,
 	  		    							'render' : function(data,
 	  		    									type, row, meta) {
-	  		    									if(data!=undefined){
-	  		  										return "无";
+	  		    									if(data==undefined){
+	  		  										return "";
 	  		  									}
-	  		  	  								return '';
+	  		  	  								return "";
 	  		  	
 	  		    							}
 	  		    						},{
 	  		    							'targets' : 7,
 	  		    							'render' : function(data,
 	  		    									type, row, meta) {
-	  		    								if(data!=undefined){
-	  		    									return "无";
+	  		    								if(data==undefined){
+	  		    									return "";
 	  		    								}
-	  		    								return '';
+	  		    								return data;
 	  		    								
 	  		    							}
 	  		    						},{
 	  		    							'targets' : 9,
 	  		    							'render' : function(data,
 	  		    									type, row, meta) {
-	  		    									if(data!=undefined){
-	  		  										return "无";
+	  		    									if(data==undefined){
+	  		  										return "";
 	  		  									}
-	  		  	  								return '';
+	  		  	  								return data;
 	  		  	
 	  		    							}
 	  		    						}]
