@@ -48,6 +48,9 @@ import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.OrderInfo;
+import com.congmai.zhgj.web.model.OrderMateriel;
+import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.ContractService;
 
@@ -88,6 +91,60 @@ public class ContractController {
 		pageMap.put("recordsFiltered",contractList==null?0:contractList.size());
 		pageMap.put("data", contractList);
 		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+	}
+	
+	
+	
+	/**
+	 * 
+	 * @Description 查找所有销售合同信息
+	 * @return
+	 */
+	@RequestMapping(value = "/querySaleContractList", method = RequestMethod.GET)
+	public ResponseEntity<Map> querySaleContractList(HttpServletRequest request) {
+
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
+		List<ContractVO> contractList=contractService.querySaleContractList(currenLoginName);
+
+		//封装datatables数据返回到前台
+		Map pageMap = new HashMap();
+		pageMap.put("draw", 1);
+		pageMap.put("recordsTotal",contractList==null?0:contractList.size());
+		pageMap.put("recordsFiltered",contractList==null?0:contractList.size());
+		pageMap.put("data", contractList);
+		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+	}
+	
+	
+	
+	/**
+	 * 
+	 * @Description 查找所有销售合同信息
+	 * @return
+	 */
+	@RequestMapping(value = "/queryBuyContractList", method = RequestMethod.GET)
+	public ResponseEntity<Map> queryBuyContractList(HttpServletRequest request) {
+
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
+		List<ContractVO> contractList=contractService.queryBuyContractList(currenLoginName);
+
+		//封装datatables数据返回到前台
+		Map pageMap = new HashMap();
+		pageMap.put("draw", 1);
+		pageMap.put("recordsTotal",contractList==null?0:contractList.size());
+		pageMap.put("recordsFiltered",contractList==null?0:contractList.size());
+		pageMap.put("data", contractList);
+		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value = "/queryOrderInfo", method = RequestMethod.GET)
+    public ResponseEntity<List<OrderInfo>>  queryOrderInfo(HttpServletRequest request,String serialNum) {
+    	List<OrderInfo> orderList=contractService.queryOrderInfo(serialNum);
+		
+		return new ResponseEntity<List<OrderInfo>>(orderList, HttpStatus.OK);
 	}
 
 
@@ -161,16 +218,41 @@ public class ContractController {
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
 		List<ContractVO> contractList=contractService.queryContractList(currenLoginName);
-		/*for(ContractVO contractVO:contractList){
-    			Date date=getNowDateShort(contractVO.getStartDate());
-    			contractVO.setStartDate(date);
-    		}*/
-
 		dataMap.put("contractList",contractList);
 		ExcelUtil.export(request, response, dataMap, "contract", "合同信息");
 	}
 
+	
+	/**
+	 * @Description (导出销售合同信息)
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("exportSaleContract")
+	public void exportSaleContract(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
+		List<ContractVO> contractList=contractService.querySaleContractList(currenLoginName);
+		dataMap.put("contractList",contractList);
+		ExcelUtil.export(request, response, dataMap, "contract", "销售合同信息");
+	}
 
+	
+	/**
+	 * @Description (导出采购合同信息)
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("exportBuyContract")
+	public void exportBuyContract(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
+		List<ContractVO> contractList=contractService.queryBuyContractList(currenLoginName);
+		dataMap.put("contractList",contractList);
+		ExcelUtil.export(request, response, dataMap, "contract", "采购合同信息");
+	}
 	/** 
 	 * 获取时间 
 	 *  

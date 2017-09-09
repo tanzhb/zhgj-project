@@ -103,8 +103,11 @@ public class ContractVO {
     //更新时间
     private Date updateTime;
 
-    
+    //订单流水
     private String orderSerial;
+    
+    //关联订单数量
+    private String orderAmount;
     
     //甲方
     private String firstParty;
@@ -403,6 +406,12 @@ public class ContractVO {
 	public void setOtherPartyContractNum(String otherPartyContractNum) {
 		this.otherPartyContractNum = otherPartyContractNum;
 	}
-    
 
+	public String getOrderAmount() {
+		return orderAmount;
+	}
+
+	public void setOrderAmount(String orderAmount) {
+		this.orderAmount = orderAmount;
+	}
 }

@@ -14,6 +14,7 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.dao.ContractMapper;
 import com.congmai.zhgj.web.dao.UserMapper;
 import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.UserExample;
 import com.congmai.zhgj.web.service.ContractService;
@@ -61,6 +62,29 @@ public class ContractServiceImpl extends GenericServiceImpl<ContractVO, String> 
 	}
 
 	
+	
+	@Override
+	public List<ContractVO> querySaleContractList(String userId) {
+		// TODO Auto-generated method stub
+		return contractMapper.querySaleContractList(userId);
+	}
+
+	
+
+	@Override
+	public List<ContractVO> queryBuyContractList(String userId) {
+		// TODO Auto-generated method stub
+		return contractMapper.queryBuyContractList(userId);
+	}
+
+
+	@Override
+	public List<OrderInfo> queryOrderInfo(String contractSerial) {
+		// TODO Auto-generated method stub
+		return contractMapper.queryOrderInfo(contractSerial);
+	}
+
+
 	/**
      * 
      * @Description 批量删除 合同

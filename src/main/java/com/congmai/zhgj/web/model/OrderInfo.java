@@ -39,6 +39,8 @@ public class OrderInfo extends BaseVO {
     private String orderSerial;
 
     private String deliveryMode;
+    
+    private String materielAmount;
 
     private String transportMode;
     @DateTimeFormat(pattern="yyyy-MM-dd")
@@ -300,6 +302,14 @@ public class OrderInfo extends BaseVO {
 
 	public void setUnBillAmount(String unBillAmount) {
 		this.unBillAmount = unBillAmount;
+	}
+
+	public String getMaterielAmount() {
+		return materielAmount;
+	}
+
+	public void setMaterielAmount(String materielAmount) {
+		this.materielAmount = materielAmount;
 	}
     
 }
