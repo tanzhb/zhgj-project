@@ -6,6 +6,7 @@ import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.PaymentFile;
 import com.congmai.zhgj.web.model.PaymentPlan;
 import com.congmai.zhgj.web.model.PaymentRecord;
 
@@ -86,4 +87,28 @@ public interface PayMapper extends GenericDao<PaymentRecord, String> {
      * @param record
      */
     public void updatePaymentRecord(PaymentRecord record);
+    
+    
+    
+    
+    public void betchInsertPaymentFiles(PaymentFile Files);
+    
+    
+    
+    
+    public String selectPaiedMoney(String serialNum);
+    
+    
+    
+    
+    public String selectBilledMoney(String serialNum);
+    
+    
+    
+    
+    public List<PaymentFile> selectFileList(String serialNum);
+    
+    
+    
+    public void deleteFileOld(String paySerialNum);
 }

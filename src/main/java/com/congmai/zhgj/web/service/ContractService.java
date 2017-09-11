@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.congmai.zhgj.core.generic.GenericService;
 import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.User;
 
 /**
@@ -27,6 +28,22 @@ public interface ContractService extends GenericService<ContractVO, String> {
      * @return
      */
     public List<ContractVO> queryContractList(String userId);
+    
+    
+    
+    
+    
+    
+    public List<ContractVO> querySaleContractList(String userId);
+    
+    
+    
+    
+    public List<ContractVO> queryBuyContractList(String userId);
+    
+    
+    
+    public List<OrderInfo> queryOrderInfo(String contractSerial);
     
     
     /**

@@ -39,6 +39,12 @@ public class OrderInfo extends BaseVO {
     private String orderSerial;
 
     private String deliveryMode;
+      
+    
+    private String paiedMoney;
+    
+    
+    private String billedMoney;
 
     private String transportMode;
     @DateTimeFormat(pattern="yyyy-MM-dd")
@@ -309,20 +315,34 @@ public class OrderInfo extends BaseVO {
 		this.unBillAmount = unBillAmount;
 	}
 
-	public String getOrderRemark() {
-		return orderRemark;
-	}
-
-	public void setOrderRemark(String orderRemark) {
-		this.orderRemark = orderRemark;
-	}
-
 	public String getMaterielAmount() {
 		return materielAmount;
 	}
 
 	public void setMaterielAmount(String materielAmount) {
 		this.materielAmount = materielAmount;
+	}
+
+	public String getPaiedMoney() {
+		return paiedMoney;
+	}
+
+	public void setPaiedMoney(String paiedMoney) {
+		this.paiedMoney = paiedMoney;
+	}
+
+	public String getBilledMoney() {
+		return billedMoney;
+	}
+
+	public void setBilledMoney(String billedMoney) {
+		this.billedMoney = billedMoney;
+	}	public String getOrderRemark() {
+		return orderRemark;
+	}
+
+	public void setOrderRemark(String orderRemark) {
+		this.orderRemark = orderRemark;
 	}
 
 	public String getRateAmount() {
@@ -356,5 +376,4 @@ public class OrderInfo extends BaseVO {
 	public void setMaterielCount(String materielCount) {
 		this.materielCount = materielCount;
 	}
-    
 }

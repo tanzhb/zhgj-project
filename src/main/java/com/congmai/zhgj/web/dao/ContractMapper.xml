@@ -15,7 +15,8 @@
     SELECT 
     serialNum AS Id,
 	contractNum,
-	comId,
+	firstParty,
+	secondParty,
 	contractType,
 	serviceModel,
 	signDate,
@@ -30,6 +31,48 @@
 	delFlg='0'
 	AND 
 	creator=#{userId}
+	AND
+	comId IS NULL
+    </select>
+    
+    <!--查询销售合同列表  -->
+    <select id="querySaleContractList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ContractVO">
+    SELECT
+	a.serialNum AS id,a.contractNum,b.buyComId AS comId,
+	a.contractType,COUNT(DISTINCT b.serialNum) AS orderAmount,a.signDate,a.signer,a.startDate,a.endDate,
+    a.versionNO,a.status
+	FROM
+	contract a
+	LEFT JOIN orderInfo b ON a.serialNum=b.contractSerial
+	WHERE a.delFlg='0' AND b.supplyComId IS NULL AND b.delFlg='0'
+	AND a.creator=#{userId}
+	GROUP BY(a.serialNum)
+    </select>
+    
+     <!--查询采购合同列表  -->
+    <select id="queryBuyContractList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ContractVO">
+    SELECT
+	a.serialNum AS id,a.contractNum,b.supplyComId AS comId,a.contractType,COUNT(DISTINCT b.serialNum) AS orderAmount,a.signDate,a.signer,a.startDate,a.endDate,
+	a.versionNO,a.status
+	FROM
+	contract a
+	LEFT JOIN orderInfo b ON a.serialNum=b.contractSerial
+	WHERE a.delFlg='0' AND b.buyComId IS NULL AND b.delFlg='0'
+	AND a.creator=#{userId}
+	GROUP BY(a.serialNum)
+    </select>
+    
+    
+    <select id="queryOrderInfo" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.OrderInfo">
+    SELECT
+	a.serialNum,a.orderNum,a.orderType,a.orderAmount,COUNT(DISTINCT b.serialNum) AS materielAmount,a.buyComId,a.supplyComId,a.maker,a.orderDate,a.status
+	FROM
+	orderInfo a
+	LEFT JOIN orderMateriel b ON a.serialNum=b.orderSerial
+	WHERE
+	a.contractSerial=#{contractSerial}
+	AND a.delFlg='0'
+	GROUP BY (a.serialNum)
     </select>
     
     <!--删除合同  -->

@@ -5,6 +5,8 @@ import java.util.List;
 import com.congmai.zhgj.core.generic.GenericService;
 import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
+import com.congmai.zhgj.web.model.MaterielFile;
+import com.congmai.zhgj.web.model.PaymentFile;
 import com.congmai.zhgj.web.model.PaymentPlan;
 import com.congmai.zhgj.web.model.PaymentRecord;
 
@@ -91,4 +93,24 @@ public interface PayService extends GenericService<PaymentRecord, String> {
 	 * @param contractVO
 	 */
     public void updatePaymentRecord(PaymentRecord record);
+    
+    
+    
+    public void betchInsertPaymentFiles(List<PaymentFile> paymentFiles);
+    
+    
+    
+    public String selectPaiedMoney(String serialNum);
+    
+    
+    
+    public String selectBilledMoney(String serialNum);
+    
+    
+    
+    public List<PaymentFile> selectFileList(String serialNum);
+    
+    
+    
+    public void deleteFileOld(String paySerialNum);
 }
