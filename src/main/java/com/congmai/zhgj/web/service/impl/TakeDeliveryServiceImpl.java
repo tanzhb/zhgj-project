@@ -86,9 +86,21 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	
 	private TakeDeliveryParams getTakeDeliveryData(TakeDeliveryParams takeDeliveryParams,String currenLoginName){
 		String deliverySerial = ApplicationUtils.random32UUID();
+		String takeDeliverySerial = ApplicationUtils.random32UUID();
 		Date now = new Date();
+		if(StringUtils.isEmpty(takeDeliveryParams.getTakeDelivery().getSerialNum())){
+			takeDeliveryParams.getTakeDelivery().setSerialNum(takeDeliverySerial);
+			takeDeliveryParams.getTakeDelivery().setDeliverSerial("");
+			takeDeliveryParams.getTakeDelivery().setCreator(currenLoginName);
+			takeDeliveryParams.getTakeDelivery().setCreateTime(now);
+		}
+		takeDeliveryParams.getTakeDelivery().setUpdater(currenLoginName);
+		takeDeliveryParams.getTakeDelivery().setUpdateTime(now);
+		takeDeliveryParams.getTakeDelivery().setDelFlg("0");
+
 		if(StringUtils.isEmpty(takeDeliveryParams.getDelivery().getSerialNum())){
 			takeDeliveryParams.getDelivery().setSerialNum(deliverySerial);
+			takeDeliveryParams.getDelivery().setTakeDeliverSerial(takeDeliverySerial);
 			takeDeliveryParams.getDelivery().setCreator(currenLoginName);
 			takeDeliveryParams.getDelivery().setCreateTime(now);
 		}
@@ -107,15 +119,6 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		takeDeliveryParams.getDeliveryTransport().setUpdateTime(now);
 		takeDeliveryParams.getDeliveryTransport().setDelFlg("0");
 		
-		if(StringUtils.isEmpty(takeDeliveryParams.getTakeDelivery().getSerialNum())){
-			takeDeliveryParams.getTakeDelivery().setSerialNum(ApplicationUtils.random32UUID());
-			takeDeliveryParams.getTakeDelivery().setDeliverSerial(deliverySerial);
-			takeDeliveryParams.getTakeDelivery().setCreator(currenLoginName);
-			takeDeliveryParams.getTakeDelivery().setCreateTime(now);
-		}
-		takeDeliveryParams.getTakeDelivery().setUpdater(currenLoginName);
-		takeDeliveryParams.getTakeDelivery().setUpdateTime(now);
-		takeDeliveryParams.getTakeDelivery().setDelFlg("0");
 		
 		for(DeliveryMateriel materiel : takeDeliveryParams.getDeliveryMateriels()){
 			materiel.setSerialNum(ApplicationUtils.random32UUID());

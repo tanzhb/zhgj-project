@@ -516,7 +516,7 @@
   </update>
   <select id="selectListByExample" resultMap="BaseResultMap2" parameterType="com.congmai.zhgj.web.model.StockInOutRecordSelectExample" >
     select
-   		dm.serialNum,dm.stockCount,s.serialNum as s_serialNum, s.deliverSerial, takeDeliverSerial, s.inOutNum, s.stockDate, s.operator, s.contactNum, 
+   		dm.serialNum,dm.stockCount,s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial, s.inOutNum, s.stockDate, s.operator, s.contactNum, 
     	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,dm.orderMaterielSerial
     from stockInOutRecord s
     left join delivery d on d.serialNum = s.deliverSerial

@@ -62,6 +62,8 @@ public class Delivery {
 
     private Date updateTime;
     
+    private String takeDeliverSerial;
+    
     
     //冗余字段
     
@@ -381,6 +383,14 @@ public class Delivery {
 
 	public void setOrderAmount(String orderAmount) {
 		this.orderAmount = orderAmount;
+	}
+
+	public String getTakeDeliverSerial() {
+		return takeDeliverSerial;
+	}
+
+	public void setTakeDeliverSerial(String takeDeliverSerial) {
+		this.takeDeliverSerial = takeDeliverSerial;
 	}
     
     
