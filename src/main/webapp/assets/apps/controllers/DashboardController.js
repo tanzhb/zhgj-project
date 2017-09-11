@@ -1,4 +1,22 @@
-angular.module('MetronicApp').controller('DashboardController', function($rootScope, $scope, $state, $http, $timeout) {
+var dashModule  = angular.module('MetronicApp');
+//当页面中追加元素时，若元素中含有angularjs元素，则需要compile才能生效
+angular.module('MetronicApp')
+.directive('compile', function ($compile) {
+    return function (scope, element, attrs) {
+        scope.$watch(
+          function (scope) {
+               
+              return scope.$eval(attrs.compile);
+          },
+          function (value) {
+              element.html(value);
+              $compile(element.contents())(scope);
+          }
+        );
+    };
+});
+
+dashModule.controller('DashboardController', function($rootScope, $scope, $state, $http, $timeout) {
     $scope.$on('$viewContentLoaded', function() {   
         // initialize core components
         App.initAjax();
@@ -9,85 +27,70 @@ angular.module('MetronicApp').controller('DashboardController', function($rootSc
     $rootScope.settings.layout.pageBodySolid = false;
     $rootScope.settings.layout.pageSidebarClosed = false;
     
-    daibanList();//加载待办列表
-    yibanList();//加载已办列表
-	
-    $scope.todo = function () {
-    	alert();
-    	 // $state.go("rest/page/addVacation");
-    };
-	
-//	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-//	      // 获取已激活的标签页的名称
-//	      var activeTab = $(e.target).text(); 
-//	      if(1==1){
-//	    	  alert(1);
-////	    	  daibanList();
-//	      }else if(2==2){
-//	    	  alert(2);
-////	    	  yibanList();
-//	      }
-//	});
+
+    //待办列表 	
+	$http.get(ctx + "/rest/processAction/todoTask/").success( function(result) {
+		var list = [];
+		if(result != null && result.data != null && result.data.length > 0){
+			for (var i=0;i<result.data.length;i++){
+				var map = {};
+				var title = result.data[i].title;
+				var creatTime = result.data[i].createTime;
+				var workflowType = result.data[i].businessType;
+				var assign = result.data[i].assign;
+				var taskId = result.data[i].taskId;
+				var processInstanceId = result.data[i].processInstanceId;
+				var workflowName = "";
+				if(workflowType == 'vacation'){
+					workflowName = "请假流程";
+				}
+				map['template'] = "<li><div class='col-md-9'>" +
+						"<a ui-sref='"+workflowType+"({tabHref:1})'>" +//tabHref:1将tab指向“待办列表”
+								"<span>"+workflowName+"："+title+"</span></a></div>" +
+						"<div class='col-md-3'><div class='date'>" + timeStamp2String(creatTime) + "</div></div></li>";
+				list.push(map);
+			}
+		}else{
+			var map = {};
+			map['template'] = "<div>无待办事项！</div>"
+				list.push(map);
+		}
+		$scope.dbItems = list;
+     });
     
+ 
     
-    //待办列表
-    function daibanList(){
-    	$.ajax({
-        	url:ctx + "/rest/processAction/todoTask/",
-    		type: 'get',
-    		dataType: 'json',
-    		success:function(result){	
-    			var html = "";
-    			if(result != null && result.data != null && result.data.length > 0){
-    				for (var i=0;i<result.data.length;i++){
-    					var title = result.data[i].title;
-    					var creatTime = result.data[i].createTime;
-    					var workflowType = result.data[i].businessType;
-    					var workflowName = "";
-    					if(workflowType == 'vacation'){
-    						workflowName = "请假流程";
-    					}
-    					html += "<li><a href='javascript:;' ng-click=\"todo()\">" +
-    							"<div class='col1'><div class='cont'><div class='cont-col1'><div class='label label-sm label-success'>" +
-    							"<i class='fa fa-bell-o'></i></div></div><div class='cont-col2'><div class='desc'>" + workflowName + "：" + title + "</div>" +
-    							"</div></div></div><div class='col2'><div class='date'>" + timeStamp2String2(creatTime) + "</div></div></a></li>";
-    				}
-    			}else{
-    				html = "无待办事项！"
-    			}
-    			$("#daiban").html(html);
-    		}
-    	})
-    }
     //已办列表
-    function yibanList(){
-    	$.ajax({
-        	url:ctx + "/rest/processAction/endTask/",
-    		type: 'get',
-    		dataType: 'json',
-    		success:function(result){	
-    			var html = "";
-    			if(result != null && result.data != null && result.data.length > 0){
-    				for (var i=0;i<result.data.length;i++){
-    					var title = result.data[i].title;
-    					var endTime = result.data[i].endTime;
-    					var workflowType = result.data[i].businessType;
-    					var workflowName = "";
-    					if(workflowType == 'vacation'){
-    						workflowName = "请假流程";
-    					}
-    					html += "<li><div class='col1'><div class='cont'><div class='cont-col1'><div class='label label-sm label-success'>" +
-    							"<i class='fa fa-bell-o'></i></div></div><div class='cont-col2'><div class='desc'>" + workflowName + "：" + title + "</div>" +
-    							"</div></div></div><div class='col2'><div class='date'>" + timeStamp2String2(endTime) + "</div></div></li>";
-    				}
-    			}else{
-    				html = "无已办事项！"
-    			}
-    			$("#yiban").html(html);
-    		}
-    	})
-    }
+	$http.get(ctx + "/rest/processAction/endTask/").success( function(result) {
+		var list = [];
+		if(result != null && result.data != null && result.data.length > 0){
+			for (var i=0;i<result.data.length;i++){
+				var map = {};
+				var title = result.data[i].title;
+				var endTime = result.data[i].endTime;
+				var workflowType = result.data[i].businessType;
+				var workflowName = "";
+				if(workflowType == 'vacation'){
+					workflowName = "请假流程";
+				}
+				map['template'] = "<li><div class='col-md-9'>" +
+						"<a ui-sref='"+workflowType+"({tabHref:2})'>" +//tabHref:1将tab指向“已办列表”
+						"<span>"+workflowName+"："+title+"</span></a></div>" +
+						"<div class='col-md-3'><div class='date'>" + timeStamp2String(endTime) + "</div></div></li>";
+				list.push(map);
+			}
+		}else{
+			var map = {};
+			map['template'] = "<div>无已办事项！</div>"
+				list.push(map);
+		}
+		$scope.ybItems = list;
+     });
 	
-	
-    
+
 });
+
+function todo() {
+	window.location.href=ctx + "/rest/page/addVacation";
+	 // $state.go("rest/page/addVacation");
+};

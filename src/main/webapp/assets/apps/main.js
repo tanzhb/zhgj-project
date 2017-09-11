@@ -1173,7 +1173,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		.state(
 				'vacation',
 				{
-					url : "/vacation",
+					url : "/vacation?tabHref",
 					templateUrl : "rest/page/addVacation",
 					data : {
 						pageTitle : '请假'
