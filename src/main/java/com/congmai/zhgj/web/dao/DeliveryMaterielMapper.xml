@@ -520,7 +520,7 @@
       unqualifiedCount = #{unqualifiedCount,jdbcType=VARCHAR},
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
-  <!-- ³ö¿â -->
+  <!-- ï¿½ï¿½ï¿½ï¿½ -->
   <select id="selectListByExample" resultMap="BaseResultMap2" parameterType="com.congmai.zhgj.web.model.StockInOutRecordSelectExample" >
     select
    		dm.serialNum,dm.stockCount,dm.batchNum,s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial, s.inOutNum, s.stockDate, s.operator, s.contactNum, 
@@ -537,10 +537,10 @@
     </if>
   </select>
   
-  <!-- Èë¿â²éÑ¯ -->
+  <!-- ï¿½ï¿½ï¿½ï¿½Ñ¯ -->
   <select id="selectListByExampleForStockIn" resultMap="BaseResultMap2" parameterType="com.congmai.zhgj.web.model.StockInOutRecordSelectExample" >
     select
-   		dm.serialNum,dm.stockCount,dm.batchNum,s.serialNum as s_serialNum, s.deliverSerial, takeDeliverSerial, s.inOutNum, s.stockDate, s.operator, s.contactNum, 
+   		dm.serialNum,dm.stockCount,dm.batchNum,s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial, s.inOutNum, s.stockDate, s.operator, s.contactNum, 
     	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,dm.orderMaterielSerial,o.orderNum,o.buyComId
     from stockInOutRecord s
     left join takeDelivery td on td.serialNum = s.takeDeliverSerial
@@ -554,7 +554,7 @@
       order by ${orderByClause}
     </if>
   </select>
-  <!-- ³ö¿âÍ³¼Æ -->
+  <!-- ï¿½ï¿½ï¿½ï¿½Í³ï¿½ï¿½ -->
    <select id="countListByExample" parameterType="com.congmai.zhgj.web.model.StockInOutRecordSelectExample" resultType="java.lang.Integer" >
     select
    		count(s.serialNum) 
@@ -565,7 +565,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  	<!-- Èë¿âÍ³¼Æ -->
+  	<!-- ï¿½ï¿½ï¿½Í³ï¿½ï¿½ -->
    <select id="countListByExampleForStockIn" parameterType="com.congmai.zhgj.web.model.StockInOutRecordSelectExample" resultType="java.lang.Integer" >
     select
    		count(s.serialNum) 
