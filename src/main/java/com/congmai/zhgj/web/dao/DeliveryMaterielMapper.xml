@@ -544,7 +544,7 @@
     	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,dm.orderMaterielSerial,o.orderNum,o.buyComId
     from stockInOutRecord s
     left join takeDelivery td on td.serialNum = s.takeDeliverSerial
-    left join delivery d on d.serialNum = td.deliverSerial
+    LEFT JOIN delivery d ON d.takeDeliverSerial = td.serialNum
     left join deliveryMateriel dm on dm.deliverSerial = d.serialNum
     left join orderInfo o on o.serialNum = d.orderSerial
     <if test="_parameter != null" >
@@ -571,7 +571,7 @@
    		count(s.serialNum) 
     from stockInOutRecord s
     left join takeDelivery td on td.serialNum = s.takeDeliverSerial
-    left join delivery d on d.serialNum = td.deliverSerial
+    LEFT JOIN delivery d ON d.takeDeliverSerial = td.serialNum
     left join deliveryMateriel dm on dm.deliverSerial = d.serialNum
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />

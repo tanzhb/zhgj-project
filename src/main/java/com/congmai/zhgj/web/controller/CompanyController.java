@@ -38,6 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
+import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.enums.ComType;
@@ -48,10 +49,13 @@ import com.congmai.zhgj.web.model.CompanyExample.Criteria;
 import com.congmai.zhgj.web.model.CompanyFinance;
 import com.congmai.zhgj.web.model.CompanyQualification;
 import com.congmai.zhgj.web.model.DataTablesParams;
+import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.CompanyContactService;
 import com.congmai.zhgj.web.service.CompanyFinanceService;
 import com.congmai.zhgj.web.service.CompanyQualificationService;
 import com.congmai.zhgj.web.service.CompanyService;
+import com.congmai.zhgj.web.service.UserCompanyService;
+
 
 /**
  * 
@@ -73,6 +77,8 @@ public class CompanyController {
 	private CompanyContactService companyContactService;
 	@Autowired
 	private CompanyFinanceService companyFinanceService;
+	@Autowired
+	private UserCompanyService userCompanyService;
 	
 	  /**
      * @Description (企业信息首页)
@@ -131,9 +137,18 @@ public class CompanyController {
     	
 		 company.setPageIndex(0);
 		 company.setPageSize(-1);
-    	Page<Company> companys = companyService.selectByPage(company);
-    	//List<Company> companys = companyService.selectByPage(company).getResult();
-		// 封装datatables数据返回到前台
+		 //获取session中的user
+		User user = UserUtil.getUserFromSession();
+		
+		Page<Company> companys = new Page<Company>();
+		if(user !=null){
+			
+			company.setComId(userCompanyService.getUserComId(String.valueOf(user.getUserId())));//获取用户的企业ID
+			companys = companyService.selectByPage(company);
+	    	//List<Company> companys = companyService.selectByPage(company).getResult();
+			// 封装datatables数据返回到前台
+		}
+    	
 		Map<String,Object> pageMap = new HashMap<String,Object>();
 		pageMap.put("draw", 1);
 		pageMap.put("recordsTotal", company==null?0:companys.getTotalCount());

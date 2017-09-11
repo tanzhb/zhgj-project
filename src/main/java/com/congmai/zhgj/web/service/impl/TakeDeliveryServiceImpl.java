@@ -64,7 +64,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		TakeDeliverySelectExample example = new TakeDeliverySelectExample();
 		example.setPageIndex(0);
 		example.setPageSize(-1);
-		example.createCriteria().andDelFlgEqualTo("0").andDeliverStatusNotEqualTo("0");
+		example.createCriteria().andDelFlgEqualTo("0").andDeliverStatusNotEqualTo("0").andDeliverSerialEqualTo("");
 		Page<Delivery> page = new Page<Delivery>();
 		page.setResult(takeDeliveryMapper.selectListByExample(example));
 		page.setTotalCount(takeDeliveryMapper.countListByExample(example));
@@ -129,6 +129,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			materiel.setUpdateTime(now);
 			materiel.setDelFlg("0");
 		}
+		
 		return takeDeliveryParams;
 	}
 	@Override
@@ -209,7 +210,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 
 	@Override
 	public StockInOutRecord selectStockInOutRecordByPrimayKey(String serialNum,String type) {
-	    if("in".equals("type")){
+	    if("in".equals(type)){
 	    	return stockInOutRecordMapper.selectStockInInfoByPrimaryKey(serialNum);
 	    }else{
 	    	return stockInOutRecordMapper.selectStockOutInfoByPrimaryKey(serialNum);
@@ -294,6 +295,36 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			example2.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
 			deliveryMaterielMapper.updateByExampleSelective(materiel, example2);
 		}
+	}
+
+	@Override
+	public void createStockInRecord(String takeDeliverySerial,String currenLoginName) {
+		StockInOutRecord record = new StockInOutRecord();
+		record.setSerialNum(ApplicationUtils.random32UUID());
+		record.setTakeDeliverSerial(takeDeliverySerial);
+		record.setDeliverSerial("");
+		record.setStatus("0");
+		record.setDelFlg("0");
+		record.setCreator(currenLoginName);
+		record.setCreateTime(new Date());
+		record.setUpdater(currenLoginName);
+		record.setUpdateTime(new Date());
+		stockInOutRecordMapper.insert(record);
+	}
+
+	@Override
+	public void createStockOutRecord(String deliverySerial,String currenLoginName) {
+		StockInOutRecord record = new StockInOutRecord();
+		record.setSerialNum(ApplicationUtils.random32UUID());
+		record.setDeliverSerial(deliverySerial);
+		record.setTakeDeliverSerial("");
+		record.setStatus("0");
+		record.setDelFlg("0");
+		record.setCreator(currenLoginName);
+		record.setCreateTime(new Date());
+		record.setUpdater(currenLoginName);
+		record.setUpdateTime(new Date());
+		stockInOutRecordMapper.insert(record);
 	}
 	
 
