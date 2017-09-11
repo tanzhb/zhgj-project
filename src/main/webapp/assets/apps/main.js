@@ -1264,11 +1264,14 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/css/special.css',
 				'assets/global/plugins/datatables/datatables.all.min.js',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload-shim.min.js',
+			    'assets/apps/scripts/angular-file-upload.min.js',
+			    'assets/apps/scripts/FileUploader.js',
 				'assets/apps/scripts/pageHandle.js',
 	        	'assets/apps/service/PayService.js',
 				'assets/apps/controllers/PayController.js',
 				'assets/apps/controllers/app.js',
-				'assets/apps/controllers/uploadPhoto.js',
+				'assets/apps/controllers/uploadPhoto.js'
                       ]
                     });
                 }]
@@ -1291,9 +1294,14 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/css/special.css',
 				'assets/global/plugins/datatables/datatables.all.min.js',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload-shim.min.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/FileUploader.js',
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/PayService.js',
 				'assets/apps/controllers/PayController.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js'
                       ]
                     });
                 }]
@@ -1318,6 +1326,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/PayService.js',
+			    'assets/apps/scripts/angular-file-upload.min.js',
 				'assets/apps/controllers/PayController.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js',
@@ -1343,11 +1352,14 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/css/special.css',
 				'assets/global/plugins/datatables/datatables.all.min.js',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload-shim.min.js',
+			    'assets/apps/scripts/angular-file-upload.min.js',
+			    'assets/apps/scripts/FileUploader.js',
 				'assets/apps/scripts/pageHandle.js',
 	        	'assets/apps/service/PayService.js',
 				'assets/apps/controllers/PayController.js',
 				'assets/apps/controllers/app.js',
-				'assets/apps/controllers/uploadPhoto.js',
+				'assets/apps/controllers/uploadPhoto.js'
                       ]
                     });
                 }]

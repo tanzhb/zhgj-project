@@ -4,16 +4,24 @@
     
     <!--添加应付款  -->
     <insert id="insertPaymentRecord" parameterType="com.congmai.zhgj.web.model.PaymentRecord">
-    INSERT INTO paymentRecord(serialNum,paymentNum,supplyComId,buyComId,invoiceSerial,paymentType,billStyle,paymentDate,paymentPlanSerial,
-    isBill,approver,approvalDate,applyDate,applicant,paymentVoucher,remark,status,creator,createTime,updater,updateTime) 
-    VALUES(#{serialNum},#{paymentNum},#{supplyComId},#{buyComId},#{invoiceSerial},#{paymentType},#{billStyle},#{paymentDate},#{paymentPlanSerial},
-    #{isBill},#{approver},#{approvalDate},#{applyDate},#{applicant},#{paymentVoucher},#{remark},'0',#{creator},NOW(),#{creator},NOW())
+    INSERT INTO paymentRecord(serialNum,paymentNum,supplyComId,buyComId,paymentType,orderSerial,applyPaymentAmount,billStyle,paymentDate,
+    applyCurrency,playPaymentDate,payType,paymentNode,nodeNum,applyDept,payee,contact,contactNum,bank,accountName,accountNumber,
+    isBill,applyDate,applicant,remark,status,creator,createTime,updater,updateTime) 
+    VALUES(#{serialNum},#{paymentNum},#{supplyComId},#{buyComId},#{paymentType},#{orderSerial},#{applyPaymentAmount},#{billStyle},#{paymentDate},
+    #{applyCurrency},#{playPaymentDate},#{payType},#{paymentNode},#{nodeNum},#{applyDept},#{payee},#{contact},#{contactNum},#{bank},#{accountName},#{accountNumber},
+    #{isBill},#{applyDate},#{applicant},#{remark},'0',#{creator},NOW(),#{creator},NOW())
     </insert>
     
     <!--插入应付款计划  -->
     <insert id="insertPaymentPlan" parameterType="com.congmai.zhgj.web.model.PaymentPlan">
     INSERT INTO paymentPlan(serialNum,paymentPlanNum,paymentAmount,supplyComId,buyComId,paymentStyle,orderSerial,clauseSettlementSerial,creator,createTime,updater,updateTime)
     VALUES(#{serialNum},#{paymentPlanNum},#{paymentAmount},#{supplyComId},#{buyComId},#{paymentStyle},#{orderSerial},#{clauseSettlementSerial},#{creator},NOW(),#{creator},NOW())
+    </insert>
+    
+    
+    <insert id="betchInsertPaymentFiles" parameterType="com.congmai.zhgj.web.model.PaymentFile">
+    INSERT INTO paymentFile(serialNum,paymentSerial,fileType,fileDescribe,file,uploader,uploadDate,creator,createTime,updater,updateTime,remark)
+                VALUES(#{serialNum},#{paymentSerial},#{fileType},#{fileDescribe},#{file},#{uploader},NOW(),#{creator},NOW(),#{updater},NOW(),#{remark})
     </insert>
     
     <!--查询结算条款列表  -->
@@ -44,12 +52,11 @@
     <!--查询付款列表  -->
     <select id="selectAllPaymentRecordList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.PaymentRecord">
     SELECT
-	a.serialNum,a.paymentNum,b.paymentPlanNum,c.orderNum,a.paymentType,b.paymentStyle,a.billStyle,
-	a.invoiceSerial,a.applicant,a.applyDate,a.supplyComId,b.paymentAmount,a.status
+	a.serialNum,a.paymentNum,a.playPaymentDate,a.paymentNode,a.nodeNum,a.applyPaymentAmount,b.orderNum,
+	a.supplyComId,a.paymentDate,a.paymentAmount,a.status
 	FROM
 	paymentRecord a
-	LEFT JOIN paymentPlan b ON a.paymentPlanSerial=b.serialNum
-	LEFT JOIN orderInfo c ON b.orderSerial=c.serialNum
+	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
 	WHERE a.delFlg='0'
 	AND
 	a.creator=#{userId}
@@ -77,15 +84,13 @@
     <!--通过id查询付款详情  -->
     <select id="selectPayById" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.PaymentRecord">
      SELECT
-	a.serialNum,a.paymentNum,b.paymentPlanNum,c.orderNum,c.serialNum AS orderSerial,a.paymentType,b.paymentStyle,a.billStyle,a.invoiceSerial,a.applicant,
-	a.applyDate,a.supplyComId,a.buyComId,b.paymentAmount,a.status,a.isBill,a.paymentVoucher,a.remark,d.paymentType AS clausePaymentType,b.serialNum AS paymentPlanSerial,
-	d.deliveryNode,d.accountPeriod,d.deliveryRate,d.deliveryAmount,d.paymentMethod,d.billingMethod,d.billingAmount,
-	d.unbilledAmount,d.remark AS clauseRemark,d.status AS clauseStatus,d.serialNum AS clauseSettlementDetailSerialNum
+	a.serialNum,a.paymentNum,a.paymentType,b.orderNum,b.serialNum AS orderSerial,
+	b.orderAmount,a.applyPaymentAmount,a.applyCurrency,a.playPaymentDate,a.payType,a.paymentNode,a.nodeNum,
+	a.billStyle,a.isBill,a.applyDate,a.applicant,a.applyDept,a.remark,
+    a.payee,a.contact,a.contactNum,a.bank,a.accountName,a.accountNumber
 	FROM
 	paymentRecord a
-	LEFT JOIN paymentPlan b ON a.paymentPlanSerial=b.serialNum
-	LEFT JOIN orderInfo c ON b.orderSerial=c.serialNum
-	LEFT JOIN clauseSettlementDetail d ON b.clauseSettlementSerial=d.serialNum
+	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
 	WHERE a.serialNum=#{serialNum}
     </select>
     
@@ -141,4 +146,41 @@
 	WHERE
 	serialNum=#{serialNum}
     </update>
+    
+    
+    <select id="selectPaiedMoney" parameterType="java.lang.String" resultType="java.lang.String">
+    SELECT
+	IFNULL(SUM(applyPaymentAmount),0)
+	FROM
+	paymentRecord
+	WHERE
+	orderSerial=#{serialNum}
+	AND
+	delFlg='0'
+    </select>
+    
+    
+    
+    <select id="selectBilledMoney" parameterType="java.lang.String" resultType="java.lang.String">
+    SELECT
+	IFNULL(SUM(c.unitPrice*b.billCount),0)
+	FROM orderMateriel a 
+	LEFT JOIN invoiceBillingRecord b ON a.serialNum=b.orderMaterielSerial
+	LEFT JOIN materiel c ON a.materielSerial=c.serialNum
+	WHERE a.orderSerial=#{serialNum}
+    </select>
+    
+    
+    <select id="selectFileList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.PaymentFile">
+    SELECT
+    serialNum,fileType,fileDescribe,file,uploader,uploadDate,remark
+    FROM paymentFile
+    WHERE paymentSerial=#{serialNum}
+    </select>
+    
+    
+    
+    <delete id="deleteFileOld" parameterType="java.lang.String">
+    DELETE FROM paymentFile WHERE paymentSerial=#{paySerialNum}
+    </delete>
 </mapper>

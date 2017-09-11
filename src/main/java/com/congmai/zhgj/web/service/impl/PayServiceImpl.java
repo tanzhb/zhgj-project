@@ -1,10 +1,12 @@
 package com.congmai.zhgj.web.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
@@ -12,8 +14,12 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.dao.PayMapper;
 import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
+import com.congmai.zhgj.web.model.MaterielFile;
+import com.congmai.zhgj.web.model.MaterielFileExample;
+import com.congmai.zhgj.web.model.PaymentFile;
 import com.congmai.zhgj.web.model.PaymentPlan;
 import com.congmai.zhgj.web.model.PaymentRecord;
+import com.congmai.zhgj.web.model.MaterielFileExample.Criteria;
 import com.congmai.zhgj.web.service.PayService;
 
 /**
@@ -152,5 +158,40 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 	public void updatePaymentRecord(PaymentRecord record) {
 		// TODO Auto-generated method stub
 		payMapper.updatePaymentRecord(record);
+	}
+	
+	@Override
+	public void betchInsertPaymentFiles(List<PaymentFile> Files) {
+		if(!CollectionUtils.isEmpty(Files)){
+			
+			for(PaymentFile b:Files){
+				payMapper.betchInsertPaymentFiles(b);
+			}
+		}
+	}
+
+	@Override
+	public String selectPaiedMoney(String serialNum) {
+		// TODO Auto-generated method stub
+		
+		return payMapper.selectPaiedMoney(serialNum);
+	}
+
+	@Override
+	public String selectBilledMoney(String serialNum) {
+		// TODO Auto-generated method stub
+		return payMapper.selectBilledMoney(serialNum);
+	}
+
+	@Override
+	public List<PaymentFile> selectFileList(String serialNum) {
+		// TODO Auto-generated method stub
+		return payMapper.selectFileList(serialNum);
+	}
+
+	@Override
+	public void deleteFileOld(String paySerialNum) {
+		// TODO Auto-generated method stub
+		payMapper.deleteFileOld(paySerialNum);
 	}
 }

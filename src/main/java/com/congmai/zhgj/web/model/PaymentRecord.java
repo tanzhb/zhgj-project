@@ -49,7 +49,8 @@ public class PaymentRecord {
     
     //开票方式
     private String billStyle;
-
+    
+    
     //付款日期
     private Date paymentDate;
 
@@ -138,6 +139,59 @@ public class PaymentRecord {
     
     //采购商名称
     private String buyComName;
+    
+    
+    
+    private String payType;
+    
+    
+    private String applyPaymentAmount;
+    
+    
+    private String applyCurrency;
+    
+    
+    private String paiedMoney;
+    
+    
+    private String billedMoney;
+    
+    
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date playPaymentDate;
+    
+    
+	private String paymentNode;
+    
+    
+    private String nodeNum;
+    
+    
+    private String applyDept;
+    
+    
+    private String payee;
+    
+    
+    private String contact;
+    
+    
+    private String contactNum;
+    
+    
+    private String bank;
+    
+    
+    private String accountName;
+    
+    
+    private String orderAmount;
+    
+    
+    private List<PaymentFile> fileList;
+    
+    
+    private String accountNumber;
     public String getSerialNum() {
         return serialNum;
     }
@@ -483,5 +537,141 @@ public class PaymentRecord {
 
 	public void setBuyComName(String buyComName) {
 		this.buyComName = buyComName;
+	}
+
+	public String getApplyPaymentAmount() {
+		return applyPaymentAmount;
+	}
+
+	public void setApplyPaymentAmount(String applyPaymentAmount) {
+		this.applyPaymentAmount = applyPaymentAmount;
+	}
+
+	public String getApplyCurrency() {
+		return applyCurrency;
+	}
+
+	public void setApplyCurrency(String applyCurrency) {
+		this.applyCurrency = applyCurrency;
+	}
+
+	
+	public String getPaymentNode() {
+		return paymentNode;
+	}
+
+	public void setPaymentNode(String paymentNode) {
+		this.paymentNode = paymentNode;
+	}
+
+	public String getNodeNum() {
+		return nodeNum;
+	}
+
+	public void setNodeNum(String nodeNum) {
+		this.nodeNum = nodeNum;
+	}
+
+	public String getApplyDept() {
+		return applyDept;
+	}
+
+	public void setApplyDept(String applyDept) {
+		this.applyDept = applyDept;
+	}
+
+	public String getPayee() {
+		return payee;
+	}
+
+	public void setPayee(String payee) {
+		this.payee = payee;
+	}
+
+	public String getContact() {
+		return contact;
+	}
+
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+
+	public String getContactNum() {
+		return contactNum;
+	}
+
+	public void setContactNum(String contactNum) {
+		this.contactNum = contactNum;
+	}
+
+	public String getBank() {
+		return bank;
+	}
+
+	public void setBank(String bank) {
+		this.bank = bank;
+	}
+
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
+
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	} public String getPayType() {
+		return payType;
+	}
+
+	public void setPayType(String payType) {
+		this.payType = payType;
+	}
+
+	@JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
+	public Date getPlayPaymentDate() {
+		return playPaymentDate;
+	}
+
+	public void setPlayPaymentDate(Date playPaymentDate) {
+		this.playPaymentDate = playPaymentDate;
+	}
+
+	public String getOrderAmount() {
+		return orderAmount;
+	}
+
+	public void setOrderAmount(String orderAmount) {
+		this.orderAmount = orderAmount;
+	}
+
+	public String getPaiedMoney() {
+		return paiedMoney;
+	}
+
+	public void setPaiedMoney(String paiedMoney) {
+		this.paiedMoney = paiedMoney;
+	}
+
+	public String getBilledMoney() {
+		return billedMoney;
+	}
+
+	public void setBilledMoney(String billedMoney) {
+		this.billedMoney = billedMoney;
+	}
+
+	public List<PaymentFile> getFileList() {
+		return fileList;
+	}
+
+	public void setFileList(List<PaymentFile> fileList) {
+		this.fileList = fileList;
 	}
 }
