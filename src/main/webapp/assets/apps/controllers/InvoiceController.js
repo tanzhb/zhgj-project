@@ -9,12 +9,13 @@ angular
 						'$state',
 						'$compile',
 						'$http',
+						'$filter',
 						'$location',
 						'$stateParams',
 						'settings',
 						'InvoiceService',
 						'FileUploader',
-						function($rootScope, $scope, $state, $compile,$http,$location,$stateParams,settings,
+						function($rootScope, $scope, $state, $compile,$http,$filter,$location,$stateParams,settings,
 								InvoiceService,FileUploader) {
 							$scope
 									.$on(
@@ -439,7 +440,264 @@ angular
 				// ***************************************
 				// 构建datatables结束***************************************
 				}
-			
+			function loadMaterielInTable(orderSerial){
+				var a = 0,judgeString='in';
+				tableAjaxUrl= "rest/invoice/getMaterielList?orderSerial="+orderSerial
+				App.getViewPort().width < App
+						.getResponsiveBreakpoint("md") ? $(
+						".page-header").hasClass(
+						"page-header-fixed-mobile")
+						&& (a = $(".page-header").outerHeight(!0))
+						: $(".page-header").hasClass(
+								"navbar-fixed-top") ? a = $(
+								".page-header").outerHeight(!0)
+								: $("body").hasClass(
+										"page-header-fixed")
+										&& (a = 64);
+								
+								table = $("#sample_in")
+								.DataTable(
+										{
+											language : {
+												aria : {
+													sortAscending : ": activate to sort column ascending",
+													sortDescending : ": activate to sort column descending"
+												},
+												emptyTable : "空表",
+												info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+												infoEmpty : "没有数据",
+												infoFiltered : "(从 _MAX_ 条数据中检索)",
+												lengthMenu : "每页显示 _MENU_ 条数据",
+												search : "查询:",
+												zeroRecords : "抱歉， 没有找到！",
+												paginate : {
+													"sFirst" : "首页",
+													"sPrevious" : "前一页",
+													"sNext" : "后一页",
+													"sLast" : "尾页"
+												}
+											},
+											/*fixedHeader : {// 固定表头、表底
+												header : !0,
+												footer : !0,
+												headerOffset : a
+											},*/
+											// select: true,行多选
+											order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+											bRetrieve : true,
+											// searching: true,//是否过滤检索
+											// ordering: true,//是否排序
+											lengthMenu : [
+													[ 5, 10, 15, 30, -1 ],
+													[ 5, 10, 15, 30, "All" ] ],
+											pageLength : 10,// 每页显示数量
+											processing : true,// loading等待框
+											// serverSide: true,
+											ajax : tableAjaxUrl,// 加载数据中发票表数据
+
+											"aoColumns" : [
+											 /*  {
+											    mData : 'serialNum'
+											   },*/
+												{
+												mData : 'materielNum'
+												},{
+													mData : 'materielName'
+												},  {
+													mData : 'specifications'
+												},{
+													mData : 'unit'
+												}, {
+													mData : 'amount'
+												},{
+													mData : 'canBillAmount'
+												}, {
+													mData : 'billAmount'
+												}, { 
+													mData : 'orderUnitPrice',
+													mRender:function(data){
+					                            		if(data!=""&&data!=null){
+					                            			return $filter('currency')(data,'￥');
+					                            		}else{
+					                            			return $filter('currency')(0,'￥');
+					                            		}
+					                            	}
+												}, {
+													mData : 'money',//
+													mRender:function(data){
+					                            		if(data!=""&&data!=null){
+					                            			return $filter('currency')(data,'￥');
+					                            		}else{
+					                            			return $filter('currency')(0,'￥');
+					                            		}
+					                            	}
+													
+												},{
+													mData : 'status'
+												}
+												],
+											'aoColumnDefs' : [  {
+												'targets' : 6,
+												'className' : 'dt-body-center',
+												'render' : function(data,
+														type, row, meta) {
+													return '<input  type="text"   id="'+row.serialNum+'"  />';
+													//return data;
+												},"createdCell": function (td, cellData, rowData, row, col) {
+													 $compile(td)($scope);
+											    }
+											} ,{
+												'targets' : 9,
+												'searchable' : false,
+												'orderable' : false,
+												'className' : 'dt-body-center',
+												'render' : function(data,
+														type, row, meta) {
+													return '<a   ng-click="saveMaterielInfo(\''+row.serialNum+'\',\''+judgeString+'\')">保存</a>&nbsp;&nbsp;&nbsp;&nbsp;<a   ng-click="editMaterielInfo(\''+row.serialNum+'\',\''+judgeString+'\')">修改</a>';
+													//return data;
+												},"createdCell": function (td, cellData, rowData, row, col) {
+													 $compile(td)($scope);
+											    }
+											}  ],
+										});
+							
+				// 构建datatables结束***************************************
+				}
+
+function loadMaterielOutTable(orderSerial){
+	var a = 0,judgeString='out';
+	tableAjaxUrl= "rest/invoice/getMaterielList?orderSerial="+orderSerial
+	App.getViewPort().width < App
+			.getResponsiveBreakpoint("md") ? $(
+			".page-header").hasClass(
+			"page-header-fixed-mobile")
+			&& (a = $(".page-header").outerHeight(!0))
+			: $(".page-header").hasClass(
+					"navbar-fixed-top") ? a = $(
+					".page-header").outerHeight(!0)
+					: $("body").hasClass(
+							"page-header-fixed")
+							&& (a = 64);
+	table = $("#sample_out")
+	.DataTable(
+			{
+				language : {
+					aria : {
+						sortAscending : ": activate to sort column ascending",
+						sortDescending : ": activate to sort column descending"
+					},
+					emptyTable : "空表",
+					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+					infoEmpty : "没有数据",
+					infoFiltered : "(从 _MAX_ 条数据中检索)",
+					lengthMenu : "每页显示 _MENU_ 条数据",
+					search : "查询:",
+					zeroRecords : "抱歉， 没有找到！",
+					paginate : {
+						"sFirst" : "首页",
+						"sPrevious" : "前一页",
+						"sNext" : "后一页",
+						"sLast" : "尾页"
+					}
+				},
+				/*fixedHeader : {// 固定表头、表底
+					header : !0,
+					footer : !0,
+					headerOffset : a
+				},*/
+				// select: true,行多选
+				order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+				bRetrieve : true,
+				// searching: true,//是否过滤检索
+				// ordering: true,//是否排序
+				lengthMenu : [
+						[ 5, 10, 15, 30, -1 ],
+						[ 5, 10, 15, 30, "All" ] ],
+				pageLength : 10,// 每页显示数量
+				processing : true,// loading等待框
+				// serverSide: true,
+				ajax : tableAjaxUrl,// 加载数据中发票表数据
+				"aoColumns" : [
+				             /*  	{
+				               	mData : 'serialNum'
+				               	},*/
+								{
+								mData : 'materielNum'
+								},{
+									mData : 'materielName'
+								},  {
+									mData : 'specifications'
+								},{
+									mData : 'unit'
+								}, {
+									mData : 'amount'
+								},{
+									mData : 'canBillAmount'
+								}, {
+									mData : 'billAmount'
+								}, { 
+									mData : 'orderUnitPrice',
+									mRender:function(data){
+	                            		if(data!=""&&data!=null){
+	                            			return $filter('currency')(data,'￥');
+	                            		}else{
+	                            			return $filter('currency')(0,'￥');
+	                            		}
+	                            	}
+								}, {
+									mData : 'money',//
+									mRender:function(data){
+	                            		if(data!=""&&data!=null){
+	                            			return $filter('currency')(data,'￥');
+	                            		}else{
+	                            			return $filter('currency')(0,'￥');
+	                            		}
+	                            	}
+									
+								},{
+									mData : 'status'
+								}
+								],
+							'aoColumnDefs' : [ {
+								'targets' : 6,
+								'className' : 'dt-body-center',
+								'render' : function(data,
+										type, row, meta) {
+									return '<input  type="text"   id="+row.serialNum+"  />';
+									//return data;
+								},"createdCell": function (td, cellData, rowData, row, col) {
+									 $compile(td)($scope);
+							    }
+							},{
+								'targets' : 9,
+								'className' : 'dt-body-center',
+								'render' : function(data,
+										type, row, meta) {
+									return '<a   ng-click="saveMaterielInfo(\''+row.serialNum+'\',\''+judgeString+'\')">保存</a>&nbsp;&nbsp;&nbsp;&nbsp;<a   ng-click="editMaterielInfo(\''+row.serialNum+'\',\''+judgeString+'\')">修改</a>';
+									//return data;
+								},"createdCell": function (td, cellData, rowData, row, col) {
+									 $compile(td)($scope);
+							    }
+							}  ],
+				
+			});
+
+	// ***************************************
+	// 构建datatables结束***************************************
+	}
+
+
+$scope.saveMaterielInfo=function (serialNum,judgeString){
+	
+	$("#"+serialNum).attr("readonly",true);
+	$("#"+serialNum).css("border","none");
+}
+
+$scope.editMaterielInfo=function (serialNum,judgeString){
+	$("#"+serialNum).attr("readonly",false);
+	$("#"+serialNum).css("border","1px solid");
+	$("#"+serialNum).focus();
+}
 			$scope.showOut=function(judgeString){
 				 $state.go('invoice',{inOrOut:judgeString}); //切换tab
 			}
@@ -693,25 +951,25 @@ angular
 		 	            	$scope.row.serialNum = serialNum;//发货单号流水/收货单号流水
 		 	            //	$scope.row.orderAmount=orderAmount;//订单金额
 		 	            	$scope.row.orderNum=orderNum;//订单编号
-		 	            	getClauseSettlementInfo($scope.row.serialNum);//获取订单结算条款
+		 	            	getOrderInfoBySerialNum($scope.row.serialNum);//获取订单物料信息
+		 	            	
+		 	            	
 						}
-					function getClauseSettlementInfo(serialNum){
-						InvoiceService.getClauseSettlementBySerialNum(serialNum).then(
+					function getOrderInfoBySerialNum(serialNum){
+						InvoiceService.getOrderInfoBySerialNum(serialNum).then(
 								function(data) {debugger;
 								if(serialNum.length>32){
-									$scope.row.clauseSettlement=data.clauseSettlement;
-									$scope.row.clauseSettlementDetails=data.clauseSettlementDetails;
+									//$scope.row.orderMateriels=data.orderMateriels;
 									$scope.row.orderInfo=data.orderInfo;
 									$scope.row.orderAmount=data.orderInfo.orderAmount;
-									$scope.row.unBillAmount=data.orderInfo.unBillAmount;
+									$scope.row.currency=data.orderInfo.currency;
 								}else{
 									$scope.invoice.orderAmount=data.orderInfo.orderAmount;//订单金额
 			 	    				$scope.invoice.relationBuyOrSaleNum=data.orderInfo.orderNum;//订单编号
-			 	    				$scope.clauseSettlementDetails=data.clauseSettlementDetails;
-			 	    				$scope.invoice.unBillAmount=data.orderInfo.unBillAmount;
-			 	    				$scope.clauseSettlement=data.clauseSettlement;
+			 	    				
 								}
-								
+								if(serialNum.indexOf("in")>-1){	loadMaterielInTable(serialNum);
+			 	            	}else{loadMaterielOutTable(serialNum);}
 							},
 							function(errResponse) {
 								toastr.warning("获取失败！");
@@ -751,9 +1009,8 @@ angular
 		 	    			$scope.invoice.orderSerial=$scope.row.orderInfo.serialNum;//订单流水
 	 	    				$scope.invoice.orderAmount=$scope.row.orderAmount;//订单金额
 	 	    				$scope.invoice.relationBuyOrSaleNum=$scope.row.orderNum;//订单编号
-	 	    				$scope.clauseSettlementDetails=$scope.row.clauseSettlementDetails;
-	 	    				$scope.invoice.unBillAmount=$scope.row.unBillAmount;
-	 	    				$scope.clauseSettlement=$scope.row.clauseSettlement;
+	 	    				$scope.orderMateriels=$scope.row.orderMateriels;
+	 	    				$scope.invoice.currency=$scope.row.currency;
 		 	    			if(judgeString=='buy'){
 			 	            	$('#buyOrderInfo').modal('hide');// 选择成功后关闭模态框
 		 	    			}else{
@@ -808,8 +1065,8 @@ angular
 						            	invoiceType: { required:"发票类型未选择！"},
 						            	billingDate:{required:"开票日期不能为空！"},
 						            	invoiceNO:{required:"发票号不能为空！"},
-						            	submitter:{required:"提交人不能为空！"},
-						            	submitDate:{required:"提交日期不能为空！"},
+						            	/*submitter:{required:"提交人不能为空！"},
+						            	submitDate:{required:"提交日期不能为空！"},*/
 						            	approver:approver,
 						            	approvalDate:approvalDate
 						            },
@@ -823,8 +1080,8 @@ angular
 						            	invoiceType:{required:true},
 						            	billingDate:{required:true},
 						            	invoiceNO:{required:true},
-						            	submitter:{required:true},
-						            	submitDate:{required:true},
+						            	/*submitter:{required:true},
+						            	submitDate:{required:true},*/
 						            	approver:{required:true},
 						            	approvalDate:{required:true}
 						            },
@@ -863,8 +1120,9 @@ angular
 						 	        			 $scope.invoice.billingDate=timeStamp2ShortString(data.invoice.billingDate);
 						 	        			 $scope.invoice.submitDate=timeStamp2ShortString(data.invoice.submitDate);
 						 	        			 $scope.invoice.approvalDate=timeStamp2ShortString(data.invoice.approvalDate);
-						 	        			getClauseSettlementInfo($scope.invoice.orderSerial);//获取订单结算条款
-						 	    				
+						 	        			getOrderInfoBySerialNum(serialNum);//获取订单信息
+							 	            	if(serialNum.indexOf("in")>-1){	loadMaterielInTable(serialNum);//加载发票物料
+							 	            	}else{loadMaterielOutTable(serialNum);}
 						 	        			
 						 	        			
 						 	            },function(data){

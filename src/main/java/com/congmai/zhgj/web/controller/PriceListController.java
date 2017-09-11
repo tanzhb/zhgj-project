@@ -34,6 +34,7 @@ import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.enums.ComType;
+import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.LadderPrice;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.PriceList;
@@ -184,6 +185,7 @@ public class PriceListController {
     @RequestMapping(value = "/viewPriceListDetail", method = RequestMethod.POST)
     public ResponseEntity<Map> viewPriceListDetail(HttpServletRequest request, @RequestBody String  serialNum) {
     	Map<String, Object> map = new HashMap<String, Object>();
+    	if(serialNum.length()>32){
     	PriceList priceList=priceListService.selectById(serialNum.substring(0, 32));
     	if(priceList!=null){
     	Materiel m=materielService.selectById(priceList.getMaterielSerial());
@@ -201,6 +203,7 @@ public class PriceListController {
     	map.put("priceLists", priceListService.getAllPriceListInfoByPriceIdOrPriceType(priceList.getPriceId(), null));//价格历史版本信息
     	map.put("buyList", priceListService.getAllPriceListInfoByPriceIdOrPriceType(priceList.getPriceId(), "salePrice"));//获取历史价格中使用的采购商
     }
+    	}
     	map.put("supplyCom", companyService.selectCompanyByComType(ComType.SUPPLIER.getValue(), null));
     	map.put("buyCom", companyService.selectCompanyByComType(ComType.BUYER.getValue(), null));
     	return new ResponseEntity<Map>(map, HttpStatus.OK);
@@ -318,8 +321,10 @@ public class PriceListController {
 	    		for(PriceList p:priceListList){
 	    			if("buyPrice".equals(p.getPriceType())){
 	    				p.setComName(companyService.selectOne(p.getSupplyComId()).getComName());
+	    				p.setPriceType(StaticConst.getInfo("buyPrice"));
 	    			}else{
 	    				p.setComName(companyService.selectOne(p.getBuyComId()).getComName());
+	    				p.setPriceType(StaticConst.getInfo("salePrice"));
 	    			}
 	    			Materiel m=materielService.selectById(p.getMaterielSerial());
 	    			p.setMaterielNum(m.getMaterielNum());

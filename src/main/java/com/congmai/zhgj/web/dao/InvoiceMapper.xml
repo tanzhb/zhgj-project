@@ -18,6 +18,15 @@
     <result column="submitter" property="submitter" jdbcType="VARCHAR" />
     <result column="submitDate" property="submitDate" jdbcType="DATE" />
     <result column="billingRemark" property="billingRemark" jdbcType="VARCHAR" />
+    <result column="submitDepartment" property="submitDepartment" jdbcType="VARCHAR" />
+    <result column="companyName" property="companyName" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="bankName" property="bankName" jdbcType="VARCHAR" />
+    <result column="taxNum" property="taxNum" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="thirdRemark" property="thirdRemark" jdbcType="VARCHAR" />
+    <result column="secondRemark" property="secondRemark" jdbcType="VARCHAR" />
     <result column="receiptDate" property="receiptDate" jdbcType="DATE" />
     <result column="operator" property="operator" jdbcType="VARCHAR" />
     <result column="receiptRemark" property="receiptRemark" jdbcType="VARCHAR" />
@@ -92,9 +101,10 @@
   <sql id="Base_Column_List" >
     serialNum, invoiceNum, supplyComId, buyComId, orderSerial, clauseSettlementSerial, 
     paymentSerial, paymentAmount, paymentStatus, invoiceType, invoiceAmount, billingDate, 
-    invoiceNO, submitter, submitDate, billingRemark, receiptDate, operator, receiptRemark, 
-    invoiceVoucher, billWay, approver, approvalDate, delFlg, creator, createTime, updater, 
-    updateTime
+    invoiceNO, submitter, submitDate, billingRemark, submitDepartment, companyName, tel, 
+    bankName, taxNum, address, account, thirdRemark, secondRemark, receiptDate, operator, 
+    receiptRemark, invoiceVoucher, billWay, approver, approvalDate, delFlg, creator, 
+    createTime, updater, updateTime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.InvoiceExample" >
     select
@@ -132,7 +142,10 @@
       paymentSerial, paymentAmount, paymentStatus, 
       invoiceType, invoiceAmount, billingDate, 
       invoiceNO, submitter, submitDate, 
-      billingRemark, receiptDate, operator, 
+      billingRemark, submitDepartment, companyName, 
+      tel, bankName, taxNum, 
+      address, account, thirdRemark, 
+      secondRemark, receiptDate, operator, 
       receiptRemark, invoiceVoucher, billWay, 
       approver, approvalDate, delFlg, 
       creator, createTime, updater, 
@@ -142,7 +155,10 @@
       #{paymentSerial,jdbcType=VARCHAR}, #{paymentAmount,jdbcType=VARCHAR}, #{paymentStatus,jdbcType=VARCHAR}, 
       #{invoiceType,jdbcType=VARCHAR}, #{invoiceAmount,jdbcType=VARCHAR}, #{billingDate,jdbcType=DATE}, 
       #{invoiceNO,jdbcType=VARCHAR}, #{submitter,jdbcType=VARCHAR}, #{submitDate,jdbcType=DATE}, 
-      #{billingRemark,jdbcType=VARCHAR}, #{receiptDate,jdbcType=DATE}, #{operator,jdbcType=VARCHAR}, 
+      #{billingRemark,jdbcType=VARCHAR}, #{submitDepartment,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{tel,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, #{taxNum,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{thirdRemark,jdbcType=VARCHAR}, 
+      #{secondRemark,jdbcType=VARCHAR}, #{receiptDate,jdbcType=DATE}, #{operator,jdbcType=VARCHAR}, 
       #{receiptRemark,jdbcType=VARCHAR}, #{invoiceVoucher,jdbcType=VARCHAR}, #{billWay,jdbcType=VARCHAR}, 
       #{approver,jdbcType=VARCHAR}, #{approvalDate,jdbcType=DATE}, #{delFlg,jdbcType=VARCHAR}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
@@ -198,6 +214,33 @@
       </if>
       <if test="billingRemark != null" >
         billingRemark,
+      </if>
+      <if test="submitDepartment != null" >
+        submitDepartment,
+      </if>
+      <if test="companyName != null" >
+        companyName,
+      </if>
+      <if test="tel != null" >
+        tel,
+      </if>
+      <if test="bankName != null" >
+        bankName,
+      </if>
+      <if test="taxNum != null" >
+        taxNum,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="account != null" >
+        account,
+      </if>
+      <if test="thirdRemark != null" >
+        thirdRemark,
+      </if>
+      <if test="secondRemark != null" >
+        secondRemark,
       </if>
       <if test="receiptDate != null" >
         receiptDate,
@@ -284,6 +327,33 @@
       </if>
       <if test="billingRemark != null" >
         #{billingRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="submitDepartment != null" >
+        #{submitDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="taxNum != null" >
+        #{taxNum,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdRemark != null" >
+        #{thirdRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="secondRemark != null" >
+        #{secondRemark,jdbcType=VARCHAR},
       </if>
       <if test="receiptDate != null" >
         #{receiptDate,jdbcType=DATE},
@@ -380,6 +450,33 @@
       <if test="record.billingRemark != null" >
         billingRemark = #{record.billingRemark,jdbcType=VARCHAR},
       </if>
+      <if test="record.submitDepartment != null" >
+        submitDepartment = #{record.submitDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyName != null" >
+        companyName = #{record.companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tel != null" >
+        tel = #{record.tel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankName != null" >
+        bankName = #{record.bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taxNum != null" >
+        taxNum = #{record.taxNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null" >
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.account != null" >
+        account = #{record.account,jdbcType=VARCHAR},
+      </if>
+      <if test="record.thirdRemark != null" >
+        thirdRemark = #{record.thirdRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.secondRemark != null" >
+        secondRemark = #{record.secondRemark,jdbcType=VARCHAR},
+      </if>
       <if test="record.receiptDate != null" >
         receiptDate = #{record.receiptDate,jdbcType=DATE},
       </if>
@@ -439,6 +536,15 @@
       submitter = #{record.submitter,jdbcType=VARCHAR},
       submitDate = #{record.submitDate,jdbcType=DATE},
       billingRemark = #{record.billingRemark,jdbcType=VARCHAR},
+      submitDepartment = #{record.submitDepartment,jdbcType=VARCHAR},
+      companyName = #{record.companyName,jdbcType=VARCHAR},
+      tel = #{record.tel,jdbcType=VARCHAR},
+      bankName = #{record.bankName,jdbcType=VARCHAR},
+      taxNum = #{record.taxNum,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
+      account = #{record.account,jdbcType=VARCHAR},
+      thirdRemark = #{record.thirdRemark,jdbcType=VARCHAR},
+      secondRemark = #{record.secondRemark,jdbcType=VARCHAR},
       receiptDate = #{record.receiptDate,jdbcType=DATE},
       operator = #{record.operator,jdbcType=VARCHAR},
       receiptRemark = #{record.receiptRemark,jdbcType=VARCHAR},
@@ -503,6 +609,33 @@
       <if test="billingRemark != null" >
         billingRemark = #{billingRemark,jdbcType=VARCHAR},
       </if>
+      <if test="submitDepartment != null" >
+        submitDepartment = #{submitDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null" >
+        companyName = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        bankName = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="taxNum != null" >
+        taxNum = #{taxNum,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null" >
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdRemark != null" >
+        thirdRemark = #{thirdRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="secondRemark != null" >
+        secondRemark = #{secondRemark,jdbcType=VARCHAR},
+      </if>
       <if test="receiptDate != null" >
         receiptDate = #{receiptDate,jdbcType=DATE},
       </if>
@@ -559,6 +692,15 @@
       submitter = #{submitter,jdbcType=VARCHAR},
       submitDate = #{submitDate,jdbcType=DATE},
       billingRemark = #{billingRemark,jdbcType=VARCHAR},
+      submitDepartment = #{submitDepartment,jdbcType=VARCHAR},
+      companyName = #{companyName,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      bankName = #{bankName,jdbcType=VARCHAR},
+      taxNum = #{taxNum,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      account = #{account,jdbcType=VARCHAR},
+      thirdRemark = #{thirdRemark,jdbcType=VARCHAR},
+      secondRemark = #{secondRemark,jdbcType=VARCHAR},
       receiptDate = #{receiptDate,jdbcType=DATE},
       operator = #{operator,jdbcType=VARCHAR},
       receiptRemark = #{receiptRemark,jdbcType=VARCHAR},

@@ -6,7 +6,7 @@ angular.module('MetronicApp').factory('InvoiceService', ['$rootScope', '$http', 
     		saveInvoice:saveInvoice,
     		delInvoices:delInvoices,
             selectDetailBySerialNum:selectDetailBySerialNum,
-            getClauseSettlementBySerialNum:getClauseSettlementBySerialNum
+            getOrderInfoBySerialNum:getOrderInfoBySerialNum
     };
 
     return factory;
@@ -57,10 +57,10 @@ debugger;
           
     };
     //通过订单serialNum查找订单结算明细条款
-    function getClauseSettlementBySerialNum(serialNum){//getClauseSettlementBySerialNum
+    function getOrderInfoBySerialNum(serialNum){//getClauseSettlementBySerialNum
         var deferred = $q.defer();  
         debugger;
-        $http.post($rootScope.basePath + "/rest/invoice/clauseSettlement", serialNum).success(function (data) { 
+        $http.post($rootScope.basePath + "/rest/invoice/getOrderInfoBySerialNum", serialNum).success(function (data) { 
             // 如果连接成功，延时返回给调用者 
             deferred.resolve(data);  
         })  

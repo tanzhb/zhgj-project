@@ -135,4 +135,12 @@ public class MaterielServiceImpl implements MaterielService {
 		return null;
 	}
 
+	@Override
+	public List<Materiel> selectMaterielByOrderSerial(String orderSerial) {
+		if(StringUtils.isNotEmpty(orderSerial)){
+			return MaterielMapper.selectMaterielByOrderSerial(orderSerial);
+		}
+		return null;
+	}
+
 }

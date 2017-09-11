@@ -12,7 +12,7 @@ import java.util.Date;
 public class Invoice {
     private String serialNum;
 
-    private String invoiceNum;
+    private String invoiceNum;//发票编号
 
     private String supplyComId;
 
@@ -26,27 +26,57 @@ public class Invoice {
 
     private String paymentAmount;
 
-    private String paymentStatus;
+    private String paymentStatus;//付款状态
 
-    private String invoiceType;
+    private String invoiceType;//发票类型
 
-    private String invoiceAmount;
+    private String invoiceAmount;//发票金额
 
-    private Date billingDate;
+    private Date billingDate;//开票日期
 
-    private String invoiceNO;
+    private String invoiceNO;//发票号
 
-    private String submitter;
+    private String submitter;//申请人
 
-    private Date submitDate;
+    private Date submitDate;//申请日期
+    
+    private Date submitDepartment;//申请部门
 
     private String billingRemark;
 
-    private Date receiptDate;
+    private Date receiptDate;//申请开票日期
 
     private String operator;
 
     private String receiptRemark;
+    
+    private String secondRemark;
+    
+    private String thirdRemark;
+    
+    private String shouldPayOrReceiptMoney;//应付/应收金额
+    
+    private String prePayOrReceiptMoney;//预付/预收金额
+    
+    private String PayedOrReceiptedMoney;//已付/已收金额
+    
+    private String unPayOrReceiptMoney;//未付/未收金额
+    
+    private String billedOrReceiptedMoney;//>已开票/收票金额
+    
+    private String unBillOrReceiptMoney;//>	未开票/收票金额
+    
+    private String   companyName;//企业全称
+    
+    private String  account;//账号
+    
+    private String  tel;//联系电话
+    
+    private String  address;//地址
+    
+    private String    taxNum;//企业纳税号
+    
+    private String  bankName;//开户行名称
 
     private String invoiceVoucher;
 
@@ -66,7 +96,7 @@ public class Invoice {
     
     private  String relationReceiveOrPayNum;//关联收付款编号
     
-    private String orderAmount;//订单金额
+    private String orderAmount;//订单金额/收票金额
     
     private  String billWay;//开票方式
     
@@ -76,7 +106,7 @@ public class Invoice {
     
     private  String unBillAmount;//未开金额
     
-    private  String approver;
+    private  String approver;//收票人/开票人
     
     private  Date approvalDate;
 
@@ -359,6 +389,126 @@ public class Invoice {
 
 	public void setApprovalDate(Date approvalDate) {
 		this.approvalDate = approvalDate;
+	}
+
+	public Date getSubmitDepartment() {
+		return submitDepartment;
+	}
+
+	public void setSubmitDepartment(Date submitDepartment) {
+		this.submitDepartment = submitDepartment;
+	}
+
+	public String getSecondRemark() {
+		return secondRemark;
+	}
+
+	public void setSecondRemark(String secondRemark) {
+		this.secondRemark = secondRemark;
+	}
+
+	public String getThirdRemark() {
+		return thirdRemark;
+	}
+
+	public void setThirdRemark(String thirdRemark) {
+		this.thirdRemark = thirdRemark;
+	}
+
+	public String getShouldPayOrReceiptMoney() {
+		return shouldPayOrReceiptMoney;
+	}
+
+	public void setShouldPayOrReceiptMoney(String shouldPayOrReceiptMoney) {
+		this.shouldPayOrReceiptMoney = shouldPayOrReceiptMoney;
+	}
+
+	public String getPrePayOrReceiptMoney() {
+		return prePayOrReceiptMoney;
+	}
+
+	public void setPrePayOrReceiptMoney(String prePayOrReceiptMoney) {
+		this.prePayOrReceiptMoney = prePayOrReceiptMoney;
+	}
+
+	public String getPayedOrReceiptedMoney() {
+		return PayedOrReceiptedMoney;
+	}
+
+	public void setPayedOrReceiptedMoney(String payedOrReceiptedMoney) {
+		PayedOrReceiptedMoney = payedOrReceiptedMoney;
+	}
+
+	public String getUnPayOrReceiptMoney() {
+		return unPayOrReceiptMoney;
+	}
+
+	public void setUnPayOrReceiptMoney(String unPayOrReceiptMoney) {
+		this.unPayOrReceiptMoney = unPayOrReceiptMoney;
+	}
+
+	public String getBilledOrReceiptedMoney() {
+		return billedOrReceiptedMoney;
+	}
+
+	public void setBilledOrReceiptedMoney(String billedOrReceiptedMoney) {
+		this.billedOrReceiptedMoney = billedOrReceiptedMoney;
+	}
+
+	public String getUnBillOrReceiptMoney() {
+		return unBillOrReceiptMoney;
+	}
+
+	public void setUnBillOrReceiptMoney(String unBillOrReceiptMoney) {
+		this.unBillOrReceiptMoney = unBillOrReceiptMoney;
+	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+	public String getAccount() {
+		return account;
+	}
+
+	public void setAccount(String account) {
+		this.account = account;
+	}
+
+	public String getTel() {
+		return tel;
+	}
+
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getTaxNum() {
+		return taxNum;
+	}
+
+	public void setTaxNum(String taxNum) {
+		this.taxNum = taxNum;
+	}
+
+	public String getBankName() {
+		return bankName;
+	}
+
+	public void setBankName(String bankName) {
+		this.bankName = bankName;
 	}
     
     

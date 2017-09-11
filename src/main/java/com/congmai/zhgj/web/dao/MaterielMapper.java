@@ -29,5 +29,7 @@ public interface MaterielMapper {
     int updateByPrimaryKeySelective(Materiel record);
     
     void deleteMateriels(List<String> ids);
+    
+    List<Materiel> selectMaterielByOrderSerial(String orderSerial);//根据订单流水查找订单物料
 
 }

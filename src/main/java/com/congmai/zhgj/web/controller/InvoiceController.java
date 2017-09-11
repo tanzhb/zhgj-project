@@ -43,6 +43,7 @@ import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.Invoice;
+import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.OrderFile;
 import com.congmai.zhgj.web.model.OrderFileExample;
 import com.congmai.zhgj.web.model.OrderInfo;
@@ -56,6 +57,7 @@ import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.DeliveryMaterielService;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.InvoiceService;
+import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.StockInOutCheckService;
 import com.congmai.zhgj.web.service.TakeDeliveryService;
@@ -91,7 +93,8 @@ public class InvoiceController {
     private ClauseSettlementDetailService clauseSettlementDetailService;
     @Resource
     private CompanyService  companyService;
-    
+    @Resource
+    private MaterielService  materielService;
     
     /**
      * 发票列表展示
@@ -243,46 +246,43 @@ public class InvoiceController {
 		    			ExcelUtil.export(request, response, dataMap, "invoiceOut", "销项票信息");
 		    		}
 	    }
-	@RequestMapping(value = "/clauseSettlement",method = RequestMethod.POST)
+	@RequestMapping(value = "/getOrderInfoBySerialNum",method = RequestMethod.POST)
 	@ResponseBody
-	public Map getClauseSettlementInfo( @RequestBody String serialNum) {
+	public Map getOrderMaterielInfo( @RequestBody String serialNum) {
 		OrderInfo orderInfo =null;
 		if(serialNum.indexOf("in")>-1){
-			//Delivery delivery= takeDeliveryService.selectByTakeDeliveryPrimaryKey(serialNum.substring(0, 32));
 			orderInfo = orderService.selectById(serialNum.substring(0, 32));
 		}else if(serialNum.indexOf("out")>-1){
-			//DeliveryVO deliveryVO=deliveryService.selectDetailById(serialNum.substring(0, 32));
 			orderInfo = orderService.selectById(serialNum.substring(0, 32));
 		}else{
 			orderInfo= orderService.selectById(serialNum);
 		}
 		Map<String, Object> map = new HashMap<String, Object>();
-    	//获取合同信息
-    	ContractVO contract = null;
-		if(!StringUtils.isEmpty(orderInfo.getContractSerial())){
-    		contract=contractService.selectConbtractById(orderInfo.getContractSerial());
-    	}
-    	if(contract!=null&&!StringUtils.isEmpty(contract.getId())){
-    		//获取结算条款信息
-    		ClauseSettlement clauseSettlement = clauseSettlementService.selectByContractId(contract.getId());
-    		map.put("clauseSettlement", clauseSettlement);
-    		
-        	//查询订单结算条款明细
-    		ClauseSettlementDetailExample cde=new ClauseSettlementDetailExample();
-    		com.congmai.zhgj.web.model.ClauseSettlementDetailExample.Criteria criteriaf=cde.createCriteria();
-    		criteriaf.andClauseSettlementSerialEqualTo(clauseSettlement.getSerialNum());
-    		criteriaf.andDelFlgEqualTo("0");
-    		List<ClauseSettlementDetail>csds=clauseSettlementDetailService.selectList(cde);
-    	BigDecimal num=BigDecimal.ZERO;
-    		for(ClauseSettlementDetail clauseSettlementDetail:csds){
-    			num=num.add(new BigDecimal(clauseSettlementDetail.getUnbilledAmount()));
-    		}
-    		orderInfo.setUnBillAmount(num.toString());
-    		map.put("orderInfo", orderInfo);
-    		map.put("clauseSettlementDetails", csds);
-        	
-    	}
+		map.put("orderInfo", orderInfo);
+    	//获取订单物料信息
+		List<Materiel>orderMateriels=materielService.selectMaterielByOrderSerial(serialNum.substring(0, 32));
+		map.put("orderMateriels", orderMateriels);
     	return map;
 	}
-	
+	/**
+     * 获取发票物料列表
+     * 
+     */
+    @RequestMapping(value = "/getMaterielList")
+    public ResponseEntity<Map> getMaterielList(HttpServletRequest request,String  orderSerial) {
+    	
+		List<Materiel> materiels = materielService.selectMaterielByOrderSerial(orderSerial.substring(0, 32));
+		OrderInfo orderInfo=orderService.selectById(orderSerial.substring(0, 32));
+		for(Materiel materiel:materiels){
+			materiel.setMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getAmount()).setScale(2,BigDecimal.ROUND_HALF_UP )).toString());
+			
+		}
+		// 封装datatables数据返回到前台
+		Map<String,Object> pageMap = new HashMap<String,Object>();
+		pageMap.put("draw", 1);
+		pageMap.put("recordsTotal",  materiels==null?0:materiels.size());
+		pageMap.put("recordsFiltered",  materiels==null?0:materiels.size());
+		pageMap.put("data", materiels);
+		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+	}
 }
