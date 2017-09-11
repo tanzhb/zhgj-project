@@ -23,6 +23,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	 			getDemandPlanInfo($stateParams.serialNum);
 	 			selectParentMateriel();
 	 			$scope.serialNums = [];
+	 			selectSaleOrderTable();//加载物料列表
 	 			handle.datePickersInit();
 	 		}else{
 	 			demandPlanMaterielList();
@@ -1072,7 +1073,141 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	       
 	       $scope.cancel = function(){
 	    	   $state.go("demandPlan");
-	       }
+	       };
+	       
+	       
+	       /*******************************************历史订单Start********************************************/
+
+	       var s_table;
+	       var tableAjaxUrl = "rest/order/findOrderList?type=sale";
+	       var selectSaleOrderTable = function() {
+	               a = 0;
+	               App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
+	               s_table = $("#sample_2")
+	   			.DataTable({
+	                   language: {
+	                       aria: {
+	                           sortAscending: ": activate to sort column ascending",
+	                           sortDescending: ": activate to sort column descending"
+	                       },
+	                       emptyTable: "空表",
+	                       info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+	                       infoEmpty: "没有数据",
+	                       // infoFiltered: "(filtered1 from _MAX_ total entries)",
+	                       lengthMenu: "每页显示 _MENU_ 条数据",
+	                       search: "查询:",
+	                       zeroRecords: "抱歉， 没有找到！",
+	                       paginate: {
+	                           "sFirst": "首页",
+	                           "sPrevious": "前一页",
+	                           "sNext": "后一页",
+	                           "sLast": "尾页"
+	                        }
+	                   },
+	   /*
+	    * fixedHeader: {//固定表头、表底 header: !0, footer: !0, headerOffset: a },
+	    */
+	                   order: [[1, "asc"]],// 默认排序列及排序方式
+	                   searching: true,// 是否过滤检索
+	                   ordering:  true,// 是否排序
+	                   lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
+	                   pageLength: 5,// 每页显示数量
+	                   processing: true,// loading等待框
+	   // serverSide: true,
+	                   ajax: tableAjaxUrl,// 加载数据中
+	                   "aoColumns": [
+	                                /* { mData: 'serialNum' },*/
+	                                 { mData: 'orderNum' },
+	                                 { mData: 'buyComId' },
+	                                 { mData: null },
+	                                 { mData: null },
+	                                 { mData: 'deliveryMode' },
+	                                 { mData: 'serviceModel' },
+	                                 { mData: 'saleApplySerial' },
+	                                 { mData: 'orderSerial' },
+	                                 { mData: 'orderDate' },
+	                                 { mData: 'serialNum' }
+
+	                           ],
+	                  'aoColumnDefs' : [ /*{
+	   							'targets' : 0,
+	   							'searchable' : false,
+	   							'orderable' : false,
+	   							'render' : function(data,
+	   									type, full, meta) {
+	   								return '<input type="checkbox" id="'+data+'" ng-click="getSaleOrderInfo_(\''+data+'\')" name="serialNum[]" value="'
+	   													+ $('<div/>')
+	   													.text(
+	   															data)
+	   													.html()
+	   											+ '">';
+	   							},
+	   							"createdCell": function (td, cellData, rowData, row, col) {
+	   								 $compile(td)($scope);
+	   						       }
+	   						},*/{
+	   							'targets' : 9,
+	   							'searchable' : false,
+	   							'orderable' : false,
+	   							'render' : function(data,
+	   									type, full, meta) {
+	   								return '<a>查看</a>';
+	   							}
+	   						} ]
+
+	               }).on('order.dt',
+	               function() {
+	                   console.log('排序');
+	               })
+	               
+	               
+	               
+	               
+	               // 添加checkbox功能***************************************
+	   			// Handle click on "Select all" control
+	   			$('#example-select-all').on(
+	   					'click',
+	   					function() {
+	   						// Check/uncheck all checkboxes in the
+	   						// table
+	   						var rows = s_table.rows({
+	   							'search' : 'applied'
+	   						}).nodes();
+	   						$('input[type="checkbox"]', rows).prop(
+	   								'checked', this.checked);
+	   					});
+	   	
+	   			// Handle click on checkbox to set state of "Select
+	   			// all" control
+	   			$('#sample_2 tbody')
+	   					.on(
+	   							'change',
+	   							'input[type="checkbox"]',
+	   							function() {
+	   								// If checkbox is not checked
+	   								if (!this.checked) {
+	   									var el = $(
+	   											'#example-select-all')
+	   											.get(0);
+	   									// If "Select all" control
+	   									// is checked and has
+	   									// 'indeterminate' property
+	   									if (el
+	   											&& el.checked
+	   											&& ('indeterminate' in el)) {
+	   										// Set visual state of
+	   										// "Select all" control
+	   										// as 'indeterminate'
+	   										el.indeterminate = true;
+	   									}
+	   								}
+	   							});
+	   			// 添加checkbox功能
+	   			// ***************************************
+	           };
+	    
+	       
+	       /*******************************************历史订单End********************************************/
 }]); 
 
 /*var changeSelectValue = function (value,obj){

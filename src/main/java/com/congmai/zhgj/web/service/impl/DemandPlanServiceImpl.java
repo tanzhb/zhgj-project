@@ -63,7 +63,6 @@ public class DemandPlanServiceImpl extends GenericServiceImpl<DemandPlan,String>
 		if(StringUtils.isNotEmpty(demandPlan.getSearchKey())){
 			c.andSearchKeyLike(demandPlan.getSearchKey().trim().toUpperCase());
 		}
-		
 		List<DemandPlan> list = demandPlanMapper.selectByExample(example);
 		if(!CollectionUtils.isEmpty(list)){
 			for(DemandPlan vo : list){

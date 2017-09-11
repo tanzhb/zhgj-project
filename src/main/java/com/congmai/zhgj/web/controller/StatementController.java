@@ -31,6 +31,7 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.web.model.BOMMateriel;
 import com.congmai.zhgj.web.model.BOMMaterielExample;
@@ -50,6 +51,7 @@ import com.congmai.zhgj.web.model.StatementExample;
 import com.congmai.zhgj.web.model.StatementPaymentInfo;
 import com.congmai.zhgj.web.model.StatementExample.Criteria;
 import com.congmai.zhgj.web.model.StatementOrderInfo;
+import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.ClauseAdvanceService;
 import com.congmai.zhgj.web.service.ClauseAfterSalesService;
 import com.congmai.zhgj.web.service.ClauseCheckAcceptService;
@@ -59,6 +61,7 @@ import com.congmai.zhgj.web.service.ClauseSettlementDetailService;
 import com.congmai.zhgj.web.service.ClauseSettlementService;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.StatementService;
+import com.congmai.zhgj.web.service.UserCompanyService;
 
 /**
  * 
@@ -74,6 +77,9 @@ public class StatementController {
 	
     @Resource
     private StatementService statementService;
+    
+    @Resource
+    private UserCompanyService userCompanyService;
   
     @RequestMapping("statementBuyAdd")
     public String statementBuyAdd() {
@@ -138,11 +144,26 @@ public class StatementController {
     	//and 条件1
     	Criteria criteria =  m.createCriteria();
     	criteria.andDelFlgEqualTo("0");
-    	if("buy".equals(type)){//平台客户对账单供应商为空
-    		criteria.andSupplyComIdIsNull();
-    	}else if("supply".equals(type)){//平台供应商对账单客户为空
-    		criteria.andBuyComIdIsNull();
+    	User user = UserUtil.getUserFromSession();
+    	if(user!=null){
+    		String comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+    		if("buy".equals(type)){//平台客户对账单供应商为空
+    			if(comId==null){
+    				criteria.andSupplyComIdIsNull();
+    			}else{
+    				criteria.andSupplyComIdEqualTo(comId);
+    			}
+        	}else if("supply".equals(type)){//平台供应商对账单客户为空
+        		if(comId==null){
+            		criteria.andBuyComIdIsNull();
+    			}else{
+    				criteria.andBuyComIdEqualTo(comId);
+    			}
+        	}
+    		m.setOrderByClause("updateTime DESC");
+        	statementList = statementService.selectList(m);
     	}
+    
     	/*//and 条件2,未发布可编辑的物料
     	Criteria criteria2 =  m.createCriteria();
     	criteria2.andStatusEqualTo("0");
@@ -150,8 +171,7 @@ public class StatementController {
     	//or 条件
     	m.or(criteria2);*/
     	//排序字段
-    	m.setOrderByClause("updateTime DESC");
-    	statementList = statementService.selectList(m);
+    
     	
     	//封装datatables数据返回到前台
 		Map pageMap = new HashMap();

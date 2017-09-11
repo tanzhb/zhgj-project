@@ -27,6 +27,8 @@ public interface Delivery2Mapper extends GenericDao<Delivery, String>{
     Delivery selectByPrimaryKey(String serialNum);
     
     Delivery selectByTakeDeliveryPrimaryKey(String serialNum);
+    
+    Delivery selectByDeliveryPrimaryKey(String serialNum);
 
     int updateByExampleSelective(@Param("record") Delivery record, @Param("example") DeliveryExample example);
 

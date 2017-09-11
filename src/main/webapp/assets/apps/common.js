@@ -104,6 +104,12 @@ function timeStamp2String (time){
      var minute = datetime.getMinutes();
      var second = datetime.getSeconds();
      var mseconds = datetime.getMilliseconds();
+     if(minute < 10){
+    	 minute = '0' + minute;
+     }
+     if(second < 10){
+    	 second = '0' + second;
+     }
      return year + "-" + month + "-" + date+" "+hour+":"+minute+":"+second;
 };
 function timeStamp2ShortString (time){

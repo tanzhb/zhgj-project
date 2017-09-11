@@ -54,8 +54,10 @@
 					<div class="tab-content">
 						<div class="tab-pane active" id="tab_1_1">
 							<div class="scroller" style="height: 129px;" data-always-visible="1" data-rail-visible="0">
-								<ul class="feeds" id="daiban">										
-									
+								<ul class="feeds">										
+									<div ng-repeat="dbItem in dbItems">
+								         <div compile="dbItem.template"></div>         
+								     </div>
 								</ul>
 								
 							</div>
@@ -63,8 +65,10 @@
 						</div>
 						<div class="tab-pane" id="tab_1_2">
 							<div class="scroller" style="height: 129px;" data-always-visible="1" data-rail-visible="0">
-								<ul class="feeds" id="yiban">									
-																		
+								<ul class="feeds">									
+									 <div ng-repeat="ybItem in ybItems">
+								         <div compile="ybItem.template"></div>         
+								     </div>							
 								</ul>
 							</div>
 						</div>

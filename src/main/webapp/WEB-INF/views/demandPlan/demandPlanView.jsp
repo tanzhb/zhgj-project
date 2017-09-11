@@ -282,8 +282,9 @@
 							<!-- END SAMPLE TABLE PORTLET-->
 						</div>
                     </div>
-					<div class="tab-pane fade active in" id="tab_1_2">
+					<div class="tab-pane fade" id="tab_1_2">
 						<div class="" id="tab2_c">
+							<jsp:include page="selectSaleOrder.jsp"></jsp:include>
 							<!-- END SAMPLE TABLE PORTLET-->
 						</div>
 					</div>

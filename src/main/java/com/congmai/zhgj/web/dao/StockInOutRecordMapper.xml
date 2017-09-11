@@ -17,6 +17,7 @@
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
+  <!-- 入库查询 -->
   <resultMap id="BaseResultMap2" type="com.congmai.zhgj.web.model.StockInOutRecord" >
     <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
     <result column="deliverSerial" property="deliverSerial" jdbcType="VARCHAR" />
@@ -33,6 +34,26 @@
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <association property="delivery" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.TakeDeliveryMapper.selectByTakeDeliveryPrimaryKeyForStockIn"></association>
+  	<association property="warehouseCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countWarehouseByDeliverSerial" ></association>
+    <association property="positionCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countPositionByDeliverSerial" ></association>
+  </resultMap>
+  <!-- 出库查询 -->
+  <resultMap id="BaseResultMap3" type="com.congmai.zhgj.web.model.StockInOutRecord" >
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="deliverSerial" property="deliverSerial" jdbcType="VARCHAR" />
+    <result column="takeDeliverSerial" property="takeDeliverSerial" jdbcType="VARCHAR" />
+    <result column="inOutNum" property="inOutNum" jdbcType="VARCHAR" />
+    <result column="stockDate" property="stockDate" jdbcType="DATE" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="contactNum" property="contactNum" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <association property="delivery" column="deliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectByDeliveryPrimaryKey"></association>
   	<association property="warehouseCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countWarehouseByDeliverSerial" ></association>
     <association property="positionCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countPositionByDeliverSerial" ></association>
   </resultMap>
@@ -119,6 +140,12 @@
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </select>
   <select id="selectStockInInfoByPrimaryKey" resultMap="BaseResultMap2" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from stockInOutRecord
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  <select id="selectStockOutInfoByPrimaryKey" resultMap="BaseResultMap3" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from stockInOutRecord

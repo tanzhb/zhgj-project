@@ -32,6 +32,7 @@ import com.congmai.zhgj.web.model.OrderInfoExample;
 import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.StockInOutRecord;
+import com.congmai.zhgj.web.model.StockInOutRecordExample;
 import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.model.TakeDeliveryExample;
 import com.congmai.zhgj.web.model.TakeDeliveryParams;
@@ -265,7 +266,40 @@ public class TakeDeliveryController {
         		Subject currentUser = SecurityUtils.getSubject();
         		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
         		if(StringUtils.isNotEmpty(takeDeliveryParams.getRecord().getSerialNum())){
-        			takeDeliveryService.updateStockInData(takeDeliveryParams,currenLoginName);
+        			takeDeliveryService.updateStockInData(takeDeliveryParams,currenLoginName,"in");
+        		}else{
+        			takeDeliveryService.insertStockInData(takeDeliveryParams,currenLoginName);
+        		}
+        		flag = "1";
+        	}catch(Exception e){
+        		System.out.println(e.getMessage());
+        		return null;
+        	}
+    	return flag;
+    }
+    
+    /**
+     * @Description (保存出库记录)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="saveStockOutData",method=RequestMethod.POST)
+    @ResponseBody
+    public String saveStockOutData(Map<String, Object> map,@RequestBody String params,HttpServletRequest request) {
+    	String flag ="0"; //默认失败
+
+    	
+  	   	  TakeDeliveryParams  takeDeliveryParams = null;
+		   try {
+			   takeDeliveryParams = JSON.parseObject(params, TakeDeliveryParams.class);
+			} catch (Exception e) {
+		    	System.out.println(this.getClass()+"---------"+ e.getMessage());
+			}
+        	try{
+        		Subject currentUser = SecurityUtils.getSubject();
+        		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+        		if(StringUtils.isNotEmpty(takeDeliveryParams.getRecord().getSerialNum())){
+        			takeDeliveryService.updateStockInData(takeDeliveryParams,currenLoginName,"out");
         		}else{
         			takeDeliveryService.insertStockInData(takeDeliveryParams,currenLoginName);
         		}
@@ -277,16 +311,61 @@ public class TakeDeliveryController {
     	return flag;
     }
 
+
+    /**
+     * 
+     * @Description (TODO新建入庫)
+     * @param map
+     * @param serialNum
+     * @param request
+     * @return
+     */
     @RequestMapping(value="stockInAdd")
     public String stockInAdd(Map<String, Object> map,String serialNum,HttpServletRequest request) {
     	
     	return "takeDelivery/stockInAdd";
     }
     
+    /**
+     * 
+     * @Description (TODO查看入库)
+     * @param map
+     * @param serialNum
+     * @param request
+     * @return
+     */
     @RequestMapping(value="stockInView")
     public String stockInView(Map<String, Object> map,String serialNum,HttpServletRequest request) {
     	
     	return "takeDelivery/stockInView";
+    }
+    
+    /**
+     * 
+     * @Description (TODO这新建出库)
+     * @param map
+     * @param serialNum
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="stockOutAdd")
+    public String stockOutAdd(Map<String, Object> map,String serialNum,HttpServletRequest request) {
+    	
+    	return "delivery/stockOutAdd";
+    }
+    
+    /**
+     * 
+     * @Description (TODO查看出库)
+     * @param map
+     * @param serialNum
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="stockOutView")
+    public String stockOutView(Map<String, Object> map,String serialNum,HttpServletRequest request) {
+    	
+    	return "delivery/stockOutView";
     }
     
     /**
@@ -298,7 +377,19 @@ public class TakeDeliveryController {
     @ResponseBody
     public StockInOutRecord getStockInInfo(HttpServletRequest request,String serialNum) {
     	
-    	return takeDeliveryService.selectStockInOutRecordByPrimayKey(serialNum);
+    	return takeDeliveryService.selectStockInOutRecordByPrimayKey(serialNum,"in");
+    }
+    
+    /**
+     * @Description (出库查看)
+     * @param request
+     * @return
+     */
+    @RequestMapping("getStockOutInfo")
+    @ResponseBody
+    public StockInOutRecord getStockOutInfo(HttpServletRequest request,String serialNum) {
+    	
+    	return takeDeliveryService.selectStockInOutRecordByPrimayKey(serialNum,"out");
     }
     
     
@@ -333,7 +424,7 @@ public class TakeDeliveryController {
 				}*/
 		 record.setPageIndex(0);
 		 record.setPageSize(-1);
-	 	Page<DeliveryMateriel> takeDeliverys = deliveryMaterielService.selectListByExample(record);
+	 	Page<DeliveryMateriel> takeDeliverys = deliveryMaterielService.selectListByExample(record,"in");
 	 	//List<Company> companys = companyService.selectByPage(company).getResult();
 			// 封装datatables数据返回到前台
 			Map<String,Object> pageMap = new HashMap<String,Object>();
@@ -344,6 +435,48 @@ public class TakeDeliveryController {
 			return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
 	 }
 
+	 /**
+	  * @Description (获取列表数据)
+	  * @param request
+	  * @return
+	  */
+	 @RequestMapping(value="stockOutList",method=RequestMethod.POST)
+	 public ResponseEntity<Map<String,Object>> stockOutList(Map<String, Object> map,HttpServletRequest request,@RequestBody String params,StockInOutRecord record) {
+		 //远程分页代码
+		 /*try {
+	 		params = URLDecoder.decode(params, "UTF-8");
+			} catch (UnsupportedEncodingException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+	 	 ObjectMapper objectMapper = new ObjectMapper();
+	 	 objectMapper.configure(org.codehaus.jackson.map.DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		   		DataTablesParams  dataTablesParams = null;
+			   try {
+				   JSONObject a = JSONObject.fromObject(params);
+				   dataTablesParams = objectMapper.readValue(params,DataTablesParams.class);
+				} catch (JsonParseException e) {
+					System.out.println(this.getClass()+"---------"+ e.getMessage());
+				} catch (JsonMappingException e) {
+					System.out.println(this.getClass()+"---------"+ e.getMessage());
+				} catch (IOException e) {
+					System.out.println(this.getClass()+"---------"+ e.getMessage());
+				} catch (Exception e) {
+			    	System.out.println(this.getClass()+"---------"+ e.getMessage());
+				}*/
+		 record.setPageIndex(0);
+		 record.setPageSize(-1);
+		 Page<DeliveryMateriel> takeDeliverys = deliveryMaterielService.selectListByExample(record,"out");
+		 //List<Company> companys = companyService.selectByPage(company).getResult();
+		 // 封装datatables数据返回到前台
+		 Map<String,Object> pageMap = new HashMap<String,Object>();
+		 pageMap.put("draw", 1);
+		 pageMap.put("recordsTotal", record==null?0:takeDeliverys.getTotalCount());
+		 pageMap.put("recordsFiltered", record==null?0:takeDeliverys.getTotalCount());
+		 pageMap.put("data", takeDeliverys.getResult());
+		 return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
+	 }
+	 
 	 
 	  /**
 	     * @Description (删除入库记录信息)
@@ -367,7 +500,7 @@ public class TakeDeliveryController {
 	 }
 	  
 	  /**
-	     * @Description (导出收货计划)
+	     * @Description (导出入库记录)
 	     * @param request
 	     * @return
 	     */
@@ -377,9 +510,25 @@ public class TakeDeliveryController {
 	    		StockInOutRecord record = new StockInOutRecord();
 	    		record.setPageIndex(0);
 	    		record.setPageSize(-1);
-	    		List<DeliveryMateriel> stockInList = deliveryMaterielService.selectListByExample(record).getResult();
+	    		List<DeliveryMateriel> stockInList = deliveryMaterielService.selectListByExample(record,"in").getResult();
 	    		dataMap.put("stockInList",stockInList);
 	    		ExcelUtil.export(request, response, dataMap, "stockIn", "入库记录");
+	    }
+	    
+	    /**
+	     * @Description (导出出库记录)
+	     * @param request
+	     * @return
+	     */
+	    @RequestMapping("exportStockOut")
+	    public void exportStockOut(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+	    	Map<String, Object> dataMap = new HashMap<String, Object>();
+	    	StockInOutRecord record = new StockInOutRecord();
+	    	record.setPageIndex(0);
+	    	record.setPageSize(-1);
+	    	List<DeliveryMateriel> stockOutList = deliveryMaterielService.selectListByExample(record,"out").getResult();
+	    	dataMap.put("stockOutList",stockOutList);
+	    	ExcelUtil.export(request, response, dataMap, "stockOut", "出库记录");
 	    }
     
     @RequestMapping("getOrders")
