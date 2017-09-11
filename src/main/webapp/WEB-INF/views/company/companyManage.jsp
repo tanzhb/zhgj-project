@@ -130,12 +130,12 @@
 			<div class="portlet-body" id="comViewContent">
 				<ul class="nav nav-tabs">
 					<li class="active">
-                  	<a data-target="#tab_1_1" data-toggle="tab">基本信息</a>
+                  	<a class="bold" data-target="#tab_1_1" data-toggle="tab">基本信息</a>
               		</li>
-					<li><a data-target="#tab_1_2" data-toggle="tab">联系人</a>
+					<li><a class="bold" data-target="#tab_1_2" data-toggle="tab">联系人</a>
 					</li>
-					<li><a data-target="#tab_1_3" data-toggle="tab">资质信息</a></li>
-					<li><a data-target="#tab_1_4" data-toggle="tab">财务信息</a></li>
+					<li><a class="bold" data-target="#tab_1_3" data-toggle="tab">资质信息</a></li>
+					<li><a class="bold" data-target="#tab_1_4" data-toggle="tab">财务信息</a></li>
 				</ul>
 				<div class="tab-content">
 				<div class="tab-pane fade active in" id="tab_1_1">

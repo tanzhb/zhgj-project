@@ -11,7 +11,7 @@
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
 			class="fa fa-angle-right"></i></li>
-		<li><a ui-sref="datatablesmanaged">物流管理</a> <i
+		<li><a ui-sref="datatablesmanaged">仓储</a> <i
 			class="fa fa-angle-right"></i></li>
 		<li><a id="tip" ui-sref="datatablesmanaged">收货</a></li>
 	</ul>

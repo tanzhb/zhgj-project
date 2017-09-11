@@ -265,7 +265,7 @@ public class StatementServiceImpl implements StatementService {
  					
 					if(CollectionUtils.isNotEmpty(paymentPlanViews)){
 							
-								//获取分期应付信息
+								//获取本期应付信息
 								getShouldPaymentInfo(paymentPlanViews,set,paymentList,map2);
 								
 								//构造付款记录查询条件

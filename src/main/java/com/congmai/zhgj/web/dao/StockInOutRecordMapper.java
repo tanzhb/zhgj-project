@@ -36,4 +36,6 @@ public interface StockInOutRecordMapper  extends GenericDao<StockInOutRecord,Str
 	List<Delivery> selectListByExample(StockInOutRecordExample example);
 	
 	StockInOutRecord selectStockInInfoByPrimaryKey(String serialNum);
+	
+	StockInOutRecord selectStockOutInfoByPrimaryKey(String serialNum);
 }

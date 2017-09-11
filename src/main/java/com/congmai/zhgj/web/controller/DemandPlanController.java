@@ -441,6 +441,10 @@ public class DemandPlanController {
 									company.setComType("1");//客户
 									company.setComName(row.get(4).toString()
 											);
+									company.setCreator(currenLoginName);
+									company.setCreateTime(new Date());
+									company.setUpdater(currenLoginName);
+									company.setUpdateTime(new Date());
 									companyService.insert(company);
 									demandPlan.setBuyComId(comId);
 								}else{
@@ -457,7 +461,7 @@ public class DemandPlanController {
 								materiel.setDemandPlanSerial(demandPlanSerial);
 								String serialNum = demandPlanMaterielService.selectMaterielSerialByMaterielNum(row.get(1).toString()); //物料流水号
 								//String s_serialNum = ""; //供应物料流水号
-								if(serialNum==null){
+								if(serialNum==null){//标准物料不存在
 									Materiel m = new Materiel();
 									//s_serialNum = ApplicationUtils.random32UUID();
 									serialNum = ApplicationUtils.random32UUID();
@@ -466,13 +470,19 @@ public class DemandPlanController {
 									m.setMaterielId(materiel_id);
 									m.setMaterielName(row.get(1).toString());
 									m.setMaterielNum(row.get(2).toString());
-									materielMapper.insert(m);
-									setSupplyMaterielSerial(materiel,materiel_id,row.get(5).toString());
+									m.setCreator(currenLoginName);
+									m.setDelFlg("0");
+									m.setCreateTime(new Date());
+									m.setUpdater(currenLoginName);
+									m.setUpdateTime(new Date());
+									materielMapper.insert(m);//新增标准物料
+									setSupplyMaterielSerial(materiel,materiel_id,row.get(5).toString(),currenLoginName);
 									materiel.setMaterielSerial(serialNum);
-								}else{
+								}else{//存在标准物料
 									materiel.setMaterielSerial(serialNum);
 									String materiel_id = materielMapper.selectByPrimaryKey(serialNum).getMaterielId();
-									setSupplyMaterielSerial(materiel,materiel_id,row.get(5).toString());
+									//检查供应物料是否存在
+									setSupplyMaterielSerial(materiel,materiel_id,row.get(5).toString(),currenLoginName);
 								}
 								
 								materiel.setAmount(row.get(2).toString());
@@ -481,6 +491,8 @@ public class DemandPlanController {
 								materiel.setCreator(currenLoginName);
 								materiel.setCreateTime(new Date());
 								materiel.setUpdater(currenLoginName);
+								materiel.setUpdateTime(new Date());
+								materiel.setDelFlg("0");
 								demandPlanMateriels.add(materiel);
 							}
 						}catch(Exception  e){
@@ -493,6 +505,7 @@ public class DemandPlanController {
 				}
 			}, 1);
 			demandPlan.setSerialNum(demandPlanSerial);
+			demandPlan.setDelFlg("0");
 			demandPlan.setCreator(currenLoginName);
 			demandPlan.setCreateTime(new Date());
 			demandPlan.setUpdater(currenLoginName);
@@ -520,9 +533,16 @@ public class DemandPlanController {
     		ExcelUtil.export(request, response, dataMap, "demandPlan", "需求计划");
     }
 
-    private void setSupplyMaterielSerial(DemandPlanMateriel materiel,String materiel_id,String comName){
+    /**
+     * 
+     * @Description (TODO检查供应物料是否存在)
+     * @param materiel
+     * @param materiel_id
+     * @param comName
+     */
+    private void setSupplyMaterielSerial(DemandPlanMateriel materiel,String materiel_id,String comName,String currenLoginName){
     	String supplyComId = companyService.selectComIdByComName(comName);
-		if(supplyComId==null){
+		if(supplyComId==null){//供应商不存在
 			SupplyMateriel sm = new SupplyMateriel();
 			String serialNum = ApplicationUtils.random32UUID();
 			sm.setSerialNum(serialNum);
@@ -533,18 +553,36 @@ public class DemandPlanController {
 			company.setComId(comId);
 			company.setComType("2");//供应商
 			company.setComName(comName);
-			companyService.insert(company);
+			company.setCreator(currenLoginName);
+			company.setCreateTime(new Date());
+			company.setUpdater(currenLoginName);
+			company.setUpdateTime(new Date());
+			companyService.insert(company);//新增供应商
 			sm.setSupplyComId(comId);
-			supplyMaterielMapper.insert(sm);
+			sm.setCreator(currenLoginName);
+			sm.setCreateTime(new Date());
+			sm.setUpdater(currenLoginName);
+			sm.setUpdateTime(new Date());
+			supplyMaterielMapper.insert(sm);//新增供应物料
 			materiel.setSupplyMaterielSerial(serialNum);
 		}else{
 			SupplyMaterielExample example = new SupplyMaterielExample();
 			example.createCriteria().andSupplyComIdEqualTo(supplyComId).andMaterielIdEqualTo(materiel_id).andDelFlgEqualTo("0");
 			List<SupplyMateriel> supplyMateriels = supplyMaterielMapper.selectByExample(example);
-			if(CollectionUtils.isNotEmpty(supplyMateriels)){
+			if(CollectionUtils.isNotEmpty(supplyMateriels)){//供应物料存在
 				materiel.setSupplyMaterielSerial(supplyMateriels.get(0).getSerialNum());
 			}else{
-				setSupplyMaterielSerial(materiel,materiel_id,comName);
+				SupplyMateriel sm = new SupplyMateriel();
+				String serialNum = ApplicationUtils.random32UUID();
+				sm.setSerialNum(serialNum);
+				sm.setMaterielId(materiel_id);
+				sm.setSupplyComId(supplyComId);
+				sm.setCreator(currenLoginName);
+				sm.setCreateTime(new Date());
+				sm.setUpdater(currenLoginName);
+				sm.setUpdateTime(new Date());
+				supplyMaterielMapper.insert(sm);//新增供应物料
+				materiel.setSupplyMaterielSerial(serialNum);
 			}
 		}
     	

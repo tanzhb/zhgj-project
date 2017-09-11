@@ -121,7 +121,7 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="supplyComId">供应商 <span class="required"> * </span></label>
                                                     <div class="">
-                                                    	<select class="bs-select form-control order" selectpicker data-live-search="true"  id="supplyComId"  name="supplyComId" ng-model="deliver.supplyComId" ng-hide="deliverAdd"  data-size="8">
+                                                    	<select class="form-control" selectpicker data-live-search="true"  id="supplyComId"  name="supplyComId" ng-model="deliver.supplyComId" ng-hide="deliverAdd"  data-size="8">
 	                                                        <option value=""></option>
 	                                                        <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}">{{supplier.comName}}</option>
 	                                                    </select>

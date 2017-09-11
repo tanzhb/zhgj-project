@@ -2,23 +2,23 @@
  * 
  */
 
-angular.module('MetronicApp').controller('StockInController',['$rootScope','$scope','$state','$http','takeDeliveryService','$location','$compile','$stateParams',function($rootScope,$scope,$state,$http,takeDeliveryService,$location,$compile,$stateParams) {
+angular.module('MetronicApp').controller('StockOutController',['$rootScope','$scope','$state','$http','takeDeliveryService','$location','$compile','$stateParams',function($rootScope,$scope,$state,$http,takeDeliveryService,$location,$compile,$stateParams) {
 	 $scope.$on('$viewContentLoaded', function() {   
 	    	// initialize core components
 		    handle = new pageHandle();
 	    	App.initAjax();
 	    	handle.datePickersInit();
-	    	if($location.path()=="/stockInAdd"){
+	    	if($location.path()=="/stockOutAdd"){debugger;
 	    		initWarehouse();
 	    		handle.validatorInit();
 	    		//initTakeDelviery();
-	    		loadTakeDelieryTable();
+	    		loadDelieryTable();
 	    		if(!isNull($stateParams.serialNum)){
-	    			$(".s_tip").text("编辑入库信息");
-	    			stockInInfo($stateParams.serialNum);
+	    			$(".s_tip").text("编辑出库信息");
+	    			stockOutInfo($stateParams.serialNum);
 	    		}
 	    	}else{
-	    			stockInInfo($stateParams.serialNum);
+	    			stockOutInfo($stateParams.serialNum);
 	    	}
 	    		
 	    	// set default layout mode
@@ -142,7 +142,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
         			$scope.takeDeliveryMateriels = data.data;
         			countWarehouseAndPosition();
         			//$scope.deliver.materielCount = data.orderMateriel.length;
-        			if($location.path()=="/stockInAdd"){ //入库编辑时
+        			if($location.path()=="/stockOutAdd"){ //出库编辑时
         				for(var i in data.data){
             				$scope.getPositions(data.data[i]);
             			}
@@ -154,21 +154,21 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 	        
 
 	        /**
-	         * 确认入库
+	         * 确认出库
 	         */
 			$scope.saveStockIn = function() {
 				if($('#stockInForm').valid()){
 					handle.blockUI();
 					var params = {};
 					params.record = $scope.record;
-					params.record.deliverSerial = "";
+					params.record.deliverSerial = $scope.deliverSerial;
 					params.deliveryMateriels = [];
 					var param
 					for(var i=0;i < $scope.takeDeliveryMateriels.length;i++){
 						param = {};
 						param.serialNum = $scope.takeDeliveryMateriels[i].serialNum;
 						param.stockCount = $scope.takeDeliveryMateriels[i].stockCount;
-						param.unstockCount = $scope.takeDeliveryMateriels[i].acceptCount-$scope.takeDeliveryMateriels[i].stockCount;
+						param.unstockCount = $scope.takeDeliveryMateriels[i].deliverCount-$scope.takeDeliveryMateriels[i].stockCount;
 						param.warehouseSerial = $scope.takeDeliveryMateriels[i].warehouseSerial;
 						param.positionSerial = $scope.takeDeliveryMateriels[i].positionSerial;
 						param.stockRemark = $scope.takeDeliveryMateriels[i].stockRemark;
@@ -176,30 +176,30 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 					}
 					
 					var promise = takeDeliveryService
-							.saveStockInData(params);
+							.saveStockOutData(params);
 					promise.then(function(data) {
 						if(data.data == "1"){
 							if(isNull($scope.record.serialNum)){
-								toastr.success("入库成功！");
+								toastr.success("出库成功！");
 							}else{
 								toastr.success("修改成功！");
 							}
-							$state.go("takeDelivery");
+							$state.go("delivery");
 						}else{
-							toastr.error("入库失败！请联系管理员");
+							toastr.error("出库失败！请联系管理员");
 						}
 						handle.unblockUI();
 					}, function(data) {
 						// 调用承诺接口reject();
 						handle.unblockUI();
-						toastr.error("入库失败！请联系管理员");
+						toastr.error("出库失败！请联系管理员");
 						console.log(data);
 					});
 				}
 			}; 
 			
 			$scope.cancelStockIn = function(){
-				$state.go("takeDelivery");
+				$state.go("delivery");
 			}
 			
 			$scope.getWarehouseName = function(type){
@@ -228,13 +228,13 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 				}
 			}
 			
-			var stockInInfo = function(serialNum){
-				var promise = takeDeliveryService.getStockInInfo(serialNum);
-        		promise.then(function(data){debugger;
+			var stockOutInfo = function(serialNum){
+				var promise = takeDeliveryService.getStockOutInfo(serialNum);
+        		promise.then(function(data){
         			$scope.record = data.data; 
-        			$scope.record.takeDeliverNum = data.data.delivery.takeDelivery.takeDeliverNum;
+        			$scope.record.deliverNum = data.data.delivery.deliverNum;
         			//$scope.deliver.materielCount = data.orderMateriel.length;
-        			if(!isNull($stateParams.serialNum)&&$location.path()=="/stockInAdd"){//入库编辑时
+        			if(!isNull($stateParams.serialNum)&&$location.path()=="/stockOutAdd"){//出库编辑时
         				$scope.deliverSerial = data.data.delivery.serialNum;
         				$scope.getTakeDeliverMateriel(data.data.delivery);
         			}
@@ -243,12 +243,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
         		});
 			}
 
-	       /**
-	        * 导出收货计划
-	        */
-	       $scope.exportTakeDelivery = function(){
-		    	 window.location.href=$rootScope.basePath+"/rest/takeDelivery/exportTakeDelivery";
-		   }
+
 	       
 		    function unique(arr) {
 			    var result = [], hash = {};
@@ -261,12 +256,12 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 			    return result.length;
 			}
 
-		    jQuery.validator.addMethod("StockInNumCheck", function (value, element) {
+		    jQuery.validator.addMethod("StockOutNumCheck", function (value, element) {
 				
-			    return this.optional(element) || Number($(element).data("acceptcount"))-value >= 0;
-			}, "入库数量不能超过实收数量");
+			    return this.optional(element) || Number($(element).data("delivercount"))-value >= 0;
+			}, "出库数量不能超过发货数量");
 
-		 // 页面加载完成后调用，验证输入框
+		 // 页面加载完成后调用，验证输出框
 			$scope.$watch('$viewContentLoaded', function() {  
 							var e = $("#stockInForm"),
 					        r = $(".alert-danger", e),
@@ -277,12 +272,12 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 					            focusInvalid: !1,
 					            ignore: "",
 					            messages: {
-					            	inOutNum:{required:"入库单号不能为空！"},
+					            	inOutNum:{required:"出库单号不能为空！"},
 					            	takeDeliverSerial:{required:"收货单号不能为空！"},
-					            	stockDate:{required:"入库日期不能为空！"},
+					            	stockDate:{required:"出库日期不能为空！"},
 					            	operator:{required:"操作员不能为空！"},
 					            	contactNum:{required:"联系方式不能为空！"},
-					            	stockCount:{required:"入库数量不能为空！",digits:"发货数量必须为数字！"},
+					            	stockCount:{required:"出库数量不能为空！",digits:"发货数量必须为数字！"},
 					            	warehouseSerial:{required:"仓库不能为空！"},
 					            	positionSerial:{required:"库位不能为空！"}
 					            },
@@ -308,7 +303,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 					                stockCount: {
 					                	required: !0,
 					                	digits:!0,
-					                	StockInNumCheck:!0
+					                	StockOutNumCheck:!0
 					                },
 					                contactNum: {
 					                	required: !0,
@@ -345,155 +340,101 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 			   
 		       /***选择收货列表初始化START***/
 		       var t_table;
-		       var loadTakeDelieryTable = function() {
-		                a = 0;
-		                App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
-		                t_table = $("#takeDelivery").DataTable({
-		                    language: {
-		                        aria: {
-		                            sortAscending: ": activate to sort column ascending",
-		                            sortDescending: ": activate to sort column descending"
-		                        },
-		                        emptyTable: "空表",
-		                        info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
-		                        infoEmpty: "没有数据",
-		                        //infoFiltered: "(filtered1 from _MAX_ total entries)",
-		                        lengthMenu: "每页显示 _MENU_ 条数据",
-		                        search: "查询:",
-		                        zeroRecords: "抱歉， 没有找到！",
-		                        paginate: {
-		                            "sFirst": "首页",
-		                            "sPrevious": "前一页",
-		                            "sNext": "后一页",
-		                            "sLast": "尾页"
-		                         }
-		                    },
-		    /*                fixedHeader: {//固定表头、表底
-		                        header: !0,
-		                        footer: !0,
-		                        headerOffset: a
-		                    },*/
-		                    order: [[1, "asc"]],//默认排序列及排序方式
-		                    bRetrieve : true,
-		  					'scrollX': false,
-		  					  buttons: [
-		  				                {
-		  				                	 extend: "print",
-		  					                 className: "btn dark btn-outline"
-		  				                }
-		  				            ],
-		                    searching: true,//是否过滤检索
-		                    ordering:  true,//是否排序
-		                    lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
-		                    pageLength: 5,//每页显示数量
-		                    processing: true,//loading等待框
-		                    bRetrieve : true,
-//		                    serverSide: true,
-		                   // ajax: "rest/takeDelivery/takeDeliveryList",//加载数据中
-		                    ajax :{ "url":$rootScope.basePath
-		  						+ "/rest/takeDelivery/takeDeliveryList",// 加载数据中user表数据    
-		  						"contentType": "application/json",
-		  					    "type": "POST",
-		  					    "data": function ( d ) {
-		  					      return JSON.stringify( d );
-		  					    }},
-		                    "aoColumns": [
-		                                  { mData: 'takeDelivery.serialNum' },
-		                                  { mData: 'takeDelivery.takeDeliverNum' },
-		                                  { mData: 'orderNum' },
-		                                  { mData: 'shipper' },
-		                                  { mData: 'materielCount' },
-		                                  { mData: 'packageCount' },
-		                                  { mData: 'packageType' },
-		                                  { mData: 'warehouse.address' },
-		                                  { mData: 'deliverDate' },
-		                                  { mData: 'deliveryTransport.transportType' },
-		                                  { mData: 'takeDelivery.warehouse.address' },
-		                                  { mData: 'takeDelivery.remark' }
-		                            ],
-		                   'aoColumnDefs' : [ {
-		    							'targets' : 0,
-		    							'searchable' : false,
-		    							'orderable' : false,
-		    							'className' : 'dt-body-center',
-		    							'render' : function(data,
-		    									type, row, meta) {
-		  	  	  								return '<input  type="radio" id='+data+'  ng-click="getSelectIndex('+meta.row+')"   name="takeDeliverySerial" value="'
-		  											+ $('<div/>')
-		  													.text(
-		  															data)
-		  													.html()
-		  											+ '">';
-		  	
-		    							},
-		    							"createdCell": function (td, cellData, rowData, row, col) {
-		    								 $compile(td)($scope);
-		    						       }
-		    						},{
-		    							'targets' : 1,
-		    							'render' : function(data,
-		    									type, row, meta) {
-		    										if(data==null){
-		    											data="未收货";
-		    										}
-		  	  	  								return '<a href="javascript:void(0);" ng-click="takeDeliveryView(\''+row.takeDelivery.serialNum+'\')">'+data+'</a>';
-		  	
-		    							},
-		    							"createdCell": function (td, cellData, rowData, row, col) {
-		    								 $compile(td)($scope);
-		    						       }
-		    						},{
-		    							'targets' : 7,
-		    							'render' : function(data,
-		    									type, row, meta) {
-		    									if(data!=undefined){
-		  										return data;
-		  									}
-		  	  								return '';
-		  	
-		    							}
-		    						},{
-		    							'targets' : 9,
-		    							'render' : function(data,
-		    									type, row, meta) {
-		    									if(data!=undefined){
-		  										return data;
-		  									}
-		  	  								return '';
-		  	
-		    							}
-		    						},{
-		    							'targets' : 10,
-		    							'render' : function(data,
-		    									type, row, meta) {
-		    									if(data!=undefined){
-		  										return data;
-		  									}
-		  	  								return '';
-		  	
-		    							}
-		    						},{
-		    							'targets' : 11,
-		    							'render' : function(data,
-		    									type, row, meta) {
-		    										if(data!=undefined){
-		    											return data;
-		    										}
-		  	  	  								return '';
-		  	
-		    							}
-		    						}]
+		       var loadDelieryTable = function() {
+					
+					var a = 0;
+					App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile")&& (a = $(".page-header").outerHeight(!0)): 
+						$(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0): $("body").hasClass("page-header-fixed")&& (a = 64);
 
-		                }).on('order.dt',
-		                function() {
-		                    console.log('排序');
-		                }).on('page.dt', 
-		                function () {
-		              	  console.log('翻页');
-		  	          }).on('draw.dt',function() {
-		  	        	//  checkedIdHandler();
-		  	          });
-		            };
+						t_table = $("#takeDelivery").DataTable(
+								{
+									language : {
+										aria : {
+											sortAscending : ": activate to sort column ascending",
+											sortDescending : ": activate to sort column descending"
+										},
+										emptyTable : "空表",
+										info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+										infoEmpty : "没有数据",
+										infoFiltered : "(从 _MAX_ 条数据中检索)",
+										lengthMenu : "每页显示 _MENU_ 条数据",
+										search : "查询:",
+										zeroRecords : "抱歉， 没有找到！&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
+										paginate : {
+											"sFirst" : "首页",
+											"sPrevious" : "前一页",
+											"sNext" : "后一页",
+											"sLast" : "尾页"
+										}
+									},
+									/*fixedHeader : {// 固定表头、表底
+										header : !0,
+										footer : !0,
+										headerOffset : a
+									},*/
+									// select: true,行多选
+									order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+									bRetrieve : true,
+									"sScrollX": "100%",
+									"sScrollXInner": "110%",
+									"bScrollCollapse": true,
+									// searching: true,//是否过滤检索
+									// ordering: true,//是否排序
+									lengthMenu : [
+									              [ 5, 10, 15,15, 30, -1 ],
+									              [ 5, 10, 15, 15,30, "All" ] ],
+									              pageLength : 10,// 每页显示数量
+									              processing : true,// loading等待框
+									              // serverSide: true,
+									              ajax:"rest/delivery/findAllDeliveryList",//加载数据中user表数据
+									              "aoColumns": [
+									                            { mData: 'serialNum'},
+									                            { mData: 'deliverNum' },
+									                            { mData: 'orderNum' },
+									                            { mData: 'materielCount' },
+									                            { mData: 'packageCount' },
+									                            { mData: 'receiver'},
+									                            { mData: 'deliveryAddress'},
+									                            { mData: 'deliverDate'},
+									                            { mData: 'transportType'},
+									                            { mData: 'takeAddress' },
+									                            { mData: 'remark'}
+									                            ],
+									                            
+									                            'aoColumnDefs': [ {
+									                            	'targets' : 0,
+									                            	'searchable' : false,
+									                            	'orderable' : false,
+									                            	'className' : 'dt-body-center',
+									                            	'render' : function(data,type, row, meta) {
+									                            		return '<input  type="radio" id='+data+'  ng-click="getSelectIndex('+meta.row+')"   name="takeDeliverySerial" value="'
+							  											+ $('<div/>')
+							  													.text(
+							  															data)
+							  													.html()
+							  											+ '">';
+									                            	},
+									                            	"createdCell": function (td, cellData, rowData, row, col) {
+									                            		$compile(td)($scope);
+									                            	}
+									                            } ,
+									                            
+									                            {
+									                            	'targets' : 1,
+									                            	'className' : 'dt-body-center',
+									                            	'render' : function(data,
+									                            			type, row, meta) {
+									                            		return '<a data-toggle="modal" ng-click="jumpToGetDeliveryInfo(\''+row.serialNum+'\')" ">'+data+'</a>';
+									                            	},
+									                            	"createdCell": function (td, cellData, rowData, row, col) {
+									                            		$compile(td)($scope);
+									                            	}
+									                            }
+									                            ]}).on('order.dt',
+									                            		function() {
+									                            	console.log('排序');
+									                            })
+					};
 		            /***收货列表初始化END***/
 		            
 		            $scope.confirmSelect = function(){
@@ -504,8 +445,9 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 							//var serialNum = $('#buyOrder input[name="selecrOrderSerial"]:checked').val();
 							var delivery = t_table.row($scope.index).data();
 							$scope.deliverSerial = delivery.serialNum;
-							$scope.record.takeDeliverSerial = $('#takeDelivery input[name="takeDeliverySerial"]:checked').val();
-							$scope.record.takeDeliverNum = delivery.takeDelivery.takeDeliverNum;
+							$scope.record.deliverSerial = $('#takeDelivery input[name="takeDeliverySerial"]:checked').val();
+							$scope.record.deliverNum = delivery.deliverNum;
+							$scope.record.takeDeliverSerial = "";
 							$scope.getTakeDeliverMateriel(delivery);
 							$("#takeDeliveryInfo").modal('hide'); 
 						}

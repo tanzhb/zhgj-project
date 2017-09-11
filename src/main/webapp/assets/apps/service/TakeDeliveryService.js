@@ -145,11 +145,26 @@ angular.module('MetronicApp').service('takeDeliveryService',['$http','$q',functi
 	
 	
 	/**
-	 * 保存收货计划
+	 * 保存入库信息
 	 */
 	this.saveStockInData = function (params){
 		var deferred = $q.defer();
 		$http.post("rest/takeDelivery/saveStockInData", 
+				JSON.stringify(params)//传整个表单数据  
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
+	
+	/**
+	 * 保存出库信息
+	 */
+	this.saveStockOutData = function (params){
+		var deferred = $q.defer();
+		$http.post("rest/takeDelivery/saveStockOutData", 
 				JSON.stringify(params)//传整个表单数据  
 		).then(function success(result) {
 			deferred.resolve(result);//请求成功
@@ -166,6 +181,21 @@ angular.module('MetronicApp').service('takeDeliveryService',['$http','$q',functi
 		var deferred = $q.defer();
 		$http.get("rest/takeDelivery/getStockInInfo",{ 
 				params:{serialNum:serialNum}//传整个表单数据  
+		}).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
+	
+	/**
+	 * 查看入库信息
+	 */
+	this.getStockOutInfo = function (serialNum){
+		var deferred = $q.defer();
+		$http.get("rest/takeDelivery/getStockOutInfo",{ 
+			params:{serialNum:serialNum}//传整个表单数据  
 		}).then(function success(result) {
 			deferred.resolve(result);//请求成功
 		}, function error(err) {

@@ -31,6 +31,7 @@
   <resultMap id="BaseResultMap2" type="com.congmai.zhgj.web.model.DeliveryMateriel" >
   	<id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
   	<result column="stockCount" property="stockCount" jdbcType="VARCHAR" />
+  	<result column="batchNum" property="batchNum" jdbcType="VARCHAR" />
     <association column="orderMaterielSerial" property="orderMateriel" select="com.congmai.zhgj.web.dao.OrderMaterielMapper.selectByPrimaryKey" ></association>
     <association property="stockInOutRecord" javaType="com.congmai.zhgj.web.model.StockInOutRecord">
     	<result column="s_serialNum" property="serialNum" jdbcType="VARCHAR" />
@@ -47,10 +48,15 @@
 	    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
 	    <result column="updater" property="updater" jdbcType="VARCHAR" />
 	    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+	    <association property="order" javaType="com.congmai.zhgj.web.model.OrderInfo">
+    	  	<result column="orderNum" property="orderNum" jdbcType="VARCHAR" />
+	    	<result column="buyComId" property="buyComId" jdbcType="VARCHAR" />
+    	</association>
     </association>
     <association property="delivery" javaType="com.congmai.zhgj.web.model.Delivery">
     	 <association property="supplyName" column="supplyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
     </association>
+   
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -514,13 +520,15 @@
       unqualifiedCount = #{unqualifiedCount,jdbcType=VARCHAR},
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
+  <!-- ���� -->
   <select id="selectListByExample" resultMap="BaseResultMap2" parameterType="com.congmai.zhgj.web.model.StockInOutRecordSelectExample" >
     select
-   		dm.serialNum,dm.stockCount,s.serialNum as s_serialNum, s.deliverSerial, takeDeliverSerial, s.inOutNum, s.stockDate, s.operator, s.contactNum, 
-    	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,dm.orderMaterielSerial
+   		dm.serialNum,dm.stockCount,dm.batchNum,s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial, s.inOutNum, s.stockDate, s.operator, s.contactNum, 
+    	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,dm.orderMaterielSerial,o.orderNum,o.buyComId
     from stockInOutRecord s
     left join delivery d on d.serialNum = s.deliverSerial
     left join deliveryMateriel dm on dm.deliverSerial = s.deliverSerial
+    left join orderInfo o on o.serialNum = d.orderSerial
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -529,12 +537,42 @@
     </if>
   </select>
   
+  <!-- ����ѯ -->
+  <select id="selectListByExampleForStockIn" resultMap="BaseResultMap2" parameterType="com.congmai.zhgj.web.model.StockInOutRecordSelectExample" >
+    select
+   		dm.serialNum,dm.stockCount,dm.batchNum,s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial, s.inOutNum, s.stockDate, s.operator, s.contactNum, 
+    	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,dm.orderMaterielSerial,o.orderNum,o.buyComId
+    from stockInOutRecord s
+    left join takeDelivery td on td.serialNum = s.takeDeliverSerial
+    LEFT JOIN delivery d ON d.takeDeliverSerial = td.serialNum
+    left join deliveryMateriel dm on dm.deliverSerial = d.serialNum
+    left join orderInfo o on o.serialNum = d.orderSerial
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <!-- ����ͳ�� -->
    <select id="countListByExample" parameterType="com.congmai.zhgj.web.model.StockInOutRecordSelectExample" resultType="java.lang.Integer" >
     select
    		count(s.serialNum) 
     from stockInOutRecord s
     left join delivery d on d.serialNum = s.deliverSerial
     left join deliveryMateriel dm on dm.deliverSerial = s.deliverSerial
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  	<!-- ���ͳ�� -->
+   <select id="countListByExampleForStockIn" parameterType="com.congmai.zhgj.web.model.StockInOutRecordSelectExample" resultType="java.lang.Integer" >
+    select
+   		count(s.serialNum) 
+    from stockInOutRecord s
+    left join takeDelivery td on td.serialNum = s.takeDeliverSerial
+    LEFT JOIN delivery d ON d.takeDeliverSerial = td.serialNum
+    left join deliveryMateriel dm on dm.deliverSerial = d.serialNum
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>

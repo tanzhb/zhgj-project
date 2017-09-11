@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.Delivery" >
     <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
     <result column="deliverNum" property="deliverNum" jdbcType="VARCHAR" />
+    <result column="takeDeliverSerial" property="takeDeliverSerial" jdbcType="VARCHAR" />
     <result column="orderSerial" property="orderSerial" jdbcType="VARCHAR" />
     <result column="supplyComId" property="supplyComId" jdbcType="VARCHAR" />
     <result column="shipper" property="shipper" jdbcType="VARCHAR" />
@@ -56,6 +57,7 @@
     <association property="orderNum" column="orderSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectOrderNumByOrderSerial"></association>
     <collection property="deliveryMateriels" ofType="com.congmai.zhgj.web.model.DeliveryMateriel">
     	<!--  <result column="orderMaterielSerial" property="orderMaterielSerial" jdbcType="VARCHAR" /> -->
+	     <result column="dmSerialNum" property="serialNum" jdbcType="VARCHAR" />
 	     <result column="batchNum" property="batchNum" jdbcType="VARCHAR" />
 	     <result column="manufactureDate" property="manufactureDate" jdbcType="DATE" />
 	     <result column="deliverCount" property="deliverCount" jdbcType="VARCHAR" />
@@ -135,7 +137,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    serialNum, deliverNum, orderSerial, supplyComId, shipper, receiver, makeDate, maker, 
+    serialNum, deliverNum, orderSerial,takeDeliverSerial,supplyComId, shipper, receiver, makeDate, maker, 
     remark, status, approval, approvalDate, warehouseSerial, materielCount, deliverDate, 
     packageCount, materielWeight, packageType, packageSpecifications, serviceMoney, deliverer, 
     contactNum, deliverRemark, delFlg, creator, createTime, updater, updateTime
@@ -163,7 +165,7 @@
     dt.transportType,
 	td.serialNum as tdSerialNum,td.warehouseSerial as tdWarehouseSerial,td.takeDeliverDate,td.receiver,td.contactNum,td.takeDeliverNum,td.remark as take_delivery_remark
     from takeDelivery td
-    left join delivery  d on d.serialNum = td.deliverSerial
+    left join delivery  d on d.takeDeliverSerial = td.serialNum
     left join deliveryTransport dt on d.serialNum = dt.deliverSerial
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -177,17 +179,34 @@
     d.serialNum, d.deliverNum, d.orderSerial, d.supplyComId, d.shipper, d.receiver, d.makeDate, d.maker, 
     d.remark, d.status, d.approval, d.approvalDate, d.warehouseSerial as warehouseSerial, d.materielCount, d.deliverDate, 
     d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, 
-    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.batchNum,
+    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.serialNum as dmSerialNum,dm.batchNum,
     dm.manufactureDate,dm.deliverCount,dm.deliverRemark,
     dm.acceptCount,dm.refuseCount,dm.takeRemark,dm.qualifiedCount,dm.unqualifiedCount,dm.checkRemark,dm.warehouseSerial,
 	dm.positionSerial,dm.stockCount,dm.unstockCount,dm.stockRemark,dm.remark as dmRemark,dm.warehouseSerial as dmWarehouseSerial,dm.orderMaterielSerial,
     	dt.transportType,dt.transport,dt.port,dt.shipNumber,dt.playArrivalDate,dt.playWarehouseDate,dt.remark as delivery_transport_remark,dt.contactNum as dtContactNum,dt.contact as dtContact,
 		td.serialNum as tdSerialNum,td.warehouseSerial as tdWarehouseSerial,td.takeDeliverDate,td.receiver,td.contactNum,td.takeDeliverNum,td.remark as take_delivery_remark
     from takeDelivery td
-    left join delivery  d on d.serialNum = td.deliverSerial
+    left join delivery  d on d.takeDeliverSerial = td.serialNum
     left join deliveryTransport dt on d.serialNum = dt.deliverSerial
     left join deliveryMateriel dm on d.serialNum = dm.deliverSerial
     where td.serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByDeliveryPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    d.serialNum, d.deliverNum, d.orderSerial, d.supplyComId, d.shipper, d.receiver, d.makeDate, d.maker, 
+    d.remark, d.status, d.approval, d.approvalDate, d.warehouseSerial as warehouseSerial, d.materielCount, d.deliverDate, 
+    d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, 
+    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.serialNum as dmSerialNum,dm.batchNum,
+    dm.manufactureDate,dm.deliverCount,dm.deliverRemark,
+    dm.acceptCount,dm.refuseCount,dm.takeRemark,dm.qualifiedCount,dm.unqualifiedCount,dm.checkRemark,dm.warehouseSerial,
+	dm.positionSerial,dm.stockCount,dm.unstockCount,dm.stockRemark,dm.remark as dmRemark,dm.warehouseSerial as dmWarehouseSerial,dm.orderMaterielSerial,
+    	dt.transportType,dt.transport,dt.port,dt.shipNumber,dt.playArrivalDate,dt.playWarehouseDate,dt.remark as delivery_transport_remark,dt.contactNum as dtContactNum,dt.contact as dtContact,
+		td.serialNum as tdSerialNum,td.warehouseSerial as tdWarehouseSerial,td.takeDeliverDate,td.receiver,td.contactNum,td.takeDeliverNum,td.remark as take_delivery_remark
+    from delivery  d
+    left join takeDelivery td on d.serialNum = td.deliverSerial
+    left join deliveryTransport dt on d.serialNum = dt.deliverSerial
+    left join deliveryMateriel dm on d.serialNum = dm.deliverSerial
+    where d.serialNum = #{serialNum,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from delivery
@@ -199,27 +218,27 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.congmai.zhgj.web.model.Delivery" >
+<insert id="insert" parameterType="com.congmai.zhgj.web.model.Delivery" >
     insert into delivery (serialNum, deliverNum, orderSerial, 
-      supplyComId, shipper, receiver, 
-      makeDate, maker, remark, 
-      status, approval, approvalDate, 
-      warehouseSerial, materielCount, deliverDate, 
-      packageCount, materielWeight, packageType, 
-      packageSpecifications, serviceMoney, deliverer, 
-      contactNum, deliverRemark, delFlg, 
-      creator, createTime, updater, 
-      updateTime)
+      takeDeliverSerial, supplyComId, shipper, 
+      receiver, makeDate, maker, 
+      remark, status, approval, 
+      approvalDate, warehouseSerial, materielCount, 
+      deliverDate, packageCount, materielWeight, 
+      packageType, packageSpecifications, serviceMoney, 
+      deliverer, contactNum, deliverRemark, 
+      delFlg, creator, createTime, 
+      updater, updateTime)
     values (#{serialNum,jdbcType=VARCHAR}, #{deliverNum,jdbcType=VARCHAR}, #{orderSerial,jdbcType=VARCHAR}, 
-      #{supplyComId,jdbcType=VARCHAR}, #{shipper,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, 
-      #{makeDate,jdbcType=DATE}, #{maker,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{status,jdbcType=VARCHAR}, #{approval,jdbcType=VARCHAR}, #{approvalDate,jdbcType=DATE}, 
-      #{warehouseSerial,jdbcType=VARCHAR}, #{materielCount,jdbcType=VARCHAR}, #{deliverDate,jdbcType=DATE}, 
-      #{packageCount,jdbcType=VARCHAR}, #{materielWeight,jdbcType=VARCHAR}, #{packageType,jdbcType=VARCHAR}, 
-      #{packageSpecifications,jdbcType=VARCHAR}, #{serviceMoney,jdbcType=VARCHAR}, #{deliverer,jdbcType=VARCHAR}, 
-      #{contactNum,jdbcType=VARCHAR}, #{deliverRemark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, 
-      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{takeDeliverSerial,jdbcType=VARCHAR}, #{supplyComId,jdbcType=VARCHAR}, #{shipper,jdbcType=VARCHAR}, 
+      #{receiver,jdbcType=VARCHAR}, #{makeDate,jdbcType=DATE}, #{maker,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{approval,jdbcType=VARCHAR}, 
+      #{approvalDate,jdbcType=DATE}, #{warehouseSerial,jdbcType=VARCHAR}, #{materielCount,jdbcType=VARCHAR}, 
+      #{deliverDate,jdbcType=DATE}, #{packageCount,jdbcType=VARCHAR}, #{materielWeight,jdbcType=VARCHAR}, 
+      #{packageType,jdbcType=VARCHAR}, #{packageSpecifications,jdbcType=VARCHAR}, #{serviceMoney,jdbcType=VARCHAR}, 
+      #{deliverer,jdbcType=VARCHAR}, #{contactNum,jdbcType=VARCHAR}, #{deliverRemark,jdbcType=VARCHAR}, 
+      #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.Delivery" >
     insert into delivery
@@ -232,6 +251,9 @@
       </if>
       <if test="orderSerial != null" >
         orderSerial,
+      </if>
+      <if test="takeDeliverSerial != null" >
+        takeDeliverSerial,
       </if>
       <if test="supplyComId != null" >
         supplyComId,
@@ -318,6 +340,9 @@
       </if>
       <if test="orderSerial != null" >
         #{orderSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="takeDeliverSerial != null" >
+        #{takeDeliverSerial,jdbcType=VARCHAR},
       </if>
       <if test="supplyComId != null" >
         #{supplyComId,jdbcType=VARCHAR},
@@ -414,6 +439,9 @@
       <if test="record.orderSerial != null" >
         orderSerial = #{record.orderSerial,jdbcType=VARCHAR},
       </if>
+      <if test="record.takeDeliverSerial != null" >
+        takeDeliverSerial = #{record.takeDeliverSerial,jdbcType=VARCHAR},
+      </if>
       <if test="record.supplyComId != null" >
         supplyComId = #{record.supplyComId,jdbcType=VARCHAR},
       </if>
@@ -499,6 +527,7 @@
     set serialNum = #{record.serialNum,jdbcType=VARCHAR},
       deliverNum = #{record.deliverNum,jdbcType=VARCHAR},
       orderSerial = #{record.orderSerial,jdbcType=VARCHAR},
+      takeDeliverSerial = #{record.takeDeliverSerial,jdbcType=VARCHAR},
       supplyComId = #{record.supplyComId,jdbcType=VARCHAR},
       shipper = #{record.shipper,jdbcType=VARCHAR},
       receiver = #{record.receiver,jdbcType=VARCHAR},
@@ -536,6 +565,9 @@
       </if>
       <if test="orderSerial != null" >
         orderSerial = #{orderSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="takeDeliverSerial != null" >
+        takeDeliverSerial = #{takeDeliverSerial,jdbcType=VARCHAR},
       </if>
       <if test="supplyComId != null" >
         supplyComId = #{supplyComId,jdbcType=VARCHAR},
@@ -619,6 +651,7 @@
     update delivery
     set deliverNum = #{deliverNum,jdbcType=VARCHAR},
       orderSerial = #{orderSerial,jdbcType=VARCHAR},
+      takeDeliverSerial = #{takeDeliverSerial,jdbcType=VARCHAR},
       supplyComId = #{supplyComId,jdbcType=VARCHAR},
       shipper = #{shipper,jdbcType=VARCHAR},
       receiver = #{receiver,jdbcType=VARCHAR},

@@ -37,6 +37,8 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     		//删除发货信息
     		deleteDeliveryS:deleteDeliveryS,
     		
+    		deleteStockOutInfo:deleteStockOutInfo
+    		
     };
 
     return factory;
@@ -303,6 +305,21 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
         })  
         return deferred.promise; 
     }
+    
+    /**
+	 * 批量删除出库信息
+	 */
+	function deleteStockOutInfo(serialNums){
+		var deferred = $q.defer();
+		$http.post("rest/takeDelivery/deleteStockInInfo",  
+		   serialNums//传整个表单数据  
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
     
 }]);
 
