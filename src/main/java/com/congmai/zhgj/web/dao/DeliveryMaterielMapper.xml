@@ -520,10 +520,10 @@
       unqualifiedCount = #{unqualifiedCount,jdbcType=VARCHAR},
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
-  <!-- 鍑哄簱 -->
+  <!-- 出库 -->
   <select id="selectListByExample" resultMap="BaseResultMap2" parameterType="com.congmai.zhgj.web.model.StockInOutRecordSelectExample" >
     select
-   		dm.serialNum,dm.stockCount,dm.batchNum,s.serialNum as s_serialNum, s.deliverSerial, takeDeliverSerial, s.inOutNum, s.stockDate, s.operator, s.contactNum, 
+   		dm.serialNum,dm.stockCount,dm.batchNum,s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial, s.inOutNum, s.stockDate, s.operator, s.contactNum, 
     	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,dm.orderMaterielSerial,o.orderNum,o.buyComId
     from stockInOutRecord s
     left join delivery d on d.serialNum = s.deliverSerial
@@ -537,7 +537,7 @@
     </if>
   </select>
   
-  <!-- 鍏ュ簱鏌ヨ -->
+  <!-- 入库查询 -->
   <select id="selectListByExampleForStockIn" resultMap="BaseResultMap2" parameterType="com.congmai.zhgj.web.model.StockInOutRecordSelectExample" >
     select
    		dm.serialNum,dm.stockCount,dm.batchNum,s.serialNum as s_serialNum, s.deliverSerial, takeDeliverSerial, s.inOutNum, s.stockDate, s.operator, s.contactNum, 
@@ -554,7 +554,7 @@
       order by ${orderByClause}
     </if>
   </select>
-  <!-- 鍑哄簱缁熻 -->
+  <!-- 出库统计 -->
    <select id="countListByExample" parameterType="com.congmai.zhgj.web.model.StockInOutRecordSelectExample" resultType="java.lang.Integer" >
     select
    		count(s.serialNum) 
@@ -565,7 +565,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  	<!-- 鍏ュ簱缁熻 -->
+  	<!-- 入库统计 -->
    <select id="countListByExampleForStockIn" parameterType="com.congmai.zhgj.web.model.StockInOutRecordSelectExample" resultType="java.lang.Integer" >
     select
    		count(s.serialNum) 
