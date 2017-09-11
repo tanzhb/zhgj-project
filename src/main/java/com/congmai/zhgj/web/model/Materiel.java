@@ -86,6 +86,8 @@ public class Materiel {
     private String palletWeight;
 
     private String customsSupervisionConditions;
+    
+    private String customsCode;
 
     private String qualityDate;
 
@@ -492,12 +494,13 @@ public class Materiel {
 		this.deliveryCycle = deliveryCycle;
 	}
 
-/*	public boolean getIsBOMcheck() {
-		return isBOMcheck;
+	public String getCustomsCode() {
+		return customsCode;
 	}
 
-	public void setIsBOMcheck(boolean isBOMcheck) {
-		this.isBOMcheck = isBOMcheck;
-	}*/
+	public void setCustomsCode(String customsCode) {
+		this.customsCode = customsCode;
+	}
+
     
 }

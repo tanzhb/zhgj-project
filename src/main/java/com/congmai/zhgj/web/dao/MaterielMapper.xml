@@ -39,6 +39,7 @@
     <result column="packageUnitConversion" property="packageUnitConversion" jdbcType="VARCHAR" />
     <result column="palletWeight" property="palletWeight" jdbcType="VARCHAR" />
     <result column="customsSupervisionConditions" property="customsSupervisionConditions" jdbcType="VARCHAR" />
+    <result column="customsCode" property="customsCode" jdbcType="VARCHAR" />
     <result column="qualityDate" property="qualityDate" jdbcType="VARCHAR" />
     <result column="versionNO" property="versionNO" jdbcType="VARCHAR" />
     <result column="isLatestVersion" property="isLatestVersion" jdbcType="VARCHAR" />
@@ -115,7 +116,7 @@
     width, height, length, currency, unitPrice, deliveryCycle,filingItemNo, volume, weight, palletSpecification, 
     manufactureDate, remark, packageNum, packageSpecifications, packageUnit, packagewidth, 
     packageheight, packagelength, packagevolume, packageUnitConversion, palletWeight, 
-    customsSupervisionConditions, qualityDate, versionNO, isLatestVersion, status, delFlg, 
+    customsSupervisionConditions,customsCode, qualityDate, versionNO, isLatestVersion, status, delFlg, 
     creator, createTime, updater, updateTime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.MaterielExample" >
@@ -171,7 +172,7 @@
       manufactureDate, remark, packageNum, 
       packageSpecifications, packageUnit, packagewidth, 
       packageheight, packagelength, packagevolume, 
-      packageUnitConversion, palletWeight, customsSupervisionConditions, 
+      packageUnitConversion, palletWeight, customsSupervisionConditions, customsCode,
       qualityDate, versionNO, isLatestVersion, 
       status, creator, 
       createTime, updater, updateTime
@@ -187,7 +188,7 @@
       #{manufactureDate,jdbcType=DATE}, #{remark,jdbcType=VARCHAR}, #{packageNum,jdbcType=VARCHAR}, 
       #{packageSpecifications,jdbcType=VARCHAR}, #{packageUnit,jdbcType=VARCHAR}, #{packagewidth,jdbcType=VARCHAR}, 
       #{packageheight,jdbcType=VARCHAR}, #{packagelength,jdbcType=VARCHAR}, #{packagevolume,jdbcType=VARCHAR}, 
-      #{packageUnitConversion,jdbcType=VARCHAR}, #{palletWeight,jdbcType=VARCHAR}, #{customsSupervisionConditions,jdbcType=VARCHAR}, 
+      #{packageUnitConversion,jdbcType=VARCHAR}, #{palletWeight,jdbcType=VARCHAR}, #{customsSupervisionConditions,jdbcType=VARCHAR}, #{customsCode,jdbcType=VARCHAR},
       #{qualityDate,jdbcType=VARCHAR}, #{versionNO,jdbcType=VARCHAR}, #{isLatestVersion,jdbcType=VARCHAR}, 
       #{status,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
@@ -306,6 +307,9 @@
       </if>
       <if test="customsSupervisionConditions != null" >
         customsSupervisionConditions,
+      </if>
+      <if test="customsCode != null" >
+        customsCode,
       </if>
       <if test="qualityDate != null" >
         qualityDate,
@@ -446,6 +450,9 @@
       </if>
       <if test="customsSupervisionConditions != null" >
         #{customsSupervisionConditions,jdbcType=VARCHAR},
+      </if>
+      <if test="customsCode != null" >
+        #{customsCode,jdbcType=VARCHAR},
       </if>
       <if test="qualityDate != null" >
         #{qualityDate,jdbcType=VARCHAR},
@@ -593,6 +600,9 @@
       </if>
       <if test="customsSupervisionConditions != null" >
         customsSupervisionConditions = #{customsSupervisionConditions,jdbcType=VARCHAR},
+      </if>
+      <if test="customsCode != null" >
+        customsCode = #{customsCode,jdbcType=VARCHAR},
       </if>
       <if test="qualityDate != null" >
         qualityDate = #{qualityDate,jdbcType=VARCHAR},
@@ -744,6 +754,9 @@
       </if>
       <if test="record.customsSupervisionConditions != null" >
         customsSupervisionConditions = #{record.customsSupervisionConditions,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customsCode != null" >
+        customsCode = #{record.customsCode,jdbcType=VARCHAR},
       </if>
       <if test="record.qualityDate != null" >
         qualityDate = #{record.qualityDate,jdbcType=VARCHAR},

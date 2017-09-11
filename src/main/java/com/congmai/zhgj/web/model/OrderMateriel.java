@@ -33,6 +33,8 @@ public class OrderMateriel {
 
     private String deliveryAddress;
 
+    private String customsRate;
+    
     private String discountRate;
 
     private String serviceRate;
@@ -208,5 +210,14 @@ public class OrderMateriel {
 	public void setRedTicket(String redTicket) {
 		this.redTicket = redTicket;
 	}
+
+	public String getCustomsRate() {
+		return customsRate;
+	}
+
+	public void setCustomsRate(String customsRate) {
+		this.customsRate = customsRate;
+	}
+
     
 }

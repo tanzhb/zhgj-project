@@ -12,6 +12,7 @@
     <result column="deliveryDate" property="deliveryDate" jdbcType="DATE" />
     <result column="lastDeliveryDate" property="lastDeliveryDate" jdbcType="DATE" />
     <result column="deliveryAddress" property="deliveryAddress" jdbcType="VARCHAR" />
+    <result column="customsRate" property="customsRate" jdbcType="VARCHAR" />
     <result column="discountRate" property="discountRate" jdbcType="VARCHAR" />
     <result column="serviceRate" property="serviceRate" jdbcType="VARCHAR" />
     <result column="redTicket" property="redTicket" jdbcType="VARCHAR" />
@@ -83,7 +84,7 @@
   </sql>
   <sql id="Base_Column_List" >
     serialNum, orderSerial, materielSerial, supplyMaterielSerial, amount, orderUnitPrice, 
-    money, deliveryDate, lastDeliveryDate, deliveryAddress, discountRate, serviceRate, redTicket,
+    money, deliveryDate, lastDeliveryDate, deliveryAddress, customsRate, discountRate, serviceRate, redTicket,
     delFlg, creator, createTime, updater, updateTime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.OrderMaterielExample" >
@@ -120,13 +121,13 @@
     insert into orderMateriel (serialNum, orderSerial, materielSerial, 
       supplyMaterielSerial, amount, orderUnitPrice, 
       money, deliveryDate, lastDeliveryDate, 
-      deliveryAddress, discountRate, serviceRate, redTicket,
+      deliveryAddress, customsRate, discountRate, serviceRate, redTicket,
       creator, createTime, 
       updater, updateTime)
     values (#{serialNum,jdbcType=VARCHAR}, #{orderSerial,jdbcType=VARCHAR}, #{materielSerial,jdbcType=VARCHAR}, 
       #{supplyMaterielSerial,jdbcType=VARCHAR}, #{amount,jdbcType=VARCHAR}, #{orderUnitPrice,jdbcType=VARCHAR}, 
       #{money,jdbcType=VARCHAR}, #{deliveryDate,jdbcType=DATE}, #{lastDeliveryDate,jdbcType=DATE}, 
-      #{deliveryAddress,jdbcType=VARCHAR}, #{discountRate,jdbcType=VARCHAR}, #{serviceRate,jdbcType=VARCHAR},#{redTicket,jdbcType=VARCHAR}, 
+      #{deliveryAddress,jdbcType=VARCHAR}, #{customsRate,jdbcType=VARCHAR}, #{discountRate,jdbcType=VARCHAR}, #{serviceRate,jdbcType=VARCHAR},#{redTicket,jdbcType=VARCHAR}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
@@ -162,6 +163,9 @@
       </if>
       <if test="deliveryAddress != null" >
         deliveryAddress,
+      </if>
+      <if test="customsRate != null" >
+        customsRate,
       </if>
       <if test="discountRate != null" >
         discountRate,
@@ -218,6 +222,9 @@
       </if>
       <if test="deliveryAddress != null" >
         #{deliveryAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="customsRate != null" >
+        #{customsRate,jdbcType=VARCHAR},
       </if>
       <if test="discountRate != null" >
         #{discountRate,jdbcType=VARCHAR},
@@ -284,6 +291,9 @@
       <if test="record.deliveryAddress != null" >
         deliveryAddress = #{record.deliveryAddress,jdbcType=VARCHAR},
       </if>
+      <if test="record.customsRate != null" >
+        customsRate = #{record.customsRate,jdbcType=VARCHAR},
+      </if>
       <if test="record.discountRate != null" >
         discountRate = #{record.discountRate,jdbcType=VARCHAR},
       </if>
@@ -325,6 +335,7 @@
       deliveryDate = #{record.deliveryDate,jdbcType=DATE},
       lastDeliveryDate = #{record.lastDeliveryDate,jdbcType=DATE},
       deliveryAddress = #{record.deliveryAddress,jdbcType=VARCHAR},
+      customsRate = #{record.customsRate,jdbcType=VARCHAR},
       discountRate = #{record.discountRate,jdbcType=VARCHAR},
       serviceRate = #{record.serviceRate,jdbcType=VARCHAR},
       redTicket = #{record.redTicket,jdbcType=VARCHAR},
@@ -367,6 +378,9 @@
       <if test="deliveryAddress != null" >
         deliveryAddress = #{deliveryAddress,jdbcType=VARCHAR},
       </if>
+      <if test="customsRate != null" >
+        customsRate = #{customsRate,jdbcType=VARCHAR},
+      </if>
       <if test="discountRate != null" >
         discountRate = #{discountRate,jdbcType=VARCHAR},
       </if>
@@ -405,6 +419,7 @@
       deliveryDate = #{deliveryDate,jdbcType=DATE},
       lastDeliveryDate = #{lastDeliveryDate,jdbcType=DATE},
       deliveryAddress = #{deliveryAddress,jdbcType=VARCHAR},
+      customsRate = #{customsRate,jdbcType=VARCHAR},
       discountRate = #{discountRate,jdbcType=VARCHAR},
       serviceRate = #{serviceRate,jdbcType=VARCHAR},
       redTicket = #{redTicket,jdbcType=VARCHAR},
