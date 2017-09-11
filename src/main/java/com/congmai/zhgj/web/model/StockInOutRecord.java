@@ -49,6 +49,8 @@ public class StockInOutRecord {
     private int warehouseCount;
     
     private int positionCount;
+    
+    private OrderInfo order;
 
     public String getSerialNum() {
         return serialNum;
@@ -201,5 +203,13 @@ public class StockInOutRecord {
 
 	public void setPositionCount(int positionCount) {
 		this.positionCount = positionCount;
+	}
+
+	public OrderInfo getOrder() {
+		return order;
+	}
+
+	public void setOrder(OrderInfo order) {
+		this.order = order;
 	}
 }

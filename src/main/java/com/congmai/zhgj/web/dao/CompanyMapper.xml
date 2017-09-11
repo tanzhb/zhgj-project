@@ -65,6 +65,12 @@
     <include refid="Base_Column_List" />
     from company
    		where delFlg = 0
+   	<if test="creator != null" >
+        and creator = #{creator,jdbcType=VARCHAR}
+    </if>
+    <if test="comId != null" >
+        and comId = #{comId,jdbcType=VARCHAR}
+    </if>
    	order by updateTime DESC
    	<if test="pageSize!=-1">    
      	limit #{pageIndex},#{pageSize}

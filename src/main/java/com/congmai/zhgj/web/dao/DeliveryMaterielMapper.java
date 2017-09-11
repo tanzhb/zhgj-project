@@ -34,7 +34,11 @@ public interface DeliveryMaterielMapper extends GenericDao<DeliveryMateriel, Str
     int updateByPrimaryKey(DeliveryMateriel record);
   
     List<DeliveryMateriel> selectListByExample(StockInOutRecordSelectExample example);
+    
+    List<DeliveryMateriel> selectListByExampleForStockIn(StockInOutRecordSelectExample example);
 
 	int countListByExample(StockInOutRecordSelectExample example);
+	
+	int countListByExampleForStockIn(StockInOutRecordSelectExample example);
 
 int updateDeliveryMateriel(DeliveryMateriel record);}

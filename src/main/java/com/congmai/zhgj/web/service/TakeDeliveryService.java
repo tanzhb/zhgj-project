@@ -28,12 +28,24 @@ public interface TakeDeliveryService extends GenericService<TakeDelivery, String
 
 	Page<Delivery> selectStockInListByPage(StockInOutRecord record);
 	
-	StockInOutRecord selectStockInOutRecordByPrimayKey(String serialNum);
+	StockInOutRecord selectStockInOutRecordByPrimayKey(String serialNum,String type);
 
 	void deleteStockInInfo(List<String> serialNumArray);
 
 	void updateStockInData(TakeDeliveryParams takeDeliveryParams,
-			String currenLoginName);
+			String currenLoginName,String type);
+	
+	/**
+	 * 
+	 * @Description (TODO生成入库单)
+	 */
+	void createStockInRecord(String takeDeliverySerial,String currenLoginName);
+	
+	/**
+	 * 
+	 * @Description (TODO生成出库单)
+	 */
+	void createStockOutRecord(String deliverySerial,String currenLoginName);
 	
 		
 

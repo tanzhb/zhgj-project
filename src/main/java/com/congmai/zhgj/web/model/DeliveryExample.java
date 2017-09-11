@@ -39,26 +39,8 @@ public class DeliveryExample {
     public List<Criteria> getOredCriteria() {
         return oredCriteria;
     }
-    
-    
 
-    public int getPageIndex() {
-		return pageIndex;
-	}
-
-	public void setPageIndex(int pageIndex) {
-		this.pageIndex = pageIndex;
-	}
-
-	public int getPageSize() {
-		return pageSize;
-	}
-
-	public void setPageSize(int pageSize) {
-		this.pageSize = pageSize;
-	}
-
-	public void or(Criteria criteria) {
+    public void or(Criteria criteria) {
         oredCriteria.add(criteria);
     }
 
@@ -87,7 +69,23 @@ public class DeliveryExample {
         distinct = false;
     }
 
-    protected abstract static class GeneratedCriteria {
+    public int getPageIndex() {
+		return pageIndex;
+	}
+
+	public void setPageIndex(int pageIndex) {
+		this.pageIndex = pageIndex;
+	}
+
+	public int getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	protected abstract static class GeneratedCriteria {
         protected List<Criterion> criteria;
 
         protected GeneratedCriteria() {
@@ -361,6 +359,76 @@ public class DeliveryExample {
 
         public Criteria andOrderSerialNotBetween(String value1, String value2) {
             addCriterion("orderSerial not between", value1, value2, "orderSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakeDeliverSerialIsNull() {
+            addCriterion("takeDeliverSerial is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakeDeliverSerialIsNotNull() {
+            addCriterion("takeDeliverSerial is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakeDeliverSerialEqualTo(String value) {
+            addCriterion("takeDeliverSerial =", value, "takeDeliverSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakeDeliverSerialNotEqualTo(String value) {
+            addCriterion("takeDeliverSerial <>", value, "takeDeliverSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakeDeliverSerialGreaterThan(String value) {
+            addCriterion("takeDeliverSerial >", value, "takeDeliverSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakeDeliverSerialGreaterThanOrEqualTo(String value) {
+            addCriterion("takeDeliverSerial >=", value, "takeDeliverSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakeDeliverSerialLessThan(String value) {
+            addCriterion("takeDeliverSerial <", value, "takeDeliverSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakeDeliverSerialLessThanOrEqualTo(String value) {
+            addCriterion("takeDeliverSerial <=", value, "takeDeliverSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakeDeliverSerialLike(String value) {
+            addCriterion("takeDeliverSerial like", value, "takeDeliverSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakeDeliverSerialNotLike(String value) {
+            addCriterion("takeDeliverSerial not like", value, "takeDeliverSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakeDeliverSerialIn(List<String> values) {
+            addCriterion("takeDeliverSerial in", values, "takeDeliverSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakeDeliverSerialNotIn(List<String> values) {
+            addCriterion("takeDeliverSerial not in", values, "takeDeliverSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakeDeliverSerialBetween(String value1, String value2) {
+            addCriterion("takeDeliverSerial between", value1, value2, "takeDeliverSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakeDeliverSerialNotBetween(String value1, String value2) {
+            addCriterion("takeDeliverSerial not between", value1, value2, "takeDeliverSerial");
             return (Criteria) this;
         }
 

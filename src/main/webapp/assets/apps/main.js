@@ -817,6 +817,44 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    			});
 		    		}]
 		    	}	        
+		    }).state('stockOutAdd', {
+		    	url: "/stockOutAdd?:serialNum",
+		    	templateUrl: "rest/takeDelivery/stockOutAdd",
+		    	data: {pageTitle: '新建出库单'},
+		    	reload:true, 
+		    	controller: "StockOutController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [
+		    				        'assets/global/plugins/datatables/datatables.min.css',                  
+		    				        'assets/global/plugins/datatables/datatables.all.min.js',
+		    				        'assets/apps/controllers/StockOutController.js',
+		    				        'assets/apps/service/TakeDeliveryService.js'
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
+		    }).state('stockOutView', {
+		    	url: "/stockOutView?:serialNum",
+		    	templateUrl: "rest/takeDelivery/stockOutView",
+		    	data: {pageTitle: '查看出库单'},
+		    	reload:true, 
+		    	controller: "StockOutController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [       
+		    				        'assets/apps/controllers/StockOutController.js',
+		    				        'assets/apps/service/TakeDeliveryService.js'
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
 		    }).state('paymentRecord', {
 		    	url: "/paymentRecord",
 		    	templateUrl: "rest/paymentRecord/paymentRecordManage",
@@ -1135,7 +1173,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		.state(
 				'vacation',
 				{
-					url : "/vacation",
+					url : "/vacation?tabHref",
 					templateUrl : "rest/page/addVacation",
 					data : {
 						pageTitle : '请假'
