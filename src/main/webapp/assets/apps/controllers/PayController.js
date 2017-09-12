@@ -426,8 +426,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
        }
        
        $scope.downloadFile1 = function(str){
-    	 debugger
-    		   window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName=zhgj/upload/"+str;
+    		   window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+str;
        }
        
        $scope.removefile = function(index){
