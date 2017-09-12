@@ -10,6 +10,7 @@ import java.util.Date;
  * @version 1.0.0
  */
 public class Invoice {
+
     private String serialNum;
 
     private String invoiceNum;//发票编号
@@ -109,8 +110,22 @@ public class Invoice {
     private  String approver;//收票人/开票人
     
     private  Date approvalDate;
+    
+    private String  billOrReceiptMoney;//当前收票金额/申请开票金额
+    
+    private String capitalMoney;//大写金额
+    
+    private String  currency;//币种
 
-    public String getSerialNum() {
+    public String getCapitalMoney() {
+		return capitalMoney;
+	}
+
+	public void setCapitalMoney(String capitalMoney) {
+		this.capitalMoney = capitalMoney;
+	}
+
+	public String getSerialNum() {
         return serialNum;
     }
 
@@ -509,6 +524,22 @@ public class Invoice {
 
 	public void setBankName(String bankName) {
 		this.bankName = bankName;
+	}
+
+	public String getBillOrReceiptMoney() {
+		return billOrReceiptMoney;
+	}
+
+	public void setBillOrReceiptMoney(String billOrReceiptMoney) {
+		this.billOrReceiptMoney = billOrReceiptMoney;
+	}
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
 	}
     
     

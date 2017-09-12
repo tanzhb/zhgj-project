@@ -142,9 +142,9 @@ public class PriceListController {
     @RequestMapping(value = "/getPriceList")
     public ResponseEntity<Map> getPriceList(HttpServletRequest request,String  buyOrSale) {
 		List<PriceList> priceLists = priceListService.selectPriceList(buyOrSale);
-		if (priceLists==null||priceLists.isEmpty()) {
+		if (priceLists==null||priceLists.size()==0) {
 			return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);//判断是否为空,为空返回NO_CONTENT
-		}
+		}else{
 		for(PriceList priceList:priceLists){
 			if(StringUtils.isEmpty(priceList.getBuyComId())){
 				priceList.setSupplyComName(companyService.selectOne(priceList.getSupplyComId()).getComName());
@@ -157,6 +157,7 @@ public class PriceListController {
 			priceList.setUnit(m.getUnit());
 			priceList.setSpecifications(m.getSpecifications());
 			priceList.setPriceNum(priceList.getPriceNum()+"-V"+priceList.getVersionNO());
+		}
 		}
 		// 封装datatables数据返回到前台
 		Map pageMap = new HashMap();

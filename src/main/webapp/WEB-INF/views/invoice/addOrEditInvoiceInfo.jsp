@@ -60,7 +60,7 @@
 								           <div class="row">
                                                              <div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="invoiceNum"> <span class="required"> * </span>	发票编号 :</label>
+                                                    <label class="control-label bold" for="invoiceNum"> <span class="required"> * </span>	<span  ng-if="inOrOut.indexOf('in')>-1"  > 进项</span><span   ng-if="inOrOut.indexOf('out')>-1" > 销项</span>发票编号 :</label>
                                                     <div class=" ">
                                                         <input type="text" class="form-control" id="invoiceNum" name="invoiceNum" ng-model="invoice.invoiceNum"  ng-hide="invoiceAdd" />
                                                         <div class="form-control-focus"> </div>
@@ -86,8 +86,6 @@
                                                                     </div>
                                                                 </div>
                                                        </div>
-										     <input type="hidden"   id="deliverSerial" ng-model="invoice.deliverSerial"  />
-										<input type="hidden"     id="takeDeliverSerial"   ng-model="invoice.takeDeliverSerial"  />
                                                           
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
@@ -102,8 +100,8 @@
 	                                                            </button>
 	                                                        </span>
                                                          </div>
-                                                         <div class="input-group" ng-if="inOrOut.indexOf('out')>-1"   ng-click="selectBuyOrSaleOrderInfo('sale')" data-target="#saleOrderInfo" data-toggle="modal">
-	                                                       <input type="text" class="form-control" placeholder=""  id="relationBuyOrSaleNum"      name ="relationBuyOrSaleNum"  ng-hide="invoiceAdd"   
+                                                         <div class="input-group" ng-if="inOrOut.indexOf('out')>-1"   ng-click="selectBuyOrSaleOrderInfo('sale')" data-target="#saleOrderInfo" data-toggle="modal"  >
+	                                                       <input type="text" class="form-control" placeholder=""  id="relationBuyOrSaleNum"      name ="relationBuyOrSaleNum"  ng-hide="invoiceAdd"    onkey
 												ng-model="invoice.relationBuyOrSaleNum" > 
 	                                                        <span class="input-group-btn" style="vertical-align: top;" ng-hide="invoiceAdd"  >
 	                                                            <button class="btn default" type="button">
@@ -121,7 +119,7 @@
                                                             <!--/span-->
                                                             <div class="col-md-4">
                                                             <div class="form-group">
-                                                    <label class="control-label bold" for="supplyName">订单金额 :</label>
+                                                    <label class="control-label bold" for="orderAmount">订单金额 :</label>
                                                     <div class=" ">
                                                     <span></span>
                                                                     <!-- <input type="text" class="form-control"   id="orderAmount" name ="orderAmount"  ng-hide="invoiceAdd"  readonly="readonly"
@@ -134,11 +132,11 @@
                                                         </div>
                                                         <div class="col-md-4">
                                                             <div class="form-group">
-                                                    <label class="control-label bold" for="supplyName">收票金额 :</label>
+                                                    <label class="control-label bold" for="billOrReceiptMoney">收票金额 :</label>
                                                     <div class=" ">
                                                                    
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left"  >{{invoice.orderAmount |currency:'￥'}}</p> 
+                                                                        <p class="control-label left"  >{{invoice.billOrReceiptMoney |currency:'￥'}}</p> 
                                                                 </div>
                                                             </div>
                                                             <!--/span-->
@@ -151,7 +149,7 @@
                                                                         <!-- <input type="text"     class="form-control"   placeholder=""  id="unBillAmount" name ="unBillAmount"   ng-hide="invoiceAdd"   readonly
 												ng-model="invoice.unBillAmount" /> --> 
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" >{{invoice.unBillAmount }}</p> 
+                                                                        <p class="control-label left" >{{invoice.capitalMoney }}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -254,7 +252,7 @@
                                                        <input type="text"  class="form-control" placeholder=""  id="submitDepartment" name ="submitDepartment"   ng-hide="invoiceAdd"  
 												ng-model="invoice.submitDepartment" > 
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="invoiceView">{{invoice.nvoice.submitDepartment}}</p> 
+                                                                        <p class="control-label left" ng-show="invoiceView">{{invoice.submitDepartment}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -288,7 +286,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                             <div class="col-md-4"  ng-show="inOrOut.indexOf('out')>-1" >
+                                                             <div class="col-md-4"  ng-show="inOrOut.indexOf('out')>-1">
                                                              <div class="form-group">
                                                     <label class="control-label bold" for="checker"> 申请开票日期:</label>
                                                     <div class=" ">
@@ -586,14 +584,14 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-4">
+                                                            <div class="col-md-4" >
                                                                 <div class="form-group">
                                                                 <label class="control-label bold" for="invoiceNO"><span class="required"> * </span>发票号码 : </label>
                                                                        <div class=" ">
                                                        <input type="text"  class="form-control "       placeholder=""   id="invoiceNO" name ="invoiceNO"  ng-hide="invoiceAdd"   
 												ng-model="invoice.invoiceNO" > 
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="invoiceView">{{invoice.approvalDate| date:'yyyy-MM-dd'}}</p> 
+                                                                        <p class="control-label left" ng-show="invoiceView">{{invoice.invoiceNO}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -648,6 +646,7 @@
                                                                     </div>
                                             </div>
 										</div>
+										 </form>
                                                         </div><!-- row END-->
                                                         
                                              <div>          
@@ -730,14 +729,14 @@
 						<tr>
 							<td style="text-align: center;" >物料编号</td>
                               <td style="text-align: center">物料名称</td>
-                               <td  style="text-align: center">规格型号</td>
-                                <td  style="text-align: center">单位</td>
-                                <td  style="text-align: center">订单数量</td>
-                                <td  style="text-align: center">可开数量</td>
-                                 <td   style="text-align: center">开票数量</td>
-                                <td  style="text-align: center">含税单价</td>
-                                   <td   style="text-align: center">金额</td>
-                                   <td   style="text-align: center">操作</td>
+                              <td  style="text-align: center">规格型号</td>
+                              <td  style="text-align: center">单位</td>
+                              <td  style="text-align: center">订单数量</td>
+                              <td  style="text-align: center">可开数量</td>
+                              <td   style="text-align: center">开票数量</td>
+                              <td  style="text-align: center">含税单价</td>
+                              <td   style="text-align: center">金额</td>
+                              <td   style="text-align: center">操作</td>
 						</tr>
 					</thead>
 					
@@ -745,7 +744,7 @@
 					</tbody>
 				</table>
 			</div>
-                                </form>
+                               
 				</div>
 				
         </div>
@@ -754,5 +753,17 @@
 <!-- END MAIN CONTENT -->
 <!-- BEGIN MAIN JS -->
  <script>
+ function judgeNumber(canBillAmount,serialNum,judgeString){
+	 var value=$("#"+serialNum).val();
+	 debugger;
+	 if(value>Number(canBillAmount)){
+		 if(judgeString=='in'){
+			 toastr.warning("收票数量不得大于未收数量！");
+		 }else if(judgeString=='out'){
+			 toastr.warning("开票数量不得大于可开数量！");
+		 }
+		 $("#"+serialNum).focus();
+	 }
+ }
 </script> 
 <!-- END MAIN JS -->

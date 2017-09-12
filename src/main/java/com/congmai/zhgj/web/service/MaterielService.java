@@ -31,5 +31,5 @@ public interface MaterielService extends GenericService<Materiel, String> {
 
 	List<Materiel> chooseMateriel(String ids);
 	
-	List<Materiel> selectMaterielByOrderSerial (String orderSerial);
+	List<Materiel> selectMaterielByOrderSerial (String orderSerial,String invoiceSerial );
 }

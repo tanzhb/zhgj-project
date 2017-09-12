@@ -35,8 +35,6 @@ angular
 													$scope.inOrOut=$stateParams.inOrOut;
 												if($scope.inOrOut.length>3){
 													getInvoiceInfo($stateParams.inOrOut);
-												}else{
-													$scope.clauseSettlementDetails=null;
 												}
 										 		}else if($location.path()=="/invoiceView"){
 										 			debugger;
@@ -442,6 +440,11 @@ angular
 				}
 			function loadMaterielInTable(orderSerial){
 				var a = 0,judgeString='in';
+				if($scope.invoice.serialNum==undefined){
+					orderSerial=orderSerial+'no';
+				}else{
+					orderSerial=orderSerial+'no'+$scope.invoice.serialNum;
+				}
 				tableAjaxUrl= "rest/invoice/getMaterielList?orderSerial="+orderSerial
 				App.getViewPort().width < App
 						.getResponsiveBreakpoint("md") ? $(
@@ -541,7 +544,7 @@ angular
 												'className' : 'dt-body-center',
 												'render' : function(data,
 														type, row, meta) {
-													return '<input  type="text"   id="'+row.serialNum+'"  />';
+													return '<input  type="text"    value="'+row.billAmount+'"   id="'+row.serialNum+'"  onchange="judgeNumber(\''+row.canBillAmount+'\',\''+row.serialNum+'\',\''+judgeString+'\')" />';
 													//return data;
 												},"createdCell": function (td, cellData, rowData, row, col) {
 													 $compile(td)($scope);
@@ -553,7 +556,8 @@ angular
 												'className' : 'dt-body-center',
 												'render' : function(data,
 														type, row, meta) {
-													return '<a   ng-click="saveMaterielInfo(\''+row.serialNum+'\',\''+judgeString+'\')">保存</a>&nbsp;&nbsp;&nbsp;&nbsp;<a   ng-click="editMaterielInfo(\''+row.serialNum+'\',\''+judgeString+'\')">修改</a>';
+													return '<a   id="save'+row.serialNum+'" ng-click="saveBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\')">  <i class="fa fa-save" title="保存"></i> </a>&nbsp;&nbsp;&nbsp;<a   style="display:none"  id="edit'+row.serialNum+'"  ng-click="editBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\')"><i class="fa fa-edit" title="编辑"></i></a>'
+													+ '&nbsp;&nbsp;&nbsp;<a  id="cancel'+row.serialNum+'" ng-click="cancelEditBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.billAmount+'\')"><i class="fa fa-undo"  title="取消"></i></a>';
 													//return data;
 												},"createdCell": function (td, cellData, rowData, row, col) {
 													 $compile(td)($scope);
@@ -566,6 +570,12 @@ angular
 
 function loadMaterielOutTable(orderSerial){
 	var a = 0,judgeString='out';
+	debugger;
+	if($scope.invoice.serialNum==undefined){
+		orderSerial=orderSerial+'no';
+	}else{
+		orderSerial=orderSerial+'no'+$scope.invoice.serialNum;
+	}
 	tableAjaxUrl= "rest/invoice/getMaterielList?orderSerial="+orderSerial
 	App.getViewPort().width < App
 			.getResponsiveBreakpoint("md") ? $(
@@ -663,7 +673,7 @@ function loadMaterielOutTable(orderSerial){
 								'className' : 'dt-body-center',
 								'render' : function(data,
 										type, row, meta) {
-									return '<input  type="text"   id="+row.serialNum+"  />';
+									return '<input  type="text"  value="'+row.billAmount+'"   id="+row.serialNum+"  onchange="judgeNumber(\''+row.canBillAmount+'\',\''+row.serialNum+'\',\''+judgeString+'\')" />';
 									//return data;
 								},"createdCell": function (td, cellData, rowData, row, col) {
 									 $compile(td)($scope);
@@ -673,7 +683,8 @@ function loadMaterielOutTable(orderSerial){
 								'className' : 'dt-body-center',
 								'render' : function(data,
 										type, row, meta) {
-									return '<a   ng-click="saveMaterielInfo(\''+row.serialNum+'\',\''+judgeString+'\')">保存</a>&nbsp;&nbsp;&nbsp;&nbsp;<a   ng-click="editMaterielInfo(\''+row.serialNum+'\',\''+judgeString+'\')">修改</a>';
+									return '<a   id="save'+row.serialNum+'" ng-click="saveBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\')">  <i class="fa fa-save" title="保存"></i> </a>&nbsp;&nbsp;&nbsp;<a   style="display:none"   id="edit'+row.serialNum+'"  ng-click="editBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\')"><i class="fa fa-edit" title="编辑"></i></a>'
+									+ '&nbsp;&nbsp;&nbsp;<a  id="cancel'+row.serialNum+'" ng-click="cancelEditBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.billAmount+'\')"><i class="fa fa-undo"  title="取消"></i></a>';
 									//return data;
 								},"createdCell": function (td, cellData, rowData, row, col) {
 									 $compile(td)($scope);
@@ -687,16 +698,50 @@ function loadMaterielOutTable(orderSerial){
 	}
 
 
-$scope.saveMaterielInfo=function (serialNum,judgeString){
+$scope.saveBillingRecord=function (serialNum,judgeString){
+	if($scope.invoice.serialNum==undefined&&judgeString=='in'){
+		 toastr.warning("请先保存进项票信息！");
+		 return;
+	}
+	if($scope.invoice.serialNum==undefined&&judgeString=='out'){
+		 toastr.warning("请先保存销项票信息！");
+		 return;
+	}
+	debugger;
+	$scope.invoiceBillingRecord = {};
+	$scope.invoiceBillingRecord.orderMaterielSerial=serialNum;
+	$scope.invoiceBillingRecord.invoiceSerial=$scope.invoice.serialNum;
+	$scope.invoiceBillingRecord.billCount=$("#"+serialNum).val();
+	InvoiceService.saveInvoiceBillingRecord($scope.invoiceBillingRecord).then(
+			function(data) {debugger;
+				toastr.success("保存成功！");
+				$("#"+serialNum).attr("readonly",true);
+				$("#"+serialNum).css("border","none");
+				$("#"+serialNum).css("border","none");
+				$("#save"+serialNum).css("display","none");
+				$("#edit"+serialNum).css("display","block");
+    			
+			},
+			function(errResponse) {
+				toastr.warning("保存失败！");
+				console
+						.error('Error while creating User');
+			}
+	);
 	
-	$("#"+serialNum).attr("readonly",true);
-	$("#"+serialNum).css("border","none");
 }
 
-$scope.editMaterielInfo=function (serialNum,judgeString){
+$scope.editBillingRecord=function (serialNum,judgeString){
 	$("#"+serialNum).attr("readonly",false);
 	$("#"+serialNum).css("border","1px solid");
+	$("#save"+serialNum).css("display","block");
+	$("#edit"+serialNum).css("display","none");
 	$("#"+serialNum).focus();
+}
+$scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
+	$("#"+serialNum).attr("readonly",true);
+	$("#"+serialNum).css("border","none");
+	$("#"+serialNum).val(billAcount);
 }
 			$scope.showOut=function(judgeString){
 				 $state.go('invoice',{inOrOut:judgeString}); //切换tab
@@ -731,7 +776,7 @@ $scope.editMaterielInfo=function (serialNum,judgeString){
 										}else{
 											$scope.invoice.buyComId=$scope.invoice.comName;
 											$scope.invoice.supplyComId=null;
-										};
+										}
 										InvoiceService.saveInvoice($scope.invoice).then(
 															function(data) {debugger;
 																toastr.success("保存发票数据成功！");
@@ -740,6 +785,7 @@ $scope.editMaterielInfo=function (serialNum,judgeString){
 											        			$scope.invoiceAdd = true;
 											        			$scope.invoiceEdit = true;
 											        			$(".alert-danger").hide();
+											        			
 															},
 															function(errResponse) {
 																toastr.warning("保存失败！");
@@ -1031,21 +1077,18 @@ $scope.editMaterielInfo=function (serialNum,judgeString){
 		 	    		
 							// 页面加载完成后调用，验证输入框
 							$scope.$watch('$viewContentLoaded', function() { 
-								var  comName,relationBuyOrSaleNum,relationReceiveOrPayNum,receiptDate,approver,approvalDate;
+								var  comName,relationBuyOrSaleNum,relationReceiveOrPayNum,receiptDate,approver,approvalDate,invoiceNum;
 								if($scope.inOrOut!=undefined&&$scope.inOrOut.indexOf("in")>-1){
+									invoiceNum={required:"进项发票单号不能为空！"};
 									comName={required:"开票方不能为空！"};
 									relationBuyOrSaleNum={required:"关联采购单号不能为空！"};
-									relationReceiveOrPayNum={required:"关联付款单号不能为空！"};
-									receiptDate={required:"付款日期不能为空！"};
-									approver={required:"收票人不能为空！"};
-									approvalDate={required:"收票日期不能为空！"};
+									receiptDate={};
 								}else if($scope.inOrOut!=undefined&&$scope.inOrOut.indexOf("out")>-1){
+									invoiceNum={required:"销项发票单号不能为空！"};
 									comName={required:"收票方不能为空！"};
 									relationBuyOrSaleNum={required:"关联销售单号不能为空！"};
-									relationReceiveOrPayNum={required:"关联收款单号不能为空！"};
-									receiptDate={required:"收款日期不能为空！"};
-									approver={required:"审批人不能为空！"};
-									approvalDate={required:"审批日期不能为空！"};
+									//receiptDate={required:true};
+									receiptDate={};
 								}
 								var e = $("#invoiceForm"),
 						        r = $(".alert-danger", e),
@@ -1056,34 +1099,41 @@ $scope.editMaterielInfo=function (serialNum,judgeString){
 						            focusInvalid: !1,
 						            ignore: "",
 						            messages: {
-						            	invoiceNum:{required:"发票编号不能为空！"},
+						            	invoiceNum:invoiceNum,
 						            	comName:comName,
 						            	relationBuyOrSaleNum:relationBuyOrSaleNum,
-						            	relationReceiveOrPayNum:relationReceiveOrPayNum,
-						            	receiptDate:receiptDate,
+						            	receiptDate:{required:" 申请开票日期不能为空！"},
 						            	invoiceAmount:{required:"发票金额不能为空！",digits:"必须为数字！"},
 						            	invoiceType: { required:"发票类型未选择！"},
 						            	billingDate:{required:"开票日期不能为空！"},
 						            	invoiceNO:{required:"发票号不能为空！"},
+						            	 tel: { 
+						                    	digits:'请输入正确的电话, 必须为数字！',
+						                    	required:"电话不能为空！",
+				                        	    rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")
+						                    },
+						                    companyName:{required:"发票号不能为空！"},
+						                    address:{required:"地址不能为空！"},
+						                    bankName:{required:"开户银行不能为空！"},
+						                    account:{required:"account不能为空！"},
+						                    taxNum:{required:"企业纳税号不能为空！"}
 						            	/*submitter:{required:"提交人不能为空！"},
 						            	submitDate:{required:"提交日期不能为空！"},*/
-						            	approver:approver,
-						            	approvalDate:approvalDate
+						            
 						            },
 						            rules: {
 						            	invoiceNum:{required:true},
 						            	comName:{required:true},
 						            	relationBuyOrSaleNum:{required:true},
 						            	relationReceiveOrPayNum:{required:true},
-						            	receiptDate:{required:true},
+						            	receiptDate:receiptDate,
 						            	invoiceAmount:{required:true,digits:true},
 						            	invoiceType:{required:true},
 						            	billingDate:{required:true},
 						            	invoiceNO:{required:true},
+						            	 tel: {required:true,digits:true, rangelength:[7,20] }
 						            	/*submitter:{required:true},
 						            	submitDate:{required:true},*/
-						            	approver:{required:true},
-						            	approvalDate:{required:true}
 						            },
 						            invalidHandler: function(e, t) {
 						                i.hide(),
@@ -1120,9 +1170,9 @@ $scope.editMaterielInfo=function (serialNum,judgeString){
 						 	        			 $scope.invoice.billingDate=timeStamp2ShortString(data.invoice.billingDate);
 						 	        			 $scope.invoice.submitDate=timeStamp2ShortString(data.invoice.submitDate);
 						 	        			 $scope.invoice.approvalDate=timeStamp2ShortString(data.invoice.approvalDate);
-						 	        			getOrderInfoBySerialNum(serialNum);//获取订单信息
-							 	            	if(serialNum.indexOf("in")>-1){	loadMaterielInTable(serialNum);//加载发票物料
-							 	            	}else{loadMaterielOutTable(serialNum);}
+						 	        			getOrderInfoBySerialNum($scope.invoice.orderSerial);//获取订单信息
+							 	            	if(serialNum.indexOf("in")>-1){	loadMaterielInTable($scope.invoice.orderSerial);//加载发票物料
+							 	            	}else{loadMaterielOutTable($scope.invoice.orderSerial);}
 						 	        			
 						 	        			
 						 	            },function(data){

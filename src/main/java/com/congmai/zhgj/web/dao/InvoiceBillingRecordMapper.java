@@ -1,11 +1,15 @@
 package com.congmai.zhgj.web.dao;
 
+import com.congmai.zhgj.core.generic.GenericDao;
+import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.web.model.InvoiceBillingRecord;
 import com.congmai.zhgj.web.model.InvoiceBillingRecordExample;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
-public interface InvoiceBillingRecordMapper {
+public interface InvoiceBillingRecordMapper  extends GenericDao<InvoiceBillingRecord, String>{
     int countByExample(InvoiceBillingRecordExample example);
 
     int deleteByExample(InvoiceBillingRecordExample example);

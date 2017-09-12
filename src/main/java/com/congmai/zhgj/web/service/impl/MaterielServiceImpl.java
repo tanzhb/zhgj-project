@@ -2,7 +2,9 @@ package com.congmai.zhgj.web.service.impl;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -136,9 +138,12 @@ public class MaterielServiceImpl implements MaterielService {
 	}
 
 	@Override
-	public List<Materiel> selectMaterielByOrderSerial(String orderSerial) {
+	public List<Materiel> selectMaterielByOrderSerial(String orderSerial,String orderSerial1) {
 		if(StringUtils.isNotEmpty(orderSerial)){
-			return MaterielMapper.selectMaterielByOrderSerial(orderSerial);
+			Map<String,String> map=new HashMap<String,String>();
+			map.put("orderSerial", orderSerial);
+			map.put("invoiceSerial", (orderSerial1==null||orderSerial1.length()<66)?null:orderSerial1.substring(34, 66));
+			return MaterielMapper.selectMaterielByOrderSerial(map);
 		}
 		return null;
 	}

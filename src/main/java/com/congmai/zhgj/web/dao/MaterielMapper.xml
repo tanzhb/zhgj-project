@@ -777,10 +777,22 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <select id="selectMaterielByOrderSerial"   parameterType="java.lang.String"   resultType="com.congmai.zhgj.web.model.Materiel">
+  <select id="selectMaterielByOrderSerial"   parameterType="java.util.Map"   resultType="com.congmai.zhgj.web.model.Materiel">
   select m.*,om.amount  as amount ,IFNULL(om.canBillAmount,om.amount)  AS canBillAmount,om.orderUnitPrice  as orderUnitPrice
-  from materiel m
-  left join orderMateriel om  on  om.materielSerial=m.serialNum
+  <if test="invoiceSerial!=null">
+  , IFNULL(ibr.billCount,0) as billAmount
+  </if>
+  <if test="invoiceSerial==null">
+  , 0 as billAmount
+  </if>
+  from  orderMateriel om
+  left join materiel m  on  om.materielSerial=m.serialNum
+    <if test="invoiceSerial!=null">
+   left join invoiceBillingRecord ibr on   ibr.orderMaterielSerial=om.materielSerial 
+   </if>
   where  om.orderSerial=#{orderSerial,jdbcType=VARCHAR} 
+  <if test="invoiceSerial!=null">
+   and  ibr.invoiceSerial=#{invoiceSerial,jdbcType=VARCHAR} 
+   </if>
   </select>
 </mapper>

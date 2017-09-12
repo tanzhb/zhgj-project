@@ -4,6 +4,7 @@ import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -30,6 +31,6 @@ public interface MaterielMapper {
     
     void deleteMateriels(List<String> ids);
     
-    List<Materiel> selectMaterielByOrderSerial(String orderSerial);//根据订单流水查找订单物料
+    List<Materiel> selectMaterielByOrderSerial(Map<String,String>map);//根据订单流水和发票流水查找订单物料
 
 }
