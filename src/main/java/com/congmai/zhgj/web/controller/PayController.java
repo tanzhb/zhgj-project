@@ -172,12 +172,6 @@ public class PayController {
 
 
 		String paymentVoucher=null;
-
-
-			if(file!=null){
-				paymentVoucher=uploadFile(file); 
-				record.setPaymentVoucher(paymentVoucher);
-			}
 		//如果id为空执行保存
 		if(StringUtils.isEmpty(record.getSerialNum())){
 			
@@ -188,18 +182,6 @@ public class PayController {
 			payService.insertPaymentRecord(record);
 		}else{
 			//如果id不为空执行更新
-			PaymentPlan plan=new PaymentPlan();
-			plan.setSerialNum(record.getPaymentPlanSerial());
-			plan.setOrderSerial(record.getOrderSerial());
-			plan.setPaymentPlanNum(record.getPaymentPlanNum());
-			plan.setPaymentStyle(record.getPaymentStyle());
-			plan.setSupplyComId(record.getSupplyComId());
-			plan.setBuyComId(null);
-			plan.setPaymentAmount(record.getPaymentAmount());
-			plan.setClauseSettlementSerial(record.getClauseSettlementSerial());
-			plan.setUpdater(currenLoginName);
-			//更新付款计划
-			payService.updatePaymentPlan(plan);
 			
 			record.setUpdater(currenLoginName);
 			//更新付款记录

@@ -95,7 +95,7 @@
 															ng-model="paymentRecord.paymentType">
 															<option value="">付款类型</option>
 															<option value="采购付款">采购付款</option>
-															<option value="采购付款">预付款</option>
+															<option value="预付款">预付款</option>
 														</select>
 														<p class="form-control-static" ng-show="span">{{pay.paymentType}}</p>
 														<div class="form-control-focus"></div>
@@ -536,7 +536,7 @@
 											class="btn green  btn-circle  btn-sm" ng-show="inputFile">
 											<i class="fa fa-save"></i> 保存
 										</button>
-										<button ng-click="cancel()" type="button"
+										<button ng-click="goBack()" type="button"
 											class="btn defualt  btn-circle  btn-sm">
 											<i class="fa fa-undo"></i> 取消
 										</button>

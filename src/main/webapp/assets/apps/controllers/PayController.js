@@ -286,7 +286,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	    		toastr.error('请先保存基本信息！');return
 			}
 	    	/*if($('#form_sample_4').valid()){*/
-	    		PayService.saveFile($scope.file).then(
+	    		PayService.updateFile($scope.file).then(
 	       		     function(data){
 	       		    	toastr.success('数据保存成功！');
 	       		    	$scope.inputFile=false;
@@ -425,6 +425,11 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
     	   }
        }
        
+       $scope.downloadFile1 = function(str){
+    	 debugger
+    		   window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName=zhgj/upload/"+str;
+       }
+       
        $scope.removefile = function(index){
     	   $scope.file[index].file = "";
        }
@@ -518,25 +523,33 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 			fd.append('nodeNum',$scope.pay.nodeNum);
 			fd.append('billStyle',"先款后票"); 
 			fd.append('isBill',$("input[name='isBill']:checked").val());
-			
-			
-			
-			fd.append('invoiceSerial',$scope.pay.invoiceSerial); 
+			fd.append('applyDate',$scope.pay.applyDate);
 			fd.append('applicant',$scope.pay.applicant);
-			fd.append('applyDate',$scope.pay.applyDate); 
+			fd.append('applyDept',$scope.pay.applyDept);
 			fd.append('remark',$scope.pay.remark);
-			fd.append('paymentVoucher',$scope.pay.paymentVoucher); 
+			
+			fd.append('payee',$scope.pay.payee);
+			fd.append('contact',$scope.pay.contact);
+			fd.append('contactNum',$scope.pay.contactNum);
+			fd.append('bank',$scope.pay.bank);
+			fd.append('accountName',$scope.pay.accountName);
+			fd.append('accountNumber',$scope.pay.accountNumber);
 			$http({
 				method:'POST',
 				url:"rest/pay/savePaymentRecord",
 				data: fd,
 				headers: {'Content-Type':undefined}
 			})   
-			.success( function ( response )
+			.success( function ( data )
 					{
 				//上传成功的操作
 				toastr.success("保存应付款数据成功！");
-				$state.go('paymentRecordC');
+				handle.unblockUI();
+				$scope.pay= data;
+				$scope.span = true;
+				$scope.input = false;
+				$scope.applyPaymentAmountChn=convertCurrency($scope.pay.applyPaymentAmount);
+				$(".alert-danger").hide();
 					});
 		}
 	}
