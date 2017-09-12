@@ -245,15 +245,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!-- BEGIN MAIN JS -->
  <script>
 
-/*      TableDatatablesManaged.init(); */
-    
        $('#signDate').datepicker({
     	   rtl: App.isRTL(),
 	   		orientation: "left",
 	   		autoclose: true,
 	   		dateFormat:"yyyy-mm-dd",
 	   		language: "zh-CN"
-    	});  
+    	}).on('changeDate',function(ev){
+    		var endDate=$("#endDate").val();
+    		var signDate=$("#signDate").val();
+    		
+    		if(endDate<signDate&&$.trim(endDate)!=""&&endDate!=null){
+        		toastr.warning('签订时间不能大于结束时间 ！');
+        		$("#signDate").val("");
+        		}else{
+        		}
+    		}); 
      
     	 $('#startDate').datepicker({
     	   language: "zh-CN",
@@ -263,12 +270,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		}).on('changeDate',function(ev){
     		var startDate=$("#startDate").val();
     		var endDate=$("#endDate").val();
-    		if(startDate>endDate&&endDate!=null&&endDate!=""){
-    		/* alert("开始时间不能大于结束时间  ！"); */
+    		if(startDate>endDate&&endDate!=null&&$.trim(endDate)!=""){
     		toastr.warning('开始时间不能大于结束时间  ！');
-    		/* $("#startDate").focus(); */
     		$("#startDate").val("");
     		}
+    		
+    		
     		});
     	
     	
@@ -280,24 +287,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		}).on('changeDate',function(ev){
     		var startDate=$("#startDate").val();
     		var endDate=$("#endDate").val();
+    		var signDate=$("#signDate").val();
     		
-    		if(endDate<startDate){
-    		/* alert("结束时间不能小于开始时间 ！"); */
+    		if(endDate<startDate&&startDate!=null&&$.trim(startDate)!=""){
     		toastr.warning('结束时间不能小于开始时间 ！');
     		$("#endDate").val("");
     		}else{
     		}
+    		
+    		if(endDate<signDate&&signDate!=null&&$.trim(signDate)!=""){
+        		toastr.warning('结束时间不能小于签订时间 ！');
+        		$("#endDate").val("");
+        		}else{
+        		}
     		}); 
-     
-     
-     
-      function uploadElectric(obj){
-    	 $(obj).next().val($(obj).val());
-     } 
-     
-     function uploadSign(obj){
-    	 $(obj).next().val($(obj).val());
-     }
-     
 </script> 
 <!-- END MAIN JS -->

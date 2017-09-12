@@ -81,7 +81,8 @@
 									<label class="btn btn-transparent purple btn-circle btn-sm"
 										ng-click="editBuyOrder()"> <i class="fa fa-edit"></i>
 										修改
-									</label></shiro:hasPermission>
+									</label>
+								</shiro:hasPermission>
 									<shiro:hasPermission name="buyNormalOrder:delete">
 										<label class="btn btn-transparent red btn-circle btn-sm"
 											ng-click="deleteBuyOrder()"> <i class="fa fa-minus"></i>

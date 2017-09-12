@@ -17,12 +17,15 @@ import javax.validation.Valid;
 import org.apache.commons.io.FileUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.JavaType;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,8 +41,10 @@ import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
+import com.congmai.zhgj.web.model.MaterielFile;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
+import com.congmai.zhgj.web.model.PaymentFile;
 import com.congmai.zhgj.web.model.PaymentPlan;
 import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.service.ContractService;
@@ -131,7 +136,13 @@ public class PayController {
 	public Map getSaleOrderInfo(String serialNum,OrderInfo orderInfo) {
 		orderInfo = orderService.selectById(serialNum);
 		Map<String, Object> map = new HashMap<String, Object>();
+		String paiedMoney=payService.selectPaiedMoney(serialNum);
+		orderInfo.setPaiedMoney(paiedMoney);
+		String billedMoney=payService.selectBilledMoney(serialNum);
+		orderInfo.setBilledMoney(billedMoney);
     	map.put("orderInfo", orderInfo);
+    	
+    	
     	
     	OrderMaterielExample m =new OrderMaterielExample();
     	//and 条件1
@@ -153,7 +164,8 @@ public class PayController {
 	 * @return 操作结果
 	 */
 	@RequestMapping(value = "/savePaymentRecord", method = RequestMethod.POST)
-	public ResponseEntity<Void> saveUserContract(@Valid PaymentRecord record, HttpServletRequest request,
+	@ResponseBody
+	public ResponseEntity<PaymentRecord> saveUserContract(@Valid PaymentRecord record, HttpServletRequest request,
 			UriComponentsBuilder ucBuilder,MultipartFile file) {
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
@@ -168,24 +180,10 @@ public class PayController {
 			}
 		//如果id为空执行保存
 		if(StringUtils.isEmpty(record.getSerialNum())){
-			PaymentPlan plan=new PaymentPlan();
-			plan.setSerialNum(ApplicationUtils.random32UUID());
-			plan.setOrderSerial(record.getOrderSerial());
-			plan.setPaymentPlanNum(record.getPaymentPlanNum());
-			plan.setPaymentStyle(record.getPaymentStyle());
-			plan.setSupplyComId(record.getSupplyComId());
-			plan.setBuyComId(record.getBuyComId());
-			plan.setPaymentAmount(record.getPaymentAmount());
-			plan.setCreator(currenLoginName);
-			plan.setClauseSettlementSerial(record.getClauseSettlementSerial());
-			//添加付款计划
-			payService.insertPaymentPlan(plan);
-			
 			
 			String serialNum=ApplicationUtils.random32UUID(); 
 			record.setSerialNum(serialNum);
 			record.setCreator(currenLoginName);
-			record.setPaymentPlanSerial(plan.getSerialNum());
 			//添加付款记录
 			payService.insertPaymentRecord(record);
 		}else{
@@ -208,13 +206,88 @@ public class PayController {
 			payService.updatePaymentRecord(record);
 		}
 
-
+		record=payService.selectPayById(record.getSerialNum());
+		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("/paymentRecordC").buildAndExpand(record.getSerialNum()).toUri());
 
-		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+		return new ResponseEntity<PaymentRecord>(record, HttpStatus.CREATED);
 	}
 	
+	
+	
+	/**
+     * 
+     * @Description 保存附件
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/saveFile", method = RequestMethod.POST)
+    @ResponseBody
+    public void saveFile(@RequestBody String params) {
+    	params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+        JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, PaymentFile.class);  
+        List<PaymentFile> file;
+		try {
+			file = objectMapper.readValue(params, javaType);
+	    	if(!CollectionUtils.isEmpty(file)){
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		    	for(PaymentFile f:file){
+		    		f.setSerialNum(ApplicationUtils.random32UUID());
+		    		f.setUploader(currenLoginName);
+		    		f.setCreator(currenLoginName);
+	    			f.setUpdater(currenLoginName);
+		    	}
+		    	//填充File******↑↑↑↑↑↑********
+		    	payService.betchInsertPaymentFiles(file);
+		    	//数据插入******↑↑↑↑↑↑********
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
+    }
+    
+    
+    /**
+     * 
+     * @Description 更新附件
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/updateFile", method = RequestMethod.POST)
+    @ResponseBody
+    public void updateFile(@RequestBody String params) {
+    	params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+        JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, PaymentFile.class);  
+        List<PaymentFile> file;
+		try {
+			file = objectMapper.readValue(params, javaType);
+			String paySerialNum=file.get(0).getPaymentSerial();
+			payService.deleteFileOld(paySerialNum);
+			
+			
+	    	if(!CollectionUtils.isEmpty(file)){
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		    	for(PaymentFile f:file){
+		    		f.setSerialNum(ApplicationUtils.random32UUID());
+		    		f.setUploader(currenLoginName);
+		    		f.setCreator(currenLoginName);
+	    			f.setUpdater(currenLoginName);
+		    	}
+		    	//填充File******↑↑↑↑↑↑********
+		    	payService.betchInsertPaymentFiles(file);
+		    	//数据插入******↑↑↑↑↑↑********
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
+    }
 	
 	/**
 	 * 查询结算条款详情
@@ -399,8 +472,16 @@ public class PayController {
 	public ResponseEntity<PaymentRecord> selectPayById(String serialNum) {
 
 		PaymentRecord c=payService.selectPayById(serialNum);
-		List<ClauseSettlementDetail> clauList=payService.selectClauseSettlementDetailList(c.getOrderSerial());
-		c.setClauseSettList(clauList);
+		String orderSerial=c.getOrderSerial();
+		String paiedMoney=payService.selectPaiedMoney(orderSerial);
+		String billedMoney=payService.selectBilledMoney(orderSerial);
+		c.setPaiedMoney(paiedMoney);
+		c.setBilledMoney(billedMoney);
+		List<PaymentFile> list=payService.selectFileList(serialNum);
+		c.setFileList(list);
+		
+		/*List<ClauseSettlementDetail> clauList=payService.selectClauseSettlementDetailList(c.getOrderSerial());
+		c.setClauseSettList(clauList);*/
 		return new ResponseEntity<PaymentRecord>(c, HttpStatus.OK);
 	}
 

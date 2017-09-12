@@ -14,10 +14,46 @@ angular.module('MetronicApp').factory('PayService', ['$rootScope', '$http', '$q'
     		delPaymentRecord:delPaymentRecord,
     		//单个查找
     		selectPay:selectPay,
+    		
+    		saveFile:saveFile,
+    		
+    		
+    		updateFile:updateFile,
     };
 
     return factory;
 
+    
+  //保存附件
+ function saveFile(File) {
+		var deferred = $q.defer();
+		var params = {};
+		params = JSON.stringify(File);
+		$http.post("rest/pay/saveFile", params
+		).success(function (data) {
+            // 如果连接成功，延时返回给调用者
+            deferred.resolve(data);
+        }).error(function () {
+            deferred.reject('连接服务器出错！');
+        })
+		return deferred.promise;
+	};
+	
+	
+	 //更新附件
+	 function updateFile(File) {
+			var deferred = $q.defer();
+			var params = {};
+			params = JSON.stringify(File);
+			$http.post("rest/pay/updateFile", params
+			).success(function (data) {
+	            // 如果连接成功，延时返回给调用者
+	            deferred.resolve(data);
+	        }).error(function () {
+	            deferred.reject('连接服务器出错！');
+	        })
+			return deferred.promise;
+		};
     
     
   //删除付款

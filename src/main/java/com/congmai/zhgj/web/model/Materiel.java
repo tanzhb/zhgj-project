@@ -86,6 +86,8 @@ public class Materiel {
     private String palletWeight;
 
     private String customsSupervisionConditions;
+    
+    private String customsCode;
 
     private String qualityDate;
 
@@ -107,15 +109,15 @@ public class Materiel {
     
 /*    private boolean isBOMcheck;*/
     
-    private String  canBillAmount;//å¯å¼€ç¥¨æ•°é‡
+    private String  canBillAmount;//¿É¿ªÆ±ÊıÁ¿
     
-    private String  orderUnitPrice;//å«ç¨å•ä»·
+    private String  orderUnitPrice;//º¬Ë°µ¥¼Û
     
-    private String amount ;//è®¢å•ç‰©æ–™æ•°é‡
+    private String amount ;//¶©µ¥ÎïÁÏÊıÁ¿
     
-    private String  billAmount;//å¼€ç¥¨æ•°é‡/æ”¶ç¥¨æ•°é‡
+    private String  billAmount;//¿ªÆ±ÊıÁ¿/ÊÕÆ±ÊıÁ¿
     
-    private String  money;//é‡‘é¢
+    private String  money;//½ğ¶î
     
     
 
@@ -504,6 +506,7 @@ public class Materiel {
 		this.deliveryCycle = deliveryCycle;
 	}
 
+
 	public String getCanBillAmount() {
 		return canBillAmount;
 	}
@@ -544,12 +547,8 @@ public class Materiel {
 		this.money = money;
 	}
 
-/*	public boolean getIsBOMcheck() {
-		return isBOMcheck;
-	}
 
-	public void setIsBOMcheck(boolean isBOMcheck) {
-		this.isBOMcheck = isBOMcheck;
-	}*/
+	
+
     
 }

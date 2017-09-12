@@ -15,7 +15,9 @@ angular.module('MetronicApp').factory('ContractService', ['$rootScope', '$http',
     		
     		downLoad:downLoad,
     		
-    		uploadExcel:uploadExcel
+    		uploadExcel:uploadExcel,
+    		
+    		getOderInfo:getOderInfo,
     };
 
     return factory;
@@ -120,5 +122,19 @@ angular.module('MetronicApp').factory('ContractService', ['$rootScope', '$http',
           
     };
     
+    function getOderInfo(ids){
+        var deferred = $q.defer();  
+
+        $.get("rest/contract/queryOrderInfo", {serialNum:ids}).success(function (data) { 
+            // 如果连接成功，延时返回给调用者  
+            deferred.resolve(data);
+            
+        })  
+            .error(function () {  
+                deferred.reject('连接服务器出错！');  
+            })  
+        return deferred.promise;  
+          
+    };
 }]);
 

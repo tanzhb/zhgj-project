@@ -39,6 +39,12 @@ public class OrderInfo extends BaseVO {
     private String orderSerial;
 
     private String deliveryMode;
+      
+    
+    private String paiedMoney;
+    
+    
+    private String billedMoney;
 
     private String transportMode;
     @DateTimeFormat(pattern="yyyy-MM-dd")
@@ -51,10 +57,17 @@ public class OrderInfo extends BaseVO {
     private String currency;
 
     private String exchangeRate;
-
+    
+    private String materielCount;
+    private String materielAmount;
+    private String rateAmount;
+    private String rateAndAmount;
+    private String otherAmount;
     private String orderAmount;
 
     private String remark;
+    
+    private String orderRemark;
 
     private String status;
 
@@ -301,5 +314,66 @@ public class OrderInfo extends BaseVO {
 	public void setUnBillAmount(String unBillAmount) {
 		this.unBillAmount = unBillAmount;
 	}
-    
+
+	public String getMaterielAmount() {
+		return materielAmount;
+	}
+
+	public void setMaterielAmount(String materielAmount) {
+		this.materielAmount = materielAmount;
+	}
+
+	public String getPaiedMoney() {
+		return paiedMoney;
+	}
+
+	public void setPaiedMoney(String paiedMoney) {
+		this.paiedMoney = paiedMoney;
+	}
+
+	public String getBilledMoney() {
+		return billedMoney;
+	}
+
+	public void setBilledMoney(String billedMoney) {
+		this.billedMoney = billedMoney;
+	}	public String getOrderRemark() {
+		return orderRemark;
+	}
+
+	public void setOrderRemark(String orderRemark) {
+		this.orderRemark = orderRemark;
+	}
+
+	public String getRateAmount() {
+		return rateAmount;
+	}
+
+	public void setRateAmount(String rateAmount) {
+		this.rateAmount = rateAmount;
+	}
+
+	public String getRateAndAmount() {
+		return rateAndAmount;
+	}
+
+	public void setRateAndAmount(String rateAndAmount) {
+		this.rateAndAmount = rateAndAmount;
+	}
+
+	public String getOtherAmount() {
+		return otherAmount;
+	}
+
+	public void setOtherAmount(String otherAmount) {
+		this.otherAmount = otherAmount;
+	}
+
+	public String getMaterielCount() {
+		return materielCount;
+	}
+
+	public void setMaterielCount(String materielCount) {
+		this.materielCount = materielCount;
+	}
 }

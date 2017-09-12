@@ -8,17 +8,19 @@ public class ClauseSettlement {
 
     private String contractSerial;
     
+    private String orderSerial;
+    
     private List<ClauseSettlementDetail> clauseSettlementDetails;
 
     private String payee;
 
     private String payer;
 
-    private String orderAmount;
-
+    private String materielAmount;
+    private String rateAmount;
+    private String rateAndAmount;
     private String otherAmount;
-
-    private String totalAmount;
+    private String orderAmount;
 
     private String remark;
 
@@ -80,14 +82,6 @@ public class ClauseSettlement {
 
     public void setOtherAmount(String otherAmount) {
         this.otherAmount = otherAmount == null ? null : otherAmount.trim();
-    }
-
-    public String getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(String totalAmount) {
-        this.totalAmount = totalAmount == null ? null : totalAmount.trim();
     }
 
     public String getRemark() {
@@ -153,6 +147,38 @@ public class ClauseSettlement {
 	public void setClauseSettlementDetails(
 			List<ClauseSettlementDetail> clauseSettlementDetails) {
 		this.clauseSettlementDetails = clauseSettlementDetails;
+	}
+
+	public String getMaterielAmount() {
+		return materielAmount;
+	}
+
+	public void setMaterielAmount(String materielAmount) {
+		this.materielAmount = materielAmount;
+	}
+
+	public String getRateAmount() {
+		return rateAmount;
+	}
+
+	public void setRateAmount(String rateAmount) {
+		this.rateAmount = rateAmount;
+	}
+
+	public String getRateAndAmount() {
+		return rateAndAmount;
+	}
+
+	public void setRateAndAmount(String rateAndAmount) {
+		this.rateAndAmount = rateAndAmount;
+	}
+
+	public String getOrderSerial() {
+		return orderSerial;
+	}
+
+	public void setOrderSerial(String orderSerial) {
+		this.orderSerial = orderSerial;
 	}
     
 }
