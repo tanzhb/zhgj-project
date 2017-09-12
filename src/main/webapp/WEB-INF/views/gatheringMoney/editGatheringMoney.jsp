@@ -369,7 +369,7 @@
 										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">收款方 <span
+													<label class="control-label bold">付款方 <span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<input type="text" class="form-control" name="payee"
@@ -382,7 +382,7 @@
 											<!--/span-->
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">收款方联系人<span
+													<label class="control-label bold">付款方联系人<span
 														class="required" aria-required="true"> * </span> </label>
 													<div class="">
 														<input type="text" class="form-control" name="contact"
@@ -411,7 +411,7 @@
 										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">收款银行 <span
+													<label class="control-label bold">银行 <span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<select class="form-control" id="bank"
