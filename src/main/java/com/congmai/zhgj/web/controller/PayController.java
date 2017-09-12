@@ -189,6 +189,11 @@ public class PayController {
 		}
 
 		record=payService.selectPayById(record.getSerialNum());
+		String orderSerial=record.getOrderSerial();
+		String paiedMoney=payService.selectPaiedMoney(orderSerial);
+		String billedMoney=payService.selectBilledMoney(orderSerial);
+		record.setPaiedMoney(paiedMoney);
+		record.setBilledMoney(billedMoney);
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("/paymentRecordC").buildAndExpand(record.getSerialNum()).toUri());

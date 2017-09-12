@@ -67,13 +67,12 @@
     
      <!--查询收款列表  -->
     <select id="findAllGatheringMoneyRecord" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.PaymentRecord">
-    SELECT
-	a.serialNum,a.paymentNum,b.paymentPlanNum,c.orderNum,a.paymentType,b.paymentStyle,a.billStyle,
-	a.invoiceSerial,a.applicant,a.applyDate,a.buyComId,b.paymentAmount,a.status
+	 SELECT
+	a.serialNum,a.paymentNum,a.playPaymentDate,a.paymentNode,a.nodeNum,a.applyPaymentAmount,b.orderNum,
+	a.buyComId,a.paymentDate,a.paymentAmount,a.status
 	FROM
 	paymentRecord a
-	LEFT JOIN paymentPlan b ON a.paymentPlanSerial=b.serialNum
-	LEFT JOIN orderInfo c ON b.orderSerial=c.serialNum
+	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
 	WHERE a.delFlg='0'
 	AND
 	a.creator=#{userId}

@@ -1,11 +1,10 @@
 angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope','$http', 'settings', 'PayService','$state','$compile','$stateParams','FileUploader',  
                                                            function($rootScope,$scope,$http,settings,PayService,$state,$compile,$stateParams,FileUploader) {
 	$scope.$on('$viewContentLoaded', function() {   
-		// initialize core components
 		
 		App.initAjax();
 		handle = new pageHandle();
-		// set default layout mode
+		
 		$rootScope.settings.layout.pageContentWhite = true;
 		$rootScope.settings.layout.pageBodySolid = false;
 		$rootScope.settings.layout.pageSidebarClosed = false;
@@ -17,6 +16,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		$scope.span =false;
 		$scope.input = true;
 		$scope.inputFile=true;
+		
 		validateFileInit();//file表单初始化
 
 		//根据参数查询对象
@@ -54,7 +54,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	};
 
 
-	//根据参数查询对象
+	//根据参数查询付款对象
 	$scope.getPayInfo  = function(serialNum) {
 		debugger
 		PayService.selectPay(serialNum).then(
@@ -85,6 +85,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		window.print();  
 	}
 	
+   //讲申请付款金额转换成大写
 	$scope.getChnAmount=function(){
 		var amount=$("#applyPaymentAmount").val();
 		var chnAmount=convertCurrency(amount);
@@ -92,6 +93,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	}
 	
 	
+	//将金额转换成大写
 	function convertCurrency(money) {
 		  //汉字的数字
 		  var cnNums = new Array('零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖');
@@ -197,8 +199,9 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		);	
 	};
 	
+	
 	var supplyComId=null;
-	//获取订单物料的信息
+	//获取采购订单的信息（并给supplyComId赋值）
 	$scope.getSaleOrderInfo  = function(serialNum) {
 		PayService.getSaleOrderInfo(serialNum).then(
 				function(data){
@@ -281,7 +284,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	    }; 	
 	    
 	    
-	    $scope.updateFile  = function() {//保存File信息
+	    $scope.updateFile  = function() {//更新File信息
 	    	if($scope.pay.serialNum==null||$scope.pay.serialNum=='') {//上级物料为空的处理
 	    		toastr.error('请先保存基本信息！');return
 			}
@@ -383,6 +386,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
   			  uploader.cancelAll();
   		  }
   	  }
+  	  
   	  //添加文件到上传队列后
   	  uploader.onCompleteAll = function () {
   		  uploader.clearQueue();
@@ -417,6 +421,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
   		  uploader.addToQueue(file);
   		  uploader.uploadAll();
   	  }
+  	  //下载文件上传时
        $scope.downloadFile = function(obj){
     	   if(!handle.isNull(obj)){
     		   window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+encodeURI(encodeURI(obj.file));
@@ -425,6 +430,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
     	   }
        }
        
+       //下载文件查看详情时
        $scope.downloadFile1 = function(str){
     		   window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+str;
        }
@@ -440,21 +446,6 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		if($('#form_sample_1').valid()){
 			var fd = new FormData();
 			debugger
-			/*var file = document.querySelector('input[type="file"]').files[0];
-			if($.trim($("#paymentVoucher").val())!=''){
-				fd.append("file", file);
-			}else{
-				toastr.warning("付款凭证不能为空！");
-				return;
-			}
-			
-			var clauseItem=$("input[name='serialNumClause']:checked").val();
-			if($.trim(clauseItem)!=''){
-				fd.append('clauseSettlementSerial',$("input[name='serialNumClause']:checked").val()); 
-			}else{
-				toastr.warning("至少选择一个结算条款！");
-				return;
-			}*/
 			fd.append('paymentNum',$scope.paymentRecord.paymentNum); 
 			fd.append('paymentType',$scope.paymentRecord.paymentType);
 			fd.append('orderSerial',$scope.orderSerial); 
@@ -553,6 +544,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		}
 	}
 
+	//跳转到详情页面
 	$scope.jumpToGetPayInfo  = function(serialNum) {
     	$state.go('viewPay',{serialNum:serialNum});
     }; 

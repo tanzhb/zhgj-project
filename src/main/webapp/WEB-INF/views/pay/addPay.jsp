@@ -296,7 +296,8 @@
 															type="radio" ng-model="paymentRecord.isBill"
 															name="isBill" value="0">否
 												   </span>	
-															<p class="form-control-static" ng-show="span">{{pay.isBill}}</p>
+															<p class="form-control-static" ng-show="span" ng-if="pay.isBill=='1'">是</p>
+												            <p class="form-control-static" ng-show="span" ng-if="pay.isBill=='0'">否</p>
 													</div>
 												</div>
 											</div>
