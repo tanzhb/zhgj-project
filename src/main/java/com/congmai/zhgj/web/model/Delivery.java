@@ -9,6 +9,8 @@ public class Delivery {
     private String serialNum;
 
     private String deliverNum;
+    
+    private String deliverType;
 
     private String orderSerial;
 
@@ -393,6 +395,14 @@ public class Delivery {
 
 	public void setTakeDeliverSerial(String takeDeliverSerial) {
 		this.takeDeliverSerial = takeDeliverSerial;
+	}
+
+	public String getDeliverType() {
+		return deliverType;
+	}
+
+	public void setDeliverType(String deliverType) {
+		this.deliverType = deliverType;
 	}
 
     

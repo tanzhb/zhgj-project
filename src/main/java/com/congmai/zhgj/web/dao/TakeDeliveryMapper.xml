@@ -23,6 +23,7 @@
   <resultMap id="BaseResultMap2" type="com.congmai.zhgj.web.model.Delivery" >
     <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
     <result column="deliverNum" property="deliverNum" jdbcType="VARCHAR" />
+    <result column="deliverType" property="deliverType" jdbcType="VARCHAR" />
     <result column="orderSerial" property="orderSerial" jdbcType="VARCHAR" />
     <result column="supplyComId" property="supplyComId" jdbcType="VARCHAR" />
     <result column="shipper" property="shipper" jdbcType="VARCHAR" />
@@ -49,9 +50,6 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
-    <result column="actualDate" property="actualDate" jdbcType="TIMESTAMP" />
-	<result column="taker" property="taker" jdbcType="VARCHAR" />
-	<result column="takeRemark" property="takeRemark" jdbcType="VARCHAR" />
     <association property="deliveryTransport"  javaType="com.congmai.zhgj.web.model.DeliveryTransport">
     	 <result column="dtSerialNum" property="serialNum" jdbcType="VARCHAR" />
     	 <result column="transportType" property="transportType" jdbcType="VARCHAR" />
@@ -72,6 +70,9 @@
          <result column="tdContactNum" property="contactNum" jdbcType="VARCHAR" />
          <result column="takeDeliverNum" property="takeDeliverNum" jdbcType="VARCHAR" />
          <result column="take_delivery_remark" property="remark" jdbcType="VARCHAR" />
+         <result column="actualDate" property="actualDate" jdbcType="TIMESTAMP" />
+		 <result column="taker" property="taker" jdbcType="VARCHAR" />
+		 <result column="takeRemark" property="takeRemark" jdbcType="VARCHAR" />
          <association column="tdWarehouseSerial" property="warehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>
     </association>
     <association column="warehouseSerial" property="warehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>
@@ -117,6 +118,7 @@
     <resultMap id="BaseResultMap3" type="com.congmai.zhgj.web.model.Delivery" >
     <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
     <result column="deliverNum" property="deliverNum" jdbcType="VARCHAR" />
+    <result column="deliverType" property="deliverType" jdbcType="VARCHAR" />
     <result column="orderSerial" property="orderSerial" jdbcType="VARCHAR" />
     <result column="supplyComId" property="supplyComId" jdbcType="VARCHAR" />
     <association property="takeDelivery" javaType="com.congmai.zhgj.web.model.TakeDelivery">
@@ -211,7 +213,7 @@
   </sql>
     <select id="selectListByExample" resultMap="BaseResultMap2" parameterType="com.congmai.zhgj.web.model.DeliverySelectExample" >
     select
-    d.serialNum, d.deliverNum, d.orderSerial, d.shipper, d.receiver, d.makeDate, d.maker, 
+    d.serialNum, d.deliverNum,d.deliverType, d.orderSerial, d.shipper, d.receiver, d.makeDate, d.maker, 
     d.remark, d.status, d.approval, d.approvalDate, d.warehouseSerial, d.materielCount, d.deliverDate, 
     d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, 
     dt.transportType,d.supplyComId,
@@ -228,7 +230,7 @@
   </select>
   <select id="selectByTakeDeliveryPrimaryKey" resultMap="BaseResultMap2" parameterType="java.lang.String" >
     select
-    d.serialNum, d.deliverNum, d.orderSerial, d.supplyComId, d.shipper, d.receiver, d.makeDate, d.maker, 
+    d.serialNum, d.deliverNum,d.deliverType, d.orderSerial, d.supplyComId, d.shipper, d.receiver, d.makeDate, d.maker, 
     d.remark, d.status, d.approval, d.approvalDate, d.warehouseSerial as warehouseSerial, d.materielCount, d.deliverDate, 
     d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, 
     d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.batchNum,    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.batchNum,dm.serialNum as dmSerialNum,
@@ -535,7 +537,7 @@
   </update>
       <select id="selectByTakeDeliveryPrimaryKeyForStockIn" resultMap="BaseResultMap2" parameterType="java.lang.String" >
     select
-    d.serialNum, d.deliverNum, d.orderSerial, d.supplyComId,dm.serialNum as dmSerialNum,dm.batchNum,
+    d.serialNum, d.deliverNum,d.deliverType, d.orderSerial, d.supplyComId,dm.serialNum as dmSerialNum,dm.batchNum,
     dm.manufactureDate,dm.deliverCount,dm.deliverRemark,
     dm.acceptCount,dm.refuseCount,dm.takeRemark,dm.qualifiedCount,dm.unqualifiedCount,dm.checkRemark,dm.warehouseSerial as dmWarehouseSerial,
 	dm.positionSerial as dmPositionSerial,dm.stockCount,dm.unstockCount,dm.stockRemark,dm.remark as dmRemark,dm.warehouseSerial as dmWarehouseSerial,dm.orderMaterielSerial,
