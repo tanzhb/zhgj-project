@@ -62,7 +62,6 @@
 												<input type="text" name="deliverNum" class="form-control"
 													ng-model="delivery.deliverNum" ng-show="input">
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入发货单号</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.deliverNum}}</p>
 											</div>
@@ -81,7 +80,6 @@
 													<option value="贸易发货">贸易发货</option>
 												</select>
 												<div class="form-control-focus"></div>
-												<span class="help-block">请选择发货类型</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.deliverType}}</p>
 											</div>
@@ -102,7 +100,6 @@
                                                     </span>
                                                 </div>
 												<input type="text" ng-model="orderSerial" ng-hide="true" /> 
-												<span class="help-block">请输入销售订单号</span>
 
 												<p class="form-control-static" ng-show="span">
 													{{delivery.orderNum}}</p>
@@ -122,7 +119,6 @@
 												<p class="form-control-static" ng-show="span">
 													{{delivery.supplyComId}}</p>
 												<div class="form-control-focus"></div>
-												<span class="help-block">请选择供应商</span>
 											</div>
 
 										</div>
@@ -137,7 +133,6 @@
 												<p class="form-control-static" ng-show="span">
 													{{delivery.shipper}}</p>
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入发货方</span>
 											</div>
 
 										</div>
@@ -152,7 +147,6 @@
 												<p class="form-control-static" ng-show="span">
 													{{delivery.receiver}}</p>
 												<div class="form-control-focus"></div>
-												<span class="help-block">请选择收货方</span>
 											</div>
 
 										</div>
@@ -170,7 +164,6 @@
 												<p class="form-control-static" ng-show="span">
 													{{delivery.maker}}</p>
 												<div class="form-control-focus"></div>
-												<span class="help-block">请选择制单人</span>
 											</div>
 										</div>
 									</div>
@@ -186,7 +179,6 @@
 												<p class="form-control-static" ng-show="span">
 													{{delivery.makeDate}}</p>
 												<div class="form-control-focus"></div>
-												<span class="help-block">请选择制单日期</span>
 											</div>
 
 										</div>
@@ -201,7 +193,6 @@
 												<p class="form-control-static" ng-show="span">
 													{{delivery.approval}}</p>
 												<div class="form-control-focus"></div>
-												<span class="help-block">请选择审批人</span>
 											</div>
 										</div>
 									</div>
@@ -217,7 +208,6 @@
 													ng-show="input" data-date-viewmode="years" size="16"
 													ng-model="delivery.approvalDate" class="form-control" readonly="readonly"/>
 												<div class="form-control-focus"></div>
-												<span class="help-block">请选择审批日期</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.approvalDate}}</p>
 											</div>
@@ -231,7 +221,6 @@
 												<input type="text" class="form-control"
 													ng-model="delivery.remark" ng-show="input" />
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入备注</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.remark}}</p>
 											</div>
@@ -266,7 +255,6 @@
 														value="{{item.serialNum}}">{{item.warehouseName}}</option>
 												</select>
 												<div class="form-control-focus"></div>
-												<span class="help-block">请选择发货仓库</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.deliveryWarehouseName}}</p>
 											</div>
@@ -281,7 +269,6 @@
 													class="form-control" disabled="disabled" ng-model="warehouseAddress"
 													ng-show="input" />
 												<div class="form-control-focus"></div>
-												<!-- <span class="help-block">请输入仓库地址</span> -->
 												<p class="form-control-static" ng-show="span">
 													{{delivery.deliveryAddress}}</p>
 											</div>
@@ -297,7 +284,6 @@
 													ng-show="input" data-date-viewmode="years" size="16"
 													ng-model="delivery.deliverDate" readonly="readonly"/>
 												<div class="form-control-focus"></div>
-												<span class="help-block">请选择发货日期</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.deliverDate}}</p>
 											</div>
@@ -314,7 +300,6 @@
 												<input type="text" name="materielCount" class="form-control"
 													ng-model="delivery.materielCount" ng-show="input" />
 												<div class="form-control-focus"></div>
-												<span class="help-block">请选择物料数</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.materielCount}}</p>
 											</div>
@@ -329,7 +314,6 @@
 												<input type="text" class="form-control" name="packageCount"
 													ng-model="delivery.packageCount" ng-show="input" />
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入包装件数</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.packageCount}}</p>
 											</div>
@@ -350,7 +334,6 @@
 													<option value="类型3">类型3</option>
 												</select>
 												<div class="form-control-focus"></div>
-												<span class="help-block">请选择包装类型</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.packageType}}</p>
 											</div>
@@ -374,7 +357,6 @@
 													<option value="规格3">规格3</option>
 												</select>
 												<div class="form-control-focus"></div>
-												<span class="help-block">请选择包装规格</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.packageSpecifications}}</p>
 											</div>
@@ -388,7 +370,6 @@
 												<input type="text" class="form-control" ng-show="input"
 													name="materielWeight" ng-model="delivery.materielWeight" />
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入物料重量</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.materielWeight}}</p>
 											</div>
@@ -403,7 +384,6 @@
 												<input type="text" class="form-control" name="serviceMoney"
 													ng-model="delivery.serviceMoney" ng-show="input" />
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入服务费</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.serviceMoney}}</p>
 											</div>
@@ -419,7 +399,6 @@
 												<input type="text" class="form-control" name="deliverer"
 													ng-model="delivery.deliverer" ng-show="input" />
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入发货人</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.deliverer}}</p>
 											</div>
@@ -433,7 +412,6 @@
 												<input type="text" class="form-control" name="contactNum"
 													ng-model="delivery.contactNum" ng-show="input" />
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入联系电话</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.contactNum}}</p>
 											</div>
@@ -447,7 +425,6 @@
 												<input type="text" class="form-control" name="deliverRemark"
 													ng-model="delivery.deliverRemark" ng-show="input" />
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入备注</span>
 												<p class="form-control-static"></p>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.deliverRemark}}</p>
@@ -478,7 +455,6 @@
 												<input type="text" class="form-control" name="transportType"
 													ng-model="deliveryTransport.transportType" ng-show="input" />
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入运输方式</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.transportType}}</p>
 											</div>
@@ -492,7 +468,6 @@
 												<input type="text" class="form-control" name="transport"
 													ng-model="deliveryTransport.transport" ng-show="input" />
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入运输方</span>
 												<p class="form-control-static" ng-show="span">
 													{{deliveryTransport.transport}}</p>
 											</div>
@@ -506,7 +481,6 @@
 												<input type="text" class="form-control" name="port"
 													ng-model="deliveryTransport.port" ng-show="input" />
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入港口</span>
 												<p class="form-control-static" ng-show="span">
 													{{deliveryTransport.port}}</p>
 											</div>
@@ -523,7 +497,6 @@
 												<input type="text" class="form-control" name="shipNumber"
 													ng-model="deliveryTransport.shipNumber" ng-show="input" />
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入船号</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.shipNumber}}</p>
 											</div>
@@ -541,7 +514,6 @@
 													id="playArrivalDate"
 													ng-model="deliveryTransport.playArrivalDate" readonly="readonly"/>
 												<div class="form-control-focus"></div>
-												<span class="help-block">请选择预计到港日期</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.playArrivalDate}}</p>
 											</div>
@@ -559,7 +531,6 @@
 													id="playWarehouseDate"
 													ng-model="deliveryTransport.playWarehouseDate" readonly="readonly"/>
 												<div class="form-control-focus"></div>
-												<span class="help-block">请选择预计到库日期</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.playWarehouseDate}}</p>
 											</div>
@@ -576,7 +547,6 @@
 												<input type="text" class="form-control" name="deliveryTransportContact"
 													ng-show="input" ng-model="deliveryTransport.contact" />
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入联系人</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.transportContact}}</p>
 											</div>
@@ -590,7 +560,6 @@
 												<input type="text" class="form-control" name="deliveryTransportContactNum"
 													ng-show="input" ng-model="deliveryTransport.contactNum" />
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入联系电话</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.transportContactNum}}</p>
 											</div>
@@ -605,7 +574,6 @@
 												<input type="text" class="form-control" name="remark"
 													ng-show="input" ng-model="deliveryTransport.remark" />
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入备注</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.transportRemark}}</p>
 											</div>
@@ -640,7 +608,6 @@
 														value="{{item.serialNum}}">{{item.warehouseName}}</option>
 												</select>
 												<div class="form-control-focus"></div>
-												<span class="help-block">请选择收货仓库</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.takeWarehouseName}}</p>
 											</div>
@@ -657,7 +624,6 @@
 													ng-show="input" />
 
 												<div class="form-control-focus"></div>
-												<!-- <span class="help-block">请输入仓库地址</span> -->
 												<p class="form-control-static" ng-show="span">
 													{{delivery.takeAddress}}</p>
 											</div>
@@ -674,7 +640,6 @@
 													ng-model="takeDelivery.takeDeliverDate" ng-show="input" readonly="readonly"/>
 
 												<div class="form-control-focus"></div>
-												<span class="help-block">请选择收货日期</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.takeDeliverDate}}</p>
 											</div>
@@ -693,7 +658,6 @@
 													ng-show="input" />
 
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入收货人</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.takeDeliveryReceiver}}</p>
 											</div>
@@ -709,7 +673,6 @@
 													class="form-control" ng-model="takeDelivery.contactNum"
 													ng-show="input" />
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入联系电话</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.takeDeliveryContactNum}}</p>
 											</div>
@@ -724,7 +687,6 @@
 												<input type="text" name="remark" class="form-control"
 													ng-model="takeDelivery.remark" ng-show="input" />
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入备注</span>
 												<p class="form-control-static" ng-show="span">
 													{{delivery.takeDeliveryRemark}}</p>
 											</div>
