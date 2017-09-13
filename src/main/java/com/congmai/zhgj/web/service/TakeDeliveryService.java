@@ -35,6 +35,10 @@ public interface TakeDeliveryService extends GenericService<TakeDelivery, String
 	void updateStockInData(TakeDeliveryParams takeDeliveryParams,
 			String currenLoginName,String type);
 	
+	TakeDelivery selectByPrimaryKey(String serialNum);
+	
+	int updateByPrimaryKeySelective(TakeDelivery record);
+	
 	/**
 	 * 
 	 * @Description (TODO生成入库单)

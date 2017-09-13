@@ -535,6 +535,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	$scope.toYiban = function() {
 		$('#accountPayableTab a[href="#yiban"]').tab('show');
 		ybTable = showYbTable();
+		$("#buttons").hide();
 	};
 	
 	//审批通过
@@ -561,10 +562,23 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	        type: 'POST',
 	        data : mydata,
 	        success : function(data) {
-	        	dbTable.ajax.reload();
+	        	$("#dbTable").DataTable().ajax.reload();
 	        	showToastr('toast-bottom-right', 'success', data);
 	        }
 	     });
+	}
+	
+	if($stateParams.tabHref == '1'){//首页待办列表传过来的参数
+		$('#accountPayableTab a[href="#daiban"]').tab('show');
+		showDbTable();
+		$("#buttons").hide();
+	}else if($stateParams.tabHref == '2'){//首页已办列表传过来的参数
+		$('#accountPayableTab a[href="#yiban"]').tab('show');
+		showYbTable();
+		$("#buttons").hide();
+	}else{//从菜单进入
+		$('#accountPayableTab a[href="#apply"]').tab('show');
+		$("#buttons").show();
 	}
 	
 	function showDbTable(){
@@ -616,51 +630,54 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 									}else if(ids=='more'){
 										toastr.warning('只能选择一个办理！');return;
 									} else {
+//										alert($("#dbTable").DataTable().row(1).data().assign);
 										
+//										if(assign == ''){
+//											toastr.warning("此任务您还没有签收，请【签收】任务后再处理任务！！");
+//										}else{
+												PayService
+												.getAuditInfos(ids)
+												.then(
+														function(result) {													
+															
+															var comments = ""//添加评论
+															for (var i=0;i<result.commentList.length;i++){
+																comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+																+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
+															}
+															
+															if(result.actionType == 'audit'){//审批流程
+																
+																$state.go('auditPay',{serialNum:result.paymentRecord.serialNum, taskId:ids, comments:comments});
+																
+																
+															}else{//result.actionType == 'modify' 更改流程
+		//														if(comments == ""){
+		//															comments = "无评论";
+		//														}else $("#comment_modify").html(comments);
+		//														$("#modify_beginDate").val(timeStamp2String2(result.vacation.beginDate));
+		//														$("#modify_endDate").val(timeStamp2String2(result.vacation.endDate));
+		//														$("#modify_days").val(result.vacation.days);
+		//														$("#modify_vacationType").val(result.vacation.vacationType);
+		//														$("#modify_reason").val(result.vacation.reason);
+		//														$('#modifyVacationModal').modal('show');
+															}
+															
+															
+															
+															
+															
+														},
+														function(errResponse) {
+															toastr.warning("申请失败！");
+															console
+																	.error('Error while apply ap');
+														}
+		
+												);
 										
+//										}
 										
-										PayService
-										.getAuditInfos(ids)
-										.then(
-												function(result) {													
-													
-													var comments = ""//添加评论
-													for (var i=0;i<result.commentList.length;i++){
-														comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
-														+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
-													}
-													
-													if(result.actionType == 'audit'){//审批流程
-														
-														$state.go('auditPay',{serialNum:result.paymentRecord.serialNum, taskId:ids, comments:comments});
-//														$("#serialNum").val(result.paymentRecord.serialNum);//赋值给隐藏input，通过和不通过时调用
-//														$("#taskId").val(ids);//赋值给隐藏input，通过和不通过时调用
-														
-														
-													}else{//result.actionType == 'modify' 更改流程
-//														if(comments == ""){
-//															comments = "无评论";
-//														}else $("#comment_modify").html(comments);
-//														$("#modify_beginDate").val(timeStamp2String2(result.vacation.beginDate));
-//														$("#modify_endDate").val(timeStamp2String2(result.vacation.endDate));
-//														$("#modify_days").val(result.vacation.days);
-//														$("#modify_vacationType").val(result.vacation.vacationType);
-//														$("#modify_reason").val(result.vacation.reason);
-//														$('#modifyVacationModal').modal('show');
-													}
-													
-													
-													
-													
-													
-												},
-												function(errResponse) {
-													toastr.warning("申请失败！");
-													console
-															.error('Error while apply ap');
-												}
-
-										);
 										
 										
 									}
@@ -860,7 +877,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 							+ "/rest/processAction/endTask",// 加载已办列表数据
 
 					"aoColumns" : [
-							{ mData: 'taskId'},
+//							{ mData: 'taskId'},
 							{
 								mData : 'userName'
 							},

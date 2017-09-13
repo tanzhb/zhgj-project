@@ -184,9 +184,7 @@
 													id="ybTable">
 													<thead>
 														<tr>
-															<th style="text-align: center"><input name="select_all"
-																value="1" id="example-select-all" type="checkbox" /></th>
-															
+																														
 															<th>申请人</th>
 															<th>标题</th>
 															<th>任务开始时间</th>
