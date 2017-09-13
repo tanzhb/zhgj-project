@@ -584,12 +584,6 @@ public class DeliveryVO {
 		this.supplyComIds = supplyComIds;
 	}
 
-
-
-
-
-
-
 	public String getDeliverType() {
 		return deliverType;
 	}
