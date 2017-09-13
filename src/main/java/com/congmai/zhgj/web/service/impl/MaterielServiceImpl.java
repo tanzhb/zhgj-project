@@ -155,7 +155,7 @@ public class MaterielServiceImpl implements MaterielService {
 			materiels= MaterielMapper.selectMaterielByOrderSerial(map);
 			if(materiels!=null&&materiels.size()>0){
 				for(Materiel materiel:materiels){
-					int billedCount=invoiceBillingRecordMapper.countBilledNum(materiel.getSerialNum());
+					Integer  billedCount=invoiceBillingRecordMapper.countBilledNum(materiel.getSerialNum());
 					materiel.setCanBillAmount((Integer.parseInt(materiel.getAmount())-billedCount)+"");
 				}
 			}

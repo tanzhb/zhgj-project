@@ -39,7 +39,7 @@ angular
 										 		}else if($location.path()=="/invoiceView"){
 										 			debugger;
 										 			$scope.inOrOut=$stateParams.inOrOut;
-										 			getInvoiceInfo($stateParams.inOrOut);//查看发票详情
+										 			getInvoiceInfo($stateParams.inOrOut+"view");//查看发票详情
 									 		}else if(($location.path()=="/invoice")){
 									 			debugger;
 									 			if($stateParams.inOrOut=='showout'){
@@ -438,7 +438,7 @@ angular
 				// ***************************************
 				// 构建datatables结束***************************************
 				}
-			function loadMaterielInTable(orderSerial){
+			function loadMaterielInTable(orderSerial,serialNum){
 				var a = 0,judgeString='in';
 				if($scope.invoice.serialNum==undefined||$scope.invoice.orderSerial!=orderSerial){
 					orderSerial=orderSerial+'no';
@@ -536,8 +536,11 @@ angular
 												'className' : 'dt-body-center',
 												'render' : function(data,
 														type, row, meta) {
-													return '<input  type="text"    value="'+row.billAmount+'"   id="'+row.serialNum+'"  onchange="judgeNumber(\''+row.canBillAmount+'\',\''+row.serialNum+'\',\''+judgeString+'\')" />';
-													//return data;
+													if(serialNum.indexOf("view")>-1){
+														return data;
+													}else{
+														return '<input  type="text"  value="'+row.billAmount+'"      id="'+row.serialNum+'"  onchange="judgeNumber(\''+row.canBillAmount+'\',\''+row.serialNum+'\',\''+judgeString+'\')" />';
+													}
 												},"createdCell": function (td, cellData, rowData, row, col) {
 													 $compile(td)($scope);
 											    }
@@ -556,9 +559,12 @@ angular
 												'orderable' : false,
 												'render' : function(data,
 														type, row, meta) {
+													if(serialNum.indexOf("view")>-1){
+														return "";
+													}else{
 													return '<a   id="save'+row.serialNum+'" ng-click="saveBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.invoiceBillingRecordSerial+'\',\''+row.billAmount+'\',\''+row.orderUnitPrice+'\',\''+row.money+'\')">  <i class="fa fa-save" title="保存"></i> </a>&nbsp;<a   style="display:none"  id="edit'+row.serialNum+'"  ng-click="editBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\')"><i class="fa fa-edit" title="编辑"></i></a>'
 													+ '&nbsp;<a  id="cancel'+row.serialNum+'" ng-click="cancelEditBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.billAmount+'\')"><i class="fa fa-undo"  title="取消"></i></a>';
-													//return data;
+													}//return data;
 												},"createdCell": function (td, cellData, rowData, row, col) {
 													 $compile(td)($scope);
 											    }
@@ -568,7 +574,7 @@ angular
 				// 构建datatables结束***************************************
 				}
 
-function loadMaterielOutTable(orderSerial){
+function loadMaterielOutTable(orderSerial,serialNum){
 	var a = 0,judgeString='out';
 	debugger;
 	if($scope.invoice.serialNum==undefined||$scope.invoice.orderSerial!=orderSerial){
@@ -665,7 +671,12 @@ function loadMaterielOutTable(orderSerial){
 								'className' : 'dt-body-center',
 								'render' : function(data,
 										type, row, meta) {
-									return '<input  type="text"  value="'+row.billAmount+'"   id="'+row.serialNum+'"  onchange="judgeNumber(\''+row.canBillAmount+'\',\''+row.serialNum+'\',\''+judgeString+'\')" />';
+									if(serialNum.indexOf("view")>-1){
+										return data;
+									}else{
+										return '<input  type="text"  value="'+row.billAmount+'"      id="'+row.serialNum+'"  onchange="judgeNumber(\''+row.canBillAmount+'\',\''+row.serialNum+'\',\''+judgeString+'\')" />';
+									}
+								
 									//return data;
 								},"createdCell": function (td, cellData, rowData, row, col) {
 									 $compile(td)($scope);
@@ -683,8 +694,13 @@ function loadMaterielOutTable(orderSerial){
 								'targets' : 9,
 								'render' : function(data,
 										type, row, meta) {
-									return '<a   id="save'+row.serialNum+'" ng-click="saveBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.invoiceBillingRecordSerial+'\',\''+row.billAmount+'\',\''+row.orderUnitPrice+'\',\''+row.money+'\')">  <i class="fa fa-save" title="保存"></i> </a>&nbsp;<a   style="display:none"   id="edit'+row.serialNum+'"  ng-click="editBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\')"><i class="fa fa-edit" title="编辑"></i></a>&nbsp;<a  id="cancel'+row.serialNum+'" ng-click="cancelEditBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.billAmount+'\')"><i class="fa fa-undo"  title="取消"></i></a>';
-									//return data;
+									if(serialNum.indexOf("view")>-1){
+										return "";
+									}else{
+									return '<a   id="save'+row.serialNum+'" ng-click="saveBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.invoiceBillingRecordSerial+'\',\''+row.billAmount+'\',\''+row.orderUnitPrice+'\',\''+row.money+'\')">  <i class="fa fa-save" title="保存"></i> </a>&nbsp;<a   style="display:none"  id="edit'+row.serialNum+'"  ng-click="editBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\')"><i class="fa fa-edit" title="编辑"></i></a>'
+									+ '&nbsp;<a  id="cancel'+row.serialNum+'" ng-click="cancelEditBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.billAmount+'\')"><i class="fa fa-undo"  title="取消"></i></a>';
+									}
+									
 								},"createdCell": function (td, cellData, rowData, row, col) {
 									 $compile(td)($scope);
 							    }
@@ -1178,8 +1194,8 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 						 	        			 $scope.invoice.approvalDate=timeStamp2ShortString(data.invoice.approvalDate);
 						 	        			 $scope.invoice.capitalMoney=convertCurrency(data.invoice.billOrReceiptMoney);
 						 	        			getOrderInfoBySerialNum($scope.invoice.orderSerial);//获取订单信息
-							 	            	if(serialNum.indexOf("in")>-1){	loadMaterielInTable($scope.invoice.orderSerial);//加载发票物料
-							 	            	}else{loadMaterielOutTable($scope.invoice.orderSerial);}
+							 	            	if(serialNum.indexOf("in")>-1){	loadMaterielInTable($scope.invoice.orderSerial,serialNum);//加载发票物料
+							 	            	}else{loadMaterielOutTable($scope.invoice.orderSerial,serialNum);}
 						 	        			
 						 	        			
 						 	            },function(data){
