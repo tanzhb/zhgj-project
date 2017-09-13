@@ -46,6 +46,15 @@ public interface TakeDeliveryService extends GenericService<TakeDelivery, String
 	 * @Description (TODO生成出库单)
 	 */
 	void createStockOutRecord(String deliverySerial,String currenLoginName);
+
+	/**
+	 * 
+	 * @Description (TODO发货)
+	 * @param takeDeliveryParams
+	 * @param currenLoginName
+	 */
+	void confirmTakeDelivery(TakeDeliveryParams takeDeliveryParams,
+			String currenLoginName);
 	
 		
 

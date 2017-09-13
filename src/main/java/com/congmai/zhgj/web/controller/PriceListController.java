@@ -31,6 +31,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
+import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.enums.ComType;
@@ -38,10 +39,12 @@ import com.congmai.zhgj.web.model.LadderPrice;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.PriceListExample;
+import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.LadderPriceService;
 import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.PriceListService;
+import com.congmai.zhgj.web.service.UserCompanyService;
 
 
 /**
@@ -63,6 +66,8 @@ public class PriceListController {
 	private MaterielService  materielService;
     @Autowired
    	private CompanyService  companyService;
+    @Autowired
+    private UserCompanyService userCompanyService;
     
     
     /**
@@ -140,7 +145,12 @@ public class PriceListController {
   
     @RequestMapping(value = "/getPriceList")
     public ResponseEntity<Map> getPriceList(HttpServletRequest request,String  buyOrSale) {
-		List<PriceList> priceLists = priceListService.selectPriceList(buyOrSale);
+    	User user = UserUtil.getUserFromSession();
+    	List<String> comIds = null;
+    	if(user!=null){
+			comIds = userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId()));
+		}
+		List<PriceList> priceLists = priceListService.selectPriceList(buyOrSale,comIds);
 		if (priceLists==null||priceLists.isEmpty()) {
 			return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);//判断是否为空,为空返回NO_CONTENT
 		}
@@ -314,7 +324,12 @@ public class PriceListController {
 	    @RequestMapping("exportPriceList")
 	    public void exportWarehouse(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,String buyOrSale) {
 	    		Map<String, Object> dataMap = new HashMap<String, Object>();
-	    		List<PriceList> priceListList= priceListService.selectPriceList(buyOrSale);
+	    		User user = UserUtil.getUserFromSession();
+	        	List<String> comIds = null;
+	        	if(user!=null){
+	    			comIds = userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId()));
+	    		}
+	    		List<PriceList> priceListList= priceListService.selectPriceList(buyOrSale,comIds);
 	    		for(PriceList p:priceListList){
 	    			if("buyPrice".equals(p.getPriceType())){
 	    				p.setComName(companyService.selectOne(p.getSupplyComId()).getComName());

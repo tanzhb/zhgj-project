@@ -118,6 +118,15 @@
     customsSupervisionConditions, qualityDate, versionNO, isLatestVersion, status, delFlg, 
     creator, createTime, updater, updateTime
   </sql>
+  <sql id="Base_Column_List2" >
+    m.serialNum, m.materielId, m.materielNum, m.materielName, m.specifications, m.unit, m.parentMaterielSerial, 
+    m.type, m.productionPlace, m.brand, m.category, m.MnemonicCode, m.isBOM, m.stockUnit, m.originCountry, 
+    m.width, m.height, m.length, m.currency, m.unitPrice, m.deliveryCycle,m.filingItemNo, m.volume, m.weight, m.palletSpecification, 
+    m.manufactureDate, m.remark, m.packageNum, m.packageSpecifications, m.packageUnit, m.packagewidth, 
+    m.packageheight, m.packagelength, m.packagevolume, m.packageUnitConversion, m.palletWeight, 
+    m.customsSupervisionConditions, m.qualityDate, m.versionNO, m.isLatestVersion, m.status, m.delFlg, 
+    m.creator, m.createTime, m.updater, m.updateTime
+  </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.MaterielExample" >
     select
     <if test="distinct" >
@@ -125,6 +134,21 @@
     </if>
     <include refid="Base_Column_List" />
     from materiel
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectBySelectExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.MaterielSelectExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List2" />
+    from materiel m 
+    left join supplyMateriel sm on sm.materielId = m.materielId 
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>

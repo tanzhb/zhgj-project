@@ -198,19 +198,19 @@
 										<td>{{materiel.refuseCount}}</td>
 										<td>{{materiel.takeRemark}}</td>
 										<td>
-											{{materiel.stockCount}}
+											{{materiel.stockInCount}}
 										</td>
 										<td>
-											{{materiel.unstockCount}}
+											{{materiel.unstockInCount}}
 										</td>
 										<td>
-											{{materiel.warehouse.warehouseName}}
+											{{materiel.stockInWarehouse.warehouseName}}
 										</td>
 										<td>
-											{{materiel.position.positionName}}
+											{{materiel.stockInPosition.positionName}}
 										</td>
 										<td>
-											{{materiel.stockRemark}}
+											{{materiel.stockInRemark}}
 										</td> 
 									</tr>
 									<tr ng-if="record.delivery.deliveryMateriels==undefined||record.delivery.deliveryMateriels.length==0">

@@ -137,7 +137,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 	            }*/
 	            $scope.record.orderSerial = delivery.orderSerial;
 				$scope.record.orderNum = delivery.orderNum;
-	        	var promise = takeDeliveryService.getTakeDeliveryMaterielList($scope.deliverSerial);
+	        	var promise = takeDeliveryService.getTakeDeliveryMaterielList(sd);
         		promise.then(function(data){
         			$scope.takeDeliveryMateriels = data.data;
         			countWarehouseAndPosition();
@@ -163,13 +163,23 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 					params.record = $scope.record;
 					params.record.deliverSerial = "";
 					params.deliveryMateriels = [];
-					var param
+					var param;
 					for(var i=0;i < $scope.takeDeliveryMateriels.length;i++){
 						param = {};
+						param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].orderMaterielSerial;
+						param.batchNum = $scope.takeDeliveryMateriels[i].batchNum;
+						param.manufactureDate = $scope.takeDeliveryMateriels[i].manufactureDate;
+						param.deliverCount = $scope.takeDeliveryMateriels[i].deliverCount;
+						param.deliverRemark = $scope.takeDeliveryMateriels[i].deliverRemark;
+						param.acceptCount = $scope.takeDeliveryMateriels[i].acceptCount;
+						param.refuseCount = $scope.takeDeliveryMateriels[i].deliverCount-$scope.takeDeliveryMateriels[i].acceptCount;
+						param.takeRemark = $scope.takeDeliveryMateriels[i].takeRemark;
+						
 						param.serialNum = $scope.takeDeliveryMateriels[i].serialNum;
 						param.stockCount = $scope.takeDeliveryMateriels[i].stockCount;
 						param.unstockCount = $scope.takeDeliveryMateriels[i].acceptCount-$scope.takeDeliveryMateriels[i].stockCount;
 						param.warehouseSerial = $scope.takeDeliveryMateriels[i].warehouseSerial;
+						param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].orderMaterielSerial;
 						param.positionSerial = $scope.takeDeliveryMateriels[i].positionSerial;
 						param.stockRemark = $scope.takeDeliveryMateriels[i].stockRemark;
 						params.deliveryMateriels.push(param);

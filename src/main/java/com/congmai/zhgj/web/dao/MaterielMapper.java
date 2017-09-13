@@ -2,6 +2,7 @@ package com.congmai.zhgj.web.dao;
 
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
+import com.congmai.zhgj.web.model.MaterielSelectExample;
 
 import java.util.List;
 
@@ -19,6 +20,8 @@ public interface MaterielMapper {
     int insertSelective(Materiel record);
 
     List<Materiel> selectByExample(MaterielExample example);
+    
+    List<Materiel> selectBySelectExample(MaterielSelectExample example);
 
     Materiel selectByPrimaryKey(String serialNum);
 

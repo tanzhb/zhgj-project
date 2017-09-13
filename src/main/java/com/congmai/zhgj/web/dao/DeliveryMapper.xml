@@ -148,7 +148,7 @@
     </select>
     
     <!--查询发货列表  -->
-   <select id="findAllDeliveryList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.DeliveryVO">
+   <select id="findAllDeliveryList" parameterType="com.congmai.zhgj.web.model.DeliveryVO" resultType="com.congmai.zhgj.web.model.DeliveryVO">
    SELECT
 	a.serialNum,a.deliverNum,a.orderSerial,b.orderNum,COUNT(DISTINCT c.serialNum) AS materielCount,a.packageCount,
 	a.receiver,(SELECT address FROM warehouse WHERE serialNum=a.warehouseSerial) AS deliveryAddress,
@@ -160,7 +160,13 @@
 	LEFT JOIN takeDelivery d ON a.serialNum=d.deliverSerial 
 	LEFT JOIN deliveryTransport e ON e.deliverSerial=a.serialNum
 	LEFT JOIN  company   com  ON  com.comId=a.supplyComId
-	WHERE a.delFlg='0' AND a.creator=#{userName}
+	WHERE a.delFlg='0' AND a.creator=#{creator}
+	<if test="supplyComIds != null" >
+        and supplyComId in
+         <foreach item="supplyComIds" index="index" collection="list" open="(" separator="," close=")">  
+		  #{item}  
+		 </foreach> 
+    </if>
 	GROUP BY(a.serialNum)
 	ORDER BY a.createTime DESC
     </select>

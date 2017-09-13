@@ -34,6 +34,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.alibaba.druid.util.StringUtils;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
+import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.model.ContractVO;
@@ -44,11 +45,13 @@ import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
+import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
+import com.congmai.zhgj.web.service.UserCompanyService;
 import com.congmai.zhgj.web.service.WarehouseService;
 
 
@@ -92,6 +95,11 @@ public class DeliveryController {
 	 */
 	@Resource
     private DeliveryService deliveryService;
+	/**
+	 * 用户企业关系service
+	 */
+	@Resource
+	private UserCompanyService userCompanyService;
 
 	 /**
      * @Description (查询仓库列表)
@@ -133,7 +141,16 @@ public class DeliveryController {
 
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
-		List<DeliveryVO> contractList=deliveryService.findAllDeliveryList(currenLoginName);
+		//List<DeliveryVO> contractList=deliveryService.findAllDeliveryList(currenLoginName);
+		User user = UserUtil.getUserFromSession();
+    	List<String> comIds = null;
+    	if(user!=null){
+			comIds = userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId()));
+		}
+		DeliveryVO query = new DeliveryVO();
+		query.setCreator(currenLoginName);
+		query.setSupplyComIds(comIds);
+		List<DeliveryVO> contractList=deliveryService.findAllDeliveryList(query);
 
 		//封装datatables数据返回到前台
 		Map pageMap = new HashMap();
