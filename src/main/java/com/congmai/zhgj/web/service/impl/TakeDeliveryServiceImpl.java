@@ -64,7 +64,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		TakeDeliverySelectExample example = new TakeDeliverySelectExample();
 		example.setPageIndex(0);
 		example.setPageSize(-1);
-		example.createCriteria().andDelFlgEqualTo("0").andDeliverStatusNotEqualTo("0").andDeliverSerialEqualTo("");
+		example.createCriteria().andDelFlgEqualTo("0");
 		Page<Delivery> page = new Page<Delivery>();
 		page.setResult(takeDeliveryMapper.selectListByExample(example));
 		page.setTotalCount(takeDeliveryMapper.countListByExample(example));
@@ -90,7 +90,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		Date now = new Date();
 		if(StringUtils.isEmpty(takeDeliveryParams.getTakeDelivery().getSerialNum())){
 			takeDeliveryParams.getTakeDelivery().setSerialNum(takeDeliverySerial);
-			takeDeliveryParams.getTakeDelivery().setDeliverSerial("");
+			takeDeliveryParams.getTakeDelivery().setDeliverSerial(deliverySerial);
 			takeDeliveryParams.getTakeDelivery().setCreator(currenLoginName);
 			takeDeliveryParams.getTakeDelivery().setCreateTime(now);
 		}
@@ -134,8 +134,11 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	}
 	@Override
 	public Delivery selectByTakeDeliveryPrimaryKey(String serialNum) {
-		
-		return this.takeDeliveryMapper.selectByTakeDeliveryPrimaryKey(serialNum);
+		Delivery delivery = this.takeDeliveryMapper.selectByTakeDeliveryPrimaryKey(serialNum);
+		DeliveryMaterielExample example = new DeliveryMaterielExample();
+		example.createCriteria().andDelFlgEqualTo("0").andDeliverSerialEqualTo(delivery.getTakeDelivery().getSerialNum());
+		//return this.takeDeliveryMapper.selectByTakeDeliveryPrimaryKey(serialNum);
+		return delivery;
 	}
 
 	@Override
@@ -193,6 +196,9 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			DeliveryMaterielExample example = new DeliveryMaterielExample();
 			example.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
 			deliveryMaterielMapper.updateByExampleSelective(materiel, example);
+			//materiel.setSerialNum(ApplicationUtils.random32UUID());
+			//materiel.setDeliverSerial(record.getTakeDeliverSerial());
+			//deliveryMaterielMapper.insert(materiel);
 		}
 	}
 
@@ -254,19 +260,24 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			StockInOutRecord stockInOutRecord = stockInOutRecordMapper.selectByPrimaryKey(record.getSerialNum());
 			String takeDeliverySerial = stockInOutRecord.getTakeDeliverSerial();
 			old_delivery = takeDeliveryMapper.selectByTakeDeliveryPrimaryKey(takeDeliverySerial);
+			clearStockInInfoFormMateriels(old_delivery.getDeliveryMateriels());
 		}else{
 			//获取更新前的发货id
 			StockInOutRecord stockInOutRecord = stockInOutRecordMapper.selectByPrimaryKey(record.getSerialNum());
 			String deliverySerial = stockInOutRecord.getDeliverSerial();
 			old_delivery = delivery2Mapper.selectByDeliveryPrimaryKey(deliverySerial);
+			clearStockOutInfoFormMateriels(old_delivery.getDeliveryMateriels());
 		}
-		clearStockInInfoFormMateriels(old_delivery.getDeliveryMateriels());
+		
 		
 		List<DeliveryMateriel> materiels = takeDeliveryParams.getDeliveryMateriels(); //这里是入库的物料信息
 		for(DeliveryMateriel materiel : materiels){
 			DeliveryMaterielExample example2 = new DeliveryMaterielExample();
 			example2.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
 			deliveryMaterielMapper.updateByExampleSelective(materiel, example2);
+			//materiel.setSerialNum(ApplicationUtils.random32UUID());
+			//materiel.setDeliverSerial(old_delivery.getTakeDelivery().getSerialNum());
+			//deliveryMaterielMapper.insert(materiel);
 		}
 		
 	}
@@ -285,6 +296,12 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	}  
 	
 	private void clearStockInInfoFormMateriels(List<DeliveryMateriel> deliveryMateriels){
+		for(DeliveryMateriel materiel : deliveryMateriels){
+			deliveryMaterielMapper.deleteByPrimaryKey(materiel.getStockInSerialNum());
+		}
+	}
+	
+	private void clearStockOutInfoFormMateriels(List<DeliveryMateriel> deliveryMateriels){
 		for(DeliveryMateriel materiel : deliveryMateriels){
 			DeliveryMaterielExample example2 = new DeliveryMaterielExample();
 			materiel.setStockCount("");
@@ -325,6 +342,52 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		record.setUpdater(currenLoginName);
 		record.setUpdateTime(new Date());
 		stockInOutRecordMapper.insert(record);
+	}
+
+	@Override
+	public void confirmTakeDelivery(TakeDeliveryParams takeDeliveryParams,
+			String currenLoginName) {
+		takeDeliveryParams = getConfirmTakeDeliveryData(takeDeliveryParams,currenLoginName);
+		//(takeDeliveryParams.getTakeDelivery());
+		//TakeDelivery takeDelivery = new TakeDelivery();
+		
+		//takeDelivery.setSerialNum(takeDeliveryParams.getTakeDelivery().getSerialNum());
+		//takeDelivery.set(takeDeliveryParams.getTakeDelivery().getSerialNum());
+		//takeDelivery.setSerialNum(takeDeliveryParams.getTakeDelivery().getSerialNum());
+		//takeDelivery.setSerialNum(takeDeliveryParams.getTakeDelivery().getSerialNum());
+		//takeDeliveryMapper.updateByPrimaryKeySelective(record)
+	   for(DeliveryMateriel materiel : takeDeliveryParams.getDeliveryMateriels()){
+			DeliveryMaterielExample example = new DeliveryMaterielExample();
+			example.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
+			deliveryMaterielMapper.updateByExampleSelective(materiel, example);
+			materiel.setSerialNum(ApplicationUtils.random32UUID());
+			
+			materiel.setDeliverSerial(takeDeliveryParams.getTakeDelivery().getSerialNum());
+			materiel.setDelFlg("0");
+			materiel.setCreator(currenLoginName);
+			materiel.setCreateTime(new Date());
+			materiel.setUpdater(currenLoginName);
+			materiel.setUpdateTime(new Date());
+			deliveryMaterielMapper.insert(materiel);
+		}
+		
+	}
+
+	private TakeDeliveryParams getConfirmTakeDeliveryData(
+			TakeDeliveryParams takeDeliveryParams, String currenLoginName) {
+		Date now = new Date();
+		
+		for(DeliveryMateriel materiel : takeDeliveryParams.getDeliveryMateriels()){
+			//materiel.setSerialNum(ApplicationUtils.random32UUID());
+			//materiel.setDeliverSerial(takeDeliveryParams.getTakeDelivery().getSerialNum());
+			//materiel.setCreator(currenLoginName);
+			//materiel.setCreateTime(now);
+			materiel.setUpdater(currenLoginName);
+			materiel.setUpdateTime(now);
+			//materiel.setDelFlg("0");
+		}
+		
+		return takeDeliveryParams;
 	}
 	
 

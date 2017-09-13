@@ -63,6 +63,18 @@ public class DeliveryMateriel {
     
     private Delivery delivery;
     
+    private  String stockInSerialNum;
+    private  String stockInQualifiedCount;
+    private  String stockInUnqualifiedCount;
+    private  String stockInCheckRemark;
+    private  String stockInWarehouseSerial;
+    private  String stockInPositionSerial;
+    private  String stockInCount;
+    private  String unstockInCount;
+    private  String  stockInRemark;
+    private Warehouse stockInWarehouse;
+    private Warehouseposition stockInPosition;
+    
     private int pageIndex;
     
     private int pageSize;
@@ -314,6 +326,94 @@ public class DeliveryMateriel {
 
 	public void setPosition(Warehouseposition position) {
 		this.position = position;
+	}
+
+	public String getStockInQualifiedCount() {
+		return stockInQualifiedCount;
+	}
+
+	public void setStockInQualifiedCount(String stockInQualifiedCount) {
+		this.stockInQualifiedCount = stockInQualifiedCount;
+	}
+
+	public String getStockInUnqualifiedCount() {
+		return stockInUnqualifiedCount;
+	}
+
+	public void setStockInUnqualifiedCount(String stockInUnqualifiedCount) {
+		this.stockInUnqualifiedCount = stockInUnqualifiedCount;
+	}
+
+	public String getStockInCheckRemark() {
+		return stockInCheckRemark;
+	}
+
+	public void setStockInCheckRemark(String stockInCheckRemark) {
+		this.stockInCheckRemark = stockInCheckRemark;
+	}
+
+	public String getStockInWarehouseSerial() {
+		return stockInWarehouseSerial;
+	}
+
+	public void setStockInWarehouseSerial(String stockInWarehouseSerial) {
+		this.stockInWarehouseSerial = stockInWarehouseSerial;
+	}
+
+	public String getStockInPositionSerial() {
+		return stockInPositionSerial;
+	}
+
+	public void setStockInPositionSerial(String stockInPositionSerial) {
+		this.stockInPositionSerial = stockInPositionSerial;
+	}
+
+	public String getStockInCount() {
+		return stockInCount;
+	}
+
+	public void setStockInCount(String stockInCount) {
+		this.stockInCount = stockInCount;
+	}
+
+	public String getUnstockInCount() {
+		return unstockInCount;
+	}
+
+	public void setUnstockInCount(String unstockInCount) {
+		this.unstockInCount = unstockInCount;
+	}
+
+	public String getStockInRemark() {
+		return stockInRemark;
+	}
+
+	public void setStockInRemark(String stockInRemark) {
+		this.stockInRemark = stockInRemark;
+	}
+
+	public String getStockInSerialNum() {
+		return stockInSerialNum;
+	}
+
+	public void setStockInSerialNum(String stockInSerialNum) {
+		this.stockInSerialNum = stockInSerialNum;
+	}
+
+	public Warehouse getStockInWarehouse() {
+		return stockInWarehouse;
+	}
+
+	public void setStockInWarehouse(Warehouse stockInWarehouse) {
+		this.stockInWarehouse = stockInWarehouse;
+	}
+
+	public Warehouseposition getStockInPosition() {
+		return stockInPosition;
+	}
+
+	public void setStockInPosition(Warehouseposition stockInPosition) {
+		this.stockInPosition = stockInPosition;
 	}
     
     

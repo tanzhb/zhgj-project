@@ -14,12 +14,10 @@ import org.springframework.stereotype.Service;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.dao.InvoiceBillingRecordMapper;
 import com.congmai.zhgj.web.dao.MaterielMapper;
-import com.congmai.zhgj.web.dao.OrderMaterielMapper;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
-import com.congmai.zhgj.web.model.OrderMateriel;
-import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.MaterielExample.Criteria;
+import com.congmai.zhgj.web.model.MaterielSelectExample;
 import com.congmai.zhgj.web.service.MaterielService;
 
 /**
@@ -72,6 +70,11 @@ public class MaterielServiceImpl implements MaterielService {
 	@Override
 	public List<Materiel> selectList(MaterielExample m) {
 		return MaterielMapper.selectByExample(m);
+	}
+	
+	@Override
+	public List<Materiel> selectList(MaterielSelectExample m) {
+		return MaterielMapper.selectBySelectExample(m);
 	}
 
 	@Override
@@ -157,6 +160,7 @@ public class MaterielServiceImpl implements MaterielService {
 				}
 			}
 		}
+	
 		return materiels;
 	}
 

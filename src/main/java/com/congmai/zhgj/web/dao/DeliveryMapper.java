@@ -63,6 +63,9 @@ public interface DeliveryMapper extends GenericDao<DeliveryMaterielVO, String> {
     //查询发货列表
     public List<DeliveryVO> findAllDeliveryList(String username);
     
+    //查询发货列表(加入数据权限)
+    public List<DeliveryVO> findAllDeliveryList(DeliveryVO deliveryVO);
+    
     //查询发货详情的发货物料
     public List<DeliveryMaterielVO> selectListForDetail(String serialNum);
     

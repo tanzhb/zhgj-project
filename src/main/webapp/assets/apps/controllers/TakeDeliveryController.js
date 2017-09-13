@@ -31,7 +31,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    		}
 	    		playArrivalDateSetting();
 	    		playWarehouseDateSetting();
-	 		}else if($location.path()=="/takeDeliveryView"){
+	 		}else if($location.path()=="/takeDeliveryView"||$location.path()=="/toTakeDelivery"){
 	 				takeDeliveryInfo($stateParams.serialNum);
 	 		}else{
 	 			var type = handle.getCookie("d_type");
@@ -156,7 +156,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        		for(var i in data.data.deliveryMateriels){
 	        			$scope.orderMateriels[i].materiel = data.data.deliveryMateriels[i].orderMateriel.materiel;
 	        			$scope.orderMateriels[i].amount = data.data.deliveryMateriels[i].orderMateriel.amount;
-	        			$scope.orderMateriels[i].serialNum = data.data.deliveryMateriels[i].orderMateriel.serialNum;
+	        			$scope.orderMateriels[i].serialNum = data.data.deliveryMateriels[i].serialNum;
+	        			$scope.orderMateriels[i].orderMaterielSerial = data.data.deliveryMateriels[i].orderMateriel.serialNum;
 	        		}
 	        		$scope.takeDeliver = data.data.takeDelivery;
 	        		//$scope.takeDeliver.warehouseSerial = $scope.takeDeliver.warehouse.serialNum;
@@ -182,7 +183,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        
 
 	        /**
-	         * 确认收货
+	         * 确认发货
 	         */
 			$scope.saveTakeDelivery = function() {
 				if($('#takeDeliveryForm').valid()){
@@ -195,7 +196,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					var param
 					for(var i=0;i < $scope.orderMateriels.length;i++){
 						param = {};
-						param.orderMaterielSerial = $scope.orderMateriels[i].serialNum;
+						param.orderMaterielSerial = $scope.orderMateriels[i].orderMaterielSerial;
 						param.batchNum = $scope.orderMateriels[i].batchNum;
 						param.manufactureDate = $scope.orderMateriels[i].manufactureDate;
 						param.deliverCount = $scope.orderMateriels[i].deliverCount;
@@ -208,6 +209,49 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					
 					var promise = takeDeliveryService
 							.saveTakeDelivery(params);
+					promise.then(function(data) {
+						if(data.data == "1"){
+							toastr.success("收货成功！");
+							$state.go("takeDelivery");
+						}else{
+							toastr.error("收货失败！请联系管理员");
+						}
+						handle.unblockUI();
+					}, function(data) {
+						// 调用承诺接口reject();
+						handle.unblockUI();
+						toastr.error("收货失败！请联系管理员");
+						console.log(data);
+					});
+				}
+			}; 
+			
+			/**
+			 * 确认收货
+			 */
+			$scope.confirmTakeDelivery = function() {
+				if($('#takeDeliveryForm').valid()){
+					handle.blockUI();
+					var params = {};debugger;
+					params.takeDelivery = $scope.takeDeliver;
+					params.deliveryMateriels = [];
+					var param;
+					for(var i=0;i < $scope.orderMateriels.length;i++){debugger;
+						param = {};
+						param.orderMaterielSerial = $scope.orderMateriels[i].orderMaterielSerial;
+						param.serialNum = $scope.orderMateriels[i].serialNum;
+						param.batchNum = $scope.orderMateriels[i].batchNum;
+						param.manufactureDate = $scope.orderMateriels[i].manufactureDate;
+						param.deliverCount = $scope.orderMateriels[i].deliverCount;
+						param.deliverRemark = $scope.orderMateriels[i].deliverRemark;
+						param.acceptCount = $scope.orderMateriels[i].acceptCount;
+						param.refuseCount = $scope.orderMateriels[i].deliverCount-$scope.orderMateriels[i].acceptCount;
+						param.takeRemark = $scope.orderMateriels[i].takeRemark;
+						params.deliveryMateriels.push(param);
+					}
+					
+					var promise = takeDeliveryService
+					.saveConfirmTakeDelivery(params);
 					promise.then(function(data) {
 						if(data.data == "1"){
 							toastr.success("收货成功！");
@@ -258,7 +302,23 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					$state.go("takeDeliveryAdd",{serialNum:serialNum});
 				}
 			}
+			
 	        		
+			/**
+			 * 去编辑收货计划
+			 */
+			$scope.takeDelivery = function(){debugger;
+				var id_count = $('#takeDeliveryTable input[name="serialNum"]:checked').length;
+				if(id_count==0){
+					toastr.warning("请选择您要收货的记录");
+				}else if(id_count>1){
+					toastr.warning("只能选择一条数据进行收货");
+				}else{
+					var serialNum = $('#takeDeliveryTable input[name="serialNum"]:checked').val();
+					$state.go("toTakeDelivery",{serialNum:serialNum});
+				}
+			}
+			
 	        
 	        /**
 	         * 批量删除收货计划
@@ -989,6 +1049,16 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		    								}
 	  		    								return data;
 	  		    								
+	  		    							}
+	  		    						},{
+	  		    							'targets' : 8,
+	  		    							'render' : function(data,
+	  		    									type, row, meta) {
+	  		    									if(data==undefined){
+	  		  										return "";
+	  		  									}
+	  		  	  								return data;
+	  		  	
 	  		    							}
 	  		    						},{
 	  		    							'targets' : 9,

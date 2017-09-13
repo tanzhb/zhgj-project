@@ -15,6 +15,9 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="actualDate" property="actualDate" jdbcType="TIMESTAMP" />
+	<result column="taker" property="taker" jdbcType="VARCHAR" />
+	<result column="takeRemark" property="takeRemark" jdbcType="VARCHAR" />
   </resultMap>
   
   <resultMap id="BaseResultMap2" type="com.congmai.zhgj.web.model.Delivery" >
@@ -46,6 +49,9 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="actualDate" property="actualDate" jdbcType="TIMESTAMP" />
+	<result column="taker" property="taker" jdbcType="VARCHAR" />
+	<result column="takeRemark" property="takeRemark" jdbcType="VARCHAR" />
     <association property="deliveryTransport"  javaType="com.congmai.zhgj.web.model.DeliveryTransport">
     	 <result column="dtSerialNum" property="serialNum" jdbcType="VARCHAR" />
     	 <result column="transportType" property="transportType" jdbcType="VARCHAR" />
@@ -91,9 +97,19 @@
 	     <result column="stockCount" property="stockCount" jdbcType="VARCHAR" />
 	     <result column="unstockCount" property="unstockCount" jdbcType="VARCHAR" />
 	     <result column="stockRemark" property="stockRemark" jdbcType="VARCHAR" />
+	     <result column="stockInQualifiedCount" property="stockInQualifiedCount" jdbcType="VARCHAR" />
+	     <result column="stockInUnqualifiedCount" property="stockInUnqualifiedCount" jdbcType="VARCHAR" />
+	     <result column="stockInCheckRemark" property="stockInCheckRemark" jdbcType="VARCHAR" />
+	     <result column="stockInWarehouseSerial" property="stockInWarehouseSerial" jdbcType="VARCHAR" />
+	     <result column="stockInPositionSerial" property="stockInPositionSerial" jdbcType="VARCHAR" />
+	     <result column="stockInCount" property="stockInCount" jdbcType="VARCHAR" />
+	     <result column="unstockInCount" property="unstockInCount" jdbcType="VARCHAR" />
+	     <result column="stockInRemark" property="stockInRemark" jdbcType="VARCHAR" />
 	     <result column="dmRemark" property="remark" jdbcType="VARCHAR" />
 	     <association column="dmWarehouseSerial" property="warehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>
 	     <association column="dmPositionSerial" property="position" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectPositionByPositionSerial" ></association>
+	     <association column="stockInWarehouseSerial" property="stockInWarehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>
+	     <association column="stockInPositionSerial" property="stockInPosition" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectPositionByPositionSerial" ></association>
 	     <association column="orderMaterielSerial" property="orderMateriel" select="com.congmai.zhgj.web.dao.OrderMaterielMapper.selectByPrimaryKey" ></association>
     </collection>
   </resultMap>
@@ -191,7 +207,7 @@
   </sql>
   <sql id="Base_Column_List" >
     serialNum, deliverSerial, warehouseSerial, takeDeliverDate, receiver, contactNum, 
-    takeDeliverNum, remark, delFlg, creator, createTime, updater, updateTime
+    takeDeliverNum, remark, delFlg, creator, createTime, updater, updateTime, actualDate, taker, takeRemark
   </sql>
     <select id="selectListByExample" resultMap="BaseResultMap2" parameterType="com.congmai.zhgj.web.model.DeliverySelectExample" >
     select
@@ -201,7 +217,7 @@
     dt.transportType,d.supplyComId,
 	td.serialNum as tdSerialNum,td.warehouseSerial as tdWarehouseSerial,td.takeDeliverDate,td.receiver as tdReceiver,td.contactNum as tdContactNum,td.takeDeliverNum,td.remark as take_delivery_remark
     from takeDelivery td
-    left join delivery  d on d.takeDeliverSerial = td.serialNum
+    left join delivery  d on d.serialNum = td.deliverSerial
     left join deliveryTransport dt on d.serialNum = dt.deliverSerial
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -218,13 +234,15 @@
     d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.batchNum,    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.batchNum,dm.serialNum as dmSerialNum,
     dm.manufactureDate,dm.deliverCount,dm.deliverRemark,
     dm.acceptCount,dm.refuseCount,dm.takeRemark,dm.qualifiedCount,dm.unqualifiedCount,dm.checkRemark,dm.warehouseSerial,dm.orderMaterielSerial,
-
-    	dt.serialNum as dtSerialNum,dt.transportType,dt.transport,dt.port,dt.shipNumber,dt.playArrivalDate,dt.playWarehouseDate,dt.remark as delivery_transport_remark,dt.contactNum as dtContactNum,dt.contact as dtContact,
-		td.serialNum as tdSerialNum,td.warehouseSerial as tdWarehouseSerial,td.takeDeliverDate,td.receiver as tdReceiver,td.contactNum as tdContactNum,td.takeDeliverNum,td.remark as take_delivery_remark
+    dm2.serialNum as stockInSerialNum,dm2.qualifiedCount as stockInQualifiedCount,dm2.unqualifiedCount as stockInUnqualifiedCount,dm2.checkRemark as stockInCheckRemark,dm2.warehouseSerial as stockInWarehouseSerial,
+	dm2.positionSerial as stockInPositionSerial,dm2.stockCount as stockInCount,dm2.unstockCount as unstockInCount,dm2.stockRemark as stockInRemark,
+    dt.serialNum as dtSerialNum,dt.transportType,dt.transport,dt.port,dt.shipNumber,dt.playArrivalDate,dt.playWarehouseDate,dt.remark as delivery_transport_remark,dt.contactNum as dtContactNum,dt.contact as dtContact,
+	td.serialNum as tdSerialNum,td.warehouseSerial as tdWarehouseSerial,td.takeDeliverDate,td.receiver as tdReceiver,td.contactNum as tdContactNum,td.takeDeliverNum,td.remark as take_delivery_remark, td.actualDate, td.taker, td.takeRemark
     from takeDelivery td
-    left join delivery  d on d.takeDeliverSerial = td.serialNum
+    left join delivery  d on d.serialNum = td.deliverSerial
     left join deliveryTransport dt on d.serialNum = dt.deliverSerial  and dt.delFlg = "0"
     left join deliveryMateriel dm on d.serialNum = dm.deliverSerial and dm.delFlg = "0"
+    left join deliveryMateriel dm2 on td.serialNum = dm2.deliverSerial and dm.orderMaterielSerial=dm2.orderMaterielSerial and dm.delFlg = "0"
     where td.serialNum = #{serialNum,jdbcType=VARCHAR} 
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
@@ -237,15 +255,17 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.congmai.zhgj.web.model.TakeDelivery" >
+ <insert id="insert" parameterType="com.congmai.zhgj.web.model.TakeDelivery" >
     insert into takeDelivery (serialNum, deliverSerial, warehouseSerial, 
       takeDeliverDate, receiver, contactNum, 
-      takeDeliverNum, remark, delFlg, 
+      takeDeliverNum, remark, actualDate, 
+      taker, takeRemark, delFlg, 
       creator, createTime, updater, 
       updateTime)
     values (#{serialNum,jdbcType=VARCHAR}, #{deliverSerial,jdbcType=VARCHAR}, #{warehouseSerial,jdbcType=VARCHAR}, 
       #{takeDeliverDate,jdbcType=DATE}, #{receiver,jdbcType=VARCHAR}, #{contactNum,jdbcType=VARCHAR}, 
-      #{takeDeliverNum,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, 
+      #{takeDeliverNum,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{actualDate,jdbcType=TIMESTAMP}, 
+      #{taker,jdbcType=VARCHAR}, #{takeRemark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
@@ -275,6 +295,15 @@
       </if>
       <if test="remark != null" >
         remark,
+      </if>
+      <if test="actualDate != null" >
+        actualDate,
+      </if>
+      <if test="taker != null" >
+        taker,
+      </if>
+      <if test="takeRemark != null" >
+        takeRemark,
       </if>
       <if test="delFlg != null" >
         delFlg,
@@ -317,6 +346,15 @@
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="actualDate != null" >
+        #{actualDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taker != null" >
+        #{taker,jdbcType=VARCHAR},
+      </if>
+      <if test="takeRemark != null" >
+        #{takeRemark,jdbcType=VARCHAR},
+      </if>
       <if test="delFlg != null" >
         #{delFlg,jdbcType=VARCHAR},
       </if>
@@ -347,7 +385,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+ <update id="updateByExampleSelective" parameterType="map" >
     update takeDelivery
     <set >
       <if test="record.serialNum != null" >
@@ -373,6 +411,15 @@
       </if>
       <if test="record.remark != null" >
         remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actualDate != null" >
+        actualDate = #{record.actualDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.taker != null" >
+        taker = #{record.taker,jdbcType=VARCHAR},
+      </if>
+      <if test="record.takeRemark != null" >
+        takeRemark = #{record.takeRemark,jdbcType=VARCHAR},
       </if>
       <if test="record.delFlg != null" >
         delFlg = #{record.delFlg,jdbcType=VARCHAR},
@@ -404,6 +451,9 @@
       contactNum = #{record.contactNum,jdbcType=VARCHAR},
       takeDeliverNum = #{record.takeDeliverNum,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
+      actualDate = #{record.actualDate,jdbcType=TIMESTAMP},
+      taker = #{record.taker,jdbcType=VARCHAR},
+      takeRemark = #{record.takeRemark,jdbcType=VARCHAR},
       delFlg = #{record.delFlg,jdbcType=VARCHAR},
       creator = #{record.creator,jdbcType=VARCHAR},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
@@ -437,6 +487,15 @@
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="actualDate != null" >
+        actualDate = #{actualDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taker != null" >
+        taker = #{taker,jdbcType=VARCHAR},
+      </if>
+      <if test="takeRemark != null" >
+        takeRemark = #{takeRemark,jdbcType=VARCHAR},
+      </if>
       <if test="delFlg != null" >
         delFlg = #{delFlg,jdbcType=VARCHAR},
       </if>
@@ -464,6 +523,9 @@
       contactNum = #{contactNum,jdbcType=VARCHAR},
       takeDeliverNum = #{takeDeliverNum,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
+      actualDate = #{actualDate,jdbcType=TIMESTAMP},
+      taker = #{taker,jdbcType=VARCHAR},
+      takeRemark = #{takeRemark,jdbcType=VARCHAR},
       delFlg = #{delFlg,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP},
@@ -477,10 +539,13 @@
     dm.manufactureDate,dm.deliverCount,dm.deliverRemark,
     dm.acceptCount,dm.refuseCount,dm.takeRemark,dm.qualifiedCount,dm.unqualifiedCount,dm.checkRemark,dm.warehouseSerial as dmWarehouseSerial,
 	dm.positionSerial as dmPositionSerial,dm.stockCount,dm.unstockCount,dm.stockRemark,dm.remark as dmRemark,dm.warehouseSerial as dmWarehouseSerial,dm.orderMaterielSerial,
+	dm2.serialNum as stockInSerialNum,dm2.qualifiedCount as stockInQualifiedCount,dm2.unqualifiedCount as stockInUnqualifiedCount,dm2.checkRemark as stockInCheckRemark,dm2.warehouseSerial as stockInWarehouseSerial,
+	dm2.positionSerial as stockInPositionSerial,dm2.stockCount as stockInCount,dm2.unstockCount as unstockInCount,dm2.stockRemark as stockInRemark,
 	td.serialNum as tdSerialNum,td.contactNum as tdContactNum,td.takeDeliverNum
     from takeDelivery td
-    left join delivery  d on d.takeDeliverSerial = td.serialNum
+    left join delivery  d on d.serialNum = td.deliverSerial
     left join deliveryMateriel dm on d.serialNum = dm.deliverSerial and dm.delFlg = "0"
+    left join deliveryMateriel dm2 on td.serialNum = dm2.deliverSerial and dm.orderMaterielSerial=dm2.orderMaterielSerial and dm.delFlg = "0"
     where td.serialNum = #{serialNum,jdbcType=VARCHAR} 
   </select>
 </mapper>

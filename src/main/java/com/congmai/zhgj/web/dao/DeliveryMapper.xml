@@ -17,9 +17,9 @@
     <!--添加基本信息  -->
     <insert id="insertBasicInfo" parameterType="com.congmai.zhgj.web.model.DeliveryVO">
     INSERT INTO delivery
-    (serialNum,orderSerial,deliverNum,supplyComId,shipper,receiver,maker,makeDate,approval,approvalDate,warehouseSerial,remark,deliverDate,
+    (serialNum,orderSerial,deliverNum,deliverType,supplyComId,shipper,receiver,maker,makeDate,approval,approvalDate,warehouseSerial,remark,deliverDate,
     materielCount,packageCount,packageType,packageSpecifications,materielWeight,serviceMoney,deliverer,contactNum,deliverRemark,creator,createTime,updater,updateTime,status) VALUES
-    (#{serialNum},#{orderSerial},#{deliverNum},#{supplyComId},#{shipper},#{receiver},#{maker},#{makeDate},#{approval},#{approvalDate},#{warehouseSerial},#{remark},#{deliverDate},#{materielCount},
+    (#{serialNum},#{orderSerial},#{deliverNum},#{deliverType},#{supplyComId},#{shipper},#{receiver},#{maker},#{makeDate},#{approval},#{approvalDate},#{warehouseSerial},#{remark},#{deliverDate},#{materielCount},
     #{packageCount},#{packageType},#{packageSpecifications},#{materielWeight},#{serviceMoney},#{deliverer},#{contactNum},#{deliverRemark},#{creator},NOW(),#{creator},NOW(),'0')
     </insert>
     
@@ -131,12 +131,12 @@
     <!--查询详情  -->
     <select id="selectDetailById" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.DeliveryVO">
     SELECT
-	a.serialNum,a.deliverNum,f.orderNum,a.supplyComId,a.shipper,a.receiver,a.maker,a.makeDate,a.approval,a.approvalDate,a.warehouseSerial,a.orderSerial,c.warehouseSerial AS takeWarehouseSerial,
+	a.serialNum,a.deliverNum,a.deliverType,f.orderNum,a.supplyComId,a.shipper,a.receiver,a.maker,a.makeDate,a.approval,a.approvalDate,a.warehouseSerial,a.orderSerial,c.warehouseSerial AS takeWarehouseSerial,
 	a.remark,d.warehouseName deliveryWarehouseName,d.address deliveryAddress,a.deliverDate,a.materielCount,a.packageCount,a.packageType,a.packageSpecifications,
 	a.materielWeight,a.serviceMoney,a.deliverer,a.contactNum,a.deliverRemark,a.status,
 	b.serialNum AS transportserialNum,b.transportType,b.transport,b.port,b.shipNumber,b.playArrivalDate,b.playWarehouseDate,
 	b.contact transportContact,b.contactNum transportContactNum,b.remark transportRemark,
-	e.warehouseName takeWarehouseName,e.address takeAddress,c.takeDeliverDate,c.receiver takeDeliveryReceiver,
+	e.serialNum takeWarehouseSerial,e.warehouseName takeWarehouseName,e.address takeAddress,c.takeDeliverDate,c.receiver takeDeliveryReceiver,
 	c.contactNum takeDeliveryContactNum,c.remark takeDeliveryRemark,c.serialNum AS takeDeliverSerialNum
 	FROM delivery a
 	LEFT JOIN deliveryTransport b ON b.deliverSerial=a.serialNum
@@ -148,7 +148,7 @@
     </select>
     
     <!--查询发货列表  -->
-   <select id="findAllDeliveryList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.DeliveryVO">
+   <select id="findAllDeliveryList" parameterType="com.congmai.zhgj.web.model.DeliveryVO" resultType="com.congmai.zhgj.web.model.DeliveryVO">
    SELECT
 	a.serialNum,a.deliverNum,a.orderSerial,b.orderNum,COUNT(DISTINCT c.serialNum) AS materielCount,a.packageCount,
 	a.receiver,(SELECT address FROM warehouse WHERE serialNum=a.warehouseSerial) AS deliveryAddress,
@@ -160,7 +160,13 @@
 	LEFT JOIN takeDelivery d ON a.serialNum=d.deliverSerial 
 	LEFT JOIN deliveryTransport e ON e.deliverSerial=a.serialNum
 	LEFT JOIN  company   com  ON  com.comId=a.supplyComId
-	WHERE a.delFlg='0' AND a.creator=#{userName}
+	WHERE a.delFlg='0' AND a.creator=#{creator}
+	<if test="supplyComIds != null" >
+        and supplyComId in
+         <foreach item="supplyComIds" index="index" collection="list" open="(" separator="," close=")">  
+		  #{item}  
+		 </foreach> 
+    </if>
 	GROUP BY(a.serialNum)
 	ORDER BY a.createTime DESC
     </select>

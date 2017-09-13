@@ -75,6 +75,7 @@ import com.congmai.zhgj.web.service.IVacationService;
 import com.congmai.zhgj.web.service.OrderFileService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
+import com.congmai.zhgj.web.service.UserCompanyService;
 
 /**
  * 
@@ -110,6 +111,8 @@ public class OrderController {
     private OrderFileService orderFileService;
     @Resource
     private ClauseFrameworkService clauseFrameworkService;
+    @Resource
+    private UserCompanyService userCompanyService;
     
 	/**
 	 * 合同管理service
@@ -217,13 +220,19 @@ public class OrderController {
 //    	m.or(criteria2);*/
 //    	//排序字段
 //    	m.setOrderByClause("updateTime DESC");
-    	
-    	
+    	User user = UserUtil.getUserFromSession();
+    	String comId = null;
+    	if(user!=null){
+			comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+			if(comId==null){
+				comId = "null";
+			}
+		}
     	OrderInfo parm =new OrderInfo();
     	if("sale".equals(type)){//平台销售订单供应商为空
-    		parm.setSupplyComId("null");
+    		parm.setSupplyComId(comId);
     	}else if("buy".equals(type)){//平台采购订单采购商为空
-    		parm.setBuyComId("null");
+    		parm.setBuyComId(comId);
     	}
     	if("1".equals(fram)){
     		orderInfoList = orderService.selectFramList(parm);
