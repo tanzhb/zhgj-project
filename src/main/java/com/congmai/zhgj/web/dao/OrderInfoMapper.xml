@@ -126,7 +126,7 @@ otherAmount, remark, orderRemark,
   <select id="selectFramByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.OrderInfoExample" >
     select
     orderInfo.serialNum, orderInfo.contractSerial, orderInfo.supplyComId, orderInfo.buyComId, orderInfo.orderNum, orderInfo.orderType, orderInfo.seller, orderInfo.entrustParty, 
-    orderInfo.serviceModel, orderInfo.demandPlanSerial, orderInfo.saleApplySerial, orderInfo.settlementClause, orderInfo.orderSerial, orderInfo.deliveryMode, 
+    orderInfo.serviceModel, orderInfo.demandPlanSerial, orderInfo.saleApplySerial, orderInfo.settlementClause, orderInfo.orderSerial, orderInfo.deliveryMode, orderInfo.materielCount,orderInfo.orderAmount,
     orderInfo.transportMode, orderInfo.orderDate, orderInfo.maker, orderInfo.rate, orderInfo.currency, orderInfo.exchangeRate, orderInfo.remark,orderRemark, orderInfo.status, orderInfo.delFlg, 
     orderInfo.creator, orderInfo.createTime, orderInfo.updater, orderInfo.updateTime
     from orderInfo
@@ -147,7 +147,7 @@ otherAmount, remark, orderRemark,
   <select id="selectCommenByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.OrderInfo" >
     select
     orderInfo.serialNum, orderInfo.contractSerial, orderInfo.supplyComId, orderInfo.buyComId, orderInfo.orderNum, orderInfo.orderType, orderInfo.seller, orderInfo.entrustParty, 
-    orderInfo.serviceModel, orderInfo.demandPlanSerial, orderInfo.saleApplySerial, orderInfo.settlementClause, orderInfo.orderSerial, orderInfo.deliveryMode, 
+    orderInfo.serviceModel, orderInfo.demandPlanSerial, orderInfo.saleApplySerial, orderInfo.settlementClause, orderInfo.orderSerial, orderInfo.deliveryMode, orderInfo.materielCount,orderInfo.orderAmount,
     orderInfo.transportMode, orderInfo.orderDate, orderInfo.maker, orderInfo.rate, orderInfo.currency, orderInfo.exchangeRate, orderInfo.remark,orderInfo.orderRemark, orderInfo.status, orderInfo.delFlg, 
     orderInfo.creator, orderInfo.createTime, orderInfo.updater, orderInfo.updateTime
     from orderInfo
