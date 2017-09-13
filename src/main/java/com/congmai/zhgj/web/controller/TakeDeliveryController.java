@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.controller;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,10 +9,15 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONObject;
+
 import org.activiti.engine.ActivitiException;
+import org.activiti.engine.ActivitiObjectNotFoundException;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -22,15 +28,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
+import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.Constants;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.UserUtil;
+import com.congmai.zhgj.web.model.BaseVO;
+import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryMaterielExample;
@@ -38,16 +51,19 @@ import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderInfoExample;
 import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
+import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.StockInOutRecordExample;
 import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.model.TakeDeliveryExample;
 import com.congmai.zhgj.web.model.TakeDeliveryParams;
+import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.WarehouseExample;
 import com.congmai.zhgj.web.model.Warehouseposition;import com.congmai.zhgj.web.model.WarehousepositionExample;
 import com.congmai.zhgj.web.service.DeliveryMaterielService;
 import com.congmai.zhgj.web.service.DeliveryTransportService;
+import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.TakeDeliveryService;
@@ -94,6 +110,11 @@ public class TakeDeliveryController {
 	
     @Autowired
     protected IdentityService identityService;
+	@Autowired
+	protected TaskService taskService;
+
+	@Autowired
+	private IProcessService processService;
 	
 	
 	
@@ -178,6 +199,16 @@ public class TakeDeliveryController {
     @RequestMapping("takeDelivery")
     public String takeDelivery(HttpServletRequest request) {
     	return "takeDelivery/takeDelivery";
+    }
+    
+    /**
+     * @Description (收货审批)
+     * @param request
+     * @return
+     */
+    @RequestMapping("takeDeliveryAudit")
+    public String takeDeliveryAudit(HttpServletRequest request) {
+    	return "takeDelivery/takeDeliveryAudit";
     }
 
     /**
@@ -658,9 +689,8 @@ public class TakeDeliveryController {
         String businessKey = takeDelivery.getBusinessKey();
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(Constants.TAKEDELIVERY_KEY, businessKey, variables);
         String processInstanceId = processInstance.getId();
-        //takeDelivery.setProcessInstanceId(processInstanceId);
-        //this.takeDeliveryService.
-
+        takeDelivery.setProcessInstanceId(processInstanceId);
+        this.takeDeliveryService.updateByPrimaryKeySelective(takeDelivery);
         logger.info("processInstanceId: "+processInstanceId);
         //最后要设置null，就是这么做，还没研究为什么
         this.identityService.setAuthenticatedUserId(null);
@@ -674,9 +704,25 @@ public class TakeDeliveryController {
     	String flag = saveTakeDelivery(map, params, request);
     	if("1".equals(flag)){
     		 try {
-    			 startTakeDelivery(JSON.parseObject(params, TakeDeliveryParams.class).getTakeDelivery());
-//    	            message.setStatus(Boolean.TRUE);
-//    				message.setMessage("请假流程已启动，流程ID：" + processInstanceId);
+    			 TakeDelivery takeDelivery = this.takeDeliveryService.selectByPrimaryKey(JSON.parseObject(params, TakeDeliveryParams.class).getTakeDelivery().getSerialNum());
+    			 
+    				User user = UserUtil.getUserFromSession();
+    				String reason = (String) map.get("reason");
+    				String serialNum = (String) map.get("serialNum");
+
+    				takeDelivery.setUserId(user.getUserId());
+    				takeDelivery.setUser_name(user.getUserName());
+    				takeDelivery.setTitle(user.getUserName() + " 的应付款申请");
+    				takeDelivery.setBusinessType(BaseVO.ACCOUNTPAYABLE);
+    				takeDelivery.setStatus(BaseVO.PENDING);
+    				takeDelivery.setApplyDate(new Date());
+    				takeDelivery.setBusinessKey(serialNum);
+    				takeDelivery.setReason(reason);
+    				
+    			 String processInstanceId = startTakeDelivery(takeDelivery);
+ //   	            message.setStatus(Boolean.TRUE);
+//   				message.setMessage("请假流程已启动，流程ID：" + processInstanceId);
+    			 logger.info("processInstanceId: " + processInstanceId);
     	        } catch (ActivitiException e) {
 //    	        	message.setStatus(Boolean.FALSE);
     	            if (e.getMessage().indexOf("no processes deployed with key") != -1) {
@@ -698,6 +744,99 @@ public class TakeDeliveryController {
     	}
     	return flag;
     }
+    
+	/**
+	 * 审批请假流程
+	 * 
+	 * @param taskId
+	 * @param model
+	 * @return
+	 * @throws NumberFormatException
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/toApproval/{taskId}", method = RequestMethod.POST, produces = "application/json")
+	public @ResponseBody Map<String, Object> toApproval(
+			@PathVariable("taskId") String taskId)
+			throws NumberFormatException, Exception {
+		Task task = this.taskService.createTaskQuery().taskId(taskId)
+				.singleResult();
+		// 根据任务查询流程实例
+		String processInstanceId = task.getProcessInstanceId();
+		ProcessInstance pi = this.runtimeService.createProcessInstanceQuery()
+				.processInstanceId(processInstanceId).singleResult();
+		PaymentRecord paymentRecord = (PaymentRecord) this.runtimeService
+				.getVariable(pi.getId(), "entity");
+		paymentRecord.setTask(task);
+		paymentRecord.setProcessInstanceId(processInstanceId);
+		List<CommentVO> commentList = this.processService
+				.getComments(processInstanceId);
+		String taskDefinitionKey = task.getTaskDefinitionKey();
+		logger.info("taskDefinitionKey: " + taskDefinitionKey);
+		String result = null;
+		if ("modifyApply".equals(taskDefinitionKey)) {
+			result = "modify";
+		} else {
+			result = "audit";
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("actionType", result);
+		map.put("paymentRecord", paymentRecord);
+		map.put("commentList", commentList);
+		return map;
+	}
+
+	@RequestMapping(value = "/complete", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+	@ResponseBody
+	public String complete(@RequestParam("serialNum") String serialNum,
+			@RequestParam("content") String content,
+			@RequestParam("isPass") Boolean completeFlag,
+			@RequestParam("taskId") String taskId,
+			RedirectAttributes redirectAttributes) throws Exception {
+		User user = UserUtil.getUserFromSession();
+		String result = "";
+		try {
+			TakeDelivery takeDelivery = this.takeDeliveryService.selectByPrimaryKey(serialNum);
+			TakeDelivery baseTakeDelivery = (TakeDelivery) this.runtimeService
+					.getVariable(takeDelivery.getProcessInstanceId(), "entity");
+			Map<String, Object> variables = new HashMap<String, Object>();
+			variables.put("isPass", completeFlag);
+			if (!completeFlag) {
+				baseTakeDelivery.setTitle(baseTakeDelivery.getUser_name()
+						+ " 的收货申请失败,需修改后重新提交！");
+				takeDelivery.setStatus(BaseVO.APPROVAL_FAILED);
+				variables.put("entity", baseTakeDelivery);
+			}
+			// 完成任务
+			this.processService.complete(taskId, content, user.getUserId()
+					.toString(), variables);
+
+			if (completeFlag) {
+				// 此处需要修改，不能根据人来判断审批是否结束。应该根据流程实例id(processInstanceId)来判定。
+				// 判断指定ID的实例是否存在，如果结果为空，则代表流程结束，实例已被删除(移到历史库中)
+				ProcessInstance pi = this.runtimeService
+						.createProcessInstanceQuery()
+						.processInstanceId(takeDelivery.getProcessInstanceId())
+						.singleResult();
+				if (BeanUtils.isBlank(pi)) {
+					takeDelivery.setStatus(BaseVO.APPROVAL_SUCCESS);
+				}
+			}
+
+			this.takeDeliveryService.updateByPrimaryKeySelective(takeDelivery);
+
+			result = "任务办理完成！";
+		} catch (ActivitiObjectNotFoundException e) {
+			result = "此任务不存在，请联系管理员！";
+			throw e;
+		} catch (ActivitiException e) {
+			result = "此任务正在协办，您不能办理此任务！";
+			throw e;
+		} catch (Exception e) {
+			result = "任务办理失败，请联系管理员！";
+			throw e;
+		}
+		return result;
+	}
 
     
 

@@ -31,8 +31,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    		}
 	    		playArrivalDateSetting();
 	    		playWarehouseDateSetting();
-	 		}else if($location.path()=="/takeDeliveryView"||$location.path()=="/toTakeDelivery"){
-	 				takeDeliveryInfo($stateParams.serialNum);
+	 		}else if($location.path()=="/takeDeliveryView"||$location.path()=="/toTakeDelivery"||$location.path()=="/takeDeliveryAudit"){
+	 				takeDeliveryInfo($stateParams.serialNum,null,$stateParams.taskId, $stateParams.comments);
 	 		}else{
 	 			var type = handle.getCookie("d_type");
 	 			if(type=="stockIn"){
@@ -148,7 +148,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        /**
 	         * 查看收货详情
 	         */
-	        var takeDeliveryInfo = function(serialNum,type){
+	        var takeDeliveryInfo = function(serialNum,type,taskId,comments){
 	        	var promise = takeDeliveryService.getTakeDeliveryInfo(serialNum);
 	        	promise.then(function(data){
 	        	$scope.deliver = data.data;
@@ -179,6 +179,14 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    		 		$("#playArrivalDate").datepicker('setDate',playArrivalDate);
 	    		    	$("#playWarehouseDate").datepicker('setStartDate',playArrivalDate);
 	    		    }
+	        	}
+	        	if(!isNull(taskId)&&!isNull(comments)){
+	        		$("#serialNum").val(serialNum);//赋值给隐藏input，通过和不通过时调用
+					$("#taskId").val(ids);//赋值给隐藏input，通过和不通过时调用
+					
+					if(comments == ""){
+						$("#comment_audit").html( "无评论");
+					}else $("#comment_audit").html(comments);
 	        	}
 	        	},function(data){
 	        		//调用承诺接口reject();
@@ -1687,6 +1695,25 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
   		              })	  			
   		    //  };
 	  		}
+	  		
+	  		//审批通过
+	  		$scope.apPass = function() {
+	  		   
+	  		    var mydata={"serialNum":$("#serialNum").val(),"content":$("#content").val(),
+	  					"isPass":true, "taskId":$("#taskId").val()};
+	  		    var _url = ctx + "rest/takeDelivery/complete";
+	  		    doVacation(_url, mydata);
+	  		};
+	  		//审批不通过
+	  		$scope.apUnPass = function() {
+	  			var mydata={"serialNum":$("#serialNum").val(),"content":$("#content").val(),
+	  					"isPass":false, "taskId":$("#taskId").val()};
+	  			var _url = ctx + "rest/takeDelivery/complete";
+	  			doVacation(_url, mydata);
+	  		};
+	  		$scope.closeAuditDialogue = function() {
+	  			$state.go("takeDelivery");
+	  		};
 	  		/************************************************申请JS***********************************************/
 
 }]); 

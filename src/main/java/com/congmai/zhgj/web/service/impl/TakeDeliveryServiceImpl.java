@@ -390,6 +390,18 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		
 		return takeDeliveryParams;
 	}
+
+	@Override
+	public TakeDelivery selectByPrimaryKey(String serialNum) {
+		
+		return takeDeliveryMapper.selectByPrimaryKey(serialNum);
+	}
+
+	@Override
+	public int updateByPrimaryKeySelective(TakeDelivery record) {
+		
+		return takeDeliveryMapper.updateByPrimaryKeySelective(record);
+	}
 	
 
 }

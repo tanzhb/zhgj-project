@@ -22,4 +22,13 @@ public class Constants {
 	public static final String ACCOUNTPAYABLE = "com.congmai.zhgj.accountPayable";
 	
 	public static long SYSY_INIT_TIME = new Date().getTime();
+	
+	/***************** 收货编号生成起始索引 *****************/
+	public static int TAKEDELIVERY_NUMBER_INDEX = 1; 
+	
+	/***************** 编号生成时间记录 *****************/
+	public static String NOW_DATE_STRING = "19700101";
+	
+	/***************** 收货流程KEY *****************/
+	public static final String TAKEDELIVERY_KEY = "com.congmai.zhgj.takeDelivery";
 }

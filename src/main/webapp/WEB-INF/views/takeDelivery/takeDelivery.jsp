@@ -615,10 +615,10 @@
 					  </div> 
          			<!-- 物料信息END -->
          			 <div class="row" align="center">
-         			 	<button   class="btn blue  btn-sm btn-circle" data-toggle="modal" data-target="#apply">
-                              		申请收货 </button>
+         			 	<!-- <button   class="btn blue  btn-sm btn-circle" data-toggle="modal" data-target="#apply">
+                              		申请收货 </button> -->
          			 	<button   class="btn green  btn-sm btn-circle" ng-click="confirmTakeDelivery()">
-                              		<i class="fa fa-check"></i> 保存 </button>
+                              		<i class="fa fa-check"></i> 确认收货 </button>
                       	<button    class="btn defualt  btn-sm btn-circle" ng-click="cancelTakeDelivery()" onclick="return false;">
                               		<i class="fa fa-mail-reply"></i> 取消 </button>
          			<!-- 	<div class="col-md-5"></div>
