@@ -823,8 +823,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     					$("#taskId").val(taskId);//赋值给隐藏input，通过和不通过时调用
     					$("#processInstanceId").val(processInstanceId);//赋值给隐藏input，通过和不通过时调用
     					
-    					if(comments == ""){
-    						$("#comment_audit").html( "无评论");
+    					if(comments == ""||comments == null){
+    						$("#comment_audit").html( "<tr><td colspan='3' align='center'>无内容</td></tr>");
     					}else $("#comment_audit").html(comments);
           		     },
           		     function(error){
@@ -2650,6 +2650,7 @@ var e = $("#form_clauseSettlement"),
 		        												if(result.actionType == 'audit'){//审批流程
 		        													$state.go('approvalBuyApply',{serialNum:result.orderInfo.serialNum, taskId:ids, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
 		        												}else{
+		        													toastr.warning("重新编辑未完成！");
 		        												}
 		        											},
 		        											function(errResponse) {

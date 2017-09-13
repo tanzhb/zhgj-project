@@ -1197,20 +1197,16 @@
           </div>
       			<!-- //申请原因 -->
 					<div class="portlet-body form">
-					     <form >
-						     <div class="form-body">
-			                      <div class="row">
-			                          <div class="col-md-8">
-			                          		<div class="form-group ">
-				                              	<label class="control-label col-md-5 bold">原因：</label>
-				                                <div class="col-md-7">
-			                                      <p class="form-control-static" > {{buyOrder.remark}} </p>
-				                               	</div>
-			                               </div>
-			                          </div>
-			                      </div>
-			                  </div>
-			                </form>
+					     <div class="row">
+	                          <div class="col-md-12">
+	                          		<div class="form-group ">
+		                              	<label class="control-label col-md-3 bold">原因：</label>
+		                                <div class="col-md-8">
+	                                      <p class="form-control-static" > {{buyOrder.remark}} </p>
+		                               	</div>
+	                               </div>
+	                          </div>
+	                      </div>
 		            </div>
 		            <div class="row">
 						<div class="col-md-12">
@@ -1238,8 +1234,8 @@
 							
 							<p>
 								<div class="form-group form-md-line-input">
-									<label class="col-md-4 control-label" for="form_control_1">我的意见</label>
-									<div class="col-md-7">
+									<label class="col-md-3 control-label" for="form_control_1">我的意见</label>
+									<div class="col-md-8">
 										<textarea class="form-control"   
 											id="content" name="content" rows="1"></textarea>
 									</div>
@@ -1250,18 +1246,9 @@
 							</p>
 
 							<div class="modal-footer">
-								<button type="submit" ng-click="orderPass()"
-									class="btn btn-primary">
-									<i class="fa fa-save"></i> 通过
-								</button>
-								<!-- <button type="submit" ng-click="orderUnPass()"
-									class="btn btn-primary">
-									<i class="fa fa-save"></i> 不通过
-								</button> -->
-								<button type="submit" ng-click="closeAuditDialogue()"
-									class="btn btn-primary">
-									<i class="fa fa-save"></i> 关闭
-								</button>
+								<button type="button" ng-click="orderPass()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">通过</button>
+								<button type="button" ng-click="orderUnPass()" ng-hide="orderStatusInput" class="btn red btn-circle  btn-sm">不通过</button>
+				                <button type="button" ng-click="cancelPage()" class="btn default btn-circle  btn-sm"><i class="fa fa-undo"></i> 取消 </button>
 							</div>
 						</div>
 					</div>
