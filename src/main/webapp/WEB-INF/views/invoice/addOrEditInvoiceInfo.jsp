@@ -149,7 +149,7 @@
                                                                         <!-- <input type="text"     class="form-control"   placeholder=""  id="unBillAmount" name ="unBillAmount"   ng-hide="invoiceAdd"   readonly
 												ng-model="invoice.unBillAmount" /> --> 
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" >{{invoice.capitalMoney }}</p> 
+                                                                        <p class="control-label left" >{{invoice.capitalMoney}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -499,7 +499,7 @@
 												ng-model="invoice.prePayOrReceiptMoney" />  -->
 												 
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left"      >{{invoice.prePayOrReceiptMoney|currency:'￥'}}</p> 
+                                                                        <p class="control-label left"      >{{0|currency:'￥'}}</p> 
                                                                     </div>
                                                                       
                                                                 </div>
@@ -700,7 +700,7 @@
 			<div class="portlet-body"  ng-if="inOrOut.indexOf('in')>-1"><!-- 进项票物料信息-->
 				<table
 					class="table table-striped table-bordered table-hover "
-					id="sample_in">
+					id="sample_inm">
 					<thead>
 						<tr>
 						
@@ -719,12 +719,18 @@
 					
 					<tbody>
 					</tbody>
+					<tfoot>
+					<tr>
+							<td colspan="4">合计</td>
+                              <td colspan="6">小写: {{invoice.billOrReceiptMoney |currency:'￥'}} 大写:{{invoice.capitalMoney}}</td>
+						</tr>
+					</tfoot>
 				</table>
 			</div>
 			<div class="portlet-body"  ng-if="inOrOut.indexOf('out')>-1"><!-- 销项票物料信息-->
 				<table
 					class="table table-striped table-bordered table-hover "
-					id="sample_out">
+					id="sample_outm">
 					<thead>
 						<tr>
 							<td style="text-align: center;" >物料编号</td>
@@ -742,12 +748,16 @@
 					
 					<tbody>
 					</tbody>
+					<tfoot>
+					<tr>
+							<td colspan="4">合计</td>
+                              <td colspan="6">小写: {{invoice.billOrReceiptMoney |currency:'￥'}} 大写:{{invoice.capitalMoney}}</td>
+						</tr>
+					</tfoot>
 				</table>
 			</div>
                                
-				</div>
 				
-        </div>
         <!-- END EXAMPLE TABLE PORTLET-->
 <jsp:include  page="../invoice/selectBuyOrSaleOrder.jsp"/>
 <!-- END MAIN CONTENT -->

@@ -273,4 +273,7 @@
       updateTime = #{updateTime,jdbcType=TIMESTAMP}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
+  <select id="countBilledNum" parameterType="java.lang.String" resultType="java.lang.Integer" >
+   select SUM(  IFNULL(billCount,0) )from invoiceBillingRecord where orderMaterielSerial=#{orderMaterielSerial,jdbcType=VARCHAR}
+  </select>
 </mapper>

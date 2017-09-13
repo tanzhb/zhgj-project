@@ -24,7 +24,11 @@ public enum StaticConst {
 	/**
 	 * @Field @PRICE_TYPE_SALE : TODO(销售价格)
 	 */
-	PRICE_TYPE_SALE("salePrice","销售价格");
+	PRICE_TYPE_SALE("salePrice","销售价格"),
+	/**
+	 * @Field @ORDER_TYPE : TODO(订单类型)
+	 */
+	ORDER_TYPE("orderTypeIn","标准采购(内贸)");
 	
 	
 	private String value;

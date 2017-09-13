@@ -31,4 +31,6 @@ public interface InvoiceBillingRecordMapper  extends GenericDao<InvoiceBillingRe
     int updateByPrimaryKeySelective(InvoiceBillingRecord record);
 
     int updateByPrimaryKey(InvoiceBillingRecord record);
+    
+    int countBilledNum(String  orderMaterielSerial);
 }

@@ -440,7 +440,7 @@ angular
 				}
 			function loadMaterielInTable(orderSerial){
 				var a = 0,judgeString='in';
-				if($scope.invoice.serialNum==undefined){
+				if($scope.invoice.serialNum==undefined||$scope.invoice.orderSerial!=orderSerial){
 					orderSerial=orderSerial+'no';
 				}else{
 					orderSerial=orderSerial+'no'+$scope.invoice.serialNum;
@@ -458,7 +458,7 @@ angular
 										"page-header-fixed")
 										&& (a = 64);
 								
-								table = $("#sample_in")
+								table = $("#sample_inm")
 								.DataTable(
 										{
 											language : {
@@ -556,7 +556,7 @@ angular
 												'orderable' : false,
 												'render' : function(data,
 														type, row, meta) {
-													return '<a   id="save'+row.serialNum+'" ng-click="saveBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.invoiceBillingRecordSerial+'\',\''+row.billAmount+'\')">  <i class="fa fa-save" title="保存"></i> </a>&nbsp;<a   style="display:none"  id="edit'+row.serialNum+'"  ng-click="editBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\')"><i class="fa fa-edit" title="编辑"></i></a>'
+													return '<a   id="save'+row.serialNum+'" ng-click="saveBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.invoiceBillingRecordSerial+'\',\''+row.billAmount+'\',\''+row.orderUnitPrice+'\',\''+row.money+'\')">  <i class="fa fa-save" title="保存"></i> </a>&nbsp;<a   style="display:none"  id="edit'+row.serialNum+'"  ng-click="editBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\')"><i class="fa fa-edit" title="编辑"></i></a>'
 													+ '&nbsp;<a  id="cancel'+row.serialNum+'" ng-click="cancelEditBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.billAmount+'\')"><i class="fa fa-undo"  title="取消"></i></a>';
 													//return data;
 												},"createdCell": function (td, cellData, rowData, row, col) {
@@ -571,7 +571,7 @@ angular
 function loadMaterielOutTable(orderSerial){
 	var a = 0,judgeString='out';
 	debugger;
-	if($scope.invoice.serialNum==undefined){
+	if($scope.invoice.serialNum==undefined||$scope.invoice.orderSerial!=orderSerial){
 		orderSerial=orderSerial+'no';
 	}else{
 		orderSerial=orderSerial+'no'+$scope.invoice.serialNum;
@@ -588,7 +588,7 @@ function loadMaterielOutTable(orderSerial){
 					: $("body").hasClass(
 							"page-header-fixed")
 							&& (a = 64);
-	table = $("#sample_out")
+	table = $("#sample_outm")
 	.DataTable(
 			{
 				language : {
@@ -665,7 +665,7 @@ function loadMaterielOutTable(orderSerial){
 								'className' : 'dt-body-center',
 								'render' : function(data,
 										type, row, meta) {
-									return '<input  type="text"  value="'+row.billAmount+'"   id="+row.serialNum+"  onchange="judgeNumber(\''+row.canBillAmount+'\',\''+row.serialNum+'\',\''+judgeString+'\')" />';
+									return '<input  type="text"  value="'+row.billAmount+'"   id="'+row.serialNum+'"  onchange="judgeNumber(\''+row.canBillAmount+'\',\''+row.serialNum+'\',\''+judgeString+'\')" />';
 									//return data;
 								},"createdCell": function (td, cellData, rowData, row, col) {
 									 $compile(td)($scope);
@@ -683,7 +683,7 @@ function loadMaterielOutTable(orderSerial){
 								'targets' : 9,
 								'render' : function(data,
 										type, row, meta) {
-									return '<a   id="save'+row.serialNum+'" ng-click="saveBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.invoiceBillingRecordSerial+'\',\''+row.billAmount+'\')">  <i class="fa fa-save" title="保存"></i> </a>&nbsp;<a   style="display:none"   id="edit'+row.serialNum+'"  ng-click="editBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\')"><i class="fa fa-edit" title="编辑"></i></a>&nbsp;<a  id="cancel'+row.serialNum+'" ng-click="cancelEditBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.billAmount+'\')"><i class="fa fa-undo"  title="取消"></i></a>';
+									return '<a   id="save'+row.serialNum+'" ng-click="saveBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.invoiceBillingRecordSerial+'\',\''+row.billAmount+'\',\''+row.orderUnitPrice+'\',\''+row.money+'\')">  <i class="fa fa-save" title="保存"></i> </a>&nbsp;<a   style="display:none"   id="edit'+row.serialNum+'"  ng-click="editBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\')"><i class="fa fa-edit" title="编辑"></i></a>&nbsp;<a  id="cancel'+row.serialNum+'" ng-click="cancelEditBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.billAmount+'\')"><i class="fa fa-undo"  title="取消"></i></a>';
 									//return data;
 								},"createdCell": function (td, cellData, rowData, row, col) {
 									 $compile(td)($scope);
@@ -697,7 +697,7 @@ function loadMaterielOutTable(orderSerial){
 	}
 
 
-$scope.saveBillingRecord=function (serialNum,judgeString,invoiceBillingRecordSerial,billAmount){
+$scope.saveBillingRecord=function (serialNum,judgeString,invoiceBillingRecordSerial,billAmount,orderUnitPrice,money){
 	if($scope.invoice.serialNum==undefined&&judgeString=='in'){
 		 toastr.warning("请先保存进项票信息！");
 		 return;
@@ -720,7 +720,12 @@ $scope.saveBillingRecord=function (serialNum,judgeString,invoiceBillingRecordSer
 				$("#save"+serialNum).css("display","none");
 				$("#edit"+serialNum).css("display","inline-block");
 				$("#cancel"+serialNum).css("display","none");
-				$("#money"+serialNum).val();
+				var nowMoney=Number($("#"+serialNum).val())*Number(orderUnitPrice);
+				var billOrReceiptMoney =Number($scope.invoice.billOrReceiptMoney);
+				$scope.invoice.billOrReceiptMoney=billOrReceiptMoney-Number(money)+nowMoney;
+				$scope.invoice.capitalMoney=convertCurrency(billOrReceiptMoney-Number(money)+nowMoney);
+				$("#money"+serialNum).html(nowMoney);
+				
     			
 			},
 			function(errResponse) {
@@ -1014,13 +1019,10 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 									$scope.row.orderInfo=data.orderInfo;
 									$scope.row.orderAmount=data.orderInfo.orderAmount;
 									$scope.row.currency=data.orderInfo.currency;
-								}else{
-									$scope.invoice.orderAmount=data.orderInfo.orderAmount;//订单金额
-			 	    				$scope.invoice.relationBuyOrSaleNum=data.orderInfo.orderNum;//订单编号
-			 	    				
+									if(serialNum.indexOf("in")>-1){loadMaterielInTable($scope.row.orderInfo.serialNum);
+				 	            	}else{debugger;loadMaterielOutTable($scope.row.orderInfo.serialNum);}
 								}
-								if(serialNum.indexOf("in")>-1){	loadMaterielInTable(serialNum);
-			 	            	}else{loadMaterielOutTable(serialNum);}
+								
 							},
 							function(errResponse) {
 								toastr.warning("获取失败！");
@@ -1060,7 +1062,6 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 		 	    			$scope.invoice.orderSerial=$scope.row.orderInfo.serialNum;//订单流水
 	 	    				$scope.invoice.orderAmount=$scope.row.orderAmount;//订单金额
 	 	    				$scope.invoice.relationBuyOrSaleNum=$scope.row.orderNum;//订单编号
-	 	    				$scope.orderMateriels=$scope.row.orderMateriels;
 	 	    				$scope.invoice.currency=$scope.row.currency;
 		 	    			if(judgeString=='buy'){
 			 	            	$('#buyOrderInfo').modal('hide');// 选择成功后关闭模态框
@@ -1175,6 +1176,7 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 						 	        			 $scope.invoice.billingDate=timeStamp2ShortString(data.invoice.billingDate);
 						 	        			 $scope.invoice.submitDate=timeStamp2ShortString(data.invoice.submitDate);
 						 	        			 $scope.invoice.approvalDate=timeStamp2ShortString(data.invoice.approvalDate);
+						 	        			 $scope.invoice.capitalMoney=convertCurrency(data.invoice.billOrReceiptMoney);
 						 	        			getOrderInfoBySerialNum($scope.invoice.orderSerial);//获取订单信息
 							 	            	if(serialNum.indexOf("in")>-1){	loadMaterielInTable($scope.invoice.orderSerial);//加载发票物料
 							 	            	}else{loadMaterielOutTable($scope.invoice.orderSerial);}
