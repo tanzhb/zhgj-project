@@ -2,7 +2,9 @@ package com.congmai.zhgj.web.service.impl;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -13,6 +15,7 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.dao.MaterielMapper;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
+import com.congmai.zhgj.web.model.MaterielSelectExample;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.MaterielExample.Criteria;
 import com.congmai.zhgj.web.service.MaterielService;
@@ -65,6 +68,11 @@ public class MaterielServiceImpl implements MaterielService {
 	@Override
 	public List<Materiel> selectList(MaterielExample m) {
 		return MaterielMapper.selectByExample(m);
+	}
+	
+	@Override
+	public List<Materiel> selectList(MaterielSelectExample m) {
+		return MaterielMapper.selectBySelectExample(m);
 	}
 
 	@Override
@@ -131,6 +139,17 @@ public class MaterielServiceImpl implements MaterielService {
 			MaterielExample example = new MaterielExample();
 			example.createCriteria().andSerialNumIn(idList).andDelFlgEqualTo("0");
 			return MaterielMapper.selectByExample(example);
+		}
+		return null;
+	}
+
+	@Override
+	public List<Materiel> selectMaterielByOrderSerial(String orderSerial,String orderSerial1) {
+		if(StringUtils.isNotEmpty(orderSerial)){
+			Map<String,String> map=new HashMap<String,String>();
+			map.put("orderSerial", orderSerial);
+			map.put("invoiceSerial", (orderSerial1==null||orderSerial1.length()<66)?null:orderSerial1.substring(34, 66));
+			return MaterielMapper.selectMaterielByOrderSerial(map);
 		}
 		return null;
 	}

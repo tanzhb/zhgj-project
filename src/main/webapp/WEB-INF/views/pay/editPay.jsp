@@ -40,7 +40,7 @@
 							<div class="tab-pane fade active in" id="tab_1_1">
 								<div class="portlet-title" style="min-height: 48px;">
 									<div class="tools" style="float: right" id="noprintdiv">
-										<button type="submit" ng-click="saveBasicInfo()"
+										<button type="submit" ng-click="editBasicInfo()"
 											class="btn green  btn-circle  btn-sm" ng-show="input">
 											<i class="fa fa-save"></i> 保存
 										</button>
@@ -84,7 +84,7 @@
 															ng-model="pay.paymentType">
 															<option value="">付款类型</option>
 															<option value="采购付款">采购付款</option>
-															<option value="采购付款">预付款</option>
+															<option value="预付款">预付款</option>
 														</select>
 														<p class="form-control-static" ng-show="span">{{pay.paymentType}}</p>
 														<div class="form-control-focus"></div>
@@ -286,7 +286,8 @@
 															type="radio" ng-model="paymentRecord.isBill"
 															name="isBill" value="0">否
 												   </span>	
-															<p class="form-control-static" ng-show="span">{{pay.isBill}}</p>
+															<p class="form-control-static" ng-show="span" ng-if="pay.isBill=='1'">是</p>
+												            <p class="form-control-static" ng-show="span" ng-if="pay.isBill=='0'">否</p>
 													</div>
 												</div>
 											</div>
@@ -526,7 +527,7 @@
 											class="btn green  btn-circle  btn-sm" ng-show="inputFile">
 											<i class="fa fa-save"></i> 保存
 										</button>
-										<button ng-click="cancel()" type="button"
+										<button ng-click="goBack()" type="button"
 											class="btn defualt  btn-circle  btn-sm">
 											<i class="fa fa-undo"></i> 取消
 										</button>

@@ -15,10 +15,10 @@
 </div>
 <div class="tabbable-line">
 	<ul class="nav nav-tabs" id="statement_tab">
-		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">普通合同</a>
-		</li>
 		<li><a data-target="#tab_15_2" data-toggle="tab">销售合同</a></li>
 		<li><a data-target="#tab_15_3" data-toggle="tab">采购合同</a></li>
+		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">其他合同</a>
+		</li>
 	</ul>
 	<div class="tab-content">
 		<div class="tab-pane active" id="tab_15_1">

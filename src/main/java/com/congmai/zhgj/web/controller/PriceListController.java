@@ -31,17 +31,22 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
+import com.congmai.zhgj.core.util.UserUtil;
+import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.enums.ComType;
+import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.LadderPrice;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.PriceListExample;
+import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.LadderPriceService;
 import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.PriceListService;
+import com.congmai.zhgj.web.service.UserCompanyService;
 
 
 /**
@@ -63,6 +68,8 @@ public class PriceListController {
 	private MaterielService  materielService;
     @Autowired
    	private CompanyService  companyService;
+    @Autowired
+    private UserCompanyService userCompanyService;
     
     
     /**
@@ -140,10 +147,15 @@ public class PriceListController {
   
     @RequestMapping(value = "/getPriceList")
     public ResponseEntity<Map> getPriceList(HttpServletRequest request,String  buyOrSale) {
-		List<PriceList> priceLists = priceListService.selectPriceList(buyOrSale);
-		if (priceLists==null||priceLists.isEmpty()) {
-			return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);//判断是否为空,为空返回NO_CONTENT
+    	User user = UserUtil.getUserFromSession();
+    	List<String> comIds = null;
+    	if(user!=null){
+			comIds = userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId()));
 		}
+		List<PriceList> priceLists = priceListService.selectPriceList(buyOrSale,comIds);
+		if (priceLists==null||priceLists.size()==0) {
+			return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);//判断是否为空,为空返回NO_CONTENT
+		}else{
 		for(PriceList priceList:priceLists){
 			if(StringUtils.isEmpty(priceList.getBuyComId())){
 				priceList.setSupplyComName(companyService.selectOne(priceList.getSupplyComId()).getComName());
@@ -156,6 +168,7 @@ public class PriceListController {
 			priceList.setUnit(m.getUnit());
 			priceList.setSpecifications(m.getSpecifications());
 			priceList.setPriceNum(priceList.getPriceNum()+"-V"+priceList.getVersionNO());
+		}
 		}
 		// 封装datatables数据返回到前台
 		Map pageMap = new HashMap();
@@ -184,6 +197,7 @@ public class PriceListController {
     @RequestMapping(value = "/viewPriceListDetail", method = RequestMethod.POST)
     public ResponseEntity<Map> viewPriceListDetail(HttpServletRequest request, @RequestBody String  serialNum) {
     	Map<String, Object> map = new HashMap<String, Object>();
+    	if(serialNum.length()>32){
     	PriceList priceList=priceListService.selectById(serialNum.substring(0, 32));
     	if(priceList!=null){
     	Materiel m=materielService.selectById(priceList.getMaterielSerial());
@@ -201,6 +215,7 @@ public class PriceListController {
     	map.put("priceLists", priceListService.getAllPriceListInfoByPriceIdOrPriceType(priceList.getPriceId(), null));//价格历史版本信息
     	map.put("buyList", priceListService.getAllPriceListInfoByPriceIdOrPriceType(priceList.getPriceId(), "salePrice"));//获取历史价格中使用的采购商
     }
+    	}
     	map.put("supplyCom", companyService.selectCompanyByComType(ComType.SUPPLIER.getValue(), null));
     	map.put("buyCom", companyService.selectCompanyByComType(ComType.BUYER.getValue(), null));
     	return new ResponseEntity<Map>(map, HttpStatus.OK);
@@ -314,12 +329,19 @@ public class PriceListController {
 	    @RequestMapping("exportPriceList")
 	    public void exportWarehouse(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,String buyOrSale) {
 	    		Map<String, Object> dataMap = new HashMap<String, Object>();
-	    		List<PriceList> priceListList= priceListService.selectPriceList(buyOrSale);
+	    		User user = UserUtil.getUserFromSession();
+	        	List<String> comIds = null;
+	        	if(user!=null){
+	    			comIds = userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId()));
+	    		}
+	    		List<PriceList> priceListList= priceListService.selectPriceList(buyOrSale,comIds);
 	    		for(PriceList p:priceListList){
 	    			if("buyPrice".equals(p.getPriceType())){
 	    				p.setComName(companyService.selectOne(p.getSupplyComId()).getComName());
+	    				p.setPriceType(StaticConst.getInfo("buyPrice"));
 	    			}else{
 	    				p.setComName(companyService.selectOne(p.getBuyComId()).getComName());
+	    				p.setPriceType(StaticConst.getInfo("salePrice"));
 	    			}
 	    			Materiel m=materielService.selectById(p.getMaterielSerial());
 	    			p.setMaterielNum(m.getMaterielNum());

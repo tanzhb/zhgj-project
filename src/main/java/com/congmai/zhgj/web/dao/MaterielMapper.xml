@@ -39,6 +39,7 @@
     <result column="packageUnitConversion" property="packageUnitConversion" jdbcType="VARCHAR" />
     <result column="palletWeight" property="palletWeight" jdbcType="VARCHAR" />
     <result column="customsSupervisionConditions" property="customsSupervisionConditions" jdbcType="VARCHAR" />
+    <result column="customsCode" property="customsCode" jdbcType="VARCHAR" />
     <result column="qualityDate" property="qualityDate" jdbcType="VARCHAR" />
     <result column="versionNO" property="versionNO" jdbcType="VARCHAR" />
     <result column="isLatestVersion" property="isLatestVersion" jdbcType="VARCHAR" />
@@ -115,8 +116,17 @@
     width, height, length, currency, unitPrice, deliveryCycle,filingItemNo, volume, weight, palletSpecification, 
     manufactureDate, remark, packageNum, packageSpecifications, packageUnit, packagewidth, 
     packageheight, packagelength, packagevolume, packageUnitConversion, palletWeight, 
-    customsSupervisionConditions, qualityDate, versionNO, isLatestVersion, status, delFlg, 
+    customsSupervisionConditions,customsCode, qualityDate, versionNO, isLatestVersion, status, delFlg, 
     creator, createTime, updater, updateTime
+  </sql>
+  <sql id="Base_Column_List2" >
+    m.serialNum, m.materielId, m.materielNum, m.materielName, m.specifications, m.unit, m.parentMaterielSerial, 
+    m.type, m.productionPlace, m.brand, m.category, m.MnemonicCode, m.isBOM, m.stockUnit, m.originCountry, 
+    m.width, m.height, m.length, m.currency, m.unitPrice, m.deliveryCycle,m.filingItemNo, m.volume, m.weight, m.palletSpecification, 
+    m.manufactureDate, m.remark, m.packageNum, m.packageSpecifications, m.packageUnit, m.packagewidth, 
+    m.packageheight, m.packagelength, m.packagevolume, m.packageUnitConversion, m.palletWeight, 
+    m.customsSupervisionConditions, m.qualityDate, m.versionNO, m.isLatestVersion, m.status, m.delFlg, 
+    m.creator, m.createTime, m.updater, m.updateTime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.MaterielExample" >
     select
@@ -125,6 +135,21 @@
     </if>
     <include refid="Base_Column_List" />
     from materiel
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectBySelectExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.MaterielSelectExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List2" />
+    from materiel m 
+    left join supplyMateriel sm on sm.materielId = m.materielId 
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -171,7 +196,7 @@
       manufactureDate, remark, packageNum, 
       packageSpecifications, packageUnit, packagewidth, 
       packageheight, packagelength, packagevolume, 
-      packageUnitConversion, palletWeight, customsSupervisionConditions, 
+      packageUnitConversion, palletWeight, customsSupervisionConditions, customsCode,
       qualityDate, versionNO, isLatestVersion, 
       status, creator, 
       createTime, updater, updateTime
@@ -187,7 +212,7 @@
       #{manufactureDate,jdbcType=DATE}, #{remark,jdbcType=VARCHAR}, #{packageNum,jdbcType=VARCHAR}, 
       #{packageSpecifications,jdbcType=VARCHAR}, #{packageUnit,jdbcType=VARCHAR}, #{packagewidth,jdbcType=VARCHAR}, 
       #{packageheight,jdbcType=VARCHAR}, #{packagelength,jdbcType=VARCHAR}, #{packagevolume,jdbcType=VARCHAR}, 
-      #{packageUnitConversion,jdbcType=VARCHAR}, #{palletWeight,jdbcType=VARCHAR}, #{customsSupervisionConditions,jdbcType=VARCHAR}, 
+      #{packageUnitConversion,jdbcType=VARCHAR}, #{palletWeight,jdbcType=VARCHAR}, #{customsSupervisionConditions,jdbcType=VARCHAR}, #{customsCode,jdbcType=VARCHAR},
       #{qualityDate,jdbcType=VARCHAR}, #{versionNO,jdbcType=VARCHAR}, #{isLatestVersion,jdbcType=VARCHAR}, 
       #{status,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
@@ -306,6 +331,9 @@
       </if>
       <if test="customsSupervisionConditions != null" >
         customsSupervisionConditions,
+      </if>
+      <if test="customsCode != null" >
+        customsCode,
       </if>
       <if test="qualityDate != null" >
         qualityDate,
@@ -446,6 +474,9 @@
       </if>
       <if test="customsSupervisionConditions != null" >
         #{customsSupervisionConditions,jdbcType=VARCHAR},
+      </if>
+      <if test="customsCode != null" >
+        #{customsCode,jdbcType=VARCHAR},
       </if>
       <if test="qualityDate != null" >
         #{qualityDate,jdbcType=VARCHAR},
@@ -593,6 +624,9 @@
       </if>
       <if test="customsSupervisionConditions != null" >
         customsSupervisionConditions = #{customsSupervisionConditions,jdbcType=VARCHAR},
+      </if>
+      <if test="customsCode != null" >
+        customsCode = #{customsCode,jdbcType=VARCHAR},
       </if>
       <if test="qualityDate != null" >
         qualityDate = #{qualityDate,jdbcType=VARCHAR},
@@ -745,6 +779,9 @@
       <if test="record.customsSupervisionConditions != null" >
         customsSupervisionConditions = #{record.customsSupervisionConditions,jdbcType=VARCHAR},
       </if>
+      <if test="record.customsCode != null" >
+        customsCode = #{record.customsCode,jdbcType=VARCHAR},
+      </if>
       <if test="record.qualityDate != null" >
         qualityDate = #{record.qualityDate,jdbcType=VARCHAR},
       </if>
@@ -777,4 +814,23 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
+  <select id="selectMaterielByOrderSerial"   parameterType="java.util.Map"   resultType="com.congmai.zhgj.web.model.Materiel">
+  select m.*,om.amount  as amount ,IFNULL(om.canBillAmount,om.amount)  AS canBillAmount,om.orderUnitPrice  as orderUnitPrice,om.serialNum as serialNum
+  <if test="invoiceSerial!=null">
+  , IFNULL(ibr.billCount,0) as billAmount
+  ,ibr.serialNum as invoiceBillingRecordSerial
+  </if>
+  <if test="invoiceSerial==null">
+  , 0 as billAmount
+  </if>
+  from  orderMateriel om
+  left join materiel m  on  om.materielSerial=m.serialNum
+    <if test="invoiceSerial!=null">
+   left join invoiceBillingRecord ibr on   ibr.orderMaterielSerial=om.materielSerial 
+   </if>
+  where  om.orderSerial=#{orderSerial,jdbcType=VARCHAR} 
+  <if test="invoiceSerial!=null">
+   and  ibr.invoiceSerial=#{invoiceSerial,jdbcType=VARCHAR} 
+   </if>
+  </select>
 </mapper>

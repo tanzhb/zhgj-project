@@ -5,6 +5,7 @@ import java.util.List;
 import com.congmai.zhgj.core.generic.GenericService;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
+import com.congmai.zhgj.web.model.MaterielSelectExample;
 import com.congmai.zhgj.web.model.User;
 
 /**
@@ -22,6 +23,8 @@ public interface MaterielService extends GenericService<Materiel, String> {
      * @return 对象集合
      */
     List<Materiel> selectList(MaterielExample m);
+    
+    List<Materiel> selectList(MaterielSelectExample m);
 
 	public void deleteMateriels(String ids);
 
@@ -30,4 +33,6 @@ public interface MaterielService extends GenericService<Materiel, String> {
 	Materiel getMaterielInfoByMaterielId(String materielId);
 
 	List<Materiel> chooseMateriel(String ids);
+	
+	List<Materiel> selectMaterielByOrderSerial (String orderSerial,String invoiceSerial );
 }

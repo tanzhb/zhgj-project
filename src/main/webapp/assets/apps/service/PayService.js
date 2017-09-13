@@ -12,12 +12,17 @@ angular.module('MetronicApp').factory('PayService', ['$rootScope', '$http', '$q'
     		
     		//删除
     		delPaymentRecord:delPaymentRecord,
+    		
+    		
     		//单个查找
     		selectPay:selectPay,
     		
+    		
+    		//保存附件
     		saveFile:saveFile,
     		
     		
+    		//更新附件
     		updateFile:updateFile,
     		//流程申请
     		applyAp:applyAp,

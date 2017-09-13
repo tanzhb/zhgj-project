@@ -36,6 +36,7 @@ angular
 								 $scope.ladderprices=[{}];
 								 _index = 0; 
 								 $scope.priceList.isLadderPrice="0";
+								 getPriceListInfo($stateParams.buyOrSale);
 								 $scope.isChecked=false;
 								 $scope.priceListAdd=true;
 								 $scope.priceListView=false;
@@ -361,7 +362,10 @@ function loadPriceListBuyTable(){
 								                              },{
 								                            	  mData : 'specifications'
 								                              }, {
-								                            	  mData : 'priceType'
+								                            	  mData : 'priceType',
+								                            	  mRender:function(data){
+								                            		 return "采购价格";
+								                            	  }
 								                              },{
 								                            	  mData : 'unit'
 								                              }, {
@@ -529,7 +533,10 @@ function loadPriceListSaleTable(){
 	                              },{
 	                            	  mData : 'specifications'
 	                              }, {
-	                            	  mData : 'priceType'
+	                            	  mData : 'priceType',
+	                            	  mRender:function(data){
+		                            		 return "销售价格";
+		                            	  }
 	                              },{
 	                            	  mData : 'unit'
 	                              }, {
@@ -1151,19 +1158,21 @@ function loadPriceListSaleTable(){
 						 var promise =priceListService.selectBySerialNum(serialNum);
 						 promise.then(function(data){
 							 debugger;
+							 if(serialNum.length>32){
 							 data.priceList.priceEffectiveDate=timeStamp2ShortString(data.priceList.priceEffectiveDate);
 							 data.priceList.priceExpirationDate=timeStamp2ShortString(data.priceList.priceExpirationDate);
 							 $scope.priceList = data.priceList;
 							 $scope.ladderprices=data.ladderPrices;
-							 $scope.buyCom=data.buyCom;
-							 $scope.supplyCom=data.supplyCom;
-							 $scope.buyComs=data.buyList;
-							 $scope.priceLists=data.priceLists;
 							 _index=data.ladderPrices.length-1;
+							 $scope.priceLists=data.priceLists;
+							 $scope.buyComs=data.buyList;
 							 if($scope.priceList.isLadderPrice=='1'){
 								 $('#isLadderPriceCheck').iCheck('check'); 
 								 $scope.isChecked=true;
 							 }  
+							 }
+							 $scope.buyCom=data.buyCom;
+							 $scope.supplyCom=data.supplyCom;
 						 });
 					 }else{
 						 debugger;

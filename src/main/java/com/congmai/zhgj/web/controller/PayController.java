@@ -59,10 +59,8 @@ import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.PaymentFile;
-import com.congmai.zhgj.web.model.PaymentPlan;
 import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.User;
-import com.congmai.zhgj.web.model.Vacation;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.OrderService;
@@ -211,9 +209,10 @@ public class PayController {
 		User user = UserUtil.getUserFromSession();
 		String result = "";
 		try {
-			PaymentRecord paymentRecord = this.payService.selectPayById(serialNum);
-			PaymentRecord basePaymentRecord = (PaymentRecord) this.runtimeService.getVariable(
-					paymentRecord.getProcessInstanceId(), "entity");
+			PaymentRecord paymentRecord = this.payService
+					.selectPayById(serialNum);
+			PaymentRecord basePaymentRecord = (PaymentRecord) this.runtimeService
+					.getVariable(paymentRecord.getProcessInstanceId(), "entity");
 			Map<String, Object> variables = new HashMap<String, Object>();
 			variables.put("isPass", completeFlag);
 			if (!completeFlag) {
@@ -223,7 +222,8 @@ public class PayController {
 				variables.put("entity", basePaymentRecord);
 			}
 			// 完成任务
-			this.processService.complete(taskId, content, user.getUserId().toString(), variables);
+			this.processService.complete(taskId, content, user.getUserId()
+					.toString(), variables);
 
 			if (completeFlag) {
 				// 此处需要修改，不能根据人来判断审批是否结束。应该根据流程实例id(processInstanceId)来判定。
@@ -362,39 +362,34 @@ public class PayController {
 		}
 		// 如果id为空执行保存
 		if (StringUtils.isEmpty(record.getSerialNum())) {
+			// 如果id为空执行保存
+			if (StringUtils.isEmpty(record.getSerialNum())) {
 
-			String serialNum = ApplicationUtils.random32UUID();
-			record.setSerialNum(serialNum);
-			record.setCreator(currenLoginName);
-			// 添加付款记录
-			payService.insertPaymentRecord(record);
-		} else {
-			// 如果id不为空执行更新
-			PaymentPlan plan = new PaymentPlan();
-			plan.setSerialNum(record.getPaymentPlanSerial());
-			plan.setOrderSerial(record.getOrderSerial());
-			plan.setPaymentPlanNum(record.getPaymentPlanNum());
-			plan.setPaymentStyle(record.getPaymentStyle());
-			plan.setSupplyComId(record.getSupplyComId());
-			plan.setBuyComId(null);
-			plan.setPaymentAmount(record.getPaymentAmount());
-			plan.setClauseSettlementSerial(record.getClauseSettlementSerial());
-			plan.setUpdater(currenLoginName);
-			// 更新付款计划
-			payService.updatePaymentPlan(plan);
+				String serialNum = ApplicationUtils.random32UUID();
+				record.setSerialNum(serialNum);
+				record.setCreator(currenLoginName);
+				payService.insertPaymentRecord(record);
+			} else {
+				// 如果id不为空执行更新
 
-			record.setUpdater(currenLoginName);
-			// 更新付款记录
-			payService.updatePaymentRecord(record);
+				record.setUpdater(currenLoginName);
+				// 更新付款记录
+				payService.updatePaymentRecord(record);
+			}
+
+			record = payService.selectPayById(record.getSerialNum());
+			String orderSerial = record.getOrderSerial();
+			String paiedMoney = payService.selectPaiedMoney(orderSerial);
+			String billedMoney = payService.selectBilledMoney(orderSerial);
+			record.setPaiedMoney(paiedMoney);
+			record.setBilledMoney(billedMoney);
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.setLocation(ucBuilder.path("/paymentRecordC")
+					.buildAndExpand(record.getSerialNum()).toUri());
 		}
-
-		record = payService.selectPayById(record.getSerialNum());
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(ucBuilder.path("/paymentRecordC")
-				.buildAndExpand(record.getSerialNum()).toUri());
-
 		return new ResponseEntity<PaymentRecord>(record, HttpStatus.CREATED);
+
 	}
 
 	/**

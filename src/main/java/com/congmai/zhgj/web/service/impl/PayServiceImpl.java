@@ -166,6 +166,11 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 		payMapper.updatePaymentRecord(record);
 	}
 	
+	
+	/**
+     * 批量添加收付款附件
+     * @param paymentFiles
+     */
 	@Override
 	public void betchInsertPaymentFiles(List<PaymentFile> Files) {
 		if(!CollectionUtils.isEmpty(Files)){
@@ -176,6 +181,12 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 		}
 	}
 
+	
+	/**
+     * 查询订单已付金额
+     * @param serialNum
+     * @return
+     */
 	@Override
 	public String selectPaiedMoney(String serialNum) {
 		// TODO Auto-generated method stub
@@ -183,18 +194,36 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 		return payMapper.selectPaiedMoney(serialNum);
 	}
 
+	
+	/**
+     * 查询订单已开票金额
+     * @param serialNum
+     * @return
+     */
 	@Override
 	public String selectBilledMoney(String serialNum) {
 		// TODO Auto-generated method stub
 		return payMapper.selectBilledMoney(serialNum);
 	}
 
+	
+	/**
+     * 查询收付款对象附件集合
+     * @param serialNum
+     * @return
+     */
 	@Override
 	public List<PaymentFile> selectFileList(String serialNum) {
 		// TODO Auto-generated method stub
 		return payMapper.selectFileList(serialNum);
 	}
 
+	
+	/**
+     * 删除旧的附件
+     * @param serialNum
+     * @return
+     */
 	@Override
 	public void deleteFileOld(String paySerialNum) {
 		// TODO Auto-generated method stub

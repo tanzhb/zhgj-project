@@ -47,14 +47,20 @@ public class PriceListServiceImpl extends GenericServiceImpl<PriceList, String> 
 		priceListMapper.deletePriceList(idList);
 	}
 	@Override
-	public List<PriceList> selectPriceList(String  buyOrSale) {
+	public List<PriceList> selectPriceList(String  buyOrSale,List<String> comIds) {
 		PriceListExample ple=new PriceListExample();
 		Criteria criteria= ple.createCriteria();
 		criteria.andDelFlgEqualTo("0");
 		if(buyOrSale.indexOf("buy")>-1){
 			criteria.andPriceTypeEqualTo("buyPrice");
+			if(comIds!=null){
+			  criteria.andBuyComIdIn(comIds);
+			}
 		}else  if(buyOrSale.indexOf("sale")>-1){
 			criteria.andPriceTypeEqualTo("salePrice");
+			if(comIds!=null){
+			  criteria.andSupplyComIdIn(comIds);
+			}
 		}
 		return priceListMapper.selectByExample(ple);
 	}

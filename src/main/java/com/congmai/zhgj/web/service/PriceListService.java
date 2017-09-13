@@ -9,7 +9,7 @@ public interface PriceListService extends GenericService<PriceList, String>{
 	
 
 	void deletePriceList(String serialNumList);
-	 List<PriceList> selectPriceList(String  buyOrSale);
+	 List<PriceList> selectPriceList(String  buyOrSale,List<String> comId);
 	 //List<Materiel> selectList(MaterielExample m);
 	 PriceList getPriceListInfoByPriceId(String priceId);//获取最新价格
 	 void updateVersion(PriceList priceList);//将之前是否最新版本值置为0

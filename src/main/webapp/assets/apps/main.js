@@ -779,6 +779,25 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    			});
 		    		}]
 		    	}	        
+		    }) .state('toTakeDelivery', {
+		    	url: "/toTakeDelivery?:serialNum",
+		    	templateUrl: "rest/takeDelivery/takeDelivery",
+		    	data: {pageTitle: '查看收货详情'},
+		    	reload:true, 
+		    	controller: "TakeDeliveryController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [       
+		    				        'assets/apps/controllers/TakeDeliveryController.js',
+		    				        'assets/apps/service/TakeDeliveryService.js',
+		    				        'assets/apps/service/orderService.js'
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
 		    }).state('stockInAdd', {
 		    	url: "/stockInAdd?:serialNum",
 		    	templateUrl: "rest/takeDelivery/stockInAdd",
@@ -1488,7 +1507,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [
-				'assets/global/plugins/datatables/datatables.min.css',
+				/*'assets/global/plugins/datatables/datatables.min.css',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 				'assets/apps/css/special.css',
 				'assets/global/plugins/datatables/datatables.all.min.js',
@@ -1497,7 +1516,20 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/GatheringMoneyService.js',
 				'assets/apps/controllers/GatheringMoneyController.js',
 				'assets/apps/controllers/app.js',
-				'assets/apps/controllers/uploadPhoto.js',
+				'assets/apps/controllers/uploadPhoto.js',*/
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/apps/css/special.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload-shim.min.js',
+			    'assets/apps/scripts/angular-file-upload.min.js',
+			    'assets/apps/scripts/FileUploader.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/GatheringMoneyService.js',
+				'assets/apps/controllers/GatheringMoneyController.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js'
                       ]
                     });
                 }]
@@ -1516,7 +1548,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [
-				'assets/global/plugins/datatables/datatables.min.css',
+				/*'assets/global/plugins/datatables/datatables.min.css',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 				'assets/apps/css/special.css',
 				'assets/global/plugins/datatables/datatables.all.min.js',
@@ -1524,6 +1556,18 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 	        	'assets/apps/service/GatheringMoneyService.js',
 				'assets/apps/controllers/GatheringMoneyController.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js',*/
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/apps/css/special.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/GatheringMoneyService.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+			    'assets/apps/controllers/GatheringMoneyController.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js',
                       ]
@@ -1544,14 +1588,27 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [
-				'assets/global/plugins/datatables/datatables.min.css',
+				/*'assets/global/plugins/datatables/datatables.min.css',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 				'assets/apps/css/special.css',
 				'assets/global/plugins/datatables/datatables.all.min.js',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/GatheringMoneyService.js',
+				'assets/apps/controllers/GatheringMoneyController.js',*/
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/apps/css/special.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload-shim.min.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/FileUploader.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/GatheringMoneyService.js',
 				'assets/apps/controllers/GatheringMoneyController.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js'
                       ]
                     });
                 }]
@@ -1569,7 +1626,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [
-				'assets/global/plugins/datatables/datatables.min.css',
+				/*'assets/global/plugins/datatables/datatables.min.css',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 				'assets/apps/css/special.css',
 				'assets/global/plugins/datatables/datatables.all.min.js',
@@ -1578,7 +1635,20 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/service/GatheringMoneyService.js',
 				'assets/apps/controllers/GatheringMoneyController.js',
 				'assets/apps/controllers/app.js',
-				'assets/apps/controllers/uploadPhoto.js',
+				'assets/apps/controllers/uploadPhoto.js',*/
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/apps/css/special.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload-shim.min.js',
+			    'assets/apps/scripts/angular-file-upload.min.js',
+			    'assets/apps/scripts/FileUploader.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/GatheringMoneyService.js',
+				'assets/apps/controllers/GatheringMoneyController.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js'
                       ]
                     });
                 }]
