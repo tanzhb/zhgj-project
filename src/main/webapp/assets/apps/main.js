@@ -1427,7 +1427,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         
          .state('paymentRecordC', {
-            url: "/paymentRecordC",
+            url: "/paymentRecordC?tabHref",
             templateUrl: "rest/page/paymentRecord",
             data: {pageTitle: '付款列表'},
             controller: "PayController",
