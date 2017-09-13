@@ -45,19 +45,6 @@
 						<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">运输信息</a></li>
 						<li class="bold"><a data-target="#tab_1_4" data-toggle="tab">收货信息</a></li>
 					</ul>
-					<!-- <div class="portlet-title">
-						<div class="caption">基本信息</div>
-						<div class="tools" id="noprintdiv">
-							<button type="submit" ng-click="saveBasicInfo()" ng-show="input"
-								class="btn blue  btn-outline  btn-sm">
-								<i class="fa fa-save"></i> 保存
-							</button>
-							<button ng-click="goBack()" type="button"
-								ng-hide="saleOrderInput" class="btn red  btn-outline  btn-sm">
-								<i class="fa fa-undo"></i> 取消
-							</button>
-						</div>
-					</div> -->
 					<div class="tab-content">
 					<div class="tab-pane fade active in" id="tab_1_1">
 						<div class="portlet-body form">
@@ -82,6 +69,26 @@
 										</div>
 									</div>
 									<!--/span-->
+									
+									<div class="col-md-4">
+										<div class="form-group">
+											<label class="control-label bold">发货类型<span class="required" aria-required="true"> * </span></label>
+											<div class="">
+												<select class="form-control" id="deliverType"
+													name="deliverType" ng-model="delivery.deliverType"
+													ng-show="input">
+													<option value="">发货类型</option>
+													<option value="贸易发货">贸易发货</option>
+												</select>
+												<div class="form-control-focus"></div>
+												<span class="help-block">请选择发货类型</span>
+												<p class="form-control-static" ng-show="span">
+													{{delivery.deliverType}}</p>
+											</div>
+										</div>
+									</div>
+									<!--/span-->
+									
 									<div class="col-md-4">
 										<div class="form-group">
 											<label class="control-label bold">销售订单号<span class="required" aria-required="true"> * </span></label>
@@ -94,26 +101,12 @@
                                                         </button>
                                                     </span>
                                                 </div>
-											<!-- 	<input type="text" name="orderNum" class="form-control"
-													ng-model="saleOrder.orderNum" ng-show="input"
-													style="width 110%;" readonly />
-												<div class="form-control-focus"></div>-->
 												<input type="text" ng-model="orderSerial" ng-hide="true" /> 
 												<span class="help-block">请输入销售订单号</span>
 
 												<p class="form-control-static" ng-show="span">
 													{{delivery.orderNum}}</p>
 											</div>
-											<!-- <div class="col-md-2" ng-show="input">
-												<input type="text" ng-model="delivery.serialNum"
-													ng-hide="true" /> <span class="input-inline-btn">
-													<button class="btn default" type="button"
-														ng-click="selectMateriel()"
-														data-target="#basicMaterielInfo" data-toggle="modal">
-														<i class="fa fa-search"></i>
-													</button>
-												</span>
-											</div> -->
 										</div>
 									</div>
 									<!--/span-->

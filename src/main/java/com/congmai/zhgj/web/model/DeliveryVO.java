@@ -13,6 +13,9 @@ public class DeliveryVO {
 	//发货编号
 	private String deliverNum;
 	
+	//发货类型
+	private String deliverType;
+	
 	//订单流水号
 	private String orderSerial;
 	
@@ -126,6 +129,9 @@ public class DeliveryVO {
 	
 	//联系电话
 	private String transportContactNum;
+	
+	
+	private String takeWarehouseSerial;
 	
 	
 	private String deliveryWarehouseName;
@@ -565,6 +571,22 @@ public class DeliveryVO {
 
 	public void setOrderAmount(String orderAmount) {
 		this.orderAmount = orderAmount;
+	}
+
+	public String getDeliverType() {
+		return deliverType;
+	}
+
+	public void setDeliverType(String deliverType) {
+		this.deliverType = deliverType;
+	}
+
+	public String getTakeWarehouseSerial() {
+		return takeWarehouseSerial;
+	}
+
+	public void setTakeWarehouseSerial(String takeWarehouseSerial) {
+		this.takeWarehouseSerial = takeWarehouseSerial;
 	}
 	
 }
