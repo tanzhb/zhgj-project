@@ -84,6 +84,8 @@ public class Delivery {
     private String orderNum;
     
     private String orderAmount;//订单金额
+    
+
 
     public String getSerialNum() {
         return serialNum;
@@ -392,6 +394,6 @@ public class Delivery {
 	public void setTakeDeliverSerial(String takeDeliverSerial) {
 		this.takeDeliverSerial = takeDeliverSerial;
 	}
-    
+
     
 }

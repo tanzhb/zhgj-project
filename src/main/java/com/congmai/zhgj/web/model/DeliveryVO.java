@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.model;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -165,6 +166,8 @@ public class DeliveryVO {
 	private String  supplyName;//供应商名称
 	
 	private String orderAmount;//订单金额
+	
+	private List<String> supplyComIds;
 
 	public String getSerialNum() {
 		return serialNum;
@@ -573,6 +576,20 @@ public class DeliveryVO {
 		this.orderAmount = orderAmount;
 	}
 
+	public List<String> getSupplyComIds() {
+		return supplyComIds;
+	}
+
+	public void setSupplyComIds(List<String> supplyComIds) {
+		this.supplyComIds = supplyComIds;
+	}
+
+
+
+
+
+
+
 	public String getDeliverType() {
 		return deliverType;
 	}
@@ -587,6 +604,5 @@ public class DeliveryVO {
 
 	public void setTakeWarehouseSerial(String takeWarehouseSerial) {
 		this.takeWarehouseSerial = takeWarehouseSerial;
-	}
-	
+	}	
 }

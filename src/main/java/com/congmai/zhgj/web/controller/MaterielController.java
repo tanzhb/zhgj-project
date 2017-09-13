@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +15,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -28,20 +30,24 @@ import org.springframework.web.multipart.MultipartFile;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.web.model.BOMMateriel;
 import com.congmai.zhgj.web.model.BOMMaterielExample;
 import com.congmai.zhgj.web.model.JsonTreeData;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
+import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.MaterielExample.Criteria;
 import com.congmai.zhgj.web.model.MaterielFile;
 import com.congmai.zhgj.web.model.MaterielFileExample;
+import com.congmai.zhgj.web.model.MaterielSelectExample;
 import com.congmai.zhgj.web.model.SupplyMateriel;
 import com.congmai.zhgj.web.model.SupplyMaterielExample;
 import com.congmai.zhgj.web.service.MaterielFileService;
 import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.SupplyMaterielService;
+import com.congmai.zhgj.web.service.UserCompanyService;
 
 /**
  * 
@@ -66,6 +72,9 @@ public class MaterielController {
     
     @Resource
     private SupplyMaterielService supplyMaterielService;
+    
+    @Resource
+    private UserCompanyService userCompanyService;
     
     /**
      * 保存物料
@@ -277,17 +286,25 @@ public class MaterielController {
     @RequestMapping("/findMaterielList")
     @ResponseBody
     public ResponseEntity<Map> findMaterielList(String parent,String isLatestVersion) {
-    	MaterielExample m =new MaterielExample();
+    	//MaterielExample m =new MaterielExample();
+    	MaterielSelectExample m =new MaterielSelectExample();
     	List<Materiel> materielList = new ArrayList<Materiel>();
+    	
+    	User user = UserUtil.getUserFromSession();
+    	List<String> comIds = null;
+    	if(user!=null){
+			comIds = userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId()));
+		}
+    	
     	if(parent==null||parent.isEmpty()){//查询全部物料
     		//and 条件1
-        	Criteria criteria =  m.createCriteria();
+        	com.congmai.zhgj.web.model.MaterielSelectExample.Criteria criteria =  m.createCriteria();
         	criteria.andIsLatestVersionEqualTo("1");
         	criteria.andDelFlgEqualTo("0");
         	if("1".equals(isLatestVersion)){
         	}else{
         		//and 条件2,未发布可编辑的物料
-            	Criteria criteria2 =  m.createCriteria();
+            	com.congmai.zhgj.web.model.MaterielSelectExample.Criteria criteria2 =  m.createCriteria();
             	criteria2.andStatusEqualTo("0");
             	criteria2.andDelFlgEqualTo("0");
             	//or 条件
@@ -295,15 +312,18 @@ public class MaterielController {
         	}
         	//排序字段
         	m.setOrderByClause("updateTime DESC");
+        	if(comIds!=null){
+        		criteria.andSupplyComIdIn(comIds);
+        	}
         	materielList = materielService.selectList(m);
     	}else{//根据父节点查询
     		//and 条件1
-        	Criteria criteria =  m.createCriteria();
+        	com.congmai.zhgj.web.model.MaterielSelectExample.Criteria criteria =  m.createCriteria();
         	criteria.andIsLatestVersionEqualTo("1");
         	criteria.andDelFlgEqualTo("0");
         	criteria.andSerialNumEqualTo(parent);
         	//and 条件2
-        	Criteria criteria2 =  m.createCriteria();
+        	com.congmai.zhgj.web.model.MaterielSelectExample.Criteria criteria2 =  m.createCriteria();
         	criteria2.andStatusEqualTo("0");
         	criteria2.andDelFlgEqualTo("0");
         	criteria2.andSerialNumEqualTo(parent);
@@ -311,6 +331,9 @@ public class MaterielController {
         	m.or(criteria2);
         	//排序字段
         	m.setOrderByClause("updateTime DESC");
+        	if(comIds!=null){
+        		criteria.andSupplyComIdIn(comIds);
+        	}
         	materielList = materielService.selectList(m);
         	
         	//查询下级物料

@@ -71,6 +71,12 @@
     <if test="comId != null" >
         and comId = #{comId,jdbcType=VARCHAR}
     </if>
+    <if test="comIds != null" >
+        and comId in
+         <foreach item="comIds" index="index" collection="list" open="(" separator="," close=")">  
+		  #{item}  
+		 </foreach> 
+    </if>
    	order by updateTime DESC
    	<if test="pageSize!=-1">    
      	limit #{pageIndex},#{pageSize}

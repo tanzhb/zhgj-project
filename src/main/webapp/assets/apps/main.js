@@ -779,6 +779,25 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    			});
 		    		}]
 		    	}	        
+		    }) .state('toTakeDelivery', {
+		    	url: "/toTakeDelivery?:serialNum",
+		    	templateUrl: "rest/takeDelivery/takeDelivery",
+		    	data: {pageTitle: '查看收货详情'},
+		    	reload:true, 
+		    	controller: "TakeDeliveryController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [       
+		    				        'assets/apps/controllers/TakeDeliveryController.js',
+		    				        'assets/apps/service/TakeDeliveryService.js',
+		    				        'assets/apps/service/orderService.js'
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
 		    }).state('stockInAdd', {
 		    	url: "/stockInAdd?:serialNum",
 		    	templateUrl: "rest/takeDelivery/stockInAdd",
