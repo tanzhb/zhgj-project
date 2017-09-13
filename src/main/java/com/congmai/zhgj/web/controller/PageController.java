@@ -255,6 +255,24 @@ public class PageController {
         return "pay/viewPay";
     }
     
+    /**
+     * 应付款申请页面
+     * @return 
+     */
+    @RequestMapping("/applyPay")
+    public String applyPay() {
+        return "pay/applyPay";
+    }
+    
+    /**
+     * 应付款审批页面
+     * @return 
+     */
+    @RequestMapping("/auditPay")
+    public String auditPay() {
+        return "pay/auditPay";
+    }
+    
     
     /**
      * 收款详情页面

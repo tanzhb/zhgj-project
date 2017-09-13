@@ -10,6 +10,7 @@ import org.activiti.engine.runtime.ProcessInstance;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.OrderInfo;
+import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Vacation;
 
@@ -23,6 +24,14 @@ public interface IProcessService {
 	 * @throws Exception
 	 */
 	public String startVacation(Vacation vacation) throws Exception;
+	
+	/**
+	 * 启动应付款流程
+	 * @param vacation
+	 * @return
+	 * @throws Exception
+	 */
+	public String startAccountPayable(PaymentRecord paymentRecord) throws Exception;
 
 	
 	/**

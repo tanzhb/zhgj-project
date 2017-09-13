@@ -15,5 +15,11 @@ public class Constants {
 	/***************** default password (123456) *****************/
 	public static final String DEFAULT_PASSWORD = "14e1b600b1fd579f47433b88e8d85291";
 	
+	/***************** 请假流程key *****************/
+	public static final String VACATION = "com.zml.oa.vacation";
+	
+	/***************** 应付款流程key *****************/
+	public static final String ACCOUNTPAYABLE = "com.congmai.zhgj.accountPayable";
+	
 	public static long SYSY_INIT_TIME = new Date().getTime();
 }

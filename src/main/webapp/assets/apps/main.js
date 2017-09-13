@@ -1391,6 +1391,67 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             }
         })
         
+        .state('applyPay', {
+            url: "/applyPay:serialNum",
+            templateUrl: "rest/page/applyPay",
+            data: {pageTitle: '应付款申请'},
+            controller: "PayController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+								'assets/global/plugins/datatables/datatables.min.css',
+								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+								'assets/apps/css/special.css',
+								'assets/global/plugins/datatables/datatables.all.min.js',
+								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+								'assets/apps/scripts/angular-file-upload-shim.min.js',
+								'assets/apps/scripts/angular-file-upload.min.js',
+								'assets/apps/scripts/FileUploader.js',
+								'assets/apps/scripts/pageHandle.js',
+								'assets/apps/service/PayService.js',
+								'assets/apps/controllers/PayController.js',
+								'assets/apps/controllers/app.js',
+								'assets/apps/controllers/uploadPhoto.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        
+        .state('auditPay', {
+            url: "/auditPay",
+            templateUrl: "rest/page/auditPay",
+            data: {pageTitle: '应付款审批'},
+            params:{"serialNum":null,"taskId":null, "comments":null},
+            controller: "PayController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+								'assets/global/plugins/datatables/datatables.min.css',
+								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+								'assets/apps/css/special.css',
+								'assets/global/plugins/datatables/datatables.all.min.js',
+								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+								'assets/apps/scripts/angular-file-upload-shim.min.js',
+								'assets/apps/scripts/angular-file-upload.min.js',
+								'assets/apps/scripts/FileUploader.js',
+								'assets/apps/scripts/pageHandle.js',
+								'assets/apps/service/PayService.js',
+								'assets/apps/controllers/PayController.js',
+								'assets/apps/controllers/app.js',
+								'assets/apps/controllers/uploadPhoto.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        
          .state('paymentRecordC', {
             url: "/paymentRecordC",
             templateUrl: "rest/page/paymentRecord",
@@ -1402,17 +1463,28 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [
-				'assets/global/plugins/datatables/datatables.min.css',
-				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-				'assets/apps/css/special.css',
-				'assets/global/plugins/datatables/datatables.all.min.js',
-				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
-				'assets/apps/scripts/pageHandle.js',
-				'assets/apps/service/PayService.js',
-			    'assets/apps/scripts/angular-file-upload.min.js',
-				'assets/apps/controllers/PayController.js',
-				'assets/apps/controllers/app.js',
-				'assets/apps/controllers/uploadPhoto.js',
+								'assets/global/plugins/datatables/datatables.min.css',
+								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+								'assets/apps/css/special.css',
+								'assets/global/plugins/datatables/datatables.all.min.js',
+								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+								'assets/apps/scripts/pageHandle.js',
+								'assets/apps/service/PayService.js',
+							    'assets/apps/scripts/angular-file-upload.min.js',
+								'assets/apps/controllers/PayController.js',
+								'assets/apps/controllers/app.js',
+								'assets/apps/controllers/uploadPhoto.js',
+				
+				
+								//流程申请
+								'assets/global/css/dialog.css',
+								'assets/global/css/easyui.css',
+								'assets/global/css/datagrid.css',
+								'assets/global/css/jquery.qtip.min.css',
+					         
+								'assets/global/plugins/jquery.easyui.min.js',
+								'assets/global/plugins/jquery.qtip.min.js',
+								'assets/global/plugins/jquery.outerhtml.js',
                       ]
                     });
                 }]

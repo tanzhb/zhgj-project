@@ -109,15 +109,17 @@ public class Materiel {
     
 /*    private boolean isBOMcheck;*/
     
-    private String  canBillAmount;//¿É¿ªÆ±ÊıÁ¿
+    private String  canBillAmount;//å¯å¼€/å¯æ”¶æ•°é‡
     
-    private String  orderUnitPrice;//º¬Ë°µ¥¼Û
+    private String  orderUnitPrice;//å«ç¨å•ä»·
     
-    private String amount ;//¶©µ¥ÎïÁÏÊıÁ¿
+    private String amount ;//è®¢å•æ•°é‡
     
-    private String  billAmount;//¿ªÆ±ÊıÁ¿/ÊÕÆ±ÊıÁ¿
+    private String  billAmount;//å¼€ç¥¨æ•°é‡/æ”¶ç¥¨æ•°é‡
     
-    private String  money;//½ğ¶î
+    private String  money;//å½“å‰å¼€ç¥¨é‡‘é¢
+    
+    private String  invoiceBillingRecordSerial;//å‘ç¥¨å¼€ç¥¨/æ”¶ç¥¨è®°å½•æµæ°´
     
     
 
@@ -545,6 +547,22 @@ public class Materiel {
 
 	public void setMoney(String money) {
 		this.money = money;
+	}
+
+	public String getCustomsCode() {
+		return customsCode;
+	}
+
+	public void setCustomsCode(String customsCode) {
+		this.customsCode = customsCode;
+	}
+
+	public String getInvoiceBillingRecordSerial() {
+		return invoiceBillingRecordSerial;
+	}
+
+	public void setInvoiceBillingRecordSerial(String invoiceBillingRecordSerial) {
+		this.invoiceBillingRecordSerial = invoiceBillingRecordSerial;
 	}
 
 
