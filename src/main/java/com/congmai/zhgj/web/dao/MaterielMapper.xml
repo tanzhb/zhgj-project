@@ -815,9 +815,10 @@
     </if>
   </update>
   <select id="selectMaterielByOrderSerial"   parameterType="java.util.Map"   resultType="com.congmai.zhgj.web.model.Materiel">
-  select m.*,om.amount  as amount ,IFNULL(om.canBillAmount,om.amount)  AS canBillAmount,om.orderUnitPrice  as orderUnitPrice
+  select m.*,om.amount  as amount ,IFNULL(om.canBillAmount,om.amount)  AS canBillAmount,om.orderUnitPrice  as orderUnitPrice,om.serialNum as serialNum
   <if test="invoiceSerial!=null">
   , IFNULL(ibr.billCount,0) as billAmount
+  ,ibr.serialNum as invoiceBillingRecordSerial
   </if>
   <if test="invoiceSerial==null">
   , 0 as billAmount

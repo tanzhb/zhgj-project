@@ -86,7 +86,7 @@
 	a.serialNum,a.paymentNum,a.paymentType,b.orderNum,b.serialNum AS orderSerial,
 	b.orderAmount,a.applyPaymentAmount,a.applyCurrency,a.playPaymentDate,a.payType,a.paymentNode,a.nodeNum,
 	a.billStyle,a.isBill,a.applyDate,a.applicant,a.applyDept,a.remark,
-    a.payee,a.contact,a.contactNum,a.bank,a.accountName,a.accountNumber
+    a.payee,a.contact,a.contactNum,a.bank,a.accountName,a.accountNumber,a.reason,a.processInstanceId,a.userId
 	FROM
 	paymentRecord a
 	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
@@ -152,6 +152,9 @@
 	accountName=#{accountName},
 	accountNumber=#{accountNumber},
 	updater=#{updater},
+	reason=#{reason},
+	processInstanceId=#{processInstanceId},
+	userId=#{userId},
 	updateTime=NOW()
 	WHERE
 	serialNum=#{serialNum}

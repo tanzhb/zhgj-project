@@ -24,10 +24,43 @@ angular.module('MetronicApp').factory('PayService', ['$rootScope', '$http', '$q'
     		
     		//更新附件
     		updateFile:updateFile,
+    		//流程申请
+    		applyAp:applyAp,
+    		//加载审批页面信息
+    		getAuditInfos:getAuditInfos,
     };
 
     return factory;
 
+    function applyAp(reason, serialNum) {
+    	var contact = {};
+    	contact.reason = reason; 
+    	contact.serialNum = serialNum;
+    	//var str = "{\"reason\":reason,\"serialNum\":serialNum}";
+        var deferred = $q.defer();  
+        $http.post(ctx + "/rest/pay/apply",  JSON.stringify(contact)).success(function (data) {  
+        	
+        	// 如果连接成功，延时返回给调用者  
+            deferred.resolve(data);  
+        })  
+            .error(function () {  
+                deferred.reject('连接服务器出错！');  
+            })  
+        return deferred.promise;  
+    }
+    
+    function getAuditInfos(ids) {
+        var deferred = $q.defer();  
+        $http.post(ctx + "rest/pay/toApproval/" + ids).success(function (data) {  
+        	
+        	// 如果连接成功，延时返回给调用者  
+            deferred.resolve(data);  
+        })  
+            .error(function () {  
+                deferred.reject('连接服务器出错！');  
+            })  
+        return deferred.promise;  
+    }
     
   //保存附件
  function saveFile(File) {

@@ -248,7 +248,7 @@ public class InvoiceController {
 		List<Materiel> materiels = materielService.selectMaterielByOrderSerial(orderSerial.substring(0, 32),orderSerial);
 		OrderInfo orderInfo=orderService.selectById(orderSerial.substring(0, 32));
 		for(Materiel materiel:materiels){
-			materiel.setMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getAmount()).setScale(2,BigDecimal.ROUND_HALF_UP )).toString());
+			materiel.setMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getBillAmount()).setScale(2,BigDecimal.ROUND_HALF_UP )).toString());
 			
 		}
 		// 封装datatables数据返回到前台

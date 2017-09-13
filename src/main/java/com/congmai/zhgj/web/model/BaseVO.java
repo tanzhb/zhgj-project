@@ -25,6 +25,7 @@ public class BaseVO implements Serializable{
 	public final static String VACATION = "vacation";	
 	public final static String SALARY = "salary";	
 	public final static String EXPENSE = "expense";
+	public final static String ACCOUNTPAYABLE = "accountPayable";//应付款
 	
 	// 待办任务标识
 	public final static String CANDIDATE = "candidate";
