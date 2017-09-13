@@ -165,7 +165,7 @@
     dt.transportType,
 	td.serialNum as tdSerialNum,td.warehouseSerial as tdWarehouseSerial,td.takeDeliverDate,td.receiver,td.contactNum,td.takeDeliverNum,td.remark as take_delivery_remark
     from takeDelivery td
-    left join delivery  d on d.takeDeliverSerial = td.serialNum
+    left join delivery  d on d.serialNum = td.deliverSerial
     left join deliveryTransport dt on d.serialNum = dt.deliverSerial
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -186,7 +186,7 @@
     	dt.transportType,dt.transport,dt.port,dt.shipNumber,dt.playArrivalDate,dt.playWarehouseDate,dt.remark as delivery_transport_remark,dt.contactNum as dtContactNum,dt.contact as dtContact,
 		td.serialNum as tdSerialNum,td.warehouseSerial as tdWarehouseSerial,td.takeDeliverDate,td.receiver,td.contactNum,td.takeDeliverNum,td.remark as take_delivery_remark
     from takeDelivery td
-    left join delivery  d on d.takeDeliverSerial = td.serialNum
+    left join delivery  d on d.serialNum = td.deliverSerial
     left join deliveryTransport dt on d.serialNum = dt.deliverSerial
     left join deliveryMateriel dm on d.serialNum = dm.deliverSerial
     where td.serialNum = #{serialNum,jdbcType=VARCHAR}

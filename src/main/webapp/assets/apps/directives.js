@@ -92,3 +92,20 @@ MetronicApp.directive('selectpicker', function ($timeout) {
         }
     };
 });
+/*MetronicApp.directive('setDate', function ($timeout) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attributes) {debugger;
+            $timeout(function () {
+                scope.$apply(function () {
+                    element.selectpicker({"initialDate":"2016-11-11"});
+                });
+
+                scope.$watch('itemSelected', function (newValue, old) {
+                    scope.idx = newValue
+                    console.log('selected ', newValue);
+                });
+            }, 500);
+        }
+    };
+});*/

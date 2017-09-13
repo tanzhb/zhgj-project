@@ -68,6 +68,18 @@
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
 											<label class="control-label col-md-3"><span
+												class="required" aria-required="true"> * </span>发货类型:</label>
+											<div class="col-md-9">
+												<div class="form-control-focus"></div>
+												<p class="form-control-static" ng-show="input">
+													{{deliveryDetail.deliverType}}</p>
+											</div>
+										</div>
+									</div>
+									<!--/span-->
+									<div class="col-md-4">
+										<div class="form-group form-md-line-input">
+											<label class="control-label col-md-3"><span
 												class="required" aria-required="true"> * </span>销售订单号:</label>
 											<div class="col-md-9">
 												<div class="form-control-focus"></div>

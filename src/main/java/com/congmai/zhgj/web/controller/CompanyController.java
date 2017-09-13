@@ -143,7 +143,7 @@ public class CompanyController {
 		Page<Company> companys = new Page<Company>();
 		if(user !=null){
 			
-			company.setComId(userCompanyService.getUserComId(String.valueOf(user.getUserId())));//获取用户的企业ID
+			company.setComIds(userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId())));//获取用户的企业ID
 			companys = companyService.selectByPage(company);
 	    	//List<Company> companys = companyService.selectByPage(company).getResult();
 			// 封装datatables数据返回到前台

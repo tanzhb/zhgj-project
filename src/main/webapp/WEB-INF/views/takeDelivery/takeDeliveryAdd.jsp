@@ -669,7 +669,7 @@
 										<th style="min-width: 120px;" rowspan="2">批次号<span class="required2"> * </span></th>
 										<th style="min-width: 120px;" rowspan="2">生产日期<span class="required2"> * </span></th>
 										<th colspan="3" style="text-align: center;min-width: 100px;">发货</th>
-										<th colspan="3"  style="text-align: center;min-width: 100px;">收货</th>
+										<!-- <th colspan="3"  style="text-align: center;min-width: 100px;">收货</th> -->
 										<!-- <th colspan="3"  style="text-align: center;">检验</th>
 										<th colspan="5"  style="text-align: center;">入库</th>
 										<th rowspan="2">状态</th> -->
@@ -678,9 +678,9 @@
 										<th>订单数量</th>
 										<th>发货数量<span class="required2"> * </span></th>
 										<th style="min-width: 120px;">备注</th>
-										<th>实收数量<span class="required2"> * </span></th>
+										<!-- <th>实收数量<span class="required2"> * </span></th>
 										<th>拒收数量</th>
-										<th style="min-width: 120px;">备注</th>
+										<th style="min-width: 120px;">备注</th> -->
 										<!-- <th>合格数量</th>
 										<th>不合格数量</th>
 										<th>备注</th>
@@ -727,7 +727,7 @@
                                                  <input type="text" class="form-control" id="deliverRemark{{$index}}" name="deliverRemark"   ng-model="materiel.deliverRemark" ng-hide="deliverAdd" >
                                                  <div class="form-control-focus"> </div>
 										</td>
-										<td class="form-group">
+										<!-- <td class="form-group">
                                                  <input type="text" class="form-control" id="acceptCount{{$index}}" name="acceptCount" data-delivercount="{{materiel.deliverCount}}"  ng-model="materiel.acceptCount" ng-hide="deliverAdd" >
                                                  <div class="form-control-focus"> </div>
 										</td>
@@ -737,7 +737,7 @@
 										<td>
                                                  <input type="text" class="form-control" id="takeRemark{{$index}}" name="takeRemark"  ng-model="materiel.takeRemark" ng-hide="deliverAdd" >
                                                  <div class="form-control-focus"> </div>
-										</td>
+										</td> -->
 										<!-- <td></td>
 										<td></td>
 										<td></td>
