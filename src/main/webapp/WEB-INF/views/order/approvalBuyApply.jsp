@@ -1202,8 +1202,8 @@
 			                      <div class="row">
 			                          <div class="col-md-8">
 			                          		<div class="form-group ">
-				                              	<label class="control-label bold">原因：</label>
-				                                <div class="">
+				                              	<label class="control-label col-md-5 bold">原因：</label>
+				                                <div class="col-md-7">
 			                                      <p class="form-control-static" > {{buyOrder.remark}} </p>
 				                               	</div>
 			                               </div>
@@ -1212,6 +1212,59 @@
 			                  </div>
 			                </form>
 		            </div>
+		            <div class="row">
+						<div class="col-md-12">
+							<p>
+								<div class="portlet box green">
+	                                <div class="portlet-title">
+	                                    <div class="caption">
+	                                        <i class="fa fa-globe"></i>评论 </div>
+	                                </div>
+	                                <div class="portlet-body">
+	                                    <table class="table table-striped table-bordered table-hover order-column" id="pinglun">
+	                                        <thead>
+	                                            <tr>
+	                                                <th>评论人</th>
+	                                                <th>评论时间</th>
+	                                                <th>评论内容</th>
+	                                            </tr>
+	                                        </thead>
+	                                        <tbody id = "comment_audit">	
+                                            </tbody>
+	                                    </table>
+	                                </div>
+	                            </div>
+							</p>
+							
+							<p>
+								<div class="form-group form-md-line-input">
+									<label class="col-md-4 control-label" for="form_control_1">我的意见</label>
+									<div class="col-md-7">
+										<textarea class="form-control"   
+											id="content" name="content" rows="1"></textarea>
+									</div>
+								</div>
+								<input type="hidden" name="serialNum" id="serialNum" value="" />
+								<input type="hidden" name="taskId" id="taskId" value="" />
+								<input type="hidden" name="processInstanceId" id="processInstanceId" value="" />
+							</p>
+
+							<div class="modal-footer">
+								<button type="submit" ng-click="orderPass()"
+									class="btn btn-primary">
+									<i class="fa fa-save"></i> 通过
+								</button>
+								<!-- <button type="submit" ng-click="orderUnPass()"
+									class="btn btn-primary">
+									<i class="fa fa-save"></i> 不通过
+								</button> -->
+								<button type="submit" ng-click="closeAuditDialogue()"
+									class="btn btn-primary">
+									<i class="fa fa-save"></i> 关闭
+								</button>
+							</div>
+						</div>
+					</div>
       			</div>
 			</div>
 	</div>
