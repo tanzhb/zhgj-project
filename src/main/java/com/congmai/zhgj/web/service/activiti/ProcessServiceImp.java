@@ -51,16 +51,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.congmai.zhgj.core.util.BeanUtils;
+import com.congmai.zhgj.core.util.Constants;
 import com.congmai.zhgj.web.activiti.processTask.taskCommand.DeleteActiveTaskCmd;
 import com.congmai.zhgj.web.activiti.processTask.taskCommand.RevokeTaskCmd;
 import com.congmai.zhgj.web.activiti.processTask.taskCommand.StartActivityCmd;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.OrderInfo;
+import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Vacation;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.IVacationService;
+import com.congmai.zhgj.web.service.PayService;
 import com.congmai.zhgj.web.service.UserService;
 
 /**
@@ -108,6 +111,12 @@ public class ProcessServiceImp implements IProcessService{
 	
 	@Autowired
 	private ProcessEngine processEngine;
+	
+	/**
+	 * 应付款service
+	 */
+	@Autowired
+	private PayService payService;
 	
 	
     /**
@@ -400,10 +409,31 @@ public class ProcessServiceImp implements IProcessService{
 //        	variables.put("auditGroup", "director");
 //        }
         String businessKey = vacation.getBusinessKey();
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("com.zml.oa.vacation", businessKey, variables);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(Constants.VACATION, businessKey, variables);
         String processInstanceId = processInstance.getId();
         vacation.setProcessInstanceId(processInstanceId);
         this.vacationService.doUpdate(vacation);
+
+        logger.info("processInstanceId: "+processInstanceId);
+        //最后要设置null，就是这么做，还没研究为什么
+        this.identityService.setAuthenticatedUserId(null);
+        return processInstanceId;
+	}
+	
+	/**
+	 * 启动应付款流程
+	 */
+	@Override
+	public String startAccountPayable(PaymentRecord paymentRecord) throws Exception {
+		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
+        identityService.setAuthenticatedUserId(paymentRecord.getUserId().toString());
+        Map<String, Object> variables = new HashMap<String, Object>();
+        variables.put("entity", paymentRecord);
+        String businessKey = paymentRecord.getBusinessKey();
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(Constants.ACCOUNTPAYABLE, businessKey, variables);
+        String processInstanceId = processInstance.getId();
+        paymentRecord.setProcessInstanceId(processInstanceId);
+        this.payService.updatePaymentRecord(paymentRecord);;
 
         logger.info("processInstanceId: "+processInstanceId);
         //最后要设置null，就是这么做，还没研究为什么

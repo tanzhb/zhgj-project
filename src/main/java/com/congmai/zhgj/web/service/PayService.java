@@ -9,6 +9,7 @@ import com.congmai.zhgj.web.model.MaterielFile;
 import com.congmai.zhgj.web.model.PaymentFile;
 import com.congmai.zhgj.web.model.PaymentPlan;
 import com.congmai.zhgj.web.model.PaymentRecord;
+import com.congmai.zhgj.web.model.Vacation;
 
 /**
  * 
@@ -17,6 +18,15 @@ import com.congmai.zhgj.web.model.PaymentRecord;
  * @author czw
  */
 public interface PayService extends GenericService<PaymentRecord, String> {
+	
+	/**
+	 * 
+	 * @Description 启动应付款流程
+	 * @param paymentRecord
+	 * @return
+	 * @throws Exception
+	 */
+	public int apply(PaymentRecord paymentRecord) throws Exception;
     
     /**
      * 

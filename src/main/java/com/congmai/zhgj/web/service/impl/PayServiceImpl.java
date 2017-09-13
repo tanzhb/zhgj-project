@@ -19,6 +19,7 @@ import com.congmai.zhgj.web.model.MaterielFileExample;
 import com.congmai.zhgj.web.model.PaymentFile;
 import com.congmai.zhgj.web.model.PaymentPlan;
 import com.congmai.zhgj.web.model.PaymentRecord;
+import com.congmai.zhgj.web.model.Vacation;
 import com.congmai.zhgj.web.model.MaterielFileExample.Criteria;
 import com.congmai.zhgj.web.service.PayService;
 
@@ -39,6 +40,11 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 	@Override
 	public GenericDao<PaymentRecord,String> getDao() {
 		return payMapper;
+	}
+	
+	@Override
+	public int apply(PaymentRecord paymentRecord) throws Exception {
+		return payMapper.insertSelective(paymentRecord);
 	}
 
 	/**
