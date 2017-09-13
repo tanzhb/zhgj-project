@@ -155,6 +155,16 @@ public class TakeDeliveryController {
     public String takeDeliveryView(HttpServletRequest request) {
         return "takeDelivery/takeDeliveryView";
     }
+    
+    /**
+     * @Description (收货页面)
+     * @param request
+     * @return
+     */
+    @RequestMapping("takeDelivery")
+    public String takeDelivery(HttpServletRequest request) {
+    	return "takeDelivery/takeDelivery";
+    }
 
     /**
      * @Description (收货查看页面)
@@ -202,6 +212,36 @@ public class TakeDeliveryController {
         		System.out.println(e.getMessage());
         		return null;
         	}
+    	return flag;
+    }
+    
+    /**
+     * @Description (确认发货)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="confirmTakeDelivery",method=RequestMethod.POST)
+    @ResponseBody
+    public String confirmTakeDelivery(Map<String, Object> map,@RequestBody String params,HttpServletRequest request) {
+    	String flag ="0"; //默认失败
+    	
+    	ObjectMapper objectMapper = new ObjectMapper();
+    	objectMapper.configure(org.codehaus.jackson.map.DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    	TakeDeliveryParams  takeDeliveryParams = null;
+    	try {
+    		takeDeliveryParams = JSON.parseObject(params, TakeDeliveryParams.class);
+    	} catch (Exception e) {
+    		System.out.println(this.getClass()+"---------"+ e.getMessage());
+    	}
+    	try{
+    		Subject currentUser = SecurityUtils.getSubject();
+    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+    		takeDeliveryService.confirmTakeDelivery(takeDeliveryParams,currenLoginName);
+    		flag = "1";
+    	}catch(Exception e){
+    		System.out.println(e.getMessage());
+    		return null;
+    	}
     	return flag;
     }
     

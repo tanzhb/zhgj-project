@@ -21,6 +21,12 @@ public class TakeDelivery {
 
     private String remark;
 
+    private Date actualDate;
+
+    private String taker;
+
+    private String takeRemark;
+
     private String delFlg;
 
     private String creator;
@@ -154,6 +160,30 @@ public class TakeDelivery {
 
 	public void setSupplyName(String supplyName) {
 		this.supplyName = supplyName;
+	}
+
+	public Date getActualDate() {
+		return actualDate;
+	}
+
+	public void setActualDate(Date actualDate) {
+		this.actualDate = actualDate;
+	}
+
+	public String getTaker() {
+		return taker;
+	}
+
+	public void setTaker(String taker) {
+		this.taker = taker;
+	}
+
+	public String getTakeRemark() {
+		return takeRemark;
+	}
+
+	public void setTakeRemark(String takeRemark) {
+		this.takeRemark = takeRemark;
 	}
     
     

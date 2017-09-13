@@ -37,6 +37,7 @@ import com.congmai.zhgj.web.model.SupplyMateriel;
 import com.congmai.zhgj.web.model.SupplyMaterielExample;
 import com.congmai.zhgj.web.service.DeliveryMaterielService;
 import com.congmai.zhgj.web.service.DemandPlanService;
+import com.sun.org.apache.regexp.internal.recompile;
 
 @Service
 public class DeliveryMaterielServiceImpl extends GenericServiceImpl<DeliveryMateriel,String>
@@ -56,6 +57,7 @@ public class DeliveryMaterielServiceImpl extends GenericServiceImpl<DeliveryMate
 			DeliveryMaterielExample example) {
 		
 		return deliveryMaterielMapper.selectByExample(example);
+		//return deliveryMaterielMapper.selectListByExampleForStockIn(example);
 	}
 
 	@Override

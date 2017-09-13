@@ -146,18 +146,18 @@ public class StatementController {
     	criteria.andDelFlgEqualTo("0");
     	User user = UserUtil.getUserFromSession();
     	if(user!=null){
-    		String comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+    		List<String> comIds = userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId()));
     		if("buy".equals(type)){//平台客户对账单供应商为空
-    			if(comId==null){
+    			if(comIds==null){
     				criteria.andSupplyComIdIsNull();
     			}else{
-    				criteria.andSupplyComIdEqualTo(comId);
+    				criteria.andSupplyComIdIn(comIds);
     			}
         	}else if("supply".equals(type)){//平台供应商对账单客户为空
-        		if(comId==null){
+        		if(comIds==null){
             		criteria.andBuyComIdIsNull();
     			}else{
-    				criteria.andBuyComIdEqualTo(comId);
+    				criteria.andBuyComIdIn(comIds);
     			}
         	}
     		m.setOrderByClause("updateTime DESC");

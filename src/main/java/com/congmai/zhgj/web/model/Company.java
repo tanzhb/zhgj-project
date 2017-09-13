@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.model;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -61,7 +62,8 @@ public class Company {
     private int pageIndex;
     private String searchKey;
     private String comTypeName;
-
+    private List<String> comIds;
+ 
     public String getComId() {
         return comId;
     }
@@ -277,6 +279,14 @@ public class Company {
 
 	public void setComTypeName(String comTypeName) {
 		this.comTypeName = comTypeName;
+	}
+
+	public List<String> getComIds() {
+		return comIds;
+	}
+
+	public void setComIds(List<String> comIds) {
+		this.comIds = comIds;
 	}
     
     
