@@ -6,7 +6,8 @@ angular.module('MetronicApp').factory('InvoiceService', ['$rootScope', '$http', 
     		saveInvoice:saveInvoice,
     		delInvoices:delInvoices,
             selectDetailBySerialNum:selectDetailBySerialNum,
-            getClauseSettlementBySerialNum:getClauseSettlementBySerialNum
+            getOrderInfoBySerialNum:getOrderInfoBySerialNum,
+            saveInvoiceBillingRecord:saveInvoiceBillingRecord
     };
 
     return factory;
@@ -57,10 +58,10 @@ debugger;
           
     };
     //通过订单serialNum查找订单结算明细条款
-    function getClauseSettlementBySerialNum(serialNum){//getClauseSettlementBySerialNum
+    function getOrderInfoBySerialNum(serialNum){//getClauseSettlementBySerialNum
         var deferred = $q.defer();  
         debugger;
-        $http.post($rootScope.basePath + "/rest/invoice/clauseSettlement", serialNum).success(function (data) { 
+        $http.post($rootScope.basePath + "/rest/invoice/getOrderInfoBySerialNum", serialNum).success(function (data) { 
             // 如果连接成功，延时返回给调用者 
             deferred.resolve(data);  
         })  
@@ -70,5 +71,19 @@ debugger;
         return deferred.promise;  
           
     };
-   
+  //保存开票/收票信息
+    function saveInvoiceBillingRecord(invoiceBillingRecord){
+        var deferred = $q.defer();  
+debugger;
+        $http.post($rootScope.basePath + "/rest/invoice/saveInvoiceBillingRecordInfo", invoiceBillingRecord).success(function (data) {  
+            // 如果连接成功，延时返回给调用者  
+        	debugger;
+            deferred.resolve(data);  
+        })  
+            .error(function () {  
+                deferred.reject('连接服务器出错！');  
+            })  
+        return deferred.promise;  
+          
+    };
 }]);

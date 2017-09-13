@@ -22,8 +22,14 @@
     <result column="rate" property="rate" jdbcType="VARCHAR" />
     <result column="currency" property="currency" jdbcType="VARCHAR" />
     <result column="exchangeRate" property="exchangeRate" jdbcType="VARCHAR" />
+    <result column="materielCount" property="materielCount" jdbcType="VARCHAR" />
+    <result column="materielAmount" property="materielAmount" jdbcType="VARCHAR" />
+    <result column="rateAmount" property="rateAmount" jdbcType="VARCHAR" />
+    <result column="rateAndAmount" property="rateAndAmount" jdbcType="VARCHAR" />
+    <result column="otherAmount" property="otherAmount" jdbcType="VARCHAR" />
     <result column="orderAmount" property="orderAmount" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="orderRemark" property="orderRemark" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
@@ -92,7 +98,14 @@
   <sql id="Base_Column_List" >
     serialNum, contractSerial, supplyComId, buyComId, orderNum, orderType, seller, entrustParty, 
     serviceModel, demandPlanSerial, saleApplySerial, settlementClause, orderSerial, deliveryMode, 
-    transportMode, orderDate, maker, rate, currency, exchangeRate, orderAmount, remark, 
+    transportMode, orderDate, maker, rate, currency, exchangeRate, orderAmount, materielCount,
+materielAmount,
+rateAmount,
+rateAndAmount,
+otherAmount, remark, orderRemark,
+    
+    
+    
     status, delFlg, creator, createTime, updater, updateTime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.OrderInfoExample" >
@@ -113,8 +126,8 @@
   <select id="selectFramByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.OrderInfoExample" >
     select
     orderInfo.serialNum, orderInfo.contractSerial, orderInfo.supplyComId, orderInfo.buyComId, orderInfo.orderNum, orderInfo.orderType, orderInfo.seller, orderInfo.entrustParty, 
-    orderInfo.serviceModel, orderInfo.demandPlanSerial, orderInfo.saleApplySerial, orderInfo.settlementClause, orderInfo.orderSerial, orderInfo.deliveryMode, 
-    orderInfo.transportMode, orderInfo.orderDate, orderInfo.maker, orderInfo.rate, orderInfo.currency, orderInfo.exchangeRate, orderInfo.remark, orderInfo.status, orderInfo.delFlg, 
+    orderInfo.serviceModel, orderInfo.demandPlanSerial, orderInfo.saleApplySerial, orderInfo.settlementClause, orderInfo.orderSerial, orderInfo.deliveryMode, orderInfo.materielCount,orderInfo.orderAmount,
+    orderInfo.transportMode, orderInfo.orderDate, orderInfo.maker, orderInfo.rate, orderInfo.currency, orderInfo.exchangeRate, orderInfo.remark,orderRemark, orderInfo.status, orderInfo.delFlg, 
     orderInfo.creator, orderInfo.createTime, orderInfo.updater, orderInfo.updateTime
     from orderInfo
     left join contract on orderInfo.contractSerial = contract.serialNum
@@ -134,8 +147,8 @@
   <select id="selectCommenByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.OrderInfo" >
     select
     orderInfo.serialNum, orderInfo.contractSerial, orderInfo.supplyComId, orderInfo.buyComId, orderInfo.orderNum, orderInfo.orderType, orderInfo.seller, orderInfo.entrustParty, 
-    orderInfo.serviceModel, orderInfo.demandPlanSerial, orderInfo.saleApplySerial, orderInfo.settlementClause, orderInfo.orderSerial, orderInfo.deliveryMode, 
-    orderInfo.transportMode, orderInfo.orderDate, orderInfo.maker, orderInfo.rate, orderInfo.currency, orderInfo.exchangeRate, orderInfo.remark, orderInfo.status, orderInfo.delFlg, 
+    orderInfo.serviceModel, orderInfo.demandPlanSerial, orderInfo.saleApplySerial, orderInfo.settlementClause, orderInfo.orderSerial, orderInfo.deliveryMode, orderInfo.materielCount,orderInfo.orderAmount,
+    orderInfo.transportMode, orderInfo.orderDate, orderInfo.maker, orderInfo.rate, orderInfo.currency, orderInfo.exchangeRate, orderInfo.remark,orderInfo.orderRemark, orderInfo.status, orderInfo.delFlg, 
     orderInfo.creator, orderInfo.createTime, orderInfo.updater, orderInfo.updateTime
     from orderInfo
     left join contract on orderInfo.contractSerial = contract.serialNum
@@ -175,8 +188,12 @@
       demandPlanSerial, saleApplySerial, settlementClause, 
       orderSerial, deliveryMode, transportMode, 
       orderDate, maker, rate, 
-      currency, exchangeRate, orderAmount, 
-      remark, status, delFlg, 
+      currency, exchangeRate, materielCount,
+materielAmount,
+rateAmount,
+rateAndAmount,
+otherAmount, orderAmount, 
+      remark,orderRemark, status,
       creator, createTime, updater, 
       updateTime)
     values (#{serialNum,jdbcType=VARCHAR}, #{contractSerial,jdbcType=VARCHAR}, #{supplyComId,jdbcType=VARCHAR}, 
@@ -185,8 +202,14 @@
       #{demandPlanSerial,jdbcType=VARCHAR}, #{saleApplySerial,jdbcType=VARCHAR}, #{settlementClause,jdbcType=VARCHAR}, 
       #{orderSerial,jdbcType=VARCHAR}, #{deliveryMode,jdbcType=VARCHAR}, #{transportMode,jdbcType=VARCHAR}, 
       #{orderDate,jdbcType=DATE}, #{maker,jdbcType=VARCHAR}, #{rate,jdbcType=VARCHAR}, 
-      #{currency,jdbcType=VARCHAR}, #{exchangeRate,jdbcType=VARCHAR}, #{orderAmount,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, 
+      #{currency,jdbcType=VARCHAR}, #{exchangeRate,jdbcType=VARCHAR}, 
+      #{materielCount,jdbcType=VARCHAR}, 
+      #{materielAmount,jdbcType=VARCHAR}, 
+      #{rateAmount,jdbcType=VARCHAR}, 
+      #{rateAndAmount,jdbcType=VARCHAR}, 
+      #{otherAmount,jdbcType=VARCHAR}, 
+		#{orderAmount,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR},#{orderRemark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
@@ -253,11 +276,29 @@
       <if test="exchangeRate != null" >
         exchangeRate,
       </if>
+      <if test="materielCount != null" >
+        materielCount,
+      </if>
+      <if test="materielAmount != null" >
+        materielAmount,
+      </if>
+      <if test="rateAmount != null" >
+        rateAmount,
+      </if>
+      <if test="rateAndAmount != null" >
+        rateAndAmount,
+      </if>
+      <if test="otherAmount != null" >
+        otherAmount,
+      </if>
       <if test="orderAmount != null" >
         orderAmount,
       </if>
       <if test="remark != null" >
         remark,
+      </if>
+      <if test="orderRemark != null" >
+        orderRemark,
       </if>
       <if test="status != null" >
         status,
@@ -339,11 +380,29 @@
       <if test="exchangeRate != null" >
         #{exchangeRate,jdbcType=VARCHAR},
       </if>
+      <if test="materielCount != null" >
+        #{materielCount,jdbcType=VARCHAR},
+      </if>
+      <if test="materielAmount != null" >
+        #{materielAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="rateAmount != null" >
+        #{rateAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="rateAndAmount != null" >
+        #{rateAndAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="otherAmount != null" >
+        #{otherAmount,jdbcType=VARCHAR},
+      </if>
       <if test="orderAmount != null" >
         #{orderAmount,jdbcType=VARCHAR},
       </if>
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="orderRemark != null" >
+        #{orderRemark,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         #{status,jdbcType=VARCHAR},
@@ -434,11 +493,29 @@
       <if test="record.exchangeRate != null" >
         exchangeRate = #{record.exchangeRate,jdbcType=VARCHAR},
       </if>
+      <if test="record.materielCount != null" >
+        materielCount = #{record.materielCount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materielAmount != null" >
+        materielAmount = #{record.materielAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rateAmount != null" >
+        rateAmount = #{record.rateAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rateAndAmount != null" >
+        rateAndAmount = #{record.rateAndAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.otherAmount != null" >
+        otherAmount = #{record.otherAmount,jdbcType=VARCHAR},
+      </if>
       <if test="record.orderAmount != null" >
         orderAmount = #{record.orderAmount,jdbcType=VARCHAR},
       </if>
       <if test="record.remark != null" >
         remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderRemark != null" >
+        remark = #{record.orderRemark,jdbcType=VARCHAR},
       </if>
       <if test="record.status != null" >
         status = #{record.status,jdbcType=VARCHAR},
@@ -485,8 +562,14 @@
       rate = #{record.rate,jdbcType=VARCHAR},
       currency = #{record.currency,jdbcType=VARCHAR},
       exchangeRate = #{record.exchangeRate,jdbcType=VARCHAR},
+      materielCount = #{record.materielCount,jdbcType=VARCHAR},
+      materielAmount = #{record.materielAmount,jdbcType=VARCHAR},
+      rateAmount = #{record.rateAmount,jdbcType=VARCHAR},
+      rateAndAmount = #{record.rateAndAmount,jdbcType=VARCHAR},
+      otherAmount = #{record.otherAmount,jdbcType=VARCHAR},
       orderAmount = #{record.orderAmount,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
+      orderRemark = #{record.orderRemark,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
       delFlg = #{record.delFlg,jdbcType=VARCHAR},
       creator = #{record.creator,jdbcType=VARCHAR},
@@ -557,11 +640,29 @@
       <if test="exchangeRate != null" >
         exchangeRate = #{exchangeRate,jdbcType=VARCHAR},
       </if>
+      <if test="materielCount != null" >
+        materielCount = #{materielCount,jdbcType=VARCHAR},
+      </if>
+      <if test="materielAmount != null" >
+        materielAmount = #{materielAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="rateAmount != null" >
+        rateAmount = #{rateAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="rateAndAmount != null" >
+        rateAndAmount = #{rateAndAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="otherAmount != null" >
+        otherAmount = #{otherAmount,jdbcType=VARCHAR},
+      </if>
       <if test="orderAmount != null" >
         orderAmount = #{orderAmount,jdbcType=VARCHAR},
       </if>
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="orderRemark != null" >
+        orderRemark = #{orderRemark,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=VARCHAR},
@@ -605,8 +706,14 @@
       rate = #{rate,jdbcType=VARCHAR},
       currency = #{currency,jdbcType=VARCHAR},
       exchangeRate = #{exchangeRate,jdbcType=VARCHAR},
+      materielCount = #{materielCount,jdbcType=VARCHAR},
+      materielAmount = #{materielAmount,jdbcType=VARCHAR},
+      rateAmount = #{rateAmount,jdbcType=VARCHAR},
+      rateAndAmount = #{rateAndAmount,jdbcType=VARCHAR},
+      otherAmount = #{otherAmount,jdbcType=VARCHAR},
       orderAmount = #{orderAmount,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
+      orderRemark = #{orderRemark,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
       delFlg = #{delFlg,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},

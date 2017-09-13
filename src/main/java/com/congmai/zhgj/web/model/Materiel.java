@@ -86,6 +86,8 @@ public class Materiel {
     private String palletWeight;
 
     private String customsSupervisionConditions;
+    
+    private String customsCode;
 
     private String qualityDate;
 
@@ -106,6 +108,18 @@ public class Materiel {
     private Date updateTime;
     
 /*    private boolean isBOMcheck;*/
+    
+    private String  canBillAmount;//可开票数量
+    
+    private String  orderUnitPrice;//含税单价
+    
+    private String amount ;//订单物料数量
+    
+    private String  billAmount;//开票数量/收票数量
+    
+    private String  money;//金额
+    
+    
 
     public String getSerialNum() {
         return serialNum;
@@ -492,12 +506,49 @@ public class Materiel {
 		this.deliveryCycle = deliveryCycle;
 	}
 
-/*	public boolean getIsBOMcheck() {
-		return isBOMcheck;
+
+	public String getCanBillAmount() {
+		return canBillAmount;
 	}
 
-	public void setIsBOMcheck(boolean isBOMcheck) {
-		this.isBOMcheck = isBOMcheck;
-	}*/
+	public void setCanBillAmount(String canBillAmount) {
+		this.canBillAmount = canBillAmount;
+	}
+
+	public String getOrderUnitPrice() {
+		return orderUnitPrice;
+	}
+
+	public void setOrderUnitPrice(String orderUnitPrice) {
+		this.orderUnitPrice = orderUnitPrice;
+	}
+
+	public String getAmount() {
+		return amount;
+	}
+
+	public void setAmount(String amount) {
+		this.amount = amount;
+	}
+
+	public String getBillAmount() {
+		return billAmount;
+	}
+
+	public void setBillAmount(String billAmount) {
+		this.billAmount = billAmount;
+	}
+
+	public String getMoney() {
+		return money;
+	}
+
+	public void setMoney(String money) {
+		this.money = money;
+	}
+
+
+	
+
     
 }

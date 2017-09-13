@@ -42,7 +42,7 @@
             <div class="portlet-body">
 				<div class="portlet light ">
                         <div class="portlet-title">
-                            <div class="caption">价格信息</div>
+                            <div class="caption"><span ng-if="buyOrSale.indexOf('buy')>-1">采购</span><span ng-if="buyOrSale.indexOf('sale')>-1">销售</span>价格信息</div><!--   -->
                             <div class="actions">
                                 <button  ng-show="priceListView"    class="btn purple  btn-sm btn-circle " ng-click="editPriceList()">
                                             <i class="fa fa-edit"></i> 编辑 </button>
@@ -150,15 +150,13 @@
                                                             <div class="form-group">
                                                     <label class="control-label bold" for="priceType"> <span class="required"> * </span>价格类型 :</label>
                                                     <div class="">
-                                                                        <!-- <select class="form-control" id="priceType" name ="priceType" ng-model="priceList.priceType"  ng-show="priceListAdd"  >
+                                                                        <select class="form-control" id="priceType" name ="priceType" ng-model="priceList.priceType"  ng-show="priceListAdd"  disabled="disabled" >
                                                                           <option value=""></option>
-                                                                        <option value="buyPrice">采购价格</option>
-                                                                        <option value="salePrice">销售价格</option>
+                                                                        <option value="buyPrice"  ng-selected="buyOrSale.indexOf('buy')>-1">采购价格</option>
+                                                                        <option value="salePrice"  ng-selected="buyOrSale.indexOf('sale')>-1">销售价格</option>
                                                                         </select>
-                                                                         <div class="form-control-focus"> </div> -->
-                                                                           <p class="control-label left"  ng-if="buyOrSale.indexOf('buy')>-1" >采购价格</p>
-                                                                           
-                                                                        <p class="control-label left"   ng-if="buyOrSale.indexOf('sale')>-1" >  销售价格</p>
+                                                                           <p class="control-label left"   ng-show="priceListView" ng-if="buyOrSale.indexOf('buy')>-1" >采购价格</p>
+                                                                        <p class="control-label left"  ng-show="priceListView"  ng-if="buyOrSale.indexOf('sale')>-1" >  销售价格</p>
                                                                     </div>
                                                                 </div>
                                                             </div>

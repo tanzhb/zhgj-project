@@ -6,9 +6,11 @@
     <result column="contractSerial" property="contractSerial" jdbcType="VARCHAR" />
     <result column="payee" property="payee" jdbcType="VARCHAR" />
     <result column="payer" property="payer" jdbcType="VARCHAR" />
+    <result column="materielAmount" property="materielAmount" jdbcType="VARCHAR" />
+    <result column="rateAmount" property="rateAmount" jdbcType="VARCHAR" />
+    <result column="rateAndAmount" property="rateAndAmount" jdbcType="VARCHAR" />
     <result column="orderAmount" property="orderAmount" jdbcType="VARCHAR" />
     <result column="otherAmount" property="otherAmount" jdbcType="VARCHAR" />
-    <result column="totalAmount" property="totalAmount" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
@@ -77,7 +79,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    serialNum, contractSerial, payee, payer, orderAmount, otherAmount, totalAmount, remark, 
+    serialNum, contractSerial, payee, payer, materielAmount,
+rateAmount,
+rateAndAmount,
+    orderAmount, otherAmount, remark, 
     status, delFlg, creator, createTime, updater, updateTime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.ClauseSettlementExample" >
@@ -112,13 +117,19 @@
   </delete>
   <insert id="insert" parameterType="com.congmai.zhgj.web.model.ClauseSettlement" >
     insert into clauseSettlement (serialNum, contractSerial, payee, 
-      payer, orderAmount, otherAmount, 
-      totalAmount, remark, status, 
+      payer, materielAmount,
+rateAmount,
+rateAndAmount, orderAmount, otherAmount, 
+       remark, status, 
       delFlg, creator, createTime, 
       updater, updateTime)
     values (#{serialNum,jdbcType=VARCHAR}, #{contractSerial,jdbcType=VARCHAR}, #{payee,jdbcType=VARCHAR}, 
-      #{payer,jdbcType=VARCHAR}, #{orderAmount,jdbcType=VARCHAR}, #{otherAmount,jdbcType=VARCHAR}, 
-      #{totalAmount,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{payer,jdbcType=VARCHAR},
+      #{materielAmount,jdbcType=VARCHAR},
+      #{rateAmount,jdbcType=VARCHAR},
+      #{rateAndAmount,jdbcType=VARCHAR}, 
+#{orderAmount,jdbcType=VARCHAR}, #{otherAmount,jdbcType=VARCHAR}, 
+       #{remark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
       #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
@@ -137,14 +148,20 @@
       <if test="payer != null" >
         payer,
       </if>
+      <if test="materielAmount != null" >
+        materielAmount,
+      </if>
+      <if test="rateAmount != null" >
+        rateAmount,
+      </if>
+      <if test="rateAndAmount != null" >
+        rateAndAmount,
+      </if>
       <if test="orderAmount != null" >
         orderAmount,
       </if>
       <if test="otherAmount != null" >
         otherAmount,
-      </if>
-      <if test="totalAmount != null" >
-        totalAmount,
       </if>
       <if test="remark != null" >
         remark,
@@ -181,14 +198,20 @@
       <if test="payer != null" >
         #{payer,jdbcType=VARCHAR},
       </if>
+      <if test="materielAmount != null" >
+        #{payer,jdbcType=VARCHAR},
+      </if>
+      <if test="rateAmount != null" >
+        #{payer,jdbcType=VARCHAR},
+      </if>
+      <if test="rateAndAmount != null" >
+        #{payer,jdbcType=VARCHAR},
+      </if>
       <if test="orderAmount != null" >
         #{orderAmount,jdbcType=VARCHAR},
       </if>
       <if test="otherAmount != null" >
         #{otherAmount,jdbcType=VARCHAR},
-      </if>
-      <if test="totalAmount != null" >
-        #{totalAmount,jdbcType=VARCHAR},
       </if>
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
@@ -234,14 +257,20 @@
       <if test="record.payer != null" >
         payer = #{record.payer,jdbcType=VARCHAR},
       </if>
+      <if test="record.materielAmount != null" >
+        materielAmount = #{record.materielAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payer != null" >
+        rateAmount = #{record.rateAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payer != null" >
+        rateAndAmount = #{record.rateAndAmount,jdbcType=VARCHAR},
+      </if>
       <if test="record.orderAmount != null" >
         orderAmount = #{record.orderAmount,jdbcType=VARCHAR},
       </if>
       <if test="record.otherAmount != null" >
         otherAmount = #{record.otherAmount,jdbcType=VARCHAR},
-      </if>
-      <if test="record.totalAmount != null" >
-        totalAmount = #{record.totalAmount,jdbcType=VARCHAR},
       </if>
       <if test="record.remark != null" >
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -275,9 +304,11 @@
       contractSerial = #{record.contractSerial,jdbcType=VARCHAR},
       payee = #{record.payee,jdbcType=VARCHAR},
       payer = #{record.payer,jdbcType=VARCHAR},
+      materielAmount = #{record.materielAmount,jdbcType=VARCHAR},
+      rateAmount = #{record.rateAmount,jdbcType=VARCHAR},
+      rateAndAmount = #{record.rateAndAmount,jdbcType=VARCHAR},
       orderAmount = #{record.orderAmount,jdbcType=VARCHAR},
       otherAmount = #{record.otherAmount,jdbcType=VARCHAR},
-      totalAmount = #{record.totalAmount,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
       delFlg = #{record.delFlg,jdbcType=VARCHAR},
@@ -301,14 +332,20 @@
       <if test="payer != null" >
         payer = #{payer,jdbcType=VARCHAR},
       </if>
+      <if test="materielAmount != null" >
+        materielAmount = #{materielAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="rateAmount != null" >
+        rateAmount = #{rateAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="rateAndAmount != null" >
+        rateAndAmount = #{rateAndAmount,jdbcType=VARCHAR},
+      </if>
       <if test="orderAmount != null" >
         orderAmount = #{orderAmount,jdbcType=VARCHAR},
       </if>
       <if test="otherAmount != null" >
         otherAmount = #{otherAmount,jdbcType=VARCHAR},
-      </if>
-      <if test="totalAmount != null" >
-        totalAmount = #{totalAmount,jdbcType=VARCHAR},
       </if>
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
@@ -339,9 +376,11 @@
     set contractSerial = #{contractSerial,jdbcType=VARCHAR},
       payee = #{payee,jdbcType=VARCHAR},
       payer = #{payer,jdbcType=VARCHAR},
+      materielAmount = #{materielAmount,jdbcType=VARCHAR},
+      rateAmount = #{rateAmount,jdbcType=VARCHAR},
+      rateAndAmount = #{rateAndAmount,jdbcType=VARCHAR},
       orderAmount = #{orderAmount,jdbcType=VARCHAR},
       otherAmount = #{otherAmount,jdbcType=VARCHAR},
-      totalAmount = #{totalAmount,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
       delFlg = #{delFlg,jdbcType=VARCHAR},
