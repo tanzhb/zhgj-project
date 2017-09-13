@@ -209,6 +209,16 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		// TODO Auto-generated method stub
 		return deliveryMapper.findAllDeliveryList(username);
 	}
+	
+
+	/**
+	 * 查询发货列表(加入数据权限)
+	 */
+	@Override
+	public List<DeliveryVO> findAllDeliveryList(DeliveryVO deliveryVO) {
+		
+		return deliveryMapper.findAllDeliveryList(deliveryVO);
+	}
 
 
 	/**

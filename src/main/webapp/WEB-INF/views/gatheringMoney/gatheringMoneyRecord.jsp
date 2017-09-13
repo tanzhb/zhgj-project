@@ -5,14 +5,16 @@
 </h3>
 <div class="page-bar">
 	<ul class="page-breadcrumb">
-		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i class="fa fa-angle-right"></i></li>
-			
-		<li><a ui-sref="gatheringMoneyRecord">收款</a><i class="fa fa-angle-right"></i></li>
+		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
+			class="fa fa-angle-right"></i></li>
+
+		<li><a ui-sref="gatheringMoneyRecord">收款</a><i
+			class="fa fa-angle-right"></i></li>
 		<li><a ui-sref="gatheringMoneyRecord">收款信息</a></li>
 	</ul>
 </div>
 
-<div class="row" >
+<div class="row">
 	<div class="col-md-12">
 
 		<script type="text/javascript">
@@ -25,50 +27,26 @@
 			}
 		
 		</script>
-		
+
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
-		<div class="portlet box red">
+		<div class="portlet light">
 			<div class="portlet-title">
-			<div class="caption">
+				<div class="caption">
 					<i class="fa fa-globe"></i>收款列表
 				</div>
 				<div class="actions" ng-controller='MyCtrl'>
-					<a href="javascript:;" ng-click="jumpToUrl('addGatheringMoney')"
-						class="btn btn-default btn-sm btn-circle"> <i
-						class="fa fa-plus"></i> 添加
-					</a> 
-					<a href="javascript:;" ng-click="jumpToEdit()"
-						class="btn btn-default btn-sm btn-circle">
-						<i class="fa fa-edit"></i> 修改
-					</a>
-					<a href="javascript:;" ng-click="del()"
-						class="btn btn-default btn-sm btn-circle"> <i
-						class="fa fa-minus"></i> 删除
-					</a>
-					
-					<div class="btn-group">
-						<a class="btn btn-default btn-outline btn-circle"
-							href="javascript:;" data-toggle="dropdown"> <i
-							class="fa fa-share"></i> <span class="hidden-xs"> 其它 </span> <i
-							class="fa fa-angle-down"></i>
-						</a>
-						<ul class="dropdown-menu pull-right" id="sample_3_tools">
-							<!-- <li><a data-action="0" class="tool-action"
-								data-toggle="modal" data-target="#import"> <i
-									class="fa fa-upload"></i> 导入
-							</a></li> -->
-							<li><a href="javascript:;" data-action="0"
-								class="tool-action" ng-click="exportPay()"> <i class="fa fa-file-excel-o"></i> 导出
-							</a></li>
-							<li><a href="javascript:;" data-action="1"
-								class="tool-action" > <i class="fa fa-print"></i> 打印
-							</a></li>
-						</ul>
-					</div>
+				<label class="btn btn-transparent green btn-circle btn-sm" ng-click="jumpToUrl('addGatheringMoney')"><i class="fa fa-plus"></i> 添加</label>
+									
+				<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="jumpToEdit()"> <i class="fa fa-edit"></i>修改</label>
+									
+									
+				<label class="btn btn-transparent red btn-circle btn-sm" ng-click="del()"> <i class="fa fa-minus"></i> 删除</label>
+									
+				<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportPay()"> <i class="fa fa-file-excel-o"></i> 导出</label>
 				</div>
 			</div>
 
-            <div id="delUsersModal" class="modal fade" tabindex="-1"
+			<div id="delUsersModal" class="modal fade" tabindex="-1"
 				data-backdrop="static" data-keyboard="false">
 				<div class="modal-dialog">
 					<div class="modal-content">
@@ -84,28 +62,29 @@
 							<button type="button" data-dismiss="modal"
 								class="btn dark btn-outline">取消</button>
 							<button type="button" ng-click="confirmDel()" class="btn green">确定
-								</button>
+							</button>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<div class="portlet-body" >
-				<table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_2">
+			<div class="portlet-body">
+				<table
+					class="table table-striped table-bordered table-hover table-checkable order-column"
+					id="sample_2">
 					<thead>
 						<tr>
-							<th style="text-align: center"><input name="select_all" value="1" id="example-select-all" type="checkbox" /></th>
-							<th style="white-space: nowrap;">收款单号 </th>
-							<th style="white-space: nowrap;">收款计划编号</th>
-							<th style="white-space: nowrap;">关联销售订单号</th>
-							<th style="white-space: nowrap;">收款类型 </th>
-							<th style="white-space: nowrap;">支付类型</th>
-							<th style="white-space: nowrap;">发票方式 </th>
-							<th style="white-space: nowrap;">关联发票单号</th>
-							<th style="white-space: nowrap;">申请人</th>
-							<th style="white-space: nowrap;">申请日期</th>
+							<th style="text-align: center"><input name="select_all"
+								value="1" id="example-select-all" type="checkbox" /></th>
+							<th style="white-space: nowrap;">收款单号</th>
+							<th style="white-space: nowrap;">计划收款日期</th>
+							<th style="white-space: nowrap;">支付节点</th>
+							<th style="white-space: nowrap;">节点单据号</th>
 							<th style="white-space: nowrap;">收款金额</th>
+							<th style="white-space: nowrap;">关联订单号</th>
 							<th style="white-space: nowrap;">付款方</th>
+							<th style="white-space: nowrap;">实际收款日期</th>
+							<th style="white-space: nowrap;">实际收款金额</th>
 							<th style="white-space: nowrap;">状态</th>
 						</tr>
 					</thead>
@@ -129,7 +108,7 @@
 				<h4 class="modal-title">基本信息</h4>
 			</div>
 			<div class="modal-body">
-				<div class="row" style="line-height:60px;">
+				<div class="row" style="line-height: 60px;">
 					<div class="col-md-6">
 						<div class="form-group">
 							<label class="control-label col-md-5">合同编号</label> <label
@@ -147,10 +126,10 @@
 						</div>
 					</div>
 				</div>
-				
-				
-				
-				<div class="row" style="line-height:60px;">
+
+
+
+				<div class="row" style="line-height: 60px;">
 					<div class="col-md-6">
 						<div class="form-group">
 							<label class="control-label col-md-5">服务模式</label> <label
@@ -168,88 +147,84 @@
 						</div>
 					</div>
 				</div>
-				
-				
-				<div class="row" style="line-height:60px;">
+
+
+				<div class="row" style="line-height: 60px;">
 					<div class="col-md-6">
 						<div class="form-group">
 							<label class="control-label col-md-5">供应商</label> <label
-								class="control-label col-md-7">
-								{{contractVO.comId}} </label>
+								class="control-label col-md-7"> {{contractVO.comId}} </label>
 
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
 							<label class="control-label col-md-5">备注</label> <label
-								class="control-label col-md-7">
-								{{contractVO.remark}} </label>
+								class="control-label col-md-7"> {{contractVO.remark}} </label>
 
 						</div>
 					</div>
 				</div>
-				
-				
-				<div class="row" style="line-height:60px;">
+
+
+				<div class="row" style="line-height: 60px;">
 					<div class="col-md-6">
 						<div class="form-group">
 							<label class="control-label col-md-5">开始日期</label> <label
-								class="control-label col-md-7">
-								{{contractVO.startDate}} </label>
+								class="control-label col-md-7"> {{contractVO.startDate}}
+							</label>
 
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
 							<label class="control-label col-md-5">结束日期</label> <label
-								class="control-label col-md-7">
-								{{contractVO.endDate}} </label>
+								class="control-label col-md-7"> {{contractVO.endDate}} </label>
 
 						</div>
 					</div>
 				</div>
-				
-				
-				<div class="row" style="line-height:60px;">
+
+
+				<div class="row" style="line-height: 60px;">
 					<div class="col-md-6">
 						<div class="form-group">
 							<label class="control-label col-md-5">签订日期</label> <label
-								class="control-label col-md-7">
-								{{contractVO.signDate}} </label>
+								class="control-label col-md-7"> {{contractVO.signDate}}
+							</label>
 
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
 							<label class="control-label col-md-5">签订人</label> <label
-								class="control-label col-md-7">
-								{{contractVO.signer}} </label>
+								class="control-label col-md-7"> {{contractVO.signer}} </label>
 
 						</div>
 					</div>
 				</div>
-				
-				
-				<div class="row" style="line-height:60px;">
+
+
+				<div class="row" style="line-height: 60px;">
 					<div class="col-md-6">
 						<div class="form-group">
 							<label class="control-label col-md-5">电子合同</label> <label
-								class="control-label col-md-7">
-								<a title="{{contractVO.electronicContract}}" ng-click="download(contractVO.electronicContract)">
-								{{contractVO.electronicContract|limitTo:10}}... 
-								</a>
-								</label>
+								class="control-label col-md-7"> <a
+								title="{{contractVO.electronicContract}}"
+								ng-click="download(contractVO.electronicContract)">
+									{{contractVO.electronicContract|limitTo:10}}... </a>
+							</label>
 
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
 							<label class="control-label col-md-5">签字合同</label> <label
-								class="control-label col-md-7">
-								<a title="{{contractVO.signContract}}" ng-click="download(contractVO.signContract)">
-								{{contractVO.signContract|limitTo:10}}... 
-								</a>
-								</label>
+								class="control-label col-md-7"> <a
+								title="{{contractVO.signContract}}"
+								ng-click="download(contractVO.signContract)">
+									{{contractVO.signContract|limitTo:10}}... </a>
+							</label>
 
 						</div>
 					</div>

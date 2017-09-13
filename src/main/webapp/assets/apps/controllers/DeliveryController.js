@@ -317,6 +317,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	
 	//编辑基本信息
 	$scope.editBasicInfo=function(){
+		if($('#form_sample_1').valid()){
 		var promise = DeliveryService.editBasicInfo($scope);
 		promise.then(function(data) {
 			if (!handle.isNull(data)) {
@@ -344,6 +345,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			toastr.error("保存失败！请联系管理员");
 			console.log(data);
 		});	
+		};
 	}
 	
 	
@@ -387,35 +389,6 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			"hideMethod" : "fadeOut"
 		}
 	
-		
-		
-		//单个删除
-		/*$scope.jumpToDel = function(value) {
-			var ids=value;	
-			if (ids == '') {// 未勾选删除数据									
-				toastr.warning("未勾选要删除数据！");
-			} else {
-				Jquery('#delUsersModal').modal('show');// 打开确认删除模态框
-				
-				$scope.confirmDel = function() {										
-					ContractService.delUsers(ids).then(
-									function(data) {
-										
-										$('#delUsersModal').modal('hide');// 删除成功后关闭模态框
-										toastr.success("删除成功！");
-										var table = $('#sample_2').DataTable();
-										table.ajax.reload();
-										$("#sample_2").dataTable().fnDraw(false)
-									},
-									function(errResponse) {
-										console.error('Error while deleting Users');
-									}
-
-							);
-				}
-			}
-		};*/
-		
 		
 		 $scope.exportContract = function(){
 	    	 handle.blockUI("正在导出数据，请稍后"); 
@@ -951,6 +924,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
             ignore: "",
             messages: {
             	deliverNum:{required:"发货单号不能为空！",rangelength:jQuery.validator.format("发货单号位数必须在{0}到{1}字符之间！")},
+            	deliverType:{required:"发货类型不能为空！"},
             	orderNum:{required:"订单编号不能为空！"},
             	supplyComId:{required:"供应商不能为空！"},
             	shipper:{required:"发货方不能为空！"},
@@ -1014,6 +988,8 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
                 },
                 
                 deliverNum:{required:true,
+                },
+                deliverType:{required:true,
                 },
                 orderNum:{required:true,
                 },

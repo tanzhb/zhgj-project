@@ -6,7 +6,7 @@
 	content="multipart/form-data; charset=utf-8" />
 </head>
 <!-- BEGIN PAGE HEADER-->
-<h3 class="page-title">收货</h3>
+<!-- <h3 class="page-title">收货</h3> -->
 <div class="page-bar">
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
@@ -45,14 +45,21 @@
 								<div class="btn-group btn-group-devided" data-toggle="buttons">
 									<label class="btn btn-transparent green btn-circle btn-sm"
 										ui-sref="takeDeliveryAdd"> <i class="fa fa-plus"></i>
-										添加
-									</label> <label class="btn btn-transparent purple btn-circle btn-sm"
+										代发货
+									</label>
+									<label class="btn btn-transparent purple btn-circle btn-sm"
+										ng-click="takeDelivery()"> <i class="fa fa-edit"></i>
+										收货
+									</label>
+									<label class="btn btn-transparent purple btn-circle btn-sm"
 										ng-click="takeDeliveryEdit()"> <i class="fa fa-edit"></i>
 										修改
-									</label> <label class="btn btn-transparent red btn-circle btn-sm"
+									</label>
+									<label class="btn btn-transparent red btn-circle btn-sm"
 										ng-click="takeDeliveryDelete()"> <i
 										class="fa fa-minus"></i> 删除
-									</label> <label
+									</label>
+									<label
 										class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
 										ng-click="exportTakeDelivery()"> <i
 										class="fa fa-file-excel-o"></i> 导出

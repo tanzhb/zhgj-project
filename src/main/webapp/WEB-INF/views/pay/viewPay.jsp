@@ -424,14 +424,14 @@
 																ng-if="file[$index].file==null||file[$index].file==''"
 																class="fileinput fileinput-new"
 																data-provides="fileinput">
-																<span class="fileinput-filename" ng-clik="downloadFile('{{file[$index]}}')">{{_file.file.substring(_file.file.indexOf("_")+1)}}</span>
+																<span class="fileinput-filename" ng-clik="downloadFile('{{file[$index].file}}')">{{_file.file.substring(_file.file.indexOf("_")+1)}}</span>
 															</div>
 															
 															<div ng-hide="fileInfoInput"
 																ng-if="file[$index].file!=null&&file[$index].file!=''"
 																class="fileinput fileinput-exists"
 																data-provides="fileinput">
-																<span class="fileinput-filename"><a href="javascript:;" ng-clik="downloadFile('{{file[$index]}}')">{{_file.file.substring(_file.file.indexOf("_")+1)}}</a></span>
+																<span class="fileinput-filename"><a href="javascript:;" ng-click="downloadFile1(_file.file)">{{_file.file.substring(_file.file.indexOf("_")+1)}}</a></span>
 																</a>
 															</div> 
 															

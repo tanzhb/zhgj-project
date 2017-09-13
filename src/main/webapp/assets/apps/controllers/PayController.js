@@ -1,11 +1,10 @@
 angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope','$http', 'settings', 'PayService','$state','$compile','$stateParams','FileUploader',  
                                                            function($rootScope,$scope,$http,settings,PayService,$state,$compile,$stateParams,FileUploader) {
 	$scope.$on('$viewContentLoaded', function() {   
-		// initialize core components
 		
 		App.initAjax();
 		handle = new pageHandle();
-		// set default layout mode
+		
 		$rootScope.settings.layout.pageContentWhite = true;
 		$rootScope.settings.layout.pageBodySolid = false;
 		$rootScope.settings.layout.pageSidebarClosed = false;
@@ -17,6 +16,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		$scope.span =false;
 		$scope.input = true;
 		$scope.inputFile=true;
+		
 		validateFileInit();//file表单初始化
 
 		//根据参数查询对象
@@ -54,7 +54,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	};
 
 
-	//根据参数查询对象
+	//根据参数查询付款对象
 	$scope.getPayInfo  = function(serialNum) {
 		debugger
 		PayService.selectPay(serialNum).then(
@@ -85,98 +85,12 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		window.print();  
 	}
 	
+   //讲申请付款金额转换成大写
 	$scope.getChnAmount=function(){
 		var amount=$("#applyPaymentAmount").val();
 		var chnAmount=convertCurrency(amount);
 		$scope.chnAmount=chnAmount;
 	}
-	
-	
-	function convertCurrency(money) {
-		  //汉字的数字
-		  var cnNums = new Array('零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖');
-		  //基本单位
-		  var cnIntRadice = new Array('', '拾', '佰', '仟');
-		  //对应整数部分扩展单位
-		  var cnIntUnits = new Array('', '万', '亿', '兆');
-		  //对应小数部分单位
-		  var cnDecUnits = new Array('角', '分', '毫', '厘');
-		  //整数金额时后面跟的字符
-		  var cnInteger = '整';
-		  //整型完以后的单位
-		  var cnIntLast = '元';
-		  //最大处理的数字
-		  var maxNum = 999999999999999.9999;
-		  //金额整数部分
-		  var integerNum;
-		  //金额小数部分
-		  var decimalNum;
-		  //输出的中文金额字符串
-		  var chineseStr = '';
-		  //分离金额后用的数组，预定义
-		  var parts;
-		  if (money == '') { return ''; }
-		  money = parseFloat(money);
-		  if (money >= maxNum) {
-		    //超出最大处理数字
-		    return '';
-		  }
-		  if (money == 0) {
-		    chineseStr = cnNums[0] + cnIntLast + cnInteger;
-		    return chineseStr;
-		  }
-		  //转换为字符串
-		  money = money.toString();
-		  if (money.indexOf('.') == -1) {
-		    integerNum = money;
-		    decimalNum = '';
-		  } else {
-		    parts = money.split('.');
-		    integerNum = parts[0];
-		    decimalNum = parts[1].substr(0, 4);
-		  }
-		  //获取整型部分转换
-		  if (parseInt(integerNum, 10) > 0) {
-		    var zeroCount = 0;
-		    var IntLen = integerNum.length;
-		    for (var i = 0; i < IntLen; i++) {
-		      var n = integerNum.substr(i, 1);
-		      var p = IntLen - i - 1;
-		      var q = p / 4;
-		      var m = p % 4;
-		      if (n == '0') {
-		        zeroCount++;
-		      } else {
-		        if (zeroCount > 0) {
-		          chineseStr += cnNums[0];
-		        }
-		        //归零
-		        zeroCount = 0;
-		        chineseStr += cnNums[parseInt(n)] + cnIntRadice[m];
-		      }
-		      if (m == 0 && zeroCount < 4) {
-		        chineseStr += cnIntUnits[q];
-		      }
-		    }
-		    chineseStr += cnIntLast;
-		  }
-		  //小数部分
-		  if (decimalNum != '') {
-		    var decLen = decimalNum.length;
-		    for (var i = 0; i < decLen; i++) {
-		      var n = decimalNum.substr(i, 1);
-		      if (n != '0') {
-		        chineseStr += cnNums[Number(n)] + cnDecUnits[i];
-		      }
-		    }
-		  }
-		  if (chineseStr == '') {
-		    chineseStr += cnNums[0] + cnIntLast + cnInteger;
-		  } else if (decimalNum == '') {
-		    chineseStr += cnInteger;
-		  }
-		  return chineseStr;
-		}
 	
 	
 	var paymentAmount=null;
@@ -197,8 +111,9 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		);	
 	};
 	
+	
 	var supplyComId=null;
-	//获取订单物料的信息
+	//获取采购订单的信息（并给supplyComId赋值）
 	$scope.getSaleOrderInfo  = function(serialNum) {
 		PayService.getSaleOrderInfo(serialNum).then(
 				function(data){
@@ -281,12 +196,12 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	    }; 	
 	    
 	    
-	    $scope.updateFile  = function() {//保存File信息
+	    $scope.updateFile  = function() {//更新File信息
 	    	if($scope.pay.serialNum==null||$scope.pay.serialNum=='') {//上级物料为空的处理
 	    		toastr.error('请先保存基本信息！');return
 			}
 	    	/*if($('#form_sample_4').valid()){*/
-	    		PayService.saveFile($scope.file).then(
+	    		PayService.updateFile($scope.file).then(
 	       		     function(data){
 	       		    	toastr.success('数据保存成功！');
 	       		    	$scope.inputFile=false;
@@ -383,6 +298,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
   			  uploader.cancelAll();
   		  }
   	  }
+  	  
   	  //添加文件到上传队列后
   	  uploader.onCompleteAll = function () {
   		  uploader.clearQueue();
@@ -417,12 +333,18 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
   		  uploader.addToQueue(file);
   		  uploader.uploadAll();
   	  }
+  	  //下载文件上传时
        $scope.downloadFile = function(obj){
     	   if(!handle.isNull(obj)){
     		   window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+encodeURI(encodeURI(obj.file));
     	   }else{
     		   toastr.error("下载失败!");
     	   }
+       }
+       
+       //下载文件查看详情时
+       $scope.downloadFile1 = function(str){
+    		   window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+str;
        }
        
        $scope.removefile = function(index){
@@ -436,21 +358,6 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		if($('#form_sample_1').valid()){
 			var fd = new FormData();
 			debugger
-			/*var file = document.querySelector('input[type="file"]').files[0];
-			if($.trim($("#paymentVoucher").val())!=''){
-				fd.append("file", file);
-			}else{
-				toastr.warning("付款凭证不能为空！");
-				return;
-			}
-			
-			var clauseItem=$("input[name='serialNumClause']:checked").val();
-			if($.trim(clauseItem)!=''){
-				fd.append('clauseSettlementSerial',$("input[name='serialNumClause']:checked").val()); 
-			}else{
-				toastr.warning("至少选择一个结算条款！");
-				return;
-			}*/
 			fd.append('paymentNum',$scope.paymentRecord.paymentNum); 
 			fd.append('paymentType',$scope.paymentRecord.paymentType);
 			fd.append('orderSerial',$scope.orderSerial); 
@@ -518,50 +425,41 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 			fd.append('nodeNum',$scope.pay.nodeNum);
 			fd.append('billStyle',"先款后票"); 
 			fd.append('isBill',$("input[name='isBill']:checked").val());
-			
-			
-			
-			fd.append('invoiceSerial',$scope.pay.invoiceSerial); 
+			fd.append('applyDate',$scope.pay.applyDate);
 			fd.append('applicant',$scope.pay.applicant);
-			fd.append('applyDate',$scope.pay.applyDate); 
+			fd.append('applyDept',$scope.pay.applyDept);
 			fd.append('remark',$scope.pay.remark);
-			fd.append('paymentVoucher',$scope.pay.paymentVoucher); 
+			
+			fd.append('payee',$scope.pay.payee);
+			fd.append('contact',$scope.pay.contact);
+			fd.append('contactNum',$scope.pay.contactNum);
+			fd.append('bank',$scope.pay.bank);
+			fd.append('accountName',$scope.pay.accountName);
+			fd.append('accountNumber',$scope.pay.accountNumber);
 			$http({
 				method:'POST',
 				url:"rest/pay/savePaymentRecord",
 				data: fd,
 				headers: {'Content-Type':undefined}
 			})   
-			.success( function ( response )
+			.success( function ( data )
 					{
 				//上传成功的操作
 				toastr.success("保存应付款数据成功！");
-				$state.go('paymentRecordC');
+				handle.unblockUI();
+				$scope.pay= data;
+				$scope.span = true;
+				$scope.input = false;
+				$scope.applyPaymentAmountChn=convertCurrency($scope.pay.applyPaymentAmount);
+				$(".alert-danger").hide();
 					});
 		}
 	}
 
+	//跳转到详情页面
 	$scope.jumpToGetPayInfo  = function(serialNum) {
     	$state.go('viewPay',{serialNum:serialNum});
     }; 
-
-
-	//初始化toastr开始
-	toastr.options = {
-			"closeButton" : true,
-			"debug" : true,
-			"positionClass" : "toast-top-center",
-			"onclick" : null,
-			"showDuration" : "1000",
-			"hideDuration" : "1000",
-			"timeOut" : "5000",
-			"extendedTimeOut" : "1000",
-			"showEasing" : "swing",
-			"hideEasing" : "linear",
-			"showMethod" : "fadeIn",
-			"hideMethod" : "fadeOut"
-	}
-
 
 
 	//单个删除
@@ -896,19 +794,6 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	};
 
 
-	/*function(name){
-				 var deferred = $q.defer();  
-		    	ContractService.downLoad(name).then(
-		    			toastr.success("下载成功")
-		    	);
-		    	$http.get($rootScope.basePath + "/rest/contract/resourceDownload").success(function (data) {  
-		    		alert(data);
-		    		deferred.resolve(data); 
-		        })
-		  }*/
-
-
-
 	/**
 	 * 下载EXCEL模板
 	 */
@@ -1032,21 +917,6 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 			}})
 	};
 	
-
-	 jQuery.validator.addMethod("minNumber",function(value, element){
-         var returnVal = true;
-         inputZ=value;
-         var ArrMen= inputZ.split(".");    //截取字符串
-         if(ArrMen.length==2){
-             if(ArrMen[1].length>2){    //判断小数点后面的字符串长度
-                 returnVal = false;
-                 return false;
-             }
-         }
-         return returnVal;
-     },"小数点后最多为两位"); 
-	 
-	 
 	// 联系电话(手机/电话皆可)验证 
 	 jQuery.validator.addMethod("isPhone", function(value,element) { 
 	   var length = value.length; 
