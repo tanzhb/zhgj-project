@@ -90,25 +90,40 @@ public interface PayMapper extends GenericDao<PaymentRecord, String> {
     
     
     
-    
+    /**
+     * 批量添加收付款附件
+     * @param record
+     */
     public void betchInsertPaymentFiles(PaymentFile Files);
     
     
     
-    
+    /**
+     * 查询订单已付金额
+     * @param record
+     */
     public String selectPaiedMoney(String serialNum);
     
     
     
-    
+    /**
+     * 查询订单已开票金额
+     * @param record
+     */
     public String selectBilledMoney(String serialNum);
     
     
     
-    
+    /**
+     * 查询收付款对象附件集合
+     * @param record
+     */
     public List<PaymentFile> selectFileList(String serialNum);
     
     
-    
+    /**
+     * 删除旧的附件
+     * @param record
+     */
     public void deleteFileOld(String paySerialNum);
 }
