@@ -90,6 +90,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		Date now = new Date();
 		if(StringUtils.isEmpty(takeDeliveryParams.getTakeDelivery().getSerialNum())){
 			takeDeliveryParams.getTakeDelivery().setSerialNum(takeDeliverySerial);
+			takeDeliveryParams.getTakeDelivery().setTakeDeliverNum("FH"+ApplicationUtils.getFromNumber());
 			takeDeliveryParams.getTakeDelivery().setDeliverSerial(deliverySerial);
 			takeDeliveryParams.getTakeDelivery().setCreator(currenLoginName);
 			takeDeliveryParams.getTakeDelivery().setCreateTime(now);
@@ -355,7 +356,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		//takeDelivery.set(takeDeliveryParams.getTakeDelivery().getSerialNum());
 		//takeDelivery.setSerialNum(takeDeliveryParams.getTakeDelivery().getSerialNum());
 		//takeDelivery.setSerialNum(takeDeliveryParams.getTakeDelivery().getSerialNum());
-		//takeDeliveryMapper.updateByPrimaryKeySelective(record)
+		takeDeliveryMapper.updateByPrimaryKeySelective(takeDeliveryParams.getTakeDelivery());
 	   for(DeliveryMateriel materiel : takeDeliveryParams.getDeliveryMateriels()){
 			DeliveryMaterielExample example = new DeliveryMaterielExample();
 			example.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());

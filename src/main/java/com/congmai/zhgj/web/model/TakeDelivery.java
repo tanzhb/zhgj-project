@@ -1,11 +1,17 @@
 package com.congmai.zhgj.web.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class TakeDelivery {
-    private String serialNum;
+public class TakeDelivery extends BaseVO implements Serializable{
+    /**
+	 * @Field @serialVersionUID : TODO(这里用一句话描述这个类的作用)
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private String serialNum;
 
     private String deliverSerial;
 
@@ -162,6 +168,7 @@ public class TakeDelivery {
 		this.supplyName = supplyName;
 	}
 
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	public Date getActualDate() {
 		return actualDate;
 	}

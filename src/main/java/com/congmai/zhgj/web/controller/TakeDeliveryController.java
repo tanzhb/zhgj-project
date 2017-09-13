@@ -8,10 +8,16 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.activiti.engine.ActivitiException;
+import org.activiti.engine.IdentityService;
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
+import com.congmai.zhgj.core.util.Constants;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
@@ -59,6 +66,7 @@ import com.congmai.zhgj.web.service.WarehousepositionService;
 @RequestMapping("takeDelivery")
 public class TakeDeliveryController {
 	
+	 private Logger logger = Logger.getLogger(TakeDeliveryController.class);
 	
 	@Autowired
 	private DeliveryMaterielService deliveryMaterielService;
@@ -80,6 +88,12 @@ public class TakeDeliveryController {
 	
 	@Autowired
 	private WarehousepositionService warehousepositionService; 
+	
+	@Autowired
+	protected RuntimeService runtimeService;
+	
+    @Autowired
+    protected IdentityService identityService;
 	
 	
 	
@@ -197,7 +211,7 @@ public class TakeDeliveryController {
 			  // takeDeliveryParams = objectMapper.readValue(params,TakeDeliveryParams.class);
 			   takeDeliveryParams = JSON.parseObject(params, TakeDeliveryParams.class);
 			} catch (Exception e) {
-		    	System.out.println(this.getClass()+"---------"+ e.getMessage());
+		    	logger.warn(e.getMessage(), e);
 			}
         	try{
         		Subject currentUser = SecurityUtils.getSubject();
@@ -209,7 +223,7 @@ public class TakeDeliveryController {
         		}
         		flag = "1";
         	}catch(Exception e){
-        		System.out.println(e.getMessage());
+        		logger.warn(e.getMessage(), e);
         		return null;
         	}
     	return flag;
@@ -628,7 +642,62 @@ public class TakeDeliveryController {
     	return null;
     }
     
+    //**********************************审批**************************************************//
     
+    private String startTakeDelivery(TakeDelivery takeDelivery){
+    	// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
+        identityService.setAuthenticatedUserId(takeDelivery.getSerialNum().toString());
+        Map<String, Object> variables = new HashMap<String, Object>();
+        variables.put("entity", takeDelivery);
+        //由userTask自动分配审批权限
+//        if(vacation.getDays() <= 3){
+//        	variables.put("auditGroup", "manager");
+//        }else{
+//        	variables.put("auditGroup", "director");
+//        }
+        String businessKey = takeDelivery.getBusinessKey();
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(Constants.TAKEDELIVERY_KEY, businessKey, variables);
+        String processInstanceId = processInstance.getId();
+        //takeDelivery.setProcessInstanceId(processInstanceId);
+        //this.takeDeliveryService.
+
+        logger.info("processInstanceId: "+processInstanceId);
+        //最后要设置null，就是这么做，还没研究为什么
+        this.identityService.setAuthenticatedUserId(null);
+        return processInstanceId;
+    }
+    
+    
+    @RequestMapping(value="applyTakeDelivery",method=RequestMethod.POST)
+    @ResponseBody
+    public String applyTakeDelivery(Map<String, Object> map,@RequestBody String params,HttpServletRequest request){
+    	String flag = saveTakeDelivery(map, params, request);
+    	if("1".equals(flag)){
+    		 try {
+    			 startTakeDelivery(JSON.parseObject(params, TakeDeliveryParams.class).getTakeDelivery());
+//    	            message.setStatus(Boolean.TRUE);
+//    				message.setMessage("请假流程已启动，流程ID：" + processInstanceId);
+    	        } catch (ActivitiException e) {
+//    	        	message.setStatus(Boolean.FALSE);
+    	            if (e.getMessage().indexOf("no processes deployed with key") != -1) {
+    	                logger.warn("没有部署流程!", e);
+//    	    			message.setMessage("没有部署流程，请联系系统管理员，在[流程定义]中部署相应流程文件！");
+    	            } else {
+    	                logger.error("启动收货流程失败：", e);
+//    	                message.setMessage("启动请假流程失败，系统内部错误！");
+    	            }
+    	        	flag = "0";
+    	          //  throw e;
+    	        } catch (Exception e) {
+    	            logger.error("启动收货流程失败：", e);
+//    	            message.setStatus(Boolean.FALSE);
+//    	            message.setMessage("启动请假流程失败，系统内部错误！");
+    	        	flag = "0";
+    	           // throw e;
+    	        }
+    	}
+    	return flag;
+    }
 
     
 

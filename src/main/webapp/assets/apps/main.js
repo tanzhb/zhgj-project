@@ -734,7 +734,15 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/apps/service/TakeDeliveryService.js',
 		    				        'assets/apps/service/orderService.js',
 		    				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
-		    				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css'
+		    				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css',
+		    				        'assets/global/css/dialog.css',
+							         'assets/global/css/easyui.css',
+							         'assets/global/css/datagrid.css',
+							         'assets/global/css/jquery.qtip.min.css',
+							         
+							         'assets/global/plugins/jquery.easyui.min.js',
+							         'assets/global/plugins/jquery.qtip.min.js',
+							         'assets/global/plugins/jquery.outerhtml.js',
 		    				        ]
 		    			});
 		    		}]
