@@ -12,9 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.activiti.engine.ActivitiException;
+import org.activiti.engine.ActivitiObjectNotFoundException;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -28,14 +31,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.UserUtil;
@@ -52,6 +58,7 @@ import com.congmai.zhgj.web.model.ClauseDelivery;
 import com.congmai.zhgj.web.model.ClauseFrameworkExample;
 import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
+import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.MaterielExample;
 import com.congmai.zhgj.web.model.OrderFile;
@@ -72,7 +79,6 @@ import com.congmai.zhgj.web.service.ClauseSettlementDetailService;
 import com.congmai.zhgj.web.service.ClauseSettlementService;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.IProcessService;
-import com.congmai.zhgj.web.service.IVacationService;
 import com.congmai.zhgj.web.service.OrderFileService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
@@ -90,6 +96,10 @@ import com.congmai.zhgj.web.service.UserCompanyService;
 @RequestMapping("/order")
 public class OrderController {
 	private static final Logger logger = Logger.getLogger(OrderController.class);
+	@Autowired
+	protected RuntimeService runtimeService;
+	@Autowired
+    protected TaskService taskService;
 	@Autowired
 	private IProcessService processService;
     @Resource
@@ -127,14 +137,7 @@ public class OrderController {
     @RequestMapping(value = "/saveOrder", method = RequestMethod.POST)
     @ResponseBody
     public OrderInfo saveOrder(@RequestBody String params) {
-    	params = params.replace("\\", "");
-		ObjectMapper objectMapper = new ObjectMapper();  
-        OrderInfo orderInfo = new OrderInfo();
-		try {
-			orderInfo = objectMapper.readValue(params, OrderInfo.class);
-		}catch (Exception e1) {
-			e1.printStackTrace();
-		}
+    	OrderInfo orderInfo = json2Order(params);
             
     	if(orderInfo.getSerialNum()==null||orderInfo.getSerialNum().isEmpty()){//新增
     		orderInfo.setSerialNum(ApplicationUtils.random32UUID());
@@ -155,17 +158,41 @@ public class OrderController {
     		orderService.update(orderInfo);
     	}
     	
-    	if("1".equals(orderInfo.getStatus())){
+    	/*if("1".equals(orderInfo.getStatus())){
     		//启动订单审批测试流程-start
     		startOrderProcess(orderInfo);
     		//启动订单审批测试流程-end
-    	}
+    	}*/
 		
 		return orderInfo;
     }
 
+	private OrderInfo json2Order(String params) {
+		params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+        OrderInfo orderInfo = new OrderInfo();
+		try {
+			orderInfo = objectMapper.readValue(params, OrderInfo.class);
+		}catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		return orderInfo;
+	}
 
-	private void startOrderProcess(OrderInfo orderInfo) {
+    /**
+     * 
+     * @Description (启动采购订单流程)
+     * @param orderInfo
+     * @return
+     */
+    @RequestMapping(value = "/startBuyOrderProcess", method = RequestMethod.POST)
+    @ResponseBody
+	private String startBuyOrderProcess(@RequestBody String params) {
+    	String flag = "0"; //默认失败
+    	OrderInfo orderInfo = json2Order(params);
+    	
+    	orderService.update(orderInfo);//更新备注
+    	
 		//启动订单审批测试流程-start
 		User user = UserUtil.getUserFromSession();
 		orderInfo.setUser_id(user.getUserId());
@@ -178,10 +205,11 @@ public class OrderController {
 		String businessKey = orderInfo.getSerialNum().toString();
 		orderInfo.setBusinessKey(businessKey);
 		try {
-			String processInstanceId = this.processService.startOrderInfo(orderInfo);
+			String processInstanceId = this.processService.startBuyOrderInfo(orderInfo);
 //                message.setStatus(Boolean.TRUE);
 //    			message.setMessage("请假流程已启动，流程ID：" + processInstanceId);
 		    logger.info("processInstanceId: "+processInstanceId);
+		    flag = "1";
 		} catch (ActivitiException e) {
 //            	message.setStatus(Boolean.FALSE);
 		    if (e.getMessage().indexOf("no processes deployed with key") != -1) {
@@ -199,9 +227,157 @@ public class OrderController {
 		    throw e;
 		}
         //启动订单审批测试流程-end
+		return flag;
 	}
     
     
+    /**
+     * 
+     * @Description (启动销售订单流程)
+     * @param orderInfo
+     * @return
+     */
+    @RequestMapping(value = "/startSaleOrderProcess", method = RequestMethod.POST)
+    @ResponseBody
+	private String startSaleOrderProcess(@RequestBody String params) {
+    	String flag = "0"; //默认失败
+    	OrderInfo orderInfo = json2Order(params);
+    	
+    	orderService.update(orderInfo);//更新备注
+    	
+		//启动订单审批测试流程-start
+		User user = UserUtil.getUserFromSession();
+		orderInfo.setUser_id(user.getUserId());
+		orderInfo.setUser_name(user.getUserName());
+		orderInfo.setTitle(user.getUserName()+orderInfo.getOrderNum()+" 的订单申请");
+		orderInfo.setBusinessType(BaseVO.BUYORDER); 			//业务类型：采购订单
+		orderInfo.setStatus(BaseVO.PENDING);					//审批中
+//    		orderInfo.setApplyDate(new Date());
+//    		orderService.insert(orderInfo);
+		String businessKey = orderInfo.getSerialNum().toString();
+		orderInfo.setBusinessKey(businessKey);
+		try {
+			String processInstanceId = this.processService.startSaleOrderInfo(orderInfo);
+//                message.setStatus(Boolean.TRUE);
+//    			message.setMessage("请假流程已启动，流程ID：" + processInstanceId);
+		    logger.info("processInstanceId: "+processInstanceId);
+		    flag = "1";
+		} catch (ActivitiException e) {
+//            	message.setStatus(Boolean.FALSE);
+		    if (e.getMessage().indexOf("no processes deployed with key") != -1) {
+		        logger.warn("没有部署流程!", e);
+//        			message.setMessage("没有部署流程，请联系系统管理员，在[流程定义]中部署相应流程文件！");
+		    } else {
+		        logger.error("启动请假流程失败：", e);
+//                    message.setMessage("启动请假流程失败，系统内部错误！");
+		    }
+		    throw e;
+		} catch (Exception e) {
+		    logger.error("启动请假流程失败：", e);
+//                message.setStatus(Boolean.FALSE);
+//                message.setMessage("启动请假流程失败，系统内部错误！");
+		    throw e;
+		}
+        //启动订单审批测试流程-end
+		return flag;
+	}
+    
+    
+    /**
+     * 审批订单流程
+     * @param taskId
+     * @param model
+     * @return
+     * @throws NumberFormatException
+     * @throws Exception
+     */
+//	@RequiresPermissions("user:order:toApproval") 	//*代表 经理、总监、人力
+    @RequestMapping(value = "/toApproval/{taskId}", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody Map<String, Object> toApproval(@PathVariable("taskId") String taskId) throws NumberFormatException, Exception{
+    	Task task = this.taskService.createTaskQuery().taskId(taskId).singleResult();
+		// 根据任务查询流程实例
+    	String processInstanceId = task.getProcessInstanceId();
+		ProcessInstance pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+		OrderInfo orderInfo = (OrderInfo) this.runtimeService.getVariable(pi.getId(), "entity");
+		orderInfo.setTask(task);
+		orderInfo.setProcessInstanceId(processInstanceId);
+		List<CommentVO> commentList = this.processService.getComments(processInstanceId);
+		String taskDefinitionKey = task.getTaskDefinitionKey();
+		logger.info("taskDefinitionKey: "+taskDefinitionKey);
+		String result = null;
+		if("modifyApply".equals(taskDefinitionKey)){
+			result = "modify";
+		}else{
+			result = "audit";
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("actionType", result);
+		map.put("orderInfo", orderInfo);
+		map.put("commentList", commentList);
+    	return map;
+    }
+    
+    
+    /**
+     * 完成任务
+     * @param content
+     * @param completeFlag
+     * @param taskId
+     * @param redirectAttributes
+     * @param session
+     * @return
+     * @throws Exception
+     */
+//	@RequiresPermissions("user:order:complate")  //数据库中权限字符串为user:*:complate， 通配符*匹配到order所以有权限操作 
+    @RequestMapping(value = "/complate/{taskId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+	@ResponseBody
+    public String complate(
+    		@RequestParam("orderId") String orderId,
+    		@RequestParam("content") String content,
+    		@RequestParam("processInstanceId") String processInstanceId,
+    		@RequestParam("completeFlag") Boolean completeFlag,
+    		@PathVariable("taskId") String taskId, 
+    		RedirectAttributes redirectAttributes) throws Exception{
+    	User user = UserUtil.getUserFromSession();
+    	String result = "";
+    	try {
+    		OrderInfo order = this.orderService.selectById(orderId);
+            OrderInfo baseOrderInfo = (OrderInfo) this.runtimeService.getVariable(processInstanceId, "entity");
+    		Map<String, Object> variables = new HashMap<String, Object>();
+    		variables.put("isPass", completeFlag);
+    		if(!completeFlag){
+    			baseOrderInfo.setTitle(baseOrderInfo.getUser_name()+" 的订单申请失败,需修改后重新提交！");
+    			order.setStatus(BaseVO.APPROVAL_FAILED);
+    			variables.put("entity", baseOrderInfo);
+    		}
+    		// 完成任务
+    		this.processService.complete(taskId, content, user.getUserId().toString(), variables);
+    		
+    		if(completeFlag){
+    			//此处需要修改，不能根据人来判断审批是否结束。应该根据流程实例id(processInstanceId)来判定。
+    			//判断指定ID的实例是否存在，如果结果为空，则代表流程结束，实例已被删除(移到历史库中)
+    			ProcessInstance pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+    			if(BeanUtils.isBlank(pi)){
+    				order.setStatus(BaseVO.APPROVAL_SUCCESS);
+    			}
+    		}
+    		
+//    		this.orderService.update(order);
+    		
+    		result = "任务办理完成！";
+		} catch (ActivitiObjectNotFoundException e) {
+			result = "此任务不存在，请联系管理员！";
+			throw e;
+		} catch (ActivitiException e) {
+			result = "此任务正在协办，您不能办理此任务！";
+			throw e;
+		} catch (Exception e) {
+			result = "任务办理失败，请联系管理员！";
+			throw e;
+		}
+		return result;
+    }
+	
     /**
      * 
      * @Description 查询订单列表

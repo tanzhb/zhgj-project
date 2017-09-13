@@ -32,12 +32,12 @@
     <div class="col-md-12">
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet light ">
-					<div class="portlet-title">
+					<!-- <div class="portlet-title">
 			               <div class="tools">
 			               		<button type="button" ng-click="submitPage()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">提交审核</button>
 				                <button type="button" ng-click="cancelPage()" class="btn default btn-circle  btn-sm"><i class="fa fa-undo"></i> 取消 </button>
 				            </div>
-					</div>
+					</div> -->
            		 <div class="portlet-body">
 					<ul class="nav nav-tabs">
 						<li class="active bold">
@@ -52,7 +52,7 @@
 						<li class="bold"><a data-target="#tab_1_7" data-toggle="tab">交付条款</a></li>
 						<li class="bold"><a data-target="#tab_1_8" data-toggle="tab">售后条款</a></li>
 						<li class="bold"><a data-target="#tab_1_9" data-toggle="tab">附件</a></li>
-						<li class="bold"><a data-target="#tab_1_10" data-toggle="tab">备注</a></li>
+						<!-- <li class="bold"><a data-target="#tab_1_10" data-toggle="tab">备注</a></li> -->
 						
 					</ul>
 					<div class="tab-content">
@@ -1523,8 +1523,8 @@
 				            </div>
 				          <!-- 附件 end-->
                         </div>
-             			<div class="tab-pane fade " id="tab_1_10">
-             				<!-- 备注 start-->
+             			<!-- <div class="tab-pane fade " id="tab_1_10">
+             				备注 start
 					           <div class="portlet-body form">
 								     <form >
 									     <div class="form-body">
@@ -1541,12 +1541,12 @@
 						                               </div>
 						                          </div>
 						                      </div>
-						                      <!--/row-->
+						                      /row
 						                  </div>
 						                </form>
 					            </div>
-					          <!-- 备注 end-->
-             			</div>
+					          备注 end
+             			</div> -->
              
              
              

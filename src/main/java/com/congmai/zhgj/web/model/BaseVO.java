@@ -25,6 +25,7 @@ public class BaseVO implements Serializable{
 	public final static String VACATION = "vacation";	
 	public final static String SALARY = "salary";	
 	public final static String EXPENSE = "expense";
+	public final static String BUYORDER = "buyOrder";	//采购订单
 	
 	// 待办任务标识
 	public final static String CANDIDATE = "candidate";
@@ -70,6 +71,9 @@ public class BaseVO implements Serializable{
     // 运行中的流程实例
 	@JsonBackReference 
     private ProcessInstance processInstance;
+	
+	// 对应的流程实例id
+	private String processInstanceId;
 
     // 历史的流程实例
 	@JsonBackReference 
@@ -192,6 +196,14 @@ public class BaseVO implements Serializable{
 
 	public void setHistoricTaskInstance(HistoricTaskInstance historicTaskInstance) {
 		this.historicTaskInstance = historicTaskInstance;
+	}
+
+	public String getProcessInstanceId() {
+		return processInstanceId;
+	}
+
+	public void setProcessInstanceId(String processInstanceId) {
+		this.processInstanceId = processInstanceId;
 	}
 	
 	

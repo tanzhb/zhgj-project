@@ -186,6 +186,14 @@ public class PageController {
         return "order/addBuyOrder";
     }
     
+    
+    /**
+     * 采购订单提交申请
+     */
+    @RequestMapping("/submitBuyApply")
+    public String submitBuyApply(String serialNum,String view) {
+        return "order/submitBuyApply";
+    }
     /**
      * 采购订单
      */

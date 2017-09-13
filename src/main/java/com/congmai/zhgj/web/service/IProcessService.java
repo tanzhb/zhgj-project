@@ -173,10 +173,17 @@ public interface IProcessService {
     public void addProcessByDynamic() throws Exception;
     
     /**
-     * 激活订单流程
+     * 激活采购订单流程
      * @param processInstanceId
      * @throws Exception
      */
-	public String startOrderInfo(OrderInfo orderInfo);
+	public String startBuyOrderInfo(OrderInfo orderInfo);
+	
+	/**
+     * 激活销售订单流程
+     * @param processInstanceId
+     * @throws Exception
+     */
+	public String startSaleOrderInfo(OrderInfo orderInfo);
 
 }

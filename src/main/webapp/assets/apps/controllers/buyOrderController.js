@@ -12,6 +12,107 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
         if($state.current.name=="buyOrder"){
         	loadMainTable();// 加载订单列表(普通订单)
         	loadMainFramTable();// 框架订单列表
+        	
+        	//***************************************流程处理相关start
+        	var dbtable;//待办table
+			var endTaskTable;//已办table
+			
+			if($stateParams.tabHref == '1'){//首页待办列表传过来的参数
+				$('#orderTab a[href="#daiban"]').tab('show');
+				showDbTable();
+			}else if($stateParams.tabHref == '2'){//首页已办列表传过来的参数
+				$('#orderTab a[href="#yiban"]').tab('show');
+				showYbTable();
+			}else{//从菜单进入
+				$('#orderTab a[href="#apply"]').tab('show');
+			}
+			
+			
+			function doOrder(_url, mydata, modal){
+		        $.ajax( {
+			        url : _url,
+			        dataType:"text",
+			        type: 'POST',
+			        data : mydata,
+			        success : function(data) {
+			        	if(modal == 'audit') $('#auditOrderModal').modal('hide');
+			        	else $('#modifyOrderModal').modal('hide');
+			        	dbtable.ajax.reload();
+			        	showToastr('toast-bottom-right', 'success', data);
+			        }
+			     });
+			}
+			
+			//审批通过
+			$scope.orderPass = function() {
+			    $("#completeFlag").val("true");
+			    var mydata={"processInstanceId":$("#processInstanceId").val(),"orderId":$("#orderId").val(),"content":$("#content").val(),
+						"completeFlag":$("#completeFlag").val()};
+			    var _url = ctx + "/rest/order/complate/" + $("#taskId").val();
+			    doOrder(_url, mydata, 'audit');
+			};
+			//审批不通过
+			$scope.orderUnPass = function() {
+				$("#completeFlag").val("false");
+				var mydata={"processInstanceId":$("#processInstanceId").val(),"orderId":$("#orderId").val(),"content":$("#content").val(),
+						"completeFlag":$("#completeFlag").val()};
+				var _url = ctx + "/rest/order/complate/" + $("#taskId").val();
+				doOrder(_url, mydata, 'audit');
+			};
+			
+			//重新申请
+			$scope.replyOrder = function() {
+				$("#reApply").val("true");
+			    var mydata={"processInstanceId":$("#processInstanceId").val(),
+						"reApply":$("#reApply").val(),"orderId":$("#orderId").val(),"beginDate":$("#modify_beginDate").val(),"endDate":$("#modify_endDate").val(),
+						"days":$("#modify_days").val(),"orderType":$("#modify_orderType").val(),"reason":$("#modify_reason").val()};
+				var _url = ctx + "/rest/order/modifyOrder/" + $("#taskId").val();
+				doOrder(_url, mydata, 'modify');
+			};
+			//取消申请
+			$scope.cancelApply = function() {
+				 $("#reApply").val("false");					 
+			     var mydata={"processInstanceId":$("#processInstanceId").val(),
+						"reApply":$("#reApply").val(),"orderId":$("#orderId").val(),"beginDate":$("#modify_beginDate").val(),"endDate":$("#modify_endDate").val(),
+						"days":$("#modify_days").val(),"orderType":$("#modify_orderType").val(),"reason":$("#modify_reason").val()};
+				var _url = ctx + "/rest/order/modifyOrder/" + $("#taskId").val();
+				doOrder(_url, mydata, 'modify' );
+			};
+
+			// 请假申请
+			$scope.toApply = function() {
+				$('#orderTab a[href="#apply"]').tab('show');
+			};
+			// 待办流程
+			$scope.toDaiban = function() {
+				$('#orderTab a[href="#daiban"]').tab('show');
+
+				// 构建datatables开始***************************************
+				dbtable = showDbTable();								
+				// 构建datatables结束***************************************
+
+			};
+			// 已办流程
+			$scope.toYiban = function() {
+				$('#orderTab a[href="#yiban"]').tab('show');
+				endTaskTable = showYbTable();
+			};
+			
+			// 关闭审批窗口
+			$scope.closeAuditDialogue = function() {
+				$('#auditOrderModal').modal("hide");
+			};
+			
+			// 关闭更改申请窗口 
+			$scope.closeModifyDialogue = function() {
+				$('#modifyOrderModal').modal("hide");
+			};
+			
+			//初始化审批表单
+			function approvalFormInit( taskDefinitionKey, businessType, taskId ) {
+				
+			}
+			//***************************************流程处理相关end
         	}else{
         		$scope.datepickerInit();
             	// 初始化日期控件
@@ -2425,5 +2526,396 @@ var e = $("#form_clauseSettlement"),
 			       		scope._CSD.deliveryAmount =  ($scope.totalOrderAmount()*scope._CSD.deliveryRate/100).toFixed(2);
 			       	}
 		       };
-		     //********订单物料合计，结算条款start****************//
+		     //********订单物料合计，结算条款end****************//
+		       
+		     //********审批流程start****************//
+		       $scope.submitBuyApply  = function() {// 进入申请审批页面
+		        	var ids = '';
+		    		// Iterate over all checkboxes in the table
+		    		table.$('input[type="checkbox"]').each(
+		    				function() {
+		    					// If checkbox exist in DOM
+		    					if ($.contains(document, this)) {
+		    						// If checkbox is checked
+		    						if (this.checked) {
+		    							// 将选中数据id放入ids中
+		    							if (ids == '') {
+		    								ids = this.value;
+		    							} else{
+		    								ids = "more"
+		    							}
+		    						}
+		    					}
+		    				});
+		    		if(ids==''){
+		    			toastr.warning('请选择一个订单！');return;
+		    		}else if(ids=='more'){
+		    			toastr.warning('只能选择一个订单！');return;
+		    		}
+		    		
+		    		$state.go("submitBuyApply",{serialNum:ids});
+		        };
+		        
+		        
+		        $scope.confirmBuyApply  = function() {// 进入提交申请
+		        	$scope.submitOrder = {}
+		        	$scope.submitOrder.serialNum = $scope.buyOrder.serialNum;
+		        	$scope.submitOrder.remark = $scope.buyOrder.remark;
+		        	//启动流程
+		        	orderService.startBuyOrderProcess($scope.submitOrder).then(
+		          		     function(data){
+		          		    	if(data == "1"){
+			        				toastr.success("提交申请成功！");
+			        				$scope.cancelPage();
+			        			}else{
+			        				toastr.error("提交申请失败！");
+					            	console.log(data);
+			        			}
+		          		     },
+		          		     function(error){
+		          		         $scope.error = error;
+		          		         toastr.error('数据保存出错！');
+		          		     }
+		          		 );
+		    		
+		        };
+		     //********审批流程end****************//  
 }]);
+
+
+//********审批流程列表****************//
+function showDbTable(){
+	
+	var table = $("#dbTable")
+	.DataTable(
+			{
+				language : {
+					aria : {
+						sortAscending : ": activate to sort column ascending",
+						sortDescending : ": activate to sort column descending"
+					},
+					emptyTable : "空表",
+					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+					infoEmpty : "没有数据",
+					infoFiltered : "(从 _MAX_ 条数据中检索)",
+					lengthMenu : "每页显示 _MENU_ 条数据",
+					search : "查询:",
+					zeroRecords : "抱歉， 没有找到！",
+					paginate : {
+						"sFirst" : "首页",
+						"sPrevious" : "前一页",
+						"sNext" : "后一页",
+						"sLast" : "尾页"
+					}
+				},
+
+				buttons : [
+						{
+							text : "办理",
+							className : "btn default",
+							action: function(e, dt, node, config) { 
+								if(table.rows('.selected').data().length == 0){
+									toastr.warning("请选择要办理的任务！");
+								}else{
+									var assign = table.row('.selected').data().assign;
+									var taskId = table.row('.selected').data().taskId;
+									var processInstanceId = table.row('.selected').data().processInstanceId;
+									handleTask(assign, taskId, processInstanceId);
+								}
+							}
+						},
+						{
+							text : "签收",
+							className : "btn default",
+							action: function(e, dt, node, config) { 
+								if(table.rows('.selected').data().length == 0){
+									toastr.warning("请选择要签收的任务！");
+								}else{
+									var taskId = table.row('.selected').data().taskId;
+									claimTask(taskId, 'dbTable');
+								}								
+							}
+						},
+						{
+							text : "转办",
+							className : "btn default"
+						},
+						{
+							text : "委派",
+							className : "btn default"
+						},
+						{
+							text : "跳转",
+							className : "btn default"
+						} ],
+				dom : "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
+				order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+
+				bRetrieve : true,
+				lengthMenu : [
+						[ 5, 10, 15, 30, -1 ],
+						[ 5, 10, 15, 30,
+								"All" ] ],
+				pageLength : 10,// 每页显示数量
+				processing : true,// loading等待框
+
+				ajax : ctx
+						+ "/rest/processAction/todoTask",// 加载待办列表数据
+
+				"aoColumns" : [
+
+						{
+							mData : 'assign',
+							mRender : function(
+									data) {
+								if (data == '') {
+									return "待签收";
+								} else {
+									return "待办理";
+								}
+							}
+						},
+						{
+							mData : 'businessType',
+							mRender : function(
+									data) {
+								return "订单申请";
+							}
+						},
+						{
+							mData : 'userName'
+						},
+						{
+							mData : 'title'
+						},
+						{
+							mData : 'taskName',
+							mRender : function(
+									data,
+									type,
+									row,
+									meta) {
+								return "<a class='trace' onclick=\"graphTrace('"
+										+ row.processInstanceId + "','" + ctx 
+										+ "')\" id='diagram' href='javascript:;' pid='"
+										+ row.id
+										+ "' pdid='"
+										+ row.processDefinitionId
+										+ "' title='see'>"
+										+ data
+										+ "</a>";
+							}
+						},
+						{
+							mData : 'owner',
+							mRender : function(
+									data,
+									type,
+									row,
+									meta) {
+								if (data != ''
+										&& data != row.assign) {
+									return row.assign
+											+ " (原执行人："
+											+ data
+											+ ")";
+								} else {
+									return row.assign;
+								}
+							}
+						},
+						{
+							mData : 'createTime',
+							mRender : function(
+									data) {
+								if (data != null) {
+									return timeStamp2String(data);
+								} else
+									return '';
+							}
+						},
+						{
+							mData : 'suspended',
+							mRender : function(
+									data) {
+								if (data) {
+									return "已挂起";
+								} else {
+									return "正常";
+								}
+							}
+						} ]
+
+			})
+			
+			$('#dbTable tbody')
+										.on(
+												'click',
+												'tr',
+												function() {
+													if ($(this).hasClass(
+															'selected')) {
+														$(this).removeClass(
+																'selected');
+													} else {
+														table
+																.$(
+																		'tr.selected')
+																.removeClass(
+																		'selected');
+														$(this).addClass(
+																'selected');
+													}
+												});
+			
+			return table;
+}
+
+function showYbTable(){
+	var endTaskTable = $("#endTaskTable").DataTable(
+			{
+				language : {
+					aria : {
+						sortAscending : ": activate to sort column ascending",
+						sortDescending : ": activate to sort column descending"
+					},
+					emptyTable : "空表",
+					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+					infoEmpty : "没有数据",
+					infoFiltered : "(从 _MAX_ 条数据中检索)",
+					lengthMenu : "每页显示 _MENU_ 条数据",
+					search : "查询:",
+					zeroRecords : "抱歉， 没有找到！",
+					paginate : {
+						"sFirst" : "首页",
+						"sPrevious" : "前一页",
+						"sNext" : "后一页",
+						"sLast" : "尾页"
+					}
+				},
+				order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+				bRetrieve : true,
+				lengthMenu : [
+						[ 5, 10, 15, 30, -1 ],
+						[ 5, 10, 15, 30,
+								"All" ] ],
+				pageLength : 10,// 每页显示数量
+				processing : true,// loading等待框
+
+				ajax : ctx
+						+ "/rest/processAction/endTask",// 加载已办列表数据
+
+				"aoColumns" : [
+						{
+							mData : 'businessType',
+							mRender : function(
+									data) {
+								return "请假申请";
+							}
+						},
+						{
+							mData : 'userName'
+						},
+						{
+							mData : 'title'
+						},
+						{
+							mData : 'startTime',
+							mRender : function(
+									data,
+									type,
+									row,
+									meta) {
+								return timeStamp2String(data);
+							}
+						},
+						{
+							mData : 'claimTime',
+							mRender : function(
+									data,
+									type,
+									row,
+									meta) {
+								if(data != null){
+		                			return timeStamp2String(data);
+		                		}else{
+		                			return "无需签收";
+		                		}
+							}
+						},
+						{
+							mData : 'endTime',
+							mRender : function(
+									data) {
+								if (data != null) {
+									return timeStamp2String(data);
+								} else
+									return '';
+							}
+						},
+						{
+							mData : 'deleteReason'
+						},
+						{
+							mData : 'version'
+						},
+						{
+							mData : 'revoke',
+							mRender : function(data,type,row,meta) {
+								return "<a href='javascript:void(0);' onclick=\"revoke('"+row.taskId+"','"+row.processInstanceId+"','endTaskTable')\">撤销</a>";
+							}
+						}
+						]
+
+			})
+ return endTaskTable;
+}
+
+function handleTask(assign, taskId, processInstanceId){
+	
+	if(assign == ''){
+		toastr.warning("此任务您还没有签收，请【签收】任务后再处理任务！！");
+	}else{		
+		$.ajax({url:ctx + "/rest/order/toApproval/" + taskId,
+			type: 'POST',
+			dataType: 'json',
+			success:function(result){
+				$("#taskId").val(taskId);
+				$("#processInstanceId").val(processInstanceId);																					
+				$("#orderId").val(result.orderInfo.serialNum);
+				
+				var comments = ""//添加评论
+				for (var i=0;i<result.commentList.length;i++){
+					comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+					+ timeStamp2String2(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
+				}
+				
+				if(result.actionType == 'audit'){//审批流程
+					if(comments == ""){
+						comments = "无评论";
+					}else $("#comment_audit").html(comments);
+//					$("#audit_beginDate").val(timeStamp2String2(result.order.beginDate));
+//					$("#audit_endDate").val(timeStamp2String2(result.order.endDate));
+//					$("#audit_days").val(result.order.days);
+//					$("#audit_orderType").val(result.order.orderType);
+					$("#audit_reason").val(result.orderInfo.remark);
+					$('#auditOrderModal').modal('show');
+				}else{//result.actionType == 'modify' 更改流程
+					if(comments == ""){
+						comments = "无评论";
+					}else $("#comment_modify").html(comments);
+//					$("#modify_beginDate").val(timeStamp2String2(result.order.beginDate));
+//					$("#modify_endDate").val(timeStamp2String2(result.order.endDate));
+//					$("#modify_days").val(result.order.days);
+//					$("#modify_orderType").val(result.order.orderType);
+					$("#modify_reason").val(result.orderInfo.reason);
+					$('#modifyOrderModal').modal('show');
+				}
+				
+		}});
+		
+	}
+	
+	
+	
+}
