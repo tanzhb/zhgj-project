@@ -15,6 +15,8 @@ public class OrderInfo extends BaseVO {
 	private String serialNum;
 
     private String contractSerial;
+    
+    private ContractVO contract;
 
     private String supplyComId;
 
@@ -376,4 +378,13 @@ public class OrderInfo extends BaseVO {
 	public void setMaterielCount(String materielCount) {
 		this.materielCount = materielCount;
 	}
+
+	public ContractVO getContract() {
+		return contract;
+	}
+
+	public void setContract(ContractVO contract) {
+		this.contract = contract;
+	}
+	
 }

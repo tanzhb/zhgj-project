@@ -40,6 +40,7 @@ import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
+import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.BOMMateriel;
 import com.congmai.zhgj.web.model.BOMMaterielExample;
 import com.congmai.zhgj.web.model.BaseVO;
@@ -123,14 +124,14 @@ public class OrderController {
     @RequestMapping(value = "/saveOrder", method = RequestMethod.POST)
     @ResponseBody
     public OrderInfo saveOrder(@RequestBody String params) {
-        	params = params.replace("\\", "");
-    		ObjectMapper objectMapper = new ObjectMapper();  
-            OrderInfo orderInfo = new OrderInfo();
-			try {
-				orderInfo = objectMapper.readValue(params, OrderInfo.class);
-			}catch (Exception e1) {
-				e1.printStackTrace();
-			}
+    	params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+        OrderInfo orderInfo = new OrderInfo();
+		try {
+			orderInfo = objectMapper.readValue(params, OrderInfo.class);
+		}catch (Exception e1) {
+			e1.printStackTrace();
+		}
             
     	if(orderInfo.getSerialNum()==null||orderInfo.getSerialNum().isEmpty()){//新增
     		orderInfo.setSerialNum(ApplicationUtils.random32UUID());
@@ -140,43 +141,8 @@ public class OrderController {
     		orderInfo.setUpdater(currenLoginName);
     		orderInfo.setCreateTime(new Date());
     		orderInfo.setUpdateTime(new Date());
-    		orderInfo.setStatus("1");
     		
     		orderService.insert(orderInfo);
-    		
-    		//启动订单审批测试流程-start
-    		User user = UserUtil.getUserFromSession();
-    		orderInfo.setUser_id(user.getUserId());
-    		orderInfo.setUser_name(user.getUserName());
-    		orderInfo.setTitle(user.getUserName()+" 的订单申请");
-    		orderInfo.setBusinessType(BaseVO.VACATION); 			//业务类型：请假申请
-    		orderInfo.setStatus(BaseVO.PENDING);					//审批中
-//    		orderInfo.setApplyDate(new Date());
-//    		orderService.insert(orderInfo);
-            String businessKey = orderInfo.getSerialNum().toString();
-            orderInfo.setBusinessKey(businessKey);
-            try {
-            	String processInstanceId = this.processService.startOrderInfo(orderInfo);
-//                message.setStatus(Boolean.TRUE);
-//    			message.setMessage("请假流程已启动，流程ID：" + processInstanceId);
-                logger.info("processInstanceId: "+processInstanceId);
-            } catch (ActivitiException e) {
-//            	message.setStatus(Boolean.FALSE);
-                if (e.getMessage().indexOf("no processes deployed with key") != -1) {
-                    logger.warn("没有部署流程!", e);
-//        			message.setMessage("没有部署流程，请联系系统管理员，在[流程定义]中部署相应流程文件！");
-                } else {
-                    logger.error("启动请假流程失败：", e);
-//                    message.setMessage("启动请假流程失败，系统内部错误！");
-                }
-                throw e;
-            } catch (Exception e) {
-                logger.error("启动请假流程失败：", e);
-//                message.setStatus(Boolean.FALSE);
-//                message.setMessage("启动请假流程失败，系统内部错误！");
-                throw e;
-            }
-          //启动订单审批测试流程-end
     		
     	}else{//更新
     		Subject currentUser = SecurityUtils.getSubject();
@@ -186,8 +152,51 @@ public class OrderController {
     		orderService.update(orderInfo);
     	}
     	
+    	if("1".equals(orderInfo.getStatus())){
+    		//启动订单审批测试流程-start
+    		startOrderProcess(orderInfo);
+    		//启动订单审批测试流程-end
+    	}
+		
 		return orderInfo;
     }
+
+
+	private void startOrderProcess(OrderInfo orderInfo) {
+		//启动订单审批测试流程-start
+		User user = UserUtil.getUserFromSession();
+		orderInfo.setUser_id(user.getUserId());
+		orderInfo.setUser_name(user.getUserName());
+		orderInfo.setTitle(user.getUserName()+" 的订单申请");
+		orderInfo.setBusinessType(BaseVO.VACATION); 			//业务类型：订单审核
+		orderInfo.setStatus(BaseVO.PENDING);					//审批中
+//    		orderInfo.setApplyDate(new Date());
+//    		orderService.insert(orderInfo);
+		String businessKey = orderInfo.getSerialNum().toString();
+		orderInfo.setBusinessKey(businessKey);
+		try {
+			String processInstanceId = this.processService.startOrderInfo(orderInfo);
+//                message.setStatus(Boolean.TRUE);
+//    			message.setMessage("请假流程已启动，流程ID：" + processInstanceId);
+		    logger.info("processInstanceId: "+processInstanceId);
+		} catch (ActivitiException e) {
+//            	message.setStatus(Boolean.FALSE);
+		    if (e.getMessage().indexOf("no processes deployed with key") != -1) {
+		        logger.warn("没有部署流程!", e);
+//        			message.setMessage("没有部署流程，请联系系统管理员，在[流程定义]中部署相应流程文件！");
+		    } else {
+		        logger.error("启动请假流程失败：", e);
+//                    message.setMessage("启动请假流程失败，系统内部错误！");
+		    }
+		    throw e;
+		} catch (Exception e) {
+		    logger.error("启动请假流程失败：", e);
+//                message.setStatus(Boolean.FALSE);
+//                message.setMessage("启动请假流程失败，系统内部错误！");
+		    throw e;
+		}
+        //启动订单审批测试流程-end
+	}
     
     
     /**
@@ -271,7 +280,7 @@ public class OrderController {
 	
 	/**
 	 * 
-	 * @Description 获取销售订单信息
+	 * @Description 获取订单信息
 	 * @param ids
 	 * @return
 	 */
@@ -310,7 +319,7 @@ public class OrderController {
     		map.put("clauseSettlement", clauseSettlement);
     		
         	//查询框架合同
-        	if("框架合同".equals(contract.getContractType())){//如果是框架合同
+        	if(StaticConst.getInfo("framContract").equals(contract.getContractType())){//如果是框架合同
         		ClauseFrameworkExample mf =new ClauseFrameworkExample();
     	    	com.congmai.zhgj.web.model.ClauseFrameworkExample.Criteria criteriaf =  mf.createCriteria();
     	    	criteriaf.andContractSerialEqualTo(contract.getId());

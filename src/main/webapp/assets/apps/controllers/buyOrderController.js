@@ -224,6 +224,16 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
 						       }
+						}, {
+							'targets' : 7,
+							'render' : function(data,
+									type, row, meta) {
+								if(isNull(row.contract)){
+									return ""
+								}else{
+									return row.contract.contractNum
+								}
+							}
 						} ]
 
             }).on('order.dt',
@@ -343,7 +353,17 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     							"createdCell": function (td, cellData, rowData, row, col) {
     								 $compile(td)($scope);
     						       }
-    						} ]
+    						}, {
+								'targets' : 7,
+								'render' : function(data,
+										type, row, meta) {
+									if(isNull(row.contract)){
+										return ""
+									}else{
+										return row.contract.contractNum
+									}
+								}
+							} ]
 
                 }).on('order.dt',
                 function() {
@@ -2109,7 +2129,7 @@ var e = $("#form_clauseSettlement"),
 	        $scope.cancelPage  = function() {// 取消编辑
 	        	$state.go("buyOrder");
 	        };
-	        $scope.submitPage  = function() {// 取消编辑
+	        $scope.submitPage  = function() {// 提交审核
 	        	$scope.submitOrder = {}
 	        	$scope.submitOrder.serialNum = $scope.buyOrder.serialNum;
 	        	$scope.submitOrder.remark = $scope.buyOrder.remark;

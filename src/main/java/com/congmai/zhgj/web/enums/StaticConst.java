@@ -18,6 +18,10 @@ public enum StaticConst {
 	 */
 	LADDER_TYPE_MORE("moreStagePrice","累计阶梯价格"),
 	/**
+	 * @Field @PRICE_TYPE_SALE : TODO(框架合同)
+	 */
+	CONTRACT_TYPE_FRAM("framContract","框架合同"),
+	/**
 	 * @Field @PRICE_TYPE_BUY : TODO(采购价格)
 	 */
 	PRICE_TYPE_BUY("buyPrice","采购价格"),
