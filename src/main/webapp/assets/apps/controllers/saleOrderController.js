@@ -113,6 +113,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 
     		orderService.save($scope.saleOrder).then(
        		     function(data){
+       		    	$scope.saleOrder.serialNum = data.serialNum;
        		    	$scope.contract.orderSerial = data.serialNum;
        		    	$scope.contract.contractNum = $scope.saleOrder.orderNum;
 	   	    		$scope.contract.comId = $scope.saleOrder.buyComId;
@@ -699,7 +700,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
           		    		$scope.contract = {};
           		    	}
           		    	 
-          		    	
+          		    	$scope.copyMateriels = angular.copy($scope.orderMateriel);
           		     },
           		     function(error){
           		         $scope.error = error;
@@ -1062,6 +1063,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
         					$scope["orderMaterielShow"+i] = false;
         				}
         			}else{
+        				var length = $scope.orderMateriel.length; 
         				for(var i = 0;i < data.data.length;i++){// data.data为选择的供应物料
         					$scope.tempMateriel = {};
         					$scope.tempMateriel.materiel = (data.data)[i].materiel;
@@ -1069,11 +1071,11 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
         					$scope.tempMateriel.materielSerial = (data.data)[i].materiel.serialNum;
         					$scope.tempMateriel.supplyMaterielSerial = (data.data)[i].serialNum;
         					$scope.tempMateriel.supplyMateriel = (data.data)[i];
-        					$scope.orderMateriel.unshift($scope.tempMateriel);
-	        				$scope["orderMaterielInput"+i] = false;
-							$scope["orderMaterielShow"+i] = false;
-							$scope["orderMaterielInput" + ($scope.orderMateriel.length-1)] = true;
-							$scope["orderMaterielShow" + ($scope.orderMateriel.length-1)] = true;
+        					$scope.orderMateriel.push($scope.tempMateriel);
+	        				$scope["orderMaterielInput"+(length+i)] = false;
+							$scope["orderMaterielShow"+(length+i)] = false;
+							/*$scope["orderMaterielInput" + ($scope.orderMateriel.length-1)] = true;
+							$scope["orderMaterielShow" + ($scope.orderMateriel.length-1)] = true;*/
 		        		}
         			}
         			$scope.copyMateriels = angular.copy($scope.orderMateriel);
@@ -1171,7 +1173,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 						// $state.go('companyAdd',company,{reload:true});
 						$scope.orderMateriel[index] = data.data;
 						$scope.copyMateriels[index] = data.data;
-						console.log(data.data);
+						/*console.log(data.data);*/
 						$scope["orderMaterielInput"+index] = true;
 						$scope["orderMaterielShow"+index] = true;
 						$(".alert-danger").hide();
@@ -1208,8 +1210,8 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)].deliveryDate = "";
 	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)].deliveryAddress = "";
 	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)].lastDeliveryDate = "";
-	        			$scope.rootMateriels[$scope.rootMateriels.indexOf(materiel)].amount = "";
-	        			$scope.rootMateriels[$scope.rootMateriels.indexOf(materiel)].orderUnitPrice = "";
+	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)].amount = "";
+	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)].orderUnitPrice = "";
 	        		}
 	        	}
 	        };  
@@ -1511,48 +1513,55 @@ var e = $("#form_clauseSettlement"),
     	if($scope.contract.id==null||$scope.contract.id=='') {// 合同信息为空的处理
     		toastr.error('请先保存订单信息！');return
 		}
+    	if(!$scope.saleOrderInput){
+    		toastr.error('订单处于编辑状态，请处理！');return
+    	}
+    	
+    	if($scope.orderMateriel.length>0){
+			for(var i = 0;i < $scope.orderMateriel.length;i++){// data.data为选择的供应物料
+				if(!$scope["orderMaterielInput"+i]){
+					toastr.error('有订单物料处于编辑状态，请处理！');return
+				}
+			}
+		}
+    	
     	if(isNull($scope.clauseSettlement)){// 结算条款为空的处理
     		toastr.error('请填写结算条款后保存！');return
 		}
     	if($('#form_clauseSettlement').valid()){
     		$scope.clauseSettlement.contractSerial = $scope.contract.id;
     		$scope.clauseSettlementDetail = $scope.clauseSettlement.CSD;
+	        $scope.clauseSettlement.materielAmount = $scope.totalAmount();
+  	        $scope.clauseSettlement.rateAmount = $scope.totalRateAmount();
+  	        $scope.clauseSettlement.rateAndAmount = $scope.totalRateAndAmount();
+  	        $scope.clauseSettlement.orderAmount = $scope.totalOrderAmount();
+  	        
     		delete $scope.clauseSettlement.CSD;
     		orderService.saveClauseSettlement($scope.clauseSettlement).then(//保存结算条款
        		     function(data){
        		    	$scope.clauseSettlement = data.data;
        		    	if(!isNull(data.data)){
-      		    		for(var i=0;i<$scope.clauseSettlementDetail.length;i++){
-      		    			$scope.clauseSettlementDetail[i].clauseSettlementSerial = data.data.serialNum;
-      		    		}
-      		    		orderService.saveClauseSettlementDetail($scope.clauseSettlementDetail).then(//保存结算条款明细
-      		        		     function(data){
-      		        		    	toastr.success('数据保存成功！');
-      		        		    	$scope.cancelClauseSettlement();
-      		        		    	$scope.clauseSettlement.CSD = data.data;
-      		        		    	
-      		        		    	//更新订单数据
-      		        		    	/*$scope.submitOrder = {}
-	      		      	        	$scope.submitOrder.serialNum = $scope.saleOrder.serialNum;
-	      		      	        	$scope.submitOrder.materielCount = $scope.totalCount();
-	      		      	        	$scope.submitOrder.materielAmount = $scope.totalAmount();
-		      		      	        $scope.submitOrder.rateAmount = $scope.totalRateAmount();
-		      		      	        $scope.submitOrder.rateAndAmount = $scope.totalRateAndAmount();
-      		        		    	orderService.save($scope.submitOrder).then(
-      		     	          		     function(data){
-      		     	          		    	
-      		     	          		     },
-      		     	          		     function(error){
-      		     	          		         $scope.error = error;
-      		     	          		         toastr.error('数据保存出错！');
-      		     	          		     }
-      		     	          		 );*/
-      		        		     },
-      		        		     function(error){
-      		        		    	toastr.error('数据保存出错！');
-      		        		         $scope.error = error;
-      		        		     }
-      		        		 );
+       		    		if(!isNull($scope.clauseSettlementDetail)){
+       		    			for(var i=0;i<$scope.clauseSettlementDetail.length;i++){
+          		    			$scope.clauseSettlementDetail[i].clauseSettlementSerial = data.data.serialNum;
+          		    		}
+          		    		orderService.saveClauseSettlementDetail($scope.clauseSettlementDetail).then(//保存结算条款明细
+          		        		     function(data){
+          		        		    	toastr.success('数据保存成功！');
+          		        		    	$scope.cancelClauseSettlement();
+          		        		    	$scope.clauseSettlement.CSD = data.data;
+          		        		     },
+          		        		     function(error){
+          		        		    	toastr.error('数据保存出错！');
+          		        		         $scope.error = error;
+          		        		     }
+          		        		 );
+       		    		}else{
+       		    			toastr.success('数据保存成功！');
+          		    		$scope.cancelClauseSettlement()
+       		    		}
+       		    	//更新订单金额数据
+	        		$scope.updateOrderAmount();	
       		    		
       		    	}else{
       		    		$scope.clauseSettlement = {}
@@ -2265,9 +2274,24 @@ var e = $("#form_clauseSettlement"),
 			       		return 0;
 			       	}
 		       };
+		       $scope.totalOrderAmount  = function(scope) {//订单金额（外贸：商品金额+其他金额，内贸：价税合计（商品金额+税额）+ 其他金额）
+		    	   if(isNull($scope.clauseSettlement)||isNull($scope.clauseSettlement.otherAmount)){
+		    		   if(!isNull($scope.saleOrder)&&$scope.saleOrder.orderType =='标准销售(外贸)'){
+		    			   return Number($scope.totalAmount());
+		    		   }else{
+		    			   return Number($scope.totalAmount()) + Number($scope.totalRateAmount());
+		    		   }
+			       		
+			       	}else{
+			       	   if(!isNull($scope.saleOrder)&&$scope.saleOrder.orderType =='标准销售(外贸)'){
+		    			   return Number($scope.totalAmount()) + Number($scope.clauseSettlement.otherAmount)
+		    		   }else{
+		    			   return Number($scope.totalAmount()) + Number($scope.totalRateAmount()) + Number($scope.clauseSettlement.otherAmount);
+		    		   }
+			       	}
+		       };
 		       
-		       
-		       $scope.totalAmount  = function(scope) {//订单金额
+		       $scope.totalAmount  = function(scope) {//商品金额
 		    	   if($scope.orderMateriel){
 		    		    var total = 0 ; 
 			       		for(var i=0;i<$scope.orderMateriel.length;i++){
@@ -2290,7 +2314,7 @@ var e = $("#form_clauseSettlement"),
 			       	}
 		       };
 		       
-		       $scope.totalRateAndAmount  = function(scope) {//订单价税合计
+		       $scope.totalRateAndAmount  = function(scope) {//求和订单价税合计
 		    	   if($scope.orderMateriel){
 		    		    var total = 0 ; 
 			       		for(var i=0;i<$scope.orderMateriel.length;i++){
@@ -2353,7 +2377,7 @@ var e = $("#form_clauseSettlement"),
 			       	}
 		       };
 		       
-		       $scope._arithmeticRateAndAmount  = function(scope) {//计算价税合计
+		       $scope._arithmeticRateAndAmount  = function(scope) {//计算价税合计（商品金额+税额）
 			       	return Number($scope._arithmeticAmount(scope))+Number($scope._arithmeticRateAmount(scope));
 		       };
 		       
@@ -2373,6 +2397,33 @@ var e = $("#form_clauseSettlement"),
 			    	 obj[attr] = obj[attr].replace(/[^\d]/g,"");
 		    	 }
 
+		       
+		     //更新订单金额数据
+		     $scope.updateOrderAmount = function(obj,attr){
+		    	$scope.submitOrder = {}
+   	        	$scope.submitOrder.serialNum = $scope.saleOrder.serialNum;
+   	        	$scope.submitOrder.materielCount = $scope.totalCount();
+   	        	$scope.submitOrder.materielAmount = $scope.totalAmount();
+      	        $scope.submitOrder.rateAmount = $scope.totalRateAmount();
+      	        $scope.submitOrder.rateAndAmount = $scope.totalRateAndAmount();
+      	        $scope.submitOrder.otherAmount = $scope.clauseSettlement.otherAmount;
+      	        $scope.submitOrder.orderAmount = $scope.totalOrderAmount();
+	    	    orderService.save($scope.submitOrder).then(
+          		     function(data){
+          		    	
+          		     },
+          		     function(error){
+          		         $scope.error = error;
+          		         toastr.error('数据保存出错！');
+          		     }
+          		 );
+		      }
+ 		    	
+		     $scope._arithmeticDeliveryAmount  = function(scope) {//计算支付金额
+			       	if(scope._CSD.deliveryRate){
+			       		scope._CSD.deliveryAmount =  ($scope.totalOrderAmount()*scope._CSD.deliveryRate/100).toFixed(2);
+			       	}
+		       };
 		     //********订单物料合计，结算条款start****************//
     	 
 }]);

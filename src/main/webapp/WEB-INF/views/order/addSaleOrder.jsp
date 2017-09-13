@@ -1066,64 +1066,62 @@
 				                      <div class="row">
 				                          <div class="col-md-4">
 				                              <div class="form-group ">
-				                                  <label class="control-label bold">付款方：</label>
+				                                  <label class="control-label bold">商品金额：</label>
 				                                  <div class="">
-				                                  <input type="text" name="payer" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.payer"  >
-				                                      <div class="form-control-focus"> </div>
-				                                      <span class="help-block" ng-hide="clauseSettlementInput">请输入付款方</span>
-				                                      <p class="form-control-static" ng-show="clauseSettlementShow"> {{clauseSettlement.payer}} </p>
+				                                  <p class="form-control-static"> {{totalAmount()}} </p>
 				                                  </div>
-				                                  
 				                              </div>
 				                          </div>
 				                          <!--/span-->
 				                          <div class="col-md-4">
 				                          		<div class="form-group ">
-					                              	<label class="control-label bold">收款方：</label>
-					                                <div class="">
-					                                  <input type="text" name="payee" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.payee"  >
-				                                      <div class="form-control-focus"> </div>
-				                                      <span class="help-block" ng-hide="clauseSettlementInput">请输入收款方</span>
-				                                      <p class="form-control-static" ng-show="clauseSettlementShow"> {{clauseSettlement.payee}} </p>
-					                               	</div>
+					                              	<label class="control-label bold">税额：</label>
+					                                 <div class="">
+					                                  <p class="form-control-static">{{totalRateAmount()}}</p>
+					                                  </div>
+				                               </div>
+				                          </div>
+				                          <div class="col-md-4">
+				                          		<div class="form-group ">
+					                              	<label class="control-label bold">价税合计：</label>
+					                                 <div class="">
+					                                  <p class="form-control-static"> {{totalRateAndAmount()}} </p>
+					                                  </div>
 				                               </div>
 				                          </div>
 				                          <!--/span-->
 				                      </div>
 				                      <!--/row-->
 				                      <div class="row">
-				                          <div class="col-md-4">
-				                              <div class="form-group ">
-				                                  <label class="control-label bold">订单金额：</label>
-				                                  <div class="">
-				                                  		<input type="text" name="orderAmount" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.orderAmount"  >
-				                                      <div class="form-control-focus"> </div>
-				                                      <span class="help-block" ng-hide="clauseSettlementInput">请输入订单金额</span>
-				                                      <p class="form-control-static" ng-show="clauseSettlementShow"> {{clauseSettlement.orderAmount}} </p>
-				                               		</div>
-				                              </div>
-				                          </div>
 				                          <!--/span-->
 				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">其他费用：</label>
 				                                  <div class="">
-				                                  		<input type="text" name="otherAmount" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.otherAmount"  >
+				                                  		<input type="text" name="otherAmount" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.otherAmount" ng-keyup="clearNoNumPoint(clauseSettlement,'otherAmount')" >
 				                                      <div class="form-control-focus"> </div>
 				                                      <span class="help-block" ng-hide="clauseSettlementInput">请输入其他费用</span>
 				                                      <p class="form-control-static" ng-show="clauseSettlementShow"> {{clauseSettlement.otherAmount}} </p>
 				                               		</div>
 				                              </div>
 				                          </div>
+				                          <div class="col-md-4">
+				                              <div class="form-group ">
+				                                  <label class="control-label bold">订单金额：</label>
+			                                      <div class="">
+				                                  <p class="form-control-static"> {{totalOrderAmount()}} </p>
+				                                  </div>
+				                              </div>
+				                          </div>
 				                          <!--/span-->
 				                          <div class="col-md-4">
 				                              <div class="form-group ">
-				                                  <label class="control-label bold">应付金额：</label>
+				                                  <label class="control-label bold">备注：</label>
 				                                  <div class="">
-				                                  		<input type="text" name="totalAmount" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.totalAmount"  >
+				                                  		<input type="text" name="clauseSettlementRemark" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.remark"  >
 				                                      <div class="form-control-focus"> </div>
-				                                      <span class="help-block" ng-hide="clauseSettlementInput">请输入应付金额</span>
-				                                      <p class="form-control-static" ng-show="clauseSettlementShow"> {{clauseSettlement.totalAmount}} </p>
+				                                      <span class="help-block" ng-hide="clauseSettlementInput">请输入备注</span>
+				                                      <p class="form-control-static" ng-show="clauseSettlementShow"> {{clauseSettlement.remark}} </p>
 				                               		</div>
 				                              </div>
 				                          </div>
@@ -1153,31 +1151,58 @@
 				                              <tbody>
 				                                  <tr ng-repeat="_CSD in clauseSettlement.CSD track by $index" ng-mouseover="showOperation('csd',$index)" ng-mouseleave="hideOperation('csd',$index)">
 				                                      <td>
-				                                      		<input type="text" id="paymentType[$index]" name="paymentType" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].paymentType"  >
+							                                <select  id="paymentType[$index]" name="paymentType" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].paymentType"  >
+				                                              <option value=""></option>
+				                                             	<option value="预付款" >预付款</option>
+				                                               <option value="中期款" >中期款</option>
+				                                               <option value="尾款" >尾款</option>
+				                                               <option value="全款" >全款</option>
+				                                             </select>
 							                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.paymentType}} </p>
 							                          </td>
 							                          <td>
-				                                      		<input type="text" id="deliveryNode[$index]" name="deliveryNode" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].deliveryNode"  >
+				                                      		<select  id="deliveryNode[$index]" name="deliveryNode" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].deliveryNode"  >
+							                                	<option value=""></option>
+				                                             	<option value="合同签订" >合同签订</option>
+				                                               <option value="提货前" >提货前</option>
+				                                               <option value="到货后" >到货后</option>
+				                                               <option value="验收后" >验收后</option>
+				                                               <option value="质保期满" >质保期满</option>
+				                                               <option value="销售出库" >销售出库</option>
+				                                               <option value="收到委托方付款后" >收到委托方付款后</option>
+				                                               </select>
 							                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.deliveryNode}} </p>
 							                          </td>
 				                                      <td>
-				                                      		<input type="text" id="accountPeriod[$index]" name="accountPeriod" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].accountPeriod"  >
+				                                      		<input type="text" id="accountPeriod[$index]" name="accountPeriod" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].accountPeriod" 
+				                                      		 ng-keyup="clearNoNum(clauseSettlement.CSD[$index],'accountPeriod')" >
 							                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.accountPeriod}} </p>
 							                          </td>
 							                          <td>
-				                                      		<input type="text" id="deliveryRate[$index]" name="deliveryRate" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].deliveryRate"  >
+				                                      		<input type="text" id="deliveryRate[$index]" name="deliveryRate" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].deliveryRate" 
+				                                      		ng-keyup="clearNoNumPoint(clauseSettlement.CSD[$index],'deliveryRate');_arithmeticDeliveryAmount(this)" >
 							                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.deliveryRate}} </p>
 							                          </td>
 							                          <td>
-				                                      		<input type="text" id="deliveryAmount[$index]" name="deliveryAmount" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].deliveryAmount"  >
+				                                      		<input type="text" id="deliveryAmount[$index]" name="deliveryAmount" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].deliveryAmount"  
+				                                      		ng-keyup="clearNoNumPoint(clauseSettlement.CSD[$index],'deliveryAmount')" >
 							                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.deliveryAmount}} </p>
 							                          </td>
 							                          <td>
-				                                      		<input type="text" id="paymentMethod[$index]" name="paymentMethod" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].paymentMethod"  >
+				                                      		<select  id="paymentMethod[$index]" name="paymentMethod" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].paymentMethod"  >
+							                                <option value=""></option>
+				                                             	<option value="现款" >现款</option>
+				                                               <option value="承兑汇款" >承兑汇款</option>
+				                                               <option value="电子承兑" >电子承兑</option>
+				                                               </select>
 							                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.paymentMethod}} </p>
 							                          </td>
 							                          <td>
-				                                      		<input type="text" id="billingMethod[$index]" name="billingMethod" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].billingMethod"  >
+				                                      		<select  id="billingMethod[$index]" name="billingMethod" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].billingMethod"  >
+							                                <option value=""></option>
+				                                             	<option value="先票后款" >先票后款</option>
+				                                               <option value="先款后票" >先款后票</option>
+				                                               </select>
 							                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.billingMethod}} </p>
 							                          </td>
 							                          <td>

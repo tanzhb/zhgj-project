@@ -79,7 +79,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    serialNum, contractSerial, payee, payer, materielAmount
+    serialNum, contractSerial, payee, payer, materielAmount,
 rateAmount,
 rateAndAmount,
     orderAmount, otherAmount, remark, 
@@ -117,7 +117,7 @@ rateAndAmount,
   </delete>
   <insert id="insert" parameterType="com.congmai.zhgj.web.model.ClauseSettlement" >
     insert into clauseSettlement (serialNum, contractSerial, payee, 
-      payer, materielAmount
+      payer, materielAmount,
 rateAmount,
 rateAndAmount, orderAmount, otherAmount, 
        remark, status, 

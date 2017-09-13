@@ -210,6 +210,9 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
       		     function(data){
       		    	$scope.materiel=data.materiel;
       		    	if($state.current.name=="addMateriel"&&$scope.materiel.isBOM=="1"){
+      		    		
+      		    		diyFormiCheck();//初始化checkbox控件
+      		    		
       	        		$('#isBOMcheck').iCheck('check'); 
       	        		$scope.BOMShow=true;
       	        	}
