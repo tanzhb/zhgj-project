@@ -373,7 +373,34 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         .state('submitBuyApply', {
             url: "/submitBuyApply?:serialNum&:view",
             templateUrl: "rest/page/submitBuyApply",
-            data: {pageTitle: '新增采购订单'},
+            data: {pageTitle: '采购订单申请'},
+            controller: "buyOrderController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+	        	'assets/apps/service/orderService.js',
+				'assets/apps/controllers/buyOrderController.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        // 审批订单
+        .state('approvalBuyApply', {
+            url: "/approvalBuyApply?:serialNum&:view",
+            params:{"serialNum":null,"taskId":null, "comments":null,"processInstanceId":null},
+            templateUrl: "rest/page/approvalBuyApply",
+            data: {pageTitle: '审批采购订单'},
             controller: "buyOrderController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {

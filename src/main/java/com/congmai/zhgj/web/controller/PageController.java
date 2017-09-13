@@ -194,6 +194,15 @@ public class PageController {
     public String submitBuyApply(String serialNum,String view) {
         return "order/submitBuyApply";
     }
+    
+    /**
+     * 审批采购订单
+     */
+    @RequestMapping("/approvalBuyApply")
+    public String approvalBuyApply(String serialNum,String view) {
+        return "order/approvalBuyApply";
+    }
+    
     /**
      * 采购订单
      */
