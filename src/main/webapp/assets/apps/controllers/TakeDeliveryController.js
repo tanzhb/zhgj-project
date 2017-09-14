@@ -52,8 +52,17 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		 				 $("#tip").text("收货计划");
 		 				//$('#delivery_tab a:first').tab('show');
 		 		}
-	 			loadStockInTable();
-	 			loadTakeDelieryTable();
+	 			
+	 			 if($stateParams.tabHref == '1'){//首页待办列表传过来的参数
+	 				$('#takeDelivery_tab a[data-target="#tab_25_2"]').tab('show');
+	 				//showDbTable();
+	 				 $scope.toDaiban();
+	 	 		 }else if($stateParams.tabHref == '2'){
+	 	 			    $('#takeDelivery_tab a[data-target="#tab_25_3"]').tab('show');
+	 	 			 	$scope.toYiban();
+	 	 		 }
+	 			 loadStockInTable();
+	 			 loadTakeDelieryTable();
 	 			
 	 			
 	 		}
@@ -65,11 +74,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    	
 	 });
 	 
-	 if($stateParams.tabHref == '2'){//首页待办列表传过来的参数
-			$('#takeDelivery_tab a[data-target="#tab_25_2"]').tab('show');
-			showDbTable();
-	 }
 	
+		
 	 var playArrivalDateSetting = function() { 
 		    
 	        $("#playArrivalDate").datepicker().on('changeDate', function(ev){
@@ -1360,7 +1366,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 			var apply_table;
 	  		function showDbTable(){
 		  	  
-  		      var tableAjaxUrl = ctx + "/rest/processAction/todoTask";// 加载待办列表数据
+  		      var tableAjaxUrl = ctx + "/rest/processAction/todoTask/"+ 'takeDelivery';// 加载待办列表数据
   		    //  var loadApplyTable = function() {
   		             // a = 0;
   		              //App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
@@ -1572,7 +1578,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		var y_table;
 	  		function showYbTable(){
 	  			
-	  			var tableAjaxUrl = ctx + "/rest/processAction/endTask";// 加载待办列表数据
+	  			var tableAjaxUrl = ctx + "/rest/processAction/endTask/" + 'takeDelivery';// 加载待办列表数据
 	  			//  var loadApplyTable = function() {
 	  			// a = 0;
 	  			//App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
@@ -1725,18 +1731,18 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		    var mydata={"serialNum":$("#serialNum").val(),"content":$("#content").val(),
 	  					"isPass":true, "taskId":$("#taskId").val()};
 	  		    var _url = ctx + "rest/takeDelivery/complete";
-	  		    doVacation(_url, mydata);
+	  		    doVacation(_url, mydata,2);
 	  		};
 	  		//审批不通过
 	  		$scope.apUnPass = function() {
 	  			var mydata={"serialNum":$("#serialNum").val(),"content":$("#content").val(),
 	  					"isPass":false, "taskId":$("#taskId").val()};
 	  			var _url = ctx + "rest/takeDelivery/complete";
-	  			doVacation(_url, mydata);
+	  			doVacation(_url, mydata,1);
 	  		};
 	  		
 	  	//办结待办流程
-	  		function doVacation(_url, mydata){
+	  		function doVacation(_url, mydata,target){
 	  	        $.ajax( {
 	  		        url : _url,
 	  		        dataType:"text",
@@ -1745,7 +1751,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		        success : function(data) {
 	  		        	//$("#dbTable").DataTable().ajax.reload();
 	  		        	showToastr('toast-bottom-right', 'success', data);
-	  		        	$state.go("takeDelivery");
+	  		        	$state.go("takeDelivery",{tabHref:target});
 	  		        }
 	  		     });
 	  		}
