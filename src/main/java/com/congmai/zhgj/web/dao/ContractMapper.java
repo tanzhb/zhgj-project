@@ -37,4 +37,9 @@ public interface ContractMapper extends GenericDao<ContractVO, String> {
     
     //更新合同
     public void updateContract(ContractVO record);
+    
+    //订单中更新合同
+    public void updateContract4order(ContractVO record);
+    
+    
 }

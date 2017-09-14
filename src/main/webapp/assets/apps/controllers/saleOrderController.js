@@ -24,7 +24,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
             		$scope.getSaleOrderInfo($stateParams.serialNum)
             	}else{
             		$scope.opration = '新增';
-            		$scope.orderMateriel={};
+            		$scope.orderMateriel=[];
             		$scope.saleOrder={};
             		$scope.contract={};
             		$scope.clauseSettlement = {};

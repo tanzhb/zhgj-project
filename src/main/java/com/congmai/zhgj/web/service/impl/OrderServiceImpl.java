@@ -107,7 +107,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public void updateContract(ContractVO contract) {
-		contractMapper.updateContract(contract);
+		contractMapper.updateContract4order(contract);
 	}
 	
 
