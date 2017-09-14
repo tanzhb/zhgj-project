@@ -1,8 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<h3 class="page-title">
-	收款信息 <small></small>
-</h3>
 <div class="page-bar">
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
@@ -74,8 +71,12 @@
 					id="sample_2">
 					<thead>
 						<tr>
-							<th style="text-align: center"><input name="select_all"
-								value="1" id="example-select-all" type="checkbox" /></th>
+							<th style="text-align:center;">
+                                <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                    <input type="checkbox" class="group-checkable" id="example-select-all"/>
+                                    <span></span>
+                                </label>
+                            </th>
 							<th style="white-space: nowrap;">收款单号</th>
 							<th style="white-space: nowrap;">计划收款日期</th>
 							<th style="white-space: nowrap;">支付节点</th>
