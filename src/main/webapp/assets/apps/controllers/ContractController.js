@@ -277,8 +277,8 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 							                            	'searchable' : false,
 							                            	'orderable' : false,
 							                            	'className' : 'dt-body-center',
-							                            	'render' : function(data,type, full, meta) {
-							                            		return '<input type="checkbox" name="id[]" value="'+ $('<div/>').text(data).html()+ '">';
+							                            	   'render' : function(data,type, full, meta) {
+								                            		return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline"><input type="checkbox" name="id[]" value="'+ $('<div/>').text(data).html()+ '"><span></span></label>';
 							                            	}
 							                            } ,
 							                            {
@@ -572,8 +572,8 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 	            }).error(function (data, status, headers, config) {
 	                //upload failed
 	            });*/
-				/*window.open($rootScope.basePath+"/uploadAttachFiles/"+name);*/
-				 window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+name;
+				window.open($rootScope.basePath+"/uploadAttachFiles/"+name);
+				/* window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+name;*/
 	        };
 				
 				

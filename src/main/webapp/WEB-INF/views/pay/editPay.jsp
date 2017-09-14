@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <!-- BEGIN PAGE HEADER-->
 
-<h3 class="page-title">付款信息</h3>
 <div class="page-bar">
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
