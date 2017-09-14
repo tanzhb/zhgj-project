@@ -15,8 +15,8 @@
 	float: left;
 }
 </style>
-<h3 class="page-title"> 仓库信息
-</h3>
+<!-- <h3 class="page-title"> 仓库信息
+</h3> -->
 <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>

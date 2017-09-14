@@ -438,6 +438,7 @@ angular
 				// ***************************************
 				// 构建datatables结束***************************************
 				}
+			var  materielInTable,materielOutTable;
 			function loadMaterielInTable(orderSerial,serialNum){
 				var a = 0,judgeString='in';
 				if($scope.invoice.serialNum==undefined||$scope.invoice.orderSerial!=orderSerial){
@@ -445,6 +446,9 @@ angular
 				}else{
 					orderSerial=orderSerial+'no'+$scope.invoice.serialNum;
 				}
+				 if(materielInTable!=undefined){
+					 materielInTable.destroy();
+		 	    	 }
 				tableAjaxUrl= "rest/invoice/getMaterielList?orderSerial="+orderSerial
 				App.getViewPort().width < App
 						.getResponsiveBreakpoint("md") ? $(
@@ -458,7 +462,7 @@ angular
 										"page-header-fixed")
 										&& (a = 64);
 								
-								table = $("#sample_inm")
+								materielInTable = $("#sample_inm")
 								.DataTable(
 										{
 											language : {
@@ -582,6 +586,9 @@ function loadMaterielOutTable(orderSerial,serialNum){
 	}else{
 		orderSerial=orderSerial+'no'+$scope.invoice.serialNum;
 	}
+	 if(materielOutTable!=undefined){
+		 materielOutTable.destroy();
+	    	 }
 	tableAjaxUrl= "rest/invoice/getMaterielList?orderSerial="+orderSerial
 	App.getViewPort().width < App
 			.getResponsiveBreakpoint("md") ? $(
@@ -594,7 +601,7 @@ function loadMaterielOutTable(orderSerial,serialNum){
 					: $("body").hasClass(
 							"page-header-fixed")
 							&& (a = 64);
-	table = $("#sample_outm")
+					materielOutTable = $("#sample_outm")
 	.DataTable(
 			{
 				language : {
@@ -1035,10 +1042,9 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 									$scope.row.orderInfo=data.orderInfo;
 									$scope.row.orderAmount=data.orderInfo.orderAmount;
 									$scope.row.currency=data.orderInfo.currency;
-									
 								}
-								if(serialNum.indexOf("in")>-1){loadMaterielInTable(serialNum.substring(0,32),null);
-			 	            	}else{debugger;loadMaterielOutTable(serialNum.substring(0,32),null);}
+								/*if(serialNum.indexOf("in")>-1){loadMaterielInTable(serialNum.substring(0,32),'no');
+			 	            	}else{debugger;loadMaterielOutTable(serialNum.substring(0,32),'no');}*/
 							},
 							function(errResponse) {
 								toastr.warning("获取失败！");
@@ -1079,9 +1085,12 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 	 	    				$scope.invoice.orderAmount=$scope.row.orderAmount;//订单金额
 	 	    				$scope.invoice.relationBuyOrSaleNum=$scope.row.orderNum;//订单编号
 	 	    				$scope.invoice.currency=$scope.row.currency;
+	 	    				
 		 	    			if(judgeString=='buy'){
+		 	    				loadMaterielInTable($scope.invoice.orderSerial,'no');
 			 	            	$('#buyOrderInfo').modal('hide');// 选择成功后关闭模态框
 		 	    			}else{
+		 	    				loadMaterielOutTable($scope.invoice.orderSerial,'no');
 		 	            	$('#saleOrderInfo').modal('hide');// 选择成功后关闭模态框
 		 	    			}
 		 	    			$(".modal-backdrop").remove();

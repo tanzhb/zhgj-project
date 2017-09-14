@@ -14,8 +14,8 @@
 	float: left;
 }
 </style>
-<h3 class="page-title"> 库存信息
-</h3>
+<!-- <h3 class="page-title"> 库存信息
+</h3> -->
 <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>
@@ -42,7 +42,7 @@
             <div class="portlet-body">
 				<div class="portlet light ">
                         <div class="portlet-title">
-                            <div class="caption">库存信息</div>
+                            <div class="caption"><span ng-if="manageType.indexOf('zijian')>-1">自建</span><span ng-if="manageType.indexOf('daiguan')>-1">代管</span><span ng-if="manageType.indexOf('jinwai')>-1">境外</span>库存信息</div>
                             <div class="actions">
                                 <button  ng-show="stockView"    class="btn purple  btn-sm btn-circle  " ng-click="editStock()">
                                             <i class="fa fa-edit"></i> 编辑 </button>
@@ -64,7 +64,6 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="stockNum"> <span class="required"> * </span>库存编号 :</label>
                                                     <div class="  ">
-                                                     <input type="hidden"     id="materielSerial" ng-model="stock.materielSerial"  />
                                                         <input type="text" class="form-control" id="stockNum" name="stockNum" ng-model="stock.stockNum"  ng-hide="stockAdd" />
                                                         <div class="form-control-focus"> </div>
                                                           <p class="control-label left" ng-show="stockView">{{stock.stockNum}}</p> 
@@ -86,7 +85,8 @@
 	                                                        </span>
                                                          </div>
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.materielNum}}</p> 
+                                                                        <p class="control-label left" ng-show="priceListView">{{stock.materielNum}}</p> 
+                                                                         <input type="hidden"  id="materielSerial" ng-model="stock.materielSerial"  /><!--  存放物料流水号-->
                                                                     </div>
                                                                 </div>
                                                             </div>   
@@ -149,11 +149,11 @@
                                                              <div class="form-group">
                                                     <label class="control-label bold" for="manageType"> <span class="required"> * </span>管理类型:</label>
                                                     <div class="  ">
-                                                     <select class="form-control"    id="manageType"   name ="manageType" ng-model="stock.manageType"  ng-hide="stockAdd"  >
+                                                     <select class="form-control"    id="manageType"   name ="manageType" ng-model="stock.manageType"  ng-hide="stockAdd"  disabled="disabled" >
                                                                           <option value=""></option>
-                                                                        <option value="1">自建库管理</option>
-                                                                        <option value="2">代管库管理</option>
-                                                                        <option value="3">境外库管理</option>
+                                                                        <option value="1"   ng-selected="manageType.indexOf('zijian')>-1">自建库管理</option>
+                                                                        <option value="2"  ng-selected="manageType.indexOf('daiguan')>-1">代管库管理</option>
+                                                                        <option value="3" ng-selected="manageType.indexOf('jinwai')>-1">境外库管理</option>
                                                                         </select>
                                                                         
                                                                         <!-- <input type="text" class="form-control"   id="manageType" name ="manageType"  ng-hide="stockAdd"  
