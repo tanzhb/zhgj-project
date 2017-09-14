@@ -180,9 +180,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    		    	$("#playWarehouseDate").datepicker('setStartDate',playArrivalDate);
 	    		    }
 	        	}
-	        	if(!isNull(taskId)&&!isNull(comments)){
+	        	if(!isNull(taskId)){
 	        		$("#serialNum").val(serialNum);//赋值给隐藏input，通过和不通过时调用
-					$("#taskId").val(ids);//赋值给隐藏input，通过和不通过时调用
+					$("#taskId").val(taskId);//赋值给隐藏input，通过和不通过时调用
 					
 					if(comments == ""){
 						$("#comment_audit").html( "无评论");
@@ -322,7 +322,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 			
 	        		
 			/**
-			 * 去编辑收货计划
+			 * 去收货
 			 */
 			$scope.takeDelivery = function(){debugger;
 				var id_count = $('#takeDeliveryTable input[name="serialNum"]:checked').length;
@@ -1278,6 +1278,44 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 				}
 	  		}
 	  		
+	  		/**
+			 * 去收货
+			 */
+			$scope.takeDeliveryAudit = function(){
+				var id_count = $('#sample_2 input[name="serialNum"]:checked').length;
+				if(id_count==0){
+					toastr.warning("请选择您要办理的记录");
+				}else{
+					var ids = $('#sample_2 input[name="serialNum"]:checked').val();
+					takeDeliveryService
+					.getAuditInfos(ids)
+					.then(
+							function(result) {													
+								
+								var comments = ""//添加评论
+								for (var i=0;i<result.commentList.length;i++){
+									comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+									+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
+								}
+								
+								//if(result.actionType == 'audit'){//审批流程
+									$state.go('takeDeliveryAudit',{serialNum:result.takeDelivery.serialNum, taskId:ids, comments:comments});
+
+								//}else{
+									
+								//}
+							},
+							function(errResponse) {
+								toastr.warning("申请失败！");
+								console
+										.error('Error while apply ap');
+							}
+
+					);
+			}
+					//$state.go("takeDeliveryAudit",{serialNum:serialNum});
+			}
+	  		
 	  	// 待办流程
 			$scope.toDaiban = function() {
 				$('#takeDelivery_tab a[data-target="#tab_25_2"]').tab('show');
@@ -1289,195 +1327,6 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 			};
 			
 	  		function showDbTable(){
-	  			
-/*	  			var table = $("#sample_2")
-	  			.DataTable(
-	  					{
-	  						language : {
-	  							aria : {
-	  								sortAscending : ": activate to sort column ascending",
-	  								sortDescending : ": activate to sort column descending"
-	  							},
-	  							emptyTable : "空表",
-	  							info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
-	  							infoEmpty : "没有数据",
-	  							infoFiltered : "(从 _MAX_ 条数据中检索)",
-	  							lengthMenu : "每页显示 _MENU_ 条数据",
-	  							search : "查询:",
-	  							zeroRecords : "抱歉， 没有找到！",
-	  							paginate : {
-	  								"sFirst" : "首页",
-	  								"sPrevious" : "前一页",
-	  								"sNext" : "后一页",
-	  								"sLast" : "尾页"
-	  							}
-	  						},
-
-	  						buttons : [
-	  								{
-	  									text : "办理",
-	  									className : "btn default",
-	  									action: function(e, dt, node, config) { 
-	  										if(table.rows('.selected').data().length == 0){
-	  											toastr.warning("请选择要办理的任务！");
-	  										}else{
-	  											var assign = table.row('.selected').data().assign;
-	  											var taskId = table.row('.selected').data().taskId;
-	  											var processInstanceId = table.row('.selected').data().processInstanceId;
-	  											handleTask(assign, taskId, processInstanceId);
-	  										}
-	  									}
-	  								},
-	  								{
-	  									text : "签收",
-	  									className : "btn default",
-	  									action: function(e, dt, node, config) { 
-	  										if(table.rows('.selected').data().length == 0){
-	  											toastr.warning("请选择要签收的任务！");
-	  										}else{
-	  											var taskId = table.row('.selected').data().taskId;
-	  											claimTask(taskId, 'sample_2');
-	  										}								
-	  									}
-	  								},
-	  								{
-	  									text : "转办",
-	  									className : "btn default"
-	  								},
-	  								{
-	  									text : "委派",
-	  									className : "btn default"
-	  								},
-	  								{
-	  									text : "跳转",
-	  									className : "btn default"
-	  								} ],
-	  						dom : "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
-	  						order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
-
-	  						bRetrieve : true,
-	  						lengthMenu : [
-	  								[ 5, 10, 15, 30, -1 ],
-	  								[ 5, 10, 15, 30,
-	  										"All" ] ],
-	  						pageLength : 10,// 每页显示数量
-	  						processing : true,// loading等待框
-
-	  						ajax : ctx
-	  								+ "/rest/processAction/todoTask",// 加载待办列表数据
-
-	  						"aoColumns" : [
-	  						        {
-										'targets' : 0,
-										'searchable' : false,
-										'orderable' : false,
-										'className' : 'dt-body-center',
-										'render' : function(data,
-												type, row, meta) {
-													return '<input  type="checkbox" id='+data+'   name="serialNum2" value="'
-													+ $('<div/>')
-															.text(
-																	data)
-															.html()
-													+ '">';
-								
-										},
-										"createdCell": function (td, cellData, rowData, row, col) {
-											 $compile(td)($scope);
-									       }
-									},       		
-	  								{
-	  									mData : 'assign',
-	  									mRender : function(
-	  											data) {
-	  										if (data == '') {
-	  											return "待签收";
-	  										} else {
-	  											return "待办理";
-	  										}
-	  									}
-	  								},
-	  								{
-	  									mData : 'businessType',
-	  									mRender : function(
-	  											data) {debugger;
-	  										if (data == "takeDelivery") {
-	  											return "请假申请";
-	  										} else if (data == "salary") {
-	  											return "薪资调整";
-	  										} else if (data == "expense") {
-	  											return "报销申请";
-	  										}
-	  									}
-	  								},
-	  								{
-	  									mData : 'userName'
-	  								},
-	  								{
-	  									mData : 'title'
-	  								},
-	  								{
-	  									mData : 'taskName',
-	  									mRender : function(
-	  											data,
-	  											type,
-	  											row,
-	  											meta) {
-	  										return "<a class='trace' onclick=\"graphTrace('"
-	  												+ row.processInstanceId + "','" + ctx 
-	  												+ "')\" id='diagram' href='javascript:;' pid='"
-	  												+ row.id
-	  												+ "' pdid='"
-	  												+ row.processDefinitionId
-	  												+ "' title='see'>"
-	  												+ data
-	  												+ "</a>";
-	  									}
-	  								},
-	  								{
-	  									mData : 'owner',
-	  									mRender : function(
-	  											data,
-	  											type,
-	  											row,
-	  											meta) {
-	  										if (data != ''
-	  												&& data != row.assign) {
-	  											return row.assign
-	  													+ " (原执行人："
-	  													+ data
-	  													+ ")";
-	  										} else {
-	  											return row.assign;
-	  										}
-	  									}
-	  								},
-	  								{
-	  									mData : 'createTime',
-	  									mRender : function(
-	  											data) {
-	  										if (data != null) {
-	  											return timeStamp2String(data);
-	  										} else
-	  											return '';
-	  									}
-	  								},
-	  								{
-	  									mData : 'suspended',
-	  									mRender : function(
-	  											data) {
-	  										if (data) {
-	  											return "已挂起";
-	  										} else {
-	  											return "正常";
-	  										}
-	  									}
-	  								} ]
-
-	  					})
-	  		}*/
-	  		
-	  		
 		  	  var apply_table;
   		      var tableAjaxUrl = ctx + "/rest/processAction/todoTask";// 加载待办列表数据
   		    //  var loadApplyTable = function() {
@@ -1572,12 +1421,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
   		  						    'className' : 'dt-body-center',
   		  							'render' : function(data,
   		  									type, row, meta) {
-  		  								return '<input type="radio" id="'+data+'" data-num="'+row.orderNum+'" ng-click="getBuyOrderInfo_(\''+data+'\')" name="selecrOrderSerial" value="'
-  		  													+ $('<div/>')
-  		  													.text(
-  		  															data)
-  		  													.html()
-  		  											+ '">';
+  		  								return '<input type="radio" id="'+data+'"   name="serialNum" value="'+data+ '">';
   		  							},
   		  							"createdCell": function (td, cellData, rowData, row, col) {
   		  								 $compile(td)($scope);
@@ -1606,6 +1450,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 											return "薪资调整";
 										} else if (data == "expense") {
 											return "报销申请";
+										}else{
+											return data;
 										}
   		  							}
   		  						},{
@@ -1617,7 +1463,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
   		  								if (data == undefined) {
   		  									return "";
   		  								} else {
-  		  									return "";
+  		  									return data;
   		  								}
   		  							}
   		  						},{
@@ -1629,7 +1475,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
   		  								if (data == undefined) {
   		  									return "";
   		  								} else{
-  		  									return "";
+  		  									return data;
   		  								}
   		  							}
   		  						},{
@@ -1696,6 +1542,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
   		    //  };
 	  		}
 	  		
+
 	  		//审批通过
 	  		$scope.apPass = function() {
 	  		   
@@ -1711,6 +1558,21 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  			var _url = ctx + "rest/takeDelivery/complete";
 	  			doVacation(_url, mydata);
 	  		};
+	  		
+	  	//办结待办流程
+	  		function doVacation(_url, mydata){
+	  	        $.ajax( {
+	  		        url : _url,
+	  		        dataType:"text",
+	  		        type: 'POST',
+	  		        data : mydata,
+	  		        success : function(data) {
+	  		        	//$("#dbTable").DataTable().ajax.reload();
+	  		        	showToastr('toast-bottom-right', 'success', data);
+	  		        	$state.go("takeDelivery");
+	  		        }
+	  		     });
+	  		}
 	  		$scope.closeAuditDialogue = function() {
 	  			$state.go("takeDelivery");
 	  		};
