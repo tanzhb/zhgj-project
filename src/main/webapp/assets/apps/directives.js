@@ -88,7 +88,7 @@ MetronicApp.directive('selectpicker', function ($timeout) {
                     scope.idx = newValue
                     console.log('selected ', newValue);
                 });*/
-            }, 500);
+            }, 1500);
         }
     };
 });

@@ -465,10 +465,9 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 							                            	'orderable' : false,
 							                            	'className' : 'dt-body-center',
 							                            	'render' : function(data,type, full, meta) {
-							                            		return '<input type="checkbox" name="id[]" value="'+ $('<div/>').text(data).html()+ '">';
+							                            		return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline"><input type="checkbox" name="id[]" value="'+ $('<div/>').text(data).html()+ '"><span></span></label>';
 							                            	}
 							                            } ,
-							                            
 							                            {
 							                            	'targets' : 1,
 							                            	'className' : 'dt-body-center',
@@ -485,6 +484,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 							                            	console.log('排序');
 							                            })
 		}
+		
 		
 		
 	        // 确认选择开始***************************************
@@ -676,6 +676,51 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 								);
 					}
 				}								
+			};
+			
+			   //流程申请
+		    $scope.jumpToApplyPay  = function() {
+		    	var ids = '';
+				// Iterate over all checkboxes in the table
+				table.$('input[type="checkbox"]').each(
+						function() {
+							// If checkbox exist in DOM
+							if ($.contains(document, this)) {
+								// If checkbox is checked
+								if (this.checked) {
+									// 将选中数据id放入ids中
+									if (ids == '') {
+										ids = this.value;
+									} else{
+										ids = "more"
+									}
+								}
+							}
+						});
+				if(ids==''){
+					toastr.warning('请选择一个申请！');return;
+				}else if(ids=='more'){
+					toastr.warning('只能选择一个申请！');return;
+				}
+				$state.go('applyDelivery',{serialNum:ids});
+		    }; 
+		    
+		    
+		  //启动流程
+			$scope.applyAp = function() {
+				DeliveryService
+						.applyAp($('#reason').val(), $stateParams.serialNum)
+						.then(
+								function(data) {
+									toastr.success("申请成功！");
+								},
+								function(errResponse) {
+									toastr.warning("申请失败！");
+									console
+											.error('Error while apply ap');
+								}
+
+						);
 			};
 			
 			

@@ -712,8 +712,8 @@ public class TakeDeliveryController {
 
     				takeDelivery.setUserId(user.getUserId());
     				takeDelivery.setUser_name(user.getUserName());
-    				takeDelivery.setTitle(user.getUserName() + " 的应付款申请");
-    				takeDelivery.setBusinessType(BaseVO.ACCOUNTPAYABLE);
+    				takeDelivery.setTitle(user.getUserName() + " 的收货申请");
+    				takeDelivery.setBusinessType(Constants.TAKEDELIVERY);
     				takeDelivery.setStatus(BaseVO.PENDING);
     				takeDelivery.setApplyDate(new Date());
     				takeDelivery.setBusinessKey(serialNum);
@@ -819,11 +819,15 @@ public class TakeDeliveryController {
 						.singleResult();
 				if (BeanUtils.isBlank(pi)) {
 					takeDelivery.setStatus(BaseVO.APPROVAL_SUCCESS);
+					//任务办理完成后,创建入库检验单
+					this.takeDeliveryService.createStockInCheckRecord(takeDelivery.getSerialNum(), user.getUserName());
 				}
 			}
 
 			this.takeDeliveryService.updateByPrimaryKeySelective(takeDelivery);
 
+			
+			
 			result = "任务办理完成！";
 		} catch (ActivitiObjectNotFoundException e) {
 			result = "此任务不存在，请联系管理员！";

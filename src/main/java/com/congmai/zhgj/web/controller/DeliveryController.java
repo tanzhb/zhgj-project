@@ -4,18 +4,24 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONObject;
+
+import org.activiti.engine.ActivitiException;
 import org.apache.commons.io.FileUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -37,6 +43,7 @@ import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryTransportVO;
@@ -44,11 +51,13 @@ import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
+import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.DeliveryService;
+import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.UserCompanyService;
@@ -65,6 +74,7 @@ import com.congmai.zhgj.web.service.WarehouseService;
 @Controller
 @RequestMapping("/delivery")
 public class DeliveryController {
+	private static final Logger logger = Logger.getLogger(PayController.class);
 
 	/**
 	 * 合同管理service
@@ -100,6 +110,10 @@ public class DeliveryController {
 	 */
 	@Resource
 	private UserCompanyService userCompanyService;
+	
+	
+	@Autowired
+	private IProcessService processService;
 
 	 /**
      * @Description (查询仓库列表)
@@ -387,6 +401,67 @@ public class DeliveryController {
        	map.put("deliveryMateriels", deliveryMateriels);
        	return map;
    	}
+   	
+   	
+   	/**
+	 * 
+	 * @Description 启动应付款流程审批
+	 * @param entity
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/apply", method = RequestMethod.POST)
+	@ResponseBody
+	public String apply(@RequestBody JSONObject entity) throws Exception {
+		User user = UserUtil.getUserFromSession();
+		Map map = JSONObject.fromObject(entity);
+		String reason = (String) map.get("reason");
+		String serialNum = (String) map.get("serialNum");
+
+		/*PaymentRecord paymentRecord = payService.selectPayById(serialNum);
+		paymentRecord.setUserId(user.getUserId());
+		paymentRecord.setUser_name(user.getUserName());
+		paymentRecord.setTitle(user.getUserName() + " 的应付款申请");
+		paymentRecord.setBusinessType(BaseVO.ACCOUNTPAYABLE);
+		paymentRecord.setStatus(BaseVO.PENDING);
+		paymentRecord.setApplyDate(new Date());
+		paymentRecord.setBusinessKey(serialNum);
+		paymentRecord.setReason(reason);*/
+		DeliveryVO delivery=deliveryService.selectDetailById(serialNum);
+		delivery.setUserId(user.getUserId());
+		delivery.setUser_name(user.getUserName());
+		delivery.setUpdater(user.getUserName());
+		delivery.setTitle(user.getUserName()+"的发货申请");
+		delivery.setBusinessType(BaseVO.ACCOUNTPAYABLE);
+		delivery.setStatus(BaseVO.PENDING);
+		delivery.setApplyDate(new Date());
+		delivery.setBusinessKey(serialNum);
+		delivery.setReason(reason);
+
+		try {
+			String processInstanceId = this.processService
+					.startAccountDeliveryable(delivery);
+			// message.setStatus(Boolean.TRUE);
+			// message.setMessage("请假流程已启动，流程ID：" + processInstanceId);
+			logger.info("processInstanceId: " + processInstanceId);
+		} catch (ActivitiException e) {
+			// message.setStatus(Boolean.FALSE);
+			if (e.getMessage().indexOf("no processes deployed with key") != -1) {
+				logger.warn("没有部署流程!", e);
+				// message.setMessage("没有部署流程，请联系系统管理员，在[流程定义]中部署相应流程文件！");
+			} else {
+				logger.error("启动请假流程失败：", e);
+				// message.setMessage("启动请假流程失败，系统内部错误！");
+			}
+			throw e;
+		} catch (Exception e) {
+			logger.error("启动请假流程失败：", e);
+			// message.setStatus(Boolean.FALSE);
+			// message.setMessage("启动请假流程失败，系统内部错误！");
+			throw e;
+		}
+		return null;
+	}
 
 	/**
 	 * @Description (导出发货信息)
@@ -408,6 +483,12 @@ public class DeliveryController {
 	@RequestMapping("/viewDelivery")
     public String viewDelivery() {
         return "delivery/viewDelivery";
+    }
+	
+	
+	@RequestMapping("/applyDelivery")
+    public String applyDelivery() {
+        return "delivery/applyDelivery";
     }
 
 

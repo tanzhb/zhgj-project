@@ -807,7 +807,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        		}]
 		        	}	        
 		    }) .state('takeDelivery', {
-		    	url: "/takeDelivery?:type",
+		    	url: "/takeDelivery?:tabHref",
 		    	templateUrl: "rest/takeDelivery/takeDeliveryManage",
 		    	data: {pageTitle: '收货计划'},
 		    	reload:true, 
@@ -1261,6 +1261,32 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             url: "/viewDelivery:serialNum",
             templateUrl: "rest/delivery/viewDelivery",
             data: {pageTitle: '查看发货'},
+            controller: "DeliveryController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [                             
+			'assets/global/plugins/datatables/datatables.min.css',
+			'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+			'assets/global/plugins/datatables/datatables.all.min.js',
+			'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+			'assets/apps/scripts/pageHandle.js',
+			'assets/apps/service/DeliveryService.js',
+			'assets/apps/controllers/DeliveryController.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        
+        
+        .state('applyDelivery', {
+        	params:{data:null},
+            url: "/applyDelivery:serialNum",
+            templateUrl: "rest/delivery/applyDelivery",
+            data: {pageTitle: '发货申请'},
             controller: "DeliveryController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
