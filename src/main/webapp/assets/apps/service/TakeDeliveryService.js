@@ -87,6 +87,21 @@ angular.module('MetronicApp').service('takeDeliveryService',['$http','$q',functi
 	}
 	
 	/**
+	 * 保存收货计划
+	 */
+	this.applyTakeDelivery = function (params){
+		var deferred = $q.defer();
+		$http.post("rest/takeDelivery/applyTakeDelivery", 
+				JSON.stringify(params)//传整个表单数据  
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
+	
+	/**
 	 * 收货确认
 	 */
 	this.saveConfirmTakeDelivery = function (params){
@@ -234,6 +249,19 @@ angular.module('MetronicApp').service('takeDeliveryService',['$http','$q',functi
 		});
 		return deferred.promise;//返回承诺
 	}
+	
+	this.getAuditInfos = function(ids) {
+        var deferred = $q.defer();  
+        $http.post(ctx + "rest/takeDelivery/toApproval/" + ids).success(function (data) {  
+        	
+        	// 如果连接成功，延时返回给调用者  
+            deferred.resolve(data);  
+        })  
+            .error(function () {  
+                deferred.reject('连接服务器出错！');  
+            })  
+        return deferred.promise;  
+    }
 
 	
 

@@ -14,8 +14,8 @@
 	vertical-align:middle;
 } */
 </style>
-<h3 class="page-title d_tip"> 新建收货信息
-</h3>
+<!-- <h3 class="page-title d_tip"> 新建代发货信息
+</h3> -->
 <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>
@@ -24,7 +24,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a ui-sref="datatablesmanaged">物流管理</a>
+            <a ui-sref="datatablesmanaged">仓储</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
@@ -32,7 +32,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a class="d_tip">新建收货信息</a>
+            <a class="d_tip">新建代发货信息</a>
         </li>
     </ul>
 
@@ -69,25 +69,26 @@
 									<div class="alert alert-danger display-hide">
                                                 <button class="close" data-close="alert"></button>请先输入正确数据！</div>
 									<div class="row">
-										<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold" for="takeDeliverNum">收货单号 <span class="required"> * </span></label>
-                                                    <div class="">
-                                                        <input type="text" class="form-control" id="takeDeliverNum" name="takeDeliverNum" ng-model="takeDeliver.takeDeliverNum" ng-hide="deliverAdd" >
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{takeDeliver.takeDeliverNum}}</p>
-                                                    </div>
-                                            </div>
-										</div>
-						
-										<!--/span-->
-										<div class="col-md-4">
+									<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="deliverNum">发货单号 <span class="required"> * </span></label>
                                                     <div class="">
                                                         <input type="text" class="form-control" id="deliverNum"  name="deliverNum" ng-model="deliver.deliverNum" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.deliverNum}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<!--/span-->
+										<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="deliverType">发货类型<span class="required"> * </span></label>
+                                                    <div class="">
+                                                        <select class="form-control"  id="deliverType" ng-init="deliver.deliverType='贸易发货'"  name="deliverType" ng-model="deliver.deliverType" ng-hide="deliverAdd"  data-size="8">
+	                                                        <option  value="贸易发货" selected="selected" >贸易发货</option>
+	                                                    </select>
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="deliverView">{{takeDeliver.takeDeliverNum}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -121,8 +122,8 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="supplyComId">供应商 <span class="required"> * </span></label>
                                                     <div class="">
-                                                    	<select class="form-control" selectpicker data-live-search="true"  id="supplyComId"  name="supplyComId" ng-model="deliver.supplyComId" ng-hide="deliverAdd"  data-size="8">
-	                                                        <option value=""></option>
+                                                    	<select class="form-control" selectpicker  id="supplyComId"  name="supplyComId" ng-model="deliver.supplyComId" ng-hide="deliverAdd"  data-size="8">
+	                                                        <!-- <option value=""></option> -->
 	                                                        <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}">{{supplier.comName}}</option>
 	                                                    </select>
                                                         <div class="form-control-focus"> </div>
@@ -251,6 +252,8 @@
                    <div class="tab-pane fade" id="tab_1_2">
                         <div class="portlet-body form">
 								<div class="form-body">
+								<div class="alert alert-danger display-hide">
+                                                <button class="close" data-close="alert"></button>请先输入正确数据！</div>
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
@@ -430,6 +433,8 @@
                     <div class="tab-pane fade" id="tab_1_3">
                         <div class="portlet-body form">
 								<div class="form-body">
+								 <div class="alert alert-danger display-hide">
+                                                <button class="close" data-close="alert"></button>请先输入正确数据！</div>
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
@@ -566,6 +571,8 @@
                         <div class="tab-pane fade" id="tab_1_4">
                         <div class="portlet-body form">
 								<div class="form-body">
+								<div class="alert alert-danger display-hide">
+                                                <button class="close" data-close="alert"></button>请先输入正确数据！</div>
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">

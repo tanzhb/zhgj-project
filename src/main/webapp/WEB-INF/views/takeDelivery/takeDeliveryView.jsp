@@ -11,8 +11,8 @@
 	vertical-align:middle;
 } */
 </style>
-<h3 class="page-title"> 查看收货详情
-</h3>
+<!-- <h3 class="page-title"> 查看收货详情
+</h3> -->
 <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>
@@ -54,19 +54,18 @@
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="takeDeliveryNum">收货单号：</label>
-                                                    <div class="col-md-8">
-                                                         <p class="control-label left" >{{deliver.takeDelivery.takeDeliverNum}}</p>
-                                                    </div>
-                                            </div>
-										</div>
-						
-										<!--/span-->
-										<div class="col-md-4">
-											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="deliverNum"> 发货单号：</label>
                                                     <div class="col-md-8">
                                                          <p class="control-label left" >{{deliver.deliverNum}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<!--/span-->
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="deliverType">发货类型：</label>
+                                                    <div class="col-md-8">
+                                                         <p class="control-label left" >{{deliver.deliverType}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -480,6 +479,47 @@
                                                     <label class="col-md-4 control-label" >备注：</label>
                                                     <div class="col-md-8">
                                                          <p class="control-label left" >{{deliver.takeDelivery.remark}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<!--/span-->
+									</div>
+									<!--/row-->
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="takeDeliverNum"> 收货单号：</label>
+                                                    <div class="col-md-8">
+                                                         <p class="control-label left" >{{deliver.takeDelivery.takeDeliverNum}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="tdReceiver"> 实际收货日期：</label>
+                                                    <div class="col-md-8">
+                                                         <p class="control-label left" >{{deliver.takeDelivery.actualDate}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+						
+										<!--/span-->
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="tdContactNum"> 收货人：</label>
+                                                    <div class="col-md-8">
+                                                         <p class="control-label left" >{{deliver.takeDelivery.taker}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<!--/span-->
+									</div>
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" >备注：</label>
+                                                    <div class="col-md-8">
+                                                         <p class="control-label left" >{{deliver.takeDelivery.takeDate}}</p>
                                                     </div>
                                             </div>
 										</div>

@@ -499,7 +499,7 @@
 					<button type="submit" ng-click="apUnPass()"
 						class="btn red">
 						<i class="glyphicon glyphicon-remove"></i> 不通过
-					</button>
+					</button>					
 					<button type="submit" ng-click="backDbList()"
 						class="btn green-meadow">
 						<i class="glyphicon glyphicon-share-alt"></i> 返回

@@ -40,24 +40,28 @@
 	<div class="col-md-12">
 
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
-		<div class="portlet box blue">
+		<div class="portlet light">
 			<div class="portlet-title">
 				<div class="caption">
 					<i class="fa fa-globe"></i>库存列表
 				</div>
 				<div class="actions">
 					<button ng-click="addStock()"
-						data-toggle="modal" class="btn btn-default btn-sm btn-circle">
+						data-toggle="modal" class="btn btn-transparent green btn-circle btn-sm">
 						<i class="fa fa-plus"></i> 添加
 					</button><button ng-click="toEditStockPage()"
-						class="btn btn-default btn-sm btn-circle"> <i
+						class="btn btn-transparent purple btn-circle btn-sm"> <i
 						class="fa fa-edit"></i> 修改
 					</button> <button ng-click="delStock()" 
 						data-toggle="modal" 
-						class="btn btn-default btn-sm btn-circle"> <i
+						class="btn btn-transparent red btn-circle btn-sm"> <i
 						class="fa fa-minus"></i> 删除
 					</button>
-					<div class="btn-group">
+						<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
+	                                              <i class="fa fa-upload"></i> 导入</label>
+						<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportStock()">
+	                                              <i class="fa fa-file-excel-o"></i> 导出</label>
+					<!-- <div class="btn-group">
 						<a class="btn btn-default btn-outline btn-circle"
 							href="javascript:;" data-toggle="dropdown"> <i
 							class="fa fa-share"></i> <span class="hidden-xs"> 其它 </span> <i
@@ -75,7 +79,7 @@
 													class="tool-action" > <i class="fa fa-print"></i> 打印
 												</a></li> 
 											</ul>
-					</div>
+					</div> -->
 				</div>
 			</div>
 

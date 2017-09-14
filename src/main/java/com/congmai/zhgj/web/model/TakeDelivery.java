@@ -1,11 +1,17 @@
 package com.congmai.zhgj.web.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class TakeDelivery {
-    private String serialNum;
+public class TakeDelivery extends BaseVO implements Serializable{
+    /**
+	 * @Field @serialVersionUID : TODO(这里用一句话描述这个类的作用)
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private String serialNum;
 
     private String deliverSerial;
 
@@ -40,6 +46,16 @@ public class TakeDelivery {
     private Warehouse warehouse;
     
     private String supplyName;//供应商名称
+    
+    private String processInstanceId;
+    
+    private String status;
+    
+    private String reason;
+    
+    private int userId;
+    
+    private Date applyDate;
 
     public String getSerialNum() {
         return serialNum;
@@ -162,6 +178,7 @@ public class TakeDelivery {
 		this.supplyName = supplyName;
 	}
 
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
 	public Date getActualDate() {
 		return actualDate;
 	}
@@ -184,6 +201,46 @@ public class TakeDelivery {
 
 	public void setTakeRemark(String takeRemark) {
 		this.takeRemark = takeRemark;
+	}
+
+	public String getProcessInstanceId() {
+		return processInstanceId;
+	}
+
+	public void setProcessInstanceId(String processInstanceId) {
+		this.processInstanceId = processInstanceId;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
+	public Date getApplyDate() {
+		return applyDate;
+	}
+
+	public void setApplyDate(Date applyDate) {
+		this.applyDate = applyDate;
 	}
     
     
