@@ -27,11 +27,11 @@
 <div class="tabbable-line">
     <ul class="nav nav-tabs">
 		<shiro:hasPermission name="zhgj:buyNormalOrder">
-			<li class="active"><a data-target="#tab_15_1" data-toggle="tab">普通订单</a>
+			<li class="active"><a data-target="#tab_15_1" data-toggle="tab">采购订单</a>
 			</li>
 		</shiro:hasPermission>
 		<shiro:hasPermission name="zhgj:buyFrameOrder">
-			<li><a data-target="#tab_15_2" data-toggle="tab">框架订单</a></li>
+			<li><a data-target="" data-toggle="tab">框架合同</a></li>
 		</shiro:hasPermission>
 	</ul>
     <div class="tab-content">
@@ -42,11 +42,11 @@
 			<div class="tabbable-custom ">
 			<ul class="nav nav-tabs " id="orderTab">
 				<li class="active"><a href="#apply" data-toggle="tab"
-					ng-click="toApply()"> 请假申请 </a></li>
+					ng-click="toApply()"> 订单 </a></li>
 				<li><a href="#daiban" data-toggle="tab" ng-click="toDaiban()">
-						待办流程 </a></li>
+						待办 </a></li>
 				<li><a href="#yiban" data-toggle="tab" ng-click="toYiban()">
-						已办流程 </a></li>
+						已办 </a></li>
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane active" id="apply">

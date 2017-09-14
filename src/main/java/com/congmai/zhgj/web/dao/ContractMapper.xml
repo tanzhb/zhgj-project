@@ -142,4 +142,38 @@
 	WHERE
 	serialNum=#{id}
     </update>
+    
+    
+    <!--更新合同  -->
+    <update id="updateContract4order" parameterType="com.congmai.zhgj.web.model.ContractVO">
+    UPDATE
+	contract
+	SET
+	contractNum=#{contractNum},
+	contractType=#{contractType},
+	<!-- startDate=#{startDate},
+	endDate=#{endDate},
+	signDate=#{signDate},
+	signer=#{signer},
+	signerAddress=#{signerAddress},
+	firstParty=#{firstParty},
+	secondParty=#{secondParty},
+	firstPartySigner=#{firstPartySigner},
+	secondPartySigner=#{secondPartySigner}, -->
+	contractNumber=#{contractNumber},
+<!-- 	<if test="electronicContract!=null">  
+    electronicContract = #{electronicContract},  
+    </if> 
+    
+    <if test="electronicContract!=null">  
+    signContract = #{signContract},  
+    </if> 
+	
+	versionNO=versionNO+1,
+	remark=#{remark}, -->
+	updater=#{updater},
+	updateTime=NOW()
+	WHERE
+	serialNum=#{id}
+    </update>
 </mapper>

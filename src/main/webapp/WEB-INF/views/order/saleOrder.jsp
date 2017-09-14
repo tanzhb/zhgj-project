@@ -26,11 +26,11 @@
 <div class="tabbable-line">
     <ul class="nav nav-tabs">
 		<shiro:hasPermission name="zhgj:normalOrder">
-			<li class="active"><a data-target="#tab_15_1" data-toggle="tab">普通订单</a>
+			<li class="active"><a data-target="#tab_15_1" data-toggle="tab">销售订单</a>
 			</li>
 		</shiro:hasPermission>
 		<shiro:hasPermission name="zhgj:frameOrder">
-			<li><a data-target="#tab_15_2" data-toggle="tab">框架订单</a></li>
+			<li><a data-target="" data-toggle="tab">框架合同</a></li>
 		</shiro:hasPermission>
 	</ul>
     <div class="tab-content">

@@ -227,7 +227,7 @@ public class TakeDelivery extends BaseVO implements Serializable{
 		this.reason = reason;
 	}
 
-	public int getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
 
