@@ -5,9 +5,6 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <!-- BEGIN PAGE HEADER-->
-<h3 class="page-title">
-	合同信息 <small></small>
-</h3>
 <div class="page-bar">
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i class="fa fa-angle-right"></i></li>

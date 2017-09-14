@@ -1,8 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<h3 class="page-title">
-	发货 <small></small>
-</h3>
 <div class="page-bar">
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
@@ -100,9 +97,15 @@
 											id="sample_2">
 											<thead>
 												<tr>
-													<th style="text-align: center"><input
+													<!-- <th style="text-align: center"><input
 														name="select_all" value="1" id="example-select-all"
-														type="checkbox" /></th>
+														class="group-checkable" type="checkbox" /></th> -->
+														<th style="text-align:center;">
+                                                 <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                                     <input type="checkbox" class="group-checkable" id="example-select-all"/>
+                                                     <span></span>
+                                                 </label>
+                                             </th>
 
 													<th style="white-space: nowrap;">发货单编号</th>
 													<th style="white-space: nowrap;">关联销售单号</th>

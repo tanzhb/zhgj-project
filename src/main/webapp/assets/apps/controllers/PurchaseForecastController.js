@@ -128,7 +128,7 @@ angular.module('MetronicApp').controller('PurchaseForecastController', ['$rootSc
 						                            	'orderable' : false,
 						                            	'className' : 'dt-body-center',
 						                            	'render' : function(data,type, full, meta) {
-						                            		return '<input type="checkbox" name="id[]" value="'+ $('<div/>').text(data).html()+ '">';
+							                            		return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline"><input type="checkbox" name="id[]" value="'+ $('<div/>').text(data).html()+ '"><span></span></label>';
 						                            	}
 						                            } ,
 						                            {

@@ -1,9 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
-<h3 class="page-title">
-	采购预测信息 <small></small>
-</h3>
 <div class="page-bar">
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
@@ -92,8 +89,12 @@
 				<table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_2">
 					<thead>
 						<tr>
-							<th style="text-align: center"><input name="select_all"
-								value="1" id="example-select-all" type="checkbox" /></th>
+							<th>
+                                                 <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                                     <input type="checkbox" class="group-checkable" id="example-select-all"/>
+                                                     <span></span>
+                                                 </label>
+                                             </th>
 
 							<th style="white-space: nowrap;">采购预测编号</th>
 							<th style="white-space: nowrap;">物料名称</th>
