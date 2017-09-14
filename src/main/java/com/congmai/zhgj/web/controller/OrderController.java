@@ -200,7 +200,7 @@ public class OrderController {
 		orderInfo.setUser_id(user.getUserId());
 		orderInfo.setUser_name(user.getUserName());
 		orderInfo.setTitle(user.getUserName()+" 的订单申请");
-		orderInfo.setBusinessType(BaseVO.VACATION); 			//业务类型：订单审核
+		orderInfo.setBusinessType(BaseVO.BUYORDER); 			//业务类型：订单审核
 		orderInfo.setStatus(BaseVO.PENDING);					//审批中
 //    		orderInfo.setApplyDate(new Date());
 //    		orderService.insert(orderInfo);
@@ -252,7 +252,7 @@ public class OrderController {
 		orderInfo.setUser_id(user.getUserId());
 		orderInfo.setUser_name(user.getUserName());
 		orderInfo.setTitle(user.getUserName()+orderInfo.getOrderNum()+" 的订单申请");
-		orderInfo.setBusinessType(BaseVO.BUYORDER); 			//业务类型：采购订单
+		orderInfo.setBusinessType(BaseVO.SALEORDER); 			//业务类型：采购订单
 		orderInfo.setStatus(BaseVO.PENDING);					//审批中
 //    		orderInfo.setApplyDate(new Date());
 //    		orderService.insert(orderInfo);

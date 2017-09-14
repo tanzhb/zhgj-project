@@ -152,11 +152,18 @@
 				                              <div class="form-group ">
 				                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>卖方：</label>
 				                                  <div class="">
-				                                  <input type="text" name="supplyComId" class="form-control" ng-hide="buyOrderInput" ng-model="buyOrder.supplyComId"  >
-				                                      <div class="form-control-focus"> </div>
+				                                  	<div  ng-hide="buyOrderInput">
+			                                   		<select class="form-control" id="supplyComId"  data-live-search="true"  name="supplyComId" class="form-control" 
+			                                   		 ng-model="buyOrder.supplyComId"  ng-change="changeSupplyName(this)" data-size="8">
+                                                        <option value=""></option>
+                                                        <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}" >{{supplier.comName}}</option>
+                                                    </select>
+                                                    </div>
 				                                      <span class="help-block" ng-hide="buyOrderInput">请选择卖方</span>
-				                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.supplyComId}} </p>
+				                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.supplyName}} </p>
 				                                  </div>
+				                                  
+				                                  
 				                              </div>
 				                          </div>
 				                          <!--/span-->

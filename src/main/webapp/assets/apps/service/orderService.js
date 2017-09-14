@@ -216,6 +216,37 @@ angular.module('MetronicApp').service('orderService',
 	                    deferred.reject('连接服务器出错！');
 	                })
 					return deferred.promise;
-				}
+				},//获取供应商列表
+				  initSuppliers : function (){
+					  var deferred = $q.defer();
+						$http.get("rest/company/getSuppliers")
+						.then(function success(result) {
+							deferred.resolve(result);//请求成功
+						}, function error(err) {
+							deferred.reject(err);//请求失败
+						});
+						return deferred.promise;//返回承诺  
+				  },//获取客户列表
+				  initCustomers : function (){
+					  var deferred = $q.defer();
+						$http.get("rest/company/getCustomers")
+						.then(function success(result) {
+				            deferred.resolve(result);//请求成功
+				        }, function error(err) {
+				            deferred.reject(err);//请求失败
+				        });
+				        return deferred.promise;//返回承诺
+				  },
+				  getAuditInfos : function (ids) {
+				        var deferred = $q.defer();  
+				        $http.post(ctx + "rest/order/toApproval/" + ids).success(function (data) {  
+				        	// 如果连接成功，延时返回给调用者  
+				            deferred.resolve(data);  
+				        })  
+				            .error(function () {  
+				                deferred.reject('连接服务器出错！');  
+				            })  
+				        return deferred.promise;  
+				    }
 			}
 		} ]);
