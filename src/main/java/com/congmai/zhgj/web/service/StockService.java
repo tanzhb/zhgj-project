@@ -11,7 +11,7 @@ import com.congmai.zhgj.web.model.StockExample;
 public interface StockService extends GenericService<Stock, String>{
 
 	void deleteStock(String serialNums);
-	 List<Stock> selectStockList();
+	 List<Stock> selectStockList(String  manageType);
 
 	
 	

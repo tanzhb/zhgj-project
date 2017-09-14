@@ -1028,7 +1028,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         
         .state('stock', {
 	            url: "/stock",
-	            templateUrl:"rest/stock/viewStockList",
+	            templateUrl:"rest/stock/viewStockList?:stockSerialNum",
 	            data: {pageTitle: '库存'},
 	            controller: "StockController",
 	            resolve: {

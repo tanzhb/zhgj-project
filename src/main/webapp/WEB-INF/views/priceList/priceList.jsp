@@ -2,9 +2,9 @@
 <!-- <meta http-equiv="cache-control" content="no-cache">   -->
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
  <!-- BEGIN PAGE HEADER-->
-<h3 class="page-title"> 价格列表
+<!-- <h3 class="page-title"> 价格列表
     <small> 价格目录</small>
-</h3>
+</h3> -->
 <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>

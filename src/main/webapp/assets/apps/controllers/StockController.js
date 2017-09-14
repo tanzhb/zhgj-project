@@ -22,18 +22,30 @@ angular
 												// initialize core components
 												 handle = new pageHandle();
 												App.initAjax();
+												$scope.manageType=$stateParams.stockSerialNum;
 												if($location.path()=="/addOrEditStock"){
-													if(!isNull($stateParams.stockSerialNum)){//库存编辑页面
+													if($stateParams.stockSerialNum.length>7){//库存编辑页面
 														getStockInfo($stateParams.stockSerialNum);
 													}
-												
-													
 										 		}else if($location.path()=="/stockView"){
 										 			debugger;
 										 			getStockDetailInfo($stateParams.stockSerialNum);//查看库位详情页面
 									 		}else{
-										 			loadStockTable();
+										 			loadStockzijianTable();
+										 			loadStockdaiguanTable();
+										 			if($scope.manageType==undefined||$scope.manageType=='zijian'){
+										 				$("#daiguan").removeClass("active");
+										 				$("#zijian").addClass("active");
+										 				$("#tab_daiguan").removeClass("active");
+										 				$("#tab_zijian").addClass("active");
+										 			}else{
+										 				$("#daiguan").addClass("active");
+										 				$("#zijian").removeClass("active");
+										 				$("#tab_daiguan").addClass("active");
+										 				$("#tab_zijian").removeClass("active")
+										 			}
 										 		}
+												
 												selectMaterielStock();//选择物料表格初始化
 												// set default layout mode
 												$rootScope.settings.layout.pageContentWhite = true;
@@ -59,10 +71,11 @@ angular
 							//初始化toastr结束
 
 							// 构建datatables开始***************************************
-							var tableAjaxUrl = "rest/stock/getStockList";
-							 var table;
-			function loadStockTable(){
+							var tableAjaxUrl ;
+							 var tablezijian,tabledaiguan,table;
+			function loadStockzijianTable(){
 							var a = 0;
+							tableAjaxUrl= "rest/stock/getStockList?manageType=1";
 							App.getViewPort().width < App
 									.getResponsiveBreakpoint("md") ? $(
 									".page-header").hasClass(
@@ -75,7 +88,7 @@ angular
 													"page-header-fixed")
 													&& (a = 64);
 
-						 table = $("#sample_stock")
+									tablezijian = $("#sample_zijian")
 									.DataTable(
 											{
 												language : {
@@ -192,12 +205,12 @@ angular
 
 							// 添加checkbox功能***************************************
 							// Handle click on "Select all" control
-							$('#example-select-all').on(
+							$('#example-select-zijian-all').on(
 									'click',
 									function() {
 										// Check/uncheck all checkboxes in the
 										// table
-										var rows = table.rows({
+										var rows = tablezijian.rows({
 											'search' : 'applied'
 										}).nodes();
 										$('input[type="checkbox"]', rows).prop(
@@ -206,7 +219,7 @@ angular
 
 							// Handle click on checkbox to set state of "Select
 							// all" control
-							$('#sample_stock tbody')
+							$('#sample_zijian tbody')
 									.on(
 											'change',
 											'input[type="checkbox"]',
@@ -214,7 +227,7 @@ angular
 												// If checkbox is not checked
 												if (!this.checked) {
 													var el = $(
-															'#example-select-all')
+															'#example-select-zijian-all')
 															.get(0);
 													// If "Select all" control
 													// is checked and has
@@ -232,10 +245,186 @@ angular
 							// 添加checkbox功能
 							// ***************************************
 							}
+			function loadStockdaiguanTable(){
+				var a = 0;
+				tableAjaxUrl= "rest/stock/getStockList?manageType=2";
+				App.getViewPort().width < App
+						.getResponsiveBreakpoint("md") ? $(
+						".page-header").hasClass(
+						"page-header-fixed-mobile")
+						&& (a = $(".page-header").outerHeight(!0))
+						: $(".page-header").hasClass(
+								"navbar-fixed-top") ? a = $(
+								".page-header").outerHeight(!0)
+								: $("body").hasClass(
+										"page-header-fixed")
+										&& (a = 64);
+
+								tabledaiguan = $("#sample_daiguan")
+						.DataTable(
+								{
+									language : {
+										aria : {
+											sortAscending : ": activate to sort column ascending",
+											sortDescending : ": activate to sort column descending"
+										},
+										emptyTable : "空表",
+										info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+										infoEmpty : "没有数据",
+										infoFiltered : "(从 _MAX_ 条数据中检索)",
+										lengthMenu : "每页显示 _MENU_ 条数据",
+										search : "查询:",
+										zeroRecords : "抱歉， 没有找到！",
+										paginate : {
+											"sFirst" : "首页",
+											"sPrevious" : "前一页",
+											"sNext" : "后一页",
+											"sLast" : "尾页"
+										}
+									},
+									/*fixedHeader : {// 固定表头、表底
+										header : !0,
+										footer : !0,
+										headerOffset : a
+									},*/
+									// select: true,行多选
+									order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+									bRetrieve : true,
+									// searching: true,//是否过滤检索
+									// ordering: true,//是否排序
+									lengthMenu : [
+											[ 5, 10, 15, 30, -1 ],
+											[ 5, 10, 15, 30, "All" ] ],
+									pageLength : 10,// 每页显示数量
+									processing : true,// loading等待框
+									// serverSide: true,
+									ajax : tableAjaxUrl,// 加载数据中库存表数据
+
+									"aoColumns" : [
+										{
+										mData : 'serialNum'
+										},
+										 {
+											mData : 'stockNum'
+										},  {
+											mData : 'materielNum'
+										},{
+											mData : 'materielName'
+										}, {
+											mData : 'specifications'
+										},{
+											mData : 'belongWarehouseNum'
+										}, {
+											mData : 'currentAmount'
+										}, {
+											mData : 'averrageWhAge'
+										}, {
+											mData : 'preSaleAmount'
+										},{
+											mData : 'onRoadAmount'
+										}, {
+											mData : 'canSaleAmount'
+										},/*{
+											mData : 'riskGrade'
+										},*/ {
+											mData : 'status'
+										}
+										],
+									'aoColumnDefs' : [ {
+										'targets' : 0,
+										'searchable' : false,
+										'orderable' : false,
+										'className' : 'dt-body-center',
+										'render' : function(data,
+												type, full, meta) {
+											return '<input type="checkbox" id="'+data+'" name="id[]" value="'
+													+ $('<div/>')
+															.text(
+																	data)
+															.html()
+															+ '" data-check="false"  >';
+										},"createdCell": function (td, cellData, rowData, full, col) {
+											 $compile(td)($scope);
+									    }
+									},{
+										'targets' : 1,
+										'render' : function(data,
+												type, row, meta) {
+											return '<a   ng-click="showStockInfo(\''+row.serialNum+'\')">'+data+'</a>';
+											//return data;
+										},"createdCell": function (td, cellData, rowData, row, col) {
+											 $compile(td)($scope);
+									    }
+									},{
+										'targets' : 11,
+										'render' : function(data,
+												type, row, meta) {
+											var statusIcon='';//状态
+	 	    								if(row.status==0){
+	 	    									statusIcon = '<span class="label label-sm label-success"  >缺料</span> '
+	 	    								}else if(row.status==1){
+	 	    									statusIcon = '<span class="label label-sm label-success">报警</span> '
+	 	    								}else if(row.status==2){
+	 	    									statusIcon = '<span class="label label-sm label-success">正常</span> '
+	 	    								}
+	 	    								return statusIcon ;
+											
+										}
+									}  ],
+
+								})
+				// 构建datatables结束***************************************
+
+				// 添加checkbox功能***************************************
+				// Handle click on "Select all" control
+				$('#example-select-daiguan-all').on(
+						'click',
+						function() {
+							// Check/uncheck all checkboxes in the
+							// table
+							var rows = tabledaiguan.rows({
+								'search' : 'applied'
+							}).nodes();
+							$('input[type="checkbox"]', rows).prop(
+									'checked', this.checked);
+						});
+
+				// Handle click on checkbox to set state of "Select
+				// all" control
+				$('#sample_daiguan tbody')
+						.on(
+								'change',
+								'input[type="checkbox"]',
+								function() {
+									// If checkbox is not checked
+									if (!this.checked) {
+										var el = $(
+												'#example-select-daiguan-all')
+												.get(0);
+										// If "Select all" control
+										// is checked and has
+										// 'indeterminate' property
+										if (el
+												&& el.checked
+												&& ('indeterminate' in el)) {
+											// Set visual state of
+											// "Select all" control
+											// as 'indeterminate'
+											el.indeterminate = true;
+										}
+									}
+								});
+				// 添加checkbox功能
+				// ***************************************
+				}
+			
+			 $scope.showStock=function(judgeString){
+				 $state.go('stock',{stockSerialNum:judgeString}); //切换tab
+			}
 							// 添加库存开始***************************************
-			$scope.addStock = function() {
+			$scope.addStock = function(judgeString) {
 				debugger;
-				 $state.go('addOrEditStock',{},{reload:true}); 
+				 $state.go('addOrEditStock',{stockSerialNum:judgeString},{reload:true}); 
 			}
 						$scope.editStock = function(){
 							debugger;
@@ -265,8 +454,8 @@ angular
 						}
 								$scope.saveStock= function() {
 									debugger;
-									$scope.stock.materielSerial=$("#materielSerial").val();
 									if($('#stockForm').valid()&&judgeData()){//表单验证通过则执行添加功能
+										$scope.stock.materielSerial=$("#materielSerial").val();
 										StockService
 										.saveStock($scope.stock)
 										.then(
@@ -292,8 +481,13 @@ angular
 							// 添加库存结束***************************************
 							
 							// 修改库存开始***************************************							
-							$scope.toEditStockPage = function() {//弹出框修改库存信息
+							$scope.toEditStockPage = function(judgeString) {//弹出框修改库存信息
 								debugger;
+								if(judgeString=='zijian'){
+									table=tablezijian;
+								}else{
+									table=tabledaiguan;
+								}
 								var id_count = table.$('input[type="checkbox"]:checked').length;
 								if(id_count==0){
 									toastr.warning("请选择一条数据进行编辑");
@@ -301,7 +495,7 @@ angular
 									toastr.warning("只能选择一条数据进行编辑");
 								}else{
 									var serialNum = table.$('input[type="checkbox"]:checked').val();
-									$state.go("addOrEditStock",{stockSerialNum:serialNum});
+									$state.go("addOrEditStock",{stockSerialNum:serialNum+judgeString});
 								}
 							};
 							// 修改库存结束***************************************							
@@ -492,10 +686,11 @@ angular
 		 	    			$("#materielName").val($scope.row.materielName);
 		 	    			$("#materielNum").val($scope.row.materielNum);
 		 	    			$("#specifications").val($scope.row.specifications);
-		 	    		/*	$scope.stock.materielName=;//物料名称
-		 	            	$scope.stock.materielNum=;//物料编号
-		 	            	$scope.stock.specifications=;//规格型号
-*/		 	    			$('#basicMaterielInfo').modal('hide');// 删除成功后关闭模态框
+		 	    			//$scope.stock.materielSerial=$scope.row.serialNum;//物料名称
+		 	    			/*$scope.stock.materielName=$scope.row.materielName;//物料名称
+		 	            	$scope.stock.materielNum=$scope.row.materielNum;//物料编号
+		 	            	$scope.stock.specifications=$scope.row.specifications;//规格型号
+*/	 	    			$('#basicMaterielInfo').modal('hide');// 删除成功后关闭模态框
 		 	    			$(".modal-backdrop").remove();
 		 	    		};
 							// 页面加载完成后调用，验证输入框
