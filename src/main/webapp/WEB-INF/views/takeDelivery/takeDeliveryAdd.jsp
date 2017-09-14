@@ -182,7 +182,7 @@
                                             </div>
 										</div>
 										<!--/span-->
-										<div class="col-md-4">
+									<!-- 	<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="approval">审批人 <span class="required"> * </span></label>
                                                     <div class="">
@@ -192,9 +192,9 @@
                                                     </div>
                                             </div>
 										</div>
-										<!--/span-->
+										/span
 									</div>
-									<!--/row-->
+									/row
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
@@ -207,7 +207,7 @@
                                             </div>
 										</div>
 						
-										<!--/span-->
+										/span -->
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" > 备注</label>
@@ -219,16 +219,16 @@
                                             </div>
 										</div>
 										<!--/span-->
-										<div class="col-md-4">
+										<!-- <div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold"> 状态</label>
                                                     <div class="">
-                                                        <!-- <input type="text" class="form-control" id="comName"  name="comName" ng-model="deliver.status" ng-hide="deliverAdd" >
-                                                        <div class="form-control-focus"> </div> -->
+                                                        <input type="text" class="form-control" id="comName"  name="comName" ng-model="deliver.status" ng-hide="deliverAdd" >
+                                                        <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.status}}</p>
                                                     </div>
                                             </div>
-										</div>
+										</div> -->
 										<!--/span-->
 									</div>
 									<!--/row-->
