@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Transient;
 
@@ -72,9 +73,6 @@ public class BaseVO implements Serializable{
     // 运行中的流程实例
 	@JsonBackReference 
     private ProcessInstance processInstance;
-	
-	// 对应的流程实例id
-	private String processInstanceId;
 
     // 历史的流程实例
 	@JsonBackReference 
@@ -87,6 +85,21 @@ public class BaseVO implements Serializable{
     // 流程定义
 	@JsonBackReference 
     private ProcessDefinition processDefinition;
+	
+	// 申请日期
+	private Date applyDate;
+	
+	//原因
+	private String reason;
+	
+	// 对应的流程实例id
+	private String processInstanceId;
+	
+	// 用户id
+	private Integer userId;
+	
+	//审批状态
+	private String status;
 
     @Transient
 	public String getTitle() {
@@ -205,6 +218,38 @@ public class BaseVO implements Serializable{
 
 	public void setProcessInstanceId(String processInstanceId) {
 		this.processInstanceId = processInstanceId;
+	}
+
+	public Date getApplyDate() {
+		return applyDate;
+	}
+
+	public void setApplyDate(Date applyDate) {
+		this.applyDate = applyDate;
+	}
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 	

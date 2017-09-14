@@ -1205,10 +1205,9 @@
 			                          		<div class="form-group ">
 				                              	<label class="control-label bold">原因：</label>
 				                                <div class="">
-				                                  <input type="text" name="remark" ng-hide="orderStatusInput" class="form-control"  ng-model="buyOrder.remark"  >
+				                                  <input type="text" name="remark"  class="form-control"  ng-model="buyOrder.remark"  >
 			                                      <div class="form-control-focus"> </div>
-			                                      <span class="help-block" ng-hide="orderStatusInput">请输入原因</span>
-			                                      <p class="form-control-static" ng-show="orderStatusShow"> {{buyOrder.remark}} </p>
+			                                      <span class="help-block" >请输入原因</span>
 				                               	</div>
 			                               </div>
 			                          </div>

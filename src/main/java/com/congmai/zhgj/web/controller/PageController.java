@@ -204,6 +204,16 @@ public class PageController {
     }
     
     /**
+     * 重新编辑采购订单申请
+     */
+    @RequestMapping("/editBuyApply")
+    public String editBuyApply(String serialNum,String view) {
+        return "order/editBuyApply";
+    }
+    
+    
+    
+    /**
      * 采购订单
      */
     @RequestMapping("/buyOrder")

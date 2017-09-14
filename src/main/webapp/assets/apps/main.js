@@ -337,7 +337,16 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 							'assets/apps/scripts/angular-file-upload.min.js',
 							'assets/apps/service/materielService.js',
                             'assets/apps/service/orderService.js',
-                            'assets/apps/controllers/buyOrderController.js'
+                            'assets/apps/controllers/buyOrderController.js',
+                          //流程申请
+							'assets/global/css/dialog.css',
+							'assets/global/css/easyui.css',
+							'assets/global/css/datagrid.css',
+							'assets/global/css/jquery.qtip.min.css',
+				         
+							'assets/global/plugins/jquery.easyui.min.js',
+							'assets/global/plugins/jquery.qtip.min.js',
+							'assets/global/plugins/jquery.outerhtml.js'
                         ]
                     });
                 }]
@@ -422,6 +431,34 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
+        // 重新编辑采购订单申请
+        .state('editBuyApply', {
+            url: "/editBuyApply?:serialNum&:view",
+            params:{"serialNum":null,"taskId":null, "comments":null,"processInstanceId":null},
+            templateUrl: "rest/page/editBuyApply",
+            data: {pageTitle: '重新编辑订单'},
+            controller: "buyOrderController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+	        	'assets/apps/service/orderService.js',
+				'assets/apps/controllers/buyOrderController.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        
         //对账单
         .state('statement', {
             url: "/statement",

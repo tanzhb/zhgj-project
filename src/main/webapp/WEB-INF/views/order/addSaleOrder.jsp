@@ -118,7 +118,7 @@
 			                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>合同类型：</label>
 			                                  <div class="">
 			                                  	<div ng-hide="saleOrderInput">
-			                                	<input type="radio" ng-click="hidnClauseFramework()"  ng-model="contract.contractType" name="contractType" ng-checked="contract.contractType!='框架合同'" value="普通合同"> 普通合同
+			                                	<input type="radio" ng-click="hidnClauseFramework()"  ng-model="contract.contractType" name="contractType" ng-checked="contract.contractType!='框架合同'" value="销售合同"> 销售合同
 			                        			<input type="radio" ng-click="showClauseFramework()"  ng-model="contract.contractType" name="contractType" ng-checked="contract.contractType=='框架合同'" value="框架合同"> 框架合同
 			                                    </div>
 			                                    <p class="form-control-static" ng-show="saleOrderShow"> {{contract.contractType}} </p>

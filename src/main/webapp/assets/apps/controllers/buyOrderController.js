@@ -76,7 +76,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		$scope.getBuyOrderInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments,$stateParams.processInstanceId)
             	}else{
             		$scope.opration = '新增';
-            		$scope.orderMateriel={};
+            		$scope.orderMateriel=[];
             		$scope.buyOrder={};
             		$scope.contract={};
             		$scope.clauseSettlement = {};
@@ -137,7 +137,6 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	
 	//审批通过
 	$scope.orderPass = function() {
-	    $("#completeFlag").val("true");
 	    var mydata={"processInstanceId":$("#processInstanceId").val(),"orderId":$scope.buyOrder.serialNum,"content":$("#content").val(),
 				"completeFlag":true};
 	    var _url = ctx + "rest/order/complate/" + $("#taskId").val();
@@ -145,7 +144,6 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	};
 	//审批不通过
 	$scope.orderUnPass = function() {
-		$("#completeFlag").val("false");
 		var mydata={"processInstanceId":$("#processInstanceId").val(),"orderId":$scope.buyOrder.serialNum,"content":$("#content").val(),
 				"completeFlag":false};
 		var _url = ctx + "rest/order/complate/" + $("#taskId").val();
@@ -154,19 +152,15 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	
 	//重新申请
 	$scope.replyOrder = function() {
-		$("#reApply").val("true");
 	    var mydata={"processInstanceId":$("#processInstanceId").val(),
-				"reApply":$("#reApply").val(),"orderId":$("#orderId").val(),"beginDate":$("#modify_beginDate").val(),"endDate":$("#modify_endDate").val(),
-				"days":$("#modify_days").val(),"orderType":$("#modify_orderType").val(),"reason":$("#modify_reason").val()};
+				"reApply":true,"orderId":$scope.buyOrder.serialNum,"reason":$scope.buyOrder.remark};
 		var _url = ctx + "rest/order/modifyOrder/" + $("#taskId").val();
 		doOrder(_url, mydata, 'modify');
 	};
 	//取消申请
 	$scope.cancelApply = function() {
-		 $("#reApply").val("false");					 
 	     var mydata={"processInstanceId":$("#processInstanceId").val(),
-				"reApply":$("#reApply").val(),"orderId":$("#orderId").val(),"beginDate":$("#modify_beginDate").val(),"endDate":$("#modify_endDate").val(),
-				"days":$("#modify_days").val(),"orderType":$("#modify_orderType").val(),"reason":$("#modify_reason").val()};
+				"reApply":false,"orderId":$scope.buyOrder.serialNum,"reason":$scope.buyOrder.remark};
 		var _url = ctx + "rest/order/modifyOrder/" + $("#taskId").val();
 		doOrder(_url, mydata, 'modify' );
 	};
@@ -2650,7 +2644,7 @@ var e = $("#form_clauseSettlement"),
 		        												if(result.actionType == 'audit'){//审批流程
 		        													$state.go('approvalBuyApply',{serialNum:result.orderInfo.serialNum, taskId:ids, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
 		        												}else{
-		        													toastr.warning("重新编辑未完成！");
+		        													$state.go('editBuyApply',{serialNum:result.orderInfo.serialNum, taskId:ids, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
 		        												}
 		        											},
 		        											function(errResponse) {
