@@ -254,11 +254,11 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
     };
     
     $scope.viewSupplyStatement = function(serialNum){
-    	$state.go("viewSupplyStatement",{serialNum,serialNum});
+    	$state.go("viewSupplyStatement",{serialNum:serialNum});
     }
     
     $scope.viewBuyStatement = function(serialNum){
-    	$state.go("viewBuyStatement",{serialNum,serialNum});
+    	$state.go("viewBuyStatement",{serialNum:serialNum});
     }
     
     var buyTable;
