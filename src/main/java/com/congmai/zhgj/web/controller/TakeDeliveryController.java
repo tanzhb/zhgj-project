@@ -677,7 +677,7 @@ public class TakeDeliveryController {
     
     private String startTakeDelivery(TakeDelivery takeDelivery){
     	// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
-        identityService.setAuthenticatedUserId(takeDelivery.getSerialNum().toString());
+        identityService.setAuthenticatedUserId(takeDelivery.getUserId().toString());
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("entity", takeDelivery);
         //由userTask自动分配审批权限
