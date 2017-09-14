@@ -196,7 +196,7 @@
 		<shiro:hasPermission name="zhgj:bill">   
 		<li class="nav-item">
             <a ui-sref="invoice">
-                <i class="icon-check"></i>
+                <i class="icon-docs"></i>
                 <span class="title">发票</span>
             </a>
         </li>

@@ -242,8 +242,7 @@ public class InvoiceController {
      * 
      */
     @RequestMapping(value = "/getMaterielList")
-    @ResponseBody
-    public ResponseEntity<Map> getMaterielList(HttpServletRequest request,String  orderSerial) {
+    public ResponseEntity<Map> getMaterielList(HttpServletRequest request, String  orderSerial) {
     	
 		List<Materiel> materiels = materielService.selectMaterielByOrderSerial(orderSerial.substring(0, 32),orderSerial);
 		OrderInfo orderInfo=orderService.selectById(orderSerial.substring(0, 32));

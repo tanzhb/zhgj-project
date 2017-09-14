@@ -282,8 +282,6 @@
                                                                 <div class="form-group">
                                                     <label class="control-label bold" for=""><span class="required"> * </span>联系电话:</label>
                                                     <div class="">
-                                                     <input type="text" class="form-control"   id="tel" name ="tel"       ng-hide="invoiceAdd"   
-												ng-model="invoice.tel" /> 
 												 
 												<div class="form-control-focus"> </div>
 												 

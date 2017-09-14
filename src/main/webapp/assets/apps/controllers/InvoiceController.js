@@ -1024,7 +1024,7 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 		 	            //	$scope.row.orderAmount=orderAmount;//订单金额
 		 	            	$scope.row.orderNum=orderNum;//订单编号
 		 	            	getOrderInfoBySerialNum($scope.row.serialNum);//获取订单物料信息
-		 	            	
+		 	            
 		 	            	
 						}
 					function getOrderInfoBySerialNum(serialNum){
@@ -1035,10 +1035,10 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 									$scope.row.orderInfo=data.orderInfo;
 									$scope.row.orderAmount=data.orderInfo.orderAmount;
 									$scope.row.currency=data.orderInfo.currency;
-									if(serialNum.indexOf("in")>-1){loadMaterielInTable($scope.row.orderInfo.serialNum);
-				 	            	}else{debugger;loadMaterielOutTable($scope.row.orderInfo.serialNum);}
+									
 								}
-								
+								if(serialNum.indexOf("in")>-1){loadMaterielInTable(serialNum.substring(0,32),null);
+			 	            	}else{debugger;loadMaterielOutTable(serialNum.substring(0,32),null);}
 							},
 							function(errResponse) {
 								toastr.warning("获取失败！");
@@ -1194,8 +1194,8 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 						 	        			 $scope.invoice.approvalDate=timeStamp2ShortString(data.invoice.approvalDate);
 						 	        			 $scope.invoice.capitalMoney=convertCurrency(data.invoice.billOrReceiptMoney);
 						 	        			getOrderInfoBySerialNum($scope.invoice.orderSerial);//获取订单信息
-							 	            	if(serialNum.indexOf("in")>-1){	loadMaterielInTable($scope.invoice.orderSerial,serialNum);//加载发票物料
-							 	            	}else{loadMaterielOutTable($scope.invoice.orderSerial,serialNum);}
+							 	            	if(serialNum.indexOf("in")>-1){	loadMaterielInTable($scope.invoice.orderSerial,serialNum, $scope.invoice.serialNum);//加载发票物料
+							 	            	}else{loadMaterielOutTable($scope.invoice.orderSerial,serialNum, $scope.invoice.serialNum);}
 						 	        			
 						 	        			
 						 	            },function(data){
