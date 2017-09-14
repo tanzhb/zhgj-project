@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!-- BEGIN PAGE HEADER-->
 
-<h3 class="page-title"> 物料信息
-</h3>
+<!-- <h3 class="page-title"> 物料信息
+</h3> -->
 <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>

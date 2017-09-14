@@ -52,21 +52,21 @@
                         </div>
                         <div class="portlet-body form">
 									<div class="row">
-										<div class="col-md-4">
-											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="takeDeliveryNum">收货单号：</label>
-                                                    <div class="col-md-8">
-                                                         <p class="control-label left" >{{deliver.takeDelivery.takeDeliverNum}}</p>
-                                                    </div>
-                                            </div>
-										</div>
-						
-										<!--/span-->
+
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="deliverNum"> 发货单号：</label>
                                                     <div class="col-md-8">
                                                          <p class="control-label left" >{{deliver.deliverNum}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<!--/span-->
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="deliverType">发货类型：</label>
+                                                    <div class="col-md-8">
+                                                         <p class="control-label left" >{{deliver.deliverType}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -488,6 +488,61 @@
 									<!--/row-->
 								</div>
          				</div>
+         				
+         				<div class="portlet-title">
+                        </div>
+                        <div class="portlet-body form">
+								<div class="form-body">
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="col-md-4 control-label" for="takeDeliverNum"> <span class="required"> * </span>收货单号:</label>
+                                                    <div class="col-md-8">
+                                                        <input type="text" class="form-control" id="takeDeliverNum" name="takeDeliverNum" ng-model="takeDeliver.takeDeliverNum" ng-hide="deliverAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="deliverView">{{takeDeliver.takeDeliverNum}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="col-md-4 control-label" for="actualDate"><span class="required"> * </span>实际收货日期 :</label>
+                                                    <div class="col-md-8">
+                                                    	<input type="text" class="form-control date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="actualDate"  name="actualDate" ng-model="takeDeliver.actualDate" readonly="readonly">
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="deliverView">{{takeDeliver.actualDate}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+						
+										<!--/span-->
+										<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="col-md-4 control-label" ><span class="required"> * </span>收货人:</label>
+                                                    <div class="col-md-8">
+                                                        <input type="text" class="form-control" id="taker" name="taker" ng-model="takeDeliver.taker" >
+                                                         <div class="form-control-focus"></div>
+                                                    </div>
+                                            </div>
+										</div>
+										<!--/span-->
+									</div>
+									<!--/row-->
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="col-md-4 control-label" for="takeDeliverDate">备注:</label>
+                                                    <div class="col-md-8">
+                                                       <input type="text" class="form-control" id="takeRemark" name="takeRemark" ng-model="takeDeliver.takeRemark" >
+                                                        <div class="form-control-focus"> </div>
+                                                    </div>
+                                            </div>
+										</div>
+										<!--/span-->
+									</div>
+									<!--/row-->
+								</div>
+						</div>
          			<!-- 收货信息END -->
          			<!-- 物料信息START -->
                         <div class="portlet-title">
@@ -559,8 +614,14 @@
 						</div>
 					  </div> 
          			<!-- 物料信息END -->
-         			 <div class="row">
-         				<div class="col-md-5"></div>
+         			 <div class="row" align="center">
+         			 	<!-- <button   class="btn blue  btn-sm btn-circle" data-toggle="modal" data-target="#apply">
+                              		申请收货 </button> -->
+         			 	<button   class="btn green  btn-sm btn-circle" ng-click="confirmTakeDelivery()">
+                              		<i class="fa fa-check"></i> 确认收货 </button>
+                      	<button    class="btn defualt  btn-sm btn-circle" ng-click="cancelTakeDelivery()" onclick="return false;">
+                              		<i class="fa fa-mail-reply"></i> 取消 </button>
+         			<!-- 	<div class="col-md-5"></div>
          				<div class="col-md-1">
          					 <button   ng-hide="deliverAdd" class="btn blue" ng-click="confirmTakeDelivery()">
                                             <i class="fa fa-check"></i> 确认收货 </button>
@@ -569,7 +630,7 @@
          					 <button   ng-hide="deliverAdd" class="btn red btn-outline" ng-click="cancelTakeDelivery()">
                                             <i class="fa fa-undo"></i> 取消 </button>
          				</div>
-         				<div class="col-md-5"></div>
+         				<div class="col-md-5"></div> -->
          			</div>
        			</div> 
     		</div>
@@ -578,3 +639,26 @@
 	</div>
 </div>
 <!-- END MAIN CONTENT -->
+ <!-- 申请modal 开始 -->
+	<div id="apply" class="modal fade" tabindex="-1"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true"></button>
+					<h4 class="modal-title">申请备注</h4>
+				</div>
+				<div class="modal-body">
+					<input type="text" class="form-control" id="applyReason" ng-model="applyReason" >
+				</div>
+				<div class="modal-footer">
+					<button type="button" data-dismiss="modal"
+						class="btn dark btn-outline">取消</button>
+					<button type="button" ng-click="applyTakeDelivery()" class="btn green">确定
+						</button>
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- 申请modal 结束 -->

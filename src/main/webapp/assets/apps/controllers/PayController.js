@@ -19,9 +19,10 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		
 		validateFileInit();//file表单初始化
 
+	
 		//根据参数查询对象
 		 if($stateParams.serialNum){
-    	$scope.getPayInfo($stateParams.serialNum);	
+			 $scope.getPayInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);	//在审批页面加载评论
          }
 	});
 
@@ -55,7 +56,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 
 
 	//根据参数查询付款对象
-	$scope.getPayInfo  = function(serialNum) {
+	$scope.getPayInfo  = function(serialNum, ids, comments) {
 		debugger
 		PayService.selectPay(serialNum).then(
       		     function(data){
@@ -65,6 +66,15 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
       		    	$scope.file[i].paymentSerial = $scope.pay.serialNum;
       		    	}
       		    	$scope.chnAmount=convertCurrency($scope.pay.applyPaymentAmount);
+      		    	
+      		    	$("#serialNum").val(serialNum);//赋值给隐藏input，通过和不通过时调用
+					$("#taskId").val(ids);//赋值给隐藏input，通过和不通过时调用
+					
+					if(comments == ""){
+						$("#comment_audit").html( "无评论");
+					}else $("#comment_audit").html(comments);
+					
+					
       		     },
       		     function(error){
       		         console.log("error")
@@ -460,6 +470,477 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	$scope.jumpToGetPayInfo  = function(serialNum) {
     	$state.go('viewPay',{serialNum:serialNum});
     }; 
+    //流程申请
+    $scope.jumpToApplyPay  = function() {
+    	var ids = '';
+		// Iterate over all checkboxes in the table
+		table.$('input[type="checkbox"]').each(
+				function() {
+					// If checkbox exist in DOM
+					if ($.contains(document, this)) {
+						// If checkbox is checked
+						if (this.checked) {
+							// 将选中数据id放入ids中
+							if (ids == '') {
+								ids = this.value;
+							} else{
+								ids = "more"
+							}
+						}
+					}
+				});
+		if(ids==''){
+			toastr.warning('请选择一个申请！');return;
+		}else if(ids=='more'){
+			toastr.warning('只能选择一个申请！');return;
+		}
+		$state.go('applyPay',{serialNum:ids});
+    }; 
+    
+  //启动流程
+	$scope.applyAp = function() {
+		PayService
+				.applyAp($('#reason').val(), $stateParams.serialNum)
+				.then(
+						function(data) {
+							toastr.success("申请成功！");
+						},
+						function(errResponse) {
+							toastr.warning("申请失败！");
+							console
+									.error('Error while apply ap');
+						}
+
+				);
+	};
+	
+	$scope.toApply = function() {
+		$("#buttons").show();
+	};
+	
+	// 待办流程
+	var dbTable;	
+	$scope.toDaiban = function() {
+		$('#accountPayableTab a[href="#daiban"]').tab('show');
+		
+		$("#buttons").hide();
+		
+		// 构建datatables开始***************************************
+		dbTable = showDbTable();								
+		// 构建datatables结束***************************************
+
+	};
+	// 已办流程
+	var ybTable;
+	$scope.toYiban = function() {
+		$('#accountPayableTab a[href="#yiban"]').tab('show');
+		ybTable = showYbTable();
+		$("#buttons").hide();
+	};
+	
+	//审批通过
+	$scope.apPass = function() {
+	   
+	    var mydata={"serialNum":$("#serialNum").val(),"content":$("#content").val(),
+				"isPass":true, "taskId":$("#taskId").val()};
+	    var _url = ctx + "rest/pay/complete";
+	    doVacation(_url, mydata);
+	};
+	//审批不通过
+	$scope.apUnPass = function() {
+		var mydata={"serialNum":$("#serialNum").val(),"content":$("#content").val(),
+				"isPass":false, "taskId":$("#taskId").val()};
+		var _url = ctx + "rest/pay/complete";
+		doVacation(_url, mydata);
+	};
+	
+	//办结待办流程
+	function doVacation(_url, mydata){
+        $.ajax( {
+	        url : _url,
+	        dataType:"text",
+	        type: 'POST',
+	        data : mydata,
+	        success : function(data) {
+	        	$("#dbTable").DataTable().ajax.reload();
+	        	showToastr('toast-bottom-right', 'success', data);
+	        }
+	     });
+	}
+	
+	if($stateParams.tabHref == '1'){//首页待办列表传过来的参数
+		$('#accountPayableTab a[href="#daiban"]').tab('show');
+		showDbTable();
+		$("#buttons").hide();
+	}else if($stateParams.tabHref == '2'){//首页已办列表传过来的参数
+		$('#accountPayableTab a[href="#yiban"]').tab('show');
+		showYbTable();
+		$("#buttons").hide();
+	}else{//从菜单进入
+		$('#accountPayableTab a[href="#apply"]').tab('show');
+		$("#buttons").show();
+	}
+	
+	function showDbTable(){
+		
+		var t = $("#dbTable")
+		.DataTable(
+				{
+					language : {
+						aria : {
+							sortAscending : ": activate to sort column ascending",
+							sortDescending : ": activate to sort column descending"
+						},
+						emptyTable : "空表",
+						info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+						infoEmpty : "没有数据",
+						infoFiltered : "(从 _MAX_ 条数据中检索)",
+						lengthMenu : "每页显示 _MENU_ 条数据",
+						search : "查询:",
+						zeroRecords : "抱歉， 没有找到！",
+						paginate : {
+							"sFirst" : "首页",
+							"sPrevious" : "前一页",
+							"sNext" : "后一页",
+							"sLast" : "尾页"
+						}
+					},
+
+					buttons : [
+							{
+								text : "办理",
+								className : "btn default",
+								action: function(e, dt, node, config) { 
+									
+									var ids = '';
+									t.$('input[type="checkbox"]').each(function() {
+										if ($.contains(document, this)) {											
+											if (this.checked) {
+												// 将选中数据id放入ids中
+												if (ids == '') {
+													ids = this.value;
+												} else
+													ids = 'more';
+											}
+										}
+									});
+									
+									if(ids==''){
+										toastr.warning('请选择一个办理！');return;
+									}else if(ids=='more'){
+										toastr.warning('只能选择一个办理！');return;
+									} else {
+//										alert($("#dbTable").DataTable().row(1).data().assign);
+										
+//										if(assign == ''){
+//											toastr.warning("此任务您还没有签收，请【签收】任务后再处理任务！！");
+//										}else{
+												PayService
+												.getAuditInfos(ids)
+												.then(
+														function(result) {													
+															
+															var comments = ""//添加评论
+															for (var i=0;i<result.commentList.length;i++){
+																comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+																+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
+															}
+															
+															if(result.actionType == 'audit'){//审批流程
+																
+																$state.go('auditPay',{serialNum:result.paymentRecord.serialNum, taskId:ids, comments:comments});
+																
+																
+															}else{//result.actionType == 'modify' 更改流程
+		//														if(comments == ""){
+		//															comments = "无评论";
+		//														}else $("#comment_modify").html(comments);
+		//														$("#modify_beginDate").val(timeStamp2String2(result.vacation.beginDate));
+		//														$("#modify_endDate").val(timeStamp2String2(result.vacation.endDate));
+		//														$("#modify_days").val(result.vacation.days);
+		//														$("#modify_vacationType").val(result.vacation.vacationType);
+		//														$("#modify_reason").val(result.vacation.reason);
+		//														$('#modifyVacationModal').modal('show');
+															}
+															
+															
+															
+															
+															
+														},
+														function(errResponse) {
+															toastr.warning("申请失败！");
+															console
+																	.error('Error while apply ap');
+														}
+		
+												);
+										
+//										}
+										
+										
+										
+									}
+									
+									
+								}
+							},
+							{
+								text : "签收",
+								className : "btn default",
+								action: function(e, dt, node, config) { 
+									var ids = '';
+									t.$('input[type="checkbox"]').each(function() {
+										if ($.contains(document, this)) {											
+											if (this.checked) {
+												// 将选中数据id放入ids中
+												if (ids == '') {
+													ids = this.value;
+												} else
+													ids = 'more';
+											}
+										}
+									});
+									
+									if(ids==''){
+										toastr.warning('请选择一个签收！');return;
+									}else if(ids=='more'){
+										toastr.warning('只能选择一个签收！');return;
+									} else {
+										claimTask(ids, 'dbTable');
+									}
+									
+									
+									
+									
+//									if(t.rows('.selected').data().length == 0){
+//										toastr.warning("请选择要签收的任务！");
+//									}else{
+//										var taskId = t.row('.selected').data().taskId;
+//										claimTask(taskId, 'sample_2');
+//									}								
+								}
+							},
+							{
+								text : "转办",
+								className : "btn default"
+							},
+							{
+								text : "委派",
+								className : "btn default"
+							},
+							{
+								text : "跳转",
+								className : "btn default"
+							} ],
+					dom : "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
+					order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+
+					bRetrieve : true,
+					lengthMenu : [
+							[ 5, 10, 15, 30, -1 ],
+							[ 5, 10, 15, 30,
+									"All" ] ],
+					pageLength : 10,// 每页显示数量
+					processing : true,// loading等待框
+
+					ajax : ctx
+							+ "/rest/processAction/todoTask",// 加载待办列表数据
+
+					"aoColumns" : [
+					              { mData: 'taskId'},
+							{
+								mData : 'assign',
+								mRender : function(
+										data) {
+									if (data == '') {
+										return "待签收";
+									} else {
+										return "待办理";
+									}
+								}
+							},
+							{
+								mData : 'userName'
+							},
+							{
+								mData : 'title'
+							},
+							{
+								mData : 'taskName',
+								mRender : function(
+										data,
+										type,
+										row,
+										meta) {
+									return "<a class='trace' onclick=\"graphTrace('"
+											+ row.processInstanceId + "','" + ctx 
+											+ "')\" id='diagram' href='javascript:;' pid='"
+											+ row.id
+											+ "' pdid='"
+											+ row.processDefinitionId
+											+ "' title='see'>"
+											+ data
+											+ "</a>";
+								}
+							},
+							{
+								mData : 'owner',
+								mRender : function(
+										data,
+										type,
+										row,
+										meta) {
+									if (data != ''
+											&& data != row.assign) {
+										return row.assign
+												+ " (原执行人："
+												+ data
+												+ ")";
+									} else {
+										return row.assign;
+									}
+								}
+							},
+							{
+								mData : 'createTime',
+								mRender : function(
+										data) {
+									if (data != null) {
+										return timeStamp2String(data);
+									} else
+										return '';
+								}
+							},
+							{
+								mData : 'suspended',
+								mRender : function(
+										data) {
+									if (data) {
+										return "已挂起";
+									} else {
+										return "正常";
+									}
+								}
+							} ],
+						'aoColumnDefs': [ {
+	                    	'targets' : 0,
+	                    	'searchable' : false,
+	                    	'orderable' : false,
+	                    	'className' : 'dt-body-center',
+	                    	'render' : function(data,type, full, meta) {
+	                    		return '<input type="checkbox" name="id[]" value="'+ $('<div/>').text(data).html()+ '">';
+	                    	}
+	                    } 
+	                    ]
+
+				})
+
+				
+				return t;
+	}
+	
+	
+	
+	function showYbTable(){
+		var ybTable = $("#ybTable").DataTable(
+				{
+					language : {
+						aria : {
+							sortAscending : ": activate to sort column ascending",
+							sortDescending : ": activate to sort column descending"
+						},
+						emptyTable : "空表",
+						info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+						infoEmpty : "没有数据",
+						infoFiltered : "(从 _MAX_ 条数据中检索)",
+						lengthMenu : "每页显示 _MENU_ 条数据",
+						search : "查询:",
+						zeroRecords : "抱歉， 没有找到！",
+						paginate : {
+							"sFirst" : "首页",
+							"sPrevious" : "前一页",
+							"sNext" : "后一页",
+							"sLast" : "尾页"
+						}
+					},
+					order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+					bRetrieve : true,
+					lengthMenu : [
+							[ 5, 10, 15, 30, -1 ],
+							[ 5, 10, 15, 30,
+									"All" ] ],
+					pageLength : 10,// 每页显示数量
+					processing : true,// loading等待框
+
+					ajax : ctx
+							+ "/rest/processAction/endTask",// 加载已办列表数据
+
+					"aoColumns" : [
+//							{ mData: 'taskId'},
+							{
+								mData : 'userName'
+							},
+							{
+								mData : 'title'
+							},
+							{
+								mData : 'startTime',
+								mRender : function(
+										data,
+										type,
+										row,
+										meta) {
+									return timeStamp2String(data);
+								}
+							},
+							{
+								mData : 'claimTime',
+								mRender : function(
+										data,
+										type,
+										row,
+										meta) {
+									if(data != null){
+			                			return timeStamp2String(data);
+			                		}else{
+			                			return "无需签收";
+			                		}
+								}
+							},
+							{
+								mData : 'endTime',
+								mRender : function(
+										data) {
+									if (data != null) {
+										return timeStamp2String(data);
+									} else
+										return '';
+								}
+							},
+							{
+								mData : 'deleteReason'
+							},
+							{
+								mData : 'version'
+							},
+							{
+								mData : 'revoke',
+								mRender : function(data,type,row,meta) {
+									return "<a href='javascript:void(0);' onclick=\"revoke('"+row.taskId+"','"+row.processInstanceId+"','ybTable')\">撤销</a>";
+								}
+							}
+							]
+
+				})
+	 return ybTable;
+	}
+	
+	
+	
+	
+
+
 
 
 	//单个删除
@@ -581,7 +1062,8 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 						                            		$compile(td)($scope);
 						                            	}
 						                            }
-						                            ]}).on('order.dt',
+						                            ]
+													}).on('order.dt',
 						                            		function() {
 						                            	console.log('排序');
 						                            })
@@ -1115,5 +1597,8 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 
 
 }]);
+
+
+
 
 

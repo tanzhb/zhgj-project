@@ -1,10 +1,12 @@
 package com.congmai.zhgj.core.util;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 
@@ -76,6 +78,26 @@ public class ApplicationUtils {
 	 */
 	public static String sha256Hex(String value) {
 		return DigestUtils.sha256Hex(value);
+	}
+	
+	/**
+	 * 
+	 * @Description (TODO生成一个11位编号)
+	 * @return
+	 */
+	public static String getFromNumber(){
+		String date = DateUtil.format("yyyyMMdd", new Date());
+		int random = 0;
+		if(!Constants.NOW_DATE_STRING.equals(DateUtil.format("yyyyMMdd", new Date()))){
+			Constants.TAKEDELIVERY_NUMBER_INDEX = 1;//系统重启或第二天索引从1开始
+			Constants.NOW_DATE_STRING = DateUtil.format("yyyyMMdd", new Date());//更新时间
+			random = (int)(Math.random()*10);//生成一个随机数
+		}
+		date = StringUtils.substring(date, 2);
+		int index = Constants.TAKEDELIVERY_NUMBER_INDEX;
+		String str = String.format("%4d", index).replace(" ", "0");  
+		Constants.TAKEDELIVERY_NUMBER_INDEX++;
+		return date+random+str;
 	}
 	
 	public static void main(String args[]){

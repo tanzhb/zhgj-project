@@ -186,6 +186,23 @@ public class PageController {
         return "order/addBuyOrder";
     }
     
+    
+    /**
+     * 采购订单提交申请
+     */
+    @RequestMapping("/submitBuyApply")
+    public String submitBuyApply(String serialNum,String view) {
+        return "order/submitBuyApply";
+    }
+    
+    /**
+     * 审批采购订单
+     */
+    @RequestMapping("/approvalBuyApply")
+    public String approvalBuyApply(String serialNum,String view) {
+        return "order/approvalBuyApply";
+    }
+    
     /**
      * 采购订单
      */
@@ -245,6 +262,24 @@ public class PageController {
     @RequestMapping("/viewPay")
     public String viewPay() {
         return "pay/viewPay";
+    }
+    
+    /**
+     * 应付款申请页面
+     * @return 
+     */
+    @RequestMapping("/applyPay")
+    public String applyPay() {
+        return "pay/applyPay";
+    }
+    
+    /**
+     * 应付款审批页面
+     * @return 
+     */
+    @RequestMapping("/auditPay")
+    public String auditPay() {
+        return "pay/auditPay";
     }
     
     
