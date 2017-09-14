@@ -1,5 +1,6 @@
 package com.congmai.zhgj.web.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -7,7 +8,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class DeliveryVO {
+public class DeliveryVO extends BaseVO implements Serializable{
+	
+	private static final long serialVersionUID = -1495795296316800235L;
 	//发货流水号
 	private String serialNum;
 
@@ -168,7 +171,21 @@ public class DeliveryVO {
 	private String orderAmount;//订单金额
 	
 	private List<String> supplyComIds;
-
+	
+	// 业务类型
+	private String businessType;
+	
+	//申请日期
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date applyDate;
+    
+    
+    //原因
+  	private String reason;
+  	
+    // 用户id
+ 	private Integer userId;
+	
 	public String getSerialNum() {
 		return serialNum;
 	}
@@ -598,5 +615,38 @@ public class DeliveryVO {
 
 	public void setTakeWarehouseSerial(String takeWarehouseSerial) {
 		this.takeWarehouseSerial = takeWarehouseSerial;
+	}
+
+	public String getBusinessType() {
+		return businessType;
+	}
+
+	public void setBusinessType(String businessType) {
+		this.businessType = businessType;
+	}
+
+	@JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
+	public Date getApplyDate() {
+		return applyDate;
+	}
+
+	public void setApplyDate(Date applyDate) {
+		this.applyDate = applyDate;
+	}
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}	
 }

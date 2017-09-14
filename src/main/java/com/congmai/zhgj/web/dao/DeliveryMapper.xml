@@ -30,6 +30,7 @@
     deliverNum=#{deliverNum},
     warehouseSerial=#{warehouseSerial},
     supplyComId=#{supplyComId},
+    status=#{status},
     shipper=#{shipper},
     receiver=#{receiver},
     maker=#{maker},
