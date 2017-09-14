@@ -1546,6 +1546,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 								'assets/global/plugins/datatables/datatables.min.css',
 								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 								'assets/apps/css/special.css',
+								
+								'assets/global/scripts/datatable.js',
+								//'assets/global/plugins/datatables/datatables.min.js',
 								'assets/global/plugins/datatables/datatables.all.min.js',
 								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 								'assets/apps/scripts/pageHandle.js',
