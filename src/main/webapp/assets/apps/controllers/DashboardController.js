@@ -43,7 +43,13 @@ dashModule.controller('DashboardController', function($rootScope, $scope, $state
 				var workflowName = "";
 				if(workflowType == 'vacation'){
 					workflowName = "请假流程";
+				}else if(workflowType == 'accountPayable'){
+					workflowName = "应付款流程";
+					workflowType="paymentRecordC";
+				}else{
+					workflowName = "未命名";
 				}
+				
 				map['template'] = "<li><div class='col-md-9'>" +
 						"<a ui-sref='"+workflowType+"({tabHref:1})'>" +//tabHref:1将tab指向“待办列表”
 								"<span>"+workflowName+"："+title+"</span></a></div>" +
@@ -72,6 +78,11 @@ dashModule.controller('DashboardController', function($rootScope, $scope, $state
 				var workflowName = "";
 				if(workflowType == 'vacation'){
 					workflowName = "请假流程";
+				}else if(workflowType == 'accountPayable'){
+					workflowName = "应付款流程";
+					workflowType="paymentRecordC";
+				}else{
+					workflowName = "未命名";
 				}
 				map['template'] = "<li><div class='col-md-9'>" +
 						"<a ui-sref='"+workflowType+"({tabHref:2})'>" +//tabHref:1将tab指向“已办列表”

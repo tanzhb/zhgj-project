@@ -493,9 +493,6 @@
 							class="btn btn-primary">
 							<i class="fa fa-save"></i> 申请
 						</button>
-						<button type="reset" class="btn btn-default">
-							<i class="fa fa-reset"></i> 重置
-						</button>
 					</div>
 				</form>
 			</div>

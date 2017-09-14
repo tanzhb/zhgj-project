@@ -19,6 +19,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		
 		validateFileInit();//file表单初始化
 
+	
 		//根据参数查询对象
 		 if($stateParams.serialNum){
 			 $scope.getPayInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);	//在审批页面加载评论
@@ -518,7 +519,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	};
 	
 	// 待办流程
-	var dbTable;
+	var dbTable;	
 	$scope.toDaiban = function() {
 		$('#accountPayableTab a[href="#daiban"]').tab('show');
 		
@@ -530,9 +531,11 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 
 	};
 	// 已办流程
+	var ybTable;
 	$scope.toYiban = function() {
 		$('#accountPayableTab a[href="#yiban"]').tab('show');
-		//endTaskTable = showYbTable();
+		ybTable = showYbTable();
+		$("#buttons").hide();
 	};
 	
 	//审批通过
@@ -559,10 +562,23 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	        type: 'POST',
 	        data : mydata,
 	        success : function(data) {
-	        	dbTable.ajax.reload();
+	        	$("#dbTable").DataTable().ajax.reload();
 	        	showToastr('toast-bottom-right', 'success', data);
 	        }
 	     });
+	}
+	
+	if($stateParams.tabHref == '1'){//首页待办列表传过来的参数
+		$('#accountPayableTab a[href="#daiban"]').tab('show');
+		showDbTable();
+		$("#buttons").hide();
+	}else if($stateParams.tabHref == '2'){//首页已办列表传过来的参数
+		$('#accountPayableTab a[href="#yiban"]').tab('show');
+		showYbTable();
+		$("#buttons").hide();
+	}else{//从菜单进入
+		$('#accountPayableTab a[href="#apply"]').tab('show');
+		$("#buttons").show();
 	}
 	
 	function showDbTable(){
@@ -614,51 +630,54 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 									}else if(ids=='more'){
 										toastr.warning('只能选择一个办理！');return;
 									} else {
+//										alert($("#dbTable").DataTable().row(1).data().assign);
 										
+//										if(assign == ''){
+//											toastr.warning("此任务您还没有签收，请【签收】任务后再处理任务！！");
+//										}else{
+												PayService
+												.getAuditInfos(ids)
+												.then(
+														function(result) {													
+															
+															var comments = ""//添加评论
+															for (var i=0;i<result.commentList.length;i++){
+																comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+																+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
+															}
+															
+															if(result.actionType == 'audit'){//审批流程
+																
+																$state.go('auditPay',{serialNum:result.paymentRecord.serialNum, taskId:ids, comments:comments});
+																
+																
+															}else{//result.actionType == 'modify' 更改流程
+		//														if(comments == ""){
+		//															comments = "无评论";
+		//														}else $("#comment_modify").html(comments);
+		//														$("#modify_beginDate").val(timeStamp2String2(result.vacation.beginDate));
+		//														$("#modify_endDate").val(timeStamp2String2(result.vacation.endDate));
+		//														$("#modify_days").val(result.vacation.days);
+		//														$("#modify_vacationType").val(result.vacation.vacationType);
+		//														$("#modify_reason").val(result.vacation.reason);
+		//														$('#modifyVacationModal').modal('show');
+															}
+															
+															
+															
+															
+															
+														},
+														function(errResponse) {
+															toastr.warning("申请失败！");
+															console
+																	.error('Error while apply ap');
+														}
+		
+												);
 										
+//										}
 										
-										PayService
-										.getAuditInfos(ids)
-										.then(
-												function(result) {													
-													
-													var comments = ""//添加评论
-													for (var i=0;i<result.commentList.length;i++){
-														comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
-														+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
-													}
-													
-													if(result.actionType == 'audit'){//审批流程
-														
-														$state.go('auditPay',{serialNum:result.paymentRecord.serialNum, taskId:ids, comments:comments});
-//														$("#serialNum").val(result.paymentRecord.serialNum);//赋值给隐藏input，通过和不通过时调用
-//														$("#taskId").val(ids);//赋值给隐藏input，通过和不通过时调用
-														
-														
-													}else{//result.actionType == 'modify' 更改流程
-//														if(comments == ""){
-//															comments = "无评论";
-//														}else $("#comment_modify").html(comments);
-//														$("#modify_beginDate").val(timeStamp2String2(result.vacation.beginDate));
-//														$("#modify_endDate").val(timeStamp2String2(result.vacation.endDate));
-//														$("#modify_days").val(result.vacation.days);
-//														$("#modify_vacationType").val(result.vacation.vacationType);
-//														$("#modify_reason").val(result.vacation.reason);
-//														$('#modifyVacationModal').modal('show');
-													}
-													
-													
-													
-													
-													
-												},
-												function(errResponse) {
-													toastr.warning("申请失败！");
-													console
-															.error('Error while apply ap');
-												}
-
-										);
 										
 										
 									}
@@ -816,29 +835,110 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	                    ]
 
 				})
-				
-//				$('#sample_2 tbody')
-//											.on(
-//													'click',
-//													'tr',
-//													function() {
-//														if ($(this).hasClass(
-//																'selected')) {
-//															$(this).removeClass(
-//																	'selected');
-//														} else {
-//															table
-//																	.$(
-//																			'tr.selected')
-//																	.removeClass(
-//																			'selected');
-//															$(this).addClass(
-//																	'selected');
-//														}
-//													});
+
 				
 				return t;
 	}
+	
+	
+	
+	function showYbTable(){
+		var ybTable = $("#ybTable").DataTable(
+				{
+					language : {
+						aria : {
+							sortAscending : ": activate to sort column ascending",
+							sortDescending : ": activate to sort column descending"
+						},
+						emptyTable : "空表",
+						info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+						infoEmpty : "没有数据",
+						infoFiltered : "(从 _MAX_ 条数据中检索)",
+						lengthMenu : "每页显示 _MENU_ 条数据",
+						search : "查询:",
+						zeroRecords : "抱歉， 没有找到！",
+						paginate : {
+							"sFirst" : "首页",
+							"sPrevious" : "前一页",
+							"sNext" : "后一页",
+							"sLast" : "尾页"
+						}
+					},
+					order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+					bRetrieve : true,
+					lengthMenu : [
+							[ 5, 10, 15, 30, -1 ],
+							[ 5, 10, 15, 30,
+									"All" ] ],
+					pageLength : 10,// 每页显示数量
+					processing : true,// loading等待框
+
+					ajax : ctx
+							+ "/rest/processAction/endTask",// 加载已办列表数据
+
+					"aoColumns" : [
+//							{ mData: 'taskId'},
+							{
+								mData : 'userName'
+							},
+							{
+								mData : 'title'
+							},
+							{
+								mData : 'startTime',
+								mRender : function(
+										data,
+										type,
+										row,
+										meta) {
+									return timeStamp2String(data);
+								}
+							},
+							{
+								mData : 'claimTime',
+								mRender : function(
+										data,
+										type,
+										row,
+										meta) {
+									if(data != null){
+			                			return timeStamp2String(data);
+			                		}else{
+			                			return "无需签收";
+			                		}
+								}
+							},
+							{
+								mData : 'endTime',
+								mRender : function(
+										data) {
+									if (data != null) {
+										return timeStamp2String(data);
+									} else
+										return '';
+								}
+							},
+							{
+								mData : 'deleteReason'
+							},
+							{
+								mData : 'version'
+							},
+							{
+								mData : 'revoke',
+								mRender : function(data,type,row,meta) {
+									return "<a href='javascript:void(0);' onclick=\"revoke('"+row.taskId+"','"+row.processInstanceId+"','ybTable')\">撤销</a>";
+								}
+							}
+							]
+
+				})
+	 return ybTable;
+	}
+	
+	
+	
+	
 
 
 
@@ -1498,53 +1598,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 
 }]);
 
-function handleTask(assign, taskId, processInstanceId){
-	
-	if(assign == ''){
-		toastr.warning("此任务您还没有签收，请【签收】任务后再处理任务！！");
-	}else{		
-		$.ajax({url:ctx + "/rest/vacationAction/toApproval/" + taskId,
-			type: 'POST',
-			dataType: 'json',
-			success:function(result){
-				$("#taskId").val(taskId);
-				$("#processInstanceId").val(processInstanceId);																					
-				$("#vacationId").val(result.vacation.id);
-				
-				var comments = ""//添加评论
-				for (var i=0;i<result.commentList.length;i++){
-					comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
-					+ timeStamp2String2(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
-				}
-				
-				if(result.actionType == 'audit'){//审批流程
-					if(comments == ""){
-						comments = "无评论";
-					}else $("#comment_audit").html(comments);
-					$("#audit_beginDate").val(timeStamp2String2(result.vacation.beginDate));
-					$("#audit_endDate").val(timeStamp2String2(result.vacation.endDate));
-					$("#audit_days").val(result.vacation.days);
-					$("#audit_vacationType").val(result.vacation.vacationType);
-					$("#audit_reason").val(result.vacation.reason);
-					$('#auditVacationModal').modal('show');
-				}else{//result.actionType == 'modify' 更改流程
-					if(comments == ""){
-						comments = "无评论";
-					}else $("#comment_modify").html(comments);
-					$("#modify_beginDate").val(timeStamp2String2(result.vacation.beginDate));
-					$("#modify_endDate").val(timeStamp2String2(result.vacation.endDate));
-					$("#modify_days").val(result.vacation.days);
-					$("#modify_vacationType").val(result.vacation.vacationType);
-					$("#modify_reason").val(result.vacation.reason);
-					$('#modifyVacationModal').modal('show');
-				}
-				
-		}});
-		
-	}
-	
-	
-	
-}
+
+
 
 

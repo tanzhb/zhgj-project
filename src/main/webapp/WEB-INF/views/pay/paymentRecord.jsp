@@ -172,6 +172,39 @@
 								</div>
 							</div>
 							<div class="tab-pane" id="yiban">
+								<div class="row">
+									<div class="col-md-12">
+				
+										<!-- BEGIN EXAMPLE TABLE PORTLET-->
+										<div class="portlet box green">
+											<div class="portlet-title" style="height:50px"></div>
+				
+											<div class="portlet-body">
+												<table class="table table-striped table-bordered table-hover"
+													id="ybTable">
+													<thead>
+														<tr>
+																														
+															<th>申请人</th>
+															<th>标题</th>
+															<th>任务开始时间</th>
+															<th>任务签收时间</th>
+															<th>任务结束时间 </th>
+															<th>流程结束原因</th>
+															<th>流程版本号</th>
+															<th>操作</th>
+															
+															
+														</tr>
+													</thead>
+													<tbody>				
+													</tbody>
+												</table>
+											</div>
+										</div>
+										<!-- END EXAMPLE TABLE PORTLET-->
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

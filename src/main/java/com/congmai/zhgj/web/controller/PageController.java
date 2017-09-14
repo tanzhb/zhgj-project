@@ -186,6 +186,23 @@ public class PageController {
         return "order/addBuyOrder";
     }
     
+    
+    /**
+     * 采购订单提交申请
+     */
+    @RequestMapping("/submitBuyApply")
+    public String submitBuyApply(String serialNum,String view) {
+        return "order/submitBuyApply";
+    }
+    
+    /**
+     * 审批采购订单
+     */
+    @RequestMapping("/approvalBuyApply")
+    public String approvalBuyApply(String serialNum,String view) {
+        return "order/approvalBuyApply";
+    }
+    
     /**
      * 采购订单
      */

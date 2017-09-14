@@ -194,6 +194,28 @@ angular.module('MetronicApp').service('orderService',
 						deferred.reject(err);//请求失败
 					});
 					return deferred.promise;//返回承诺
+				},//启动采购订单流程
+				startBuyOrderProcess : function(orderInfo) {
+					var deferred = $q.defer();
+					$http.post("rest/order/startBuyOrderProcess", orderInfo
+					).success(function (data) {
+		                // 如果连接成功，延时返回给调用者
+		                deferred.resolve(data);
+		            }).error(function () {
+	                    deferred.reject('连接服务器出错！');
+	                })
+					return deferred.promise;
+				},//启动销售订单流程
+				startSaleOrderProcess : function(orderInfo) {
+					var deferred = $q.defer();
+					$http.post("rest/order/startSaleOrderProcess", orderInfo
+					).success(function (data) {
+		                // 如果连接成功，延时返回给调用者
+		                deferred.resolve(data);
+		            }).error(function () {
+	                    deferred.reject('连接服务器出错！');
+	                })
+					return deferred.promise;
 				}
 			}
 		} ]);

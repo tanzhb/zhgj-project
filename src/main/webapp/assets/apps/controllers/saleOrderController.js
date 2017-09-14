@@ -226,6 +226,16 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
 						       }
+						}, {
+							'targets' : 7,
+							'render' : function(data,
+									type, row, meta) {
+								if(isNull(row.contract)){
+									return ""
+								}else{
+									return row.contract.contractNum
+								}
+							}
 						} ]
 
             }).on('order.dt',
@@ -346,7 +356,17 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     							"createdCell": function (td, cellData, rowData, row, col) {
     								 $compile(td)($scope);
     						       }
-    						} ]
+    						}, {
+								'targets' : 7,
+								'render' : function(data,
+										type, row, meta) {
+									if(isNull(row.contract)){
+										return ""
+									}else{
+										return row.contract.contractNum
+									}
+								}
+							} ]
 
                 }).on('order.dt',
                 function() {
