@@ -29,7 +29,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a ui-sref="takeDelivery">收货</a>
+            <a ui-sref="takeDelivery">查看收货详情</a>
         </li>
     </ul>
 
@@ -38,7 +38,7 @@
 <!-- BEGIN MAIN CONTENT -->
 <div class="row">
     <div class="col-md-12">
-    	<form  id="takeDeliveryForm" class="form-horizontal" >
+    	<form  id="takeDeliveryyForm" class="form-horizontal" >
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
         <div class="portlet bordered">
             <div class="portlet-body">
@@ -52,7 +52,6 @@
                         </div>
                         <div class="portlet-body form">
 									<div class="row">
-
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="deliverNum"> 发货单号：</label>
@@ -486,55 +485,41 @@
 										<!--/span-->
 									</div>
 									<!--/row-->
-								</div>
-         				</div>
-         				
-         				<div class="portlet-title">
-                        </div>
-                        <div class="portlet-body form">
-								<div class="form-body">
 									<div class="row">
 										<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="col-md-4 control-label" for="takeDeliverNum"> <span class="required"> * </span>收货单号:</label>
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="takeDeliverNum"> 收货单号：</label>
                                                     <div class="col-md-8">
-                                                        <input type="text" class="form-control" id="takeDeliverNum" name="takeDeliverNum" ng-model="takeDeliver.takeDeliverNum" ng-hide="deliverAdd" >
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{takeDeliver.takeDeliverNum}}</p>
+                                                         <p class="control-label left" >{{deliver.takeDelivery.takeDeliverNum}}</p>
                                                     </div>
                                             </div>
 										</div>
 										<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="col-md-4 control-label" for="actualDate"><span class="required"> * </span>实际收货日期 :</label>
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="tdReceiver"> 实际收货日期：</label>
                                                     <div class="col-md-8">
-                                                    	<input type="text" class="form-control date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="actualDate"  name="actualDate" ng-model="takeDeliver.actualDate" readonly="readonly">
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{takeDeliver.actualDate}}</p>
+                                                         <p class="control-label left" >{{deliver.takeDelivery.actualDate}}</p>
                                                     </div>
                                             </div>
 										</div>
 						
 										<!--/span-->
 										<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="col-md-4 control-label" ><span class="required"> * </span>收货人:</label>
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="tdContactNum"> 收货人：</label>
                                                     <div class="col-md-8">
-                                                        <input type="text" class="form-control" id="taker" name="taker" ng-model="takeDeliver.taker" >
-                                                         <div class="form-control-focus"></div>
+                                                         <p class="control-label left" >{{deliver.takeDelivery.taker}}</p>
                                                     </div>
                                             </div>
 										</div>
 										<!--/span-->
 									</div>
-									<!--/row-->
 									<div class="row">
 										<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="col-md-4 control-label" for="takeDeliverDate">备注:</label>
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" >备注：</label>
                                                     <div class="col-md-8">
-                                                       <input type="text" class="form-control" id="takeRemark" name="takeRemark" ng-model="takeDeliver.takeRemark" >
-                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" >{{deliver.takeDelivery.takeDate}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -542,7 +527,7 @@
 									</div>
 									<!--/row-->
 								</div>
-						</div>
+         				</div>
          			<!-- 收货信息END -->
          			<!-- 物料信息START -->
                         <div class="portlet-title">
@@ -564,6 +549,8 @@
 										<th  rowspan="2">生产日期</th>
 										<th colspan="3" style="text-align: center;">发货</th>
 										<th colspan="3"  style="text-align: center;">收货</th>
+										<th colspan="3"  style="text-align: center;">检验</th>
+										<th colspan="5"  style="text-align: center;">入库</th>
 										<th rowspan="2">状态</th>
 									</tr>
 									<tr>
@@ -572,6 +559,14 @@
 										<th>备注</th>
 										<th>实收数量</th>
 										<th>拒收数量</th>
+										<th>备注</th>
+										<th>合格数量</th>
+										<th>不合格数量</th>
+										<th>备注</th>
+										<th>入库数量</th>
+										<th>未入数量</th>
+										<th>仓库</th>
+										<th>库位</th>
 										<th>备注</th>
 									</tr>
 								</thead>
@@ -594,17 +589,24 @@
 										<td>
                                             {{materiel.deliverRemark}}
 										</td>
-										<td class="form-group">
-                                                 <input type="text" class="form-control" id="acceptCount{{$index}}" name="acceptCount" data-delivercount="{{materiel.deliverCount}}"  ng-model="materiel.acceptCount" ng-hide="deliverAdd" >
-                                                 <div class="form-control-focus"> </div>
-										</td>
-										<td><span class="help-block"></span>
-											<span ng-if="materiel.deliverCount!=undefined && materiel.acceptCount!=undedined">{{materiel.deliverCount-materiel.acceptCount}}</span>
+										<td>
+                                            {{materiel.acceptCount}}
 										</td>
 										<td>
-                                                 <input type="text" class="form-control" id="takeRemark{{$index}}" name="takeRemark"  ng-model="materiel.takeRemark" ng-hide="deliverAdd" >
-                                                 <div class="form-control-focus"> </div>
+											{{materiel.refuseCount}}
 										</td>
+										<td>
+                                            {{materiel.takeRemark}}
+										</td>
+										<td>{{materiel.qualifiedCount}}</td>
+										<td>{{materiel.unqualifiedCount}}</td>
+										<td>{{materiel.checkRemark}}</td>
+										<td>{{materiel.stockCount}}</td>
+										<td>{{materiel.unstockCount}}</td>
+										<td>{{materiel.warehouse.warehouseName}}</td>
+										<td>{{materiel.positionSerial}}</td>
+										<td>{{materiel.stockRemark}}</td>
+										<td></td>
 									</tr>
 									<tr ng-if="deliver.deliveryMateriels==undefined||deliver.deliveryMateriels.length==0">
 											<td colspan="22" align="center">暂无数据</td>
@@ -614,51 +616,37 @@
 						</div>
 					  </div> 
          			<!-- 物料信息END -->
-         			 <div class="row" align="center">
-         			 	<!--  <button   class="btn blue  btn-sm btn-circle" data-toggle="modal" data-target="#apply">
-                              		申请收货 </button> -->
-         			 	<button   class="btn green  btn-sm btn-circle" ng-click="confirmTakeDelivery()">
-                              		<i class="fa fa-check"></i> 确认收货 </button>
-                      	<button    class="btn defualt  btn-sm btn-circle" ng-click="cancelTakeDelivery()" onclick="return false;">
-                              		<i class="fa fa-mail-reply"></i> 取消 </button>
-         			<!-- 	<div class="col-md-5"></div>
-         				<div class="col-md-1">
-         					 <button   ng-hide="deliverAdd" class="btn blue" ng-click="confirmTakeDelivery()">
-                                            <i class="fa fa-check"></i> 确认收货 </button>
-         				</div>
-         				<div class="col-md-1">
-         					 <button   ng-hide="deliverAdd" class="btn red btn-outline" ng-click="cancelTakeDelivery()">
-                                            <i class="fa fa-undo"></i> 取消 </button>
-         				</div>
-         				<div class="col-md-5"></div> -->
-         			</div>
+         			<div class="row">
+							<div class="form-group form-md-line-input">
+								<label class="col-md-1 control-label" for="form_control_1">我的意见:</label>
+								<div class="col-md-11">
+									<textarea class="form-control" ng-model="content"
+										id="content" name="content" rows="1"></textarea>
+									<div class="form-control-focus"></div>
+									<span class="help-block">输入我的意见</span>
+								</div>
+							</div>
+							<input type="hidden" name="serialNum" id="serialNum" value="" />
+							<input type="hidden" name="taskId" id="taskId" value="" />
+					</div>
        			</div> 
     		</div>
 		</div>
 		</form>
+		<div class="modal-footer">
+					<button type="submit" ng-click="apPass()"
+						class="btn btn-primary">
+						<i class="fa fa-save"></i> 通过
+					</button>
+					<!-- <button type="submit" ng-click="apUnPass()"
+						class="btn btn-primary">
+						<i class="fa fa-save"></i> 不通过
+					</button> -->
+					<button type="submit" ng-click="closeAuditDialogue()"
+						class="btn btn-primary">
+						<i class="fa fa-save"></i> 关闭
+					</button>
+		</div>
 	</div>
 </div>
 <!-- END MAIN CONTENT -->
- <!-- 申请modal 开始 -->
-	<div id="apply" class="modal fade" tabindex="-1"
-		data-backdrop="static" data-keyboard="false">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-hidden="true"></button>
-					<h4 class="modal-title">申请备注</h4>
-				</div>
-				<div class="modal-body">
-					<input type="text" class="form-control" id="applyReason" ng-model="applyReason" >
-				</div>
-				<div class="modal-footer">
-					<button type="button" data-dismiss="modal"
-						class="btn dark btn-outline">取消</button>
-					<button type="button" ng-click="applyTakeDelivery()" class="btn green">确定
-						</button>
-				</div>
-			</div>
-		</div>
-	</div>
-<!-- 申请modal 结束 -->

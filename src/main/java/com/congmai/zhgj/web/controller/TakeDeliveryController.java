@@ -701,7 +701,7 @@ public class TakeDeliveryController {
     @RequestMapping(value="applyTakeDelivery",method=RequestMethod.POST)
     @ResponseBody
     public String applyTakeDelivery(Map<String, Object> map,@RequestBody String params,HttpServletRequest request){
-    	String flag = saveTakeDelivery(map, params, request);
+    	String flag = confirmTakeDelivery(map, params, request);
     	if("1".equals(flag)){
     		 try {
     			 TakeDelivery takeDelivery = this.takeDeliveryService.selectByPrimaryKey(JSON.parseObject(params, TakeDeliveryParams.class).getTakeDelivery().getSerialNum());
@@ -764,10 +764,10 @@ public class TakeDeliveryController {
 		String processInstanceId = task.getProcessInstanceId();
 		ProcessInstance pi = this.runtimeService.createProcessInstanceQuery()
 				.processInstanceId(processInstanceId).singleResult();
-		PaymentRecord paymentRecord = (PaymentRecord) this.runtimeService
+		TakeDelivery takeDelivery = (TakeDelivery) this.runtimeService
 				.getVariable(pi.getId(), "entity");
-		paymentRecord.setTask(task);
-		paymentRecord.setProcessInstanceId(processInstanceId);
+		takeDelivery.setTask(task);
+		takeDelivery.setProcessInstanceId(processInstanceId);
 		List<CommentVO> commentList = this.processService
 				.getComments(processInstanceId);
 		String taskDefinitionKey = task.getTaskDefinitionKey();
@@ -780,7 +780,7 @@ public class TakeDeliveryController {
 		}
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("actionType", result);
-		map.put("paymentRecord", paymentRecord);
+		map.put("takeDelivery", takeDelivery);
 		map.put("commentList", commentList);
 		return map;
 	}
