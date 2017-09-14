@@ -224,7 +224,7 @@
 			                                  <div class="">
 			                                  	<select class="form-control" id="rate"  ng-hide="saleOrderInput" name="rate"  ng-model="saleOrder.rate" >
 			                                           	<option value=""></option>
-			                                           	<option value="17" >17%</option>
+			                                           	<option value="17"  >17%</option>
 			                                             <option value="6" >6%</option>
 			                                        </select>
 			                                      <div class="form-control-focus"> </div>
@@ -347,7 +347,7 @@
 			                                  <div class="">
 			                                  	<select class="form-control" id="rate"  ng-hide="saleOrderInput" name="tuirate"  ng-model="saleOrder.rate" >
 			                                           	<option value=""></option>
-			                                           	<option value="17" >17%</option>
+			                                           	<option value="17"  >17%</option>
 			                                             <option value="6" >6%</option>
 			                                        </select>
 			                                      <div class="form-control-focus"> </div>
@@ -532,7 +532,7 @@
 			                                  <div class="">
 			                                  	<select class="form-control" id="rate"  ng-hide="saleOrderInput" name="rate"  ng-model="saleOrder.rate" >
 			                                           	<option value=""></option>
-			                                           	<option value="17" >17%</option>
+			                                           	<option value="17"  >17%</option>
 			                                             <option value="6" >6%</option>
 			                                        </select>
 			                                      <div class="form-control-focus"> </div>
@@ -1211,7 +1211,8 @@
 							                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.billingMethod}} </p>
 							                          </td>
 							                          <td>
-				                                      		<input type="text" id="billingAmount[$index]" name="billingAmount" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].billingAmount"  >
+				                                      		<input type="text" id="billingAmount[$index]" name="billingAmount" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].billingAmount"  
+				                                      		ng-keyup="clearNoNumPoint(clauseSettlement.CSD[$index],'billingAmount');_arithmeticUnbilledAmount(this)">
 							                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.billingAmount}} </p>
 							                          </td>
 							                          <td>

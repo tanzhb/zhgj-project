@@ -334,7 +334,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
        
        //下载文件查看详情时
        $scope.downloadFile1 = function(str){
-    		   window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+str;
+    		   window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+encodeURI(encodeURI(str));
        }
        
        $scope.removefile = function(index){
@@ -479,7 +479,8 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 
 				);
 		$state.go('paymentRecordC');//返回申请列表
-		//$('#sample_2').DataTable().ajax.reload();
+//		$state.go('paymentRecordC',{},{reload:true});
+		$("#sample_2").DataTable().ajax.reload();
 	};
 	
 	$scope.toApply = function() {
@@ -956,7 +957,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 
 	//付款列表
 	var table;
-	var tableAjaxUrl = "rest/pay/findAllPaymentRecord";
+//	var tableAjaxUrl = "rest/pay/findAllPaymentRecord";
 	var loadMainTable = function() {
 		var a = 0;
 		table = $("#sample_2").DataTable(
@@ -990,7 +991,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 						              pageLength : 10,// 每页显示数量
 						              processing : true,// loading等待框
 						              // serverSide: true,
-						              ajax: tableAjaxUrl,//加载数据中user表数据
+						              ajax: "rest/pay/findAllPaymentRecord",//加载数据
 						              "aoColumns": [
 						                            { mData: 'serialNum',
 						                            	mRender : function(
