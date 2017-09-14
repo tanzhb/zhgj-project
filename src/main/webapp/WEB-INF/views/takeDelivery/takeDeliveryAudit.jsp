@@ -616,7 +616,34 @@
 						</div>
 					  </div> 
          			<!-- 物料信息END -->
+         			<!-- 评论START -->
+         			<div class="portlet-body">
          			<div class="row">
+							<div class="portlet box green">
+	                             <div class="portlet-title">
+	                                 <div class="caption">
+	                                     <i class="fa fa-globe"></i>评论 </div>
+	                             </div>
+	                             <div class="portlet-body">
+	                                 <table class="table table-striped table-bordered table-hover order-column" id="pinglun">
+	                                     <thead>
+	                                         <tr>
+	                                             <th>评论人</th>
+	                                             <th>评论时间</th>
+	                                             <th>评论内容</th>
+	                                         </tr>
+	                                     </thead>
+	                                     <tbody id = "comment_audit">	
+	                                        </tbody>
+	                                 </table>
+	                             </div>
+	                         </div>
+						 </div>
+					</div>	 
+					<!-- 评论END -->
+					<!-- 意见START -->
+         			 <div class="portlet-body">
+		         		<div class="row">
 							<div class="form-group form-md-line-input">
 								<label class="col-md-1 control-label" for="form_control_1">我的意见:</label>
 								<div class="col-md-11">
@@ -628,7 +655,9 @@
 							</div>
 							<input type="hidden" name="serialNum" id="serialNum" value="" />
 							<input type="hidden" name="taskId" id="taskId" value="" />
+						</div>
 					</div>
+					<!-- 意见END -->
        			</div> 
     		</div>
 		</div>
@@ -638,10 +667,10 @@
 						class="btn btn-primary">
 						<i class="fa fa-save"></i> 通过
 					</button>
-					<!-- <button type="submit" ng-click="apUnPass()"
+					<button type="submit" ng-click="apUnPass()"
 						class="btn btn-primary">
 						<i class="fa fa-save"></i> 不通过
-					</button> -->
+					</button>
 					<button type="submit" ng-click="closeAuditDialogue()"
 						class="btn btn-primary">
 						<i class="fa fa-save"></i> 关闭
