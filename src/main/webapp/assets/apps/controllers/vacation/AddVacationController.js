@@ -228,7 +228,7 @@ function showDbTable(){
 				processing : true,// loading等待框
 
 				ajax : ctx
-						+ "/rest/processAction/todoTask",// 加载待办列表数据
+						+ "/rest/processAction/todoTask/" + 'vacation',// 加载待办列表数据
 
 				"aoColumns" : [
 
@@ -377,7 +377,7 @@ function showYbTable(){
 				processing : true,// loading等待框
 
 				ajax : ctx
-						+ "/rest/processAction/endTask",// 加载已办列表数据
+						+ "/rest/processAction/endTask/" + 'vacation',// 加载已办列表数据
 
 				"aoColumns" : [
 						{

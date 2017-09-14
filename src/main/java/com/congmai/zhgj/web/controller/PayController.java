@@ -265,6 +265,7 @@ public class PayController {
 		String currenLoginName = currentUser.getPrincipal().toString();// 获取当前登录用户名
 		List<PaymentRecord> paymentRecordlist = payService
 				.selectAllPaymentRecordList(currenLoginName);
+		
 
 		// 封装datatables数据返回到前台
 		Map pageMap = new HashMap();

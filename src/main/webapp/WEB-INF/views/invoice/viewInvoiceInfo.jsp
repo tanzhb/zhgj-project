@@ -41,249 +41,514 @@
                         <div class="portlet-title">
                             <div class="caption"><span ng-if="inOrOut.indexOf('in')>-1" >进项票</span><span  ng-if="inOrOut.indexOf('out')>-1">销项票</span>详情</div>
                             <div class="actions">
-                                            <button   ui-sref="invoice"  class="btn blue  btn-outline  btn-sm " >
-                                            <i class="fa fa-undo"></i> 返回 </button>
+                                           
                             </div>
                         </div>
+            
+                       
+                         <div class="tab-content">
+				<div class="tab-pane fade active in" id="tab_1_1"> 
                         <div class="portlet-body form">
-                            <form  id="stockForm" class="form-horizontal"   >
 								<div class="form-body">
-								           <div class="row"><!-- row START -->
+									<div class="alert alert-danger display-hide">
+                                               <button class="close" data-close="alert"></button>请先输入正确数据！</div>
+								           <div class="row">
                                                              <div class="col-md-4">
-											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="invoiceNum"> 发票编号 :</label>
-                                                    <div class="col-md-8">
-                                                          <p class="control-label left" >{{invoice.invoiceNum}}</p> 
+											<div class="form-group">
+                                                    <label class="control-label bold" for="invoiceNum"> <span class="required"> * </span>	<span  ng-if="inOrOut.indexOf('in')>-1"  > 进项</span><span   ng-if="inOrOut.indexOf('out')>-1" > 销项</span>发票编号 :</label>
+                                                    <div class=" ">
+                                                          <p class="control-label left"   >{{invoice.invoiceNum}}</p> 
+                                                         <!--  存放物料流水号-->
                                                     </div>
                                             </div>
 										</div>
+										
+										<div class="col-md-4">
+                                                            <div class="form-group">
+                                                    <label class="control-label bold" for="contactNum"> <span class="required"> * </span>发票类型 :</label>
+                                                    <div class=" ">
+                                                                        <p class="control-label left" >{{invoice.invoiceType}}</p> 
+                                                                    </div>
+                                                                </div>
+                                                       </div>
+                                                          
                                                             <div class="col-md-4">
-                                                                <div class="form-group form-md-line-input">
-                                                                <label class="col-md-4 control-label" for=""><span  ng-if="inOrOut.indexOf('in')>-1"  >开票方</span><span   ng-if="inOrOut.indexOf('out')>-1" >收票方</span> :</label>
-                                                                    <div class="col-md-8">
-                                                                        <p class="control-label left"   ng-if="inOrOut.indexOf('out')>-1"  >{{invoice.buyComId}}</p> 
-                                                                         <p class="control-label left" ng-if="inOrOut.indexOf('in')>-1"  >{{invoice.supplyComId}}</p> 
+                                                                <div class="form-group">
+                                                                <label class="control-label bold" for="relationBuyOrSaleNum"><span class="required"> * </span>  <span  ng-if="inOrOut.indexOf('in')>-1"  > 关联采购单号</span><span   ng-if="inOrOut.indexOf('out')>-1" > 关联销售订单号</span> :</label>
+                                                                    <div class="">
+                                                   
+                                                                        <p class="control-label left" >{{invoice.relationBuyOrSaleNum}}</p> 
+                                                                    </div>
+                                                                </div>
+                                                            </div>  
+                                                        </div>
+                                                        <div class="row">
+                                                            <!--/span-->
+                                                            <div class="col-md-4">
+                                                            <div class="form-group">
+                                                    <label class="control-label bold" for="orderAmount">订单金额 :</label>
+                                                    <div class=" ">
+                                                    <span></span>
+                                                                    <!-- <input type="text" class="form-control"   id="orderAmount" name ="orderAmount"  ng-hide="invoiceAdd"  readonly="readonly"
+												ng-model="invoice.orderAmount" >  -->
+												<div class="form-control-focus"> </div>
+                                                                        <p class="control-label left"  >{{invoice.orderAmount |currency:'￥'}}</p> 
+                                                                </div>
+                                                            </div>
+                                                            <!--/span-->
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                    <label class="control-label bold" for="billOrReceiptMoney">收票金额 :</label>
+                                                    <div class=" ">
+                                                                   
+												<div class="form-control-focus"> </div>
+                                                                        <p class="control-label left"  >{{invoice.billOrReceiptMoney |currency:'￥'}}</p> 
+                                                                </div>
+                                                            </div>
+                                                            <!--/span-->
+                                                        </div>
+                                                     <!--     -->
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                    <label class="control-label bold" for="checkDate"> 大写金额 :</label>
+                                                    <div class=" ">
+                                                                        <!-- <input type="text"     class="form-control"   placeholder=""  id="unBillAmount" name ="unBillAmount"   ng-hide="invoiceAdd"   readonly
+												ng-model="invoice.unBillAmount" /> --> 
+												<div class="form-control-focus"> </div>
+                                                                        <p class="control-label left" >{{invoice.capitalMoney}}</p> 
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!--/row-->
+                                                       
+                                                        <div class="row">
+                                                        <div class="col-md-4">
+                                                             <div class="form-group">
+                                                    <label class="control-label bold" for="checker"> 币种 :</label>
+                                                    <div class=" ">
+                                                                        <!-- <input type="text"     class="form-control"   placeholder=""  id="unBillAmount" name ="unBillAmount"   ng-hide="invoiceAdd"   readonly
+												ng-model="invoice.unBillAmount" />  -->
+												<div class="form-control-focus"> </div>
+                                                                        <p class="control-label left" >{{invoice.currency}}</p> 
+                                                                    </div>
+                                                
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                            <div class="form-group">
+                                                    <label class="control-label bold" for="billWay"><span class="required"> * </span>开票方式 :</label>
+                                                    <div class=" " >
+                                                                        <p class="control-label left"    ng-if="invoice.billWay!='1'">先款后票</p> 
+                                                                        <p class="control-label left"   ng-if="invoice.billWay=='1'">先票后款</p> 
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                            <div class="col-md-4">
+                                                             <div class="form-group">
+                                                    <label class="control-label bold" for="checker"> <span class="required"> * </span> <span  ng-if="inOrOut.indexOf('in')>-1"  >是否付款</span><span   ng-if="inOrOut.indexOf('out')>-1" > 是否收款</span> :</label>
+                                                    <div class=" ">
+                                                                        <p class="control-label left"  ng-if="invoice.paymentStatus!='是'" >否</p> 
+                                                                          <p class="control-label left"   ng-if="invoice.paymentStatus=='是'" >是</p> 
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                         <div class="row">
+                                                            <div class="col-md-4">
+                                                             <div class="form-group">
+                                                    <label class="control-label bold" for="status">  申请日期: </label>
+                                                 <div class=" ">
+                                                                        <p class="control-label left" >{{invoice.submitDate | date:'yyyy-MM-dd'}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
-                                                                <div class="form-group form-md-line-input">
-                                                                <label class="col-md-4 control-label" for=""><span  ng-if="inOrOut.indexOf('in')>-1"  > 关联采购订单号</span><span   ng-if="inOrOut.indexOf('out')>-1" > 关联销售订单号</span> :</label>
-                                                                    <div class="col-md-8">
-                                                                        <p class="control-label left"  >{{invoice.relationBuyOrSaleNum}}</p> 
-                                                                        
+                                                             <div class="form-group">
+                                                    <label class="control-label bold" for="checker"> 申请部门:</label>
+                                                    <div class=" ">
+                                                      
+                                                                        <p class="control-label left" >{{invoice.submitDepartment}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div><!-- row END-->
-                                                        <div class="row"><!-- row START -->
-                                                             <div class="col-md-4">
-											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="comName"> 订单金额:</label>
-                                                    <div class="col-md-8">
-                                                          <p class="control-label left" >{{invoice.orderAmount|currency:'￥'}}</p>
-                                                    </div>
-                                            </div>
-										</div>
-                                                            <div class="col-md-4">
-                                                                <div class="form-group form-md-line-input">
-                                                                <label class="col-md-4 control-label" for="checkParty">开票方式 :</label>
-                                                                    <div class="col-md-8">
-                                                                          <p class="control-label left"   ng-if="invoice.billWay!='1'">先款后票</p> 
-                                                                        <p class="control-label left"    ng-if="invoice.billWay=='1'">先票后款</p> 
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <div class="form-group form-md-line-input">
-                                                                <label class="col-md-4 control-label" for="checkDate">未开金额 :</label>
-                                                                    <div class="col-md-8">
-                                                                       <p class="control-label left" >{{invoice.unBillAmount|currency:'￥'}}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div><!-- row END-->
-                                                        <div class="row"><!-- row START -->
-                                                             <div class="col-md-4">
-											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="checker"> <span  ng-if="inOrOut.indexOf('in')>-1"  > 是否付款</span><span   ng-if="inOrOut.indexOf('out')>-1" > 是否收款</span> :</label>
-                                                    <div class="col-md-8">
-                                                         <p class="control-label left" >{{invoice.paymentStatus}}</p> 
-                                                    </div>
-                                            </div>
-										</div>
-                                                            <div class="col-md-4">
-                                                                <div class="form-group form-md-line-input">
-                                                                <label class="col-md-4 control-label" for="contactNum"><span  ng-if="inOrOut.indexOf('in')>-1"  >关联付款单号</span><span   ng-if="inOrOut.indexOf('out')>-1" > 关联收款单号</span>  :</label>
-                                                                    <div class="col-md-8">
-                                                                     <p class="control-label left"  ng-if="invoice.relationReceiveOrPayNum!=null">{{invoice.relationReceiveOrPayNum}}</p> 
-                                                                    <p class="control-label left"  ng-if="invoice.relationReceiveOrPayNum==null">----</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <div class="form-group form-md-line-input">
-                                                                <label class="col-md-4 control-label" for="status"><span  ng-if="inOrOut.indexOf('in')>-1"  >付款日期</span><span   ng-if="inOrOut.indexOf('out')>-1" >收款日期</span>  :</label>
-                                                                    <div class="col-md-8">
-                                                                   <p class="control-label left"  ng-if="invoice.receiptDate!=null">{{invoice.receiptDate | date:'yyyy-MM-dd'}}</p> 
-                                                                    <p class="control-label left"  ng-if="invoice.receiptDate==null">----</p> 
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div><!-- row END-->
-                                                         <div class="row"><!-- row START -->
-                                                             <div class="col-md-4">
-											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="checker"> 发票金额 :</label>
-                                                    <div class="col-md-8">
-                                                         <p class="control-label left" >{{invoice.invoiceAmount|currency:'￥'}}</p> 
-                                                    </div>
-                                            </div>
-										</div>
-                                                            <div class="col-md-4">
-                                                                <div class="form-group form-md-line-input">
-                                                                <label class="col-md-4 control-label" for="contactNum">发票类型 :</label>
-                                                                    <div class="col-md-8">
-                                                                         <p class="control-label left" >{{invoice.invoiceType}}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <div class="form-group form-md-line-input">
-                                                                <label class="col-md-4 control-label" for="status">开票日期 :</label>
-                                                                    <div class="col-md-8">
-                                                                   {{invoice.billingDate | date:'yyyy-MM-dd'}}
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div><!-- row END-->
-                                                         <div class="row"><!-- row START -->
-                                                             <div class="col-md-4">
-											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="checker">发票号 :</label>
-                                                    <div class="col-md-8">
-                                                         <p class="control-label left" >{{invoice.invoiceNO}}</p> 
-                                                    </div>
-                                            </div>
-										</div>
-                                                            <div class="col-md-4">
-                                                                <div class="form-group form-md-line-input">
-                                                                <label class="col-md-4 control-label" for="contactNum">提交人 :</label>
-                                                                    <div class="col-md-8">
+                                                              <div class="col-md-4">
+                                                             <div class="form-group">
+                                                    <label class="control-label bold" for="checker"> 申请人:</label>
+                                                    <div class=" ">
+                                                      
                                                                         <p class="control-label left" >{{invoice.submitter}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <!--/span-->
+                                                            
+                                                            <!--/span-->
+                                                        </div>
+                                                            <div class="row">
                                                             <div class="col-md-4">
-                                                                <div class="form-group form-md-line-input">
-                                                                <label class="col-md-4 control-label" for="status">提交日期 :</label>
-                                                                    <div class="col-md-8">
-                                                                   <p class="control-label left" >{{invoice.submitDate | date:'yyyy-MM-dd'}}</p> 
+                                                             <div class="form-group">
+                                                    <label class="control-label bold" for="checker"> 备注:</label>
+                                                    <div class=" ">
+                                                      
+                                                                        <p class="control-label left"    ng-if="inOrOut.indexOf('in')>-1"  >{{invoice.billingRemark}}</p> 
+                                                                         <p class="control-label left"  ng-if="inOrOut.indexOf('out')>-1"  >{{invoice.receiptRemark}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div><!-- row END-->
-                                                         <div class="row"><!-- row START -->
+                                                             <div class="col-md-4"  ng-show="inOrOut.indexOf('out')>-1">
+                                                             <div class="form-group">
+                                                    <label class="control-label bold" for="checker"> 申请开票日期:</label>
+                                                    <div class=" ">
+												  
+                                                                        <p class="control-label left" >{{invoice.receiptDate | date:'yyyy-MM-dd'}}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                              
+                                                        </div>
+                                                     <div class="row"  ng-if="inOrOut.indexOf('in')>-1" >
+                                                             <div class="col-md-4"  >
+                                                                <div class="form-group">
+                                                    <label class="control-label bold" for=""><span class="required"> * </span> 开票方:</label>
+                                                    <div class="">
+                                                   
+                                                                         <p class="control-label left"     >{{invoice.supplyComId}}</p> 
+                                                                    </div>
+                                                                      
+                                                                </div>
+                                                            </div> 
                                                              <div class="col-md-4">
-											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="checker"><span  ng-if="inOrOut.indexOf('in')>-1"  >收票人 </span><span   ng-if="inOrOut.indexOf('out')>-1" >审批人</span> :</label>
-                                                    <div class="col-md-8">
-                                                         <p class="control-label left"   ng-if="invoice.approver==null">-----</p> 
-                                                          <p class="control-label left"  ng-if="invoice.approver!=null">{{invoice.approver}}</p> 
-                                                    </div>
+                                                                <div class="form-group">
+                                                    <label class="control-label bold" for=""><span class="required"> * </span> 联系电话 :</label>
+                                                    <div class="">
+                                                     
+                                                                        <p class="control-label left"   >{{invoice.tel}}</p> 
+                                                                    </div>
+                                                                      
+                                                                </div>
+                                                            </div> 
+                                                             <div class="col-md-4">
+                                                                <div class="form-group">
+                                                    <label class="control-label bold" for=""> 备注 :</label>
+                                                    <div class="">
+                                                     
+                                                                        <p class="control-label left"      >{{invoice.secondRemark}}</p> 
+                                                                    </div>
+                                                                      
+                                                                </div>
+                                                            </div> 
+                                                 
+                                                        </div>
+                                                        <div class="row"  ng-if="inOrOut.indexOf('out')>-1" >
+                                                             <div class="col-md-4"  >
+                                                                <div class="form-group">
+                                                    <label class="control-label bold" for=""><span class="required"> * </span> 收票方:</label>
+                                                    <div class="">
+                                                   
+												 
+                                                                        <p class="control-label left"      ng-if="inOrOut.indexOf('out')>-1"   >{{invoice.buyComId}}</p> 
+                                                                         <p class="control-label left"     ng-if="inOrOut.indexOf('in')>-1"   >{{invoice.supplyComId}}</p> 
+                                                                    </div>
+                                                                      
+                                                                </div>
+                                                            </div> 
+                                                             <div class="col-md-4">
+                                                                <div class="form-group">
+                                                    <label class="control-label bold" for=""><span class="required"> * </span> 企业全称 :</label>
+                                                    <div class="">
+                                                     
+                                                                        <p class="control-label left"   ng-if="inOrOut.indexOf('out')>-1"   >{{invoice.companyName}}</p> 
+                                                                    </div>
+                                                                      
+                                                                </div>
+                                                            </div> 
+                                                             <div class="col-md-4">
+                                                                <div class="form-group">
+                                                    <label class="control-label bold" for=""><span class="required"> * </span> 地址 :</label>
+                                                    <div class="">
+                                                    
+                                                                        <p class="control-label left"       >{{invoice.address}}</p> 
+                                                                    </div>
+                                                                      
+                                                                </div>
+                                                            </div> 
+                                                 
+                                                        </div>
+                                                        <div class="row"  ng-if="inOrOut.indexOf('out')>-1" >
+                                                             <div class="col-md-4"  >
+                                                                <div class="form-group">
+                                                    <label class="control-label bold" for=""><span class="required"> * </span>联系电话:</label>
+                                                    <div class="">
+												 
+												<div class="form-control-focus"> </div>
+												 
+                                                                        <p class="control-label left"       >{{invoice.tel}}</p> 
+                                                                         
+                                                                    </div>
+                                                                      
+                                                                </div>
+                                                            </div> 
+                                                             <div class="col-md-4">
+                                                                <div class="form-group">
+                                                    <label class="control-label bold" for=""><span class="required"> * </span> 开户银行 :</label>
+                                                    <div class="">
+                                                  
+                                                                        <p class="control-label left"      >{{invoice.bankName}}</p> 
+                                                                    </div>
+                                                                      
+                                                                </div>
+                                                            </div> 
+                                                             <div class="col-md-4">
+                                                                <div class="form-group">
+                                                    <label class="control-label bold" for=""><span class="required"> * </span> 账号:</label>
+                                                    <div class="">
+                                                    
+                                                                        <p class="control-label left"      >{{invoice.account}}</p> 
+                                                                    </div>
+                                                                      
+                                                                </div>
+                                                            </div> 
+                                                 
+                                                        </div>
+                                                        <div class="row"  ng-if="inOrOut.indexOf('out')>-1" >
+                                                             <div class="col-md-4"  >
+                                                                <div class="form-group">
+                                                    <label class="control-label bold" for=""><span class="required"> * </span> 企业纳税号:</label>
+                                                    <div class="">
+                                                   
+												 
+                                                                         <p class="control-label left"       >{{invoice.taxNum}}</p> 
+                                                                    </div>
+                                                                      
+                                                                </div>
+                                                            </div> 
+                                                             <div class="col-md-4">
+                                                                <div class="form-group">
+                                                    <label class="control-label bold" for=""> 备注 :</label>
+                                                    <div class="">
+                                                     
+                                                                        <p class="control-label left"      >{{invoice.secondRemark}}</p> 
+                                                                    </div>
+                                                                      
+                                                                </div>
+                                                            </div> 
+                                                 
+                                                        </div>
+                                                        <div class="row"  >
+                                                             <div class="col-md-4"  >
+                                                                <div class="form-group">
+                                                    <label class="control-label bold" for=""> <span  ng-if="inOrOut.indexOf('in')>-1"  >应付金额</span><span   ng-if="inOrOut.indexOf('out')>-1" > 应收金额</span>:</label>
+                                                    <div class="">
+                                                
+												 
+												<div class="form-control-focus"> </div>
+                                                                        <p class="control-label left"      >{{invoice.shouldPayOrReceiptMoney|currency:'￥'}}</p> 
+                                                                    </div>
+                                                                      
+                                                                </div>
+                                                            </div> 
+                                                             <div class="col-md-4">
+                                                                <div class="form-group">
+                                                    <label class="control-label bold" for=""> <span  ng-if="inOrOut.indexOf('in')>-1"  >预付金额</span><span   ng-if="inOrOut.indexOf('out')>-1" > 预收金额</span> :</label>
+                                                    <div class="">
+                                                 
+												 
+												<div class="form-control-focus"> </div>
+                                                                        <p class="control-label left"      >{{0|currency:'￥'}}</p> 
+                                                                    </div>
+                                                                      
+                                                                </div>
+                                                            </div> 
+                                                             <div class="col-md-4">
+                                                                <div class="form-group">
+                                                    <label class="control-label bold" for=""> <span  ng-if="inOrOut.indexOf('in')>-1"  >已付金额</span><span   ng-if="inOrOut.indexOf('out')>-1" >已收金额</span> :</label>
+                                                    <div class="">
+                                                  
+												<div class="form-control-focus"> </div>
+                                                                        <p class="control-label left"       >{{invoice.PayedOrReceiptedMoney|currency:'￥'}}</p> 
+                                                                    </div>
+                                                                      
+                                                                </div>
+                                                            </div> 
+                                                 
+                                                        </div>
+                                                        <div class="row"  >
+                                                             <div class="col-md-4"  >
+                                                                <div class="form-group">
+                                                    <label class="control-label bold" for=""> <span  ng-if="inOrOut.indexOf('in')>-1"  >未付金额</span><span   ng-if="inOrOut.indexOf('out')>-1" > 未收金额</span>:</label>
+                                                    <div class="">
+                                                    
+												 
+												<div class="form-control-focus"> </div>
+												 
+                                                                        <p class="control-label left"    >{{invoice.unPayOrReceiptMoney|currency:'￥'}}</p> 
+                                                                         
+                                                                    </div>
+                                                                      
+                                                                </div>
+                                                            </div> 
+                                                             <div class="col-md-4">
+                                                                <div class="form-group">
+                                                    <label class="control-label bold" for=""> <span  ng-if="inOrOut.indexOf('in')>-1"  >已收票金额</span><span   ng-if="inOrOut.indexOf('out')>-1" > 已开票金额</span> :</label>
+                                                    <div class="">
+                                                  
+												 
+												<div class="form-control-focus"> </div>
+                                                                        <p class="control-label left"      >{{invoice.billedOrReceiptedMoney|currency:'￥'}}</p> 
+                                                                    </div>
+                                                                      
+                                                                </div>
+                                                            </div> 
+                                                             <div class="col-md-4">
+                                                                <div class="form-group">
+                                                    <label class="control-label bold" for=""> <span  ng-if="inOrOut.indexOf('in')>-1"  >未收票金额</span><span   ng-if="inOrOut.indexOf('out')>-1" >未开票金额</span> :</label>
+                                                    <div class="">
+                                                   
+												<div class="form-control-focus"> </div>
+                                                                        <p class="control-label left"   >{{invoice.unBillOrReceiptMoney|currency:'￥'}}</p> 
+                                                                    </div>
+                                                                      
+                                                                </div>
+                                                            </div> 
+                                                 
+                                                        </div>
+                                                          <div class="row"><!-- row START -->
+                                                             <div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="billingDate"><span class="required"> * </span>开票日期  :</label>
+                                                       <div class=" ">
+                                                       
+                                                                        <p class="control-label left" >{{invoice.billingDate | date:'yyyy-MM-dd'}}</p>
+                                                                    </div>
                                             </div>
 										</div>
-                                                            <div class="col-md-4">
-                                                                <div class="form-group form-md-line-input">
-                                                                <label class="col-md-4 control-label" for="contactNum"><span  ng-if="inOrOut.indexOf('in')>-1"  >收票日期 </span><span   ng-if="inOrOut.indexOf('out')>-1" >审批日期</span> : </label>
-                                                                    <div class="col-md-8">
-                                                                    <p class="control-label left"   ng-if="invoice.approvalDate==null">-----</p> 
-                                                          <p class="control-label left"  ng-if="invoice.approvalDate!=null">{{invoice.approvalDate| date:'yyyy-MM-dd'}}</p> 
+										 <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                <label class="control-label bold" for="invoiceAmount"><span class="required"> * </span>发票金额 : </label>
+                                                                       <div class=" ">
+                                                      
+                                                                        <p class="control-label left" >{{invoice.invoiceAmount|currency:'￥'}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-4">
-                                                                <div class="form-group form-md-line-input">
-                                                                <label class="col-md-4 control-label" for="status">发票凭证 :</label>
-                                                                    <div class="col-md-8">
-                                                               <p class="control-label left"   ng-if="invoice.invoiceVoucher==null">未上传发票凭证</p> 
-                                                          <p class="control-label left"  ng-if="invoice.approver!=null">{{invoice.invoiceVoucher}}</p> 
+                                                            <div class="col-md-4" >
+                                                                <div class="form-group">
+                                                                <label class="control-label bold" for="invoiceNO"><span class="required"> * </span>发票号码 : </label>
+                                                                       <div class=" ">
+                                                       
+                                                                        <p class="control-label left" >{{invoice.invoiceNO}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div><!-- row END-->
-                                                         <div class="row"><!-- row START -->
-                                                             <div class="col-md-4">
-											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="checker"> 备注 :</label>
-                                                    <div class="col-md-8">
-                                                         <p class="control-label left"   ng-if="inOrOut.indexOf('in')>-1" >{{invoice.billingRemark}}</p> 
-                                                          <p class="control-label left"   ng-if="inOrOut.indexOf('out')>-1" >{{invoice.receiptRemark}}</p> 
-                                                    </div>
+                                                                   <div class="row"><!-- row START -->
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                <label class="control-label bold" for="invoiceVoucher">发票凭证 :</label>
+                                                                <div class="">
+                                                                      <div class="col-md-9">
+                                                    	<label    ng-if="invoice.invoiceVoucher==null||invoice.invoiceVoucher==''" class="c_edit" >未上传发票凭证</label>
+                                                    	<label    ng-if="invoice.invoiceVoucher!=null&&invoice.invoiceVoucher!=''" class="c_edit" ><a href="javascript:;" title="下载附件" ng-click="downloadFile(invoice)">{{invoice.invoiceVoucher.substring(invoice.invoiceVoucher.indexOf("_")+1)}}</a></label>
+												</div>
+												</div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="approver"><span class="required"> * </span><span  ng-if="inOrOut.indexOf('in')>-1"  >收票人 </span><span   ng-if="inOrOut.indexOf('out')>-1" >开票人</span> :</label>
+                                                       <div class=" ">
+                                                       
+                                                                        <p class="control-label left" >{{invoice.approver}}</p> 
+                                                                    </div>
                                             </div>
 										</div>
-                                                            <div class="col-md-4">
-                                                                <div class="form-group form-md-line-input">
-                                                                <label class="col-md-4 control-label" for="status">状态 :</label>
-                                                                    <div class="col-md-8">
-                                                                   
+										<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="thirdRemark">备注 :</label>
+                                                       <div class=" ">
+                                                      
+                                                                        <p class="control-label left" >{{invoice.thirdRemark}}</p> 
                                                                     </div>
-                                                                </div>
-                                                            </div>
+                                            </div>
+										</div>
+										 </form>
                                                         </div><!-- row END-->
+                                                        
+                                             <div>          
+                                                        </div> 
 								</div>
-							</form>
-         				</div>
-
- <div class="portlet-title"><!-- 订单结算条款START -->
-                            <div class="caption">订单结算条款</div>
+							
+         				</div></div></div> 
+         				
+         				 	 <div class="portlet-title"><!-- 物料信息START -->
+                            <div class="caption">物料信息</div>
                             <div class="actions">
                             </div>
                         </div>
-                           <div class="portlet-body form">
-                                    <div class="table-scrollable">
-                                        <table class="table table-striped table-bordered table-advance table-hover"  >
-                                            <thead>
-                                                <tr >
-                                                      <td rowspan="2"  colspan="4"   style="text-align: center;vertical-align: middle">付款方:{{clauseSettlement.payee}}</td>
-                                                    <td  rowspan="2"    colspan="4" style="text-align: center;vertical-align: middle">收款方:{{clauseSettlement.payer}}</td>
-                                                    <td   rowspan="2"   colspan="4" style="text-align: center;vertical-align: middle">本次应付:{{invoice.orderAmount|currency:'￥'}}</td>
-                                                </tr>
-                                                <tr></tr>
-                                            
-                                             <tr >
-                                                 <td style="text-align: center">支付类型</td>
-                                                  <td style="text-align: center">支付节点</td>
-                                                  <td  style="text-align: center">账期</td>
-                                                  <td  style="text-align: center">支付比率%</td>
-                                                  <td  style="text-align: center">支付金额</td>
-                                                  <td  style="text-align: center">开票方式</td>
-                                                  <td   style="text-align: center">开票金额</td>
-                                                  <td colspan="2" style="text-align: center">未开金额</td>
-                                                  <td   style="text-align: center">备注</td>
-                                                   <td  style="text-align: center">状态</td>
-                                                </tr> 
-                                                </thead>
-                                            <tbody  ng-if="clauseSettlementDetails==null"   >
-			                                             	<tr>
-			                                                    <td colspan="16" align="center" >暂无数据</td>
-			                                                </tr>
-			                                </tbody>
-                                         <tr  ng-if="clauseSettlementDetails!=null"  ng-repeat="clauseSettlementDetail in clauseSettlementDetails track by $index" >
-                                         <td style="text-align: center"><span ng-if="clauseSettlementDetail.serialNum==invoice.clauseSettlementSerial" style="width:10px; background-color: #3598dc">已选</span>{{clauseSettlementDetail.paymentType}}</td>
-                                                  <td style="text-align: center">{{clauseSettlementDetail.deliveryNode}}</td>
-                                                  <td  style="text-align: center">{{clauseSettlementDetail.accountPeriod}}</td>
-                                                  <td  style="text-align: center">{{clauseSettlementDetail.deliveryRate}}</td>
-                                                  <td  style="text-align: center">{{clauseSettlementDetail.deliveryAmount}}</td>
-                                                  <td  style="text-align: center">{{clauseSettlementDetail.billingMethod}}</td>
-                                                  <td   style="text-align: center">{{clauseSettlementDetail.billingAmount|currency:'￥'}}</td>
-                                                  <td colspan="2" style="text-align: center">{{clauseSettlementDetail.unbilledAmount|currency:'￥'}}</td>
-                                                  <td   style="text-align: center">{{clauseSettlementDetail.remark}}</td>
-                                                   <td  style="text-align: center"><span ng-if="clauseSettlementDetail.serialNum==invoice.clauseSettlementSerial">待收票</span><span ng-if="clauseSettlementDetail.serialNum!=invoice.clauseSettlementSerial">未开启</span></td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div><!-- 订单结算条款END-->
+                      
+                                
+			<div class="portlet-body"  ng-if="inOrOut.indexOf('in')>-1"><!-- 进项票物料信息-->
+				<table
+					class="table table-striped table-bordered table-hover "
+					id="sample_inm">
+					<thead>
+						<tr>
+						
+							<td style="text-align: center">物料编号</td>
+                              <td style="text-align: center">物料名称</td>
+                               <td  style="text-align: center">规格型号</td>
+                                <td  style="text-align: center">单位</td>
+                                <td  style="text-align: center">订单数量</td>
+                                <td  style="text-align: center">未收数量</td>
+                                 <td   style="text-align: center">收票数量</td>
+                                <td  style="text-align: center">含税单价</td>
+                                  <td   style="text-align: center">金额</td>
+                                  <td   style="text-align: center">操作</td>
+						</tr>
+					</thead>
+					
+					<tbody>
+					</tbody>
+					<tfoot>
+					<tr>
+							<td colspan="4">合计</td>
+                              <td colspan="6">小写: {{invoice.billOrReceiptMoney |currency:'￥'}} 大写:{{invoice.capitalMoney}}</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+			<div class="portlet-body"  ng-if="inOrOut.indexOf('out')>-1"><!-- 销项票物料信息-->
+				<table
+					class="table table-striped table-bordered table-hover "
+					id="sample_outm">
+					<thead>
+						<tr>
+							<td style="text-align: center;" >物料编号</td>
+                              <td style="text-align: center">物料名称</td>
+                              <td  style="text-align: center">规格型号</td>
+                              <td  style="text-align: center">单位</td>
+                              <td  style="text-align: center">订单数量</td>
+                              <td  style="text-align: center">可开数量</td>
+                              <td   style="text-align: center">开票数量</td>
+                              <td  style="text-align: center">含税单价</td>
+                              <td   style="text-align: center">金额</td>
+                              <td    style="text-align: center">操作</td>
+						</tr>
+					</thead>
+					
+					<tbody>
+					</tbody>
+					<tfoot>
+					<tr>
+							<td colspan="4">合计</td>
+                              <td colspan="6">小写: {{invoice.billOrReceiptMoney |currency:'￥'}} 大写:{{invoice.capitalMoney}}</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
 				</div>
 				
         </div>

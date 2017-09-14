@@ -187,9 +187,9 @@ public class ProcessAction {
 	 * @throws Exception
 	 */
 //	@RequiresPermissions("user:task:todoTask")
-	@RequestMapping(value = "/todoTask", method = {RequestMethod.GET})
+	@RequestMapping(value = "/todoTask/{businessType}", method = {RequestMethod.GET})
 	@ResponseBody
-	public ResponseEntity<Map<String,Object>> todoTask(Map<String, Object> mp,HttpServletRequest request) throws Exception{
+	public ResponseEntity<Map<String,Object>> todoTask(@PathVariable("businessType") String businessType, Map<String, Object> mp,HttpServletRequest request) throws Exception{
 		String userId = UserUtil.getUserFromSession().getUserId().toString();
 		User user = this.userService.selectById(new Integer(userId));
 		List<BaseVO> taskList = this.processService.findTodoTask(user);
@@ -221,8 +221,13 @@ public class ProcessAction {
 			map.put("processDefinitionKey", base.getProcessDefinition().getKey());	//任务跳转用
 			map.put("supended", base.getProcessInstance().isSuspended());
 			map.put("version", base.getProcessDefinition().getVersion());
+			if(!"All".equals(businessType)){
+				if(businessType.equals(base.getBusinessType())){//根据流程类型添加到待办事项
+					jsonList.add(map);
+				}
+			}else jsonList.add(map);//进入首页时，所有流程类型添加到待办事项
 			
-			jsonList.add(map);
+			
 		}
 		
 		Map<String,Object> pageMap = new HashMap<String,Object>();
@@ -242,9 +247,9 @@ public class ProcessAction {
      * @throws Exception 
      */
 //    @RequiresPermissions("user:process:finished")
-    @RequestMapping(value = "/endTask")
+    @RequestMapping(value = "/endTask/{businessType}")
     @ResponseBody
-    public ResponseEntity<Map<String,Object>> findFinishedTaskInstances() throws Exception {
+    public ResponseEntity<Map<String,Object>> findFinishedTaskInstances(@PathVariable("businessType") String businessType) throws Exception {
     	User user = UserUtil.getUserFromSession();
     	List<BaseVO> taskList = this.processService.findFinishedTaskInstances(user);
     	List<Object> jsonList=new ArrayList<Object>(); 
@@ -260,7 +265,11 @@ public class ProcessAction {
     		map.put("endTime", base.getHistoricTaskInstance().getEndTime());
     		map.put("deleteReason", base.getHistoricTaskInstance().getDeleteReason());
     		map.put("version", base.getProcessDefinition().getVersion());
-    		jsonList.add(map);
+    		if(!"All".equals(businessType)){
+				if(businessType.equals(base.getBusinessType())){//根据流程类型添加到已办事项
+					jsonList.add(map);
+				}
+			}else jsonList.add(map);//进入首页时，所有流程类型添加到已办事项
     	}
     	
     	Map<String,Object> pageMap = new HashMap<String,Object>();

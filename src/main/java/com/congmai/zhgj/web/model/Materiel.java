@@ -121,6 +121,8 @@ public class Materiel {
     
     private String  invoiceBillingRecordSerial;//发票开票/收票记录流水
     
+    private String  orderMaterielSerial;//订单物料流水
+    
     
 
     public String getSerialNum() {
@@ -563,6 +565,14 @@ public class Materiel {
 
 	public void setInvoiceBillingRecordSerial(String invoiceBillingRecordSerial) {
 		this.invoiceBillingRecordSerial = invoiceBillingRecordSerial;
+	}
+
+	public String getOrderMaterielSerial() {
+		return orderMaterielSerial;
+	}
+
+	public void setOrderMaterielSerial(String orderMaterielSerial) {
+		this.orderMaterielSerial = orderMaterielSerial;
 	}
 
 

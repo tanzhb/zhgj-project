@@ -6,8 +6,8 @@
 	float: left;
 }
 </style>
-<h3 class="page-title d_tip"> 查看供应商对账单
-</h3>
+<!-- <h3 class="page-title d_tip"> 查看供应商对账单
+</h3> -->
 <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>

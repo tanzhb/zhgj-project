@@ -1,5 +1,6 @@
 package com.congmai.zhgj.web.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -9,10 +10,18 @@ import org.springframework.stereotype.Service;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.web.dao.InvoiceBillingRecordMapper;
 import com.congmai.zhgj.web.dao.InvoiceMapper;
+import com.congmai.zhgj.web.dao.OrderInfoMapper;
+import com.congmai.zhgj.web.dao.OrderMaterielMapper;
+import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.Invoice;
+import com.congmai.zhgj.web.model.InvoiceBillingRecord;
+import com.congmai.zhgj.web.model.InvoiceBillingRecordExample;
 import com.congmai.zhgj.web.model.InvoiceExample;
 import com.congmai.zhgj.web.model.InvoiceExample.Criteria;
+import com.congmai.zhgj.web.model.OrderInfo;
+import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.service.InvoiceService;
 
 /**
@@ -27,6 +36,12 @@ public class InvoiceServiceImpl extends GenericServiceImpl<Invoice, String> impl
 
 	 @Resource
 	    private InvoiceMapper  invoiceMapper;
+	 @Resource
+	    private OrderMaterielMapper  orderMaterielMapper ;
+	 @Resource
+	    private InvoiceBillingRecordMapper   invoiceBillingRecordMapper ;
+	 @Resource
+	    private OrderInfoMapper  orderInfoMapper ;
 
 	@Override
 	public GenericDao<Invoice, String> getDao() {
@@ -51,6 +66,31 @@ public class InvoiceServiceImpl extends GenericServiceImpl<Invoice, String> impl
     		criteria.andBuyComIdIsNotNull();
     	}
 		return invoiceMapper.selectByExample(ie);
+	}
+
+	@Override
+	public Invoice getDetailInfo(Invoice invoice) {
+		InvoiceBillingRecordExample ibe=new InvoiceBillingRecordExample();
+		com.congmai.zhgj.web.model.InvoiceBillingRecordExample.Criteria c=ibe.createCriteria();
+		c.andInvoiceSerialEqualTo(invoice.getSerialNum());
+		List<InvoiceBillingRecord>list=invoiceBillingRecordMapper.selectByExample(ibe);
+		BigDecimal billOrReceiptMoney=BigDecimal.ZERO;
+		BigDecimal price=BigDecimal.ZERO;
+		if(list!=null&&list.size()>0){
+			for(InvoiceBillingRecord i:list){
+				OrderMateriel orderMateriel=orderMaterielMapper.selectByPrimaryKey(i.getOrderMaterielSerial());
+				OrderInfo orderInfo=orderInfoMapper.selectByPrimaryKey(orderMateriel.getOrderSerial());
+				if(orderInfo.getOrderType().equalsIgnoreCase(StaticConst.getInfo("orderTypeIn"))){
+					price=price.add(new BigDecimal(orderInfo.getRate()).multiply(new BigDecimal(orderMateriel.getOrderUnitPrice())));
+				}else{
+					price=new BigDecimal(orderMateriel.getOrderUnitPrice());
+				}
+				billOrReceiptMoney=billOrReceiptMoney.add(new BigDecimal(i.getBillCount()).multiply(price));
+			}
+		}
+		invoice.setBillOrReceiptMoney(billOrReceiptMoney.toString());
+		
+		return invoice;
 	}
 	}
 	

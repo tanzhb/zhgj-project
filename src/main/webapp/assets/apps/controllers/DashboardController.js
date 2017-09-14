@@ -29,7 +29,7 @@ dashModule.controller('DashboardController', function($rootScope, $scope, $state
     
 
     //待办列表 	
-	$http.get(ctx + "/rest/processAction/todoTask/").success( function(result) {
+	$http.get(ctx + "/rest/processAction/todoTask/" + 'All').success( function(result) {
 		var list = [];
 		if(result != null && result.data != null && result.data.length > 0){
 			for (var i=0;i<result.data.length;i++){
@@ -67,7 +67,7 @@ dashModule.controller('DashboardController', function($rootScope, $scope, $state
  
     
     //已办列表
-	$http.get(ctx + "/rest/processAction/endTask/").success( function(result) {
+	$http.get(ctx + "/rest/processAction/endTask/" + 'All').success( function(result) {
 		var list = [];
 		if(result != null && result.data != null && result.data.length > 0){
 			for (var i=0;i<result.data.length;i++){

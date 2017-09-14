@@ -155,6 +155,7 @@
 	reason=#{reason},
 	processInstanceId=#{processInstanceId},
 	userId=#{userId},
+	status=#{status},
 	updateTime=NOW()
 	WHERE
 	serialNum=#{serialNum}
