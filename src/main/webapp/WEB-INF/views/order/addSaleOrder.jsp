@@ -118,7 +118,7 @@
 			                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>合同类型：</label>
 			                                  <div class="">
 			                                  	<div ng-hide="saleOrderInput">
-			                                	<input type="radio" ng-click="hidnClauseFramework()"  ng-model="contract.contractType" name="contractType" ng-checked="contract.contractType!='框架合同'" value="普通合同"> 普通合同
+			                                	<input type="radio" ng-click="hidnClauseFramework()"  ng-model="contract.contractType" name="contractType" ng-checked="contract.contractType!='框架合同'" value="销售合同"> 销售合同
 			                        			<input type="radio" ng-click="showClauseFramework()"  ng-model="contract.contractType" name="contractType" ng-checked="contract.contractType=='框架合同'" value="框架合同"> 框架合同
 			                                    </div>
 			                                    <p class="form-control-static" ng-show="saleOrderShow"> {{contract.contractType}} </p>
@@ -148,10 +148,15 @@
 			                              <div class="form-group ">
 			                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>买方：</label>
 			                                  <div class="">
-			                                  <input type="text" name="buyComId" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.buyComId"  >
-			                                      <div class="form-control-focus"> </div>
+			                                  <div  ng-hide="saleOrderInput">
+			                                   	<select class="form-control" id="buyComId"  data-live-search="true"  name="buyComId" class="form-control" 
+			                                   		 ng-model="saleOrder.buyComId"   data-size="8">
+                                                      <option value=""></option>
+                                                      <option  ng-repeat="customer in customers" value="{{customer.comId}}" >{{customer.comName}}</option>
+                                                  </select>
+                                                  </div>
 			                                      <span class="help-block" ng-hide="saleOrderInput">请选择买方</span>
-			                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.buyComId}} </p>
+			                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.buyName}} </p>
 			                                  </div>
 			                                  
 			                              </div>
@@ -861,7 +866,7 @@
 							<!-- 订单物料 start-->
 				          <div class="portlet-title" style="min-height: 48px;">
 				               <div class="tools" style="float:right">
-				                  <button ng-click="addOrderMateriel()" type="button"  ng-show="noShow" class="btn blue  btn-circle  btn-sm">
+				                  <button ng-click="addOrderMateriel()" type="button"  class="btn blue  btn-circle  btn-sm">
 				                  		<i class="fa fa-edit"></i> 添加物料 </button>
 				                </div>
 				            </div>

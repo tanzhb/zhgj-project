@@ -121,7 +121,7 @@
 				                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>合同类型：</label>
 				                                  <div class="">
 				                                  	<div ng-hide="buyOrderInput">
-				                                	<input type="radio" ng-click="hidnClauseFramework()"  ng-model="contract.contractType" name="contractType" ng-checked="contract.contractType!='框架合同'" value="普通合同"> 普通合同
+				                                	<input type="radio" ng-click="hidnClauseFramework()"  ng-model="contract.contractType" name="contractType" ng-checked="contract.contractType!='框架合同'" value="采购合同"> 采购合同
 				                        			<input type="radio" ng-click="showClauseFramework()"  ng-model="contract.contractType" name="contractType" ng-checked="contract.contractType=='框架合同'" value="框架合同"> 框架合同
 				                                    </div>
 				                                    <p class="form-control-static" ng-show="buyOrderShow"> {{contract.contractType}} </p>
@@ -152,11 +152,18 @@
 				                              <div class="form-group ">
 				                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>卖方：</label>
 				                                  <div class="">
-				                                  <input type="text" name="supplyComId" class="form-control" ng-hide="buyOrderInput" ng-model="buyOrder.supplyComId"  >
-				                                      <div class="form-control-focus"> </div>
+				                                  	<div  ng-hide="buyOrderInput">
+			                                   		<select class="form-control" id="supplyComId"  data-live-search="true"  name="supplyComId" class="form-control" 
+			                                   		 ng-model="buyOrder.supplyComId"  ng-change="changeSupplyName(this)" data-size="8">
+                                                        <option value=""></option>
+                                                        <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}" >{{supplier.comName}}</option>
+                                                    </select>
+                                                    </div>
 				                                      <span class="help-block" ng-hide="buyOrderInput">请选择卖方</span>
-				                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.supplyComId}} </p>
+				                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.supplyName}} </p>
 				                                  </div>
+				                                  
+				                                  
 				                              </div>
 				                          </div>
 				                          <!--/span-->

@@ -37,6 +37,8 @@
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <association property="contract" column="contractSerial" select="com.congmai.zhgj.web.dao.ContractMapper.selectContractById"/> 
+    <association property="buyName" column="buyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
+    <association property="supplyName" column="supplyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >

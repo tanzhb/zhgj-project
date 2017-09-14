@@ -70,19 +70,23 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             	     	
             	$scope.opration = {};
             	$scope.serialNums = [];
-            	// 加载数据
+            	
+            	
             	if($stateParams.serialNum){
             		$scope.opration = '修改';
             		$scope.getBuyOrderInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments,$stateParams.processInstanceId)
             	}else{
             		$scope.opration = '新增';
-            		$scope.orderMateriel={};
+            		$scope.orderMateriel=[];
             		$scope.buyOrder={};
             		$scope.contract={};
             		$scope.clauseSettlement = {};
             		$scope.buyOrder.seller ="中航能科（上海）能源科技有限公司"
             		dateSelectSetting();//日期选择限制
+            		// 加载数据
+                	initSuppliers();
             	}
+            	
             	$scope.noShow = true;
             	if($stateParams.view==1){// 订单切换为查看
             		$scope.buyOrderInput = true;
@@ -137,7 +141,6 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	
 	//审批通过
 	$scope.orderPass = function() {
-	    $("#completeFlag").val("true");
 	    var mydata={"processInstanceId":$("#processInstanceId").val(),"orderId":$scope.buyOrder.serialNum,"content":$("#content").val(),
 				"completeFlag":true};
 	    var _url = ctx + "rest/order/complate/" + $("#taskId").val();
@@ -145,7 +148,6 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	};
 	//审批不通过
 	$scope.orderUnPass = function() {
-		$("#completeFlag").val("false");
 		var mydata={"processInstanceId":$("#processInstanceId").val(),"orderId":$scope.buyOrder.serialNum,"content":$("#content").val(),
 				"completeFlag":false};
 		var _url = ctx + "rest/order/complate/" + $("#taskId").val();
@@ -154,19 +156,15 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	
 	//重新申请
 	$scope.replyOrder = function() {
-		$("#reApply").val("true");
 	    var mydata={"processInstanceId":$("#processInstanceId").val(),
-				"reApply":$("#reApply").val(),"orderId":$("#orderId").val(),"beginDate":$("#modify_beginDate").val(),"endDate":$("#modify_endDate").val(),
-				"days":$("#modify_days").val(),"orderType":$("#modify_orderType").val(),"reason":$("#modify_reason").val()};
+				"reApply":true,"orderId":$scope.buyOrder.serialNum,"reason":$scope.buyOrder.remark};
 		var _url = ctx + "rest/order/modifyOrder/" + $("#taskId").val();
 		doOrder(_url, mydata, 'modify');
 	};
 	//取消申请
 	$scope.cancelApply = function() {
-		 $("#reApply").val("false");					 
 	     var mydata={"processInstanceId":$("#processInstanceId").val(),
-				"reApply":$("#reApply").val(),"orderId":$("#orderId").val(),"beginDate":$("#modify_beginDate").val(),"endDate":$("#modify_endDate").val(),
-				"days":$("#modify_days").val(),"orderType":$("#modify_orderType").val(),"reason":$("#modify_reason").val()};
+				"reApply":false,"orderId":$scope.buyOrder.serialNum,"reason":$scope.buyOrder.remark};
 		var _url = ctx + "rest/order/modifyOrder/" + $("#taskId").val();
 		doOrder(_url, mydata, 'modify' );
 	};
@@ -299,7 +297,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                 "aoColumns": [
                               { mData: 'serialNum' },
                               { mData: 'orderNum' },
-                              { mData: 'supplyComId' },
+                              { mData: 'supplyName' },
                               { mData: 'materielCount' },
                               { mData: 'orderAmount' },
                               { mData: 'deliveryMode' },
@@ -428,7 +426,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                     "aoColumns": [
                                   { mData: 'serialNum' },
                                   { mData: 'orderNum' },
-                                  { mData: 'supplyComId' },
+                                  { mData: 'supplyName' },
                                   { mData: 'materielCount' },
                                   { mData: 'orderAmount' },
                                   { mData: 'deliveryMode' },
@@ -818,7 +816,9 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
           		    	
           		    	$scope.copyMateriels = angular.copy($scope.orderMateriel);
           		    	
-          		    	
+          		    	// 加载数据
+                    	initSuppliers();
+                    	
           		    	$("#serialNum").val(serialNum);//赋值给隐藏input，通过和不通过时调用
     					$("#taskId").val(taskId);//赋值给隐藏input，通过和不通过时调用
     					$("#processInstanceId").val(processInstanceId);//赋值给隐藏input，通过和不通过时调用
@@ -826,6 +826,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     					if(comments == ""||comments == null){
     						$("#comment_audit").html( "<tr><td colspan='3' align='center'>无内容</td></tr>");
     					}else $("#comment_audit").html(comments);
+    					
+    					
           		     },
           		     function(error){
           		         $scope.error = error;
@@ -2638,26 +2640,27 @@ var e = $("#form_clauseSettlement"),
 		        								}else if(ids=='more'){
 		        									toastr.warning('只能选择一个办理！');return;
 		        								} else {
-		        									$.ajax({url:ctx + "/rest/order/toApproval/" + ids,
-		        										type: 'POST',
-		        										dataType: 'json',
-		        										success:function(result){													
+		        									orderService
+		        									.getAuditInfos(ids)
+													.then(
+															function(result) {													
 		        												var comments = ""//添加评论
-		        												for (var i=0;i<result.commentList.length;i++){
-		        													comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
-		        													+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
-		        												}
-		        												if(result.actionType == 'audit'){//审批流程
-		        													$state.go('approvalBuyApply',{serialNum:result.orderInfo.serialNum, taskId:ids, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
-		        												}else{
-		        													toastr.warning("重新编辑未完成！");
-		        												}
-		        											},
-		        											function(errResponse) {
-		        												toastr.warning("办理失败！");
-		        												console.error('Error while apply ap');
-		        											}
-		        										});
+			        												for (var i=0;i<result.commentList.length;i++){
+			        													comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+			        													+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
+			        												}
+			        												if(result.actionType == 'audit'){//审批流程
+			        													$state.go('approvalBuyApply',{serialNum:result.orderInfo.serialNum, taskId:ids, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
+			        												}else{
+			        													$state.go('editBuyApply',{serialNum:result.orderInfo.serialNum, taskId:ids, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
+			        												}
+			        											},
+															function(errResponse) {
+			        												toastr.warning("办理失败！");
+			        												console.error('Error while apply ap');
+			        											}
+			
+													);
 		        								}
 		        							}
 		        						},
@@ -2686,15 +2689,6 @@ var e = $("#form_clauseSettlement"),
 		        									claimTask(ids, 'dbTable');
 		        								}
 		        								
-		        								
-		        								
-		        								
-//		        								if(t.rows('.selected').data().length == 0){
-//		        									toastr.warning("请选择要签收的任务！");
-//		        								}else{
-//		        									var taskId = t.row('.selected').data().taskId;
-//		        									claimTask(taskId, 'sample_2');
-//		        								}								
 		        							}
 		        						},
 		        						{
@@ -2854,7 +2848,7 @@ var e = $("#form_clauseSettlement"),
 		        							mData : 'businessType',
 		        							mRender : function(
 		        									data) {
-		        								return "请假申请";
+		        								return "订单申请";
 		        							}
 		        						},
 		        						{
@@ -2964,6 +2958,28 @@ var e = $("#form_clauseSettlement"),
 		        	
 		        }
 		     //********审批流程end****************//  
+		        
+    /**
+	 * 加载供应商数据
+	 */
+	var initSuppliers = function(){
+		var promise = orderService.initSuppliers();
+        	promise.then(function(data){
+        		$scope.suppliers = data.data;
+        		setTimeout(function () {
+        			$("#supplyComId").selectpicker({
+                        showSubtext: true
+                    });
+        			$('#supplyComId').selectpicker('refresh');//刷新插件
+        			
+                }, 100);
+        		
+        	},function(data){
+        		//调用承诺接口reject();
+        	});
+	}
+
+	
 }]);
 
 

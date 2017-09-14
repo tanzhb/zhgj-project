@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -69,6 +70,7 @@ import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderInfoExample;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.User;
+import com.congmai.zhgj.web.model.Vacation;
 import com.congmai.zhgj.web.model.OrderInfoExample.Criteria;
 import com.congmai.zhgj.web.service.ClauseAdvanceService;
 import com.congmai.zhgj.web.service.ClauseAfterSalesService;
@@ -198,7 +200,7 @@ public class OrderController {
 		orderInfo.setUser_id(user.getUserId());
 		orderInfo.setUser_name(user.getUserName());
 		orderInfo.setTitle(user.getUserName()+" 的订单申请");
-		orderInfo.setBusinessType(BaseVO.VACATION); 			//业务类型：订单审核
+		orderInfo.setBusinessType(BaseVO.BUYORDER); 			//业务类型：订单审核
 		orderInfo.setStatus(BaseVO.PENDING);					//审批中
 //    		orderInfo.setApplyDate(new Date());
 //    		orderService.insert(orderInfo);
@@ -250,7 +252,7 @@ public class OrderController {
 		orderInfo.setUser_id(user.getUserId());
 		orderInfo.setUser_name(user.getUserName());
 		orderInfo.setTitle(user.getUserName()+orderInfo.getOrderNum()+" 的订单申请");
-		orderInfo.setBusinessType(BaseVO.BUYORDER); 			//业务类型：采购订单
+		orderInfo.setBusinessType(BaseVO.SALEORDER); 			//业务类型：采购订单
 		orderInfo.setStatus(BaseVO.PENDING);					//审批中
 //    		orderInfo.setApplyDate(new Date());
 //    		orderService.insert(orderInfo);
@@ -378,6 +380,79 @@ public class OrderController {
 		return result;
     }
 	
+    
+    /**
+	 * 调整请假申请
+	 * @param vacation
+	 * @param taskId
+	 * @param processInstanceId
+	 * @param reApply
+	 * @param session
+	 * @return
+	 * @throws Exception
+	 */
+//	@RequiresPermissions("user:vacation:modify")
+	@RequestMapping(value = "/modifyOrder/{taskId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+	@ResponseBody
+	public String modifyOrder(
+			@PathVariable("taskId") String taskId,
+			@RequestParam("processInstanceId") String processInstanceId,
+			@RequestParam("reApply") Boolean reApply,
+			@RequestParam("orderId") String orderId,
+			@RequestParam("reason") String reason) throws Exception{
+		String result = "";
+		User user = UserUtil.getUserFromSession();
+
+		OrderInfo orderInfo = new OrderInfo();
+		orderInfo.setSerialNum(orderId);
+		orderInfo.setRemark(reason);
+    	
+    	orderService.update(orderInfo);//更新备注(审批原因)
+		
+        Map<String, Object> variables = new HashMap<String, Object>();
+        orderInfo.setUser_id(user.getUserId());
+        orderInfo.setUser_name(user.getUserName());
+        orderInfo.setBusinessType(BaseVO.BUYORDER);
+        orderInfo.setApplyDate(new Date());
+        orderInfo.setBusinessKey(orderId);
+        orderInfo.setProcessInstanceId(processInstanceId);
+        String content = "";
+        if(reApply){
+        	//修改请假申请
+        	orderInfo.setTitle(user.getUserName()+" 的请假申请！");
+        	orderInfo.setStatus(BaseVO.PENDING);
+	        content = "重新申请";
+	        result = "任务办理完成，请假申请已重新提交！";
+        }else{
+        	orderInfo.setTitle(user.getUserName()+" 的请假申请已取消！");
+        	orderInfo.setStatus(BaseVO.APPROVAL_FAILED);
+        	content = "取消申请";
+        	result = "任务办理完成，已经取消您的请假申请！";
+        }
+        try {
+			variables.put("entity", orderInfo);
+			variables.put("reApply", reApply);
+			this.processService.complete(taskId, content, user.getUserId().toString(), variables);
+			
+		} catch (ActivitiObjectNotFoundException e) {
+//			message.setStatus(Boolean.FALSE);
+//			message.setMessage("此任务不存在，请联系管理员！");
+			result = "此任务不存在，请联系管理员！";
+			throw e;
+		} catch (ActivitiException e) {
+//			message.setStatus(Boolean.FALSE);
+//			message.setMessage("此任务正在协办，您不能办理此任务！");
+			result = "此任务正在协办，您不能办理此任务！";
+			throw e;
+		} catch (Exception e) {
+//			message.setStatus(Boolean.FALSE);
+//			message.setMessage("任务办理失败，请联系管理员！");
+			result = "任务办理失败，请联系管理员！";
+			throw e;
+		}
+		
+    	return result;
+    }
     /**
      * 
      * @Description 查询订单列表

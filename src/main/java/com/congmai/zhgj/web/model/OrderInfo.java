@@ -84,6 +84,10 @@ public class OrderInfo extends BaseVO {
     private Date updateTime;
     
     private String unBillAmount;//未开金额合计
+    
+    private String supplyName;
+    
+    private String buyName;
 
     public String getSerialNum() {
         return serialNum;
@@ -385,6 +389,22 @@ public class OrderInfo extends BaseVO {
 
 	public void setContract(ContractVO contract) {
 		this.contract = contract;
+	}
+
+	public String getSupplyName() {
+		return supplyName;
+	}
+
+	public void setSupplyName(String supplyName) {
+		this.supplyName = supplyName;
+	}
+
+	public String getBuyName() {
+		return buyName;
+	}
+
+	public void setBuyName(String buyName) {
+		this.buyName = buyName;
 	}
 	
 }

@@ -24,15 +24,16 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
             		$scope.getSaleOrderInfo($stateParams.serialNum)
             	}else{
             		$scope.opration = '新增';
-            		$scope.orderMateriel={};
+            		$scope.orderMateriel=[];
             		$scope.saleOrder={};
             		$scope.contract={};
             		$scope.clauseSettlement = {};
             		$scope.saleOrder.seller ="中航能科（上海）能源科技有限公司";
             		
             		dateSelectSetting();//日期选择限制
+            		//加载客户
+                	initCustomers();
             	}
-            	
             	
             	$scope.noShow = true;
             	if($stateParams.view==1){// 订单切换为查看
@@ -200,7 +201,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
                 "aoColumns": [
                               { mData: 'serialNum' },
                               { mData: 'orderNum' },
-                              { mData: 'buyComId' },
+                              { mData: 'buyName' },
                               { mData: 'materielCount' },
                               { mData: 'orderAmount' },
                               { mData: 'deliveryMode' },
@@ -330,7 +331,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
                     "aoColumns": [
                                   { mData: 'serialNum' },
                                   { mData: 'orderNum' },
-                                  { mData: 'buyComId' },
+                                  { mData: 'buyName' },
                                   { mData: 'materielCount' },
                                   { mData: 'orderAmount' },
                                   { mData: 'deliveryMode' },
@@ -721,6 +722,8 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
           		    	}
           		    	 
           		    	$scope.copyMateriels = angular.copy($scope.orderMateriel);
+          		    	//加载客户
+                    	initCustomers();
           		     },
           		     function(error){
           		         $scope.error = error;
@@ -2445,5 +2448,26 @@ var e = $("#form_clauseSettlement"),
 			       	}
 		       };
 		     //********订单物料合计，结算条款start****************//
+		    
+		    
+		    /**
+			 * 加载客户数据
+			 */
+			var initCustomers = function(){
+				var promise = orderService.initCustomers();
+		        	promise.then(function(data){
+		        		$scope.customers = data.data;
+		        		setTimeout(function () {
+		        			$("#buyComId").selectpicker({
+		                        showSubtext: true
+		                    });
+		        			$('#buyComId').selectpicker('refresh');//刷新插件
+		        			
+		                }, 100);
+		        		
+		        	},function(data){
+		        		//调用承诺接口reject();
+		        	});
+			}
     	 
 }]);
