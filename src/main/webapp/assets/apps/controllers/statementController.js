@@ -306,6 +306,8 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
                               { mData: 'nowShouldPay' },
                               { mData: 'nowAlreadyPay' },
                               { mData: 'endShouldPay' },
+                              { mData: 'overTimeAmout' },
+                              { mData: 'serviceAmount' },
                               { mData: 'status' }
                         ],
                'aoColumnDefs' : [ {
@@ -334,6 +336,48 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
 						       }
+						},{
+							'targets' : 4,
+							'render' : function(data,
+									type, row, meta) {
+								return $filter('currency')(data,'￥');
+							}
+						},{
+							'targets' : 5,
+							'render' : function(data,
+									type, row, meta) {
+								return $filter('currency')(data,'￥');
+							}
+						},{
+							'targets' : 6,
+							'render' : function(data,
+									type, row, meta) {
+								return $filter('currency')(data,'￥');
+							}
+						},{
+							'targets' : 7,
+							'render' : function(data,
+									type, row, meta) {
+								return $filter('currency')(data,'￥');
+							}
+						},{
+							'targets' : 8,
+							'render' : function(data,
+									type, row, meta) {
+								return $filter('currency')(0,'￥');
+							}
+						},{
+							'targets' : 9,
+							'render' : function(data,
+									type, row, meta) {
+								return $filter('currency')(0,'￥');
+							}
+						},{
+							'targets' : 10,
+							'render' : function(data,
+									type, row, meta) {
+								return '待接收';
+							}
 						}  ]
 
             }).on('statement.dt',
@@ -429,11 +473,12 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
                               { mData: 'statementNum' },
                               { mData: 'statementDate' },
                               { mData: 'supplyName' },
-                              { mData: 'totalAmount' },
-                              { mData: 'deliveryAmount' },
-                              { mData: 'paymentAmount' },
+                              { mData: 'beginShouldPay' },
+                              { mData: 'nowShouldPay' },
+                              { mData: 'nowAlreadyPay' },
                               { mData: 'endShouldPay' },
-                              { mData: 'endShouldPay' },
+                              { mData: 'overTimeAmout' },
+                              { mData: 'serviceAmount' },
                               { mData: 'status' }
                             ],
                    'aoColumnDefs' : [ {
@@ -463,24 +508,48 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
     								 $compile(td)($scope);
     						       }
     						},{
+    							'targets' : 4,
+    							'render' : function(data,
+    									type, row, meta) {
+    								return $filter('currency')(data,'￥');
+    							}
+    						},{
+    							'targets' : 5,
+    							'render' : function(data,
+    									type, row, meta) {
+    								return $filter('currency')(data,'￥');
+    							}
+    						},{
+    							'targets' : 6,
+    							'render' : function(data,
+    									type, row, meta) {
+    								return $filter('currency')(data,'￥');
+    							}
+    						},{
     							'targets' : 7,
     							'render' : function(data,
     									type, row, meta) {
-    								return '0';
-    							},
-    							"createdCell": function (td, cellData, rowData, row, col) {
-    								 $compile(td)($scope);
-    						       }
+    								return $filter('currency')(data,'￥');
+    								}
     						},{
     							'targets' : 8,
     							'render' : function(data,
     									type, row, meta) {
-    								return '2017-12-12';
-    							},
-    							"createdCell": function (td, cellData, rowData, row, col) {
-    								 $compile(td)($scope);
-    						       }
-    						} ]
+    								return $filter('currency')(0,'￥');
+    							}
+    						},{
+    							'targets' : 9,
+    							'render' : function(data,
+    									type, row, meta) {
+    								return $filter('currency')(0,'￥');
+    							}
+    						},{
+    							'targets' : 10,
+    							'render' : function(data,
+    									type, row, meta) {
+    								return "待接收";
+    							}
+    						}]
 
                 }).on('statement.dt',
                 function() {

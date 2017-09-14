@@ -18,6 +18,11 @@
     <result column="actualDate" property="actualDate" jdbcType="TIMESTAMP" />
 	<result column="taker" property="taker" jdbcType="VARCHAR" />
 	<result column="takeRemark" property="takeRemark" jdbcType="VARCHAR" />
+	<result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="processInstanceId" property="processInstanceId" jdbcType="VARCHAR" />
+    <result column="userId" property="userId" jdbcType="INTEGER" />
+    <result column="applyDate" property="applyDate" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
   </resultMap>
   
   <resultMap id="BaseResultMap2" type="com.congmai.zhgj.web.model.Delivery" >
@@ -73,6 +78,11 @@
          <result column="actualDate" property="actualDate" jdbcType="TIMESTAMP" />
 		 <result column="taker" property="taker" jdbcType="VARCHAR" />
 		 <result column="takeRemark" property="takeRemark" jdbcType="VARCHAR" />
+		 <result column="reason" property="reason" jdbcType="VARCHAR" />
+	     <result column="processInstanceId" property="processInstanceId" jdbcType="VARCHAR" />
+	     <result column="userId" property="userId" jdbcType="INTEGER" />
+	     <result column="applyDate" property="applyDate" jdbcType="DATE" />
+	     <result column="status" property="status" jdbcType="VARCHAR" />
          <association column="tdWarehouseSerial" property="warehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>
     </association>
     <association column="warehouseSerial" property="warehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>
@@ -209,7 +219,7 @@
   </sql>
   <sql id="Base_Column_List" >
     serialNum, deliverSerial, warehouseSerial, takeDeliverDate, receiver, contactNum, 
-    takeDeliverNum, remark, delFlg, creator, createTime, updater, updateTime, actualDate, taker, takeRemark
+    takeDeliverNum, remark, delFlg, creator, createTime, updater, updateTime, actualDate,taker, takeRemark,reason,processInstanceId,userId,applyDate,status
   </sql>
     <select id="selectListByExample" resultMap="BaseResultMap2" parameterType="com.congmai.zhgj.web.model.DeliverySelectExample" >
     select
@@ -239,13 +249,20 @@
     dm2.serialNum as stockInSerialNum,dm2.qualifiedCount as stockInQualifiedCount,dm2.unqualifiedCount as stockInUnqualifiedCount,dm2.checkRemark as stockInCheckRemark,dm2.warehouseSerial as stockInWarehouseSerial,
 	dm2.positionSerial as stockInPositionSerial,dm2.stockCount as stockInCount,dm2.unstockCount as unstockInCount,dm2.stockRemark as stockInRemark,
     dt.serialNum as dtSerialNum,dt.transportType,dt.transport,dt.port,dt.shipNumber,dt.playArrivalDate,dt.playWarehouseDate,dt.remark as delivery_transport_remark,dt.contactNum as dtContactNum,dt.contact as dtContact,
-	td.serialNum as tdSerialNum,td.warehouseSerial as tdWarehouseSerial,td.takeDeliverDate,td.receiver as tdReceiver,td.contactNum as tdContactNum,td.takeDeliverNum,td.remark as take_delivery_remark, td.actualDate, td.taker, td.takeRemark
+	td.serialNum as tdSerialNum,td.warehouseSerial as tdWarehouseSerial,td.takeDeliverDate,td.receiver as tdReceiver,td.contactNum as tdContactNum,td.takeDeliverNum,td.remark as take_delivery_remark, 
+	td.actualDate, td.taker, td.takeRemark,td.reason,td.processInstanceId,td.userId,td.applyDate,td.status
     from takeDelivery td
     left join delivery  d on d.serialNum = td.deliverSerial
     left join deliveryTransport dt on d.serialNum = dt.deliverSerial  and dt.delFlg = "0"
     left join deliveryMateriel dm on d.serialNum = dm.deliverSerial and dm.delFlg = "0"
     left join deliveryMateriel dm2 on td.serialNum = dm2.deliverSerial and dm.orderMaterielSerial=dm2.orderMaterielSerial and dm.delFlg = "0"
     where td.serialNum = #{serialNum,jdbcType=VARCHAR} 
+  </select>
+   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from takedelivery
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from takeDelivery
@@ -512,6 +529,21 @@
       </if>
       <if test="updateTime != null" >
         updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reason != null" >
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="processInstanceId != null" >
+        processInstanceId = #{processInstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        userId = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="applyDate != null" >
+        applyDate = #{applyDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
       </if>
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
