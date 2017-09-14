@@ -31,4 +31,7 @@ public class Constants {
 	
 	/***************** 收货流程KEY *****************/
 	public static final String TAKEDELIVERY_KEY = "com.congmai.zhgj.takeDelivery";
+	
+	/***************** 单据类型-收货 *****************/
+	public static final String TAKEDELIVERY = "takeDelivery";
 }

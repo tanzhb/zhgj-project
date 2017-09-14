@@ -26,6 +26,7 @@ import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryMaterielExample;
 import com.congmai.zhgj.web.model.DeliverySelectExample;
 import com.congmai.zhgj.web.model.DeliveryTransportExample;
+import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.StockInOutRecordExample;
 import com.congmai.zhgj.web.model.TakeDelivery;
@@ -52,6 +53,9 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	
 	@Resource
 	private StockInOutRecordMapper stockInOutRecordMapper;
+	
+	@Resource
+	private StockInOutCheckMapper stockInOutCheckMapper;
 	
 	@Override
 	public GenericDao<TakeDelivery, String> getDao() {
@@ -90,7 +94,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		Date now = new Date();
 		if(StringUtils.isEmpty(takeDeliveryParams.getTakeDelivery().getSerialNum())){
 			takeDeliveryParams.getTakeDelivery().setSerialNum(takeDeliverySerial);
-			takeDeliveryParams.getTakeDelivery().setTakeDeliverNum("FH"+ApplicationUtils.getFromNumber());
+			takeDeliveryParams.getTakeDelivery().setTakeDeliverNum("SH"+ApplicationUtils.getFromNumber());
 			takeDeliveryParams.getTakeDelivery().setDeliverSerial(deliverySerial);
 			takeDeliveryParams.getTakeDelivery().setCreator(currenLoginName);
 			takeDeliveryParams.getTakeDelivery().setCreateTime(now);
@@ -109,7 +113,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			takeDeliveryParams.getDelivery().setUpdater(currenLoginName);
 			takeDeliveryParams.getDelivery().setUpdateTime(now);
 			takeDeliveryParams.getDelivery().setDelFlg("0");
-			//takeDeliveryParams.getDelivery().setStatus("2"); //已发货
+			takeDeliveryParams.getDelivery().setStatus("0"); //已发货
 		}
 		
 		if(takeDeliveryParams.getDeliveryTransport()!=null){
@@ -404,6 +408,39 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	public int updateByPrimaryKeySelective(TakeDelivery record) {
 		
 		return takeDeliveryMapper.updateByPrimaryKeySelective(record);
+	}
+
+	@Override
+	public void createStockInCheckRecord(String takeDeliverySerial,
+			String currenLoginName) {
+		StockInOutCheck check = new StockInOutCheck();
+		check.setSerialNum(ApplicationUtils.random32UUID());
+		check.setTakeDeliverSerial(takeDeliverySerial);
+		check.setDeliverSerial("");
+		check.setCheckNum("RK"+ApplicationUtils.getFromNumber());
+		check.setStatus("0");
+		check.setDelFlg("0");
+		check.setCreator(currenLoginName);
+		check.setCreateTime(new Date());
+		check.setUpdater(currenLoginName);
+		check.setUpdateTime(new Date());
+		stockInOutCheckMapper.insert(check);
+	}
+
+	@Override
+	public void createStockOutCheckRecord(String deliverySerial,
+			String currenLoginName) {
+		StockInOutCheck check = new StockInOutCheck();
+		check.setSerialNum(ApplicationUtils.random32UUID());
+		check.setDeliverSerial(deliverySerial);
+		check.setTakeDeliverSerial("");
+		check.setStatus("0");
+		check.setDelFlg("0");
+		check.setCreator(currenLoginName);
+		check.setCreateTime(new Date());
+		check.setUpdater(currenLoginName);
+		check.setUpdateTime(new Date());
+		stockInOutCheckMapper.insert(check);
 	}
 	
 

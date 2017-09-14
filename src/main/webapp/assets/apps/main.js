@@ -807,7 +807,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        		}]
 		        	}	        
 		    }) .state('takeDelivery', {
-		    	url: "/takeDelivery?:type",
+		    	url: "/takeDelivery?:tabHref",
 		    	templateUrl: "rest/takeDelivery/takeDeliveryManage",
 		    	data: {pageTitle: '收货计划'},
 		    	reload:true, 
