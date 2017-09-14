@@ -11,8 +11,8 @@
 	vertical-align:middle;
 } */
 </style>
-<h3 class="page-title s_tip"> 新建入库记录
-</h3>
+<!-- <h3 class="page-title s_tip"> 新建入库记录
+</h3> -->
 <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>

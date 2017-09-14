@@ -12,12 +12,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.web.dao.InvoiceBillingRecordMapper;
 import com.congmai.zhgj.web.dao.MaterielMapper;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
-import com.congmai.zhgj.web.model.MaterielSelectExample;
-import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.MaterielExample.Criteria;
+import com.congmai.zhgj.web.model.MaterielSelectExample;
 import com.congmai.zhgj.web.service.MaterielService;
 
 /**
@@ -32,6 +32,8 @@ import com.congmai.zhgj.web.service.MaterielService;
 public class MaterielServiceImpl implements MaterielService {
     @Resource
     private MaterielMapper MaterielMapper;
+    @Resource
+    private InvoiceBillingRecordMapper invoiceBillingRecordMapper;
     
 	@Override
 	public int insert(Materiel model) {
@@ -145,13 +147,21 @@ public class MaterielServiceImpl implements MaterielService {
 
 	@Override
 	public List<Materiel> selectMaterielByOrderSerial(String orderSerial,String orderSerial1) {
+		List<Materiel>materiels=null;
 		if(StringUtils.isNotEmpty(orderSerial)){
 			Map<String,String> map=new HashMap<String,String>();
 			map.put("orderSerial", orderSerial);
 			map.put("invoiceSerial", (orderSerial1==null||orderSerial1.length()<66)?null:orderSerial1.substring(34, 66));
-			return MaterielMapper.selectMaterielByOrderSerial(map);
+			materiels= MaterielMapper.selectMaterielByOrderSerial(map);
+			if(materiels!=null&&materiels.size()>0){
+				for(Materiel materiel:materiels){
+					Integer  billedCount=invoiceBillingRecordMapper.countBilledNum(materiel.getSerialNum());
+					materiel.setCanBillAmount((Integer.parseInt(materiel.getAmount())-billedCount)+"");
+				}
+			}
 		}
-		return null;
+	
+		return materiels;
 	}
 
 }

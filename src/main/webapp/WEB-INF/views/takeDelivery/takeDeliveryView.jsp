@@ -11,8 +11,8 @@
 	vertical-align:middle;
 } */
 </style>
-<h3 class="page-title"> 查看收货详情
-</h3>
+<!-- <h3 class="page-title"> 查看收货详情
+</h3> -->
 <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>

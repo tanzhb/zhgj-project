@@ -173,6 +173,7 @@ public class InvoiceController {
     public Map viewInvoice(HttpServletRequest request, @RequestBody String  serialNum) {
     	Map<String, Object> map = new HashMap<String, Object>();
     	Invoice invoice=invoiceService.selectById(serialNum.substring(0, 32));
+    	 invoice=invoiceService.getDetailInfo(invoice);//统计数据
     	if(invoice!=null){
     	OrderInfo orderInfo=orderService.selectById(invoice.getOrderSerial());
     		invoice.setRelationBuyOrSaleNum(orderInfo.getOrderNum());
@@ -233,9 +234,7 @@ public class InvoiceController {
 		}
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("orderInfo", orderInfo);
-    	//获取订单物料信息
-		List<Materiel>orderMateriels=materielService.selectMaterielByOrderSerial(serialNum.substring(0, 32),null);
-		map.put("orderMateriels", orderMateriels);
+    	
     	return map;
 	}
 	/**
@@ -243,7 +242,7 @@ public class InvoiceController {
      * 
      */
     @RequestMapping(value = "/getMaterielList")
-    public ResponseEntity<Map> getMaterielList(HttpServletRequest request,String  orderSerial) {
+    public ResponseEntity<Map> getMaterielList(HttpServletRequest request, String  orderSerial) {
     	
 		List<Materiel> materiels = materielService.selectMaterielByOrderSerial(orderSerial.substring(0, 32),orderSerial);
 		OrderInfo orderInfo=orderService.selectById(orderSerial.substring(0, 32));
@@ -265,7 +264,7 @@ public class InvoiceController {
    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
    		invoiceBillingRecord.setCreator(currenLoginName);
        	try{
-       		if(StringUtils.isEmpty(invoiceBillingRecord.getSerialNum())){
+       		if("null".equals(invoiceBillingRecord.getSerialNum())){
        			invoiceBillingRecord.setSerialNum(ApplicationUtils.random32UUID());
        			invoiceBillingRecordService.insert(invoiceBillingRecord);
        		}else{

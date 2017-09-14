@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <!-- BEGIN PAGE HEADER-->
-<h3 class="page-title"> 对账单
+<!-- <h3 class="page-title"> 对账单
     <small></small>
-</h3>
+</h3> -->
 <div class="page-bar">
 
     <ul class="page-breadcrumb">
@@ -91,11 +91,12 @@
 				                            <th> 对账单号 </th>
 				                            <th> 对账日期 </th>
 				                            <th> 供应商 </th>
-				                            <th> 合计金额</th>
-				                            <th> 客户提货金额 </th>
-				                            <th> 付款金额 </th>
-				                            <th> 服务费</th>
-				                            <th> 实际收款日期</th>
+				                            <th> 期初应付</th>
+				                            <th> 本期应付 </th>
+				                            <th> 本期付款 </th>
+				                            <th> 期末应付</th>
+				                            <th> 超期款</th>
+				                            <th> 本期扣款</th>
 				                            <th> 状态 </th>
 				                        </tr>
 				                    </thead>
@@ -172,11 +173,13 @@
 				                            <th style="text-align: center"><input name="select_all" id="example-select-buy" type="checkbox"/></th>
 				                            <th> 对账单号 </th>
 				                            <th> 对账日期 </th>
-				                            <th> 客户 </th>
-				                            <th> 期初欠款</th>
-				                            <th> 本期欠款 </th>
+				                            <th> 客户  </th>
+				                            <th> 期初应付</th>
+				                            <th> 本期应付 </th>
 				                            <th> 本期付款 </th>
-				                            <th> 期末欠款</th>
+				                            <th> 期末应付</th>
+				                            <th> 超期款</th>
+				                            <th> 本期扣款 </th>
 				                            <th> 状态 </th>
 				                        </tr>
 				                    </thead>

@@ -26,7 +26,7 @@
 	</ul>
 	<div class="tab-content">
 		<div class="tab-pane active" id="tab_15_1">
-			<!-- <ul class="nav nav-tabs" id="takeDelivery_tab">
+<!-- 		    <ul class="nav nav-tabs" id="takeDelivery_tab">
 				<li class="active"><a data-target="#tab_25_1" data-toggle="tab">收货计划</a>
 				</li>
 				<li><a data-target="#tab_25_2" data-toggle="tab" ng-click="toDaiban()">待办流程</a></li>
@@ -58,11 +58,11 @@
 												ng-click="takeDelivery()"> <i class="fa fa-edit"></i>
 												收货
 											</label>
-											<label class="btn btn-transparent purple btn-circle btn-sm"
+<!-- 											<label class="btn btn-transparent purple btn-circle btn-sm"
 												ng-click="takeDeliveryEdit()"> <i class="fa fa-edit"></i>
 												修改
 											</label>
-											<label class="btn btn-transparent red btn-circle btn-sm"
+ -->											<label class="btn btn-transparent red btn-circle btn-sm"
 												ng-click="takeDeliveryDelete()"> <i
 												class="fa fa-minus"></i> 删除
 											</label>
@@ -134,7 +134,7 @@
 							<!-- END EXAMPLE TABLE PORTLET-->
 						</div>
 					</div>
-<!-- 				</div>
+ <!-- 				</div>
 				<div class="tab-pane" id="tab_25_2">
 						
 					<div class="row">
@@ -146,7 +146,7 @@
 									<div class="actions">
 												<div class="btn-group btn-group-devided" data-toggle="buttons">
 													<label class="btn btn-transparent green btn-circle btn-sm"
-														ng-click="handlingTakeDelivery()" > <i class="fa fa-plus"></i>
+														ng-click="takeDeliveryAudit()" > <i class="fa fa-plus"></i>
 														办理
 													</label>
 												</div>
@@ -182,7 +182,7 @@
 					</div>
 						
 				</div>
-			</div>--> 
+			</div>  -->
 		</div>
 		<div class="tab-pane" id="tab_15_2">
 			<div class="row">

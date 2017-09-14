@@ -44,24 +44,26 @@
                         <div class="portlet-title">
                             <div class="caption">库存信息</div>
                             <div class="actions">
-                                <button  ng-show="stockView"    class="btn blue  btn-outline  btn-sm " ng-click="editStock()">
+                                <button  ng-show="stockView"    class="btn purple  btn-sm btn-circle  " ng-click="editStock()">
                                             <i class="fa fa-edit"></i> 编辑 </button>
-                                <button   ng-show="stockEdit"   class="btn red  btn-outline  btn-sm " ng-click="cancelEditStock()">
+                                <button   ng-show="stockEdit"   class="btn defualt  btn-sm btn-circle " ng-click="cancelEditStock()">
                                             <i class="fa fa-undo"></i> 取消 </button>
-                                <button  ng-hide="stockAdd"   type="submit"   class="btn blue  btn-outline  btn-sm "   ng-click="saveStock()">
+                                <button  ng-hide="stockAdd"   type="submit"   class="btn green  btn-sm btn-circle "   ng-click="saveStock()">
                                             <i class="fa fa-save"></i> 保存 </button>
                             </div>
                         </div>
+                              <div class="tab-content">
+				<div class="tab-pane fade active in" id="tab_1_1"> 
                         <div class="portlet-body form">
-                            <form  id="stockForm" class="form-horizontal"   >
+                            <form  id="stockForm"  >
 								<div class="form-body">
 									<div class="alert alert-danger display-hide">
                                                <button class="close" data-close="alert"></button>请先输入正确数据！</div>
 								           <div class="row">
                                                              <div class="col-md-6">
-											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="stockNum"> <span class="required"> * </span>库存编号 :</label>
-                                                    <div class="col-md-8">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="stockNum"> <span class="required"> * </span>库存编号 :</label>
+                                                    <div class="  ">
                                                      <input type="hidden"     id="materielSerial" ng-model="stock.materielSerial"  />
                                                         <input type="text" class="form-control" id="stockNum" name="stockNum" ng-model="stock.stockNum"  ng-hide="stockAdd" />
                                                         <div class="form-control-focus"> </div>
@@ -71,27 +73,29 @@
                                             </div>
 										</div>
                                                            <div class="col-md-6">
-                                                                <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="materielNum"><span class="required"> * </span> 物料编号 :</label>
-                                                    <div class="col-md-6">
-                                                     <input type="text" class="form-control"   id="materielNum" name ="materielNum"  readonly  ng-hide="stockAdd"   readonly="readonly"
+                                                                <div class="form-group">
+                                                    <label class="control-label bold" for="materielNum"><span class="required"> * </span> 物料编号 :</label>
+                                                    <div class="">
+												<div class="input-group" ng-click="selectMateriel()" data-target="#basicMaterielInfo" data-toggle="modal" >
+	                                                        <input type="text" class="form-control"   id="materielNum" name ="materielNum"  readonly  ng-hide="stockAdd" 
 												ng-model="stock.materielNum" /> 
+	                                                        <span class="input-group-btn" style="vertical-align: top;"  ng-hide="stockAdd">
+	                                                            <button class="btn default" type="button">
+	                                                                <i class="fa fa-search"></i>
+	                                                            </button>
+	                                                        </span>
+                                                         </div>
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="stockView">{{stock.materielNum}}</p> 
+                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.materielNum}}</p> 
                                                                     </div>
-                                                                    <div class="col-md-1"><span class="input-inline-btn"  ng-hide="stockAdd"  >
-                                                            <button class="btn default" type="button"   ng-click="selectMateriel()" data-target="#basicMaterielInfo" data-toggle="modal" >
-                                                                <i class="fa fa-search"></i>
-                                                            </button>
-                                                        </span></div>
                                                                 </div>
                                                             </div>   
                                                         </div>
                                                         <div class="row">
                                                           <div class="col-md-6">
-                                                                <div class="form-group form-md-line-input">
-                                                                <label class="col-md-4 control-label" for="materielName">   物料名称 :</label>
-                                                                    <div class="col-md-8">
+                                                                <div class="form-group">
+                                                                <label class="control-label bold" for="materielName">   物料名称 :</label>
+                                                                    <div class="  ">
                                                                        <input type="text" class="form-control" placeholder=""  id="materielName" name ="materielName"  ng-hide="stockAdd"   readonly
 												ng-model="stock.materielName" > 
                                                                        <div class="form-control-focus"> </div>
@@ -101,9 +105,9 @@
                                                             </div>
                                                             <!--/span-->
                                                             <div class="col-md-6">
-                                                            <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="stockCategory">规格型号 :</label>
-                                                    <div class="col-md-8">
+                                                            <div class="form-group">
+                                                    <label class="control-label bold" for="stockCategory">规格型号 :</label>
+                                                    <div class="  ">
                                                                     <input type="text" class="form-control"   id="specifications" name ="specifications"  ng-hide="stockAdd"  readonly="readonly"
 												ng-model="stock.specifications" > 
 												<div class="form-control-focus"> </div>
@@ -116,9 +120,9 @@
                                                         <!--/row-->
                                                         <div class="row">
                                                             <div class="col-md-6">
-                                                             <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="address"> <span class="required"> * </span>最高库存:</label>
-                                                    <div class="col-md-8">
+                                                             <div class="form-group">
+                                                    <label class="control-label bold" for="address"> <span class="required"> * </span>最高库存:</label>
+                                                    <div class="  ">
                                                                         <input type="text" class="form-control"   id="maxStock" name ="maxStock"  ng-hide="stockAdd"  
 												ng-model="stock.maxStock" > 
 												<div class="form-control-focus"> </div>
@@ -128,9 +132,9 @@
                                                             </div>
                                                             <!--/span-->
                                                             <div class="col-md-6">
-                                                            <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="minStock"> <span class="required"> * </span>最低库存 :</label>
-                                                    <div class="col-md-8">
+                                                            <div class="form-group">
+                                                    <label class="control-label bold" for="minStock"> <span class="required"> * </span>最低库存 :</label>
+                                                    <div class="  ">
                                                                         <input type="text"  class="form-control" placeholder=""  id="minStock" name ="minStock"   ng-hide="stockAdd"  
 												ng-model="stock.minStock" > 
 												<div class="form-control-focus"> </div>
@@ -142,9 +146,9 @@
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-md-6">
-                                                             <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="manageType"> <span class="required"> * </span>管理类型:</label>
-                                                    <div class="col-md-8">
+                                                             <div class="form-group">
+                                                    <label class="control-label bold" for="manageType"> <span class="required"> * </span>管理类型:</label>
+                                                    <div class="  ">
                                                      <select class="form-control"    id="manageType"   name ="manageType" ng-model="stock.manageType"  ng-hide="stockAdd"  >
                                                                           <option value=""></option>
                                                                         <option value="1">自建库管理</option>
@@ -164,9 +168,9 @@
                                                             </div>
                                                             <!--/span-->
                                                             <div class="col-md-6">
-                                                            <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="materielOwner"> <span class="required"> * </span>物权方 :</label>
-                                                    <div class="col-md-8">
+                                                            <div class="form-group">
+                                                    <label class="control-label bold" for="materielOwner"> <span class="required"> * </span>物权方 :</label>
+                                                    <div class="  ">
                                                                         <input type="text"  class="form-control" placeholder=""  id="materielOwner" name ="materielOwner"   ng-hide="stockAdd"  
 												ng-model="stock.materielOwner" > 
 												<div class="form-control-focus"> </div>
@@ -178,9 +182,9 @@
                                                         </div>
                                                          <div class="row">
                                                             <div class="col-md-6">
-                                                             <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="serviceParty"> <span class="required"> * </span>服务方:</label>
-                                                    <div class="col-md-8">
+                                                             <div class="form-group">
+                                                    <label class="control-label bold" for="serviceParty"> <span class="required"> * </span>服务方:</label>
+                                                    <div class="  ">
                                                                         <input type="text" class="form-control"   id="serviceParty" name ="serviceParty"  ng-hide="stockAdd"  
 												ng-model="stock.serviceParty" > 
 												<div class="form-control-focus"> </div>
@@ -190,9 +194,9 @@
                                                             </div>
                                                             <!--/span-->
                                                             <div class="col-md-6">
-                                                            <div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="remark"> 备注 :</label>
-                                                    <div class="col-md-8">
+                                                            <div class="form-group">
+                                                    <label class="control-label bold" for="remark"> 备注 :</label>
+                                                    <div class="  ">
                                                                         <input type="text"  class="form-control" placeholder=""  id="remark" name ="remark"   ng-hide="stockAdd"  
 												ng-model="stock.remark" > 
 												<div class="form-control-focus"> </div>
@@ -208,6 +212,7 @@
 								</div>
 							</form>
          				</div>
+         				</div></div>
 				</div>
 				
         </div>
