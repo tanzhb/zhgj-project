@@ -491,7 +491,7 @@
 					<div class="modal-footer">
 						<button type="submit" ng-click="applyAp()"
 							class="btn blue">
-							<i class="glyphicon glyphicon-ok"></i> 通过
+							<i class="glyphicon glyphicon-ok"></i> 申请
 						</button>
 						<button type="submit" ng-click="backApplyList()"
 							class="btn green-meadow">
