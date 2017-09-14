@@ -47,8 +47,8 @@
 													ui-sref="takeDeliveryAdd"> <i class="fa fa-plus"></i>
 													代发货
 												</label>
-												<label class="btn btn-transparent purple btn-circle btn-sm"
-													ng-click="takeDelivery()"> <i class="fa fa-edit"></i>
+												<label class="btn btn-transparent blue btn-circle btn-sm"
+													ng-click="takeDelivery()"> <i class="fa fa-gift"></i>
 													收货
 												</label>
 	<!-- 											<label class="btn btn-transparent purple btn-circle btn-sm"
@@ -208,8 +208,8 @@
 					<div class="portlet light">
 						<div class="portlet-title">
 							<div class="caption">
-								<i class="fa fa-globe font-green"></i> <span
-									class="caption-subject font-green bold uppercase">入库记录</span>
+								<!-- <i class="fa fa-globe font-green"></i> <span
+									class="caption-subject font-green bold uppercase">入库记录</span> -->
 							</div>
 							<!--  <div class="actions">
 		                                        <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#basic">
