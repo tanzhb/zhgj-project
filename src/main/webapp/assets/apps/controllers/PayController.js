@@ -28,30 +28,10 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 
 
 	//修改
-	$scope.jumpToEdit = function() {
-		var ids = '';
-		// Iterate over all checkboxes in the table
-		table.$('input[type="checkbox"]').each(
-				function() {
-					// If checkbox exist in DOM
-					if ($.contains(document, this)) {
-						// If checkbox is checked
-						if (this.checked) {
-							// 将选中数据id放入ids中
-							if (ids == '') {
-								ids = this.value;
-							} else{
-								ids = "more"
-							}
-						}
-					}
-				});
-		if(ids==''){
-			toastr.warning('请选择一个付款！');return;
-		}else if(ids=='more'){
-			toastr.warning('只能选择一个付款！');return;
-		}
-		$state.go('editPay',{serialNum:ids});
+	$scope.jumpToEdit = function() {		
+		if(table.rows('.active').data().length != 1){
+			showToastr('toast-top-center', 'warning', '请选择一条数据进行修改！')
+		}else $state.go('editPay',{serialNum:table.row('.active').data().serialNum});
 	};
 
 
@@ -471,30 +451,15 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
     	$state.go('viewPay',{serialNum:serialNum});
     }; 
     //流程申请
-    $scope.jumpToApplyPay  = function() {
-    	var ids = '';
-		// Iterate over all checkboxes in the table
-		table.$('input[type="checkbox"]').each(
-				function() {
-					// If checkbox exist in DOM
-					if ($.contains(document, this)) {
-						// If checkbox is checked
-						if (this.checked) {
-							// 将选中数据id放入ids中
-							if (ids == '') {
-								ids = this.value;
-							} else{
-								ids = "more"
-							}
-						}
-					}
-				});
-		if(ids==''){
-			toastr.warning('请选择一个申请！');return;
-		}else if(ids=='more'){
-			toastr.warning('只能选择一个申请！');return;
-		}
-		$state.go('applyPay',{serialNum:ids});
+    $scope.jumpToApplyPay  = function() {    	
+    	if(table.rows('.active').data().length != 1){
+			showToastr('toast-top-center', 'warning', '请选择一条任务进行流程申请！')
+		}else{
+			var status = table.row('.active').data().status;
+			if(status != '0'){
+				showToastr('toast-top-center', 'warning', '该应付款已发起流程审批，不能再次申请！')
+			}else $state.go('applyPay',{serialNum:table.row('.active').data().serialNum});
+		}     	
     }; 
     
   //启动流程
@@ -504,6 +469,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 				.then(
 						function(data) {
 							toastr.success("申请成功！");
+							
 						},
 						function(errResponse) {
 							toastr.warning("申请失败！");
@@ -512,6 +478,8 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 						}
 
 				);
+		$state.go('paymentRecordC');//返回申请列表
+		//$('#sample_2').DataTable().ajax.reload();
 	};
 	
 	$scope.toApply = function() {
@@ -524,38 +492,53 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		$('#accountPayableTab a[href="#daiban"]').tab('show');
 		
 		$("#buttons").hide();
-		
 		// 构建datatables开始***************************************
-		dbTable = showDbTable();								
+		if(dbTable == undefined){
+			dbTable = showDbTable();
+		}else $("#dbTable").DataTable().ajax.reload();
+										
 		// 构建datatables结束***************************************
-
+		//dbTable.ajax.reload();
 	};
 	// 已办流程
 	var ybTable;
 	$scope.toYiban = function() {
 		$('#accountPayableTab a[href="#yiban"]').tab('show');
-		ybTable = showYbTable();
+		
+		if(ybTable == undefined){
+			ybTable = showYbTable();
+		}else $("#ybTable").DataTable().ajax.reload();
+		
 		$("#buttons").hide();
 	};
 	
 	//审批通过
-	$scope.apPass = function() {
-	   
+	$scope.apPass = function() {	   
 	    var mydata={"serialNum":$("#serialNum").val(),"content":$("#content").val(),
 				"isPass":true, "taskId":$("#taskId").val()};
 	    var _url = ctx + "rest/pay/complete";
-	    doVacation(_url, mydata);
+	    doAudit(_url, mydata);
+	    $state.go('paymentRecordC',{tabHref:1});//返回到待办列表
 	};
 	//审批不通过
 	$scope.apUnPass = function() {
 		var mydata={"serialNum":$("#serialNum").val(),"content":$("#content").val(),
 				"isPass":false, "taskId":$("#taskId").val()};
 		var _url = ctx + "rest/pay/complete";
-		doVacation(_url, mydata);
+		doAudit(_url, mydata);
+		$state.go('paymentRecordC',{tabHref:1});//返回到待办列表
+	};
+	//返回待办列表
+	$scope.backDbList = function() {
+		$state.go('paymentRecordC',{tabHref:1});//返回待办列表
+	};
+	//返回申请列表
+	$scope.backApplyList = function() {
+		$state.go('paymentRecordC');//返回申请列表
 	};
 	
 	//办结待办流程
-	function doVacation(_url, mydata){
+	function doAudit(_url, mydata){
         $.ajax( {
 	        url : _url,
 	        dataType:"text",
@@ -570,11 +553,18 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	
 	if($stateParams.tabHref == '1'){//首页待办列表传过来的参数
 		$('#accountPayableTab a[href="#daiban"]').tab('show');
-		showDbTable();
+		if(dbTable == undefined){
+			dbTable = showDbTable();
+		}else $("#dbTable").DataTable().ajax.reload();
+		
 		$("#buttons").hide();
 	}else if($stateParams.tabHref == '2'){//首页已办列表传过来的参数
 		$('#accountPayableTab a[href="#yiban"]').tab('show');
-		showYbTable();
+		
+		if(ybTable == undefined){
+			ybTable = showYbTable();
+		}else $("#ybTable").DataTable().ajax.reload();
+		
 		$("#buttons").hide();
 	}else{//从菜单进入
 		$('#accountPayableTab a[href="#apply"]').tab('show');
@@ -611,32 +601,15 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 								text : "办理",
 								className : "btn default",
 								action: function(e, dt, node, config) { 
-									
-									var ids = '';
-									t.$('input[type="checkbox"]').each(function() {
-										if ($.contains(document, this)) {											
-											if (this.checked) {
-												// 将选中数据id放入ids中
-												if (ids == '') {
-													ids = this.value;
-												} else
-													ids = 'more';
-											}
-										}
-									});
-									
-									if(ids==''){
-										toastr.warning('请选择一个办理！');return;
-									}else if(ids=='more'){
-										toastr.warning('只能选择一个办理！');return;
+									if(t.rows('.active').data().length != 1){
+										showToastr('toast-top-center', 'warning', '请选择一条任务进行办理！')
 									} else {
-//										alert($("#dbTable").DataTable().row(1).data().assign);
-										
-//										if(assign == ''){
-//											toastr.warning("此任务您还没有签收，请【签收】任务后再处理任务！！");
-//										}else{
+										if(t.row('.active').data().assign == ''){
+											showToastr('toast-top-center', 'warning', '此任务您还没有签收，请【签收】任务后再处理任务！')
+										}else{
+											var taskId=t.row('.active').data().taskId;
 												PayService
-												.getAuditInfos(ids)
+												.getAuditInfos(taskId)
 												.then(
 														function(result) {													
 															
@@ -648,7 +621,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 															
 															if(result.actionType == 'audit'){//审批流程
 																
-																$state.go('auditPay',{serialNum:result.paymentRecord.serialNum, taskId:ids, comments:comments});
+																$state.go('auditPay',{serialNum:result.paymentRecord.serialNum, taskId:taskId, comments:comments});
 																
 																
 															}else{//result.actionType == 'modify' 更改流程
@@ -676,7 +649,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		
 												);
 										
-//										}
+										}
 										
 										
 										
@@ -689,36 +662,16 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 								text : "签收",
 								className : "btn default",
 								action: function(e, dt, node, config) { 
-									var ids = '';
-									t.$('input[type="checkbox"]').each(function() {
-										if ($.contains(document, this)) {											
-											if (this.checked) {
-												// 将选中数据id放入ids中
-												if (ids == '') {
-													ids = this.value;
-												} else
-													ids = 'more';
-											}
-										}
-									});
-									
-									if(ids==''){
-										toastr.warning('请选择一个签收！');return;
-									}else if(ids=='more'){
-										toastr.warning('只能选择一个签收！');return;
+									if(t.rows('.active').data().length != 1){
+										
+										toastr.warning('请选择一条任务进行签收！');return;									
 									} else {
-										claimTask(ids, 'dbTable');
-									}
-									
-									
-									
-									
-//									if(t.rows('.selected').data().length == 0){
-//										toastr.warning("请选择要签收的任务！");
-//									}else{
-//										var taskId = t.row('.selected').data().taskId;
-//										claimTask(taskId, 'sample_2');
-//									}								
+										
+										if(t.row('.active').data().assign != ''){
+											toastr.warning('该任务已签收！');return;
+										}else
+											claimTask(t.row('.active').data().taskId, 'dbTable');
+									}						
 								}
 							},
 							{
@@ -745,10 +698,20 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 					processing : true,// loading等待框
 
 					ajax : ctx
-							+ "/rest/processAction/todoTask",// 加载待办列表数据
+							+ "/rest/processAction/todoTask/" + 'accountPayable',// 加载待办列表数据
 
 					"aoColumns" : [
-					              { mData: 'taskId'},
+					              { mData: 'taskId',
+									mRender : function(
+											data,
+											type,
+											row,
+											meta) {
+										return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+												"<input type='checkbox' class='checkboxes' value='1' />" +
+												"<span></span></label>";
+									}
+					             },
 							{
 								mData : 'assign',
 								mRender : function(
@@ -835,6 +798,19 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	                    ]
 
 				})
+				
+				$("#dbTable").find(".group-checkable").change(function() {
+		            var e = jQuery(this).attr("data-set"),
+		            t = jQuery(this).is(":checked");
+		            jQuery(e).each(function() {
+		                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+		            })
+		        }),
+		        $("#dbTable").on("change", "tbody tr .checkboxes",
+		        function() {
+		            $(this).parents("tr").toggleClass("active")
+		        })
+
 
 				
 				return t;
@@ -874,7 +850,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 					processing : true,// loading等待框
 
 					ajax : ctx
-							+ "/rest/processAction/endTask",// 加载已办列表数据
+							+ "/rest/processAction/endTask/"  + 'accountPayable',// 加载已办列表数据
 
 					"aoColumns" : [
 //							{ mData: 'taskId'},
@@ -983,10 +959,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	var tableAjaxUrl = "rest/pay/findAllPaymentRecord";
 	var loadMainTable = function() {
 		var a = 0;
-		App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile")&& (a = $(".page-header").outerHeight(!0)): 
-			$(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0): $("body").hasClass("page-header-fixed")&& (a = 64);
-
-			table = $("#sample_2").DataTable(
+		table = $("#sample_2").DataTable(
 					{
 						language : {
 							aria : {
@@ -1019,7 +992,17 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 						              // serverSide: true,
 						              ajax: tableAjaxUrl,//加载数据中user表数据
 						              "aoColumns": [
-						                            { mData: 'serialNum'},
+						                            { mData: 'serialNum',
+						                            	mRender : function(
+																data,
+																type,
+																row,
+																meta) {
+															return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+																	"<input type='checkbox' class='checkboxes' value='1' />" +
+																	"<span></span></label>";
+														}
+						                            },
 						                            { mData: 'paymentNum' },
 						                            { mData: 'playPaymentDate' },
 						                            { mData: 'paymentNode' },
@@ -1034,8 +1017,16 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 						                            	mRender:function(data){
 						                            		if(data!=""&&data!=null){
 						                            			if(data=='0'){
-						                            				return '初始';
-						                            			}
+						                            				return '未审批';
+						                            			}else if(data=='PENDING'){
+						                            				return '审批中';
+						                            			}else if(data=='WAITING_FOR_APPROVAL'){
+						                            				return '待审批';					                            				
+																}else if(data=='APPROVAL_SUCCESS'){
+																	return '审批成功';
+																}else if(data=='APPROVAL_FAILED'){
+																	return '审批失败';
+																}
 						                            		}else{
 						                            			return "";
 						                            		}
@@ -1065,8 +1056,19 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 						                            ]
 													}).on('order.dt',
 						                            		function() {
-						                            	console.log('排序');
 						                            })
+						                            
+						                            $("#sample_2").find(".group-checkable").change(function() {
+											            var e = jQuery(this).attr("data-set"),
+											            t = jQuery(this).is(":checked");
+											            jQuery(e).each(function() {
+											                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+											            })
+											        }),
+											        $("#sample_2").on("change", "tbody tr .checkboxes",
+											        function() {
+											            $(this).parents("tr").toggleClass("active")
+											        })
 	}
 
 
@@ -1217,25 +1219,18 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 
 	//删除
 	$scope.del = function() {
-		var ids = '';
-		// Iterate over all checkboxes in the table
-		table.$('input[type="checkbox"]').each(function() {
-			// If checkbox exist in DOM
-			if ($.contains(document, this)) {
-				// If checkbox is checked
-				if (this.checked) {
-					// 将选中数据id放入ids中
-					if (ids == '') {
-						ids = this.value;
-					} else
-						ids = ids + ',' + this.value;
-				}
-			}
-		});
-
-		if (ids == '') {// 未勾选删除数据									
-			toastr.warning("未勾选要删除数据！");
+		if(table.rows('.active').data().length == 0){
+			showToastr('toast-top-center', 'warning', '未勾选要删除数据！')
 		} else {
+			var ap = table.rows('.active').data();
+			var ids = '';
+			for(i=0;i<ap.length;i++){
+				if(ids == ''){
+					ids = ap[i].serialNum;
+				}else ids = ids +','+ ap[i].serialNum;
+				
+			}
+			alert(ids);
 			$('#delUsersModal').modal('show');// 打开确认删除模态框
 
 			$scope.confirmDel = function() {										
@@ -1248,7 +1243,6 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 						},
 						function(errResponse) {
 							/*console.error('Error while deleting Users');*/
-							alert(123);
 						}
 
 				);

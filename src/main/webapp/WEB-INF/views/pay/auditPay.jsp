@@ -493,16 +493,16 @@
 				
 				<div class="modal-footer">
 					<button type="submit" ng-click="apPass()"
-						class="btn btn-primary">
-						<i class="fa fa-save"></i> 通过
+						class="btn blue">
+						<i class="glyphicon glyphicon-ok"></i> 通过
 					</button>
 					<button type="submit" ng-click="apUnPass()"
-						class="btn btn-primary">
-						<i class="fa fa-save"></i> 不通过
+						class="btn red">
+						<i class="glyphicon glyphicon-remove"></i> 不通过
 					</button>
-					<button type="submit" ng-click="closeAuditDialogue()"
-						class="btn btn-primary">
-						<i class="fa fa-save"></i> 关闭
+					<button type="submit" ng-click="backDbList()"
+						class="btn green-meadow">
+						<i class="glyphicon glyphicon-share-alt"></i> 返回
 					</button>
 				</div>
 			</div>

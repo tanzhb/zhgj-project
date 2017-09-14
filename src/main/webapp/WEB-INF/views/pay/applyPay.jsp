@@ -490,8 +490,12 @@
 				<form class="form-horizontal" id="applyAp_form">
 					<div class="modal-footer">
 						<button type="submit" ng-click="applyAp()"
-							class="btn btn-primary">
-							<i class="fa fa-save"></i> 申请
+							class="btn blue">
+							<i class="glyphicon glyphicon-ok"></i> 通过
+						</button>
+						<button type="submit" ng-click="backApplyList()"
+							class="btn green-meadow">
+							<i class="glyphicon glyphicon-share-alt"></i> 返回
 						</button>
 					</div>
 				</form>
