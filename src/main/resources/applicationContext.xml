@@ -119,11 +119,11 @@
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
     <!-- Cache配置 -->
-    <cache:annotation-driven cache-manager="cacheManager"/>
+<!--     <cache:annotation-driven cache-manager="cacheManager"/>
     <bean id="ehCacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
           p:configLocation="classpath:ehcache.xml"/>
     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager"
-          p:cacheManager-ref="ehCacheManagerFactory"/>
+          p:cacheManager-ref="ehCacheManagerFactory"/> -->
           
     <import resource="spring-activiti.xml" />
 </beans>
