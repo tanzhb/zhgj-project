@@ -1461,7 +1461,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         files: [
 				'assets/global/plugins/datatables/datatables.min.css',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-				'assets/apps/css/special.css',
+				
 				'assets/global/plugins/datatables/datatables.all.min.js',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 				'assets/apps/scripts/angular-file-upload-shim.min.js',
@@ -1491,7 +1491,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         files: [
 				'assets/global/plugins/datatables/datatables.min.css',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-				'assets/apps/css/special.css',
+				
 				'assets/global/plugins/datatables/datatables.all.min.js',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 				'assets/apps/scripts/angular-file-upload-shim.min.js',
@@ -1521,7 +1521,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         files: [
 								'assets/global/plugins/datatables/datatables.min.css',
 								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-								'assets/apps/css/special.css',
+								
 								'assets/global/plugins/datatables/datatables.all.min.js',
 								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 								'assets/apps/scripts/angular-file-upload-shim.min.js',
@@ -1552,7 +1552,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         files: [
 								'assets/global/plugins/datatables/datatables.min.css',
 								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-								'assets/apps/css/special.css',
+								
 								'assets/global/plugins/datatables/datatables.all.min.js',
 								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 								'assets/apps/scripts/angular-file-upload-shim.min.js',
@@ -1582,7 +1582,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         files: [
 								'assets/global/plugins/datatables/datatables.min.css',
 								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-								'assets/apps/css/special.css',
+								
 								
 								'assets/global/scripts/datatable.js',
 								//'assets/global/plugins/datatables/datatables.min.js',
@@ -1624,7 +1624,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         files: [
 				'assets/global/plugins/datatables/datatables.min.css',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-				'assets/apps/css/special.css',
+				
 				'assets/global/plugins/datatables/datatables.all.min.js',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 				'assets/apps/scripts/angular-file-upload-shim.min.js',
@@ -1655,7 +1655,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         files: [
 				/*'assets/global/plugins/datatables/datatables.min.css',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-				'assets/apps/css/special.css',
+				
 				'assets/global/plugins/datatables/datatables.all.min.js',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 				'assets/apps/scripts/pageHandle.js',
@@ -1665,7 +1665,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/controllers/uploadPhoto.js',*/
 				'assets/global/plugins/datatables/datatables.min.css',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-				'assets/apps/css/special.css',
+				
 				'assets/global/plugins/datatables/datatables.all.min.js',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 				'assets/apps/scripts/angular-file-upload-shim.min.js',
@@ -1696,7 +1696,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         files: [
 				/*'assets/global/plugins/datatables/datatables.min.css',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-				'assets/apps/css/special.css',
+				
 				'assets/global/plugins/datatables/datatables.all.min.js',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 				'assets/apps/scripts/pageHandle.js',
@@ -1706,7 +1706,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/controllers/uploadPhoto.js',*/
 				'assets/global/plugins/datatables/datatables.min.css',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-				'assets/apps/css/special.css',
+				
 				'assets/global/plugins/datatables/datatables.all.min.js',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 				'assets/apps/scripts/pageHandle.js',
@@ -1736,7 +1736,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         files: [
 				/*'assets/global/plugins/datatables/datatables.min.css',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-				'assets/apps/css/special.css',
+				
 				'assets/global/plugins/datatables/datatables.all.min.js',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 				'assets/apps/scripts/pageHandle.js',
@@ -1744,7 +1744,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/controllers/GatheringMoneyController.js',*/
 				'assets/global/plugins/datatables/datatables.min.css',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-				'assets/apps/css/special.css',
+				
 				'assets/global/plugins/datatables/datatables.all.min.js',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 				'assets/apps/scripts/angular-file-upload-shim.min.js',
@@ -1774,7 +1774,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         files: [
 				/*'assets/global/plugins/datatables/datatables.min.css',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-				'assets/apps/css/special.css',
+				
 				'assets/global/plugins/datatables/datatables.all.min.js',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 				'assets/apps/scripts/pageHandle.js',
@@ -1784,7 +1784,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/controllers/uploadPhoto.js',*/
 				'assets/global/plugins/datatables/datatables.min.css',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-				'assets/apps/css/special.css',
+				
 				'assets/global/plugins/datatables/datatables.all.min.js',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 				'assets/apps/scripts/angular-file-upload-shim.min.js',
