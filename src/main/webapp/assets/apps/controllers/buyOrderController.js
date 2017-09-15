@@ -2376,7 +2376,7 @@ var e = $("#form_clauseSettlement"),
 		    		    for(var i=0;i<$scope.orderMateriel.length;i++){
 			       			total = total + Number($scope.arithmeticRateAmount($scope.orderMateriel[i]));
 			       		}
-			       		return total
+			       		return total.toFixed(2)
 			       	}else{
 			       		return 0;
 			       	}
@@ -2407,7 +2407,7 @@ var e = $("#form_clauseSettlement"),
 			       		for(var i=0;i<$scope.orderMateriel.length;i++){
 			       			total = total + Number($scope.arithmeticRateAndAmount($scope.orderMateriel[i]));
 			       		}
-			       		return total
+			       		return total.toFixed(2)
 			       	}else{
 			       		return 0;
 			       	}
@@ -2534,6 +2534,13 @@ var e = $("#form_clauseSettlement"),
 		     $scope._arithmeticDeliveryAmount  = function(scope) {//计算支付金额
 			       	if(scope._CSD.deliveryRate){
 			       		scope._CSD.deliveryAmount =  ($scope.totalOrderAmount()*scope._CSD.deliveryRate/100).toFixed(2);
+			       	}
+			       	$scope._arithmeticUnbilledAmount(scope);
+		       };
+		       
+		       $scope._arithmeticUnbilledAmount  = function(scope) {//计算未开金额
+			       	if(scope._CSD.billingAmount&&scope._CSD.deliveryAmount){
+			       		scope._CSD.unbilledAmount =  (Number(scope._CSD.deliveryAmount) - Number(scope._CSD.billingAmount)).toFixed(2);
 			       	}
 		       };
 		     //********订单物料合计，结算条款end****************//
@@ -2715,7 +2722,7 @@ var e = $("#form_clauseSettlement"),
 		        				processing : true,// loading等待框
 
 		        				ajax : ctx
-		        						+ "/rest/processAction/todoTask",// 加载待办列表数据
+		        						+ "/rest/processAction/todoTask/" + 'buyOrder',// 加载待办列表数据
 
 		        				"aoColumns" : [
 		        					              { mData: 'taskId'},
@@ -2841,7 +2848,7 @@ var e = $("#form_clauseSettlement"),
 		        				processing : true,// loading等待框
 
 		        				ajax : ctx
-		        						+ "/rest/processAction/endTask",// 加载已办列表数据
+		        						+ "/rest/processAction/endTask/"+'buyOrder',// 加载已办列表数据
 
 		        				"aoColumns" : [
 		        						{

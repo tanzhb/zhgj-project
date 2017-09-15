@@ -14,8 +14,8 @@
 	float: left;
 }
 </style>
-<h3 class="page-title">发票
-</h3>
+<!-- <h3 class="page-title">发票
+</h3> -->
 <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>
@@ -490,7 +490,7 @@
                         </div>
                       
                                 
-			<div class="portlet-body"  ng-if="inOrOut.indexOf('in')>-1"><!-- 进项票物料信息-->
+			<div class="portlet-body"  ng-if="inOrOut.indexOf('in')>-1"><!-- 进项票物料信息   -->
 				<table
 					class="table table-striped table-bordered table-hover "
 					id="sample_inm">
@@ -520,7 +520,7 @@
 					</tfoot>
 				</table>
 			</div>
-			<div class="portlet-body"  ng-if="inOrOut.indexOf('out')>-1"><!-- 销项票物料信息-->
+			<div class="portlet-body"  ng-if="inOrOut.indexOf('out')>-1"><!-- 销项票物料信息--  -->
 				<table
 					class="table table-striped table-bordered table-hover "
 					id="sample_outm">

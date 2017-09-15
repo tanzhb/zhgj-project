@@ -136,7 +136,7 @@
 				                                  <div class="">
 				                                  		<select class="form-control" id="orderType"  ng-hide="buyOrderInput" name="orderType"  ng-model="buyOrder.orderType" >
 				                                            <option value=""></option>
-				                                           	<option value="标准采购(内贸)" >标准采购(内贸)</option>
+				                                           	<option value="标准采购(内贸)">标准采购(内贸)</option>
 				                                             <option value="标准采购(外贸)" >标准采购(外贸)</option>
 				                                             <option value="委托采购" >委托采购</option>
 				                                             <option value="VMI采购" >VMI采购</option>
@@ -221,7 +221,7 @@
 				                                             <option value="$" >美元</option>
 				                                             <option value="€" >欧元</option>
 				                                             <option value="￡" >英镑</option> -->
-				                                             <option value="人民币" >人民币</option>
+				                                             <option value="人民币">人民币</option>
 				                                             <option value="美元" >美元</option>
 				                                             <option value="欧元" >欧元</option>
 				                                             <option value="英镑" >英镑</option>
@@ -241,7 +241,7 @@
 				                                  <div class="">
 				                                  	<select class="form-control" id="rate"  ng-hide="buyOrderInput" name="rate"  ng-model="buyOrder.rate" >
 				                                           	<option value=""></option>
-				                                           	<option value="17" >17%</option>
+				                                           	<option value="17"  >17%</option>
 				                                             <option value="6" >6%</option>
 				                                        </select>
 				                                      <div class="form-control-focus"> </div>
@@ -364,7 +364,7 @@
 				                                  <div class="">
 				                                  	<select class="form-control" id="rate"  ng-hide="buyOrderInput" name="rate"  ng-model="buyOrder.rate" >
 				                                           	<option value=""></option>
-				                                           	<option value="17" >17%</option>
+				                                           	<option value="17"  >17%</option>
 				                                             <option value="6" >6%</option>
 				                                        </select>
 				                                      <div class="form-control-focus"> </div>
@@ -532,7 +532,7 @@
 				                                             <option value="$" >美元</option>
 				                                             <option value="€" >欧元</option>
 				                                             <option value="￡" >英镑</option> -->
-				                                             <option value="人民币" >人民币</option>
+				                                             <option value="人民币">人民币</option>
 				                                             <option value="美元" >美元</option>
 				                                             <option value="欧元" >欧元</option>
 				                                             <option value="英镑" >英镑</option>
@@ -552,7 +552,7 @@
 				                                  <div class="">
 				                                  	<select class="form-control" id="rate"  ng-hide="buyOrderInput" name="rate"  ng-model="buyOrder.rate" >
 				                                           	<option value=""></option>
-				                                           	<option value="17" >17%</option>
+				                                           	<option value="17"  >17%</option>
 				                                             <option value="6" >6%</option>
 				                                        </select>
 				                                      <div class="form-control-focus"> </div>
@@ -1212,7 +1212,8 @@
 							                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.billingMethod}} </p>
 							                          </td>
 							                          <td>
-				                                      		<input type="text" id="billingAmount[$index]" name="billingAmount" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].billingAmount"  >
+				                                      		<input type="text" id="billingAmount[$index]" name="billingAmount" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].billingAmount"  
+				                                      		ng-keyup="clearNoNumPoint(clauseSettlement.CSD[$index],'billingAmount');_arithmeticUnbilledAmount(this)">
 							                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.billingAmount}} </p>
 							                          </td>
 							                          <td>
