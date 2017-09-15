@@ -338,7 +338,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
        
        //下载文件查看详情时
        $scope.downloadFile1 = function(str){
-    		   window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+str;
+    		   window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+encodeURI(encodeURI(str));
        }
        
        $scope.removefile = function(index){

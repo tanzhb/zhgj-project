@@ -41,10 +41,11 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 	}
 
 	@Override
-	public List<Stock> selectStockList() {
+	public List<Stock> selectStockList(String  manageType) {
 		StockExample se=new  StockExample();
     	Criteria criteria=se.createCriteria();
     	criteria.andDelFlgEqualTo("0");
+    	criteria.andManageTypeEqualTo(manageType);
 		return stockMapper.selectByExample(se);
 	}
    

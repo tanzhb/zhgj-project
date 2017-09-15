@@ -127,8 +127,8 @@ public class StockController {
     }
   
     @RequestMapping(value = "/getStockList", method = RequestMethod.GET)//获取库存信息列表
-    public ResponseEntity<Map> getStockList(HttpServletRequest request) {
-		List<Stock> stocks = stockService.selectStockList();
+    public ResponseEntity<Map> getStockList(HttpServletRequest request,String manageType) {
+		List<Stock> stocks = stockService.selectStockList(manageType);
 		if(stocks.size()!=0){
 		for(Stock stock:stocks){
 			Materiel m=materielService.selectById(stock.getMaterielSerial());
@@ -156,7 +156,7 @@ public class StockController {
     @RequestMapping(value = "/viewStock", method = RequestMethod.POST)
     public ResponseEntity<Map> viewStock(HttpServletRequest request, @RequestBody String  serialNum) {
     	Map<String, Object> map = new HashMap<String, Object>();
-    	Stock stock=stockService.selectById(serialNum);
+    	Stock stock=stockService.selectById(serialNum.substring(0, 32));
     	if(stock!=null){
     		Materiel m=materielService.selectById(stock.getMaterielSerial());
 			stock.setMaterielName(m.getMaterielName());

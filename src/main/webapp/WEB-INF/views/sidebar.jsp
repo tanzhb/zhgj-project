@@ -67,7 +67,7 @@
         <shiro:hasPermission name="zhgj:salesOrder">
         <li class="nav-item">
             <a href="javascript:;" class="nav-link nav-toggle" >
-             <i class="icon-settings"></i>
+             <i class="icon-paper-plane"></i>
                 <span class="title">销售订单</span>
                 <span class="arrow "></span>
             </a>
@@ -96,7 +96,7 @@
                 <span class="title">采购订单</span>
             </a> -->
             <a href="javascript:;" class="nav-link nav-toggle">
-                <i class="icon-check"></i>
+                <i class="icon-basket-loaded"></i>
                 <span class="title">采购订单</span>
                 <span class="arrow "></span>
             </a>
@@ -126,7 +126,7 @@
         <shiro:hasPermission name="zhgj:storeHouse">
        <li class="nav-item">
             <a href="javascript:;" class="nav-link nav-toggle">
-                <i class="icon-paper-plane"></i>
+                <i class="icon-grid"></i>
                 <span class="title">仓储</span>
                 <span class="arrow "></span>
             </a> 
@@ -167,7 +167,7 @@
         <shiro:hasPermission name="zhgj:statement">
         <li class="nav-item">
             <a ui-sref="statement">
-                <i class="icon-basket-loaded"></i>
+                <i class="icon-docs"></i>
                 <span class="title">对账单</span>
             </a>
         </li>
@@ -179,7 +179,7 @@
 				<li><a ui-sref="addPay"> <i class="icon-paper-clip"></i>应付款</span></a></li>
 			</ul> -->
 			 <a href="javascript:;" class="nav-link nav-toggle">
-                <i class="icon-grid"></i>
+                <i class="icon-credit-card"></i>
                 <span class="title">收付款</span>
                 <span class="arrow "></span>
             </a> 
@@ -196,7 +196,7 @@
 		<shiro:hasPermission name="zhgj:bill">   
 		<li class="nav-item">
             <a ui-sref="invoice">
-                <i class="icon-docs"></i>
+                <i class="icon-layers"></i>
                 <span class="title">发票</span>
             </a>
         </li>

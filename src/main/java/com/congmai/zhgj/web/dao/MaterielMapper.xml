@@ -154,6 +154,7 @@
       <include refid="Example_Where_Clause" />
     </if>
     <if test="orderByClause != null" >
+      group by m.serialNum
       order by ${orderByClause}
     </if>
   </select>
