@@ -8,7 +8,7 @@
 			class="fa fa-angle-right"></i></li>
 		<li><a ui-sref="paymentRecordC">付款</a> <i class="fa fa-angle-right"></i>
 		</li>
-		<li><a>付款详情</a></li>
+		<li><a>流程审批</a></li>
 	</ul>
 	<div class="page-toolbar">
 		<div class="btn-group pull-right">

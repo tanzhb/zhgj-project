@@ -31,7 +31,11 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	$scope.jumpToEdit = function() {		
 		if(table.rows('.active').data().length != 1){
 			showToastr('toast-top-center', 'warning', '请选择一条数据进行修改！')
-		}else $state.go('editPay',{serialNum:table.row('.active').data().serialNum});
+		}else{
+			if(table.row('.active').data().status != '0'){
+				showToastr('toast-top-center', 'warning', '该条数据已经申请流程审批，不能进行修改！')
+			}else $state.go('editPay',{serialNum:table.row('.active').data().serialNum});
+		} 
 	};
 
 
@@ -49,7 +53,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
       		    	
       		    	$("#serialNum").val(serialNum);//赋值给隐藏input，通过和不通过时调用
 					$("#taskId").val(ids);//赋值给隐藏input，通过和不通过时调用
-					
+
 					if(comments == ""){
 						$("#comment_audit").html( "无评论");
 					}else $("#comment_audit").html(comments);
@@ -538,6 +542,112 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		$state.go('paymentRecordC');//返回申请列表
 	};
 	
+	//重新申请
+	$scope.apApplyAngain = function() {		
+		if($('#form_sample_1').valid()){
+			var fd = new FormData();
+			fd.append('serialNum',$scope.pay.serialNum);
+			fd.append('paymentType',$scope.pay.paymentType);
+			fd.append('paymentNum',$scope.pay.paymentNum); 
+			fd.append('orderSerial',$scope.pay.orderSerial); 
+			if(supplyComId!=null){
+				fd.append('supplyComId',supplyComId);
+			}else{
+				fd.append('supplyComId',$scope.pay.supplyComId);
+			}
+			fd.append('applyPaymentAmount',$scope.pay.applyPaymentAmount); 
+			fd.append('applyCurrency',$scope.pay.applyCurrency);
+			fd.append('playPaymentDate',$scope.pay.playPaymentDate);
+			fd.append('payType',$scope.pay.payType);
+			fd.append('paymentNode',$scope.pay.paymentNode);
+			fd.append('nodeNum',$scope.pay.nodeNum);
+			fd.append('billStyle',"先款后票"); 
+			fd.append('isBill',$("input[name='isBill']:checked").val());
+			fd.append('applyDate',$scope.pay.applyDate);
+			fd.append('applicant',$scope.pay.applicant);
+			fd.append('applyDept',$scope.pay.applyDept);
+			fd.append('remark',$scope.pay.remark);
+			
+			fd.append('payee',$scope.pay.payee);
+			fd.append('contact',$scope.pay.contact);
+			fd.append('contactNum',$scope.pay.contactNum);
+			fd.append('bank',$scope.pay.bank);
+			fd.append('accountName',$scope.pay.accountName);
+			fd.append('accountNumber',$scope.pay.accountNumber);
+			fd.append('reason',$scope.pay.reason);
+			$http({
+				method:'POST',
+				url:ctx + "rest/pay/modifyApplyAp",
+				params:{'taskId':$("#taskId").val(), 'reApply':true},
+				data: fd,
+				headers: {'Content-Type':undefined}
+			})   
+			.success( function ( data )
+					{
+				$state.go('paymentRecordC',{tabHref:1});//返回到待办列表
+				$("#dbTable").DataTable().ajax.reload();
+				showToastr('toast-bottom-right', 'success', data);
+				$scope.pay= data;
+				$scope.span = true;
+				$scope.input = false;
+				$scope.applyPaymentAmountChn=convertCurrency($scope.pay.applyPaymentAmount);
+					});
+		}
+	};
+	
+	//取消申请
+	$scope.apCancelApply = function() {		
+		if($('#form_sample_1').valid()){
+			var fd = new FormData();
+			fd.append('serialNum',$scope.pay.serialNum);
+			fd.append('paymentType',$scope.pay.paymentType);
+			fd.append('paymentNum',$scope.pay.paymentNum); 
+			fd.append('orderSerial',$scope.pay.orderSerial); 
+			if(supplyComId!=null){
+				fd.append('supplyComId',supplyComId);
+			}else{
+				fd.append('supplyComId',$scope.pay.supplyComId);
+			}
+			fd.append('applyPaymentAmount',$scope.pay.applyPaymentAmount); 
+			fd.append('applyCurrency',$scope.pay.applyCurrency);
+			fd.append('playPaymentDate',$scope.pay.playPaymentDate);
+			fd.append('payType',$scope.pay.payType);
+			fd.append('paymentNode',$scope.pay.paymentNode);
+			fd.append('nodeNum',$scope.pay.nodeNum);
+			fd.append('billStyle',"先款后票"); 
+			fd.append('isBill',$("input[name='isBill']:checked").val());
+			fd.append('applyDate',$scope.pay.applyDate);
+			fd.append('applicant',$scope.pay.applicant);
+			fd.append('applyDept',$scope.pay.applyDept);
+			fd.append('remark',$scope.pay.remark);
+			
+			fd.append('payee',$scope.pay.payee);
+			fd.append('contact',$scope.pay.contact);
+			fd.append('contactNum',$scope.pay.contactNum);
+			fd.append('bank',$scope.pay.bank);
+			fd.append('accountName',$scope.pay.accountName);
+			fd.append('accountNumber',$scope.pay.accountNumber);
+			fd.append('reason',$scope.pay.reason);
+			$http({
+				method:'POST',
+				url:ctx + "rest/pay/modifyApplyAp",
+				params:{'taskId':$("#taskId").val(), 'reApply':false},
+				data: fd,
+				headers: {'Content-Type':undefined}
+			})   
+			.success( function ( data )
+					{
+				$state.go('paymentRecordC',{tabHref:1});//返回到待办列表
+				$("#dbTable").DataTable().ajax.reload();
+				showToastr('toast-bottom-right', 'success', data);
+				$scope.pay= data;
+				$scope.span = true;
+				$scope.input = false;
+				$scope.applyPaymentAmountChn=convertCurrency($scope.pay.applyPaymentAmount);
+					});
+		}
+	};
+	
 	//办结待办流程
 	function doAudit(_url, mydata){
         $.ajax( {
@@ -620,21 +730,10 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 																+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
 															}
 															
-															if(result.actionType == 'audit'){//审批流程
-																
+															if(result.actionType == 'audit'){//审批流程																
 																$state.go('auditPay',{serialNum:result.paymentRecord.serialNum, taskId:taskId, comments:comments});
-																
-																
 															}else{//result.actionType == 'modify' 更改流程
-		//														if(comments == ""){
-		//															comments = "无评论";
-		//														}else $("#comment_modify").html(comments);
-		//														$("#modify_beginDate").val(timeStamp2String2(result.vacation.beginDate));
-		//														$("#modify_endDate").val(timeStamp2String2(result.vacation.endDate));
-		//														$("#modify_days").val(result.vacation.days);
-		//														$("#modify_vacationType").val(result.vacation.vacationType);
-		//														$("#modify_reason").val(result.vacation.reason);
-		//														$('#modifyVacationModal').modal('show');
+																$state.go('editAuditPay',{serialNum:result.paymentRecord.serialNum, taskId:taskId, comments:comments});
 															}
 															
 															
