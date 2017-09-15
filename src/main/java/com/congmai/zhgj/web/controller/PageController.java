@@ -292,6 +292,15 @@ public class PageController {
         return "pay/auditPay";
     }
     
+    /**
+     * 调整应付款申请页面
+     * @return 
+     */
+    @RequestMapping("/editAuditPay")
+    public String editAuditPay() {
+        return "pay/editAuditPay";
+    }
+    
     
     /**
      * 收款详情页面

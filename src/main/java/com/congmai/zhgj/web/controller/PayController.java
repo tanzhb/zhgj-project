@@ -3,6 +3,7 @@ package com.congmai.zhgj.web.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -61,6 +62,7 @@ import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.PaymentFile;
 import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.User;
+import com.congmai.zhgj.web.model.Vacation;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.OrderService;
@@ -336,6 +338,71 @@ public class PayController {
 		map.put("clauList", clauList);
 		return map;
 	}
+	
+	
+	/**
+	 * 
+	 * @Description 调整应付款申请
+	 * @param taskId
+	 * @param reApply
+	 * @param record
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/modifyApplyAp", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+	@ResponseBody
+	public String modifyApplyAp(
+			@RequestParam("taskId") String taskId,
+			@RequestParam("reApply") Boolean reApply,
+			@Valid PaymentRecord record) throws Exception{
+		
+		String result = "";
+		User user = UserUtil.getUserFromSession();		
+		record.setUserId(user.getUserId());
+		record.setUser_name(user.getUserName());
+		record.setBusinessType(BaseVO.ACCOUNTPAYABLE);
+		record.setApplyDate(new Date());
+		record.setBusinessKey(record.getSerialNum());
+		record.setProcessInstanceId(record.getProcessInstanceId());
+        Map<String, Object> variables = new HashMap<String, Object>();
+        String content = "";
+        if(reApply){
+        	//修改请假申请
+        	record.setTitle(user.getUserName()+" 的应付款申请！");
+        	record.setStatus(BaseVO.PENDING);
+	        content = "重新申请";
+	        //由userTask自动分配审批权限
+//	        if(vacation.getDays() <= 3){
+//            	variables.put("auditGroup", "manager");
+//            }else{
+//            	variables.put("auditGroup", "director");
+//            }
+	        result = "任务办理完成，应付款申请已重新提交！";
+        }else{
+        	record.setTitle(user.getUserName()+" 的应付款申请已取消！");
+        	record.setStatus(BaseVO.APPROVAL_FAILED);
+        	content = "取消申请";
+        	result = "任务办理完成，已经取消您的应付款申请！";
+        }
+        try {
+			this.payService.updatePaymentRecord(record);
+			variables.put("entity", record);
+			variables.put("reApply", reApply);
+			this.processService.complete(taskId, content, user.getUserId().toString(), variables);
+			
+		} catch (ActivitiObjectNotFoundException e) {
+			result = "此任务不存在，请联系管理员！";
+			throw e;
+		} catch (ActivitiException e) {
+			result = "此任务正在协办，您不能办理此任务！";
+			throw e;
+		} catch (Exception e) {
+			result = "任务办理失败，请联系管理员！";
+			throw e;
+		}
+		
+    	return result;
+    }
 
 	/**
 	 * 保存用户付款信息

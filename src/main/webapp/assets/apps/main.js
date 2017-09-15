@@ -1569,6 +1569,37 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             }
         })
         
+        .state('editAuditPay', {
+            url: "/editAuditPay",
+            templateUrl: "rest/page/editAuditPay",
+            data: {pageTitle: '调整应付款申请'},
+            params:{"serialNum":null,"taskId":null, "comments":null},
+            controller: "PayController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+								'assets/global/plugins/datatables/datatables.min.css',
+								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+								'assets/apps/css/special.css',
+								'assets/global/plugins/datatables/datatables.all.min.js',
+								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+								'assets/apps/scripts/angular-file-upload-shim.min.js',
+								'assets/apps/scripts/angular-file-upload.min.js',
+								'assets/apps/scripts/FileUploader.js',
+								'assets/apps/scripts/pageHandle.js',
+								'assets/apps/service/PayService.js',
+								'assets/apps/controllers/PayController.js',
+								'assets/apps/controllers/app.js',
+								'assets/apps/controllers/uploadPhoto.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        
          .state('paymentRecordC', {
             url: "/paymentRecordC?tabHref",
             templateUrl: "rest/page/paymentRecord",

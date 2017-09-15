@@ -144,14 +144,16 @@ public class WorkflowService {
             //任务所属角色
             String taskDefinKey = taskDefinition.getKey();
             logger.info("taskDefinKey: "+taskDefinKey);
-            if(taskDefinKey.startsWith("director")){
+            if(taskDefinKey.startsWith("director") || taskDefinKey.startsWith("cfo") || taskDefinKey.startsWith("dgm") || taskDefinKey.startsWith("pdAudit")){
             	vars.put("任务所属角色", "总监组");
             }else if(taskDefinKey.startsWith("finance")){
-            	vars.put("任务所属角色", "财务组");
+            	vars.put("任务所属角色", "财务部");
             }else if(taskDefinKey.startsWith("hr")){
             	vars.put("任务所属角色", "人事组");
             }else if(taskDefinKey.startsWith("manager")){
             	vars.put("任务所属角色", "经理组");
+            }else if(taskDefinKey.startsWith("modifyApply")){
+            	vars.put("任务所属角色", "员工组");
             }
             
             //当前处理人
