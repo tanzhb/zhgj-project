@@ -281,13 +281,13 @@
       takeDeliverNum, remark, actualDate, 
       taker, takeRemark, delFlg, 
       creator, createTime, updater, 
-      updateTime)
+      updateTime,status)
     values (#{serialNum,jdbcType=VARCHAR}, #{deliverSerial,jdbcType=VARCHAR}, #{warehouseSerial,jdbcType=VARCHAR}, 
       #{takeDeliverDate,jdbcType=DATE}, #{receiver,jdbcType=VARCHAR}, #{contactNum,jdbcType=VARCHAR}, 
       #{takeDeliverNum,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{actualDate,jdbcType=TIMESTAMP}, 
       #{taker,jdbcType=VARCHAR}, #{takeRemark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{updateTime,jdbcType=TIMESTAMP},#{status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.TakeDelivery" >
     insert into takeDelivery

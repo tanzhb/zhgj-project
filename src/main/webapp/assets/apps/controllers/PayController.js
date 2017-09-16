@@ -1325,12 +1325,17 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 			var ap = table.rows('.active').data();
 			var ids = '';
 			for(i=0;i<ap.length;i++){
+				if(ap[i].status != '0'){
+					showToastr('toast-top-center', 'warning', '所选数据已经申请流程审批，不能删除！');
+					return;
+				}
+				
 				if(ids == ''){
 					ids = ap[i].serialNum;
 				}else ids = ids +','+ ap[i].serialNum;
 				
 			}
-			alert(ids);
+			
 			$('#delUsersModal').modal('show');// 打开确认删除模态框
 
 			$scope.confirmDel = function() {										

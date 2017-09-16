@@ -123,12 +123,18 @@
 			
 			<div class="portlet-body">
 				<table
-					class="table table-striped table-bordered table-hover "
+					class="table table-striped table-bordered table-hover table-checkable order-column  "
 					id="sample_in">
 					<thead>
 						<tr>
-							<th style="text-align: center"><input name="select_all"
-								value="1" id="example-select-in-all" type="checkbox" /></th>
+							<!-- <th style="text-align: center"><input name="select_all"
+								value="1" id="example-select-in-all" type="checkbox" /></th> -->
+								<th>
+			                  <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+			                      <input  type="checkbox" class="group-checkable" data-set="#sample_in .checkboxes" />
+			                         <span></span>
+			                          </label>
+			                                    </th>
 							<th>发票编号 </th>
                             <th> 发票类型</th>
                             <th>关联采购单号</th>
@@ -233,12 +239,18 @@
 
 			<div class="portlet-body">
 				<table
-					class="table table-striped table-bordered table-hover "
+					class="table table-striped table-bordered table-hover table-checkable order-column "
 					id="sample_out">
 					<thead>
 						<tr>
-							<th style="text-align: center"><input name="select_all"
-								value="1" id="example-select-out-all" type="checkbox" /></th>
+							<!-- <th style="text-align: center"><input name="select_all"
+								value="1" id="example-select-out-all" type="checkbox" /></th> -->
+								<th>
+			                  <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+			                      <input  type="checkbox" class="group-checkable" data-set="#sample_out .checkboxes" />
+			                         <span></span>
+			                          </label>
+			                                    </th>
 							<th>发票编号 </th>
                             <th> 发票类型</th>
                             <th>关联销售单号</th>

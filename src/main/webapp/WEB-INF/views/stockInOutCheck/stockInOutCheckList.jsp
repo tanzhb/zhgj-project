@@ -46,8 +46,8 @@
 				</div>
 				<div class="actions">
 				<div class="btn-group btn-group-devided" data-toggle="buttons">
-						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addStockInOutCheck('in')">
-	                                              <i class="fa fa-plus"></i> 添加</label>
+						<!-- <label class="btn btn-transparent green btn-circle btn-sm" ng-click="addStockInOutCheck('in')">
+	                                              <i class="fa fa-plus"></i> 添加</label> -->
 						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditStockInOutPage('in')">
 	                                              <i class="fa fa-edit"></i> 修改</label>
 						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delStockInOutCheck('In')" >
@@ -189,12 +189,18 @@
 
 			<div class="portlet-body">
 				<table
-					class="table table-striped table-bordered table-hover "
+					class="table table-striped table-bordered table-hover table-checkable order-column "
 					id="sample_in">
 					<thead>
 						<tr>
-							<th style="text-align: center"><input name="select_all"
-								value="1" id="example-select-in-all" type="checkbox" /></th>
+						<th>
+			                  <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+			                      <input  type="checkbox" class="group-checkable" data-set="#sample_in .checkboxes" />
+			                         <span></span>
+			                          </label>
+			                                    </th>
+							<!-- <th style="text-align: center"><input name="select_all"
+								value="1" id="example-select-in-all" type="checkbox" /></th> -->
 							<th>检验编号 </th>
                             <th> 收货单号</th>
                             <th>采购订单号</th>
@@ -228,8 +234,8 @@
 				</div>
 				<div class="actions">
 					<div class="btn-group btn-group-devided" data-toggle="buttons">
-						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addStockInOutCheck('out')">
-	                                              <i class="fa fa-plus"></i> 添加</label>
+					<!-- 	<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addStockInOutCheck('out')">
+	                                              <i class="fa fa-plus"></i> 添加</label> -->
 						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditStockInOutPage('out')">
 	                                              <i class="fa fa-edit"></i> 修改</label>
 						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delStockInOutCheck('Out')" >
@@ -371,12 +377,18 @@
 
 			<div class="portlet-body">
 				<table
-					class="table table-striped table-bordered table-hover "
+					class="table table-striped table-bordered table-hover table-checkable order-column  "
 					id="sample_out">
 					<thead>
 						<tr>
-							<th style="text-align: center"><input name="select_all"
-								value="1" id="example-select-out-all" type="checkbox" /></th>
+						<th>
+			                  <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+			                      <input  type="checkbox" class="group-checkable" data-set="#sample_out .checkboxes" />
+			                         <span></span>
+			                          </label>
+			                                    </th>
+							<!-- <th style="text-align: center"><input name="select_all"
+								value="1" id="example-select-out-all" type="checkbox" /></th> -->
 							<th>检验编号 </th>
                             <th> 发货单号</th>
                             <th>销售订单号</th>

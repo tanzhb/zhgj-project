@@ -86,6 +86,18 @@ public class PriceList {
     
     private String comName;//企业名称
     
+    //原因
+  	private String reason;
+  	
+  	// 对应的流程实例id
+ 	private String processInstanceId;
+ 	
+	// 用户id
+	private Integer userId;
+	
+	//申请日期 
+	   @DateTimeFormat(pattern="yyyy-MM-dd")
+	    private Date applyDate;
     
     
 
@@ -383,6 +395,38 @@ public class PriceList {
 
 	public void setComName(String comName) {
 		this.comName = comName;
+	}
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+
+	public String getProcessInstanceId() {
+		return processInstanceId;
+	}
+
+	public void setProcessInstanceId(String processInstanceId) {
+		this.processInstanceId = processInstanceId;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	public Date getApplyDate() {
+		return applyDate;
+	}
+
+	public void setApplyDate(Date applyDate) {
+		this.applyDate = applyDate;
 	}
     
 }

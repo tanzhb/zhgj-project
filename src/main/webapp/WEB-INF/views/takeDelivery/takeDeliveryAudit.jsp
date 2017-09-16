@@ -604,7 +604,7 @@
 										<td>{{materiel.stockInCount}}</td>
 										<td>{{materiel.unstockInCount}}</td>
 										<td>{{materiel.stockInWarehouse.warehouseName}}</td>
-										<td>{{materiel.stockInPosition}}</td>
+										<td>{{materiel.stockInPosition.positionName}}</td>
 										<td>{{materiel.stockInRemark}}</td>
 										<td></td>
 									</tr>
