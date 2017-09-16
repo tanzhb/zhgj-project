@@ -246,7 +246,7 @@
     d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, 
     d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.batchNum,    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.batchNum,dm.serialNum as dmSerialNum,
     dm.manufactureDate,dm.deliverCount,dm.deliverRemark,
-    dm.acceptCount,dm.refuseCount,dm.takeRemark,dm.qualifiedCount,dm.unqualifiedCount,dm.checkRemark,dm.warehouseSerial,dm.orderMaterielSerial,
+    dm2.acceptCount,dm2.refuseCount,dm2.takeRemark,dm.qualifiedCount,dm.unqualifiedCount,dm.checkRemark,dm.warehouseSerial,dm.orderMaterielSerial,
     dm2.serialNum as stockInSerialNum,dm2.qualifiedCount as stockInQualifiedCount,dm2.unqualifiedCount as stockInUnqualifiedCount,dm2.checkRemark as stockInCheckRemark,dm2.warehouseSerial as stockInWarehouseSerial,
 	dm2.positionSerial as stockInPositionSerial,dm2.stockCount as stockInCount,dm2.unstockCount as unstockInCount,dm2.stockRemark as stockInRemark,
     dt.serialNum as dtSerialNum,dt.transportType,dt.transport,dt.port,dt.shipNumber,dt.playArrivalDate,dt.playWarehouseDate,dt.remark as delivery_transport_remark,dt.contactNum as dtContactNum,dt.contact as dtContact,
@@ -262,7 +262,7 @@
    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from takedelivery
+    from takeDelivery
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
@@ -572,7 +572,7 @@
     select
     d.serialNum, d.deliverNum,d.deliverType, d.orderSerial, d.supplyComId,dm.serialNum as dmSerialNum,dm.batchNum,
     dm.manufactureDate,dm.deliverCount,dm.deliverRemark,
-    dm.acceptCount,dm.refuseCount,dm.takeRemark,dm.qualifiedCount,dm.unqualifiedCount,dm.checkRemark,dm.warehouseSerial as dmWarehouseSerial,
+    dm2.acceptCount,dm2.refuseCount,dm2.takeRemark,dm.qualifiedCount,dm.unqualifiedCount,dm.checkRemark,dm.warehouseSerial as dmWarehouseSerial,
 	dm.positionSerial as dmPositionSerial,dm.stockCount,dm.unstockCount,dm.stockRemark,dm.remark as dmRemark,dm.warehouseSerial as dmWarehouseSerial,dm.orderMaterielSerial,
 	dm2.serialNum as stockInSerialNum,dm2.qualifiedCount as stockInQualifiedCount,dm2.unqualifiedCount as stockInUnqualifiedCount,dm2.checkRemark as stockInCheckRemark,dm2.warehouseSerial as stockInWarehouseSerial,
 	dm2.positionSerial as stockInPositionSerial,dm2.stockCount as stockInCount,dm2.unstockCount as unstockInCount,dm2.stockRemark as stockInRemark,

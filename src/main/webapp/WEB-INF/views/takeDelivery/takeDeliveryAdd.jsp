@@ -49,7 +49,7 @@
 				 <ul class="nav nav-tabs" >
 					<li class="dropdown pull-right tabdrop" >
                        <button   ng-hide="companyAdd" class="btn green  btn-sm btn-circle" ng-click="saveTakeDelivery()">
-                              <i class="fa fa-check"></i> 确认收货 </button>
+                              <i class="fa fa-check"></i> 确认发货 </button>
                        <button   ng-hide="companyAdd" class="btn defualt  btn-sm btn-circle" ng-click="cancelTakeDelivery()" onclick="return false;">
                               <i class="fa fa-mail-reply"></i> 取消 </button>
                                 
@@ -123,7 +123,7 @@
                                                     <label class="control-label bold" for="supplyComId">供应商 <span class="required"> * </span></label>
                                                     <div class="">
                                                     	<select class="form-control" selectpicker  id="supplyComId"  name="supplyComId" ng-model="deliver.supplyComId" ng-hide="deliverAdd"  data-size="8">
-	                                                        <!-- <option value=""></option> -->
+	                                                        <option value=""></option>
 	                                                        <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}">{{supplier.comName}}</option>
 	                                                    </select>
                                                         <div class="form-control-focus"> </div>

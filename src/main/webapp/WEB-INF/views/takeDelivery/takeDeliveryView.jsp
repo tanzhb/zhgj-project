@@ -598,11 +598,11 @@
 										<td>
                                             {{materiel.takeRemark}}
 										</td>
-										<td>{{materiel.qualifiedCount}}</td>
-										<td>{{materiel.unqualifiedCount}}</td>
-										<td>{{materiel.checkRemark}}</td>
-										<td>{{materiel.stockCount}}</td>
-										<td>{{materiel.unstockCount}}</td>
+										<td>{{materiel.stockInQualifiedCount}}</td>
+										<td>{{materiel.stockInUnqualifiedCount}}</td>
+										<td>{{materiel.stockInCheckRemark}}</td>
+										<td>{{materiel.stockInCount}}</td>
+										<td>{{materiel.unstockInCount}}</td>
 										<td>{{materiel.warehouse.warehouseName}}</td>
 										<td>{{materiel.positionSerial}}</td>
 										<td>{{materiel.stockRemark}}</td>

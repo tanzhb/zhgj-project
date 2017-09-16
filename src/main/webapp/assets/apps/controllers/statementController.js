@@ -317,12 +317,15 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 							'className' : 'dt-body-center',
 							'render' : function(data,
 									type, full, meta) {
-								return '<input type="checkbox" id="'+data+'" ng-click="getStatement_(\''+data+'\')" name="serialNum[]" value="'
-													+ $('<div/>')
-													.text(
-															data)
-													.html()
-											+ '">';
+//								return '<input type="checkbox" id="'+data+'" ng-click="getStatement_(\''+data+'\')" name="serialNum[]" value="'
+//													+ $('<div/>')
+//													.text(
+//															data)
+//													.html()
+//											+ '">';
+								return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
+                                '<input type="checkbox" data-check="false" class="checkboxes"  id="'+data+'" value="'+data+'" data-set="#sample_2 .checkboxes" />'+
+                                '<span></span></label>';
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
@@ -385,7 +388,17 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
                 console.log('排序');
             })
             
-            
+             $("#sample_2").find(".group-checkable").change(function() {
+	            var e = jQuery(this).attr("data-set"),
+	            t = jQuery(this).is(":checked");
+	            jQuery(e).each(function() {
+	                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+	            })
+	        }),
+	        $("#sample_2").on("change", "tbody tr .checkboxes",
+	        function() {
+	            $(this).parents("tr").toggleClass("active")
+	        });
             
             
             // 添加checkbox功能***************************************
@@ -488,12 +501,15 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
     							'className' : 'dt-body-center',
     							'render' : function(data,
     									type, full, meta) {
-    								return '<input type="checkbox" id="'+data+'" ng-click="getStatement_(\''+data+'\')" name="serialNum[]" value="'
-    													+ $('<div/>')
-    													.text(
-    															data)
-    													.html()
-    											+ '">';
+//    								return '<input type="checkbox" id="'+data+'" ng-click="getStatement_(\''+data+'\')" name="serialNum[]" value="'
+//    													+ $('<div/>')
+//    													.text(
+//    															data)
+//    													.html()
+//    											+ '">';
+    								return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
+                                    '<input type="checkbox" data-check="false" class="checkboxes"  id="'+data+'" value="'+data+'" data-set="#sample_1 .checkboxes" />'+
+                                    '<span></span></label>';
     							},
     							"createdCell": function (td, cellData, rowData, row, col) {
     								 $compile(td)($scope);
@@ -556,7 +572,17 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
                     console.log('排序');
                 })
                 
-                
+                 $("#sample_1").find(".group-checkable").change(function() {
+		            var e = jQuery(this).attr("data-set"),
+		            t = jQuery(this).is(":checked");
+		            jQuery(e).each(function() {
+		                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+		            })
+		        }),
+		        $("#sample_1").on("change", "tbody tr .checkboxes",
+		        function() {
+		            $(this).parents("tr").toggleClass("active")
+		        });
                 
                 
                 // 添加checkbox功能***************************************

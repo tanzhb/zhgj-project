@@ -13,7 +13,7 @@
 					<table class="table table-striped table-bordered table-hover table-checkable order-column" id="buyOrder">
 	                    <thead>
 	                        <tr>
-	                            <th style="text-align: center"></th>
+	                            <th></th>
 	                            <th> 采购订单号 </th>
 	                            <th> 供应方 </th>
 	                            <th> 采购商品 </th>

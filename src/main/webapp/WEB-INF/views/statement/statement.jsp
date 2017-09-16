@@ -54,40 +54,18 @@
 									<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportStatement('supply')">
 				                                              <i class="fa fa-file-excel-o"></i> 导出</label>
 				                </div>
-								<!-- <a href="javascript:;" ui-sref="addSupplyStatement"
-									 class="btn btn-default btn-sm btn-circle">
-									<i class="fa fa-plus"></i> 添加
-								</a>  -->
-								<!-- <a href="javascript:;" ng-click="editStatement()"
-									 class="btn btn-default btn-sm btn-circle">
-									<i class="fa fa-edit"></i> 修改
-								</a> -->
-								<!-- <a href="javascript:;" ng-click="deleteSupplyStatement()"
-									class="btn btn-default btn-sm btn-circle"> <i
-									class="fa fa-minus"></i> 删除
-								</a> -->
-								<!-- <div class="btn-group">
-									<a class="btn btn-default btn-outline btn-circle"
-										href="javascript:;" data-toggle="dropdown"> <i
-										class="fa fa-share"></i> <span class="hidden-xs"> 其它 </span> <i
-										class="fa fa-angle-down"></i>
-									</a>
-									<ul class="dropdown-menu pull-right" id="sample_3_tools">
-										<li><a data-action="0"
-											class="tool-action" data-toggle="modal" data-target="#import"> <i class="fa fa-upload"></i> 导入
-										</a></li> 
-										<li><a href="javascript:;" data-action="1"
-											class="tool-action" ng-click="exportStatement()"> <i class="fa fa-file-excel-o"></i> 导出
-										</a></li>
-									</ul>
-								</div> -->
 							</div>
 				            </div>
 				            <div class="portlet-body">
 				                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_1">
 				                    <thead>
 				                        <tr>
-				                            <th style="text-align: center"><input name="select_all" id="example-select-supply" type="checkbox"/></th>
+				                            <th style="text-align: center">
+					                             <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+				                                     <input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" />
+				                                     <span></span>
+				                                 </label>
+				                            </th>
 				                            <th> 对账单号 </th>
 				                            <th> 对账日期 </th>
 				                            <th> 供应商 </th>
@@ -134,43 +112,18 @@
 									<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportStatement('buy')">
 				                                              <i class="fa fa-file-excel-o"></i> 导出</label>
 				                </div>
-								<!-- <a href="javascript:;" ui-sref="addBuyStatement"
-									 class="btn btn-default btn-sm btn-circle">
-									<i class="fa fa-plus"></i> 添加
-								</a>  -->
-								<!-- <a href="javascript:;" ng-click="editStatement()"
-									 class="btn btn-default btn-sm btn-circle">
-									<i class="fa fa-edit"></i> 修改
-								</a> -->
-								<!-- <a href="javascript:;" ng-click="deleteBuyStatement()"
-									class="btn btn-default btn-sm btn-circle"> <i
-									class="fa fa-minus"></i> 删除
-								</a>
-								<a href="javascript:;" data-action="1"
-											class="tool-action" ng-click="exportStatement()"> <i class="fa fa-file-excel-o"></i> 导出
-										</a>< -->
-								<!-- <div class="btn-group">
-									<a class="btn btn-default btn-outline btn-circle"
-										href="javascript:;" data-toggle="dropdown"> <i
-										class="fa fa-share"></i> <span class="hidden-xs"> 其它 </span> <i
-										class="fa fa-angle-down"></i>
-									</a>
-									<ul class="dropdown-menu pull-right" id="sample_3_tools">
-										<li><a data-action="0"
-											class="tool-action" data-toggle="modal" data-target="#import"> <i class="fa fa-upload"></i> 导入
-										</a></li> 
-										<li><a href="javascript:;" data-action="1"
-											class="tool-action" ng-click="exportStatement()"> <i class="fa fa-file-excel-o"></i> 导出
-										</a></li>
-									</ul>
-								</div> -->
 							</div>
 				            </div>
 				            <div class="portlet-body">
 				                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_2">
 				                    <thead>
 				                        <tr>
-				                            <th style="text-align: center"><input name="select_all" id="example-select-buy" type="checkbox"/></th>
+				                            <th style="text-align: center">
+				                            	 <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+				                                     <input type="checkbox" class="group-checkable" data-set="#sample_2 .checkboxes" />
+				                                     <span></span>
+				                                 </label>
+				                            </th>
 				                            <th> 对账单号 </th>
 				                            <th> 对账日期 </th>
 				                            <th> 客户  </th>

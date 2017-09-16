@@ -691,7 +691,7 @@ public class ProcessServiceImp implements IProcessService{
 	public String startBuyOrderInfo(OrderInfo orderInfo) {
 
 		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
-        identityService.setAuthenticatedUserId(orderInfo.getUser_id().toString());
+        identityService.setAuthenticatedUserId(orderInfo.getUserId().toString());
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("entity", orderInfo);
 
@@ -712,7 +712,7 @@ public class ProcessServiceImp implements IProcessService{
 	public String startSaleOrderInfo(OrderInfo orderInfo) {
 
 		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
-        identityService.setAuthenticatedUserId(orderInfo.getUser_id().toString());
+        identityService.setAuthenticatedUserId(orderInfo.getUserId().toString());
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("entity", orderInfo);
 

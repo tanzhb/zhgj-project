@@ -197,7 +197,7 @@ public class OrderController {
     	
 		//启动订单审批测试流程-start
 		User user = UserUtil.getUserFromSession();
-		orderInfo.setUser_id(user.getUserId());
+		orderInfo.setUserId(user.getUserId());
 		orderInfo.setUser_name(user.getUserName());
 		orderInfo.setTitle(user.getUserName()+" 的订单申请");
 		orderInfo.setBusinessType(BaseVO.BUYORDER); 			//业务类型：订单审核
@@ -249,7 +249,7 @@ public class OrderController {
     	
 		//启动订单审批测试流程-start
 		User user = UserUtil.getUserFromSession();
-		orderInfo.setUser_id(user.getUserId());
+		orderInfo.setUserId(user.getUserId());
 		orderInfo.setUser_name(user.getUserName());
 		orderInfo.setTitle(user.getUserName()+orderInfo.getOrderNum()+" 的订单申请");
 		orderInfo.setBusinessType(BaseVO.SALEORDER); 			//业务类型：采购订单
@@ -410,7 +410,7 @@ public class OrderController {
     	orderService.update(orderInfo);//更新备注(审批原因)
 		
         Map<String, Object> variables = new HashMap<String, Object>();
-        orderInfo.setUser_id(user.getUserId());
+        orderInfo.setUserId(user.getUserId());
         orderInfo.setUser_name(user.getUserName());
         orderInfo.setBusinessType(BaseVO.BUYORDER);
         orderInfo.setApplyDate(new Date());
