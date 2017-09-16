@@ -84,12 +84,18 @@
 			
 			<div class="portlet-body">
 				<table
-					class="table table-striped table-bordered table-hover "
+					class="table table-striped table-bordered table-hover table-checkable order-column"
 					id="sample_zijian">
 					<thead>
 					<tr>
-							<th style="text-align: center"><input name="zijian"
-								value="1" id="example-select-zijian-all" type="checkbox" /></th>
+					<th>
+			                  <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+			                      <input  type="checkbox" class="group-checkable" data-set="#sample_zijian .checkboxes" />
+			                         <span></span>
+			                          </label>
+			                                    </th>
+							<!-- <th style="text-align: center"><input name="zijian"
+								value="1" id="example-select-zijian-all" type="checkbox" /></th> -->
 							<th>库存编号 </th>
                             <th> 物料编号</th>
                             <th>物料名称</th>
@@ -165,12 +171,18 @@
 <!-- 删除代管库存end -->
 			<div class="portlet-body">
 				<table
-					class="table table-striped table-bordered table-hover "
+					class="table table-striped table-bordered table-hover table-checkable order-column "
 					id="sample_daiguan">
 					<thead>
 						<tr>
-							<th style="text-align: center"><input name="daiguan"
-								value="1" id="example-select-daiguan-all" type="checkbox" /></th>
+							<!-- <th style="text-align: center"><input name="daiguan"
+								value="1" id="example-select-daiguan-all" type="checkbox" /></th> -->
+								<th>
+			                  <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+			                      <input  type="checkbox" class="group-checkable" data-set="#sample_daiguan .checkboxes" />
+			                         <span></span>
+			                          </label>
+			                                    </th>
 							<th>库存编号 </th>
                             <th> 物料编号</th>
                             <th>物料名称</th>

@@ -382,12 +382,18 @@
 
 			<div class="portlet-body">
 				<table
-					class="table table-striped table-bordered table-hover "
+					class="table table-striped table-bordered table-hover table-checkable order-column "
 					id="sample_warehouse">
 					<thead>
 						<tr>
-							<th style="text-align: center"><input name="select_all"
-								value="1" id="example-select-all" type="checkbox" /></th>
+							<!-- <th style="text-align: center"><input name="select_all"
+								value="1" id="example-select-all" type="checkbox" /></th> -->
+								<th>
+			                  <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+			                      <input  type="checkbox" class="group-checkable" data-set="#sample_warehouse .checkboxes" />
+			                         <span></span>
+			                          </label>
+			                                    </th>
 							<th>仓库编号 </th>
                             <th> 仓库名称</th>
                             <th> 仓库类型</th>
