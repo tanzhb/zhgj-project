@@ -85,6 +85,8 @@ import com.congmai.zhgj.web.service.OrderFileService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.UserCompanyService;
+import com.congmai.zhgj.web.service.ProcessBaseService;
+
 
 /**
  * 
@@ -126,6 +128,8 @@ public class OrderController {
     private ClauseFrameworkService clauseFrameworkService;
     @Resource
     private UserCompanyService userCompanyService;
+    @Resource
+    private ProcessBaseService processBaseService;
     
 	/**
 	 * 合同管理service
@@ -202,8 +206,9 @@ public class OrderController {
 		orderInfo.setTitle(user.getUserName()+" 的订单申请");
 		orderInfo.setBusinessType(BaseVO.BUYORDER); 			//业务类型：订单审核
 		orderInfo.setStatus(BaseVO.PENDING);					//审批中
-//    		orderInfo.setApplyDate(new Date());
-//    		orderService.insert(orderInfo);
+    	orderInfo.setApplyDate(new Date());
+    	orderInfo.setReason(orderInfo.getRemark());
+    	processBaseService.insert(orderInfo);
 		String businessKey = orderInfo.getSerialNum().toString();
 		orderInfo.setBusinessKey(businessKey);
 		try {
@@ -254,8 +259,9 @@ public class OrderController {
 		orderInfo.setTitle(user.getUserName()+orderInfo.getOrderNum()+" 的订单申请");
 		orderInfo.setBusinessType(BaseVO.SALEORDER); 			//业务类型：采购订单
 		orderInfo.setStatus(BaseVO.PENDING);					//审批中
-//    		orderInfo.setApplyDate(new Date());
-//    		orderService.insert(orderInfo);
+    	orderInfo.setApplyDate(new Date());
+    	orderInfo.setReason(orderInfo.getRemark());
+    	processBaseService.insert(orderInfo);
 		String businessKey = orderInfo.getSerialNum().toString();
 		orderInfo.setBusinessKey(businessKey);
 		try {
@@ -364,7 +370,7 @@ public class OrderController {
     			}
     		}
     		
-//    		this.orderService.update(order);
+    		this.processBaseService.update(order);
     		
     		result = "任务办理完成！";
 		} catch (ActivitiObjectNotFoundException e) {
@@ -405,9 +411,6 @@ public class OrderController {
 
 		OrderInfo orderInfo = new OrderInfo();
 		orderInfo.setSerialNum(orderId);
-		orderInfo.setRemark(reason);
-    	
-    	orderService.update(orderInfo);//更新备注(审批原因)
 		
         Map<String, Object> variables = new HashMap<String, Object>();
         orderInfo.setUserId(user.getUserId());
@@ -430,6 +433,7 @@ public class OrderController {
         	result = "任务办理完成，已经取消您的请假申请！";
         }
         try {
+    		this.processBaseService.update(orderInfo);
 			variables.put("entity", orderInfo);
 			variables.put("reApply", reApply);
 			this.processService.complete(taskId, content, user.getUserId().toString(), variables);

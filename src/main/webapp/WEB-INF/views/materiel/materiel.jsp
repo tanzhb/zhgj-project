@@ -102,7 +102,12 @@
 	                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_2">
 	                    <thead>
 	                        <tr>
-	                            <th style="text-align: center"><input name="select_all" id="example-select-all" type="checkbox"/></th>
+	                            <th>
+                                    <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                        <input type="checkbox" class="group-checkable" data-set="#sample_2 .checkboxes" />
+                                        <span></span>
+                                    </label>
+                                </th>
 	                            <th> 物料编码 </th>
 	                            <th> 物料名称 </th>
 	                            <th> 规格型号 </th>

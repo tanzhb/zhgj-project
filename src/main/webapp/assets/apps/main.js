@@ -269,7 +269,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         //销售订单
         .state('saleOrder', {
-            url: "/saleOrder",
+            url: "/saleOrder?:tabHref",
             templateUrl: "rest/page/saleOrder",
             data: {pageTitle: '销售订单'},
             controller: "saleOrderController",
@@ -320,7 +320,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         //采购订单
         .state('buyOrder', {
-            url: "/buyOrder",
+            url: "/buyOrder?:tabHref",
             templateUrl: "rest/page/buyOrder",
             data: {pageTitle: '采购订单'},
             controller: "buyOrderController",

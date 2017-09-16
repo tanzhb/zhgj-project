@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.activiti.bpmn.BpmnAutoLayout;
 import org.activiti.bpmn.model.ActivitiListener;
 import org.activiti.bpmn.model.BpmnModel;
@@ -66,6 +68,7 @@ import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.IVacationService;
 import com.congmai.zhgj.web.service.PayService;
+import com.congmai.zhgj.web.service.ProcessBaseService;
 import com.congmai.zhgj.web.service.UserService;
 
 /**
@@ -113,6 +116,9 @@ public class ProcessServiceImp implements IProcessService{
 	
 	@Autowired
 	private ProcessEngine processEngine;
+	
+	@Autowired
+    private ProcessBaseService processBaseService;
 	
 	/**
 	 * 应付款service
@@ -698,8 +704,8 @@ public class ProcessServiceImp implements IProcessService{
         String businessKey = orderInfo.getBusinessKey();
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("com.congmai.zhgj.buyOrder", businessKey, variables);
         String processInstanceId = processInstance.getId();
-//        orderInfo.setProcessInstanceId(processInstanceId);
-//        this.vacationService.doUpdate(orderInfo);
+        orderInfo.setProcessInstanceId(processInstanceId);
+        this.processBaseService.update(orderInfo);
 
         logger.info("processInstanceId: "+processInstanceId);
         //最后要设置null，就是这么做，还没研究为什么
@@ -719,8 +725,8 @@ public class ProcessServiceImp implements IProcessService{
         String businessKey = orderInfo.getBusinessKey();
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("com.congmai.zhgj.saleOrder", businessKey, variables);
         String processInstanceId = processInstance.getId();
-//        orderInfo.setProcessInstanceId(processInstanceId);
-//        this.vacationService.doUpdate(orderInfo);
+        orderInfo.setProcessInstanceId(processInstanceId);
+        this.processBaseService.update(orderInfo);
 
         logger.info("processInstanceId: "+processInstanceId);
         //最后要设置null，就是这么做，还没研究为什么

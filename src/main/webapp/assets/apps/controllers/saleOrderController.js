@@ -217,12 +217,9 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 							'orderable' : false,
 							'render' : function(data,
 									type, full, meta) {
-								return '<input type="checkbox" id="'+data+'" ng-click="getSaleOrderInfo_(\''+data+'\')" name="serialNum[]" value="'
-													+ $('<div/>')
-													.text(
-															data)
-													.html()
-											+ '">';
+								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+								"<input type='checkbox' class='checkboxes' value="+ data +" />" +
+								"<span></span></label>";
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
@@ -288,6 +285,18 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 							});
 			// 添加checkbox功能
 			// ***************************************
+			
+			$("#sample_2").find(".group-checkable").change(function() {
+	            var e = jQuery(this).attr("data-set"),
+	            t = jQuery(this).is(":checked");
+	            jQuery(e).each(function() {
+	                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+	            })
+	        }),
+	        $("#sample_2").on("change", "tbody tr .checkboxes",
+	        function() {
+	            $(this).parents("tr").toggleClass("active")
+	        })
         };
         
         
@@ -347,12 +356,9 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     							'orderable' : false,
     							'render' : function(data,
     									type, full, meta) {
-    								return '<input type="checkbox" id="'+data+'" ng-click="getSaleOrderInfo_(\''+data+'\')" name="serialNum[]" value="'
-    													+ $('<div/>')
-    													.text(
-    															data)
-    													.html()
-    											+ '">';
+    								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+    								"<input type='checkbox' class='checkboxes' value="+ data +" />" +
+    								"<span></span></label>";
     							},
     							"createdCell": function (td, cellData, rowData, row, col) {
     								 $compile(td)($scope);
@@ -418,6 +424,17 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     							});
     			// 添加checkbox功能
     			// ***************************************
+    			$("#sample_3").find(".group-checkable").change(function() {
+    	            var e = jQuery(this).attr("data-set"),
+    	            t = jQuery(this).is(":checked");
+    	            jQuery(e).each(function() {
+    	                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+    	            })
+    	        }),
+    	        $("#sample_3").on("change", "tbody tr .checkboxes",
+    	        function() {
+    	            $(this).parents("tr").toggleClass("active")
+    	        })
             };
         
          // 弹出确认删除模态框
@@ -795,12 +812,17 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
        										+ '">';
 
          								}else{
-         	  								return '<input type="checkbox" data-checked=false id="'+ row.serialNum +'" ng-click="getCheckedIds(\''+data+'\','+meta.row+')" name="material_serial" value="'
+         	  								/*return '<input type="checkbox" data-checked=false id="'+ row.serialNum +'" ng-click="getCheckedIds(\''+data+'\','+meta.row+')" name="material_serial" value="'
        										+ $('<div/>')
        												.text(
        														row.supplyMateriels[0].serialNum)
        												.html()
-       										+ '">';
+       										+ '">';*/
+
+         									return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+         									"<input type='checkbox' class='checkboxes' data-checked=false name='material_serial'  id='"+ row.serialNum +"' ng-click='getCheckedIds(\""+data+"\","+meta.row+")' value="+ row.supplyMateriels[0].serialNum +" />" +
+         									"<span></span></label>";
+         								
 
          								}
      								}else{
@@ -857,6 +879,18 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
    	          }).on('draw.dt',function() {
    	        	  checkedIdHandler();
    	          });
+                 
+                 $("#select_sample_2").find(".group-checkable").change(function() {
+     	            var e = jQuery(this).attr("data-set"),
+     	            t = jQuery(this).is(":checked");
+     	            jQuery(e).each(function() {
+     	                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+     	            })
+     	        }),
+     	        $("#select_sample_2").on("change", "tbody tr .checkboxes",
+     	        function() {
+     	            $(this).parents("tr").toggleClass("active")
+     	        })
                 
              };
 
