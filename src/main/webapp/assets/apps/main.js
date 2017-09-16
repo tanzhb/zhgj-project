@@ -915,6 +915,25 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    			});
 		    		}]
 		    	}	        
+		    }) .state('takeDeliveryAdjustment', {
+		    	url: "/takeDeliveryAdjustment?:serialNum&:taskId&:comments",
+		    	templateUrl: "rest/takeDelivery/takeDeliveryAdjustment",
+		    	data: {pageTitle: '收货'},
+		    	reload:true, 
+		    	controller: "TakeDeliveryController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [       
+		    				        'assets/apps/controllers/TakeDeliveryController.js',
+		    				        'assets/apps/service/TakeDeliveryService.js',
+		    				        'assets/apps/service/orderService.js'
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
 		    }).state('stockInAdd', {
 		    	url: "/stockInAdd?:serialNum",
 		    	templateUrl: "rest/takeDelivery/stockInAdd",

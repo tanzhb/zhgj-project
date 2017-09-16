@@ -233,12 +233,16 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
        							
        							'render' : function(data,
        									type, row, meta) {
-   	  								return '<input type="checkbox"  name="serialNum[]" value="'
+   	  								/*return '<input type="checkbox"  name="serialNum[]" value="'
  										+ $('<div/>')
  												.text(
  														data)
  												.html()
- 										+ '">';
+ 										+ '">';*/
+   	  							return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
+                                '<input type="checkbox" data-check="false" class="checkboxes" id="'+data+'" value="'+data+'" data-set="#demandPlanTable .checkboxes" />'+
+                                '<span></span>'+
+                                 '</label>';
        							},
        							"createdCell": function (td, cellData, rowData, row, col) {
        								 $compile(td)($scope);
