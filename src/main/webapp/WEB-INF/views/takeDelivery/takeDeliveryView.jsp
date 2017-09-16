@@ -37,6 +37,9 @@
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
 <div class="row">
+<%-- 	<div class="col-md-12">
+		<jsp:include page="step.jsp"></jsp:include>
+	</div> --%>
     <div class="col-md-12">
     	<form  id="takeDeliveryyForm" class="form-horizontal" >
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
@@ -603,9 +606,9 @@
 										<td>{{materiel.stockInCheckRemark}}</td>
 										<td>{{materiel.stockInCount}}</td>
 										<td>{{materiel.unstockInCount}}</td>
-										<td>{{materiel.warehouse.warehouseName}}</td>
-										<td>{{materiel.positionSerial}}</td>
-										<td>{{materiel.stockRemark}}</td>
+										<td>{{materiel.stockInWarehouse.warehouseName}}</td>
+										<td>{{materiel.stockInPosition.positionName}}</td>
+										<td>{{materiel.stockInRemark}}</td>
 										<td></td>
 									</tr>
 									<tr ng-if="deliver.deliveryMateriels==undefined||deliver.deliveryMateriels.length==0">

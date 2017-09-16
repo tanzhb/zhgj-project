@@ -355,7 +355,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        /**
 	         * 批量删除收货计划
 	         */
-	        $scope.takeDeliveryDelete = function () {debugger;
+	        $scope.takeDeliveryDelete = function () {
 	        	var id_count = $('#takeDeliveryTable input[name="serialNum"]:checked').length;
 				if(id_count==0){
 					toastr.warning("请选择您要删除的记录");
@@ -475,6 +475,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        	
 	        };
 	         
+	        /**
+	         * 入库编辑
+	         */
 	        $scope.stockInEdit = function(){
 	        	var id_count = $('#stockInTable input[name="serialNum2"]:checked').length;
 				if(id_count==0){
@@ -485,6 +488,21 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					var serialNum = $('#stockInTable input[name="serialNum2"]:checked').val();
 					$state.go("stockInAdd",{serialNum:serialNum});
 				}
+	        }
+	        
+	        /**
+	         * 入库编辑
+	         */
+	        $scope.stockIn = function(){
+	        	var id_count = $('#stockInTable input[name="serialNum2"]:checked').length;
+	        	if(id_count==0){
+	        		toastr.warning("请选择您要入库的记录");
+	        	}else if(id_count>1){
+	        		toastr.warning("只能选择一条数据进行入库");
+	        	}else{
+	        		var serialNum = $('#stockInTable input[name="serialNum2"]:checked').val();
+	        		$state.go("stockIn",{serialNum:serialNum});
+	        	}
 	        }
 	       	
 	        /**
@@ -677,7 +695,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    									}else if(data=="APPROVAL_SUCCESS"){
 	    										return '<span  class="label label-sm label-info ng-scope">待检验</span>';
 	    									}else if(data=="APPROVAL_FAILED"){
-	    										return '<span  class="label label-sm label-danger ng-scope">待调整</span>';
+	    										return '<span  class="label label-sm label-danger ng-scope">未通过</span>';
 	    									}else{
 	    										return '<span  class="label label-sm label-danger ng-scope">待收货</span>';
 	    									}

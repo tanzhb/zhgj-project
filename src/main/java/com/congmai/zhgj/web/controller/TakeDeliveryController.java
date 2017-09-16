@@ -423,6 +423,20 @@ public class TakeDeliveryController {
     
     /**
      * 
+     * @Description (TODO新建入庫)
+     * @param map
+     * @param serialNum
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="stockIn")
+    public String stockIn(Map<String, Object> map,String serialNum,HttpServletRequest request) {
+    	
+    	return "takeDelivery/stockIn";
+    }
+    
+    /**
+     * 
      * @Description (TODO查看入库)
      * @param map
      * @param serialNum
@@ -816,22 +830,28 @@ public class TakeDeliveryController {
 			String taskDefinitionKey = task.getTaskDefinitionKey();
 			TakeDelivery takeDelivery = null;
 			if ("modifyApply".equals(taskDefinitionKey)) {
-				String flag = confirmTakeDelivery(new HashMap<String, Object>(), params, request);
-				if(!"1".equals(flag)){
-					logger.warn("修改收货信息失败");
-					throw new Exception("修改收货信息失败");
-				}
-				takeDelivery = this.takeDeliveryService.selectByPrimaryKey(serialNum);
-				TakeDelivery baseTakeDelivery = (TakeDelivery) this.runtimeService
-						.getVariable(takeDelivery.getProcessInstanceId(), "entity");
+				
+				
 				if(!completeFlag){
+					takeDelivery = this.takeDeliveryService.selectByPrimaryKey(serialNum);
+					TakeDelivery baseTakeDelivery = (TakeDelivery) this.runtimeService
+							.getVariable(takeDelivery.getProcessInstanceId(), "entity");
 		        	baseTakeDelivery.setTitle(baseTakeDelivery.getUser_name()
 							+ " 的收货申请已取消！");
-					takeDelivery.setStatus(BaseVO.APPROVAL_FAILED);
+					takeDelivery.setStatus(BaseVO.APPROVAL_SUCCESS);
 		        	content = "取消申请";
-		        	result = "任务办理完成，已经取消您的请假申请！";
+		        	//result = "任务办理完成，已经取消您的请假申请！";
+		        	variables.put("entity", baseTakeDelivery);
 		        }else
 		        {
+		        	String flag = confirmTakeDelivery(new HashMap<String, Object>(), params, request);
+					if(!"1".equals(flag)){
+						logger.warn("修改收货信息失败");
+						throw new Exception("修改收货信息失败");
+					}
+					takeDelivery = this.takeDeliveryService.selectByPrimaryKey(serialNum);
+					TakeDelivery baseTakeDelivery = (TakeDelivery) this.runtimeService
+							.getVariable(takeDelivery.getProcessInstanceId(), "entity");
 		        	baseTakeDelivery.setTitle(baseTakeDelivery.getUser_name()
 							+ " 的收货重新申请！");
 					takeDelivery.setStatus(BaseVO.PENDING);

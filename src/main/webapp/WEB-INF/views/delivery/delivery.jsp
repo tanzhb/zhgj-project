@@ -231,11 +231,15 @@
 						</div>
 						<div class="portlet-body">
 							<!-- <div class="table-responsive"> -->
-							<table class="table table-bordered" id="stockInTable">
+							<table class="table table-striped table-bordered table-hover table-checkable order-column" id="stockInTable">
 								<thead>
 									<tr>
-										<th style="text-align: center"><input name="select_all_2"
-											value="1" id="example-select-all-2" type="checkbox" /></th>
+										<th>
+												<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+				                                     <input type="checkbox" class="group-checkable" data-set="#stockInTable .checkboxes" />
+				                                     <span></span>
+				                                 </label>
+										</th>
 										<th>出库明细号</th>
 										<th>销售订单号</th>
 										<th>商品名称</th>

@@ -14,6 +14,7 @@ import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.Constants;
 import com.congmai.zhgj.web.dao.Delivery2Mapper;
 import com.congmai.zhgj.web.dao.DeliveryMaterielMapper;
 import com.congmai.zhgj.web.dao.DeliveryTransportMapper;
@@ -96,6 +97,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			takeDeliveryParams.getTakeDelivery().setSerialNum(takeDeliverySerial);
 			takeDeliveryParams.getTakeDelivery().setTakeDeliverNum("SH"+ApplicationUtils.getFromNumber());
 			takeDeliveryParams.getTakeDelivery().setDeliverSerial(deliverySerial);
+			takeDeliveryParams.getTakeDelivery().setStatus("0");
 			takeDeliveryParams.getTakeDelivery().setCreator(currenLoginName);
 			takeDeliveryParams.getTakeDelivery().setCreateTime(now);
 		}
@@ -417,7 +419,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		StockInOutCheck check = new StockInOutCheck();
 		check.setSerialNum(ApplicationUtils.random32UUID());
 		check.setTakeDeliverSerial(takeDeliverySerial);
-		check.setDeliverSerial("");
+		check.setDeliverSerial("checkin");
 		check.setCheckNum("RK"+ApplicationUtils.getFromNumber());
 		check.setStatus("0");
 		check.setDelFlg("0");
@@ -434,7 +436,8 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		StockInOutCheck check = new StockInOutCheck();
 		check.setSerialNum(ApplicationUtils.random32UUID());
 		check.setDeliverSerial(deliverySerial);
-		check.setTakeDeliverSerial("");
+		check.setTakeDeliverSerial("checkout");
+		check.setCheckNum("CK"+ApplicationUtils.getFromNumber());
 		check.setStatus("0");
 		check.setDelFlg("0");
 		check.setCreator(currenLoginName);

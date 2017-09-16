@@ -1400,12 +1400,15 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
   							'className' : 'dt-body-center',
   							'render' : function(data,
   									type, row, meta) {
-	  	  								return '<input  type="checkbox" id='+data+'   name="serialNum2" value="'
-											+ $('<div/>')
-													.text(
-															data)
-													.html()
-											+ '">';
+//	  	  								return '<input  type="checkbox" id='+data+'   name="serialNum2" value="'
+//											+ $('<div/>')
+//													.text(
+//															data)
+//													.html()
+//											+ '">';
+  								return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
+                                '<input type="checkbox" name="serialNum2" class="checkboxes"  id="'+data+'" value="'+data+'" data-set="#stockInTable .checkboxes" />'+
+                                '<span></span></label>';
 	
   							},
   							"createdCell": function (td, cellData, rowData, row, col) {
@@ -1463,6 +1466,18 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          }).on('draw.dt',function() {
 	        	//  checkedIdHandler();
 	          });
+            
+            $("#stockInTable").find(".group-checkable").change(function() {
+	            var e = jQuery(this).attr("data-set"),
+	            t = jQuery(this).is(":checked");
+	            jQuery(e).each(function() {
+	                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+	            })
+	        }),
+	        $("#stockInTable").on("change", "tbody tr .checkboxes",
+	        function() {
+	            $(this).parents("tr").toggleClass("active")
+	        })
           };
      /***选择出库列表初始化END***/
           		

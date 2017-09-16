@@ -343,9 +343,9 @@
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="packageSpecifications">包装规格 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="packageSpecifications">包装规格 </label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="packageSpecifications" name="packageSpecifications" ng-model="deliver.packageSpecifications" ng-hide="deliverAdd" >
+                                                        <input type="text" class="form-control" id="packageSpecifications"  ng-model="deliver.packageSpecifications" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.packageSpecifications}}</p>
                                                     </div>
@@ -355,7 +355,7 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="materielWeight">物料重量 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="materielWeight">物料重量 </label>
                                                     <div class="">
                                                         <input type="text" class="form-control" id="materielWeight"  name="materielWeight" ng-model="deliver.materielWeight" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
@@ -366,7 +366,7 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="serviceMoney">服务费 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="serviceMoney">服务费</label>
                                                     <div class="">
                                                         <input type="text" class="form-control" id="serviceMoney"  name="serviceMoney" ng-model="deliver.serviceMoney" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>

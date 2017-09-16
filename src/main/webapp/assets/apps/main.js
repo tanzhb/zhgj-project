@@ -872,7 +872,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				files: [       
 		    				        'assets/apps/controllers/TakeDeliveryController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js',
-		    				        'assets/apps/service/orderService.js'
+		    				        'assets/apps/service/orderService.js',
+		    				        'assets/global/css/components-rounded.min.css'
 		    				        ]
 		    			});
 		    		}]
@@ -938,6 +939,26 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    	url: "/stockInAdd?:serialNum",
 		    	templateUrl: "rest/takeDelivery/stockInAdd",
 		    	data: {pageTitle: '新建入库单'},
+		    	reload:true, 
+		    	controller: "StockInController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [
+		    				        'assets/global/plugins/datatables/datatables.min.css',                  
+		    				        'assets/global/plugins/datatables/datatables.all.min.js',
+		    				        'assets/apps/controllers/StockInController.js',
+		    				        'assets/apps/service/TakeDeliveryService.js'
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
+		    }).state('stockIn', {//执行入库
+		    	url: "/stockIn?:serialNum",
+		    	templateUrl: "rest/takeDelivery/stockIn",
+		    	data: {pageTitle: '入库'},
 		    	reload:true, 
 		    	controller: "StockInController",
 		    	resolve: {

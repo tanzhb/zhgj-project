@@ -7,8 +7,8 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 	    	// initialize core components
 		    handle = new pageHandle();
 	    	App.initAjax();
-	    	handle.datePickersInit();
-	    	if($location.path()=="/stockInAdd"){
+	    	handle.datePickersInit();debugger;
+	    	if($location.path()=="/stockInAdd"||$location.path()=="/stockIn"){
 	    		initWarehouse();
 	    		handle.validatorInit();
 	    		//initTakeDelviery();
@@ -189,7 +189,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 							.saveStockInData(params);
 					promise.then(function(data) {
 						if(data.data == "1"){
-							if(isNull($scope.record.serialNum)){
+							if(isNull($scope.record.serialNum)||$state.current.name="stockIn"){
 								toastr.success("入库成功！");
 							}else{
 								toastr.success("修改成功！");
@@ -244,7 +244,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
         			$scope.record = data.data; 
         			$scope.record.takeDeliverNum = data.data.delivery.takeDelivery.takeDeliverNum;
         			//$scope.deliver.materielCount = data.orderMateriel.length;
-        			if(!isNull($stateParams.serialNum)&&$location.path()=="/stockInAdd"){//入库编辑时
+        			if(!isNull($stateParams.serialNum)&&($location.path()=="/stockInAdd"||$location.path()=="/stockIn")){//入库编辑或入库时时
         				$scope.deliverSerial = data.data.delivery.serialNum;
         				$scope.getTakeDeliverMateriel(data.data.delivery);
         			}
@@ -428,12 +428,15 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 		    							'className' : 'dt-body-center',
 		    							'render' : function(data,
 		    									type, row, meta) {
-		  	  	  								return '<input  type="radio" id='+data+'  ng-click="getSelectIndex('+meta.row+')"   name="takeDeliverySerial" value="'
-		  											+ $('<div/>')
-		  													.text(
-		  															data)
-		  													.html()
-		  											+ '">';
+//		  	  	  								return '<input  type="radio" id='+data+'  ng-click="getSelectIndex('+meta.row+')"   name="takeDeliverySerial" value="'
+//		  											+ $('<div/>')
+//		  													.text(
+//		  															data)
+//		  													.html()
+//		  											+ '">';
+		  	  	  							return '<label class="mt-radio mt-radio-outline">'+
+		                                     '<input type="radio"  ng-click="getSelectIndex(\''+meta.row+'\')" name="takeDeliverySerial"  class="checkboxes" id="'+data+'" value="'+data+'" />'+
+		                                     '<span></span></label>';
 		  	
 		    							},
 		    							"createdCell": function (td, cellData, rowData, row, col) {

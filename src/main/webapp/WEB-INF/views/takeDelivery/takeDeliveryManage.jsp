@@ -230,9 +230,13 @@
 		                                    </div> -->
 							<div class="actions">
 								<div class="btn-group btn-group-devided" data-toggle="buttons">
+									<label class="btn btn-transparent yellow btn-circle btn-sm"
+										ng-click="stockIn()"> <i class="fa fa-plus"></i> 入库
+									</label> 
 									<label class="btn btn-transparent green btn-circle btn-sm"
 										ui-sref="stockInAdd"> <i class="fa fa-plus"></i> 添加
-									</label> <label class="btn btn-transparent purple btn-circle btn-sm"
+									</label> 
+									<label class="btn btn-transparent purple btn-circle btn-sm"
 										ng-click="stockInEdit()"> <i class="fa fa-edit"></i>
 										修改
 									</label> <label class="btn btn-transparent red btn-circle btn-sm"
