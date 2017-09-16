@@ -357,7 +357,7 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="materielWeight">物料重量 </label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="materielWeight"  name="materielWeight" ng-model="deliver.materielWeight" ng-hide="deliverAdd" >
+                                                        <input type="text" class="form-control" id="materielWeight"   ng-model="deliver.materielWeight" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.materielWeight}}</p>
                                                     </div>
@@ -368,7 +368,7 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="serviceMoney">服务费</label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="serviceMoney"  name="serviceMoney" ng-model="deliver.serviceMoney" ng-hide="deliverAdd" >
+                                                        <input type="text" class="form-control" id="serviceMoney"  ng-model="deliver.serviceMoney" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.serviceMoney}}</p>
                                                     </div>
