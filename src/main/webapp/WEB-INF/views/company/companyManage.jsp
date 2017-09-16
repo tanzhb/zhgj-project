@@ -89,16 +89,20 @@
 			</div>
 			<div class="portlet-body">
 				<!-- <div class="table-responsive"> -->
-				<table class="table table-bordered" id="companyTable">
+				<table class="table table-striped table-bordered table-hover table-checkable order-column" id="companyTable">
 					<thead>
 						<tr>
-							<th style="text-align: center;width: 1px;">
-								<input name="select_all"  class="checkbox-inline"
-								value="1" id="example-select-all" data-check="false" type="checkbox" />
+							<th>
+								<!-- <input name="select_all"  class="checkbox-inline"
+								value="1" id="example-select-all" data-check="false" type="checkbox" /> -->
 								<!-- <label name="select_all" id="example-select-all"  class="mt-checkbox mt-checkbox-outline"  >
                                     <input type="checkbox" ng-model="allChecked" ng-click="checkedOrCancelAll()">
                                     <span></span>
                                 </label> -->
+                                 <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                     <input type="checkbox" class="group-checkable" data-set="#companyTable .checkboxes" />
+                                     <span></span>
+                                 </label>
 							</th>
 							<th>企业编码</th>
 							<th>企业名称</th>

@@ -364,12 +364,13 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		//takeDelivery.setSerialNum(takeDeliveryParams.getTakeDelivery().getSerialNum());
 		//takeDelivery.setSerialNum(takeDeliveryParams.getTakeDelivery().getSerialNum());
 		takeDeliveryMapper.updateByPrimaryKeySelective(takeDeliveryParams.getTakeDelivery());
+		//删除已保存的收货物料
+		DeliveryMaterielExample example = new DeliveryMaterielExample();
+		example.createCriteria().andDeliverSerialEqualTo(takeDeliveryParams.getTakeDelivery().getSerialNum());
+		deliveryMaterielMapper.deleteByExample(example);
+		
 	   for(DeliveryMateriel materiel : takeDeliveryParams.getDeliveryMateriels()){
-			DeliveryMaterielExample example = new DeliveryMaterielExample();
-			example.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
-			deliveryMaterielMapper.updateByExampleSelective(materiel, example);
 			materiel.setSerialNum(ApplicationUtils.random32UUID());
-			
 			materiel.setDeliverSerial(takeDeliveryParams.getTakeDelivery().getSerialNum());
 			materiel.setDelFlg("0");
 			materiel.setCreator(currenLoginName);

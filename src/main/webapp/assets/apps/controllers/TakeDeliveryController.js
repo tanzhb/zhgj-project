@@ -31,7 +31,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    		}
 	    		playArrivalDateSetting();
 	    		playWarehouseDateSetting();
-	 		}else if($location.path()=="/takeDeliveryView"||$location.path()=="/toTakeDelivery"||$location.path()=="/takeDeliveryAudit"){
+	 		}else if($location.path()=="/takeDeliveryView"||$location.path()=="/toTakeDelivery"||$location.path()=="/takeDeliveryAudit"||$location.path()=="/takeDeliveryAdjustment"){
 	 				takeDeliveryInfo($stateParams.serialNum,null,$stateParams.taskId, $stateParams.comments);
 	 		}else{
 	 			var type = handle.getCookie("d_type");
@@ -63,7 +63,12 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	 	 		 }
 	 			 loadStockInTable();
 	 			 loadTakeDelieryTable();
-	 			
+	 			 $("#sample_2").on("change", "tbody tr .checkboxes",
+				         function() {
+				            $(this).parents("tr").toggleClass("active");
+				            $(this).parents("tr").siblings().removeClass("active");
+				            $(this).parents("tr").siblings().find("input").checked = false;
+				 });
 	 			
 	 		}
 	    	// set default layout mode
@@ -336,9 +341,13 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					toastr.warning("请选择您要收货的记录");
 				}else if(id_count>1){
 					toastr.warning("只能选择一条数据进行收货");
-				}else{
-					var serialNum = $('#takeDeliveryTable input[name="serialNum"]:checked').val();
-					$state.go("toTakeDelivery",{serialNum:serialNum});
+				}else{debugger;
+					if(table.row('.active').data().status != '0'){
+						showToastr('toast-top-center', 'warning', '该条数据已经申请流程审批，不能进行修改！')
+					}else {
+						var serialNum = $('#takeDeliveryTable input[name="serialNum"]:checked').val();
+						$state.go("toTakeDelivery",{serialNum:serialNum});
+					}
 				}
 			}
 			
@@ -588,12 +597,16 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    							'className' : 'dt-body-center',
 	    							'render' : function(data,
 	    									type, row, meta) {
-	  	  	  								return '<input  type="checkbox" id='+data+'   name="serialNum" value="'
+	  	  	  								/*return '<input  type="checkbox" id='+data+'   name="serialNum" value="'
 	  											+ $('<div/>')
 	  													.text(
 	  															data)
 	  													.html()
-	  											+ '">';
+	  											+ '">';*/
+	  	  	  							return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
+	                                     '<input type="checkbox"  name="serialNum" class="checkboxes"  id="'+data+'" value="'+data+'" data-set="#takeDeliveryTable .checkboxes" />'+
+	                                     '<span></span>'+
+	                                 '</label>';
 	  	
 	    							},
 	    							"createdCell": function (td, cellData, rowData, row, col) {
@@ -680,6 +693,18 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  	          }).on('draw.dt',function() {
 	  	        	//  checkedIdHandler();
 	  	          });
+	                
+	                $("#takeDeliveryTable").find(".group-checkable").change(function() {
+			            var e = jQuery(this).attr("data-set"),
+			            t = jQuery(this).is(":checked");
+			            jQuery(e).each(function() {
+			                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+			            })
+			        }),
+			        $("#takeDeliveryTable").on("change", "tbody tr .checkboxes",
+			        function() {
+			            $(this).parents("tr").toggleClass("active")
+			        });
 	            };
 	            /***收货列表初始化END***/
 	            
@@ -1034,12 +1059,15 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		    							'className' : 'dt-body-center',
 	  		    							'render' : function(data,
 	  		    									type, row, meta) {
-	  		  	  	  								return '<input  type="checkbox" id='+data+'   name="serialNum2" value="'
+	  		  	  	  								/*return '<input  type="checkbox" id='+data+'   name="serialNum2" value="'
 	  		  											+ $('<div/>')
 	  		  													.text(
 	  		  															data)
 	  		  													.html()
-	  		  											+ '">';
+	  		  											+ '">';*/
+	  		  	  	  						return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
+		                                     '<input type="checkbox" name="serialNum2" class="checkboxes" id="'+data+'" value="'+data+'" data-set="#stockInTable .checkboxes" />'+
+		                                     '<span></span></label>';
 	  		  	
 	  		    							},
 	  		    							"createdCell": function (td, cellData, rowData, row, col) {
@@ -1107,6 +1135,18 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		  	          }).on('draw.dt',function() {
 	  		  	        	//  checkedIdHandler();
 	  		  	          });
+	  		              
+	  		            $("#stockInTable").find(".group-checkable").change(function() {
+				            var e = jQuery(this).attr("data-set"),
+				            t = jQuery(this).is(":checked");
+				            jQuery(e).each(function() {
+				                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+				            })
+				        }),
+				        $("#stockInTable").on("change", "tbody tr .checkboxes",
+				        function() {
+				            $(this).parents("tr").toggleClass("active")
+				        });
 	  		            };
 	  		       /***选择入库列表初始化END***/
 	  		            		
@@ -1208,12 +1248,15 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		  							'orderable' : false,
 	  		  							'render' : function(data,
 	  		  									type, row, meta) {
-	  		  								return '<input type="radio" id="'+data+'" data-num="'+row.orderNum+'" ng-click="getBuyOrderInfo_(\''+data+'\')" name="selecrOrderSerial" value="'
-	  		  													+ $('<div/>')
-	  		  													.text(
-	  		  															data)
-	  		  													.html()
-	  		  											+ '">';
+		  		  							/*	return '<input type="radio" id="'+data+'" data-num="'+row.orderNum+'" ng-click="getBuyOrderInfo_(\''+data+'\')" name="selecrOrderSerial" value="'
+		  		  													+ $('<div/>')
+		  		  													.text(
+		  		  															data)
+		  		  													.html()
+		  		  											+ '">';*/
+		  		  							return '<label class="mt-radio mt-radio-outline">'+
+		                                     '<input type="radio"  data-num="'+row.orderNum+'" ng-click="getBuyOrderInfo_(\''+data+'\')" name="selecrOrderSerial"  class="checkboxes" id="'+data+'" value="'+data+'" data-set="#buyOrder .checkboxes" />'+
+		                                     '<span></span></label>';
 	  		  							},
 	  		  							"createdCell": function (td, cellData, rowData, row, col) {
 	  		  								 $compile(td)($scope);
@@ -1223,7 +1266,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		              }).on('order.dt',
 	  		              function() {
 	  		                  console.log('排序');
-	  		              })	  			
+	  		              })	  	
 	  		      };
 	  		      
 	  		$scope.confirmSelect = function(){
@@ -1287,11 +1330,15 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 				}
 	  		}
 	  		
+	  		/**
+	  		 * 签收
+	  		 */
 	  		$scope.receiveTakeDelivery = function(){
 	  			var id_count = $('#sample_2 input[name="serialNum"]:checked').length;
 				if(id_count==0){
 					toastr.warning("请选择您要办理的记录");
 				}else{
+					
 					var ids = $('#sample_2 input[name="serialNum"]:checked').val();
 					claimTask(ids, 'sample_2');
 				}
@@ -1303,34 +1350,36 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 				var id_count = $('#sample_2 input[name="serialNum"]:checked').length;
 				if(id_count==0){
 					toastr.warning("请选择您要办理的记录");
-				}else{
-					var ids = $('#sample_2 input[name="serialNum"]:checked').val();
-					takeDeliveryService
-					.getAuditInfos(ids)
-					.then(
-							function(result) {													
-								
-								var comments = ""//添加评论
-								for (var i=0;i<result.commentList.length;i++){
-									comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
-									+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
-								}
-								
-								//if(result.actionType == 'audit'){//审批流程
-									$state.go('takeDeliveryAudit',{serialNum:result.takeDelivery.serialNum, taskId:ids, comments:comments});
-
-								//}else{
+				}else{debugger;
+					
+						var ids = $('#sample_2 input[name="serialNum"]:checked').val();
+						takeDeliveryService
+						.getAuditInfos(ids)
+						.then(
+								function(result) {													
 									
-								//}
-							},
-							function(errResponse) {
-								toastr.warning("申请失败！");
-								console
-										.error('Error while apply ap');
-							}
+									var comments = ""//添加评论
+									for (var i=0;i<result.commentList.length;i++){
+										comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+										+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
+									}
+									
+									if(result.actionType == 'audit'){//审批流程
+										$state.go('takeDeliveryAudit',{serialNum:result.takeDelivery.serialNum,taskId:ids,comments:comments});
 
-					);
-				}
+									}else{
+										$state.go('takeDeliveryAdjustment',{serialNum:result.takeDelivery.serialNum,taskId:ids,comments:comments});
+									}
+								},
+								function(errResponse) {
+									toastr.warning("申请失败！");
+									console
+											.error('Error while apply ap');
+								}
+
+						);
+					}
+					
 					//$state.go("takeDeliveryAudit",{serialNum:serialNum});
 			}
 	  		
@@ -1390,57 +1439,12 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
   		                          "sLast": "尾页"
   		                       }
   		                  },
-  		  /*
-  		   * fixedHeader: {//固定表头、表底 header: !0, footer: !0, headerOffset: a },
-  		   */
-  		                
- 					      /* buttons : [
-	  								{
-	  									text : "办理",
-	  									className : "btn default",
-	  									action: function(e, dt, node, config) { 
-	  										if(table.rows('.selected').data().length == 0){
-	  											toastr.warning("请选择要办理的任务！");
-	  										}else{
-	  											var assign = table.row('.selected').data().assign;
-	  											var taskId = table.row('.selected').data().taskId;
-	  											var processInstanceId = table.row('.selected').data().processInstanceId;
-	  											handleTask(assign, taskId, processInstanceId);
-	  										}
-	  									}
-	  								},
-	  								{
-	  									text : "签收",
-	  									className : "btn default",
-	  									action: function(e, dt, node, config) { 
-	  										if(table.rows('.selected').data().length == 0){
-	  											toastr.warning("请选择要签收的任务！");
-	  										}else{
-	  											var taskId = table.row('.selected').data().taskId;
-	  											claimTask(taskId, 'sample_2');
-	  										}								
-	  									}
-	  								},
-	  								{
-	  									text : "转办",
-	  									className : "btn default"
-	  								},
-	  								{
-	  									text : "委派",
-	  									className : "btn default"
-	  								},
-	  								{
-	  									text : "跳转",
-	  									className : "btn default"
-	  								} ],*/
   		                  order: [[1, "asc"]],// 默认排序列及排序方式
   		                  searching: true,// 是否过滤检索
   		                  ordering:  true,// 是否排序
   		                  lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
   		                  pageLength: 5,// 每页显示数量
   		                  processing: true,// loading等待框
-  		                  bRetrieve : true,
-  		                  responsive: !0,
   		  // serverSide: true,
   		                  ajax: tableAjaxUrl,// 加载数据中
   		                  "aoColumns": [
@@ -1461,7 +1465,10 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
   		  						    'className' : 'dt-body-center',
   		  							'render' : function(data,
   		  									type, row, meta) {
-  		  								return '<input type="radio" id="'+data+'"   name="serialNum" value="'+data+ '" />';
+  		  								//return '<input type="radio" id="'+data+'"   name="serialNum" value="'+data+ '" />';
+  		  						return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
+                                '<input type="checkbox" name="serialNum" class="checkboxes"  id="'+data+'" value="'+data+'"  />'+
+                                '<span></span></label>';
   		  							}
   		  						},{
   		  							'targets' : 1,
@@ -1571,7 +1578,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
   		              }).on('order.dt',
   		              function() {
   		                  console.log('排序');
-  		              })	  			
+  		              });
+
+			        
   		    //  };
 	  		}
 	  		
@@ -1740,6 +1749,43 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  			var _url = ctx + "rest/takeDelivery/complete";
 	  			doVacation(_url, mydata,1);
 	  		};
+	  		
+	  		//重新申请
+	  		$scope.reApply = function() {
+	  			var params = {};
+				params.takeDelivery = {};
+				params.takeDelivery.serialNum = $scope.deliver.takeDelivery.serialNum;
+				params.takeDelivery.takeDeliverNum = $scope.takeDeliver.takeDeliverNum;
+				params.takeDelivery.actualDate = $scope.takeDeliver.actualDate;
+				params.takeDelivery.taker = $scope.takeDeliver.taker;
+				params.takeDelivery.takeRemark = $scope.takeDeliver.takeRemark;
+				params.deliveryMateriels = [];
+				var param;
+				for(var i=0;i < $scope.deliver.deliveryMateriels.length;i++){
+					param = {};
+					param.orderMaterielSerial = $scope.deliver.deliveryMateriels[i].orderMateriel.serialNum;
+					param.serialNum = $scope.deliver.deliveryMateriels[i].serialNum;
+					param.batchNum = $scope.deliver.deliveryMateriels[i].batchNum;
+					param.manufactureDate = $scope.deliver.deliveryMateriels[i].manufactureDate;
+					param.deliverCount = $scope.deliver.deliveryMateriels[i].deliverCount;
+					param.deliverRemark = $scope.deliver.deliveryMateriels[i].deliverRemark;
+					param.acceptCount = $scope.deliver.deliveryMateriels[i].acceptCount;
+					param.refuseCount = $scope.deliver.deliveryMateriels[i].deliverCount-$scope.deliver.deliveryMateriels[i].acceptCount;
+					param.takeRemark = $scope.deliver.deliveryMateriels[i].takeRemark;
+					params.deliveryMateriels.push(param);
+				}
+	  			var mydata={"serialNum":$("#serialNum").val(),"content":$("#content").val(),
+	  					"isPass":true, "taskId":$("#taskId").val(),"params":JSON.stringify(params)};
+	  			var _url = ctx + "rest/takeDelivery/complete";
+	  			doVacation(_url, mydata,2);
+	  		};
+	  		//审批不通过
+	  		/*$scope.apUnPass = function() {
+	  			var mydata={"serialNum":$("#serialNum").val(),"content":$("#content").val(),
+	  					"isPass":false, "taskId":$("#taskId").val()};
+	  			var _url = ctx + "rest/takeDelivery/complete";
+	  			doVacation(_url, mydata,1);
+	  		};*/
 	  		
 	  	//办结待办流程
 	  		function doVacation(_url, mydata,target){

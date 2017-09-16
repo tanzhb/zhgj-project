@@ -142,7 +142,11 @@
 																	<div class="portlet-title">
 									                                    <div class="caption" style="width: 100%;font-size: 15px;">
 									                                    	<div style="float:left;width:70%;">
-									                                    		<input name="select_all" class="dt-body-center" value="{{demandPlan.serialNum}}" id="example-select-all" type="checkbox" />
+									                                    		  <!--  <input name="select_all" class="dt-body-center" value="{{demandPlan.serialNum}}" id="example-select-all" type="checkbox" /> -->
+									                                    		  <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+												                                     <input type="checkbox" name="select_all" class="group-checkable" value="{{demandPlan.serialNum}}" id="example-select-all" data-set="#demandPlanTable .checkboxes" v />
+												                                     <span></span>
+												                                 </label>
 									                                    		{{demandPlan.buyComName}}&nbsp;&nbsp;&nbsp;&nbsp;近五条记录&nbsp;&nbsp;&nbsp;&nbsp;更新日期：{{demandPlan.updateTime.substring(0,10)}}
 									                                    	</div>
 									                                    		
@@ -236,7 +240,12 @@
 	                        	<table class="table table-striped table-bordered table-hover table-checkable order-column" id="demand_plan_date">
 				                    <thead>
 				                        <tr>
-				                            <th style="text-align: center"><input name="select_all" value="1" id="example-select-all" type="checkbox"/></th>
+				                            <th style="text-align: center">
+				                            	<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                                     <input type="checkbox" class="group-checkable" data-set="#calendar .checkboxes" />
+                                                     <span></span>
+                                                 </label>
+				                            </th>
 				                            <th> 计划编号 </th>
 				                            <th> 采购客户 </th>
 				                            <th> 物料编号 </th>

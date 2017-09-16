@@ -410,10 +410,10 @@ function graphTrace(id, ctx) {
                     'class': 'activity-attr'
                 }).css({
                     position: 'absolute',
-                    left: (v.x + 4),
-                    top: (v.y + 26),
-                    width: (v.width - 2),
-                    height: (v.height - 2),
+                    left: (v.x + 8),
+                    top: (v.y + 29),
+                    width: (v.width + 3),
+                    height: (v.height + 5),
                     backgroundColor: 'black',
                     opacity: 0,
                     zIndex: $.fn.qtip.zindex - 1
@@ -424,10 +424,10 @@ function graphTrace(id, ctx) {
                     'class': 'activity-attr-border'
                 }).css({
                     position: 'absolute',
-                    left: (v.x + 4),
-                    top: (v.y + 26),
-                    width: (v.width - 2),
-                    height: (v.height - 2),
+                    left: (v.x + 8),
+                    top: (v.y + 29),
+                    width: (v.width + 3),
+                    height: (v.height + 5),
                     zIndex: $.fn.qtip.zindex - 2
                 });
 
@@ -478,7 +478,7 @@ function graphTrace(id, ctx) {
 		                buttons: [
 		                    {
 		                        text: '关闭',
-		                        iconCls: 'icon-cancel',
+		                        /*iconCls: 'icon-cancel',*/
 		                        handler: function () {
 		                        	workflowTraceDialog.dialog('destroy');
 		                        }
@@ -492,13 +492,13 @@ function graphTrace(id, ctx) {
                    $('.activity-attr').qtip({
                        content: function() {
                            var vars = $(this).data('vars');
-                           var tipContent = "<table class='easyui-datagrid'><thead>";
+                           var tipContent = '<div class="light">';
                            $.each(vars, function(varKey, varValue) {
                                if (varValue) {
-                                   tipContent += "<tr><td class='title1'>" + varKey + "</td><td class='left'>" + varValue + "<td/></tr>";
+                                   tipContent += "<div class='page-bar '>" + varKey + " : <span class='font-green-sharp sbold'>" + varValue + "</span></div>";
                                }
                            });
-                           tipContent += "</thead></table>";
+                           tipContent += "</div>";
                            return tipContent;
                        },
                        position: {
