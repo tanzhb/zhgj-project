@@ -94,20 +94,27 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
   									type, row, meta) {
   								if(row.supplyMateriels.length>0){
 	  								if($scope.modalType=='single'){
-	  	  								return '<input type="radio" id='+data+' data-radio=true ng-click="getCheckedIds(\''+data+'\','+meta.row+')"  name="serialNum" value="'
-											+ $('<div/>')
-													.text(
-															row.supplyMateriels[0].serialNum)
-													.html()
-											+ '">';
+//	  	  								return '<input type="radio" id='+data+' data-radio=true ng-click="getCheckedIds(\''+data+'\','+meta.row+')"  name="serialNum" value="'
+//											+ $('<div/>')
+//													.text(
+//															row.supplyMateriels[0].serialNum)
+//													.html()
+//											+ '">';
+	  	  							return '<label class="mt-radio mt-radio-outline">'+
+                                    '<input type="radio" data-radio=true   ng-click="getCheckedIds(\''+data+'\','+meta.row+')" name="serialNum"  class="checkboxes" id="'+data+'" value="'+row.supplyMateriels[0].serialNum+'" />'+
+                                    '<span></span></label>';
 	
 	  								}else{
-	  	  								return '<input type="checkbox" data-checked=false id='+data+' ng-click="getCheckedIds(\''+data+'\','+meta.row+')"  name="material_serial" value="'
+	  	  								/*return '<input type="checkbox" data-checked=false id='+data+' ng-click="getCheckedIds(\''+data+'\','+meta.row+')"  name="material_serial" value="'
 											+ $('<div/>')
 													.text(
 															row.supplyMateriels[0].serialNum)
 													.html()
-											+ '">';
+											+ '">';*/
+	  									return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
+	                                     '<input type="checkbox"  name="material_serial" data-checked=false id='+data+' ng-click="getCheckedIds(\''+data+'\','+meta.row+')" class="checkboxes"  id="'+data+'" value="'+row.supplyMateriels[0].serialNum+'" data-set="#select_sample_2 .checkboxes" />'+
+	                                     '<span></span>'+
+	                                 '</label>';
 	
 	  								}
   								}else{
