@@ -143,7 +143,16 @@ angular
 
 														"aoColumns" : [
 															{
-															mData : 'serialNum'
+															mData : 'serialNum',
+							                            	  mRender : function(
+																		data,
+																		type,
+																		row,
+																		meta) {
+																	return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+																			"<input type='checkbox' class='checkboxes' value='"+data+"'/>" +
+																			"<span></span></label>";
+																}
 															},{
 																mData : 'invoiceNum'
 															},  {
@@ -219,7 +228,20 @@ angular
 															}
 														}  ],
 													});
-											// 添加checkbox功能***************************************
+											
+											$("#sample_in").find(".group-checkable").change(function() {
+										        var e = jQuery(this).attr("data-set"),
+										        t = jQuery(this).is(":checked");
+										        jQuery(e).each(function() {
+										            t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+										        })
+										    }),
+										    $("#sample_in").on("change", "tbody tr .checkboxes",
+										    function() {
+										        $(this).parents("tr").toggleClass("active")
+										    })
+										   return table;
+											/*// 添加checkbox功能***************************************
 											// Handle click on "Select all" control
 											$('#example-select-'+judgeString+'-all').on(
 													'click',
@@ -260,7 +282,7 @@ angular
 															});
 											// 添加checkbox功能
 											// ***************************************
-							// 构建datatables结束***************************************
+*/							// 构建datatables结束***************************************
 							}
 			
 			function loadInvoiceOutTable(){
@@ -318,7 +340,16 @@ angular
 							ajax : tableAjaxUrl,// 加载数据中发票表数据
 							"aoColumns" : [
 											{
-											mData : 'serialNum'
+											mData : 'serialNum',
+			                            	  mRender : function(
+														data,
+														type,
+														row,
+														meta) {
+													return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+															"<input type='checkbox' class='checkboxes' value='"+data+"'/>" +
+															"<span></span></label>";
+												}
 											},{
 												mData : 'invoiceNum'
 											},  {
@@ -395,7 +426,19 @@ angular
 										}  ],
 							
 						});
-				// 添加checkbox功能***************************************
+				$("#sample_out").find(".group-checkable").change(function() {
+			        var e = jQuery(this).attr("data-set"),
+			        t = jQuery(this).is(":checked");
+			        jQuery(e).each(function() {
+			            t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+			        })
+			    }),
+			    $("#sample_out").on("change", "tbody tr .checkboxes",
+			    function() {
+			        $(this).parents("tr").toggleClass("active")
+			    })
+			   return table;
+			/*	// 添加checkbox功能***************************************
 				// Handle click on "Select all" control
 				$('#example-select-'+judgeString+'-all').on(
 						'click',
@@ -436,7 +479,7 @@ angular
 								});
 				// 添加checkbox功能
 				// ***************************************
-				// 构建datatables结束***************************************
+*/				// 构建datatables结束***************************************
 				}
 			var  materielInTable,materielOutTable;
 			function loadMaterielInTable(orderSerial,serialNum){

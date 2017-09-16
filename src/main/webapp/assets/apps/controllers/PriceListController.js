@@ -349,7 +349,16 @@ function loadPriceListBuyTable(){
 											ajax : tableAjaxUrl,// 加载数据中发票表数据
 											   "aoColumns" : [
 								                              {
-								                            	  mData : 'serialNum'
+								                            	  mData : 'serialNum',
+								                            	  mRender : function(
+																			data,
+																			type,
+																			row,
+																			meta) {
+																		return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+																				"<input type='checkbox' class='checkboxes' value='"+data+"' />" +
+																				"<span></span></label>";
+																	}
 								                              },
 								                              {
 								                            	  mData : 'priceNum'
@@ -395,7 +404,8 @@ function loadPriceListBuyTable(){
 								                              },{
 								                            	  mData : 'status'
 								                              }],
-								                              'aoColumnDefs' : [ {
+								                              'aoColumnDefs' : [ 
+								                                                 {
 								                            	  'targets' : 0,
 								                            	  'searchable' : false,
 								                            	  'orderable' : false,
@@ -421,7 +431,19 @@ function loadPriceListBuyTable(){
 								                              }  ],
 											
 										});
-								// 添加checkbox功能***************************************
+								$("#sample_buy").find(".group-checkable").change(function() {
+						            var e = jQuery(this).attr("data-set"),
+						            t = jQuery(this).is(":checked");
+						            jQuery(e).each(function() {
+						                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+						            })
+						        }),
+						        $("#sample_buy").on("change", "tbody tr .checkboxes",
+						        function() {
+						            $(this).parents("tr").toggleClass("active")
+						        })
+						        return table;
+						/*		// 添加checkbox功能***************************************
 								// Handle click on "Select all" control
 								$('#example-select-'+judgeString+'-all').on(
 										'click',
@@ -462,13 +484,13 @@ function loadPriceListBuyTable(){
 												});
 								// 添加checkbox功能
 								// ***************************************
-				// 构建datatables结束***************************************
+*/				// 构建datatables结束***************************************
 				}
 
 function loadPriceListSaleTable(){
 	var a = 0,judgeString='sale';
 	 tableAjaxUrl = "rest/priceList/getPriceList?buyOrSale="+judgeString;
-	App.getViewPort().width < App
+/*	App.getViewPort().width < App
 			.getResponsiveBreakpoint("md") ? $(
 			".page-header").hasClass(
 			"page-header-fixed-mobile")
@@ -478,7 +500,7 @@ function loadPriceListSaleTable(){
 					".page-header").outerHeight(!0)
 					: $("body").hasClass(
 							"page-header-fixed")
-							&& (a = 64);
+							&& (a = 64);*/
 	table = $("#sample_sale")
 	.DataTable(
 			{
@@ -520,7 +542,16 @@ function loadPriceListSaleTable(){
 				ajax : tableAjaxUrl,// 加载数据中发票表数据
 				"aoColumns" : [
 	                              {
-	                            	  mData : 'serialNum'
+	                            	  mData : 'serialNum',
+	                            	  mRender : function(
+												data,
+												type,
+												row,
+												meta) {
+											return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+													"<input type='checkbox' class='checkboxes' value='"+data+"'/>" +
+													"<span></span></label>";
+										}
 	                              },
 	                              {
 	                            	  mData : 'priceNum'
@@ -592,7 +623,19 @@ function loadPriceListSaleTable(){
 	                              }  ],
 				
 			});
-	// 添加checkbox功能***************************************
+	$("#sample_sale").find(".group-checkable").change(function() {
+        var e = jQuery(this).attr("data-set"),
+        t = jQuery(this).is(":checked");
+        jQuery(e).each(function() {
+            t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+        })
+    }),
+    $("#sample_sale").on("change", "tbody tr .checkboxes",
+    function() {
+        $(this).parents("tr").toggleClass("active")
+    })
+   return table;
+	/*// 添加checkbox功能***************************************
 	// Handle click on "Select all" control
 	$('#example-select-'+judgeString+'-all').on(
 			'click',
@@ -633,7 +676,7 @@ function loadPriceListSaleTable(){
 					});
 	// 添加checkbox功能
 	// ***************************************
-	// 构建datatables结束***************************************
+*/	// 构建datatables结束***************************************
 	}
 			 // 添加价格开始***************************************
 			 $scope.addPriceList = function(judgeString) {
@@ -696,7 +739,7 @@ function loadPriceListSaleTable(){
 				 }
 			 };	
 			 // 删除价格开始***************************************							
-			 $scope.delPriceList= function() {
+			 $scope.delPriceList= function(judgeString) {
 				 debugger;
 				 var ids = '';
 				 // Iterate over all checkboxes in the table
@@ -717,14 +760,14 @@ function loadPriceListSaleTable(){
 				 if (ids == '') {// 未勾选删除数据									
 					 toastr.warning("未勾选要删除数据！");
 				 } else {
-					 $('#delPriceListModal').modal('show');// 打开确认删除模态框
+					 $('#delPriceList'+judgeString+'Modal').modal('show');// 打开确认删除模态框
 
 					 $scope.confirmDelPriceList = function() {										
 						 priceListService
 						 .delPriceLists(ids)
 						 .then(
 								 function(data) {
-									 $('#delPriceListModal').modal(
+									 $('#delPriceList'+judgeString+'Modal').modal(
 									 'hide');// 删除成功后关闭模态框
 									 toastr.success("删除成功！");
 									 table.ajax.reload(); // 重新加载datatables数据

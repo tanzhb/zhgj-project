@@ -117,7 +117,16 @@ angular
 
 												"aoColumns" : [
 													{
-													mData : 'serialNum'
+													mData : 'serialNum',
+														 mRender : function(
+																	data,
+																	type,
+																	row,
+																	meta) {
+																return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+																		"<input type='checkbox' class='checkboxes' value='"+data+"'/>" +
+																		"<span></span></label>";
+															}
 													},
 													 {
 														mData : 'warehouseNum'
@@ -165,8 +174,19 @@ angular
 
 											})
 							// 构建datatables结束***************************************
-
-							// 添加checkbox功能***************************************
+											$("#sample_warehouse").find(".group-checkable").change(function() {
+										        var e = jQuery(this).attr("data-set"),
+										        t = jQuery(this).is(":checked");
+										        jQuery(e).each(function() {
+										            t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+										        })
+										    }),
+										    $("#sample_warehouse").on("change", "tbody tr .checkboxes",
+										    function() {
+										        $(this).parents("tr").toggleClass("active")
+										    })
+										   return table;
+							/*// 添加checkbox功能***************************************
 							// Handle click on "Select all" control
 							$('#example-select-all').on(
 									'click',
@@ -207,7 +227,7 @@ angular
 											});
 							// 添加checkbox功能
 							// ***************************************
-							}
+*/							}
 							// 添加仓库开始***************************************
 						$scope.addWarehouse = function() {
 							$scope.warehouseAdd=true;

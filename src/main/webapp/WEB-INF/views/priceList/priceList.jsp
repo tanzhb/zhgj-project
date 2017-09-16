@@ -97,12 +97,19 @@
 			
 			<div class="portlet-body">
 				<table
-					class="table table-striped table-bordered table-hover "
+					class="table table-striped table-bordered table-hover table-checkable order-column"
 					id="sample_buy">
 					<thead>
 					<tr>
-							<th style="text-align: center"><input name="buy"
-								value="1" id="example-select-buy-all" type="checkbox" /></th>
+					 <th>
+			                  <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+			                      <input type="checkbox"   
+								class="group-checkable" data-set="#sample_buy .checkboxes" />
+			                         <span></span>
+			                          </label>
+			                                    </th>
+							<!-- <th style="text-align: center"><input name="buy"  
+								value="1" id="example-select-buy-all" type="checkbox" /></th> -->
 							<th>价格编号 </th>
                             <th> 供应商名称</th>
                             <th> 物料编号</th>
@@ -189,12 +196,18 @@
 <!-- 删除销售价格end -->
 			<div class="portlet-body">
 				<table
-					class="table table-striped table-bordered table-hover "
+					class="table table-striped table-bordered table-hover table-checkable order-column"
 					id="sample_sale">
 					<thead>
 						<tr>
-							<th style="text-align: center"><input name="sale"
-								value="1" id="example-select-sale-all" type="checkbox" /></th>
+						<th>
+			                  <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+			                      <input  type="checkbox" class="group-checkable" data-set="#sample_sale .checkboxes" />
+			                         <span></span>
+			                          </label>
+			                                    </th>
+							<!-- <th style="text-align: center"><input 
+								value="1" id="example-select-sale-all" type="checkbox" /></th> -->
 							<th>价格编号 </th>
                             <th> 采购商名称</th>
                             <th> 物料编号</th>
