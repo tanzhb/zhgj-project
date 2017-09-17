@@ -493,6 +493,13 @@ public class OrderController {
 //    	//排序字段
 //    	m.setOrderByClause("updateTime DESC");
     	String comId = null;
+    	User user = UserUtil.getUserFromSession();
+    	if(user!=null){
+			comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+			if(comId==null){
+				comId = "null";
+			}
+		}
     	comId = "null";
     	OrderInfo parm =new OrderInfo();
     	if("sale".equals(type)){//平台销售订单供应商为空
@@ -503,13 +510,6 @@ public class OrderController {
     	}else if("buy".equals(type)){//平台采购订单采购商为空
     		parm.setBuyComId(comId);
     	}else if("supply".equals(type)){//供应商订单(状态不为0)
-    		User user = UserUtil.getUserFromSession();
-        	if(user!=null){
-    			comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
-    			if(comId==null){
-    				comId = "null";
-    			}
-    		}
     		parm.setSupplyComId(comId);
     		parm.setStatus("notequals0");
     	}

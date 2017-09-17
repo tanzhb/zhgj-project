@@ -157,6 +157,9 @@ otherAmount, remark, orderRemark,
 		 <if test="status!=null and status!=''" >
 		 	AND orderInfo.status='2'
 		 </if>
+		 <if test="status=='notequals0'" >
+		 	AND orderInfo.status ! = 0
+		 </if>
 		AND contract.contractType = '框架合同'
 		ORDER BY
 			updateTime DESC 
@@ -187,6 +190,12 @@ otherAmount, remark, orderRemark,
 			 <if test="supplyComId != 'null'" >
 			 	AND orderInfo.supplyComId = #{supplyComId,jdbcType=VARCHAR}
 			 </if>
+		 </if>
+		 <if test="status!=null and status!=''" >
+		 	AND orderInfo.status='2'
+		 </if>
+		 <if test="status=='notequals0'" >
+		 	AND orderInfo.status ! = 0
 		 </if>
 		AND (contract.contractType is null or
 	contract.contractType != '框架合同')
