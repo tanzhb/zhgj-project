@@ -117,9 +117,9 @@
 											<label class="control-label bold">供应商<span class="required" aria-required="true"> * </span></label>
 											<div class="">
 												<input type="text" name=supplyComId class="form-control"
-													ng-model="delivery.supplyComId" ng-show="input" />
+													ng-model="supplyComId" ng-show="input" readonly/>
 												<p class="form-control-static" ng-show="span">
-													{{delivery.supplyComId}}</p>
+													{{supplyComId}}</p>
 												<div class="form-control-focus"></div>
 											</div>
 
@@ -131,9 +131,9 @@
 											<label class="control-label bold">发货方<span class="required" aria-required="true"> * </span></label>
 											<div class="">
 												<input type="text" name="shipper" class="form-control"
-													ng-model="delivery.shipper" ng-show="input" />
+													ng-model="shipper" ng-show="input" readonly/>
 												<p class="form-control-static" ng-show="span">
-													{{delivery.shipper}}</p>
+													{{shipper}}</p>
 												<div class="form-control-focus"></div>
 											</div>
 

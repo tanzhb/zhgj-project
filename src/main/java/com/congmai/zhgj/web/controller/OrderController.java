@@ -473,7 +473,7 @@ public class OrderController {
      */
     @RequestMapping("/findOrderList")
     @ResponseBody
-    public ResponseEntity<Map> findOrderList(String type,String fram) {
+    public ResponseEntity<Map> findOrderList(String type,String selectFor,String fram) {
     	List<OrderInfo> orderInfoList = new ArrayList<OrderInfo>();
 //    	OrderInfoExample m =new OrderInfoExample();
 //    	//and 条件1
@@ -497,6 +497,9 @@ public class OrderController {
     	OrderInfo parm =new OrderInfo();
     	if("sale".equals(type)){//平台销售订单供应商为空
     		parm.setSupplyComId(comId);
+    		if("delivery".equals(selectFor)){
+    			parm.setStatus("2");
+    		}
     	}else if("buy".equals(type)){//平台采购订单采购商为空
     		parm.setBuyComId(comId);
     	}else if("supply".equals(type)){//供应商订单(状态不为0)

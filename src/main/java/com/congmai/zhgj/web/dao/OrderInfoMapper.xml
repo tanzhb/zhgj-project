@@ -154,6 +154,9 @@ otherAmount, remark, orderRemark,
 			 	AND orderInfo.supplyComId = #{supplyComId,jdbcType=VARCHAR}
 			 </if>
 		 </if>
+		 <if test="status!=null and status!=''" >
+		 	AND orderInfo.status='2'
+		 </if>
 		AND contract.contractType = '框架合同'
 		ORDER BY
 			updateTime DESC 

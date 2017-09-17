@@ -48,6 +48,9 @@
     deliverer=#{deliverer},
     contactNum=#{contactNum},
     deliverRemark=#{deliverRemark},
+    reason=#{reason},
+	processInstanceId=#{processInstanceId},
+	userId=#{userId},
     updater=#{updater},
     updateTime=NOW()
     WHERE
@@ -138,7 +141,7 @@
 	b.serialNum AS transportserialNum,b.transportType,b.transport,b.port,b.shipNumber,b.playArrivalDate,b.playWarehouseDate,
 	b.contact transportContact,b.contactNum transportContactNum,b.remark transportRemark,
 	e.serialNum takeWarehouseSerial,e.warehouseName takeWarehouseName,e.address takeAddress,c.takeDeliverDate,c.receiver takeDeliveryReceiver,
-	c.contactNum takeDeliveryContactNum,c.remark takeDeliveryRemark,c.serialNum AS takeDeliverSerialNum
+	c.contactNum takeDeliveryContactNum,c.remark takeDeliveryRemark,c.serialNum AS takeDeliverSerialNum,a.reason,a.processInstanceId,a.userId
 	FROM delivery a
 	LEFT JOIN deliveryTransport b ON b.deliverSerial=a.serialNum
 	LEFT JOIN warehouse d ON a.warehouseSerial=d.serialNum AND d.delFlg='0'
@@ -152,7 +155,7 @@
    <select id="findAllDeliveryList" parameterType="com.congmai.zhgj.web.model.DeliveryVO" resultType="com.congmai.zhgj.web.model.DeliveryVO">
    SELECT
 	a.serialNum,a.deliverNum,a.orderSerial,b.orderNum,COUNT(DISTINCT c.serialNum) AS materielCount,a.packageCount,
-	a.receiver,(SELECT address FROM warehouse WHERE serialNum=a.warehouseSerial) AS deliveryAddress,
+	a.receiver,(SELECT address FROM warehouse WHERE serialNum=a.warehouseSerial) AS deliveryAddress,a.status,
 	(SELECT address FROM warehouse WHERE serialNum=d.warehouseSerial) AS takeAddress,a.deliverDate,
 	e.transportType,a.remark,com.comName AS supplyName
 	FROM delivery a 
@@ -163,8 +166,8 @@
 	LEFT JOIN  company   com  ON  com.comId=a.supplyComId
 	WHERE a.delFlg='0' AND a.creator=#{creator}
 	<if test="supplyComIds != null" >
-        and supplyComId in
-         <foreach item="supplyComIds" index="index" collection="list" open="(" separator="," close=")">  
+        and a.supplyComId in
+         <foreach item="item" index="index" collection="supplyComIds" open="(" separator="," close=")">  
 		  #{item}  
 		 </foreach> 
     </if>

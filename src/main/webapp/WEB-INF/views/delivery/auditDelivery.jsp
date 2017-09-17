@@ -33,10 +33,10 @@
 						<div class="caption">基本信息</div>
 						<div class="tools" id="noprintdiv">
 						
-							<!-- <button type="button" ng-click="goDelivery(deliveryDetail.serialNum)" ng-if="deliveryDetail.status=='0'"
+							<button type="button" ng-click="goDelivery(deliveryDetail.serialNum)" ng-if="deliveryDetail.status=='0'"
 								class="btn blue  btn-outline  btn-sm">
 								<i class="fa fa-save"></i> 确认发货
-							</button> -->
+							</button>
 							<button ng-click="goBack()" type="button"
 								ng-hide="saleOrderInput" class="btn red  btn-outline  btn-sm">
 								<i class="fa fa-undo"></i> 取消
@@ -818,50 +818,58 @@
 							</div>
 					</div>
 					<!-- 供应商 end-->
+					<div class="row">
+							<div class="portlet box green">
+	                             <div class="portlet-title">
+	                                 <div class="caption">
+	                                     <i class="fa fa-globe"></i>评论 </div>
+	                             </div>
+	                             <div class="portlet-body">
+	                                 <table class="table table-striped table-bordered table-hover order-column" id="pinglun">
+	                                     <thead>
+	                                         <tr>
+	                                             <th>评论人</th>
+	                                             <th>评论时间</th>
+	                                             <th>评论内容</th>
+	                                         </tr>
+	                                     </thead>
+	                                     <tbody id = "comment_audit">	
+	                                        </tbody>
+	                                 </table>
+	                             </div>
+	                         </div>
+						 </div>
+						
+					
+						<div class="row">
+							<div class="form-group form-md-line-input">
+								<label class="col-md-1 control-label" for="form_control_1">我的意见:</label>
+								<div class="col-md-11">
+									<textarea class="form-control" ng-model="content"
+										id="content" name="content" rows="1"></textarea>
+									<div class="form-control-focus"></div>
+									<span class="help-block">输入我的意见</span>
+								</div>
+							</div>
+							<input type="hidden" name="serialNum" id="serialNum" value="" />
+							<input type="hidden" name="taskId" id="taskId" value="" />
+						</div>
 				</div>
 				</form>
 			</div>
-		</div>
-	</div>
-</div>
-
-<div id="basicMaterielInfo" class="modal fade bs-modal-lg" tabindex="-1"
-	data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal"
-					aria-hidden="true"></button>
-				<h4 class="modal-title">选择销售订单</h4>
-			</div>
-			<div class="modal-body">
-				<table
-					class="table table-striped table-bordered table-hover table-checkable order-column"
-					id="sample_21">
-					<thead>
-						<tr>
-							<th style="text-align: center"></th>
-							<th>销售订单号</th>
-							<th>采购方</th>
-							<th>销售商品</th>
-							<th>金额</th>
-							<th>配送</th>
-							<th>服务模式</th>
-							<th>关联销售合同</th>
-							<th>关联采购单</th>
-							<th>下单日期</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-			</div>
 			<div class="modal-footer">
-				<button type="button" data-dismiss="modal"
-					class="btn dark btn-outline">取消</button>
-				<button type="button" ng-click="confirmSelect()" class="btn green">确定
-				</button>
-			</div>
+					<button type="submit" ng-click="apPass()"
+						class="btn blue">
+						<i class="glyphicon glyphicon-ok"></i> 通过
+					</button>
+					<button type="submit" ng-click="apUnPass()"
+						class="btn red">
+						<i class="glyphicon glyphicon-remove"></i> 不通过
+					</button>					
+					<button type="submit" ng-click="backDbList()"
+						class="btn green-meadow">
+						<i class="glyphicon glyphicon-share-alt"></i> 返回
+					</button>	
 		</div>
 	</div>
 </div>

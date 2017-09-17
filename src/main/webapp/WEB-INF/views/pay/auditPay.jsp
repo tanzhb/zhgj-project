@@ -480,8 +480,8 @@
 									<span class="help-block">输入我的意见</span>
 								</div>
 							</div>
-							<input type="hidden" name="serialNum" id="serialNum" value="" />
-							<input type="hidden" name="taskId" id="taskId" value="" />
+							<input type="text" name="serialNum" id="serialNum" value="" />
+							<input type="text" name="taskId" id="taskId" value="" />
 						</div>
 						
 					</div>
