@@ -47,6 +47,13 @@ public class TakeDelivery extends BaseVO implements Serializable{
     
     private String supplyName;//供应商名称
     
+    
+    public static final String WAITING = "0";
+    public static final String APPLY_COMPLETE = "1";
+    public static final String CANCEL = "2";
+    public static final String CHECK_COMPLETE = "3";
+    public static final String COMPLETE = "4";
+    
 /*    private String processInstanceId;
     
     private String status;

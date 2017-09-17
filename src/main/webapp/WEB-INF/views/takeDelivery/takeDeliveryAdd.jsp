@@ -122,12 +122,13 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="supplyComId">供应商 <span class="required"> * </span></label>
                                                     <div class="">
-                                                    	<select class="form-control" selectpicker  id="supplyComId"  name="supplyComId" ng-model="deliver.supplyComId" ng-hide="deliverAdd"  data-size="8">
+                                                     	<input type="text" class="form-control"  value="{{deliver.supplyName}}" disabled="disabled">
+                                                    	<!-- <select class="form-control" selectpicker  id="supplyComId"  name="supplyComId" ng-model="deliver.supplyComId" ng-hide="deliverAdd"  data-size="8">
 	                                                        <option value=""></option>
 	                                                        <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}">{{supplier.comName}}</option>
 	                                                    </select>
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.supplyName}}</p>
+                                                         <p class="control-label left" ng-show="deliverView">{{deliver.supplyName}}</p> -->
                                                     </div>
                                             </div>
 										</div>
@@ -137,9 +138,16 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="shipper">发货方 <span class="required"> * </span></label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="shipper"  name="shipper" ng-model="deliver.shipper" ng-hide="deliverAdd" >
+                                                     	<input type="text" class="form-control"  value="{{deliver.shipperName}}" disabled="disabled">
+                                                       <!--  <input type="text" class="form-control" id="shipper"  name="shipper" ng-model="deliver.shipper" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.shipper}}</p>
+                                                         <p class="control-label left" ng-show="deliverView">{{deliver.shipper}}</p> -->
+                                                         <!-- <select class="form-control" selectpicker  id="shipper"  name="shipper" ng-model="deliver.shipper" ng-hide="deliverAdd"  data-size="8">
+	                                                        <option value=""></option>
+	                                                        <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}">{{supplier.comName}}</option>
+	                                                    </select>
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="deliverView">{{deliver.shipperName}}</p> -->
                                                     </div>
                                             </div>
 										</div>
@@ -148,9 +156,16 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="receiver">收货方 <span class="required"> * </span></label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="receiver"  name="receiver" ng-model="deliver.receiver" ng-hide="deliverAdd" >
+                                                     	<input type="text" class="form-control"  value="{{deliver.receiverName}}" disabled="disabled">
+                                                        <!-- <input type="text" class="form-control" id="receiver"  name="receiver" ng-model="deliver.receiver" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.receiver}}</p>
+                                                         <p class="control-label left" ng-show="deliverView">{{deliver.receiver}}</p> -->
+                                                      <!--    <select class="form-control" selectpicker  id="receiver"  name="receiver" ng-model="deliver.receiver" ng-hide="deliverAdd"  data-size="8">
+	                                                        <option value=""></option>
+	                                                        <option  ng-repeat="customer in customers" value="{{customers.comId}}">{{customer.comName}}</option>
+	                                                    </select>
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="deliverView">{{deliver.receiverName}}</p> -->
                                                     </div>
                                             </div>
 										</div>
@@ -326,10 +341,9 @@
                                                     <div class="">
                                                      	<select class="form-control" id="packageType"  name="packageType" ng-model="deliver.packageType" ng-hide="deliverAdd" >
 	                                                    	<option value=""></option>
-	                                                    	<option value="类型一">类型一</option>
-	                                                    	<option value="类型二">类型二</option>
-	                                                    	<option value="类型三">类型三</option>
-	                                                    	<option value="类型四">类型四</option>
+	                                                    	<option value="原厂包装">原厂包装</option>
+	                                                    	<option value="供应商包装">供应商包装</option>
+	                                                    	<option value="其他类型">其他类型</option>
 	                                                    </select>
                                                         <!-- <input type="text" class="form-control" id="packageType"  name="packageType" ng-model="deliver.packageType" ng-hide="deliverAdd" > -->
                                                         <div class="form-control-focus"> </div>
@@ -442,7 +456,7 @@
                                                     <div class="">
 	                                                    <select class="bs-select form-control order" id="transportType" name="transportType" ng-model="deliverTransport.transportType" ng-hide="deliverAdd">
 	                                                    	<option value=""></option>
-	                                                    	<option value="水上运输">水上运输</option>
+	                                                    	<option value="水路运输">水路运输</option>
 	                                                    	<option value="铁路运输">铁路运输</option>
 	                                                    	<option value="公路运输">公路运输</option>
 	                                                    	<option value="航空运输">航空运输</option>

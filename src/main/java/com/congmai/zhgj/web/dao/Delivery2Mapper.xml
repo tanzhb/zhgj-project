@@ -55,6 +55,8 @@
     </association>
     <association column="warehouseSerial" property="warehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>
     <association property="supplyName" column="supplyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
+    <association property="shipperName" column="shipper" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
+    <association property="receiverName" column="receiver" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
     <association property="orderNum" column="orderSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectOrderNumByOrderSerial"></association>
     <collection property="deliveryMateriels" ofType="com.congmai.zhgj.web.model.DeliveryMateriel">
     	<!--  <result column="orderMaterielSerial" property="orderMaterielSerial" jdbcType="VARCHAR" /> -->

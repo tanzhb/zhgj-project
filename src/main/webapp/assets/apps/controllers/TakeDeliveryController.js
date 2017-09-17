@@ -23,6 +23,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    		//initOrders();
 	    		initSuppliers();
 	    		initWarehouse();
+	    		initCustomers();
 	    		validatorInit();
 	    		loadOrderTable();
 	    		if(!isNull($stateParams.serialNum)){
@@ -122,6 +123,18 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 			}
 			
 			/**
+			 * 加载采购商数据
+			 */
+			var initCustomers = function(){
+				var promise = takeDeliveryService.initCustomers();
+        		promise.then(function(data){
+        			$scope.customers = data.data;
+        		},function(data){
+        			//调用承诺接口reject();
+        		});
+			}
+			
+			/**
 			 * 加载仓库数据
 			 */
 			var initWarehouse = function(){
@@ -163,8 +176,10 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        	var promise = takeDeliveryService.getTakeDeliveryInfo(serialNum);
 	        	promise.then(function(data){
 	        	$scope.deliver = data.data;
-	        	$scope.deliver.warehouseSerial = data.data.warehouse.serialNum;
-	        	$scope.deliver.warehouseName = data.data.warehouse.address;
+	        	if(data.data.warehouse != null){
+		        	$scope.deliver.warehouseSerial = data.data.warehouse.serialNum;
+		        	$scope.deliver.warehouseName = data.data.warehouse.address;
+	        	}
 	        	if(type="edit"){
 	        		$scope.deliverTransport = data.data.deliveryTransport;
 	        		$scope.orderMateriels = data.data.deliveryMateriels;
@@ -175,9 +190,10 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        			$scope.orderMateriels[i].orderMaterielSerial = data.data.deliveryMateriels[i].orderMateriel.serialNum;
 	        		}
 	        		$scope.takeDeliver = data.data.takeDelivery;
-	        		//$scope.takeDeliver.warehouseSerial = $scope.takeDeliver.warehouse.serialNum;
-	        		$scope.takeDeliver.warehouseName = $scope.takeDeliver.warehouse.address;
-	        		
+	        		if($scope.takeDeliver.warehouse != null){
+	        			$scope.takeDeliver.warehouseSerial = $scope.takeDeliver.warehouse.serialNum;
+		        		$scope.takeDeliver.warehouseName = $scope.takeDeliver.warehouse.address;
+	        		}
 	        		
 	        		var playWarehouseDate= $scope.deliverTransport.playWarehouseDate;
 	    		    if(!isNull(playWarehouseDate)){
@@ -341,10 +357,14 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					toastr.warning("请选择您要收货的记录");
 				}else if(id_count>1){
 					toastr.warning("只能选择一条数据进行收货");
-				}else{debugger;
+				}else{
 					if(table.row('.active').data().status != '0'){
-						showToastr('toast-top-center', 'warning', '该条数据已经申请流程审批，不能进行修改！')
-					}else {
+						showToastr('toast-top-center', 'warning', '该收货单已经申请流程审批，不能进行再次收货！');
+					}else if(table.row('.active').data().status == 4){
+						showToastr('toast-top-center', 'warning', '该收货单已经已收货完成！');
+					}else if(table.row('.active').data().status > 2){
+						showToastr('toast-top-center', 'warning', '该收货单已经进入检验入库流程，不能进行再次收货！');
+					}else{
 						var serialNum = $('#takeDeliveryTable input[name="serialNum"]:checked').val();
 						$state.go("toTakeDelivery",{serialNum:serialNum});
 					}
@@ -359,6 +379,10 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        	var id_count = $('#takeDeliveryTable input[name="serialNum"]:checked').length;
 				if(id_count==0){
 					toastr.warning("请选择您要删除的记录");
+					return;
+				}
+				if(table.row('.active').data().status != '0'){
+					showToastr('toast-top-center', 'warning', '该收货单已经申请流程审批，不能删除！');
 					return;
 				}
 	        	handle.confirm("确定删除吗？",function(){
@@ -597,7 +621,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	                                  { mData: 'takeDelivery.serialNum' },
 	                                  { mData: 'takeDelivery.takeDeliverNum' },
 	                                  { mData: 'orderNum' },
-	                                  { mData: 'shipper' },
+	                                  { mData: 'shipperName' },
 	                                  { mData: 'materielCount' },
 	                                  { mData: 'packageCount' },
 	                                  { mData: 'packageType' },
@@ -692,12 +716,16 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    									type, row, meta) {debugger;
 	    									if(data=="PENDING"||data=="WAITING_FOR_APPROVAL"){
 	    										return '<span  class="label label-sm label-warning ng-scope">审核中</span>';
-	    									}else if(data=="APPROVAL_SUCCESS"){
+	    									}else if(data=="1"){
 	    										return '<span  class="label label-sm label-info ng-scope">待检验</span>';
 	    									}else if(data=="APPROVAL_FAILED"){
 	    										return '<span  class="label label-sm label-danger ng-scope">未通过</span>';
+	    									}else if(data=="2"){
+	    										return '<span  class="label label-sm label-warning ng-scope">已取消</span>';
+	    									}else if(data=="3"){
+	    										return '<span  class="label label-sm label-warning ng-scope">待入库</span>';
 	    									}else{
-	    										return '<span  class="label label-sm label-danger ng-scope">待收货</span>';
+	    										return '<span  class="label label-sm label-warning ng-scope">待收货</span>';
 	    									}
 	    							}
 	    						}]
@@ -800,8 +828,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  			// ***************************************
 	  	 
 	  			jQuery.validator.addMethod("deliverNumCheck", function (value, element) {
-	  				
-	  			    return this.optional(element) || Number($(element).data("ordercount"))-value >= 0;
+	  				//console.log(----------------");
+	  				//console.log($(element));
+	  			    return this.optional(element) || Number(element.dataset.ordercount)-value >= 0;
 	  			}, "发货数量不能超过订单数量");
 	  			
 	  			jQuery.validator.addMethod("acceptNumCheck", function (value, element) {
@@ -1248,43 +1277,63 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		  // serverSide: true,
 	  		                  ajax: tableAjaxUrl,// 加载数据中
 	  		                  "aoColumns": [
-	  		                                { mData: 'serialNum' },
-	  		                                { mData: 'orderNum' },
-	  		                                { mData: 'supplyComId' },
-	  		                                { mData: null },
-	  		                                { mData: null },
-	  		                                { mData: 'deliveryMode' },
-	  		                                { mData: 'serviceModel' },
-	  		                                { mData: 'saleApplySerial' },
-	  		                                { mData: 'orderSerial' },
-	  		                                { mData: 'orderDate' }
-
-	  		                          ],
-	  		                 'aoColumnDefs' : [ {
-	  		  							'targets' : 0,
-	  		  							'searchable' : false,
-	  		  							'orderable' : false,
-	  		  							'render' : function(data,
-	  		  									type, row, meta) {
-		  		  							/*	return '<input type="radio" id="'+data+'" data-num="'+row.orderNum+'" ng-click="getBuyOrderInfo_(\''+data+'\')" name="selecrOrderSerial" value="'
-		  		  													+ $('<div/>')
-		  		  													.text(
-		  		  															data)
-		  		  													.html()
-		  		  											+ '">';*/
-		  		  							return '<label class="mt-radio mt-radio-outline">'+
-		                                     '<input type="radio"  data-num="'+row.orderNum+'" ng-click="getBuyOrderInfo_(\''+data+'\')" name="selecrOrderSerial"  class="checkboxes" id="'+data+'" value="'+data+'" data-set="#buyOrder .checkboxes" />'+
-		                                     '<span></span></label>';
-	  		  							},
-	  		  							"createdCell": function (td, cellData, rowData, row, col) {
-	  		  								 $compile(td)($scope);
-	  		  						       }
-	  		  						} ]
+	  		                              { mData: 'serialNum'},
+	  		                              { mData: 'orderNum' },
+	  		                              { mData: 'supplyName' },
+	  		                              { mData: 'materielCount' },
+	  		                              { mData: 'orderAmount' },
+	  		                              { mData: 'deliveryMode' },
+	  		                              { mData: 'serviceModel' },
+	  		                              { mData: 'saleApplySerial' },
+	  		                              { mData: 'orderSerial' },
+	  		                              { mData: 'orderDate' },
+	  		                              { mData: 'processBase',
+	  			                            	mRender:function(data){
+	  			                            		if(data!=""&&data!=null){
+	  			                            			if(data.status=="PENDING"||data.status=="WAITING_FOR_APPROVAL"){
+	  			    										return '<span  class="label label-sm label-warning ng-scope">审核中</span>';
+	  			    									}else if(data.status=="APPROVAL_SUCCESS"){
+	  			    										return '<span  class="label label-sm label-success ng-scope">待接收</span>';
+	  			    									}else if(data.status=="APPROVAL_FAILED"){
+	  			    										return '<span  class="label label-sm label-danger ng-scope">未通过</span>';
+	  			    									}else{
+	  			    										return '<span  class="label label-sm label-info ng-scope">未审批</span>';
+	  			    									}
+	  			                            		}else{
+	  			                            			return '<span  class="label label-sm label-info ng-scope">未审批</span>';
+	  			                            		}
+	  			                            	}
+	  			                            } ],
+	  				  		                 'aoColumnDefs' : [ {
+	  		  		  							'targets' : 0,
+	  		  		  							'searchable' : false,
+	  		  		  							'orderable' : false,
+	  		  		  							'render' : function(data,
+	  		  		  									type, row, meta) {
+	  			  		  							/*	return '<input type="radio" id="'+data+'" data-num="'+row.orderNum+'" ng-click="getBuyOrderInfo_(\''+data+'\')" name="selecrOrderSerial" value="'
+	  			  		  													+ $('<div/>')
+	  			  		  													.text(
+	  			  		  															data)
+	  			  		  													.html()
+	  			  		  											+ '">';*/
+	  			  		  							return '<label class="mt-radio mt-radio-outline">'+
+	  			                                     '<input type="radio"  data-num="'+row.orderNum+'" ng-click="getBuyOrderInfo_(\''+data+'\')" name="selecrOrderSerial"  class="checkboxes" id="'+data+'" value="'+data+'" data-set="#buyOrder .checkboxes" />'+
+	  			                                     '<span></span></label>';
+	  		  		  							},
+	  		  		  							"createdCell": function (td, cellData, rowData, row, col) {
+	  		  		  								 $compile(td)($scope);
+	  		  		  						       }
+	  		  		  						} ]
 
 	  		              }).on('order.dt',
 	  		              function() {
 	  		                  console.log('排序');
-	  		              })	  	
+	  		              });
+	  		            
+	  		          $("#buyOrder").on("change", "tbody tr .checkboxes",
+						        function() {
+						            $(this).parents("tr").toggleClass("active").siblings().removeClass("active");
+						        })
 	  		      };
 	  		      
 	  		$scope.confirmSelect = function(){
@@ -1294,6 +1343,17 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 				}else{
 					//var serialNum = $('#buyOrder input[name="selecrOrderSerial"]:checked').val();
 					$scope.deliver.orderSerial = $('#buyOrder input[name="selecrOrderSerial"]:checked').val();
+					var order = order_table.row('.active').data();debugger;
+					$scope.deliver.supplyComId = order.supplyComId;
+					$scope.deliver.shipper = order.supplyComId;
+					$scope.deliver.receiver =  order.buyComId;
+					
+					$scope.deliver.supplyName = order.supplyName;
+					$scope.deliver.shipperName = order.supplyName;
+					if(isNull(order.buyComId)){
+						$scope.deliver.receiverName = "中航能科（上海）能源科技有限公司";
+					}
+					
 					$scope.deliver.orderNum = $('#buyOrder input[name="selecrOrderSerial"]:checked').data("num");
 					$scope.getOrderMateriel();
 					$("#buyOrderInfo").modal('hide'); 
