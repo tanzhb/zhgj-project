@@ -358,6 +358,8 @@ public class OrderController {
     			baseOrderInfo.setTitle(baseOrderInfo.getUser_name()+" 的订单申请失败,需修改后重新提交！");
     			order.setStatus(BaseVO.APPROVAL_FAILED);
     			variables.put("entity", baseOrderInfo);
+    		}else{
+    			order.setStatus(BaseVO.PENDING);					//审批中
     		}
     		// 完成任务
     		this.processService.complete(taskId, content, user.getUserId().toString(), variables);
@@ -500,7 +502,7 @@ public class OrderController {
 				comId = "null";
 			}
 		}
-    	comId = "null";
+    	
     	OrderInfo parm =new OrderInfo();
     	if("sale".equals(type)){//平台销售订单供应商为空
     		parm.setSupplyComId(comId);
@@ -511,7 +513,7 @@ public class OrderController {
     		parm.setBuyComId(comId);
     	}else if("supply".equals(type)){//供应商订单(状态不为0)
     		parm.setSupplyComId(comId);
-    		parm.setStatus("notequals0");
+    		parm.setStatus("000");
     	}
     	if("1".equals(fram)){
     		orderInfoList = orderService.selectFramList(parm);

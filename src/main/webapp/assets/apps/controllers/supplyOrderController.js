@@ -148,7 +148,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
     
     
     var table;
-    var tableAjaxUrl = "rest/order/findOrderList?type=sale";
+    var tableAjaxUrl = "rest/order/findOrderList?type=supply";
     var loadMainTable = function() {
             a = 0;
             App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
@@ -343,7 +343,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
         };
         
         var framTable;
-        var framTableAjaxUrl = "rest/order/findOrderList?type=sale&&fram=1";
+        var framTableAjaxUrl = "rest/order/findOrderList?type=supply&&fram=1";
         var loadMainFramTable = function() {
                 a = 0;
                 App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
