@@ -86,6 +86,11 @@
                     </a>
                 </li>
                 </shiro:hasPermission>
+                <li>
+                    <a ui-sref="supplyOrder">
+                        订单</span>
+                    </a>
+                </li>
             </ul>
         </li>
         </shiro:hasPermission>

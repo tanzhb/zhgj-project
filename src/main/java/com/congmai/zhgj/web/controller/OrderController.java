@@ -153,6 +153,7 @@ public class OrderController {
     		orderInfo.setUpdater(currenLoginName);
     		orderInfo.setCreateTime(new Date());
     		orderInfo.setUpdateTime(new Date());
+    		orderInfo.setStatus("0");
     		
     		orderService.insert(orderInfo);
     		
@@ -372,6 +373,13 @@ public class OrderController {
     		
     		this.processBaseService.update(order);
     		
+    		if(BaseVO.APPROVAL_SUCCESS.equals(order.getStatus())){//订单完成，需更新状态为1(订单待接收)
+    			OrderInfo oi = new OrderInfo();
+    			oi.setSerialNum(order.getSerialNum());
+    			oi.setStatus("1");
+    			this.orderService.update(oi);
+    		}
+    		
     		result = "任务办理完成！";
 		} catch (ActivitiObjectNotFoundException e) {
 			result = "此任务不存在，请联系管理员！";
@@ -484,19 +492,23 @@ public class OrderController {
 //    	m.or(criteria2);*/
 //    	//排序字段
 //    	m.setOrderByClause("updateTime DESC");
-    	User user = UserUtil.getUserFromSession();
     	String comId = null;
-    	if(user!=null){
-			comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
-			if(comId==null){
-				comId = "null";
-			}
-		}
+    	comId = "null";
     	OrderInfo parm =new OrderInfo();
     	if("sale".equals(type)){//平台销售订单供应商为空
     		parm.setSupplyComId(comId);
     	}else if("buy".equals(type)){//平台采购订单采购商为空
     		parm.setBuyComId(comId);
+    	}else if("supply".equals(type)){//供应商订单(状态不为0)
+    		User user = UserUtil.getUserFromSession();
+        	if(user!=null){
+    			comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+    			if(comId==null){
+    				comId = "null";
+    			}
+    		}
+    		parm.setSupplyComId(comId);
+    		parm.setStatus("notequals0");
     	}
     	if("1".equals(fram)){
     		orderInfoList = orderService.selectFramList(parm);

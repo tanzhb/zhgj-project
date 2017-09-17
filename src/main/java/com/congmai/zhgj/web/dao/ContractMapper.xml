@@ -5,9 +5,9 @@
     <!--添加合同  -->
     <insert id="insertContract" parameterType="com.congmai.zhgj.web.model.ContractVO">
     INSERT INTO contract(serialNum,  comId,   contractNum,    contractType,  serviceModel,   settlementClause,  startDate,  endDate,   signDate,   signer,    remark, 
-     electronicContract,  signContract,versionNO,status, isLatestVersion,creator,createTime,updater,updateTime,firstParty,secondParty,firstPartySigner,secondPartySigner,otherPartyContractNum,signerAddress) 
+     electronicContract,  signContract,versionNO,status, isLatestVersion,creator,createTime,updater,updateTime,firstParty,secondParty,firstPartySigner,secondPartySigner,otherPartyContractNum,signerAddress,contractNumber) 
                 VALUES(#{id},#{comId},#{contractNum},#{contractType},#{serviceModel},#{settlementClause},#{startDate},#{endDate},#{signDate},#{signer},#{remark},
-     #{electronicContract},#{signContract},   '1','0',  '1',        #{creator},NOW(),#{creator},NOW(),#{firstParty},#{secondParty},#{firstPartySigner},#{secondPartySigner},#{otherPartyContractNum},#{signerAddress})
+     #{electronicContract},#{signContract},   '1','0',  '1',        #{creator},NOW(),#{creator},NOW(),#{firstParty},#{secondParty},#{firstPartySigner},#{secondPartySigner},#{otherPartyContractNum},#{signerAddress},#{contractNumber})
     </insert>
     
     <!--查询合同列表  -->
@@ -151,26 +151,7 @@
 	SET
 	contractNum=#{contractNum},
 	contractType=#{contractType},
-	<!-- startDate=#{startDate},
-	endDate=#{endDate},
-	signDate=#{signDate},
-	signer=#{signer},
-	signerAddress=#{signerAddress},
-	firstParty=#{firstParty},
-	secondParty=#{secondParty},
-	firstPartySigner=#{firstPartySigner},
-	secondPartySigner=#{secondPartySigner}, -->
 	contractNumber=#{contractNumber},
-<!-- 	<if test="electronicContract!=null">  
-    electronicContract = #{electronicContract},  
-    </if> 
-    
-    <if test="electronicContract!=null">  
-    signContract = #{signContract},  
-    </if> 
-	
-	versionNO=versionNO+1,
-	remark=#{remark}, -->
 	updater=#{updater},
 	updateTime=NOW()
 	WHERE

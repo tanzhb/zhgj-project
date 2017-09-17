@@ -186,6 +186,20 @@ public class PageController {
         return "order/addBuyOrder";
     }
     
+    /**
+     * 查看采购订单
+     */
+    @RequestMapping("/viewBuyOrder")
+    public String viewBuyOrder(String serialNum) {
+        return "order/viewBuyOrder";
+    }
+    /**
+     * 供应商查看订单
+     */
+    @RequestMapping("/viewSupplyOrder")
+    public String viewSupplyOrder(String serialNum) {
+        return "order/viewSupplyOrder";
+    }
     
     /**
      * 采购订单提交申请
@@ -219,6 +233,14 @@ public class PageController {
     @RequestMapping("/buyOrder")
     public String buyOrder() {
         return "order/buyOrder";
+    }
+    
+    /**
+     * 供应商的销售订单
+     */
+    @RequestMapping("/supplyOrder")
+    public String supplyOrder() {
+        return "order/supplyOrder";
     }
     
     /**

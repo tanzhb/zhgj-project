@@ -138,11 +138,21 @@ otherAmount, remark, orderRemark,
     left join contract on orderInfo.contractSerial = contract.serialNum
     where
 		 orderInfo.delFlg = 0  
-		 <if test="buyComId == 'null'" >
-		 	AND orderInfo.buyComId IS NULL
+		 <if test="buyComId != null" >
+			 <if test="buyComId == 'null'" >
+			 	AND orderInfo.buyComId IS NULL
+			 </if>
+			 <if test="buyComId != 'null'" >
+			 	AND orderInfo.buyComId = #{buyComId,jdbcType=VARCHAR}
+			 </if>
 		 </if>
-		 <if test="supplyComId == 'null'" >
-		 	AND orderInfo.supplyComId IS NULL
+		 <if test="supplyComId != null" >
+			 <if test="supplyComId == 'null'" >
+			 	AND orderInfo.supplyComId IS NULL
+			 </if>
+			 <if test="supplyComId != 'null'" >
+			 	AND orderInfo.supplyComId = #{supplyComId,jdbcType=VARCHAR}
+			 </if>
 		 </if>
 		AND contract.contractType = '框架合同'
 		ORDER BY
@@ -159,11 +169,21 @@ otherAmount, remark, orderRemark,
     left join contract on orderInfo.contractSerial = contract.serialNum
     where
 		 orderInfo.delFlg = 0  
-		 <if test="buyComId == 'null'" >
-		 	AND orderInfo.buyComId IS NULL
+		 <if test="buyComId != null" >
+			 <if test="buyComId == 'null'" >
+			 	AND orderInfo.buyComId IS NULL
+			 </if>
+			 <if test="buyComId != 'null'" >
+			 	AND orderInfo.buyComId = #{buyComId,jdbcType=VARCHAR}
+			 </if>
 		 </if>
-		 <if test="supplyComId == 'null'" >
-		 	AND orderInfo.supplyComId IS NULL
+		 <if test="supplyComId != null" >
+			 <if test="supplyComId == 'null'" >
+			 	AND orderInfo.supplyComId IS NULL
+			 </if>
+			 <if test="supplyComId != 'null'" >
+			 	AND orderInfo.supplyComId = #{supplyComId,jdbcType=VARCHAR}
+			 </if>
 		 </if>
 		AND (contract.contractType is null or
 	contract.contractType != '框架合同')

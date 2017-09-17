@@ -15,7 +15,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a>{{opration}}</a>
+            <a>查看</a>
         </li>
     </ul>
 <!--     <div class="page-toolbar">
@@ -39,9 +39,15 @@
 				            </div>
 					</div> -->
            		 <div class="portlet-body">
-					<jsp:include  page="editBuyOrderBase.jsp"/>
+					<jsp:include  page="viewBuyOrderBase.jsp"/>
+					
+		            <div class="portlet-title">
+			               <div class="tools">
+				                <button type="button" ng-click="cancelPage()" class="btn default btn-circle  btn-sm"><i class="fa fa-undo"></i> 取消 </button>
+				            </div>
+					</div>
       			</div>
 			</div>
 	</div>
 </div>
-<jsp:include  page="selectBasicMateriel.jsp"/> <!-- 选择基本物料 -->
+
