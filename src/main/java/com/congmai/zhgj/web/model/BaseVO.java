@@ -28,6 +28,7 @@ public class BaseVO implements Serializable{
 	public final static String EXPENSE = "expense";
 
 	public final static String ACCOUNTPAYABLE = "accountPayable";//应付款
+	public final static String ACCOUNTDELIVERY = "accountDelivery";//发货
 	public final static String BUYORDER = "buyOrder";	//采购订单	
 	public final static String SALEORDER = "saleOrder";	//销售订单	
 	// 待办任务标识

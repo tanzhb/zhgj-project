@@ -103,7 +103,7 @@
 											<!-- <input type="text" name=supplyComId class="form-control"
 													ng-model="delivery.supplyComId" ng-show="input" /> -->
 											<p class="form-control-static" ng-show="input">
-												{{deliveryDetail.supplyComId}}</p>
+												{{supplyComId}}</p>
 											<div class="form-control-focus"></div>
 											<span class="help-block">请选择供应商</span>
 										</div>
@@ -119,7 +119,7 @@
 											<!-- <input type="text" name="shipper" class="form-control"
 													ng-model="delivery.shipper" ng-show="input" /> -->
 											<p class="form-control-static" ng-show="input">
-												{{deliveryDetail.shipper}}</p>
+												{{shipper}}</p>
 											<div class="form-control-focus"></div>
 											<span class="help-block">请输入发货方</span>
 										</div>

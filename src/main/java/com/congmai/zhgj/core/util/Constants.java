@@ -21,6 +21,10 @@ public class Constants {
 	/***************** 应付款流程key *****************/
 	public static final String ACCOUNTPAYABLE = "com.congmai.zhgj.accountPayable";
 	
+	
+	/***************** 发货流程key *****************/
+	public static final String ACCOUNTDELIVERYABLE = "com.congmai.zhgj.accountDelivery";
+	
 	public static long SYSY_INIT_TIME = new Date().getTime();
 	
 	/***************** 收货编号生成起始索引 *****************/

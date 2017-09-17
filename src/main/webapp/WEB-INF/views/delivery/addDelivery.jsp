@@ -30,7 +30,7 @@
 				<div class="portlet light ">
 					<ul class="nav nav-tabs" >
 						<li class="dropdown pull-right tabdrop" >
-	                       <button   ng-hide="companyAdd" class="btn green  btn-sm btn-circle" ng-click="saveBasicInfo()">
+	                       <button   ng-show="input" class="btn green  btn-sm btn-circle" ng-click="saveBasicInfo()">
 	                              <i class="fa fa-check"></i> 保存 </button>
 	                       <button   ng-hide="companyAdd" class="btn defualt  btn-sm btn-circle" ng-click="goBack()" onclick="return false;">
 	                              <i class="fa fa-mail-reply"></i> 取消 </button>
@@ -91,8 +91,8 @@
 											<label class="control-label bold">销售订单号<span class="required" aria-required="true"> * </span></label>
 											<div class="">
 												<div class="input-group" data-target="#basicMaterielInfo" data-toggle="modal" ng-click="selectMateriel()" onclick="return false;">
-                                                    <input id="orderSerial"  name="orderNum" type="text" class="form-control" ng-model="saleOrder.orderNum" readonly="readonly" >
-                                                    <span class="input-group-btn" style="vertical-align: top;">
+                                                    <input id="orderSerial"  name="orderNum" type="text" ng-show="input" class="form-control" ng-model="saleOrder.orderNum" readonly="readonly" >
+                                                    <span ng-show="input" class="input-group-btn" style="vertical-align: top;">
                                                         <button class="btn default" type="button">
                                                             <i class="fa fa-search"></i>
                                                         </button>
@@ -114,9 +114,9 @@
 											<label class="control-label bold">供应商<span class="required" aria-required="true"> * </span></label>
 											<div class="">
 												<input type="text" name=supplyComId class="form-control"
-													ng-model="delivery.supplyComId" ng-show="input" />
+													ng-model="supplyComId" ng-show="input" readonly/>
 												<p class="form-control-static" ng-show="span">
-													{{delivery.supplyComId}}</p>
+													{{supplyComId}}</p>
 												<div class="form-control-focus"></div>
 											</div>
 
@@ -128,9 +128,9 @@
 											<label class="control-label bold">发货方<span class="required" aria-required="true"> * </span></label>
 											<div class="">
 												<input type="text" name="shipper" class="form-control"
-													ng-model="delivery.shipper" ng-show="input" />
+													ng-model="shipper" ng-show="input" readonly/>
 												<p class="form-control-static" ng-show="span">
-													{{delivery.shipper}}</p>
+													{{shipper}}</p>
 												<div class="form-control-focus"></div>
 											</div>
 

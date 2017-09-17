@@ -42,6 +42,9 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     		//流程申请
     		applyAp:applyAp,
     		
+    		//加载审批页面信息
+    		getAuditInfos:getAuditInfos,
+    		
     };
 
     return factory;
@@ -54,6 +57,19 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     	//var str = "{\"reason\":reason,\"serialNum\":serialNum}";
         var deferred = $q.defer();  
         $http.post(ctx + "/rest/delivery/apply",  JSON.stringify(contact)).success(function (data) {  
+        	
+        	// 如果连接成功，延时返回给调用者  
+            deferred.resolve(data);  
+        })  
+            .error(function () {  
+                deferred.reject('连接服务器出错！');  
+            })  
+        return deferred.promise;  
+    }
+    
+    function getAuditInfos(ids) {
+        var deferred = $q.defer();  
+        $http.post(ctx + "rest/delivery/toApproval/" + ids).success(function (data) {  
         	
         	// 如果连接成功，延时返回给调用者  
             deferred.resolve(data);  
@@ -113,8 +129,8 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 			warehouseSerial:$scope.delivery.warehouseSerial,
 			deliverNum:$scope.delivery.deliverNum,
 			deliverType:$scope.delivery.deliverType,
-			supplyComId:$scope.delivery.supplyComId,
-			shipper:$scope.delivery.shipper,
+			supplyComId:null,
+			shipper:null,
 			receiver:$scope.delivery.receiver,
 			maker:$scope.delivery.maker,
 			makeDate:$scope.delivery.makeDate,
@@ -166,8 +182,8 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 			orderSerial:$scope.delivery.orderSerial,
 			warehouseSerial:$scope.delivery.warehouseSerial,
 			deliverNum:$scope.delivery.deliverNum,
-			supplyComId:$scope.delivery.supplyComId,
-			shipper:$scope.delivery.shipper,
+			supplyComId:null,
+			shipper:null,
 			receiver:$scope.delivery.receiver,
 			maker:$scope.delivery.maker,
 			makeDate:$scope.delivery.makeDate,

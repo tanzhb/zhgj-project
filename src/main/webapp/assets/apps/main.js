@@ -1249,7 +1249,17 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 				'assets/apps/scripts/pageHandle.js',
 	        	'assets/apps/service/DeliveryService.js',
-				'assets/apps/controllers/DeliveryController.js'
+				'assets/apps/controllers/DeliveryController.js',
+				
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js',
                       ]
                     });
                 }]
@@ -1302,6 +1312,32 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 			'assets/apps/service/DeliveryService.js',
 			'assets/apps/controllers/DeliveryController.js'
                         ]
+                    });
+                }]
+            }
+        })
+        
+        
+         .state('auditDelivery', {
+            url: "/auditDelivery",
+            templateUrl: "rest/delivery/auditDelivery",
+            data: {pageTitle: '发货审批'},
+            params:{"serialNum":null,"taskId":null, "comments":null},
+            controller: "DeliveryController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+								'assets/global/plugins/datatables/datatables.min.css',
+								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+								'assets/global/plugins/datatables/datatables.all.min.js',
+								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+								'assets/apps/scripts/pageHandle.js',
+								'assets/apps/service/DeliveryService.js',
+								'assets/apps/controllers/DeliveryController.js'
+                      ]
                     });
                 }]
             }

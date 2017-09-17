@@ -454,7 +454,7 @@ public class ProcessServiceImp implements IProcessService{
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("entity", deliveryVO);
         String businessKey = deliveryVO.getBusinessKey();
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(Constants.ACCOUNTPAYABLE, businessKey, variables);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(Constants.ACCOUNTDELIVERYABLE, businessKey, variables);
         String processInstanceId = processInstance.getId();
         deliveryVO.setProcessInstanceId(processInstanceId);
         this.deliveryService.updateBasicInfo(deliveryVO);
