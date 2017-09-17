@@ -44,6 +44,7 @@ import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
+import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryMaterielExample;
@@ -67,6 +68,7 @@ import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.TakeDeliveryService;
+import com.congmai.zhgj.web.service.UserCompanyService;
 import com.congmai.zhgj.web.service.WarehouseService;
 import com.congmai.zhgj.web.service.WarehousepositionService;
 
@@ -116,6 +118,9 @@ public class TakeDeliveryController {
 	@Autowired
 	private IProcessService processService;
 	
+	@Autowired
+	private UserCompanyService userCompanyService;
+	
 	
 	
 	@RequestMapping("takeDeliveryManage")
@@ -130,7 +135,7 @@ public class TakeDeliveryController {
      * @return
      */
     @RequestMapping(value="takeDeliveryList",method=RequestMethod.POST)
-    public ResponseEntity<Map<String,Object>> takeDeliveryList(Map<String, Object> map,HttpServletRequest request,@RequestBody String params,Delivery takeDelivery) {
+    public ResponseEntity<Map<String,Object>> takeDeliveryList(Map<String, Object> map,HttpServletRequest request,@RequestBody String params,Delivery takeDelivery,String status) {
     	//远程分页代码
     	/*try {
     		params = URLDecoder.decode(params, "UTF-8");
@@ -155,6 +160,16 @@ public class TakeDeliveryController {
 			}*/
     	takeDelivery.setPageIndex(0);
     	takeDelivery.setPageSize(-1);
+    	if(StringUtils.isNotBlank(status)){
+    		takeDelivery.setStatus(status);
+    	}
+    	
+    	User user = UserUtil.getUserFromSession();
+		String comId = null;
+		if(user !=null){
+			comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));//获取用户的企业ID
+		}
+		
     	Page<Delivery> takeDeliverys = takeDeliveryService.selectByPage(takeDelivery);
     	
     	
@@ -838,7 +853,7 @@ public class TakeDeliveryController {
 							.getVariable(takeDelivery.getProcessInstanceId(), "entity");
 		        	baseTakeDelivery.setTitle(baseTakeDelivery.getUser_name()
 							+ " 的收货申请已取消！");
-					takeDelivery.setStatus(BaseVO.APPROVAL_SUCCESS);
+					takeDelivery.setStatus(TakeDelivery.CANCEL);
 		        	content = "取消申请";
 		        	//result = "任务办理完成，已经取消您的请假申请！";
 		        	variables.put("entity", baseTakeDelivery);
@@ -881,7 +896,7 @@ public class TakeDeliveryController {
 						.processInstanceId(takeDelivery.getProcessInstanceId())
 						.singleResult();
 				if (BeanUtils.isBlank(pi)) {
-					takeDelivery.setStatus(BaseVO.APPROVAL_SUCCESS);
+					takeDelivery.setStatus(TakeDelivery.APPLY_COMPLETE);
 					//任务办理完成后,创建入库检验单
 					this.takeDeliveryService.createStockInCheckRecord(takeDelivery.getSerialNum(), user.getUserName());
 				}

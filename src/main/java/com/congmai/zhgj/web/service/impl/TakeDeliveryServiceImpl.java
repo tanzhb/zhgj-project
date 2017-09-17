@@ -34,6 +34,7 @@ import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.model.TakeDeliveryExample;
 import com.congmai.zhgj.web.model.TakeDeliveryParams;
 import com.congmai.zhgj.web.model.TakeDeliverySelectExample;
+import com.congmai.zhgj.web.model.TakeDeliverySelectExample.Criteria;
 import com.congmai.zhgj.web.service.TakeDeliveryService;
 
 @Service
@@ -69,7 +70,11 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		TakeDeliverySelectExample example = new TakeDeliverySelectExample();
 		example.setPageIndex(0);
 		example.setPageSize(-1);
-		example.createCriteria().andDelFlgEqualTo("0");
+		Criteria c =  example.createCriteria();
+		c.andDelFlgEqualTo("0");
+		if(StringUtils.isNotBlank(takeDelivery.getStatus())){
+			c.andStatusEqualTo(takeDelivery.getStatus());
+		}
 		Page<Delivery> page = new Page<Delivery>();
 		page.setResult(takeDeliveryMapper.selectListByExample(example));
 		page.setTotalCount(takeDeliveryMapper.countListByExample(example));

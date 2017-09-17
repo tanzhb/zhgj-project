@@ -189,7 +189,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 							.saveStockInData(params);
 					promise.then(function(data) {
 						if(data.data == "1"){
-							if(isNull($scope.record.serialNum)||$state.current.name="stockIn"){
+							if(isNull($scope.record.serialNum)||$state.current.name=="stockIn"){
 								toastr.success("入库成功！");
 							}else{
 								toastr.success("修改成功！");
@@ -401,7 +401,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 //		                    serverSide: true,
 		                   // ajax: "rest/takeDelivery/takeDeliveryList",//加载数据中
 		                    ajax :{ "url":$rootScope.basePath
-		  						+ "/rest/takeDelivery/takeDeliveryList",// 加载数据中user表数据    
+		  						+ "/rest/takeDelivery/takeDeliveryList?status=3",// 加载数据中收货列表的数据    
 		  						"contentType": "application/json",
 		  					    "type": "POST",
 		  					    "data": function ( d ) {
