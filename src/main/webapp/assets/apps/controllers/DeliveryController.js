@@ -1900,7 +1900,17 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
   									if(data==undefined){
 										return "";
 									}
-	  								return 0;
+	  								return "";
+	
+  							}
+  						},{
+  							'targets' : 9,
+  							'render' : function(data,
+  									type, row, meta) {
+  									if(data==undefined){
+										return "";
+									}
+	  								return "";
 	
   							}
   						}]
