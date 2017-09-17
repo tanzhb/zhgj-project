@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8" %>
+<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"  %>
 <!-- 基本信息modal 开始 -->
 	<div id="buyOrderInfo" class="modal fade bs-modal-lg" tabindex="-1"
 		data-backdrop="static" data-keyboard="false">
@@ -13,7 +13,7 @@
 					<table class="table table-striped table-bordered table-hover table-checkable order-column" id="buyOrder">
 	                    <thead>
 	                        <tr>
-	                            <th style="text-align: center"></th>
+	                            <th></th>
 	                            <th> 采购订单号 </th>
 	                            <th> 供应方 </th>
 	                            <th> 采购商品 </th>

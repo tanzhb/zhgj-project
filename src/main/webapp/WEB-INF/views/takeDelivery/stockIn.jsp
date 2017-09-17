@@ -79,18 +79,15 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="takeDeliverSerial">收货单号 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="takeDeliverSerial">收货单号 </label>
 	                                                 <div class="">
-	                                                 	<div class="input-group" data-toggle="modal" data-target="#takeDeliveryInfo" onclick="return false;">
-	                                                        <input id="takeDeliverSerial"   name="takeDeliverSerial" type="text" class="form-control" ng-model="record.takeDeliverNum" readonly="readonly" >
-	                                                        <span class="input-group-btn" style="vertical-align: top;">
+	                                                        <input id="takeDeliverSerial"   name="takeDeliverSerial" type="text" class="form-control" ng-model="record.takeDeliverNum" disabled="disabled">
+	                                                      <!--   <span class="input-group-btn" style="vertical-align: top;">
 	                                                            <button class="btn default" type="button">
 	                                                                <i class="fa fa-search"></i>
 	                                                            </button>
-	                                                        </span>
-	                                                    </div>
+	                                                        </span> -->
                                                      </div>
-                                                     <div class="form-control-focus"> </div>
                                             </div>
 										</div>
 										<!--/span-->

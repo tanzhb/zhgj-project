@@ -13,6 +13,8 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.mgt.RealmSecurityManager;
+import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +34,7 @@ import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.security.PasswordHelper;
 import com.congmai.zhgj.web.security.PermissionSign;
 import com.congmai.zhgj.web.security.RoleSign;
-import com.congmai.zhgj.web.security.ShiroKit;
+import com.congmai.zhgj.web.security.SecurityRealm;
 import com.congmai.zhgj.web.service.UserService;
 
 /**
@@ -52,6 +54,9 @@ public class UserController {
 
 	@Autowired
 	protected PasswordHelper passwordHelper;
+	
+	@Autowired
+    private SecurityRealm securityRealm;
 
 	/**
 	 * 用户登录
@@ -115,6 +120,7 @@ public class UserController {
 		session.removeAttribute("userInfo");
 		// 登出操作
 		Subject subject = SecurityUtils.getSubject();
+		
 		subject.logout();
 		return "login";
 	}

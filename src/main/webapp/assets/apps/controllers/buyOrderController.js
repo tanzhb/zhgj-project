@@ -295,7 +295,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 // serverSide: true,
                 ajax: tableAjaxUrl,// 加载数据中
                 "aoColumns": [
-                              { mData: 'serialNum' },
+                              { mData: 'serialNum'},
                               { mData: 'orderNum' },
                               { mData: 'supplyName' },
                               { mData: 'materielCount' },
@@ -304,7 +304,24 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                               { mData: 'serviceModel' },
                               { mData: 'saleApplySerial' },
                               { mData: 'orderSerial' },
-                              { mData: 'orderDate' }
+                              { mData: 'orderDate' },
+                              { mData: 'processBase',
+	                            	mRender:function(data){
+	                            		if(data!=""&&data!=null){
+	                            			if(data.status=="PENDING"||data.status=="WAITING_FOR_APPROVAL"){
+	    										return '<span  class="label label-sm label-warning ng-scope">审核中</span>';
+	    									}else if(data.status=="APPROVAL_SUCCESS"){
+	    										return '<span  class="label label-sm label-success ng-scope">待接收</span>';
+	    									}else if(data.status=="APPROVAL_FAILED"){
+	    										return '<span  class="label label-sm label-danger ng-scope">未通过</span>';
+	    									}else{
+	    										return '<span  class="label label-sm label-info ng-scope">未审批</span>';
+	    									}
+	                            		}else{
+	                            			return '<span  class="label label-sm label-info ng-scope">未审批</span>';
+	                            		}
+	                            	}
+	                            }
 
                         ],
                'aoColumnDefs' : [ {
@@ -313,12 +330,9 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 							'orderable' : false,
 							'render' : function(data,
 									type, full, meta) {
-								return '<input type="checkbox" id="'+data+'" ng-click="getBuyOrderInfo_(\''+data+'\')" name="serialNum[]" value="'
-													+ $('<div/>')
-													.text(
-															data)
-													.html()
-											+ '">';
+								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+								"<input type='checkbox' class='checkboxes' value="+ data +" />" +
+								"<span></span></label>";
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
@@ -384,6 +398,17 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 							});
 			// 添加checkbox功能
 			// ***************************************
+			$("#sample_2").find(".group-checkable").change(function() {
+	            var e = jQuery(this).attr("data-set"),
+	            t = jQuery(this).is(":checked");
+	            jQuery(e).each(function() {
+	                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+	            })
+	        }),
+	        $("#sample_2").on("change", "tbody tr .checkboxes",
+	        function() {
+	            $(this).parents("tr").toggleClass("active")
+	        })
         };
         
         var framTable;
@@ -442,12 +467,9 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     							'orderable' : false,
     							'render' : function(data,
     									type, full, meta) {
-    								return '<input type="checkbox" id="'+data+'" ng-click="getBuyOrderInfo_(\''+data+'\')" name="serialNum[]" value="'
-    													+ $('<div/>')
-    													.text(
-    															data)
-    													.html()
-    											+ '">';
+    								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+    								"<input type='checkbox' class='checkboxes' value="+ data +" />" +
+    								"<span></span></label>";
     							},
     							"createdCell": function (td, cellData, rowData, row, col) {
     								 $compile(td)($scope);
@@ -513,6 +535,18 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     							});
     			// 添加checkbox功能
     			// ***************************************
+    			// ***************************************
+    			$("#sample_3").find(".group-checkable").change(function() {
+    	            var e = jQuery(this).attr("data-set"),
+    	            t = jQuery(this).is(":checked");
+    	            jQuery(e).each(function() {
+    	                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+    	            })
+    	        }),
+    	        $("#sample_3").on("change", "tbody tr .checkboxes",
+    	        function() {
+    	            $(this).parents("tr").toggleClass("active")
+    	        })
             };
         
         // 弹出确认删除模态框
@@ -897,12 +931,15 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
    										+ '">';
 
      								}else{
-     	  								return '<input type="checkbox" data-checked=false id="'+ row.serialNum +'" ng-click="getCheckedIds(\''+data+'\','+meta.row+')" name="material_serial" value="'
+     	  								/*return '<input type="checkbox" data-checked=false id="'+ row.serialNum +'" ng-click="getCheckedIds(\''+data+'\','+meta.row+')" name="material_serial" value="'
    										+ $('<div/>')
    												.text(
    														row.serialNum)
    												.html()
-   										+ '">';
+   										+ '">';*/
+     	  								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+     									"<input type='checkbox' class='checkboxes' data-checked=false  id='"+ row.serialNum +"' ng-click='getCheckedIds(\""+data+"\","+meta.row+")' name='material_serial' value="+ row.serialNum +" />" +
+     									"<span></span></label>";
 
      								}
      								
@@ -932,7 +969,18 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
    	          }).on('draw.dt',function() {
    	        	  checkedIdHandler();
    	          });
-                
+                 //全选操作
+                 $("#select_sample_2").find(".group-checkable").change(function() {
+      	            var e = jQuery(this).attr("data-set"),
+      	            t = jQuery(this).is(":checked");
+      	            jQuery(e).each(function() {
+      	                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+      	            })
+      	        }),
+      	        $("#select_sample_2").on("change", "tbody tr .checkboxes",
+      	        function() {
+      	            $(this).parents("tr").toggleClass("active")
+      	        })
              };
 
              /**
@@ -2547,30 +2595,14 @@ var e = $("#form_clauseSettlement"),
 		       
 		     //********审批流程start****************//
 		       $scope.submitBuyApply  = function() {// 进入申请审批页面
-		        	var ids = '';
-		    		// Iterate over all checkboxes in the table
-		    		table.$('input[type="checkbox"]').each(
-		    				function() {
-		    					// If checkbox exist in DOM
-		    					if ($.contains(document, this)) {
-		    						// If checkbox is checked
-		    						if (this.checked) {
-		    							// 将选中数据id放入ids中
-		    							if (ids == '') {
-		    								ids = this.value;
-		    							} else{
-		    								ids = "more"
-		    							}
-		    						}
-		    					}
-		    				});
-		    		if(ids==''){
-		    			toastr.warning('请选择一个订单！');return;
-		    		}else if(ids=='more'){
-		    			toastr.warning('只能选择一个订单！');return;
-		    		}
-		    		
-		    		$state.go("submitBuyApply",{serialNum:ids});
+		        	if(table.rows('.active').data().length != 1){
+		    			showToastr('toast-top-center', 'warning', '请选择一条任务进行流程申请！')
+		    		}else{
+		    			var processBase = table.row('.active').data().processBase;
+		    			if(processBase != null){
+		    				showToastr('toast-top-center', 'warning', '该订单已发起流程审批，不能再次申请！')
+		    			}else $state.go('submitBuyApply',{serialNum:table.row('.active').data().serialNum});
+		    		}     	
 		        };
 		        
 		        
@@ -2806,14 +2838,32 @@ var e = $("#form_clauseSettlement"),
 		        	                    	'orderable' : false,
 		        	                    	'className' : 'dt-body-center',
 		        	                    	'render' : function(data,type, full, meta) {
-		        	                    		return '<input type="checkbox" name="id[]" value="'+ $('<div/>').text(data).html()+ '">';
+		        								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+		        								"<input type='checkbox' class='checkboxes' value="+ data +" />" +
+		        								"<span></span></label>";
+		        							
 		        	                    	}
 		        	                    } 
 		        	                    ]
 
 		        			})
 		        			
+		        			
+		        			$("#dbTable").find(".group-checkable").change(function() {
+					            var e = jQuery(this).attr("data-set"),
+					            t = jQuery(this).is(":checked");
+					            jQuery(e).each(function() {
+					                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+					            })
+					        }),
+					        $("#dbTable").on("change", "tbody tr .checkboxes",
+					        function() {
+					            $(this).parents("tr").toggleClass("active")
+					        })
+	        
 		        			return table;
+		        	
+		        	
 		        }
 
 		        function showYbTable(){

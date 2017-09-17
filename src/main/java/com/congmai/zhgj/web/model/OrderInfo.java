@@ -88,6 +88,8 @@ public class OrderInfo extends BaseVO {
     private String supplyName;
     
     private String buyName;
+    
+    private ProcessBase processBase;
 
     public String getSerialNum() {
         return serialNum;
@@ -406,5 +408,15 @@ public class OrderInfo extends BaseVO {
 	public void setBuyName(String buyName) {
 		this.buyName = buyName;
 	}
+
+	public ProcessBase getProcessBase() {
+		return processBase;
+	}
+
+	public void setProcessBase(ProcessBase processBase) {
+		this.processBase = processBase;
+	}
+
+
 	
 }

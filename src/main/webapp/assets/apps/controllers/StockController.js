@@ -76,7 +76,7 @@ angular
 			function loadStockzijianTable(){
 							var a = 0;
 							tableAjaxUrl= "rest/stock/getStockList?manageType=1";
-							App.getViewPort().width < App
+							/*App.getViewPort().width < App
 									.getResponsiveBreakpoint("md") ? $(
 									".page-header").hasClass(
 									"page-header-fixed-mobile")
@@ -86,7 +86,7 @@ angular
 											".page-header").outerHeight(!0)
 											: $("body").hasClass(
 													"page-header-fixed")
-													&& (a = 64);
+													&& (a = 64);*/
 
 									tablezijian = $("#sample_zijian")
 									.DataTable(
@@ -130,7 +130,16 @@ angular
 
 												"aoColumns" : [
 													{
-													mData : 'serialNum'
+													mData : 'serialNum',
+						                            	  mRender : function(
+																	data,
+																	type,
+																	row,
+																	meta) {
+																return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+																		"<input type='checkbox' class='checkboxes' value='"+data+"'/>" +
+																		"<span></span></label>";
+															}
 													},
 													 {
 														mData : 'stockNum'
@@ -202,8 +211,19 @@ angular
 
 											})
 							// 构建datatables结束***************************************
-
-							// 添加checkbox功能***************************************
+											$("#sample_zijian").find(".group-checkable").change(function() {
+										        var e = jQuery(this).attr("data-set"),
+										        t = jQuery(this).is(":checked");
+										        jQuery(e).each(function() {
+										            t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+										        })
+										    }),
+										    $("#sample_zijian").on("change", "tbody tr .checkboxes",
+										    function() {
+										        $(this).parents("tr").toggleClass("active")
+										    })
+										   return tablezijian;
+						/*	// 添加checkbox功能***************************************
 							// Handle click on "Select all" control
 							$('#example-select-zijian-all').on(
 									'click',
@@ -244,11 +264,11 @@ angular
 											});
 							// 添加checkbox功能
 							// ***************************************
-							}
+*/							}
 			function loadStockdaiguanTable(){
 				var a = 0;
 				tableAjaxUrl= "rest/stock/getStockList?manageType=2";
-				App.getViewPort().width < App
+			/*	App.getViewPort().width < App
 						.getResponsiveBreakpoint("md") ? $(
 						".page-header").hasClass(
 						"page-header-fixed-mobile")
@@ -258,7 +278,7 @@ angular
 								".page-header").outerHeight(!0)
 								: $("body").hasClass(
 										"page-header-fixed")
-										&& (a = 64);
+										&& (a = 64);*/
 
 								tabledaiguan = $("#sample_daiguan")
 						.DataTable(
@@ -302,7 +322,16 @@ angular
 
 									"aoColumns" : [
 										{
-										mData : 'serialNum'
+										mData : 'serialNum',
+		                            	  mRender : function(
+													data,
+													type,
+													row,
+													meta) {
+												return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+														"<input type='checkbox' class='checkboxes' value='"+data+"'/>" +
+														"<span></span></label>";
+											}
 										},
 										 {
 											mData : 'stockNum'
@@ -374,8 +403,19 @@ angular
 
 								})
 				// 构建datatables结束***************************************
-
-				// 添加checkbox功能***************************************
+								$("#sample_daiguan").find(".group-checkable").change(function() {
+							        var e = jQuery(this).attr("data-set"),
+							        t = jQuery(this).is(":checked");
+							        jQuery(e).each(function() {
+							            t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+							        })
+							    }),
+							    $("#sample_daiguan").on("change", "tbody tr .checkboxes",
+							    function() {
+							        $(this).parents("tr").toggleClass("active")
+							    })
+							   return tabledaiguan;
+			/*	// 添加checkbox功能***************************************
 				// Handle click on "Select all" control
 				$('#example-select-daiguan-all').on(
 						'click',
@@ -416,7 +456,7 @@ angular
 								});
 				// 添加checkbox功能
 				// ***************************************
-				}
+*/				}
 			
 			 $scope.showStock=function(judgeString){
 				 $state.go('stock',{stockSerialNum:judgeString}); //切换tab
@@ -501,9 +541,14 @@ angular
 							// 修改库存结束***************************************							
 
 							// 删除库存开始***************************************							
-							$scope.delStock = function() {
+							$scope.delStock = function(judgeString) {
 								debugger;
 								var ids = '';
+								if(judgeString=='zijian'){
+									table=tablezijian;
+								}else{
+									table=tabledaiguan;
+								}
 								// Iterate over all checkboxes in the table
 								table.$('input[type="checkbox"]').each(function() {
 									// If checkbox exist in DOM
@@ -522,14 +567,14 @@ angular
 								if (ids == '') {// 未勾选删除数据									
 									toastr.warning("未勾选要删除数据！");
 								} else {
-									$('#delStockModal').modal('show');// 打开确认删除模态框
+									$('#delStock'+judgeString+'Modal').modal('show');// 打开确认删除模态框
 									
 									$scope.confirmDellStock = function() {										
 										StockService
 												.delStocks(ids)
 												.then(
 														function(data) {
-															$('#delStockModal').modal(
+															$('#delStock'+judgeString+'Modal').modal(
 																	'hide');// 删除成功后关闭模态框
 															toastr.success("删除成功！");
 															table.ajax.reload(); // 重新加载datatables数据

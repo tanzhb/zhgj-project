@@ -247,16 +247,15 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 									'className' : 'dt-body-center',
 									'render' : function(data,
 											type, row, meta) {
-										/*return '<label class="mt-checkbox mt-checkbox-outline"  >'+
-	                                    '<input type="checkbox"  ng-model="serialNums['+meta.row+']" id="'+data+'" value="'+data+'" data-check="false"  ng-click="showCompanyInfo(\''+row.comId+'\')">'+
-	                                    '<span></span>'+
-										'</label>';*/
-										return '<input type="checkbox"  class="checkbox-inline" id="'+data+'" name="id[]" value="'
+										/*return '<input type="checkbox"  class="checkbox-inline" id="'+data+'" name="id[]" value="'
 												+ $('<div/>')
 														.text(
 																data)
 														.html()
-												+ '" data-check="false"  ng-click="showCompanyInfo(\''+row.comId+'\')">';
+												+ '" data-check="false"  ng-click="showCompanyInfo(\''+row.comId+'\')">';*/
+										return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
+	                                     '<input type="checkbox" data-check="false" class="checkboxes" ng-click="showCompanyInfo(\''+row.comId+'\')" id="'+data+'" value="'+data+'" data-set="#companyTable .checkboxes" />'+
+	                                     '<span></span></label>';
 									},"createdCell": function (td, cellData, rowData, row, col) {
 										 $compile(td)($scope);
 								    }
@@ -288,6 +287,17 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 				            	  console.log('翻页');
 					          })
 			// 构建datatables结束***************************************
+					           $("#companyTable").find(".group-checkable").change(function() {
+						            var e = jQuery(this).attr("data-set"),
+						            t = jQuery(this).is(":checked");
+						            jQuery(e).each(function() {
+						                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+						            })
+						        }),
+						        $("#companyTable").on("change", "tbody tr .checkboxes",
+						        function() {
+						            $(this).parents("tr").toggleClass("active")
+						        })
 	 }
 	/**加载列表结束**/
 	 

@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8" %>
+<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"  %>
 <!-- 基本信息modal 开始 -->
 	<div id="takeDeliveryInfo" class="modal fade bs-modal-lg" tabindex="-1"
 		data-backdrop="static" data-keyboard="false">

@@ -49,7 +49,7 @@
 				 <ul class="nav nav-tabs" >
 					<li class="dropdown pull-right tabdrop" >
                        <button   ng-hide="companyAdd" class="btn green  btn-sm btn-circle" ng-click="saveTakeDelivery()">
-                              <i class="fa fa-check"></i> 确认收货 </button>
+                              <i class="fa fa-check"></i> 确认发货 </button>
                        <button   ng-hide="companyAdd" class="btn defualt  btn-sm btn-circle" ng-click="cancelTakeDelivery()" onclick="return false;">
                               <i class="fa fa-mail-reply"></i> 取消 </button>
                                 
@@ -123,7 +123,7 @@
                                                     <label class="control-label bold" for="supplyComId">供应商 <span class="required"> * </span></label>
                                                     <div class="">
                                                     	<select class="form-control" selectpicker  id="supplyComId"  name="supplyComId" ng-model="deliver.supplyComId" ng-hide="deliverAdd"  data-size="8">
-	                                                        <!-- <option value=""></option> -->
+	                                                        <option value=""></option>
 	                                                        <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}">{{supplier.comName}}</option>
 	                                                    </select>
                                                         <div class="form-control-focus"> </div>
@@ -343,9 +343,9 @@
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="packageSpecifications">包装规格 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="packageSpecifications">包装规格 </label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="packageSpecifications" name="packageSpecifications" ng-model="deliver.packageSpecifications" ng-hide="deliverAdd" >
+                                                        <input type="text" class="form-control" id="packageSpecifications"  ng-model="deliver.packageSpecifications" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.packageSpecifications}}</p>
                                                     </div>
@@ -355,9 +355,9 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="materielWeight">物料重量 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="materielWeight">物料重量 </label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="materielWeight"  name="materielWeight" ng-model="deliver.materielWeight" ng-hide="deliverAdd" >
+                                                        <input type="text" class="form-control" id="materielWeight"   ng-model="deliver.materielWeight" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.materielWeight}}</p>
                                                     </div>
@@ -366,9 +366,9 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="serviceMoney">服务费 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="serviceMoney">服务费</label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="serviceMoney"  name="serviceMoney" ng-model="deliver.serviceMoney" ng-hide="deliverAdd" >
+                                                        <input type="text" class="form-control" id="serviceMoney"  ng-model="deliver.serviceMoney" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.serviceMoney}}</p>
                                                     </div>

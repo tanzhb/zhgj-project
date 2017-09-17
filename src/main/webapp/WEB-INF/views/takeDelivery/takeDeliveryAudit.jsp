@@ -598,14 +598,14 @@
 										<td>
                                             {{materiel.takeRemark}}
 										</td>
-										<td>{{materiel.qualifiedCount}}</td>
-										<td>{{materiel.unqualifiedCount}}</td>
-										<td>{{materiel.checkRemark}}</td>
-										<td>{{materiel.stockCount}}</td>
-										<td>{{materiel.unstockCount}}</td>
-										<td>{{materiel.warehouse.warehouseName}}</td>
-										<td>{{materiel.positionSerial}}</td>
-										<td>{{materiel.stockRemark}}</td>
+										<td>{{materiel.stockInQualifiedCount}}</td>
+										<td>{{materiel.stockInUnqualifiedCount}}</td>
+										<td>{{materiel.stockInCheckRemark}}</td>
+										<td>{{materiel.stockInCount}}</td>
+										<td>{{materiel.unstockInCount}}</td>
+										<td>{{materiel.stockInWarehouse.warehouseName}}</td>
+										<td>{{materiel.stockInPosition.positionName}}</td>
+										<td>{{materiel.stockInRemark}}</td>
 										<td></td>
 									</tr>
 									<tr ng-if="deliver.deliveryMateriels==undefined||deliver.deliveryMateriels.length==0">
@@ -618,7 +618,7 @@
          			<!-- 物料信息END -->
          			<!-- 评论START -->
          			<div class="portlet-body">
-         			<div class="row">
+         				<div class="table-scrollable">
 							<div class="portlet box green">
 	                             <div class="portlet-title">
 	                                 <div class="caption">

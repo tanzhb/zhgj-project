@@ -210,6 +210,16 @@ public class TakeDeliveryController {
     public String takeDeliveryAudit(HttpServletRequest request) {
     	return "takeDelivery/takeDeliveryAudit";
     }
+    
+    /**
+     * @Description (重新申请)
+     * @param request
+     * @return
+     */
+    @RequestMapping("takeDeliveryAdjustment")
+    public String takeDeliveryAdjustment(HttpServletRequest request) {
+    	return "takeDelivery/takeDeliveryAdjustment";
+    }
 
     /**
      * @Description (收货查看页面)
@@ -409,6 +419,20 @@ public class TakeDeliveryController {
     public String stockInAdd(Map<String, Object> map,String serialNum,HttpServletRequest request) {
     	
     	return "takeDelivery/stockInAdd";
+    }
+    
+    /**
+     * 
+     * @Description (TODO新建入庫)
+     * @param map
+     * @param serialNum
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="stockIn")
+    public String stockIn(Map<String, Object> map,String serialNum,HttpServletRequest request) {
+    	
+    	return "takeDelivery/stockIn";
     }
     
     /**
@@ -790,21 +814,60 @@ public class TakeDeliveryController {
 	public String complete(@RequestParam("serialNum") String serialNum,
 			@RequestParam("content") String content,
 			@RequestParam("isPass") Boolean completeFlag,
+			@RequestBody@RequestParam(value="params",required=false) String params,
 			@RequestParam("taskId") String taskId,
-			RedirectAttributes redirectAttributes) throws Exception {
+			RedirectAttributes redirectAttributes,HttpServletRequest request) throws Exception {
 		User user = UserUtil.getUserFromSession();
 		String result = "";
 		try {
-			TakeDelivery takeDelivery = this.takeDeliveryService.selectByPrimaryKey(serialNum);
-			TakeDelivery baseTakeDelivery = (TakeDelivery) this.runtimeService
-					.getVariable(takeDelivery.getProcessInstanceId(), "entity");
+		
 			Map<String, Object> variables = new HashMap<String, Object>();
 			variables.put("isPass", completeFlag);
-			if (!completeFlag) {
-				baseTakeDelivery.setTitle(baseTakeDelivery.getUser_name()
-						+ " 的收货申请失败,需修改后重新提交！");
-				takeDelivery.setStatus(BaseVO.APPROVAL_FAILED);
-				variables.put("entity", baseTakeDelivery);
+		
+			
+			Task task = this.taskService.createTaskQuery().taskId(taskId)
+					.singleResult();
+			String taskDefinitionKey = task.getTaskDefinitionKey();
+			TakeDelivery takeDelivery = null;
+			if ("modifyApply".equals(taskDefinitionKey)) {
+				
+				
+				if(!completeFlag){
+					takeDelivery = this.takeDeliveryService.selectByPrimaryKey(serialNum);
+					TakeDelivery baseTakeDelivery = (TakeDelivery) this.runtimeService
+							.getVariable(takeDelivery.getProcessInstanceId(), "entity");
+		        	baseTakeDelivery.setTitle(baseTakeDelivery.getUser_name()
+							+ " 的收货申请已取消！");
+					takeDelivery.setStatus(BaseVO.APPROVAL_SUCCESS);
+		        	content = "取消申请";
+		        	//result = "任务办理完成，已经取消您的请假申请！";
+		        	variables.put("entity", baseTakeDelivery);
+		        }else
+		        {
+		        	String flag = confirmTakeDelivery(new HashMap<String, Object>(), params, request);
+					if(!"1".equals(flag)){
+						logger.warn("修改收货信息失败");
+						throw new Exception("修改收货信息失败");
+					}
+					takeDelivery = this.takeDeliveryService.selectByPrimaryKey(serialNum);
+					TakeDelivery baseTakeDelivery = (TakeDelivery) this.runtimeService
+							.getVariable(takeDelivery.getProcessInstanceId(), "entity");
+		        	baseTakeDelivery.setTitle(baseTakeDelivery.getUser_name()
+							+ " 的收货重新申请！");
+					takeDelivery.setStatus(BaseVO.PENDING);
+					variables.put("entity", baseTakeDelivery);
+		        	content = "重新申请";
+		        }
+			}else{
+				takeDelivery = this.takeDeliveryService.selectByPrimaryKey(serialNum);
+				TakeDelivery baseTakeDelivery = (TakeDelivery) this.runtimeService
+						.getVariable(takeDelivery.getProcessInstanceId(), "entity");
+				if (!completeFlag) {
+					baseTakeDelivery.setTitle(baseTakeDelivery.getUser_name()
+							+ " 的收货申请失败,需修改后重新提交！");
+					takeDelivery.setStatus(BaseVO.APPROVAL_FAILED);
+					variables.put("entity", baseTakeDelivery);
+				}
 			}
 			// 完成任务
 			this.processService.complete(taskId, content, user.getUserId()

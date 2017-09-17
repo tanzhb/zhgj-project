@@ -47,7 +47,7 @@ public class TakeDelivery extends BaseVO implements Serializable{
     
     private String supplyName;//供应商名称
     
-    private String processInstanceId;
+/*    private String processInstanceId;
     
     private String status;
     
@@ -55,7 +55,7 @@ public class TakeDelivery extends BaseVO implements Serializable{
     
     private int userId;
     
-    private Date applyDate;
+    private Date applyDate;*/
 
     public String getSerialNum() {
         return serialNum;
@@ -203,45 +203,7 @@ public class TakeDelivery extends BaseVO implements Serializable{
 		this.takeRemark = takeRemark;
 	}
 
-	public String getProcessInstanceId() {
-		return processInstanceId;
-	}
 
-	public void setProcessInstanceId(String processInstanceId) {
-		this.processInstanceId = processInstanceId;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public String getReason() {
-		return reason;
-	}
-
-	public void setReason(String reason) {
-		this.reason = reason;
-	}
-
-	public Integer getUserId() {
-		return userId;
-	}
-
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
-
-	public Date getApplyDate() {
-		return applyDate;
-	}
-
-	public void setApplyDate(Date applyDate) {
-		this.applyDate = applyDate;
-	}
     
     
 }

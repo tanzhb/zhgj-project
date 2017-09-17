@@ -93,7 +93,12 @@
 			                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_2">
 			                    <thead>
 			                        <tr>
-			                            <th style="text-align: center"><input name="select_all" id="example-select-all" type="checkbox"/></th>
+			                            <th>
+                                            <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                                <input type="checkbox" class="group-checkable" data-set="#sample_2 .checkboxes" />
+                                                <span></span>
+                                            </label>
+                                        </th>
 			                            <th> 采购订单号 </th>
 			                            <th> 供应方 </th>
 			                            <th> 采购商品 </th>
@@ -103,6 +108,7 @@
 			                            <th> 关联采购合同 </th>
 			                            <th> 关联销售单 </th>
 			                            <th> 下单日期 </th>
+			                            <th style="white-space: nowrap;">状态</th>
 			                        </tr>
 			                    </thead>
 			                    <tbody>
@@ -117,12 +123,16 @@
 								<div class="portlet-title"></div>
 	
 								<div class="portlet-body">
-									<table class="table table-striped table-bordered table-hover"
+									<table class="table table-striped table-bordered table-hover table-checkable order-column"
 										id="dbTable">
 										<thead>
 											<tr>
-											<th style="text-align: center"><input name="select_all"
-												value="1" id="example-select-all" type="checkbox" /></th>
+											<th>
+	                                            <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+	                                                <input type="checkbox" class="group-checkable" data-set="#dbTable .checkboxes" />
+	                                                <span></span>
+	                                            </label>
+	                                        </th>
 											<th style="white-space: nowrap;">任务状态</th>
 											<th style="white-space: nowrap;">申请人</th>
 											<th style="white-space: nowrap;">标题</th>
@@ -248,7 +258,12 @@
 	                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_3">
 	                    <thead>
 	                        <tr>
-	                            <th style="text-align: center"><input name="select_all" id="example-select-all" type="checkbox"/></th>
+	                            <th>
+                                    <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                        <input type="checkbox" class="group-checkable" data-set="#sample_3 .checkboxes" />
+                                        <span></span>
+                                    </label>
+                                </th>
 	                            <th> 采购订单号 </th>
 	                            <th> 供应方 </th>
 	                            <th> 采购商品 </th>

@@ -55,13 +55,13 @@ public class StockInOutCheckServiceImpl extends GenericServiceImpl<StockInOutChe
     	Criteria criteria=sore.createCriteria();
     	criteria.andDelFlgEqualTo("0");
     	if("in".equals(InOut)){//入库
-    		criteria.andDeliverSerialLike("111111");
+    		criteria.andDeliverSerialLike("checkin");
     		criteria.andTakeDeliverSerialIsNotNull();
     		if(!StringUtils.isEmpty(serialNum)){
     			criteria.andTakeDeliverSerialEqualTo(serialNum);
     		}
     	}else if("out".equals(InOut)){//出库
-    		criteria.andTakeDeliverSerialLike("111111");
+    		criteria.andTakeDeliverSerialLike("checkout");
     		criteria.andDeliverSerialIsNotNull();
     		if(!StringUtils.isEmpty(serialNum)){
     			criteria.andDeliverSerialEqualTo(serialNum);

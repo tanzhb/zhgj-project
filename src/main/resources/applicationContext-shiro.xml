@@ -60,6 +60,23 @@
         <property name="interval" value="60000"/>  
     </bean>  --> 
 
+	<bean id="securityRealm" class="com.congmai.zhgj.web.security.SecurityRealm" >      
+	    <property name="cacheManager" ref="shiroEhcacheManager"/>  
+	    
+	    <!-- 配置缓存相关 -->
+	    <!-- 启用缓存 -->
+	    <property name="cachingEnabled" value="true"/>
+	    <!-- 开启认证缓存-->
+	    <property name="authenticationCachingEnabled" value="true"/>
+	    <!-- 指定认证缓存的名字(与 ehcache.xml 中声明的相同) -->
+	    <property name="authenticationCacheName" value="shiroCache"/>
+	    <!--开启授权缓存-->
+	    <property name="authorizationCachingEnabled" value="true"/>
+	    <!-- 指定授权缓存的名字(与 ehcache.xml 中声明的相同) -->
+	    <property name="authorizationCacheName" value="shiroCache"/>
+	    
+	</bean>
+
     <!-- 安全管理器 -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realms">
@@ -71,7 +88,7 @@
         <property name="rememberMeManager" ref="rememberMeManager" />
         
         <!-- cacheManager,集合spring缓存工厂 -->
-        <!-- <property name="cacheManager" ref="shiroEhcacheManager" /> -->
+        <!-- <property name="cacheManager" ref="shiroEhcacheManager" /> --> 
         <!-- <property name="sessionManager" ref="sessionManager" /> -->
     </bean>
 

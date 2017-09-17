@@ -407,12 +407,15 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 									                            	'orderable' : false,
 									                            	'className' : 'dt-body-center',
 									                            	'render' : function(data,type, row, meta) {
-									                            		return '<input  type="radio" id='+data+'  ng-click="getSelectIndex('+meta.row+')"   name="takeDeliverySerial" value="'
-							  											+ $('<div/>')
-							  													.text(
-							  															data)
-							  													.html()
-							  											+ '">';
+//									                            		return '<input  type="radio" id='+data+'  ng-click="getSelectIndex('+meta.row+')"   name="takeDeliverySerial" value="'
+//							  											+ $('<div/>')
+//							  													.text(
+//							  															data)
+//							  													.html()
+//							  											+ '">';
+									                            		return '<label class="mt-radio mt-radio-outline">'+
+									                                     '<input type="radio"  ng-click="getSelectIndex(\''+meta.row+'\')" name="takeDeliverySerial"  class="checkboxes" id="'+data+'" value="'+data+'" />'+
+									                                     '<span></span></label>';
 									                            	},
 									                            	"createdCell": function (td, cellData, rowData, row, col) {
 									                            		$compile(td)($scope);

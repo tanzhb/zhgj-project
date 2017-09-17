@@ -109,7 +109,12 @@
 	                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_2">
 	                    <thead>
 	                        <tr>
-	                            <th style="text-align: center"><input name="select_all" id="example-select-all" type="checkbox"/></th>
+	                            <th>
+                                    <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                        <input type="checkbox" class="group-checkable" data-set="#sample_2 .checkboxes" />
+                                        <span></span>
+                                    </label>
+                                </th>
 	                            <th> 销售订单号 </th>
 	                            <th> 采购方 </th>
 	                            <th> 销售商品 </th>
@@ -201,7 +206,12 @@
 	                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_3">
 	                    <thead>
 	                        <tr>
-	                            <th style="text-align: center"><input name="select_all" id="example-select-all" type="checkbox"/></th>
+	                            <th>
+                                    <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                        <input type="checkbox" class="group-checkable" data-set="#sample_3 .checkboxes" />
+                                        <span></span>
+                                    </label>
+                                </th>
 	                            <th> 销售订单号 </th>
 	                            <th> 采购方 </th>
 	                            <th> 销售商品 </th>

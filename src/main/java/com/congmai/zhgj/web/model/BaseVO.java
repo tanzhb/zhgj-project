@@ -54,7 +54,7 @@ public class BaseVO implements Serializable{
 	
 	
 	// 申请人id
-	private Integer user_id;
+	//private Integer user_id;
 	
 	// 申请的标题
 	private String title;
@@ -111,15 +111,15 @@ public class BaseVO implements Serializable{
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
-	@Transient
-	public Integer getUser_id() {
-		return user_id;
-	}
-
-	public void setUser_id(Integer user_id) {
-		this.user_id = user_id;
-	}
+//
+//	@Transient
+//	public Integer getUser_id() {
+//		return user_id;
+//	}
+//
+//	public void setUser_id(Integer user_id) {
+//		this.user_id = user_id;
+//	}
 
 	@Transient
 	public String getUser_name() {

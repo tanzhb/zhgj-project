@@ -46,6 +46,12 @@ dashModule.controller('DashboardController', function($rootScope, $scope, $state
 				}else if(workflowType == 'accountPayable'){
 					workflowName = "应付款流程";
 					workflowType="paymentRecordC";
+				}else if(workflowType == 'buyOrder'){
+					workflowName = "采购订单流程";
+				}else if(workflowType == 'saleOrder'){
+					workflowName = "销售订单流程";
+				}else if(workflowType == 'takeDelivery'){
+					workflowName = "收货流程";
 				}else{
 					workflowName = "未命名";
 				}
@@ -81,6 +87,12 @@ dashModule.controller('DashboardController', function($rootScope, $scope, $state
 				}else if(workflowType == 'accountPayable'){
 					workflowName = "应付款流程";
 					workflowType="paymentRecordC";
+				}else if(workflowType == 'buyOrder'){
+					workflowName = "采购订单流程";
+				}else if(workflowType == 'saleOrder'){
+					workflowName = "销售订单流程";
+				}else if(workflowType == 'takeDelivery'){
+					workflowName = "收货流程";
 				}else{
 					workflowName = "未命名";
 				}
