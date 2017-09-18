@@ -1303,14 +1303,10 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	       }
 		
 	       
-		//修改
-		/*$scope.jumpToEdit = function() {
-			if(table.rows('.active').data().length != 1){
-				showToastr('toast-top-center', 'warning', '请选择一条任务进行流程申请！')
-			}else{
-				$state.go('editDeliveryPage',{serialNumEdit:table.row('.active').data().serialNum});
-			} 
-		};*/
+	     //返回待办列表
+	   	$scope.backDbList = function() {
+	   		$state.go('delivery',{tabHref:1});//返回待办列表
+	   	};
 		
 		//修改
 		$scope.jumpToEdit = function() {		
