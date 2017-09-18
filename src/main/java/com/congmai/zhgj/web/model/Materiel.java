@@ -31,8 +31,11 @@ public class Materiel {
     private String productionPlace;
 
     private String brand;
-
-    private String category;
+    
+    private String category1;
+    private String category2;
+    private String category3;
+    private String materielAttribute;
 
     private String mnemonicCode;
 
@@ -203,14 +206,6 @@ public class Materiel {
 
     public void setBrand(String brand) {
         this.brand = brand == null ? null : brand.trim();
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category == null ? null : category.trim();
     }
 
     public String getMnemonicCode() {
@@ -575,8 +570,36 @@ public class Materiel {
 		this.orderMaterielSerial = orderMaterielSerial;
 	}
 
+	public String getCategory1() {
+		return category1;
+	}
 
-	
+	public void setCategory1(String category1) {
+		this.category1 = category1;
+	}
 
+	public String getCategory2() {
+		return category2;
+	}
+
+	public void setCategory2(String category2) {
+		this.category2 = category2;
+	}
+
+	public String getCategory3() {
+		return category3;
+	}
+
+	public void setCategory3(String category3) {
+		this.category3 = category3;
+	}
+
+	public String getMaterielAttribute() {
+		return materielAttribute;
+	}
+
+	public void setMaterielAttribute(String materielAttribute) {
+		this.materielAttribute = materielAttribute;
+	}
     
 }

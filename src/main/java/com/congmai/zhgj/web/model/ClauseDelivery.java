@@ -7,6 +7,8 @@ public class ClauseDelivery {
 
     private String contractSerial;
 
+    private String deliveryMode;
+    
     private String transportType;
 
     private String packingRequire;
@@ -122,4 +124,13 @@ public class ClauseDelivery {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public String getDeliveryMode() {
+		return deliveryMode;
+	}
+
+	public void setDeliveryMode(String deliveryMode) {
+		this.deliveryMode = deliveryMode;
+	}
+    
 }

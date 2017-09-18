@@ -24,6 +24,48 @@
                  <div class="form-body">
                      <div class="alert alert-danger display-hide">
                          <button class="close" data-close="alert"></button> 请先输入正确数据！ </div>
+                     
+                     <div class="row">
+                     		<!--/span-->
+                         <!--/span-->
+                         
+                         <div class="col-md-4">
+                         	<div class="form-group ">
+                                 <label class="control-label col-md-5 bold">采购类型：</label>
+                                 <div class="control-label col-md-7" >
+	                                 <p class="form-control-static"> {{buyOrder.orderType}} </p>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="col-md-4">
+                         	<div class="form-group ">
+                                 <label class="control-label col-md-5 bold">贸易类型：</label>
+                                 <div class="control-label col-md-7" >
+	                                 <p class="form-control-static"> {{buyOrder.tradeType}} </p>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="col-md-4">
+                         		<div class="form-group ">
+                                 <label class="control-label col-md-5 bold">合同类型：</label>
+                                 <div class="control-label col-md-7">
+                                   <p class="form-control-static" > {{contract.contractType}} </p>
+                                 </div>
+                             </div>
+                         		
+                         </div>
+                     </div>
+                     <div class="row">
+                         <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label col-md-5 bold">卖方：</label>
+                                 <div class="control-label col-md-7">
+                                     <p class="form-control-static" > {{buyOrder.supplyName}} </p>
+                                 </div>
+                             </div>
+                         </div>
+                         <!--/span-->
+                     </div>
                      <div class="row">
                          <div class="col-md-4">
                              <div class="form-group ">
@@ -54,40 +96,8 @@
                          
                      </div>
                      <!--/row-->
-                     <div class="row">
-                     		<!--/span-->
-                         <div class="col-md-4">
-                         		<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">合同类型：</label>
-                                 <div class="control-label col-md-7">
-                                   <p class="form-control-static" > {{contract.contractType}} </p>
-                                 </div>
-                             </div>
-                         		
-                         </div>
-                         <!--/span-->
-                         <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">采购类型：</label>
-                                 <div class="control-label col-md-7">
-                                     <p class="form-control-static" > {{buyOrder.orderType}} </p>
-                                 </div>
-                             </div>
-                         </div>
-                         <!--/span-->
-                         <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">卖方：</label>
-                                 <div class="control-label col-md-7">
-                                     <p class="form-control-static" > {{buyOrder.supplyName}} </p>
-                                 </div>
-                             </div>
-                         </div>
-                         <!--/span-->
-                     </div>
-                     <!--/row-->
                      
-                     <div ng-if="buyOrder.orderType =='标准采购(内贸)'||buyOrder.orderType =='VMI采购'">
+                     <div ng-if="buyOrder.orderType =='普通采购' && buyOrder.tradeType =='内贸'">
                      <div class="row">
                          <div class="col-md-4">
                          	<div class="form-group ">
@@ -99,14 +109,6 @@
                          </div>
                          <!--/span-->
                          <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">提货方式：</label>
-                                 <div class="control-label col-md-7">
-                                     <p class="form-control-static" > {{buyOrder.deliveryMode}} </p>
-                                 </div>
-                             </div>
-                         </div>
-                         <div class="col-md-4">
                          	<div class="form-group ">
                                  <label class="control-label col-md-5 bold">币种：</label>
                                  <div class="control-label col-md-7">
@@ -115,8 +117,6 @@
                              </div>
                          </div>
                          <!--/span-->
-                     </div>
-                     <div class="row">
                          <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">税率：</label>
@@ -125,12 +125,24 @@
                                  </div>
                              </div>
                          </div>
+                     </div>
+                     <div class="row">
+                         
                          <div class="col-md-4">
                          	<div class="form-group ">
                                  <label class="control-label col-md-5 bold">制单人：</label>
                                  <div class="control-label col-md-7">
                                      <p class="form-control-static" > {{buyOrder.maker}} </p>
                                  </div>
+                             </div>
+                         </div>
+                         <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label col-md-5 bold">制单日期：</label>
+                                 <div class="control-label col-md-7" >
+                                     <p class="form-control-static"> {{buyOrder.makeDate}} </p>
+                                 </div>
+                                 
                              </div>
                          </div>
                          <!--/span-->
@@ -167,7 +179,7 @@
                      </div>
                      <!--/row-->
                      </div>
-                     <div ng-if="buyOrder.orderType =='标准采购(外贸)'">
+                     <div ng-if="buyOrder.orderType =='普通采购' && buyOrder.tradeType =='外贸'">
                      <div class="row">
                          <div class="col-md-4">
                          	<div class="form-group ">
@@ -179,14 +191,6 @@
                          </div>
                          <!--/span-->
                          <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">提货方式：</label>
-                                 <div class="control-label col-md-7">
-                                     <p class="form-control-static" > {{buyOrder.deliveryMode}} </p>
-                                 </div>
-                             </div>
-                         </div>
-                         <div class="col-md-4">
                          	<div class="form-group ">
                                  <label class="control-label col-md-5 bold">币种：</label>
                                  <div class="control-label col-md-7">
@@ -194,9 +198,6 @@
                                  </div>
                              </div>
                          </div>
-                         <!--/span-->
-                     </div>
-                     <div class="row">
                          <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">税率：</label>
@@ -206,8 +207,8 @@
                              </div>
                          </div>
                          <!--/span-->
-                         
-                         <!--/span-->
+                     </div>
+                     <div class="row">
                          <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">结算汇率：</label>
@@ -225,6 +226,16 @@
                                  </div>
                              </div>
                          </div>
+                         <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label col-md-5 bold">制单日期：</label>
+                                 <div class="control-label col-md-7" >
+                                     <p class="form-control-static"> {{buyOrder.makeDate}} </p>
+                                 </div>
+                                 
+                             </div>
+                         </div>
+                         <!--/span-->
                      </div>
                      <div class="row">
                          
@@ -259,7 +270,7 @@
                      </div>
                      <!--/row-->
                      </div>
-                     <div ng-if="buyOrder.orderType =='委托采购'">
+                     <div ng-if="buyOrder.orderType =='代理采购'">
                      <div class="row">
                      	<div class="col-md-4">
                          	<div class="form-group ">
@@ -301,14 +312,6 @@
                          </div>
                           <!--/span-->
                          <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">提货方式：</label>
-                                 <div class="control-label col-md-7">
-                                     <p class="form-control-static" > {{buyOrder.deliveryMode}} </p>
-                                 </div>
-                             </div>
-                         </div>
-                         <div class="col-md-4">
                          	<div class="form-group ">
                                  <label class="control-label col-md-5 bold">币种：</label>
                                  <div class="control-label col-md-7">
@@ -316,10 +319,7 @@
                                  </div>
                              </div>
                          </div>
-                         <!--/span-->
-                     </div>
-                     <div class="row">
-                     		<div class="col-md-4">
+                         <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">税率：</label>
                                  <div class="control-label col-md-7">
@@ -327,6 +327,10 @@
                                  </div>
                              </div>
                          </div>
+                         <!--/span-->
+                     </div>
+                     <div class="row">
+                     		
                          <div class="col-md-4">
                          	<div class="form-group ">
                                  <label class="control-label col-md-5 bold">制单人：</label>
@@ -336,6 +340,15 @@
                              </div>
                          </div>
                          <!--/span-->
+                         <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label col-md-5 bold">制单日期：</label>
+                                 <div class="control-label col-md-7" >
+                                     <p class="form-control-static"> {{buyOrder.makeDate}} </p>
+                                 </div>
+                                 
+                             </div>
+                         </div>
                          <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">采购日期：</label>
@@ -587,7 +600,7 @@
                              <thead>
                                  <tr>
 								<th>商品编号</th>
-								<th ng-if="buyOrder.orderType =='标准采购(外贸)'">海关编码</th>
+								<th ng-if="buyOrder.tradeType =='外贸'">海关编码</th>
 								<th>物料名称</th>
 								<th>规格型号</th>
 								<th>单位</th>
@@ -600,8 +613,8 @@
 								<th>含税采购单价</th>
 								<th>金额</th>
 								<th>税额</th>
-								<th ng-if="buyOrder.orderType =='标准采购(外贸)'">关税率</th>
-								<th ng-if="buyOrder.orderType =='标准采购(外贸)'">关税金额</th>
+								<th ng-if="buyOrder.tradeType =='外贸'">关税率</th>
+								<th ng-if="buyOrder.tradeType =='外贸'">关税金额</th>
 								<th ng-if="buyOrder.settlementClause =='服务费'">服务费率</th>
 								<th ng-if="buyOrder.settlementClause =='服务费'">服务费</th>
 								<th ng-if="buyOrder.settlementClause =='折扣折让'">折扣率</th>
@@ -619,7 +632,7 @@
 		                          <td>
 		                                <p class="form-control-static" > {{_orderMateriel.materiel.materielNum}} </p>
 		                          </td>
-		                          <td ng-if="buyOrder.orderType =='标准采购(外贸)'">
+		                          <td ng-if="buyOrder.tradeType =='外贸'">
 		                          		<p class="form-control-static" > {{_orderMateriel.materiel.customsCode}} </p>
 		                          </td>
 		                          <td>
@@ -658,10 +671,10 @@
 		                          <td>  
                                      		<p class="form-control-static"> {{_arithmeticRateAmount(this)}} </p>
 		                          </td>
-		                          <td ng-if="buyOrder.orderType =='标准采购(外贸)'">
+		                          <td ng-if="buyOrder.tradeType =='外贸'">
                                      		<p class="form-control-static" > {{_orderMateriel.customsRate}} </p>
 		                          </td>
-								  <td ng-if="buyOrder.orderType =='标准采购(外贸)'">
+								  <td ng-if="buyOrder.tradeType =='外贸'">
 								  		<p class="form-control-static" > {{_arithmeticCustomsRateAmount(this)}} </p>
 								  </td>
 		                          <td ng-if="buyOrder.settlementClause =='服务费'">
@@ -691,7 +704,7 @@
                                  </tr>
                                  <tr>
 								<th></th>
-								<th ng-if="buyOrder.orderType =='标准采购(外贸)'"></th>
+								<th ng-if="buyOrder.tradeType =='外贸'"></th>
 								<th>合计</th>
 								<th>{{totalCount()}}</th>
 								<th></th>
@@ -704,8 +717,8 @@
 								<th></th>
 								<th>{{totalAmount()}}</th>
 								<th>{{totalRateAmount()}}</th>
-								<th ng-if="buyOrder.orderType =='标准采购(外贸)'"></th>
-								<th ng-if="buyOrder.orderType =='标准采购(外贸)'">{{totalCustomsRateAmount()}}</th>
+								<th ng-if="buyOrder.tradeType =='外贸'"></th>
+								<th ng-if="buyOrder.tradeType =='外贸'">{{totalCustomsRateAmount()}}</th>
 								<th ng-if="buyOrder.settlementClause =='服务费'">服务费率</th>
 								<th ng-if="buyOrder.settlementClause =='服务费'">服务费</th>
 								<th ng-if="buyOrder.settlementClause =='折扣折让'">折扣率</th>
@@ -915,6 +928,14 @@
                          <button class="close" data-close="alert"></button> 请先输入正确数据！ </div>
                      <!--/row-->
                      <div class="row">
+                     	<div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label col-md-5 bold">送货方式：</label>
+                                 <div class="control-label col-md-7" >
+                                     <p class="form-control-static"> {{clauseDelivery.deliveryMode}} </p>
+                                 </div>
+                             </div>
+                         </div>
                          <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">运输方式：</label>
@@ -932,6 +953,8 @@
                               		</div>
                              </div>
                          </div>
+                    </div>
+                    <div class="row">     
                          <!--/span-->
                          <div class="col-md-4">
                              <div class="form-group ">
@@ -942,6 +965,14 @@
                              </div>
                          </div>
                          <!--/span-->
+                          <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label col-md-5 bold">备注：</label>
+                                 <div class="control-label col-md-7" >
+                                     <p class="form-control-static"> {{clauseDelivery.remark}} </p>
+                              		</div>
+                             </div>
+                         </div>
                      </div>
                      <!--/row-->
                  </div>

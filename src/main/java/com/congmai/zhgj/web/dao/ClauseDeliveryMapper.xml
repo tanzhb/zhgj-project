@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.ClauseDelivery" >
     <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
     <result column="contractSerial" property="contractSerial" jdbcType="VARCHAR" />
+    <result column="deliveryMode" property="deliveryMode" jdbcType="VARCHAR" />
     <result column="transportType" property="transportType" jdbcType="VARCHAR" />
     <result column="packingRequire" property="packingRequire" jdbcType="VARCHAR" />
     <result column="specifications" property="specifications" jdbcType="VARCHAR" />
@@ -74,7 +75,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    serialNum, contractSerial, transportType, packingRequire, specifications, remark, 
+    serialNum, contractSerial,deliveryMode, transportType, packingRequire, specifications, remark, 
     status, delFlg, creator, createTime, updater, updateTime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.ClauseDeliveryExample" >
@@ -108,12 +109,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.congmai.zhgj.web.model.ClauseDelivery" >
-    insert into clauseDelivery (serialNum, contractSerial, transportType, 
+    insert into clauseDelivery (serialNum, contractSerial, deliveryMode,transportType, 
       packingRequire, specifications, remark, 
       status, delFlg, creator, 
       createTime, updater, updateTime
       )
-    values (#{serialNum,jdbcType=VARCHAR}, #{contractSerial,jdbcType=VARCHAR}, #{transportType,jdbcType=VARCHAR}, 
+    values (#{serialNum,jdbcType=VARCHAR}, #{contractSerial,jdbcType=VARCHAR}, #{deliveryMode,jdbcType=VARCHAR}, #{transportType,jdbcType=VARCHAR}, 
       #{packingRequire,jdbcType=VARCHAR}, #{specifications,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
       #{status,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
@@ -127,6 +128,9 @@
       </if>
       <if test="contractSerial != null" >
         contractSerial,
+      </if>
+      <if test="deliveryMode != null" >
+        deliveryMode,
       </if>
       <if test="transportType != null" >
         transportType,
@@ -165,6 +169,9 @@
       </if>
       <if test="contractSerial != null" >
         #{contractSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryMode != null" >
+        #{deliveryMode,jdbcType=VARCHAR},
       </if>
       <if test="transportType != null" >
         #{transportType,jdbcType=VARCHAR},
@@ -213,6 +220,9 @@
       <if test="record.contractSerial != null" >
         contractSerial = #{record.contractSerial,jdbcType=VARCHAR},
       </if>
+      <if test="record.deliveryMode != null" >
+        deliveryMode = #{record.deliveryMode,jdbcType=VARCHAR},
+      </if>
       <if test="record.transportType != null" >
         transportType = #{record.transportType,jdbcType=VARCHAR},
       </if>
@@ -252,6 +262,7 @@
     update clauseDelivery
     set serialNum = #{record.serialNum,jdbcType=VARCHAR},
       contractSerial = #{record.contractSerial,jdbcType=VARCHAR},
+      deliveryMode = #{record.deliveryMode,jdbcType=VARCHAR},
       transportType = #{record.transportType,jdbcType=VARCHAR},
       packingRequire = #{record.packingRequire,jdbcType=VARCHAR},
       specifications = #{record.specifications,jdbcType=VARCHAR},
@@ -271,6 +282,9 @@
     <set >
       <if test="contractSerial != null" >
         contractSerial = #{contractSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryMode != null" >
+        deliveryMode = #{deliveryMode,jdbcType=VARCHAR},
       </if>
       <if test="transportType != null" >
         transportType = #{transportType,jdbcType=VARCHAR},
@@ -308,6 +322,7 @@
   <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.ClauseDelivery" >
     update clauseDelivery
     set contractSerial = #{contractSerial,jdbcType=VARCHAR},
+    	deliveryMode = #{deliveryMode,jdbcType=VARCHAR},
       transportType = #{transportType,jdbcType=VARCHAR},
       packingRequire = #{packingRequire,jdbcType=VARCHAR},
       specifications = #{specifications,jdbcType=VARCHAR},
