@@ -1189,36 +1189,42 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			        }
 	        
 		// 删除
-		$scope.del = function() {
-			if(table.rows('.active').data().length == 0){
-				showToastr('toast-top-center', 'warning', '未勾选要删除数据！')
-			} else {
-				var ap = table.rows('.active').data();
-				var ids = '';
-				for(i=0;i<ap.length;i++){
-					if(ids == ''){
-						ids = ap[i].serialNum;
-					}else ids = ids +','+ ap[i].serialNum;
-					
-				}
-				$('#delUsersModal').modal('show');// 打开确认删除模态框
+        $scope.del = function() {
+    		if(table.rows('.active').data().length == 0){
+    			showToastr('toast-top-center', 'warning', '未勾选要删除数据！')
+    		} else {
+    			var ap = table.rows('.active').data();
+    			var ids = '';
+    			for(i=0;i<ap.length;i++){
+    				if(ap[i].status != '0'){
+    					showToastr('toast-top-center', 'warning', '所选数据已经申请流程审批，不能删除！');
+    					return;
+    				}
+    				
+    				if(ids == ''){
+    					ids = ap[i].serialNum;
+    				}else ids = ids +','+ ap[i].serialNum;
+    				
+    			}
+    			
+    			$('#delUsersModal').modal('show');// 打开确认删除模态框
 
-				$scope.confirmDel = function() {										
-					DeliveryService.deleteDeliveryS(ids).then(
-							function(data) {
-								$('#delUsersModal').modal('hide');// 删除成功后关闭模态框
-								$(".modal-backdrop").remove();
-								toastr.success("删除成功！");
-								$state.go('delivery',{},{reload:true}); // 重新加载datatables数据
-							},
-							function(errResponse) {
-								/*console.error('Error while deleting Users');*/
-							}
+    			$scope.confirmDel = function() {										
+    				DeliveryService.deleteDeliveryS(ids).then(
+    						function(data) {
+    							$('#delUsersModal').modal('hide');// 删除成功后关闭模态框
+    							$(".modal-backdrop").remove();
+    							toastr.success("删除成功！");
+    							$state.go('paymentRecordC',{},{reload:true}); // 重新加载datatables数据
+    						},
+    						function(errResponse) {
+    							/*console.error('Error while deleting Users');*/
+    						}
 
-					);
-				}
-			}
-			};
+    				);
+    			}
+    		}								
+    	};
 			
 			
 		    
