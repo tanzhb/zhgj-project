@@ -300,7 +300,7 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		}else{
 			map.put("deliverSerial", serialNum);
 		}
-		 return deliveryMapper.selectListForDetailForStockCheck(null);
+		 return deliveryMapper.selectListForDetailForStockCheck(map);
 	}
 
 }
