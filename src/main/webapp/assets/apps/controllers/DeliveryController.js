@@ -1215,7 +1215,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
     							$('#delUsersModal').modal('hide');// 删除成功后关闭模态框
     							$(".modal-backdrop").remove();
     							toastr.success("删除成功！");
-    							$state.go('paymentRecordC',{},{reload:true}); // 重新加载datatables数据
+    							$state.go('delivery',{},{reload:true}); // 重新加载datatables数据
     						},
     						function(errResponse) {
     							/*console.error('Error while deleting Users');*/
@@ -1304,39 +1304,22 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		
 	       
 		//修改
-		$scope.jumpToEdit = function() {
-			/*debugger
-			var ids = '';
-    		// Iterate over all checkboxes in the table
-    		table.$('input[type="checkbox"]').each(
-    				function() {
-    					// If checkbox exist in DOM
-    					if ($.contains(document, this)) {
-    						// If checkbox is checked
-    						if (this.checked) {
-    							// 将选中数据id放入ids中
-    							if (ids == '') {
-    								ids = this.value;
-    							} else{
-    								ids = "more"
-    							}
-    						}
-    					}
-    				});
-    		if(ids==''){
-    			toastr.warning('请选择一个发货信息！');return;
-    		}else if(ids=='more'){
-    			toastr.warning('只能选择一个发货信息！');return;
-    		}
-			$state.go('editDeliveryPage',{serialNumEdit:ids});*/
+		/*$scope.jumpToEdit = function() {
 			if(table.rows('.active').data().length != 1){
 				showToastr('toast-top-center', 'warning', '请选择一条任务进行流程申请！')
 			}else{
-				/*var status = table.row('.active').data().status;
-				if(status != '0'){
-					showToastr('toast-top-center', 'warning', '该发货已发起流程审批，不能再次申请！')
-				}else */
 				$state.go('editDeliveryPage',{serialNumEdit:table.row('.active').data().serialNum});
+			} 
+		};*/
+		
+		//修改
+		$scope.jumpToEdit = function() {		
+			if(table.rows('.active').data().length != 1){
+				showToastr('toast-top-center', 'warning', '请选择一条数据进行修改！')
+			}else{
+				if(table.row('.active').data().status != '0'){
+					showToastr('toast-top-center', 'warning', '该条数据已经申请流程审批，不能进行修改！')
+				}else $state.go('editDeliveryPage',{serialNumEdit:table.row('.active').data().serialNum});
 			} 
 		};
 		
