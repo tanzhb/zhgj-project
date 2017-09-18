@@ -271,4 +271,11 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		// TODO Auto-generated method stub
 		deliveryMapper.goDelivery(map);
 	}
+
+
+	@Override
+	public void updateOrderWhenDeliveryComlete(Map<String,Object> map) {
+		// TODO Auto-generated method stub
+		deliveryMapper.updateOrderWhenDeliveryComlete(map);
+	}
 }

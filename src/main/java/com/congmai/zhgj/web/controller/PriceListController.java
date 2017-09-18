@@ -163,11 +163,13 @@ public class PriceListController {
 				priceList.setSupplyComName(companyService.selectOne(priceList.getBuyComId()).getComName());
 			}
 			Materiel m=materielService.getMaterielInfoByMaterielId(materielService.selectById(priceList.getMaterielSerial()).getMaterielId());
+			if(m!=null){
 			priceList.setMaterielName(m.getMaterielName());
 			priceList.setMaterielNum(m.getMaterielNum());
 			priceList.setUnit(m.getUnit());
 			priceList.setSpecifications(m.getSpecifications());
 			priceList.setPriceNum(priceList.getPriceNum()+"-V"+priceList.getVersionNO());
+			}
 		}
 		}
 		// 封装datatables数据返回到前台

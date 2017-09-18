@@ -77,4 +77,7 @@ public interface DeliveryMapper extends GenericDao<DeliveryMaterielVO, String> {
     
     //确认发货
     public void goDelivery(Map<String,Object> map);
+    
+    
+    public void updateOrderWhenDeliveryComlete(Map<String,Object> map);
 }
