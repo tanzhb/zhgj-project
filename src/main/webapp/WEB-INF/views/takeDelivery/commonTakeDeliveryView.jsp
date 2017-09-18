@@ -337,36 +337,12 @@
 						</div>
 					</div>
 					<!--/span-->
-				</div>
-				<!--/row-->
-				<div class="row">
 					<div class="col-md-4">
 						<div class="form-group form-md-line-input">
 							<label class="col-md-4 control-label" for="shipNumber">
-								船号：</label>
+								运单号：</label>
 							<div class="col-md-8">
 								<p class="control-label left">{{deliver.deliveryTransport.shipNumber}}</p>
-							</div>
-						</div>
-					</div>
-
-					<!--/span-->
-					<div class="col-md-4">
-						<div class="form-group form-md-line-input">
-							<label class="col-md-4 control-label" for="playArrivalDate">
-								预计到港日期：</label>
-							<div class="col-md-8">
-								<p class="control-label left">{{deliver.deliveryTransport.playArrivalDate}}</p>
-							</div>
-						</div>
-					</div>
-					<!--/span-->
-					<div class="col-md-4">
-						<div class="form-group form-md-line-input">
-							<label class="col-md-4 control-label" for="playWarehouseDate">
-								预计到库日期：</label>
-							<div class="col-md-8">
-								<p class="control-label left">{{deliver.deliveryTransport.playWarehouseDate}}</p>
 							</div>
 						</div>
 					</div>
@@ -440,7 +416,7 @@
 					<div class="col-md-4">
 						<div class="form-group form-md-line-input">
 							<label class="col-md-4 control-label" for="takeDeliveryDate">
-								收货日期：</label>
+								预计到货日期：</label>
 							<div class="col-md-8">
 								<p class="control-label left">{{deliver.takeDelivery.takeDeliverDate}}</p>
 							</div>

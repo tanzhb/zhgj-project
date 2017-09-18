@@ -286,7 +286,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			//更新订单状态
 			OrderInfo orderInfo = new OrderInfo();
 			orderInfo.setSerialNum(old_delivery.getOrderSerial());
-			orderInfo.setStatus("8");//入库完成/待收票
+			orderInfo.setStatus("12");//入库完成/待收票
 			orderInfo.setUpdateTime(new Date());
 			orderInfo.setUpdater(currenLoginName);
 			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);

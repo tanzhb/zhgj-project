@@ -878,7 +878,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						            	transportType:{required:"运输方式不能为空！"},
 	  						            	transport:{required:"运输方不能为空！"},
 	  						            	port:{required:"港口不能为空！"},
-	  						            	shipNumber:{required:"船号不能为空！"},
+	  						            	shipNumber:{required:"运单号不能为空！"},
 	  						            	playArrivalDate:{required:"预计到港日期不能为空！"},
 	  						            	playWarehouseDate:{required:"预计到库日期不能为空！"},
 	  						            	dtContact:{required:"联系人不能为空！"},
@@ -890,7 +890,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						            	batchNum:{required:"批次号不能为空！"},
 	  						            	manufactureDate:{required:"生产日期不能为空！"},
 	  						            	deliverCount:{required:"发货数量不能为空！",digits:"发货数量必须为数字！"},
-	  						            	acceptCount:{required:"实收数量不能为空！",digits:"实收数量必须为数字！"}
+	  						            	acceptCount:{required:"实收数量不能为空！",digits:"实收数量必须为数字！"},
+	  						            	actualDate:{required:"实际收货日期不能为空！"},
+	  						            	taker:{required:"收货人不能为空！"}
 	  						            },
 	  						            rules: {
 	  						            	takeDeliverNum: {
@@ -1009,6 +1011,12 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						                tdContactNum: {
 	  						                	required: !0,
 	  						                	isPhone: !0
+	  						                },
+	  						                actualDate: {
+	  						                	required: !0
+	  						                },
+	  						                taker: {
+	  						                	required: !0
 	  						                }
 	  						            },
 	  						            invalidHandler: function(e, t) {
@@ -1248,7 +1256,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	       
 	       
 	  		  	  var order_table;
-	  		      var tableAjaxUrl = "rest/order/findOrderList?type=buy";
+	  		      var tableAjaxUrl = "rest/order/findOrderList?type=buy&selectFor=delivery";
 	  		      var loadOrderTable = function() {
 	  		              a = 0;
 	  		              App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
