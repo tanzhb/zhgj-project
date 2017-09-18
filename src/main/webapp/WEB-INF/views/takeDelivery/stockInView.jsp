@@ -66,8 +66,18 @@
                                                     </div>
                                             </div>
 										</div>
-						
 										<!--/span-->
+										
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="inOutType">入库类型 ：</label>
+	                                                 <div class="col-md-8">
+			                                              <p class="control-label left" >{{record.inOutType}}</p>
+                                                     </div>
+                                            </div>
+										</div>
+										<!--/span-->
+										
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="takeDeliverSerial"> 收货单号：</label>
@@ -77,6 +87,10 @@
                                             </div>
 										</div>
 										<!--/span-->
+										
+									</div>
+									<!--/row-->
+									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="orderSerial"> 采购订单号：</label>
@@ -86,9 +100,7 @@
                                             </div>
 										</div>
 										<!--/span-->
-									</div>
-									<!--/row-->
-									<div class="row">
+										
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="supplyComId"> 入库仓库：</label>
@@ -99,7 +111,7 @@
 										</div>
 						
 										<!--/span-->
-										<div class="col-md-4">
+										<!-- <div class="col-md-4">
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="shipper"> 入库库位：</label>
                                                     <div class="col-md-8">
@@ -107,7 +119,7 @@
                                                     </div>
                                             </div>
 										</div>
-										<!--/span-->
+										/span -->
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="stockDate"> 入库日期：</label>
@@ -120,6 +132,16 @@
 									</div>
 									<!--/row-->
 									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="operator">发货方：</label>
+                                                    <div class="col-md-8">
+                                                       <p class="control-label left" >{{record.shipperOrReceiverName}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<!--/span-->
+										
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="operator"> 操作员：</label>
@@ -139,18 +161,36 @@
                                             </div>
 										</div>
 										<!--/span-->
+									</div>
+									<!--/row-->
+									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="approval"> 状态：</label>
-                                                    <div class="col-md-8">
-                                                         <p class="control-label left" ><span class="label label-sm label-warning">待入库</span></p>
-                                                    </div>
-                                            </div>
+												<label class="col-md-4 control-label" for="approval">
+													备注：</label>
+												<div class="col-md-8">
+													<p class="control-label left">
+														{{record.remark}}
+													</p>
+												</div>
+											</div>
+										</div>
+										<!--/span-->
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+												<label class="col-md-4 control-label" for="approval">
+													状态：</label>
+												<div class="col-md-8">
+													<p class="control-label left">
+														<span class="label label-sm label-success">已入库</span>
+													</p>
+												</div>
+											</div>
 										</div>
 										<!--/span-->
 									</div>
 									<!--/row-->
-								</div>
+							</div>
          				</div>
          			<!-- 基本信息END -->
          			<!-- 物料信息START -->

@@ -145,6 +145,12 @@
     packageCount, materielWeight, packageType, packageSpecifications, serviceMoney, deliverer, 
     contactNum, deliverRemark, delFlg, creator, createTime, updater, updateTime
   </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from delivery
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.DeliveryExample" >
     select
     <if test="distinct" >

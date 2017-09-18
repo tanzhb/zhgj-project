@@ -163,6 +163,17 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		// TODO Auto-generated method stub
 		deliveryMapper.updateBasicInfo(record);
 	}
+	
+	
+	/**
+	 * 编辑基本信息
+	 * @param record
+	 */
+	@Override
+	public void updateBasicInfo2(DeliveryVO record) {
+		// TODO Auto-generated method stub
+		deliveryMapper.updateBasicInfo2(record);
+	}
 
 
 	/**
@@ -278,4 +289,27 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		// TODO Auto-generated method stub
 		deliveryMapper.updateOrderWhenDeliveryComlete(map);
 	}
+
+
+
+
+
+
+
+
+
+
+	@Override
+	public void updateOrderWhenDeliveryComlete(Map<String,Object> map) {
+		// TODO Auto-generated method stub
+		deliveryMapper.updateOrderWhenDeliveryComlete(map);
+	}
+
+
+
+
+
+
+
+
 }

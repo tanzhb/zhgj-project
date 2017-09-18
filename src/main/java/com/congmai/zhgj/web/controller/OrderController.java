@@ -506,10 +506,10 @@ public class OrderController {
     	OrderInfo parm =new OrderInfo();
     	if("sale".equals(type)){//平台销售订单供应商为空
     		parm.setSupplyComId(comId);
+    	}else if("buy".equals(type)){//平台采购订单采购商为空
     		if("delivery".equals(selectFor)){
     			parm.setStatus("2");
     		}
-    	}else if("buy".equals(type)){//平台采购订单采购商为空
     		parm.setBuyComId(comId);
     	}else if("supply".equals(type)){//供应商订单(状态不为0)
     		parm.setSupplyComId(comId);

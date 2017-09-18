@@ -383,4 +383,8 @@
             #{idList.serialNum}
         </foreach>
   </update>
+  <update  id="updateStockInOutCheckStatus" parameterType="java.lang.String">
+    	update  updateStockInOutCheckStatus   set status=1  where serialNum = #{serialNum,jdbcType=VARCHAR}
+        
+    </update>
 </mapper>

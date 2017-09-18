@@ -572,7 +572,7 @@
   </update>
       <select id="selectByTakeDeliveryPrimaryKeyForStockIn" resultMap="BaseResultMap2" parameterType="java.lang.String" >
     select
-    d.serialNum, d.deliverNum,d.deliverType, d.orderSerial, d.supplyComId,dm.serialNum as dmSerialNum,dm.batchNum,
+    d.serialNum, d.deliverNum,d.deliverType, d.orderSerial, d.supplyComId,d.shipper,d.receiver,dm.serialNum as dmSerialNum,dm.batchNum,
     dm.manufactureDate,dm.deliverCount,dm.deliverRemark,
     dm2.acceptCount,dm2.refuseCount,dm2.takeRemark,dm.qualifiedCount,dm.unqualifiedCount,dm.checkRemark,dm.warehouseSerial as dmWarehouseSerial,
 	dm.positionSerial as dmPositionSerial,dm.stockCount,dm.unstockCount,dm.stockRemark,dm.remark as dmRemark,dm.warehouseSerial as dmWarehouseSerial,dm.orderMaterielSerial,

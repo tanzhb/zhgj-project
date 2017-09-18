@@ -35,4 +35,6 @@ public interface StockInOutCheckMapper extends GenericDao<StockInOutCheck,String
     int deleteStockInOutCheck(List<String>serialNums);//批量删除出入库检验记录信息
     
     int updateDeliverMateriel(List<DeliveryMateriel>deliveryMateriels);//批量更新发货明细
+    
+    int updateStockInOutCheckStatus(String serialNum);//更新出入库检验状态
 }

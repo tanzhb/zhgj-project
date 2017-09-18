@@ -42,8 +42,12 @@
             <div class="portlet-body">
 				<div class="portlet light ">
                         <div class="portlet-title">
-                            <div class="caption"><span ng-if="inOrOut.indexOf('in')>-1" >入库检验</span><span  ng-if="inOrOut.indexOf('out')>-1">出库检验</span>详情</div>
+                            <div class="caption"><span ng-if="inOrOut.indexOf('in')>-1" >入库检验</span><span  ng-if="inOrOut.indexOf('out')>-1">出库检验</span>确认</div>
                             <div class="actions">
+                             <button   type="submit"  ng-if="inOrOut.indexOf('checkin')>-1&&stockInOutCheck.status==0"  class="btn green  btn-sm btn-circle "   ng-click="confirmStockInOutCheck('checkin')">
+                                            <i class="fa fa-save"></i> 确认检验 </button>
+                                             <button    type="submit"  ng-if="inOrOut.indexOf('checkout')>-1&&stockInOutCheck.status==0"  class="btn green  btn-sm btn-circle "   ng-click="confirmStockInOutCheck('checkout')">
+                                            <i class="fa fa-save"></i> 确认检验 </button>
                                             <button   ui-sref="stockInOutCheck"  class="btn blue  btn-outline  btn-sm " >
                                             <i class="fa fa-undo"></i> 返回 </button>
                             </div>
@@ -127,8 +131,7 @@
                                                                 <label class="col-md-4 control-label" for="status">状态 :</label>
                                                                     <div class="col-md-8">
                                                                     <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==0" >待检验</span>
-                                                                    <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==1" >待审批</span>
-                                                                    <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==2" >已检验</span>
+                                                                    <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==1" >已检验</span>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -179,10 +182,10 @@
 			                                </tbody>
                                             <tbody >
                                             <tr  ng-repeat="materiel in materials">
-                                          <td >{{materiel.materielNum}}</td>
-										<td  >{{materiel.materielName}}</td>
-										<td  >{{materiel.specifications}}</td>
-										<td  >{{materiel.unit}}</td>
+                                           <td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.materiel.materielNum}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.materielNum}}</td>
+										<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.materiel.materielName}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.materielName}}</td>
+										<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.materiel.specifications}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.specifications}}</td>
+										<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.materiel.unit}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.unit}}</td>
 										<td>
                                             {{materiel.batchNum}}
                                         </td>
@@ -205,8 +208,7 @@
 										<td>{{materiel.unqualifiedCount}}</td>
 										<td>{{materiel.checkRemark}}</td>
 										<td><span class="label label-sm label-success"  ng-if="stockInOutCheck.status==0" >待检验</span>
-                                                  <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==1" >待审批</span>
-                                                   <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==2" >已检验</span></td>
+                                                  <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==1" >已检验</span>
                                                 </tr>
                                                 <tr ng-if="materials!=null"><td colspan="3">合计</td><td >{{materials.length}}</td><td></td><td></td><td></td><td   >{{stockInOutCheck.totalDeliverCount}}</td></tr>
                                             </tbody>
