@@ -164,4 +164,8 @@ public interface DeliveryService extends GenericService<DeliveryMaterielVO, Stri
     * @param map
     */
    public void goDelivery(Map<String,Object> map);
+   
+   
+   
+   public void updateOrderWhenDeliveryComlete(Map<String,Object> map);
 }

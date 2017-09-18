@@ -185,6 +185,8 @@ public class DeliveryVO extends BaseVO implements Serializable{
   	
     // 用户id
  	private Integer userId;
+ 	
+ 	private String processInstanceId;
 	
 	public String getSerialNum() {
 		return serialNum;
@@ -648,5 +650,13 @@ public class DeliveryVO extends BaseVO implements Serializable{
 
 	public void setUserId(Integer userId) {
 		this.userId = userId;
+	}
+
+	public String getProcessInstanceId() {
+		return processInstanceId;
+	}
+
+	public void setProcessInstanceId(String processInstanceId) {
+		this.processInstanceId = processInstanceId;
 	}	
 }
