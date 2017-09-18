@@ -345,6 +345,18 @@ public class DeliveryController {
     	delivery.setSerialNum(ApplicationUtils.random32UUID());
     	Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		
+		User user = UserUtil.getUserFromSession();
+    	String comId = null;
+		comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+    	if(StringUtils.isEmpty(comId)){
+    		delivery.setSupplyComId(null);
+    		delivery.setShipper(null);
+    	}else{
+    		delivery.setSupplyComId(comId);
+    		delivery.setShipper(comId);
+    	}
+		
 		delivery.setCreator(currenLoginName);
     	deliveryService.insertBasicInfo(delivery);
     	
@@ -488,6 +500,12 @@ public class DeliveryController {
 					.getVariable(paymentRecord.getProcessInstanceId(), "entity");*/
 			
 			DeliveryVO delivery=deliveryService.selectDetailById(serialNum);
+			
+			String orderSerial=delivery.getOrderSerial();
+			Map<String,Object> map=new HashMap<String,Object>();
+			map.put("updater", user.getUserId());
+			map.put("orderSerial", orderSerial);
+			deliveryService.updateOrderWhenDeliveryComlete(map);
 			DeliveryVO baseDelivery = (DeliveryVO) this.runtimeService.getVariable(delivery.getProcessInstanceId(), "entity");
 					
 			

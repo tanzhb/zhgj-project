@@ -80,7 +80,6 @@
 						</div>
 
 						<div class="portlet-body">
-
 							<div class="tabbable-custom ">
 								<ul class="nav nav-tabs " id="accountPayableTab">
 									<li class="active"><a href="#apply" data-toggle="tab"

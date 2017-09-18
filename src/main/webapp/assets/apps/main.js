@@ -1353,7 +1353,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         // 新增发货
         .state('delivery', {
             url: "/delivery",
-            templateUrl: "rest/page/delivery",
+            templateUrl: "rest/page/delivery?:tabHref",
             data: {pageTitle: '发货列表'},
             controller: "DeliveryController",
             resolve: {

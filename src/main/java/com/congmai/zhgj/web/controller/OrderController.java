@@ -500,7 +500,7 @@ public class OrderController {
 				comId = "null";
 			}
 		}
-    	comId = "null";
+
     	OrderInfo parm =new OrderInfo();
     	if("sale".equals(type)){//平台销售订单供应商为空
     		parm.setSupplyComId(comId);
