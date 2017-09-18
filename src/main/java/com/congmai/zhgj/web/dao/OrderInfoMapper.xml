@@ -200,8 +200,10 @@ otherAmount, remark, orderRemark,
 		 <if test="status=='000'" >
 		 	AND orderInfo.status != 0
 		 </if>
-		AND (contract.contractType is null or
-	contract.contractType != '框架合同')
+		 <if test="status!='2'.toString()" >
+		 	AND (contract.contractType is null or
+	        contract.contractType != '框架合同')
+		 </if>
 		ORDER BY
 			updateTime DESC 
   </select>
