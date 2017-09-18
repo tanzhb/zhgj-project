@@ -280,25 +280,16 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 	}
 
 
-
-
-
-
-
-
-
-
 	@Override
-	public void updateOrderWhenDeliveryComlete(Map<String,Object> map) {
-		// TODO Auto-generated method stub
-		deliveryMapper.updateOrderWhenDeliveryComlete(map);
+	public List<DeliveryMaterielVO> selectListForDetailForStockCheck(
+			String serialNum, String judgeString) {
+		Map<String,String> map=new HashMap<String,String>();
+		if("in".equals(judgeString)){
+			map.put("takeDeliverSerial", serialNum);//deliverSerial  takeDeliverSerial
+		}else{
+			map.put("deliverSerial", serialNum);
+		}
+		 return deliveryMapper.selectListForDetailForStockCheck(null);
 	}
-
-
-
-
-
-
-
 
 }
