@@ -79,6 +79,22 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
+                                                    <label class="control-label bold" for="inOutType">入库类型 <span class="required"> * </span></label>
+	                                                 <div class="">
+	                                                 	<select class="form-control"  name="inOutType" ng-model="record.inOutType" ng-init="record.inOutType='贸易'"   data-size="8">
+			                                                   <option value=""></option>
+			                                                   <option value="贸易">贸易</option>
+			                                                   <option  value="备品备件">备品备件</option>
+			                                                   <option  value="退货">退货</option>
+			                                                   <option  value="生产">生产</option>
+			                                             </select>
+                                                     </div>
+                                                     <div class="form-control-focus"> </div>
+                                            </div>
+										</div>
+										<!--/span-->
+										<div class="col-md-4">
+											<div class="form-group">
                                                     <label class="control-label bold" for="takeDeliverSerial">收货单号 <span class="required"> * </span></label>
 	                                                 <div class="">
 	                                                 	<div class="input-group" data-toggle="modal" data-target="#takeDeliveryInfo" onclick="return false;">
@@ -94,6 +110,10 @@
                                             </div>
 										</div>
 										<!--/span-->
+										
+									</div>
+									<!--/row-->
+									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="orderSerial"> 采购订单号</label>
@@ -104,9 +124,6 @@
                                             </div>
 										</div>
 										<!--/span-->
-									</div>
-									<!--/row-->
-									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="supplyComId"> 入库仓库</label>
@@ -118,15 +135,15 @@
 										</div>
 						
 										<!--/span-->
-										<div class="col-md-4">
+										<!-- <div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="shipper"> 入库库位</label>
                                                     <div class="">
                                                     		<input type="text" class="form-control" value="{{positionCount}}" disabled="disabled">
-                                                      <!--    <p class="control-label left" >{{positionCount}}</p> -->
+                                                         <p class="control-label left" >{{positionCount}}</p>
                                                     </div>
                                             </div>
-										</div>
+										</div> -->
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
@@ -145,6 +162,16 @@
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
+                                                    <label class="control-label bold" for="operator">发货方 <span class="required"> * </span></label>
+                                                    <div class="">
+                                                       <input type="text" class="form-control" value="{{shipperOrReceiverName}}" disabled="disabled">
+                                                    </div>
+                                            </div>
+										</div>
+										<!--/span-->
+										
+										<div class="col-md-4">
+											<div class="form-group">
                                                     <label class="control-label bold" for="operator">操作员 <span class="required"> * </span></label>
                                                     <div class="">
                                                         <input type="text" class="form-control" id="operator" name="operator" ng-model="record.operator" ng-hide="deliverAdd" >
@@ -153,8 +180,8 @@
                                                     </div>
                                             </div>
 										</div>
-						
 										<!--/span-->
+										
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="contactNum">联系方式 <span class="required"> * </span></label>
@@ -166,7 +193,22 @@
                                             </div>
 										</div>
 										<!--/span-->
+										
+									</div>
+									<!--/row-->
+									<div class="row">
 										<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="remark">备注</label>
+                                                    <div class="">
+                                                         <input type="text" class="form-control" id="remark"  name="remark" ng-model="record.remark" ng-hide="deliverAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="deliverView">{{record.remark}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<!--/span-->
+										<!-- <div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="approval">状态</label>
                                                     <div class="">
@@ -174,7 +216,7 @@
                                                     </div>
                                             </div>
 										</div>
-										<!--/span-->
+										/span -->
 									</div>
 									<!--/row-->
 								</div>

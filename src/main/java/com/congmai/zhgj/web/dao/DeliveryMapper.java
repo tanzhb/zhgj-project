@@ -51,6 +51,9 @@ public interface DeliveryMapper extends GenericDao<DeliveryMaterielVO, String> {
     //更新基本信息
     public void updateBasicInfo(DeliveryVO record);
     
+  //更新基本信息
+    public void updateBasicInfo2(DeliveryVO record);
+    
     //更新基本信息第二部分
     public void updateBasicInfoPartII(DeliveryTransportVO deliveryTransport);
     

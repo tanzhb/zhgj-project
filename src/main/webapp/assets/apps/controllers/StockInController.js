@@ -7,7 +7,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 	    	// initialize core components
 		    handle = new pageHandle();
 	    	App.initAjax();
-	    	handle.datePickersInit();debugger;
+	    	handle.datePickersInit();
 	    	if($location.path()=="/stockInAdd"||$location.path()=="/stockIn"){
 	    		initWarehouse();
 	    		handle.validatorInit();
@@ -32,7 +32,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 	 
 
 	 	
-	 	var countWarehouseAndPosition = function() {debugger;
+	 	var countWarehouseAndPosition = function() {
 	 		if($scope.takeDeliveryMateriels != undefined){
 	    		var w_arr = [];
 	    		var p_arr = [];
@@ -55,7 +55,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 		/**
 		 * 加载订单数据
 		 */
-			var initOrders = function(){debugger;
+			var initOrders = function(){
 				var promise = takeDeliveryService.initOrders();
         		promise.then(function(data){
         			$scope.orders = data.data;
@@ -67,7 +67,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 			/**
 			 * 加载供应商数据
 			 */
-			var initSuppliers = function(){debugger;
+			var initSuppliers = function(){
 			var promise = takeDeliveryService.initSuppliers();
 			promise.then(function(data){
 				$scope.suppliers = data.data;
@@ -79,7 +79,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 			/**
 			 * 加载仓库数据
 			 */
-			var initWarehouse = function(){debugger;
+			var initWarehouse = function(){
 			var promise = takeDeliveryService.initWarehouse();
 			promise.then(function(data){
 				$scope.warehouses = data.data;
@@ -91,7 +91,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 			/**
 			 * 加载库位数据
 			 */
-			 $scope.getPositions = function(materiel){debugger;
+			 $scope.getPositions = function(materiel){
 				var promise = takeDeliveryService.getPositions(materiel.warehouseSerial);
 				promise.then(function(data){
 					//$scope.warehousePositions = data.data;
@@ -114,7 +114,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 			 */
 			var initTakeDelviery = function(){
 				var promise = takeDeliveryService.initTakeDelviery();
-				promise.then(function(data){debugger;
+				promise.then(function(data){
 					$scope.takeDeliverys = data.data;
 				},function(data){
 					//调用承诺接口reject();
@@ -240,13 +240,16 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 			
 			var stockInInfo = function(serialNum){
 				var promise = takeDeliveryService.getStockInInfo(serialNum);
-        		promise.then(function(data){debugger;
+        		promise.then(function(data){
         			$scope.record = data.data; 
         			$scope.record.takeDeliverNum = data.data.delivery.takeDelivery.takeDeliverNum;
+        			$scope.record.shipperOrReceiver = data.data.delivery.shipper;
+					$scope.shipperOrReceiverName = data.data.delivery.shipperName;debugger;
         			//$scope.deliver.materielCount = data.orderMateriel.length;
         			if(!isNull($stateParams.serialNum)&&($location.path()=="/stockInAdd"||$location.path()=="/stockIn")){//入库编辑或入库时时
         				$scope.deliverSerial = data.data.delivery.serialNum;
         				$scope.getTakeDeliverMateriel(data.data.delivery);
+        				$scope.record.inOutType = '贸易';
         			}
         		},function(data){
         			//调用承诺接口reject();
@@ -411,7 +414,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 		                                  { mData: 'takeDelivery.serialNum' },
 		                                  { mData: 'takeDelivery.takeDeliverNum' },
 		                                  { mData: 'orderNum' },
-		                                  { mData: 'shipper' },
+		                                  { mData: 'shipperName' },
 		                                  { mData: 'materielCount' },
 		                                  { mData: 'packageCount' },
 		                                  { mData: 'packageType' },
@@ -519,6 +522,8 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 							$scope.deliverSerial = delivery.serialNum;
 							$scope.record.takeDeliverSerial = $('#takeDelivery input[name="takeDeliverySerial"]:checked').val();
 							$scope.record.takeDeliverNum = delivery.takeDelivery.takeDeliverNum;
+							$scope.record.shipperOrReceiver = delivery.shipper;
+							$scope.shipperOrReceiverName = delivery.shipperName;
 							$scope.getTakeDeliverMateriel(delivery);
 							$("#takeDeliveryInfo").modal('hide'); 
 						}

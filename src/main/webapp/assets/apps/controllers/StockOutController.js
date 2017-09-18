@@ -8,7 +8,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 		    handle = new pageHandle();
 	    	App.initAjax();
 	    	handle.datePickersInit();
-	    	if($location.path()=="/stockOutAdd"){debugger;
+	    	if($location.path()=="/stockOutAdd"||$location.path()=="/stockOut"){
 	    		initWarehouse();
 	    		handle.validatorInit();
 	    		//initTakeDelviery();
@@ -32,7 +32,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 	 
 
 	 	
-	 	var countWarehouseAndPosition = function() {debugger;
+	 	var countWarehouseAndPosition = function() {
 	 		if($scope.takeDeliveryMateriels != undefined){
 	    		var w_arr = [];
 	    		var p_arr = [];
@@ -55,7 +55,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 		/**
 		 * 加载订单数据
 		 */
-			var initOrders = function(){debugger;
+			var initOrders = function(){
 				var promise = takeDeliveryService.initOrders();
         		promise.then(function(data){
         			$scope.orders = data.data;
@@ -67,7 +67,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 			/**
 			 * 加载供应商数据
 			 */
-			var initSuppliers = function(){debugger;
+			var initSuppliers = function(){
 			var promise = takeDeliveryService.initSuppliers();
 			promise.then(function(data){
 				$scope.suppliers = data.data;
@@ -79,7 +79,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 			/**
 			 * 加载仓库数据
 			 */
-			var initWarehouse = function(){debugger;
+			var initWarehouse = function(){
 			var promise = takeDeliveryService.initWarehouse();
 			promise.then(function(data){
 				$scope.warehouses = data.data;
@@ -91,7 +91,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 			/**
 			 * 加载库位数据
 			 */
-			 $scope.getPositions = function(materiel){debugger;
+			 $scope.getPositions = function(materiel){
 				var promise = takeDeliveryService.getPositions(materiel.warehouseSerial);
 				promise.then(function(data){
 					//$scope.warehousePositions = data.data;
@@ -114,7 +114,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 			 */
 			var initTakeDelviery = function(){
 				var promise = takeDeliveryService.initTakeDelviery();
-				promise.then(function(data){debugger;
+				promise.then(function(data){
 					$scope.takeDeliverys = data.data;
 				},function(data){
 					//调用承诺接口reject();
@@ -233,10 +233,13 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
         		promise.then(function(data){
         			$scope.record = data.data; 
         			$scope.record.deliverNum = data.data.delivery.deliverNum;
+        			$scope.record.shipperOrReceiver = data.data.delivery.receiver;
+					$scope.shipperOrReceiverName = data.data.delivery.receiverName;
         			//$scope.deliver.materielCount = data.orderMateriel.length;
-        			if(!isNull($stateParams.serialNum)&&$location.path()=="/stockOutAdd"){//出库编辑时
+        			if(!isNull($stateParams.serialNum)&&$location.path()=="/stockOutAdd"||$location.path()=="/stockOut"){//出库编辑时
         				$scope.deliverSerial = data.data.delivery.serialNum;
         				$scope.getTakeDeliverMateriel(data.data.delivery);
+        				$scope.record.inOutType = '贸易';
         			}
         		},function(data){
         			//调用承诺接口reject();
@@ -375,8 +378,8 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 									// select: true,行多选
 									order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
 									bRetrieve : true,
-									"sScrollX": "100%",
-									"sScrollXInner": "110%",
+									//"sScrollX": "100%",
+								//	"sScrollXInner": "110%",
 									"bScrollCollapse": true,
 									// searching: true,//是否过滤检索
 									// ordering: true,//是否排序
@@ -388,17 +391,18 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 									              // serverSide: true,
 									              ajax:"rest/delivery/findAllDeliveryList",//加载数据中user表数据
 									              "aoColumns": [
-									                            { mData: 'serialNum'},
-									                            { mData: 'deliverNum' },
-									                            { mData: 'orderNum' },
-									                            { mData: 'materielCount' },
-									                            { mData: 'packageCount' },
-									                            { mData: 'receiver'},
-									                            { mData: 'deliveryAddress'},
-									                            { mData: 'deliverDate'},
-									                            { mData: 'transportType'},
-									                            { mData: 'takeAddress' },
-									                            { mData: 'remark'}
+									                    { mData: 'serialNum'},
+							                            { mData: 'deliverNum' },
+							                            { mData: 'orderNum' },
+							                            { mData: 'materielCount' },
+							                            { mData: 'packageCount' },
+							                            { mData: 'receiver'},
+							                            { mData: 'deliveryAddress'},
+							                            { mData: 'deliverDate'},
+							                            { mData: 'transportType'},
+							                            { mData: 'takeAddress' },
+							                            { mData: 'remark'},
+							                            { mData: 'status'}
 									                            ],
 									                            
 									                            'aoColumnDefs': [ {
@@ -432,6 +436,25 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 									                            	"createdCell": function (td, cellData, rowData, row, col) {
 									                            		$compile(td)($scope);
 									                            	}
+									                            },
+									                            {
+									                            	'targets' : 11,
+									                            	'render' : function(data,
+									                            			type, row, meta) {if(data!=""&&data!=null){
+										                            			if(data=='0'){
+										                            				return '未审批';
+										                            			}else if(data=='PENDING'){
+										                            				return '审批中';
+										                            			}else if(data=='WAITING_FOR_APPROVAL'){
+										                            				return '待审批';					                            				
+																				}else if(data=='3'){
+																					return '审批成功';
+																				}else if(data=='APPROVAL_FAILED'){
+																					return '审批失败';
+																				}
+										                            		}else{
+										                            			return "";
+										                            		}}
 									                            }
 									                            ]}).on('order.dt',
 									                            		function() {
@@ -450,6 +473,8 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 							$scope.deliverSerial = delivery.serialNum;
 							$scope.record.deliverSerial = $('#takeDelivery input[name="takeDeliverySerial"]:checked').val();
 							$scope.record.deliverNum = delivery.deliverNum;
+							$scope.record.shipperOrReceiver = delivery.receiver;
+							$scope.shipperOrReceiverName = delivery.receiverName;
 							$scope.record.takeDeliverSerial = "";
 							$scope.getTakeDeliverMateriel(delivery);
 							$("#takeDeliveryInfo").modal('hide'); 

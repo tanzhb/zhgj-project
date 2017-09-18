@@ -55,6 +55,36 @@
     serialNum=#{serialNum}
     </update>
     
+     <!--更新基本信息  -->
+    <update id="updateBasicInfo2" parameterType="com.congmai.zhgj.web.model.DeliveryVO">
+    UPDATE delivery SET
+    orderSerial=#{orderSerial},
+    deliverNum=#{deliverNum},
+    warehouseSerial=#{warehouseSerial},
+    status=#{status},
+    receiver=#{receiver},
+    maker=#{maker},
+    makeDate=#{makeDate},
+    approval=#{approval},
+    approvalDate=#{approvalDate},
+    remark=#{remark},
+    deliverDate=#{deliverDate},
+    materielCount=#{materielCount},
+    packageCount=#{packageCount},
+    packageType=#{packageType},
+    packageSpecifications=#{packageSpecifications},
+    materielWeight=#{materielWeight},
+    serviceMoney=#{serviceMoney},
+    deliverer=#{deliverer},
+    contactNum=#{contactNum},
+    deliverRemark=#{deliverRemark},
+	userId=#{userId},
+    updater=#{updater},
+    updateTime=NOW()
+    WHERE
+    serialNum=#{serialNum}
+    </update>
+    
     
     <!--添加基本信息第二部分  -->
     <insert id="insertBasicInfoPartII" parameterType="com.congmai.zhgj.web.model.DeliveryTransportVO">

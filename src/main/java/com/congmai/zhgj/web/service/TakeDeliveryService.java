@@ -55,7 +55,7 @@ public interface TakeDeliveryService extends GenericService<TakeDelivery, String
 	 * 
 	 * @Description (TODO生成入库检验单)
 	 */
-	void createStockInCheckRecord(String takeDeliverySerial,String currenLoginName);
+	void createStockInCheckRecord(TakeDelivery takeDelivery,String currenLoginName) throws Exception ;
 	
 	/**
 	 * 

@@ -98,6 +98,13 @@ public interface DeliveryService extends GenericService<DeliveryMaterielVO, Stri
 	
 	
 	/**
+	 * 编辑基本信息
+	 * @param record
+	 */
+	public void updateBasicInfo2(DeliveryVO record);
+	
+	
+	/**
 	 * 编辑基本信息第二部分
 	 * @param deliveryTransport
 	 */
