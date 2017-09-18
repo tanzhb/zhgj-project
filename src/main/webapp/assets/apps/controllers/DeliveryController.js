@@ -28,7 +28,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
     
        //根据参数查询对象
     if($stateParams.serialNumEdit){
-    	$scope.getDeliveryEditInfo($stateParams.serialNumEdit);	
+    	$scope.getDeliveryEditInfo($stateParams.serialNumEdit,$stateParams.taskId, $stateParams.comments);
     }
     
     //查询仓库列表
@@ -349,6 +349,48 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	}
 	
 	
+	//调整申请
+	$scope.apApplyAngain=function(){
+		//判断基本信息是否保存，未保存先保存基本信息
+		if($scope.isBasicInfoSaved!='1'){
+			toastr.error("请先保存基本信息！");	
+			return;
+		}
+		
+		if($('#form_sample_1').valid()){
+		var promise = DeliveryService.apApplyAngain($scope);
+		promise.then(function(data) {
+			if (!handle.isNull(data)) {
+				$(".modal-backdrop").remove();
+				toastr.success("保存成功");
+				
+				$state.go('delivery',{tabHref:1});//返回到待办列表
+				$("#dbTable").DataTable().ajax.reload();
+				showToastr('toast-bottom-right', 'success', data);
+				/*handle.unblockUI();
+				$scope.delivery= data;
+				$scope.isBasicInfoSaved='1';
+				$scope.span = true;
+				$scope.input = false;
+				$(".alert-danger").hide();*/
+			} else {
+				$(".modal-backdrop").remove();
+				handle.unblockUI();
+				toastr.error("保存失败！请联系管理员");
+				console.log(data);
+			}
+			
+		}, function(data) {
+			// 调用承诺接口reject();
+			$(".modal-backdrop").remove();
+			handle.unblockUI();
+			toastr.error("保存失败！请联系管理员");
+			console.log(data);
+		});	
+		};
+	}
+	
+	
 	//返回按钮
 	$scope.goBack=function(){
 		$state.go('delivery');
@@ -564,7 +606,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	                pageLength: 5,//每页显示数量
 	                processing: true,//loading等待框
 //	                serverSide: true,
-	                ajax:"rest/order/findOrderList?type=sale&selectFor=delivery&fram=1",//加载数据中
+	                ajax:"rest/order/findOrderList?type=buy&selectFor=delivery&fram=1",//加载数据中
 	                "aoColumns": [
 	                              { mData: 'serialNum' },
 	                              { mData: 'orderNum' },
@@ -698,20 +740,9 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 																}
 																
 																if(result.actionType == 'audit'){//审批流程
-																	
-																	$state.go('auditDelivery',{serialNum:result.deliveryVO.serialNum, taskId:taskId, comments:comments});
-																	
-																	
-																}else{//result.actionType == 'modify' 更改流程
-			//														if(comments == ""){
-			//															comments = "无评论";
-			//														}else $("#comment_modify").html(comments);
-			//														$("#modify_beginDate").val(timeStamp2String2(result.vacation.beginDate));
-			//														$("#modify_endDate").val(timeStamp2String2(result.vacation.endDate));
-			//														$("#modify_days").val(result.vacation.days);
-			//														$("#modify_vacationType").val(result.vacation.vacationType);
-			//														$("#modify_reason").val(result.vacation.reason);
-			//														$('#modifyVacationModal').modal('show');
+																	$state.go('auditDelivery',{serialNum:result.deliveryVO.serialNum,taskId:taskId,comments:comments});
+																}else{
+																	$state.go('editAuditDelivery',{serialNumEdit:result.deliveryVO.serialNum,taskId:taskId,comments:comments});
 																}
 																
 																
@@ -1108,10 +1139,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			    					if(comments == ""){
 			    						$("#comment_audit").html( "无评论");
 			    					}else{ $("#comment_audit").html(comments);
-			    					
-			    					
 			          		     }
-			          		    	
 			          		     },
 			          		     function(error){
 			          		         $scope.error = error;
@@ -1120,7 +1148,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			        };
 			        
 			        //查询编辑时的发货信息
-			        $scope.getDeliveryEditInfo  = function(serialNumEdit) {
+			        $scope.getDeliveryEditInfo  = function(serialNumEdit, ids, comments) {
 			        	DeliveryService.getDeliveryInfo(serialNumEdit).then(
 			          		     function(data){
 			          		    	$scope.delivery=data.delivery;
@@ -1129,6 +1157,13 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			          		    		$scope.shipper=$scope.delivery.shipper;
 			          		    	}
 			          		    	$scope.deliveryMaterielE=data.deliveryMateriels;
+			          		    	$("#serialNum").val(serialNumEdit);//赋值给隐藏input，通过和不通过时调用
+			    					$("#taskId").val(ids);//赋值给隐藏input，通过和不通过时调用
+			    					
+			    					if(comments == ""){
+			    						$("#comment_audit").html( "无评论");
+			    					}else{ $("#comment_audit").html(comments);
+			          		     }
 			          		     },
 			          		     function(error){
 			          		         $scope.error = error;
