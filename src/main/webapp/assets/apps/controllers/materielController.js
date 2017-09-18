@@ -300,7 +300,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
                               { mData: 'unit' },
                               { mData: 'parentMateriel' },
                               { mData: 'type' },
-                              { mData: 'productionPlace' },
+                              { mData: 'originCountry' },
                               { mData: 'brand' },
                               { mData: null },
                               { mData: 'versionNO' },
