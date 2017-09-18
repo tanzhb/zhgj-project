@@ -37,9 +37,9 @@
 									class="caption-subject font-green bold uppercase">发货列表</span>
 							</div>
 							<div class="actions" ng-controller='MyCtrl'>
-								<label class="btn btn-transparent green btn-circle btn-sm"
-									ng-click="jumpToApplyPay()"><i class="fa fa-plus"></i>
-									申请</label> <label class="btn btn-transparent green btn-circle btn-sm"
+									<label class="btn btn-transparent yellow btn-circle btn-sm" ng-click="jumpToApplyPay()"><i class="glyphicon glyphicon-play"></i> 申请</label>
+									
+									<label class="btn btn-transparent green btn-circle btn-sm"
 									ng-click="jumpToUrl('addDelivery')"> <i
 									class="fa fa-plus"></i> 添加
 								</label> <label class="btn btn-transparent purple btn-circle btn-sm"
@@ -80,7 +80,6 @@
 						</div>
 
 						<div class="portlet-body">
-
 							<div class="tabbable-custom ">
 								<ul class="nav nav-tabs " id="accountPayableTab">
 									<li class="active"><a href="#apply" data-toggle="tab"

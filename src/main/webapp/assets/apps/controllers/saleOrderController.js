@@ -1263,13 +1263,13 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 						break;
 	        		}
 	        		
-	        		if(i==$scope.copyMateriels.length-1){ // 如果是已选择但未保存的物料，清空
+	        		/*if(i==$scope.copyMateriels.length-1){ // 如果是已选择但未保存的物料，清空
 	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)].deliveryDate = "";
 	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)].deliveryAddress = "";
 	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)].lastDeliveryDate = "";
 	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)].amount = "";
 	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)].orderUnitPrice = "";
-	        		}
+	        		}*/
 	        	}
 	        };  
 	        

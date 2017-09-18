@@ -165,6 +165,10 @@ public interface DeliveryService extends GenericService<DeliveryMaterielVO, Stri
     */
    public void goDelivery(Map<String,Object> map);
    
+   
+   
+   public void updateOrderWhenDeliveryComlete(Map<String,Object> map);
+  
    /**
 	 * 查询发货详情的发货物料(出入库检验)
 	 * @param serialNum

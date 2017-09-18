@@ -8,6 +8,7 @@
     <result column="buyComId" property="buyComId" jdbcType="VARCHAR" />
     <result column="orderNum" property="orderNum" jdbcType="VARCHAR" />
     <result column="orderType" property="orderType" jdbcType="VARCHAR" />
+    <result column="tradeType" property="tradeType" jdbcType="VARCHAR" />
     <result column="seller" property="seller" jdbcType="VARCHAR" />
     <result column="entrustParty" property="entrustParty" jdbcType="VARCHAR" />
     <result column="serviceModel" property="serviceModel" jdbcType="VARCHAR" />
@@ -18,6 +19,7 @@
     <result column="deliveryMode" property="deliveryMode" jdbcType="VARCHAR" />
     <result column="transportMode" property="transportMode" jdbcType="VARCHAR" />
     <result column="orderDate" property="orderDate" jdbcType="DATE" />
+    <result column="makeDate" property="makeDate" jdbcType="DATE" />
     <result column="maker" property="maker" jdbcType="VARCHAR" />
     <result column="rate" property="rate" jdbcType="VARCHAR" />
     <result column="currency" property="currency" jdbcType="VARCHAR" />
@@ -101,9 +103,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    serialNum, contractSerial, supplyComId, buyComId, orderNum, orderType, seller, entrustParty, 
+    serialNum, contractSerial, supplyComId, buyComId, orderNum, orderType,tradeType, seller, entrustParty, 
     serviceModel, demandPlanSerial, saleApplySerial, settlementClause, orderSerial, deliveryMode, 
-    transportMode, orderDate, maker, rate, currency, exchangeRate, orderAmount, materielCount,
+    transportMode, orderDate,makeDate, maker, rate, currency, exchangeRate, orderAmount, materielCount,
 materielAmount,
 rateAmount,
 rateAndAmount,
@@ -130,9 +132,9 @@ otherAmount, remark, orderRemark,
   
   <select id="selectFramByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.OrderInfoExample" >
     select
-    orderInfo.serialNum, orderInfo.contractSerial, orderInfo.supplyComId, orderInfo.buyComId, orderInfo.orderNum, orderInfo.orderType, orderInfo.seller, orderInfo.entrustParty, 
+    orderInfo.serialNum, orderInfo.contractSerial, orderInfo.supplyComId, orderInfo.buyComId, orderInfo.orderNum, orderInfo.orderType,orderInfo.tradeType, orderInfo.seller, orderInfo.entrustParty, 
     orderInfo.serviceModel, orderInfo.demandPlanSerial, orderInfo.saleApplySerial, orderInfo.settlementClause, orderInfo.orderSerial, orderInfo.deliveryMode, orderInfo.materielCount,orderInfo.orderAmount,
-    orderInfo.transportMode, orderInfo.orderDate, orderInfo.maker, orderInfo.rate, orderInfo.currency, orderInfo.exchangeRate, orderInfo.remark,orderRemark, orderInfo.status, orderInfo.delFlg, 
+    orderInfo.transportMode, orderInfo.orderDate,orderInfo.makeDate, orderInfo.maker, orderInfo.rate, orderInfo.currency, orderInfo.exchangeRate, orderInfo.remark,orderRemark, orderInfo.status, orderInfo.delFlg, 
     orderInfo.creator, orderInfo.createTime, orderInfo.updater, orderInfo.updateTime
     from orderInfo
     left join contract on orderInfo.contractSerial = contract.serialNum
@@ -160,16 +162,19 @@ otherAmount, remark, orderRemark,
 		 <if test="status=='000'" >
 		 	AND orderInfo.status != 0
 		 </if>
-		AND contract.contractType = '框架合同'
+		 <if test="status!='2'.toString()" >
+		 	AND contract.contractType = '框架合同'
+		 </if>
+		
 		ORDER BY
 			updateTime DESC 
   </select>
   
   <select id="selectCommenByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.OrderInfo" >
     select
-    orderInfo.serialNum, orderInfo.contractSerial, orderInfo.supplyComId, orderInfo.buyComId, orderInfo.orderNum, orderInfo.orderType, orderInfo.seller, orderInfo.entrustParty, 
+    orderInfo.serialNum, orderInfo.contractSerial, orderInfo.supplyComId, orderInfo.buyComId, orderInfo.orderNum, orderInfo.orderType,orderInfo.tradeType, orderInfo.seller, orderInfo.entrustParty, 
     orderInfo.serviceModel, orderInfo.demandPlanSerial, orderInfo.saleApplySerial, orderInfo.settlementClause, orderInfo.orderSerial, orderInfo.deliveryMode, orderInfo.materielCount,orderInfo.orderAmount,
-    orderInfo.transportMode, orderInfo.orderDate, orderInfo.maker, orderInfo.rate, orderInfo.currency, orderInfo.exchangeRate, orderInfo.remark,orderInfo.orderRemark, orderInfo.status, orderInfo.delFlg, 
+    orderInfo.transportMode, orderInfo.orderDate,orderInfo.makeDate, orderInfo.maker, orderInfo.rate, orderInfo.currency, orderInfo.exchangeRate, orderInfo.remark,orderInfo.orderRemark, orderInfo.status, orderInfo.delFlg, 
     orderInfo.creator, orderInfo.createTime, orderInfo.updater, orderInfo.updateTime
     from orderInfo
     left join contract on orderInfo.contractSerial = contract.serialNum
@@ -197,8 +202,10 @@ otherAmount, remark, orderRemark,
 		 <if test="status=='000'" >
 		 	AND orderInfo.status != 0
 		 </if>
-		AND (contract.contractType is null or
-	contract.contractType != '框架合同')
+		 <if test="status!='2'.toString()" >
+		 	AND (contract.contractType is null or
+	        contract.contractType != '框架合同')
+		 </if>
 		ORDER BY
 			updateTime DESC 
   </select>
@@ -220,11 +227,11 @@ otherAmount, remark, orderRemark,
   </delete>
   <insert id="insert" parameterType="com.congmai.zhgj.web.model.OrderInfo" >
     insert into orderInfo (serialNum, contractSerial, supplyComId, 
-      buyComId, orderNum, orderType, 
+      buyComId, orderNum, orderType,tradeType, 
       seller, entrustParty, serviceModel, 
       demandPlanSerial, saleApplySerial, settlementClause, 
       orderSerial, deliveryMode, transportMode, 
-      orderDate, maker, rate, 
+      orderDate,makeDate, maker, rate, 
       currency, exchangeRate, materielCount,
 materielAmount,
 rateAmount,
@@ -234,11 +241,11 @@ otherAmount, orderAmount,
       creator, createTime, updater, 
       updateTime)
     values (#{serialNum,jdbcType=VARCHAR}, #{contractSerial,jdbcType=VARCHAR}, #{supplyComId,jdbcType=VARCHAR}, 
-      #{buyComId,jdbcType=VARCHAR}, #{orderNum,jdbcType=VARCHAR}, #{orderType,jdbcType=VARCHAR}, 
+      #{buyComId,jdbcType=VARCHAR}, #{orderNum,jdbcType=VARCHAR}, #{orderType,jdbcType=VARCHAR}, #{tradeType,jdbcType=VARCHAR},
       #{seller,jdbcType=VARCHAR}, #{entrustParty,jdbcType=VARCHAR}, #{serviceModel,jdbcType=VARCHAR}, 
       #{demandPlanSerial,jdbcType=VARCHAR}, #{saleApplySerial,jdbcType=VARCHAR}, #{settlementClause,jdbcType=VARCHAR}, 
       #{orderSerial,jdbcType=VARCHAR}, #{deliveryMode,jdbcType=VARCHAR}, #{transportMode,jdbcType=VARCHAR}, 
-      #{orderDate,jdbcType=DATE}, #{maker,jdbcType=VARCHAR}, #{rate,jdbcType=VARCHAR}, 
+      #{orderDate,jdbcType=DATE},#{makeDate,jdbcType=DATE}, #{maker,jdbcType=VARCHAR}, #{rate,jdbcType=VARCHAR}, 
       #{currency,jdbcType=VARCHAR}, #{exchangeRate,jdbcType=VARCHAR}, 
       #{materielCount,jdbcType=VARCHAR}, 
       #{materielAmount,jdbcType=VARCHAR}, 
@@ -271,6 +278,9 @@ otherAmount, orderAmount,
       <if test="orderType != null" >
         orderType,
       </if>
+      <if test="tradeType != null" >
+        tradeType,
+      </if>
       <if test="seller != null" >
         seller,
       </if>
@@ -300,6 +310,9 @@ otherAmount, orderAmount,
       </if>
       <if test="orderDate != null" >
         orderDate,
+      </if>
+      <if test="makeDate != null" >
+        makeDate,
       </if>
       <if test="maker != null" >
         maker,
@@ -375,6 +388,9 @@ otherAmount, orderAmount,
       <if test="orderType != null" >
         #{orderType,jdbcType=VARCHAR},
       </if>
+      <if test="tradeType != null" >
+        #{tradeType,jdbcType=VARCHAR},
+      </if>
       <if test="seller != null" >
         #{seller,jdbcType=VARCHAR},
       </if>
@@ -404,6 +420,9 @@ otherAmount, orderAmount,
       </if>
       <if test="orderDate != null" >
         #{orderDate,jdbcType=DATE},
+      </if>
+      <if test="makeDate != null" >
+        #{makeDate,jdbcType=DATE},
       </if>
       <if test="maker != null" >
         #{maker,jdbcType=VARCHAR},
@@ -488,6 +507,9 @@ otherAmount, orderAmount,
       <if test="record.orderType != null" >
         orderType = #{record.orderType,jdbcType=VARCHAR},
       </if>
+      <if test="record.tradeType != null" >
+        tradeType = #{record.tradeType,jdbcType=VARCHAR},
+      </if>
       <if test="record.seller != null" >
         seller = #{record.seller,jdbcType=VARCHAR},
       </if>
@@ -517,6 +539,9 @@ otherAmount, orderAmount,
       </if>
       <if test="record.orderDate != null" >
         orderDate = #{record.orderDate,jdbcType=DATE},
+      </if>
+      <if test="record.makeDate != null" >
+        makeDate = #{record.makeDate,jdbcType=DATE},
       </if>
       <if test="record.maker != null" >
         maker = #{record.maker,jdbcType=VARCHAR},
@@ -585,6 +610,7 @@ otherAmount, orderAmount,
       buyComId = #{record.buyComId,jdbcType=VARCHAR},
       orderNum = #{record.orderNum,jdbcType=VARCHAR},
       orderType = #{record.orderType,jdbcType=VARCHAR},
+      tradeType = #{record.tradeType,jdbcType=VARCHAR},
       seller = #{record.seller,jdbcType=VARCHAR},
       entrustParty = #{record.entrustParty,jdbcType=VARCHAR},
       serviceModel = #{record.serviceModel,jdbcType=VARCHAR},
@@ -595,6 +621,7 @@ otherAmount, orderAmount,
       deliveryMode = #{record.deliveryMode,jdbcType=VARCHAR},
       transportMode = #{record.transportMode,jdbcType=VARCHAR},
       orderDate = #{record.orderDate,jdbcType=DATE},
+      makeDate = #{record.makeDate,jdbcType=DATE},
       maker = #{record.maker,jdbcType=VARCHAR},
       rate = #{record.rate,jdbcType=VARCHAR},
       currency = #{record.currency,jdbcType=VARCHAR},
@@ -635,6 +662,9 @@ otherAmount, orderAmount,
       <if test="orderType != null" >
         orderType = #{orderType,jdbcType=VARCHAR},
       </if>
+      <if test="tradeType != null" >
+        tradeType = #{tradeType,jdbcType=VARCHAR},
+      </if>
       <if test="seller != null" >
         seller = #{seller,jdbcType=VARCHAR},
       </if>
@@ -664,6 +694,9 @@ otherAmount, orderAmount,
       </if>
       <if test="orderDate != null" >
         orderDate = #{orderDate,jdbcType=DATE},
+      </if>
+      <if test="makeDate != null" >
+        makeDate = #{makeDate,jdbcType=DATE},
       </if>
       <if test="maker != null" >
         maker = #{maker,jdbcType=VARCHAR},
@@ -729,6 +762,7 @@ otherAmount, orderAmount,
       buyComId = #{buyComId,jdbcType=VARCHAR},
       orderNum = #{orderNum,jdbcType=VARCHAR},
       orderType = #{orderType,jdbcType=VARCHAR},
+      tradeType = #{tradeType,jdbcType=VARCHAR},
       seller = #{seller,jdbcType=VARCHAR},
       entrustParty = #{entrustParty,jdbcType=VARCHAR},
       serviceModel = #{serviceModel,jdbcType=VARCHAR},
@@ -739,6 +773,7 @@ otherAmount, orderAmount,
       deliveryMode = #{deliveryMode,jdbcType=VARCHAR},
       transportMode = #{transportMode,jdbcType=VARCHAR},
       orderDate = #{orderDate,jdbcType=DATE},
+      makeDate = #{makeDate,jdbcType=DATE},
       maker = #{maker,jdbcType=VARCHAR},
       rate = #{rate,jdbcType=VARCHAR},
       currency = #{currency,jdbcType=VARCHAR},

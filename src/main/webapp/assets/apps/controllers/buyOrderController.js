@@ -81,8 +81,11 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		$scope.buyOrder={};
             		$scope.contract={};
             		$scope.contract.contractType="采购合同";
+            		$scope.contract.orderType="普通采购";
+            		$scope.contract.tradeType="内贸";
             		$scope.clauseSettlement = {};
-            		$scope.buyOrder.seller ="中航能科（上海）能源科技有限公司"
+            		$scope.buyOrder.seller ="中航能科（上海）能源科技有限公司";
+            		$scope.buyOrder.rate = 17;
             		dateSelectSetting();//日期选择限制
             		// 加载数据
                 	initSuppliers();
@@ -173,19 +176,21 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     $scope.repeatDone = function(scope){
     	var date1= scope._orderMateriel.deliveryDate;
     	var date2= scope._orderMateriel.lastDeliveryDate;
-    	var date3= scope.buyOrder.orderDate;
+    	/*var date3= scope.buyOrder.orderDate;*/
     	$scope.datepickerInit();
     	if(scope._orderMateriel){
     		scope._orderMateriel.deliveryDate = date1;
     		scope._orderMateriel.lastDeliveryDate = date2;
     	}
-    	scope.buyOrder.orderDate = date3;
+    	/*scope.buyOrder.orderDate = date3;*/
    };
    
    $scope.renderDone = function(){
    	var date3= $scope.buyOrder.orderDate;
+   	var date4= $scope.buyOrder.makeDate;
    	$scope.datepickerInit();
    	$scope.buyOrder.orderDate = date3;
+   	$scope.buyOrder.makeDate = date4;
   };
    
    $scope.datepickerInit = function(scope){
@@ -1388,13 +1393,13 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 						break;
 	        		}
 	        		
-	        		if(i==$scope.copyMateriels.length-1){ // 如果是已选择但未保存的物料，清空
+	        		/*if(i==$scope.copyMateriels.length-1){ // 如果是已选择但未保存的物料，清空
 	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)].deliveryDate = "";
 	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)].deliveryAddress = "";
 	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)].lastDeliveryDate = "";
 	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)].amount = "";
 	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)].orderUnitPrice = "";
-	        		}
+	        		}*/
 	        	}
 	        };  
 	        
@@ -2436,14 +2441,14 @@ var e = $("#form_clauseSettlement"),
 		       
 		       $scope.totalOrderAmount  = function(scope) {//订单金额（外贸：商品金额+其他金额，内贸：价税合计（商品金额+税额含关税）+ 其他金额）
 		    	   if(isNull($scope.clauseSettlement)||isNull($scope.clauseSettlement.otherAmount)){
-		    		   if(!isNull($scope.buyOrder)&&$scope.buyOrder.orderType =='标准采购(外贸)'){
+		    		   if(!isNull($scope.buyOrder)&&$scope.buyOrder.tradeType =='外贸'){
 		    			   return Number($scope.totalAmount());
 		    		   }else{
 		    			   return Number($scope.totalAmount()) + Number($scope.totalRateAndCustomsAmount());
 		    		   }
 			       		
 			       	}else{
-			       	   if(!isNull($scope.buyOrder)&&$scope.buyOrder.orderType =='标准采购(外贸)'){
+			       	   if(!isNull($scope.buyOrder)&&$scope.buyOrder.tradeType =='外贸'){
 		    			   return Number($scope.totalAmount()) + Number($scope.clauseSettlement.otherAmount)
 		    		   }else{
 		    			   return Number($scope.totalAmount()) + Number($scope.totalRateAndCustomsAmount()) + Number($scope.clauseSettlement.otherAmount);
@@ -2486,8 +2491,8 @@ var e = $("#form_clauseSettlement"),
 		       };
 		       
 		       $scope.totalRateAndCustomsAmount  = function(scope) {//订单税额(含关税)
-		    	   if(!isNull($scope.buyOrder)&&$scope.buyOrder.orderType =='标准采购(外贸)'){//税额+关税
-	    		    	return $scope.totalRateAmount() + $scope.totalCustomsRateAmount();
+		    	   if(!isNull($scope.buyOrder)&&$scope.buyOrder.tradeType =='外贸'){//税额+关税
+	    		    	return Number($scope.totalRateAmount()) + Number($scope.totalCustomsRateAmount());
 			    	}else{
 			    		return $scope.totalRateAmount()
 			    	}
@@ -2537,7 +2542,7 @@ var e = $("#form_clauseSettlement"),
 		       };
 		       
 		       $scope.arithmeticRateAndAmount  = function(scope) {//计算价税合计
-		    	   if(!isNull($scope.buyOrder)&&$scope.buyOrder.orderType =='标准采购(外贸)'){//税额+关税
+		    	   if(!isNull($scope.buyOrder)&&$scope.buyOrder.tradeType =='外贸'){//税额+关税
 		    		   return Number($scope.arithmeticAmount(scope))+Number($scope.arithmeticRateAmount(scope))+Number($scope.arithmeticCustomsRateAmount(scope));
 			    	}else{
 			    		return Number($scope.arithmeticAmount(scope))+Number($scope.arithmeticRateAmount(scope));
@@ -2577,7 +2582,7 @@ var e = $("#form_clauseSettlement"),
 		       };
 		       
 		       $scope._arithmeticRateAndAmount  = function(scope) {//计算价税合计（商品金额+税额）
-		    	   if(!isNull($scope.buyOrder)&&$scope.buyOrder.orderType =='标准采购(外贸)'){//税额+关税
+		    	   if(!isNull($scope.buyOrder)&&$scope.buyOrder.tradeType =='外贸'){//税额+关税
 		    		   return Number($scope._arithmeticAmount(scope))+Number($scope._arithmeticRateAmount(scope))+Number($scope._arithmeticCustomsRateAmount(scope));
 			    	}else{
 			    		return Number($scope._arithmeticAmount(scope))+Number($scope._arithmeticRateAmount(scope));
