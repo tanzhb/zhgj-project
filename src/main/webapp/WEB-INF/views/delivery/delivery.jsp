@@ -223,12 +223,17 @@
 		                                    </div> -->
 							<div class="actions">
 								<div class="btn-group btn-group-devided" data-toggle="buttons">
+									<label class="btn btn-transparent yellow btn-circle btn-sm"
+										ng-click="stockOut()"> <i class="fa fa-arrow-up"></i> 入库
+									</label>
 									<label class="btn btn-transparent green btn-circle btn-sm"
 										ui-sref="stockOutAdd"> <i class="fa fa-plus"></i> 添加
-									</label> <label class="btn btn-transparent purple btn-circle btn-sm"
+									</label> 
+									<!-- <label class="btn btn-transparent purple btn-circle btn-sm"
 										ng-click="stockOutEdit()"> <i class="fa fa-edit"></i>
 										修改
-									</label> <label class="btn btn-transparent red btn-circle btn-sm"
+									</label>  -->
+									<label class="btn btn-transparent red btn-circle btn-sm"
 										ng-click="stockOutDelete()"> <i class="fa fa-minus"></i>
 										删除
 									</label> <label
@@ -237,34 +242,6 @@
 										class="fa fa-file-excel-o"></i> 导出
 									</label>
 								</div>
-								<!-- <a href="javascript:;" class="btn btn-default btn-sm btn-circle"
-								ui-sref="stockInAdd" > <i class="fa fa-plus"></i> 添加
-							</a> <a href="javascript:;" class="btn btn-default btn-sm btn-circle"
-								ng-click="stockInEdit()"> <i class="fa fa-edit"></i> 修改
-							</a> <a href="javascript:;" class="btn btn-default btn-sm btn-circle"
-								ng-click="stockInDelete()"> <i class="fa fa-minus"></i>
-								删除
-							</a>  -->
-								<!-- <div class="btn-group">
-								<a class="btn btn-default btn-outline btn-circle"
-									href="javascript:;" data-toggle="dropdown"> <i
-									class="fa fa-share"></i> <span class="hidden-xs"> 其它 </span> <i
-									class="fa fa-angle-down"></i>
-								</a>
-								<ul class="dropdown-menu pull-right" id="sample_3_tools">
-									<li><a data-action="0" class="tool-action"
-										data-toggle="modal" data-target="#import"> <i
-											class="fa fa-upload"></i> 导入
-									</a></li>
-									<li><a href="javascript:;" data-action="0"
-										class="tool-action" ng-click="exportStockIn()"> <i
-											class="fa fa-file-excel-o"></i> 导出
-									</a></li>
-									<li><a href="javascript:;" data-action="2"
-										class="tool-action"> <i class="fa fa-print"></i> 打印
-									</a></li>
-								</ul>
-							</div> -->
 							</div>
 						</div>
 						<div class="portlet-body">
@@ -279,14 +256,15 @@
 				                                 </label>
 										</th>
 										<th>出库明细号</th>
-										<th>销售订单号</th>
+										<th>出库类型</th>
 										<th>商品名称</th>
 										<th>规格型号</th>
-										<th>批次号</th>
 										<th>出库日期</th>
 										<th>出库数量</th>
-										<th>库存数量</th>
-										<th>客户</th>
+										<th>关联批次号</th>
+										<th>收货方</th>
+										<th>关联单据号</th>
+										<th>状态</th>
 									</tr>
 								</thead>
 								<tbody>

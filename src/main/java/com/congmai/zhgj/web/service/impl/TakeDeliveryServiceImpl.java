@@ -18,6 +18,7 @@ import com.congmai.zhgj.core.util.Constants;
 import com.congmai.zhgj.web.dao.Delivery2Mapper;
 import com.congmai.zhgj.web.dao.DeliveryMaterielMapper;
 import com.congmai.zhgj.web.dao.DeliveryTransportMapper;
+import com.congmai.zhgj.web.dao.OrderInfoMapper;
 import com.congmai.zhgj.web.dao.StockInOutCheckMapper;
 import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
 import com.congmai.zhgj.web.dao.TakeDeliveryMapper;
@@ -27,6 +28,7 @@ import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryMaterielExample;
 import com.congmai.zhgj.web.model.DeliverySelectExample;
 import com.congmai.zhgj.web.model.DeliveryTransportExample;
+import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.StockInOutRecordExample;
@@ -58,6 +60,9 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	
 	@Resource
 	private StockInOutCheckMapper stockInOutCheckMapper;
+	
+	@Resource
+	private OrderInfoMapper orderInfoMapper;
 	
 	@Override
 	public GenericDao<TakeDelivery, String> getDao() {
@@ -120,7 +125,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			takeDeliveryParams.getDelivery().setUpdater(currenLoginName);
 			takeDeliveryParams.getDelivery().setUpdateTime(now);
 			takeDeliveryParams.getDelivery().setDelFlg("0");
-			takeDeliveryParams.getDelivery().setStatus("0"); //已发货
+			takeDeliveryParams.getDelivery().setStatus("3"); //已发货
 		}
 		
 		if(takeDeliveryParams.getDeliveryTransport()!=null){
@@ -203,6 +208,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		record.setCreateTime(new Date());
 		record.setUpdater(currenLoginName);
 		record.setUpdateTime(new Date());
+		record.setStatus("0");
 		record.setDelFlg("0");
 		stockInOutRecordMapper.insert(record);
 		
@@ -261,27 +267,64 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		StockInOutRecord record = takeDeliveryParams.getRecord();
 		
 		
-		
-		record.setUpdater(currenLoginName);
-		record.setUpdateTime(new Date());
-		StockInOutRecordExample example = new StockInOutRecordExample();
-		example.createCriteria().andSerialNumEqualTo(record.getSerialNum());
-		stockInOutRecordMapper.updateByExampleSelective(record, example);
-		
-		//清除之前的出入库物料信息
 		Delivery old_delivery = null;
 		if("in".equals(type)){
 			//获取更新前的收货id
 			StockInOutRecord stockInOutRecord = stockInOutRecordMapper.selectByPrimaryKey(record.getSerialNum());
 			String takeDeliverySerial = stockInOutRecord.getTakeDeliverSerial();
-			old_delivery = takeDeliveryMapper.selectByTakeDeliveryPrimaryKey(takeDeliverySerial);
-			clearStockInInfoFormMateriels(old_delivery.getDeliveryMateriels());
+			old_delivery = takeDeliveryMapper.selectByTakeDeliveryPrimaryKey(takeDeliverySerial); //之前的收货id
+			//clearStockInInfoFormMateriels(old_delivery.getDeliveryMateriels());//清除之前的出入库物料信息
+			
+			//更新入库记录
+			record.setUpdater(currenLoginName);
+			record.setStatus("1");//入库完成
+			record.setUpdateTime(new Date());
+			StockInOutRecordExample example = new StockInOutRecordExample();
+			example.createCriteria().andSerialNumEqualTo(record.getSerialNum());
+			stockInOutRecordMapper.updateByExampleSelective(record, example);
+			
+			//更新订单状态
+			OrderInfo orderInfo = new OrderInfo();
+			orderInfo.setSerialNum(old_delivery.getOrderSerial());
+			orderInfo.setStatus("8");//入库完成/待收票
+			orderInfo.setUpdateTime(new Date());
+			orderInfo.setUpdater(currenLoginName);
+			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+			//更新收货状态
+			TakeDelivery takeDelivery = new TakeDelivery();
+			takeDelivery.setSerialNum(takeDeliverySerial);
+			takeDelivery.setStatus("4");//收货完成
+			takeDelivery.setUpdateTime(new Date());
+			takeDelivery.setUpdater(currenLoginName);
+			takeDeliveryMapper.updateByPrimaryKeySelective(takeDelivery);
 		}else{
 			//获取更新前的发货id
 			StockInOutRecord stockInOutRecord = stockInOutRecordMapper.selectByPrimaryKey(record.getSerialNum());
 			String deliverySerial = stockInOutRecord.getDeliverSerial();
 			old_delivery = delivery2Mapper.selectByDeliveryPrimaryKey(deliverySerial);
-			clearStockOutInfoFormMateriels(old_delivery.getDeliveryMateriels());
+			clearStockOutInfoFormMateriels(old_delivery.getDeliveryMateriels());//清除之前的出入库物料信息
+			
+			//更新入库记录
+			record.setUpdater(currenLoginName);
+			record.setStatus("1");//入库完成
+			record.setUpdateTime(new Date());
+			StockInOutRecordExample example = new StockInOutRecordExample();
+			example.createCriteria().andSerialNumEqualTo(record.getSerialNum());
+			stockInOutRecordMapper.updateByExampleSelective(record, example);
+			
+			//更新订单状态
+			//OrderInfo orderInfo = new OrderInfo();
+			//orderInfo.setSerialNum(old_delivery.getOrderSerial());
+			//orderInfo.setStatus("8");//入库完成/待收票
+			//orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+			//更新发货状态
+			Delivery delivery = new Delivery();
+			delivery.setSerialNum(deliverySerial);
+			delivery.setStatus("4");//状态未定
+			delivery.setUpdateTime(new Date());
+			delivery.setUpdater(currenLoginName);
+			//delivery2Mapper.updateByPrimaryKeySelective(delivery);
+			//跟新发货状态
 		}
 		
 		
@@ -294,6 +337,8 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			//materiel.setDeliverSerial(old_delivery.getTakeDelivery().getSerialNum());
 			//deliveryMaterielMapper.insert(materiel);
 		}
+		
+		
 		
 	}
 	
@@ -419,11 +464,11 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	}
 
 	@Override
-	public void createStockInCheckRecord(String takeDeliverySerial,
-			String currenLoginName) {
+	public void createStockInCheckRecord(TakeDelivery takeDelivery,
+			String currenLoginName) throws Exception {
 		StockInOutCheck check = new StockInOutCheck();
 		check.setSerialNum(ApplicationUtils.random32UUID());
-		check.setTakeDeliverSerial(takeDeliverySerial);
+		check.setTakeDeliverSerial(takeDelivery.getSerialNum());
 		check.setDeliverSerial("checkin");
 		check.setCheckNum("RK"+ApplicationUtils.getFromNumber());
 		check.setStatus("0");
@@ -433,6 +478,20 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		check.setUpdater(currenLoginName);
 		check.setUpdateTime(new Date());
 		stockInOutCheckMapper.insert(check);
+		
+		//更改订单 
+		OrderInfo orderInfo = new OrderInfo();
+		Delivery delivery = delivery2Mapper.selectByPrimaryKey(takeDelivery.getDeliverSerial());
+		if(delivery!=null){
+			orderInfo.setSerialNum(delivery.getOrderSerial());
+			orderInfo.setStatus("5");//待检验
+			orderInfo.setUpdateTime(new Date());
+			orderInfo.setUpdater(currenLoginName);
+			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+		}else{
+			throw new Exception("没有找到发货单,发货id"+takeDelivery.getDeliverSerial());
+		}
+		
 	}
 
 	@Override

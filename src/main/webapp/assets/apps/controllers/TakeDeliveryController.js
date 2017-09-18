@@ -381,8 +381,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					toastr.warning("请选择您要删除的记录");
 					return;
 				}
-				if(table.row('.active').data().status != '0'){
-					showToastr('toast-top-center', 'warning', '该收货单已经申请流程审批，不能删除！');
+				if(table.row('.active').data().status > 2){
+					showToastr('toast-top-center', 'warning', '存在已经进入流程审批的收货单，不能删除！');
 					return;
 				}
 	        	handle.confirm("确定删除吗？",function(){
@@ -515,7 +515,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        }
 	        
 	        /**
-	         * 入库编辑
+	         * 入库
 	         */
 	        $scope.stockIn = function(){
 	        	var id_count = $('#stockInTable input[name="serialNum2"]:checked').length;
@@ -524,8 +524,13 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        	}else if(id_count>1){
 	        		toastr.warning("只能选择一条数据进行入库");
 	        	}else{
+	        		var row = stock_table.row(".active").data();
+		       		if(row.status=="1"){
+		       			toastr.warning("该收货单已出库！");
+		       			return;
+		       		}
 	        		var serialNum = $('#stockInTable input[name="serialNum2"]:checked').val();
-	        		$state.go("stockIn",{serialNum:serialNum});
+	        		$state.go("stockIn",{serialNum:row.stockInOutRecord.serialNum});
 	        	}
 	        }
 	       	
@@ -1090,14 +1095,15 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		                    "aoColumns": [
 	  		                                  { mData: 'stockInOutRecord.serialNum' },
 	  		                                  { mData: 'stockInOutRecord.inOutNum' },
-	  		                                  /*{ mData: 'stockInOutRecord.inOutNum' },*/
+	  		                                  { mData: 'stockInOutRecord.inOutType' },
 	  		                                  { mData: 'orderMateriel.materiel.materielName'},
 	  		                                  { mData: 'orderMateriel.materiel.specifications'},
 	  		                                  { mData: 'stockInOutRecord.stockDate' },
 	  		                                  { mData: 'stockCount' },
 	  		                                  { mData: 'batchNum' },
 	  		                                  { mData: 'delivery.supplyName' },
-	  		                                  { mData: 'stockInOutRecord.order.orderNum' }
+	  		                                  { mData: 'stockInOutRecord.order.orderNum' },
+	  		                                  { mData: 'stockInOutRecord.status' }
 	  		                            ],
 	  		                   'aoColumnDefs' : [ {
 	  		    							'targets' : 0,
@@ -1131,18 +1137,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		    							"createdCell": function (td, cellData, rowData, row, col) {
 	  		    								 $compile(td)($scope);
 	  		    						       }
-	  		    						}/*,{
-	  		    							'targets' : 2,
-	  		    							'render' : function(data,
-	  		    									type, row, meta) {
-	  		    									if(data==undefined){
-	  		  										return "";
-	  		  									}
-	  		  	  								return "";
-	  		  	
-	  		    							}
-	  		    						}*/,{
-	  		    							'targets' : 6,
+	  		    						},{
+	  		    							'targets' : 7,
 	  		    							'render' : function(data,
 	  		    									type, row, meta) {
 	  		    								if(data==undefined){
@@ -1152,7 +1148,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		    								
 	  		    							}
 	  		    						},{
-	  		    							'targets' : 7,
+	  		    							'targets' : 8,
 	  		    							'render' : function(data,
 	  		    									type, row, meta) {
 	  		    									if(data==undefined){
@@ -1162,7 +1158,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		  	
 	  		    							}
 	  		    						},{
-	  		    							'targets' : 8,
+	  		    							'targets' : 9,
 	  		    							'render' : function(data,
 	  		    									type, row, meta) {
 	  		    									if(data==undefined){
@@ -1170,6 +1166,17 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		  									}
 	  		  	  								return data;
 	  		  	
+	  		    							}
+	  		    						},{
+	  		    							'targets' : 10,
+	  		    							'render' : function(data,
+	  		    									type, row, meta) {
+	  		    								if(data=="0"){
+	  		  										return "<span  class='label label-sm label-warning ng-scope'>待入库</span>";
+	  		  									}else if(data=="1"){
+	  		  										return "<span  class='label label-sm label-info ng-scope'>已入库</span>";
+	  		  									}
+	  		    								return "";
 	  		    							}
 	  		    						}]
 
@@ -1343,7 +1350,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 				}else{
 					//var serialNum = $('#buyOrder input[name="selecrOrderSerial"]:checked').val();
 					$scope.deliver.orderSerial = $('#buyOrder input[name="selecrOrderSerial"]:checked').val();
-					var order = order_table.row('.active').data();debugger;
+					var order = order_table.row('.active').data();
 					$scope.deliver.supplyComId = order.supplyComId;
 					$scope.deliver.shipper = order.supplyComId;
 					$scope.deliver.receiver =  order.buyComId;

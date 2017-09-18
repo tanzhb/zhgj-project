@@ -480,6 +480,20 @@ public class TakeDeliveryController {
     
     /**
      * 
+     * @Description (TODO这新建出库)
+     * @param map
+     * @param serialNum
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="stockOut")
+    public String stockOut(Map<String, Object> map,String serialNum,HttpServletRequest request) {
+    	
+    	return "delivery/stockOut";
+    }
+    
+    /**
+     * 
      * @Description (TODO查看出库)
      * @param map
      * @param serialNum
@@ -898,7 +912,7 @@ public class TakeDeliveryController {
 				if (BeanUtils.isBlank(pi)) {
 					takeDelivery.setStatus(TakeDelivery.APPLY_COMPLETE);
 					//任务办理完成后,创建入库检验单
-					this.takeDeliveryService.createStockInCheckRecord(takeDelivery.getSerialNum(), user.getUserName());
+					this.takeDeliveryService.createStockInCheckRecord(takeDelivery, user.getUserName());
 				}
 			}
 
@@ -909,13 +923,13 @@ public class TakeDeliveryController {
 			result = "任务办理完成！";
 		} catch (ActivitiObjectNotFoundException e) {
 			result = "此任务不存在，请联系管理员！";
-			throw e;
+			//throw e;
 		} catch (ActivitiException e) {
 			result = "此任务正在协办，您不能办理此任务！";
-			throw e;
+			//throw e;
 		} catch (Exception e) {
 			result = "任务办理失败，请联系管理员！";
-			throw e;
+			//throw e;
 		}
 		return result;
 	}
