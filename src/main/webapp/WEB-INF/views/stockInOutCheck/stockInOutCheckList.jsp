@@ -46,11 +46,11 @@
 				</div>
 				<div class="actions">
 				<div class="btn-group btn-group-devided" data-toggle="buttons">
-						<!-- <label class="btn btn-transparent green btn-circle btn-sm" ng-click="addStockInOutCheck('in')">
-	                                              <i class="fa fa-plus"></i> 添加</label> -->
+						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addStockInOutCheck('in')">
+	                                              <i class="fa fa-plus"></i> 添加</label>
 	                                               <label class="btn btn-transparent yellow btn-circle btn-sm"
-										ng-click="toEditStockInOutPage('checkin')"> <i class="glyphicon glyphicon-play"></i> 申请</label>
-						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditStockInOutPage('in')">
+										ng-click="toEditStockInOutPage('checkin')"> <i class="glyphicon glyphicon-play"></i>检验</label>
+						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditStockInOutPage('checkin')">
 	                                              <i class="fa fa-edit"></i> 修改</label>
 						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delStockInOutCheck('In')" >
 	                                              <i class="fa fa-minus"></i> 删除</label>
@@ -236,11 +236,11 @@
 				</div>
 				<div class="actions">
 					<div class="btn-group btn-group-devided" data-toggle="buttons">
-					<!-- 	<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addStockInOutCheck('out')">
-	                                              <i class="fa fa-plus"></i> 添加</label> -->
+						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addStockInOutCheck('out')">
+	                                              <i class="fa fa-plus"></i> 添加</label>
 	                    <label class="btn btn-transparent yellow btn-circle btn-sm"
-										ng-click="toEditStockInOutPage('checkout')"> <i class="glyphicon glyphicon-play"></i> 申请</label>
-						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditStockInOutPage('out')">
+										ng-click="toEditStockInOutPage('checkout')"> <i class="glyphicon glyphicon-play"></i> 检验</label>
+						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditStockInOutPage('checkout')">
 	                                              <i class="fa fa-edit"></i> 修改</label>
 						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delStockInOutCheck('Out')" >
 	                                              <i class="fa fa-minus"></i> 删除</label>

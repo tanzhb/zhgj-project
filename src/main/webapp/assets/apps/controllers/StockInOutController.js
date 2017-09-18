@@ -38,7 +38,11 @@ angular
 										 			debugger;
 										 			$scope.inOrOut=$stateParams.inOrOut;
 										 			getStockInOutCheckInfo($stateParams.inOrOut);//查看出入库检验详情页面
-									 		}else{
+									 		}else if($location.path()=="/confirmStockInOutCheck"){
+									 			debugger;
+									 			$scope.inOrOut=$stateParams.inOrOut;
+									 			getStockInOutCheckInfo($stateParams.inOrOut);//查看出入库检验详情页面
+								 		}else{
 									 			if($stateParams.inOrOut=='showOut'){
 									 				debugger;
 									 				$("#in").removeClass("active");
@@ -493,12 +497,21 @@ angular
 								debugger;
 								var id_count = table.$('input[type="checkbox"]:checked').length;
 								if(id_count==0){
-									toastr.warning("请选择一条数据进行编辑");
+									if(judgeString.indexOf("check")>-1){
+										toastr.warning("请选择一条数据进行检验");
+									}else{toastr.warning("请选择一条数据进行编辑");}
+									
 								}else if(id_count>1){
-									toastr.warning("只能选择一条数据进行编辑");
+									if(judgeString.indexOf("check")>-1){
+										toastr.warning("只请选择一条数据进行检验");
+									}else{toastr.warning("只能选择一条数据进行编辑");}
+									
 								}else{
 									var serialNum = table.$('input[type="checkbox"]:checked').val();
-									$state.go("addOrEditStockInOutCheck",{inOrOut:serialNum+judgeString});
+									if(judgeString.indexOf("check")>-1){
+									$state.go("confimStockInOutCheck",{inOrOut:serialNum+judgeString});
+									}else{$state.go("addOrEditStockInOutCheck",{inOrOut:serialNum+judgeString});}
+										
 								}
 							};
 							// 修改检验结束***************************************							
@@ -550,6 +563,23 @@ angular
 								debugger;
 								 $state.go('stockInOutCheckView',{inOrOut:serialNum+judgeString},{reload:true}); 
 								
+							}
+							$scope.confirmStockInOutCheck = function(judgeString) {										
+								StockInOutService
+										.updateStockInOutCheckStatus($scope.inOrOut)
+										.then(
+												function(data) {
+													if(judgeString=='checkin'){toastr.success("确认入库检验成功！");
+													}else{toastr.success("确认出库成功！");
+												}
+												$scope.stockInOutCheck.status=1;
+												},
+												function(errResponse) {
+													console
+															.error('Error while deleting Users');
+												}
+
+										);
 							}
 							  var selectIndex,ajaxUrl;
 					 	       $scope.selectDeliverOrTakeDelivery = function(judgeString){
@@ -925,10 +955,10 @@ angular
 						 	        			 $scope.materials=data.materials;
 						 	        			 if($stateParams.inOrOut.indexOf("in")>-1){
 						 	        				 $("#takeDeliverSerial").val(data.stockInOutCheck.takeDeliverSerial);
-						 	        				 $("#deliverSerial").val('111111');
+						 	        				 $("#deliverSerial").val('checkin');
 						 	        			 }else{
 						 	        				 $("#deliverSerial").val(data.stockInOutCheck.deliverSerial);
-						 	        				$("#takeDeliverSerial").val('111111');
+						 	        				$("#takeDeliverSerial").val('checkout');
 						 	        			 }
 						 	        			
 						 	            },function(data){

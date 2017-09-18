@@ -1325,7 +1325,30 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        		}]
 		        	}	        
 		    })   
-		    
+		    .state('confirmStockInOutCheck', {//出入库检验确认检验
+		        	url: "/confirmStockInOutCheck?:inOrOut",
+		        	templateUrl: "rest/stockInOut/confirmStockInOutCheck",
+		        	data: {pageTitle: '出入库检验详情'},
+		        	reload:true, 
+		        	controller: "StockInOutController",
+		        	resolve: {
+		        		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		        			return $ocLazyLoad.load({
+		        				name: 'MetronicApp',
+		        				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		        				files: [       
+		        				        'assets/global/plugins/datatables/datatables.min.css',                  
+		        				        'assets/global/plugins/datatables/datatables.all.min.js',
+		        				        'assets/apps/service/StockInOutService.js',
+		        						'assets/apps/controllers/StockInOutController.js',
+		        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
+		        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css',
+		        				        'assets/pages/scripts/table-datatables-scroller.min.js'
+		        				        ]
+		        			});
+		        		}]
+		        	}	        
+		    })   
 		    .state('addDelivery', {
             url: "/addDelivery",
             templateUrl: "rest/page/addDelivery",

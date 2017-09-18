@@ -264,4 +264,30 @@
     <update id="goDelivery" parameterType="java.util.HashMap">
     UPDATE delivery SET status='1',updater=#{updater},updateTime=NOW() WHERE serialNum=#{serialNum}
     </update>
+    <!--查询详情物料集合  -->
+    <select id="selectListForDetailForStockCheck" resultType="com.congmai.zhgj.web.model.DeliveryMaterielVO" parameterType="java.util.HashMap">
+    SELECT
+	a.serialNum,c.materielNum,c.materielName,c.specifications,c.unit,a.batchNum,a.manufactureDate,b.amount,a.deliverCount,a.remark,
+	a.stockCount,a.unstockCount,d.warehouseName,e.positionName,a.stockRemark,a.qualifiedCount,a.unqualifiedCount,a.checkRemark,
+	a.acceptCount,a.refuseCount,a.takeRemark
+	<if test="null!=#{deliverSerial}">
+	,f.status
+	</if>
+	<if test="null!=#{takeDeliverSerial}">
+	,td.status
+	</if>
+	FROM
+	deliveryMateriel a
+	LEFT JOIN orderMateriel b ON a.orderMaterielSerial=b.serialNum
+	LEFT JOIN materiel c ON b.materielSerial=c.serialNum
+	LEFT JOIN warehouse d ON a.warehouseSerial=d.serialNum
+	LEFT JOIN warehousePosition e ON a.positionSerial=e.serialNum
+	<if test="null!=#{deliverSerial}">
+	LEFT JOIN delivery f ON a.deliverSerial=f.serialNum
+	</if>
+	<if test="null!=#{takeDeliverSerial}">
+	LEFT JOIN takedelivery td ON a.deliverSerial=td.serialNum
+	</if>
+	WHERE a.deliverSerial=#{serialNum}
+    </select>
 </mapper>
