@@ -1679,6 +1679,24 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
     	   $state.go("stockOutView",{serialNum:serialNum});
        }
 	   
+	   $scope.stockOut = function(){
+		   var id_count = $('#stockInTable input[name="serialNum2"]:checked').length;
+	       	if(id_count==0){
+	       		toastr.warning("请选择您要出库的记录");
+	       	}else if(id_count>1){
+	       		toastr.warning("只能选择一条发货单进行出库");
+	       	}else{
+	       		
+	       		var row = stock_table.row(".active").data();
+	       		if(row.status=="1"){
+	       			toastr.warning("该发货单已出库！");
+	       			return;
+	       		}
+	       		//var serialNum = $('#stockInTable input[name="serialNum2"]:checked').val();
+	       		$state.go("stockOut",{serialNum:row.stockInOutRecord.serialNum});
+	       	}
+	   }
+	   
     /**
      * 批量删除出库记录
      */
@@ -1825,14 +1843,15 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
                   "aoColumns": [
                                 { mData: 'stockInOutRecord.serialNum' },
                                 { mData: 'stockInOutRecord.inOutNum' },
-                                { mData: 'stockInOutRecord.order.orderNum' },
+                                { mData: 'stockInOutRecord.inOutType' },
                                 { mData: 'orderMateriel.materiel.materielName'},
                                 { mData: 'orderMateriel.materiel.specifications'},
-                                { mData: 'batchNum' },
                                 { mData: 'stockInOutRecord.stockDate' },
                                 { mData: 'stockCount' },
-                                { mData: 'stockInOutRecord.order.buyComId' },
-                                { mData: 'stockInOutRecord.order.buyComId' }
+                                { mData: 'batchNum' },
+                                { mData: 'stockInOutRecord.order.buyName' },
+                                { mData: 'stockInOutRecord.order.orderNum' },
+                                { mData: 'stockInOutRecord.status' }
                           ],
                  'aoColumnDefs' : [ {
   							'targets' : 0,
@@ -1866,16 +1885,6 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
   								 $compile(td)($scope);
   						       }
   						},{
-  							'targets' : 2,
-  							'render' : function(data,
-  									type, row, meta) {
-  									if(data==undefined){
-										return "无";
-									}
-	  								return data;
-	
-  							}
-  						},{
   							'targets' : 7,
   							'render' : function(data,
   									type, row, meta) {
@@ -1889,8 +1898,8 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
   							'targets' : 8,
   							'render' : function(data,
   									type, row, meta) {
-  									if(data==undefined){
-										return "";
+  									if(data!=undefined){
+										return data;
 									}
 	  								return "";
 	
@@ -1899,11 +1908,22 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
   							'targets' : 9,
   							'render' : function(data,
   									type, row, meta) {
-  									if(data==undefined){
-										return "";
+  									if(data!=undefined){
+										return data;
 									}
 	  								return "";
 	
+  							}
+  						},{
+  							'targets' : 10,
+  							'render' : function(data,
+  									type, row, meta) {
+  								if(data=="0"){
+										return '<span  class="label label-sm label-warning ng-scope">待出库</span>';
+								}else if(data=="1"){
+										return '<span  class="label label-sm label-info ng-scope">已出库</span>';
+								}
+  								return "";
   							}
   						}]
 
