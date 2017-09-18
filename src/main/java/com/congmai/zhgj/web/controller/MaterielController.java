@@ -560,7 +560,7 @@ public class MaterielController {
 							materiel.setMnemonicCode(row.get(1).toString());
 							materiel.setType(row.get(2).toString());
 							materiel.setMaterielName(row.get(3).toString());
-							materiel.setCategory(row.get(4).toString());
+							materiel.setCategory1(row.get(4).toString());
 							materiel.setUnit(row.get(5).toString());
 							materiel.setSpecifications(row.get(6).toString());
 							materiel.setProductionPlace(row.get(7).toString());
