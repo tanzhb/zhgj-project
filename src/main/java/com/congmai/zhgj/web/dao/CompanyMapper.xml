@@ -73,7 +73,7 @@
     </if>
     <if test="comIds != null" >
         and comId in
-         <foreach item="comIds" index="index" collection="list" open="(" separator="," close=")">  
+         <foreach item="item" index="index" collection="comIds" open="(" separator="," close=")">  
 		  #{item}  
 		 </foreach> 
     </if>

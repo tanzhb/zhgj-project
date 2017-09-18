@@ -83,6 +83,10 @@ public class Delivery {
     
     private String supplyName;
     
+    private String shipperName;
+    
+    private String receiverName;
+    
     private String orderNum;
     
     private String orderAmount;//订单金额
@@ -403,6 +407,22 @@ public class Delivery {
 
 	public void setDeliverType(String deliverType) {
 		this.deliverType = deliverType;
+	}
+
+	public String getReceiverName() {
+		return receiverName;
+	}
+
+	public void setReceiverName(String receiverName) {
+		this.receiverName = receiverName;
+	}
+
+	public String getShipperName() {
+		return shipperName;
+	}
+
+	public void setShipperName(String shipperName) {
+		this.shipperName = shipperName;
 	}
 
     

@@ -86,11 +86,13 @@
                     </a>
                 </li>
                 </shiro:hasPermission>
+                <shiro:hasPermission name="zhgj:supplyOrder:*">
                 <li>
                     <a ui-sref="supplyOrder">
                         订单</span>
                     </a>
                 </li>
+                </shiro:hasPermission>
             </ul>
         </li>
         </shiro:hasPermission>
