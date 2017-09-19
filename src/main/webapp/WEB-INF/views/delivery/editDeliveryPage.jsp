@@ -414,7 +414,7 @@
 												<select class="form-control"
 													id="transportType"
 													name="transportType"
-													ng-model="deliveryTransport.transportType" ng-show="input">
+													ng-model="delivery.transportType" ng-show="input">
 													<option value="水路运输">水路运输</option>
 													<option value="铁路运输">铁路运输</option>
 													<option value="公路运输">公路运输</option>
@@ -521,6 +521,7 @@
 													<option value="">收货仓库</option>
 													<option ng-repeat="item in warehouseList"
 														value="{{item.serialNum}}">{{item.warehouseName}}</option>
+													<option value="无">无</option>
 												</select>
 												<div class="form-control-focus"></div>
 												<p class="form-control-static" ng-show="span">
