@@ -276,7 +276,7 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 			reason:$scope.delivery.reason,
 			taskId:$("#taskId").val(), 
 			reApply:true
-		},
+		}
 		/*params:{'taskId':$("#taskId").val(), 'reApply':true},*/
 		).then(function success(result) {
 			deferred.resolve(result);//请求成功

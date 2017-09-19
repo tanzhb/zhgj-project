@@ -156,7 +156,7 @@ otherAmount, remark, orderRemark,
 			 	AND orderInfo.supplyComId = #{supplyComId,jdbcType=VARCHAR}
 			 </if>
 		 </if>
-		 <if test="status=='2'" >
+		 <if test="status=='2'.toString()" >
 		 	AND orderInfo.status='2'
 		 </if>
 		 <if test="status=='000'" >
@@ -196,7 +196,7 @@ otherAmount, remark, orderRemark,
 			 	AND orderInfo.supplyComId = #{supplyComId,jdbcType=VARCHAR}
 			 </if>
 		 </if>
-		 <if test="status=='2'" >
+		 <if test="status=='2'.toString()" >
 		 	AND orderInfo.status='2'
 		 </if>
 		 <if test="status=='000'" >

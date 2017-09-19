@@ -75,7 +75,6 @@ public class OrderInfo extends BaseVO {
     
     private String orderRemark;
 
-    private String status;
 
     private String delFlg;
 
@@ -269,14 +268,6 @@ public class OrderInfo extends BaseVO {
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
     }
 
     public String getDelFlg() {

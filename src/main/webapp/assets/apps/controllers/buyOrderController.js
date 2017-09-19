@@ -81,8 +81,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		$scope.buyOrder={};
             		$scope.contract={};
             		$scope.contract.contractType="采购合同";
-            		$scope.contract.orderType="普通采购";
-            		$scope.contract.tradeType="内贸";
+            		$scope.buyOrder.orderType="普通采购";
+            		$scope.buyOrder.tradeType="内贸";
             		$scope.clauseSettlement = {};
             		$scope.buyOrder.seller ="中航能科（上海）能源科技有限公司";
             		$scope.buyOrder.rate = 17;

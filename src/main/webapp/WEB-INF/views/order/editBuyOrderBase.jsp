@@ -57,8 +57,8 @@
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>贸易类型：</label>
                                  <div class="">
 	                                 <div ng-hide="buyOrderInput">
-		                               	<input type="radio"  ng-model="buyOrder.tradeType" name="tradeType" ng-checked="buyOrder.orderType=='内贸'" value="内贸"> 内贸
-		                       			<input type="radio"  ng-model="buyOrder.tradeType" name="tradeType" ng-checked="buyOrder.orderType=='外贸'" value="外贸"> 外贸
+		                               	<input type="radio"  ng-model="buyOrder.tradeType" name="tradeType" ng-checked="buyOrder.tradeType=='内贸'" value="内贸"> 内贸
+		                       			<input type="radio"  ng-model="buyOrder.tradeType" name="tradeType" ng-checked="buyOrder.tradeType=='外贸'" value="外贸"> 外贸
 	                                 </div>
 	                                 <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.tradeType}} </p>
                                  </div>
@@ -100,15 +100,7 @@
                              <div class="form-group ">
                                  <label class="control-label bold">合同内容：</label>
                                  <div class="">
-                                 	<div  ng-hide="buyOrderInput">
-                                 		<select class="form-control" id="supplyComId"  data-live-search="true"  name="supplyComId" class="form-control" 
-                                 		 ng-model="buyOrder.supplyComId"  ng-change="changeSupplyName(this)" data-size="8">
-                                                   <option value=""></option>
-                                                   <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}" >{{supplier.comName}}</option>
-                                               </select>
-                                               </div>
-                                     <span class="help-block" ng-hide="buyOrderInput">请选择卖方</span>
-                                     <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.supplyName}} </p>
+                                 	
                                  </div>
                                  
                                  
