@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <!-- BEGIN PAGE HEADER-->
 
-<h3 class="page-title">发货信息</h3>
+<!-- <h3 class="page-title">发货信息</h3>
 <div class="page-bar">
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
@@ -21,7 +21,7 @@
 
 		</div>
 	</div>
-</div>
+</div> -->
 <div class="row" id="saleOrderPrint">
 	<div class="col-md-12">
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->

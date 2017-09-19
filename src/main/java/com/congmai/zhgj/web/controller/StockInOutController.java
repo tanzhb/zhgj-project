@@ -163,12 +163,13 @@ public class StockInOutController {
 				List<DeliveryMaterielVO> deliveryMateriels=null;
 				if("in".equals(inOrOut)){
 					deliveryMateriels = deliveryService.selectListForDetailForStockCheck(stockInOutCheck.getDeliverSerial(),"out");
-					DeliveryVO deliveryVO=deliveryService.selectDetailById(stockInOutCheck.getDeliverSerial());
-		    	 	stockInOutCheck.setDeliverNum(deliveryVO.getDeliverNum());
-		    	 	OrderInfo orderInfo=orderService.selectById(deliveryVO.getOrderSerial());
-		    	 stockInOutCheck.setRelationSaleNum(orderInfo.getOrderNum());
-		    	 	Company  company=companyService.selectById(deliveryVO.getSupplyComId());
+					TakeDelivery takeDeliveryVO=takeDeliveryService.selectByPrimaryKey(stockInOutCheck.getTakeDeliverSerial());
+		    		stockInOutCheck.setTakeDeliverNum(takeDeliveryVO.getTakeDeliverNum());
+		    		DeliveryVO deliveryVO=deliveryService.selectDetailById(takeDeliveryVO.getDeliverSerial());
+		    		Company  company=companyService.selectById(deliveryVO.getSupplyComId());
 		    	 	stockInOutCheck.setSupplyName(company.getComName());
+		    	 	OrderInfo orderInfo=orderService.selectById(deliveryVO.getOrderSerial());
+		    	 	stockInOutCheck.setRelationBuyNum(orderInfo.getOrderNum());
 				}else if("out".equals(inOrOut)){
 					deliveryMateriels=deliveryService.selectListForDetailForStockCheck(stockInOutCheck.getTakeDeliverSerial(),"in");
 					DeliveryVO deliveryVO=deliveryService.selectDetailById(stockInOutCheck.getDeliverSerial());
@@ -185,9 +186,6 @@ public class StockInOutController {
 	    		stockInOutCheck.setMaterialNum(deliveryMateriels.size()+"");
 	    		stockInOutCheck.setTotalQualifiedCount(totalQualifiedCount.toString());
 	    		stockInOutCheck.setTotalUnQualifiedCount(totalUnQualifiedCount.toString());
-	    		DeliveryVO delivery=deliveryService.selectDetailById(stockInOutCheck.getDeliverSerial());
-	    		stockInOutCheck.setDeliverNum(delivery.getDeliverNum());
-	    	 	stockInOutCheck.setRelationSaleNum(delivery.getOrderNum());
 			}
 		}
 	
@@ -392,7 +390,7 @@ public class StockInOutController {
 	     */
 	    @RequestMapping(value = "/confirmStockInOutCheck")
 	    public String confirmStockInOutCheck(HttpServletRequest request) {
-	        return "stockInOutCheck/confirmStockInOutCheckInfo";
+	        return "stockInOutCheck/addOrEditStockInOutCheckInfo";
 	    }
 	    
 	    /**

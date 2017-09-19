@@ -160,7 +160,7 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 			contactNum:$scope.delivery.contactNum,
 			deliverRemark:$scope.delivery.deliverRemark,
 			
-			transportType:$scope.deliveryTransport.transportType,
+			transportType:$scope.transportType,
 			transport:$scope.deliveryTransport.transport,
 			port:$scope.deliveryTransport.port,
 			shipNumber:$scope.deliveryTransport.shipNumber,
