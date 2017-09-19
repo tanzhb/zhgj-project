@@ -390,7 +390,7 @@ public class StockInOutController {
 	     */
 	    @RequestMapping(value = "/confirmStockInOutCheck")
 	    public String confirmStockInOutCheck(HttpServletRequest request) {
-	        return "stockInOutCheck/confirmStockInOutCheckInfo";
+	        return "stockInOutCheck/addOrEditStockInOutCheckInfo";
 	    }
 	    
 	    /**
