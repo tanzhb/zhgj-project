@@ -485,7 +485,6 @@ angular
 									debugger;
 									$scope.stockInOutCheck.deliverSerial=$("#deliverSerial").val();
 									$scope.stockInOutCheck.takeDeliverSerial=$("#takeDeliverSerial").val();
-									$scope.materials;
 									if($('#stockInOutCheckForm').valid()){//表单验证通过则执行添加功能
 										 judgeIsExist ();
 									}
@@ -509,7 +508,7 @@ angular
 								}else{
 									var serialNum = table.$('input[type="checkbox"]:checked').val();
 									if(judgeString.indexOf("check")>-1){
-									$state.go("confimStockInOutCheck",{inOrOut:serialNum+judgeString});
+									$state.go("confirmStockInOutCheck",{inOrOut:serialNum+judgeString});
 									}else{$state.go("addOrEditStockInOutCheck",{inOrOut:serialNum+judgeString});}
 										
 								}
@@ -569,10 +568,28 @@ angular
 										.updateStockInOutCheckStatus($scope.inOrOut)
 										.then(
 												function(data) {
-													if(judgeString=='checkin'){toastr.success("确认入库检验成功！");
-													}else{toastr.success("确认出库成功！");
-												}
-												$scope.stockInOutCheck.status=1;
+													StockInOutService.saveStockInOutCheck($scope.stockInOutCheck)
+													.then(
+															function(data) {debugger;
+																//toastr.success("保存检验数据成功！");
+																$scope.stockInOutCheck = data;
+											        			$scope.stockInOutCheckView = true;
+											        			$scope.stockInOutCheckAdd = true;
+											        			$scope.stockInOutCheckEdit = true;
+											        			$(".alert-danger").hide();
+											        			if(judgeString=='checkin'){toastr.success("确认入库检验成功！");
+																}else{toastr.success("确认出库检验成功！");
+															}
+															$scope.stockInOutCheck.status=1;
+															},
+															function(errResponse) {
+																toastr.warning("保存失败！");
+																console
+																		.error('Error while creating User');
+															}
+													);
+													
+													
 												},
 												function(errResponse) {
 													console

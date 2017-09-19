@@ -519,6 +519,7 @@
 													<option value="">收货仓库</option>
 													<option ng-repeat="item in warehouseList"
 														value="{{item.serialNum}}">{{item.warehouseName}}</option>
+													<option value="无">无</option>
 												</select>
 												<div class="form-control-focus"></div>
 												<p class="form-control-static" ng-show="span">
