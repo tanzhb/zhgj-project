@@ -265,20 +265,10 @@
 								</div>
 								<!--/row-->
 								<div class="row">
-									<!-- <div class="col-md-4">
-										<div class="form-group">
-											<label class="control-label bold">物料数<span class="required" aria-required="true"> * </span></label>
-											<div class="">
-												<p class="form-control-static" ng-show="span">
-													{{materielCount}}</p>
-											</div>
-
-										</div>
-									</div> -->
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group">
-											<label class="control-label bold">包装件数<span class="required" aria-required="true"> * </span></label>
+											<label class="control-label bold">包装件数</label>
 											<div class="">
 												<input type="text" class="form-control" name="packageCount"
 													ng-model="delivery.packageCount" ng-show="input" />
@@ -292,7 +282,7 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group">
-											<label class="control-label bold">包装类型<span class="required" aria-required="true"> * </span></label>
+											<label class="control-label bold">包装类型</label>
 											<div class="">
 												<select class="form-control" id="packageType"
 													name="packageType" ng-model="delivery.packageType"
@@ -314,7 +304,7 @@
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group">
-											<label class="control-label bold">包装规格<span class="required" aria-required="true"> * </span></label>
+											<label class="control-label bold">包装规格</label>
 											<div class="">
 												<select class="form-control"
 													id="ordpackageSpecificationserType"
@@ -334,7 +324,7 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group">
-											<label class="control-label bold">物料重量<span class="required" aria-required="true"> * </span></label>
+											<label class="control-label bold">物料重量</label>
 											<div class="">
 												<input type="text" class="form-control" ng-show="input"
 													name="materielWeight" ng-model="delivery.materielWeight" />
@@ -348,7 +338,7 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group">
-											<label class="control-label bold">服务费<span class="required" aria-required="true"> * </span></label>
+											<label class="control-label bold">服务费</label>
 											<div class="">
 												<input type="text" class="form-control" name="serviceMoney"
 													ng-model="delivery.serviceMoney" ng-show="input" />
@@ -363,7 +353,7 @@
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group">
-											<label class="control-label bold">发货人<span class="required" aria-required="true"> * </span></label>
+											<label class="control-label bold">发货人</label>
 											<div class="">
 												<input type="text" class="form-control" name="deliverer"
 													ng-model="delivery.deliverer" ng-show="input" />
@@ -376,7 +366,7 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group">
-											<label class="control-label bold">联系电话<span class="required" aria-required="true"> * </span></label>
+											<label class="control-label bold">联系电话</label>
 											<div class="">
 												<input type="text" class="form-control" name="contactNum"
 													ng-model="delivery.contactNum" ng-show="input" />
@@ -419,15 +409,12 @@
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group">
-											<label class="control-label bold">运输方式<span class="required" aria-required="true"> * </span></label>
+											<label class="control-label bold">运输方式</label>
 											<div class="">
-												<!-- <input type="text" class="form-control" name="transportType"
-													ng-model="deliveryTransport.transportType" ng-show="input" /> -->
 												<select class="form-control"
 													id="transportType"
 													name="transportType"
 													ng-model="deliveryTransport.transportType" ng-show="input">
-													<option value="">运输方式</option>
 													<option value="水路运输">水路运输</option>
 													<option value="铁路运输">铁路运输</option>
 													<option value="公路运输">公路运输</option>
@@ -470,7 +457,7 @@
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group">
-											<label class="control-label bold">联系人<span class="required" aria-required="true"> * </span></label>
+											<label class="control-label bold">联系人</label>
 											<div class="">
 												<input type="text" class="form-control" name="deliveryTransportContact"
 													ng-show="input" ng-model="delivery.transportContact" />
@@ -483,7 +470,7 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group">
-											<label class="control-label bold">联系电话<span class="required" aria-required="true"> * </span></label>
+											<label class="control-label bold">联系电话</label>
 											<div class="">
 												<input type="text" class="form-control" name="deliveryTransportContactNum"
 													ng-show="input" ng-model="delivery.transportContactNum" />
@@ -560,7 +547,7 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group">
-											<label class="control-label bold">收货日期<span class="required" aria-required="true"> * </span></label>
+											<label class="control-label bold">收货日期</label>
 											<div class="">
 												<input type="text" name="takeDeliverDate"
 													id="takeDeliverDate" data-date-format="yyyy-mm-dd"
@@ -579,7 +566,7 @@
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group">
-											<label class="control-label bold">收货人<span class="required" aria-required="true"> * </span></label>
+											<label class="control-label bold">收货人</label>
 											<div class="">
 												<input type="text" name="takeDeliveryReceiver"
 													class="form-control" ng-model="delivery.takeDeliveryReceiver"
@@ -595,7 +582,7 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group">
-											<label class="control-label bold">联系电话<span class="required" aria-required="true"> * </span></label>
+											<label class="control-label bold">联系电话</label>
 											<div class="">
 												<input type="text" name="takeDeliveryContactNum"
 													class="form-control" ng-model="delivery.takeDeliveryContactNum"
