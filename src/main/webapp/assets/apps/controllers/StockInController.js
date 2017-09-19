@@ -102,11 +102,12 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 				});
 			}
 			 
+			 //选中第一个物料仓库时触发
 			 $scope.getPositionsAndSelectedAll =function(materiel){
 				 $scope.getPositions(materiel);
 				 //$(".warehouseSerial").val(materiel.warehouseSerial);
 				 
-				 for(var i in $scope.takeDeliveryMateriels){debugger;
+				 for(var i in $scope.takeDeliveryMateriels){
 					 if(i>0){
 						 $scope.takeDeliveryMateriels[i].warehouseSerial = materiel.warehouseSerial;
 						 $scope.getPositions($scope.takeDeliveryMateriels[i]);
@@ -547,7 +548,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 		            }
 		            
 		            /**
-				     * 设置收货默认收货数量
+				     * 设置入库默认入库数量
 				     */
 				    $scope.setDefualtNum = function(scope){
 				    	//if(isNull($scope.deliver.serialNum)){

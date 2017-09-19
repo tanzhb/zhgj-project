@@ -281,7 +281,7 @@
 	                                                 <!--  <option value=""></option> -->
 	                                                  <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
 	                                            </select>
-	                                            <select ng-if="!$first" aaa class="bs-select form-control warehouseSerial" data-live-search="true"  id="warehouseSerial{$index}" ng-init="warehouses[0].serialNum" ng-change="getPositions(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
+	                                            <select ng-if="!$first" class="bs-select form-control warehouseSerial" data-live-search="true"  id="warehouseSerial{$index}" ng-init="warehouses[0].serialNum" ng-change="getPositions(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
 	                                                 <!--  <option value=""></option> -->
 	                                                  <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
 	                                            </select>
