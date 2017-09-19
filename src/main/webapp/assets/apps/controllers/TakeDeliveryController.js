@@ -1409,18 +1409,24 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		}  
 	  		
 	  		
-	  		/*$scope.setDefualtNum = function(scope){debugger;
-	  			if(isNull(scope.materiel.deliverCount)){
-	  				scope.materiel.deliverCount = scope.materiel.amount;
+	  		$scope.calcTotalNum = function(){debugger;
+	  			if(!isNull($scope.orderMateriels)){
+	  				$scope.totalDeliverCount = 0;
+	  				$scope.totalAmount = 0;
+	  				$scope.materielCount = $scope.orderMateriels.length;
+	  				for(var i in $scope.orderMateriels){
+	  					$scope.totalDeliverCount += handle.formatNumber($scope.orderMateriels[i].deliverCount);
+	  					$scope.totalAmount += handle.formatNumber($scope.orderMateriels[i].amount);
+	  				}
 	  			}
-	  		}*/
+	  		}
 	  		
 	  		/************************************************申请JS***********************************************/
 	  		$scope.applyTakeDelivery = function(){
 	  			
 	  			if($('#takeDeliveryForm').valid()){
 					handle.blockUI();
-					var params = {};debugger;
+					var params = {};
 					params.takeDelivery = {};
 					params.takeDelivery.serialNum = $scope.deliver.takeDelivery.serialNum;
 					params.takeDelivery.takeDeliverNum = $scope.takeDeliver.takeDeliverNum;
