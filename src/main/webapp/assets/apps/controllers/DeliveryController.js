@@ -1129,6 +1129,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	$scope.deliveryMaterielE=data.orderMateriel;
 	          		    	$scope.materielCount=data.orderMateriel.length;
 	          		    	length=data.orderMateriel.length;
+	          		    	$scope.totalDeliveryCount="";
 	          		     },
 	          		     function(error){
 	          		         $scope.error = error;
