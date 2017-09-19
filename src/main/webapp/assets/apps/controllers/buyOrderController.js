@@ -89,6 +89,9 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		dateSelectSetting();//日期选择限制
             		// 加载数据
                 	initSuppliers();
+                	//合同内容
+                	$scope.buyOrder.contractContent = '111100';
+                	$scope.initContractContent();
             	}
             	
             	$scope.noShow = true;
@@ -910,7 +913,11 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     						$("#comment_audit").html( "<tr><td colspan='3' align='center'>无内容</td></tr>");
     					}else $("#comment_audit").html(comments);
     					
-    					
+    					//初始化合同内容
+                    	if(isNull($scope.buyOrder.contractContent)){
+                    		$scope.buyOrder.contractContent = '111100';
+                    	}
+                    	$scope.initContractContent();
           		     },
           		     function(error){
           		         $scope.error = error;
@@ -2677,7 +2684,47 @@ var e = $("#form_clauseSettlement"),
 		          		 );
 		    		
 		        };
+		      //********合同内容操作start****************//  
+		        $scope.getContentStatus = function(Str,index){
+		    		if(!isNull(Str)&&index>=1){
+		    			return Str.substring(index-1,index)
+		    		}else{
+		    			return ''
+		    		}
+		    	}
+		        $scope.changeStr = function(allstr,index,changeStr){ //allstr:原始字符串，start,开始位置,end：结束位  置,str：要改变的字，changeStr:改变后的字
+		        	 return allstr.substring(0,index-1)+changeStr+allstr.substring(index,allstr.length); 
+		        }
 		        
+		        
+		        /**
+		    	 * 初始化选中状态
+		    	 */
+		    	$scope.initContractContent = function(){
+		    		for(var i=1;i<=6;i++){
+		    			if($scope.getContentStatus($scope.buyOrder.contractContent,i)==1){
+		    				$("#tab_1_"+i+"Id").addClass("active");
+		    				$scope["tab_1_"+i+"Hide"] = false
+		    			}else{
+		    				$("#tab_1_"+i+"Id").removeClass("active");
+		    				$scope["tab_1_"+i+"Hide"] = true
+		    			}
+		    		}
+		    	}
+		    	
+		    	$scope.changeContentStatus = function(index){
+		    		if($scope.getContentStatus($scope.buyOrder.contractContent,index)==1){
+		    			$scope.buyOrder.contractContent = $scope.changeStr($scope.buyOrder.contractContent,index,0);
+		    			/*$("#tab_1_"+index+"Id").removeClass("active");*/
+	    				$scope["tab_1_"+index+"Hide"] = true
+		    		}else{
+		    			$scope.buyOrder.contractContent = $scope.changeStr($scope.buyOrder.contractContent,index,1);
+		    			/*$("#tab_1_"+index+"Id").addClass("active");*/
+	    				$scope["tab_1_"+index+"Hide"] = false
+		    		}
+		    	}
+		    	
+		    	//********合同内容操作end ****************//   
 		      //********审批流程列表****************//
 		        function showDbTable(){
 		        	
@@ -3063,7 +3110,7 @@ var e = $("#form_clauseSettlement"),
 		        	
 		        	
 		        }
-		     //********审批流程end****************//  
+		      //********审批流程end****************//  
 		        
     /**
 	 * 加载供应商数据
@@ -3084,7 +3131,7 @@ var e = $("#form_clauseSettlement"),
         		//调用承诺接口reject();
         	});
 	}
-
+	
 	
 }]);
 
