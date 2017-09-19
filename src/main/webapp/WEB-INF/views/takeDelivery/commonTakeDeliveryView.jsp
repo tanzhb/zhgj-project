@@ -328,7 +328,7 @@
 						</div>
 					</div>
 					<!--/span-->
-					<div class="col-md-4">
+					<!-- <div class="col-md-4">
 						<div class="form-group form-md-line-input">
 							<label class="col-md-4 control-label" for="port"> 港口：</label>
 							<div class="col-md-8">
@@ -336,7 +336,7 @@
 							</div>
 						</div>
 					</div>
-					<!--/span-->
+					/span -->
 					<div class="col-md-4">
 						<div class="form-group form-md-line-input">
 							<label class="col-md-4 control-label" for="shipNumber">
