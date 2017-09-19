@@ -43,7 +43,7 @@
             <div class="portlet-body">
 				<div class="portlet light ">
                         <div class="portlet-title"><!--  ng-if="inOrOut.indexOf('in')>-1"   ng-if="inOrOut.indexOf('out')>-1"  -->
-                            <div class="caption"><span ng-if="inOrOut.indexOf('in')>-1" >入库检验</span><span  ng-if="inOrOut.indexOf('out')>-1">出库检验</span></div>    
+                            <div class="caption"><span ng-if="inOrOut.indexOf('in')>-1&&inOrOut.indexOf('check')<0" >入库检验</span><span  ng-if="inOrOut.indexOf('out')>-1&&inOrOut.indexOf('check')<0">出库检验</span><span ng-if="inOrOut.indexOf('checkin')>-1" >入库检验确认</span><span  ng-if="inOrOut.indexOf('checkout')>-1">出库检验确认</span></div>    
                             <div class="actions">
                                 <button  ng-show="stockInOutCheckView"     ng-if="inOrOut.indexOf('in')>-1&&inOrOut.indexOf('check')<0"  class="btn purple  btn-sm btn-circle " ng-click="editStockInOutCheck()">
                                             <i class="fa fa-edit"></i> 编辑 </button>
@@ -51,6 +51,10 @@
                                             <i class="fa fa-undo"></i> 取消 </button>
                                             <button   ng-hide="stockInOutCheckEdit"    ng-if="inOrOut.length<=3&&inOrOut.indexOf('check')<0"   class="btn red  btn-sm btn-circle " ui-sref="stockInOutCheck">
                                             <i class="fa fa-undo"></i> 取消 </button>
+                                            <button   type="submit"  ng-if="inOrOut.indexOf('checkin')>-1&&stockInOutCheck.status==0"  class="btn green  btn-sm btn-circle "   ng-click="confirmStockInOutCheck('checkin')">
+                                            <i class="fa fa-save"></i> 确认检验 </button>
+                                             <button    type="submit"  ng-if="inOrOut.indexOf('checkout')>-1&&stockInOutCheck.status==0"  class="btn green  btn-sm btn-circle "   ng-click="confirmStockInOutCheck('checkout')">
+                                            <i class="fa fa-save"></i> 确认检验 </button>
                                 <button  ng-hide="stockInOutCheckAdd"   type="submit"  ng-if="inOrOut.indexOf('check')<0"  class="btn green  btn-sm btn-circle "   ng-click="saveStockInOutCheck()">
                                             <i class="fa fa-save"></i> 保存 </button>
                                            
