@@ -189,7 +189,7 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="makerDate">制单日期 <span class="required"> * </span></label>
                                                     <div class="">
-                                                        <input type="text" class="form-control  date-picker" size="16"  data-date-format="yyyy-mm-dd" data-date-viewmode="years"
+                                                        <input type="text" class="form-control  date-picker" size="16"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" 
                                                          id="makeDate"  name="makeDate" ng-model="deliver.makeDate" ng-hide="deliverAdd" readonly="readonly">
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.makeDate}}</p>
@@ -326,9 +326,9 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="packageCount">包装件数  <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="packageCount">包装件数 </label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="packageCount"  name="packageCount" ng-model="deliver.packageCount" ng-hide="deliverAdd" >
+                                                        <input type="text" class="form-control" id="packageCount"   ng-model="deliver.packageCount" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.packageCount}}</p>
                                                     </div>
@@ -337,9 +337,9 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="packageType">包装类型 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="packageType">包装类型 </label>
                                                     <div class="">
-                                                     	<select class="form-control" id="packageType"  name="packageType" ng-model="deliver.packageType" ng-hide="deliverAdd" >
+                                                     	<select class="form-control" id="packageType"   ng-model="deliver.packageType" ng-hide="deliverAdd" >
 	                                                    	<option value=""></option>
 	                                                    	<option value="原厂包装">原厂包装</option>
 	                                                    	<option value="供应商包装">供应商包装</option>
@@ -394,9 +394,9 @@
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="deliverer">发货人 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="deliverer">联系人 </label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="deliverer" name="deliverer" ng-model="deliver.deliverer" ng-hide="deliverAdd" >
+                                                        <input type="text" class="form-control" id="deliverer"  ng-model="deliver.deliverer" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.deliverer}}</p>
                                                     </div>
@@ -406,7 +406,7 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="dContactNum">联系电话 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="dContactNum">联系电话 </label>
                                                     <div class="">
                                                         <input type="text" class="form-control" id="dContactNum"  name="dContactNum" ng-model="deliver.contactNum" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
@@ -452,9 +452,9 @@
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="transportType">运输方式 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="transportType">运输方式</label>
                                                     <div class="">
-	                                                    <select class="bs-select form-control order" id="transportType" name="transportType" ng-model="deliverTransport.transportType" ng-hide="deliverAdd">
+	                                                    <select class="bs-select form-control order" id="transportType" ng-model="deliverTransport.transportType" ng-hide="deliverAdd">
 	                                                    	<option value=""></option>
 	                                                    	<option value="水路运输">水路运输</option>
 	                                                    	<option value="铁路运输">铁路运输</option>
@@ -496,9 +496,9 @@
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="dtContact">联系人<span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="dtContact">联系人</label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="dtContact" name="dtContact" ng-model="deliverTransport.contact" ng-hide="deliverAdd" >
+                                                        <input type="text" class="form-control" id="dtContact" ng-model="deliverTransport.contact" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliverTransport.contact}}</p>
                                                     </div>
@@ -508,7 +508,7 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="dtContactNum">联系电话<span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="dtContactNum">联系电话</label>
                                                     <div class="">
                                                         <input type="text" class="form-control" id="dtContactNum"  name="dtContactNum" ng-model="deliverTransport.contactNum" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
@@ -580,9 +580,9 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="takeDeliverDate">预计到货日期 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="takeDeliverDate">预计到货日期 </label>
                                                     <div class="">
-                                                        <input type="text" class="form-control date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="takeDeliverDate"  name="takeDeliverDate" ng-model="takeDeliver.takeDeliverDate" ng-hide="deliverAdd" readonly="readonly">
+                                                        <input type="text" class="form-control date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="takeDeliverDate"  ng-model="takeDeliver.takeDeliverDate" ng-hide="deliverAdd" readonly="readonly">
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{takeDeliver.takeDeliverDate}}</p>
                                                     </div>
@@ -594,9 +594,9 @@
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="tdReceiver">收货人 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="tdReceiver">联系人 </label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="tdReceiver" name="tdReceiver" ng-model="takeDeliver.receiver" ng-hide="deliverAdd" >
+                                                        <input type="text" class="form-control" id="tdReceiver"  ng-model="takeDeliver.receiver" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{takeDeliver.receiver}}</p>
                                                     </div>
@@ -606,7 +606,7 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="tdContactNum">联系电话 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="tdContactNum">联系电话 </label>
                                                     <div class="">
                                                         <input type="text" class="form-control" id="tdContactNum"  name="tdContactNum" ng-model="takeDeliver.contactNum" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
@@ -676,7 +676,7 @@
 									</tr>
 								</thead>
 								<tbody > 
-									<tr ng-repeat="materiel in orderMateriels track by $index" repeat-done="repeatDone(this)">
+									<tr ng-repeat="materiel in orderMateriels track by materiel.serialNum" repeat-done="repeatDone(this)">
 										<td><span class="help-block"></span>{{materiel.materiel.materielNum}}</td>
 										<td><span class="help-block"></span>{{materiel.materiel.materielName}}</td>
 										<td><span class="help-block"></span>{{materiel.materiel.specifications}}</td>
@@ -704,7 +704,7 @@
 										</td>
 										<td><span class="help-block"></span>{{materiel.amount}}</td>
 										<td class="form-group">
-                                                 <input type="text" class="form-control" id="deliverCount{{$index}}" name="deliverCount" data-ordercount="{{materiel.amount}}"  ng-model="materiel.deliverCount" ng-hide="deliverAdd" >
+                                                 <input type="text" class="form-control" id="deliverCount{{$index}}" name="deliverCount" data-ordercount="{{materiel.amount}}"   ng-model="materiel.deliverCount" ng-hide="deliverAdd" >
                                                  <div class="form-control-focus"> </div>
 										</td>
 										<td class="form-group">

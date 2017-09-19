@@ -581,7 +581,19 @@ public class CompanyController {
     	return companyService.selectCompanyByComType(ComType.SUPPLIER.getValue(), searchKey);
     }
     
-	
+    /**
+     * @Description (获取当前登录人信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping("getCurrentUser")
+    @ResponseBody
+    public User getCurrentUser(HttpServletRequest request) {
+    		User user =	UserUtil.getUserFromSession();
+    		
+    		return user;
+    }
+
 
 }
 
