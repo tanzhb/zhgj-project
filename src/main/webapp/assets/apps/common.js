@@ -524,3 +524,30 @@ function graphTrace(id, ctx) {
     
 
 }
+
+
+
+//当页面中追加元素时，若元素中含有angularjs元素，则需要compile才能生效
+angular.module('MetronicApp')
+.directive('compile', function ($compile) {
+    return function (scope, element, attrs) {
+        scope.$watch(
+          function (scope) {
+               
+              return scope.$eval(attrs.compile);
+          },
+          function (value) {
+              element.html(value);
+              $compile(element.contents())(scope);
+          }
+        );
+    };
+});
+
+
+/*根据页面不同，导航栏做相应变动*/
+function initPageBar($rootScope, path){
+	if(path == 'addPay'){
+		$("#loadPageBar").innerHTML = "<li><a ui-sref='paymentRecordC'>付款</a> <i class='fa fa-angle-right'></i></li><li><a>新增付款1</a></li>";
+	}
+}

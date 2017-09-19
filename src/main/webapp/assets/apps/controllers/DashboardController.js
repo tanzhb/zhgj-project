@@ -1,20 +1,5 @@
 var dashModule  = angular.module('MetronicApp');
-//当页面中追加元素时，若元素中含有angularjs元素，则需要compile才能生效
-angular.module('MetronicApp')
-.directive('compile', function ($compile) {
-    return function (scope, element, attrs) {
-        scope.$watch(
-          function (scope) {
-               
-              return scope.$eval(attrs.compile);
-          },
-          function (value) {
-              element.html(value);
-              $compile(element.contents())(scope);
-          }
-        );
-    };
-});
+
 
 dashModule.controller('DashboardController', function($rootScope, $scope, $state, $http, $timeout) {
     $scope.$on('$viewContentLoaded', function() {   
