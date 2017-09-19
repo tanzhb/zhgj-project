@@ -178,41 +178,6 @@
 
 										</div>
 									</div>
-									<!--/span-->
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
-												class="required" aria-required="true"> * </span>审批人:</label>
-											<div class="col-md-9">
-												<!-- <input type="text" class="form-control" name="approval"
-													ng-model="delivery.approval" ng-show="input" /> -->
-												<p class="form-control-static" ng-show="input">
-													{{deliveryDetail.approval}}</p>
-												<div class="form-control-focus"></div>
-												<span class="help-block">请选择审批人</span>
-											</div>
-										</div>
-									</div>
-									<!--/span-->
-								</div>
-								<div class="row">
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
-												class="required" aria-required="true"> * </span>审批日期:</label>
-											<div class="col-md-9">
-												<!-- <input type="text" id="approvalDate"
-													data-date-format="yyyy-mm-dd" name="approvalDate"
-													ng-show="input" data-date-viewmode="years" size="16"
-													ng-model="delivery.approvalDate" class="form-control" /> -->
-												<div class="form-control-focus"></div>
-												<span class="help-block">请选择审批日期</span>
-												<p class="form-control-static" ng-show="input">
-													{{deliveryDetail.approvalDate}}</p>
-											</div>
-										</div>
-									</div>
-									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
 											<label class="control-label col-md-3">备注:</label>
@@ -228,7 +193,6 @@
 									</div>
 									<!--/span-->
 								</div>
-								<!--/row-->
 							</div>
 						</div>
 
@@ -503,34 +467,15 @@
 											</div>
 										</div>
 									</div>
-									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
 											<label class="control-label col-md-3"><span
-												class="required" aria-required="true"> * </span>港口:</label>
-											<div class="col-md-9">
-												<!-- <input type="text" class="form-control" name="port"
-													ng-model="deliveryTransport.port" ng-show="input" /> -->
-												<div class="form-control-focus"></div>
-												<span class="help-block">请输入港口</span>
-												<p class="form-control-static" ng-show="input">
-													{{deliveryDetail.port}}</p>
-											</div>
-										</div>
-									</div>
-									<!--/span-->
-								</div>
-								<!--/row-->
-								<div class="row">
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
-												class="required" aria-required="true"> * </span>船号:</label>
+												class="required" aria-required="true"> * </span>运单号:</label>
 											<div class="col-md-9">
 												<!-- <input type="text" class="form-control" name="shipNumber"
 													ng-model="deliveryTransport.shipNumber" ng-show="input" /> -->
 												<div class="form-control-focus"></div>
-												<span class="help-block">请输入船号</span>
+												<span class="help-block">请输入运单号</span>
 												<p class="form-control-static" ng-show="input">
 													{{deliveryDetail.shipNumber}}</p>
 											</div>
@@ -538,45 +483,7 @@
 										</div>
 									</div>
 									<!--/span-->
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
-												class="required" aria-required="true"> * </span>预计到港日期:</label>
-											<div class="col-md-9">
-												<!-- <input type="text" class="form-control"
-													data-date-format="yyyy-mm-dd" ng-show="input"
-													data-date-viewmode="years" size="16" name="playArrivalDate"
-													id="playArrivalDate"
-													ng-model="deliveryTransport.playArrivalDate" /> -->
-												<div class="form-control-focus"></div>
-												<span class="help-block">请选择预计到港日期</span>
-												<p class="form-control-static" ng-show="input">
-													{{deliveryDetail.playArrivalDate}}</p>
-											</div>
-
-										</div>
-									</div>
-									<!--/span-->
-									<div class="col-md-4">
-										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
-												class="required" aria-required="true"> * </span>预计到库日期:</label>
-											<div class="col-md-9">
-												<!-- <input type="text" class="form-control"
-													data-date-format="yyyy-mm-dd" data-date-viewmode="years"
-													ng-show="input" size="16" name="playWarehouseDate"
-													id="playWarehouseDate"
-													ng-model="deliveryTransport.playWarehouseDate" /> -->
-												<div class="form-control-focus"></div>
-												<span class="help-block">请选择预计到库日期</span>
-												<p class="form-control-static" ng-show="input">
-													{{deliveryDetail.playWarehouseDate}}</p>
-											</div>
-										</div>
-									</div>
-									<!--/span-->
 								</div>
-								<!--/row-->
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">

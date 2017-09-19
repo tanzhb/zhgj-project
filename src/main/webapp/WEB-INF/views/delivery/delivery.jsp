@@ -37,7 +37,7 @@
 									class="caption-subject font-green bold uppercase">发货列表</span>
 							</div>
 							<div class="actions" ng-controller='MyCtrl'>
-									<label class="btn btn-transparent yellow btn-circle btn-sm" ng-click="jumpToApplyPay()"><i class="glyphicon glyphicon-play"></i> 申请</label>
+									<!-- <label class="btn btn-transparent yellow btn-circle btn-sm" ng-click="jumpToApplyPay()"><i class="glyphicon glyphicon-play"></i> 申请</label> -->
 									
 									<label class="btn btn-transparent green btn-circle btn-sm"
 									ng-click="jumpToUrl('addDelivery')"> <i
@@ -81,14 +81,14 @@
 
 						<div class="portlet-body">
 							<div class="tabbable-custom ">
-								<ul class="nav nav-tabs " id="accountPayableTab">
+								<!-- <ul class="nav nav-tabs " id="accountPayableTab">
 									<li class="active"><a href="#apply" data-toggle="tab"
 										ng-click="toApply()"> 待申请 </a></li>
 									<li><a href="#daiban" data-toggle="tab"
 										ng-click="toDaiban()"> 待办流程 </a></li>
 									<li><a href="#yiban" data-toggle="tab"
 										ng-click="toYiban()"> 已办流程 </a></li>
-								</ul>
+								</ul> -->
 								<div class="tab-content">
 									<div class="tab-pane active" id="apply">
 										<table

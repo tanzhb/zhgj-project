@@ -1,245 +1,257 @@
-<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!-- BEGIN PAGE HEADER-->
+
 <div class="page-bar">
 	<ul class="page-breadcrumb">
-		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i class="fa fa-angle-right"></i></li>
-		<li><a ui-sref="userContract">基础数据</a><i class="fa fa-angle-right"></i></li>
-		<li><a ui-sref="userContract">合同信息</a></li>
+		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
+			class="fa fa-angle-right"></i></li>
+		<li><a ui-sref="userContract">合同</a> <i class="fa fa-angle-right"></i>
+		</li>
+		<li><a>新增合同</a></li>
 	</ul>
-</div>
-<div class="tab-pane" id="tab_1">
-	<div class="portlet box blue">
-		<div class="portlet-title">
-			<div class="caption">
-				<i class="fa fa-gift"></i>合同新增
-			</div>
-			<div class="tools">
-				<a href="javascript:;" class="collapse"> </a>
-			    <a href="javascript:;" class="reload"> </a> 
-			</div>
-		</div>
-		<div class="portlet-body form"  >
-			<!-- BEGIN FORM-->
-			<form class="horizontal-form" id="form_sample_1" enctype="multipart/form-data" name="myForm"  ng-submit="saveUserContract()">
-				<div class="form-body">
-					<h3 class="form-section">基本信息</h3>
-					<div class="row">
+	<div class="page-toolbar">
+		<div class="btn-group pull-right">
+			<button type="button"
+				class="btn btn-fit-height grey-salt dropdown-toggle"
+				onclick="printdiv('saleOrderPrint')">
+				<i class="fa fa-print"></i> 打印
+			</button>
 
-						<div class="form-group form-md-line-input col-md-6">
-						<label class="col-md-3 control-label" for="form_control_1">合同编号
-                            <span class="required">*</span>
-                        </label>
-                        
-							<div class="col-md-9">
-								<input type="text" class="form-control"
-									ng-model="contractVO.contractNum" placeholder="合同编号" id="contractNum" name="contractNum"/>
-								<div class="form-control-focus"></div>
-								<span class="help-block">合同编号</span>
-							</div>
-						</div>
-
-						<div class="form-group form-md-line-input col-md-6">
-						<label class="col-md-3 control-label" for="form_control_1">合同类型
-                            <span class="required">*</span>
-                        </label>
-                        
-                          <div class="col-md-9">
-                              <select class="form-control" ng-model="contractVO.contractType" id="contractType" name="contractType">
-                                  <option value="">合同类型</option>
-                                  <option value="服务合同">服务合同</option>
-								  <option value="其他合同">其他合同</option>
-                              </select>
-                              <div class="form-control-focus"> </div>
-                              <span class="help-block">合同类型</span>
-                          </div>
-                      </div>
-					</div>
-					<!--/row-->
-					
-					<div class="row">
-						<div class="form-group form-md-line-input col-md-6">
-						<label class="col-md-3 control-label" for="form_control_1">甲方
-                            <span class="required">*</span>
-                        </label>
-							<div class="col-md-9">
-								<input type="text" class="form-control" placeholder="甲方"
-								  ng-model="contractVO.firstParty" name="firstParty"/>
-								<div class="form-control-focus"></div>
-								
-								<span class="help-block">甲方</span>
-							</div>
-						</div>
-						
-						<div class="form-group form-md-line-input col-md-6">
-						<label class="col-md-3 control-label" for="form_control_1">甲方签订人
-                            <span class="required">*</span>
-                        </label>
-							<div class="col-md-9">
-								<input type="text" class="form-control" placeholder="甲方签订人"
-								ng-model="contractVO.firstPartySigner" name="firstPartySigner"/>
-								<div class="form-control-focus"></div>
-								<span class="help-block">甲方签订人</span>
-							</div>
-						</div>
-					</div>
-					<!--/row-->
-					
-					
-					<div class="row">
-						<div class="form-group form-md-line-input col-md-6">
-						<label class="col-md-3 control-label" for="form_control_1">乙方
-                            <span class="required">*</span>
-                        </label>
-							<div class="col-md-9">
-								<input type="text" class="form-control" placeholder="乙方"
-								  ng-model="contractVO.secondParty" name="secondParty"/>
-								<div class="form-control-focus"></div>
-								
-								<span class="help-block">乙方</span>
-							</div>
-						</div>
-						
-						<div class="form-group form-md-line-input col-md-6">
-						<label class="col-md-3 control-label" for="form_control_1">乙方签订人
-                            <span class="required">*</span>
-                        </label>
-							<div class="col-md-9">
-								<input type="text" class="form-control" placeholder="乙方签订人"
-								ng-model="contractVO.secondPartySigner" name="secondPartySigner"/>
-								<div class="form-control-focus"></div>
-								<span class="help-block">乙方签订人</span>
-							</div>
-						</div>
-					</div>
-					<!--/row-->
-					
-					<div class="row">
-						<div class="form-group form-md-line-input col-md-6">
-						<label class="col-md-3 control-label" for="form_control_1">签订日期
-                            <span class="required">*</span>
-                        </label>
-							<div class="col-md-9">
-								<input type="text" class="form-control"
-								ng-model="contractVO.signDate" id="signDate" placeholder="签订日期" data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" name="signDate"/>
-													
-								<div class="form-control-focus"></div>
-								<span class="help-block">签订日期</span>
-							</div>
-						</div>
-						
-						<div class="form-group form-md-line-input col-md-6">
-						<label class="col-md-3 control-label" for="form_control_1">签订地点
-                            <span class="required">*</span>
-                        </label>
-							<div class="col-md-9">
-								<input type="text" class="form-control" name="signerAddress" placeholder="签订地点"
-								 ng-model="contractVO.signerAddress"/>
-								<div class="form-control-focus"></div>
-								
-								<span class="help-block">签订地点</span>
-							</div>
-						</div>
-					</div>
-					<!--/row-->
-					
-					<div class="row">
-						<div class="form-group form-md-line-input col-md-6">
-						<label class="col-md-3 control-label" for="form_control_1">开始日期
-                            <span class="required">*</span>
-                        </label>
-							<div class="col-md-9">
-								<input type="text" class="form-control date-picker"
-									 ng-model="contractVO.startDate" placeholder="开始日期" id="startDate"data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" name="startDate"/>
-								<div class="form-control-focus"></div>
-								
-								<span class="help-block">开始日期</span>
-							</div>
-						</div>
-						
-						<div class="form-group form-md-line-input col-md-6">
-						<label class="col-md-3 control-label" for="form_control_1">结束日期
-                            <span class="required">*</span>
-                        </label>
-							<div class="col-md-9">
-								<input type="text" class="form-control"
-									 ng-model="contractVO.endDate" id="endDate" placeholder="结束日期" data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" name="endDate"/>
-								<div class="form-control-focus"></div>
-								<span class="help-block">结束日期</span>
-							</div>
-						</div>
-					</div>
-					<!--/row-->
-					
-					<div class="row">
-					<div class="form-group form-md-line-input col-md-6">
-						<label class="col-md-3 control-label" for="form_control_1">对方合同号
-						<span class="required">*</span>
-                        </label>
-							<div class="col-md-9">
-								<input type="text" class="form-control"
-									ng-model="contractVO.otherPartyContractNum" id="otherPartyContractNum" name="otherPartyContractNum" placeholder="对方合同号"/>
-								<div class="form-control-focus"></div>
-								<span class="help-block">对方合同号</span>
-							</div>
-						</div>
-						
-						<div class="form-group form-md-line-input col-md-6">
-						<label class="col-md-3 control-label" for="form_control_1">备注
-                        </label>
-							<div class="col-md-9">
-								<input type="text" class="form-control"
-									ng-model="contractVO.remark" id="remark" placeholder="备注"/>
-								<div class="form-control-focus"></div>
-								<span class="help-block">备注</span>
-							</div>
-						</div>
-					</div>
-<!-- <img alt="" src="http://localhost:8080/zhgj-web/uploadAttachFiles/DD35839D47A74215935094E5FA9D4729.jpg"> -->
-
-
-					<div class="row">
-						<div class="form-group form-md-line-input col-md-6">
-							<label class="col-md-3 control-label" for="form_control_1">电子合同
-								<span class="required">*</span>
-							</label>
-							<div class="col-md-9">
-								<input type="file" id="electric"  ng-model="files" name="files"
-									class="form-control" /> 
-									<div class="form-control-focus"></div>
-								<span class="help-block">电子合同</span>
-							</div>
-						</div>
-
-						<div class="form-group form-md-line-input col-md-6">
-							<label class="col-md-3 control-label" for="form_control_1">签字合同
-								<span class="required">*</span>
-							</label>
-							<div class="col-md-9">
-									<input type="file" id="signContract" ng-model="file" name="file"
-									class="form-control" /> 
-								<div class="form-control-focus"></div>
-								<span class="help-block">签字合同</span>
-							</div>
-						</div>
-					</div>
-
-					<div class="form-actions right">
-					<button type="button" ng-click="goback()" class="btn default"><i class="fa fa-reply"></i>取消</button>
-					<button type="submit"  class="btn blue"><i class="fa fa-check"></i> 保存</button>
-				</div>
-				
-			</form>
-			<!-- END FORM-->
 		</div>
 	</div>
 </div>
-<!-- END MAIN CONTENT -->
-<!-- BEGIN MAIN JS -->
+<div class="row" id="saleOrderPrint">
+	<div class="col-md-12">
+		<!-- BEGIN EXAMPLE TABLE PORTLET-->
+		<div class="portlet bordered">
+			<div class="portlet-body">
+				<form action="#" id="form_sample_1" class="">
+					<div class="portlet light ">
+						<ul class="nav nav-tabs">
+							<li class="dropdown pull-right tabdrop">
+								<button type="button" ng-click="goback()" class="btn default"><i class="fa fa-reply"></i>取消</button>
+					            <button type="button" ng-click="saveUserContract()"  class="btn blue"><i class="fa fa-check"></i> 保存</button>
+							</li>
+							<li class="active bold"><a data-target="#tab_1_1"
+								data-toggle="tab">基本信息</a></li>
+						</ul>
+						<div class="tab-content">
+							<div class="tab-pane fade active in" id="tab_1_1">
+								<div class="portlet-body form">
+									<!-- BEGIN FORM-->
+									<div class="form-body">
+										<div class="alert alert-danger display-hide">
+											<button class="close" data-close="alert"></button>
+											请先输入正确数据！
+										</div>
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="control-label bold">合同编号<span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="text" id="contractNum" name="contractNum" class="form-control"
+															ng-model="contractVO.contractNum"/>
+														<div class="form-control-focus"></div>
+													</div>
+												</div>
+											</div>
+											<!--/span-->
+
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="control-label bold">合同类型<span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<select class="form-control" ng-model="contractVO.contractType" id="contractType" name="contractType">
+															<option value="">合同类型</option>
+                                                            <option value="服务合同">服务合同</option>
+								                            <option value="其他合同">其他合同</option>
+														</select>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!--/row-->
+										
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="control-label bold">甲方<span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="text" id="firstParty" name="firstParty" class="form-control"
+															ng-model="contractVO.firstParty"/>
+														<div class="form-control-focus"></div>
+													</div>
+												</div>
+											</div>
+											<!--/span-->
+
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="control-label bold">甲方签订人<span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="text" class="form-control" placeholder="甲方签订人"
+								                        ng-model="contractVO.firstPartySigner" name="firstPartySigner"/>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!--/row-->
+										
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="control-label bold">乙方<span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="text" class="form-control" placeholder="乙方"
+								  ng-model="contractVO.secondParty" name="secondParty"/>
+														<div class="form-control-focus"></div>
+													</div>
+												</div>
+											</div>
+											<!--/span-->
+
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="control-label bold">乙方签订人<span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="text" class="form-control" placeholder="乙方签订人"
+								ng-model="contractVO.secondPartySigner" name="secondPartySigner"/>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!--/row-->
+										
+										
+										
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="control-label bold">签订日期<span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="text" class="form-control"
+								ng-model="contractVO.signDate" id="signDate" placeholder="签订日期" data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" name="signDate"/>
+														<div class="form-control-focus"></div>
+													</div>
+												</div>
+											</div>
+											<!--/span-->
+
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="control-label bold">签订地点<span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="text" class="form-control" name="signerAddress" placeholder="签订地点"
+								 ng-model="contractVO.signerAddress"/>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!--/row-->
+										
+										
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="control-label bold">开始日期<span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="text" class="form-control date-picker"
+									 ng-model="contractVO.startDate" placeholder="开始日期" id="startDate"data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" name="startDate"/>
+														<div class="form-control-focus"></div>
+													</div>
+												</div>
+											</div>
+											<!--/span-->
+
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="control-label bold">结束日期<span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="text" class="form-control"
+									 ng-model="contractVO.endDate" id="endDate" placeholder="结束日期" data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" name="endDate"/>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!--/row-->
+										
+										
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="control-label bold">对方合同号<span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="text" class="form-control"
+									ng-model="contractVO.otherPartyContractNum" id="otherPartyContractNum" name="otherPartyContractNum" placeholder="对方合同号"/>
+														<div class="form-control-focus"></div>
+													</div>
+												</div>
+											</div>
+											<!--/span-->
+
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="control-label bold">备注<span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="text" class="form-control"
+									ng-model="contractVO.remark" id="remark" placeholder="备注"/>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!--/row-->
+										
+										
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="control-label bold">电子合同<span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="file" id="electric"  ng-model="files" name="files"
+									            class="form-control" /> 
+														<div class="form-control-focus"></div>
+													</div>
+												</div>
+											</div>
+											<!--/span-->
+
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="control-label bold">签字合同<span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="file" id="signContract" ng-model="file" name="file"
+									class="form-control" /> 
+													</div>
+												</div>
+											</div>
+										</div>
+										<!--/row-->
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
  <script>
 
        $('#signDate').datepicker({
@@ -299,4 +311,3 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         		}
     		}); 
 </script> 
-<!-- END MAIN JS -->
