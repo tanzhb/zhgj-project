@@ -320,7 +320,7 @@
 	LEFT JOIN delivery f ON a.deliverSerial=f.serialNum
 	</if>
 	<if test="null!=#{takeDeliverSerial}">
-	LEFT JOIN takedelivery td ON a.deliverSerial=td.serialNum
+	LEFT JOIN takeDelivery td ON a.deliverSerial=td.serialNum
 	</if>
 	WHERE a.deliverSerial=#{serialNum}
     </select></mapper>

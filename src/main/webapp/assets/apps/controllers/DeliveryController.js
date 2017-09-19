@@ -606,7 +606,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	                pageLength: 5,//每页显示数量
 	                processing: true,//loading等待框
 //	                serverSide: true,
-	                ajax:"rest/order/findOrderList?type=buy&selectFor=delivery&fram=1",//加载数据中
+	                ajax:"rest/order/findOrderList?type=supply&selectFor=delivery",//加载数据中
 	                "aoColumns": [
 	                              { mData: 'serialNum' },
 	                              { mData: 'orderNum' },
