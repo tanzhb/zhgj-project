@@ -2288,7 +2288,7 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', funct
 			   }else if('stockInOutCheck' == toState.name){//出入库检验
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a>检验列表</a></li>";					 
+				 		"<li><a  ui-sref='stockInOutCheck'>检验</a></li>";					 
 			   }else if('statement' == toState.name){//对账单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>对账单</a></li>";					 
@@ -2381,6 +2381,35 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', funct
 					   if(toParams.inOrOut.indexOf('in') >= 0){
 						   html += "<li><a>查看进项票</a></li>";
 					   }else html += "<li><a>查看销项票</a></li>";
+				   }
+			   }else if('addOrEditStockInOutCheck' == toState.name){//新增修改检验                  
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a  ui-sref='stockInOutCheck'>检验</a><i class='fa fa-angle-right'></i></li>";		
+				   if(toParams.inOrOut == 'in'){
+					   html += "<li><a>新增入库检验</a></li>";
+				   }else if(toParams.inOrOut.length > 4){
+					   if(toParams.inOrOut.indexOf('in') >= 0){
+						   html += "<li><a>修改入库检验</a></li>";
+					   }else html += "<li><a>修改出库检验</a></li>";
+				   } else html += "<li><a>新增出库检验</a></li>";
+			   }else if('stockInOutCheckView' == toState.name){//查看检验   
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a  ui-sref='stockInOutCheck'>检验</a><i class='fa fa-angle-right'></i></li>";		
+				   if(toParams.inOrOut.length > 4){
+					   if(toParams.inOrOut.indexOf('in') >= 0){
+						   html += "<li><a>查看入库检验</a></li>";
+					   }else html += "<li><a>查看出库检验</a></li>";
+				   }
+			   }else if('confirmStockInOutCheck' == toState.name){//查看检验   
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a  ui-sref='stockInOutCheck'>检验</a><i class='fa fa-angle-right'></i></li>";		
+				   if(toParams.inOrOut.length > 4){
+					   if(toParams.inOrOut.indexOf('in') >= 0){
+						   html += "<li><a>入库检验确认</a></li>";
+					   }else html += "<li><a>出库检验确认</a></li>";
 				   }
 			   }
 			   angular.element("#dashboard").empty();
