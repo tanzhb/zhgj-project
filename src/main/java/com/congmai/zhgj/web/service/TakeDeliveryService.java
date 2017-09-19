@@ -73,7 +73,7 @@ public interface TakeDeliveryService extends GenericService<TakeDelivery, String
 	void confirmTakeDelivery(TakeDeliveryParams takeDeliveryParams,
 			String currenLoginName);
 
-	TakeDeliveryVO selectDetailById(String deliverSerial);
+	
 	
 		
 

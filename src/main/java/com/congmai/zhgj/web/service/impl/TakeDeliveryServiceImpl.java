@@ -37,6 +37,7 @@ import com.congmai.zhgj.web.model.TakeDeliveryExample;
 import com.congmai.zhgj.web.model.TakeDeliveryParams;
 import com.congmai.zhgj.web.model.TakeDeliverySelectExample;
 import com.congmai.zhgj.web.model.TakeDeliverySelectExample.Criteria;
+import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.service.TakeDeliveryService;
 
 @Service
@@ -510,6 +511,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		check.setUpdateTime(new Date());
 		stockInOutCheckMapper.insert(check);
 	}
+
 	
 
 }

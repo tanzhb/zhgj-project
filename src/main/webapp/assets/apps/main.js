@@ -181,7 +181,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                                 	'assets/apps/controllers/PriceListController.js',
                                 	'assets/apps/scripts/angular-file-upload-shim.min.js',
                                 	'assets/apps/scripts/angular-file-upload.min.js',
-                                	 'assets/global/plugins/bootbox/bootbox.min.js'
+                                	 'assets/global/plugins/bootbox/bootbox.min.js',
+                                	  'assets/apps/service/orderService.js'
                         ]
                     });
                 }]
@@ -211,7 +212,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
     				        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
     				        'assets/apps/scripts/angular-file-upload-shim.min.js',
     				        'assets/apps/scripts/angular-file-upload.min.js',
-    				        'assets/apps/scripts/FileUploader.js'
+    				        'assets/apps/scripts/FileUploader.js',
+    				        'assets/apps/service/orderService.js'
                         ]
                     });
                 }]
