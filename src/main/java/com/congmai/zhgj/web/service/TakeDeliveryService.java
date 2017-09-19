@@ -70,7 +70,7 @@ public interface TakeDeliveryService extends GenericService<TakeDelivery, String
 	 * @param currenLoginName
 	 */
 	void confirmTakeDelivery(TakeDeliveryParams takeDeliveryParams,
-			String currenLoginName);
+			String currenLoginName)throws Exception;
 	
 		
 

@@ -162,7 +162,7 @@
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="operator">发货方 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="operator">发货方 </label>
                                                     <div class="">
                                                        <input type="text" class="form-control" value="{{shipperOrReceiverName}}" disabled="disabled">
                                                     </div>
@@ -256,7 +256,7 @@
 									</tr>
 								</thead>
 								<tbody data-repeater-list="group-a"> 
-									<tr data-repeater-item ng-repeat="materiel in takeDeliveryMateriels track by $index" >
+									<tr data-repeater-item ng-repeat="materiel in takeDeliveryMateriels track by materiel.serialNum" repeat-done="setDefualtNum(this)">
 										<td>{{materiel.orderMateriel.materiel.materielNum}}</td>
 										<td>{{materiel.orderMateriel.materiel.materielName}}</td>
 										<td>{{materiel.orderMateriel.materiel.specifications}}</td>
@@ -277,7 +277,11 @@
 										</td>
 										<td>
 											<div class="col-md-12 form-group">
-                                                <select class="bs-select form-control order" data-live-search="true"  id="warehouseSerial" ng-init="warehouses[0].serialNum" ng-change="getPositions(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
+                                                <select ng-if="$first" class="bs-select form-control order" data-live-search="true"  id="warehouseSerial" ng-init="warehouses[0].serialNum" ng-change="getPositionsAndSelectedAll(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
+	                                                 <!--  <option value=""></option> -->
+	                                                  <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
+	                                            </select>
+	                                            <select ng-if="!$first" aaa class="bs-select form-control warehouseSerial" data-live-search="true"  id="warehouseSerial{$index}" ng-init="warehouses[0].serialNum" ng-change="getPositions(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
 	                                                 <!--  <option value=""></option> -->
 	                                                  <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
 	                                            </select>

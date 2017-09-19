@@ -102,6 +102,18 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 				});
 			}
 			 
+			 $scope.getPositionsAndSelectedAll =function(materiel){
+				 $scope.getPositions(materiel);
+				 //$(".warehouseSerial").val(materiel.warehouseSerial);
+				 
+				 for(var i in $scope.takeDeliveryMateriels){debugger;
+					 if(i>0){
+						 $scope.takeDeliveryMateriels[i].warehouseSerial = materiel.warehouseSerial;
+						 $scope.getPositions($scope.takeDeliveryMateriels[i]);
+					 }
+				 }
+			 }
+			 
 			 /**
 			  * 计算库位
 			  */
@@ -142,7 +154,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
         			$scope.takeDeliveryMateriels = data.data;
         			countWarehouseAndPosition();
         			//$scope.deliver.materielCount = data.orderMateriel.length;
-        			if($location.path()=="/stockInAdd"){ //入库编辑时
+        			if($location.path()=="/stockInAdd"&&!isNull($scope.record)&&!isNull($scope.record.serialNum)){ //入库编辑时
         				for(var i in data.data){
             				$scope.getPositions(data.data[i]);
             			}
@@ -533,6 +545,15 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 		            $scope.getSelectIndex = function(index){
 		            	$scope.index = index;
 		            }
+		            
+		            /**
+				     * 设置收货默认收货数量
+				     */
+				    $scope.setDefualtNum = function(scope){
+				    	//if(isNull($scope.deliver.serialNum)){
+			  				scope.materiel.stockCount = scope.materiel.acceptCount;
+			  			//}
+				    }
 	       
 
 }]); 

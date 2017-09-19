@@ -908,7 +908,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 							         'assets/global/css/easyui.css',
 							         'assets/global/css/datagrid.css',
 							         'assets/global/css/jquery.qtip.min.css',
-							         
+							         'assets/apps/service/CommonService.js',
 							         'assets/global/plugins/jquery.easyui.min.js',
 							         'assets/global/plugins/jquery.qtip.min.js',
 							         'assets/global/plugins/jquery.outerhtml.js',
@@ -932,6 +932,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/global/plugins/datatables/datatables.all.min.js',
 		    				        'assets/apps/controllers/TakeDeliveryController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js',
+		    				        'assets/apps/service/CommonService.js',
 		    				        'assets/apps/service/orderService.js'
 		    				        ]
 		    			});
@@ -952,6 +953,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/apps/controllers/TakeDeliveryController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js',
 		    				        'assets/apps/service/orderService.js',
+		    				        'assets/apps/service/CommonService.js',
 		    				        'assets/global/css/components-rounded.min.css'
 		    				        ]
 		    			});
@@ -971,7 +973,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				files: [       
 		    				        'assets/apps/controllers/TakeDeliveryController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js',
-		    				        'assets/apps/service/orderService.js'
+		    				        'assets/apps/service/orderService.js',
+		    				        'assets/apps/service/CommonService.js'
 		    				        ]
 		    			});
 		    		}]
@@ -979,7 +982,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    }) .state('takeDeliveryAudit', {
 		    	url: "/takeDeliveryAudit?:serialNum&:taskId&:comments",
 		    	templateUrl: "rest/takeDelivery/takeDeliveryAudit",
-		    	data: {pageTitle: '收货'},
+		    	data: {pageTitle: '收货审批'},
 		    	reload:true, 
 		    	controller: "TakeDeliveryController",
 		    	resolve: {
@@ -990,6 +993,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				files: [       
 		    				        'assets/apps/controllers/TakeDeliveryController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js',
+		    				        'assets/apps/service/CommonService.js',
 		    				        'assets/apps/service/orderService.js'
 		    				        ]
 		    			});
@@ -998,7 +1002,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    }) .state('takeDeliveryAdjustment', {
 		    	url: "/takeDeliveryAdjustment?:serialNum&:taskId&:comments",
 		    	templateUrl: "rest/takeDelivery/takeDeliveryAdjustment",
-		    	data: {pageTitle: '收货'},
+		    	data: {pageTitle: '收货调整'},
 		    	reload:true, 
 		    	controller: "TakeDeliveryController",
 		    	resolve: {
@@ -1009,6 +1013,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				files: [       
 		    				        'assets/apps/controllers/TakeDeliveryController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js',
+		    				        'assets/apps/service/CommonService.js',
 		    				        'assets/apps/service/orderService.js'
 		    				        ]
 		    			});

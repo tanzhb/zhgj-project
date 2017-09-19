@@ -163,7 +163,7 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="operator">收货方 <span class="required"> * </span></label>
                                                     <div class="">
-                                                       <input type="text" class="form-control" value="{{shipperOrReceiverName}}" disabled="disabled">
+                                                       <input type="text" class="form-control" value="{{record.shipperOrReceiver}}" disabled="disabled">
                                                     </div>
                                             </div>
 										</div>
