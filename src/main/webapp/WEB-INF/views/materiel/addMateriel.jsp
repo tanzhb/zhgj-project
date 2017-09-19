@@ -91,18 +91,6 @@
 				                      </div>
 				                      <!--/row-->
 				                      <div class="row">
-				                          <div class="col-md-6">
-				                              <div class="form-group ">
-				                                  <label class="control-label bold">物料种类<span class="required" aria-required="true"> * </span></label>
-				                                  <div clamd-9">
-				                                      <input type="text" name="type" ng-hide="materielInput" ng-model="materiel.type" class="form-control" >
-				                                      <div class="form-control-focus"> </div>
-				                                      <span class="help-block" ng-hide="materielInput">请选择物料种类</span>
-				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.type}} </p>
-				                                  </div>
-				
-				                              </div>
-				                          </div>
 				                          <!--/span-->
 				                          <div class="col-md-6">
 				                              <div class="form-group ">
@@ -117,38 +105,6 @@
 				                              </div>
 				                          </div>
 				                          <!--/span-->
-				                      </div>
-				                      <!--/row-->
-				                      <div class="row">
-				                          <div class="col-md-6">
-				                              <div class="form-group ">
-				                                  <label class="control-label bold">物料类别<span class="required" aria-required="true"> * </span></label>
-				                                  <div class="">
-				                                      <input type="text" name="category" ng-hide="materielInput" ng-model="materiel.category" class="form-control" >
-				                                  		<div class="form-control-focus"> </div>
-				                                      <span class="help-block" ng-hide="materielInput">请输入物料类别</span>
-				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.category}} </p>
-				                                  </div>
-				
-				                              </div>
-				                          </div>
-				                          <!--/span-->
-				                          <div class="col-md-6">
-				                              <div class="form-group ">
-				                                  <label class="control-label bold">单位</label>
-				                                  <div class="">
-				                                      <input type="text" class="form-control" ng-hide="materielInput" ng-model="materiel.unit" >
-				                                      <div class="form-control-focus"> </div>
-				                                      <span class="help-block" ng-hide="materielInput">请输入单位</span>
-				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.unit}} </p>
-				                                  </div>
-				
-				                              </div>
-				                          </div>
-				                          <!--/span-->
-				                      </div>
-				                      <!--/row-->
-				                      <div class="row">
 				                          <div class="col-md-6">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">规格型号<span class="required" aria-required="true"> * </span></label>
@@ -161,7 +117,96 @@
 				
 				                              </div>
 				                          </div>
+				                      </div>
+				                      <!--/row-->
+				                      <div class="row">
+				                      	<div class="col-md-6">
+				                              <div class="form-group ">
+				                                  <label class="control-label bold">物料大类<span class="required" aria-required="true"> * </span></label>
+				                                  <div class="">
+				                                      <select class="form-control" name="type" ng-hide="materielInput" ng-model="materiel.type" class="form-control"   >
+				                                              <option value="外购物料">外购物料</option>
+				                                             	<option value="委外加工" >委外加工</option>
+				                                               <option value="生产物料" >生产物料</option>
+				                                               <option value="成品物料" >成品物料</option>
+				                                             </select>
+				                                      <div class="form-control-focus"> </div>
+				                                      <span class="help-block" ng-hide="materielInput">请选择物料大类</span>
+				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.type}} </p>
+				                                  </div>
+				
+				                              </div>
+				                          </div>
+				                          <div class="col-md-6">
+				                              <div class="form-group ">
+				                                  <label class="control-label bold">一级分类<span class="required" aria-required="true"> * </span></label>
+				                                  <div class="">
+				                                      <input type="text" name="category" ng-hide="materielInput" ng-model="materiel.category1" class="form-control" >
+				                                  		<div class="form-control-focus"> </div>
+				                                      <span class="help-block" ng-hide="materielInput">请输入物料一级分类</span>
+				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.category1}} </p>
+				                                  </div>
+				
+				                              </div>
+				                          </div>
+				                      </div>
+				                      <!--/row-->
+				                      <div class="row">
+				                           <div class="col-md-6">
+				                              <div class="form-group ">
+				                                  <label class="control-label bold">二级分类</label>
+				                                  <div class="">
+				                                      <input type="text" name="category" ng-hide="materielInput" ng-model="materiel.category2" class="form-control" >
+				                                  		<div class="form-control-focus"> </div>
+				                                      <span class="help-block" ng-hide="materielInput">请输入物料二级分类</span>
+				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.category2}} </p>
+				                                  </div>
+				
+				                              </div>
+				                          </div>
+				                           <div class="col-md-6">
+				                              <div class="form-group ">
+				                                  <label class="control-label bold">三级分类</label>
+				                                  <div class="">
+				                                      <input type="text" name="category" ng-hide="materielInput" ng-model="materiel.category3" class="form-control" >
+				                                  		<div class="form-control-focus"> </div>
+				                                      <span class="help-block" ng-hide="materielInput">请输入物料三级分类</span>
+				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.category3}} </p>
+				                                  </div>
+				
+				                              </div>
+				                          </div>
 				                          <!--/span-->
+				                      </div>
+				                      <div class="row">
+				                      	<div class="col-md-6">
+				                              <div class="form-group ">
+				                                  <label class="control-label bold">物料属性</label>
+				                                  <div class="">
+				                                      <input type="text" class="form-control" ng-hide="materielInput" ng-model="materiel.materielAttribute" >
+				                                      <div class="form-control-focus"> </div>
+				                                      <span class="help-block" ng-hide="materielInput">请输入物料属性</span>
+				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.materielAttribute}} </p>
+				                                  </div>
+				
+				                              </div>
+				                          </div>
+				                      	<div class="col-md-6">
+				                              <div class="form-group ">
+				                                  <label class="control-label bold">单位</label>
+				                                  <div class="">
+				                                      <input type="text" class="form-control" ng-hide="materielInput" ng-model="materiel.unit" >
+				                                      <div class="form-control-focus"> </div>
+				                                      <span class="help-block" ng-hide="materielInput">请输入单位</span>
+				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.unit}} </p>
+				                                  </div>
+				
+				                              </div>
+				                          </div>
+				                      </div>
+				                     <!--  <div class="row">
+				                          
+				                          /span
 				                          <div class="col-md-6">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">产地</label>
@@ -174,37 +219,10 @@
 				
 				                              </div>
 				                          </div>
-				                          <!--/span-->
-				                      </div>
+				                          /span
+				                      </div> -->
 				                      <!--/row-->
 				                      <div class="row">
-				                          <div class="col-md-6">
-				                              <div class="form-group ">
-				                                  <label class="control-label bold">库存单位<span class="required" aria-required="true"> * </span></label>
-				                                  <div class="">
-				                                      <input type="text" name="stockUnit" ng-hide="materielInput" ng-model="materiel.stockUnit" class="form-control" >
-				                                  <div class="form-control-focus"> </div>
-				                                      <span class="help-block" ng-hide="materielInput">请输入库存单位</span>
-				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.stockUnit}} </p>
-												</div>
-				                              </div>
-				                          </div>
-				                          <!--/span-->
-				                          <div class="col-md-6">
-				                              <div class="form-group ">
-				                                  <label class="control-label bold">上级产品</label>
-				                                  <div class="">
-				                                      <input type="text" ng-hide="materielInput" readonly ng-click="selectMateriel('parent')" data-target="#basicMaterielInfo" data-toggle="modal" ng-model="materiel.parentMateriel.materielName" class="form-control" >
-				                                      <div class="form-control-focus"> </div>
-				                                       <span class="help-block" ng-hide="materielInput">请选择上级产品</span>
-				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.parentMateriel.materielName}} </p>
-				                                  </div>
-				                              </div>
-				                          </div>
-				                          <!--/span-->
-				                      </div>
-				                      <!--/row-->
-				                       <div class="row">
 				                          <div class="col-md-6">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">品牌</label>
@@ -231,6 +249,33 @@
 				                          </div>
 				                          <!--/span-->
 				                      </div>
+				                     <!--  <div class="row">
+				                          <div class="col-md-6">
+				                              <div class="form-group ">
+				                                  <label class="control-label bold">库存单位<span class="required" aria-required="true"> * </span></label>
+				                                  <div class="">
+				                                      <input type="text" name="stockUnit" ng-hide="materielInput" ng-model="materiel.stockUnit" class="form-control" >
+				                                  <div class="form-control-focus"> </div>
+				                                      <span class="help-block" ng-hide="materielInput">请输入库存单位</span>
+				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.stockUnit}} </p>
+				                              </div>
+				                          </div>
+				                          /span
+				                          <div class="col-md-6">
+				                              <div class="form-group ">
+				                                  <label class="control-label bold">上级产品</label>
+				                                  <div class="">
+				                                      <input type="text" ng-hide="materielInput" readonly ng-click="selectMateriel('parent')" data-target="#basicMaterielInfo" data-toggle="modal" ng-model="materiel.parentMateriel.materielName" class="form-control" >
+				                                      <div class="form-control-focus"> </div>
+				                                       <span class="help-block" ng-hide="materielInput">请选择上级产品</span>
+				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.parentMateriel.materielName}} </p>
+				                                  </div>
+				                              </div>
+				                          </div>
+				                          /span
+				                      </div> -->
+				                      <!--/row-->
+				                       
 				                      <!--/row-->
 				                       <div class="row">
 				                          <div class="col-md-6">
@@ -301,22 +346,6 @@
 				
 				                              </div>
 				                          </div>
-				                          <!--/span-->
-				                          <div class="col-md-6">
-				                              <div class="form-group ">
-				                                  <label class="control-label bold">一般交付周期<span class="required" aria-required="true"> * </span></label>
-				                                  <div class="">
-				                                      <input type="text" name="deliveryCycle" ng-hide="materielInput" ng-model="materiel.deliveryCycle" class="form-control" >
-				                                      <div class="form-control-focus"> </div>
-				                                      <span class="help-block" ng-hide="materielInput">请输入一般交付周期</span>
-				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.deliveryCycle}} </p>
-				                                  </div>
-				                              </div>
-				                          </div>
-				                          <!--/span-->
-				                      </div>
-				                      <!--/row-->
-				                      <div class="row">
 				                          <div class="col-md-6">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">单件体积</label>
@@ -325,6 +354,48 @@
 				                                      <div class="form-control-focus"> </div>
 				                                      <span class="help-block" ng-hide="materielInput">请输入单件体积</span>
 				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.volume}} </p>
+				                                  </div>
+				
+				                              </div>
+				                          </div>
+				                          <!--/span-->
+				                      </div>
+				                      <!--/row-->
+				                      <div class="row">
+				                          <div class="col-md-6">
+				                              <div class="form-group ">
+				                                  <label class="control-label bold">单件重量</label>
+				                                  <div class="">
+				                                      <input type="text" ng-hide="materielInput" ng-model="materiel.weight" class="form-control" >
+				                                      <div class="form-control-focus"> </div>
+				                                      <span class="help-block" ng-hide="materielInput">请输入单件重量</span>
+				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.weight}} </p>
+				                                  </div>
+				
+				                              </div>
+				                          </div>
+				                          <div class="col-md-6">
+				                              <div class="form-group ">
+				                                  <label class="control-label bold">托盘规格</label>
+				                                  <div class="">
+				                                      <input type="text" ng-hide="materielInput" ng-model="materiel.palletSpecification" class="form-control" >
+				                                      <div class="form-control-focus"> </div>
+				                                      <span class="help-block" ng-hide="materielInput">请输入托盘规格</span>
+				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.palletSpecification}} </p>
+				                                  </div>
+				
+				                              </div>
+				                          </div>
+			                          </div>
+			                          <div class="row">
+				                          <div class="col-md-6">
+				                              <div class="form-group ">
+				                                  <label class="control-label bold">每托数量</label>
+				                                  <div class="">
+				                                      <input type="text" ng-hide="materielInput" ng-model="materiel.palletWeight" class="form-control" >
+				                                      <div class="form-control-focus"> </div>
+				                                       <span class="help-block" ng-hide="materielInput">请输入每托数量</span>
+				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.palletWeight}} </p>
 				                                  </div>
 				
 				                              </div>
@@ -345,18 +416,7 @@
 				                      </div>
 				                      <!--/row-->
 				                      <div class="row">
-				                          <div class="col-md-6">
-				                              <div class="form-group ">
-				                                  <label class="control-label bold">单件重量</label>
-				                                  <div class="">
-				                                      <input type="text" ng-hide="materielInput" ng-model="materiel.weight" class="form-control" >
-				                                      <div class="form-control-focus"> </div>
-				                                      <span class="help-block" ng-hide="materielInput">请输入单件重量</span>
-				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.weight}} </p>
-				                                  </div>
-				
-				                              </div>
-				                          </div>
+				                          
 				                          <!--/span-->
 				                          <div class="col-md-6">
 				                              <div class="form-group ">
@@ -367,22 +427,6 @@
 				                                      <span class="help-block" ng-hide="materielInput">请输入海关监管条件</span>
 				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.customsSupervisionConditions}} </p>
 				                                  </div>
-				                              </div>
-				                          </div>
-				                          <!--/span-->
-				                      </div>
-				                      <!--/row-->
-				                      <div class="row">
-				                          <div class="col-md-6">
-				                              <div class="form-group ">
-				                                  <label class="control-label bold">托盘规格</label>
-				                                  <div class="">
-				                                      <input type="text" ng-hide="materielInput" ng-model="materiel.palletSpecification" class="form-control" >
-				                                      <div class="form-control-focus"> </div>
-				                                      <span class="help-block" ng-hide="materielInput">请输入托盘规格</span>
-				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.palletSpecification}} </p>
-				                                  </div>
-				
 				                              </div>
 				                          </div>
 				                          <!--/span-->
@@ -400,20 +444,9 @@
 				                          <!--/span-->
 				                      </div>
 				                      <!--/row-->
-				                      <div class="row">
-				                          <div class="col-md-6">
-				                              <div class="form-group ">
-				                                  <label class="control-label bold">每托数量</label>
-				                                  <div class="">
-				                                      <input type="text" ng-hide="materielInput" ng-model="materiel.palletWeight" class="form-control" >
-				                                      <div class="form-control-focus"> </div>
-				                                       <span class="help-block" ng-hide="materielInput">请输入每托数量</span>
-				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.palletWeight}} </p>
-				                                  </div>
-				
-				                              </div>
-				                          </div>
-				                          <!--/span-->
+<!-- 				                      <div class="row">
+				                          
+				                          /span
 				                          <div class="col-md-6">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">生产日期</label>
@@ -426,21 +459,34 @@
 				                                  </div>
 				                              </div>
 				                          </div>
-				                          <!--/span-->
-				                      </div>
+				                          /span
+				                      </div> -->
 				                      <!--/row-->
 				                      <div class="row">
 				                      		<div class="col-md-6">
 				                              <div class="form-group ">
-				                                  <label class="control-label bold">备注</label>
+				                                  <label class="control-label bold">海关编码<span class="required" aria-required="true"> * </span></label>
 				                                  <div class="">
-				                                      <input type="text" ng-hide="materielInput" ng-model="materiel.remark" class="form-control" >
+				                                      <input type="text" name="deliveryCycle" ng-hide="materielInput" ng-model="materiel.customsCode" class="form-control" >
 				                                      <div class="form-control-focus"> </div>
-				                                      <span class="help-block" ng-hide="materielInput">请输入备注</span>
-				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.remark}} </p>
+				                                      <span class="help-block" ng-hide="materielInput">请输入海关编码</span>
+				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.customsCode}} </p>
 				                                  </div>
 				                              </div>
 				                          </div>
+				                      		<div class="col-md-6">
+				                              <div class="form-group ">
+				                                  <label class="control-label bold">一般交付周期<span class="required" aria-required="true"> * </span></label>
+				                                  <div class="">
+				                                      <input type="text" name="deliveryCycle" ng-hide="materielInput" ng-model="materiel.deliveryCycle" class="form-control" >
+				                                      <div class="form-control-focus"> </div>
+				                                      <span class="help-block" ng-hide="materielInput">请输入一般交付周期（月）</span>
+				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.deliveryCycle}} </p>
+				                                  </div>
+				                              </div>
+				                          </div>
+				                      </div>
+				                    <div class="row">
 				                          <div class="col-md-6">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">包含下级物料</label>
@@ -454,6 +500,18 @@
 				                                  </div>
 				                              </div>
 				                          </div>
+				                      		<div class="col-md-6">
+				                              <div class="form-group ">
+				                                  <label class="control-label bold">备注</label>
+				                                  <div class="">
+				                                      <input type="text" ng-hide="materielInput" ng-model="materiel.remark" class="form-control" >
+				                                      <div class="form-control-focus"> </div>
+				                                      <span class="help-block" ng-hide="materielInput">请输入备注</span>
+				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.remark}} </p>
+				                                  </div>
+				                              </div>
+				                          </div>
+				                          
 				                          <!--/span-->
 				                      </div>
 				                      <!--/row-->

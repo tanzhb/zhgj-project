@@ -12,7 +12,10 @@
     <result column="type" property="type" jdbcType="VARCHAR" />
     <result column="productionPlace" property="productionPlace" jdbcType="VARCHAR" />
     <result column="brand" property="brand" jdbcType="VARCHAR" />
-    <result column="category" property="category" jdbcType="VARCHAR" />
+    <result column="category1" property="category1" jdbcType="VARCHAR" />
+    <result column="category2" property="category2" jdbcType="VARCHAR" />
+    <result column="category3" property="category3" jdbcType="VARCHAR" />
+    <result column="materielAttribute" property="materielAttribute" jdbcType="VARCHAR" />
     <result column="MnemonicCode" property="mnemonicCode" jdbcType="VARCHAR" />
     <result column="isBOM" property="isBOM" jdbcType="VARCHAR" />
     <result column="stockUnit" property="stockUnit" jdbcType="VARCHAR" />
@@ -49,7 +52,7 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
-    <association property="parentMateriel" column="parentMaterielSerial" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByPrimaryKey"/> 
+    <!-- <association property="parentMateriel" column="parentMaterielSerial" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByPrimaryKey"/>  -->
     <collection property="supplyMateriels" column="materielId" select="com.congmai.zhgj.web.dao.SupplyMaterielMapper.selectSupplyMaterielByMaterielId"/> 
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -112,7 +115,7 @@
   </sql>
   <sql id="Base_Column_List" >
     serialNum, materielId, materielNum, materielName, specifications, unit, parentMaterielSerial, 
-    type, productionPlace, brand, category, MnemonicCode, isBOM, stockUnit, originCountry, 
+    type, productionPlace, brand, category1,category2, category3,materielAttribute, MnemonicCode, isBOM, stockUnit, originCountry, 
     width, height, length, currency, unitPrice, deliveryCycle,filingItemNo, volume, weight, palletSpecification, 
     manufactureDate, remark, packageNum, packageSpecifications, packageUnit, packagewidth, 
     packageheight, packagelength, packagevolume, packageUnitConversion, palletWeight, 
@@ -121,7 +124,7 @@
   </sql>
   <sql id="Base_Column_List2" >
     m.serialNum, m.materielId, m.materielNum, m.materielName, m.specifications, m.unit, m.parentMaterielSerial, 
-    m.type, m.productionPlace, m.brand, m.category, m.MnemonicCode, m.isBOM, m.stockUnit, m.originCountry, 
+    m.type, m.productionPlace, m.brand, m.category1,m.category2, m.category3,m.materielAttribute, m.MnemonicCode, m.isBOM, m.stockUnit, m.originCountry, 
     m.width, m.height, m.length, m.currency, m.unitPrice, m.deliveryCycle,m.filingItemNo, m.volume, m.weight, m.palletSpecification, 
     m.manufactureDate, m.remark, m.packageNum, m.packageSpecifications, m.packageUnit, m.packagewidth, 
     m.packageheight, m.packagelength, m.packagevolume, m.packageUnitConversion, m.palletWeight, 
@@ -189,7 +192,7 @@
     insert into materiel (serialNum, materielId, materielNum, 
       materielName, specifications, unit, 
       parentMaterielSerial, type, productionPlace, 
-      brand, category, MnemonicCode, 
+      brand, category1,category2, category3,materielAttribute, MnemonicCode, 
       isBOM, stockUnit, originCountry, 
       width, height, length, 
       currency, unitPrice, deliveryCycle,filingItemNo, 
@@ -205,7 +208,7 @@
     values (#{serialNum,jdbcType=VARCHAR}, #{materielId,jdbcType=VARCHAR}, #{materielNum,jdbcType=VARCHAR}, 
       #{materielName,jdbcType=VARCHAR}, #{specifications,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, 
       #{parentMaterielSerial,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{productionPlace,jdbcType=VARCHAR}, 
-      #{brand,jdbcType=VARCHAR}, #{category,jdbcType=VARCHAR}, #{mnemonicCode,jdbcType=VARCHAR}, 
+      #{brand,jdbcType=VARCHAR},#{category1,jdbcType=VARCHAR}, #{category2,jdbcType=VARCHAR},#{category3,jdbcType=VARCHAR},#{materielAttribute,jdbcType=VARCHAR},#{mnemonicCode,jdbcType=VARCHAR}, 
       #{isBOM,jdbcType=VARCHAR}, #{stockUnit,jdbcType=VARCHAR}, #{originCountry,jdbcType=VARCHAR}, 
       #{width,jdbcType=VARCHAR}, #{height,jdbcType=VARCHAR}, #{length,jdbcType=VARCHAR}, 
       #{currency,jdbcType=VARCHAR}, #{unitPrice,jdbcType=VARCHAR},#{deliveryCycle,jdbcType=VARCHAR} ,#{filingItemNo,jdbcType=VARCHAR}, 
@@ -252,8 +255,17 @@
       <if test="brand != null" >
         brand,
       </if>
-      <if test="category != null" >
-        category,
+      <if test="category1 != null" >
+        category1,
+      </if>
+      <if test="category2 != null" >
+        category2,
+      </if>
+      <if test="category3 != null" >
+        category3,
+      </if>
+      <if test="materielAttribute != null" >
+        materielAttribute,
       </if>
       <if test="mnemonicCode != null" >
         MnemonicCode,
@@ -395,8 +407,17 @@
       <if test="brand != null" >
         #{brand,jdbcType=VARCHAR},
       </if>
-      <if test="category != null" >
-        #{category,jdbcType=VARCHAR},
+      <if test="category1 != null" >
+        #{category1,jdbcType=VARCHAR},
+      </if>
+      <if test="category2 != null" >
+        #{category2,jdbcType=VARCHAR},
+      </if>
+      <if test="category3 != null" >
+        #{category3,jdbcType=VARCHAR},
+      </if>
+      <if test="materielAttribute != null" >
+        #{materielAttribute,jdbcType=VARCHAR},
       </if>
       <if test="mnemonicCode != null" >
         #{mnemonicCode,jdbcType=VARCHAR},
@@ -545,8 +566,17 @@
       <if test="brand != null" >
         brand = #{brand,jdbcType=VARCHAR},
       </if>
-      <if test="category != null" >
-        category = #{category,jdbcType=VARCHAR},
+      <if test="category1 != null" >
+        category1 = #{category1,jdbcType=VARCHAR},
+      </if>
+      <if test="category2 != null" >
+        category2 = #{category2,jdbcType=VARCHAR},
+      </if>
+      <if test="category3 != null" >
+        category3 = #{category3,jdbcType=VARCHAR},
+      </if>
+      <if test="materielAttribute != null" >
+        materielAttribute = #{materielAttribute,jdbcType=VARCHAR},
       </if>
       <if test="mnemonicCode != null" >
         MnemonicCode = #{mnemonicCode,jdbcType=VARCHAR},
@@ -699,8 +729,17 @@
       <if test="record.brand != null" >
         brand = #{record.brand,jdbcType=VARCHAR},
       </if>
-      <if test="record.category != null" >
-        category = #{record.category,jdbcType=VARCHAR},
+      <if test="record.category1 != null" >
+        category1 = #{record.category1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.category2 != null" >
+        category2 = #{record.category2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.category3 != null" >
+        category3 = #{record.category3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materielAttribute != null" >
+        materielAttribute = #{record.materielAttribute,jdbcType=VARCHAR},
       </if>
       <if test="record.mnemonicCode != null" >
         MnemonicCode = #{record.mnemonicCode,jdbcType=VARCHAR},

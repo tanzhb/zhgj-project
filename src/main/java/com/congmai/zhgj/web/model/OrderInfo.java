@@ -25,7 +25,9 @@ public class OrderInfo extends BaseVO {
     private String orderNum;
 
     private String orderType;
-
+    
+    private String tradeType;
+    
     private String seller;
 
     private String entrustParty;
@@ -41,7 +43,6 @@ public class OrderInfo extends BaseVO {
     private String orderSerial;
 
     private String deliveryMode;
-      
     
     private String paiedMoney;
     
@@ -51,6 +52,9 @@ public class OrderInfo extends BaseVO {
     private String transportMode;
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date orderDate;
+    
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date makeDate;
 
     private String maker;
 
@@ -71,7 +75,6 @@ public class OrderInfo extends BaseVO {
     
     private String orderRemark;
 
-    private String status;
 
     private String delFlg;
 
@@ -267,14 +270,6 @@ public class OrderInfo extends BaseVO {
         this.remark = remark == null ? null : remark.trim();
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
-    }
-
     public String getDelFlg() {
         return delFlg;
     }
@@ -415,6 +410,22 @@ public class OrderInfo extends BaseVO {
 
 	public void setProcessBase(ProcessBase processBase) {
 		this.processBase = processBase;
+	}
+
+	public String getTradeType() {
+		return tradeType;
+	}
+
+	public void setTradeType(String tradeType) {
+		this.tradeType = tradeType;
+	}
+    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
+	public Date getMakeDate() {
+		return makeDate;
+	}
+
+	public void setMakeDate(Date makeDate) {
+		this.makeDate = makeDate;
 	}
 
 

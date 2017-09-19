@@ -45,14 +45,15 @@
                         <div class="portlet-title"><!--  ng-if="inOrOut.indexOf('in')>-1"   ng-if="inOrOut.indexOf('out')>-1"  -->
                             <div class="caption"><span ng-if="inOrOut.indexOf('in')>-1" >入库检验</span><span  ng-if="inOrOut.indexOf('out')>-1">出库检验</span></div>    
                             <div class="actions">
-                                <button  ng-show="stockInOutCheckView"    class="btn purple  btn-sm btn-circle " ng-click="editStockInOutCheck()">
+                                <button  ng-show="stockInOutCheckView"     ng-if="inOrOut.indexOf('in')>-1&&inOrOut.indexOf('check')<0"  class="btn purple  btn-sm btn-circle " ng-click="editStockInOutCheck()">
                                             <i class="fa fa-edit"></i> 编辑 </button>
-                                <button   ng-hide="stockInOutCheckEdit"    ng-if="inOrOut.length>3"   class="btn defualt  btn-sm btn-circle " ng-click="cancelEditStockInOutCheck()">
+                                <button   ng-hide="stockInOutCheckEdit"    ng-if="inOrOut.length>3&&inOrOut.indexOf('check')<0"   class="btn defualt  btn-sm btn-circle " ng-click="cancelEditStockInOutCheck()">
                                             <i class="fa fa-undo"></i> 取消 </button>
-                                            <button   ng-hide="stockInOutCheckEdit"    ng-if="inOrOut.length<=3"   class="btn red  btn-sm btn-circle " ui-sref="stockInOutCheck">
+                                            <button   ng-hide="stockInOutCheckEdit"    ng-if="inOrOut.length<=3&&inOrOut.indexOf('check')<0"   class="btn red  btn-sm btn-circle " ui-sref="stockInOutCheck">
                                             <i class="fa fa-undo"></i> 取消 </button>
-                                <button  ng-hide="stockInOutCheckAdd"   type="submit"   class="btn green  btn-sm btn-circle "   ng-click="saveStockInOutCheck()">
+                                <button  ng-hide="stockInOutCheckAdd"   type="submit"  ng-if="inOrOut.indexOf('check')<0"  class="btn green  btn-sm btn-circle "   ng-click="saveStockInOutCheck()">
                                             <i class="fa fa-save"></i> 保存 </button>
+                                           
                             </div>
                         </div>
                           <div class="tab-content">
@@ -245,10 +246,10 @@
 			                                                </tr>
 			                                </tbody>
                                                 <tr    ng-repeat="materiel in materials track by $index"   ng-init="value=0" >
-                                                    	<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.materiel.materielNum}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.materielNum}}</td>
-										<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.materiel.materielName}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.materielName}}</td>
-										<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.materiel.specifications}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.specifications}}</td>
-										<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.materiel.unit}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.unit}}</td>
+                                                    	<td  >{{materiel.materielNum}}</td>
+										<td  >{{materiel.materielName}}</td>
+										<td  >{{materiel.specifications}}</td>
+										<td  >{{materiel.unit}}</td>
 										<td>
                                             {{materiel.batchNum}}
                                         </td>

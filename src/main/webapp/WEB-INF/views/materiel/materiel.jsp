@@ -21,6 +21,20 @@
         </li>
     </ul>
 </div> -->
+<div class="tabbable-line">
+    <ul class="nav nav-tabs">
+		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">外购物料</a>
+			</li>
+		<li class=""><a data-target="#tab_15_1" data-toggle="tab">委外加工</a>
+			</li>
+		<li class=""><a data-target="#tab_15_1" data-toggle="tab">生产物料</a>
+			</li>
+		<li class=""><a data-target="#tab_15_1" data-toggle="tab">成品物料</a>
+			</li>
+	</ul>
+    <div class="tab-content">
+    	<!-- 普通订单---START -->
+        <div class="tab-pane active" id="tab_15_1">
 <div class="row">
 <!--      <div class="col-md-4">
          <div class="portlet light ">
@@ -116,7 +130,7 @@
 	                            <th> 单位 </th>
 	                            <th> 上级物料 </th>
 	                            <th> 类别 </th>
-	                            <th> 产地 </th>
+	                            <th> 原产国 </th>
 	                            <th> 品牌 </th>
 	                            <th> 供应商 </th>
 	                            <th> 版本 </th>
@@ -131,7 +145,9 @@
         <!-- END EXAMPLE TABLE PORTLET-->
     </div>
  </div>
- 
+  </div>
+ </div>
+ </div>
  <div class="row">
 <!--      <div class="col-md-4">
          <div class="portlet light ">
@@ -205,19 +221,6 @@
 			                          <!--/span-->
 			                          <div class="col-md-4">
 			                              <div class="form-group">
-			                                  <label class="control-label col-md-5 bold">物料种类</label>
-			                                  <label class="control-label col-md-7">
-			                                      {{materiel.type}}
-			                                  </label>
-			
-			                              </div>
-			                          </div>
-			                      </div>
-			                      <!--/row-->
-			                      <!--/row-->
-			                      <div class="row">
-			                      	<div class="col-md-4">
-			                              <div class="form-group">
 			                                  <label class="control-label col-md-5 bold">物料名称</label>
 			                                  <label class="control-label col-md-7">
 			                                      {{materiel.materielName}}
@@ -225,30 +228,11 @@
 			
 			                              </div>
 			                          </div>
-			                          <div class="col-md-4">
-			                              <div class="form-group">
-			                                  <label class="control-label col-md-5 bold">物料类别</label>
-			                                  <label class="control-label col-md-7">
-			                                      {{materiel.category}}
-			                                  </label>
-			
-			                              </div>
-			                          </div>
-			                          <!--/span-->
-			                          <div class="col-md-4">
-			                              <div class="form-group">
-			                                  <label class="control-label col-md-5 bold">单位</label>
-			                                  <label class="control-label col-md-7">
-			                                      {{materiel.unit}}
-			                                  </label>
-			
-			                              </div>
-			                          </div>
-			                          <!--/span-->
 			                      </div>
 			                      <!--/row-->
+			                      <!--/row-->
 			                      <div class="row">
-			                          <div class="col-md-4">
+			                      		<div class="col-md-4">
 			                              <div class="form-group">
 			                                  <label class="control-label col-md-5 bold">规格型号</label>
 			                                  <label class="control-label col-md-7">
@@ -257,35 +241,67 @@
 			
 			                              </div>
 			                          </div>
-			                          <!--/span-->
+			                      		<div class="col-md-4">
+			                              <div class="form-group">
+			                                  <label class="control-label col-md-5 bold">物料大类</label>
+			                                  <label class="control-label col-md-7">
+			                                      {{materiel.type}}
+			                                  </label>
+			
+			                              </div>
+			                          </div>
 			                          <div class="col-md-4">
 			                              <div class="form-group">
-			                                  <label class="control-label col-md-5 bold">产地</label>
+			                                  <label class="control-label col-md-5 bold">一级分类</label>
 			                                  <label class="control-label col-md-7">
-			                                       {{materiel.productionPlace}}
+			                                      {{materiel.category1}}
+			                                  </label>
+			
+			                              </div>
+			                          </div>
+			                          
+			                          <!--/span-->
+			                      </div>
+			                      <!--/row-->
+			                      <div class="row">
+			                      	<div class="col-md-4">
+			                              <div class="form-group">
+			                                  <label class="control-label col-md-5 bold">二级分类</label>
+			                                  <label class="control-label col-md-7">
+			                                      {{materiel.category2}}
+			                                  </label>
+			
+			                              </div>
+			                          </div>
+			                      	<div class="col-md-4">
+			                              <div class="form-group">
+			                                  <label class="control-label col-md-5 bold">三级分类</label>
+			                                  <label class="control-label col-md-7">
+			                                      {{materiel.category3}}
+			                                  </label>
+			
+			                              </div>
+			                          </div>
+			                          <div class="col-md-4">
+			                              <div class="form-group">
+			                                  <label class="control-label col-md-5 bold">物料属性</label>
+			                                  <label class="control-label col-md-7">
+			                                      {{materiel.materielAttribute}}
 			                                  </label>
 			
 			                              </div>
 			                          </div>
 			                          <!--/span-->
-			                          <div class="col-md-4">
-			                              <div class="form-group">
-			                                  <label class="control-label col-md-5 bold">库存单位</label>
-			                                  <label class="control-label col-md-7">
-			                                      {{materiel.stockUnit}}
-											</label>
-			                              </div>
-			                          </div>
+			                         
 			                      </div>
-			                      <!--/row-->
-			                      <!--/row-->
-			                       <div class="row">
-			                       		<div class="col-md-4">
+			                      <div class="row">
+			                           <div class="col-md-4">
 			                              <div class="form-group">
-			                                  <label class="control-label col-md-5 bold">上级产品</label>
+			                                  <label class="control-label col-md-5 bold">单位</label>
 			                                  <label class="control-label col-md-7">
-			                                      {{materiel.parentMateriel.materielName}}
+			                                      {{materiel.unit}}
 			                                  </label>
+			
 			                              </div>
 			                          </div>
 			                          <div class="col-md-4">
@@ -307,7 +323,39 @@
 			                              </div>
 			                          </div>
 			                          <!--/span-->
+			                          <!-- <div class="col-md-4">
+			                              <div class="form-group">
+			                                  <label class="control-label col-md-5 bold">产地</label>
+			                                  <label class="control-label col-md-7">
+			                                       {{materiel.productionPlace}}
+			                                  </label>
+			
+			                              </div>
+			                          </div> -->
+			                          <!--/span-->
+			                          <!-- <div class="col-md-4">
+			                              <div class="form-group">
+			                                  <label class="control-label col-md-5 bold">库存单位</label>
+			                                  <label class="control-label col-md-7">
+			                                      {{materiel.stockUnit}}
+											</label>
+			                              </div>
+			                          </div> -->
 			                      </div>
+			                      <!--/row-->
+			                      <!--/row-->
+			                       <!-- <div class="row">
+			                       		<div class="col-md-4">
+			                              <div class="form-group">
+			                                  <label class="control-label col-md-5 bold">上级产品</label>
+			                                  <label class="control-label col-md-7">
+			                                      {{materiel.parentMateriel.materielName}}
+			                                  </label>
+			                              </div>
+			                          </div>
+			                          
+			                          /span
+			                      </div> -->
 			                      <!--/row-->
 			                       <div class="row">
 			                          <div class="col-md-4">
@@ -359,19 +407,6 @@
 			
 			                              </div>
 			                          </div>
-			                          <!--/span-->
-			                          <div class="col-md-4">
-			                              <div class="form-group">
-			                                  <label class="control-label col-md-5 bold">备案项号</label>
-			                                  <label class="control-label col-md-7">
-			                                      {{materiel.filingItemNo}}
-			                                  </label>
-			                              </div>
-			                          </div>
-			                          <!--/span-->
-			                      </div>
-			                      <!--/row-->
-			                      <div class="row">
 			                          <div class="col-md-4">
 			                              <div class="form-group">
 			                                  <label class="control-label col-md-5 bold">单件体积</label>
@@ -382,34 +417,17 @@
 			                              </div>
 			                          </div>
 			                          <!--/span-->
-			                          <div class="col-md-4">
-			                              <div class="form-group">
-			                                  <label class="control-label col-md-5 bold">海关监管条件</label>
-			                                  <label class="control-label col-md-7">
-			                                      {{materiel.customsSupervisionConditions}}
-			                                  </label>
-			                              </div>
-			                          </div>
-			                          <!--/span-->
-			                          <div class="col-md-4">
+			                          
+			                      </div>
+			                      <!--/row-->
+			                      <div class="row">
+			                           <div class="col-md-4">
 			                              <div class="form-group">
 			                                  <label class="control-label col-md-5 bold">单件重量</label>
 			                                  <label class="control-label col-md-7">
 			                                      {{materiel.weight}}
 			                                  </label>
 			
-			                              </div>
-			                          </div>
-			                      </div>
-			                      <!--/row-->
-			                      <!--/row-->
-			                      <div class="row">
-			                      		<div class="col-md-4">
-			                              <div class="form-group">
-			                                  <label class="control-label col-md-5 bold">保质期</label>
-			                                  <label class="control-label col-md-7">
-			                                      {{materiel.qualityDate}}
-			                                  </label>
 			                              </div>
 			                          </div>
 			                          <div class="col-md-4">
@@ -421,19 +439,6 @@
 			
 			                              </div>
 			                          </div>
-			                          <!--/span-->
-			                          <div class="col-md-4">
-			                              <div class="form-group">
-			                                  <label class="control-label col-md-5 bold">生产日期</label>
-			                                  <label class="control-label col-md-7">
-			                                      {{materiel.manufactureDate}}
-			                                  </label>
-			                              </div>
-			                          </div>
-			                          <!--/span-->
-			                      </div>
-			                      <!--/row-->
-			                      <div class="row">
 			                          <div class="col-md-4">
 			                              <div class="form-group">
 			                                  <label class="control-label col-md-5 bold">每托数量</label>
@@ -443,15 +448,70 @@
 			
 			                              </div>
 			                          </div>
+			                         
 			                          <!--/span-->
-			                          <div class="col-md-4">
+			                         
+			                      </div>
+			                      <!--/row-->
+			                      <!--/row-->
+			                      <div class="row">
+			                      		<div class="col-md-4">
 			                              <div class="form-group">
-			                                  <label class="control-label col-md-5 bold">备注</label>
+			                                  <label class="control-label col-md-5 bold">备案项号</label>
 			                                  <label class="control-label col-md-7">
-			                                      {{materiel.remark}}
+			                                      {{materiel.filingItemNo}}
 			                                  </label>
 			                              </div>
 			                          </div>
+			                       <!--/span-->
+			                          <div class="col-md-4">
+			                              <div class="form-group">
+			                                  <label class="control-label col-md-5 bold">海关监管条件</label>
+			                                  <label class="control-label col-md-7">
+			                                      {{materiel.customsSupervisionConditions}}
+			                                  </label>
+			                              </div>
+			                          </div>
+			                      		<div class="col-md-4">
+			                              <div class="form-group">
+			                                  <label class="control-label col-md-5 bold">保质期</label>
+			                                  <label class="control-label col-md-7">
+			                                      {{materiel.qualityDate}}
+			                                  </label>
+			                              </div>
+			                          </div>
+			                          
+			                          <!--/span-->
+			                          <!-- <div class="col-md-4">
+			                              <div class="form-group">
+			                                  <label class="control-label col-md-5 bold">生产日期</label>
+			                                  <label class="control-label col-md-7">
+			                                      {{materiel.manufactureDate}}
+			                                  </label>
+			                              </div>
+			                          </div> -->
+			                          <!--/span-->
+			                      </div>
+			                      <!--/row-->
+			                      <div class="row">
+			                          
+			                          <div class="col-md-4">
+			                              <div class="form-group">
+			                                  <label class="control-label col-md-5 bold">海关编码</label>
+			                                  <label class="control-label col-md-7">
+			                                      {{materiel.customsCode}}
+			                                  </label>
+			                              </div>
+			                          </div>
+			                          <div class="col-md-4">
+			                              <div class="form-group">
+			                                  <label class="control-label col-md-5 bold">一般交付周期</label>
+			                                  <label class="control-label col-md-7">
+			                                      {{materiel.deliveryCycle}}（月）
+			                                  </label>
+			                              </div>
+			                          </div>
+			                          <!--/span-->
 			                          <div class="col-md-4">
 			                              <div class="form-group">
 			                                  <label class="control-label col-md-5 bold">包含下级物料</label>
@@ -464,6 +524,14 @@
 			                      </div>
 			                      <!--/row-->
 			                      <div class="row">
+			                      	<div class="col-md-4">
+			                              <div class="form-group">
+			                                  <label class="control-label col-md-5 bold">备注</label>
+			                                  <label class="control-label col-md-7">
+			                                      {{materiel.remark}}
+			                                  </label>
+			                              </div>
+			                          </div>
 			                          <!--/span-->
 			                          <div class="col-md-4">
 			                              <div class="form-group">
@@ -703,15 +771,6 @@
                       </div>
                       <!--/row-->
                       <div class="row">
-                          <div class="col-md-6">
-                              <div class="form-group">
-                                  <label class="control-label col-md-5 bold">物料种类</label>
-                                  <label class="control-label col-md-7">
-                                      {{materiel.type}}
-                                  </label>
-
-                              </div>
-                          </div>
                           <!--/span-->
                           <div class="col-md-6">
                               <div class="form-group">
@@ -722,15 +781,67 @@
 
                               </div>
                           </div>
+                           <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5 bold">规格型号</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.specifications}}
+                                  </label>
+
+                              </div>
+                          </div>
                           <!--/span-->
                       </div>
                       <!--/row-->
                       <div class="row">
+                      		<div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5 bold">物料大类</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.type}}
+                                  </label>
+
+                              </div>
+                          </div>
                           <div class="col-md-6">
                               <div class="form-group">
-                                  <label class="control-label col-md-5 bold">物料类别</label>
+                                  <label class="control-label col-md-5 bold">一级分类</label>
                                   <label class="control-label col-md-7">
-                                      {{materiel.category}}
+                                      {{materiel.category1}}
+                                  </label>
+
+                              </div>
+                          </div>
+                      </div>
+                      <!--/row-->
+                      <div class="row">
+                      	<div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5 bold">二级分类</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.category2}}
+                                  </label>
+
+                              </div>
+                          </div>
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5 bold">三级分类</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.category3}}
+                                  </label>
+
+                              </div>
+                          </div>
+                      </div>
+                      <!--/row-->
+                      <div class="row">
+                      <!--/span-->
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5 bold">物料属性</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.materielAttribute}}
                                   </label>
 
                               </div>
@@ -745,20 +856,8 @@
 
                               </div>
                           </div>
-                          <!--/span-->
-                      </div>
-                      <!--/row-->
-                      <div class="row">
-                          <div class="col-md-6">
-                              <div class="form-group">
-                                  <label class="control-label col-md-5 bold">规格型号</label>
-                                  <label class="control-label col-md-7">
-                                      {{materiel.specifications}}
-                                  </label>
-
-                              </div>
-                          </div>
-                          <!--/span-->
+                         <!-- 
+                          /span
                           <div class="col-md-6">
                               <div class="form-group">
                                   <label class="control-label col-md-5 bold">产地</label>
@@ -768,31 +867,9 @@
 
                               </div>
                           </div>
-                          <!--/span-->
+                          /span -->
                       </div>
-                      <!--/row-->
                       <div class="row">
-                          <div class="col-md-6">
-                              <div class="form-group">
-                                  <label class="control-label col-md-5 bold">库存单位</label>
-                                  <label class="control-label col-md-7">
-                                      {{materiel.stockUnit}}
-								</label>
-                              </div>
-                          </div>
-                          <!--/span-->
-                          <div class="col-md-6">
-                              <div class="form-group">
-                                  <label class="control-label col-md-5 bold">上级产品</label>
-                                  <label class="control-label col-md-7">
-                                      {{materiel.parentMateriel.materielName}}
-                                  </label>
-                              </div>
-                          </div>
-                          <!--/span-->
-                      </div>
-                      <!--/row-->
-                       <div class="row">
                           <div class="col-md-6">
                               <div class="form-group">
                                   <label class="control-label col-md-5 bold">品牌</label>
@@ -813,6 +890,29 @@
                           </div>
                           <!--/span-->
                       </div>
+                      <!--/row-->
+                      <!-- <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5 bold">库存单位</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.stockUnit}}
+								</label>
+                              </div>
+                          </div>
+                          /span
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5 bold">上级产品</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.parentMateriel.materielName}}
+                                  </label>
+                              </div>
+                          </div>
+                          /span
+                      </div> -->
+                      <!--/row-->
+                       
                       <!--/row-->
                        <div class="row">
                           <div class="col-md-6">
@@ -868,19 +968,6 @@
 
                               </div>
                           </div>
-                          <!--/span-->
-                          <div class="col-md-6">
-                              <div class="form-group">
-                                  <label class="control-label col-md-5 bold">备案项号</label>
-                                  <label class="control-label col-md-7">
-                                      {{materiel.filingItemNo}}
-                                  </label>
-                              </div>
-                          </div>
-                          <!--/span-->
-                      </div>
-                      <!--/row-->
-                      <div class="row">
                           <div class="col-md-6">
                               <div class="form-group">
                                   <label class="control-label col-md-5 bold">单件体积</label>
@@ -888,15 +975,6 @@
                                       {{materiel.volume}}
                                   </label>
 
-                              </div>
-                          </div>
-                          <!--/span-->
-                          <div class="col-md-6">
-                              <div class="form-group">
-                                  <label class="control-label col-md-5 bold">海关监管条件</label>
-                                  <label class="control-label col-md-7">
-                                      {{materiel.customsSupervisionConditions}}
-                                  </label>
                               </div>
                           </div>
                           <!--/span-->
@@ -912,19 +990,6 @@
 
                               </div>
                           </div>
-                          <!--/span-->
-                          <div class="col-md-6">
-                              <div class="form-group">
-                                  <label class="control-label col-md-5 bold">保质期</label>
-                                  <label class="control-label col-md-7">
-                                      {{materiel.qualityDate}}
-                                  </label>
-                              </div>
-                          </div>
-                          <!--/span-->
-                      </div>
-                      <!--/row-->
-                      <div class="row">
                           <div class="col-md-6">
                               <div class="form-group">
                                   <label class="control-label col-md-5 bold">托盘规格</label>
@@ -935,17 +1000,7 @@
                               </div>
                           </div>
                           <!--/span-->
-                          <div class="col-md-6">
-                              <div class="form-group">
-                                  <label class="control-label col-md-5 bold">生产日期</label>
-                                  <label class="control-label col-md-7">
-                                      {{materiel.manufactureDate}}
-                                  </label>
-                              </div>
-                          </div>
-                          <!--/span-->
                       </div>
-                      <!--/row-->
                       <div class="row">
                           <div class="col-md-6">
                               <div class="form-group">
@@ -956,7 +1011,81 @@
 
                               </div>
                           </div>
+                           <!--/span-->
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5 bold">备案项号</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.filingItemNo}}
+                                  </label>
+                              </div>
+                          </div>
                           <!--/span-->
+                      </div>
+                      <div class="row">
+                          
+                          <!--/span-->
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-7 bold">海关监管条件</label>
+                                  <label class="control-label col-md-5">
+                                      {{materiel.customsSupervisionConditions}}
+                                  </label>
+                              </div>
+                          </div>
+                          <!--/span-->
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5 bold">保质期</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.qualityDate}}
+                                  </label>
+                              </div>
+                          </div>
+                      </div>
+                      <!--/row-->
+                      <!-- <div class="row">
+                          
+                          /span
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5 bold">生产日期</label>
+                                  <label class="control-label col-md-7">
+                                      {{materiel.manufactureDate}}
+                                  </label>
+                              </div>
+                          </div>
+                          /span
+                      </div> -->
+                      <!--/row-->
+                      <div class="row">
+                      		<div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5 bold">海关编码</label>
+                                  <label class="control-label col-md-7">
+                                         {{materiel.customsCode}}
+                                  </label>
+                              </div>
+                          </div>
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-7 bold">一般交付周期</label>
+                                  <label class="control-label col-md-5">
+                                        {{materiel.deliveryCycle}}（月）
+                                  </label>
+                              </div>
+                          </div>
+                      </div>
+                      <!--/row-->
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-7 bold">包含下级物料</label>
+                                  <label class="control-label col-md-5">
+                                        {{materiel.isBOM=="1"?'是':'否'}}
+                                  </label>
+                              </div>
+                          </div>
                           <div class="col-md-6">
                               <div class="form-group">
                                   <label class="control-label col-md-5 bold">备注</label>
@@ -965,19 +1094,9 @@
                                   </label>
                               </div>
                           </div>
-                          <!--/span-->
-                      </div>
+                       </div>
                       <!--/row-->
                       <div class="row">
-                          <div class="col-md-6">
-                              <div class="form-group">
-                                  <label class="control-label col-md-5 bold">包含下级物料</label>
-                                  <label class="control-label col-md-7">
-                                        {{materiel.isBOM=="1"?'是':'否'}}
-                                  </label>
-                              </div>
-                          </div>
-                          <!--/span-->
                           <div class="col-md-6">
                               <div class="form-group">
                                   <label class="control-label col-md-5 bold">版本</label>

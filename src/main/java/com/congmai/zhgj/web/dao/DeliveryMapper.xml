@@ -29,9 +29,7 @@
     orderSerial=#{orderSerial},
     deliverNum=#{deliverNum},
     warehouseSerial=#{warehouseSerial},
-    supplyComId=#{supplyComId},
     status=#{status},
-    shipper=#{shipper},
     receiver=#{receiver},
     maker=#{maker},
     makeDate=#{makeDate},
@@ -50,6 +48,36 @@
     deliverRemark=#{deliverRemark},
     reason=#{reason},
 	processInstanceId=#{processInstanceId},
+	userId=#{userId},
+    updater=#{updater},
+    updateTime=NOW()
+    WHERE
+    serialNum=#{serialNum}
+    </update>
+    
+     <!--更新基本信息  -->
+    <update id="updateBasicInfo2" parameterType="com.congmai.zhgj.web.model.DeliveryVO">
+    UPDATE delivery SET
+    orderSerial=#{orderSerial},
+    deliverNum=#{deliverNum},
+    warehouseSerial=#{warehouseSerial},
+    status=#{status},
+    receiver=#{receiver},
+    maker=#{maker},
+    makeDate=#{makeDate},
+    approval=#{approval},
+    approvalDate=#{approvalDate},
+    remark=#{remark},
+    deliverDate=#{deliverDate},
+    materielCount=#{materielCount},
+    packageCount=#{packageCount},
+    packageType=#{packageType},
+    packageSpecifications=#{packageSpecifications},
+    materielWeight=#{materielWeight},
+    serviceMoney=#{serviceMoney},
+    deliverer=#{deliverer},
+    contactNum=#{contactNum},
+    deliverRemark=#{deliverRemark},
 	userId=#{userId},
     updater=#{updater},
     updateTime=NOW()
@@ -264,4 +292,35 @@
     <update id="goDelivery" parameterType="java.util.HashMap">
     UPDATE delivery SET status='1',updater=#{updater},updateTime=NOW() WHERE serialNum=#{serialNum}
     </update>
-</mapper>
+    
+    
+    <update id="updateOrderWhenDeliveryComlete" parameterType="java.util.HashMap">
+    UPDATE orderInfo SET status='3',updater=#{updater},updateTime=NOW() WHERE serialNum=#{orderSerial}
+    </update>
+  <!--查询详情物料集合  -->
+    <select id="selectListForDetailForStockCheck" resultType="com.congmai.zhgj.web.model.DeliveryMaterielVO" parameterType="java.util.HashMap">
+    SELECT
+	a.serialNum,c.materielNum,c.materielName,c.specifications,c.unit,a.batchNum,a.manufactureDate,b.amount,a.deliverCount,a.remark,
+	a.stockCount,a.unstockCount,d.warehouseName,e.positionName,a.stockRemark,a.qualifiedCount,a.unqualifiedCount,a.checkRemark,
+	b.orderSerial,
+	a.acceptCount,a.refuseCount,a.takeRemark
+	<if test="null!=#{deliverSerial}">
+	,f.status
+	</if>
+	<if test="null!=#{takeDeliverSerial}">
+	,td.status
+	</if>
+	FROM
+	deliveryMateriel a
+	LEFT JOIN orderMateriel b ON a.orderMaterielSerial=b.serialNum
+	LEFT JOIN materiel c ON b.materielSerial=c.serialNum
+	LEFT JOIN warehouse d ON a.warehouseSerial=d.serialNum
+	LEFT JOIN warehousePosition e ON a.positionSerial=e.serialNum
+	<if test="null!=#{deliverSerial}">
+	LEFT JOIN delivery f ON a.deliverSerial=f.serialNum
+	</if>
+	<if test="null!=#{takeDeliverSerial}">
+	LEFT JOIN takeDelivery td ON a.deliverSerial=td.serialNum
+	</if>
+	WHERE a.deliverSerial=#{serialNum}
+    </select></mapper>

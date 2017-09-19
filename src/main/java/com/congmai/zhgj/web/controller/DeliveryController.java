@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import net.sf.json.JSONObject;
 
@@ -345,6 +346,18 @@ public class DeliveryController {
     	delivery.setSerialNum(ApplicationUtils.random32UUID());
     	Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		
+		User user = UserUtil.getUserFromSession();
+    	String comId = null;
+		comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+    	if(StringUtils.isEmpty(comId)){
+    		delivery.setSupplyComId(null);
+    		delivery.setShipper(null);
+    	}else{
+    		delivery.setSupplyComId(comId);
+    		delivery.setShipper(comId);
+    	}
+		
 		delivery.setCreator(currenLoginName);
     	deliveryService.insertBasicInfo(delivery);
     	
@@ -399,6 +412,93 @@ public class DeliveryController {
     	//保存之后查询
     	delivery=deliveryService.selectDetailById(delivery.getSerialNum());
     	return new ResponseEntity<DeliveryVO>(delivery, HttpStatus.OK);
+    }
+    
+    
+    /**
+	 * 
+	 * @Description 调整发货申请
+	 * @param taskId
+	 * @param reApply
+	 * @param record
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/modifyApplyAp", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+	@ResponseBody
+	public String modifyApplyAp(
+			@RequestParam("taskId") String taskId,
+			@RequestParam("reApply") Boolean reApply,
+			@Valid DeliveryVO record) throws Exception{
+		
+		String result = "";
+		User user = UserUtil.getUserFromSession();		
+		record.setUserId(user.getUserId());
+		record.setUser_name(user.getUserName());
+		record.setBusinessType(BaseVO.ACCOUNTDELIVERY);
+		record.setApplyDate(new Date());
+		record.setBusinessKey(record.getSerialNum());
+		record.setProcessInstanceId(record.getProcessInstanceId());
+        Map<String, Object> variables = new HashMap<String, Object>();
+        String content = "";
+        if(reApply){
+        	//修改请假申请
+        	record.setTitle(user.getUserName()+" 的发货申请！");
+        	record.setStatus(BaseVO.PENDING);
+	        content = "重新申请";
+	        //由userTask自动分配审批权限
+//	        if(vacation.getDays() <= 3){
+//            	variables.put("auditGroup", "manager");
+//            }else{
+//            	variables.put("auditGroup", "director");
+//            }
+	        result = "任务办理完成，发货申请已重新提交！";
+        }else{
+        	record.setTitle(user.getUserName()+" 的应付款申请已取消！");
+        	record.setStatus(BaseVO.APPROVAL_FAILED);
+        	content = "取消申请";
+        	result = "任务办理完成，已经取消您的发货申请！";
+        }
+        try {
+        	//保存基本信息第一部分
+        	String transportserialNum=record.getTransportserialNum();
+        	String takeDeliverSerialNum=record.getTakeDeliverSerialNum();
+        	
+        	Subject currentUser = SecurityUtils.getSubject();
+    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+    		record.setUpdater(currenLoginName);
+        	deliveryService.updateBasicInfo(record);
+        	
+        	
+        	/*//保存基本信息第二部分
+        	deliveryTransport.setSerialNum(transportserialNum);
+        	deliveryTransport.setUpdater(currenLoginName);
+        	deliveryService.updateBasicInfoPartII(deliveryTransport);
+        	
+        	//保存基本信息第三部分
+        	takeDeliveryVO.setSerialNum(takeDeliverSerialNum);
+        	takeDeliveryVO.setUpdater(currenLoginName);
+        	deliveryService.updateBasicInfoPartIII(takeDeliveryVO);*/
+        	
+        	//保存之后查询
+        	record=deliveryService.selectDetailById(record.getSerialNum());
+        	
+			variables.put("entity", record);
+			variables.put("reApply", reApply);
+			this.processService.complete(taskId, content, user.getUserId().toString(), variables);
+			
+		} catch (ActivitiObjectNotFoundException e) {
+			result = "此任务不存在，请联系管理员！";
+			throw e;
+		} catch (ActivitiException e) {
+			result = "此任务正在协办，您不能办理此任务！";
+			throw e;
+		} catch (Exception e) {
+			result = "任务办理失败，请联系管理员！";
+			throw e;
+		}
+		
+    	return result;
     }
     
     
@@ -488,6 +588,12 @@ public class DeliveryController {
 					.getVariable(paymentRecord.getProcessInstanceId(), "entity");*/
 			
 			DeliveryVO delivery=deliveryService.selectDetailById(serialNum);
+			
+			String orderSerial=delivery.getOrderSerial();
+			Map<String,Object> map=new HashMap<String,Object>();
+			map.put("updater", user.getUserId());
+			map.put("orderSerial", orderSerial);
+			deliveryService.updateOrderWhenDeliveryComlete(map);
 			DeliveryVO baseDelivery = (DeliveryVO) this.runtimeService.getVariable(delivery.getProcessInstanceId(), "entity");
 					
 			
@@ -515,6 +621,7 @@ public class DeliveryController {
 				}
 			}
 
+			delivery.setReason(content);
 			this.deliveryService.updateBasicInfo(delivery);
 
 			result = "任务办理完成！";
@@ -530,7 +637,8 @@ public class DeliveryController {
 		}
 		return result;
 	}
-
+	
+	
 	/**
 	 * @Description (导出发货信息)
 	 * @param request
@@ -716,6 +824,16 @@ public class DeliveryController {
 	@RequestMapping(value = "/editDeliveryPage")
 	public String editDeliveryPage(String id,String view) {
 		return "delivery/editDeliveryPage";
+	}
+	
+	
+	/**
+	 * 跳转到调整页面
+	 * @return
+	 */
+	@RequestMapping(value = "/editAuditDelivery")
+	public String editAuditDelivery(String id,String view) {
+		return "delivery/editAuditDelivery";
 	}
 	
 	

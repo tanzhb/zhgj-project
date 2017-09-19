@@ -28,6 +28,9 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     		//编辑基本信息
     		editBasicInfo:editBasicInfo,
     		
+    		//调整申请
+    		apApplyAngain:apApplyAngain,
+    		
     		//查询发货详情
     		getDeliveryInfo:getDeliveryInfo,
     		
@@ -129,8 +132,6 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 			warehouseSerial:$scope.delivery.warehouseSerial,
 			deliverNum:$scope.delivery.deliverNum,
 			deliverType:$scope.delivery.deliverType,
-			supplyComId:null,
-			shipper:null,
 			receiver:$scope.delivery.receiver,
 			maker:$scope.delivery.maker,
 			makeDate:$scope.delivery.makeDate,
@@ -182,8 +183,6 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 			orderSerial:$scope.delivery.orderSerial,
 			warehouseSerial:$scope.delivery.warehouseSerial,
 			deliverNum:$scope.delivery.deliverNum,
-			supplyComId:null,
-			shipper:null,
 			receiver:$scope.delivery.receiver,
 			maker:$scope.delivery.maker,
 			makeDate:$scope.delivery.makeDate,
@@ -217,8 +216,68 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 			takeDeliverDate:$scope.delivery.takeDeliverDate,
 			takeDeliveryReceiver:$scope.delivery.takeDeliveryReceiver,
 			takeDeliveryContactNum:$scope.delivery.takeDeliveryContactNum,
-			takeDeliveryRemark:$scope.delivery.takeDeliveryRemark
+			takeDeliveryRemark:$scope.delivery.takeDeliveryRemark,
+			reason:$scope.delivery.reason,
+			processInstanceId:$scope.delivery.processInstanceId,
+			userId:$scope.delivery.userId
 		}
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+    }
+    
+    
+    
+    function apApplyAngain($scope){
+    	debugger
+    	var deferred = $q.defer();
+		$.post("rest/delivery/modifyApplyAp", {
+			serialNum:$scope.delivery.serialNum,
+			orderSerial:$scope.delivery.orderSerial,
+			warehouseSerial:$scope.delivery.warehouseSerial,
+			deliverNum:$scope.delivery.deliverNum,
+			receiver:$scope.delivery.receiver,
+			maker:$scope.delivery.maker,
+			makeDate:$scope.delivery.makeDate,
+			approval:$scope.delivery.approval,
+			approvalDate:$scope.delivery.approvalDate,
+			remark:$scope.delivery.remark,
+			deliverDate:$scope.delivery.deliverDate,
+			materielCount:$scope.delivery.materielCount,
+			packageCount:$scope.delivery.packageCount,
+			packageType:$scope.delivery.packageType,
+			packageSpecifications:$scope.delivery.packageSpecifications,
+			materielWeight:$scope.delivery.materielWeight,
+			serviceMoney:$scope.delivery.serviceMoney,
+			deliverer:$scope.delivery.deliverer,
+			contactNum:$scope.delivery.contactNum,
+			deliverRemark:$scope.delivery.deliverRemark,
+			
+			transportserialNum:$scope.delivery.transportserialNum,
+			transportType:$scope.delivery.transportType,
+			transport:$scope.delivery.transport,
+			port:$scope.delivery.port,
+			shipNumber:$scope.delivery.shipNumber,
+			playArrivalDate:$scope.delivery.playArrivalDate,
+			playWarehouseDate:$scope.delivery.playWarehouseDate,
+			transportRemark:$scope.delivery.transportRemark,
+			transportContact:$scope.delivery.transportContact,
+			transportContactNum:$scope.delivery.contactNum,
+			
+			takeDeliverSerialNum:$scope.delivery.takeDeliverSerialNum,
+			takeDeliveryWarehouseSerial:$scope.delivery.takeWarehouseSerial,
+			takeDeliverDate:$scope.delivery.takeDeliverDate,
+			takeDeliveryReceiver:$scope.delivery.takeDeliveryReceiver,
+			takeDeliveryContactNum:$scope.delivery.takeDeliveryContactNum,
+			takeDeliveryRemark:$scope.delivery.takeDeliveryRemark,
+			reason:$scope.delivery.reason,
+			taskId:$("#taskId").val(), 
+			reApply:true
+		}
+		/*params:{'taskId':$("#taskId").val(), 'reApply':true},*/
 		).then(function success(result) {
 			deferred.resolve(result);//请求成功
 		}, function error(err) {

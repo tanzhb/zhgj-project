@@ -51,6 +51,9 @@ public interface DeliveryMapper extends GenericDao<DeliveryMaterielVO, String> {
     //更新基本信息
     public void updateBasicInfo(DeliveryVO record);
     
+  //更新基本信息
+    public void updateBasicInfo2(DeliveryVO record);
+    
     //更新基本信息第二部分
     public void updateBasicInfoPartII(DeliveryTransportVO deliveryTransport);
     
@@ -77,4 +80,8 @@ public interface DeliveryMapper extends GenericDao<DeliveryMaterielVO, String> {
     
     //确认发货
     public void goDelivery(Map<String,Object> map);
-}
+    
+    
+    public void updateOrderWhenDeliveryComlete(Map<String,Object> map);
+ //查询发货详情的发货物料(出入库检验)
+    public List<DeliveryMaterielVO> selectListForDetailForStockCheck(Map<String,String>map);}

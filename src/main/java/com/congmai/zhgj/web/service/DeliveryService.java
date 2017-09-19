@@ -98,6 +98,13 @@ public interface DeliveryService extends GenericService<DeliveryMaterielVO, Stri
 	
 	
 	/**
+	 * 编辑基本信息
+	 * @param record
+	 */
+	public void updateBasicInfo2(DeliveryVO record);
+	
+	
+	/**
 	 * 编辑基本信息第二部分
 	 * @param deliveryTransport
 	 */
@@ -164,4 +171,15 @@ public interface DeliveryService extends GenericService<DeliveryMaterielVO, Stri
     * @param map
     */
    public void goDelivery(Map<String,Object> map);
+   
+   
+   
+   public void updateOrderWhenDeliveryComlete(Map<String,Object> map);
+  
+   /**
+	 * 查询发货详情的发货物料(出入库检验)
+	 * @param serialNum
+	 * @return
+	 */
+	List<DeliveryMaterielVO> selectListForDetailForStockCheck(String serialNum,String judgeString);
 }

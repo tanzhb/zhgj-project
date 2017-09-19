@@ -219,13 +219,15 @@
 							<div class="actions">
 								<div class="btn-group btn-group-devided" data-toggle="buttons">
 									<label class="btn btn-transparent yellow btn-circle btn-sm"
-										ng-click="stockIn()"> <i class="fa fa-plus"></i> 入库
+										ng-click="stockIn()"> <i class="fa fa-arrow-down"></i> 入库
 									</label> <label class="btn btn-transparent green btn-circle btn-sm"
 										ui-sref="stockInAdd"> <i class="fa fa-plus"></i> 添加
-									</label> <label class="btn btn-transparent purple btn-circle btn-sm"
+									</label> 
+									<!-- <label class="btn btn-transparent purple btn-circle btn-sm"
 										ng-click="stockInEdit()"> <i class="fa fa-edit"></i>
 										修改
-									</label> <label class="btn btn-transparent red btn-circle btn-sm"
+									</label> -->
+									<label class="btn btn-transparent red btn-circle btn-sm"
 										ng-click="stockInDelete()"> <i class="fa fa-minus"></i>
 										删除
 									</label> <label
@@ -249,7 +251,7 @@
 												data-set="#stockInTable .checkboxes" /> <span></span>
 										</label></th>
 										<th>入库明细号</th>
-										<!-- <th>入库类型</th> -->
+										<th>入库类型</th>
 										<th>商品名称</th>
 										<th>规格型号</th>
 										<th>入库日期</th>
@@ -257,6 +259,7 @@
 										<th>关联批次号</th>
 										<th>供应商</th>
 										<th>关联单据</th>
+										<th>状态</th>
 									</tr>
 								</thead>
 								<tbody>

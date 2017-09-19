@@ -38,6 +38,7 @@
 	    <result column="deliverSerial" property="deliverSerial" jdbcType="VARCHAR" />
 	    <result column="takeDeliverSerial" property="takeDeliverSerial" jdbcType="VARCHAR" />
 	    <result column="inOutNum" property="inOutNum" jdbcType="VARCHAR" />
+	    <result column="inOutType" property="inOutType" jdbcType="VARCHAR" />
 	    <result column="stockDate" property="stockDate" jdbcType="DATE" />
 	    <result column="operator" property="operator" jdbcType="VARCHAR" />
 	    <result column="contactNum" property="contactNum" jdbcType="VARCHAR" />
@@ -50,7 +51,7 @@
 	    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
 	    <association property="order" javaType="com.congmai.zhgj.web.model.OrderInfo">
     	  	<result column="orderNum" property="orderNum" jdbcType="VARCHAR" />
-	    	<result column="buyComId" property="buyComId" jdbcType="VARCHAR" />
+	    	<association property="buyName" column="buyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
     	</association>
     </association>
     <association property="delivery" javaType="com.congmai.zhgj.web.model.Delivery">
@@ -523,7 +524,7 @@
   <!-- ���� -->
   <select id="selectListByExample" resultMap="BaseResultMap2" parameterType="com.congmai.zhgj.web.model.StockInOutRecordSelectExample" >
     select
-   		dm.serialNum,dm.stockCount,dm.batchNum,s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial, s.inOutNum, s.stockDate, s.operator, s.contactNum, 
+   		dm.serialNum,dm.stockCount,dm.batchNum,s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial, s.inOutNum,s.inOutType,s.stockDate, s.operator, s.contactNum, 
     	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,dm.orderMaterielSerial,o.orderNum,o.buyComId
     from stockInOutRecord s
     left join delivery d on d.serialNum = s.deliverSerial
@@ -540,7 +541,7 @@
   <!-- ����ѯ -->
   <select id="selectListByExampleForStockIn" resultMap="BaseResultMap2" parameterType="com.congmai.zhgj.web.model.StockInOutRecordSelectExample" >
     select
-   		dm.serialNum,dm.stockCount,dm.batchNum,s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial, s.inOutNum, s.stockDate, s.operator, s.contactNum, 
+   		dm.serialNum,dm.stockCount,dm.batchNum,s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial, s.inOutNum,s.inOutType,s.stockDate, s.operator, s.contactNum, 
     	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,dm.orderMaterielSerial,o.orderNum,o.buyComId
     from stockInOutRecord s
     left join takeDelivery td on td.serialNum = s.takeDeliverSerial

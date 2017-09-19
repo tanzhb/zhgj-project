@@ -1107,6 +1107,148 @@ public class StockInOutRecordSelectExample {
             addCriterion("s.updateTime not between", value1, value2, "updateTime");
             return (Criteria) this;
         }
+        
+        public Criteria andInOutTypeIsNull() {
+            addCriterion("s.inOutType is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutTypeIsNotNull() {
+            addCriterion("s.inOutType is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutTypeEqualTo(String value) {
+            addCriterion("s.inOutType =", value, "inOutType");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutTypeNotEqualTo(String value) {
+            addCriterion("s.inOutType <>", value, "inOutType");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutTypeGreaterThan(String value) {
+            addCriterion("s.inOutType >", value, "inOutType");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("s.inOutType >=", value, "inOutType");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutTypeLessThan(String value) {
+            addCriterion("s.inOutType <", value, "inOutType");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutTypeLessThanOrEqualTo(String value) {
+            addCriterion("s.inOutType <=", value, "inOutType");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutTypeLike(String value) {
+            addCriterion("s.inOutType like", value, "inOutType");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutTypeNotLike(String value) {
+            addCriterion("s.inOutType not like", value, "inOutType");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutTypeIn(List<String> values) {
+            addCriterion("s.inOutType in", values, "inOutType");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutTypeNotIn(List<String> values) {
+            addCriterion("s.inOutType not in", values, "inOutType");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutTypeBetween(String value1, String value2) {
+            addCriterion("s.inOutType between", value1, value2, "inOutType");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutTypeNotBetween(String value1, String value2) {
+            addCriterion("s.inOutType not between", value1, value2, "inOutType");
+            return (Criteria) this;
+        }
+
+        public Criteria andShipperOrReceiverIsNull() {
+            addCriterion("s.shipperOrReceiver is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShipperOrReceiverIsNotNull() {
+            addCriterion("s.shipperOrReceiver is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShipperOrReceiverEqualTo(String value) {
+            addCriterion("s.shipperOrReceiver =", value, "shipperOrReceiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andShipperOrReceiverNotEqualTo(String value) {
+            addCriterion("s.shipperOrReceiver <>", value, "shipperOrReceiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andShipperOrReceiverGreaterThan(String value) {
+            addCriterion("s.shipperOrReceiver >", value, "shipperOrReceiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andShipperOrReceiverGreaterThanOrEqualTo(String value) {
+            addCriterion("s.shipperOrReceiver >=", value, "shipperOrReceiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andShipperOrReceiverLessThan(String value) {
+            addCriterion("s.shipperOrReceiver <", value, "shipperOrReceiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andShipperOrReceiverLessThanOrEqualTo(String value) {
+            addCriterion("s.shipperOrReceiver <=", value, "shipperOrReceiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andShipperOrReceiverLike(String value) {
+            addCriterion("s.shipperOrReceiver like", value, "shipperOrReceiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andShipperOrReceiverNotLike(String value) {
+            addCriterion("s.shipperOrReceiver not like", value, "shipperOrReceiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andShipperOrReceiverIn(List<String> values) {
+            addCriterion("s.shipperOrReceiver in", values, "shipperOrReceiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andShipperOrReceiverNotIn(List<String> values) {
+            addCriterion("s.shipperOrReceiver not in", values, "shipperOrReceiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andShipperOrReceiverBetween(String value1, String value2) {
+            addCriterion("s.shipperOrReceiver between", value1, value2, "shipperOrReceiver");
+            return (Criteria) this;
+        }
+
+        public Criteria andShipperOrReceiverNotBetween(String value1, String value2) {
+            addCriterion("s.shipperOrReceiver not between", value1, value2, "shipperOrReceiver");
+            return (Criteria) this;
+        }
+        
+        
     }
 
     public static class Criteria extends GeneratedCriteria {

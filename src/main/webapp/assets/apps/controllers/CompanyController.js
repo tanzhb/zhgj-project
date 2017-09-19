@@ -836,6 +836,10 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	         * 取消企业信息保存
 	         */
 	        $scope.cancelCompany = function (type) {
+	        	if(isNull($scope.company)||isNull($scope.company.comId)){
+	        		$state.go("company");
+	        		return;
+	        	}
 	        	getCompanyInfo($scope.company.comId)
 	        	if(type=="company"){
 	        		$scope.companyView = true;

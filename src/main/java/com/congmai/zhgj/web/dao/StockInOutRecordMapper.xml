@@ -16,6 +16,8 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+     <result column="inOutType" property="inOutType" jdbcType="VARCHAR" />
+    <result column="shipperOrReceiver" property="shipperOrReceiver" jdbcType="VARCHAR" />
   </resultMap>
   <!-- 入库查询 -->
   <resultMap id="BaseResultMap2" type="com.congmai.zhgj.web.model.StockInOutRecord" >
@@ -33,6 +35,8 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+     <result column="inOutType" property="inOutType" jdbcType="VARCHAR" />
+    <result column="shipperOrReceiver" property="shipperOrReceiver" jdbcType="VARCHAR" />
     <association property="delivery" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.TakeDeliveryMapper.selectByTakeDeliveryPrimaryKeyForStockIn"></association>
   	<association property="warehouseCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countWarehouseByDeliverSerial" ></association>
     <association property="positionCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countPositionByDeliverSerial" ></association>
@@ -53,6 +57,8 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+     <result column="inOutType" property="inOutType" jdbcType="VARCHAR" />
+    <result column="shipperOrReceiver" property="shipperOrReceiver" jdbcType="VARCHAR" />
     <association property="delivery" column="deliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectByDeliveryPrimaryKey"></association>
   	<association property="warehouseCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countWarehouseByDeliverSerial" ></association>
     <association property="positionCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countPositionByDeliverSerial" ></association>
@@ -115,9 +121,9 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Base_Column_List" >
+    <sql id="Base_Column_List" >
     serialNum, deliverSerial, takeDeliverSerial, inOutNum, stockDate, operator, contactNum, 
-    status, remark, delFlg, creator, createTime, updater, updateTime
+    status, remark, delFlg, creator, createTime, updater, updateTime, inOutType, shipperOrReceiver
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.StockInOutRecordExample" >
     select
@@ -166,12 +172,14 @@
       inOutNum, stockDate, operator, 
       contactNum, status, remark, 
       delFlg, creator, createTime, 
-      updater, updateTime)
+      updater, updateTime, inOutType, 
+      shipperOrReceiver)
     values (#{serialNum,jdbcType=VARCHAR}, #{deliverSerial,jdbcType=VARCHAR}, #{takeDeliverSerial,jdbcType=VARCHAR}, 
       #{inOutNum,jdbcType=VARCHAR}, #{stockDate,jdbcType=DATE}, #{operator,jdbcType=VARCHAR}, 
       #{contactNum,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
       #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{inOutType,jdbcType=VARCHAR}, 
+      #{shipperOrReceiver,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.StockInOutRecord" >
     insert into stockInOutRecord
@@ -218,6 +226,12 @@
       <if test="updateTime != null" >
         updateTime,
       </if>
+      <if test="inOutType != null" >
+        inOutType,
+      </if>
+      <if test="shipperOrReceiver != null" >
+        shipperOrReceiver,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
@@ -261,6 +275,12 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inOutType != null" >
+        #{inOutType,jdbcType=VARCHAR},
+      </if>
+      <if test="shipperOrReceiver != null" >
+        #{shipperOrReceiver,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -315,6 +335,12 @@
       <if test="record.updateTime != null" >
         updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.inOutType != null" >
+        inOutType = #{record.inOutType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shipperOrReceiver != null" >
+        shipperOrReceiver = #{record.shipperOrReceiver,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -335,7 +361,9 @@
       creator = #{record.creator,jdbcType=VARCHAR},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
       updater = #{record.updater,jdbcType=VARCHAR},
-      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      inOutType = #{record.inOutType,jdbcType=VARCHAR},
+      shipperOrReceiver = #{record.shipperOrReceiver,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -382,6 +410,12 @@
       <if test="updateTime != null" >
         updateTime = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="inOutType != null" >
+        inOutType = #{inOutType,jdbcType=VARCHAR},
+      </if>
+      <if test="shipperOrReceiver != null" >
+        shipperOrReceiver = #{shipperOrReceiver,jdbcType=VARCHAR},
+      </if>
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
@@ -399,7 +433,9 @@
       creator = #{creator,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP},
       updater = #{updater,jdbcType=VARCHAR},
-      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      inOutType = #{inOutType,jdbcType=VARCHAR},
+      shipperOrReceiver = #{shipperOrReceiver,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
   <delete id="deleteStockInOutRecord" parameterType="java.util.List">

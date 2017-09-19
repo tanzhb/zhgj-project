@@ -40,6 +40,10 @@ public class StockInOutRecord {
 
     private Date updateTime;
     
+    private String inOutType;
+
+    private String shipperOrReceiver;
+    
     private int pageSize;
     
     private int pageIndex;  
@@ -211,5 +215,21 @@ public class StockInOutRecord {
 
 	public void setOrder(OrderInfo order) {
 		this.order = order;
+	}
+
+	public String getInOutType() {
+		return inOutType;
+	}
+
+	public void setInOutType(String inOutType) {
+		this.inOutType = inOutType;
+	}
+
+	public String getShipperOrReceiver() {
+		return shipperOrReceiver;
+	}
+
+	public void setShipperOrReceiver(String shipperOrReceiver) {
+		this.shipperOrReceiver = shipperOrReceiver;
 	}
 }

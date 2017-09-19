@@ -1046,13 +1046,13 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 						break;
 	        		}
 	        		
-	        		if(i==$scope.copyMateriels.length-1){ // 如果是已选择但未保存的物料，清空
+	        		/*if(i==$scope.copyMateriels.length-1){ // 如果是已选择但未保存的物料，清空
 	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)].deliveryDate = "";
 	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)].deliveryAddress = "";
 	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)].lastDeliveryDate = "";
 	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)].amount = "";
 	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)].orderUnitPrice = "";
-	        		}
+	        		}*/
 	        	}
 	        };  
 	        
@@ -2145,7 +2145,7 @@ var e = $("#form_clauseSettlement"),
 		       
 		       $scope.totalRateAndCustomsAmount  = function(scope) {//订单税额(含关税)
 		    	   if(!isNull($scope.buyOrder)&&$scope.buyOrder.orderType =='标准采购(外贸)'){//税额+关税
-	    		    	return $scope.totalRateAmount() + $scope.totalCustomsRateAmount();
+	    		    	return Number($scope.totalRateAmount()) + Number($scope.totalCustomsRateAmount());
 			    	}else{
 			    		return $scope.totalRateAmount()
 			    	}

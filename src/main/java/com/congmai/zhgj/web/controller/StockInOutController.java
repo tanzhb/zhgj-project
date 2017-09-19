@@ -1,5 +1,6 @@
 package com.congmai.zhgj.web.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,9 @@ import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.StockInOutCheck;
+import com.congmai.zhgj.web.model.StockInOutRecord;
+import com.congmai.zhgj.web.model.TakeDelivery;
+import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.service.DeliveryMaterielService;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.OrderService;
@@ -60,6 +64,7 @@ public class StockInOutController {
    	private OrderService orderService;
     @Autowired
    	private DeliveryMaterielService  deliveryMaterielService;
+   
     
     
     
@@ -102,10 +107,9 @@ public class StockInOutController {
     	try{
     		if(StringUtils.isEmpty(stockInOutCheck.getSerialNum())){
     			stockInOutCheck.setSerialNum(ApplicationUtils.random32UUID());
-    			stockInOutCheck.setStatus("0");//待审批
+    			stockInOutCheck.setStatus("0");//待检验
     			stockInOutCheckService.insert(stockInOutCheck);
     		}else{
-    			stockInOutCheck.setStatus("1");//待检验
     			stockInOutCheckService.update(stockInOutCheck);
     		}
     		for(DeliveryMateriel deliveryMateriel:stockInOutCheck.getDeliverMaterials()){
@@ -153,9 +157,11 @@ public class StockInOutController {
 				totalQualifiedCount=0;totalUnQualifiedCount=0;
 				List<DeliveryMaterielVO> deliveryMateriels=null;
 				if("in".equals(inOrOut)){
-					deliveryMateriels= deliveryService.selectListForDetail(stockInOutCheck.getDeliverSerial());
+					//deliveryMateriels= deliveryService.selectListForDetail(stockInOutCheck.getDeliverSerial());
+					deliveryMateriels = deliveryService.selectListForDetailForStockCheck(stockInOutCheck.getDeliverSerial(),"out");
 				}else if("out".equals(inOrOut)){
-					deliveryMateriels= deliveryService.selectListForDetail(stockInOutCheck.getTakeDeliverSerial());
+					deliveryMateriels=deliveryService.selectListForDetailForStockCheck(stockInOutCheck.getTakeDeliverSerial(),"in");
+					//deliveryMateriels= deliveryService.selectListForDetail(stockInOutCheck.getTakeDeliverSerial());
 				}
 	    		for(DeliveryMaterielVO dmo:deliveryMateriels){
 	    			totalQualifiedCount+=Integer.parseInt(dmo.getQualifiedCount()==null?"0":dmo.getQualifiedCount());
@@ -194,9 +200,17 @@ public class StockInOutController {
     	Integer  totalDeliverCount=0;
     	List<DeliveryMaterielVO> deliveryMateriels=null;
     	if(serialNum.indexOf("in")>-1){//入库
-    		deliveryMateriels=deliveryService.selectListForDetail(stockInOutCheck.getTakeDeliverSerial());
+  		deliveryMateriels=deliveryService.selectListForDetailForStockCheck(stockInOutCheck.getTakeDeliverSerial(),"in");
+    		TakeDelivery takeDeliveryVO=takeDeliveryService.selectByPrimaryKey(stockInOutCheck.getTakeDeliverSerial());
+    		//stockInOutCheck.setDeliverNum(takeDeliveryVO.getTakeDeliverNum());
+    	 	//stockInOutCheck.setRelationSaleNum(delivery.getOrderNum());
+    	 	//stockInOutCheck.setSupplyName(takeDeliveryVO.getSupplyName());
     	}else if (serialNum.indexOf("out")>-1){//出库
-    	 	deliveryMateriels = deliveryService.selectListForDetail(stockInOutCheck.getDeliverSerial());
+    	 	deliveryMateriels = deliveryService.selectListForDetailForStockCheck(stockInOutCheck.getDeliverSerial(),"out");
+    	 	DeliveryVO deliveryVO=deliveryService.selectDetailById(stockInOutCheck.getDeliverSerial());
+    	 	//stockInOutCheck.setDeliverNum(deliveryVO.getDeliverNum());
+    	 //	stockInOutCheck.setRelationSaleNum(delivery.getOrderNum());
+    	 	//stockInOutCheck.setSupplyName(deliveryVO.getSupplyName());
     	}
     	for(DeliveryMaterielVO dmo:deliveryMateriels){
 			dmo.setQualifiedCount(dmo.getQualifiedCount()==null?"0":dmo.getQualifiedCount());
@@ -204,11 +218,9 @@ public class StockInOutController {
 			totalDeliverCount+=Integer.parseInt(dmo.getDeliverCount());
 		}
 	 	map.put("materials", deliveryMateriels);
-	 	DeliveryVO delivery=deliveryService.selectDetailById(stockInOutCheck.getDeliverSerial());
+	 	
 	 	stockInOutCheck.setTotalDeliverCount(totalDeliverCount.toString());
-	 	stockInOutCheck.setDeliverNum(delivery.getDeliverNum());
-	 	stockInOutCheck.setRelationSaleNum(delivery.getOrderNum());
-	 	stockInOutCheck.setSupplyName(delivery.getSupplyName());
+	 	
     }
     	
     	return map;
@@ -217,14 +229,12 @@ public class StockInOutController {
     @RequestMapping(value = "/getMaterialBySerialNum", method = RequestMethod.POST)
     public ResponseEntity<Map> getMaterialBySerialNum(HttpServletRequest request, @RequestBody String  serialNum) {
     	Map<String, Object> map = new HashMap<String, Object>();
-    	/*if(serialNum.indexOf("in")>-1){//入库
-    		Delivery delivery= takeDeliveryService.selectByTakeDeliveryPrimaryKey(serialNum.substring(0, 32));
-    		map.put("materials", delivery.getDeliveryMateriels());
+    	List<DeliveryMaterielVO> deliveryMateriels=null;
+    	if(serialNum.indexOf("in")>-1){//入库
+    		 deliveryMateriels = deliveryService.selectListForDetailForStockCheck(serialNum.substring(0, 32),"in");
     	}else if (serialNum.indexOf("out")>-1){//出库
-    	 	List<DeliveryMaterielVO> deliveryMateriels = deliveryService.selectListForDetail(serialNum.substring(0, 32));
-    	 	map.put("materials", deliveryMateriels);
-    	}*/
-    	List<DeliveryMaterielVO> deliveryMateriels = deliveryService.selectListForDetail(serialNum.substring(0, 32));
+    	 deliveryMateriels = deliveryService.selectListForDetailForStockCheck(serialNum.substring(0, 32),"out");
+    	}
 	 	map.put("materials", deliveryMateriels);
     	return new ResponseEntity<Map>(map, HttpStatus.OK);
     }
@@ -353,4 +363,31 @@ public class StockInOutController {
 	    	
 	         return map;
 	    }
+	    /**
+	     * 出入库信息检验
+	     * 
+	     * @param session
+	     * @return
+	     */
+	    @RequestMapping(value = "/confirmStockInOutCheck")
+	    public String confirmStockInOutCheck(HttpServletRequest request) {
+	        return "stockInOutCheck/confirmStockInOutCheckInfo";
+	    }
+	    
+	    /**
+		 * 
+		 * @Description 更新检验状态
+		 * @param ids
+		 * @return
+		 */
+		@RequestMapping(value = "/updateStockInOutCheckStatus", method = RequestMethod.POST)
+		public ResponseEntity<Void> updateStockInOutCheckStatus(@RequestBody String serialNum) {
+			Subject currentUser = SecurityUtils.getSubject();
+			String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+			stockInOutCheckService.updateStockInOutCheckStatus(serialNum.substring(0, 32),serialNum,currenLoginName);
+			StockInOutCheck stockInOutCheck=stockInOutCheckService.selectById(serialNum.substring(0, 32));
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		}
+		
+
 }

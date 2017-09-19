@@ -482,48 +482,11 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="port">港口 </label>
+                                                    <label class="control-label bold" for="shipNumber">运单号<span class="required"> * </span></label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="port"   ng-model="deliverTransport.port" ng-hide="deliverAdd" >
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliverTransport.port}}</p>
-                                                    </div>
-                                            </div>
-										</div>
-										<!--/span-->
-									</div>
-									<!--/row-->
-									<div class="row">
-										<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold" for="shipNumber">船号</label>
-                                                    <div class="">
-                                                        <input type="text" class="form-control" id="shipNumber" ng-model="deliverTransport.shipNumber" ng-hide="deliverAdd" >
+                                                        <input type="text" class="form-control" name="shipNumber" id="shipNumber" ng-model="deliverTransport.shipNumber" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliverTransport.shipNumber}}</p>
-                                                    </div>
-                                            </div>
-										</div>
-						
-										<!--/span-->
-										<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold" for="playArrivalDate">预计到港日期 </label>
-                                                    <div class="">
-                                                        <input type="text" class="form-control  date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="playArrivalDate"   ng-model="deliverTransport.playArrivalDate" ng-hide="deliverAdd" readonly="readonly">
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliverTransport.playArrivalDate}}</p>
-                                                    </div>
-                                            </div>
-										</div>
-										<!--/span-->
-										<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold" for="playWarehouseDate">预计到库日期 <span class="required"> * </span></label>
-                                                    <div class="">
-                                                        <input type="text" class="form-control date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="playWarehouseDate"  name="playWarehouseDate" ng-model="deliverTransport.playWarehouseDate" ng-hide="deliverAdd" readonly="readonly">
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliverTransport.playWarehouseDate}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -617,7 +580,7 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="takeDeliverDate">收货日期 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="takeDeliverDate">预计到货日期 <span class="required"> * </span></label>
                                                     <div class="">
                                                         <input type="text" class="form-control date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="takeDeliverDate"  name="takeDeliverDate" ng-model="takeDeliver.takeDeliverDate" ng-hide="deliverAdd" readonly="readonly">
                                                         <div class="form-control-focus"> </div>
