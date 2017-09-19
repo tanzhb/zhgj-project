@@ -34,6 +34,8 @@ import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.StockInOutRecord;
+import com.congmai.zhgj.web.model.TakeDelivery;
+import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.service.DeliveryMaterielService;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.OrderService;
@@ -198,9 +200,17 @@ public class StockInOutController {
     	Integer  totalDeliverCount=0;
     	List<DeliveryMaterielVO> deliveryMateriels=null;
     	if(serialNum.indexOf("in")>-1){//入库
-    		deliveryMateriels=deliveryService.selectListForDetailForStockCheck(stockInOutCheck.getTakeDeliverSerial(),"in");
+  		deliveryMateriels=deliveryService.selectListForDetailForStockCheck(stockInOutCheck.getTakeDeliverSerial(),"in");
+    		TakeDelivery takeDeliveryVO=takeDeliveryService.selectByPrimaryKey(stockInOutCheck.getTakeDeliverSerial());
+    		//stockInOutCheck.setDeliverNum(takeDeliveryVO.getTakeDeliverNum());
+    	 	//stockInOutCheck.setRelationSaleNum(delivery.getOrderNum());
+    	 	//stockInOutCheck.setSupplyName(takeDeliveryVO.getSupplyName());
     	}else if (serialNum.indexOf("out")>-1){//出库
     	 	deliveryMateriels = deliveryService.selectListForDetailForStockCheck(stockInOutCheck.getDeliverSerial(),"out");
+    	 	DeliveryVO deliveryVO=deliveryService.selectDetailById(stockInOutCheck.getDeliverSerial());
+    	 	//stockInOutCheck.setDeliverNum(deliveryVO.getDeliverNum());
+    	 //	stockInOutCheck.setRelationSaleNum(delivery.getOrderNum());
+    	 	//stockInOutCheck.setSupplyName(deliveryVO.getSupplyName());
     	}
     	for(DeliveryMaterielVO dmo:deliveryMateriels){
 			dmo.setQualifiedCount(dmo.getQualifiedCount()==null?"0":dmo.getQualifiedCount());
@@ -208,11 +218,9 @@ public class StockInOutController {
 			totalDeliverCount+=Integer.parseInt(dmo.getDeliverCount());
 		}
 	 	map.put("materials", deliveryMateriels);
-	 	DeliveryVO delivery=deliveryService.selectDetailById(stockInOutCheck.getDeliverSerial());
+	 	
 	 	stockInOutCheck.setTotalDeliverCount(totalDeliverCount.toString());
-	 	stockInOutCheck.setDeliverNum(delivery.getDeliverNum());
-	 	stockInOutCheck.setRelationSaleNum(delivery.getOrderNum());
-	 	stockInOutCheck.setSupplyName(delivery.getSupplyName());
+	 	
     }
     	
     	return map;

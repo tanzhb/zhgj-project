@@ -8,6 +8,7 @@ import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.model.TakeDeliveryParams;
+import com.congmai.zhgj.web.model.TakeDeliveryVO;
 
 public interface TakeDeliveryService extends GenericService<TakeDelivery, String>{
 	
@@ -71,6 +72,8 @@ public interface TakeDeliveryService extends GenericService<TakeDelivery, String
 	 */
 	void confirmTakeDelivery(TakeDeliveryParams takeDeliveryParams,
 			String currenLoginName);
+
+	TakeDeliveryVO selectDetailById(String deliverSerial);
 	
 		
 

@@ -302,6 +302,7 @@
     SELECT
 	a.serialNum,c.materielNum,c.materielName,c.specifications,c.unit,a.batchNum,a.manufactureDate,b.amount,a.deliverCount,a.remark,
 	a.stockCount,a.unstockCount,d.warehouseName,e.positionName,a.stockRemark,a.qualifiedCount,a.unqualifiedCount,a.checkRemark,
+	b.orderSerial,
 	a.acceptCount,a.refuseCount,a.takeRemark
 	<if test="null!=#{deliverSerial}">
 	,f.status

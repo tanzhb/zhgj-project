@@ -100,6 +100,10 @@ public class DeliveryMaterielVO {
 	
 	
 	private String status;
+	
+	private String orderSerial;//订单流水
+	
+	
 
 
 	public String getSerialNum() {
@@ -350,4 +354,13 @@ public class DeliveryMaterielVO {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+	public String getOrderSerial() {
+		return orderSerial;
+	}
+
+	public void setOrderSerial(String orderSerial) {
+		this.orderSerial = orderSerial;
+	}
+
 }
