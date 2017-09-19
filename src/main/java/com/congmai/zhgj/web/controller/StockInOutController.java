@@ -186,9 +186,6 @@ public class StockInOutController {
 	    		stockInOutCheck.setMaterialNum(deliveryMateriels.size()+"");
 	    		stockInOutCheck.setTotalQualifiedCount(totalQualifiedCount.toString());
 	    		stockInOutCheck.setTotalUnQualifiedCount(totalUnQualifiedCount.toString());
-	    		DeliveryVO delivery=deliveryService.selectDetailById(stockInOutCheck.getDeliverSerial());
-	    		stockInOutCheck.setDeliverNum(delivery.getDeliverNum());
-	    	 	stockInOutCheck.setRelationSaleNum(delivery.getOrderNum());
 			}
 		}
 	
