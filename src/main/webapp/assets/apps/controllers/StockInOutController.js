@@ -508,7 +508,7 @@ angular
 								}else{
 									var serialNum = table.$('input[type="checkbox"]:checked').val();
 									if(judgeString.indexOf("check")>-1){
-									$state.go("confimStockInOutCheck",{inOrOut:serialNum+judgeString});
+									$state.go("confirmStockInOutCheck",{inOrOut:serialNum+judgeString});
 									}else{$state.go("addOrEditStockInOutCheck",{inOrOut:serialNum+judgeString});}
 										
 								}
