@@ -1270,7 +1270,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
     			var ids = '';
     			for(i=0;i<ap.length;i++){
     				if(ap[i].status != '0'){
-    					showToastr('toast-top-center', 'warning', '所选数据已经申请流程审批，不能删除！');
+    					showToastr('toast-top-center', 'warning', '所选数据已经发货，不能删除！');
     					return;
     				}
     				
@@ -1387,7 +1387,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 				showToastr('toast-top-center', 'warning', '请选择一条数据进行修改！')
 			}else{
 				if(table.row('.active').data().status != '0'){
-					showToastr('toast-top-center', 'warning', '该条数据已经申请流程审批，不能进行修改！')
+					showToastr('toast-top-center', 'warning', '该条数据已经发货流程审批，不能进行修改！')
 				}else $state.go('editDeliveryPage',{serialNumEdit:table.row('.active').data().serialNum});
 			} 
 		};
@@ -1455,38 +1455,20 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
             	receiver:{required:"收货方不能为空！"},
             	maker:{required:"制单人不能为空！"},
             	makeDate:{required:"制单日期不能为空！"},
-            	approval:{required:"审批人不能为空！"},
-            	approvalDate:{required:"审批日期不能为空！"},
             	
             	
             	deliveryWarehouseSerial:{required:"发货仓库不能为空！"},
-            	/*warehouseAddress:{required:"仓库地址不能为空！"},*/
             	deliverDate:{required:"发货日期不能为空！"},
-            	materielCount:{required:"物料数不能为空！"},
-            	packageCount:{required:"包装件数不能为空！"},
-            	packageType:{required:"包装类型不能为空！"},
-            	packageSpecifications:{required:"包装规格不能为空！"},
-            	materielWeight:{required:"物料重量不能为空！"},
-            	serviceMoney:{required:"服务费不能为空！"},
-            	deliverer:{required:"发货人不能为空！"},
-            	contactNum:{required:"联系方式不能为空！",digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
+            	contactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
             	
             	
-            	transportType:{required:"运输方式不能为空！"},
             	transport:{required:"运输方不能为空！"},
-            	port:{required:"港口不能为空！"},
-            	shipNumber:{required:"船号不能为空！"},
-            	playArrivalDate:{required:"预计到港日期不能为空！"},
-            	playWarehouseDate:{required:"预计到库日期不能为空！"},
-            	deliveryTransportContact:{required:"运输联系人不能为空！"},
-            	deliveryTransportContactNum:{required:"联系方式不能为空！",digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
+            	shipNumber:{required:"运单号不能为空！"},
+            	deliveryTransportContactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
             	
             	
             	takeDeliveryWarehouseSerial:{required:"收货仓库不能为空！"},
-            	/*takeDeliveryWarehouseAddress:{required:"仓库地址不能为空！"},*/
-            	takeDeliverDate:{required:"收货日期日期不能为空！"},
-            	takeDeliveryReceiver:{required:"收货人不能为空！"},
-            	takeDeliveryContactNum:{required:"联系方式不能为空！",digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
+            	takeDeliveryContactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
             	
                 payment: {
                     maxlength: jQuery.validator.format("Max {0} items allowed for selection"),
@@ -1527,56 +1509,24 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
                 },
                 makeDate:{required:true,
                 },
-                approval:{required:true,
-                },
-                approvalDate:{required:true,
-                }, 
                
                 
                 
                 deliveryWarehouseSerial:{required:true,
                 },
-               /* warehouseAddress:{required:true,
-                },*/
                 deliverDate:{required:true,
                 },
-                materielCount:{required:true,
-                },
-                packageCount:{required:true,
-                },
-                packageType:{required:true,
-                },
-                packageSpecifications:{required:true,
-                },
-                materielWeight:{required:true,
-                },
-                serviceMoney:{required:true,
-                },
-                deliverer:{required:true,
-                },
                 contactNum:{
-                	required:true,
                 	digits:true,
                 	rangelength:[7,20]
                 },
                 
                 
-                transportType:{required:true,
-                },
                 transport:{required:true,
-                },
-                port:{required:true,
                 },
                 shipNumber:{required:true,
                 },
-                playArrivalDate:{required:true,
-                },
-                playWarehouseDate:{required:true,
-                },
-                deliveryTransportContact:{required:true,
-                },
                 deliveryTransportContactNum:{
-                	required:true,
                 	digits:true,
                 	rangelength:[7,20]
                 },
@@ -1584,14 +1534,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
                 
                 takeDeliveryWarehouseSerial:{required:true,
                 },
-               /* takeDeliveryWarehouseAddress:{required:true,
-                },*/
-                takeDeliverDate:{required:true,
-                },
-                takeDeliveryReceiver:{required:true,
-                },
                 takeDeliveryContactNum:{
-                	required:true,
                 	digits:true,
                 	rangelength:[7,20]
                 },
