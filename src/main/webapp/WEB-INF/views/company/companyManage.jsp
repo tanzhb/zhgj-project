@@ -8,7 +8,7 @@
 </head>
 <!-- BEGIN PAGE HEADER-->
 <!-- <h3 class="page-title">企业信息</h3> -->
-<div class="page-bar">
+<!-- <div class="page-bar">
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
 			class="fa fa-angle-right"></i></li>
@@ -16,7 +16,7 @@
 			class="fa fa-angle-right"></i></li>
 		<li><a ui-sref="datatablesmanaged">企业信息</a></li>
 	</ul>
-</div>
+</div> -->
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
 <div class="row">

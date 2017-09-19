@@ -21,7 +21,22 @@
 	<!-- END RESPONSIVE MENU TOGGLER -->
 	<!-- BEGIN PAGE ACTIONS -->
 	<!-- DOC: Remove "hide" class to enable the page header actions -->
-
+	
+	<div class="page-actions">
+         <div class="page-bar">
+			<ul class="page-breadcrumb" id='dashboard'>
+				<!-- <li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
+					class="fa fa-angle-right"></i></li> -->
+		
+				<!-- <div id="loadPageBar"> -->
+					
+				<!-- </div> -->
+			</ul>
+		</div>
+     </div>
+	
+	
+	
 
 	<!-- BEGIN PAGE TOP -->
 	<div class="page-top">
