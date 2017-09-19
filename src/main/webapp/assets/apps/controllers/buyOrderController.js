@@ -299,7 +299,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 /*
  * fixedHeader: {//固定表头、表底 header: !0, footer: !0, headerOffset: a },
  */
-                order: [[1, "asc"]],// 默认排序列及排序方式
+                order: [[9, "desc"]],// 默认排序列及排序方式
                 searching: true,// 是否过滤检索
                 ordering:  true,// 是否排序
                 lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],

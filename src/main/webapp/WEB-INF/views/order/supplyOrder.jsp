@@ -1,37 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <!-- BEGIN PAGE HEADER-->
-<!-- <h3 class="page-title"> 销售订单
-    <small></small>
-</h3> -->
-<div class="page-bar">
 
-    <ul class="page-breadcrumb">
-        <li>
-            <i class="fa fa-home"></i>
-            <a ui-sref="dashboard">首页</a>
-            <i class="fa fa-angle-right"></i>
-        </li>
-        <li>
-            <a ui-sref="saleOrder">销售管理</a>
-            <i class="fa fa-angle-right"></i>
-        </li>
-        <li>
-            <a ui-sref="saleOrder">订单</a>
-        </li>
-    </ul>
-</div>
+
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
 <div class="tabbable-line">
     <ul class="nav nav-tabs">
-		<shiro:hasPermission name="zhgj:normalOrder">
 			<li class="active"><a data-target="#tab_15_1" data-toggle="tab">订单</a>
 			</li>
-		</shiro:hasPermission>
-		<shiro:hasPermission name="zhgj:frameOrder">
 			<li><a data-target="" data-toggle="tab">框架合同</a></li>
-		</shiro:hasPermission>
 	</ul>
     <div class="tab-content">
     	<!-- 普通订单---START -->

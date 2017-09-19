@@ -116,8 +116,8 @@
     <!--添加基本信息第三部分  -->
     <insert id="insertBasicInfoPartIII" parameterType="com.congmai.zhgj.web.model.TakeDeliveryVO">
     INSERT INTO takeDelivery
-    (serialNum,deliverSerial,warehouseSerial,takeDeliverDate,receiver,contactNum,remark,creator,createTime,updater,updateTime) VALUES
-    (#{serialNum},#{deliverSerial},#{takeDeliveryWarehouseSerial},#{takeDeliverDate},#{takeDeliveryReceiver},#{takeDeliveryContactNum},#{takeDeliveryRemark},#{creator},NOW(),#{creator},NOW())
+    (serialNum,deliverSerial,warehouseSerial,takeDeliverDate,receiver,contactNum,remark,status,creator,createTime,updater,updateTime) VALUES
+    (#{serialNum},#{deliverSerial},#{takeDeliveryWarehouseSerial},#{takeDeliverDate},#{takeDeliveryReceiver},#{takeDeliveryContactNum},#{takeDeliveryRemark},'0',#{creator},NOW(),#{creator},NOW())
     </insert>
     
     <!--更新基本信息第三部分  -->
