@@ -70,6 +70,7 @@ MetronicApp.controller('AppController', [ '$scope', '$rootScope',
 MetronicApp.controller('HeaderController', [ '$scope', function($scope) {
 	$scope.$on('$includeContentLoaded', function() {
 		Layout.initHeader(); // init header
+		
 	});
 } ]);
 
@@ -2010,3 +2011,309 @@ MetronicApp.run([ "$rootScope", "settings", "$state",
 			$rootScope.$settings = settings; // state to be accessed from
 												// view
 		} ]);
+
+MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', function ($rootScope, $window, $location, $log, $compile) {
+	
+	$rootScope.$on('$stateChangeSuccess', 
+			function(event, toState, toParams, fromState, fromParams){
+				
+		
+			   var html = '';
+			   if('dashboard' == toState.name){//首页
+					 html="<li><i class='fa fa-home'></i> <a>首页</a></li>";					 
+			   }else if('materiel' == toState.name){//物料信息
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>物料信息</a></li>";					 
+			   }else if('addMateriel' == toState.name){//新增物料
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a ui-sref='materiel'>物料信息</a><i class='fa fa-angle-right'></i></li>";
+				   if(toParams.serialNum != undefined){
+					   html += "<li><a>修改物料</a></li>";
+				   }else html += "<li><a>新增物料</a></li>";
+			   }else if('company' == toState.name){//企业信息
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>企业信息</a></li>";					 
+			   }else if('companyAdd' == toState.name){//新增企业
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='company'>企业信息</a><i class='fa fa-angle-right'></i></li>";
+					 if(toParams.comId != undefined){
+						 html += "<li><a>修改企业信息</a></li>";
+					 } else html += "<li><a>新增企业</a></li>";
+			   }else if('userContract' == toState.name){//合同管理
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>合同信息</a></li>";					 
+			   }else if('addUserContract' == toState.name){//新增“其他合同”
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='userContract'>合同信息</a><i class='fa fa-angle-right'></i></li>" + 
+					 	"<li><a>新增合同</a></li>";
+			   }else if('editUserContractPage' == toState.name){//修改“其他合同”
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='userContract'>合同信息</a><i class='fa fa-angle-right'></i></li>" + 
+					 	"<li><a>修改合同</a></li>";
+			   }else if('warehouse' == toState.name){//仓库管理
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>仓库列表</a></li>";					 
+			   }else if('addWarehouse' == toState.name){//新增仓库
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='warehouse'>仓库列表</a><i class='fa fa-angle-right'></i></li>";
+				 		if(toParams.warehouseSerialNum != undefined){
+							 html += "<li><a>修改仓库信息</a></li>";
+						 } else html += "<li><a>新增仓库</a></li>";
+			   }else if('demandPlan' == toState.name){//需求计划
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>需求计划列表</a></li>";					 
+			   }else if('demandPlanAdd' == toState.name){//新增需求计划
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='demandPlan'>需求计划列表</a><i class='fa fa-angle-right'></i></li>";
+				 		if(toParams.serialNum != undefined){
+							 html += "<li><a>修改需求计划</a></li>";
+						 } else html += "<li><a>新增需求计划</a></li>";
+			   }else if('demandPlanView' == toState.name){//查看需求计划
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='demandPlan'>需求计划列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>查看需求计划</a></li>";
+			   }else if('saleOrder' == toState.name){//销售订单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>销售订单列表</a></li>";					 
+			   }else if('addSaleOrder' == toState.name){//新增销售订单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>";
+				 		if(toParams.serialNum != undefined){
+							 html += "<li><a>修改销售订单</a></li>";
+						 } else html += "<li><a>新增销售订单</a></li>";
+			   }else if('buyOrder' == toState.name){//采购订单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购订单列表</a></li>";					 
+			   }else if('addBuyOrder' == toState.name){//新增采购订单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>";
+				 		if(toParams.serialNum != undefined){
+							 html += "<li><a>修改采购订单</a></li>";
+						 } else html += "<li><a>新增采购订单</a></li>";
+			   }else if('viewBuyOrder' == toState.name){//查看采购订单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>查看采购订单</a></li>";
+			   }else if('submitBuyApply' == toState.name){//采购订单发起申请
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>采购订单申请</a></li>";
+			   }else if('approvalBuyApply' == toState.name){//采购订单审批
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>采购订单审批</a></li>";
+			   }else if('editBuyApply' == toState.name){//重新编辑采购订单申请
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>重新发起订单申请</a></li>";
+			   }else if('purchaseForecast' == toState.name){//采购预测
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购预测列表</a></li>";					 
+			   }else if('stock' == toState.name){//库存
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>库存</a></li>";					 
+			   }else if('addOrEditStock' == toState.name){//新增库存
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a ui-sref='stock'>库存</a><i class='fa fa-angle-right'></i></li>";
+				   
+				   if(toParams.stockSerialNum == 'zijian'){
+					   html += "<li><a>新增自建库存</a></li>";
+				   }else if(toParams.stockSerialNum == 'daiguan'){
+					   html += "<li><a>新增代管库存</a></li>";
+				   }else if(toParams.stockSerialNum.length > 4){
+					   if(toParams.stockSerialNum.indexOf('zijian') >= 0){
+						   html += "<li><a>修改自建库存</a></li>";
+					   }else html += "<li><a>修改代管库存</a></li>";
+				   }				 
+			   }else if('priceList' == toState.name){//价格目录
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>价格列表</a></li>";					 
+			   }else if('addPriceList' == toState.name){//新增价格
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a ui-sref='priceList'>价格列表</a><i class='fa fa-angle-right'></i></li>";
+				   
+				   if(toParams.buyOrSale == 'buy'){
+					   html += "<li><a>新增采购价格</a></li>";
+				   }else if(toParams.buyOrSale == 'sale'){
+					   html += "<li><a>新增销售价格</a></li>";
+				   }else if(toParams.buyOrSale.length > 4){
+					   if(toParams.buyOrSale.indexOf('sale') >= 0){
+						   html += "<li><a>修改销售价格</a></li>";
+					   }else html += "<li><a>修改采购价格</a></li>";
+				   }				 
+			   }else if('takeDelivery' == toState.name){//收货列表
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>收货列表</a></li>";					 
+			   }else if('takeDeliveryAdd' == toState.name){//新增代发货
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='takeDelivery'>收货列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>新建代发货</a></li>";
+			   }else if('takeDeliveryView' == toState.name){//查看收货
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='takeDelivery'>收货列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>查看收货</a></li>";
+			   }else if('toTakeDelivery' == toState.name){//收货申请
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='takeDelivery'>收货列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>收货申请</a></li>";
+			   }else if('takeDeliveryAudit' == toState.name){//收货审批
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='takeDelivery'>收货列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>收货审批</a></li>";
+			   }else if('takeDeliveryAdjustment' == toState.name){//收货申请调整
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='takeDelivery'>收货列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>收货申请调整</a></li>";
+			   }else if('stockInAdd' == toState.name){//新增入库
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='takeDelivery'>收货列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>新建入库</a></li>";
+			   }else if('stockIn' == toState.name){//入库
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='takeDelivery'>收货列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>入库</a></li>";
+			   }else if('stockInView' == toState.name){//查看入库单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='takeDelivery'>收货列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>查看入库</a></li>";
+			   }else if('stockInOutCheck' == toState.name){//出入库检验
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>检验列表</a></li>";					 
+			   }else if('statement' == toState.name){//对账单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>对账单</a></li>";					 
+			   }else if('addBuyStatement' == toState.name){//新增客户对账单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='statement'>对账单</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>新增客户对账单</a></li>";					 
+			   }else if('addSupplyStatement' == toState.name){//新增供应商对账单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='statement'>对账单</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>新增供应商对账单</a></li>";					 
+			   }else if('viewBuyStatement' == toState.name){//查看客户对账单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='statement'>对账单</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>查看客户对账单</a></li>";					 
+			   }else if('viewSupplyStatement' == toState.name){//查看供应商对账单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='statement'>对账单</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>查看供应商对账单</a></li>";					 
+			   }else if('gatheringMoneyRecord' == toState.name){//应收款
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>应收款</a></li>";					 
+			   }else if('addGatheringMoney' == toState.name){//新增应收款
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='gatheringMoneyRecord'>应收款</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>新增应收款</a></li>";					 
+			   }else if('editGatheringMoney' == toState.name){//修改应收款
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='gatheringMoneyRecord'>应收款</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>修改应收款</a></li>";					 
+			   }else if('viewGatheringMoney' == toState.name){//查看应收款
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='gatheringMoneyRecord'>应收款</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>查看应收款</a></li>";					 
+			   }else if('paymentRecordC' == toState.name){//应付款
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a>收付款</a><i class='fa fa-angle-right'></i></li>" +
+				   "<li><a>应付款</a></li>";
+			   }else if('addPay' == toState.name){//新增应付款
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+					 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" + 
+					 		"<li><a ui-sref='paymentRecordC'>应付款</a> <i class='fa fa-angle-right'></i></li>" + 
+					 		"<li><a>新增应付款</a></li>";					 
+			   }else if('editPay' == toState.name){//修改应付款
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a ui-sref='paymentRecordC'>应付款</a> <i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>修改应付款</a></li>";					 
+			   }else if('viewPay' == toState.name){//查看应付款
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a ui-sref='paymentRecordC'>应付款</a> <i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>查看应付款</a></li>";					 
+			   }else if('applyPay' == toState.name){//应付款申请
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a ui-sref='paymentRecordC'>应付款</a> <i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>应付款申请</a></li>";					 
+			   }else if('auditPay' == toState.name){//应付款审批
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a ui-sref='paymentRecordC'>应付款</a> <i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>应付款审批</a></li>";					 
+			   }else if('editAuditPay' == toState.name){//调整应付款申请
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a ui-sref='paymentRecordC'>应付款</a> <i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>调整应付款申请</a></li>";					 
+			   }else if('invoice' == toState.name){//发票
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a>发票</a></li>";
+			   }else if('addOrEditInvoice' == toState.name){//新增修改发票
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a ui-sref='invoice'>发票</a><i class='fa fa-angle-right'></i></li>";
+				   if(toParams.inOrOut == 'in'){
+					   html += "<li><a>新增进项票</a></li>";
+				   }else if(toParams.inOrOut.length > 4){
+					   if(toParams.inOrOut.indexOf('in') >= 0){
+						   html += "<li><a>修改进项票</a></li>";
+					   }else html += "<li><a>修改销项票</a></li>";
+				   } else html += "<li><a>新增销项票</a></li>";
+			   }else if('invoiceView' == toState.name){//查看发票
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a ui-sref='invoice'>发票</a><i class='fa fa-angle-right'></i></li>";
+				   if(toParams.inOrOut.length > 4){
+					   if(toParams.inOrOut.indexOf('in') >= 0){
+						   html += "<li><a>查看进项票</a></li>";
+					   }else html += "<li><a>查看销项票</a></li>";
+				   }
+			   }
+			   angular.element("#dashboard").empty();
+			   var template = angular.element(html);
+			   var mobileDialogElement = $compile(template)($rootScope);
+			   angular.element("#dashboard").append(mobileDialogElement);
+			   
+			})
+
+}]); 
+

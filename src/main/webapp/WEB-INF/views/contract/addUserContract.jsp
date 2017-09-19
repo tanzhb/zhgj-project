@@ -5,13 +5,13 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <!-- BEGIN PAGE HEADER-->
-<div class="page-bar">
+<!-- <div class="page-bar">
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i class="fa fa-angle-right"></i></li>
 		<li><a ui-sref="userContract">基础数据</a><i class="fa fa-angle-right"></i></li>
 		<li><a ui-sref="userContract">合同信息</a></li>
 	</ul>
-</div>
+</div> -->
 <div class="tab-pane" id="tab_1">
 	<div class="portlet box blue">
 		<div class="portlet-title">

@@ -7,7 +7,7 @@
 <!-- BEGIN PAGE HEADER-->
 <!-- <h3 class="page-title"> 发票
 </h3> -->
-<div class="page-bar">
+<!-- <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>
             <i class="fa fa-home"></i>
@@ -18,7 +18,7 @@
             <a ui-sref="invoice">发票</a>
         </li>
     </ul>
-</div>
+</div> -->
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
 <div class="tabbable-line">

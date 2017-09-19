@@ -24,6 +24,9 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		 if($stateParams.serialNum){
 			 $scope.getPayInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);	//在审批页面加载评论
          }
+		 
+		 
+		 
 	});
 
 

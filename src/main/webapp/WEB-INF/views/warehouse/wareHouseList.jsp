@@ -6,7 +6,7 @@
 <!-- <h3 class="page-title"> 仓库列表
     <small> 仓库管理</small>
 </h3> -->
-<div class="page-bar">
+<!-- <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>
             <i class="fa fa-home"></i>
@@ -21,7 +21,7 @@
             <a ui-sref="datatablesmanaged"> 仓库列表</a>
         </li>
     </ul>
-</div>
+</div> -->
 
 <div class="row" >
 <!-- <div class="col-md-4">

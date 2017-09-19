@@ -4,7 +4,7 @@
 <!-- <h3 class="page-title"> 物料列表
     <small></small>
 </h3> -->
-<div class="page-bar">
+<!-- <div class="page-bar">
 
     <ul class="page-breadcrumb">
         <li>
@@ -20,7 +20,7 @@
             <a ui-sref="materiel">物料信息</a>
         </li>
     </ul>
-</div>
+</div> -->
 <div class="row">
 <!--      <div class="col-md-4">
          <div class="portlet light ">
@@ -39,9 +39,11 @@
 	<div class="col-md-12">
 	        <div class="portlet light">
 	            <div class="portlet-title">
-				<!-- <div class="caption">
-					<i class="fa fa-globe"></i>物料列表
-				</div> -->
+		            <div class="caption">
+						<i class="fa fa-globe font-green"></i>
+						<span class="caption-subject font-green bold uppercase">物料列表</span>
+					</div>
+	            
 				<div class="actions">
 					<%-- <shiro:hasPermission name="materiel:add">
 						<a href="javascript:;" ui-sref="addMateriel"

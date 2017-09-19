@@ -5,7 +5,7 @@
 <!-- <h3 class="page-title"> 价格列表
     <small> 价格目录</small>
 </h3> -->
-<div class="page-bar">
+<!-- <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>
             <i class="fa fa-home"></i>
@@ -20,7 +20,7 @@
             <a ui-sref="datatablesmanaged">价格列表</a>
         </li>
     </ul>
-</div>
+</div> -->
 <div class="tabbable-line">
     <ul class="nav nav-tabs">
     	<shiro:hasPermission name="zhgj:buyPrice:*">
