@@ -658,12 +658,25 @@ public class DeliveryController {
 	 */
 	@RequestMapping("exportDelivery")
 	public void exportDelivery(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+/*		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
+		List<DeliveryVO> deliveryList=deliveryService.findAllDeliveryList(currenLoginName);*/
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
-		List<DeliveryVO> deliveryList=deliveryService.findAllDeliveryList(currenLoginName);
+		//List<DeliveryVO> contractList=deliveryService.findAllDeliveryList(currenLoginName);
+		User user = UserUtil.getUserFromSession();
+    	List<String> comIds = new ArrayList<String>();
+    	if(user!=null){
+			comIds = userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId()));
+		}
+		DeliveryVO query = new DeliveryVO();
+		query.setCreator(currenLoginName);
+		query.setSupplyComIds(comIds);
+		List<DeliveryVO> contractList=deliveryService.findAllDeliveryList(query);
 
-		dataMap.put("deliveryList",deliveryList);
+		dataMap.put("deliveryList",contractList);
 		ExcelUtil.export(request, response, dataMap, "delivery", "发货信息");
 	}
 	
