@@ -298,9 +298,12 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		Map<String,String> map=new HashMap<String,String>();
 		if("in".equals(judgeString)){
 			map.put("takeDeliverSerial", serialNum);//deliverSerial  takeDeliverSerial
+			map.put("deliverSerial", null);
 		}else{
 			map.put("deliverSerial", serialNum);
+			map.put("takeDeliverSerial", null);
 		}
+		map.put("serialNum", serialNum);
 		 return deliveryMapper.selectListForDetailForStockCheck(map);
 	}
 
