@@ -1374,7 +1374,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    })   
 		    .state('addDelivery', {
             url: "/addDelivery",
-            templateUrl: "rest/page/addDelivery",
+            templateUrl: "rest/delivery/addDelivery",
             data: {pageTitle: '新增发货'},
             controller: "DeliveryController",
             resolve: {

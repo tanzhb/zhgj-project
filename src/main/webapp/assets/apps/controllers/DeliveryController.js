@@ -14,12 +14,14 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		//加载销售订单表
 		loadMainTable1();
 	
+		getSupplyComId();
 		//控制输入框和span标签的显示
 		$scope.span =false;
 		$scope.input = true;
 		
 		$scope.supplyComId="中航能科";
 		$scope.shipper="中航能科";
+		$scope.transportType="水路运输";
 		
 		//根据参数查询对象
     if($stateParams.serialNum){
@@ -98,6 +100,25 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 				toastr.success("发货成功");
 				$state.go('delivery',{},{reload:true});
 				handle.unblockUI();
+		}, function(data) {
+			// 调用承诺接口reject();
+			$(".modal-backdrop").remove();
+			handle.unblockUI();
+			toastr.error("发货失败！请联系管理员");
+			console.log(data);
+		});
+		
+	}
+	
+	
+	var getSupplyComId=function (){
+		var promise = DeliveryService.getSupplyComId();
+		promise.then(function(data) {
+			if(data.comName!=null){
+				$scope.supplyComId=data.comName;
+				$scope.shipper=data.comName;
+				$scope.receiver="中航能科"
+			}
 		}, function(data) {
 			// 调用承诺接口reject();
 			$(".modal-backdrop").remove();
@@ -513,13 +534,13 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 							                            	mRender:function(data){
 							                            		if(data!=""&&data!=null){
 							                            			if(data=='0'){
-							                            				return '未审批';
+							                            				return '待发货';
 							                            			}else if(data=='PENDING'){
 							                            				return '审批中';
 							                            			}else if(data=='WAITING_FOR_APPROVAL'){
 							                            				return '待审批';					                            				
 																	}else if(data=='3'){
-																		return '审批成功';
+																		return '待收货';
 																	}else if(data=='APPROVAL_FAILED'){
 																		return '审批失败';
 																	}
@@ -1088,7 +1109,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 				
 			 };
 			 
-			   
+			var length=0;
 			 //获取订单物料的信息
 	        $scope.getSaleOrderInfo  = function(serialNum) {
 	        	DeliveryService.getSaleOrderInfo(serialNum).then(
@@ -1106,6 +1127,8 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	var orderSerial=data.orderInfo.serialNum;
 	          		    	$scope.orderSerial=data.orderInfo.serialNum;
 	          		    	$scope.deliveryMaterielE=data.orderMateriel;
+	          		    	$scope.materielCount=data.orderMateriel.length;
+	          		    	length=data.orderMateriel.length;
 	          		     },
 	          		     function(error){
 	          		         $scope.error = error;
@@ -1113,7 +1136,21 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		 );
 	        	
 	        }; 
-			        
+			
+	        
+	        $scope.getTotalDeliveryCount=function(){
+	        	var totalCount=parseInt(0);
+	        	var check=/^[1-9]\d*|0$/;
+	        	for(var i=0;i<length;i++){
+	        		var count=parseInt($("input[name='deliverCount"+i+"'").val());
+	        		if($.trim(count)!=""&&count!=null&&check.test(count)){
+	        			totalCount=totalCount+count;
+	        		}
+	        	}
+	        	$scope.totalDeliveryCount=totalCount;
+	        }
+	        
+	        
 	        //跳转到查看详情页面
 			        $scope.jumpToGetDeliveryInfo  = function(serialNum) {
 			        	$state.go('viewDelivery',{serialNum:serialNum});
@@ -1752,15 +1789,6 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		}
     }
    	
-    /**
-        * 初始化日期控件
-        */
-       $scope.repeatDone = function(scope){
-       		var date= scope.materiel.manufactureDate;
-    	    handle.datePickersInit();
-    	    scope.materiel.manufactureDate = date;
-    	    $("#manufactureDate"+index).datepicker('setDate',date);
-    };
     
     /**
         * 导出出库记录
