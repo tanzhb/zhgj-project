@@ -496,13 +496,13 @@ angular
 						            	warehouseType:{required:true},
 						            	warehouseCategory:{required:true},
 						            	owner:{required:true},
-						            	address:{required:true},
-						            	area:{required:!0,digits:true,},
-						            	 email: {	required:true,email:true},
-						            	 tel: {required:true,digits:true, rangelength:[7,20] },
-				                         fax: {required:true,digits:true, rangelength:[7,20] },
+						            	address:{required:true}
+						            	//area:{required:!0,digits:true,},
+						            	 //email: {	required:true,email:true},
+						            	// tel: {required:true,digits:true, rangelength:[7,20] },
+				                        // fax: {required:true,digits:true, rangelength:[7,20] },
 						            	//remark:{required:true},
-						            	admin:{required:true}
+						            	//admin:{required:true}
 						               
 						            },
 						            invalidHandler: function(e, t) {
