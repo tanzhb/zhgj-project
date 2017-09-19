@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<div class="page-bar">
+<!-- <div class="page-bar">
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
 			class="fa fa-angle-right"></i></li>
@@ -8,7 +8,7 @@
 		<li><a ui-sref="delivery">仓储</a><i class="fa fa-angle-right"></i></li>
 		<li><a id="tip">发货计划</a></li>
 	</ul>
-</div>
+</div> -->
 <div class="tabbable-line">
 	<ul class="nav nav-tabs" id="delivery_tab">
 		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">发货计划</a>
@@ -32,6 +32,7 @@
 					<!-- BEGIN EXAMPLE TABLE PORTLET-->
 					<div class="portlet light">
 						<div class="portlet-title">
+						
 							<div class="caption">
 								<i class="fa fa-globe font-green"></i> <span
 									class="caption-subject font-green bold uppercase">发货列表</span>
