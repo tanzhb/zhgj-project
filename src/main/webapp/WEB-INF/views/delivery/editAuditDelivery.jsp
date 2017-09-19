@@ -145,9 +145,9 @@
 											<label class="control-label bold">收货方<span class="required" aria-required="true"> * </span></label>
 											<div class="">
 												<input type="text" class="form-control" name="receiver"
-													ng-model="delivery.receiver" ng-show="input" />
+													ng-model="receiver" ng-show="input" />
 												<p class="form-control-static" ng-show="span">
-													{{delivery.receiver}}</p>
+													{{receiver}}</p>
 												<div class="form-control-focus"></div>
 											</div>
 
@@ -185,37 +185,6 @@
 
 										</div>
 									</div>
-									<!--/span-->
-									<div class="col-md-4">
-										<div class="form-group">
-											<label class="control-label bold">审批人<span class="required" aria-required="true"> * </span></label>
-											<div class="">
-												<input type="text" class="form-control" name="approval"
-													ng-model="delivery.approval" ng-show="input" />
-												<p class="form-control-static" ng-show="span">
-													{{delivery.approval}}</p>
-												<div class="form-control-focus"></div>
-											</div>
-										</div>
-									</div>
-									<!--/span-->
-								</div>
-								<div class="row">
-									<div class="col-md-4">
-										<div class="form-group">
-											<label class="control-label bold">审批日期<span class="required" aria-required="true"> * </span></label>
-											<div class="">
-												<input type="text" id="approvalDate"
-													data-date-format="yyyy-mm-dd" name="approvalDate"
-													ng-show="input" data-date-viewmode="years" size="16"
-													ng-model="delivery.approvalDate" class="form-control" readonly="readonly"/>
-												<div class="form-control-focus"></div>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.approvalDate}}</p>
-											</div>
-										</div>
-									</div>
-									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group">
 											<label class="control-label bold">备注</label>
@@ -230,7 +199,6 @@
 									</div>
 									<!--/span-->
 								</div>
-								<!--/row-->
 							</div>
 						</div>
 
@@ -479,23 +447,7 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group">
-											<label class="control-label bold">港口<span class="required" aria-required="true"> * </span></label>
-											<div class="">
-												<input type="text" class="form-control" name="port"
-													ng-model="delivery.port" ng-show="input" />
-												<div class="form-control-focus"></div>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.port}}</p>
-											</div>
-										</div>
-									</div>
-									<!--/span-->
-								</div>
-								<!--/row-->
-								<div class="row">
-									<div class="col-md-4">
-										<div class="form-group">
-											<label class="control-label bold">船号<span class="required" aria-required="true"> * </span></label>
+											<label class="control-label bold">运单号<span class="required" aria-required="true"> * </span></label>
 											<div class="">
 												<input type="text" class="form-control" name="shipNumber"
 													ng-model="delivery.shipNumber" ng-show="input" />
@@ -507,41 +459,7 @@
 										</div>
 									</div>
 									<!--/span-->
-									<div class="col-md-4">
-										<div class="form-group">
-											<label class="control-label bold">预计到港日期<span class="required" aria-required="true"> * </span></label>
-											<div class="">
-												<input type="text" class="form-control"
-													data-date-format="yyyy-mm-dd" ng-show="input"
-													data-date-viewmode="years" size="16" name="playArrivalDate"
-													id="playArrivalDate"
-													ng-model="delivery.playArrivalDate" readonly="readonly"/>
-												<div class="form-control-focus"></div>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.playArrivalDate}}</p>
-											</div>
-
-										</div>
-									</div>
-									<!--/span-->
-									<div class="col-md-4">
-										<div class="form-group">
-											<label class="control-label bold">预计到库日期<span class="required" aria-required="true"> * </span></label>
-											<div class="">
-												<input type="text" class="form-control"
-													data-date-format="yyyy-mm-dd" data-date-viewmode="years"
-													ng-show="input" size="16" name="playWarehouseDate"
-													id="playWarehouseDate"
-													ng-model="delivery.playWarehouseDate" readonly="readonly"/>
-												<div class="form-control-focus"></div>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.playWarehouseDate}}</p>
-											</div>
-										</div>
-									</div>
-									<!--/span-->
 								</div>
-								<!--/row-->
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group">
