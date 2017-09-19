@@ -10,7 +10,7 @@
 	vertical-align:middle;
 } */
 </style>
-<h3 class="page-title"> 新建出库
+<!-- <h3 class="page-title"> 新建出库
 </h3>
 <div class="page-bar">
     <ul class="page-breadcrumb">
@@ -32,7 +32,7 @@
         </li>
     </ul>
 
-</div>
+</div> -->
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
 <div class="row">
