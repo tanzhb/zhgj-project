@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<div class="page-bar">
+<!-- <div class="page-bar">
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
 			class="fa fa-angle-right"></i></li>
@@ -9,7 +9,7 @@
 			class="fa fa-angle-right"></i></li>
 		<li><a ui-sref="userContract">合同信息</a></li>
 	</ul>
-</div>
+</div> -->
 <div class="tabbable-line">
 	<ul class="nav nav-tabs" id="statement_tab">
 		<li><a data-target="#tab_15_2" data-toggle="tab">销售合同</a></li>

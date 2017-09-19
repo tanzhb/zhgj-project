@@ -1,14 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
-<div class="page-bar">
+<!-- <div class="page-bar">
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
 			class="fa fa-angle-right"></i></li>
 		<li><a ui-sref="purchaseForecast">采购订单</a><i class="fa fa-angle-right"></i></li>
 		<li><a ui-sref="purchaseForecast">采购预测</a></li>
 	</ul>
-</div>
+</div> -->
 
 <div class="row" >
 	<div class="col-md-12">

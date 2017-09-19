@@ -13,9 +13,10 @@ angular
 		 '$stateParams',
 		 'settings',
 		 'priceListService',
+		 'orderService',
 		 'FileUploader',
 		 function($rootScope, $scope, $state, $compile,$http,$location,$stateParams,settings,
-				 priceListService,FileUploader) {
+				 priceListService,orderService,FileUploader) {
 			 $scope
 			 .$on(
 					 '$viewContentLoaded',
@@ -52,9 +53,15 @@ angular
 								 $scope.ladderpriceEdit=false;//隐藏取消
 							 }
 							 $scope.buyOrSale=$stateParams.buyOrSale;
+							 if($stateParams.buyOrSale.indexOf("buy")>-1){
+								 initSuppliers();
+							 }else{
+								 initCustomers(); 
+							 }
 							 handle.pageRepeater();
 							 selectParentMateriel();//选择物料表格初始化
 							 initFormiCheck();
+							
 
 						 }else if($location.path()=="/invoiceView"){
 					 			debugger;
@@ -1271,12 +1278,47 @@ function loadPriceListSaleTable(){
 				  window.location.href=$rootScope.basePath+"/rest/priceList/exportPriceList?buyOrSale="+judgeString;
 				  handle.unblockUI(); 
 			  }
-
+			  /**
+				 * 加载供应商数据
+				 */
+				var initSuppliers = function(){
+					var promise = orderService.initSuppliers();
+			        	promise.then(function(data){
+			        		$scope.suppliers = data.data;
+			        		setTimeout(function () {
+			        			$("#supplyComId").selectpicker({
+			                        showSubtext: true
+			                    });
+			        			$('#supplyComId').selectpicker('refresh');//刷新插件
+			        			
+			                }, 100);
+			        		
+			        	},function(data){
+			        		//调用承诺接口reject();
+			        	});
+				}
+				
+				 /**
+				 * 加载采购商(客户)数据
+				 */
+				var initCustomers = function(){
+					var promise = orderService.initCustomers();
+			        	promise.then(function(data){
+			        		$scope.customers = data.data;
+			        		setTimeout(function () {
+			        			$("#buyComId").selectpicker({
+			                        showSubtext: true
+			                    });
+			        			$('#buyComId').selectpicker('refresh');//刷新插件
+			        			
+			                }, 100);
+			        		
+			        	},function(data){
+			        		//调用承诺接口reject();
+			        	});
+				}
 			  $('#import').on('hide.bs.modal', function (e) { 
 				  $("#resetFile").trigger("click");
-				  //$("#file_span input[type='file']").remove();
-				  //$(".fileinput-filename").val("");
-				  //$("#file_span").appendTo('<input type="file" file-model="excelFile" accept=".xls" name="...">');
 			  })
 			  // 页面加载完成后调用，验证输入框
 			  $scope.$watch('$viewContentLoaded', function() {  

@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <!-- BEGIN PAGE HEADER-->
 
-<div class="page-bar">
+<!-- <div class="page-bar">
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
 			class="fa fa-angle-right"></i></li>
@@ -20,7 +20,7 @@
 
 		</div>
 	</div>
-</div>
+</div> -->
 <div class="row" id="saleOrderPrint">
 	<div class="col-md-12">
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->

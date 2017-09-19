@@ -4,7 +4,7 @@
 <!-- <h3 class="page-title"> 销售订单
     <small></small>
 </h3> -->
-<div class="page-bar">
+<!-- <div class="page-bar">
 
     <ul class="page-breadcrumb">
         <li>
@@ -20,7 +20,7 @@
             <a ui-sref="saleOrder">销售订单</a>
         </li>
     </ul>
-</div>
+</div> -->
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
 <div class="tabbable-line">

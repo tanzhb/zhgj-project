@@ -14,7 +14,6 @@ import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
-import com.congmai.zhgj.core.util.Constants;
 import com.congmai.zhgj.web.dao.Delivery2Mapper;
 import com.congmai.zhgj.web.dao.DeliveryMaterielMapper;
 import com.congmai.zhgj.web.dao.DeliveryTransportMapper;
@@ -26,7 +25,6 @@ import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryExample;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryMaterielExample;
-import com.congmai.zhgj.web.model.DeliverySelectExample;
 import com.congmai.zhgj.web.model.DeliveryTransportExample;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.StockInOutCheck;
@@ -37,6 +35,7 @@ import com.congmai.zhgj.web.model.TakeDeliveryExample;
 import com.congmai.zhgj.web.model.TakeDeliveryParams;
 import com.congmai.zhgj.web.model.TakeDeliverySelectExample;
 import com.congmai.zhgj.web.model.TakeDeliverySelectExample.Criteria;
+import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.service.TakeDeliveryService;
 
 @Service
@@ -510,6 +509,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		check.setUpdateTime(new Date());
 		stockInOutCheckMapper.insert(check);
 	}
+
 	
 
 }

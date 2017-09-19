@@ -4,7 +4,7 @@
 <!-- <h3 class="page-title"> 对账单
     <small></small>
 </h3> -->
-<div class="page-bar">
+<!-- <div class="page-bar">
 
     <ul class="page-breadcrumb">
         <li>
@@ -17,7 +17,7 @@
         </li>
         
     </ul>
-</div>
+</div> -->
 
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
