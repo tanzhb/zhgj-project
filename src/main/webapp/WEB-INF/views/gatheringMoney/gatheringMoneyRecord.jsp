@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<div class="page-bar">
+<!-- <div class="page-bar">
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
 			class="fa fa-angle-right"></i></li>
@@ -9,7 +9,7 @@
 			class="fa fa-angle-right"></i></li>
 		<li><a ui-sref="gatheringMoneyRecord">收款信息</a></li>
 	</ul>
-</div>
+</div> -->
 
 <div class="row">
 	<div class="col-md-12">
@@ -29,7 +29,8 @@
 		<div class="portlet light">
 			<div class="portlet-title">
 				<div class="caption">
-					<i class="fa fa-globe"></i>收款列表
+					<i class="fa fa-globe font-green"></i>
+					<span class="caption-subject font-green bold uppercase">收款列表</span>
 				</div>
 				<div class="actions" ng-controller='MyCtrl'>
 				<label class="btn btn-transparent green btn-circle btn-sm" ng-click="jumpToUrl('addGatheringMoney')"><i class="fa fa-plus"></i> 添加</label>

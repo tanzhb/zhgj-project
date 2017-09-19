@@ -28,14 +28,17 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
+import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
+import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.DeliveryMaterielService;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.OrderService;
@@ -64,6 +67,8 @@ public class StockInOutController {
    	private OrderService orderService;
     @Autowired
    	private DeliveryMaterielService  deliveryMaterielService;
+    @Autowired
+   	private CompanyService  companyService;
    
     
     
@@ -157,11 +162,21 @@ public class StockInOutController {
 				totalQualifiedCount=0;totalUnQualifiedCount=0;
 				List<DeliveryMaterielVO> deliveryMateriels=null;
 				if("in".equals(inOrOut)){
-					//deliveryMateriels= deliveryService.selectListForDetail(stockInOutCheck.getDeliverSerial());
 					deliveryMateriels = deliveryService.selectListForDetailForStockCheck(stockInOutCheck.getDeliverSerial(),"out");
+					DeliveryVO deliveryVO=deliveryService.selectDetailById(stockInOutCheck.getDeliverSerial());
+		    	 	stockInOutCheck.setDeliverNum(deliveryVO.getDeliverNum());
+		    	 	OrderInfo orderInfo=orderService.selectById(deliveryVO.getOrderSerial());
+		    	 stockInOutCheck.setRelationSaleNum(orderInfo.getOrderNum());
+		    	 	Company  company=companyService.selectById(deliveryVO.getSupplyComId());
+		    	 	stockInOutCheck.setSupplyName(company.getComName());
 				}else if("out".equals(inOrOut)){
 					deliveryMateriels=deliveryService.selectListForDetailForStockCheck(stockInOutCheck.getTakeDeliverSerial(),"in");
-					//deliveryMateriels= deliveryService.selectListForDetail(stockInOutCheck.getTakeDeliverSerial());
+					DeliveryVO deliveryVO=deliveryService.selectDetailById(stockInOutCheck.getDeliverSerial());
+		    	 	stockInOutCheck.setDeliverNum(deliveryVO.getDeliverNum());
+		    	 	OrderInfo orderInfo=orderService.selectById(deliveryVO.getOrderSerial());
+		    	 stockInOutCheck.setRelationSaleNum(orderInfo.getOrderNum());
+		    	 	Company  company=companyService.selectById(deliveryVO.getSupplyComId());
+		    	 	stockInOutCheck.setSupplyName(company.getComName());
 				}
 	    		for(DeliveryMaterielVO dmo:deliveryMateriels){
 	    			totalQualifiedCount+=Integer.parseInt(dmo.getQualifiedCount()==null?"0":dmo.getQualifiedCount());
@@ -202,15 +217,21 @@ public class StockInOutController {
     	if(serialNum.indexOf("in")>-1){//入库
   		deliveryMateriels=deliveryService.selectListForDetailForStockCheck(stockInOutCheck.getTakeDeliverSerial(),"in");
     		TakeDelivery takeDeliveryVO=takeDeliveryService.selectByPrimaryKey(stockInOutCheck.getTakeDeliverSerial());
-    		//stockInOutCheck.setDeliverNum(takeDeliveryVO.getTakeDeliverNum());
-    	 	//stockInOutCheck.setRelationSaleNum(delivery.getOrderNum());
-    	 	//stockInOutCheck.setSupplyName(takeDeliveryVO.getSupplyName());
+    		stockInOutCheck.setTakeDeliverNum(takeDeliveryVO.getTakeDeliverNum());
+    		DeliveryVO deliveryVO=deliveryService.selectDetailById(takeDeliveryVO.getDeliverSerial());
+    		Company  company=companyService.selectById(deliveryVO.getSupplyComId());
+    	 	stockInOutCheck.setSupplyName(company.getComName());
+    	 	OrderInfo orderInfo=orderService.selectById(deliveryVO.getOrderSerial());
+    	 	stockInOutCheck.setRelationBuyNum(orderInfo.getOrderNum());
     	}else if (serialNum.indexOf("out")>-1){//出库
     	 	deliveryMateriels = deliveryService.selectListForDetailForStockCheck(stockInOutCheck.getDeliverSerial(),"out");
     	 	DeliveryVO deliveryVO=deliveryService.selectDetailById(stockInOutCheck.getDeliverSerial());
-    	 	//stockInOutCheck.setDeliverNum(deliveryVO.getDeliverNum());
-    	 //	stockInOutCheck.setRelationSaleNum(delivery.getOrderNum());
-    	 	//stockInOutCheck.setSupplyName(deliveryVO.getSupplyName());
+    	 	stockInOutCheck.setDeliverNum(deliveryVO.getDeliverNum());
+    	 	OrderInfo orderInfo=orderService.selectById(deliveryVO.getOrderSerial());
+    	 stockInOutCheck.setRelationSaleNum(orderInfo.getOrderNum());
+    	 	Company  company=companyService.selectById(deliveryVO.getSupplyComId());
+    	 	stockInOutCheck.setSupplyName(company.getComName());
+    	 	
     	}
     	for(DeliveryMaterielVO dmo:deliveryMateriels){
 			dmo.setQualifiedCount(dmo.getQualifiedCount()==null?"0":dmo.getQualifiedCount());

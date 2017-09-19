@@ -16,7 +16,7 @@
 </style>
 <!-- <h3 class="page-title"> 价格信息
 </h3> -->
-<div class="page-bar">
+<!-- <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>
             <i class="fa fa-home"></i>
@@ -32,7 +32,7 @@
         </li>
     </ul>
 
-</div>
+</div> -->
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
 <div class="row">
@@ -165,8 +165,10 @@
                                                              <div class="form-group ">
                                                     <label class="control-label bold" for="admin"> <span class="required"> * </span>采购商 :</label>
                                                      <div class="">
-                                                     <select class="bs-select form-control" data-live-search="true" data-size=""   id="buyComId"  name ="buyComId"  ng-show="priceListAdd"   ng-model="priceList.buyComId">
-                                                     <option  ng-repeat="op in buyCom " value="{{op.comId}}"  > {{op.comName}}</option>
+                                                     <select class="form-control" data-live-search="true" data-size=""   id="buyComId"  name ="buyComId"  ng-show="priceListAdd"   ng-model="priceList.buyComId">
+                                                     <!-- <option  ng-repeat="op in buyCom " value="{{op.comId}}"  > {{op.comName}}</option> -->
+                                                      <option value=""></option>
+                                                      <option  ng-repeat="customer in customers" value="{{customer.comId}}" >{{customer.comName}}</option>
                                                     </select>
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="priceListView">{{priceList.buyComName}}</p>  
@@ -178,8 +180,10 @@
                                                              <div class="form-group">
                                                     <label class="control-label bold" for="admin"> <span class="required"> * </span>供应商 :</label>
                                                     <div class="">
-                                                     <select class="bs-select form-control" data-live-search="true" data-size=""   id="supplyComId" name ="supplyComId"  ng-show="priceListAdd"   ng-model="priceList.supplyComId">
-                                                        <option  ng-repeat="op in supplyCom " value="{{op.comId}}"  > {{op.comName}}</option>
+                                                     <select class="form-control" data-live-search="true" data-size=""   id="supplyComId" name ="supplyComId"  ng-show="priceListAdd"   ng-model="priceList.supplyComId">
+                                                       <!--  <option  ng-repeat="op in supplyCom " value="{{op.comId}}"  > {{op.comName}}</option> -->
+                                                       <option value=""></option>
+                                                   <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}" >{{supplier.comName}}</option>
                                                     </select>
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="priceListView">{{priceList.supplyComName}}</p>  

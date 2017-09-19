@@ -16,7 +16,7 @@
 </style>
 <!-- <h3 class="page-title"> 库存信息
 </h3> -->
-<div class="page-bar">
+<!-- <div class="page-bar">
     <ul class="page-breadcrumb">
         <li>
             <i class="fa fa-home"></i>
@@ -32,7 +32,7 @@
         </li>
     </ul>
 
-</div>
+</div> -->
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
 <div class="row">
@@ -169,32 +169,6 @@
                                                             <!--/span-->
                                                             <div class="col-md-6">
                                                             <div class="form-group">
-                                                    <label class="control-label bold" for="materielOwner"> <span class="required"> * </span>物权方 :</label>
-                                                    <div class="  ">
-                                                                        <input type="text"  class="form-control" placeholder=""  id="materielOwner" name ="materielOwner"   ng-hide="stockAdd"  
-												ng-model="stock.materielOwner" > 
-												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="stockView">{{stock.materielOwner}}</p> 
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <!--/span-->
-                                                        </div>
-                                                         <div class="row">
-                                                            <div class="col-md-6">
-                                                             <div class="form-group">
-                                                    <label class="control-label bold" for="serviceParty"> <span class="required"> * </span>服务方:</label>
-                                                    <div class="  ">
-                                                                        <input type="text" class="form-control"   id="serviceParty" name ="serviceParty"  ng-hide="stockAdd"  
-												ng-model="stock.serviceParty" > 
-												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="stockView">{{stock.specifications}}</p> 
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <!--/span-->
-                                                            <div class="col-md-6">
-                                                            <div class="form-group">
                                                     <label class="control-label bold" for="remark"> 备注 :</label>
                                                     <div class="  ">
                                                                         <input type="text"  class="form-control" placeholder=""  id="remark" name ="remark"   ng-hide="stockAdd"  
@@ -204,7 +178,32 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                         
                                                             <!--/span-->
+                                                        </div>
+                                                         <div class="row" >
+                                                            <div class="col-md-6" >
+                                                             <div class="form-group">
+                                                    <label class="control-label bold" for="serviceParty"> <span class="required"> * </span>服务方:</label>
+                                                    <div class="  ">
+                                                                        <input type="text" class="form-control"   id="serviceParty" name ="serviceParty"  ng-hide="stockAdd"     value=""  ng-if="manageType.indexOf('daiguan')>-1||manageType.indexOf('jinwai')>-1" 
+												ng-model="stock.serviceParty" > 
+												<div class="form-control-focus"> </div>
+                                                                        <p class="control-label left" ng-show="stockView">{{stock.serviceParty}}</p> 
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                              <div class="col-md-6" >
+                                                            <div class="form-group">
+                                                    <label class="control-label bold" for="materielOwner"> <span class="required"> * </span>物权方 :</label>
+                                                    <div class="  ">
+                                                                        <input type="text"  class="form-control"  id="materielOwner" name ="materielOwner"   ng-hide="stockAdd"   value=""  ng-if="manageType.indexOf('daiguan')>-1||manageType.indexOf('jinwai')>-1" 
+												ng-model="stock.materielOwner" > 
+												<div class="form-control-focus"> </div>
+                                                                        <p class="control-label left" ng-show="stockView">{{stock.materielOwner}}</p> 
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                          
                                              <div>          

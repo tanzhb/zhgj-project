@@ -22,14 +22,14 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 	 				$('#statement_tab a:first').parent().removeClass('active');
 	 				$("#tab_15_2").addClass("active");
 	 				$("#tab_15_1").removeClass("active");
-	 				 $("#tip").text("客户对账单");
+//	 				 $("#tip").text("客户对账单");
 	 		}else{
 	 				//loadTakeDelieryTable();
 	 				$('#statement_tab a:first').parent().addClass('active');
 	 				$('#statement_tab a:last').parent().removeClass('active');
 	 				$("#tab_15_1").addClass("active");
 	 				$("#tab_15_2").removeClass("active");
-	 				 $("#tip").text("供应商对账单");
+//	 				 $("#tip").text("供应商对账单");
 	 				//$('#delivery_tab a:first').tab('show');
 	 		}
         	}else if($state.current.name=="addBuyStatement"){
@@ -779,7 +779,7 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 	        // 获取前一个激活的标签页的名称
 	       // var previousTab = $(e.relatedTarget).text(); 
 	        var absurl = $location.absUrl();
-	        $("#tip").text(activeTab);
+//	        $("#tip").text(activeTab);
 	        if(activeTab=="客户对账单"){
 	        	handle.addCookie("d_type","buyStatement",24);
 	        }else{
