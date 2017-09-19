@@ -163,12 +163,13 @@ public class StockInOutController {
 				List<DeliveryMaterielVO> deliveryMateriels=null;
 				if("in".equals(inOrOut)){
 					deliveryMateriels = deliveryService.selectListForDetailForStockCheck(stockInOutCheck.getDeliverSerial(),"out");
-					DeliveryVO deliveryVO=deliveryService.selectDetailById(stockInOutCheck.getDeliverSerial());
-		    	 	stockInOutCheck.setDeliverNum(deliveryVO.getDeliverNum());
-		    	 	OrderInfo orderInfo=orderService.selectById(deliveryVO.getOrderSerial());
-		    	 stockInOutCheck.setRelationSaleNum(orderInfo.getOrderNum());
-		    	 	Company  company=companyService.selectById(deliveryVO.getSupplyComId());
+					TakeDelivery takeDeliveryVO=takeDeliveryService.selectByPrimaryKey(stockInOutCheck.getTakeDeliverSerial());
+		    		stockInOutCheck.setTakeDeliverNum(takeDeliveryVO.getTakeDeliverNum());
+		    		DeliveryVO deliveryVO=deliveryService.selectDetailById(takeDeliveryVO.getDeliverSerial());
+		    		Company  company=companyService.selectById(deliveryVO.getSupplyComId());
 		    	 	stockInOutCheck.setSupplyName(company.getComName());
+		    	 	OrderInfo orderInfo=orderService.selectById(deliveryVO.getOrderSerial());
+		    	 	stockInOutCheck.setRelationBuyNum(orderInfo.getOrderNum());
 				}else if("out".equals(inOrOut)){
 					deliveryMateriels=deliveryService.selectListForDetailForStockCheck(stockInOutCheck.getTakeDeliverSerial(),"in");
 					DeliveryVO deliveryVO=deliveryService.selectDetailById(stockInOutCheck.getDeliverSerial());
