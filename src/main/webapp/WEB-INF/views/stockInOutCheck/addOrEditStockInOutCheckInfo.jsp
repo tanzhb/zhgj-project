@@ -201,9 +201,7 @@
                                                     <div class=" ">
 												<div class="form-control-focus"> </div>
 												 					<span class="label label-sm label-success"  ng-if="stockInOutCheck.status==0" ng-show="stockInOutCheckView" >待检验</span>
-                                                                    <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==1"  ng-show="stockInOutCheckView" >待审批</span>
-                                                                    <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==2"  ng-show="stockInOutCheckView" >已检验</span>
-                                                                       
+                                                                    <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==1"  ng-show="stockInOutCheckView" >已检验</span>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -294,8 +292,8 @@
                                                  <p class="control-label left" ng-show="stockInOutCheckView">{{materiel.checkRemark}}</p>
                                             </div>   </td>
 										<td><span class="label label-sm label-success"  ng-if="stockInOutCheck.status==0" >待检验</span>
-                                                  <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==1" >待审批</span>
-                                                   <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==2" >已检验</span></td>
+                                                  <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==1" >已检验</span>
+                                                   </td>
                                                 </tr>
                                                 <tr ng-if="materials!=null"><td colspan="3">合计</td><td >{{materials.length}}</td><td></td><td></td><td></td><td   >{{stockInOutCheck.totalDeliverCount}}</td></tr>
                                             </tbody>
