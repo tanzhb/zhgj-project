@@ -73,7 +73,7 @@
                                                     <div class=" ">
                                                         <input type="text" class="form-control" id="checkNum" name="checkNum" ng-model="stockInOutCheck.checkNum"  ng-hide="stockInOutCheckAdd"    ng-if="inOrOut.indexOf('check')<0"/>
                                                         <div class="form-control-focus"> </div>
-                                                          <p class="control-label left" ng-show="stockInOutCheckView">{{stockInOutCheck.checkNum}}</p> 
+                                                          <p class="control-label left" ng-show="stockInOutCheckView" ng-if="inOrOut.indexOf('check')<0">{{stockInOutCheck.checkNum}}</p> 
                                                            <p class="control-label left"  ng-if="inOrOut.indexOf('check')>-1">{{stockInOutCheck.checkNum}}</p>
                                                          <!--  存放物料流水号-->
                                                     </div>
@@ -105,8 +105,8 @@
                                                          </div>
 												<div class="form-control-focus"> </div>
 												 
-                                                                        <p class="control-label left" ng-show="stockInOutCheckView"   ng-if="inOrOut.indexOf('out')>-1"  >{{stockInOutCheck.deliverNum}}</p> 
-                                                                         <p class="control-label left" ng-show="stockInOutCheckView"  ng-if="inOrOut.indexOf('in')>-1"  >{{stockInOutCheck.takeDeliverNum}}</p> 
+                                                                        <p class="control-label left" ng-show="stockInOutCheckView"   ng-if="inOrOut.indexOf('out')>-1&&inOrOut.indexOf('checkout')<0"  >{{stockInOutCheck.deliverNum}}</p> 
+                                                                         <p class="control-label left" ng-show="stockInOutCheckView"  ng-if="inOrOut.indexOf('in')>-1&&inOrOut.indexOf('checkin')<0" >{{stockInOutCheck.takeDeliverNum}}</p> 
                                                                          <p class="control-label left"   ng-if="inOrOut.indexOf('checkout')>-1"  >{{stockInOutCheck.deliverNum}}</p> 
                                                                          <p class="control-label left"  ng-if="inOrOut.indexOf('checkin')>-1"  >{{stockInOutCheck.takeDeliverNum}}</p> 
                                                                     </div>
@@ -122,9 +122,9 @@
 												 <input type="text" class="form-control" placeholder=""  id="relationBuyNum" name ="relationBuyNum"   ng-if="inOrOut.indexOf('in')>-1&&inOrOut.indexOf('check')<0"  ng-hide="stockInOutCheckAdd"   readonly
 												ng-model="stockInOutCheck.relationBuyNum" > 
                                                                        <div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="stockInOutCheckView"  ng-if="inOrOut.indexOf('out')>-1" >{{stockInOutCheck.relationSaleNum}}</p> 
-                                                                        <p class="control-label left" ng-show="stockInOutCheckView"  ng-if="inOrOut.indexOf('in')>-1" >{{stockInOutCheck.relationBuyNum}}</p> 
-                                                                          <p class="control-label left"  ng-if="nOrOut.indexOf('checkout')>-1" >{{stockInOutCheck.relationSaleNum}}</p> 
+                                                                        <p class="control-label left" ng-show="stockInOutCheckView"  ng-if="inOrOut.indexOf('out')>-1&&&&inOrOut.indexOf('checkout')<0" >{{stockInOutCheck.relationSaleNum}}</p> 
+                                                                        <p class="control-label left" ng-show="stockInOutCheckView"  ng-if="inOrOut.indexOf('in')>-1&&inOrOut.indexOf('checkin')<0" >{{stockInOutCheck.relationBuyNum}}</p> 
+                                                                          <p class="control-label left"  ng-if="inOrOut.indexOf('checkout')>-1" >{{stockInOutCheck.relationSaleNum}}</p> 
                                                                         <p class="control-label left"  ng-if="inOrOut.indexOf('checkin')>-1" >{{stockInOutCheck.relationBuyNum}}</p> 
                                                                     </div>
                                                                 </div>
@@ -139,7 +139,7 @@
                                                                     <input type="text" class="form-control"   id="supplyName" name ="supplyName"  ng-hide="stockInOutCheckAdd"  readonly="readonly"  ng-if="inOrOut.indexOf('check')<0"
 												ng-model="stockInOutCheck.supplyName" > 
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="stockInOutCheckView">{{stockInOutCheck.supplyName}}</p> 
+                                                                        <p class="control-label left" ng-show="stockInOutCheckView"  ng-if="inOrOut.indexOf('check')<0">{{stockInOutCheck.supplyName}}</p> 
                                                                         <p class="control-label left" ng-if="inOrOut.indexOf('check')>-1">{{stockInOutCheck.supplyName}}</p>
                                                                 </div>
                                                             </div>

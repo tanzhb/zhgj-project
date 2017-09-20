@@ -47,12 +47,12 @@ angular
 									 				debugger;
 									 				$("#in").removeClass("active");
 									 				$("#out").addClass("active");
-									 				loadStockInOutCheckTable('out');
+									 				loadStockInOutCheckTable('outcheck');
 									 				//加载入库检验列表
 									 			}else{
 									 				$("#in").addClass("active");
 									 				$("#out").removeClass("active");
-									 				loadStockInOutCheckTable('in');//加载入库检验列表
+									 				loadStockInOutCheckTable('incheck');//加载入库检验列表
 									 			}
 										 		}
 											
@@ -97,7 +97,7 @@ angular
 													"page-header-fixed")
 													&& (a = 64);
 
-											Intable = $("#sample_in")
+											Intable = $("#sample_incheck")
 									.DataTable(
 											{
 												language : {
@@ -210,8 +210,6 @@ angular
 				 	    								if(row.status==0){
 				 	    									statusIcon = '<span class="label label-sm label-success"  >待检验</span> '
 				 	    								}else if(row.status==1){
-				 	    									statusIcon = '<span class="label label-sm label-success">待审批</span> '
-				 	    								}else if(row.status==2){
 				 	    									statusIcon = '<span class="label label-sm label-success">已检验</span> '
 				 	    								}
 				 	    								return statusIcon ;
@@ -219,7 +217,7 @@ angular
 												}  ],
 
 											});
-											Outtable = $("#sample_out")
+											Outtable = $("#sample_outcheck")
 											.DataTable(
 													{
 														language : {
@@ -332,8 +330,6 @@ angular
 						 	    								if(row.status==0){
 						 	    									statusIcon = '<span class="label label-sm label-success"  >待检验</span> '
 						 	    								}else if(row.status==1){
-						 	    									statusIcon = '<span class="label label-sm label-success">待审批</span> '
-						 	    								}else if(row.status==2){
 						 	    									statusIcon = '<span class="label label-sm label-success">已检验</span> '
 						 	    								}
 						 	    								return statusIcon ;
@@ -427,12 +423,12 @@ angular
 						
 						function judgeIsExist (){//判断是否已有收货单/发货单相关的出入库检验
 							var serialNum;
-							if($scope.inOrOut=='in'){
+							/*if($scope.inOrOut=='in'){
 								serialNum=$scope.stockInOutCheck.takeDeliverSerial+"in";
 							}else{
 								serialNum=$scope.stockInOutCheck.deliverSerial+"out";
-							}
-							StockInOutService.judgeIsExistBySerialNum(serialNum)
+							}*/
+						/*	StockInOutService.judgeIsExistBySerialNum(serialNum)
 							.then(
 									function(data) {debugger;
 										if(data=='1'){
@@ -444,7 +440,7 @@ angular
 												return ;
 											}
 											
-										}
+										}*/
 										var params = {};
 										params.deliveryMateriels = [];
 										var param
@@ -478,8 +474,8 @@ angular
 															.error('Error while creating User');
 												}
 										);
-									}
-							);	
+							/*		}
+							);	*/
 						}
 								$scope.saveStockInOutCheck= function() {
 									debugger;
@@ -563,7 +559,24 @@ angular
 								 $state.go('stockInOutCheckView',{inOrOut:serialNum+judgeString},{reload:true}); 
 								
 							}
-							$scope.confirmStockInOutCheck = function(judgeString) {										
+							$scope.confirmStockInOutCheck = function(judgeString) {	
+								var params = {};
+								params.deliveryMateriels = [];
+								var param
+								for(var i=0;i < $scope.materials.length;i++){
+									param = {};
+									param.serialNum = $scope.materials[i].serialNum;
+									param.qualifiedCount = $scope.materials[i].qualifiedCount;
+									if($scope.inOrOut.indexOf("in")){
+										param.unqualifiedCount= $scope.materials[i].acceptCount-$scope.materials[i].qualifiedCount;
+									}else{
+										param.unqualifiedCount= $scope.materials[i].deliverCount-$scope.materials[i].qualifiedCount;
+									}
+									param.checkRemark = $scope.materials[i].checkRemark;
+									params.deliveryMateriels.push(param);
+								}
+								$scope.stockInOutCheck.deliverMaterials=params.deliveryMateriels;
+								$scope.stockInOutCheck.status=1;
 								StockInOutService
 										.updateStockInOutCheckStatus($scope.inOrOut)
 										.then(
