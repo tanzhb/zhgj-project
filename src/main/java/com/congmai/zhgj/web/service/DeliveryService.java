@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.congmai.zhgj.core.generic.GenericService;
+import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryTransportVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
@@ -182,4 +183,8 @@ public interface DeliveryService extends GenericService<DeliveryMaterielVO, Stri
 	 * @return
 	 */
 	List<DeliveryMaterielVO> selectListForDetailForStockCheck(String serialNum,String judgeString);
+	
+	
+	
+	public Company selectCompanyInfo(String comId);
 }

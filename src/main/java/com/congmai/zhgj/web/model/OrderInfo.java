@@ -73,6 +73,9 @@ public class OrderInfo extends BaseVO {
 
     private String remark;
     
+    private String contractContent;    
+    
+    
     private String orderRemark;
 
 
@@ -426,6 +429,14 @@ public class OrderInfo extends BaseVO {
 
 	public void setMakeDate(Date makeDate) {
 		this.makeDate = makeDate;
+	}
+
+	public String getContractContent() {
+		return contractContent;
+	}
+
+	public void setContractContent(String contractContent) {
+		this.contractContent = contractContent;
 	}
 
 

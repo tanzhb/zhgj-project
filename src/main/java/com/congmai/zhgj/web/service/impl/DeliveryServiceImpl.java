@@ -12,6 +12,7 @@ import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.dao.DeliveryMapper;
+import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryTransportVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
@@ -297,10 +298,20 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		Map<String,String> map=new HashMap<String,String>();
 		if("in".equals(judgeString)){
 			map.put("takeDeliverSerial", serialNum);//deliverSerial  takeDeliverSerial
+			map.put("deliverSerial", null);
 		}else{
 			map.put("deliverSerial", serialNum);
+			map.put("takeDeliverSerial", null);
 		}
+		map.put("serialNum", serialNum);
 		 return deliveryMapper.selectListForDetailForStockCheck(map);
+	}
+
+
+	@Override
+	public Company selectCompanyInfo(String comId) {
+		// TODO Auto-generated method stub
+		 return deliveryMapper.selectCompanyInfo(comId);
 	}
 
 }

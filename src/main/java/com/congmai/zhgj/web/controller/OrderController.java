@@ -197,7 +197,7 @@ public class OrderController {
 	private String startBuyOrderProcess(@RequestBody String params) {
     	String flag = "0"; //默认失败
     	OrderInfo orderInfo = json2Order(params);
-    	
+    	orderInfo.setUpdateTime(new Date());
     	orderService.update(orderInfo);//更新备注
     	
 		//启动订单审批测试流程-start

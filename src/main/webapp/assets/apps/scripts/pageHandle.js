@@ -310,6 +310,13 @@ pageHandle = (function(){
 //给文本控件赋值。同下  
         return lastdate;  
      }  
+	
+	var _formatNumber = function(value){
+		if(!this.isNull(value)&&Number(value)!=NaN){
+			return Number(value);
+		}
+		return 0;
+	}
 
 	
 	var  constructor=function(){
@@ -332,6 +339,7 @@ pageHandle = (function(){
 		this.getCookie = _getCookie;
 		this.deleteCookie = _deleteCookie;
 		this.getLastMonthDay = _getLastMonthDay;
+		this.formatNumber = _formatNumber;
 		//this.toastr = toastr;
 		
 	}

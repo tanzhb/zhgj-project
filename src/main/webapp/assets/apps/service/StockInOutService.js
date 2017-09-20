@@ -17,8 +17,9 @@ angular.module('MetronicApp').factory('StockInOutService', ['$rootScope', '$http
     //保存出入库记录
     function saveStockInOutCheck(stockInOutCheck){
         var deferred = $q.defer();  
+      
 debugger;
-        $http.post($rootScope.basePath + "/rest/stockInOut/saveStockInOutCheckInfo", stockInOutCheck).success(function (data) {  
+        $http.post($rootScope.basePath + "/rest/stockInOut/saveStockInOutCheckInfo",   JSON.stringify(stockInOutCheck)).success(function (data) {  
             // 如果连接成功，延时返回给调用者  
         	debugger;
             deferred.resolve(data);  

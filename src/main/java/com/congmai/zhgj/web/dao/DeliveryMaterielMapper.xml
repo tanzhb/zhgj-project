@@ -32,6 +32,9 @@
   	<id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
   	<result column="stockCount" property="stockCount" jdbcType="VARCHAR" />
   	<result column="batchNum" property="batchNum" jdbcType="VARCHAR" />
+  	<result column="stockInQualifiedCount" property="stockInQualifiedCount" jdbcType="VARCHAR" />
+	<result column="stockInUnqualifiedCount" property="stockInUnqualifiedCount" jdbcType="VARCHAR" />
+	<result column="stockInCheckRemark" property="stockInCheckRemark" jdbcType="VARCHAR" />
     <association column="orderMaterielSerial" property="orderMateriel" select="com.congmai.zhgj.web.dao.OrderMaterielMapper.selectByPrimaryKey" ></association>
     <association property="stockInOutRecord" javaType="com.congmai.zhgj.web.model.StockInOutRecord">
     	<result column="s_serialNum" property="serialNum" jdbcType="VARCHAR" />
@@ -123,12 +126,32 @@
     checkRemark, warehouseSerial, positionSerial, stockCount, unstockCount, stockRemark, 
     remark, delFlg, creator, createTime, updater, updateTime
   </sql>
+  <sql id="Base_Column_List2" >
+    serialNum, deliverSerial, orderMaterielSerial, batchNum, manufactureDate, deliverCount, 
+    deliverRemark, acceptCount, refuseCount, takeRemark, qualifiedCount as stockInQualifiedCount,unqualifiedCount as stockInUnqualifiedCount,checkRemark as stockInCheckRemark,
+    warehouseSerial, positionSerial, stockCount, unstockCount, stockRemark, 
+    remark, delFlg, creator, createTime, updater, updateTime
+  </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.DeliveryMaterielExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
+    from deliveryMateriel
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExampleForStockIn" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.DeliveryMaterielExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List2" />
     from deliveryMateriel
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -517,9 +540,10 @@
   </update>
   <update id="updateDeliveryMateriel"  parameterType="com.congmai.zhgj.web.model.DeliveryMateriel" >
     update deliveryMateriel
-      qualifiedCount = #{qualifiedCount,jdbcType=VARCHAR},
-      unqualifiedCount = #{unqualifiedCount,jdbcType=VARCHAR},
-    where serialNum = #{serialNum,jdbcType=VARCHAR}
+    SET
+      qualifiedCount = #{qualifiedCount},
+      unqualifiedCount = #{unqualifiedCount}
+    where serialNum = #{serialNum}
   </update>
   <!-- ���� -->
   <select id="selectListByExample" resultMap="BaseResultMap2" parameterType="com.congmai.zhgj.web.model.StockInOutRecordSelectExample" >

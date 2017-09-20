@@ -48,9 +48,24 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     		//加载审批页面信息
     		getAuditInfos:getAuditInfos,
     		
+    		
+    		getSupplyComId:getSupplyComId,
     };
 
     return factory;
+    
+    
+    function getSupplyComId() {
+        var deferred = $q.defer();  
+        $http.post(ctx + "rest/delivery/getSupplyComId/").success(function (data) {  
+        	// 如果连接成功，延时返回给调用者  
+            deferred.resolve(data);  
+        })  
+            .error(function () {  
+                deferred.reject('连接服务器出错！');  
+            })  
+        return deferred.promise;  
+    }
 
     
     function applyAp(reason, serialNum) {
@@ -125,21 +140,17 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     
     //保存基本信息
     function saveBasicInfo($scope){
-    	debugger
     	var deferred = $q.defer();
 		$.post("rest/delivery/saveBasicInfo", {
 			orderSerial:$scope.orderSerial,
 			warehouseSerial:$scope.delivery.warehouseSerial,
 			deliverNum:$scope.delivery.deliverNum,
 			deliverType:$scope.delivery.deliverType,
-			receiver:$scope.delivery.receiver,
+			receiver:null,
 			maker:$scope.delivery.maker,
 			makeDate:$scope.delivery.makeDate,
-			approval:$scope.delivery.approval,
-			approvalDate:$scope.delivery.approvalDate,
 			remark:$scope.delivery.remark,
 			deliverDate:$scope.delivery.deliverDate,
-			materielCount:$scope.delivery.materielCount,
 			packageCount:$scope.delivery.packageCount,
 			packageType:$scope.delivery.packageType,
 			packageSpecifications:$scope.delivery.packageSpecifications,
@@ -149,12 +160,10 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 			contactNum:$scope.delivery.contactNum,
 			deliverRemark:$scope.delivery.deliverRemark,
 			
-			transportType:$scope.deliveryTransport.transportType,
+			transportType:$scope.transportType,
 			transport:$scope.deliveryTransport.transport,
 			port:$scope.deliveryTransport.port,
 			shipNumber:$scope.deliveryTransport.shipNumber,
-			playArrivalDate:$scope.deliveryTransport.playArrivalDate,
-			playWarehouseDate:$scope.deliveryTransport.playWarehouseDate,
 			transportRemark:$scope.deliveryTransport.remark,
 			transportContact:$scope.deliveryTransport.contact,
 			transportContactNum:$scope.deliveryTransport.contactNum,
@@ -176,21 +185,19 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     
     //编辑基本信息
     function editBasicInfo($scope){
-    	debugger
     	var deferred = $q.defer();
 		$.post("rest/delivery/editBasicInfo", {
 			serialNum:$scope.delivery.serialNum,
 			orderSerial:$scope.delivery.orderSerial,
 			warehouseSerial:$scope.delivery.warehouseSerial,
 			deliverNum:$scope.delivery.deliverNum,
-			receiver:$scope.delivery.receiver,
+			receiver:null,
 			maker:$scope.delivery.maker,
 			makeDate:$scope.delivery.makeDate,
 			approval:$scope.delivery.approval,
 			approvalDate:$scope.delivery.approvalDate,
 			remark:$scope.delivery.remark,
 			deliverDate:$scope.delivery.deliverDate,
-			materielCount:$scope.delivery.materielCount,
 			packageCount:$scope.delivery.packageCount,
 			packageType:$scope.delivery.packageType,
 			packageSpecifications:$scope.delivery.packageSpecifications,
@@ -201,7 +208,7 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 			deliverRemark:$scope.delivery.deliverRemark,
 			
 			transportserialNum:$scope.delivery.transportserialNum,
-			transportType:$scope.delivery.transportType,
+			transportType:$scope.transportType,
 			transport:$scope.delivery.transport,
 			port:$scope.delivery.port,
 			shipNumber:$scope.delivery.shipNumber,

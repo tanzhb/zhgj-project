@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.congmai.zhgj.core.generic.GenericDao;
+import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryTransportVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
@@ -84,4 +85,7 @@ public interface DeliveryMapper extends GenericDao<DeliveryMaterielVO, String> {
     
     public void updateOrderWhenDeliveryComlete(Map<String,Object> map);
  //查询发货详情的发货物料(出入库检验)
-    public List<DeliveryMaterielVO> selectListForDetailForStockCheck(Map<String,String>map);}
+    public List<DeliveryMaterielVO> selectListForDetailForStockCheck(Map<String,String>map);
+
+
+    public Company selectCompanyInfo(String comId);}

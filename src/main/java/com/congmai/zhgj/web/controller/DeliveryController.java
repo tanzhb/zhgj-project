@@ -56,6 +56,7 @@ import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
+import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryTransportVO;
@@ -210,6 +211,13 @@ public class DeliveryController {
 		Map<String,Object> map=new HashMap<String,Object>();
 		map.put("serialNum", serialNum);
 		map.put("updater", currenLoginName);
+		
+		DeliveryVO delivery=deliveryService.selectDetailById(serialNum);
+		String orderSerial=delivery.getOrderSerial();
+		map.put("orderSerial", orderSerial);
+		
+		deliveryService.updateOrderWhenDeliveryComlete(map);
+		
 		deliveryService.goDelivery(map);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("/delivery").buildAndExpand(serialNum).toUri());
@@ -354,8 +362,8 @@ public class DeliveryController {
     		delivery.setSupplyComId(null);
     		delivery.setShipper(null);
     	}else{
-    		delivery.setSupplyComId(comId);
-    		delivery.setShipper(comId);
+    		Company company=deliveryService.selectCompanyInfo(comId);
+       		delivery.setSupplyComId(comId);
     	}
 		
 		delivery.setCreator(currenLoginName);
@@ -513,6 +521,10 @@ public class DeliveryController {
    	public Map<String, Object> getDeliveryInfo(String serialNum) {
    		DeliveryVO delivery=deliveryService.selectDetailById(serialNum);
    		Map<String, Object> map = new HashMap<String, Object>();
+   		String suppluComId=delivery.getSupplyComId();
+   		Company company=deliveryService.selectCompanyInfo(suppluComId);
+   		delivery.setSupplyComId(company.getComName());
+   		delivery.setShipper(company.getComName());
        	map.put("delivery", delivery);
        	
        	List<DeliveryMaterielVO> deliveryMateriels = deliveryService.selectListForDetail(serialNum);
@@ -646,12 +658,25 @@ public class DeliveryController {
 	 */
 	@RequestMapping("exportDelivery")
 	public void exportDelivery(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+/*		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
+		List<DeliveryVO> deliveryList=deliveryService.findAllDeliveryList(currenLoginName);*/
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
-		List<DeliveryVO> deliveryList=deliveryService.findAllDeliveryList(currenLoginName);
+		//List<DeliveryVO> contractList=deliveryService.findAllDeliveryList(currenLoginName);
+		User user = UserUtil.getUserFromSession();
+    	List<String> comIds = new ArrayList<String>();
+    	if(user!=null){
+			comIds = userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId()));
+		}
+		DeliveryVO query = new DeliveryVO();
+		query.setCreator(currenLoginName);
+		query.setSupplyComIds(comIds);
+		List<DeliveryVO> contractList=deliveryService.findAllDeliveryList(query);
 
-		dataMap.put("deliveryList",deliveryList);
+		dataMap.put("deliveryList",contractList);
 		ExcelUtil.export(request, response, dataMap, "delivery", "发货信息");
 	}
 	
@@ -674,6 +699,39 @@ public class DeliveryController {
     }
 
 
+	 /**
+     * 添加发货页面
+     * @return 添加发货页面url
+     */
+    @RequestMapping("/addDelivery")
+    public String addDelivery() {
+    	User user = UserUtil.getUserFromSession();
+    	String comId = null;
+		comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+        return "delivery/addDelivery";
+    }
+    
+    /**
+     * 查询仓库地址
+     * @param warehouseSerial
+     * @return
+     */
+    @RequestMapping(value="getSupplyComId",method=RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<Company> getSupplyComId(String warehouseSerial){
+    	
+    	User user = UserUtil.getUserFromSession();
+    	String comId = null;
+		comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+		
+		
+		Company company=deliveryService.selectCompanyInfo(comId);
+    	
+    	return new ResponseEntity<Company>(company, HttpStatus.OK);
+    }
+    
+    
+    
 
 	@RequestMapping(value = "/toApproval/{taskId}", method = RequestMethod.POST, produces = "application/json")
 	public @ResponseBody Map<String, Object> toApproval(

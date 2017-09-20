@@ -192,12 +192,12 @@
 			<div class="portlet-body">
 				<table
 					class="table table-striped table-bordered table-hover table-checkable order-column "
-					id="sample_in">
+					id="sample_incheck">
 					<thead>
 						<tr>
 						<th>
 			                  <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-			                      <input  type="checkbox" class="group-checkable" data-set="#sample_in .checkboxes" />
+			                      <input  type="checkbox" class="group-checkable" data-set="#sample_incheck .checkboxes" />
 			                         <span></span>
 			                          </label>
 			                                    </th>
@@ -382,12 +382,12 @@
 			<div class="portlet-body">
 				<table
 					class="table table-striped table-bordered table-hover table-checkable order-column  "
-					id="sample_out">
+					id="sample_outcheck">
 					<thead>
 						<tr>
 						<th>
 			                  <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-			                      <input  type="checkbox" class="group-checkable" data-set="#sample_out .checkboxes" />
+			                      <input  type="checkbox" class="group-checkable" data-set="#sample_outcheck .checkboxes" />
 			                         <span></span>
 			                          </label>
 			                                    </th>

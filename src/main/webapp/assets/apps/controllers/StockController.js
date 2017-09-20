@@ -26,6 +26,9 @@ angular
 												if($location.path()=="/addOrEditStock"){
 													if($stateParams.stockSerialNum.length>7){//库存编辑页面
 														getStockInfo($stateParams.stockSerialNum);
+													}else if($scope.manageType.indexOf('daiguan')>-1||$scope.manageType.indexOf('jinwai')>-1){
+														$("#serviceParty").val("中航能科（上海）能源科技有限公司");
+														$("#materielOwner").val("中航能科（上海）能源科技有限公司");
 													}
 										 		}else if($location.path()=="/stockView"){
 										 			debugger;
@@ -464,7 +467,7 @@ angular
 							// 添加库存开始***************************************
 			$scope.addStock = function(judgeString) {
 				debugger;
-				 $state.go('addOrEditStock',{stockSerialNum:judgeString},{reload:true}); 
+				 $state.go('addOrEditStock',{stockSerialNum:judgeString}); 
 			}
 						$scope.editStock = function(){
 							debugger;
@@ -754,8 +757,8 @@ angular
 						            	maxStock:{required:"最高库存不能为空！",digits:"请输入正确的数字!"},
 						            	minStock:{required:"最低库存不能为空！",digits:"请输入正确的数字!"},
 						            	manageType:{required:"未选择管理类型！"},
-						            	materielOwner: { required:"未选择物权方！"},
-						            	serviceParty:{required:"未选择服务方！"}
+						            	materielOwner: { required:"物权方不能为空！"},
+						            	serviceParty:{required:"服务方不能为空！"}
 						            },
 						            rules: {
 						            	stockNum:{required:true},
@@ -764,7 +767,7 @@ angular
 						            	minStock:{required:true,digits:true},
 						            	manageType:{required:true},
 						            	materielOwner:{required:true},
-						            	serviceParty:{required:!0,digits:true,}
+						            	serviceParty:{required:true}
 						            },
 						            invalidHandler: function(e, t) {
 						                i.hide(),

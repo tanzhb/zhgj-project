@@ -2,8 +2,8 @@
  * 
  */
 
-angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope','$scope','$state','$http','takeDeliveryService','orderService','$location','$compile','$stateParams',
-                                                                   function($rootScope,$scope,$state,$http,takeDeliveryService,orderService,$location,$compile,$stateParams) {
+angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope','$scope','$state','$http','takeDeliveryService','orderService','$location','$compile','$stateParams','commonService',
+                                                                   function($rootScope,$scope,$state,$http,takeDeliveryService,orderService,$location,$compile,$stateParams,commonService) {
 	 $scope.$on('$viewContentLoaded', function() {   
 	    	// initialize core components
 		    handle = new pageHandle();
@@ -21,11 +21,13 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    		//selectParentMateriel();
 	    		
 	    		//initOrders();
-	    		initSuppliers();
-	    		initWarehouse();
-	    		initCustomers();
-	    		validatorInit();
-	    		loadOrderTable();
+	    		initSuppliers(); //加载供应商
+	    		initWarehouse(); //加载仓库
+	    		initCustomers(); //加载客户
+	    		getCurrentUser(); //加载当前用户信息
+	    		validatorInit();//验证初始化
+	    		loadOrderTable();//加载订单列表
+	    		setDefualtData();//设置初始值
 	    		if(!isNull($stateParams.serialNum)){
 	    			$(".d_tip").text("编辑代发货信息");
 	    			takeDeliveryInfo($stateParams.serialNum,"edit");
@@ -33,7 +35,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    		playArrivalDateSetting();
 	    		playWarehouseDateSetting();
 	 		}else if($location.path()=="/takeDeliveryView"||$location.path()=="/toTakeDelivery"||$location.path()=="/takeDeliveryAudit"||$location.path()=="/takeDeliveryAdjustment"){
-	 				takeDeliveryInfo($stateParams.serialNum,null,$stateParams.taskId, $stateParams.comments);
+	 				takeDeliveryInfo($stateParams.serialNum,"edit",$stateParams.taskId, $stateParams.comments);
+	 				//setDefualtData('takeDelivery');//设置初始值
 	 		}else{
 	 			var type = handle.getCookie("d_type");
 	 			if(type=="stockIn"){
@@ -98,23 +101,12 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	}  
 
 		
-		/**
-		 * 加载订单数据
-		 */
-			var initOrders = function(){
-				var promise = takeDeliveryService.initOrders();
-        		promise.then(function(data){
-        			$scope.orders = data.data;
-        		},function(data){
-        			//调用承诺接口reject();
-        		});
-			}
-			
+
 			/**
 			 * 加载供应商数据
 			 */
 			var initSuppliers = function(){
-			var promise = takeDeliveryService.initSuppliers();
+			var promise = commonService.initSuppliers();
 			promise.then(function(data){
 				$scope.suppliers = data.data;
 			},function(data){
@@ -126,12 +118,25 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 			 * 加载采购商数据
 			 */
 			var initCustomers = function(){
-				var promise = takeDeliveryService.initCustomers();
+				var promise = commonService.initCustomers();
         		promise.then(function(data){
         			$scope.customers = data.data;
         		},function(data){
         			//调用承诺接口reject();
         		});
+			}
+			
+			/**
+			 * 加载当前用户信息
+			 */
+			var getCurrentUser = function(){
+				var promise = commonService.getCurrentUser();
+				promise.then(function(data){
+					$scope.deliver.maker = data.data.userName;
+					$scope.takeDeliver.taker = data.data.userName;
+				},function(data){
+					//调用承诺接口reject();
+				});
 			}
 			
 			/**
@@ -145,8 +150,12 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 				//调用承诺接口reject();
 			});
 			}
-		
-		
+			
+			var setDefualtData = function(type){
+				
+				$scope.deliver.makeDate = timeStamp2ShortString(new Date());
+				$scope.deliver.deliverDate = timeStamp2ShortString(new Date());
+			}
 		
 	 		/**
 	 		 *加载订单物料
@@ -180,7 +189,11 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		        	$scope.deliver.warehouseSerial = data.data.warehouse.serialNum;
 		        	$scope.deliver.warehouseName = data.data.warehouse.address;
 	        	}
-	        	if(type="edit"){
+	        	debugger;
+	        	if(isNull($scope.deliver.receiver)){
+	        		$scope.deliver.receiverName = "中航能科（上海）能源科技有限公司";
+	        	}
+	        	if(type=="edit"){
 	        		$scope.deliverTransport = data.data.deliveryTransport;
 	        		$scope.orderMateriels = data.data.deliveryMateriels;
 	        		for(var i in data.data.deliveryMateriels){
@@ -206,6 +219,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    		 		$("#playArrivalDate").datepicker('setDate',playArrivalDate);
 	    		    	$("#playWarehouseDate").datepicker('setStartDate',playArrivalDate);
 	    		    }
+	    		 	$scope.takeDeliver.actualDate = timeStamp2ShortString(new Date());
 	        	}
 	        	if(!isNull(taskId)){
 	        		$("#serialNum").val(serialNum);//赋值给隐藏input，通过和不通过时调用
@@ -250,16 +264,16 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 							.saveTakeDelivery(params);
 					promise.then(function(data) {
 						if(data.data == "1"){
-							toastr.success("收货成功！");
+							toastr.success("代发货成功！");
 							$state.go("takeDelivery");
 						}else{
-							toastr.error("收货失败！请联系管理员");
+							toastr.error("代发货失败！请联系管理员");
 						}
 						handle.unblockUI();
 					}, function(data) {
 						// 调用承诺接口reject();
 						handle.unblockUI();
-						toastr.error("收货失败！请联系管理员");
+						toastr.error("代发货失败！请联系管理员");
 						console.log(data);
 					});
 				}
@@ -358,11 +372,11 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 				}else if(id_count>1){
 					toastr.warning("只能选择一条数据进行收货");
 				}else{
-					if(table.row('.active').data().status != '0'){
+					if(table.row('.active').data().status != '0' && table.row('.active').data().status < 1){
 						showToastr('toast-top-center', 'warning', '该收货单已经申请流程审批，不能进行再次收货！');
 					}else if(table.row('.active').data().status == 4){
 						showToastr('toast-top-center', 'warning', '该收货单已经已收货完成！');
-					}else if(table.row('.active').data().status > 2){
+					}else if(table.row('.active').data().status > 2 || table.row('.active').data().status == 1){
 						showToastr('toast-top-center', 'warning', '该收货单已经进入检验入库流程，不能进行再次收货！');
 					}else{
 						var serialNum = $('#takeDeliveryTable input[name="serialNum"]:checked').val();
@@ -524,9 +538,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        	}else if(id_count>1){
 	        		toastr.warning("只能选择一条数据进行入库");
 	        	}else{
-	        		var row = stock_table.row(".active").data();
-		       		if(row.status=="1"){
-		       			toastr.warning("该收货单已出库！");
+	        		var row = stock_table.row(".active").data();debugger;
+		       		if(row.stockInOutRecord.status=="1"){
+		       			toastr.warning("该收货单已入库！");
 		       			return;
 		       		}
 	        		var serialNum = $('#stockInTable input[name="serialNum2"]:checked').val();
@@ -541,8 +555,20 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		       		var date= scope.materiel.manufactureDate;
 		    	    handle.datePickersInit();
 		    	    scope.materiel.manufactureDate = date;
-		    	    $("#manufactureDate"+index).datepicker('setDate',date);
+		    	    if(isNull($scope.deliver.serialNum)){
+		  				scope.materiel.deliverCount = scope.materiel.amount;
+		  			}
+		    	    //$("#manufactureDate"+index).datepicker('setDate',date);
 		    };
+		    
+		    /**
+		     * 设置收货默认收货数量
+		     */
+		    $scope.setDefualtNum = function(scope){
+		    	//if(isNull($scope.deliver.serialNum)){
+	  				scope.materiel.acceptCount = scope.materiel.deliverCount;
+	  			//}
+		    }
 	        
 	        /**
 		        * 导出入库记录
@@ -729,8 +755,10 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    										return '<span  class="label label-sm label-warning ng-scope">已取消</span>';
 	    									}else if(data=="3"){
 	    										return '<span  class="label label-sm label-warning ng-scope">待入库</span>';
+	    									}else if(data=="4"){
+	    										return '<span  class="label label-sm label-success ng-scope">已完成</span>';
 	    									}else{
-	    										return '<span  class="label label-sm label-warning ng-scope">待收货</span>';
+	    										return '<span  class="label label-sm label-danger ng-scope">待收货</span>';
 	    									}
 	    							}
 	    						}]
@@ -873,7 +901,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						            	packageSpecifications:{required:"包装规格不能为空！"},
 	  						            	materielWeight:{required:"物料重量不能为空！"},
 	  						            	serviceMoney:{required:"服务费不能为空！",digits:"包装件数必须为数字！"},
-	  						            	deliverer:{required:"发货人不能为空！"},
+	  						            	deliverer:{required:"联系人不能为空！"},
 	  						            	dContactNum:{required:"联系电话不能为空！"},
 	  						            	transportType:{required:"运输方式不能为空！"},
 	  						            	transport:{required:"运输方不能为空！"},
@@ -885,7 +913,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						            	dtContactNum:{required:"联系电话不能为空！"},
 	  						            	warehouseSerial:{required:"收货仓库不能为空！"},
 	  						            	takeDeliverDate:{required:"收货日期不能为空！"},
-	  						            	tdReceiver:{required:"收货人不能为空！"},
+	  						            	tdReceiver:{required:"联系人不能为空！"},
 	  						            	tdContactNum:{required:"联系电话不能为空！"},
 	  						            	batchNum:{required:"批次号不能为空！"},
 	  						            	manufactureDate:{required:"生产日期不能为空！"},
@@ -955,7 +983,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						                	required: !0
 	  						                },
 	  						                dContactNum: {
-	  						                	required: !0,
+	  						                	//required: !0,
 	  						                	isPhone: !0
 	  						                },
 	  						                transportType: {
@@ -980,7 +1008,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						                	required: !0
 	  						                },
 	  						                dtContactNum: {
-	  						                	required: !0,
+	  						                	//required: !0,
 	  						                	isPhone: !0
 	  						                },
 	  						                warehouseSerial: {
@@ -1009,7 +1037,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						                	acceptNumCheck:!0
 	  						                },
 	  						                tdContactNum: {
-	  						                	required: !0,
+	  						                	//required: !0,
 	  						                	isPhone: !0
 	  						                },
 	  						                actualDate: {
@@ -1361,7 +1389,11 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					var order = order_table.row('.active').data();
 					$scope.deliver.supplyComId = order.supplyComId;
 					$scope.deliver.shipper = order.supplyComId;
-					$scope.deliver.receiver =  order.buyComId;
+					if(!isNull(order.buyComId)){
+						$scope.deliver.receiver =  order.buyComId;
+						$scope.deliver.receiverName =  order.buyName;
+					}
+					
 					
 					$scope.deliver.supplyName = order.supplyName;
 					$scope.deliver.shipperName = order.supplyName;
@@ -1374,14 +1406,27 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					$("#buyOrderInfo").modal('hide'); 
 				}
 				
-	  		}    
+	  		}  
+	  		
+	  		
+	  		$scope.calcTotalNum = function(){debugger;
+	  			if(!isNull($scope.orderMateriels)){
+	  				$scope.totalDeliverCount = 0;
+	  				$scope.totalAmount = 0;
+	  				$scope.materielCount = $scope.orderMateriels.length;
+	  				for(var i in $scope.orderMateriels){
+	  					$scope.totalDeliverCount += handle.formatNumber($scope.orderMateriels[i].deliverCount);
+	  					$scope.totalAmount += handle.formatNumber($scope.orderMateriels[i].amount);
+	  				}
+	  			}
+	  		}
 	  		
 	  		/************************************************申请JS***********************************************/
 	  		$scope.applyTakeDelivery = function(){
 	  			
 	  			if($('#takeDeliveryForm').valid()){
 					handle.blockUI();
-					var params = {};debugger;
+					var params = {};
 					params.takeDelivery = {};
 					params.takeDelivery.serialNum = $scope.deliver.takeDelivery.serialNum;
 					params.takeDelivery.takeDeliverNum = $scope.takeDeliver.takeDeliverNum;

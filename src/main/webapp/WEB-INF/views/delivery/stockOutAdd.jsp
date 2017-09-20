@@ -11,7 +11,7 @@
 	vertical-align:middle;
 } */
 </style>
-<h3 class="page-title s_tip"> 新建出库记录
+<!-- <h3 class="page-title s_tip"> 新建出库记录
 </h3>
 <div class="page-bar">
     <ul class="page-breadcrumb">
@@ -33,7 +33,7 @@
         </li>
     </ul>
 
-</div>
+</div> -->
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
 <div class="row">
@@ -183,9 +183,9 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="contactNum">联系方式 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="contactNum">联系方式</label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="contactNum"  name="contactNum" ng-model="record.contactNum" ng-hide="deliverAdd" >
+                                                        <input type="text" class="form-control" id="contactNum" ng-model="record.contactNum" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{record.contactNum}}</p>
                                                     </div>
@@ -244,7 +244,7 @@
 									</tr>
 								</thead>
 								<tbody data-repeater-list="group-a"> 
-									<tr data-repeater-item ng-repeat="materiel in takeDeliveryMateriels track by $index" >
+									<tr data-repeater-item ng-repeat="materiel in takeDeliveryMateriels track by materiel.serialNum" repeat-done="setDefualtNum(this)" >
 										<td>{{materiel.orderMateriel.materiel.materielNum}}</td>
 										<td>{{materiel.orderMateriel.materiel.materielName}}</td>
 										<td>{{materiel.orderMateriel.materiel.specifications}}</td>
@@ -262,7 +262,11 @@
 											<span ng-if="materiel.deliverCount!=undefined && materiel.stockCount!=undedined">{{materiel.deliverCount-materiel.stockCount}}</span>
 										</td>
 										<td class="form-group">
-                                                <select class="bs-select form-control order" data-live-search="true"  id="warehouseSerial" ng-init="warehouses[0].serialNum" ng-change="getPositions(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
+                                                <select ng-if="$first" class="bs-select form-control order" data-live-search="true"  id="warehouseSerial" ng-init="warehouses[0].serialNum" ng-change="getPositionsAndSelectedAll(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
+	                                                 <!--  <option value=""></option> -->
+	                                                  <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
+	                                            </select>
+                                                <select ng-if="!$first" class="bs-select form-control order" data-live-search="true"  id="warehouseSerial" ng-init="warehouses[0].serialNum" ng-change="getPositions(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
 	                                                 <!--  <option value=""></option> -->
 	                                                  <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
 	                                            </select>

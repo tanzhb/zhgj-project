@@ -39,6 +39,12 @@ angular
 										 			$scope.inOrOut=$stateParams.inOrOut;
 										 			getStockInOutCheckInfo($stateParams.inOrOut);//查看出入库检验详情页面
 									 		}else if($location.path()=="/confirmStockInOutCheck"){
+									 			$('.date-picker').datepicker({
+													rtl: App.isRTL(),
+													orientation: "left",
+													autoclose: true,
+													language:"zh-CN"
+									        	})
 									 			debugger;
 									 			$scope.inOrOut=$stateParams.inOrOut;
 									 			getStockInOutCheckInfo($stateParams.inOrOut);//查看出入库检验详情页面
@@ -47,12 +53,12 @@ angular
 									 				debugger;
 									 				$("#in").removeClass("active");
 									 				$("#out").addClass("active");
-									 				loadStockInOutCheckTable('out');
+									 				loadStockInOutCheckTable('outcheck');
 									 				//加载入库检验列表
 									 			}else{
 									 				$("#in").addClass("active");
 									 				$("#out").removeClass("active");
-									 				loadStockInOutCheckTable('in');//加载入库检验列表
+									 				loadStockInOutCheckTable('incheck');//加载入库检验列表
 									 			}
 										 		}
 											
@@ -83,8 +89,13 @@ angular
 							var tableAjaxUrl ;
 							 var table,Intable,Outtable;
 			function loadStockInOutCheckTable(judgeString){
-							var a = 0;
-							tableAjaxUrl= "rest/stockInOut/getStockInOutCheckList?inOrOut="+judgeString
+							var a = 0,judgeString1;
+							if(judgeString.indexOf("in")>-1){
+								judgeString1='in';
+							}else{
+								judgeString1='out';
+							}
+							tableAjaxUrl= "rest/stockInOut/getStockInOutCheckList?inOrOut="+judgeString1
 							App.getViewPort().width < App
 									.getResponsiveBreakpoint("md") ? $(
 									".page-header").hasClass(
@@ -97,7 +108,7 @@ angular
 													"page-header-fixed")
 													&& (a = 64);
 
-											Intable = $("#sample_in")
+											Intable = $("#sample_incheck")
 									.DataTable(
 											{
 												language : {
@@ -210,8 +221,6 @@ angular
 				 	    								if(row.status==0){
 				 	    									statusIcon = '<span class="label label-sm label-success"  >待检验</span> '
 				 	    								}else if(row.status==1){
-				 	    									statusIcon = '<span class="label label-sm label-success">待审批</span> '
-				 	    								}else if(row.status==2){
 				 	    									statusIcon = '<span class="label label-sm label-success">已检验</span> '
 				 	    								}
 				 	    								return statusIcon ;
@@ -219,7 +228,7 @@ angular
 												}  ],
 
 											});
-											Outtable = $("#sample_out")
+											Outtable = $("#sample_outcheck")
 											.DataTable(
 													{
 														language : {
@@ -332,8 +341,6 @@ angular
 						 	    								if(row.status==0){
 						 	    									statusIcon = '<span class="label label-sm label-success"  >待检验</span> '
 						 	    								}else if(row.status==1){
-						 	    									statusIcon = '<span class="label label-sm label-success">待审批</span> '
-						 	    								}else if(row.status==2){
 						 	    									statusIcon = '<span class="label label-sm label-success">已检验</span> '
 						 	    								}
 						 	    								return statusIcon ;
@@ -341,7 +348,7 @@ angular
 														}  ],
 
 													});
-											if(judgeString=='in'){
+											if(judgeString=='incheck'){
 												table=Intable;
 											}else{
 												table=Outtable;
@@ -427,12 +434,12 @@ angular
 						
 						function judgeIsExist (){//判断是否已有收货单/发货单相关的出入库检验
 							var serialNum;
-							if($scope.inOrOut=='in'){
+							/*if($scope.inOrOut=='in'){
 								serialNum=$scope.stockInOutCheck.takeDeliverSerial+"in";
 							}else{
 								serialNum=$scope.stockInOutCheck.deliverSerial+"out";
-							}
-							StockInOutService.judgeIsExistBySerialNum(serialNum)
+							}*/
+						/*	StockInOutService.judgeIsExistBySerialNum(serialNum)
 							.then(
 									function(data) {debugger;
 										if(data=='1'){
@@ -444,7 +451,7 @@ angular
 												return ;
 											}
 											
-										}
+										}*/
 										var params = {};
 										params.deliveryMateriels = [];
 										var param
@@ -478,14 +485,13 @@ angular
 															.error('Error while creating User');
 												}
 										);
-									}
-							);	
+							/*		}
+							);	*/
 						}
 								$scope.saveStockInOutCheck= function() {
 									debugger;
 									$scope.stockInOutCheck.deliverSerial=$("#deliverSerial").val();
 									$scope.stockInOutCheck.takeDeliverSerial=$("#takeDeliverSerial").val();
-									$scope.materials;
 									if($('#stockInOutCheckForm').valid()){//表单验证通过则执行添加功能
 										 judgeIsExist ();
 									}
@@ -509,7 +515,7 @@ angular
 								}else{
 									var serialNum = table.$('input[type="checkbox"]:checked').val();
 									if(judgeString.indexOf("check")>-1){
-									$state.go("confimStockInOutCheck",{inOrOut:serialNum+judgeString});
+									$state.go("confirmStockInOutCheck",{inOrOut:serialNum+judgeString});
 									}else{$state.go("addOrEditStockInOutCheck",{inOrOut:serialNum+judgeString});}
 										
 								}
@@ -564,15 +570,50 @@ angular
 								 $state.go('stockInOutCheckView',{inOrOut:serialNum+judgeString},{reload:true}); 
 								
 							}
-							$scope.confirmStockInOutCheck = function(judgeString) {										
+							$scope.confirmStockInOutCheck = function(judgeString) {	
+								var params = {};
+								params.deliveryMateriels = [];
+								var param
+								for(var i=0;i < $scope.materials.length;i++){
+									param = {};
+									param.serialNum = $scope.materials[i].serialNum;
+									param.qualifiedCount = $scope.materials[i].qualifiedCount;
+									if($scope.inOrOut.indexOf("in")){
+										param.unqualifiedCount= $scope.materials[i].acceptCount-$scope.materials[i].qualifiedCount;
+									}else{
+										param.unqualifiedCount= $scope.materials[i].deliverCount-$scope.materials[i].qualifiedCount;
+									}
+									param.checkRemark = $scope.materials[i].checkRemark;
+									params.deliveryMateriels.push(param);
+								}
+								$scope.stockInOutCheck.deliverMaterials=params.deliveryMateriels;
+								$scope.stockInOutCheck.status=1;
 								StockInOutService
 										.updateStockInOutCheckStatus($scope.inOrOut)
 										.then(
 												function(data) {
-													if(judgeString=='checkin'){toastr.success("确认入库检验成功！");
-													}else{toastr.success("确认出库成功！");
-												}
-												$scope.stockInOutCheck.status=1;
+													StockInOutService.saveStockInOutCheck($scope.stockInOutCheck)
+													.then(
+															function(data) {debugger;
+																//toastr.success("保存检验数据成功！");
+																$scope.stockInOutCheck = data;
+											        			$scope.stockInOutCheckView = true;
+											        			$scope.stockInOutCheckAdd = true;
+											        			$scope.stockInOutCheckEdit = true;
+											        			$(".alert-danger").hide();
+											        			if(judgeString=='checkin'){toastr.success("确认入库检验成功！");
+																}else{toastr.success("确认出库检验成功！");
+															}
+															$scope.stockInOutCheck.status=1;
+															},
+															function(errResponse) {
+																toastr.warning("保存失败！");
+																console
+																		.error('Error while creating User');
+															}
+													);
+													
+													
 												},
 												function(errResponse) {
 													console

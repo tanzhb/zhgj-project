@@ -182,7 +182,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                                 	'assets/apps/controllers/PriceListController.js',
                                 	'assets/apps/scripts/angular-file-upload-shim.min.js',
                                 	'assets/apps/scripts/angular-file-upload.min.js',
-                                	 'assets/global/plugins/bootbox/bootbox.min.js'
+                                	 'assets/global/plugins/bootbox/bootbox.min.js',
+                                	  'assets/apps/service/orderService.js'
                         ]
                     });
                 }]
@@ -212,7 +213,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
     				        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
     				        'assets/apps/scripts/angular-file-upload-shim.min.js',
     				        'assets/apps/scripts/angular-file-upload.min.js',
-    				        'assets/apps/scripts/FileUploader.js'
+    				        'assets/apps/scripts/FileUploader.js',
+    				        'assets/apps/service/orderService.js'
                         ]
                     });
                 }]
@@ -909,7 +911,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 							         'assets/global/css/easyui.css',
 							         'assets/global/css/datagrid.css',
 							         'assets/global/css/jquery.qtip.min.css',
-							         
+							         'assets/apps/service/CommonService.js',
 							         'assets/global/plugins/jquery.easyui.min.js',
 							         'assets/global/plugins/jquery.qtip.min.js',
 							         'assets/global/plugins/jquery.outerhtml.js',
@@ -933,6 +935,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/global/plugins/datatables/datatables.all.min.js',
 		    				        'assets/apps/controllers/TakeDeliveryController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js',
+		    				        'assets/apps/service/CommonService.js',
 		    				        'assets/apps/service/orderService.js'
 		    				        ]
 		    			});
@@ -953,6 +956,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/apps/controllers/TakeDeliveryController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js',
 		    				        'assets/apps/service/orderService.js',
+		    				        'assets/apps/service/CommonService.js',
 		    				        'assets/global/css/components-rounded.min.css'
 		    				        ]
 		    			});
@@ -972,7 +976,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				files: [       
 		    				        'assets/apps/controllers/TakeDeliveryController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js',
-		    				        'assets/apps/service/orderService.js'
+		    				        'assets/apps/service/orderService.js',
+		    				        'assets/apps/service/CommonService.js'
 		    				        ]
 		    			});
 		    		}]
@@ -980,7 +985,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    }) .state('takeDeliveryAudit', {
 		    	url: "/takeDeliveryAudit?:serialNum&:taskId&:comments",
 		    	templateUrl: "rest/takeDelivery/takeDeliveryAudit",
-		    	data: {pageTitle: '收货'},
+		    	data: {pageTitle: '收货审批'},
 		    	reload:true, 
 		    	controller: "TakeDeliveryController",
 		    	resolve: {
@@ -991,6 +996,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				files: [       
 		    				        'assets/apps/controllers/TakeDeliveryController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js',
+		    				        'assets/apps/service/CommonService.js',
 		    				        'assets/apps/service/orderService.js'
 		    				        ]
 		    			});
@@ -999,7 +1005,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    }) .state('takeDeliveryAdjustment', {
 		    	url: "/takeDeliveryAdjustment?:serialNum&:taskId&:comments",
 		    	templateUrl: "rest/takeDelivery/takeDeliveryAdjustment",
-		    	data: {pageTitle: '收货'},
+		    	data: {pageTitle: '收货调整'},
 		    	reload:true, 
 		    	controller: "TakeDeliveryController",
 		    	resolve: {
@@ -1010,6 +1016,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				files: [       
 		    				        'assets/apps/controllers/TakeDeliveryController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js',
+		    				        'assets/apps/service/CommonService.js',
 		    				        'assets/apps/service/orderService.js'
 		    				        ]
 		    			});
@@ -1372,7 +1379,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    })   
 		    .state('addDelivery', {
             url: "/addDelivery",
-            templateUrl: "rest/page/addDelivery",
+            templateUrl: "rest/delivery/addDelivery",
             data: {pageTitle: '新增发货'},
             controller: "DeliveryController",
             resolve: {
@@ -2167,6 +2174,10 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>采购订单列表</a></li>";					 
+			   }else if('supplyOrder' == toState.name){//采购订单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>订单列表</a></li>";					 
 			   }else if('addBuyOrder' == toState.name){//新增采购订单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
@@ -2179,6 +2190,11 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" + 
 				 		"<li><a>查看采购订单</a></li>";
+			   }else if('viewSupplyOrder' == toState.name){//查看供应商订单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='supplyOrder'>订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>查看订单</a></li>";
 			   }else if('submitBuyApply' == toState.name){//采购订单发起申请
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
@@ -2278,10 +2294,25 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a ui-sref='takeDelivery'>收货列表</a><i class='fa fa-angle-right'></i></li>" + 
 				 		"<li><a>查看入库</a></li>";
+			   }else if('stockOutAdd' == toState.name){//新增
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+				   "<li><a ui-sref='delivery'>发货计划</a><i class='fa fa-angle-right'></i></li>" + 
+				   "<li><a>新增出库单</a></li>";
+			   }else if('stockOut' == toState.name){//出库
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+				   "<li><a ui-sref='delivery'>发货计划</a><i class='fa fa-angle-right'></i></li>" + 
+				   "<li><a>出库</a></li>";
+			   }else if('stockOutView' == toState.name){//查看出库单
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+				   "<li><a ui-sref='delivery'>发货计划</a><i class='fa fa-angle-right'></i></li>" + 
+				   "<li><a>查看出库</a></li>";
 			   }else if('stockInOutCheck' == toState.name){//出入库检验
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a>检验列表</a></li>";					 
+				 		"<li><a  ui-sref='stockInOutCheck'>检验</a></li>";					 
 			   }else if('statement' == toState.name){//对账单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>对账单</a></li>";					 
@@ -2374,6 +2405,35 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					   if(toParams.inOrOut.indexOf('in') >= 0){
 						   html += "<li><a>查看进项票</a></li>";
 					   }else html += "<li><a>查看销项票</a></li>";
+				   }
+			   }else if('addOrEditStockInOutCheck' == toState.name){//新增修改检验                  
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a  ui-sref='stockInOutCheck'>检验</a><i class='fa fa-angle-right'></i></li>";		
+				   if(toParams.inOrOut == 'in'){
+					   html += "<li><a>新增入库检验</a></li>";
+				   }else if(toParams.inOrOut.length > 4){
+					   if(toParams.inOrOut.indexOf('in') >= 0){
+						   html += "<li><a>修改入库检验</a></li>";
+					   }else html += "<li><a>修改出库检验</a></li>";
+				   } else html += "<li><a>新增出库检验</a></li>";
+			   }else if('stockInOutCheckView' == toState.name){//查看检验   
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a  ui-sref='stockInOutCheck'>检验</a><i class='fa fa-angle-right'></i></li>";		
+				   if(toParams.inOrOut.length > 4){
+					   if(toParams.inOrOut.indexOf('in') >= 0){
+						   html += "<li><a>查看入库检验</a></li>";
+					   }else html += "<li><a>查看出库检验</a></li>";
+				   }
+			   }else if('confirmStockInOutCheck' == toState.name){//查看检验   
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a  ui-sref='stockInOutCheck'>检验</a><i class='fa fa-angle-right'></i></li>";		
+				   if(toParams.inOrOut.length > 4){
+					   if(toParams.inOrOut.indexOf('in') >= 0){
+						   html += "<li><a>入库检验确认</a></li>";
+					   }else html += "<li><a>出库检验确认</a></li>";
 				   }
 			   }
 			   angular.element("#dashboard").empty();

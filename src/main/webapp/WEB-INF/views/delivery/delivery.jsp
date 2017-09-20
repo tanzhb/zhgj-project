@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<div class="page-bar">
+<!-- <div class="page-bar">
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
 			class="fa fa-angle-right"></i></li>
@@ -8,7 +8,7 @@
 		<li><a ui-sref="delivery">仓储</a><i class="fa fa-angle-right"></i></li>
 		<li><a id="tip">发货计划</a></li>
 	</ul>
-</div>
+</div> -->
 <div class="tabbable-line">
 	<ul class="nav nav-tabs" id="delivery_tab">
 		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">发货计划</a>
@@ -32,12 +32,13 @@
 					<!-- BEGIN EXAMPLE TABLE PORTLET-->
 					<div class="portlet light">
 						<div class="portlet-title">
+						
 							<div class="caption">
 								<i class="fa fa-globe font-green"></i> <span
 									class="caption-subject font-green bold uppercase">发货列表</span>
 							</div>
 							<div class="actions" ng-controller='MyCtrl'>
-									<label class="btn btn-transparent yellow btn-circle btn-sm" ng-click="jumpToApplyPay()"><i class="glyphicon glyphicon-play"></i> 申请</label>
+									<!-- <label class="btn btn-transparent yellow btn-circle btn-sm" ng-click="jumpToApplyPay()"><i class="glyphicon glyphicon-play"></i> 申请</label> -->
 									
 									<label class="btn btn-transparent green btn-circle btn-sm"
 									ng-click="jumpToUrl('addDelivery')"> <i
@@ -81,14 +82,14 @@
 
 						<div class="portlet-body">
 							<div class="tabbable-custom ">
-								<ul class="nav nav-tabs " id="accountPayableTab">
+								<!-- <ul class="nav nav-tabs " id="accountPayableTab">
 									<li class="active"><a href="#apply" data-toggle="tab"
 										ng-click="toApply()"> 待申请 </a></li>
 									<li><a href="#daiban" data-toggle="tab"
 										ng-click="toDaiban()"> 待办流程 </a></li>
 									<li><a href="#yiban" data-toggle="tab"
 										ng-click="toYiban()"> 已办流程 </a></li>
-								</ul>
+								</ul> -->
 								<div class="tab-content">
 									<div class="tab-pane active" id="apply">
 										<table

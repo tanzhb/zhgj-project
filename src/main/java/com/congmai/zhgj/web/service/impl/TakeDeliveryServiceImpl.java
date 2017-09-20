@@ -405,7 +405,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 
 	@Override
 	public void confirmTakeDelivery(TakeDeliveryParams takeDeliveryParams,
-			String currenLoginName) {
+			String currenLoginName) throws Exception {
 		takeDeliveryParams = getConfirmTakeDeliveryData(takeDeliveryParams,currenLoginName);
 		//(takeDeliveryParams.getTakeDelivery());
 		//TakeDelivery takeDelivery = new TakeDelivery();
@@ -414,7 +414,15 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		//takeDelivery.set(takeDeliveryParams.getTakeDelivery().getSerialNum());
 		//takeDelivery.setSerialNum(takeDeliveryParams.getTakeDelivery().getSerialNum());
 		//takeDelivery.setSerialNum(takeDeliveryParams.getTakeDelivery().getSerialNum());
+		
+		takeDeliveryParams.getTakeDelivery().setStatus(TakeDelivery.APPLY_COMPLETE); //待检验
 		takeDeliveryMapper.updateByPrimaryKeySelective(takeDeliveryParams.getTakeDelivery());
+		
+		//没有审批时，直接收货
+		TakeDelivery takeDelivery = takeDeliveryMapper.selectByPrimaryKey(takeDeliveryParams.getTakeDelivery().getSerialNum());
+		takeDeliveryParams.getTakeDelivery().setDeliverSerial(takeDelivery.getDeliverSerial());
+		this.createStockInCheckRecord(takeDeliveryParams.getTakeDelivery(),currenLoginName);
+		
 		//删除已保存的收货物料
 		DeliveryMaterielExample example = new DeliveryMaterielExample();
 		example.createCriteria().andDeliverSerialEqualTo(takeDeliveryParams.getTakeDelivery().getSerialNum());
@@ -487,6 +495,14 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			orderInfo.setUpdateTime(new Date());
 			orderInfo.setUpdater(currenLoginName);
 			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+			
+			//更新发货状态
+			Delivery _delivery = new Delivery();
+			_delivery.setSerialNum(delivery.getSerialNum());
+			_delivery.setStatus("4");//状态:已收货
+			_delivery.setUpdateTime(new Date());
+			_delivery.setUpdater(currenLoginName);
+			delivery2Mapper.updateByPrimaryKeySelective(_delivery);
 		}else{
 			throw new Exception("没有找到发货单,发货id"+takeDelivery.getDeliverSerial());
 		}
@@ -510,11 +526,6 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		stockInOutCheckMapper.insert(check);
 	}
 
-	@Override
-	public TakeDeliveryVO selectDetailById(String deliverSerial) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 
 }

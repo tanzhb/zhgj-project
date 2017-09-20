@@ -134,6 +134,9 @@ function timeStamp2ShortString (time){
      var year = datetime.getFullYear();
      var month = datetime.getMonth() + 1;
      var date = datetime.getDate();
+     if(month < 10){
+    	 month = '0' + month;
+     }
      return year + "-" + month + "-" + date;
 };
 //+---------------------------------------------------

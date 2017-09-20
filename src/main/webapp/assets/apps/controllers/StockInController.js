@@ -102,6 +102,19 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 				});
 			}
 			 
+			 //选中第一个物料仓库时触发
+			 $scope.getPositionsAndSelectedAll =function(materiel){
+				 $scope.getPositions(materiel);
+				 //$(".warehouseSerial").val(materiel.warehouseSerial);
+				 
+				 for(var i in $scope.takeDeliveryMateriels){
+					 if(i>0){
+						 $scope.takeDeliveryMateriels[i].warehouseSerial = materiel.warehouseSerial;
+						 $scope.getPositions($scope.takeDeliveryMateriels[i]);
+					 }
+				 }
+			 }
+			 
 			 /**
 			  * 计算库位
 			  */
@@ -137,12 +150,12 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 	            }*/
 	            $scope.record.orderSerial = delivery.orderSerial;
 				$scope.record.orderNum = delivery.orderNum;
-	        	var promise = takeDeliveryService.getTakeDeliveryMaterielList(sd);
+	        	var promise = takeDeliveryService.getTakeDeliveryMaterielListForStockIn(sd);
         		promise.then(function(data){
-        			$scope.takeDeliveryMateriels = data.data;
+        			$scope.takeDeliveryMateriels = data.data;debugger;
         			countWarehouseAndPosition();
         			//$scope.deliver.materielCount = data.orderMateriel.length;
-        			if($location.path()=="/stockInAdd"){ //入库编辑时
+        			if($location.path()=="/stockInAdd"&&!isNull($scope.record)&&!isNull($scope.record.serialNum)){ //入库编辑时
         				for(var i in data.data){
             				$scope.getPositions(data.data[i]);
             			}
@@ -324,7 +337,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 					                	StockInNumCheck:!0
 					                },
 					                contactNum: {
-					                	required: !0,
+					                	//required: !0,
 					                	isPhone: !0
 					                }
 					            },
@@ -533,6 +546,15 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 		            $scope.getSelectIndex = function(index){
 		            	$scope.index = index;
 		            }
+		            
+		            /**
+				     * 设置入库默认入库数量
+				     */
+				    $scope.setDefualtNum = function(scope){
+				    	//if(isNull($scope.deliver.serialNum)){
+			  				scope.materiel.stockCount = scope.materiel.acceptCount;
+			  			//}
+				    }
 	       
 
 }]); 

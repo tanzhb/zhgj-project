@@ -10,7 +10,7 @@
 	vertical-align:middle;
 } */
 </style>
-<h3 class="page-title"> 新建出库
+<!-- <h3 class="page-title"> 新建出库
 </h3>
 <div class="page-bar">
     <ul class="page-breadcrumb">
@@ -32,7 +32,7 @@
         </li>
     </ul>
 
-</div>
+</div> -->
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
 <div class="row">
@@ -134,7 +134,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="operator">收货方：</label>
                                                     <div class="col-md-8">
-                                                       <p class="control-label left" >{{record.shipperOrReceiverName}}</p>
+                                                       <p class="control-label left" >{{shipperOrReceiverName}}</p>
                                                     </div>
                                             </div>
 										</div>

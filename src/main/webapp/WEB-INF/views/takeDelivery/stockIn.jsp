@@ -178,9 +178,9 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="contactNum">联系方式 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="contactNum">联系方式 </label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="contactNum"  name="contactNum" ng-model="record.contactNum" ng-hide="deliverAdd" >
+                                                        <input type="text" class="form-control" id="contactNum"  ng-model="record.contactNum" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{record.contactNum}}</p>
                                                     </div>
@@ -234,12 +234,16 @@
 										<th  rowspan="2">批次号</th>
 										<th  rowspan="2">生产日期</th>
 										<th colspan="3"  style="text-align: center;">收货</th>
+										<th colspan="3"  style="text-align: center;">检验</th>
 										<th colspan="5"  style="text-align: center;">入库</th>
 										<th rowspan="2">状态</th>
 									</tr>
 									<tr>
 										<th>实收数量</th>
 										<th>拒收数量</th>
+										<th>备注</th>
+										<th>合格数量</th>
+										<th>不合格数量</th>
 										<th>备注</th>
 										<th>入库数量</th>
 										<th>未入数量</th>
@@ -249,7 +253,7 @@
 									</tr>
 								</thead>
 								<tbody data-repeater-list="group-a"> 
-									<tr data-repeater-item ng-repeat="materiel in takeDeliveryMateriels track by $index" >
+									<tr data-repeater-item ng-repeat="materiel in takeDeliveryMateriels track by materiel.serialNum" repeat-done="setDefualtNum(this)" >
 										<td>{{materiel.orderMateriel.materiel.materielNum}}</td>
 										<td>{{materiel.orderMateriel.materiel.materielName}}</td>
 										<td>{{materiel.orderMateriel.materiel.specifications}}</td>
@@ -259,6 +263,9 @@
 										<td>{{materiel.acceptCount}}</td>
 										<td>{{materiel.refuseCount}}</td>
 										<td>{{materiel.takeRemark}}</td>
+										<td>{{materiel.stockInQualifiedCount}}</td>
+										<td>{{materiel.stockInUnqualifiedCount}}</td>
+										<td>{{materiel.stockInCheckRemark}}</td>
 										<td>
 											<div class="col-md-12 form-group">
                                                  <input type="text" class="form-control input-small" id="stockCount{{$index}}" name="stockCount" data-acceptcount="{{materiel.acceptCount}}"  ng-model="materiel.stockCount" ng-hide="deliverAdd" >
@@ -270,8 +277,12 @@
 										</td>
 										<td>
 											<div class="col-md-12 form-group">
-                                                <select class="bs-select form-control order" data-live-search="true"  id="warehouseSerial" ng-init="warehouses[0].serialNum" ng-change="getPositions(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
-	                                                 <!--  <option value=""></option> -->
+                                                <select ng-if="$first" class="bs-select form-control order" data-live-search="true"  id="warehouseSerial" ng-init="warehouses[0].serialNum" ng-change="getPositionsAndSelectedAll(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
+	                                                 <option value=""></option>
+	                                                  <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
+	                                            </select>
+                                                <select ng-if="!$first" class="bs-select form-control order" data-live-search="true"  id="warehouseSerial" ng-init="warehouses[0].serialNum" ng-change="getPositions(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
+	                                                 <option value=""></option>
 	                                                  <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
 	                                            </select>
 	                                            <div class="form-control-focus"></div>
@@ -280,7 +291,7 @@
 										<td>
 											<div class="col-md-12">
                                                 <select class="bs-select form-control order" data-live-search="true"  id="positionSerial" ng-change="countPosition()" ng-init="materiel.warehousePositons[0].serialNum"   name="positionSerial" ng-model="materiel.positionSerial"    data-size="8">
-	                                                   <!-- <option value=""></option> -->
+	                                                   <option value=""></option>
 	                                                   <option  ng-repeat="warehousePositon in materiel.warehousePositons" value="{{warehousePositon.serialNum}}">{{warehousePositon.positionName}}</option>
 	                                             </select>
 	                                             <div class="form-control-focus"> </div>
@@ -291,6 +302,10 @@
                                                  <input type="text" class="form-control input-small" id="stockRemark{{$index}}" name="stockRemark" data-delivercount="{{materiel.stockRemark}}"  ng-model="materiel.stockRemark"  >
                                                  <div class="form-control-focus"> </div>
                                             </div>
+										</td> 
+										<td>
+											<span ng-if="record.status==0"  class="label label-sm label-warning ng-scope">待入库</span>
+											<span ng-if="record.status==1" class="label label-sm label-success ng-scope">已入库</span>
 										</td> 
 									</tr>
 									<tr ng-if="takeDeliveryMateriels==undefined||takeDeliveryMateriels.length==0">

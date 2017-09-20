@@ -147,7 +147,7 @@
                                                          <div class="row">
                                                             <div class="col-md-6">
                                                             <div class="form-group ">
-                                                    <label class="control-label bold" for="admin"> <span class="required"> * </span>仓库管理员 :</label>
+                                                    <label class="control-label bold" for="admin"> <!-- <span class="required"> * </span> -->仓库管理员 :</label>
                                                     <div class=" ">
                                                                         <input type="text"  class="form-control" placeholder=""  id="admin" name ="admin"   ng-hide="warehouseAdd" 
 												ng-model="warehouse.admin" >
@@ -159,7 +159,7 @@
                                                             <!--/span-->
                                                             <div class="col-md-6">
                                                              <div class="form-group ">
-                                                    <label class="control-label bold" for="area"> <span class="required"> * </span>仓库面积 :</label>
+                                                    <label class="control-label bold" for="area"> <!-- <span class="required"> * </span> -->仓库面积 :</label>
                                                     <div class=" ">
                                                                         <input type="text"  class="form-control" placeholder=""  id="area" name ="area"  ng-hide="warehouseAdd" 
 												ng-model="warehouse.area" >
@@ -173,7 +173,7 @@
                                                          <div class="row">
                                                             <div class="col-md-6">
                                                             <div class="form-group ">
-                                                    <label class="control-label bold" for="email"> <span class="required"> * </span>邮件 :</label>
+                                                    <label class="control-label bold" for="email"> <!-- <span class="required"> * </span> -->邮件 :</label>
                                                     <div class=" ">
                                                                         <input type="text"    id="email"      name="email" class="form-control" placeholder=""  ng-model="warehouse.email"  ng-hide="warehouseAdd" >
                                                                         <div class="form-control-focus"> </div>
@@ -184,7 +184,7 @@
                                                             <!--/span-->
                                                             <div class="col-md-6">
                                                               <div class="form-group ">
-                                                    <label class="control-label bold" for="tel"> <span class="required"> * </span>电话 :</label>
+                                                    <label class="control-label bold" for="tel"> <!-- <span class="required"> * </span -->电话 :</label>
                                                     <div class=" ">
                                                                         <input type="text"  class="form-control" placeholder=""  id="tel" name ="tel"  ng-hide="warehouseAdd" 
 												ng-model="warehouse.tel" >  
@@ -209,7 +209,7 @@
                                                             </div>
                                                            <div class="col-md-6">
                                                            <div class="form-group ">
-                                                    <label class="control-label bold" for="fax"> <span class="required"> * </span>传真 :</label>
+                                                    <label class="control-label bold" for="fax"> <!-- <span class="required"> * </span> -->传真 :</label>
                                                     <div class=" ">
                                                                         <input type="text"   class="form-control" placeholder=""  id="fax" name ="fax"  ng-hide="warehouseAdd" 
 												ng-model="warehouse.fax" >
