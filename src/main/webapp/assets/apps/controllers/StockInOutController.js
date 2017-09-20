@@ -39,6 +39,12 @@ angular
 										 			$scope.inOrOut=$stateParams.inOrOut;
 										 			getStockInOutCheckInfo($stateParams.inOrOut);//查看出入库检验详情页面
 									 		}else if($location.path()=="/confirmStockInOutCheck"){
+									 			$('.date-picker').datepicker({
+													rtl: App.isRTL(),
+													orientation: "left",
+													autoclose: true,
+													language:"zh-CN"
+									        	})
 									 			debugger;
 									 			$scope.inOrOut=$stateParams.inOrOut;
 									 			getStockInOutCheckInfo($stateParams.inOrOut);//查看出入库检验详情页面
