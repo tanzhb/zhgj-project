@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
@@ -106,9 +107,10 @@ public class StockInOutController {
      * 
      */
     @RequestMapping(value = "/saveStockInOutCheckInfo", method = RequestMethod.POST)
-	public ResponseEntity<StockInOutCheck> saveStockInOutCheckInfo(@RequestBody StockInOutCheck  stockInOutCheck,UriComponentsBuilder ucBuilder){//
+	public ResponseEntity<StockInOutCheck> saveStockInOutCheckInfo(@RequestBody String  params){//
     	Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		StockInOutCheck stockInOutCheck=JSON.parseObject(params, StockInOutCheck.class);
     	try{
     		if(StringUtils.isEmpty(stockInOutCheck.getSerialNum())){
     			stockInOutCheck.setSerialNum(ApplicationUtils.random32UUID());
@@ -118,7 +120,6 @@ public class StockInOutController {
     			stockInOutCheckService.update(stockInOutCheck);
     		}
     		for(DeliveryMateriel deliveryMateriel:stockInOutCheck.getDeliverMaterials()){
-    			System.out.println(deliveryMateriel.getSerialNum());
     			deliveryMaterielService.updateDeliveryMateriel(deliveryMateriel);
     		}
     	}catch(Exception e){
