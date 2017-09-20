@@ -90,7 +90,7 @@ public class StockInOutCheckServiceImpl extends GenericServiceImpl<StockInOutChe
 	public void updateStockInOutCheckStatus(String serialNum,String serialNum1,String userName) {
 		stockInOutCheckMapper.updateStockInOutCheckStatus(serialNum);
 		StockInOutCheck stockInOutCheck=stockInOutCheckMapper.selectByPrimaryKey(serialNum);
-		if(serialNum.indexOf("checkin")>-1){
+		if(serialNum1.indexOf("checkin")>-1){
 			createStockInOutRecord("checkin",stockInOutCheck.getTakeDeliverSerial(),userName);//产生入库记录
 			TakeDelivery td=takeDeliveryMapper.selectByPrimaryKey(stockInOutCheck.getTakeDeliverSerial());
 			td.setStatus(TakeDelivery.CHECK_COMPLETE);
@@ -99,7 +99,7 @@ public class StockInOutCheckServiceImpl extends GenericServiceImpl<StockInOutChe
 			OrderInfo o =orderInfoMapper.selectByPrimaryKey(d.getOrderSerial());
 			o.setStatus("6");
 			orderInfoMapper.updateByPrimaryKey(o);
-		}else if(serialNum.indexOf("checkout")>-1){
+		}else if(serialNum1.indexOf("checkout")>-1){
 			createStockInOutRecord("checkout",stockInOutCheck.getDeliverSerial(),userName);//产生出库记录
 			//String orderSerial=td.getDeliverSerial();
 			/*Delivery d=deliveryMapper.
@@ -114,8 +114,10 @@ public class StockInOutCheckServiceImpl extends GenericServiceImpl<StockInOutChe
 		stockInOutRecord.setSerialNum(ApplicationUtils.random32UUID());
 		if("checkin".equals(judgeString)){
 			stockInOutRecord.setTakeDeliverSerial(serial);
+			stockInOutRecord.setDeliverSerial("");
 		}else{
 			stockInOutRecord.setDeliverSerial(serial);
+			stockInOutRecord.setTakeDeliverSerial("");
 		}
 		stockInOutRecord.setInOutNum("RK"+ApplicationUtils.getFromNumber());
 		stockInOutRecord.setDelFlg("0");
