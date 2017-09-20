@@ -136,7 +136,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="operator">发货方：</label>
                                                     <div class="col-md-8">
-                                                       <p class="control-label left" >{{record.shipperOrReceiverName}}</p>
+                                                       <p class="control-label left" >{{shipperOrReceiverName}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -182,7 +182,8 @@
 													状态：</label>
 												<div class="col-md-8">
 													<p class="control-label left">
-														<span class="label label-sm label-success">已入库</span>
+														<span ng-if="record.status==0"  class="label label-sm label-warning ng-scope">待入库</span>
+														<span ng-if="record.status==1" class="label label-sm label-success ng-scope">已入库</span>
 													</p>
 												</div>
 											</div>
@@ -212,6 +213,7 @@
 										<th  rowspan="2">批次号</th>
 										<th  rowspan="2">生产日期</th>
 										<th colspan="3"  style="text-align: center;">收货</th>
+										<th colspan="3"  style="text-align: center;">检验</th>
 										<th colspan="5"  style="text-align: center;">入库</th>
 										<th rowspan="2">状态</th>
 									</tr>
@@ -219,11 +221,14 @@
 										<th>实收数量</th>
 										<th>拒收数量</th>
 										<th>备注</th>
+										<th>合格数量</th>
+										<th>不合格数量</th>
+										<th>备注</th>
 										<th>入库数量</th>
 										<th>未入数量</th>
 										<th>仓库</th>
 										<th>库位</th>
-										<th>备注</th> 
+										<th>备注</th>
 									</tr>
 								</thead>
 								<tbody data-repeater-list="group-a"> 
@@ -237,6 +242,9 @@
 										<td>{{materiel.acceptCount}}</td>
 										<td>{{materiel.refuseCount}}</td>
 										<td>{{materiel.takeRemark}}</td>
+										<td>{{materiel.stockInQualifiedCount}}</td>
+										<td>{{materiel.stockInUnqualifiedCount}}</td>
+										<td>{{materiel.stockInCheckRemark}}</td>
 										<td>
 											{{materiel.stockInCount}}
 										</td>
@@ -251,6 +259,10 @@
 										</td>
 										<td>
 											{{materiel.stockInRemark}}
+										</td> 
+										<td>
+											<span ng-if="record.status==0"  class="label label-sm label-warning ng-scope">待入库</span>
+											<span ng-if="record.status==1" class="label label-sm label-success ng-scope">已入库</span>
 										</td> 
 									</tr>
 									<tr ng-if="record.delivery.deliveryMateriels==undefined||record.delivery.deliveryMateriels.length==0">

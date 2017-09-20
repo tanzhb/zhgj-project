@@ -12,6 +12,7 @@ import com.congmai.zhgj.web.model.StockInOutRecordExample;
 
 public interface DeliveryMaterielService extends GenericService<DeliveryMateriel, String>{
 	 List<DeliveryMateriel> selectByExample(DeliveryMaterielExample example);
+	 List<DeliveryMateriel> selectByExampleForStockIn(DeliveryMaterielExample example);
 	 Page<DeliveryMateriel> selectListByExample(StockInOutRecord record,String type);
  int updateDeliveryMateriel(DeliveryMateriel record);
 }

@@ -150,9 +150,9 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 	            }*/
 	            $scope.record.orderSerial = delivery.orderSerial;
 				$scope.record.orderNum = delivery.orderNum;
-	        	var promise = takeDeliveryService.getTakeDeliveryMaterielList(sd);
+	        	var promise = takeDeliveryService.getTakeDeliveryMaterielListForStockIn(sd);
         		promise.then(function(data){
-        			$scope.takeDeliveryMateriels = data.data;
+        			$scope.takeDeliveryMateriels = data.data;debugger;
         			countWarehouseAndPosition();
         			//$scope.deliver.materielCount = data.orderMateriel.length;
         			if($location.path()=="/stockInAdd"&&!isNull($scope.record)&&!isNull($scope.record.serialNum)){ //入库编辑时
