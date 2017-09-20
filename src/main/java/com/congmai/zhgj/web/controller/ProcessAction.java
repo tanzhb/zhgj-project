@@ -42,6 +42,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.congmai.zhgj.core.util.Constants;
 import com.congmai.zhgj.core.util.Page;
 import com.congmai.zhgj.core.util.ProcessDefinitionCache;
 import com.congmai.zhgj.core.util.UserUtil;
@@ -238,6 +239,37 @@ public class ProcessAction {
 		
 		return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
 	}
+	
+	/**
+	 * 
+	 * @Description 路由跳转到有审批页面时，加载待办条数
+	 * @param businessType
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/getTodoTaskSize/{businessType}", method = {RequestMethod.GET})
+	@ResponseBody
+	public String getTodoTaskSize(@PathVariable("businessType") String businessType) throws Exception{
+		String userId = UserUtil.getUserFromSession().getUserId().toString();
+		User user = this.userService.selectById(new Integer(userId));
+		List<BaseVO> taskList = this.processService.findTodoTask(user);
+		
+		int taskListSize = 0;
+		if(taskList != null && taskList.size() > 0){
+			if("All".equals(businessType)){//首页显示所有待办流程
+				taskListSize = taskList.size();
+			}else{//根据流程不同加以统计
+				for(BaseVO base : taskList){
+					if(businessType.equals(base.getBusinessType())){
+						taskListSize ++;
+					}
+				}
+			}
+		}
+		
+		
+		return String.valueOf(taskListSize);
+	}
     
 	
     /**
@@ -279,6 +311,36 @@ public class ProcessAction {
 		pageMap.put("data", jsonList);
     	
 		return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
+    }
+    
+    /**
+     * 
+     * @Description 路由跳转到有审批页面时，加载已办条数
+     * @param businessType
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/getEndTaskSize/{businessType}")
+    @ResponseBody
+    public String getEndTaskSize(@PathVariable("businessType") String businessType) throws Exception {
+    	User user = UserUtil.getUserFromSession();
+    	List<BaseVO> taskList = this.processService.findFinishedTaskInstances(user);
+    	
+    	int taskListSize = 0;
+    	if(taskList != null && taskList.size() > 0){
+			if("All".equals(businessType)){//首页显示所有待办流程
+				taskListSize = taskList.size();
+			}else{//根据流程不同加以统计
+				for(BaseVO base : taskList){
+					if(businessType.equals(base.getBusinessType())){
+						taskListSize ++;
+					}
+				}
+			}
+		}
+		
+		
+		return String.valueOf(taskListSize);
     }
     
 	/**

@@ -45,8 +45,8 @@
 					</div>
 					<ul class="nav nav-tabs" id="test">
 						<li class="active"><a href="#tab_1_1" class="active"
-							data-toggle="tab"> 待办 </a></li>
-						<li><a href="#tab_1_2" data-toggle="tab"> 已办 </a></li>
+							data-toggle="tab"> 待办<dbQuantity/></a></li>
+						<li><a href="#tab_1_2" data-toggle="tab"> 已办 <ybQuantity/></a></li>
 					</ul>
 				</div>
 				<div class="portlet-body" style="height:150px">

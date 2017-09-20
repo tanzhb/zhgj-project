@@ -18,6 +18,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		$scope.inputFile=true;
 		
 		validateFileInit();//file表单初始化
+		
 
 	
 		//根据参数查询对象
@@ -527,6 +528,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	    var _url = ctx + "rest/pay/complete";
 	    doAudit(_url, mydata);
 	    $state.go('paymentRecordC',{tabHref:1});//返回到待办列表
+		
 	};
 	//审批不通过
 	$scope.apUnPass = function() {
@@ -535,6 +537,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		var _url = ctx + "rest/pay/complete";
 		doAudit(_url, mydata);
 		$state.go('paymentRecordC',{tabHref:1});//返回到待办列表
+		
 	};
 	//返回待办列表
 	$scope.backDbList = function() {
