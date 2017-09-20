@@ -517,9 +517,10 @@
   </update>
   <update id="updateDeliveryMateriel"  parameterType="com.congmai.zhgj.web.model.DeliveryMateriel" >
     update deliveryMateriel
-      qualifiedCount = #{qualifiedCount,jdbcType=VARCHAR},
-      unqualifiedCount = #{unqualifiedCount,jdbcType=VARCHAR},
-    where serialNum = #{serialNum,jdbcType=VARCHAR}
+    SET
+      qualifiedCount = #{qualifiedCount},
+      unqualifiedCount = #{unqualifiedCount}
+    where serialNum = #{serialNum}
   </update>
   <!-- ���� -->
   <select id="selectListByExample" resultMap="BaseResultMap2" parameterType="com.congmai.zhgj.web.model.StockInOutRecordSelectExample" >
