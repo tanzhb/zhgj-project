@@ -109,3 +109,35 @@ MetronicApp.directive('selectpicker', function ($timeout) {
         }
     };
 });*/
+
+
+MetronicApp.directive('dbquantity', function() {  
+    return {  
+        restrict: 'E',  
+        template: '<span class="badge badge-danger" style="position: relative;top: -4px;"> {{dbsLength}} </span>',  
+        scope:true,
+        replace: true,
+        link:function(scope, iElement, iAttrs, controller){
+//        	var deferred = $q.defer();
+			$.get(ctx + "/rest/processAction/getTodoTaskSize/" + 'accountPayable').success(function (data) {
+		        alert(data);
+				// 如果连接成功，延时返回给调用者  
+//		        deferred.resolve(data);
+		    }).error(function () {  
+//		        deferred.reject('连接服务器出错！');  
+		    })
+//		    return deferred.promise.then(function(data){
+//		    	alert(data);
+//		    	scope.dbsLength = data;  //调用承诺接口resolove()
+//		    });
+        }
+    };  
+});
+MetronicApp.directive('ybquantity', function() {  
+    return {  
+        restrict: 'E',  
+        template: '<span class="badge badge-danger" style="position: relative;top: -4px;"> {{ybsLength}} </span>',
+        scope:true,
+        replace: true  
+    };  
+}); 
