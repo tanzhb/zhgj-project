@@ -2519,7 +2519,7 @@ var e = $("#form_clauseSettlement"),
 		       
 		       $scope.arithmeticRateUnit  = function(scope) {//计算含税销售单价
 			       	if(scope.orderUnitPrice&&$scope.buyOrder.rate){
-			       		return (scope.orderUnitPrice*($scope.buyOrder.rate+1)/100).toFixed(4);
+			       		return (scope.orderUnitPrice*($scope.buyOrder.rate/100+1)).toFixed(4);
 			       	}else{
 			       		return 0;
 			       	}
@@ -2559,7 +2559,7 @@ var e = $("#form_clauseSettlement"),
 		       
 		       $scope._arithmeticRateUnit  = function(scope) {//计算含税销售单价
 			       	if(scope._orderMateriel.orderUnitPrice&&$scope.buyOrder.rate){
-			       		return (scope._orderMateriel.orderUnitPrice*($scope.buyOrder.rate+1)/100).toFixed(4);
+			       		return (scope._orderMateriel.orderUnitPrice*($scope.buyOrder.rate/100+1)).toFixed(4);
 			       	}else{
 			       		return 0;
 			       	}
