@@ -11,7 +11,7 @@
 	vertical-align:middle;
 } */
 </style>
-<h3 class="page-title s_tip"> 新建出库记录
+<!-- <h3 class="page-title s_tip"> 新建出库记录
 </h3>
 <div class="page-bar">
     <ul class="page-breadcrumb">
@@ -33,7 +33,7 @@
         </li>
     </ul>
 
-</div>
+</div> -->
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
 <div class="row">
@@ -173,9 +173,9 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="contactNum">联系方式 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="contactNum">联系方式 </label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="contactNum"  name="contactNum" ng-model="record.contactNum" ng-hide="deliverAdd" >
+                                                        <input type="text" class="form-control" id="contactNum" ng-model="record.contactNum" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{record.contactNum}}</p>
                                                     </div>
