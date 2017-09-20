@@ -337,7 +337,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 					                	StockInNumCheck:!0
 					                },
 					                contactNum: {
-					                	required: !0,
+					                	//required: !0,
 					                	isPhone: !0
 					                }
 					            },

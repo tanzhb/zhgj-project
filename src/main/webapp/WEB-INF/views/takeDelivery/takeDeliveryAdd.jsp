@@ -732,6 +732,16 @@
 										<td></td>
 										<td></td> -->
 									</tr>
+									<tr>
+										<td colspan="2" class="bold" align="right">合计：</td>
+										<td>{{calcTotalNum()}}{{materielCount}}</td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td>{{totalAmount}}</td>
+										<td>{{totalDeliverCount}}</td>
+										<td></td>
+									</tr>
 									<tr ng-if="orderMateriels==undefined||orderMateriels.length==0">
 											<td colspan="12" align="center">暂无数据</td>
 									</tr>
