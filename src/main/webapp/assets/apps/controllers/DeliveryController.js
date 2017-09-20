@@ -545,6 +545,8 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 																		return '审批失败';
 																	}else if(data=='4'){
 																		return '已收货';
+																	}else{
+																		return '';
 																	}
 							                            		}else{
 							                            			return "";
