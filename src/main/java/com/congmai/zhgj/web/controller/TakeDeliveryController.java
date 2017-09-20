@@ -715,6 +715,17 @@ public class TakeDeliveryController {
     	return null;
     }
     
+    @RequestMapping("getTakeDeliveryMaterielListForStockIn")
+    @ResponseBody
+    public List<DeliveryMateriel> getTakeDeliveryMaterielListForStockIn(String serialNum){
+    	if(StringUtils.isNotBlank(serialNum)){
+    		DeliveryMaterielExample example = new DeliveryMaterielExample();
+    		example.createCriteria().andDelFlgEqualTo("0").andDeliverSerialEqualTo(serialNum);
+    		return deliveryMaterielService.selectByExampleForStockIn(example);
+    	}
+    	return null;
+    }
+    
     @RequestMapping("getOrderMaterielList")
     @ResponseBody
     public List<OrderMateriel> getOrderMaterielList(String serialNum){

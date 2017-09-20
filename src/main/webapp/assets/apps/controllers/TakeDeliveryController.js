@@ -538,9 +538,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        	}else if(id_count>1){
 	        		toastr.warning("只能选择一条数据进行入库");
 	        	}else{
-	        		var row = stock_table.row(".active").data();
-		       		if(row.status=="1"){
-		       			toastr.warning("该收货单已出库！");
+	        		var row = stock_table.row(".active").data();debugger;
+		       		if(row.stockInOutRecord.status=="1"){
+		       			toastr.warning("该收货单已入库！");
 		       			return;
 		       		}
 	        		var serialNum = $('#stockInTable input[name="serialNum2"]:checked').val();
