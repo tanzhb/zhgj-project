@@ -465,9 +465,9 @@
 				                      <div class="row">
 				                      		<div class="col-md-6">
 				                              <div class="form-group ">
-				                                  <label class="control-label bold">海关编码<span class="required" aria-required="true"> * </span></label>
+				                                  <label class="control-label bold">海关编码</label>
 				                                  <div class="">
-				                                      <input type="text" name="deliveryCycle" ng-hide="materielInput" ng-model="materiel.customsCode" class="form-control" >
+				                                      <input type="text" name="customsCode" ng-hide="materielInput" ng-model="materiel.customsCode" class="form-control" >
 				                                      <div class="form-control-focus"> </div>
 				                                      <span class="help-block" ng-hide="materielInput">请输入海关编码</span>
 				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.customsCode}} </p>

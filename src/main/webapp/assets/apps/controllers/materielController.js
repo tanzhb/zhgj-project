@@ -33,6 +33,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
         		$scope.getMaterielInfo($stateParams.serialNum)
         	}else{
         		$scope.opration = '新增';
+        		$scope.materiel = {}
         	}
         	
         	if($stateParams.view==1){//切换为查看
@@ -809,6 +810,9 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     		//********bom  start****************//
     		var _index = 0;
     	    $scope.saveBOM  = function() {//保存BOM信息
+    	    	if(!$scope.materielInput){
+    	    		toastr.error('请先保存基本信息！');return
+    	    	}
     	    	if($scope.materiel.serialNum==null||$scope.materiel.serialNum=='') {//上级物料为空的处理
     	    		toastr.error('请先保存基本信息！');return
     			}
@@ -850,6 +854,9 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
   	        * bom新增一行
   	        */
     	    $scope.addBOM = function(){
+    	    	if(!$scope.materielInput){
+    	    		toastr.error('请先保存基本信息！');return
+    	    	}
     	    	if($scope.materiel.serialNum==null||$scope.materiel.serialNum=='') {
     	    		toastr.error('请先保存基本信息！');return
     			}else{
