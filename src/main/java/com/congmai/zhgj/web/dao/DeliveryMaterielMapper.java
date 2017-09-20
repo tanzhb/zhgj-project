@@ -22,6 +22,8 @@ public interface DeliveryMaterielMapper extends GenericDao<DeliveryMateriel, Str
     int insertSelective(DeliveryMateriel record);
 
     List<DeliveryMateriel> selectByExample(DeliveryMaterielExample example);
+    
+    List<DeliveryMateriel> selectByExampleForStockIn(DeliveryMaterielExample example);
 
     DeliveryMateriel selectByPrimaryKey(String serialNum);
 

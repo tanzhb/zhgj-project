@@ -174,6 +174,18 @@ angular.module('MetronicApp').service('takeDeliveryService',['$http','$q',functi
 		});
 		return deferred.promise;//返回承诺
 	}
+	
+	this.getTakeDeliveryMaterielListForStockIn = function(deliverySerial){
+		var deferred = $q.defer();
+		$http.get("rest/takeDelivery/getTakeDeliveryMaterielListForStockIn",{ 
+			params:{serialNum:deliverySerial}	//传整个表单数据  
+		}).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
 
 	this.getPositions = function(warehouseSerial){
 		var deferred = $q.defer();

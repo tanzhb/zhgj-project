@@ -59,6 +59,14 @@ public class DeliveryMaterielServiceImpl extends GenericServiceImpl<DeliveryMate
 		return deliveryMaterielMapper.selectByExample(example);
 		//return deliveryMaterielMapper.selectListByExampleForStockIn(example);
 	}
+	
+	@Override
+	public List<DeliveryMateriel> selectByExampleForStockIn(
+			DeliveryMaterielExample example) {
+		
+		return deliveryMaterielMapper.selectByExampleForStockIn(example);
+		//return deliveryMaterielMapper.selectListByExampleForStockIn(example);
+	}
 
 	@Override
 	public Page<DeliveryMateriel> selectListByExample(StockInOutRecord record,String type) {
