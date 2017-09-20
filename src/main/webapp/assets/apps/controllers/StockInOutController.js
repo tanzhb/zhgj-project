@@ -83,8 +83,13 @@ angular
 							var tableAjaxUrl ;
 							 var table,Intable,Outtable;
 			function loadStockInOutCheckTable(judgeString){
-							var a = 0;
-							tableAjaxUrl= "rest/stockInOut/getStockInOutCheckList?inOrOut="+judgeString
+							var a = 0,judgeString1;
+							if(judgeString.indexOf("in")>-1){
+								judgeString1='in';
+							}else{
+								judgeString1='out';
+							}
+							tableAjaxUrl= "rest/stockInOut/getStockInOutCheckList?inOrOut="+judgeString1
 							App.getViewPort().width < App
 									.getResponsiveBreakpoint("md") ? $(
 									".page-header").hasClass(
@@ -337,7 +342,7 @@ angular
 														}  ],
 
 													});
-											if(judgeString=='in'){
+											if(judgeString=='incheck'){
 												table=Intable;
 											}else{
 												table=Outtable;
