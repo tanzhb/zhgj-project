@@ -114,26 +114,12 @@
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group">
-											<label class="control-label bold">供应商<span class="required" aria-required="true"> * </span></label>
-											<div class="">
-												<input type="text" name=supplyComId class="form-control"
-													ng-model="supplyComId" ng-show="input" readonly/>
-												<p class="form-control-static" ng-show="span">
-													{{supplyComId}}</p>
-												<div class="form-control-focus"></div>
-											</div>
-
-										</div>
-									</div>
-									<!--/span-->
-									<div class="col-md-4">
-										<div class="form-group">
 											<label class="control-label bold">发货方<span class="required" aria-required="true"> * </span></label>
 											<div class="">
 												<input type="text" name="shipper" class="form-control"
-													ng-model="shipper" ng-show="input" readonly/>
+													ng-model="delivery.shipper" ng-show="input"/>
 												<p class="form-control-static" ng-show="span">
-													{{shipper}}</p>
+													{{delivery.shipper}}</p>
 												<div class="form-control-focus"></div>
 											</div>
 
@@ -154,9 +140,6 @@
 										</div>
 									</div>
 									<!--/span-->
-								</div>
-								<!--/row-->
-								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group">
 											<label class="control-label bold">制单人<span class="required" aria-required="true"> * </span></label>
@@ -170,22 +153,10 @@
 										</div>
 									</div>
 									<!--/span-->
-									<div class="col-md-4">
-										<div class="form-group">
-											<label class="control-label bold">制单日期<span class="required" aria-required="true"> * </span></label>
-											<div class="">
-												<input type="text" id="makeDate" ng-show="input"
-													name="makeDate" data-date-format="yyyy-mm-dd"
-													data-date-viewmode="years" size="16"
-													ng-model="delivery.makeDate" class="form-control" readonly="readonly"/>
-												<p class="form-control-static" ng-show="span">
-													{{delivery.makeDate}}</p>
-												<div class="form-control-focus"></div>
-											</div>
-
-										</div>
-									</div>
-									<!--/span-->
+								</div>
+								<!--/row-->
+								<div class="row">
+									
 									<div class="col-md-4">
 										<div class="form-group">
 											<label class="control-label bold">备注</label>
@@ -238,7 +209,7 @@
 											<label class="control-label bold">仓库地址</label>
 											<div class="">
 												<input type="text" name="warehouseAddress"
-													class="form-control" disabled="disabled" ng-model="delivery.deliveryAddress"
+													class="form-control"  ng-model="delivery.deliveryAddress"
 													ng-show="input" />
 												<div class="form-control-focus"></div>
 												<p class="form-control-static" ng-show="span">
@@ -536,7 +507,7 @@
 											<div class="">
 												<input type="text" name="takeDeliveryWarehouseAddress"
 													class="form-control"
-													ng-model="delivery.takeAddress" disabled="disabled"
+													ng-model="delivery.takeAddress"
 													ng-show="input" />
 
 												<div class="form-control-focus"></div>
