@@ -1,21 +1,39 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<style>
+.btn-default.active, .btn-default:active{
+color: #32c5d2;
+background-color: #fff;
+border-color: #32c5d2;
+}
+.btn-default.active.focus, .btn-default.active:hover{
+color: #32c5d2;
+background-color: #fff;
+border-color: #32c5d2;
+}
+.btn-default-margin{
+margin-right: 20px;
+}
 
+
+
+</style>
 <!-- 采购订单基本信息 START -->
 <ul class="nav nav-tabs">
-	<li class="active bold">
-              		<a data-target="#tab_1_1" data-toggle="tab">订单信息</a>
-          		</li>
-	<!-- <li class="bold"><a data-target="#tab_1_2" data-toggle="tab">合同信息</a>
-	</li> -->
-	<li class="bold" ng-show="ClauseFrameworkShow"><a data-target="#tab_1_3" data-toggle="tab">框架条款</a></li>
-	<li class="bold"><a data-target="#tab_1_4" data-toggle="tab">物料信息</a></li>
-	<li class="bold"><a data-target="#tab_1_5" data-toggle="tab">结算条款</a></li>			
-	<li class="bold"><a data-target="#tab_1_6" data-toggle="tab">验收条款</a></li>
-	<li class="bold"><a data-target="#tab_1_7" data-toggle="tab">交付条款</a></li>
-	<li class="bold"><a data-target="#tab_1_8" data-toggle="tab">售后条款</a></li>
-	<li class="bold"><a data-target="#tab_1_9" data-toggle="tab">附件</a></li>
-	
-</ul>
+		<li class="active bold">
+               		<a data-target="#tab_1_1" data-toggle="tab">订单信息</a>
+           		</li>
+		<!-- <li class="bold"><a data-target="#tab_1_2" data-toggle="tab">合同信息</a>
+		</li> -->
+		<li class="bold" ng-show="ClauseFrameworkShow"><a data-target="#tab_1_3" data-toggle="tab">框架条款</a></li>
+		<li class="bold" ng-hide="tab_1_1Hide"><a data-target="#tab_1_4" data-toggle="tab">物料信息</a></li>
+		<li class="bold" ng-hide="tab_1_3Hide"><a data-target="#tab_1_5" data-toggle="tab">结算条款</a></li>			
+		<li class="bold" ng-hide="tab_1_4Hide"><a data-target="#tab_1_7" data-toggle="tab">交付条款</a></li>
+		<li class="bold" ng-hide="tab_1_5Hide"><a data-target="#tab_1_6" data-toggle="tab">验收条款</a></li>
+		<li class="bold" ng-hide="tab_1_6Hide"><a data-target="#tab_1_8" data-toggle="tab">售后条款</a></li>
+		<li class="bold"><a data-target="#tab_1_9" data-toggle="tab">附件</a></li>
+		<!-- <li class="bold"><a data-target="#tab_1_10" data-toggle="tab">备注</a></li> -->
+		
+	</ul>
 <div class="tab-content">
 	<div class="tab-pane fade active in" id="tab_1_1">
          <div class="portlet-body form">
@@ -65,6 +83,32 @@
                              </div>
                          </div>
                          <!--/span-->
+                         <div class="col-md-8">
+                             <div class="form-group ">
+                                 <label class="control-label col-md-3  bold">合同内容：</label>
+                                 <div class="control-label col-md-9">
+                                 <div class="btn-group">
+                                     <div class="clearfix">
+                                          <div class="btn-group" data-toggle="buttons">
+                                              <label class="btn btn-default  btn-default-margin" id="tab_1_1Id" ng-click="changeContentStatus(1)">
+                                                  <input type="checkbox" class="toggle"> <i class="fa fa-check"></i> 物料清单 </label> 
+                                              <!-- <label class="btn btn-default  btn-default-margin" id="tab_1_2Id" ng-click="changeContentStatus(2)">
+                                                  <input type="checkbox" class="toggle"> <i class="fa fa-check"></i> 垫资条款 </label>  -->
+                                              <label class="btn btn-default  btn-default-margin" id="tab_1_3Id" ng-click="changeContentStatus(3)">
+                                                  <input type="checkbox" class="toggle"> <i class="fa fa-check"></i> 结算条款 </label> 
+                                              <label class="btn btn-default  btn-default-margin" id="tab_1_4Id" ng-click="changeContentStatus(4)">
+                                                  <input type="checkbox" class="toggle"> <i class="fa fa-check"></i> 交付条款 </label> 
+                                              <label class="btn btn-default btn-default-margin" id="tab_1_5Id" ng-click="changeContentStatus(5)">
+                                                  <input type="checkbox" class="toggle"> <i class="fa fa-check"></i> 验收条款 </label>
+                                              <label class="btn btn-default" id="tab_1_6Id" ng-click="changeContentStatus(6)">
+                                                  <input type="checkbox" class="toggle"> <i class="fa fa-check"></i> 售后条款 </label> 
+                                          </div>
+                                      </div>
+                                 </div>
+                                 </div>
+                                 
+                             </div>
+                         </div>
                      </div>
                      <div class="row">
                          <div class="col-md-4">
