@@ -328,6 +328,9 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 					                warehouseSerial: {
 					                	required: !0
 					                },
+					                /*positionSerial: {
+					                	required: !0
+					                },*/
 					                stockCount: {
 					                	required: !0,
 					                	digits:!0,

@@ -109,3 +109,21 @@ MetronicApp.directive('selectpicker', function ($timeout) {
         }
     };
 });*/
+
+
+MetronicApp.directive('dbquantity', function() {  
+    return {  
+        restrict: 'E',  
+        template: '<span class="badge badge-danger" style="position: relative;top: -4px;"> {{dbsLength}} </span>',  
+        scope:true,
+        replace: true
+    };  
+});
+MetronicApp.directive('ybquantity', function() {  
+    return {  
+        restrict: 'E',  
+        template: '<span class="badge badge-danger" style="position: relative;top: -4px;"> {{ybsLength}} </span>',
+        scope:true,
+        replace: true  
+    };  
+}); 

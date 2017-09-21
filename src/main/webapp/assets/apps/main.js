@@ -2087,8 +2087,8 @@ MetronicApp.run([ "$rootScope", "settings", "$state",
 												// view
 		} ]);
 
-MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', function ($rootScope, $window, $location, $log, $compile) {
-	
+MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$http', '$q', function ($rootScope, $window, $location, $log, $compile, $http, $q) {
+	//路由转换成功后
 	$rootScope.$on('$stateChangeSuccess', 
 			function(event, toState, toParams, fromState, fromParams){
 				
@@ -2264,6 +2264,26 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', funct
 				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a ui-sref='takeDelivery'>收货列表</a><i class='fa fa-angle-right'></i></li>" + 
 				 		"<li><a>查看收货</a></li>";
+			   }else if('addDelivery' == toState.name){//发货列表
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='delivery'>发货</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>新增发货</a></li>";
+			   }else if('editDeliveryPage' == toState.name){//发货列表
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='delivery'>发货</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>编辑发货</a></li>";
+			   }else if('delivery' == toState.name){//发货列表
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='delivery'>发货</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>发货列表</a></li>";
+			   }else if('viewDelivery' == toState.name){//发货列表
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='delivery'>发货</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>发货详情</a></li>";
 			   }else if('toTakeDelivery' == toState.name){//收货申请
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
@@ -2335,7 +2355,7 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', funct
 			   }else if('gatheringMoneyRecord' == toState.name){//应收款
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a>应收款</a></li>";					 
+				 		"<li><a>应收款</a></li>";	
 			   }else if('addGatheringMoney' == toState.name){//新增应收款
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" +
@@ -2354,7 +2374,7 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', funct
 			   }else if('paymentRecordC' == toState.name){//应付款
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				   "<li><a>收付款</a><i class='fa fa-angle-right'></i></li>" +
-				   "<li><a>应付款</a></li>";
+				   "<li><a>应付款</a></li>";				   
 			   }else if('addPay' == toState.name){//新增应付款
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 					 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" + 
@@ -2442,6 +2462,55 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', funct
 			   angular.element("#dashboard").append(mobileDialogElement);
 			   
 			})
+			
+			
+			//路由转换开始时,根据流程type加载各自的待办、已办数量
+			$rootScope.$on('$stateChangeStart', 
+				function(event, toState, toParams, fromState, fromParams){		
+					if('paymentRecordC' == toState.name){
+						getTodoTaskLength('paymentRecordC', 'accountPayable');
+						getEndTaskLength('paymentRecordC', 'accountPayable');
+						}else if('buyOrder' == toState.name){
+						getTodoTaskLength('buyOrder', 'buyOrder');
+						getEndTaskLength('buyOrder', 'buyOrder');					
+						}else if('takeDelivery' == toState.name){ //收货
+						getTodoTaskLength('takeDelivery', 'takeDelivery');
+						getEndTaskLength('takeDelivery', 'takeDelivery');
+					}else if('dashboard' == toState.name){
+						getTodoTaskLength('dashboard', 'All');
+						getEndTaskLength('dashboard', 'All');
+					}
+			});
+			
+			
+			
+			function getTodoTaskLength(route, workflowType){
+				var deferred = $q.defer();
+				$.get(ctx + "/rest/processAction/getTodoTaskSize/" + workflowType).success(function (data) {
+			        // 如果连接成功，延时返回给调用者  
+			        deferred.resolve(data);
+			    }).error(function () {  
+			        deferred.reject('连接服务器出错！');  
+			    })
+			    return deferred.promise.then(function(data){
+			    	$rootScope.dbsLength = data;  //调用承诺接口resolove()
+			    });
+			}
 
+			function getEndTaskLength(route, workflowType){
+				var deferred = $q.defer();
+				$.get(ctx + "/rest/processAction/getEndTaskSize/" + workflowType).success(function (data) {
+				    // 如果连接成功，延时返回给调用者  
+				    deferred.resolve(data);
+				}).error(function () {  
+				    deferred.reject('连接服务器出错！');  
+				})
+				return deferred.promise.then(function(data){
+					$rootScope.ybsLength = data;
+				});
+			}
+			
 }]); 
+
+
 

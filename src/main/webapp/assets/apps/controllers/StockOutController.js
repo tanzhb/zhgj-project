@@ -312,6 +312,9 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					                warehouseSerial: {
 					                	required: !0
 					                },
+					                /*positionSerial: {
+					                	required: !0
+					                },*/
 					                stockCount: {
 					                	required: !0,
 					                	digits:!0,
@@ -458,12 +461,8 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 										                            				return '待审批';					                            				
 																				}else if(data=='3'){
 																					return '审批成功';
-																				}else if(data=='4'){
-																					return '';
 																				}else if(data=='APPROVAL_FAILED'){
 																					return '审批失败';
-																				}else{
-																					return "";
 																				}
 										                            		}else{
 										                            			return "";
