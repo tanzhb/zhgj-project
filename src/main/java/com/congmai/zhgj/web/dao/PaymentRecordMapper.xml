@@ -6,26 +6,46 @@
     <result column="paymentNum" property="paymentNum" jdbcType="VARCHAR" />
     <result column="supplyComId" property="supplyComId" jdbcType="VARCHAR" />
     <result column="buyComId" property="buyComId" jdbcType="VARCHAR" />
-    <result column="invoiceSerial" property="invoiceSerial" jdbcType="VARCHAR" />
     <result column="paymentType" property="paymentType" jdbcType="VARCHAR" />
     <result column="paymentPlanSerial" property="paymentPlanSerial" jdbcType="VARCHAR" />
+    <result column="orderSerial" property="orderSerial" jdbcType="VARCHAR" />
+    <result column="applyPaymentAmount" property="applyPaymentAmount" jdbcType="VARCHAR" />
+    <result column="applyCurrency" property="applyCurrency" jdbcType="VARCHAR" />
+    <result column="playPaymentDate" property="playPaymentDate" jdbcType="DATE" />
+    <result column="paymentNode" property="paymentNode" jdbcType="VARCHAR" />
+    <result column="payType" property="payType" jdbcType="VARCHAR" />
+    <result column="nodeNum" property="nodeNum" jdbcType="VARCHAR" />
     <result column="billStyle" property="billStyle" jdbcType="VARCHAR" />
-    <result column="paymentDate" property="paymentDate" jdbcType="DATE" />
+    <result column="invoiceSerial" property="invoiceSerial" jdbcType="VARCHAR" />
+    <result column="billType" property="billType" jdbcType="VARCHAR" />
     <result column="isBill" property="isBill" jdbcType="VARCHAR" />
-    <result column="approver" property="approver" jdbcType="VARCHAR" />
-    <result column="approvalDate" property="approvalDate" jdbcType="DATE" />
+    <result column="applyDept" property="applyDept" jdbcType="VARCHAR" />
     <result column="applyDate" property="applyDate" jdbcType="DATE" />
     <result column="applicant" property="applicant" jdbcType="VARCHAR" />
+    <result column="payee" property="payee" jdbcType="VARCHAR" />
+    <result column="contact" property="contact" jdbcType="VARCHAR" />
+    <result column="contactNum" property="contactNum" jdbcType="VARCHAR" />
+    <result column="bank" property="bank" jdbcType="VARCHAR" />
+    <result column="accountName" property="accountName" jdbcType="VARCHAR" />
+    <result column="accountNumber" property="accountNumber" jdbcType="VARCHAR" />
+    <result column="paymentDate" property="paymentDate" jdbcType="DATE" />
+    <result column="paymentAmount" property="paymentAmount" jdbcType="VARCHAR" />
+    <result column="paymentStyle" property="paymentStyle" jdbcType="VARCHAR" />
+    <result column="bankList" property="bankList" jdbcType="VARCHAR" />
+    <result column="payer" property="payer" jdbcType="VARCHAR" />
+    <result column="payRemark" property="payRemark" jdbcType="VARCHAR" />
+    <result column="approver" property="approver" jdbcType="VARCHAR" />
+    <result column="approvalDate" property="approvalDate" jdbcType="DATE" />
     <result column="paymentVoucher" property="paymentVoucher" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
-    <result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="processInstanceId" property="processInstanceId" jdbcType="VARCHAR" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
     <result column="userId" property="userId" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -87,9 +107,13 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    serialNum, paymentNum, supplyComId, buyComId, invoiceSerial, paymentType, paymentPlanSerial, 
-    billStyle, paymentDate, isBill, approver, approvalDate, applyDate, applicant, paymentVoucher, 
-    remark, status, delFlg, creator, createTime, updateTime, updater, reason, processInstanceId,userId
+    serialNum, paymentNum, supplyComId, buyComId, paymentType, paymentPlanSerial, orderSerial, 
+    applyPaymentAmount, applyCurrency, playPaymentDate, paymentNode, payType, nodeNum, 
+    billStyle, invoiceSerial, billType, isBill, applyDept, applyDate, applicant, payee, 
+    contact, contactNum, bank, accountName, accountNumber, paymentDate, paymentAmount, 
+    paymentStyle, bankList, payer, payRemark, approver, approvalDate, paymentVoucher, 
+    remark, status, delFlg, creator, createTime, updater, updateTime, processInstanceId, 
+    reason, userId
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.PaymentRecordExample" >
     select
@@ -123,21 +147,37 @@
   </delete>
   <insert id="insert" parameterType="com.congmai.zhgj.web.model.PaymentRecord" >
     insert into paymentRecord (serialNum, paymentNum, supplyComId, 
-      buyComId, invoiceSerial, paymentType, 
-      paymentPlanSerial, billStyle, paymentDate, 
-      isBill, approver, approvalDate, 
-      applyDate, applicant, paymentVoucher, 
-      remark, status, delFlg, 
-      creator, createTime, updateTime, 
-      updater, reason, processInstanceId, userId)
+      buyComId, paymentType, paymentPlanSerial, 
+      orderSerial, applyPaymentAmount, applyCurrency, 
+      playPaymentDate, paymentNode, payType, 
+      nodeNum, billStyle, invoiceSerial, 
+      billType, isBill, applyDept, 
+      applyDate, applicant, payee, 
+      contact, contactNum, bank, 
+      accountName, accountNumber, paymentDate, 
+      paymentAmount, paymentStyle, bankList, 
+      payer, payRemark, approver, 
+      approvalDate, paymentVoucher, remark, 
+      status, delFlg, creator, 
+      createTime, updater, updateTime, 
+      processInstanceId, reason, userId
+      )
     values (#{serialNum,jdbcType=VARCHAR}, #{paymentNum,jdbcType=VARCHAR}, #{supplyComId,jdbcType=VARCHAR}, 
-      #{buyComId,jdbcType=VARCHAR}, #{invoiceSerial,jdbcType=VARCHAR}, #{paymentType,jdbcType=VARCHAR}, 
-      #{paymentPlanSerial,jdbcType=VARCHAR}, #{billStyle,jdbcType=VARCHAR}, #{paymentDate,jdbcType=DATE}, 
-      #{isBill,jdbcType=VARCHAR}, #{approver,jdbcType=VARCHAR}, #{approvalDate,jdbcType=DATE}, 
-      #{applyDate,jdbcType=DATE}, #{applicant,jdbcType=VARCHAR}, #{paymentVoucher,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, 
-      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{updater,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, #{processInstanceId,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER})
+      #{buyComId,jdbcType=VARCHAR}, #{paymentType,jdbcType=VARCHAR}, #{paymentPlanSerial,jdbcType=VARCHAR}, 
+      #{orderSerial,jdbcType=VARCHAR}, #{applyPaymentAmount,jdbcType=VARCHAR}, #{applyCurrency,jdbcType=VARCHAR}, 
+      #{playPaymentDate,jdbcType=DATE}, #{paymentNode,jdbcType=VARCHAR}, #{payType,jdbcType=VARCHAR}, 
+      #{nodeNum,jdbcType=VARCHAR}, #{billStyle,jdbcType=VARCHAR}, #{invoiceSerial,jdbcType=VARCHAR}, 
+      #{billType,jdbcType=VARCHAR}, #{isBill,jdbcType=VARCHAR}, #{applyDept,jdbcType=VARCHAR}, 
+      #{applyDate,jdbcType=DATE}, #{applicant,jdbcType=VARCHAR}, #{payee,jdbcType=VARCHAR}, 
+      #{contact,jdbcType=VARCHAR}, #{contactNum,jdbcType=VARCHAR}, #{bank,jdbcType=VARCHAR}, 
+      #{accountName,jdbcType=VARCHAR}, #{accountNumber,jdbcType=VARCHAR}, #{paymentDate,jdbcType=DATE}, 
+      #{paymentAmount,jdbcType=VARCHAR}, #{paymentStyle,jdbcType=VARCHAR}, #{bankList,jdbcType=VARCHAR}, 
+      #{payer,jdbcType=VARCHAR}, #{payRemark,jdbcType=VARCHAR}, #{approver,jdbcType=VARCHAR}, 
+      #{approvalDate,jdbcType=DATE}, #{paymentVoucher,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{processInstanceId,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.PaymentRecord" >
     insert into paymentRecord
@@ -154,35 +194,95 @@
       <if test="buyComId != null" >
         buyComId,
       </if>
-      <if test="invoiceSerial != null" >
-        invoiceSerial,
-      </if>
       <if test="paymentType != null" >
         paymentType,
       </if>
       <if test="paymentPlanSerial != null" >
         paymentPlanSerial,
       </if>
+      <if test="orderSerial != null" >
+        orderSerial,
+      </if>
+      <if test="applyPaymentAmount != null" >
+        applyPaymentAmount,
+      </if>
+      <if test="applyCurrency != null" >
+        applyCurrency,
+      </if>
+      <if test="playPaymentDate != null" >
+        playPaymentDate,
+      </if>
+      <if test="paymentNode != null" >
+        paymentNode,
+      </if>
+      <if test="payType != null" >
+        payType,
+      </if>
+      <if test="nodeNum != null" >
+        nodeNum,
+      </if>
       <if test="billStyle != null" >
         billStyle,
       </if>
-      <if test="paymentDate != null" >
-        paymentDate,
+      <if test="invoiceSerial != null" >
+        invoiceSerial,
+      </if>
+      <if test="billType != null" >
+        billType,
       </if>
       <if test="isBill != null" >
         isBill,
       </if>
-      <if test="approver != null" >
-        approver,
-      </if>
-      <if test="approvalDate != null" >
-        approvalDate,
+      <if test="applyDept != null" >
+        applyDept,
       </if>
       <if test="applyDate != null" >
         applyDate,
       </if>
       <if test="applicant != null" >
         applicant,
+      </if>
+      <if test="payee != null" >
+        payee,
+      </if>
+      <if test="contact != null" >
+        contact,
+      </if>
+      <if test="contactNum != null" >
+        contactNum,
+      </if>
+      <if test="bank != null" >
+        bank,
+      </if>
+      <if test="accountName != null" >
+        accountName,
+      </if>
+      <if test="accountNumber != null" >
+        accountNumber,
+      </if>
+      <if test="paymentDate != null" >
+        paymentDate,
+      </if>
+      <if test="paymentAmount != null" >
+        paymentAmount,
+      </if>
+      <if test="paymentStyle != null" >
+        paymentStyle,
+      </if>
+      <if test="bankList != null" >
+        bankList,
+      </if>
+      <if test="payer != null" >
+        payer,
+      </if>
+      <if test="payRemark != null" >
+        payRemark,
+      </if>
+      <if test="approver != null" >
+        approver,
+      </if>
+      <if test="approvalDate != null" >
+        approvalDate,
       </if>
       <if test="paymentVoucher != null" >
         paymentVoucher,
@@ -202,17 +302,17 @@
       <if test="createTime != null" >
         createTime,
       </if>
-      <if test="updateTime != null" >
-        updateTime,
-      </if>
       <if test="updater != null" >
         updater,
       </if>
-      <if test="reason != null" >
-        reason,
+      <if test="updateTime != null" >
+        updateTime,
       </if>
       <if test="processInstanceId != null" >
         processInstanceId,
+      </if>
+      <if test="reason != null" >
+        reason,
       </if>
       <if test="userId != null" >
         userId,
@@ -231,35 +331,95 @@
       <if test="buyComId != null" >
         #{buyComId,jdbcType=VARCHAR},
       </if>
-      <if test="invoiceSerial != null" >
-        #{invoiceSerial,jdbcType=VARCHAR},
-      </if>
       <if test="paymentType != null" >
         #{paymentType,jdbcType=VARCHAR},
       </if>
       <if test="paymentPlanSerial != null" >
         #{paymentPlanSerial,jdbcType=VARCHAR},
       </if>
+      <if test="orderSerial != null" >
+        #{orderSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="applyPaymentAmount != null" >
+        #{applyPaymentAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="applyCurrency != null" >
+        #{applyCurrency,jdbcType=VARCHAR},
+      </if>
+      <if test="playPaymentDate != null" >
+        #{playPaymentDate,jdbcType=DATE},
+      </if>
+      <if test="paymentNode != null" >
+        #{paymentNode,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null" >
+        #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeNum != null" >
+        #{nodeNum,jdbcType=VARCHAR},
+      </if>
       <if test="billStyle != null" >
         #{billStyle,jdbcType=VARCHAR},
       </if>
-      <if test="paymentDate != null" >
-        #{paymentDate,jdbcType=DATE},
+      <if test="invoiceSerial != null" >
+        #{invoiceSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="billType != null" >
+        #{billType,jdbcType=VARCHAR},
       </if>
       <if test="isBill != null" >
         #{isBill,jdbcType=VARCHAR},
       </if>
-      <if test="approver != null" >
-        #{approver,jdbcType=VARCHAR},
-      </if>
-      <if test="approvalDate != null" >
-        #{approvalDate,jdbcType=DATE},
+      <if test="applyDept != null" >
+        #{applyDept,jdbcType=VARCHAR},
       </if>
       <if test="applyDate != null" >
         #{applyDate,jdbcType=DATE},
       </if>
       <if test="applicant != null" >
         #{applicant,jdbcType=VARCHAR},
+      </if>
+      <if test="payee != null" >
+        #{payee,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null" >
+        #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="contactNum != null" >
+        #{contactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="bank != null" >
+        #{bank,jdbcType=VARCHAR},
+      </if>
+      <if test="accountName != null" >
+        #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNumber != null" >
+        #{accountNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentDate != null" >
+        #{paymentDate,jdbcType=DATE},
+      </if>
+      <if test="paymentAmount != null" >
+        #{paymentAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentStyle != null" >
+        #{paymentStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="bankList != null" >
+        #{bankList,jdbcType=VARCHAR},
+      </if>
+      <if test="payer != null" >
+        #{payer,jdbcType=VARCHAR},
+      </if>
+      <if test="payRemark != null" >
+        #{payRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="approver != null" >
+        #{approver,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalDate != null" >
+        #{approvalDate,jdbcType=DATE},
       </if>
       <if test="paymentVoucher != null" >
         #{paymentVoucher,jdbcType=VARCHAR},
@@ -279,17 +439,17 @@
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateTime != null" >
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="updater != null" >
         #{updater,jdbcType=VARCHAR},
       </if>
-      <if test="reason != null" >
-        #{reason,jdbcType=VARCHAR},
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="processInstanceId != null" >
         #{processInstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null" >
+        #{reason,jdbcType=VARCHAR},
       </if>
       <if test="userId != null" >
         #{userId,jdbcType=INTEGER},
@@ -317,35 +477,95 @@
       <if test="record.buyComId != null" >
         buyComId = #{record.buyComId,jdbcType=VARCHAR},
       </if>
-      <if test="record.invoiceSerial != null" >
-        invoiceSerial = #{record.invoiceSerial,jdbcType=VARCHAR},
-      </if>
       <if test="record.paymentType != null" >
         paymentType = #{record.paymentType,jdbcType=VARCHAR},
       </if>
       <if test="record.paymentPlanSerial != null" >
         paymentPlanSerial = #{record.paymentPlanSerial,jdbcType=VARCHAR},
       </if>
+      <if test="record.orderSerial != null" >
+        orderSerial = #{record.orderSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.applyPaymentAmount != null" >
+        applyPaymentAmount = #{record.applyPaymentAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.applyCurrency != null" >
+        applyCurrency = #{record.applyCurrency,jdbcType=VARCHAR},
+      </if>
+      <if test="record.playPaymentDate != null" >
+        playPaymentDate = #{record.playPaymentDate,jdbcType=DATE},
+      </if>
+      <if test="record.paymentNode != null" >
+        paymentNode = #{record.paymentNode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payType != null" >
+        payType = #{record.payType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nodeNum != null" >
+        nodeNum = #{record.nodeNum,jdbcType=VARCHAR},
+      </if>
       <if test="record.billStyle != null" >
         billStyle = #{record.billStyle,jdbcType=VARCHAR},
       </if>
-      <if test="record.paymentDate != null" >
-        paymentDate = #{record.paymentDate,jdbcType=DATE},
+      <if test="record.invoiceSerial != null" >
+        invoiceSerial = #{record.invoiceSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.billType != null" >
+        billType = #{record.billType,jdbcType=VARCHAR},
       </if>
       <if test="record.isBill != null" >
         isBill = #{record.isBill,jdbcType=VARCHAR},
       </if>
-      <if test="record.approver != null" >
-        approver = #{record.approver,jdbcType=VARCHAR},
-      </if>
-      <if test="record.approvalDate != null" >
-        approvalDate = #{record.approvalDate,jdbcType=DATE},
+      <if test="record.applyDept != null" >
+        applyDept = #{record.applyDept,jdbcType=VARCHAR},
       </if>
       <if test="record.applyDate != null" >
         applyDate = #{record.applyDate,jdbcType=DATE},
       </if>
       <if test="record.applicant != null" >
         applicant = #{record.applicant,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payee != null" >
+        payee = #{record.payee,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contact != null" >
+        contact = #{record.contact,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactNum != null" >
+        contactNum = #{record.contactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bank != null" >
+        bank = #{record.bank,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accountName != null" >
+        accountName = #{record.accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accountNumber != null" >
+        accountNumber = #{record.accountNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paymentDate != null" >
+        paymentDate = #{record.paymentDate,jdbcType=DATE},
+      </if>
+      <if test="record.paymentAmount != null" >
+        paymentAmount = #{record.paymentAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paymentStyle != null" >
+        paymentStyle = #{record.paymentStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankList != null" >
+        bankList = #{record.bankList,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payer != null" >
+        payer = #{record.payer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payRemark != null" >
+        payRemark = #{record.payRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.approver != null" >
+        approver = #{record.approver,jdbcType=VARCHAR},
+      </if>
+      <if test="record.approvalDate != null" >
+        approvalDate = #{record.approvalDate,jdbcType=DATE},
       </if>
       <if test="record.paymentVoucher != null" >
         paymentVoucher = #{record.paymentVoucher,jdbcType=VARCHAR},
@@ -365,17 +585,17 @@
       <if test="record.createTime != null" >
         createTime = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updateTime != null" >
-        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="record.updater != null" >
         updater = #{record.updater,jdbcType=VARCHAR},
       </if>
-      <if test="record.reason != null" >
-        reason = #{record.reason,jdbcType=VARCHAR},
+      <if test="record.updateTime != null" >
+        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.processInstanceId != null" >
         processInstanceId = #{record.processInstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reason != null" >
+        reason = #{record.reason,jdbcType=VARCHAR},
       </if>
       <if test="record.userId != null" >
         userId = #{record.userId,jdbcType=INTEGER},
@@ -391,26 +611,46 @@
       paymentNum = #{record.paymentNum,jdbcType=VARCHAR},
       supplyComId = #{record.supplyComId,jdbcType=VARCHAR},
       buyComId = #{record.buyComId,jdbcType=VARCHAR},
-      invoiceSerial = #{record.invoiceSerial,jdbcType=VARCHAR},
       paymentType = #{record.paymentType,jdbcType=VARCHAR},
       paymentPlanSerial = #{record.paymentPlanSerial,jdbcType=VARCHAR},
+      orderSerial = #{record.orderSerial,jdbcType=VARCHAR},
+      applyPaymentAmount = #{record.applyPaymentAmount,jdbcType=VARCHAR},
+      applyCurrency = #{record.applyCurrency,jdbcType=VARCHAR},
+      playPaymentDate = #{record.playPaymentDate,jdbcType=DATE},
+      paymentNode = #{record.paymentNode,jdbcType=VARCHAR},
+      payType = #{record.payType,jdbcType=VARCHAR},
+      nodeNum = #{record.nodeNum,jdbcType=VARCHAR},
       billStyle = #{record.billStyle,jdbcType=VARCHAR},
-      paymentDate = #{record.paymentDate,jdbcType=DATE},
+      invoiceSerial = #{record.invoiceSerial,jdbcType=VARCHAR},
+      billType = #{record.billType,jdbcType=VARCHAR},
       isBill = #{record.isBill,jdbcType=VARCHAR},
-      approver = #{record.approver,jdbcType=VARCHAR},
-      approvalDate = #{record.approvalDate,jdbcType=DATE},
+      applyDept = #{record.applyDept,jdbcType=VARCHAR},
       applyDate = #{record.applyDate,jdbcType=DATE},
       applicant = #{record.applicant,jdbcType=VARCHAR},
+      payee = #{record.payee,jdbcType=VARCHAR},
+      contact = #{record.contact,jdbcType=VARCHAR},
+      contactNum = #{record.contactNum,jdbcType=VARCHAR},
+      bank = #{record.bank,jdbcType=VARCHAR},
+      accountName = #{record.accountName,jdbcType=VARCHAR},
+      accountNumber = #{record.accountNumber,jdbcType=VARCHAR},
+      paymentDate = #{record.paymentDate,jdbcType=DATE},
+      paymentAmount = #{record.paymentAmount,jdbcType=VARCHAR},
+      paymentStyle = #{record.paymentStyle,jdbcType=VARCHAR},
+      bankList = #{record.bankList,jdbcType=VARCHAR},
+      payer = #{record.payer,jdbcType=VARCHAR},
+      payRemark = #{record.payRemark,jdbcType=VARCHAR},
+      approver = #{record.approver,jdbcType=VARCHAR},
+      approvalDate = #{record.approvalDate,jdbcType=DATE},
       paymentVoucher = #{record.paymentVoucher,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
       delFlg = #{record.delFlg,jdbcType=VARCHAR},
       creator = #{record.creator,jdbcType=VARCHAR},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
-      updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       updater = #{record.updater,jdbcType=VARCHAR},
-      reason = #{record.reason,jdbcType=VARCHAR},
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       processInstanceId = #{record.processInstanceId,jdbcType=VARCHAR},
+      reason = #{record.reason,jdbcType=VARCHAR},
       userId = #{record.userId,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -428,35 +668,95 @@
       <if test="buyComId != null" >
         buyComId = #{buyComId,jdbcType=VARCHAR},
       </if>
-      <if test="invoiceSerial != null" >
-        invoiceSerial = #{invoiceSerial,jdbcType=VARCHAR},
-      </if>
       <if test="paymentType != null" >
         paymentType = #{paymentType,jdbcType=VARCHAR},
       </if>
       <if test="paymentPlanSerial != null" >
         paymentPlanSerial = #{paymentPlanSerial,jdbcType=VARCHAR},
       </if>
+      <if test="orderSerial != null" >
+        orderSerial = #{orderSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="applyPaymentAmount != null" >
+        applyPaymentAmount = #{applyPaymentAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="applyCurrency != null" >
+        applyCurrency = #{applyCurrency,jdbcType=VARCHAR},
+      </if>
+      <if test="playPaymentDate != null" >
+        playPaymentDate = #{playPaymentDate,jdbcType=DATE},
+      </if>
+      <if test="paymentNode != null" >
+        paymentNode = #{paymentNode,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null" >
+        payType = #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="nodeNum != null" >
+        nodeNum = #{nodeNum,jdbcType=VARCHAR},
+      </if>
       <if test="billStyle != null" >
         billStyle = #{billStyle,jdbcType=VARCHAR},
       </if>
-      <if test="paymentDate != null" >
-        paymentDate = #{paymentDate,jdbcType=DATE},
+      <if test="invoiceSerial != null" >
+        invoiceSerial = #{invoiceSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="billType != null" >
+        billType = #{billType,jdbcType=VARCHAR},
       </if>
       <if test="isBill != null" >
         isBill = #{isBill,jdbcType=VARCHAR},
       </if>
-      <if test="approver != null" >
-        approver = #{approver,jdbcType=VARCHAR},
-      </if>
-      <if test="approvalDate != null" >
-        approvalDate = #{approvalDate,jdbcType=DATE},
+      <if test="applyDept != null" >
+        applyDept = #{applyDept,jdbcType=VARCHAR},
       </if>
       <if test="applyDate != null" >
         applyDate = #{applyDate,jdbcType=DATE},
       </if>
       <if test="applicant != null" >
         applicant = #{applicant,jdbcType=VARCHAR},
+      </if>
+      <if test="payee != null" >
+        payee = #{payee,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null" >
+        contact = #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="contactNum != null" >
+        contactNum = #{contactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="bank != null" >
+        bank = #{bank,jdbcType=VARCHAR},
+      </if>
+      <if test="accountName != null" >
+        accountName = #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNumber != null" >
+        accountNumber = #{accountNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentDate != null" >
+        paymentDate = #{paymentDate,jdbcType=DATE},
+      </if>
+      <if test="paymentAmount != null" >
+        paymentAmount = #{paymentAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentStyle != null" >
+        paymentStyle = #{paymentStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="bankList != null" >
+        bankList = #{bankList,jdbcType=VARCHAR},
+      </if>
+      <if test="payer != null" >
+        payer = #{payer,jdbcType=VARCHAR},
+      </if>
+      <if test="payRemark != null" >
+        payRemark = #{payRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="approver != null" >
+        approver = #{approver,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalDate != null" >
+        approvalDate = #{approvalDate,jdbcType=DATE},
       </if>
       <if test="paymentVoucher != null" >
         paymentVoucher = #{paymentVoucher,jdbcType=VARCHAR},
@@ -476,17 +776,17 @@
       <if test="createTime != null" >
         createTime = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateTime != null" >
-        updateTime = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="updater != null" >
         updater = #{updater,jdbcType=VARCHAR},
       </if>
-      <if test="reason != null" >
-        reason = #{reason,jdbcType=VARCHAR},
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="processInstanceId != null" >
         processInstanceId = #{processInstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null" >
+        reason = #{reason,jdbcType=VARCHAR},
       </if>
       <if test="userId != null" >
         userId = #{userId,jdbcType=INTEGER},
@@ -499,26 +799,46 @@
     set paymentNum = #{paymentNum,jdbcType=VARCHAR},
       supplyComId = #{supplyComId,jdbcType=VARCHAR},
       buyComId = #{buyComId,jdbcType=VARCHAR},
-      invoiceSerial = #{invoiceSerial,jdbcType=VARCHAR},
       paymentType = #{paymentType,jdbcType=VARCHAR},
       paymentPlanSerial = #{paymentPlanSerial,jdbcType=VARCHAR},
+      orderSerial = #{orderSerial,jdbcType=VARCHAR},
+      applyPaymentAmount = #{applyPaymentAmount,jdbcType=VARCHAR},
+      applyCurrency = #{applyCurrency,jdbcType=VARCHAR},
+      playPaymentDate = #{playPaymentDate,jdbcType=DATE},
+      paymentNode = #{paymentNode,jdbcType=VARCHAR},
+      payType = #{payType,jdbcType=VARCHAR},
+      nodeNum = #{nodeNum,jdbcType=VARCHAR},
       billStyle = #{billStyle,jdbcType=VARCHAR},
-      paymentDate = #{paymentDate,jdbcType=DATE},
+      invoiceSerial = #{invoiceSerial,jdbcType=VARCHAR},
+      billType = #{billType,jdbcType=VARCHAR},
       isBill = #{isBill,jdbcType=VARCHAR},
-      approver = #{approver,jdbcType=VARCHAR},
-      approvalDate = #{approvalDate,jdbcType=DATE},
+      applyDept = #{applyDept,jdbcType=VARCHAR},
       applyDate = #{applyDate,jdbcType=DATE},
       applicant = #{applicant,jdbcType=VARCHAR},
+      payee = #{payee,jdbcType=VARCHAR},
+      contact = #{contact,jdbcType=VARCHAR},
+      contactNum = #{contactNum,jdbcType=VARCHAR},
+      bank = #{bank,jdbcType=VARCHAR},
+      accountName = #{accountName,jdbcType=VARCHAR},
+      accountNumber = #{accountNumber,jdbcType=VARCHAR},
+      paymentDate = #{paymentDate,jdbcType=DATE},
+      paymentAmount = #{paymentAmount,jdbcType=VARCHAR},
+      paymentStyle = #{paymentStyle,jdbcType=VARCHAR},
+      bankList = #{bankList,jdbcType=VARCHAR},
+      payer = #{payer,jdbcType=VARCHAR},
+      payRemark = #{payRemark,jdbcType=VARCHAR},
+      approver = #{approver,jdbcType=VARCHAR},
+      approvalDate = #{approvalDate,jdbcType=DATE},
       paymentVoucher = #{paymentVoucher,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
       delFlg = #{delFlg,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP},
-      updateTime = #{updateTime,jdbcType=TIMESTAMP},
       updater = #{updater,jdbcType=VARCHAR},
-      reason = #{reason,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
       processInstanceId = #{processInstanceId,jdbcType=VARCHAR},
+      reason = #{reason,jdbcType=VARCHAR},
       userId = #{userId,jdbcType=INTEGER}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>

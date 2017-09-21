@@ -54,7 +54,7 @@
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="statementNum"> <span class="required"> * </span>对账单号：</label>
+                                                    <label class="col-md-4 control-label" for="statementNum"> 对账单号：</label>
                                                     <div class="col-md-8">
                                                          <p class="control-label left" >{{statement.statementNum}}</p>
                                                     </div>
@@ -64,7 +64,7 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="supplyComId"> <span class="required"> * </span>供应商：</label>
+                                                    <label class="col-md-4 control-label" for="supplyComId"> 供应商：</label>
                                                     <div class="col-md-8">
                                                          <p class="control-label left" >{{statement.supplyName}}</p>
                                                     </div>
@@ -73,7 +73,7 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
-													<label class="col-md-4 control-label" for="statementDate"> <span class="required"> * </span>对账日期：</label>
+													<label class="col-md-4 control-label" for="statementDate"> 对账日期：</label>
                                                     <div class="col-md-8">
                                                         <p class="control-label left" >{{statement.statementDate}}</p>
                                                     </div>
@@ -147,7 +147,7 @@
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="maker"> <span class="required"> * </span>制单人：</label>
+                                                    <label class="col-md-4 control-label" for="maker"> 制单人：</label>
                                                     <div class="col-md-8">
                                                          <p class="control-label left" >{{statement.maker}}</p>
                                                     </div>
@@ -157,7 +157,7 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" > <span class="required"> * </span>制单日期：</label>
+                                                    <label class="col-md-4 control-label" > 制单日期：</label>
                                                     <div class="col-md-8">
                                                          <p class="control-label left" >{{statement.makeDate}}</p>
                                                     </div>
@@ -222,7 +222,7 @@
 										<td>{{info.orderStatus}}</td>
 										<td></td>
 									</tr>
-									<tr>
+									<tr ng-if="orderList!=null&&orderList.length>0">
 										<td></td>
 										<td></td>
 										<td>合计：</td>
@@ -236,9 +236,9 @@
 										<td>{{totalUnReadyAmount|currency:'￥'}}</td>
 										<td></td>
 									</tr>
-									<!-- <tr ng-if="orderList==undefined||orderList.length==0">
+									<tr ng-if="orderList==null||orderList.length==0">
 											<td colspan="13" align="center">暂无数据</td>
-									</tr> -->
+									</tr>
 								</tbody>
 							</table>
 						</div>
@@ -293,7 +293,7 @@
 												<td>{{payment.billNum}}</td>
 												<td></td>
 											</tr>
-											<tr>
+											<tr ng-if="paymentList!=null&&paymentList.length>0">
 												<td></td>
 												<td></td>
 												<td></td>
@@ -306,6 +306,9 @@
 												<td></td>
 												<td></td>
 												<td></td>
+											</tr>
+											<tr ng-if="paymentList==null||paymentList.length==0">
+												<td colspan="12" align="center">暂无数据</td>
 											</tr>
 										</tbody>
 									</table>
@@ -346,7 +349,7 @@
 												<td>{{payment.billNum}}</td>
 												<td></td>
 											</tr>
-											<tr>
+											<tr ng-if="alreadyPaymentList!=null&&alreadyPaymentList.length>0">
 												<td></td>
 												<td></td>
 												<td></td>
@@ -359,6 +362,9 @@
 												<td></td>
 												<td></td>
 												<td></td>
+											</tr>
+											<tr ng-if="alreadyPaymentList==null||alreadyPaymentList.length==0">
+												<td colspan="12" align="center">暂无数据</td>
 											</tr>
 										</tbody>
 									</table>

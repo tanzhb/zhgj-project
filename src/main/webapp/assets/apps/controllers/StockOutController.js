@@ -293,8 +293,8 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					            	operator:{required:"操作员不能为空！"},
 					            	contactNum:{required:"联系方式不能为空！"},
 					            	stockCount:{required:"出库数量不能为空！",digits:"发货数量必须为数字！"},
-					            	warehouseSerial:{required:"仓库不能为空！"},
-					            	positionSerial:{required:"库位不能为空！"}
+					            	warehouseSerial:{required:"仓库不能为空！"}
+					            	//positionSerial:{required:"库位不能为空！"}
 					            },
 					            rules: {
 					            	inOutNum: {
@@ -310,9 +310,6 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					                	required: !0
 					                },
 					                warehouseSerial: {
-					                	required: !0
-					                },
-					                positionSerial: {
 					                	required: !0
 					                },
 					                stockCount: {
@@ -461,8 +458,12 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 										                            				return '待审批';					                            				
 																				}else if(data=='3'){
 																					return '审批成功';
+																				}else if(data=='4'){
+																					return '';
 																				}else if(data=='APPROVAL_FAILED'){
 																					return '审批失败';
+																				}else{
+																					return "";
 																				}
 										                            		}else{
 										                            			return "";

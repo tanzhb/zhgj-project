@@ -23,6 +23,7 @@
     <result column="userId" property="userId" jdbcType="INTEGER" />
     <result column="applyDate" property="applyDate" jdbcType="DATE" />
     <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="takeDeliverAddress" property="takeDeliverAddress" jdbcType="VARCHAR" />
   </resultMap>
   
   <resultMap id="BaseResultMap2" type="com.congmai.zhgj.web.model.Delivery" >
@@ -83,6 +84,7 @@
 	     <result column="userId" property="userId" jdbcType="INTEGER" />
 	     <result column="applyDate" property="applyDate" jdbcType="DATE" />
 	     <result column="status" property="status" jdbcType="VARCHAR" />
+	     <result column="takeDeliverAddress" property="takeDeliverAddress" jdbcType="VARCHAR" />
          <association column="tdWarehouseSerial" property="warehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>
     </association>
     <association column="warehouseSerial" property="warehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>
@@ -219,9 +221,11 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Base_Column_List" >
+   <sql id="Base_Column_List" >
     serialNum, deliverSerial, warehouseSerial, takeDeliverDate, receiver, contactNum, 
-    takeDeliverNum, remark, delFlg, creator, createTime, updater, updateTime, actualDate,taker, takeRemark,reason,processInstanceId,userId,applyDate,status
+    takeDeliverNum, remark, actualDate, taker, takeRemark, takeDeliverAddress, delFlg, 
+    creator, createTime, updater, updateTime, reason, processInstanceId, userId, applyDate, 
+    status
   </sql>
     <select id="selectListByExample" resultMap="BaseResultMap2" parameterType="com.congmai.zhgj.web.model.DeliverySelectExample" >
     select
@@ -277,19 +281,23 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
- <insert id="insert" parameterType="com.congmai.zhgj.web.model.TakeDelivery" >
+  <insert id="insert" parameterType="com.congmai.zhgj.web.model.TakeDelivery" >
     insert into takeDelivery (serialNum, deliverSerial, warehouseSerial, 
       takeDeliverDate, receiver, contactNum, 
       takeDeliverNum, remark, actualDate, 
-      taker, takeRemark, delFlg, 
-      creator, createTime, updater, 
-      updateTime,status)
+      taker, takeRemark, takeDeliverAddress, 
+      delFlg, creator, createTime, 
+      updater, updateTime, reason, 
+      processInstanceId, userId, applyDate, 
+      status)
     values (#{serialNum,jdbcType=VARCHAR}, #{deliverSerial,jdbcType=VARCHAR}, #{warehouseSerial,jdbcType=VARCHAR}, 
       #{takeDeliverDate,jdbcType=DATE}, #{receiver,jdbcType=VARCHAR}, #{contactNum,jdbcType=VARCHAR}, 
       #{takeDeliverNum,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{actualDate,jdbcType=TIMESTAMP}, 
-      #{taker,jdbcType=VARCHAR}, #{takeRemark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, 
-      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=TIMESTAMP},#{status,jdbcType=VARCHAR})
+      #{taker,jdbcType=VARCHAR}, #{takeRemark,jdbcType=VARCHAR}, #{takeDeliverAddress,jdbcType=VARCHAR}, 
+      #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{reason,jdbcType=VARCHAR}, 
+      #{processInstanceId,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{applyDate,jdbcType=DATE}, 
+      #{status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.TakeDelivery" >
     insert into takeDelivery
@@ -327,6 +335,9 @@
       <if test="takeRemark != null" >
         takeRemark,
       </if>
+      <if test="takeDeliverAddress != null" >
+        takeDeliverAddress,
+      </if>
       <if test="delFlg != null" >
         delFlg,
       </if>
@@ -341,6 +352,21 @@
       </if>
       <if test="updateTime != null" >
         updateTime,
+      </if>
+      <if test="reason != null" >
+        reason,
+      </if>
+      <if test="processInstanceId != null" >
+        processInstanceId,
+      </if>
+      <if test="userId != null" >
+        userId,
+      </if>
+      <if test="applyDate != null" >
+        applyDate,
+      </if>
+      <if test="status != null" >
+        status,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -377,6 +403,9 @@
       <if test="takeRemark != null" >
         #{takeRemark,jdbcType=VARCHAR},
       </if>
+      <if test="takeDeliverAddress != null" >
+        #{takeDeliverAddress,jdbcType=VARCHAR},
+      </if>
       <if test="delFlg != null" >
         #{delFlg,jdbcType=VARCHAR},
       </if>
@@ -391,6 +420,21 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reason != null" >
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="processInstanceId != null" >
+        #{processInstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="applyDate != null" >
+        #{applyDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -407,7 +451,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
- <update id="updateByExampleSelective" parameterType="map" >
+<update id="updateByExampleSelective" parameterType="map" >
     update takeDelivery
     <set >
       <if test="record.serialNum != null" >
@@ -443,6 +487,9 @@
       <if test="record.takeRemark != null" >
         takeRemark = #{record.takeRemark,jdbcType=VARCHAR},
       </if>
+      <if test="record.takeDeliverAddress != null" >
+        takeDeliverAddress = #{record.takeDeliverAddress,jdbcType=VARCHAR},
+      </if>
       <if test="record.delFlg != null" >
         delFlg = #{record.delFlg,jdbcType=VARCHAR},
       </if>
@@ -457,6 +504,21 @@
       </if>
       <if test="record.updateTime != null" >
         updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.reason != null" >
+        reason = #{record.reason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.processInstanceId != null" >
+        processInstanceId = #{record.processInstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null" >
+        userId = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.applyDate != null" >
+        applyDate = #{record.applyDate,jdbcType=DATE},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -476,11 +538,17 @@
       actualDate = #{record.actualDate,jdbcType=TIMESTAMP},
       taker = #{record.taker,jdbcType=VARCHAR},
       takeRemark = #{record.takeRemark,jdbcType=VARCHAR},
+      takeDeliverAddress = #{record.takeDeliverAddress,jdbcType=VARCHAR},
       delFlg = #{record.delFlg,jdbcType=VARCHAR},
       creator = #{record.creator,jdbcType=VARCHAR},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
       updater = #{record.updater,jdbcType=VARCHAR},
-      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      reason = #{record.reason,jdbcType=VARCHAR},
+      processInstanceId = #{record.processInstanceId,jdbcType=VARCHAR},
+      userId = #{record.userId,jdbcType=INTEGER},
+      applyDate = #{record.applyDate,jdbcType=DATE},
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -517,6 +585,9 @@
       </if>
       <if test="takeRemark != null" >
         takeRemark = #{takeRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="takeDeliverAddress != null" >
+        takeDeliverAddress = #{takeDeliverAddress,jdbcType=VARCHAR},
       </if>
       <if test="delFlg != null" >
         delFlg = #{delFlg,jdbcType=VARCHAR},
@@ -563,11 +634,17 @@
       actualDate = #{actualDate,jdbcType=TIMESTAMP},
       taker = #{taker,jdbcType=VARCHAR},
       takeRemark = #{takeRemark,jdbcType=VARCHAR},
+      takeDeliverAddress = #{takeDeliverAddress,jdbcType=VARCHAR},
       delFlg = #{delFlg,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP},
       updater = #{updater,jdbcType=VARCHAR},
-      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      reason = #{reason,jdbcType=VARCHAR},
+      processInstanceId = #{processInstanceId,jdbcType=VARCHAR},
+      userId = #{userId,jdbcType=INTEGER},
+      applyDate = #{applyDate,jdbcType=DATE},
+      status = #{status,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
       <select id="selectByTakeDeliveryPrimaryKeyForStockIn" resultMap="BaseResultMap2" parameterType="java.lang.String" >
