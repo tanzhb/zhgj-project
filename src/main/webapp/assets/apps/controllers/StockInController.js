@@ -309,8 +309,8 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 					            	operator:{required:"操作员不能为空！"},
 					            	contactNum:{required:"联系方式不能为空！"},
 					            	stockCount:{required:"入库数量不能为空！",digits:"发货数量必须为数字！"},
-					            	warehouseSerial:{required:"仓库不能为空！"},
-					            	positionSerial:{required:"库位不能为空！"}
+					            	warehouseSerial:{required:"仓库不能为空！"}
+					            	//positionSerial:{required:"库位不能为空！"}
 					            },
 					            rules: {
 					            	inOutNum: {
@@ -328,9 +328,9 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 					                warehouseSerial: {
 					                	required: !0
 					                },
-					                positionSerial: {
+					                /*positionSerial: {
 					                	required: !0
-					                },
+					                },*/
 					                stockCount: {
 					                	required: !0,
 					                	digits:!0,

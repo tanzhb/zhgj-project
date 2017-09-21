@@ -629,7 +629,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 		};
 		
 		$scope.editBuyOrder  = function() {// 进入编辑页面
-        	var ids = '';
+        	/*var ids = '';
     		// Iterate over all checkboxes in the table
     		table.$('input[type="checkbox"]').each(
     				function() {
@@ -650,9 +650,16 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     			toastr.warning('请选择一个订单！');return;
     		}else if(ids=='more'){
     			toastr.warning('只能选择一个订单！');return;
+    		}*/
+    		if(table.rows('.active').data().length != 1){
+    			showToastr('toast-top-center', 'warning', '请选择一个订单！')
+    		}else{
+    			var processBase = table.row('.active').data().processBase;
+    			if(processBase != null){
+    				showToastr('toast-top-center', 'warning', '该订单已发起流程审批，不能修改！')
+    			}else $state.go('addBuyOrder',{serialNum:table.row('.active').data().serialNum});
     		}
     		
-    		$state.go("addBuyOrder",{serialNum:ids});
         };
         
         
@@ -1448,7 +1455,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	        				}
 	        			}
 	        		}
-	        		if(!isNull(materiel.supplyMaterielSerial)){
+	        		if(!isNull(materiel.serialNum)){
 	        			var promise = orderService.deleteOrderMateriel(materiel.serialNum);
 		        		promise.then(function(data){
 		        			if(data.data == "1"){
@@ -2519,7 +2526,7 @@ var e = $("#form_clauseSettlement"),
 		       
 		       $scope.arithmeticRateUnit  = function(scope) {//计算含税销售单价
 			       	if(scope.orderUnitPrice&&$scope.buyOrder.rate){
-			       		return (scope.orderUnitPrice*($scope.buyOrder.rate+1)/100).toFixed(4);
+			       		return (scope.orderUnitPrice*($scope.buyOrder.rate/100+1)).toFixed(4);
 			       	}else{
 			       		return 0;
 			       	}
@@ -2559,7 +2566,7 @@ var e = $("#form_clauseSettlement"),
 		       
 		       $scope._arithmeticRateUnit  = function(scope) {//计算含税销售单价
 			       	if(scope._orderMateriel.orderUnitPrice&&$scope.buyOrder.rate){
-			       		return (scope._orderMateriel.orderUnitPrice*($scope.buyOrder.rate+1)/100).toFixed(4);
+			       		return (scope._orderMateriel.orderUnitPrice*($scope.buyOrder.rate/100+1)).toFixed(4);
 			       	}else{
 			       		return 0;
 			       	}
