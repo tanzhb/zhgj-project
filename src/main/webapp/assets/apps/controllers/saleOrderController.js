@@ -1311,7 +1311,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 	        				}
 	        			}
 	        		}
-	        		if(!isNull(materiel.supplyMaterielSerial)){
+	        		if(!isNull(materiel.serialNum)){
 	        			var promise = orderService.deleteOrderMateriel(materiel.serialNum);
 		        		promise.then(function(data){
 		        			if(data.data == "1"){
