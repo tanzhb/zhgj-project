@@ -680,7 +680,7 @@
 											</td>
 											<td><input type="text" name="deliverCount{{$index}}"
 												class="form-control" ng-hide="orderMaterielInput{{$index}}"
-												ng-model="deliveryMaterielE[$index].deliverCount">
+												ng-model="deliveryMaterielE[$index].deliverCount" ng-blur="getTotalDeliveryCount()"/>
 												<p class="form-control-static"
 													ng-show="orderMaterielShow{{$index}}">
 													{{_deliveryMateriel.deliverCount}}</p>
@@ -711,9 +711,9 @@
 											<th></th>
 											<th></th>
 											<th></th>
-											<th></th>
-											<th></th>
-											<th></th>
+											<td>{{totalDeliveryCount}}</td>
+											<td></td>
+											<td></td>
 										</tr>
 									</tfoot>
 								</table>
