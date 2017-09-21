@@ -191,7 +191,14 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        	}else{
 	        		$scope.deliver.warehouseName = '无';
 	        	}
-	        	debugger;
+	        	if($scope.deliver.takeDelivery.warehouse==null){
+	        		$scope.deliver.takeDelivery.warehouse={};
+	        		$scope.deliver.takeDelivery.warehouse.warehouseName='无';
+	        	}
+	        	if($scope.deliver.warehouse==null){
+	        		$scope.deliver.warehouse={};
+	        		$scope.deliver.warehouse.warehouseName='无';
+	        	}
 	        	if(isNull($scope.deliver.receiver)){
 	        		$scope.deliver.receiverName = "中航能科（上海）能源科技有限公司";
 	        	}
@@ -208,8 +215,6 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        		if($scope.takeDeliver.warehouse != null){
 	        			$scope.takeDeliver.warehouseSerial = $scope.takeDeliver.warehouse.serialNum;
 		        		$scope.takeDeliver.warehouseName = $scope.takeDeliver.warehouse.address;
-	        		}else{
-	        			$scope.takeDeliver.warehouseName = '无';
 	        		}
 	        		
 	        		var playWarehouseDate= $scope.deliverTransport.playWarehouseDate;
