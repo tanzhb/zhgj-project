@@ -35,9 +35,9 @@
 						<li class="active"><a data-target="#tab_25_1"
 							data-toggle="tab">收货计划</a></li>
 						<li><a data-target="#tab_25_2" data-toggle="tab"
-							ng-click="toDaiban()">待办</a></li>
+							ng-click="toDaiban()">待办<dbQuantity/></a></li>
 						<li><a data-target="#tab_25_3" data-toggle="tab"
-							ng-click="toYiban()">已办</a></li>
+							ng-click="toYiban()">已办 <ybQuantity/></a></li>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane active" id="tab_25_1">
