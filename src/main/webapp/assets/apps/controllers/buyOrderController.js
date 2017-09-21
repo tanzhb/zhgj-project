@@ -164,14 +164,14 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	//重新申请
 	$scope.replyOrder = function() {
 	    var mydata={"processInstanceId":$("#processInstanceId").val(),
-				"reApply":true,"orderId":$scope.buyOrder.serialNum,"reason":$scope.buyOrder.remark};
+				"reApply":true,"orderId":$scope.buyOrder.serialNum,"reason":$scope.buyOrder.remark,"orderType":'buyOrder'};
 		var _url = ctx + "rest/order/modifyOrder/" + $("#taskId").val();
 		doOrder(_url, mydata, 'modify');
 	};
 	//取消申请
 	$scope.cancelApply = function() {
 	     var mydata={"processInstanceId":$("#processInstanceId").val(),
-				"reApply":false,"orderId":$scope.buyOrder.serialNum,"reason":$scope.buyOrder.remark};
+				"reApply":false,"orderId":$scope.buyOrder.serialNum,"reason":$scope.buyOrder.remark,"orderType":'buyOrder'};
 		var _url = ctx + "rest/order/modifyOrder/" + $("#taskId").val();
 		doOrder(_url, mydata, 'modify' );
 	};
@@ -1929,8 +1929,15 @@ var e = $("#form_clauseSettlement"),
    	            errorClass: "help-block help-block-error",
    	            focusInvalid: !1,
    	            ignore: "",
-   	            messages: {},
-   	        	rules: {},
+   	      messages: {
+          	deliveryMode:{required:"提货方式不能为空！"}
+          },
+      	rules: {
+      		deliveryMode: {required: !0,maxlength: 20}
+      			},
+      		invalidHandler: function(e, t) {
+              i.hide(), r.show(), App.scrollTo(r, -200)
+          },
    	        		invalidHandler: function(e, t) {
    	                i.hide(), r.show(), App.scrollTo(r, -200)
    	            },
