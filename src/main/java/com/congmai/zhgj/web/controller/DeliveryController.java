@@ -404,6 +404,7 @@ public class DeliveryController {
     	Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
 		delivery.setUpdater(currenLoginName);
+		delivery.setStatus("0");
     	deliveryService.updateBasicInfo(delivery);
     	
     	
