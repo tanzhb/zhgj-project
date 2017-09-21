@@ -10,7 +10,7 @@
     <!-- 配置mybatis的缓存，延迟加载等等一系列属性 -->
     <settings>
     	<!-- 控制台打印sql语句 -->
- 		<setting name="logImpl" value="STDOUT_LOGGING" />
+<!--  		<setting name="logImpl" value="STDOUT_LOGGING" /> -->
         <!-- 全局映射器启用缓存 -->
         <setting name="cacheEnabled" value="true"/>
 

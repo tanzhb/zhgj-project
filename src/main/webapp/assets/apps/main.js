@@ -2450,10 +2450,10 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					if('paymentRecordC' == toState.name){
 						getTodoTaskLength('paymentRecordC', 'accountPayable');
 						getEndTaskLength('paymentRecordC', 'accountPayable');
-						}else if('buyOrder' == toState.name){
+					}else if('buyOrder' == toState.name){
 						getTodoTaskLength('buyOrder', 'buyOrder');
 						getEndTaskLength('buyOrder', 'buyOrder');					
-						}else if('takeDelivery' == toState.name){ //收货
+					}else if('takeDelivery' == toState.name){ //收货
 						getTodoTaskLength('takeDelivery', 'takeDelivery');
 						getEndTaskLength('takeDelivery', 'takeDelivery');
 					}else if('dashboard' == toState.name){
