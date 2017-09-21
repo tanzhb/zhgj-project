@@ -2264,6 +2264,26 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a ui-sref='takeDelivery'>收货列表</a><i class='fa fa-angle-right'></i></li>" + 
 				 		"<li><a>查看收货</a></li>";
+			   }else if('addDelivery' == toState.name){//发货列表
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='delivery'>发货</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>新增发货</a></li>";
+			   }else if('editDeliveryPage' == toState.name){//发货列表
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='delivery'>发货</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>编辑发货</a></li>";
+			   }else if('delivery' == toState.name){//发货列表
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='delivery'>发货</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>发货列表</a></li>";
+			   }else if('viewDelivery' == toState.name){//发货列表
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='delivery'>发货</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>发货详情</a></li>";
 			   }else if('toTakeDelivery' == toState.name){//收货申请
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
