@@ -46,7 +46,7 @@
 			<ul class="nav navbar-nav pull-right">
 				<!-- BEGIN NOTIFICATION DROPDOWN -->
 				<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-				<li class="dropdown dropdown-extended dropdown-notification"
+				<!-- <li class="dropdown dropdown-extended dropdown-notification"
 					id="header_notification_bar"><a href="#"
 					class="dropdown-toggle" dropdown-menu-hover data-toggle="dropdown"
 					data-close-others="true"> <i class="icon-bell"></i> <span
@@ -126,11 +126,11 @@
 								</a></li>
 							</ul>
 						</li>
-					</ul></li>
+					</ul></li> -->
 				<!-- END NOTIFICATION DROPDOWN -->
 				<!-- BEGIN INBOX DROPDOWN -->
 				<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-				<li class="dropdown dropdown-extended dropdown-inbox"
+				<!-- <li class="dropdown dropdown-extended dropdown-inbox"
 					id="header_inbox_bar"><a href="#" class="dropdown-toggle"
 					dropdown-menu-hover data-toggle="dropdown" data-close-others="true">
 						<i class="icon-envelope-open"></i> <span
@@ -187,11 +187,11 @@
 								</a></li>
 							</ul>
 						</li>
-					</ul></li>
+					</ul></li> -->
 				<!-- END INBOX DROPDOWN -->
 				<!-- BEGIN TODO DROPDOWN -->
 				<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-				<li class="dropdown dropdown-extended dropdown-tasks"
+				<!-- <li class="dropdown dropdown-extended dropdown-tasks"
 					id="header_task_bar"><a href="#" class="dropdown-toggle"
 					dropdown-menu-hover data-toggle="dropdown" data-close-others="true">
 						<i class="icon-calendar"></i> <span class="badge badge-default">
@@ -279,7 +279,7 @@
 								</a></li>
 							</ul>
 						</li>
-					</ul></li>
+					</ul></li> -->
 				<!-- END TODO DROPDOWN -->
 				<!-- BEGIN USER LOGIN DROPDOWN -->
 				<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
