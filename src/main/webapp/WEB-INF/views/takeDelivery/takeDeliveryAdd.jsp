@@ -84,8 +84,9 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="deliverType">发货类型<span class="required"> * </span></label>
                                                     <div class="">
-                                                        <select class="form-control"  id="deliverType" ng-init="deliver.deliverType='贸易发货'"  name="deliverType" ng-model="deliver.deliverType" ng-hide="deliverAdd"  data-size="8">
+                                                        <select class="form-control"  id="deliverType" ng-init="deliver.deliverType='贸易发货'" ng-change="changeTakeDeliveryMode(deliver.deliverType)"  name="deliverType" ng-model="deliver.deliverType" ng-hide="deliverAdd"  data-size="8">
 	                                                        <option  value="贸易发货" selected="selected" >贸易发货</option>
+	                                                        <option  value="其他发货" selected="selected" >其他发货</option>
 	                                                    </select>
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{takeDeliver.takeDeliverNum}}</p>
@@ -94,7 +95,7 @@
 										</div>
 										<!--/span-->
 										<div class="col-md-4">
-											<div class="form-group">
+											<div class="form-group" ng-if="!otherMode">
                                                     <label class="control-label bold" for="orderSerial">采购订单号<span class="required"> * </span></label>
                                                     <div class="">
                                                     	 <div class="input-group" data-toggle="modal" data-target="#buyOrderInfo" onclick="return false;">
@@ -105,13 +106,15 @@
 	                                                            </button>
 	                                                        </span>
 	                                                    </div>
-	                                                    	<!-- <input id="orderSerial" data-toggle="modal" data-target="#buyOrderInfo"  name="orderSerial" type="text" class="form-control" ng-model="deliver.orderNum" readonly="readonly" >
-	                                                    	 --><div class="form-control-focus"> </div>
+	                                                    <div class="form-control-focus"> </div>
                                                     </div>
-                                                    <!-- <div class="col-md-2">
-                                                    <button class="btn btn-icon-only default" data-toggle="modal" data-target="#buyOrderInfo" onclick="return false;">
-                                            			<i class="fa fa-search" ></i></button>
-                                                    </div> -->
+                                            </div>
+											<div class="form-group" ng-if="otherMode">
+                                                    <label class="control-label bold" for="orderSerial">关联单据号</label>
+                                                    <div class="">
+	                                                    <input type="text" class="form-control" ng-model="deliver.orderSerial" ng-hide="deliverAdd" >
+	                                                    <div class="form-control-focus"> </div>
+                                                    </div>
                                             </div>
 										</div>
 										<!--/span-->
@@ -120,34 +123,18 @@
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="supplyComId">供应商 <span class="required"> * </span></label>
-                                                    <div class="">
-                                                     	<input type="text" class="form-control"  value="{{deliver.supplyName}}" disabled="disabled">
-                                                    	<!-- <select class="form-control" selectpicker  id="supplyComId"  name="supplyComId" ng-model="deliver.supplyComId" ng-hide="deliverAdd"  data-size="8">
-	                                                        <option value=""></option>
-	                                                        <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}">{{supplier.comName}}</option>
-	                                                    </select>
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.supplyName}}</p> -->
-                                                    </div>
-                                            </div>
-										</div>
-						
-										<!--/span-->
-										<div class="col-md-4">
-											<div class="form-group">
                                                     <label class="control-label bold" for="shipper">发货方 <span class="required"> * </span></label>
                                                     <div class="">
-                                                     	<input type="text" class="form-control"  value="{{deliver.shipperName}}" disabled="disabled">
+                                                     	<input ng-if="!otherMode" type="text" class="form-control"  value="{{deliver.shipperName}}" disabled="disabled">
                                                        <!--  <input type="text" class="form-control" id="shipper"  name="shipper" ng-model="deliver.shipper" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.shipper}}</p> -->
-                                                         <!-- <select class="form-control" selectpicker  id="shipper"  name="shipper" ng-model="deliver.shipper" ng-hide="deliverAdd"  data-size="8">
+                                                        <select ng-if="otherMode" class="form-control" selectpicker  id="shipper" ng-change="setSupplyComId(deliver.shipper)"  name="shipper" ng-model="deliver.shipper" ng-hide="deliverAdd"  data-size="8">
 	                                                        <option value=""></option>
 	                                                        <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}">{{supplier.comName}}</option>
 	                                                    </select>
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.shipperName}}</p> -->
+                                                         <p class="control-label left" ng-show="deliverView">{{deliver.shipperName}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -156,23 +143,19 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="receiver">收货方 <span class="required"> * </span></label>
                                                     <div class="">
-                                                     	<input type="text" class="form-control"  value="{{deliver.receiverName}}" disabled="disabled">
+                                                     	<input ng-if="!otherMode" type="text" class="form-control"  value="{{deliver.receiverName}}" disabled="disabled">
                                                         <!-- <input type="text" class="form-control" id="receiver"  name="receiver" ng-model="deliver.receiver" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.receiver}}</p> -->
-                                                      <!--    <select class="form-control" selectpicker  id="receiver"  name="receiver" ng-model="deliver.receiver" ng-hide="deliverAdd"  data-size="8">
+                                                       <select ng-if="otherMode" class="form-control" selectpicker  id="receiver"  name="receiver" ng-model="deliver.receiver" ng-hide="deliverAdd"  data-size="8">
 	                                                        <option value=""></option>
-	                                                        <option  ng-repeat="customer in customers" value="{{customers.comId}}">{{customer.comName}}</option>
+	                                                        <option  ng-repeat="customer in customers" value="{{customer.comId}}">{{customer.comName}}</option>
 	                                                    </select>
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.receiverName}}</p> -->
                                                     </div>
                                             </div>
 										</div>
 										<!--/span-->
-									</div>
-									<!--/row-->
-									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="maker">制单人 <span class="required"> * </span></label>
@@ -183,46 +166,10 @@
                                                     </div>
                                             </div>
 										</div>
-						
 										<!--/span-->
-										<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold" for="makerDate">制单日期 <span class="required"> * </span></label>
-                                                    <div class="">
-                                                        <input type="text" class="form-control  date-picker" size="16"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" 
-                                                         id="makeDate"  name="makeDate" ng-model="deliver.makeDate" ng-hide="deliverAdd" readonly="readonly">
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.makeDate}}</p>
-                                                    </div>
-                                            </div>
-										</div>
-										<!--/span-->
-									<!-- 	<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold" for="approval">审批人 <span class="required"> * </span></label>
-                                                    <div class="">
-                                                        <input type="text" class="form-control" id="approval"  name="approval" ng-model="deliver.approval" ng-hide="deliverAdd" >
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.approval}}</p>
-                                                    </div>
-                                            </div>
-										</div>
-										/span
 									</div>
-									/row
+									<!--/row-->
 									<div class="row">
-										<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold" for="approvalDate">审批日期 <span class="required"> * </span></label>
-                                                    <div class="">
-                                                        <input type="text" class="form-control date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="approvalDate" name="approvalDate" ng-model="deliver.approvalDate" ng-hide="deliverAdd" readonly="readonly">
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.approvalDate}}</p>
-                                                    </div>
-                                            </div>
-										</div>
-						
-										/span -->
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" > 备注</label>
@@ -233,17 +180,6 @@
                                                     </div>
                                             </div>
 										</div>
-										<!--/span-->
-										<!-- <div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold"> 状态</label>
-                                                    <div class="">
-                                                        <input type="text" class="form-control" id="comName"  name="comName" ng-model="deliver.status" ng-hide="deliverAdd" >
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.status}}</p>
-                                                    </div>
-                                            </div>
-										</div> -->
 										<!--/span-->
 									</div>
 									<!--/row-->
@@ -638,12 +574,13 @@
                         <div class="portlet-title">
                             <div class="caption">物料信息</div>
                             <div class="actions">
+                            	 <button   ng-if="otherMode" class="btn blue btn-sm btn-circle" ng-click="addMateriel()" onclick="return false;">
+                              <i class="fa fa-plus"></i> 添加物料 </button>
                             </div>
                         </div>
                         <div class="portlet-body">
 						<div class="table-scrollable">
-							<table
-								class="table table-striped table-bordered table-advance table-hover" id="deliveryMaterielTable">
+							<table ng-if="!otherMode" class="table table-striped table-bordered table-advance table-hover" id="deliveryMaterielTable">
 								<thead>
 									<tr>
 										<th  rowspan="2">物料编号</th>
@@ -686,17 +623,6 @@
                                                  <div class="form-control-focus"> </div>
                                         </td>
 										<td class="form-group">
-												  <!-- <div  class="input-group date date-picker"
-														 data-date-format="yyyy-mm-dd"
-														data-date-viewmode="years" size="8">
-														<input type="text" class="form-control" size="8" readonly="" id="manufactureDate{{$index}}" ng-model="materiel.manufactureDate" name="manufactureDate"
-															> <span class="input-group-btn">
-															<button class="btn default " type="button">
-																<i class="fa fa-calendar"></i>
-															</button>
-														</span>
-														<span class="help-block"></span>
-													</div> -->
 													<input type="text" class="form-control date date-picker" data-date-format="yyyy-mm-dd"
 													data-date-viewmode="years" readonly="" id="manufactureDate{{$index}}" ng-model="materiel.manufactureDate" name="manufactureDate"
 														placeholder="" > 
@@ -711,28 +637,8 @@
                                                  <input type="text" class="form-control" id="deliverRemark{{$index}}" name="deliverRemark"   ng-model="materiel.deliverRemark" ng-hide="deliverAdd" >
                                                  <div class="form-control-focus"> </div>
 										</td>
-										<!-- <td class="form-group">
-                                                 <input type="text" class="form-control" id="acceptCount{{$index}}" name="acceptCount" data-delivercount="{{materiel.deliverCount}}"  ng-model="materiel.acceptCount" ng-hide="deliverAdd" >
-                                                 <div class="form-control-focus"> </div>
-										</td>
-										<td><span class="help-block"></span>
-											<span ng-if="materiel.deliverCount!=undefined && materiel.acceptCount!=undedined">{{materiel.deliverCount-materiel.acceptCount}}</span>
-										</td>
-										<td>
-                                                 <input type="text" class="form-control" id="takeRemark{{$index}}" name="takeRemark"  ng-model="materiel.takeRemark" ng-hide="deliverAdd" >
-                                                 <div class="form-control-focus"> </div>
-										</td> -->
-										<!-- <td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td> -->
 									</tr>
-									<tr>
+									<tr ng-if="orderMateriels!=null&&orderMateriels.length>0">
 										<td colspan="2" class="bold" align="right">合计：</td>
 										<td>{{calcTotalNum()}}{{materielCount}}</td>
 										<td></td>
@@ -742,8 +648,81 @@
 										<td>{{totalDeliverCount}}</td>
 										<td></td>
 									</tr>
-									<tr ng-if="orderMateriels==undefined||orderMateriels.length==0">
+									<tr ng-if="orderMateriels==null||orderMateriels.length==0">
 											<td colspan="12" align="center">暂无数据</td>
+									</tr>
+								</tbody>
+							</table>
+							
+							<table ng-if="otherMode" class="table table-striped table-bordered table-advance table-hover" id="deliveryMaterielTable">
+								<thead>
+									<tr>
+										<th  rowspan="2">物料编号</th>
+										<th  rowspan="2">物料名称</th>
+										<th  rowspan="2">规格型号</th>
+										<th  rowspan="2">单位</th>
+										<th style="min-width: 120px;" rowspan="2">批次号<span class="required2"> * </span></th>
+										<th style="min-width: 120px;" rowspan="2">生产日期<span class="required2"> * </span></th>
+										<th colspan="2" style="text-align: center;min-width: 100px;">发货</th>
+										<!-- <th colspan="3"  style="text-align: center;min-width: 100px;">收货</th> -->
+										<!-- <th colspan="3"  style="text-align: center;">检验</th>
+										<th colspan="5"  style="text-align: center;">入库</th>
+										<th rowspan="2">状态</th> -->
+									</tr>
+									<tr>
+										<!-- <th>订单数量</th> -->
+										<th>发货数量<span class="required2"> * </span></th>
+										<th style="min-width: 120px;">备注</th>
+										<!-- <th>实收数量<span class="required2"> * </span></th>
+										<th>拒收数量</th>
+										<th style="min-width: 120px;">备注</th> -->
+										<!-- <th>合格数量</th>
+										<th>不合格数量</th>
+										<th>备注</th>
+										<th>入库数量</th>
+										<th>未入数量</th>
+										<th>仓库</th>
+										<th>库位</th>
+										<th>备注</th> -->
+									</tr>
+								</thead>
+								<tbody > 
+									<tr ng-repeat="materiel in orderMateriels track by materiel.serialNum" repeat-done="repeatDone(this)">
+										<td><span class="help-block"></span>{{materiel.materiel.materielNum}}</td>
+										<td><span class="help-block"></span>{{materiel.materiel.materielName}}</td>
+										<td><span class="help-block"></span>{{materiel.materiel.specifications}}</td>
+										<td><span class="help-block"></span>{{materiel.materiel.unit}}</td>
+										<td class="form-group">
+                                                 <input type="text" class="form-control" id="batchNum{{$index}}" name="batchNum"  ng-model="materiel.batchNum" ng-hide="deliverAdd" >
+                                                 <div class="form-control-focus"> </div>
+                                        </td>
+										<td class="form-group">
+													<input type="text" class="form-control date date-picker" data-date-format="yyyy-mm-dd"
+													data-date-viewmode="years" readonly="" id="manufactureDate{{$index}}" ng-model="materiel.manufactureDate" name="manufactureDate"
+														placeholder="" > 
+													<span class="help-block"></span>
+										</td>
+										<!-- <td><span class="help-block"></span>{{materiel.amount}}</td> -->
+										<td class="form-group">
+                                                 <input type="text" class="form-control" id="deliverCount{{$index}}"  ng-model="materiel.deliverCount" ng-hide="deliverAdd" >
+                                                 <div class="form-control-focus"> </div>
+										</td>
+										<td class="form-group">
+                                                 <input type="text" class="form-control" id="deliverRemark{{$index}}" name="deliverRemark"   ng-model="materiel.deliverRemark" ng-hide="deliverAdd" >
+                                                 <div class="form-control-focus"> </div>
+										</td>
+									</tr>
+									<tr ng-if="orderMateriels!=null&&orderMateriels.length>0">
+										<td colspan="2" class="bold" align="right">合计：</td>
+										<td>{{calcTotalNum()}}{{materielCount}}</td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td>{{totalDeliverCount}}</td>
+										<td></td>
+									</tr>
+									<tr ng-if="orderMateriels==null||orderMateriels.length==0">
+											<td colspan="11" align="center">暂无数据</td>
 									</tr>
 								</tbody>
 							</table>
@@ -751,18 +730,6 @@
 					 <!-- </div> -->
 					 </div>
          			<!-- 物料信息END -->
-         			<!-- <div class="row">
-         				<div class="col-md-5"></div>
-         				<div class="col-md-1">
-         					 <button   ng-hide="deliverAdd" class="btn blue" ng-click="saveTakeDelivery()">
-                                            <i class="fa fa-check"></i> 确认收货 </button>
-         				</div>
-         				<div class="col-md-1">
-         					 <button   ng-hide="deliverAdd" class="btn red btn-outline" ng-click="cancelTakeDelivery()" onclick="return false;">
-                                            <i class="fa fa-undo"></i> 取消 </button>
-         				</div>
-         				<div class="col-md-5"></div>
-         			</div> -->
        			
        				</div>
     		</div>
@@ -772,3 +739,4 @@
 </div>
 <!-- END MAIN CONTENT -->
 <jsp:include page="selectBuyOrder.jsp"></jsp:include>
+<jsp:include page="../demandPlan/selectMateriel.jsp"></jsp:include>
