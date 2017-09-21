@@ -2450,6 +2450,9 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					if('paymentRecordC' == toState.name){
 						getTodoTaskLength('paymentRecordC', 'accountPayable');
 						getEndTaskLength('paymentRecordC', 'accountPayable');
+					}else if('takeDelivery' == toState.name){ //收货
+						getTodoTaskLength('takeDelivery', 'takeDelivery');
+						getEndTaskLength('takeDelivery', 'takeDelivery');
 					}else if('dashboard' == toState.name){
 						getTodoTaskLength('dashboard', 'All');
 						getEndTaskLength('dashboard', 'All');
