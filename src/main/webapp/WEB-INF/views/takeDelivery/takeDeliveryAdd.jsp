@@ -276,6 +276,7 @@
                                                     <div class="">
                                                     	<select class="bs-select form-control order" data-live-search="true"  id="dWarehouseSerial"  name="dWarehouseSerial" ng-model="deliver.warehouseSerial"  ng-change="getWarehouseName('deliver')" ng-hide="deliverAdd"  data-size="8">
 	                                                        <option value=""></option>
+	                                                        <option value="无">无</option>
 	                                                        <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
 	                                                    </select>
                                                         <div class="form-control-focus"> </div>
@@ -287,11 +288,11 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" > 仓库地址</label>
+                                                    <label class="control-label bold" > 发货地址</label>
                                                     <div class="">
-                                                        <!-- <input type="text" class="form-control" id="comName"  name="comName" ng-model="deliver.comName" ng-hide="deliverAdd" >
-                                                        <div class="form-control-focus"> </div> -->
-                                                         <input type="text" class="form-control"  value="{{deliver.warehouseName}}" disabled="disabled">
+                                                        <input type="text" class="form-control" id="deliverAddress"  name="deliverAddress" ng-model="deliver.deliverAddress" ng-hide="deliverAdd" >
+                                                        <div class="form-control-focus"> </div> 
+                                                         <!-- <input type="text" class="form-control"  value="{{deliver.warehouseName}}" disabled="disabled"> -->
                                                          <!-- <p class="control-label left" >{{deliver.warehouseName}}</p> -->
                                                     </div>
                                             </div>
@@ -557,6 +558,7 @@
                                                     <div class="">
                                                     	<select class="bs-select form-control order" data-live-search="true"  id="warehouseSerial"  name="warehouseSerial" ng-model="takeDeliver.warehouseSerial" ng-change="getWarehouseName()" ng-hide="deliverAdd"  data-size="8">
 	                                                        <option value=""></option>
+	                                                        <option value="无">无</option>
 	                                                        <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
 	                                                    </select>
                                                         <div class="form-control-focus"> </div>
@@ -568,11 +570,11 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" >仓库地址</label>
+                                                    <label class="control-label bold" >收货地址</label>
                                                     <div class="">
-                                                       <!--  <input type="text" class="form-control" id="comName"  name="comName" ng-model="deliver.comName" ng-hide="deliverAdd" >
-                                                        <div class="form-control-focus"> </div> -->
-                                                        <input type="text" class="form-control" value="{{takeDeliver.warehouseName}}" disabled="disabled">
+                                                       <input type="text" class="form-control" id="takeDeliverAddress"  name="takeDeliverAddress" ng-model="takeDeliver.takeDeliverAddress" ng-hide="deliverAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                       <!--  <input type="text" class="form-control" value="{{takeDeliver.warehouseName}}" disabled="disabled"> -->
                                                         <!--  <p class="control-label left">{{takeDeliver.warehouseName}}</p> -->
                                                     </div>
                                             </div>
@@ -651,7 +653,7 @@
 										<th  rowspan="2">规格型号</th>
 										<th  rowspan="2">单位</th>
 										<th style="min-width: 120px;" rowspan="2">批次号<span class="required2"> * </span></th>
-										<th style="min-width: 120px;" rowspan="2">生产日期<span class="required2"> * </span></th>
+										<th style="min-width: 120px;" rowspan="2">生产日期</th>
 										<th colspan="3" style="text-align: center;min-width: 100px;">发货</th>
 										<!-- <th colspan="3"  style="text-align: center;min-width: 100px;">收货</th> -->
 										<!-- <th colspan="3"  style="text-align: center;">检验</th>
@@ -698,7 +700,7 @@
 														<span class="help-block"></span>
 													</div> -->
 													<input type="text" class="form-control date date-picker" data-date-format="yyyy-mm-dd"
-													data-date-viewmode="years" readonly="" id="manufactureDate{{$index}}" ng-model="materiel.manufactureDate" name="manufactureDate"
+													data-date-viewmode="years" readonly="" id="manufactureDate{{$index}}" ng-model="materiel.manufactureDate" 
 														placeholder="" > 
 													<span class="help-block"></span>
 										</td>

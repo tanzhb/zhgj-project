@@ -36,6 +36,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    		playWarehouseDateSetting();
 	 		}else if($location.path()=="/takeDeliveryView"||$location.path()=="/toTakeDelivery"||$location.path()=="/takeDeliveryAudit"||$location.path()=="/takeDeliveryAdjustment"){
 	 				takeDeliveryInfo($stateParams.serialNum,"edit",$stateParams.taskId, $stateParams.comments);
+	 				getCurrentUser();
 	 				//setDefualtData('takeDelivery');//设置初始值
 	 		}else{
 	 			var type = handle.getCookie("d_type");
@@ -132,8 +133,13 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 			var getCurrentUser = function(){
 				var promise = commonService.getCurrentUser();
 				promise.then(function(data){
-					$scope.deliver.maker = data.data.userName;
-					$scope.takeDeliver.taker = data.data.userName;
+					$scope.user = data.data;
+					if($location.path()=="/toTakeDelivery"){
+						$scope.takeDeliver.taker = data.data.userName;
+					}else{
+						$scope.deliver.maker = data.data.userName;
+					}
+					
 				},function(data){
 					//调用承诺接口reject();
 				});
@@ -189,7 +195,14 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		        	$scope.deliver.warehouseSerial = data.data.warehouse.serialNum;
 		        	$scope.deliver.warehouseName = data.data.warehouse.address;
 	        	}
-	        	debugger;
+	        	if($scope.deliver.takeDelivery.warehouse==null){
+	        		$scope.deliver.takeDelivery.warehouse={};
+	        		$scope.deliver.takeDelivery.warehouse.warehouseName='无';
+	        	}
+	        	if($scope.deliver.warehouse==null){
+	        		$scope.deliver.warehouse={};
+	        		$scope.deliver.warehouse.warehouseName='无';
+	        	}
 	        	if(isNull($scope.deliver.receiver)){
 	        		$scope.deliver.receiverName = "中航能科（上海）能源科技有限公司";
 	        	}
@@ -219,7 +232,10 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    		 		$("#playArrivalDate").datepicker('setDate',playArrivalDate);
 	    		    	$("#playWarehouseDate").datepicker('setStartDate',playArrivalDate);
 	    		    }
-	    		 	$scope.takeDeliver.actualDate = timeStamp2ShortString(new Date());
+	    		 	if($location.path()=="/toTakeDelivery"){
+	    		 		$scope.takeDeliver.actualDate = timeStamp2ShortString(new Date());
+	    		 		$scope.takeDeliver.taker = $scope.user.userName;
+	    		 	}
 	        	}
 	        	if(!isNull(taskId)){
 	        		$("#serialNum").val(serialNum);//赋值给隐藏input，通过和不通过时调用
@@ -332,14 +348,22 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 			}
 			
 			$scope.getWarehouseName = function(type){
-				for(var i in $scope.warehouses){
+				for(var i in $scope.warehouses){debugger;
 					if(type=="deliver"){
+						if($scope.deliver.warehouseSerial=='无'){
+							$scope.deliver.deliverAddress = '';
+							return;
+						}
 						if($scope.warehouses[i].serialNum == $scope.deliver.warehouseSerial){
-							$scope.deliver.warehouseName = $scope.warehouses[i].address;
+							$scope.deliver.deliverAddress = $scope.warehouses[i].address;
 						}
 					}else{
+						if($scope.takeDeliver.warehouseSerial=="无"){
+							$scope.takeDeliver.takeDeliverAddress = '';
+							return;
+						}
 						if($scope.warehouses[i].serialNum == $scope.takeDeliver.warehouseSerial){
-							$scope.takeDeliver.warehouseName = $scope.warehouses[i].address;
+							$scope.takeDeliver.takeDeliverAddress = $scope.warehouses[i].address;
 						}
 					}
 					
@@ -395,10 +419,10 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					toastr.warning("请选择您要删除的记录");
 					return;
 				}
-				if(table.row('.active').data().status > 2){
+				/*if(table.row('.active').data().status > 2){
 					showToastr('toast-top-center', 'warning', '存在已经进入流程审批的收货单，不能删除！');
 					return;
-				}
+				}*/
 	        	handle.confirm("确定删除吗？",function(){
 	        		var ids = '';
 					// Iterate over all checkboxes in the table
