@@ -36,6 +36,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    		playWarehouseDateSetting();
 	 		}else if($location.path()=="/takeDeliveryView"||$location.path()=="/toTakeDelivery"||$location.path()=="/takeDeliveryAudit"||$location.path()=="/takeDeliveryAdjustment"){
 	 				takeDeliveryInfo($stateParams.serialNum,"edit",$stateParams.taskId, $stateParams.comments);
+	 				getCurrentUser();
 	 				//setDefualtData('takeDelivery');//设置初始值
 	 		}else{
 	 			var type = handle.getCookie("d_type");
@@ -132,8 +133,13 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 			var getCurrentUser = function(){
 				var promise = commonService.getCurrentUser();
 				promise.then(function(data){
-					$scope.deliver.maker = data.data.userName;
-					$scope.takeDeliver.taker = data.data.userName;
+					$scope.user = data.data;
+					if($location.path()=="/toTakeDelivery"){
+						$scope.takeDeliver.taker = data.data.userName;
+					}else{
+						$scope.deliver.maker = data.data.userName;
+					}
+					
 				},function(data){
 					//调用承诺接口reject();
 				});
@@ -188,8 +194,6 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        	if(data.data.warehouse != null){
 		        	$scope.deliver.warehouseSerial = data.data.warehouse.serialNum;
 		        	$scope.deliver.warehouseName = data.data.warehouse.address;
-	        	}else{
-	        		$scope.deliver.warehouseName = '无';
 	        	}
 	        	if($scope.deliver.takeDelivery.warehouse==null){
 	        		$scope.deliver.takeDelivery.warehouse={};
@@ -228,7 +232,10 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    		 		$("#playArrivalDate").datepicker('setDate',playArrivalDate);
 	    		    	$("#playWarehouseDate").datepicker('setStartDate',playArrivalDate);
 	    		    }
-	    		 	$scope.takeDeliver.actualDate = timeStamp2ShortString(new Date());
+	    		 	if($location.path()=="/toTakeDelivery"){
+	    		 		$scope.takeDeliver.actualDate = timeStamp2ShortString(new Date());
+	    		 		$scope.takeDeliver.taker = $scope.user.userName;
+	    		 	}
 	        	}
 	        	if(!isNull(taskId)){
 	        		$("#serialNum").val(serialNum);//赋值给隐藏input，通过和不通过时调用

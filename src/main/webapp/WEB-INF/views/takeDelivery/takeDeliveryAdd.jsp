@@ -653,7 +653,7 @@
 										<th  rowspan="2">规格型号</th>
 										<th  rowspan="2">单位</th>
 										<th style="min-width: 120px;" rowspan="2">批次号<span class="required2"> * </span></th>
-										<th style="min-width: 120px;" rowspan="2">生产日期<span class="required2"> * </span></th>
+										<th style="min-width: 120px;" rowspan="2">生产日期</th>
 										<th colspan="3" style="text-align: center;min-width: 100px;">发货</th>
 										<!-- <th colspan="3"  style="text-align: center;min-width: 100px;">收货</th> -->
 										<!-- <th colspan="3"  style="text-align: center;">检验</th>
@@ -700,7 +700,7 @@
 														<span class="help-block"></span>
 													</div> -->
 													<input type="text" class="form-control date date-picker" data-date-format="yyyy-mm-dd"
-													data-date-viewmode="years" readonly="" id="manufactureDate{{$index}}" ng-model="materiel.manufactureDate" name="manufactureDate"
+													data-date-viewmode="years" readonly="" id="manufactureDate{{$index}}" ng-model="materiel.manufactureDate" 
 														placeholder="" > 
 													<span class="help-block"></span>
 										</td>

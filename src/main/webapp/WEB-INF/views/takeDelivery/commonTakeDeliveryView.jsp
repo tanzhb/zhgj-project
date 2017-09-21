@@ -408,7 +408,7 @@
 						<div class="form-group form-md-line-input">
 							<label class="col-md-4 control-label">收货地址：</label>
 							<div class="col-md-8">
-								<p class="control-label left">{{deliver.takeDelivery.takeDeliveryAddress}}</p>
+								<p class="control-label left">{{deliver.takeDelivery.takeDeliverAddress}}</p>
 							</div>
 						</div>
 					</div>
