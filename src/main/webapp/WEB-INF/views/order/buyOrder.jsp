@@ -44,9 +44,9 @@
 				<li class="active"><a href="#apply" data-toggle="tab"
 					ng-click="toApply()"> 订单 </a></li>
 				<li><a href="#daiban" data-toggle="tab" ng-click="toDaiban()">
-						待办 </a></li>
+						待办 <dbQuantity/></a></li>
 				<li><a href="#yiban" data-toggle="tab" ng-click="toYiban()">
-						已办 </a></li>
+						已办 <ybQuantity/></a></li>
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane active" id="apply">

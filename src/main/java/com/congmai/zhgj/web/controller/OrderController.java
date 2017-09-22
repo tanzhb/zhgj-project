@@ -197,7 +197,7 @@ public class OrderController {
 	private String startBuyOrderProcess(@RequestBody String params) {
     	String flag = "0"; //默认失败
     	OrderInfo orderInfo = json2Order(params);
-    	
+    	orderInfo.setUpdateTime(new Date());
     	orderService.update(orderInfo);//更新备注
     	
 		//启动订单审批测试流程-start
@@ -215,7 +215,7 @@ public class OrderController {
 		try {
 			String processInstanceId = this.processService.startBuyOrderInfo(orderInfo);
 //                message.setStatus(Boolean.TRUE);
-//    			message.setMessage("请假流程已启动，流程ID：" + processInstanceId);
+//    			message.setMessage("订单流程已启动，流程ID：" + processInstanceId);
 		    logger.info("processInstanceId: "+processInstanceId);
 		    flag = "1";
 		} catch (ActivitiException e) {
@@ -224,14 +224,14 @@ public class OrderController {
 		        logger.warn("没有部署流程!", e);
 //        			message.setMessage("没有部署流程，请联系系统管理员，在[流程定义]中部署相应流程文件！");
 		    } else {
-		        logger.error("启动请假流程失败：", e);
-//                    message.setMessage("启动请假流程失败，系统内部错误！");
+		        logger.error("启动订单流程失败：", e);
+//                    message.setMessage("启动订单流程失败，系统内部错误！");
 		    }
 		    throw e;
 		} catch (Exception e) {
-		    logger.error("启动请假流程失败：", e);
+		    logger.error("启动订单流程失败：", e);
 //                message.setStatus(Boolean.FALSE);
-//                message.setMessage("启动请假流程失败，系统内部错误！");
+//                message.setMessage("启动订单流程失败，系统内部错误！");
 		    throw e;
 		}
         //启动订单审批测试流程-end
@@ -257,7 +257,7 @@ public class OrderController {
 		User user = UserUtil.getUserFromSession();
 		orderInfo.setUserId(user.getUserId());
 		orderInfo.setUser_name(user.getUserName());
-		orderInfo.setTitle(user.getUserName()+orderInfo.getOrderNum()+" 的订单申请");
+		orderInfo.setTitle(user.getUserName()+" 的订单申请");
 		orderInfo.setBusinessType(BaseVO.SALEORDER); 			//业务类型：采购订单
 		orderInfo.setStatus(BaseVO.PENDING);					//审批中
     	orderInfo.setApplyDate(new Date());
@@ -268,7 +268,7 @@ public class OrderController {
 		try {
 			String processInstanceId = this.processService.startSaleOrderInfo(orderInfo);
 //                message.setStatus(Boolean.TRUE);
-//    			message.setMessage("请假流程已启动，流程ID：" + processInstanceId);
+//    			message.setMessage("订单流程已启动，流程ID：" + processInstanceId);
 		    logger.info("processInstanceId: "+processInstanceId);
 		    flag = "1";
 		} catch (ActivitiException e) {
@@ -277,14 +277,14 @@ public class OrderController {
 		        logger.warn("没有部署流程!", e);
 //        			message.setMessage("没有部署流程，请联系系统管理员，在[流程定义]中部署相应流程文件！");
 		    } else {
-		        logger.error("启动请假流程失败：", e);
-//                    message.setMessage("启动请假流程失败，系统内部错误！");
+		        logger.error("启动订单流程失败：", e);
+//                    message.setMessage("启动订单流程失败，系统内部错误！");
 		    }
 		    throw e;
 		} catch (Exception e) {
-		    logger.error("启动请假流程失败：", e);
+		    logger.error("启动订单流程失败：", e);
 //                message.setStatus(Boolean.FALSE);
-//                message.setMessage("启动请假流程失败，系统内部错误！");
+//                message.setMessage("启动订单流程失败，系统内部错误！");
 		    throw e;
 		}
         //启动订单审批测试流程-end
@@ -398,7 +398,7 @@ public class OrderController {
 	
     
     /**
-	 * 调整请假申请
+	 * 调整订单申请
 	 * @param vacation
 	 * @param taskId
 	 * @param processInstanceId
@@ -415,7 +415,8 @@ public class OrderController {
 			@RequestParam("processInstanceId") String processInstanceId,
 			@RequestParam("reApply") Boolean reApply,
 			@RequestParam("orderId") String orderId,
-			@RequestParam("reason") String reason) throws Exception{
+			@RequestParam("reason") String reason,
+			@RequestParam("orderType") String orderType) throws Exception{
 		String result = "";
 		User user = UserUtil.getUserFromSession();
 
@@ -425,22 +426,27 @@ public class OrderController {
         Map<String, Object> variables = new HashMap<String, Object>();
         orderInfo.setUserId(user.getUserId());
         orderInfo.setUser_name(user.getUserName());
-        orderInfo.setBusinessType(BaseVO.BUYORDER);
+        if(BaseVO.SALEORDER.equals(orderType)){
+        	orderInfo.setBusinessType(BaseVO.SALEORDER);
+        }else{
+        	orderInfo.setBusinessType(BaseVO.BUYORDER);
+        }
+        
         orderInfo.setApplyDate(new Date());
         orderInfo.setBusinessKey(orderId);
         orderInfo.setProcessInstanceId(processInstanceId);
         String content = "";
         if(reApply){
-        	//修改请假申请
-        	orderInfo.setTitle(user.getUserName()+" 的请假申请！");
+        	//修改订单申请
+        	orderInfo.setTitle(user.getUserName()+" 的订单申请！");
         	orderInfo.setStatus(BaseVO.PENDING);
 	        content = "重新申请";
-	        result = "任务办理完成，请假申请已重新提交！";
+	        result = "任务办理完成，订单申请已重新提交！";
         }else{
-        	orderInfo.setTitle(user.getUserName()+" 的请假申请已取消！");
+        	orderInfo.setTitle(user.getUserName()+" 的订单申请已取消！");
         	orderInfo.setStatus(BaseVO.APPROVAL_FAILED);
         	content = "取消申请";
-        	result = "任务办理完成，已经取消您的请假申请！";
+        	result = "任务办理完成，已经取消您的订单申请！";
         }
         try {
     		this.processBaseService.update(orderInfo);

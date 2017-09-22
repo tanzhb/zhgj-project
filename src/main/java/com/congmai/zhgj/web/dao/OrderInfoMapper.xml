@@ -30,6 +30,7 @@
     <result column="rateAndAmount" property="rateAndAmount" jdbcType="VARCHAR" />
     <result column="otherAmount" property="otherAmount" jdbcType="VARCHAR" />
     <result column="orderAmount" property="orderAmount" jdbcType="VARCHAR" />
+    <result column="contractContent" property="contractContent" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="orderRemark" property="orderRemark" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
@@ -109,7 +110,7 @@
 materielAmount,
 rateAmount,
 rateAndAmount,
-otherAmount, remark, orderRemark,
+otherAmount, contractContent,remark, orderRemark,
     
     
     
@@ -134,7 +135,7 @@ otherAmount, remark, orderRemark,
     select
     orderInfo.serialNum, orderInfo.contractSerial, orderInfo.supplyComId, orderInfo.buyComId, orderInfo.orderNum, orderInfo.orderType,orderInfo.tradeType, orderInfo.seller, orderInfo.entrustParty, 
     orderInfo.serviceModel, orderInfo.demandPlanSerial, orderInfo.saleApplySerial, orderInfo.settlementClause, orderInfo.orderSerial, orderInfo.deliveryMode, orderInfo.materielCount,orderInfo.orderAmount,
-    orderInfo.transportMode, orderInfo.orderDate,orderInfo.makeDate, orderInfo.maker, orderInfo.rate, orderInfo.currency, orderInfo.exchangeRate, orderInfo.remark,orderRemark, orderInfo.status, orderInfo.delFlg, 
+    orderInfo.transportMode, orderInfo.orderDate,orderInfo.makeDate, orderInfo.maker, orderInfo.rate, orderInfo.currency, orderInfo.exchangeRate, orderInfo.contractContent,orderInfo.remark,orderRemark, orderInfo.status, orderInfo.delFlg, 
     orderInfo.creator, orderInfo.createTime, orderInfo.updater, orderInfo.updateTime
     from orderInfo
     left join contract on orderInfo.contractSerial = contract.serialNum
@@ -174,7 +175,7 @@ otherAmount, remark, orderRemark,
     select
     orderInfo.serialNum, orderInfo.contractSerial, orderInfo.supplyComId, orderInfo.buyComId, orderInfo.orderNum, orderInfo.orderType,orderInfo.tradeType, orderInfo.seller, orderInfo.entrustParty, 
     orderInfo.serviceModel, orderInfo.demandPlanSerial, orderInfo.saleApplySerial, orderInfo.settlementClause, orderInfo.orderSerial, orderInfo.deliveryMode, orderInfo.materielCount,orderInfo.orderAmount,
-    orderInfo.transportMode, orderInfo.orderDate,orderInfo.makeDate, orderInfo.maker, orderInfo.rate, orderInfo.currency, orderInfo.exchangeRate, orderInfo.remark,orderInfo.orderRemark, orderInfo.status, orderInfo.delFlg, 
+    orderInfo.transportMode, orderInfo.orderDate,orderInfo.makeDate, orderInfo.maker, orderInfo.rate, orderInfo.currency, orderInfo.exchangeRate, orderInfo.contractContent, orderInfo.remark,orderInfo.orderRemark, orderInfo.status, orderInfo.delFlg, 
     orderInfo.creator, orderInfo.createTime, orderInfo.updater, orderInfo.updateTime
     from orderInfo
     left join contract on orderInfo.contractSerial = contract.serialNum
@@ -236,7 +237,7 @@ otherAmount, remark, orderRemark,
 materielAmount,
 rateAmount,
 rateAndAmount,
-otherAmount, orderAmount, 
+otherAmount, orderAmount,contractContent, 
       remark,orderRemark, status,
       creator, createTime, updater, 
       updateTime)
@@ -252,7 +253,7 @@ otherAmount, orderAmount,
       #{rateAmount,jdbcType=VARCHAR}, 
       #{rateAndAmount,jdbcType=VARCHAR}, 
       #{otherAmount,jdbcType=VARCHAR}, 
-		#{orderAmount,jdbcType=VARCHAR}, 
+		#{orderAmount,jdbcType=VARCHAR},#{contractContent,jdbcType=VARCHAR},
       #{remark,jdbcType=VARCHAR},#{orderRemark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
       #{updateTime,jdbcType=TIMESTAMP})
@@ -343,6 +344,9 @@ otherAmount, orderAmount,
       </if>
       <if test="orderAmount != null" >
         orderAmount,
+      </if>
+      <if test="contractContent != null" >
+        contractContent,
       </if>
       <if test="remark != null" >
         remark,
@@ -453,6 +457,9 @@ otherAmount, orderAmount,
       </if>
       <if test="orderAmount != null" >
         #{orderAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="contractContent != null" >
+        #{contractContent,jdbcType=VARCHAR},
       </if>
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
@@ -573,8 +580,8 @@ otherAmount, orderAmount,
       <if test="record.orderAmount != null" >
         orderAmount = #{record.orderAmount,jdbcType=VARCHAR},
       </if>
-      <if test="record.remark != null" >
-        remark = #{record.remark,jdbcType=VARCHAR},
+      <if test="record.contractContent != null" >
+        remark = #{record.contractContent,jdbcType=VARCHAR},
       </if>
       <if test="record.orderRemark != null" >
         remark = #{record.orderRemark,jdbcType=VARCHAR},
@@ -632,6 +639,7 @@ otherAmount, orderAmount,
       rateAndAmount = #{record.rateAndAmount,jdbcType=VARCHAR},
       otherAmount = #{record.otherAmount,jdbcType=VARCHAR},
       orderAmount = #{record.orderAmount,jdbcType=VARCHAR},
+      contractContent = #{record.contractContent,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       orderRemark = #{record.orderRemark,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
@@ -728,6 +736,9 @@ otherAmount, orderAmount,
       <if test="orderAmount != null" >
         orderAmount = #{orderAmount,jdbcType=VARCHAR},
       </if>
+      <if test="contractContent != null" >
+        contractContent = #{contractContent,jdbcType=VARCHAR},
+      </if>
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
       </if>
@@ -784,6 +795,7 @@ otherAmount, orderAmount,
       rateAndAmount = #{rateAndAmount,jdbcType=VARCHAR},
       otherAmount = #{otherAmount,jdbcType=VARCHAR},
       orderAmount = #{orderAmount,jdbcType=VARCHAR},
+      contractContent = #{contractContent,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       orderRemark = #{orderRemark,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},

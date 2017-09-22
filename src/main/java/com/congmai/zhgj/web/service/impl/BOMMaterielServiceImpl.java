@@ -78,7 +78,9 @@ public class BOMMaterielServiceImpl implements BOMMaterielService {
 		materielService.updateVersion(materiel);
 		
 		for(BOMMateriel b:BOM){
-			BOMMaterielMapper.insert(b);
+			if(b.getMaterielSerial()!=null){
+				BOMMaterielMapper.insert(b);
+			}
 		}
 		
 	}

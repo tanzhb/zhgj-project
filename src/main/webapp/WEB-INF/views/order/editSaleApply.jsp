@@ -15,7 +15,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a>申请</a>
+            <a>重新编辑</a>
         </li>
     </ul>
     <div class="page-toolbar">
@@ -39,9 +39,40 @@
 				            </div>
 					</div> -->
            		 <div class="portlet-body">
-					<jsp:include  page="viewBuyOrderBase.jsp"/>
-					
-					<!-- //申请原因 -->
+					<jsp:include  page="editSaleOrderBase.jsp"/>
+      			</div>
+      			   <div class="row">
+						<div class="col-md-12">
+							<p>
+								<div class="portlet box green">
+	                                <div class="portlet-title">
+	                                    <div class="caption">
+	                                        <i class="fa fa-globe"></i>评论 </div>
+	                                </div>
+	                                <div class="portlet-body">
+	                                    <table class="table table-striped table-bordered table-hover order-column" id="pinglun">
+	                                        <thead>
+	                                            <tr>
+	                                                <th>评论人</th>
+	                                                <th>评论时间</th>
+	                                                <th>评论内容</th>
+	                                            </tr>
+	                                        </thead>
+	                                        <tbody id = "comment_audit">	
+                                            </tbody>
+	                                    </table>
+	                                </div>
+	                            </div>
+							</p>
+							
+							<p>
+								<input type="hidden" name="serialNum" id="serialNum" value="" />
+								<input type="hidden" name="taskId" id="taskId" value="" />
+								<input type="hidden" name="processInstanceId" id="processInstanceId" value="" />
+							</p>
+						</div>
+					</div>
+      			<!-- //申请原因 -->
 					<div class="portlet-body form">
 					     <form >
 						     <div class="form-body">
@@ -50,9 +81,9 @@
 			                          		<div class="form-group ">
 				                              	<label class="control-label bold">原因：</label>
 				                                <div class="">
-				                                  <input type="text" name="remark"  class="form-control"  ng-model="buyOrder.remark"  >
+				                                  <input type="text" name="remark" class="form-control"  ng-model="saleOrder.remark"  >
 			                                      <div class="form-control-focus"> </div>
-			                                      <span class="help-block" >请输入原因</span>
+			                                      <span class="help-block">请重新输入原因</span>
 				                               	</div>
 			                               </div>
 			                          </div>
@@ -62,12 +93,12 @@
 		            </div>
 		            <div class="portlet-title">
 			               <div class="tools">
-			               		<button type="button" ng-click="confirmBuyApply()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">提交申请</button>
+			               		<button type="button" ng-click="replyOrder()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">重新申请</button>
+			               		<button type="button" ng-click="cancelApply()" ng-hide="orderStatusInput" class="btn red btn-circle  btn-sm">取消申请</button>
 				                <button type="button" ng-click="cancelPage()" class="btn default btn-circle  btn-sm"><i class="fa fa-undo"></i> 取消 </button>
 				            </div>
 					</div>
-      			</div>
 			</div>
 	</div>
 </div>
-
+<jsp:include  page="selectMateriel.jsp"/> <!-- 选择供应物料 -->

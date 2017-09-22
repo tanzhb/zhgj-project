@@ -15,7 +15,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a>申请</a>
+            <a>查看</a>
         </li>
     </ul>
     <div class="page-toolbar">
@@ -39,30 +39,10 @@
 				            </div>
 					</div> -->
            		 <div class="portlet-body">
-					<jsp:include  page="viewBuyOrderBase.jsp"/>
+					<jsp:include  page="viewSaleOrderBase.jsp"/>
 					
-					<!-- //申请原因 -->
-					<div class="portlet-body form">
-					     <form >
-						     <div class="form-body">
-			                      <div class="row">
-			                          <div class="col-md-8">
-			                          		<div class="form-group ">
-				                              	<label class="control-label bold">原因：</label>
-				                                <div class="">
-				                                  <input type="text" name="remark"  class="form-control"  ng-model="buyOrder.remark"  >
-			                                      <div class="form-control-focus"> </div>
-			                                      <span class="help-block" >请输入原因</span>
-				                               	</div>
-			                               </div>
-			                          </div>
-			                      </div>
-			                  </div>
-			                </form>
-		            </div>
 		            <div class="portlet-title">
 			               <div class="tools">
-			               		<button type="button" ng-click="confirmBuyApply()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">提交申请</button>
 				                <button type="button" ng-click="cancelPage()" class="btn default btn-circle  btn-sm"><i class="fa fa-undo"></i> 取消 </button>
 				            </div>
 					</div>

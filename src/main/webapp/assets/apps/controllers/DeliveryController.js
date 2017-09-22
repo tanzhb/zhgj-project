@@ -543,6 +543,10 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 																		return '待收货';
 																	}else if(data=='APPROVAL_FAILED'){
 																		return '审批失败';
+																	}else if(data=='4'){
+																		return '已收货';
+																	}else{
+																		return '';
 																	}
 							                            		}else{
 							                            			return "";
@@ -1137,7 +1141,45 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		 );
 	        	
 	        }; 
+	        
+	      //查询编辑时的发货信息
+	        $scope.getDeliveryEditInfo  = function(serialNumEdit, ids, comments) {
+	        	DeliveryService.getDeliveryInfo(serialNumEdit).then(
+	          		     function(data){
+	          		    	$scope.delivery=data.delivery;
+	          		    	if($scope.delivery.supplyComId!=null){
+	          		    		$scope.supplyComId=$scope.delivery.supplyComId;
+	          		    		$scope.shipper=$scope.delivery.shipper;
+	          		    	}
+	          		    	$scope.deliveryMaterielE=data.deliveryMateriels;
+	          		    	$scope.materielCount=data.deliveryMateriels.length;
+	          		    	length=data.deliveryMateriels.length;
+	          		    	$("#serialNum").val(serialNumEdit);//赋值给隐藏input，通过和不通过时调用
+	    					$("#taskId").val(ids);//赋值给隐藏input，通过和不通过时调用
+	    					
+	    					if(comments == ""){
+	    						$("#comment_audit").html( "无评论");
+	    					}else{ $("#comment_audit").html(comments);
+	          		     }
+	          		     },
+	          		     function(error){
+	          		         $scope.error = error;
+	          		     }
+	          		 );
+	        };
 			
+	        var getTotalDeliveryCountEdit=function(length){
+	        	var totalCount=parseInt(0);
+	        	var check=/^[1-9]\d*|0$/;
+	        	for(var i=0;i<length;i++){
+	        		var count=parseInt($("input[name='deliverCount"+i+"'").val());
+	        		if($.trim(count)!=""&&count!=null&&check.test(count)){
+	        			totalCount=totalCount+count;
+	        		}
+	        	}
+	        	$scope.totalDeliveryCount=totalCount;
+	        }
+	        
 	        
 	        $scope.getTotalDeliveryCount=function(){
 	        	var totalCount=parseInt(0);
@@ -1185,29 +1227,6 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			          		 );
 			        };
 			        
-			        //查询编辑时的发货信息
-			        $scope.getDeliveryEditInfo  = function(serialNumEdit, ids, comments) {
-			        	DeliveryService.getDeliveryInfo(serialNumEdit).then(
-			          		     function(data){
-			          		    	$scope.delivery=data.delivery;
-			          		    	if($scope.delivery.supplyComId!=null){
-			          		    		$scope.supplyComId=$scope.delivery.supplyComId;
-			          		    		$scope.shipper=$scope.delivery.shipper;
-			          		    	}
-			          		    	$scope.deliveryMaterielE=data.deliveryMateriels;
-			          		    	$("#serialNum").val(serialNumEdit);//赋值给隐藏input，通过和不通过时调用
-			    					$("#taskId").val(ids);//赋值给隐藏input，通过和不通过时调用
-			    					
-			    					if(comments == ""){
-			    						$("#comment_audit").html( "无评论");
-			    					}else{ $("#comment_audit").html(comments);
-			          		     }
-			          		     },
-			          		     function(error){
-			          		         $scope.error = error;
-			          		     }
-			          		 );
-			        };
 			        
 			        //通过选择发货仓库改变地址（新增）
 			        $scope.selectAddress=function(){

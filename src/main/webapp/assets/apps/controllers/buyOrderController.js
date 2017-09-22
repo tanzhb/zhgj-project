@@ -89,6 +89,9 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		dateSelectSetting();//日期选择限制
             		// 加载数据
                 	initSuppliers();
+                	//合同内容
+                	$scope.buyOrder.contractContent = '111100';
+                	$scope.initContractContent();
             	}
             	
             	$scope.noShow = true;
@@ -161,14 +164,14 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	//重新申请
 	$scope.replyOrder = function() {
 	    var mydata={"processInstanceId":$("#processInstanceId").val(),
-				"reApply":true,"orderId":$scope.buyOrder.serialNum,"reason":$scope.buyOrder.remark};
+				"reApply":true,"orderId":$scope.buyOrder.serialNum,"reason":$scope.buyOrder.remark,"orderType":'buyOrder'};
 		var _url = ctx + "rest/order/modifyOrder/" + $("#taskId").val();
 		doOrder(_url, mydata, 'modify');
 	};
 	//取消申请
 	$scope.cancelApply = function() {
 	     var mydata={"processInstanceId":$("#processInstanceId").val(),
-				"reApply":false,"orderId":$scope.buyOrder.serialNum,"reason":$scope.buyOrder.remark};
+				"reApply":false,"orderId":$scope.buyOrder.serialNum,"reason":$scope.buyOrder.remark,"orderType":'buyOrder'};
 		var _url = ctx + "rest/order/modifyOrder/" + $("#taskId").val();
 		doOrder(_url, mydata, 'modify' );
 	};
@@ -296,7 +299,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 /*
  * fixedHeader: {//固定表头、表底 header: !0, footer: !0, headerOffset: a },
  */
-                order: [[1, "asc"]],// 默认排序列及排序方式
+                order: [[9, "desc"]],// 默认排序列及排序方式
                 searching: true,// 是否过滤检索
                 ordering:  true,// 是否排序
                 lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
@@ -626,7 +629,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 		};
 		
 		$scope.editBuyOrder  = function() {// 进入编辑页面
-        	var ids = '';
+        	/*var ids = '';
     		// Iterate over all checkboxes in the table
     		table.$('input[type="checkbox"]').each(
     				function() {
@@ -647,9 +650,16 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     			toastr.warning('请选择一个订单！');return;
     		}else if(ids=='more'){
     			toastr.warning('只能选择一个订单！');return;
+    		}*/
+    		if(table.rows('.active').data().length != 1){
+    			showToastr('toast-top-center', 'warning', '请选择一个订单！')
+    		}else{
+    			var processBase = table.row('.active').data().processBase;
+    			if(processBase != null){
+    				showToastr('toast-top-center', 'warning', '该订单已发起流程审批，不能修改！')
+    			}else $state.go('addBuyOrder',{serialNum:table.row('.active').data().serialNum});
     		}
     		
-    		$state.go("addBuyOrder",{serialNum:ids});
         };
         
         
@@ -910,7 +920,11 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     						$("#comment_audit").html( "<tr><td colspan='3' align='center'>无内容</td></tr>");
     					}else $("#comment_audit").html(comments);
     					
-    					
+    					//初始化合同内容
+                    	if(isNull($scope.buyOrder.contractContent)){
+                    		$scope.buyOrder.contractContent = '111100';
+                    	}
+                    	$scope.initContractContent();
           		     },
           		     function(error){
           		         $scope.error = error;
@@ -1441,7 +1455,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	        				}
 	        			}
 	        		}
-	        		if(!isNull(materiel.supplyMaterielSerial)){
+	        		if(!isNull(materiel.serialNum)){
 	        			var promise = orderService.deleteOrderMateriel(materiel.serialNum);
 		        		promise.then(function(data){
 		        			if(data.data == "1"){
@@ -1915,8 +1929,15 @@ var e = $("#form_clauseSettlement"),
    	            errorClass: "help-block help-block-error",
    	            focusInvalid: !1,
    	            ignore: "",
-   	            messages: {},
-   	        	rules: {},
+   	      messages: {
+          	deliveryMode:{required:"提货方式不能为空！"}
+          },
+      	rules: {
+      		deliveryMode: {required: !0,maxlength: 20}
+      			},
+      		invalidHandler: function(e, t) {
+              i.hide(), r.show(), App.scrollTo(r, -200)
+          },
    	        		invalidHandler: function(e, t) {
    	                i.hide(), r.show(), App.scrollTo(r, -200)
    	            },
@@ -2512,7 +2533,7 @@ var e = $("#form_clauseSettlement"),
 		       
 		       $scope.arithmeticRateUnit  = function(scope) {//计算含税销售单价
 			       	if(scope.orderUnitPrice&&$scope.buyOrder.rate){
-			       		return (scope.orderUnitPrice*($scope.buyOrder.rate+1)/100).toFixed(4);
+			       		return (scope.orderUnitPrice*($scope.buyOrder.rate/100+1)).toFixed(4);
 			       	}else{
 			       		return 0;
 			       	}
@@ -2552,7 +2573,7 @@ var e = $("#form_clauseSettlement"),
 		       
 		       $scope._arithmeticRateUnit  = function(scope) {//计算含税销售单价
 			       	if(scope._orderMateriel.orderUnitPrice&&$scope.buyOrder.rate){
-			       		return (scope._orderMateriel.orderUnitPrice*($scope.buyOrder.rate+1)/100).toFixed(4);
+			       		return (scope._orderMateriel.orderUnitPrice*($scope.buyOrder.rate/100+1)).toFixed(4);
 			       	}else{
 			       		return 0;
 			       	}
@@ -2677,7 +2698,47 @@ var e = $("#form_clauseSettlement"),
 		          		 );
 		    		
 		        };
+		      //********合同内容操作start****************//  
+		        $scope.getContentStatus = function(Str,index){
+		    		if(!isNull(Str)&&index>=1){
+		    			return Str.substring(index-1,index)
+		    		}else{
+		    			return ''
+		    		}
+		    	}
+		        $scope.changeStr = function(allstr,index,changeStr){ //allstr:原始字符串，start,开始位置,end：结束位  置,str：要改变的字，changeStr:改变后的字
+		        	 return allstr.substring(0,index-1)+changeStr+allstr.substring(index,allstr.length); 
+		        }
 		        
+		        
+		        /**
+		    	 * 初始化选中状态
+		    	 */
+		    	$scope.initContractContent = function(){
+		    		for(var i=1;i<=6;i++){
+		    			if($scope.getContentStatus($scope.buyOrder.contractContent,i)==1){
+		    				$("#tab_1_"+i+"Id").addClass("active");
+		    				$scope["tab_1_"+i+"Hide"] = false
+		    			}else{
+		    				$("#tab_1_"+i+"Id").removeClass("active");
+		    				$scope["tab_1_"+i+"Hide"] = true
+		    			}
+		    		}
+		    	}
+		    	
+		    	$scope.changeContentStatus = function(index){
+		    		if($scope.getContentStatus($scope.buyOrder.contractContent,index)==1){
+		    			$scope.buyOrder.contractContent = $scope.changeStr($scope.buyOrder.contractContent,index,0);
+		    			/*$("#tab_1_"+index+"Id").removeClass("active");*/
+	    				$scope["tab_1_"+index+"Hide"] = true
+		    		}else{
+		    			$scope.buyOrder.contractContent = $scope.changeStr($scope.buyOrder.contractContent,index,1);
+		    			/*$("#tab_1_"+index+"Id").addClass("active");*/
+	    				$scope["tab_1_"+index+"Hide"] = false
+		    		}
+		    	}
+		    	
+		    	//********合同内容操作end ****************//   
 		      //********审批流程列表****************//
 		        function showDbTable(){
 		        	
@@ -3063,7 +3124,7 @@ var e = $("#form_clauseSettlement"),
 		        	
 		        	
 		        }
-		     //********审批流程end****************//  
+		      //********审批流程end****************//  
 		        
     /**
 	 * 加载供应商数据
@@ -3084,7 +3145,7 @@ var e = $("#form_clauseSettlement"),
         		//调用承诺接口reject();
         	});
 	}
-
+	
 	
 }]);
 

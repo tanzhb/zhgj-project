@@ -193,6 +193,14 @@ public class PageController {
     public String viewBuyOrder(String serialNum) {
         return "order/viewBuyOrder";
     }
+    
+    /**
+     * 查看销售订单
+     */
+    @RequestMapping("/viewSaleOrder")
+    public String viewSaleOrder(String serialNum) {
+        return "order/viewSaleOrder";
+    }
     /**
      * 供应商查看订单
      */
@@ -210,11 +218,27 @@ public class PageController {
     }
     
     /**
+     * 销售订单提交申请
+     */
+    @RequestMapping("/submitSaleApply")
+    public String submitSaleApply(String serialNum,String view) {
+        return "order/submitSaleApply";
+    }
+    
+    /**
      * 审批采购订单
      */
     @RequestMapping("/approvalBuyApply")
     public String approvalBuyApply(String serialNum,String view) {
         return "order/approvalBuyApply";
+    }
+    
+    /**
+     * 审批销售订单
+     */
+    @RequestMapping("/approvalSaleApply")
+    public String approvalSaleApply(String serialNum,String view) {
+        return "order/approvalSaleApply";
     }
     
     /**
@@ -225,7 +249,13 @@ public class PageController {
         return "order/editBuyApply";
     }
     
-    
+    /**
+     * 重新编辑销售订单申请
+     */
+    @RequestMapping("/editSaleApply")
+    public String editSaleApply(String serialNum,String view) {
+        return "order/editSaleApply";
+    }
     
     /**
      * 采购订单

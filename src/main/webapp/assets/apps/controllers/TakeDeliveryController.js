@@ -28,6 +28,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    		validatorInit();//验证初始化
 	    		loadOrderTable();//加载订单列表
 	    		setDefualtData();//设置初始值
+	    		$scope.serialNums = [];	
 	    		if(!isNull($stateParams.serialNum)){
 	    			$(".d_tip").text("编辑代发货信息");
 	    			takeDeliveryInfo($stateParams.serialNum,"edit");
@@ -35,7 +36,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    		playArrivalDateSetting();
 	    		playWarehouseDateSetting();
 	 		}else if($location.path()=="/takeDeliveryView"||$location.path()=="/toTakeDelivery"||$location.path()=="/takeDeliveryAudit"||$location.path()=="/takeDeliveryAdjustment"){
-	 				takeDeliveryInfo($stateParams.serialNum,"edit",$stateParams.taskId, $stateParams.comments);
+	 			
+	 			takeDeliveryInfo($stateParams.serialNum,"edit",$stateParams.taskId, $stateParams.comments);
+	 				getCurrentUser();
 	 				//setDefualtData('takeDelivery');//设置初始值
 	 		}else{
 	 			var type = handle.getCookie("d_type");
@@ -132,8 +135,13 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 			var getCurrentUser = function(){
 				var promise = commonService.getCurrentUser();
 				promise.then(function(data){
-					$scope.deliver.maker = data.data.userName;
-					$scope.takeDeliver.taker = data.data.userName;
+					$scope.user = data.data;
+					if($location.path()=="/toTakeDelivery"){
+						$scope.takeDeliver.taker = data.data.userName;
+					}else{
+						$scope.deliver.maker = data.data.userName;
+					}
+					
 				},function(data){
 					//调用承诺接口reject();
 				});
@@ -189,7 +197,14 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		        	$scope.deliver.warehouseSerial = data.data.warehouse.serialNum;
 		        	$scope.deliver.warehouseName = data.data.warehouse.address;
 	        	}
-	        	debugger;
+	        	if($scope.deliver.takeDelivery.warehouse==null){
+	        		$scope.deliver.takeDelivery.warehouse={};
+	        		$scope.deliver.takeDelivery.warehouse.warehouseName='无';
+	        	}
+	        	if($scope.deliver.warehouse==null){
+	        		$scope.deliver.warehouse={};
+	        		$scope.deliver.warehouse.warehouseName='无';
+	        	}
 	        	if(isNull($scope.deliver.receiver)){
 	        		$scope.deliver.receiverName = "中航能科（上海）能源科技有限公司";
 	        	}
@@ -208,18 +223,20 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		        		$scope.takeDeliver.warehouseName = $scope.takeDeliver.warehouse.address;
 	        		}
 	        		
-	        		var playWarehouseDate= $scope.deliverTransport.playWarehouseDate;
+	        		/*var playWarehouseDate= $scope.deliverTransport.playWarehouseDate;
 	    		    if(!isNull(playWarehouseDate)){
 	    		    	$("#playWarehouseDate").datepicker('setDate',playWarehouseDate);
 	    		    	$("#playArrivalDate").datepicker('setEndDate',playWarehouseDate);
 	    		    }
-	    		    
 	    		    var playArrivalDate= $scope.deliverTransport.playArrivalDate;
 	    		 	if(!isNull(playArrivalDate)){
 	    		 		$("#playArrivalDate").datepicker('setDate',playArrivalDate);
 	    		    	$("#playWarehouseDate").datepicker('setStartDate',playArrivalDate);
-	    		    }
-	    		 	$scope.takeDeliver.actualDate = timeStamp2ShortString(new Date());
+	    		    }*/
+	    		 	if($location.path()=="/toTakeDelivery"){
+	    		 		$scope.takeDeliver.actualDate = timeStamp2ShortString(new Date());
+	    		 		$scope.takeDeliver.taker = $scope.user.userName;
+	    		 	}
 	        	}
 	        	if(!isNull(taskId)){
 	        		$("#serialNum").val(serialNum);//赋值给隐藏input，通过和不通过时调用
@@ -332,14 +349,22 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 			}
 			
 			$scope.getWarehouseName = function(type){
-				for(var i in $scope.warehouses){
+				for(var i in $scope.warehouses){debugger;
 					if(type=="deliver"){
+						if($scope.deliver.warehouseSerial=='无'){
+							$scope.deliver.deliverAddress = '';
+							return;
+						}
 						if($scope.warehouses[i].serialNum == $scope.deliver.warehouseSerial){
-							$scope.deliver.warehouseName = $scope.warehouses[i].address;
+							$scope.deliver.deliverAddress = $scope.warehouses[i].address;
 						}
 					}else{
+						if($scope.takeDeliver.warehouseSerial=="无"){
+							$scope.takeDeliver.takeDeliverAddress = '';
+							return;
+						}
 						if($scope.warehouses[i].serialNum == $scope.takeDeliver.warehouseSerial){
-							$scope.takeDeliver.warehouseName = $scope.warehouses[i].address;
+							$scope.takeDeliver.takeDeliverAddress = $scope.warehouses[i].address;
 						}
 					}
 					
@@ -395,10 +420,10 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					toastr.warning("请选择您要删除的记录");
 					return;
 				}
-				if(table.row('.active').data().status > 2){
+				/*if(table.row('.active').data().status > 2){
 					showToastr('toast-top-center', 'warning', '存在已经进入流程审批的收货单，不能删除！');
 					return;
-				}
+				}*/
 	        	handle.confirm("确定删除吗？",function(){
 	        		var ids = '';
 					// Iterate over all checkboxes in the table
@@ -538,9 +563,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        	}else if(id_count>1){
 	        		toastr.warning("只能选择一条数据进行入库");
 	        	}else{
-	        		var row = stock_table.row(".active").data();
-		       		if(row.status=="1"){
-		       			toastr.warning("该收货单已出库！");
+	        		var row = stock_table.row(".active").data();debugger;
+		       		if(row.stockInOutRecord.status=="1"){
+		       			toastr.warning("该收货单已入库！");
 		       			return;
 		       		}
 	        		var serialNum = $('#stockInTable input[name="serialNum2"]:checked').val();
@@ -1379,7 +1404,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 						        })
 	  		      };
 	  		      
-	  		$scope.confirmSelect = function(){
+	  		$scope.confirmSelectOrder = function(){
 	  			var id_count = $('#buyOrder input[name="selecrOrderSerial"]:checked').length;
 				if(id_count==0){
 					toastr.warning("请选择采购订单");
@@ -1943,5 +1968,317 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  			$state.go("takeDelivery");
 	  		};
 	  		/************************************************申请JS***********************************************/
+	  		
+	  		var m_table;	
+	  		
+	  		$scope.changeTakeDeliveryMode = function(deliverType){debugger;
+	  			
+	  			if(deliverType=='贸易发货'){
+	  					$scope.otherMode = false;
+	  			}else{
+	  				    $scope.otherMode = true;
+	  				    $scope.deliver.orderSerial = '';
+	  				    $scope.deliver.shipper = '';
+	  				    $scope.deliver.shipperName = '';
+	  				    $scope.deliver.receiver = '';
+	  				    $scope.deliver.receiverName = '';
+	  				    $scope.orderMateriels = [];
+	  				 
+	  				    if(m_table==undefined){
+	  				    	selectParentMateriel();
+	  				    }else{
+	  				    	m_table.ajax.reload();
+	  				    }
+	  				   
+	  			}
+	  		}
+	  	
+	  	/***选择物料列表初始化START***/
+	     
+	     var selectParentMateriel = function() {
+	              a = 0;
+	              App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
+	              m_table = $("#select_sample_2").DataTable({
+	                  language: {
+	                      aria: {
+	                          sortAscending: ": activate to sort column ascending",
+	                          sortDescending: ": activate to sort column descending"
+	                      },
+	                      emptyTable: "空表",
+	                      info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+	                      infoEmpty: "没有数据",
+	                      //infoFiltered: "(filtered1 from _MAX_ total entries)",
+	                      lengthMenu: "每页显示 _MENU_ 条数据",
+	                      search: "查询:",
+	                      zeroRecords: "抱歉， 没有找到！",
+	                      paginate: {
+	                          "sFirst": "首页",
+	                          "sPrevious": "前一页",
+	                          "sNext": "后一页",
+	                          "sLast": "尾页"
+	                       }
+	                  },
+	  /*                fixedHeader: {//固定表头、表底
+	                      header: !0,
+	                      footer: !0,
+	                      headerOffset: a
+	                  },*/
+	                  order: [[1, "asc"]],//默认排序列及排序方式
+	                  searching: true,//是否过滤检索
+	                  ordering:  true,//是否排序
+	                  lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
+	                  pageLength: 5,//每页显示数量
+	                  processing: true,//loading等待框
+//	                  serverSide: true,
+	                  ajax: "rest/materiel/findMaterielList?isLatestVersion=1",//加载数据中
+	                  "aoColumns": [
+	                                { mData: 'serialNum' },
+	                                { mData: 'materielNum' },
+	                                { mData: 'materielName' },
+	                                { mData: 'specifications' },
+	                                { mData: 'unit' },
+	                                { mData: 'supplyMateriels' }
+	                          ],
+	                 'aoColumnDefs' : [ {
+	  							'targets' : 0,
+	  							'searchable' : false,
+	  							'orderable' : false,
+	  							
+	  							'render' : function(data,
+	  									type, row, meta) {
+	  								if(row.supplyMateriels.length>0){
+		  								if($scope.modalType=='single'){
+//		  	  								return '<input type="radio" id='+data+' data-radio=true ng-click="getCheckedIds(\''+data+'\','+meta.row+')"  name="serialNum" value="'
+//												+ $('<div/>')
+//														.text(
+//																row.supplyMateriels[0].serialNum)
+//														.html()
+//												+ '">';
+		  	  							return '<label class="mt-radio mt-radio-outline">'+
+	                                    '<input type="radio" data-radio=true   ng-click="getCheckedIds(\''+data+'\','+meta.row+')" name="serialNum"  class="checkboxes" id="'+data+'" value="'+row.supplyMateriels[0].serialNum+'" />'+
+	                                    '<span></span></label>';
+		
+		  								}else{
+		  	  								/*return '<input type="checkbox" data-checked=false id='+data+' ng-click="getCheckedIds(\''+data+'\','+meta.row+')"  name="material_serial" value="'
+												+ $('<div/>')
+														.text(
+																row.supplyMateriels[0].serialNum)
+														.html()
+												+ '">';*/
+		  									return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
+		                                     '<input type="checkbox"  name="material_serial" data-checked=false id='+data+' ng-click="getCheckedIds(\''+data+'\','+meta.row+')" class="checkboxes"  id="'+data+'" value="'+row.supplyMateriels[0].serialNum+'" data-set="#select_sample_2 .checkboxes" />'+
+		                                     '<span></span>'+
+		                                 '</label>';
+		
+		  								}
+	  								}else{
+	  									return '';
+	  								}
+	  							},
+	  							"createdCell": function (td, cellData, rowData, row, col) {
+	  								 $compile(td)($scope);
+	  						       }
+	  						},{
+	  							'targets' : 1,
+	  							'render' : function(data,
+	  									type, row, meta) {
+	  								var bomIcon='';//bom图标
+	  								if(row.isBOM==1){
+	  									bomIcon = '<span class="label label-sm label-success">B</span> '
+	  								}
+	  								return bomIcon + data;
+	  							}},{
+	     							'targets' : 5,
+	     							'render' : function(data,
+	     									type, row, meta) {
+	     								if(data.length>0){
+	     									var select='<select class="form-control" id="select'+row.serialNum+'" ng-model="model'+row.serialNum+'" ng-init="model'+row.serialNum+'=\''+data[0].serialNum+'\'" ng-change="changeSelectValue(\'select'+row.serialNum+'\',\''+row.serialNum+'\')">'
+	 	 									for(var i=0;i<data.length;i++){
+	 	 										if(data[i].supply){
+	 	 											select = select + '<option value="'+data[i].serialNum+'">'+data[i].supply.comName+'</option>';
+	 	 										}else{
+	 	 											select = select + '<option value="'+data[i].serialNum+'"></option>';
+	 	 										}
+	 	 										
+	 	 									}
+	 	 									select = select + '</select>';	
+	 	     								return select;
+	     								}else{
+	     									return '无供应商';
+	     								}
+	     							},
+	      							"createdCell": function (td, cellData, rowData, row, col) {
+	     								 $compile(td)($scope);
+	     						       }
+
+	  						}]
+
+	              }).on('order.dt',
+	              function() {
+	                  console.log('排序');
+	              }).on('page.dt', 
+	              function () {
+	            	  console.log('翻页');
+		          }).on('draw.dt',function() {
+		        	  checkedIdHandler();
+		          });
+	          };
+	          
+	          
+	          /**
+		         * 选择物料页面弹出
+		         */
+		    	$scope.addMateriel = function (type,index){
+		    		$("#basicMaterielInfo").modal("show");
+				}
+		    	
+
+		    	/**
+		    	 * 更换供应物料流水号
+		    	 */
+		    	$scope.changeSelectValue = function(id,obj){
+		    		if($("#"+obj).data("checked") == false){
+		    			$("#"+obj).val($("#"+id).val());
+		    		}else{
+		    			for(var i=0;i<$scope.serialNums.length;i++){
+		    				if($scope.serialNums[i].serialNum==obj){
+		    					$scope.serialNums[i].materiel.supplyMaterielSerial = $("#"+id).val();
+		    				}
+		    			}
+		    		}
+
+		    	}
+	          
+		    	
+		    	/**
+		    	 * 选择物料并展示在列表
+		    	 */
+		    	$scope.confirmSelect = function(){
+		    		
+			    		if($scope.serialNums.length==0){ //判断是否选择了物料
+		    				toastr.warning("请选择物料");
+							return;
+		    			}
+		    		
+		    			//--------批量增加物料信息START--------------
+		        		handle.blockUI();
+	        			if($scope.orderMateriels.length==0){//如果需求物料列表为空
+	        				for(var i = 0;i < $scope.serialNums.length;i++){ //将选中物料放入列表，并设置为编辑状态
+	        					($scope.serialNums)[i].serialNum = ($scope.serialNums)[i].materiel.supplyMaterielSerial; //存放供应物料流水
+	        					$scope.orderMateriels.push(($scope.serialNums)[i]);
+	        					$scope["deliveryMaterielEdit"+i] = false;
+	        					$scope["deliveryMaterielView"+i] = false;
+	        				}
+	        			}else{
+			        		for(var i = 0;i < $scope.serialNums.length;i++){
+			        			($scope.serialNums)[i].serialNum = ($scope.serialNums)[i].materiel.supplyMaterielSerial; //存放供应物料流水
+		        				$scope.orderMateriels.splice(0,0,($scope.serialNums)[i]); //将选中物料放入列表开头，并设置为编辑状态
+		        				$scope["deliveryMaterielEdit"+i] = false;
+								$scope["deliveryMaterielView"+i] = false;
+								$scope["deliveryMaterielEdit" + ($scope.orderMateriels.length-1)] = true;
+								$scope["deliveryMaterielView" + ($scope.orderMateriels.length-1)] = true;
+			        		}
+	        				//之前的物料显示状态需要维持原状，以下添加代码
+			        		
+	        			}
+	        			//$scope.countSupplyCount();
+	        			$scope.copyMateriels = angular.copy($scope.orderMateriels);//复制需求物料列表，以便撤销
+	        			$("#basicMaterielInfo").modal("hide");
+	        			toastr.success("添加成功！");
+	        			handle.unblockUI();
+		    	}
+		    	
+		    	//关闭物料列表时，清除选中状态START--------------
+		    	 $('#basicMaterielInfo').on('hide.bs.modal', function (e) { 
+		    		 clearChecked();
+		    		 $scope.serialNums=[];
+			     })
+		    	
+			     /**
+			      * 清除选择状态
+			      */
+		    	function clearChecked(){
+		    		m_table.$('input[type="checkbox"]').each(
+							function() {
+								// If checkbox exist in DOM
+								if ($.contains(document, this)) {
+									// If checkbox is checked
+									this.checked = false;
+								}
+					});
+		    	}
+		    	//关闭物料列表时，清除选中状态END-----------------
+		    	 
+		    	 
+		    	 /**
+		 		 * 遍历checkbox,检查并处理已取消的元素
+		 		 */
+		 		function checkedIdHandler(){
+		 			//获取选中物料ID
+		 			m_table.$('input[name="material_serial"]').each(function() { //遍历当前页的物料信息
+		 					if ($.contains(document, this)) {
+		 						if (this.checked) {
+		 							if($scope.serialNums.length>0){
+		 								var flag = false;
+		 								for(var i=0;i<$scope.serialNums.length;i++){
+		 									if($scope.serialNums[i].serialNum == $(this).attr("id")){
+		 										flag=true;
+		 										break;
+		 									}
+		 									if(i==$scope.serialNums.length-1&& flag==false){//不在选中数组内，checkbox清除选中状态
+		 										$(this).attr("checked",false);
+		 										$(this).data("checked",false);
+		 									}
+		 								}
+		 							}else if($scope.serialNums.length==0){//没有被选中的物料
+		 								$(this).attr("checked",false);
+		 								$(this).data("checked",false);
+		 							}
+		 						}
+		 					}
+		 			});
+		 		}
+		 		
+
+				/**
+				 * checkbox点击事件
+				 */
+				$scope.getCheckedIds = function(serialNum,index){
+					var data={};
+					data.serialNum = serialNum;
+					data.materiel = m_table.row(index).data(); //获取一行数据
+					data.materiel.materielSerial = data.materiel.serialNum; //为保存操作做准备，新增物料serialNum为空
+					data.materiel.serialNum = null
+					data.materiel.supplyMaterielSerial = $("#"+serialNum).val();
+					if($("#"+serialNum).data("radio")==true){ //修改物料弹出框
+						$scope.serialNums = []; //清空选中数组
+						$scope.serialNums.push(data);
+						$scope.selectedMaterielHide = true; //不显示已选物料
+						return;
+					}
+					if($("#"+serialNum).data("checked")||$("#"+serialNum).data("checked")==undefined){
+						for(var i=0;i<$scope.serialNums.length;i++){
+							if($scope.serialNums[i].serialNum==serialNum){
+								$scope.serialNums.splice(i,1);
+								$("#"+serialNum).attr("checked",false);
+								$("#"+serialNum).data("checked",false);
+								break;
+							}
+							
+						}
+						
+					}else{
+						$scope.serialNums.push(data);
+						$("#"+serialNum).data("checked",true);
+						$("#"+serialNum).attr("checked",true);
+					}
+					
+				}
+				
+				$scope.setSupplyComId = function(comId){
+					$scope.deliver.supplyComId = comId;
+				}
+	         
+	          /***选择物料列表初始化END***/
 
 }]); 
