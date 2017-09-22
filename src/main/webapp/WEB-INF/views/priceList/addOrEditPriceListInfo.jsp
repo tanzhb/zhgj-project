@@ -41,10 +41,10 @@
         <div class="portlet bordered">
             <div class="portlet-body">
 				<div class="portlet light ">
-                        <div class="portlet-title">
+                        <div class="portlet-title" >
                             <div class="caption"><span ng-if="buyOrSale.indexOf('buy')>-1">采购</span><span ng-if="buyOrSale.indexOf('sale')>-1">销售</span>价格信息</div><!--   -->
-                            <div class="actions">
-                                <button  ng-show="priceListView"    class="btn purple  btn-sm btn-circle " ng-click="editPriceList()">
+                            <div class="actions" ng-if="buyOrSale.indexOf('view')<0">
+                                <button  ng-show="priceListView"   class="btn purple  btn-sm btn-circle " ng-click="editPriceList()">
                                             <i class="fa fa-edit"></i> 编辑 </button>
                                 <button   ng-hide="priceListEdit"   class="btn defualt  btn-sm btn-circle" ng-click="cancelEditPriceList()">
                                             <i class="fa fa-undo"></i> 取消 </button>
@@ -150,7 +150,7 @@
                                                             <div class="form-group">
                                                     <label class="control-label bold" for="priceType"> <span class="required"> * </span>价格类型 :</label>
                                                     <div class="">
-                                                                        <select class="form-control" id="priceType" name ="priceType" ng-model="priceList.priceType"  ng-show="priceListAdd"  disabled="disabled" >
+                                                                        <select class="form-control" id="priceType" name ="priceType" ng-model="priceList.priceType"   ng-show="priceListAdd"   disabled="disabled" >
                                                                           <option value=""></option>
                                                                         <option value="buyPrice"  ng-selected="buyOrSale.indexOf('buy')>-1">采购价格</option>
                                                                         <option value="salePrice"  ng-selected="buyOrSale.indexOf('sale')>-1">销售价格</option>
@@ -165,11 +165,13 @@
                                                              <div class="form-group ">
                                                     <label class="control-label bold" for="admin"> <span class="required"> * </span>采购商 :</label>
                                                      <div class="">
-                                                     <select class="form-control" data-live-search="true" data-size=""   id="buyComId"  name ="buyComId"  ng-show="priceListAdd"   ng-model="priceList.buyComId">
+                                                     <div   ng-show="priceListAdd">
+                                                     <select class="form-control" data-live-search="true" data-size=""   id="buyComId"  name ="buyComId"    ng-model="priceList.buyComId">
                                                      <!-- <option  ng-repeat="op in buyCom " value="{{op.comId}}"  > {{op.comName}}</option> -->
                                                       <option value=""></option>
                                                       <option  ng-repeat="customer in customers" value="{{customer.comId}}" >{{customer.comName}}</option>
                                                     </select>
+                                                    </div>
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="priceListView">{{priceList.buyComName}}</p>  
                                                                 </div>
@@ -180,11 +182,12 @@
                                                              <div class="form-group">
                                                     <label class="control-label bold" for="admin"> <span class="required"> * </span>供应商 :</label>
                                                     <div class="">
-                                                     <select class="form-control" data-live-search="true" data-size=""   id="supplyComId" name ="supplyComId"  ng-show="priceListAdd"   ng-model="priceList.supplyComId">
+                                                    <div   ng-show="priceListAdd">
+                                                     <select class="form-control" data-live-search="true" data-size=""   id="supplyComId" name ="supplyComId"     ng-model="priceList.supplyComId">
                                                        <!--  <option  ng-repeat="op in supplyCom " value="{{op.comId}}"  > {{op.comName}}</option> -->
                                                        <option value=""></option>
                                                    <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}" >{{supplier.comName}}</option>
-                                                    </select>
+                                                    </select></div>
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="priceListView">{{priceList.supplyComName}}</p>  
                                                                 </div>
@@ -230,7 +233,7 @@
                                                                         <input type="text"  class="form-control" placeholder=""  id="unitPrice" name ="unitPrice"  ng-show="priceListAdd" 
 												ng-model="priceList.unitPrice">
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.unitPrice}}</p>
+                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.unitPrice |currency:'￥'}}</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -241,7 +244,7 @@
                                                                         <input type="text"   class="form-control" placeholder=""  id="inclusivePrice"    data-unitprice="{{priceList.unitPrice}}"   name ="inclusivePrice"  ng-show="priceListAdd" 
 												ng-model="priceList.inclusivePrice" >
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.inclusivePrice}}</p>
+                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.inclusivePrice |currency:'￥'}}</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -254,7 +257,7 @@
                                                                            <input type="text"  class="form-control" placeholder=""  id="topPrice" name ="topPrice"   onkeyup="isNumberWithTwo(this)"   ng-show="priceListAdd" 
 												ng-model="priceList.topPrice"/>
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.topPrice}}</p>
+                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.topPrice |currency:'￥'}}</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -265,7 +268,7 @@
                                                                         <input type="text"   class="form-control" placeholder=""  id="floorPrice" name ="floorPrice"  ng-show="priceListAdd"   onkeyup="isNumberWithTwo(this)"  data-topprice="{{priceList.topPrice}}"  
 												ng-model="priceList.floorPrice" />
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.floorPrice}}</p>
+                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.floorPrice |currency:'￥'}}</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -349,7 +352,7 @@
 													<input  ng-hide="ladderpriceAdd" type="text" ng-model="ladderprice.price" name="price"   id="price"
 														class="form-control" placeholder="">
 														<div class="form-control-focus"> </div>
-														<label   ng-show="ladderpriceView"  class="c_edit" >{{ladderprice.price}}</label>
+														<label   ng-show="ladderpriceView"  class="c_edit" >{{ladderprice.price |currency:'￥'}}</label>
 												</div>
 											</div>
 										</div>
@@ -360,7 +363,7 @@
 													<input  ng-hide="ladderpriceAdd" type="text" ng-model="ladderprice.inclusivePrice" name="inclusivePrice"   id="inclusivePrice"
 														class="form-control" placeholder="">
 														<div class="form-control-focus"> </div>
-														<label   ng-show="ladderpriceView"  class="c_edit" >{{ladderprice.inclusivePrice}}</label>
+														<label   ng-show="ladderpriceView"  class="c_edit" >{{ladderprice.inclusivePrice |currency:'￥'}}</label>
 												</div>
 											</div>
 										</div>
@@ -387,7 +390,7 @@
          			<!-- 	</div> 
                          </div>  -->
                                                         </div> 
-                                                        </div> 
+                                                    
                                                         <div class="row">
                                                             <div class="col-md-6">
                                                              <div class="form-group">
@@ -455,6 +458,7 @@
 								</div>
 							<!-- </form> -->
          				</div>
+         				     </div>
 
   <div class="portlet-title"><!-- 使用采购商 START -->
                             <div class="caption">使用采购商</div>

@@ -116,6 +116,8 @@ public class Invoice {
     private String capitalMoney;//大写金额
     
     private String  currency;//币种
+    
+    private ProcessBase processBase;//流程字段类
 
     public String getCapitalMoney() {
 		return capitalMoney;
@@ -540,6 +542,14 @@ public class Invoice {
 
 	public void setCurrency(String currency) {
 		this.currency = currency;
+	}
+
+	public ProcessBase getProcessBase() {
+		return processBase;
+	}
+
+	public void setProcessBase(ProcessBase processBase) {
+		this.processBase = processBase;
 	}
     
     

@@ -183,7 +183,14 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                                 	'assets/apps/scripts/angular-file-upload-shim.min.js',
                                 	'assets/apps/scripts/angular-file-upload.min.js',
                                 	 'assets/global/plugins/bootbox/bootbox.min.js',
-                                	  'assets/apps/service/orderService.js'
+                                	  'assets/apps/service/orderService.js','assets/global/css/dialog.css',
+                      				'assets/global/css/easyui.css',
+                    				'assets/global/css/datagrid.css',
+                    				'assets/global/css/jquery.qtip.min.css',
+                    	         
+                    				'assets/global/plugins/jquery.easyui.min.js',
+                    				'assets/global/plugins/jquery.qtip.min.js',
+                    				'assets/global/plugins/jquery.outerhtml.js'
                         ]
                     });
                 }]
@@ -220,7 +227,89 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
-
+          
+        // 价格发起申请
+        .state('submitPriceApply', {
+            url: "/submitPriceApply?:buyOrSale&:priceType",
+            templateUrl: "rest/page/submitPriceApply",
+            data: {pageTitle: '价格申请'},
+            controller: "PriceListController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+	        	'assets/apps/service/orderService.js',
+	        	 'assets/apps/controllers/PriceListController.js',
+			      'assets/apps/service/PriceListService.js'
+                      ]
+                    });
+                }]
+            }
+        })
+         
+        // 审批价格
+        .state('approvalPriceApply', {
+            url: "/approvalPriceApply?:buyOrSale&:priceType&:taskId&:processInstanceId",
+            params:{"serialNum":null,"taskId":null, "comments":null,"processInstanceId":null},
+            templateUrl: "rest/page/approvalPriceApply",
+            data: {pageTitle: '审批价格'},
+            controller: "PriceListController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+	        	'assets/apps/service/orderService.js',
+	        	 'assets/apps/controllers/PriceListController.js',
+			      'assets/apps/service/PriceListService.js'
+                      ]
+                    });
+                }]
+            }
+        })
+       
+        // 重新编辑价格申请
+        .state('editPriceApply', {
+            url: "/editPriceApply?:buyOrSale&:priceType&:taskId&:processInstanceId",
+            params:{"serialNum":null,"taskId":null, "comments":null,"processInstanceId":null},
+            templateUrl: "rest/page/editPriceApply",
+            data: {pageTitle: '重新编辑价格'},
+            controller: "PriceListController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/controllers/PriceListController.js',
+			    'assets/apps/service/PriceListService.js'
+                      ]
+                    });
+                }]
+            }
+        })
         .state('materiel', {
             url: "/materiel",
             templateUrl: "rest/page/materiel",
@@ -1618,7 +1707,15 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 			        'assets/apps/service/InvoiceService.js',
 					'assets/apps/controllers/InvoiceController.js',
 					'assets/apps/scripts/angular-file-upload-shim.min.js',
-                	'assets/apps/scripts/angular-file-upload.min.js'
+                	'assets/apps/scripts/angular-file-upload.min.js',
+                	'assets/global/css/dialog.css',
+    				'assets/global/css/easyui.css',
+    				'assets/global/css/datagrid.css',
+    				'assets/global/css/jquery.qtip.min.css',
+    	         
+    				'assets/global/plugins/jquery.easyui.min.js',
+    				'assets/global/plugins/jquery.qtip.min.js',
+    				'assets/global/plugins/jquery.outerhtml.js'
                    	                        ]
                     });
                 }]

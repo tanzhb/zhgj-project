@@ -35,17 +35,31 @@
         </shiro:hasPermission>
     </ul>
     <div class="tab-content">
-    	<!-- 进项票列表---START -->
+    	<!-- 采购价格列表---START -->
         <div class="tab-pane active" id="tab_buy">
+        <div class="portlet-body">
+			<div class="tabbable-custom ">
+			<ul class="nav nav-tabs " id="buyPriceTab">
+				<li class="active"><a href="#applyBuyPrice" data-toggle="tab"
+					ng-click="toApplyBuyPrice()"> 采购价格 </a></li>
+				<li><a href="#daibanBuyPrice" data-toggle="tab" ng-click="toDaibanBuyPrice()">
+						待办 </a></li>
+				<li><a href="#yibanBuyPrice" data-toggle="tab" ng-click="toYibanBuyPrice()">
+						已办 </a></li>
+			</ul>
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="tab-content">
+				<div class="tab-pane active" id="applyBuyPrice">
 		<div class="portlet light">
 			<div class="portlet-title">
-				<div class="caption">
+			<!-- 	<div class="caption">
 					<i class="fa fa-globe font-green"></i>
 					<span class="caption-subject font-green bold uppercase">采购价格列表</span>
-				</div>
+				</div> -->
 				<div class="actions">
 				<div class="btn-group btn-group-devided" data-toggle="buttons">
+				<label class="btn btn-transparent yellow btn-circle btn-sm"
+										ng-click="submitPriceApply('buy')"> <i class="glyphicon glyphicon-play"></i> 申请</label>
 					<shiro:hasPermission name="buyPrice:add">
 						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addPriceList('buy')">
 	                                              <i class="fa fa-plus"></i> 添加</label>
@@ -132,21 +146,106 @@
 				</table>
 			</div>
 		</div>
+			</div>
+		
 		<!-- END EXAMPLE TABLE PORTLET-->
-        </div>
         <!-- 进项票列表---END -->
         
-        <!-- 出库检验列表---START -->
+        <div class="tab-pane" id="daibanBuyPrice">
+							<!-- BEGIN EXAMPLE TABLE PORTLET-->
+							<div class="portlet box ">
+								<div class="portlet-title"></div>
+	
+								<div class="portlet-body">
+									<table class="table table-striped table-bordered table-hover table-checkable order-column"
+										id="dbBuyPriceTable">
+										<thead>
+											<tr>
+											<th>
+	                                            <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+	                                                <input type="checkbox" class="group-checkable" data-set="#dbBuyPriceTable .checkboxes" />
+	                                                <span></span>
+	                                            </label>
+	                                        </th>
+											<th style="white-space: nowrap;">任务状态</th>
+											<th style="white-space: nowrap;">申请人</th>
+											<th style="white-space: nowrap;">标题</th>
+											<th style="white-space: nowrap;">当前节点</th>
+											<th style="white-space: nowrap;">负责人</th>
+											<th style="white-space: nowrap;">任务创建时间</th>
+											<th style="white-space: nowrap;">流程状态</th>
+											</tr>
+										</thead>
+										<tbody>
+	
+										</tbody>
+									</table>
+								</div>
+	
+	
+							</div>
+							<!-- END EXAMPLE TABLE PORTLET-->
+				</div>
+				<div class="tab-pane" id="yibanBuyPrice">
+							<div class="portlet box">
+								<div class="portlet-title"></div>
+	
+								<div class="portlet-body">
+									<table class="table table-striped table-bordered table-hover"
+										id="endTaskBuyPriceTable">
+										<thead>
+											<tr>
+												<th>单据类型</th>
+												<th>申请人</th>
+												<th>标题</th>
+												<th>任务开始时间</th>
+												<th>任务签收时间</th>
+												<th>任务结束时间 </th>
+												<th>流程结束原因</th>
+												<th>流程版本号</th>
+												<th>操作</th>
+											</tr>
+										</thead>
+										<tbody>
+	
+										</tbody>
+									</table>
+								</div>
+	
+	
+							</div>
+							<!-- END EXAMPLE TABLE PORTLET-->
+				</div>
+				
+   </div>     
+   </div> 
+   </div> 
+   </div> 
+        <!-- 销售价格列表---START -->
         <div class="tab-pane" id="tab_sale">
+         <div class="portlet-body">
+			<div class="tabbable-custom ">
+			<ul class="nav nav-tabs " id="salePriceTab">
+				<li class="active"><a href="#applySalePrice" data-toggle="tab"
+					ng-click="toSalePriceApply()"> 销售价格 </a></li>
+				<li><a href="#daibanSalePrice" data-toggle="tab" ng-click="toDaibanSalePrice()">
+						待办 </a></li>
+				<li><a href="#yibanSalePrice" data-toggle="tab" ng-click="toYibanSalePrice()">
+						已办 </a></li>
+			</ul>
          <!-- BEGIN EXAMPLE TABLE PORTLET-->
+          <div class="tab-content">
+				<div class="tab-pane active" id="applySalePrice">
 		<div class="portlet light">
 			<div class="portlet-title">
-				<div class="caption">
+				<!-- <div class="caption">
 					<i class="fa fa-globe font-green"></i>
 					<span class="caption-subject font-green bold uppercase">销售价格列表</span>
-				</div>
+				</div> -->
 				<div class="actions">
 				<div class="btn-group btn-group-devided" data-toggle="buttons">
+				<label class="btn btn-transparent yellow btn-circle btn-sm"
+										ng-click="submitPriceApply('sale')"> <i class="glyphicon glyphicon-play"></i> 申请</label>
 					<shiro:hasPermission name="salePrice:add">
 						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addPriceList('sale')">
 	                                              <i class="fa fa-plus"></i> 添加</label>
@@ -229,11 +328,77 @@
 				</table>
 			</div>
 		</div>
-		<!-- END EXAMPLE TABLE PORTLET-->
         </div>
-        <!-- 出库检验列表---END -->
+        <div class="tab-pane" id="daibanSalePrice">
+							<!-- BEGIN EXAMPLE TABLE PORTLET-->
+							<div class="portlet box ">
+								<div class="portlet-title"></div>
+	
+								<div class="portlet-body">
+									<table class="table table-striped table-bordered table-hover table-checkable order-column"
+										id="dbSalePriceTable">
+										<thead>
+											<tr>
+											<th>
+	                                            <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+	                                                <input type="checkbox" class="group-checkable" data-set="#dbSalePriceTable .checkboxes" />
+	                                                <span></span>
+	                                            </label>
+	                                        </th>
+											<th style="white-space: nowrap;">任务状态</th>
+											<th style="white-space: nowrap;">申请人</th>
+											<th style="white-space: nowrap;">标题</th>
+											<th style="white-space: nowrap;">当前节点</th>
+											<th style="white-space: nowrap;">负责人</th>
+											<th style="white-space: nowrap;">任务创建时间</th>
+											<th style="white-space: nowrap;">流程状态</th>
+											</tr>
+										</thead>
+										<tbody>
+	
+										</tbody>
+									</table>
+								</div>
+	
+	
+							</div>
+							<!-- END EXAMPLE TABLE PORTLET-->
+				</div>
+				<div class="tab-pane" id="yibanSalePrice">
+							<div class="portlet box">
+								<div class="portlet-title"></div>
+	
+								<div class="portlet-body">
+									<table class="table table-striped table-bordered table-hover"
+										id="endTaskSalePriceTable">
+										<thead>
+											<tr>
+												<th>单据类型</th>
+												<th>申请人</th>
+												<th>标题</th>
+												<th>任务开始时间</th>
+												<th>任务签收时间</th>
+												<th>任务结束时间 </th>
+												<th>流程结束原因</th>
+												<th>流程版本号</th>
+												<th>操作</th>
+											</tr>
+										</thead>
+										<tbody>
+	
+										</tbody>
+									</table>
+								</div>
+	
+	
+							</div>
+							<!-- END EXAMPLE TABLE PORTLET-->
+				</div>
     </div>
-</div>
+
+		</div>
+		</div>
+		</div>
 <!-- <div class="row" >
 	<div class="col-md-12">
 
