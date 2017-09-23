@@ -2480,10 +2480,43 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				   }else if(toParams.buyOrSale == 'sale'){
 					   html += "<li><a>新增销售价格</a></li>";
 				   }else if(toParams.buyOrSale.length > 4){
-					   if(toParams.buyOrSale.indexOf('sale') >= 0){
+					   if(toParams.buyOrSale.indexOf('sale') >= 0&&toParams.buyOrSale.indexOf('view')<0){
 						   html += "<li><a>修改销售价格</a></li>";
-					   }else html += "<li><a>修改采购价格</a></li>";
+					   }else if(toParams.buyOrSale.indexOf('buy') >= 0&&toParams.buyOrSale.indexOf('view')<0){
+						   html += "<li><a>修改采购价格</a></li>";
+					   }else if(toParams.buyOrSale.indexOf('buy') >= 0&&toParams.buyOrSale.indexOf('view')>-1){
+						   html += "<li><a>采购价格详情</a></li>";
+					   }else if(toParams.buyOrSale.indexOf('sale') >= 0&&toParams.buyOrSale.indexOf('view')>-1){
+						   html += "<li><a>销售价格详情</a></li>";
+					   }
 				   }				 
+			   }else if('submitPriceApply' == toState.name){//价格申请
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a ui-sref='priceList'>价格列表</a><i class='fa fa-angle-right'></i></li>";
+				   if(toParams.buyOrSale.indexOf("buy")>-1){
+					   html += "<li><a>采购价格申请</a></li>";
+				   }else if(toParams.buyOrSale.indexOf("sale")>-1){
+					   html += "<li><a>销售价格申请</a></li>";
+				   }			 
+			   }else if('approvalPriceApply' == toState.name){//价格审批
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a ui-sref='priceList'>价格列表</a><i class='fa fa-angle-right'></i></li>";
+				   if(toParams.buyOrSale.indexOf("buy")>-1){
+					   html += "<li><a>采购价格审批</a></li>";
+				   }else if(toParams.buyOrSale.indexOf("sale")>-1){
+					   html += "<li><a>销售价格审批</a></li>";
+				   }
+			   }else if('editPriceApply' == toState.name){//价格申请修改
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a ui-sref='priceList'>价格列表</a><i class='fa fa-angle-right'></i></li>";
+				   if(toParams.buyOrSale.indexOf("buy")>-1){
+					   html += "<li><a>采购价格重新申请</a></li>";
+				   }else if(toParams.buyOrSale.indexOf("sale")>-1){
+					   html += "<li><a>销售价格重新申请</a></li>";
+				   }
 			   }else if('takeDelivery' == toState.name){//收货列表
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
@@ -2713,6 +2746,11 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					}else if('saleOrder' == toState.name){
 						getTodoTaskLength('saleOrder', 'saleOrder');
 						getEndTaskLength('saleOrder', 'saleOrder');
+					}else if('priceList' == toState.name){
+						getTodoTaskLength('priceList', 'buyPrice');
+						getEndTaskLength('priceList', 'buyPrice');
+						getTodoTaskLength('priceList', 'salePrice');
+						getEndTaskLength('priceList', 'salePrice');
 					}else if('dashboard' == toState.name){
 						getTodoTaskLength('dashboard', 'All');
 						getEndTaskLength('dashboard', 'All');
@@ -2730,7 +2768,12 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 			        deferred.reject('连接服务器出错！');  
 			    })
 			    return deferred.promise.then(function(data){
-			    	$rootScope.dbsLength = data;  //调用承诺接口resolove()
+			    	if(workflowType=='salePrice'){
+			    		$rootScope.dbsLength1 = data; 
+			    	}else{
+			    		$rootScope.dbsLength = data; 
+			    	}
+			    	 //调用承诺接口resolove()
 			    });
 			}
 
@@ -2743,7 +2786,12 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				    deferred.reject('连接服务器出错！');  
 				})
 				return deferred.promise.then(function(data){
-					$rootScope.ybsLength = data;
+					if(workflowType=='salePrice'){
+						$rootScope.ybsLength1 = data;
+			    	}else{
+			    		$rootScope.ybsLength = data;
+			    	}
+					
 				});
 			}
 			

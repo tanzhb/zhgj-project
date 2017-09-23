@@ -26,17 +26,11 @@ angular
 						 App.initAjax();
 						 if($location.path()=="/addPriceList"){
 							 debugger;
-							 $('.date-picker').datepicker({
-								 rtl: App.isRTL(),
-								 orientation: "left",
-								 autoclose: true,
-								 language:"zh-CN"
-							 })//初始化icheck控件
 							 if($stateParams.buyOrSale.length<=4){
 								 debugger;
 								 $scope.ladderprices=[{}];
 								 _index = 0; 
-								 $scope.priceList.isLadderPrice="0";
+								// $scope.priceList.isLadderPrice="0";
 								 getPriceListInfo($stateParams.buyOrSale);
 								 $scope.isChecked=false;
 								 $scope.priceListAdd=true;
@@ -58,9 +52,9 @@ angular
 							 }else{
 								 initCustomers(); 
 							 }
-							 handle.pageRepeater();
+						/*	 handle.pageRepeater();
 							 selectParentMateriel();//选择物料表格初始化
-							 initFormiCheck();
+							 initFormiCheck();*/
 							
 
 						 }else if($location.path()=="/priceList"){
@@ -91,10 +85,27 @@ angular
 						var comments =$stateParams.comments;
 						 if(comments == ""||comments == null){
 	    						$("#comment_audit").html( "<tr><td colspan='3' align='center'>无内容</td></tr>");
-	    					}else $("#comment_audit").html(comments);
-	    					;
+	    					}else{ $("#comment_audit").html(comments);}
+						 if($location.path()=="/editPriceApply"){
+							 if($stateParams.buyOrSale.indexOf("buy")>-1){
+								 initSuppliers();
+							 }else{
+								 initCustomers(); 
+							 }
+							 $scope.priceListView =false;
+							 $scope.priceListAdd =true ;
+							 $scope.priceListEdit =false;
+	    					}
 					 }
-						 
+						  handle.pageRepeater();
+							 selectParentMateriel();//选择物料表格初始化
+							 initFormiCheck();
+							 $('.date-picker').datepicker({
+								 rtl: App.isRTL(),
+								 orientation: "left",
+								 autoclose: true,
+								 language:"zh-CN"
+							 })//初始化icheck控件
 						 // set default layout mode
 						 $rootScope.settings.layout.pageContentWhite = true;
 						 $rootScope.settings.layout.pageBodySolid = false;
@@ -940,7 +951,8 @@ function loadPriceListSaleTable(){
 						 countStart:{digits:"必须是数字！"},
 						 countEnd:{digits:"必须是数字！"},
 						 price:{digits:"必须是数字！"},
-						 inclusivePrice:{}
+						 inclusivePrice:{},
+						 ladderInclusivePrice:{}
 					 },
 					 rules: {
 						 priceNum:{required:true},
@@ -960,7 +972,8 @@ function loadPriceListSaleTable(){
 						 countStart:{digits:true},
 						 countEnd:{digits:true},
 						 price:{digits:true},
-						 inclusivePrice:{inclusivePriceNumCheck:!0}
+						 inclusivePrice:{inclusivePriceNumCheck:!0},
+						 ladderInclusivePrice:{digits:true,ladderPriceNumCheck:!0}
 					 },
 					 invalidHandler: function(e, t) {
 						 i.hide(),
@@ -998,7 +1011,15 @@ function loadPriceListSaleTable(){
 					$(element).removeData();
 					return this.optional(element) || Number($(element).data("topprice")) == NaN?false:(Number($(element).data("topprice"))-value>= 0);
 				}, "最低限价不能超过最高限价");
-			
+			 jQuery.validator.addMethod("ladderPriceNumCheck", function (value, element) {//梯度价格判断
+	    			debugger;
+					$(element).removeData();
+					if(/^[-\+]?\d+(\.\d+)?$/.test(value)==false||value==NaN||(Number(value)*100+"").indexOf(".")>-1){
+						toastr.warning("只能包含小数点和数字,且只能有两位小数");
+						$("#inclusivePrice").focus();
+						}
+					return this.optional(element) || Number($(element).data("ladderprice")) == NaN?false:(Number($(element).data("ladderprice"))-value<= 0);
+				}, "梯度单价不能超过梯度含税价格");
 			 function getLadderPriceInfo(serialNum){//获取阶梯价格详情
 				 if(!handle.isNull(serialNum)){
 					 debugger;
@@ -1786,6 +1807,7 @@ function loadPriceListSaleTable(){
 		    	};
 		    	//审批不通过
 		    	$scope.priceUnPass = function(judgeString) {
+		    		debugger;
 		    		var mydata={"processInstanceId":$("#processInstanceId").val(),"priceId":$scope.priceList.serialNum,"content":$("#content").val(),
 		    				"completeFlag":false,"priceType":judgeString};
 		    		var _url = ctx + "rest/priceList/complate/" + $("#taskId").val();
@@ -1794,15 +1816,17 @@ function loadPriceListSaleTable(){
 		    	
 		    	//重新申请
 		    	$scope.replyPrice = function(judgeString) {
+		    		debugger;
 		    	    var mydata={"processInstanceId":$("#processInstanceId").val(),
-		    				"reApply":true,"priceId":$scope.priceList.serialNum,"reason":$scope.priceList.remark,"priceType":judgeString};
+		    				"reApply":true,"priceId":$scope.priceList.serialNum,"reason":$scope.priceList.reason,"priceType":judgeString};
 		    		var _url = ctx + "rest/priceList/modifyPrice/" + $("#taskId").val();
 		    		doPrice(_url, mydata, 'modify');
 		    	};
 		    	//取消申请
 		    	$scope.cancelApplyPrice = function(judgeString) {
+		    		debugger;
 		    	     var mydata={"processInstanceId":$("#processInstanceId").val(),
-		    				"reApply":false,"priceId":$scope.priceList.serialNum,"reason":$scope.priceList.remark,"priceType":judgeString};
+		    				"reApply":false,"priceId":$scope.priceList.serialNum,"reason":$scope.priceList.reason,"priceType":judgeString};
 		    		var _url = ctx + "rest/priceList/modifyPrice/" + $("#taskId").val();
 		    		doPrice(_url, mydata, 'modify' );
 		    	};

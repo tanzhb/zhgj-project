@@ -43,9 +43,9 @@
 				<li class="active"><a href="#applyBuyPrice" data-toggle="tab"
 					ng-click="toApplyBuyPrice()"> 采购价格 </a></li>
 				<li><a href="#daibanBuyPrice" data-toggle="tab" ng-click="toDaibanBuyPrice()">
-						待办 </a></li>
+						待办 <dbQuantity/></a></li>
 				<li><a href="#yibanBuyPrice" data-toggle="tab" ng-click="toYibanBuyPrice()">
-						已办 </a></li>
+						已办  <ybQuantity/></a></li>
 			</ul>
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
         <div class="tab-content">
@@ -229,9 +229,9 @@
 				<li class="active"><a href="#applySalePrice" data-toggle="tab"
 					ng-click="toSalePriceApply()"> 销售价格 </a></li>
 				<li><a href="#daibanSalePrice" data-toggle="tab" ng-click="toDaibanSalePrice()">
-						待办 </a></li>
+						待办 <dbQuantity1/> </a></li>
 				<li><a href="#yibanSalePrice" data-toggle="tab" ng-click="toYibanSalePrice()">
-						已办 </a></li>
+						已办  <ybQuantity1/></a></li>
 			</ul>
          <!-- BEGIN EXAMPLE TABLE PORTLET-->
           <div class="tab-content">
@@ -396,6 +396,8 @@
 				</div>
     </div>
 
+		</div>
+		</div>
 		</div>
 		</div>
 		</div>
