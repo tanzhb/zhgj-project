@@ -8,6 +8,7 @@ import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryTransportVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
+import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.Warehouse;
 
@@ -46,12 +47,24 @@ public interface DeliveryService extends GenericService<DeliveryMaterielVO, Stri
 	public void deleteDeliveryS(String ids);
 	
 	
+	
+	public List<Materiel> batchGetMaterielInfo(String ids);
+	
+	
 	/**
 	 * 根据id查询发货对象
 	 * @param id
 	 * @return
 	 */
 	public DeliveryMaterielVO selectDeliveryMaterielById(String id);
+	
+	
+	/**
+	 * 根据id查询发货对象
+	 * @param id
+	 * @return
+	 */
+	public DeliveryMaterielVO selectDeliveryMaterielById2(String id);
 	
 	
 	/**
@@ -126,6 +139,12 @@ public interface DeliveryService extends GenericService<DeliveryMaterielVO, Stri
 	 */
 	public DeliveryVO selectDetailById(String id);
 	
+	/**
+	 * 通过id查询详情
+	 * @param id
+	 * @return
+	 */
+	public DeliveryVO selectDetailById2(String id);
 	
 	/**
 	 * 查询发货列表
@@ -148,6 +167,14 @@ public interface DeliveryService extends GenericService<DeliveryMaterielVO, Stri
 	 * @return
 	 */
 	List<DeliveryMaterielVO> selectListForDetail(String serialNum);
+	
+	
+	/**
+	 * 查询发货详情的发货物料
+	 * @param serialNum
+	 * @return
+	 */
+	List<DeliveryMaterielVO> selectListForDetail2(String serialNum);
 	
 	
 	/**
