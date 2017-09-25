@@ -441,5 +441,27 @@ public class PageController {
     public String error500() {
         return "500";
     }
-
+    /**
+     * 价格提交申请
+     */
+    @RequestMapping("/submitPriceApply")
+    public String submitPriceApply(String serialNum,String priceType) {
+        return "priceList/submitPriceApply";
+    }
+    
+    /**
+     * 审批采购订单
+     */
+    @RequestMapping("/approvalPriceApply")
+    public String approvalPriceApply(String serialNum,String priceType) {
+        return "priceList/approvalPriceApply";
+    }
+    
+    /**
+     * 重新编辑价格申请
+     */
+    @RequestMapping("/editPriceApply")
+    public String editPriceApply(String serialNum,String priceType) {
+        return "priceList/editPriceApply";
+    }
 }

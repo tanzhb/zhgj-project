@@ -11,7 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @Date 2017年8月8日 下午3:01:50
  * @version 1.0.0
  */
-public class PriceList {
+public class PriceList extends BaseVO{
     private String serialNum;
 
     private String priceNum;
@@ -45,8 +45,6 @@ public class PriceList {
     private String remark;
 
     private String file;
-
-    private String status;
 
     private String delFlg;
 
@@ -86,18 +84,7 @@ public class PriceList {
     
     private String comName;//企业名称
     
-    //原因
-  	private String reason;
-  	
-  	// 对应的流程实例id
- 	private String processInstanceId;
- 	
-	// 用户id
-	private Integer userId;
-	
-	//申请日期 
-	   @DateTimeFormat(pattern="yyyy-MM-dd")
-	    private Date applyDate;
+    private ProcessBase processBase;//流程字段类
     
     
 
@@ -277,13 +264,6 @@ public class PriceList {
         this.file = file == null ? null : file.trim();
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
-    }
 
     public String getDelFlg() {
         return delFlg;
@@ -397,36 +377,12 @@ public class PriceList {
 		this.comName = comName;
 	}
 
-	public String getReason() {
-		return reason;
+	public ProcessBase getProcessBase() {
+		return processBase;
 	}
 
-	public void setReason(String reason) {
-		this.reason = reason;
+	public void setProcessBase(ProcessBase processBase) {
+		this.processBase = processBase;
 	}
-
-	public String getProcessInstanceId() {
-		return processInstanceId;
-	}
-
-	public void setProcessInstanceId(String processInstanceId) {
-		this.processInstanceId = processInstanceId;
-	}
-
-	public Integer getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Integer userId) {
-		this.userId = userId;
-	}
-
-	public Date getApplyDate() {
-		return applyDate;
-	}
-
-	public void setApplyDate(Date applyDate) {
-		this.applyDate = applyDate;
-	}
-    
+	
 }
