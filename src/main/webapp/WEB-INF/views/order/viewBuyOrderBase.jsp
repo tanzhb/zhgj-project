@@ -34,7 +34,7 @@ margin-right: 20px;
 		<!-- <li class="bold"><a data-target="#tab_1_10" data-toggle="tab">备注</a></li> -->
 		
 	</ul>
-<div class="tab-content">
+<div class="tab-content" style="min-height: 300px;">
 	<div class="tab-pane fade active in" id="tab_1_1">
          <div class="portlet-body form">
              <!-- BEGIN FORM-->

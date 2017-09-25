@@ -34,6 +34,9 @@
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="orderRemark" property="orderRemark" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="deliverStatus" property="deliverStatus" jdbcType="VARCHAR" />
+    <result column="payStatus" property="payStatus" jdbcType="VARCHAR" />
+    <result column="billStatus" property="billStatus" jdbcType="VARCHAR" />
     <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
@@ -111,10 +114,10 @@ materielAmount,
 rateAmount,
 rateAndAmount,
 otherAmount, contractContent,remark, orderRemark,
-    
-    
-    
-    status, delFlg, creator, createTime, updater, updateTime
+    status, deliverStatus,
+payStatus,
+billStatus,
+    delFlg, creator, createTime, updater, updateTime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.OrderInfoExample" >
     select
@@ -135,7 +138,10 @@ otherAmount, contractContent,remark, orderRemark,
     select
     orderInfo.serialNum, orderInfo.contractSerial, orderInfo.supplyComId, orderInfo.buyComId, orderInfo.orderNum, orderInfo.orderType,orderInfo.tradeType, orderInfo.seller, orderInfo.entrustParty, 
     orderInfo.serviceModel, orderInfo.demandPlanSerial, orderInfo.saleApplySerial, orderInfo.settlementClause, orderInfo.orderSerial, orderInfo.deliveryMode, orderInfo.materielCount,orderInfo.orderAmount,
-    orderInfo.transportMode, orderInfo.orderDate,orderInfo.makeDate, orderInfo.maker, orderInfo.rate, orderInfo.currency, orderInfo.exchangeRate, orderInfo.contractContent,orderInfo.remark,orderRemark, orderInfo.status, orderInfo.delFlg, 
+    orderInfo.transportMode, orderInfo.orderDate,orderInfo.makeDate, orderInfo.maker, orderInfo.rate, orderInfo.currency, orderInfo.exchangeRate, orderInfo.contractContent,orderInfo.remark,orderRemark, 
+    orderInfo.status,orderInfo.deliverStatus,
+orderInfo.payStatus,
+orderInfo.billStatus, orderInfo.delFlg, 
     orderInfo.creator, orderInfo.createTime, orderInfo.updater, orderInfo.updateTime
     from orderInfo
     left join contract on orderInfo.contractSerial = contract.serialNum
@@ -175,7 +181,10 @@ otherAmount, contractContent,remark, orderRemark,
     select
     orderInfo.serialNum, orderInfo.contractSerial, orderInfo.supplyComId, orderInfo.buyComId, orderInfo.orderNum, orderInfo.orderType,orderInfo.tradeType, orderInfo.seller, orderInfo.entrustParty, 
     orderInfo.serviceModel, orderInfo.demandPlanSerial, orderInfo.saleApplySerial, orderInfo.settlementClause, orderInfo.orderSerial, orderInfo.deliveryMode, orderInfo.materielCount,orderInfo.orderAmount,
-    orderInfo.transportMode, orderInfo.orderDate,orderInfo.makeDate, orderInfo.maker, orderInfo.rate, orderInfo.currency, orderInfo.exchangeRate, orderInfo.contractContent, orderInfo.remark,orderInfo.orderRemark, orderInfo.status, orderInfo.delFlg, 
+    orderInfo.transportMode, orderInfo.orderDate,orderInfo.makeDate, orderInfo.maker, orderInfo.rate, orderInfo.currency, orderInfo.exchangeRate, orderInfo.contractContent, orderInfo.remark,orderInfo.orderRemark, 
+    orderInfo.status,orderInfo.deliverStatus,
+orderInfo.payStatus,
+orderInfo.billStatus, orderInfo.delFlg, 
     orderInfo.creator, orderInfo.createTime, orderInfo.updater, orderInfo.updateTime
     from orderInfo
     left join contract on orderInfo.contractSerial = contract.serialNum
@@ -238,7 +247,9 @@ materielAmount,
 rateAmount,
 rateAndAmount,
 otherAmount, orderAmount,contractContent, 
-      remark,orderRemark, status,
+      remark,orderRemark, status,deliverStatus,
+payStatus,
+billStatus,
       creator, createTime, updater, 
       updateTime)
     values (#{serialNum,jdbcType=VARCHAR}, #{contractSerial,jdbcType=VARCHAR}, #{supplyComId,jdbcType=VARCHAR}, 
@@ -254,7 +265,8 @@ otherAmount, orderAmount,contractContent,
       #{rateAndAmount,jdbcType=VARCHAR}, 
       #{otherAmount,jdbcType=VARCHAR}, 
 		#{orderAmount,jdbcType=VARCHAR},#{contractContent,jdbcType=VARCHAR},
-      #{remark,jdbcType=VARCHAR},#{orderRemark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR},#{orderRemark,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR},#{deliverStatus,jdbcType=VARCHAR},#{payStatus,jdbcType=VARCHAR},#{billStatus,jdbcType=VARCHAR},
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
@@ -356,6 +368,15 @@ otherAmount, orderAmount,contractContent,
       </if>
       <if test="status != null" >
         status,
+      </if>
+      <if test="deliverStatus != null" >
+        deliverStatus,
+      </if>
+      <if test="payStatus != null" >
+        payStatus,
+      </if>
+      <if test="billStatus != null" >
+        billStatus,
       </if>
       <if test="delFlg != null" >
         delFlg,
@@ -469,6 +490,15 @@ otherAmount, orderAmount,contractContent,
       </if>
       <if test="status != null" >
         #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverStatus != null" >
+        #{deliverStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="payStatus != null" >
+        #{payStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="billStatus != null" >
+        #{billStatus,jdbcType=VARCHAR},
       </if>
       <if test="delFlg != null" >
         #{delFlg,jdbcType=VARCHAR},
@@ -589,6 +619,15 @@ otherAmount, orderAmount,contractContent,
       <if test="record.status != null" >
         status = #{record.status,jdbcType=VARCHAR},
       </if>
+      <if test="record.deliverStatus != null" >
+        deliverStatus = #{record.deliverStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payStatus != null" >
+        payStatus = #{record.payStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.billStatus != null" >
+        billStatus = #{record.billStatus,jdbcType=VARCHAR},
+      </if>
       <if test="record.delFlg != null" >
         delFlg = #{record.delFlg,jdbcType=VARCHAR},
       </if>
@@ -643,6 +682,9 @@ otherAmount, orderAmount,contractContent,
       remark = #{record.remark,jdbcType=VARCHAR},
       orderRemark = #{record.orderRemark,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
+      deliverStatus = #{record.deliverStatus,jdbcType=VARCHAR},
+      payStatus = #{record.payStatus,jdbcType=VARCHAR},
+      billStatus = #{record.billStatus,jdbcType=VARCHAR},
       delFlg = #{record.delFlg,jdbcType=VARCHAR},
       creator = #{record.creator,jdbcType=VARCHAR},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
@@ -748,6 +790,15 @@ otherAmount, orderAmount,contractContent,
       <if test="status != null" >
         status = #{status,jdbcType=VARCHAR},
       </if>
+      <if test="deliverStatus != null" >
+        deliverStatus = #{deliverStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="payStatus != null" >
+        payStatus = #{payStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="billStatus != null" >
+        billStatus = #{billStatus,jdbcType=VARCHAR},
+      </if>
       <if test="delFlg != null" >
         delFlg = #{delFlg,jdbcType=VARCHAR},
       </if>
@@ -799,6 +850,9 @@ otherAmount, orderAmount,contractContent,
       remark = #{remark,jdbcType=VARCHAR},
       orderRemark = #{orderRemark,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
+      deliverStatus = #{deliverStatus,jdbcType=VARCHAR},
+      payStatus = #{payStatus,jdbcType=VARCHAR},
+      billStatus = #{billStatus,jdbcType=VARCHAR},
       delFlg = #{delFlg,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP},
