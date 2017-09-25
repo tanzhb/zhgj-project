@@ -17,9 +17,9 @@
     <!--添加基本信息  -->
     <insert id="insertBasicInfo" parameterType="com.congmai.zhgj.web.model.DeliveryVO">
     INSERT INTO delivery
-    (serialNum,orderSerial,deliverNum,deliverType,supplyComId,shipper,receiver,maker,makeDate,approval,approvalDate,warehouseSerial,remark,deliverDate,
+    (serialNum,orderSerial,deliverNum,deliverType,supplyComId,shipper,receiver,maker,approval,approvalDate,warehouseSerial,deliverAddress,remark,deliverDate,
     materielCount,packageCount,packageType,packageSpecifications,materielWeight,serviceMoney,deliverer,contactNum,deliverRemark,creator,createTime,updater,updateTime,status) VALUES
-    (#{serialNum},#{orderSerial},#{deliverNum},#{deliverType},#{supplyComId},#{shipper},#{receiver},#{maker},#{makeDate},#{approval},#{approvalDate},#{warehouseSerial},#{remark},#{deliverDate},#{materielCount},
+    (#{serialNum},#{orderSerial},#{deliverNum},#{deliverType},#{supplyComId},#{shipper},#{receiver},#{maker},#{approval},#{approvalDate},#{warehouseSerial},#{deliveryAddress},#{remark},#{deliverDate},#{materielCount},
     #{packageCount},#{packageType},#{packageSpecifications},#{materielWeight},#{serviceMoney},#{deliverer},#{contactNum},#{deliverRemark},#{creator},NOW(),#{creator},NOW(),'0')
     </insert>
     
@@ -29,10 +29,11 @@
     orderSerial=#{orderSerial},
     deliverNum=#{deliverNum},
     warehouseSerial=#{warehouseSerial},
+    deliverAddress=#{deliveryAddress},
     status=#{status},
+    shipper=#{shipper},
     receiver=#{receiver},
     maker=#{maker},
-    makeDate=#{makeDate},
     approval=#{approval},
     approvalDate=#{approvalDate},
     remark=#{remark},
@@ -48,36 +49,6 @@
     deliverRemark=#{deliverRemark},
     reason=#{reason},
 	processInstanceId=#{processInstanceId},
-	userId=#{userId},
-    updater=#{updater},
-    updateTime=NOW()
-    WHERE
-    serialNum=#{serialNum}
-    </update>
-    
-     <!--更新基本信息  -->
-    <update id="updateBasicInfo2" parameterType="com.congmai.zhgj.web.model.DeliveryVO">
-    UPDATE delivery SET
-    orderSerial=#{orderSerial},
-    deliverNum=#{deliverNum},
-    warehouseSerial=#{warehouseSerial},
-    status=#{status},
-    receiver=#{receiver},
-    maker=#{maker},
-    makeDate=#{makeDate},
-    approval=#{approval},
-    approvalDate=#{approvalDate},
-    remark=#{remark},
-    deliverDate=#{deliverDate},
-    materielCount=#{materielCount},
-    packageCount=#{packageCount},
-    packageType=#{packageType},
-    packageSpecifications=#{packageSpecifications},
-    materielWeight=#{materielWeight},
-    serviceMoney=#{serviceMoney},
-    deliverer=#{deliverer},
-    contactNum=#{contactNum},
-    deliverRemark=#{deliverRemark},
 	userId=#{userId},
     updater=#{updater},
     updateTime=NOW()
@@ -116,14 +87,15 @@
     <!--添加基本信息第三部分  -->
     <insert id="insertBasicInfoPartIII" parameterType="com.congmai.zhgj.web.model.TakeDeliveryVO">
     INSERT INTO takeDelivery
-    (serialNum,deliverSerial,warehouseSerial,takeDeliverDate,receiver,contactNum,remark,status,creator,createTime,updater,updateTime) VALUES
-    (#{serialNum},#{deliverSerial},#{takeDeliveryWarehouseSerial},#{takeDeliverDate},#{takeDeliveryReceiver},#{takeDeliveryContactNum},#{takeDeliveryRemark},'0',#{creator},NOW(),#{creator},NOW())
+    (serialNum,deliverSerial,warehouseSerial,takeDeliverAddress,takeDeliverDate,receiver,contactNum,remark,status,creator,createTime,updater,updateTime) VALUES
+    (#{serialNum},#{deliverSerial},#{takeDeliveryWarehouseSerial},#{takeAddress},#{takeDeliverDate},#{takeDeliveryReceiver},#{takeDeliveryContactNum},#{takeDeliveryRemark},'0',#{creator},NOW(),#{creator},NOW())
     </insert>
     
     <!--更新基本信息第三部分  -->
     <update id="updateBasicInfoPartIII" parameterType="com.congmai.zhgj.web.model.TakeDeliveryVO">
     UPDATE takeDelivery SET
     warehouseSerial=#{takeDeliveryWarehouseSerial},
+    takeDeliverAddress=#{takeAddress},
     takeDeliverDate=#{takeDeliverDate},
     receiver=#{takeDeliveryReceiver},
     contactNum=#{takeDeliveryContactNum},
@@ -160,15 +132,30 @@
 	WHERE a.deliverSerial=#{serialNum}
     </select>
     
+    <!--查询详情物料集合  -->
+    <select id="selectListForDetail2" resultType="com.congmai.zhgj.web.model.DeliveryMaterielVO" parameterType="java.lang.String">
+    SELECT
+	a.serialNum,c.materielNum,c.materielName,c.specifications,c.unit,a.batchNum,a.manufactureDate,a.deliverCount,a.remark,
+	a.stockCount,a.unstockCount,d.warehouseName,e.positionName,a.stockRemark,a.qualifiedCount,a.unqualifiedCount,a.checkRemark,
+	a.acceptCount,a.refuseCount,a.takeRemark,f.status
+	FROM
+	deliveryMateriel a
+	LEFT JOIN materiel c ON a.orderMaterielSerial=c.serialNum
+	LEFT JOIN warehouse d ON a.warehouseSerial=d.serialNum
+	LEFT JOIN warehousePosition e ON a.positionSerial=e.serialNum
+	LEFT JOIN delivery f ON a.deliverSerial=f.serialNum
+	WHERE a.deliverSerial=#{serialNum}
+    </select>
+    
     <!--查询详情  -->
     <select id="selectDetailById" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.DeliveryVO">
     SELECT
 	a.serialNum,a.deliverNum,a.deliverType,f.orderNum,a.supplyComId,a.shipper,a.receiver,a.maker,a.makeDate,a.approval,a.approvalDate,a.warehouseSerial,a.orderSerial,c.warehouseSerial AS takeWarehouseSerial,
-	a.remark,d.warehouseName deliveryWarehouseName,d.address deliveryAddress,a.deliverDate,a.materielCount,a.packageCount,a.packageType,a.packageSpecifications,
+	a.remark,d.warehouseName deliveryWarehouseName,a.deliverAddress deliveryAddress,a.deliverDate,a.materielCount,a.packageCount,a.packageType,a.packageSpecifications,
 	a.materielWeight,a.serviceMoney,a.deliverer,a.contactNum,a.deliverRemark,a.status,
 	b.serialNum AS transportserialNum,b.transportType,b.transport,b.port,b.shipNumber,b.playArrivalDate,b.playWarehouseDate,
 	b.contact transportContact,b.contactNum transportContactNum,b.remark transportRemark,
-	e.serialNum takeWarehouseSerial,e.warehouseName takeWarehouseName,e.address takeAddress,c.takeDeliverDate,c.receiver takeDeliveryReceiver,
+	e.serialNum takeWarehouseSerial,e.warehouseName takeWarehouseName,c.takeDeliverAddress takeAddress,c.takeDeliverDate,c.receiver takeDeliveryReceiver,
 	c.contactNum takeDeliveryContactNum,c.remark takeDeliveryRemark,c.serialNum AS takeDeliverSerialNum,a.reason,a.processInstanceId,a.userId
 	FROM delivery a
 	LEFT JOIN deliveryTransport b ON b.deliverSerial=a.serialNum
@@ -176,6 +163,24 @@
 	LEFT JOIN takeDelivery c ON c.deliverSerial=a.serialNum
 	LEFT JOIN warehouse e ON c.warehouseSerial=e.serialNum AND e.delFlg='0'
 	LEFT JOIN orderInfo f ON a.orderSerial=f.serialNum AND f.delFlg='0'
+	WHERE a.serialNum=#{id}
+    </select>
+    
+    <!--查询详情  -->
+    <select id="selectDetailById2" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.DeliveryVO">
+    SELECT
+	a.serialNum,a.deliverNum,a.deliverType,a.orderSerial AS orderNum,a.supplyComId,a.shipper,a.receiver,a.maker,a.makeDate,a.approval,a.approvalDate,a.warehouseSerial,a.orderSerial,c.warehouseSerial AS takeWarehouseSerial,
+	a.remark,d.warehouseName deliveryWarehouseName,a.deliverAddress deliveryAddress,a.deliverDate,a.materielCount,a.packageCount,a.packageType,a.packageSpecifications,
+	a.materielWeight,a.serviceMoney,a.deliverer,a.contactNum,a.deliverRemark,a.status,
+	b.serialNum AS transportserialNum,b.transportType,b.transport,b.port,b.shipNumber,b.playArrivalDate,b.playWarehouseDate,
+	b.contact transportContact,b.contactNum transportContactNum,b.remark transportRemark,
+	e.serialNum takeWarehouseSerial,e.warehouseName takeWarehouseName,c.takeDeliverAddress takeAddress,c.takeDeliverDate,c.receiver takeDeliveryReceiver,
+	c.contactNum takeDeliveryContactNum,c.remark takeDeliveryRemark,c.serialNum AS takeDeliverSerialNum,a.reason,a.processInstanceId,a.userId
+	FROM delivery a
+	LEFT JOIN deliveryTransport b ON b.deliverSerial=a.serialNum
+	LEFT JOIN warehouse d ON a.warehouseSerial=d.serialNum AND d.delFlg='0'
+	LEFT JOIN takeDelivery c ON c.deliverSerial=a.serialNum
+	LEFT JOIN warehouse e ON c.warehouseSerial=e.serialNum AND e.delFlg='0'
 	WHERE a.serialNum=#{id}
     </select>
     
@@ -218,6 +223,14 @@
         </foreach>
     </update>
     
+    <!--批量获取物料信息  -->
+    <select id="batchGetMaterielInfo" parameterType="java.util.List" resultType="com.congmai.zhgj.web.model.Materiel">
+    SELECT serialNum,materielNum,materielName,specifications,unit FROM materiel
+    WHERE serialNum in
+    <foreach item="idList" collection="list" open="(" close=")" separator=",">
+            #{idList}
+        </foreach>
+    </select>
     <!--查询发货物料对象  -->
     <select id="selectDeliveryMaterielById" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.DeliveryMaterielVO">
     SELECT 
@@ -240,6 +253,25 @@
 	a.serialNum=#{id}
     </select>
     
+     <!--查询发货物料对象  -->
+    <select id="selectDeliveryMaterielById2" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.DeliveryMaterielVO">
+    SELECT 
+	a.serialNum,
+	a.orderMaterielSerial,
+	a.batchNum,
+	a.deliverCount,
+	a.remark,
+	c.materielName,
+	c.materielNum,
+	c.specifications,
+	c.unit,
+	a.manufactureDate
+	FROM
+	deliveryMateriel a
+	LEFT JOIN materiel c ON a.orderMaterielSerial=c.serialNum
+	WHERE 
+	a.serialNum=#{id}
+    </select>
     <!--查询仓库地址  -->
     <select id="queryAddressById" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.Warehouse">
     SELECT
@@ -273,6 +305,9 @@
         #{idList}
     </foreach>
     </delete>
+    
+    
+    
     
     <!--查询物料归属订单  -->
     <select id="selectOrderId" parameterType="java.lang.String" resultType="java.lang.String">

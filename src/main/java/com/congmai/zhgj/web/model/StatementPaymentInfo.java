@@ -1,7 +1,7 @@
 package com.congmai.zhgj.web.model;
 
 public class StatementPaymentInfo {
-	private String paymentPlanNum;
+	private String paymentNum;
 	private String orderNum;
 	private String paymentPlanDate;
 	private String paymentNode;
@@ -13,12 +13,7 @@ public class StatementPaymentInfo {
 	private String billDate;
 	private String billNum;
 	
-	public String getPaymentPlanNum() {
-		return paymentPlanNum;
-	}
-	public void setPaymentPlanNum(String paymentPlanNum) {
-		this.paymentPlanNum = paymentPlanNum;
-	}
+
 	public String getOrderNum() {
 		return orderNum;
 	}
@@ -78,6 +73,12 @@ public class StatementPaymentInfo {
 	}
 	public void setBillNum(String billNum) {
 		this.billNum = billNum;
+	}
+	public String getPaymentNum() {
+		return paymentNum;
+	}
+	public void setPaymentNum(String paymentNum) {
+		this.paymentNum = paymentNum;
 	}
 	
 	

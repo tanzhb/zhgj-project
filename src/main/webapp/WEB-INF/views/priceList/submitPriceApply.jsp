@@ -15,7 +15,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a>重新编辑</a>
+            <a>申请</a>
         </li>
     </ul>
     <div class="page-toolbar">
@@ -28,7 +28,7 @@
           </div>
       </div>
 </div> -->
-<div class="row" id="buyOrderPrint">
+<div class="row" id="price">
     <div class="col-md-12">
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet light ">
@@ -39,40 +39,9 @@
 				            </div>
 					</div> -->
            		 <div class="portlet-body">
-					<jsp:include  page="editBuyOrderBase.jsp"/>
-      			</div>
-      			   <div class="row">
-						<div class="col-md-12">
-							<p>
-								<div class="portlet box green">
-	                                <div class="portlet-title">
-	                                    <div class="caption">
-	                                        <i class="fa fa-globe"></i>评论 </div>
-	                                </div>
-	                                <div class="portlet-body">
-	                                    <table class="table table-striped table-bordered table-hover order-column" id="pinglun">
-	                                        <thead>
-	                                            <tr>
-	                                                <th>评论人</th>
-	                                                <th>评论时间</th>
-	                                                <th>评论内容</th>
-	                                            </tr>
-	                                        </thead>
-	                                        <tbody id = "comment_audit">	
-                                            </tbody>
-	                                    </table>
-	                                </div>
-	                            </div>
-							</p>
-							
-							<p>
-								<input type="hidden" name="serialNum" id="serialNum" value="" />
-								<input type="hidden" name="taskId" id="taskId" value="{{taskId}}" />
-								<input type="hidden" name="processInstanceId" id="processInstanceId" value="{{processInstanceId}}" />
-							</p>
-						</div>
-					</div>
-      			<!-- //申请原因 -->
+					<jsp:include  page="viewPriceBase.jsp"/>
+					
+					<!-- //申请原因 -->
 					<div class="portlet-body form">
 					     <form >
 						     <div class="form-body">
@@ -81,9 +50,9 @@
 			                          		<div class="form-group ">
 				                              	<label class="control-label bold">原因：</label>
 				                                <div class="">
-				                                  <input type="text" name="remark" class="form-control"  ng-model="buyOrder.remark"  >
+				                                  <input type="text" name="remark"  class="form-control"  ng-model="priceList.reason"  >
 			                                      <div class="form-control-focus"> </div>
-			                                      <span class="help-block">请重新输入原因</span>
+			                                      <span class="help-block" >请输入原因</span>
 				                               	</div>
 			                               </div>
 			                          </div>
@@ -93,12 +62,13 @@
 		            </div>
 		            <div class="portlet-title">
 			               <div class="tools">
-			               		<button type="button" ng-click="replyOrder()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">重新申请</button>
-			               		<button type="button" ng-click="cancelApply()" ng-hide="orderStatusInput" class="btn red btn-circle  btn-sm">取消申请</button>
+			               		<button type="button"   ng-if="buyOrSale.indexOf('buy')>-1"  ng-click="confirmPriceApply('buy')" class="btn blue btn-circle  btn-sm">提交申请</button>
+			               		<button type="button"   ng-if="buyOrSale.indexOf('sale')>-1"  ng-click="confirmPriceApply('sale')"  class="btn blue btn-circle  btn-sm">提交申请</button>
 				                <button type="button" ng-click="cancelPage()" class="btn default btn-circle  btn-sm"><i class="fa fa-undo"></i> 取消 </button>
 				            </div>
 					</div>
+      			</div>
 			</div>
 	</div>
 </div>
-<jsp:include  page="selectBasicMateriel.jsp"/> <!-- 选择基本物料 -->
+

@@ -61,6 +61,7 @@ import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryTransportVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
+import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
@@ -249,6 +250,20 @@ public class DeliveryController {
     	return map;
 	}
 	
+	
+	/**
+	 * 批量获取物料信息
+	 * @return
+	 */
+	@RequestMapping(value = "/batchGetMaterielInfo", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> batchGetMaterielInfo(@RequestBody String ids) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<Materiel> list=deliveryService.batchGetMaterielInfo(ids);
+		map.put("materielList", list);
+		return map;
+	}
+	
     
     /**
      * @Description (保存订单物料信息)
@@ -278,7 +293,11 @@ public class DeliveryController {
         		return null;
         	}
         	deliveryMateriel =deliveryService.selectDeliveryMaterielById(deliveryMateriel.getSerialNum());
-    	/*return deliveryMateriel;*/
+        	
+        	if(StringUtils.isEmpty(deliveryMateriel.getMaterielNum())){
+        		deliveryMateriel =deliveryService.selectDeliveryMaterielById2(deliveryMateriel.getSerialNum());	
+        	}
+        	
     	return new ResponseEntity<DeliveryMaterielVO>(deliveryMateriel, HttpStatus.CREATED);
     }
     
@@ -383,6 +402,9 @@ public class DeliveryController {
     	
     	//保存之后查询
     	delivery=deliveryService.selectDetailById(delivery.getSerialNum());
+    	if(StringUtils.isEmpty(delivery.getOrderNum())){
+    	delivery=deliveryService.selectDetailById2(delivery.getSerialNum());	
+    	}
     	return new ResponseEntity<DeliveryVO>(delivery, HttpStatus.OK);
     }
     
@@ -404,6 +426,7 @@ public class DeliveryController {
     	Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
 		delivery.setUpdater(currenLoginName);
+		delivery.setStatus("0");
     	deliveryService.updateBasicInfo(delivery);
     	
     	
@@ -516,21 +539,32 @@ public class DeliveryController {
    	 * @param ids
    	 * @return
    	 */
-   	@RequestMapping(value = "/getDeliveryInfo")
-   	@ResponseBody
-   	public Map<String, Object> getDeliveryInfo(String serialNum) {
-   		DeliveryVO delivery=deliveryService.selectDetailById(serialNum);
-   		Map<String, Object> map = new HashMap<String, Object>();
-   		String suppluComId=delivery.getSupplyComId();
-   		Company company=deliveryService.selectCompanyInfo(suppluComId);
-   		delivery.setSupplyComId(company.getComName());
-   		delivery.setShipper(company.getComName());
-       	map.put("delivery", delivery);
-       	
-       	List<DeliveryMaterielVO> deliveryMateriels = deliveryService.selectListForDetail(serialNum);
-       	map.put("deliveryMateriels", deliveryMateriels);
-       	return map;
-   	}
+	@RequestMapping(value = "/getDeliveryInfo")
+	@ResponseBody
+	public Map<String, Object> getDeliveryInfo(String serialNum) {
+		DeliveryVO delivery=null;
+		delivery=deliveryService.selectDetailById(serialNum);
+		if(StringUtils.isEmpty(delivery.getOrderNum())){
+			delivery=deliveryService.selectDetailById2(delivery.getSerialNum());	
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		String suppluComId=delivery.getSupplyComId();
+		Company company=deliveryService.selectCompanyInfo(suppluComId);
+		delivery.setSupplyComId(company.getComName());
+		delivery.setShipper(company.getComName());
+		map.put("delivery", delivery);
+
+		List<DeliveryMaterielVO> deliveryMateriels=null;
+		deliveryMateriels = deliveryService.selectListForDetail(serialNum);
+		if(deliveryMateriels.size()>0){
+			String materielNum=deliveryMateriels.get(0).getMaterielNum();
+			if(StringUtils.isEmpty(materielNum)){
+			deliveryMateriels = deliveryService.selectListForDetail2(serialNum);	
+			}	
+		}
+		map.put("deliveryMateriels", deliveryMateriels);
+		return map;
+	}
    	
    	
    	/**

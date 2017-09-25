@@ -58,6 +58,7 @@ public class DeliveryVO extends BaseVO implements Serializable{
 	//发货仓库流水号
 	private String warehouseSerial;
 	
+	
 	//物料数量
 	private String materielCount;
 	
@@ -144,9 +145,11 @@ public class DeliveryVO extends BaseVO implements Serializable{
 	private String takeWarehouseName;
 	
 	
+	//发货地址
 	private String deliveryAddress;
 	
 	
+	//收货地址
 	private String takeAddress;
 	
 	

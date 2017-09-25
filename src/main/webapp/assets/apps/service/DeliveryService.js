@@ -50,9 +50,27 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     		
     		
     		getSupplyComId:getSupplyComId,
+    		
+    		
+    		batchGetMaterielInfo:batchGetMaterielInfo,
     };
 
     return factory;
+    
+    
+    function batchGetMaterielInfo(ids){
+    	debugger
+    	var deferred = $q.defer();  
+        $http.post(ctx + "rest/delivery/batchGetMaterielInfo",ids).success(function (data) {  
+        	
+        	// 如果连接成功，延时返回给调用者  
+            deferred.resolve(data);  
+        })  
+            .error(function () {  
+                deferred.reject('连接服务器出错！');  
+            })  
+        return deferred.promise;
+    }
     
     
     function getSupplyComId() {
@@ -98,8 +116,10 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
         return deferred.promise;  
     }
     
+    
   //保存订单物料
     function saveDeliveryMateriel (deliveryMateriel){
+    	debugger
 		var deferred = $q.defer();
 		$.post("rest/delivery/saveDeliveryMateriel", {
 			batchNum:deliveryMateriel.batchNum,
@@ -107,7 +127,7 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 			deliverCount:deliveryMateriel.deliverCount,
 			remark:deliveryMateriel.remark,
 			deliverSerial:deliveryMateriel.deliverSerial,
-			orderMaterielSerial:deliveryMateriel.orderMaterielSerialNum//传整个表单数据  
+			orderMaterielSerial:deliveryMateriel.orderMaterielSerialNum==null?deliveryMateriel.serialNum:deliveryMateriel.orderMaterielSerialNum,//传整个表单数据  
 		}
 		).then(function success(result) {
 			deferred.resolve(result);//请求成功
@@ -142,13 +162,15 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     function saveBasicInfo($scope){
     	var deferred = $q.defer();
 		$.post("rest/delivery/saveBasicInfo", {
-			orderSerial:$scope.orderSerial,
+			orderSerial:$scope.orderSerial==null?$scope.delivery.orderSerial:$scope.orderSerial,
+			/*orderSerial:$scope.delivery.orderSerial,*/
 			warehouseSerial:$scope.delivery.warehouseSerial,
+			deliveryAddress:$scope.warehouseAddress,
 			deliverNum:$scope.delivery.deliverNum,
 			deliverType:$scope.delivery.deliverType,
-			receiver:null,
+			shipper:$scope.shipper,
+			receiver:$scope.delivery.receiver,
 			maker:$scope.delivery.maker,
-			makeDate:$scope.delivery.makeDate,
 			remark:$scope.delivery.remark,
 			deliverDate:$scope.delivery.deliverDate,
 			packageCount:$scope.delivery.packageCount,
@@ -169,6 +191,7 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 			transportContactNum:$scope.deliveryTransport.contactNum,
 			
 			takeDeliveryWarehouseSerial:$scope.takeDelivery.warehouseSerial,
+			takeAddress:$scope.takeDeliveryWarehouseAddress,
 			takeDeliverDate:$scope.takeDelivery.takeDeliverDate,
 			takeDeliveryReceiver:$scope.takeDelivery.receiver,
 			takeDeliveryContactNum:$scope.takeDelivery.contactNum,
@@ -190,10 +213,11 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 			serialNum:$scope.delivery.serialNum,
 			orderSerial:$scope.delivery.orderSerial,
 			warehouseSerial:$scope.delivery.warehouseSerial,
+			deliveryAddress:$scope.delivery.deliveryAddress,
 			deliverNum:$scope.delivery.deliverNum,
-			receiver:null,
+			shipper:$scope.delivery.shipper,
+			receiver:$scope.delivery.receiver,
 			maker:$scope.delivery.maker,
-			makeDate:$scope.delivery.makeDate,
 			approval:$scope.delivery.approval,
 			approvalDate:$scope.delivery.approvalDate,
 			remark:$scope.delivery.remark,
@@ -220,6 +244,7 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 			
 			takeDeliverSerialNum:$scope.delivery.takeDeliverSerialNum,
 			takeDeliveryWarehouseSerial:$scope.delivery.takeWarehouseSerial,
+			takeAddress:$scope.delivery.takeAddress,
 			takeDeliverDate:$scope.delivery.takeDeliverDate,
 			takeDeliveryReceiver:$scope.delivery.takeDeliveryReceiver,
 			takeDeliveryContactNum:$scope.delivery.takeDeliveryContactNum,

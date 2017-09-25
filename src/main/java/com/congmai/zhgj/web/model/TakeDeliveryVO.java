@@ -16,6 +16,9 @@ public class TakeDeliveryVO {
 	//收货仓库流水号
 	private String takeDeliveryWarehouseSerial;
 	
+	//收货地址
+	private String takeAddress;
+	
 	//收货日期
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date takeDeliverDate;
@@ -151,6 +154,14 @@ public class TakeDeliveryVO {
 
 	public void setTakeDeliveryRemark(String takeDeliveryRemark) {
 		this.takeDeliveryRemark = takeDeliveryRemark;
+	}
+
+	public String getTakeAddress() {
+		return takeAddress;
+	}
+
+	public void setTakeAddress(String takeAddress) {
+		this.takeAddress = takeAddress;
 	}
 	
 }

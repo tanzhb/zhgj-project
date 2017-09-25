@@ -39,7 +39,7 @@
 				            </div>
 					</div> -->
            		 <div class="portlet-body">
-					<jsp:include  page="editBuyOrderBase.jsp"/>
+					<jsp:include  page="editPriceBase.jsp"/>
       			</div>
       			   <div class="row">
 						<div class="col-md-12">
@@ -81,7 +81,7 @@
 			                          		<div class="form-group ">
 				                              	<label class="control-label bold">原因：</label>
 				                                <div class="">
-				                                  <input type="text" name="remark" class="form-control"  ng-model="buyOrder.remark"  >
+				                                  <input type="text" name="reason" class="form-control"  ng-model="priceList.reason">
 			                                      <div class="form-control-focus"> </div>
 			                                      <span class="help-block">请重新输入原因</span>
 				                               	</div>
@@ -93,12 +93,15 @@
 		            </div>
 		            <div class="portlet-title">
 			               <div class="tools">
-			               		<button type="button" ng-click="replyOrder()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">重新申请</button>
-			               		<button type="button" ng-click="cancelApply()" ng-hide="orderStatusInput" class="btn red btn-circle  btn-sm">取消申请</button>
+			               		<button type="button" ng-click="replyPrice('buy')"  ng-if="buyOrSale.indexOf('buy')>-1"  class="btn blue btn-circle  btn-sm">重新申请</button>
+			               		<button type="button" ng-click="cancelApplyPrice('buy')"  ng-if="buyOrSale.indexOf('buy')>-1"   class="btn red btn-circle  btn-sm">取消申请</button>
+			               		<button type="button" ng-click="replyPrice('sale')"  ng-if="buyOrSale.indexOf('sale')>-1"  class="btn blue btn-circle  btn-sm">重新申请</button>
+			               		<button type="button" ng-click="cancelApplyPrice('sale')"  ng-if="buyOrSale.indexOf('sale')>-1"   class="btn red btn-circle  btn-sm">取消申请</button>
 				                <button type="button" ng-click="cancelPage()" class="btn default btn-circle  btn-sm"><i class="fa fa-undo"></i> 取消 </button>
 				            </div>
 					</div>
 			</div>
 	</div>
 </div>
-<jsp:include  page="selectBasicMateriel.jsp"/> <!-- 选择基本物料 -->
+<jsp:include  page="../materiel/selectMateriel.jsp"/>
+

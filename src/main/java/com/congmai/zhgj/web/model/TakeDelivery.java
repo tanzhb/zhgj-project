@@ -32,6 +32,8 @@ public class TakeDelivery extends BaseVO implements Serializable{
     private String taker;
 
     private String takeRemark;
+    
+    private String takeDeliverAddress;
 
     private String delFlg;
 
@@ -208,6 +210,14 @@ public class TakeDelivery extends BaseVO implements Serializable{
 
 	public void setTakeRemark(String takeRemark) {
 		this.takeRemark = takeRemark;
+	}
+
+	public String getTakeDeliverAddress() {
+		return takeDeliverAddress;
+	}
+
+	public void setTakeDeliverAddress(String takeDeliverAddress) {
+		this.takeDeliverAddress = takeDeliverAddress;
 	}
 
 

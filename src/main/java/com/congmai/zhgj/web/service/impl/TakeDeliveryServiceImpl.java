@@ -154,8 +154,8 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	@Override
 	public Delivery selectByTakeDeliveryPrimaryKey(String serialNum) {
 		Delivery delivery = this.takeDeliveryMapper.selectByTakeDeliveryPrimaryKey(serialNum);
-		DeliveryMaterielExample example = new DeliveryMaterielExample();
-		example.createCriteria().andDelFlgEqualTo("0").andDeliverSerialEqualTo(delivery.getTakeDelivery().getSerialNum());
+		//DeliveryMaterielExample example = new DeliveryMaterielExample();
+		//example.createCriteria().andDelFlgEqualTo("0").andDeliverSerialEqualTo(delivery.getTakeDelivery().getSerialNum());
 		//return this.takeDeliveryMapper.selectByTakeDeliveryPrimaryKey(serialNum);
 		return delivery;
 	}
