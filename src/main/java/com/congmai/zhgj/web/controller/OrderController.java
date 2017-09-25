@@ -47,6 +47,7 @@ import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
+import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.BOMMateriel;
 import com.congmai.zhgj.web.model.BOMMaterielExample;
@@ -146,16 +147,7 @@ public class OrderController {
     	OrderInfo orderInfo = json2Order(params);
             
     	if(orderInfo.getSerialNum()==null||orderInfo.getSerialNum().isEmpty()){//新增
-    		orderInfo.setSerialNum(ApplicationUtils.random32UUID());
-    		Subject currentUser = SecurityUtils.getSubject();
-    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-    		orderInfo.setCreator(currenLoginName);
-    		orderInfo.setUpdater(currenLoginName);
-    		orderInfo.setCreateTime(new Date());
-    		orderInfo.setUpdateTime(new Date());
-    		orderInfo.setStatus("0");
-    		
-    		orderService.insert(orderInfo);
+    		insetOrder(orderInfo);
     		
     	}else{//更新
     		Subject currentUser = SecurityUtils.getSubject();
@@ -164,7 +156,6 @@ public class OrderController {
     		orderInfo.setUpdateTime(new Date());
     		orderService.update(orderInfo);
     	}
-    	
     	/*if("1".equals(orderInfo.getStatus())){
     		//启动订单审批测试流程-start
     		startOrderProcess(orderInfo);
@@ -173,6 +164,19 @@ public class OrderController {
 		
 		return orderInfo;
     }
+    
+	private void insetOrder(OrderInfo orderInfo) {
+		orderInfo.setSerialNum(ApplicationUtils.random32UUID());
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		orderInfo.setCreator(currenLoginName);
+		orderInfo.setUpdater(currenLoginName);
+		orderInfo.setCreateTime(new Date());
+		orderInfo.setUpdateTime(new Date());
+		orderInfo.setStatus("0");
+		
+		orderService.insert(orderInfo);
+	}
 
 	private OrderInfo json2Order(String params) {
 		params = params.replace("\\", "");

@@ -38,4 +38,10 @@ public class Constants {
 	
 	/***************** 单据类型-收货 *****************/
 	public static final String TAKEDELIVERY = "takeDelivery";
+	
+	/***************** 采购订单流程key *****************/
+	public static final String BUYORDER = "com.congmai.zhgj.buyOrder";
+	
+	/***************** 销售订单流程key *****************/
+	public static final String SALEORDER = "com.congmai.zhgj.saleOrder";
 }

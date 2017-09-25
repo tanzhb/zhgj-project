@@ -702,7 +702,7 @@ public class ProcessServiceImp implements IProcessService{
         variables.put("entity", orderInfo);
 
         String businessKey = orderInfo.getBusinessKey();
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("com.congmai.zhgj.buyOrder", businessKey, variables);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(Constants.BUYORDER, businessKey, variables);
         String processInstanceId = processInstance.getId();
         orderInfo.setProcessInstanceId(processInstanceId);
         this.processBaseService.update(orderInfo);
@@ -723,7 +723,7 @@ public class ProcessServiceImp implements IProcessService{
         variables.put("entity", orderInfo);
 
         String businessKey = orderInfo.getBusinessKey();
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("com.congmai.zhgj.saleOrder", businessKey, variables);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(Constants.SALEORDER, businessKey, variables);
         String processInstanceId = processInstance.getId();
         orderInfo.setProcessInstanceId(processInstanceId);
         this.processBaseService.update(orderInfo);

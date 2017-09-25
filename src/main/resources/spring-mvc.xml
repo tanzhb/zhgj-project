@@ -77,7 +77,14 @@
         <property name="maxUploadSize" value="10485760000"/>
         <property name="maxInMemorySize" value="40960"/>
     </bean>
-
+	<!-- 开启AOP拦截 -->
+    <aop:aspectj-autoproxy proxy-target-class="true" /> 
+    <mvc:annotation-driven />
+    <!-- 定义Spring描述Bean的范围  -->
+    <context:component-scan base-package="com.congmai.zhgj.log" >
+         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+    
     <!-- 启用shrio授权注解拦截方式 -->
     <aop:config proxy-target-class="true"></aop:config>
     <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">

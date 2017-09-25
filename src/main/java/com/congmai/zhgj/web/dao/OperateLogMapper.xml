@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.congmai.zhgj.web.dao.OperateLogMapper" >
+  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.OperateLog" >
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="objectSerial" property="objectSerial" jdbcType="VARCHAR" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="operationDesc" property="operationDesc" jdbcType="VARCHAR" />
+    <result column="operateType" property="operateType" jdbcType="VARCHAR" />
+    <result column="operationTime" property="operationTime" jdbcType="TIMESTAMP" />
+    <result column="moudleCode" property="moudleCode" jdbcType="VARCHAR" />
+    <result column="moudleName" property="moudleName" jdbcType="VARCHAR" />
+    <result column="operateResult" property="operateResult" jdbcType="VARCHAR" />
+    <result column="requestIp" property="requestIp" jdbcType="VARCHAR" />
+    <result column="requestUrl" property="requestUrl" jdbcType="VARCHAR" />
+    <result column="serverIp" property="serverIp" jdbcType="VARCHAR" />
+    <result column="errorMessage" property="errorMessage" jdbcType="VARCHAR" />
+    <result column="bussType" property="bussType" jdbcType="VARCHAR" />
+    <result column="bussTypeDesc" property="bussTypeDesc" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    serialNum, objectSerial, operator, operationDesc, operateType, operationTime, moudleCode, 
+    moudleName, operateResult, requestIp, requestUrl, serverIp, errorMessage, bussType, 
+    bussTypeDesc, delFlg, creator, createTime, updater, updateTime, remark
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.OperateLogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from operateLog
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from operateLog
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from operateLog
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.OperateLogExample" >
+    delete from operateLog
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.congmai.zhgj.web.model.OperateLog" >
+    insert into operateLog (serialNum, objectSerial, operator, 
+      operationDesc, operateType, operationTime, 
+      moudleCode, moudleName, operateResult, 
+      requestIp, requestUrl, serverIp, 
+      errorMessage, bussType, bussTypeDesc, 
+      delFlg, creator, createTime, 
+      updater, updateTime, remark
+      )
+    values (#{serialNum,jdbcType=VARCHAR}, #{objectSerial,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, 
+      #{operationDesc,jdbcType=VARCHAR}, #{operateType,jdbcType=VARCHAR}, #{operationTime,jdbcType=TIMESTAMP}, 
+      #{moudleCode,jdbcType=VARCHAR}, #{moudleName,jdbcType=VARCHAR}, #{operateResult,jdbcType=VARCHAR}, 
+      #{requestIp,jdbcType=VARCHAR}, #{requestUrl,jdbcType=VARCHAR}, #{serverIp,jdbcType=VARCHAR}, 
+      #{errorMessage,jdbcType=VARCHAR}, #{bussType,jdbcType=VARCHAR}, #{bussTypeDesc,jdbcType=VARCHAR}, 
+      #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.OperateLog" >
+    insert into operateLog
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        serialNum,
+      </if>
+      <if test="objectSerial != null" >
+        objectSerial,
+      </if>
+      <if test="operator != null" >
+        operator,
+      </if>
+      <if test="operationDesc != null" >
+        operationDesc,
+      </if>
+      <if test="operateType != null" >
+        operateType,
+      </if>
+      <if test="operationTime != null" >
+        operationTime,
+      </if>
+      <if test="moudleCode != null" >
+        moudleCode,
+      </if>
+      <if test="moudleName != null" >
+        moudleName,
+      </if>
+      <if test="operateResult != null" >
+        operateResult,
+      </if>
+      <if test="requestIp != null" >
+        requestIp,
+      </if>
+      <if test="requestUrl != null" >
+        requestUrl,
+      </if>
+      <if test="serverIp != null" >
+        serverIp,
+      </if>
+      <if test="errorMessage != null" >
+        errorMessage,
+      </if>
+      <if test="bussType != null" >
+        bussType,
+      </if>
+      <if test="bussTypeDesc != null" >
+        bussTypeDesc,
+      </if>
+      <if test="delFlg != null" >
+        delFlg,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="updater != null" >
+        updater,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="objectSerial != null" >
+        #{objectSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null" >
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="operationDesc != null" >
+        #{operationDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="operateType != null" >
+        #{operateType,jdbcType=VARCHAR},
+      </if>
+      <if test="operationTime != null" >
+        #{operationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="moudleCode != null" >
+        #{moudleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="moudleName != null" >
+        #{moudleName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateResult != null" >
+        #{operateResult,jdbcType=VARCHAR},
+      </if>
+      <if test="requestIp != null" >
+        #{requestIp,jdbcType=VARCHAR},
+      </if>
+      <if test="requestUrl != null" >
+        #{requestUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="serverIp != null" >
+        #{serverIp,jdbcType=VARCHAR},
+      </if>
+      <if test="errorMessage != null" >
+        #{errorMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="bussType != null" >
+        #{bussType,jdbcType=VARCHAR},
+      </if>
+      <if test="bussTypeDesc != null" >
+        #{bussTypeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.OperateLogExample" resultType="java.lang.Integer" >
+    select count(*) from operateLog
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update operateLog
+    <set >
+      <if test="record.serialNum != null" >
+        serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.objectSerial != null" >
+        objectSerial = #{record.objectSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operator != null" >
+        operator = #{record.operator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operationDesc != null" >
+        operationDesc = #{record.operationDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operateType != null" >
+        operateType = #{record.operateType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operationTime != null" >
+        operationTime = #{record.operationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.moudleCode != null" >
+        moudleCode = #{record.moudleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.moudleName != null" >
+        moudleName = #{record.moudleName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operateResult != null" >
+        operateResult = #{record.operateResult,jdbcType=VARCHAR},
+      </if>
+      <if test="record.requestIp != null" >
+        requestIp = #{record.requestIp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.requestUrl != null" >
+        requestUrl = #{record.requestUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serverIp != null" >
+        serverIp = #{record.serverIp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.errorMessage != null" >
+        errorMessage = #{record.errorMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bussType != null" >
+        bussType = #{record.bussType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bussTypeDesc != null" >
+        bussTypeDesc = #{record.bussTypeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlg != null" >
+        delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creator != null" >
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updater != null" >
+        updater = #{record.updater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update operateLog
+    set serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      objectSerial = #{record.objectSerial,jdbcType=VARCHAR},
+      operator = #{record.operator,jdbcType=VARCHAR},
+      operationDesc = #{record.operationDesc,jdbcType=VARCHAR},
+      operateType = #{record.operateType,jdbcType=VARCHAR},
+      operationTime = #{record.operationTime,jdbcType=TIMESTAMP},
+      moudleCode = #{record.moudleCode,jdbcType=VARCHAR},
+      moudleName = #{record.moudleName,jdbcType=VARCHAR},
+      operateResult = #{record.operateResult,jdbcType=VARCHAR},
+      requestIp = #{record.requestIp,jdbcType=VARCHAR},
+      requestUrl = #{record.requestUrl,jdbcType=VARCHAR},
+      serverIp = #{record.serverIp,jdbcType=VARCHAR},
+      errorMessage = #{record.errorMessage,jdbcType=VARCHAR},
+      bussType = #{record.bussType,jdbcType=VARCHAR},
+      bussTypeDesc = #{record.bussTypeDesc,jdbcType=VARCHAR},
+      delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      updater = #{record.updater,jdbcType=VARCHAR},
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.OperateLog" >
+    update operateLog
+    <set >
+      <if test="objectSerial != null" >
+        objectSerial = #{objectSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null" >
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="operationDesc != null" >
+        operationDesc = #{operationDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="operateType != null" >
+        operateType = #{operateType,jdbcType=VARCHAR},
+      </if>
+      <if test="operationTime != null" >
+        operationTime = #{operationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="moudleCode != null" >
+        moudleCode = #{moudleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="moudleName != null" >
+        moudleName = #{moudleName,jdbcType=VARCHAR},
+      </if>
+      <if test="operateResult != null" >
+        operateResult = #{operateResult,jdbcType=VARCHAR},
+      </if>
+      <if test="requestIp != null" >
+        requestIp = #{requestIp,jdbcType=VARCHAR},
+      </if>
+      <if test="requestUrl != null" >
+        requestUrl = #{requestUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="serverIp != null" >
+        serverIp = #{serverIp,jdbcType=VARCHAR},
+      </if>
+      <if test="errorMessage != null" >
+        errorMessage = #{errorMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="bussType != null" >
+        bussType = #{bussType,jdbcType=VARCHAR},
+      </if>
+      <if test="bussTypeDesc != null" >
+        bussTypeDesc = #{bussTypeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        delFlg = #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        updater = #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.OperateLog" >
+    update operateLog
+    set objectSerial = #{objectSerial,jdbcType=VARCHAR},
+      operator = #{operator,jdbcType=VARCHAR},
+      operationDesc = #{operationDesc,jdbcType=VARCHAR},
+      operateType = #{operateType,jdbcType=VARCHAR},
+      operationTime = #{operationTime,jdbcType=TIMESTAMP},
+      moudleCode = #{moudleCode,jdbcType=VARCHAR},
+      moudleName = #{moudleName,jdbcType=VARCHAR},
+      operateResult = #{operateResult,jdbcType=VARCHAR},
+      requestIp = #{requestIp,jdbcType=VARCHAR},
+      requestUrl = #{requestUrl,jdbcType=VARCHAR},
+      serverIp = #{serverIp,jdbcType=VARCHAR},
+      errorMessage = #{errorMessage,jdbcType=VARCHAR},
+      bussType = #{bussType,jdbcType=VARCHAR},
+      bussTypeDesc = #{bussTypeDesc,jdbcType=VARCHAR},
+      delFlg = #{delFlg,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+</mapper>
