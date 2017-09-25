@@ -378,7 +378,7 @@ public class TakeDeliveryController {
         		if(StringUtils.isNotEmpty(takeDeliveryParams.getRecord().getSerialNum())){
         			takeDeliveryService.updateStockInData(takeDeliveryParams,currenLoginName,"in");
         		}else{
-        			takeDeliveryService.insertStockInData(takeDeliveryParams,currenLoginName);
+        			takeDeliveryService.insertStockInData(takeDeliveryParams,currenLoginName,"in");
         		}
         		flag = "1";
         	}catch(Exception e){
@@ -411,7 +411,7 @@ public class TakeDeliveryController {
         		if(StringUtils.isNotEmpty(takeDeliveryParams.getRecord().getSerialNum())){
         			takeDeliveryService.updateStockInData(takeDeliveryParams,currenLoginName,"out");
         		}else{
-        			takeDeliveryService.insertStockInData(takeDeliveryParams,currenLoginName);
+        			takeDeliveryService.insertStockInData(takeDeliveryParams,currenLoginName,"out");
         		}
         		flag = "1";
         	}catch(Exception e){
@@ -632,6 +632,7 @@ public class TakeDeliveryController {
 	    		}
 	    	}catch(Exception e){
 	    		System.out.println(e.getMessage());
+	    		e.printStackTrace();
 	    		flag = "1";
 	    	}
 	    	return flag;
@@ -706,10 +707,14 @@ public class TakeDeliveryController {
     
     @RequestMapping("getTakeDeliveryMaterielList")
     @ResponseBody
-    public List<DeliveryMateriel> getTakeDeliveryMaterielList(String serialNum){
-    	if(StringUtils.isNotBlank(serialNum)){
+    public List<DeliveryMateriel> getTakeDeliveryMaterielList(String deliverySerial,String stockSerial){
+    	if(StringUtils.isNotBlank(deliverySerial)){
     		DeliveryMaterielExample example = new DeliveryMaterielExample();
-        	example.createCriteria().andDelFlgEqualTo("0").andDeliverSerialEqualTo(serialNum);
+        	example.createCriteria().andDelFlgEqualTo("0").andDeliverSerialEqualTo(deliverySerial);
+        	return deliveryMaterielService.selectByExample(example);
+    	}else if(StringUtils.isNotBlank(stockSerial)){
+    		DeliveryMaterielExample example = new DeliveryMaterielExample();
+        	example.createCriteria().andDelFlgEqualTo("0").andStockInOutRecordSerialEqualTo(stockSerial);
         	return deliveryMaterielService.selectByExample(example);
     	}
     	return null;
@@ -717,12 +722,17 @@ public class TakeDeliveryController {
     
     @RequestMapping("getTakeDeliveryMaterielListForStockIn")
     @ResponseBody
-    public List<DeliveryMateriel> getTakeDeliveryMaterielListForStockIn(String serialNum){
-    	if(StringUtils.isNotBlank(serialNum)){
+    public List<DeliveryMateriel> getTakeDeliveryMaterielListForStockIn(String deliverySerialNum,String stockSerialNum){
+    	if(StringUtils.isNotBlank(deliverySerialNum)){
     		DeliveryMaterielExample example = new DeliveryMaterielExample();
-    		example.createCriteria().andDelFlgEqualTo("0").andDeliverSerialEqualTo(serialNum);
+    		example.createCriteria().andDelFlgEqualTo("0").andDeliverSerialEqualTo(deliverySerialNum);
+    		return deliveryMaterielService.selectByExampleForStockIn(example);
+    	}else if(StringUtils.isNotBlank(stockSerialNum)){
+    		DeliveryMaterielExample example = new DeliveryMaterielExample();
+    		example.createCriteria().andDelFlgEqualTo("0").andStockInOutRecordSerialEqualTo(stockSerialNum);
     		return deliveryMaterielService.selectByExampleForStockIn(example);
     	}
+    	
     	return null;
     }
     

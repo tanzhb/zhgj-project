@@ -44,7 +44,7 @@
 						<label class="col-md-4 control-label" for="orderSerial">
 							采购订单号：</label>
 						<div class="col-md-8">
-							<p class="control-label left">{{deliver.orderNum==null?deliver.orderSerial:deliver.orderNum}}</p>
+							<p class="control-label left">{{deliver.docNum==null?deliver.orderNum:deliver.docNum}}</p>
 						</div>
 					</div>
 				</div>

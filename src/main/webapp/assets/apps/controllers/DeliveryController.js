@@ -1835,13 +1835,13 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
                                 { mData: 'stockInOutRecord.serialNum' },
                                 { mData: 'stockInOutRecord.inOutNum' },
                                 { mData: 'stockInOutRecord.inOutType' },
-                                { mData: 'orderMateriel.materiel.materielName'},
-                                { mData: 'orderMateriel.materiel.specifications'},
+                                { mData: 'orderMateriel'},
+                                { mData: 'orderMateriel'},
                                 { mData: 'stockInOutRecord.stockDate' },
                                 { mData: 'stockCount' },
                                 { mData: 'batchNum' },
-                                { mData: 'stockInOutRecord.order.buyName' },
-                                { mData: 'stockInOutRecord.order.orderNum' },
+                                { mData: 'stockInOutRecord.shipperOrReceiverName' },
+                                { mData: 'delivery' },
                                 { mData: 'stockInOutRecord.status' }
                           ],
                  'aoColumnDefs' : [ {
@@ -1876,6 +1876,28 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
   								 $compile(td)($scope);
   						       }
   						},{
+  							'targets' : 3,
+  							'render' : function(data,
+  									type, row, meta) {
+  								
+  								if(data==null){
+  									return row.supplyMateriel.materiel.materielName;
+  								}else{
+  									return data.materiel.materielName;
+  								}
+  								
+  							}
+  						},{
+  							'targets' : 4,
+  							'render' : function(data,
+  									type, row, meta) {
+  								if(data==null){
+  									return row.supplyMateriel.materiel.specifications;
+  								}else{
+  									return data.materiel.specifications;
+  								}
+  							}
+  						},{
   							'targets' : 7,
   							'render' : function(data,
   									type, row, meta) {
@@ -1888,7 +1910,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
   						},{
   							'targets' : 8,
   							'render' : function(data,
-  									type, row, meta) {
+  									type, row, meta) {debugger;
   									if(data!=undefined){
 										return data;
 									}
@@ -1898,11 +1920,11 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
   						},{
   							'targets' : 9,
   							'render' : function(data,
-  									type, row, meta) {
-  									if(data!=undefined){
-										return data;
+  									type, row, meta) {debugger;
+  									if(isNull(data)||isNull(data.deliverNum)){
+										return row.stockInOutRecord.docNum;
 									}
-	  								return "";
+	  								return data.deliverNum;
 	
   							}
   						},{

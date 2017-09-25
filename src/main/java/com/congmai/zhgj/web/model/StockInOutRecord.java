@@ -44,6 +44,10 @@ public class StockInOutRecord {
 
     private String shipperOrReceiver;
     
+    private String shipperOrReceiverName;
+    
+    private String docNum;
+    
     private int pageSize;
     
     private int pageIndex;  
@@ -231,5 +235,21 @@ public class StockInOutRecord {
 
 	public void setShipperOrReceiver(String shipperOrReceiver) {
 		this.shipperOrReceiver = shipperOrReceiver;
+	}
+
+	public String getShipperOrReceiverName() {
+		return shipperOrReceiverName;
+	}
+
+	public void setShipperOrReceiverName(String shipperOrReceiverName) {
+		this.shipperOrReceiverName = shipperOrReceiverName;
+	}
+
+	public String getDocNum() {
+		return docNum;
+	}
+
+	public void setDocNum(String docNum) {
+		this.docNum = docNum;
 	}
 }

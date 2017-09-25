@@ -5,6 +5,7 @@
     <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
     <result column="deliverSerial" property="deliverSerial" jdbcType="VARCHAR" />
     <result column="takeDeliverSerial" property="takeDeliverSerial" jdbcType="VARCHAR" />
+     <result column="docNum" property="docNum" jdbcType="VARCHAR" />
     <result column="inOutNum" property="inOutNum" jdbcType="VARCHAR" />
     <result column="stockDate" property="stockDate" jdbcType="DATE" />
     <result column="operator" property="operator" jdbcType="VARCHAR" />
@@ -24,6 +25,7 @@
     <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
     <result column="deliverSerial" property="deliverSerial" jdbcType="VARCHAR" />
     <result column="takeDeliverSerial" property="takeDeliverSerial" jdbcType="VARCHAR" />
+     <result column="docNum" property="docNum" jdbcType="VARCHAR" />
     <result column="inOutNum" property="inOutNum" jdbcType="VARCHAR" />
     <result column="stockDate" property="stockDate" jdbcType="DATE" />
     <result column="operator" property="operator" jdbcType="VARCHAR" />
@@ -37,6 +39,7 @@
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
      <result column="inOutType" property="inOutType" jdbcType="VARCHAR" />
     <result column="shipperOrReceiver" property="shipperOrReceiver" jdbcType="VARCHAR" />
+    <association column="shipperOrReceiver" property="shipperOrReceiverName" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"  />
     <association property="delivery" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.TakeDeliveryMapper.selectByTakeDeliveryPrimaryKeyForStockIn"></association>
   	<association property="warehouseCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countWarehouseByDeliverSerial" ></association>
     <association property="positionCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countPositionByDeliverSerial" ></association>
@@ -46,6 +49,7 @@
     <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
     <result column="deliverSerial" property="deliverSerial" jdbcType="VARCHAR" />
     <result column="takeDeliverSerial" property="takeDeliverSerial" jdbcType="VARCHAR" />
+     <result column="docNum" property="docNum" jdbcType="VARCHAR" />
     <result column="inOutNum" property="inOutNum" jdbcType="VARCHAR" />
     <result column="stockDate" property="stockDate" jdbcType="DATE" />
     <result column="operator" property="operator" jdbcType="VARCHAR" />
@@ -59,6 +63,7 @@
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
      <result column="inOutType" property="inOutType" jdbcType="VARCHAR" />
     <result column="shipperOrReceiver" property="shipperOrReceiver" jdbcType="VARCHAR" />
+    <association column="shipperOrReceiver" property="shipperOrReceiverName" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"  />
     <association property="delivery" column="deliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectByDeliveryPrimaryKey"></association>
   	<association property="warehouseCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countWarehouseByDeliverSerial" ></association>
     <association property="positionCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countPositionByDeliverSerial" ></association>
@@ -122,8 +127,9 @@
     </where>
   </sql>
     <sql id="Base_Column_List" >
-    serialNum, deliverSerial, takeDeliverSerial, inOutNum, stockDate, operator, contactNum, 
-    status, remark, delFlg, creator, createTime, updater, updateTime, inOutType, shipperOrReceiver
+   	serialNum, deliverSerial, takeDeliverSerial, docNum, inOutNum, stockDate, operator, 
+    contactNum, status, remark, delFlg, creator, createTime, updater, updateTime, inOutType, 
+    shipperOrReceiver
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.StockInOutRecordExample" >
     select
@@ -169,17 +175,17 @@
   </delete>
   <insert id="insert" parameterType="com.congmai.zhgj.web.model.StockInOutRecord" >
     insert into stockInOutRecord (serialNum, deliverSerial, takeDeliverSerial, 
-      inOutNum, stockDate, operator, 
-      contactNum, status, remark, 
-      delFlg, creator, createTime, 
-      updater, updateTime, inOutType, 
-      shipperOrReceiver)
+      docNum, inOutNum, stockDate, 
+      operator, contactNum, status, 
+      remark, delFlg, creator, 
+      createTime, updater, updateTime, 
+      inOutType, shipperOrReceiver)
     values (#{serialNum,jdbcType=VARCHAR}, #{deliverSerial,jdbcType=VARCHAR}, #{takeDeliverSerial,jdbcType=VARCHAR}, 
-      #{inOutNum,jdbcType=VARCHAR}, #{stockDate,jdbcType=DATE}, #{operator,jdbcType=VARCHAR}, 
-      #{contactNum,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{inOutType,jdbcType=VARCHAR}, 
-      #{shipperOrReceiver,jdbcType=VARCHAR})
+      #{docNum,jdbcType=VARCHAR}, #{inOutNum,jdbcType=VARCHAR}, #{stockDate,jdbcType=DATE}, 
+      #{operator,jdbcType=VARCHAR}, #{contactNum,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{inOutType,jdbcType=VARCHAR}, #{shipperOrReceiver,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.StockInOutRecord" >
     insert into stockInOutRecord
@@ -192,6 +198,9 @@
       </if>
       <if test="takeDeliverSerial != null" >
         takeDeliverSerial,
+      </if>
+      <if test="docNum != null" >
+        docNum,
       </if>
       <if test="inOutNum != null" >
         inOutNum,
@@ -242,6 +251,9 @@
       </if>
       <if test="takeDeliverSerial != null" >
         #{takeDeliverSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="docNum != null" >
+        #{docNum,jdbcType=VARCHAR},
       </if>
       <if test="inOutNum != null" >
         #{inOutNum,jdbcType=VARCHAR},
@@ -302,6 +314,9 @@
       <if test="record.takeDeliverSerial != null" >
         takeDeliverSerial = #{record.takeDeliverSerial,jdbcType=VARCHAR},
       </if>
+      <if test="record.docNum != null" >
+        docNum = #{record.docNum,jdbcType=VARCHAR},
+      </if>
       <if test="record.inOutNum != null" >
         inOutNum = #{record.inOutNum,jdbcType=VARCHAR},
       </if>
@@ -351,6 +366,7 @@
     set serialNum = #{record.serialNum,jdbcType=VARCHAR},
       deliverSerial = #{record.deliverSerial,jdbcType=VARCHAR},
       takeDeliverSerial = #{record.takeDeliverSerial,jdbcType=VARCHAR},
+      docNum = #{record.docNum,jdbcType=VARCHAR},
       inOutNum = #{record.inOutNum,jdbcType=VARCHAR},
       stockDate = #{record.stockDate,jdbcType=DATE},
       operator = #{record.operator,jdbcType=VARCHAR},
@@ -376,6 +392,9 @@
       </if>
       <if test="takeDeliverSerial != null" >
         takeDeliverSerial = #{takeDeliverSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="docNum != null" >
+        docNum = #{docNum,jdbcType=VARCHAR},
       </if>
       <if test="inOutNum != null" >
         inOutNum = #{inOutNum,jdbcType=VARCHAR},
@@ -423,6 +442,7 @@
     update stockInOutRecord
     set deliverSerial = #{deliverSerial,jdbcType=VARCHAR},
       takeDeliverSerial = #{takeDeliverSerial,jdbcType=VARCHAR},
+      docNum = #{docNum,jdbcType=VARCHAR},
       inOutNum = #{inOutNum,jdbcType=VARCHAR},
       stockDate = #{stockDate,jdbcType=DATE},
       operator = #{operator,jdbcType=VARCHAR},
@@ -438,10 +458,10 @@
       shipperOrReceiver = #{shipperOrReceiver,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
-  <delete id="deleteStockInOutRecord" parameterType="java.util.List">
+  <update id="deleteStockInOutRecord" parameterType="java.util.List">
     	update  stockInOutRecord   set delFlg=1  where serialNum in
         <foreach item="idList" collection="list" open="(" close=")" separator=",">
             #{idList}
         </foreach>
-    </delete>
+    </update>
 </mapper>

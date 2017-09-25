@@ -1154,6 +1154,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/global/plugins/datatables/datatables.min.css',                  
 		    				        'assets/global/plugins/datatables/datatables.all.min.js',
 		    				        'assets/apps/controllers/StockInController.js',
+		    				        'assets/apps/service/CommonService.js',
 		    				        'assets/apps/service/TakeDeliveryService.js'
 		    				        ]
 		    			});
@@ -1174,6 +1175,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/global/plugins/datatables/datatables.min.css',                  
 		    				        'assets/global/plugins/datatables/datatables.all.min.js',
 		    				        'assets/apps/controllers/StockInController.js',
+		    				        'assets/apps/service/CommonService.js',
 		    				        'assets/apps/service/TakeDeliveryService.js'
 		    				        ]
 		    			});
@@ -1192,6 +1194,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
 		    				files: [       
 		    				        'assets/apps/controllers/StockInController.js',
+		    				        'assets/apps/service/CommonService.js',
 		    				        'assets/apps/service/TakeDeliveryService.js'
 		    				        ]
 		    			});
@@ -1212,6 +1215,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/global/plugins/datatables/datatables.min.css',                  
 		    				        'assets/global/plugins/datatables/datatables.all.min.js',
 		    				        'assets/apps/controllers/StockOutController.js',
+		    				        'assets/apps/service/CommonService.js',
 		    				        'assets/apps/service/TakeDeliveryService.js'
 		    				        ]
 		    			});
@@ -1232,6 +1236,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/global/plugins/datatables/datatables.min.css',                  
 		    				        'assets/global/plugins/datatables/datatables.all.min.js',
 		    				        'assets/apps/controllers/StockOutController.js',
+		    				        'assets/apps/service/CommonService.js',
 		    				        'assets/apps/service/TakeDeliveryService.js'
 		    				        ]
 		    			});
@@ -1250,6 +1255,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
 		    				files: [       
 		    				        'assets/apps/controllers/StockOutController.js',
+		    				        'assets/apps/service/CommonService.js',
 		    				        'assets/apps/service/TakeDeliveryService.js'
 		    				        ]
 		    			});

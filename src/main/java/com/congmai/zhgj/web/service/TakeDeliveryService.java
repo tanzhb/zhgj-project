@@ -26,7 +26,7 @@ public interface TakeDeliveryService extends GenericService<TakeDelivery, String
 			String currenLoginName);
 
 	void insertStockInData(TakeDeliveryParams takeDeliveryParams,
-			String currenLoginName);
+			String currenLoginName,String type);
 
 	Page<Delivery> selectStockInListByPage(StockInOutRecord record);
 	

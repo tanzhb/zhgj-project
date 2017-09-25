@@ -74,7 +74,7 @@ public class DeliveryMaterielServiceImpl extends GenericServiceImpl<DeliveryMate
 		example.setPageIndex(0);
 		example.setPageSize(-1);
 		Page<DeliveryMateriel> page = new Page<DeliveryMateriel>();
-		example.createCriteria().andDelFlgEqualTo("0").andDeliverMaterielDelFlgEqualTo("0");
+		example.createCriteria().andDelFlgEqualTo("0");
 		if("in".equals(type)){
 			page.setResult(deliveryMaterielMapper.selectListByExampleForStockIn(example));
 			page.setTotalCount(deliveryMaterielMapper.countListByExampleForStockIn(example));

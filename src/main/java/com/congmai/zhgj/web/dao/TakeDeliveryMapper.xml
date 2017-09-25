@@ -31,6 +31,7 @@
     <result column="deliverNum" property="deliverNum" jdbcType="VARCHAR" />
     <result column="deliverType" property="deliverType" jdbcType="VARCHAR" />
     <result column="orderSerial" property="orderSerial" jdbcType="VARCHAR" />
+     <result column="docNum" property="docNum" jdbcType="VARCHAR" />
     <result column="supplyComId" property="supplyComId" jdbcType="VARCHAR" />
     <result column="shipper" property="shipper" jdbcType="VARCHAR" />
     <result column="receiver" property="receiver" jdbcType="VARCHAR" />
@@ -122,11 +123,13 @@
 	     <result column="unstockInCount" property="unstockInCount" jdbcType="VARCHAR" />
 	     <result column="stockInRemark" property="stockInRemark" jdbcType="VARCHAR" />
 	     <result column="dmRemark" property="remark" jdbcType="VARCHAR" />
+	     <result column="supplyMaterielSerial" property="supplyMaterielSerial" jdbcType="VARCHAR" />
 	     <association column="dmWarehouseSerial" property="warehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>
 	     <association column="dmPositionSerial" property="position" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectPositionByPositionSerial" ></association>
 	     <association column="stockInWarehouseSerial" property="stockInWarehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>
 	     <association column="stockInPositionSerial" property="stockInPosition" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectPositionByPositionSerial" ></association>
-	     <association column="orderMaterielSerial" property="orderMateriel" select="com.congmai.zhgj.web.dao.OrderMaterielMapper.selectOrderMaterielOrDeliveryMaterielByPrimaryKey" ></association>
+	     <association column="orderMaterielSerial" property="orderMateriel" select="com.congmai.zhgj.web.dao.OrderMaterielMapper.selectByPrimaryKey" ></association>
+	     <association column="supplyMaterielSerial" property="supplyMateriel" select="com.congmai.zhgj.web.dao.SupplyMaterielMapper.selectByPrimaryKey" ></association>
     </collection>
   </resultMap>
   
@@ -135,6 +138,7 @@
     <result column="deliverNum" property="deliverNum" jdbcType="VARCHAR" />
     <result column="deliverType" property="deliverType" jdbcType="VARCHAR" />
     <result column="orderSerial" property="orderSerial" jdbcType="VARCHAR" />
+    <result column="docNum" property="docNum" jdbcType="VARCHAR" />
     <result column="supplyComId" property="supplyComId" jdbcType="VARCHAR" />
     <association property="takeDelivery" javaType="com.congmai.zhgj.web.model.TakeDelivery">
     	 <result column="tdSerialNum" property="serialNum" jdbcType="VARCHAR" />
@@ -161,6 +165,7 @@
 	     <result column="stockRemark" property="stockRemark" jdbcType="VARCHAR" />
 	     <result column="dmRemark" property="remark" jdbcType="VARCHAR" />
 	     <association column="orderMaterielSerial" property="orderMateriel" select="com.congmai.zhgj.web.dao.OrderMaterielMapper.selectByPrimaryKey" ></association>
+	    
     </collection>
   </resultMap>
   
@@ -230,7 +235,7 @@
   </sql>
     <select id="selectListByExample" resultMap="BaseResultMap2" parameterType="com.congmai.zhgj.web.model.DeliverySelectExample" >
     select
-    d.serialNum, d.deliverNum,d.deliverType, d.orderSerial, d.shipper, d.receiver, d.makeDate, d.maker, 
+    d.serialNum, d.deliverNum,d.deliverType, d.orderSerial,d.docNum,d.shipper, d.receiver, d.makeDate, d.maker, 
     d.remark, d.approval, d.approvalDate, d.warehouseSerial, d.materielCount, d.deliverDate, 
     d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, 
     dt.transportType,d.supplyComId,
@@ -248,7 +253,7 @@
   </select>
   <select id="selectByTakeDeliveryPrimaryKey" resultMap="BaseResultMap2" parameterType="java.lang.String" >
     select
-    d.serialNum, d.deliverNum,d.deliverType, d.orderSerial, d.supplyComId, d.shipper, d.receiver, d.makeDate, d.maker, 
+    d.serialNum, d.deliverNum,d.deliverType,d.docNum, d.orderSerial, d.supplyComId, d.shipper, d.receiver, d.makeDate, d.maker, 
     d.remark, d.approval, d.approvalDate, d.warehouseSerial as warehouseSerial, d.materielCount, d.deliverDate,d.deliverAddress, 
     d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, 
     d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.batchNum,    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.batchNum,dm.serialNum as dmSerialNum,
@@ -264,6 +269,26 @@
     left join deliveryTransport dt on d.serialNum = dt.deliverSerial  and dt.delFlg = "0"
     left join deliveryMateriel dm on d.serialNum = dm.deliverSerial and dm.delFlg = "0"
     left join deliveryMateriel dm2 on td.serialNum = dm2.deliverSerial and dm.orderMaterielSerial=dm2.orderMaterielSerial and dm.delFlg = "0"
+    where td.serialNum = #{serialNum,jdbcType=VARCHAR} 
+  </select>
+  <select id="selectByTakeDeliveryPrimaryKeyForOtherType" resultMap="BaseResultMap2" parameterType="java.lang.String" >
+    select
+    d.serialNum, d.deliverNum,d.deliverType,d.docNum, d.orderSerial, d.supplyComId, d.shipper, d.receiver, d.makeDate, d.maker, 
+    d.remark, d.approval, d.approvalDate, d.warehouseSerial as warehouseSerial, d.materielCount, d.deliverDate,d.deliverAddress, 
+    d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, 
+    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.batchNum,    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.batchNum,dm.serialNum as dmSerialNum,
+    dm.manufactureDate,dm.deliverCount,dm.deliverRemark,dm.supplyMaterielSerial,
+    dm2.acceptCount,dm2.refuseCount,dm2.takeRemark,dm.qualifiedCount,dm.unqualifiedCount,dm.checkRemark,dm.warehouseSerial,dm.orderMaterielSerial,
+    dm2.serialNum as stockInSerialNum,dm2.qualifiedCount as stockInQualifiedCount,dm2.unqualifiedCount as stockInUnqualifiedCount,dm2.checkRemark as stockInCheckRemark,dm2.warehouseSerial as stockInWarehouseSerial,
+	dm2.positionSerial as stockInPositionSerial,dm2.stockCount as stockInCount,dm2.unstockCount as unstockInCount,dm2.stockRemark as stockInRemark,dm2.supplyMaterielSerial,
+    dt.serialNum as dtSerialNum,dt.transportType,dt.transport,dt.port,dt.shipNumber,dt.playArrivalDate,dt.playWarehouseDate,dt.remark as delivery_transport_remark,dt.contactNum as dtContactNum,dt.contact as dtContact,
+	td.serialNum as tdSerialNum,td.warehouseSerial as tdWarehouseSerial,td.takeDeliverDate,td.receiver as tdReceiver,td.contactNum as tdContactNum,td.takeDeliverNum,td.remark as take_delivery_remark, 
+	td.actualDate, td.taker, td.takeRemark,td.reason,td.processInstanceId,td.userId,td.applyDate,td.status,td.takeDeliverAddress
+    from takeDelivery td
+    left join delivery  d on d.serialNum = td.deliverSerial
+    left join deliveryTransport dt on d.serialNum = dt.deliverSerial  and dt.delFlg = "0"
+    left join deliveryMateriel dm on d.serialNum = dm.deliverSerial and dm.delFlg = "0"
+    left join deliveryMateriel dm2 on td.serialNum = dm2.deliverSerial and dm.supplyMaterielSerial=dm2.supplyMaterielSerial and dm.delFlg = "0"
     where td.serialNum = #{serialNum,jdbcType=VARCHAR} 
   </select>
    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
@@ -650,7 +675,7 @@
   </update>
       <select id="selectByTakeDeliveryPrimaryKeyForStockIn" resultMap="BaseResultMap2" parameterType="java.lang.String" >
     select
-    d.serialNum, d.deliverNum,d.deliverType, d.orderSerial, d.supplyComId,d.shipper,d.receiver,dm.serialNum as dmSerialNum,dm.batchNum,
+    d.serialNum, d.deliverNum,d.deliverType, d.orderSerial,d.docNum,d.supplyComId,d.shipper,d.receiver,dm.serialNum as dmSerialNum,dm.batchNum,
     dm.manufactureDate,dm.deliverCount,dm.deliverRemark,
     dm2.acceptCount,dm2.refuseCount,dm2.takeRemark,dm.qualifiedCount,dm.unqualifiedCount,dm.checkRemark,dm.warehouseSerial as dmWarehouseSerial,
 	dm.positionSerial as dmPositionSerial,dm.stockCount,dm.unstockCount,dm.stockRemark,dm.remark as dmRemark,dm.warehouseSerial as dmWarehouseSerial,dm.orderMaterielSerial,

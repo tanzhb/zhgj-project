@@ -81,8 +81,8 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="inOutType">入库类型 <span class="required"> * </span></label>
 	                                                 <div class="">
-	                                                 	<select class="form-control"  name="inOutType" ng-model="record.inOutType" ng-init="record.inOutType='贸易'"   data-size="8">
-			                                                   <option value=""></option>
+	                                                 	<select class="form-control"  name="inOutType" ng-change="changeStockInMode(record.inOutType)" ng-model="record.inOutType" ng-init="record.inOutType='贸易'"   data-size="8">
+			                                                   <!-- <option value=""></option> -->
 			                                                   <option value="贸易">贸易</option>
 			                                                   <option  value="备品备件">备品备件</option>
 			                                                   <option  value="退货">退货</option>
@@ -94,7 +94,7 @@
 										</div>
 										<!--/span-->
 										<div class="col-md-4">
-											<div class="form-group">
+											<div class="form-group" ng-if="!otherMode">
                                                     <label class="control-label bold" for="takeDeliverSerial">收货单号 <span class="required"> * </span></label>
 	                                                 <div class="">
 	                                                 	<div class="input-group" data-toggle="modal" data-target="#takeDeliveryInfo" onclick="return false;">
@@ -108,13 +108,20 @@
                                                      </div>
                                                      <div class="form-control-focus"> </div>
                                             </div>
+                                             <div class="form-group" ng-if="otherMode">
+                                                    <label class="control-label bold" for="docNum">关联单据号</label>
+                                                    <div class="">
+	                                                    <input type="text" class="form-control" ng-model="record.docNum"  >
+	                                                    <div class="form-control-focus"> </div>
+                                                    </div>
+                                            </div>
 										</div>
 										<!--/span-->
 										
 									</div>
 									<!--/row-->
 									<div class="row">
-										<div class="col-md-4">
+										<div class="col-md-4" ng-if="!otherMode">
 											<div class="form-group">
                                                     <label class="control-label bold" for="orderSerial"> 采购订单号</label>
                                                     <div class="">
@@ -164,7 +171,12 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="operator">发货方 </label>
                                                     <div class="">
-                                                       <input type="text" class="form-control" value="{{shipperOrReceiverName}}" disabled="disabled">
+                                                       <input  ng-if="!otherMode" type="text" class="form-control" value="{{shipperOrReceiverName}}" disabled="disabled">
+                                                       <select ng-if="otherMode" class="form-control" selectpicker  data-live-search="true"  id="shipperOrReceiver"  name="shipperOrReceiver" ng-model="record.shipperOrReceiver" ng-hide="deliverAdd"  data-size="8">
+	                                                        <option value=""></option>
+	                                                        <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}">{{supplier.comName}}</option>
+	                                                    </select>
+	                                                    <div class="form-control-focus"> </div>
                                                     </div>
                                             </div>
 										</div>
@@ -226,11 +238,13 @@
                         <div class="portlet-title">
                             <div class="caption">物料信息</div>
                             <div class="actions">
+                            	<button   ng-if="otherMode" class="btn blue btn-sm btn-circle" ng-click="addMateriel()" onclick="return false;">
+                              	<i class="fa fa-plus"></i> 添加物料 </button>
                             </div>
                         </div>
                         <div class="portlet-body">
 						<div class="table-scrollable">
-							<table id="deliveryMaterielTable"
+							<table id="deliveryMaterielTable" ng-if="!otherMode"
 								class="table table-striped table-bordered table-advance table-hover">
 								<thead>
 									<tr>
@@ -284,11 +298,11 @@
 										</td>
 										<td>
 											<div class="col-md-12 form-group">
-                                                <select ng-if="$first" class="bs-select form-control order" data-live-search="true"  id="warehouseSerial" ng-init="warehouses[0].serialNum" ng-change="getPositionsAndSelectedAll(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
+                                                <select ng-if="$first" class="bs-select form-control order" data-live-search="true"  ng-init="warehouses[0].serialNum" ng-change="getPositionsAndSelectedAll(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
 	                                                 <!--  <option value=""></option> -->
 	                                                  <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
 	                                            </select>
-	                                            <select ng-if="!$first" class="bs-select form-control warehouseSerial" data-live-search="true"  id="warehouseSerial{$index}" ng-init="warehouses[0].serialNum" ng-change="getPositions(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
+	                                            <select ng-if="!$first" class="bs-select form-control warehouseSerial" data-live-search="true"   ng-init="warehouses[0].serialNum" ng-change="getPositions(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
 	                                                 <!--  <option value=""></option> -->
 	                                                  <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
 	                                            </select>
@@ -320,6 +334,74 @@
 									</tr>
 								</tbody>
 							</table>
+							<table id="deliveryMaterielTable" ng-if="otherMode"
+								class="table table-striped table-bordered table-advance table-hover">
+								<thead>
+									<tr>
+										<th>物料编号</th>
+										<th>物料名称</th>
+										<th>规格型号</th>
+										<th>单位</th>
+										<th>入库数量</th>
+										<th>仓库</th>
+										<th>库区</th>
+										<th>备注</th>
+										<th>状态</th>
+									</tr>
+									<tr>
+										 
+									</tr>
+								</thead>
+								<tbody data-repeater-list="group-a"> 
+									<tr data-repeater-item ng-repeat="materiel in takeDeliveryMateriels track by materiel.serialNum" repeat-done="setDefualtNum(this)">
+										<td>{{materiel.orderMateriel.materiel.materielNum}}</td>
+										<td>{{materiel.orderMateriel.materiel.materielName}}</td>
+										<td>{{materiel.orderMateriel.materiel.specifications}}</td>
+										<td>{{materiel.orderMateriel.materiel.unit}}</td>
+										<td>
+											<div class="col-md-12 form-group">
+                                                 <input type="text" class="form-control input-small" id="stockCount{{$index}}" ng-model="materiel.stockCount" ng-hide="deliverAdd" >
+                                                 <div class="form-control-focus"> </div>
+                                            </div>
+										</td>
+										<td>
+											<div class="col-md-12 form-group">
+                                                <select ng-if="$first" class="bs-select form-control order" data-live-search="true"   ng-init="warehouses[0].serialNum" ng-change="getPositionsAndSelectedAll(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
+	                                                 <!--  <option value=""></option> -->
+	                                                  <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
+	                                            </select>
+	                                            <select ng-if="!$first" class="bs-select form-control warehouseSerial" data-live-search="true"   ng-init="warehouses[0].serialNum" ng-change="getPositions(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
+	                                                 <!--  <option value=""></option> -->
+	                                                  <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
+	                                            </select>
+	                                            <div class="form-control-focus"></div>
+                                            </div>
+										</td>
+										<td>
+											<div class="col-md-12">
+                                                <select class="bs-select form-control order" data-live-search="true"  id="positionSerial" ng-change="countPosition()" ng-init="materiel.warehousePositons[0].serialNum"    ng-model="materiel.positionSerial"    data-size="8">
+	                                                   <!-- <option value=""></option> -->
+	                                                   <option  ng-repeat="warehousePositon in materiel.warehousePositons" value="{{warehousePositon.serialNum}}">{{warehousePositon.positionName}}</option>
+	                                             </select>
+	                                             <div class="form-control-focus"> </div>
+                                            </div>
+										</td>
+										<td>
+											<div class="col-md-12 form-group">
+                                                 <input type="text" class="form-control input-small" id="stockRemark{{$index}}" name="stockRemark" data-delivercount="{{materiel.stockRemark}}"  ng-model="materiel.stockRemark"  >
+                                                 <div class="form-control-focus"> </div>
+                                            </div>
+										</td> 
+										<td>
+											<span ng-if="record.status==0"  class="label label-sm label-warning ng-scope">待入库</span>
+											<span ng-if="record.status==1" class="label label-sm label-success ng-scope">已入库</span>
+										</td> 
+									</tr>
+									<tr ng-if="takeDeliveryMateriels==null||takeDeliveryMateriels.length==0">
+											<td colspan="9" align="center">暂无数据</td>
+									</tr>
+								</tbody>
+							</table>
 						</div>
 					 </div>
          			<!-- 物料信息END -->
@@ -344,3 +426,4 @@
 </div>
 <!-- END MAIN CONTENT -->
 <jsp:include page="selectTakeDelivery.jsp"></jsp:include>
+<jsp:include page="../demandPlan/selectMateriel.jsp"></jsp:include>
