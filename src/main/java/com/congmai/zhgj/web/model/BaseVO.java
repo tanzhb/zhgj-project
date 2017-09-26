@@ -54,6 +54,7 @@ public class BaseVO implements Serializable{
 	
 	public final static String BUYPRICE = "buyPrice";	//采购价格
 	public final static String SALEPRICE = "salePrice";	//销售价格
+	public final static String OUTINVOICE = "outInvoice";	//销项票
 	
 	
 	// 申请人id

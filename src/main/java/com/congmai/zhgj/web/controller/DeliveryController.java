@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import net.sf.json.JSONObject;
+import net.sf.json.JSONArray;
 
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.ActivitiObjectNotFoundException;
@@ -309,36 +310,34 @@ public class DeliveryController {
      */
     @RequestMapping(value="editDeliveryMateriel",method=RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<DeliveryMaterielVO> editDeliveryMateriel(Map<String, Object> map,DeliveryMaterielVO deliveryMateriel,HttpServletRequest request) {
-    	String flag ="0"; //默认失败
-        	try{
-        		Subject currentUser = SecurityUtils.getSubject();
-        		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-        		if(!StringUtils.isEmpty(deliveryMateriel.getSerialNum())){
-        			deliveryMateriel.setUpdater(currenLoginName);
-        			
-        			deliveryService.updateDeliveryMateriel(deliveryMateriel);
-        		}else{
-        			String orderId=deliveryService.selectOrderId(deliveryMateriel.getOrderMaterielSerial());
-        			
-        			List<String> idList=deliveryService.queryDeliveryMaterielDelete(deliveryMateriel.getDeliverSerial(), orderId);
-        			
-        			if(idList.size()!=0){
-        				deliveryService.deleteOldDeliveryMateriel(idList);	
-        			}
-        			
-        			deliveryMateriel.setSerialNum(ApplicationUtils.random32UUID());
-        			deliveryMateriel.setCreator(currenLoginName);
-        			deliveryMateriel.setUpdater(currenLoginName);
-        			deliveryService.insertDeliveryMateriel(deliveryMateriel);
-        		}
-        		flag = "1";
-        	}catch(Exception e){
-        		System.out.println(e.getMessage());
-        		return null;
-        	}
-        	deliveryMateriel =deliveryService.selectDeliveryMaterielById(deliveryMateriel.getSerialNum());
-    	return new ResponseEntity<DeliveryMaterielVO>(deliveryMateriel, HttpStatus.CREATED);
+    public ResponseEntity<List<DeliveryMaterielVO>> editDeliveryMateriel(Map<String, Object> map,HttpServletRequest request,String params) {
+    	  JSONArray array = JSONArray.fromObject(params); 
+    	  List<DeliveryMaterielVO> list = JSONArray.toList(array, DeliveryMaterielVO.class);//
+    	  String deliverSerial=null;
+    	  if(list.size()>0){
+    		   deliverSerial=list.get(0).getDeliverSerial();
+    		  deliveryService.deleteOldDeliveryMateriel2(deliverSerial);
+    	  }
+    	  
+    	  Subject currentUser = SecurityUtils.getSubject();
+  		  String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+    	  for(DeliveryMaterielVO deliveryMaterielVO:list){
+    		  deliveryMaterielVO.setSerialNum(ApplicationUtils.random32UUID());
+    		  deliveryMaterielVO.setCreator(currenLoginName);
+    		  deliveryMaterielVO.setUpdater(currenLoginName);
+    		  deliveryService.insertDeliveryMateriel(deliveryMaterielVO);
+    	  }
+    	  
+    	List<DeliveryMaterielVO> deliveryMateriels=null;
+  		deliveryMateriels = deliveryService.selectListForDetail(deliverSerial);
+  		if(deliveryMateriels.size()>0){
+  			String materielNum=deliveryMateriels.get(0).getMaterielNum();
+  			if(StringUtils.isEmpty(materielNum)){
+  			deliveryMateriels = deliveryService.selectListForDetail2(deliverSerial);	
+  			}	
+  		}
+    	  
+    	return new ResponseEntity<List<DeliveryMaterielVO>>(deliveryMateriels, HttpStatus.CREATED);
     }
     
     
@@ -440,8 +439,11 @@ public class DeliveryController {
     	takeDeliveryVO.setUpdater(currenLoginName);
     	deliveryService.updateBasicInfoPartIII(takeDeliveryVO);
     	
-    	//保存之后查询
+    	//更新之后查询
     	delivery=deliveryService.selectDetailById(delivery.getSerialNum());
+    	if(StringUtils.isEmpty(delivery.getOrderNum())){
+    	delivery=deliveryService.selectDetailById2(delivery.getSerialNum());	
+    	}
     	return new ResponseEntity<DeliveryVO>(delivery, HttpStatus.OK);
     }
     

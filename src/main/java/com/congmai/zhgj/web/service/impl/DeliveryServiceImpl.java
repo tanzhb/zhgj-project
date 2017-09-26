@@ -61,6 +61,18 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		// TODO Auto-generated method stub
 		 deliveryMapper.deleteOldDeliveryMateriel(idList);
 	}
+	 
+	 
+	 
+	 /**
+	     * 删除旧的发货物料
+	     * @param idList
+	     */
+		 @Override
+		public void deleteOldDeliveryMateriel2(String deliverSerial){
+			// TODO Auto-generated method stub
+			 deliveryMapper.deleteOldDeliveryMateriel2(deliverSerial);
+		}
 
 
 	 /**

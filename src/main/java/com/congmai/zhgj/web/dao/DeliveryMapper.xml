@@ -5,11 +5,11 @@
     <!--添加发货物料  -->
     <insert id="insertDeliveryMateriel" parameterType="com.congmai.zhgj.web.model.DeliveryMaterielVO">
     INSERT INTO deliveryMateriel
-    (serialNum,  deliverSerial,   orderMaterielSerial, 
+    (serialNum,  deliverSerial,   orderMaterielSerial, supplyMaterielSerial,
      batchNum,  manufactureDate,   deliverCount,  
      remark, creator,createTime,updater,updateTime) 
      VALUES
-     (#{serialNum},#{deliverSerial},#{orderMaterielSerial},#{batchNum},
+     (#{serialNum},#{deliverSerial},#{orderMaterielSerial},#{supplyMaterielSerial},#{batchNum},
      #{manufactureDate},#{deliverCount},#{remark},
      #{creator},NOW(),#{creator},NOW())
     </insert>
@@ -119,7 +119,7 @@
     <!--查询详情物料集合  -->
     <select id="selectListForDetail" resultType="com.congmai.zhgj.web.model.DeliveryMaterielVO" parameterType="java.lang.String">
     SELECT
-	a.serialNum,c.materielNum,c.materielName,c.specifications,c.unit,a.batchNum,a.manufactureDate,b.amount,a.deliverCount,a.remark,
+	a.serialNum,a.supplyMaterielSerial,a.orderMaterielSerial,c.materielNum,c.materielName,c.specifications,c.unit,a.batchNum,a.manufactureDate,b.amount,a.deliverCount,a.remark,
 	a.stockCount,a.unstockCount,d.warehouseName,e.positionName,a.stockRemark,a.qualifiedCount,a.unqualifiedCount,a.checkRemark,
 	a.acceptCount,a.refuseCount,a.takeRemark,f.status
 	FROM
@@ -135,12 +135,13 @@
     <!--查询详情物料集合  -->
     <select id="selectListForDetail2" resultType="com.congmai.zhgj.web.model.DeliveryMaterielVO" parameterType="java.lang.String">
     SELECT
-	a.serialNum,c.materielNum,c.materielName,c.specifications,c.unit,a.batchNum,a.manufactureDate,a.deliverCount,a.remark,
+	a.serialNum,a.supplyMaterielSerial,a.orderMaterielSerial,c.materielNum,c.materielName,c.specifications,c.unit,a.batchNum,a.manufactureDate,a.deliverCount,a.remark,
 	a.stockCount,a.unstockCount,d.warehouseName,e.positionName,a.stockRemark,a.qualifiedCount,a.unqualifiedCount,a.checkRemark,
 	a.acceptCount,a.refuseCount,a.takeRemark,f.status
 	FROM
 	deliveryMateriel a
-	LEFT JOIN materiel c ON a.orderMaterielSerial=c.serialNum
+	LEFT JOIN supplyMateriel g ON a.supplyMaterielSerial=g.serialNum
+	LEFT JOIN materiel c ON g.materielId=c.materielId AND c.isLatestVersion='1'
 	LEFT JOIN warehouse d ON a.warehouseSerial=d.serialNum
 	LEFT JOIN warehousePosition e ON a.positionSerial=e.serialNum
 	LEFT JOIN delivery f ON a.deliverSerial=f.serialNum
@@ -225,8 +226,12 @@
     
     <!--批量获取物料信息  -->
     <select id="batchGetMaterielInfo" parameterType="java.util.List" resultType="com.congmai.zhgj.web.model.Materiel">
-    SELECT serialNum,materielNum,materielName,specifications,unit FROM materiel
-    WHERE serialNum in
+    SELECT
+	a.serialNum AS supplyMaterielSerial,b.materielNum,b.materielName,b.specifications,b.unit
+	FROM
+	supplyMateriel a
+	LEFT JOIN materiel b ON a.materielId=b.materielId
+	WHERE b.isLatestVersion='1' AND a.serialNum IN
     <foreach item="idList" collection="list" open="(" close=")" separator=",">
             #{idList}
         </foreach>
@@ -255,22 +260,13 @@
     
      <!--查询发货物料对象  -->
     <select id="selectDeliveryMaterielById2" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.DeliveryMaterielVO">
-    SELECT 
-	a.serialNum,
-	a.orderMaterielSerial,
-	a.batchNum,
-	a.deliverCount,
-	a.remark,
-	c.materielName,
-	c.materielNum,
-	c.specifications,
-	c.unit,
-	a.manufactureDate
+    SELECT
+	c.materielNum,c.materielName,c.specifications,c.unit,a.batchNum,a.manufactureDate,a.deliverCount,a.remark
 	FROM
-	deliveryMateriel a
-	LEFT JOIN materiel c ON a.orderMaterielSerial=c.serialNum
-	WHERE 
-	a.serialNum=#{id}
+	deliveryMateriel a 
+	LEFT JOIN supplyMateriel b ON a.supplyMaterielSerial=b.serialNum
+	LEFT JOIN materiel c ON b.materielId=c.materielId AND c.isLatestVersion='1'
+	WHERE a.serialNum=#{id}
     </select>
     <!--查询仓库地址  -->
     <select id="queryAddressById" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.Warehouse">
@@ -307,6 +303,10 @@
     </delete>
     
     
+    <!--删除旧的物料  -->
+    <delete id="deleteOldDeliveryMateriel2" parameterType="java.lang.String">
+    DELETE FROM deliveryMateriel WHERE deliverSerial=#{deliverSerial}
+    </delete>
     
     
     <!--查询物料归属订单  -->

@@ -42,10 +42,14 @@
 				</div>
 				<div class="actions">
 				<div class="btn-group btn-group-devided" data-toggle="buttons">
+				<shiro:hasPermission name="incomeBill:edit">
+				<label class="btn btn-transparent green btn-circle btn-sm" ng-click="confirmInvoice('in')">
+	                                              <i class="fa fa-plus"></i> 确认</label>
+				 </shiro:hasPermission> 
 				<shiro:hasPermission name="incomeBill:add">
 						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addInvoice('in')">
 	                                              <i class="fa fa-plus"></i> 添加</label>
-	                                              </shiro:hasPermission>
+	                          </shiro:hasPermission>                    
 	                                              <shiro:hasPermission name="incomeBill:edit">
 						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditInvoicePage('in')">
 	                                              <i class="fa fa-edit"></i> 修改</label>
@@ -159,56 +163,62 @@
         
         <!-- 出库检验列表---START -->
         <div class="tab-pane" id="tab_out">
-         <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+       <!--   
 		<div class="portlet light">
 			<div class="portlet-title">
 				<div class="caption">
 					<i class="fa fa-globe font-green"></i>
 					<span class="caption-subject font-green bold uppercase">销项票列表</span>
-				</div>
+				</div> -->
+				  <div class="portlet-body">
+			<div class="tabbable-custom ">
+			<ul class="nav nav-tabs " id="invoiceOutTab">
+				<li class="active"><a href="#applyOutInvoice" data-toggle="tab"
+					ng-click="toInvoiceApply('out')"> 销项票 </a></li>
+				<li><a href="#daibanOutInvoice" data-toggle="tab" ng-click="toDaibanInvoice('out')">
+						待办 <dbQuantity/> </a></li>
+				<li><a href="#yibanOutInvoice" data-toggle="tab" ng-click="toYibanInvoice('out')">
+						已办  <ybQuantity/></a></li>
+			</ul>
+         <!-- BEGIN EXAMPLE TABLE PORTLET-->
+          <div class="tab-content">
+				<div class="tab-pane active" id="applyOutInvoice">
+		<div class="portlet light">
+			<div class="portlet-title">
+				<!-- <div class="caption">
+					<i class="fa fa-globe font-green"></i>
+					<span class="caption-subject font-green bold uppercase">销售价格列表</span>
+				</div> -->
 				<div class="actions">
 				<div class="btn-group btn-group-devided" data-toggle="buttons">
+				<shiro:hasPermission name="incomeBill:edit">
+				<label class="btn btn-transparent green btn-circle btn-sm" ng-click="confirmInvoice('out')">
+	                                              <i class="fa fa-plus"></i> 确认</label>
+				 </shiro:hasPermission> 
+				 <label class="btn btn-transparent yellow btn-circle btn-sm"
+										ng-click="submitInvoiceApply('out')"> <i class="glyphicon glyphicon-play"></i> 申请</label>
+				 <shiro:hasPermission name="incomeBill:add">
 						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addInvoice('out')">
 	                                              <i class="fa fa-plus"></i> 添加</label>
+	                                              </shiro:hasPermission>
+	                                               <shiro:hasPermission name="incomeBill:edit">
 						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditInvoicePage('out')">
 	                                              <i class="fa fa-edit"></i> 修改</label>
+	                                              </shiro:hasPermission>
+	                                               <shiro:hasPermission name="incomeBill:delete">
 						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delInvoice('out')" >
 	                                              <i class="fa fa-minus"></i> 删除</label>
+	                                              </shiro:hasPermission>
+	                                               <shiro:hasPermission name="incomeBill:import">
 						<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
 	                                              <i class="fa fa-upload"></i> 导入</label>
+	                                              </shiro:hasPermission>
+	                                               <shiro:hasPermission name="incomeBill:export">
 						<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportInvoice('out')">
 	                                              <i class="fa fa-file-excel-o"></i> 导出</label>
+	                                              </shiro:hasPermission>
 	                 </div>
-				<!-- 	<button ng-click="addInvoice('out')"
-						data-toggle="modal" class="btn btn-default btn-sm btn-circle">
-						<i class="fa fa-plus"></i> 添加
-					</button><button ng-click="toEditInvoicePage('out')"
-						class="btn btn-default btn-sm btn-circle"> <i
-						class="fa fa-edit"></i> 修改
-					</button> <button ng-click="delInvoice('out')" 
-						data-toggle="modal" 
-						class="btn btn-default btn-sm btn-circle"> <i
-						class="fa fa-minus"></i> 删除
-					</button>
-					<div class="btn-group">
-						<a class="btn btn-default btn-outline btn-circle"
-							href="javascript:;" data-toggle="dropdown"> <i
-							class="fa fa-share"></i> <span class="hidden-xs"> 其它 </span> <i
-							class="fa fa-angle-down"></i>
-						</a>
-						
-						<ul class="dropdown-menu pull-right" id="sample_3_tools">
-												<li><a data-action="0"
-													class="tool-action" data-toggle="modal" data-target="#import"> <i class="fa fa-upload"></i> 导入
-												</a></li> 
-												<li><a href="javascript:;" data-action="1"
-													class="tool-action" ng-click="exportInvoice('out')"> <i class="fa fa-file-excel-o"></i> 导出
-												</a></li>
-												<li><a href="javascript:;" data-action="2"
-													class="tool-action" > <i class="fa fa-print"></i> 打印
-												</a></li> 
-											</ul>
-					</div> -->
 				</div>
 			</div>
 
@@ -271,10 +281,79 @@
 		</div>
 		<!-- END EXAMPLE TABLE PORTLET-->
         </div>
-        <!-- 出库检验列表---END -->
+        <!-- 销项票列表---END -->
+             <div class="tab-pane" id="daibanOutInvoice">
+							<!-- BEGIN EXAMPLE TABLE PORTLET-->
+							<div class="portlet box ">
+								<div class="portlet-title"></div>
+	
+								<div class="portlet-body">
+									<table class="table table-striped table-bordered table-hover table-checkable order-column"
+										id="dbOutInvoiceTable">
+										<thead>
+											<tr>
+											<th>
+	                                            <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+	                                                <input type="checkbox" class="group-checkable" data-set="#dbOutInvoiceTable .checkboxes" />
+	                                                <span></span>
+	                                            </label>
+	                                        </th>
+											<th style="white-space: nowrap;">任务状态</th>
+											<th style="white-space: nowrap;">申请人</th>
+											<th style="white-space: nowrap;">标题</th>
+											<th style="white-space: nowrap;">当前节点</th>
+											<th style="white-space: nowrap;">负责人</th>
+											<th style="white-space: nowrap;">任务创建时间</th>
+											<th style="white-space: nowrap;">流程状态</th>
+											</tr>
+										</thead>
+										<tbody>
+	
+										</tbody>
+									</table>
+								</div>
+	
+	
+							</div>
+							<!-- END EXAMPLE TABLE PORTLET-->
+				</div>
+				<div class="tab-pane" id="yibanOutInvoice">
+							<div class="portlet box">
+								<div class="portlet-title"></div>
+	
+								<div class="portlet-body">
+									<table class="table table-striped table-bordered table-hover"
+										id="endTaskOutInvoiceTable">
+										<thead>
+											<tr>
+												<th>单据类型</th>
+												<th>申请人</th>
+												<th>标题</th>
+												<th>任务开始时间</th>
+												<th>任务签收时间</th>
+												<th>任务结束时间 </th>
+												<th>流程结束原因</th>
+												<th>流程版本号</th>
+												<th>操作</th>
+											</tr>
+										</thead>
+										<tbody>
+	
+										</tbody>
+									</table>
+								</div>
+	
+	
+							</div>
+							<!-- END EXAMPLE TABLE PORTLET-->
+				</div>
+        
     </div>
 </div>
-
+ </div>
+</div>
+ </div>
+</div>
 
 
 <!-- END MAIN CONTENT -->

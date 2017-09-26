@@ -33,6 +33,14 @@ public interface DeliveryService extends GenericService<DeliveryMaterielVO, Stri
      */
     public void deleteOldDeliveryMateriel(List<String> idList);
     
+    
+    
+    /**
+     * 删除旧的发货物料
+     * @param idList
+     */
+    public void deleteOldDeliveryMateriel2(String deliverSerial);
+    
     /**
 	 * 编辑发货物料
 	 * @param contractVO

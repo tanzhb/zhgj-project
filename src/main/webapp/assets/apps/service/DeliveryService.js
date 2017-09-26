@@ -127,7 +127,8 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 			deliverCount:deliveryMateriel.deliverCount,
 			remark:deliveryMateriel.remark,
 			deliverSerial:deliveryMateriel.deliverSerial,
-			orderMaterielSerial:deliveryMateriel.orderMaterielSerialNum==null?deliveryMateriel.serialNum:deliveryMateriel.orderMaterielSerialNum,//传整个表单数据  
+			orderMaterielSerial:deliveryMateriel.orderMaterielSerialNum,//传整个表单数据  
+			supplyMaterielSerial:deliveryMateriel.supplyMaterielSerial,
 		}
 		).then(function success(result) {
 			deferred.resolve(result);//请求成功
@@ -139,17 +140,10 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     
     
     //编辑订单物料
-    function editDeliveryMateriel (deliveryMateriel){
+    function editDeliveryMateriel (params){
 		var deferred = $q.defer();
-		$.post("rest/delivery/editDeliveryMateriel", {
-			serialNum:deliveryMateriel.serialNum,
-			batchNum:deliveryMateriel.batchNum,
-			deliverSerial:deliveryMateriel.deliverSerial,
-			manufactureDate:deliveryMateriel.manufactureDate,
-			deliverCount:deliveryMateriel.deliverCount,
-			remark:deliveryMateriel.remark,
-			orderMaterielSerial:deliveryMateriel.orderMaterielSerialNum//传整个表单数据  
-		}
+		$.post("rest/delivery/editDeliveryMateriel", 
+		{params:JSON.stringify(params)}
 		).then(function success(result) {
 			deferred.resolve(result);//请求成功
 		}, function error(err) {

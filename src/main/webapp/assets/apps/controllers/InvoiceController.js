@@ -34,7 +34,14 @@ angular
 										        	debugger;
 													$scope.inOrOut=$stateParams.inOrOut;
 												if($scope.inOrOut.length>3){
-													getInvoiceInfo($stateParams.inOrOut);
+													if($scope.inOrOut.indexOf("confirm")>-1){
+														getInvoiceInfo($stateParams.inOrOut+"view");
+													}else{
+														getInvoiceInfo($stateParams.inOrOut);
+													}
+												}else{
+													$scope.invoice.paymentStatus='否';
+													$scope.invoice.billWay='0';
 												}
 										 		}else if($location.path()=="/invoiceView"){
 										 			debugger;
@@ -57,6 +64,21 @@ angular
 									 				$("#tab_out").removeClass("active")
 									 				loadInvoiceInTable();//加载销项票列表
 									 			}
+										 		}else{
+										 			
+															 $scope.taskId=$stateParams.taskId;
+															 $scope.processInstanceId=$stateParams.processInstanceId;
+															var comments =$stateParams.comments;
+															 if(comments == ""||comments == null){
+										    						$("#comment_audit").html( "<tr><td colspan='3' align='center'>无内容</td></tr>");
+										    					}else{ $("#comment_audit").html(comments);}
+															 if($location.path()=="/editInvoiceApply"){
+																 getInvoiceInfo($stateParams.inOrOut);
+										    					}else{
+										    						 getInvoiceInfo($stateParams.inOrOut+"view");
+										    					}
+															 $scope.inOrOut=$stateParams.inOrOut;
+														 
 										 		}
 											
 												// set default layout mode
@@ -81,7 +103,26 @@ angular
 									"hideMethod" : "fadeOut"
 								}
 							//初始化toastr结束
-
+							//***************************************流程处理相关start
+				        	var dbOutInvoicetable;//待办销项票table
+							var endTaskOutInvoiceTable;//已办销项票table
+							// 显示销项票列表
+							$scope.toInvoiceApply = function() {
+								$('#invoiceOutTab a[href="#applyOutInvoice"]').tab('show');
+							};
+							//销项票待办流程
+							$scope.toDaibanInvoice = function(judgeString) {//
+								debugger;
+								$('#invoiceOutTab a[href="#daibanBuyPrice"]').tab('show');
+								dbOutInvoicetable = showDbOutInvoiceTable();								
+							};
+							// 销项票已办流程
+							$scope. toYibanInvoice= function(judgeString) {
+								$('#invoiceOutTab a[href="#yibanBuyPrice"]').tab('show');
+								debugger;
+								endTaskOutInvoiceTable = showYbOutInvoiceTable();
+							};
+							
 							// 构建datatables开始***************************************
 							var tableAjaxUrl ;
 							 var table ;
@@ -188,6 +229,28 @@ angular
 															},{
 																mData : 'status'
 															}
+															/* { mData: 'processBase',
+								                            	mRender:function(data,
+								    									type, row, meta){
+								                            		if(data!=""&&data!=null){
+								                            			if(data.status=="PENDING"||data.status=="WAITING_FOR_APPROVAL"){
+								    										return '<span  class="label label-sm label-warning ng-scope">审核中</span>';
+								    									}else if(data.status=="APPROVAL_SUCCESS"){
+								    										if(row.status==0){
+								    											return '<span  class="label label-sm label-success ng-scope">未确认</span>';
+								    										}else if(row.status==1){
+								    											return '<span  class="label label-sm label-success ng-scope">已确认</span>';
+								    										}
+								    									}else if(data.status=="APPROVAL_FAILED"){
+								    										return '<span  class="label label-sm label-danger ng-scope">未通过</span>';
+								    									}else{
+								    										return '<span  class="label label-sm label-info ng-scope">未审批</span>';
+								    									}
+								                            		}else{
+								                            			return '<span  class="label label-sm label-info ng-scope">未审批</span>';
+								                            		}
+								                            	}
+								                            }*/
 															],
 														'aoColumnDefs' : [ {
 															'targets' : 0,
@@ -221,7 +284,7 @@ angular
 																var statusIcon='';//状态
 						 	    								if(row.status==0){
 						 	    									statusIcon = '<span class="label label-sm label-success"  >待收票</span> '
-						 	    								}else if(row.status==1){
+						 	    								}else if(row.status==2){
 						 	    									statusIcon = '<span class="label label-sm label-success">已收票</span> '
 						 	    								}
 						 	    								return statusIcon ;
@@ -382,9 +445,34 @@ angular
 				                            	}
 											},{
 												mData : 'submitter'
-											},{
+											},/*{
 												mData : 'status'
-											}
+											}*/
+											 { mData: 'processBase',
+				                            	mRender:function(data,
+				    									type, row, meta){
+				                            		if(data!=""&&data!=null){
+				                            			debugger;
+				                            			if(data.status=="PENDING"||data.status=="WAITING_FOR_APPROVAL"){
+				    										return '<span  class="label label-sm label-warning ng-scope">审核中</span>';
+				    									}else if(data.status=="APPROVAL_SUCCESS"){
+				    										if(row.status==0){
+				    											return '<span  class="label label-sm label-success ng-scope">待开票</span>';
+				    										}else if(row.status==1){
+				    											return '<span  class="label label-sm label-success ng-scope">已审批</span>';
+				    										}else if(row.status==2){
+				    											return '<span  class="label label-sm label-success ng-scope">已开票</span>';
+				    										}
+				    									}else if(data.status=="APPROVAL_FAILED"){
+				    										return '<span  class="label label-sm label-danger ng-scope">未通过</span>';
+				    									}else{
+				    										return '<span  class="label label-sm label-info ng-scope">未审批</span>';
+				    									}
+				                            		}else{
+				                            			return '<span  class="label label-sm label-success ng-scope">待开票</span>';
+				                            		}
+				                            	}
+				                            }
 											],
 										'aoColumnDefs' : [ {
 											'targets' : 0,
@@ -411,7 +499,7 @@ angular
 											},"createdCell": function (td, cellData, rowData, row, col) {
 												 $compile(td)($scope);
 										    }
-										},{
+										}/*,{
 											'targets' : 10,
 											'render' : function(data,
 													type, row, meta) {
@@ -423,7 +511,7 @@ angular
 		 	    								}
 		 	    								return statusIcon ;
 											}
-										}  ],
+										}*/  ],
 							
 						});
 				$("#sample_out").find(".group-checkable").change(function() {
@@ -761,7 +849,53 @@ function loadMaterielOutTable(orderSerial,serialNum){
 	// ***************************************
 	// 构建datatables结束***************************************
 	}
-
+$scope.confirmInvoice=function(judgeString){//进项票/销项票确认
+	debugger;
+	var id_count = table.$('input[type="checkbox"]:checked').length;
+	if(id_count==0){
+		toastr.warning("请选择一条数据进行确认");
+	}else if(id_count>1){
+		toastr.warning("只能选择一条数据进行确认");
+	}else{
+		var serialNum = table.$('input[type="checkbox"]:checked').val()+judgeString;
+		if(judgeString=='out'){
+			InvoiceService.judgeIsApproval(serialNum).then(
+					function(data) {debugger;
+				if(data==3){
+					toastr.warning("审批尚未通过,审批通过后方可开票!");
+				}else if(data==1){
+					toastr.warning("尚未申请审批,审批通过后方可开票!");
+				}else if(data==0){
+					toastr.warning("此销项票已开票!");
+				}else{
+					$state.go("addOrEditInvoice",{inOrOut:serialNum+judgeString+"confirm"});//审批通过进入确认开票页面
+				}
+					},
+					function(errResponse) {
+						toastr.warning("保存失败！");
+						console
+								.error('Error while creating User');
+					}
+			);
+		}else{
+			InvoiceService.judgeIsApproval(serialNum).then(
+					function(data) {debugger;
+			 if(data==0){
+					toastr.warning("此进项票已收票!");
+				}else{
+					$state.go("addOrEditInvoice",{inOrOut:serialNum+judgeString+"confirm"});//审批通过进入确认开票页面
+				}
+					},
+					function(errResponse) {
+						toastr.warning("保存失败！");
+						console
+								.error('Error while creating User');
+					}
+			);
+		}
+		
+	}
+}
 
 $scope.saveBillingRecord=function (serialNum,judgeString,invoiceBillingRecordSerial,billAmount,orderUnitPrice,money){
 	if($scope.invoice.serialNum==undefined&&judgeString=='in'){
@@ -842,24 +976,26 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 		        			$scope.invoiceEdit = true;
 						}	
 						
-								$scope.saveInvoice= function() {
+								$scope.saveInvoice= function(judgeString) {
 									debugger;
 									if($('#invoiceForm').valid()){//表单验证通过则执行添加功能
 										debugger;
-										if($scope.inOrOut.indexOf("in")>-1){
-											$scope.invoice.supplyComId=$scope.invoice.comName;
-											$scope.invoice.buyComId=null;
-										}else{
-											$scope.invoice.buyComId=$scope.invoice.comName;
-											$scope.invoice.supplyComId=null;
+									 if(judgeString!=undefined){
+											$scope.invoice.status=2;
 										}
 										InvoiceService.saveInvoice($scope.invoice).then(
 															function(data) {debugger;
+															if(judgeString==undefined){
+																$scope.invoiceView = true;
 																toastr.success("保存发票数据成功！");
-																$scope.invoice = data;
-											        			$scope.invoiceView = true;
-											        			$scope.invoiceAdd = true;
-											        			$scope.invoiceEdit = true;
+															}else if(judgeString=='confirmIn'){
+																toastr.success("确认收票成功！");
+															}else{
+																toastr.success("确认开票成功！");
+															}
+															$scope.invoice = data;
+										        			$scope.invoiceAdd = true;
+										        			$scope.invoiceEdit = true;
 											        			$(".alert-danger").hide();
 											        			
 															},
@@ -950,7 +1086,7 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 					 	    		aoColumnsForBuyOrSale=  [
 					 	    		                                    { mData: 'serialNum' },
 					 	    		                                   { mData: 'orderNum' },
-					 	    		                                   { mData: 'supplyComId' },
+					 	    		                                   { mData: 'supplyName' },
 					 	    		                                   { mData: 'orderAmount' },
 					 	    		                                   { mData: null },
 					 	    		                                   { mData: 'deliveryMode' },
@@ -966,7 +1102,7 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 					 	   							'orderable' : false,
 					 	   							'render' : function(data,
 					 	   									type, full, meta) {
-					 	   								return '<input type="radio" id="'+data+'" ng-click="getBuyOrSaleOrderInfo(\''+data+"in"+'\',\''+full.orderNum+'\',\''+full.orderAmount+'\')" name="serialNum[]" value="'
+					 	   								return '<input type="radio" id="'+data+'" ng-click="getBuyOrSaleOrderInfo(\''+data+"in"+'\',\''+full.orderNum+'\',\''+full.orderAmount+'\',\''+full.supplyComId+'\',\''+full.supplyName+'\')" name="serialNum[]" value="'
 					 	   													+ $('<div/>')
 					 	   													.text(
 					 	   															data)
@@ -982,7 +1118,7 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 					 	    		aoColumnsForBuyOrSale=[
 					 	                                { mData: 'serialNum' },
 					 	                               { mData: 'orderNum' },
-					 	                               { mData: 'buyComId' },
+					 	                               { mData: 'buyName' },
 					 	                              { mData: 'orderAmount' },
 					 	                               { mData: null },
 					 	                               { mData: 'deliveryMode' },
@@ -997,7 +1133,7 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 										'orderable' : false,
 										'render' : function(data,
 												type, full, meta) {
-											return '<input type="radio" id="'+data+'" ng-click="getBuyOrSaleOrderInfo(\''+data+"out"+'\',\''+full.orderNum+'\',\''+full.orderAmount+'\')" name="serialNum[]" value="'
+											return '<input type="radio" id="'+data+'" ng-click="getBuyOrSaleOrderInfo(\''+data+"out"+'\',\''+full.orderNum+'\',\''+full.orderAmount+'\',\''+full.buyComId+'\',\''+full.buyName+'\')" name="serialNum[]" value="'
 																+ $('<div/>')
 																.text(
 																		data)
@@ -1067,12 +1203,14 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 											$scope.invoice.clauseSettlementSerial=$('input[type="checkbox"][name="select_all"]:checked').val();
 										}
 									};
-						$scope.getBuyOrSaleOrderInfo=function(serialNum,orderNum,orderAmount){
+						$scope.getBuyOrSaleOrderInfo=function(serialNum,orderNum,orderAmount,comId,comName){
 							debugger;
 							$scope.row = {};
 		 	            	$scope.row.serialNum = serialNum;//发货单号流水/收货单号流水
 		 	            //	$scope.row.orderAmount=orderAmount;//订单金额
 		 	            	$scope.row.orderNum=orderNum;//订单编号
+		 	            	$scope.row.comId=comId;//开票方/收票方企业id
+		 	            	$scope.row.comName=comName;//开票方/收票方企业名称
 		 	            	getOrderInfoBySerialNum($scope.row.serialNum);//获取订单物料信息
 		 	            
 		 	            	
@@ -1085,6 +1223,8 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 									$scope.row.orderInfo=data.orderInfo;
 									$scope.row.orderAmount=data.orderInfo.orderAmount;
 									$scope.row.currency=data.orderInfo.currency;
+									$scope.row.company=data.company;
+									$scope.row.companyFinanceList=data.companyFinanceList;
 								}
 								/*if(serialNum.indexOf("in")>-1){loadMaterielInTable(serialNum.substring(0,32),'no');
 			 	            	}else{debugger;loadMaterielOutTable(serialNum.substring(0,32),'no');}*/
@@ -1096,6 +1236,26 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 							}
 					);
 					}
+					
+					/**
+ 	   				 * 加载财务数据
+ 	   				 */
+					
+					var initCompanyFinances = function(data){
+						debugger;
+						$scope.companyFinances = data;
+						setTimeout(function () {
+							$("#bankName").selectpicker({
+		                        showSubtext: true
+		                    });
+		        			$('#bankName').selectpicker('refresh');//刷新插件
+		        			$("#account").selectpicker({
+		                        showSubtext: true
+		                    });
+		        			$('#account').selectpicker('refresh');//刷新插件
+		                }, 100);
+					}
+ 	   			
 						   // 确认选择发货单开始***************************************
 		 	    		$scope.confirmSelectBuyOrSaleOrderInfo = function(judgeString) {
 		 	    			var ids = '';
@@ -1130,12 +1290,19 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 	 	    				$scope.invoice.currency=$scope.row.currency;
 	 	    				
 		 	    			if(judgeString=='buy'){
+		 	    				$scope.invoice.supplyComId=$scope.row.comId;
 		 	    				loadMaterielInTable($scope.invoice.orderSerial,'no');
 			 	            	$('#buyOrderInfo').modal('hide');// 选择成功后关闭模态框
 		 	    			}else{
+		 	    				$scope.invoice.buyComId=$scope.row.comId;
+		 	    				$scope.invoice.companyName=$scope.row.comName;
+		 	    				$scope.invoice.address=$scope.row.company.address;
+		 	    				$scope.invoice.taxNum=$scope.row.company.taxpayeNumber;
+		 	    				initCompanyFinances($scope.row.companyFinanceList);
 		 	    				loadMaterielOutTable($scope.invoice.orderSerial,'no');
-		 	            	$('#saleOrderInfo').modal('hide');// 选择成功后关闭模态框
-		 	    			}
+			 	            	$('#saleOrderInfo').modal('hide');// 选择成功后关闭模态框
+		 	   				}
+		 	    			$scope.invoice.comName=$scope.row.comName;
 		 	    			$(".modal-backdrop").remove();
 		 	    		};  // 确认选择发货单结束***************************************
 		 	    		jQuery.validator.addMethod("qualifiedNumCheck", function (value, element) {
@@ -1353,4 +1520,434 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 							       $('#import').on('hide.bs.modal', function (e) { 
 							    	   $("#resetFile").trigger("click");
 							       })
+							       
+							       $scope.cancelPage  = function(judgeString) {// 取消申请
+							        	 $state.go("invoice",{inOrOut:judgeString});
+							        };
+							        //********审批流程start****************//
+								       $scope.submitInvoiceApply= function(judgeString) {// 进入申请审批页面
+								    	   debugger;
+								        	if(table.rows('.active').data().length != 1){
+								    			showToastr('toast-top-center', 'warning', '请选择一条任务进行流程申请！')
+								    		}else{
+								    			var processBase = table.row('.active').data().processBase;
+								    			if(processBase != null){
+								    				showToastr('toast-top-center', 'warning', '该价格已发起流程审批，不能再次申请！')
+								    			}else $state.go('submitInvoiceApply',{inOrOut:table.row('.active').data().serialNum+judgeString});
+								    		}     	
+								        };
+								        
+								        
+								        $scope.confirmInvoiceApply  = function(judgeString) {// 进入提交申请
+								        	debugger;
+								        	$scope.submitInvoice= {}
+								        	$scope.submitInvoice.serialNum = $scope.invoice.serialNum;
+								        	$scope.submitInvoice.reason = $scope.invoice.reason;
+								        /*	if(judgeString=='out'){
+								        		$scope.submitInvoice.invoiceType="out";
+								        	}else{
+								        		$scope.submitInvoice.invoiceType="in";
+								        	}*/
+								        	//启动流程
+								        	InvoiceService.startInvoiceProcess($scope.submitInvoice).then(
+								          		     function(data){
+								          		    	if(data == "1"){
+									        				toastr.success("提交申请成功！");
+									        				$scope.cancelPage();
+									        			}else{
+									        				toastr.error("提交申请失败！");
+											            	console.log(data);
+									        			}
+								          		     },
+								          		     function(error){
+								          		         $scope.error = error;
+								          		         toastr.error('数据保存出错！');
+								          		     }
+								          		 );
+								    		
+								        };
+								        
+								      //********审批流程列表****************//
+							        function doInvoice(_url, mydata, modal){
+							        	$.ajax( {
+							    	        url : _url,
+							    	        dataType:"text",
+							    	        type: 'POST',
+							    	        data : mydata,
+							    	        success : function(data) {
+							    	        	showToastr('toast-bottom-right', 'success', data);
+							    	        	$scope.cancelPage();
+							    	        }
+							    	     });
+							    	}
+							    	
+							    	//审批通过
+							    	$scope.invoicePass = function(judgeString) {
+							    		debugger;
+							    		console.log( $("#taskId").val()+"--");
+							    	    var mydata={"processInstanceId":$("#processInstanceId").val(),"invoiceId":$scope.invoice.serialNum,"content":$("#content").val(),
+							    				"completeFlag":true};
+							    	    var _url = ctx + "rest/invoice/complate/" + $("#taskId").val();
+							    	    doInvoice(_url, mydata, 'audit');
+							    	};
+							    	//审批不通过
+							    	$scope.invoiceUnPass = function(judgeString) {
+							    		debugger;
+							    		var mydata={"processInstanceId":$("#processInstanceId").val(),"invoiceId":$scope.invoice.serialNum,"content":$("#content").val(),
+							    				"completeFlag":false};
+							    		var _url = ctx + "rest/invoice/complate/" + $("#taskId").val();
+							    		doInvoice(_url, mydata, 'audit');
+							    	};
+							    	
+							    	//重新申请
+							    	$scope.replyInvoice = function(judgeString) {
+							    		debugger;
+							    	    var mydata={"processInstanceId":$("#processInstanceId").val(),
+							    				"isPass":true,"invoiceId":$scope.invoice.serialNum,"reason":$scope.invoice.reason};
+							    		var _url = ctx + "rest/invoice/modifyInvoice/" + $("#taskId").val();
+							    		doInvoice(_url, mydata, 'modify');
+							    	};
+							    	//取消申请
+							    	$scope.cancelApplyInvoice  = function(judgeString) {
+							    		debugger;
+							    	     var mydata={"processInstanceId":$("#processInstanceId").val(),
+							    				"isPass":false,"invoiceId":$scope.invoice.serialNum,"reason":$scope.invoice.reason};
+							    		var _url = ctx + "rest/invoice/modifyInvoice/" + $("#taskId").val();
+							    		doInvoice(_url, mydata, 'modify' );
+							    	};
+							       function showDbOutInvoiceTable(){
+							        	
+							        	var table = $("#dbOutInvoiceTable")
+							        	.DataTable(
+							        			{
+							        				language : {
+							        					aria : {
+							        						sortAscending : ": activate to sort column ascending",
+							        						sortDescending : ": activate to sort column descending"
+							        					},
+							        					emptyTable : "空表",
+							        					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+							        					infoEmpty : "没有数据",
+							        					infoFiltered : "(从 _MAX_ 条数据中检索)",
+							        					lengthMenu : "每页显示 _MENU_ 条数据",
+							        					search : "查询:",
+							        					zeroRecords : "抱歉， 没有找到！",
+							        					paginate : {
+							        						"sFirst" : "首页",
+							        						"sPrevious" : "前一页",
+							        						"sNext" : "后一页",
+							        						"sLast" : "尾页"
+							        					}
+							        				},
+
+							        				buttons : [
+							        						{
+							        							text : "办理",
+							        							className : "btn default",
+							        							action: function(e, dt, node, config) { 
+							        								
+							        								var ids = '';
+							        								table.$('input[type="checkbox"]').each(function() {
+							        									if ($.contains(document, this)) {											
+							        										if (this.checked) {
+							        											// 将选中数据id放入ids中
+							        											if (ids == '') {
+							        												ids = this.value;
+							        											} else
+							        												ids = 'more';
+							        										}
+							        									}
+							        								});
+							        								
+							        								if(ids==''){
+							        									toastr.warning('请选择一个办理！');return;
+							        								}else if(ids=='more'){
+							        									toastr.warning('只能选择一个办理！');return;
+							        								} else {
+							        									InvoiceService
+							        									.getAuditInfos(ids)
+																		.then(
+																				function(result) {													
+							        												var comments = ""//添加评论
+								        												for (var i=0;i<result.commentList.length;i++){
+								        													comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+								        													+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
+								        												}
+								        												if(result.actionType == 'audit'){//审批流程
+								        													$state.go('approvalInvoiceApply',{inOrOut:result.invoice.serialNum+'out',serialNum:result.invoice.serialNum, taskId:ids, comments:comments,processInstanceId:result.invoice.processInstanceId});
+								        												}else{
+								        													$state.go('editInvoiceApply',{inOrOut:result.invoice.serialNum+'out',serialNum:result.invoice.serialNum, taskId:ids, comments:comments,processInstanceId:result.invoice.processInstanceId});
+								        												}
+								        											},
+																				function(errResponse) {
+								        												toastr.warning("办理失败！");
+								        												console.error('Error while apply ap');
+								        											}
+								
+																		);
+							        								}
+							        							}
+							        						},
+							        						{
+							        							text : "签收",
+							        							className : "btn default",
+							        							action: function(e, dt, node, config) { 
+							        								var ids = '';
+							        								table.$('input[type="checkbox"]').each(function() {
+							        									if ($.contains(document, this)) {											
+							        										if (this.checked) {
+							        											// 将选中数据id放入ids中
+							        											if (ids == '') {
+							        												ids = this.value;
+							        											} else
+							        												ids = 'more';
+							        										}
+							        									}
+							        								});
+							        								
+							        								if(ids==''){
+							        									toastr.warning('请选择一个签收！');return;
+							        								}else if(ids=='more'){
+							        									toastr.warning('只能选择一个签收！');return;
+							        								} else {
+							        									claimTask(ids, 'dbOutInvoiceTable');
+							        								}
+							        								
+							        							}
+							        						},
+							        						{
+							        							text : "转办",
+							        							className : "btn default"
+							        						},
+							        						{
+							        							text : "委派",
+							        							className : "btn default"
+							        						},
+							        						{
+							        							text : "跳转",
+							        							className : "btn default"
+							        						} ],
+							        				dom : "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
+							        				order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+
+							        				bRetrieve : true,
+							        				lengthMenu : [
+							        						[ 5, 10, 15, 30, -1 ],
+							        						[ 5, 10, 15, 30,
+							        								"All" ] ],
+							        				pageLength : 10,// 每页显示数量
+							        				processing : true,// loading等待框
+
+							        				ajax : ctx
+							        						+ "/rest/processAction/todoTask/" + 'outInvoice',// 加载待办列表数据
+
+							        				"aoColumns" : [
+							        					              { mData: 'taskId'},
+							        									{
+							        										mData : 'assign',
+							        										mRender : function(
+							        												data) {
+							        											if (data == '') {
+							        												return "待签收";
+							        											} else {
+							        												return "待办理";
+							        											}
+							        										}
+							        									},
+							        									{
+							        										mData : 'userName'
+							        									},
+							        									{
+							        										mData : 'title'
+							        									},
+							        									{
+							        										mData : 'taskName',
+							        										mRender : function(
+							        												data,
+							        												type,
+							        												row,
+							        												meta) {
+							        											return "<a class='trace' onclick=\"graphTrace('"
+							        													+ row.processInstanceId + "','" + ctx 
+							        													+ "')\" id='diagram' href='javascript:;' pid='"
+							        													+ row.id
+							        													+ "' pdid='"
+							        													+ row.processDefinitionId
+							        													+ "' title='see'>"
+							        													+ data
+							        													+ "</a>";
+							        										}
+							        									},
+							        									{
+							        										mData : 'owner',
+							        										mRender : function(
+							        												data,
+							        												type,
+							        												row,
+							        												meta) {
+							        											if (data != ''
+							        													&& data != row.assign) {
+							        												return row.assign
+							        														+ " (原执行人："
+							        														+ data
+							        														+ ")";
+							        											} else {
+							        												return row.assign;
+							        											}
+							        										}
+							        									},
+							        									{
+							        										mData : 'createTime',
+							        										mRender : function(
+							        												data) {
+							        											if (data != null) {
+							        												return timeStamp2String(data);
+							        											} else
+							        												return '';
+							        										}
+							        									},
+							        									{
+							        										mData : 'suspended',
+							        										mRender : function(
+							        												data) {
+							        											if (data) {
+							        												return "已挂起";
+							        											} else {
+							        												return "正常";
+							        											}
+							        										}
+							        									} ],
+							        						'aoColumnDefs': [ {
+							        	                    	'targets' : 0,
+							        	                    	'searchable' : false,
+							        	                    	'orderable' : false,
+							        	                    	'className' : 'dt-body-center',
+							        	                    	'render' : function(data,type, full, meta) {
+							        								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+							        								"<input type='checkbox' class='checkboxes' value="+ data +" />" +
+							        								"<span></span></label>";
+							        							
+							        	                    	}
+							        	                    } 
+							        	                    ]
+
+							        			})
+							        			
+							        			
+							        			$("#dbOutInvoiceTable").find(".group-checkable").change(function() {
+										            var e = jQuery(this).attr("data-set"),
+										            t = jQuery(this).is(":checked");
+										            jQuery(e).each(function() {
+										                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+										            })
+										        }),
+										        $("#dbOutInvoiceTable").on("change", "tbody tr .checkboxes",
+										        function() {
+										            $(this).parents("tr").toggleClass("active")
+										        })
+						        
+							        			return table;
+							        	
+							        	
+							        }
+
+							        function showYbOutInvoiceTable(){
+							        	var endTaskTable = $("#endTaskOutInvoiceTable").DataTable(
+							        			{
+							        				language : {
+							        					aria : {
+							        						sortAscending : ": activate to sort column ascending",
+							        						sortDescending : ": activate to sort column descending"
+							        					},
+							        					emptyTable : "空表",
+							        					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+							        					infoEmpty : "没有数据",
+							        					infoFiltered : "(从 _MAX_ 条数据中检索)",
+							        					lengthMenu : "每页显示 _MENU_ 条数据",
+							        					search : "查询:",
+							        					zeroRecords : "抱歉， 没有找到！",
+							        					paginate : {
+							        						"sFirst" : "首页",
+							        						"sPrevious" : "前一页",
+							        						"sNext" : "后一页",
+							        						"sLast" : "尾页"
+							        					}
+							        				},
+							        				order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+							        				bRetrieve : true,
+							        				lengthMenu : [
+							        						[ 5, 10, 15, 30, -1 ],
+							        						[ 5, 10, 15, 30,
+							        								"All" ] ],
+							        				pageLength : 10,// 每页显示数量
+							        				processing : true,// loading等待框
+
+							        				ajax : ctx
+							        						+ "/rest/processAction/endTask/"+'outInvoice',// 加载已办列表数据
+
+							        				"aoColumns" : [
+							        						{
+							        							mData : 'businessType',
+							        							mRender : function(
+							        									data) {
+							        								return "销售价格申请";
+							        							}
+							        						},
+							        						{
+							        							mData : 'userName'
+							        						},
+							        						{
+							        							mData : 'title'
+							        						},
+							        						{
+							        							mData : 'startTime',
+							        							mRender : function(
+							        									data,
+							        									type,
+							        									row,
+							        									meta) {
+							        								return timeStamp2String(data);
+							        							}
+							        						},
+							        						{
+							        							mData : 'claimTime',
+							        							mRender : function(
+							        									data,
+							        									type,
+							        									row,
+							        									meta) {
+							        								if(data != null){
+							        		                			return timeStamp2String(data);
+							        		                		}else{
+							        		                			return "无需签收";
+							        		                		}
+							        							}
+							        						},
+							        						{
+							        							mData : 'endTime',
+							        							mRender : function(
+							        									data) {
+							        								if (data != null) {
+							        									return timeStamp2String(data);
+							        								} else
+							        									return '';
+							        							}
+							        						},
+							        						{
+							        							mData : 'deleteReason'
+							        						},
+							        						{
+							        							mData : 'version'
+							        						},
+							        						{
+							        							mData : 'revoke',
+							        							mRender : function(data,type,row,meta) {
+							        								return "<a href='javascript:void(0);' onclick=\"revoke('"+row.taskId+"','"+row.processInstanceId+"','endTaskOutInvoiceTable')\">撤销</a>";
+							        							}
+							        						}
+							        						]
+
+							        			})
+							         return endTaskTable;
+							        }
 						} ]);
