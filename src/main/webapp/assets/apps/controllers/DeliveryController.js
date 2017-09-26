@@ -38,6 +38,40 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
     	$scope.getDeliveryEditInfo($stateParams.serialNumEdit,$stateParams.taskId, $stateParams.comments);
     }
     
+    
+    if ($.validator) {
+    	
+    	    $.validator.prototype.elements = function () {
+    	
+    	        var validator = this,
+    	
+    	            rulesCache = {};
+    	
+    	        return $([]).add(this.currentForm.elements)
+    	
+    	        .filter(":input")
+    	
+    	        .not(":submit, :reset, :image, [disabled]")
+    	
+    	        .not(this.settings.ignore)
+    	
+    	        .filter(function () {
+    	
+    	            var elementIdentification = this.id || this.name;
+    	
+    	            !elementIdentification && validator.settings.debug && window.console && console.error("%o has no id nor name assigned", this);
+    	
+    	            if (elementIdentification in rulesCache || !validator.objectLength($(this).rules()))
+    	                return false;
+    	            rulesCache[elementIdentification] = true;
+    	            return true;
+    	
+    	        });
+    	
+    	    };
+    	
+    	}
+    
     //查询仓库列表
 		$scope.getWarehouseList();
 		if($state.current.name=="delivery"){
@@ -133,6 +167,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		});
 		
 	}
+	
 	
 	$scope.$watch('$viewContentLoaded', function() {  
 		var e = $("#form_sample_2"),
@@ -278,24 +313,24 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		}else{
 			    $scope.otherMode = true;
 		}
+		$scope.deliveryMaterielE= null;
+		$scope.materielCount=null;
+		$scope.orderMaterielInput=true;
 	}
 	
 	
 	/**
 	 * 编辑销售订单物料信息
 	 */
-	$scope.editOrderMateriel = function(deliveryMateriel,index) {
-		delete deliveryMateriel.materiel;
-		delete deliveryMateriel.supplyMateriel;
-		delete deliveryMateriel.supply;
-		
+	$scope.editOrderMateriel = function() {
+		debugger
 		//判断基本信息是否保存，未保存先保存基本信息
 		if($scope.isBasicInfoSaved!='1'){
 			toastr.error("请先保存基本信息！");	
 			return;
 		}
 		
-		var batchNum=deliveryMateriel.batchNum;
+		/*var batchNum=deliveryMateriel.batchNum;
 		if($.trim(batchNum)==""||$.trim(batchNum)==null){
 			toastr.error("批次号不能为空！");	
 			return;
@@ -323,28 +358,49 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		if(parseInt(deliverCount)>parseInt(amount)){
 			toastr.error("发货数量不能大于订单数量！");	
 			return;
-		}
+		}*/
+		/*var batchNumFlag=batchNumCheck(index);
+		if(!batchNumFlag){return false;}
+		var manufactureDateFlag=manufactureDateCheck(index);
+		if(!manufactureDateFlag){return false;}
+		var deliveryCountFlag=deliveryCountCheck(index);
+		if(!deliveryCountFlag){return false;}*/
 		
-		if(deliveryMateriel.serialNum==null||deliveryMateriel.serialNum==""){
+		/*if(deliveryMateriel.serialNum==null||deliveryMateriel.serialNum==""){
 			deliveryMateriel.deliverSerial=$scope.delivery.serialNum;
+		}*/
+		if($('#form_sample_2').valid()){
+		handle.blockUI();
+		var params = {};
+		params= [];
+		var param
+		for(var i=0;i < $scope.deliveryMaterielE.length;i++){
+			param = {};
+			param.deliverSerial=$scope.delivery.serialNum;
+			param.orderMaterielSerial = $scope.deliveryMaterielE[i].orderMaterielSerial;
+			param.supplyMaterielSerial = $scope.deliveryMaterielE[i].supplyMaterielSerial;
+			param.batchNum = $scope.deliveryMaterielE[i].batchNum;
+			param.manufactureDate = $scope.deliveryMaterielE[i].manufactureDate;
+			param.deliverCount = $scope.deliveryMaterielE[i].deliverCount;
+			param.remark = $scope.deliveryMaterielE[i].remark;
+			params.push(param);
 		}
 		
-		var promise = DeliveryService.editDeliveryMateriel(deliveryMateriel);
+		var promise = DeliveryService.editDeliveryMateriel(params);
 		promise.then(function(data) {
 			if (!handle.isNull(data)) {
 				$(".modal-backdrop").remove();
-				toastr.success("保存成功");
+				toastr.success("修改成功");
 				handle.unblockUI();
-				$scope.deliveryMaterielE[index] = data;
-				$scope.deliveryMaterielE[index] = data;
-				console.log(data.data);
-				$scope["orderMaterielInput"+index] = true;
-				$scope["orderMaterielShow"+index] = true;
+				$scope.deliveryMaterielE= data;
+				$scope.orderMaterielInput = true;
+				$scope.orderMaterielShow = true;
+				$scope.otherMode = false;
 				$(".alert-danger").hide();
 			} else {
 				$(".modal-backdrop").remove();
 				handle.unblockUI();
-				toastr.error("保存失败！请联系管理员");
+				toastr.error("修改失败！请联系管理员");
 				console.log(data);
 			}
 			
@@ -352,9 +408,10 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			// 调用承诺接口reject();
 			$(".modal-backdrop").remove();
 			handle.unblockUI();
-			toastr.error("保存失败！请联系管理员");
+			toastr.error("修改失败！请联系管理员");
 			console.log(data);
 		});
+		}
 	};
 	
 	//保存基本信息
@@ -784,7 +841,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			
 			  								}else{
 			  									return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
-			                                     '<input type="checkbox"  name="material_serial" data-checked=false id='+data+' ng-click="getCheckedIds(\''+data+'\','+meta.row+')" class="checkboxes"  id="'+data+'" value="'+data+'" data-set="#select_sample_2 .checkboxes" />'+
+			                                     '<input type="checkbox"  name="material_serial" data-checked=false id='+data+' ng-click="getCheckedIds(\''+data+'\','+meta.row+')" class="checkboxes"  id="'+data+'" value="'+row.supplyMateriels[0].serialNum+'" data-set="#select_sample_2 .checkboxes" />'+
 			                                     '<span></span>'+
 			                                 '</label>';
 			
@@ -1331,19 +1388,24 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	        $scope.getSaleOrderInfo  = function(serialNum) {
 	        	DeliveryService.getSaleOrderInfo(serialNum).then(
 	          		     function(data){
-	          		    	 
+	          		    	 debugger
 	          		    	$scope.saleOrder=data.orderInfo;
 	          		    	
 	          		    	if($scope.delivery!=null){
-	          		    		if($scope.delivery.orderNum!=""&&$scope.delivery.orderNum!=null){
-		          		    		$scope.delivery.orderNum=$scope.saleOrder.orderNum;
-		          		    	}	
+	          		    	/*	if($scope.delivery.orderNum!=""&&$scope.delivery.orderNum!=null){*/
+		          		    		$scope.delivery.orderNum1=$scope.saleOrder.orderNum;
+		          		    /*	}	*/
 	          		    	}
 	          		    	
 	          		    	
 	          		    	var orderSerial=data.orderInfo.serialNum;
 	          		    	$scope.orderSerial=data.orderInfo.serialNum;
 	          		    	$scope.deliveryMaterielE=data.orderMateriel;
+	          		    	
+	          		    	if(data.orderMateriel.length>0){
+	          		    		$scope.orderMaterielInput=false;
+	          		    	}
+	          		    	
 	          		    	$scope.materielCount=data.orderMateriel.length;
 	          		    	length=data.orderMateriel.length;
 	          		    	$scope.totalDeliveryCount="";
@@ -1380,6 +1442,10 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	    		DeliveryService.batchGetMaterielInfo(ids).then(
 	          		     function(data){
 		          		    	$scope.deliveryMaterielE=data.materielList;
+		          		    	
+		          		    	if(data.materielList.length>0){
+		          		    		$scope.orderMaterielInput=false;	
+		          		    	}
 		          		    	$scope.materielCount=data.materielList.length;
 		          		    	length=data.materielList.length;
 		          		    	$("#basicMaterielInfoI").modal("hide");
@@ -1396,6 +1462,8 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	        	DeliveryService.getDeliveryInfo(serialNumEdit).then(
 	          		     function(data){
 	          		    	$scope.delivery=data.delivery;
+	          		    	$scope.delivery.orderNum1=data.delivery.orderNum;
+	          		    	
 	          		    	if(data.delivery.deliverType=='其他发货'){
 	          		    		$scope.otherMode=true;
 	          		    	}else{
@@ -1406,6 +1474,11 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    		$scope.shipper=$scope.delivery.shipper;
 	          		    	}
 	          		    	$scope.deliveryMaterielE=data.deliveryMateriels;
+	          		    	
+	          		    	if(data.deliveryMateriels.length>0){
+	          		    		$scope.orderMaterielInput=false;	
+	          		    	}
+	          		    	
 	          		    	$scope.materielCount=data.deliveryMateriels.length;
 	          		    	length=data.deliveryMateriels.length;
 	          		    	$("#serialNum").val(serialNumEdit);//赋值给隐藏input，通过和不通过时调用
@@ -1725,7 +1798,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
             messages: {
             	deliverNum:{required:"发货单号不能为空！",rangelength:jQuery.validator.format("发货单号位数必须在{0}到{1}字符之间！")},
             	deliverType:{required:"发货类型不能为空！"},
-            	orderNum:{required:"订单编号不能为空！"},
+            	orderSerial:{required:"订单编号不能为空！"},
             	supplyComId:{required:"供应商不能为空！"},
             	shipper:{required:"发货方不能为空！"},
             	receiver:{required:"收货方不能为空！"},
@@ -1775,7 +1848,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
                 },
                 deliverType:{required:true,
                 },
-                orderNum:{required:true,
+                orderSerial:{required:true,
                 },
                 supplyComId:{required:true,
                 },

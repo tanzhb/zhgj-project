@@ -111,7 +111,7 @@
 																</button>
 															</span>
 														</div>
-														<input type="text" ng-model="orderSerial" ng-hide="true" />
+														<input type="text" ng-model="orderSerial" name="orderSerial" ng-hide="true" />
 
 														<p class="form-control-static" ng-show="span">
 															{{delivery.orderNum}}</p>

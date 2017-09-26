@@ -104,6 +104,9 @@ public class DeliveryMaterielVO {
 	private String orderSerial;//订单流水
 	
 	
+	private String supplyMaterielSerial;
+	
+	
 
 
 	public String getSerialNum() {
@@ -361,6 +364,14 @@ public class DeliveryMaterielVO {
 
 	public void setOrderSerial(String orderSerial) {
 		this.orderSerial = orderSerial;
+	}
+
+	public String getSupplyMaterielSerial() {
+		return supplyMaterielSerial;
+	}
+
+	public void setSupplyMaterielSerial(String supplyMaterielSerial) {
+		this.supplyMaterielSerial = supplyMaterielSerial;
 	}
 
 }

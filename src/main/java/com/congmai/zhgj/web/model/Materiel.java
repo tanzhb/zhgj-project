@@ -126,6 +126,8 @@ public class Materiel {
     
     private String  orderMaterielSerial;//订单物料流水
     
+    private String supplyMaterielSerial;
+    
     
 
     public String getSerialNum() {
@@ -600,6 +602,14 @@ public class Materiel {
 
 	public void setMaterielAttribute(String materielAttribute) {
 		this.materielAttribute = materielAttribute;
+	}
+
+	public String getSupplyMaterielSerial() {
+		return supplyMaterielSerial;
+	}
+
+	public void setSupplyMaterielSerial(String supplyMaterielSerial) {
+		this.supplyMaterielSerial = supplyMaterielSerial;
 	}
     
 }
