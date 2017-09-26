@@ -307,6 +307,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                 processing: true,// loading等待框
 // serverSide: true,
                 ajax: tableAjaxUrl,// 加载数据中
+                textAlign: 'center',
                 "aoColumns": [
                               { mData: 'serialNum'},
                               { mData: 'orderNum' },
@@ -314,10 +315,10 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                               { mData: 'materielCount' },
                               { mData: 'orderAmount' },
                               { mData: 'deliveryMode' },
-                              { mData: 'serviceModel' },
+                              { mData: 'orderType' },
                               { mData: 'saleApplySerial' },
                               { mData: 'orderSerial' },
-                              { mData: 'orderDate' },
+                              { mData: 'orderDate' }/*,
                               { mData: 'processBase',
 	                            	mRender:function(data,
 	    									type, row, meta){
@@ -328,7 +329,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	    										if(row.status==1){
 	    											return '<span  class="label label-sm label-success ng-scope">待接收</span>';
 	    										}else if(row.status==2){
-	    											return '<span  class="label label-sm label-success ng-scope">待发货</span>';
+	    											return '<span  class="label label-sm label-success ng-scope">已接收</span>';
 	    										}else if(row.status==3){
 	    											return '<span  class="label label-sm label-success ng-scope">待收货</span>';
 	    										}else if(row.status==4){
@@ -364,7 +365,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	                            			return '<span  class="label label-sm label-info ng-scope">未审批</span>';
 	                            		}
 	                            	}
-	                            }
+	                            }*/
 
                         ],
                'aoColumnDefs' : [ {
@@ -384,7 +385,69 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 							'targets' : 1,
 							'render' : function(data,
 									type, row, meta) {
-								return '<a href="javascript:void(0);" ng-click="viewBuyOrder(\''+row.serialNum+'\')">'+data+'</a>';
+								var clickhtm = '<a href="javascript:void(0);" ng-click="viewBuyOrder(\''+row.serialNum+'\')">'+data+'</a></br>'
+								if(row.processBase!=""&&row.processBase!=null){
+                        			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
+										return clickhtm + '<span  class="label label-sm label-warning ng-scope">审核中</span>';
+									}else if(row.processBase.status=="APPROVAL_SUCCESS"){
+										if(row.status==1){
+											return clickhtm + '<span  class="label label-sm label-success ng-scope">待接收</span>';
+										}else if(row.status==2){
+											return clickhtm + '<span  class="label label-sm label-success ng-scope">已接收</span>';
+										}
+									}else if(row.processBase.status=="APPROVAL_FAILED"){
+										return clickhtm + '<span  class="label label-sm label-danger ng-scope">未通过</span>';
+									}else{
+										return clickhtm + '<span  class="label label-sm label-info ng-scope">未发布</span>';
+									}
+                        		}else{
+                        			return clickhtm + '<span  class="label label-sm label-info ng-scope">未发布</span>';
+                        		}
+								
+							},
+							"createdCell": function (td, cellData, rowData, row, col) {
+								 $compile(td)($scope);
+						       }
+						},{
+							'targets' : 2,
+							'render' : function(data,
+									type, row, meta) {
+								var htm = data+'</br>'
+
+                    			if(row.deliverStatus=="0"){
+                    				return htm + '<span  class="label label-sm label-info ng-scope">未开始</span>';
+								}else if(row.deliverStatus=="1"){
+                    				return htm + '<span  class="label label-sm label-success ng-scope">已发货</span>';
+								}else if(row.deliverStatus=="2"){
+                    				return htm + '<span  class="label label-sm label-success ng-scope">已收货</span>';
+								}else if(row.deliverStatus=="3"){
+                    				return htm + '<span  class="label label-sm label-success ng-scope">已检验</span>';
+								}else if(row.deliverStatus=="4"){
+                    				return htm + '<span  class="label label-sm label-success ng-scope">已出库</span>';
+								}else if(row.deliverStatus=="5"){
+                    				return htm + '<span  class="label label-sm label-success ng-scope">已入库</span>';
+								}else{
+									return htm + '<span  class="label label-sm label-info ng-scope">未开始</span>';
+								}
+							},
+							"createdCell": function (td, cellData, rowData, row, col) {
+								 $compile(td)($scope);
+						       }
+						},{
+							'targets' : 4,
+							'render' : function(data,
+									type, row, meta) {
+								var htm = (data==null?'':data)+'</br>'
+
+                    			if(row.payStatus=="0"){
+                    				return htm + '<span  class="label-info ng-scope">未付款</span>';
+								}else if(row.payStatus=="1"){
+                    				return htm + '<span  class="label label-sm label-success ng-scope">已付款</span>';
+								}else if(row.payStatus=="2"){
+                    				return htm + '<span  class="label label-sm label-success ng-scope">已收款</span>';
+								}else{
+									return htm + '<span  class="label label-sm label-info ng-scope">未付款</span>';
+								}
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
@@ -507,7 +570,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                                   { mData: 'materielCount' },
                                   { mData: 'orderAmount' },
                                   { mData: 'deliveryMode' },
-                                  { mData: 'serviceModel' },
+                                  { mData: 'orderType' },
                                   { mData: 'saleApplySerial' },
                                   { mData: 'orderSerial' },
                                   { mData: 'orderDate' }

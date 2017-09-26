@@ -269,7 +269,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
                               { mData: 'materielCount' },
                               { mData: 'orderAmount' },
                               { mData: 'deliveryMode' },
-                              { mData: 'serviceModel' },
+                              { mData: 'orderType' },
                               { mData: 'saleApplySerial' },
                               { mData: 'orderSerial' },
                               { mData: 'orderDate' },
@@ -464,7 +464,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
                                   { mData: 'materielCount' },
                                   { mData: 'orderAmount' },
                                   { mData: 'deliveryMode' },
-                                  { mData: 'serviceModel' },
+                                  { mData: 'orderType' },
                                   { mData: 'saleApplySerial' },
                                   { mData: 'orderSerial' },
                                   { mData: 'orderDate' }

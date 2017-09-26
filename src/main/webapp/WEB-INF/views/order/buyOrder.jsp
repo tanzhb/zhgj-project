@@ -99,15 +99,15 @@
                                             </label>
                                         </th>
 			                            <th> 采购订单号 </th>
-			                            <th> 供应方 </th>
+			                            <th> 卖方 </th>
 			                            <th> 采购商品 </th>
 			                            <th> 金额 </th>
 			                            <th> 配送 </th>
-			                            <th> 服务模式 </th>
+			                            <th> 采购类型 </th>
 			                            <th> 关联采购合同 </th>
 			                            <th> 关联销售单 </th>
 			                            <th> 下单日期 </th>
-			                            <th style="white-space: nowrap;">状态</th>
+			                            <!-- <th style="white-space: nowrap;">状态</th> -->
 			                        </tr>
 			                    </thead>
 			                    <tbody>
@@ -264,11 +264,11 @@
                                     </label>
                                 </th>
 	                            <th> 采购订单号 </th>
-	                            <th> 供应方 </th>
+	                            <th> 卖方 </th>
 	                            <th> 采购商品 </th>
 	                            <th> 金额 </th>
 	                            <th> 配送 </th>
-	                            <th> 服务模式 </th>
+	                            <th> 采购类型 </th>
 	                            <th> 关联采购合同 </th>
 	                            <th> 关联销售单 </th>
 	                            <th> 下单日期 </th>
