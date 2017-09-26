@@ -50,4 +50,8 @@ public class Constants {
 	
 	/***************** 销售订单流程key *****************/
 	public static final String SALEORDER = "com.congmai.zhgj.saleOrder";
+
+
+	/***************** 销项票KEY *****************/
+	public static final String OUTINVOICE_KEY = "com.congmai.zhgj.outInvoice";
 }
