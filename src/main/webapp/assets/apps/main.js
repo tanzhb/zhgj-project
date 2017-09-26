@@ -1892,6 +1892,88 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        		}]
 	        	}	        
 	    })   
+	       // 销项票发起申请
+        .state('submitInvoiceApply', {
+            url: "/submitInvoiceApply?:inOrOut&:invoiceType",
+            templateUrl: "rest/page/submitInvoiceApply",
+            data: {pageTitle: '销项票申请'},
+            controller: "InvoiceController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/InvoiceService.js',
+				'assets/apps/controllers/InvoiceController.js'
+	        	
+                      ]
+                    });
+                }]
+            }
+        })
+         
+        // 审批价格
+        .state('approvalInvoiceApply', {
+            url: "/approvalInvoiceApply?:inOrOut&:invoiceType&:taskId&:processInstanceId",
+            params:{"serialNum":null,"taskId":null, "comments":null,"processInstanceId":null},
+            templateUrl: "rest/page/approvalInvoiceApply",
+            data: {pageTitle: '审批销项票'},
+            controller: "InvoiceController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/InvoiceService.js',
+				'assets/apps/controllers/InvoiceController.js'
+	        	
+                      ]
+                    });
+                }]
+            }
+        })
+       
+        // 重新编辑销项票申请
+        .state('editInvoiceApply', {
+            url: "/editInvoiceApply?:inOrOut&:invoiceType&:taskId&:processInstanceId",
+            params:{"serialNum":null,"taskId":null, "comments":null,"processInstanceId":null},
+            templateUrl: "rest/page/editInvoiceApply",
+            data: {pageTitle: '重新编辑销项票'},
+            controller: "InvoiceController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/InvoiceService.js',
+				'assets/apps/controllers/InvoiceController.js'
+	        	
+                      ]
+                    });
+                }]
+            }
+        })
 
         .state('addPay', {
             url: "/addPay",
@@ -2693,6 +2775,18 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 						   html += "<li><a>查看进项票</a></li>";
 					   }else html += "<li><a>查看销项票</a></li>";
 				   }
+			   }else if('submitInvoiceApply' == toState.name){//销项票申请
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a ui-sref='invoice'>发票</a><i class='fa fa-angle-right'></i></li><li><a>销项票申请</a></li>";
+				  
+			   }else if('approvalInvoiceApply' == toState.name){//销项票审批 
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a ui-sref='invoice'>发票</a><i class='fa fa-angle-right'></i></li><li><a>销项票审批</a></li>";
+				  
+			   }else if('editInvoiceApply' == toState.name){//销项票重新申请
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a ui-sref='invoice'>发票</a><i class='fa fa-angle-right'></i></li><li><a>销项票重新申请</a></li>";
+				  
 			   }else if('addOrEditStockInOutCheck' == toState.name){//新增修改检验                  
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 			 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
@@ -2751,6 +2845,9 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 						getEndTaskLength('priceList', 'buyPrice');
 						getTodoTaskLength('priceList', 'salePrice');
 						getEndTaskLength('priceList', 'salePrice');
+					}else if('invoice' == toState.name){
+						getTodoTaskLength('invoice', 'outInvoice');
+						getEndTaskLength('invoice', 'outInvoice');
 					}else if('dashboard' == toState.name){
 						getTodoTaskLength('dashboard', 'All');
 						getEndTaskLength('dashboard', 'All');

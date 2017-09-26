@@ -7,7 +7,10 @@ angular.module('MetronicApp').factory('InvoiceService', ['$rootScope', '$http', 
     		delInvoices:delInvoices,
             selectDetailBySerialNum:selectDetailBySerialNum,
             getOrderInfoBySerialNum:getOrderInfoBySerialNum,
-            saveInvoiceBillingRecord:saveInvoiceBillingRecord
+            saveInvoiceBillingRecord:saveInvoiceBillingRecord,
+            startInvoiceProcess:startInvoiceProcess,
+            getAuditInfos:getAuditInfos,
+            judgeIsApproval:judgeIsApproval
     };
 
     return factory;
@@ -16,7 +19,7 @@ angular.module('MetronicApp').factory('InvoiceService', ['$rootScope', '$http', 
     function saveInvoice(invoice){
         var deferred = $q.defer();  
 debugger;
-        $http.post($rootScope.basePath + "/rest/invoice/saveInvoiceInfo", invoice).success(function (data) {  
+        $http.post($rootScope.basePath + "/rest/invoice/saveInvoiceInfo",  JSON.stringify(invoice)).success(function (data) {  
             // 如果连接成功，延时返回给调用者  
         	debugger;
             deferred.resolve(data);  
@@ -86,4 +89,39 @@ debugger;
         return deferred.promise;  
           
     };
+    function startInvoiceProcess (invoiceInfo){
+		var deferred = $q.defer();
+		$http.post("rest/invoice/startInvoiceProcess", invoiceInfo
+		).success(function (data) {
+            // 如果连接成功，延时返回给调用者
+            deferred.resolve(data);
+        }).error(function () {
+            deferred.reject('连接服务器出错！');
+        })
+		return deferred.promise;
+	}
+	 function getAuditInfos (ids) {
+				        var deferred = $q.defer();  
+				        $http.post(ctx + "rest/invoice/toApproval/" + ids).success(function (data) {  
+				        	// 如果连接成功，延时返回给调用者  
+				            deferred.resolve(data);  
+				        })  
+				            .error(function () {  
+				                deferred.reject('连接服务器出错！');  
+				            })  
+				        return deferred.promise;  
+				    }
+	 function judgeIsApproval (serialNum) {
+		 var deferred = $q.defer();  
+		 debugger;
+		         $http.post($rootScope.basePath + "/rest/invoice/judgeIsApproval", serialNum).success(function (data) {  
+		             // 如果连接成功，延时返回给调用者  
+		         	debugger;
+		             deferred.resolve(data);  
+		         })  
+		             .error(function () {  
+		                 deferred.reject('连接服务器出错！');  
+		             })  
+		         return deferred.promise;  
+	    }
 }]);

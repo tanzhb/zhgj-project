@@ -639,7 +639,7 @@ public class PriceListController {
 //		@RequiresPermissions("user:vacation:modify")
 		@RequestMapping(value = "/modifyPrice/{taskId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
 		@ResponseBody
-		public String modifyOrder(
+		public String modifyPrice(
 				@PathVariable("taskId") String taskId,
 				@RequestParam("processInstanceId") String processInstanceId,
 				@RequestParam("reApply") Boolean reApply,
@@ -655,7 +655,6 @@ public class PriceListController {
 	        Map<String, Object> variables = new HashMap<String, Object>();
 	        priceList.setUserId(user.getUserId());
 	        priceList.setUser_name(user.getUserName());
-	        priceList.setBusinessType(BaseVO.BUYORDER);
 	        priceList.setApplyDate(new Date());
 	        priceList.setBusinessKey(priceId);
 	        priceList.setProcessInstanceId(processInstanceId);
@@ -664,10 +663,12 @@ public class PriceListController {
 	        	//修改价格申请
 	        	if("buy".equals(priceType)){
 	        		priceList.setTitle(user.getUserName()+" 的采购价格申请！");
+	        		 priceList.setBusinessType(BaseVO.BUYPRICE);
 	        		 content = "重新申请采购价格";
 	 		        result = "任务办理完成，采购价格申请已重新提交！";
     			}else{
     				priceList.setTitle(user.getUserName()+" 的销售价格申请！");
+    				priceList.setBusinessType(BaseVO.SALEPRICE);
 	        		 content = "重新申请销售价格";
 	 		        result = "任务办理完成，销售价格申请已重新提交！";
     			}
@@ -676,10 +677,12 @@ public class PriceListController {
 	        }else{
 	        	if("buy".equals(priceType)){
 	        		priceList.setTitle(user.getUserName()+" 的采购价格申请已取消！");
+	        		priceList.setBusinessType(BaseVO.BUYPRICE);
 	        		 content = "取消申请采购价格";
 	 		        result = "任务办理完成，已经取消您的采购价格申请！";
     			}else{
     				priceList.setTitle(user.getUserName()+" 的销售价格申请！");
+    				priceList.setBusinessType(BaseVO.SALEPRICE);
 	        		 content = "取消申请销售价格";
 	 		        result = "任务办理完成，已经取消您的销售价格申请！";
     			}

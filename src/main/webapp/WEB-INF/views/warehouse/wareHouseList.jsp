@@ -421,7 +421,7 @@
 			<div class="portlet-title">
 				<div class="caption">
 				<i class="fa fa-globe font-green"></i>
-					<span class="caption-subject font-green bold uppercase">库位管理</span>
+					<span class="caption-subject font-green bold uppercase">库区管理</span>
 				</div>
 				<div class="actions">
 					

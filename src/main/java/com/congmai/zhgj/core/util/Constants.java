@@ -44,4 +44,7 @@ public class Constants {
 	
 	/***************** 销售价格KEY *****************/
 	public static final String SALEPRICE_KEY = "com.congmai.zhgj.salePrice";
+	
+	/***************** 销项票KEY *****************/
+	public static final String OUTINVOICE_KEY = "com.congmai.zhgj.outInvoice";
 }

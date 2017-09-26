@@ -464,4 +464,27 @@ public class PageController {
     public String editPriceApply(String serialNum,String priceType) {
         return "priceList/editPriceApply";
     }
+    /**
+     * 发票提交申请
+     */
+    @RequestMapping("/submitInvoiceApply")
+    public String submitInvoiceApply(String serialNum,String invoiceType) {
+        return "invoice/submitInvoiceApply";
+    }
+    
+    /**
+     * 审批发票
+     */
+    @RequestMapping("/approvalInvoiceApply")
+    public String approvalInvoiceApply(String serialNum,String invoiceType) {
+        return "invoice/approvalInvoiceApply";
+    }
+    
+    /**
+     * 重新编辑发票申请
+     */
+    @RequestMapping("/editInvoiceApply")
+    public String editInvoiceApply(String serialNum,String invoiceType) {
+        return "invoice/editInvoiceApply";
+    }
 }

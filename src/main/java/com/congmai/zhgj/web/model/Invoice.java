@@ -9,7 +9,7 @@ import java.util.Date;
  * @Date 2017年8月30日 下午1:47:08
  * @version 1.0.0
  */
-public class Invoice {
+public class Invoice extends BaseVO{
 
     private String serialNum;
 
@@ -90,8 +90,6 @@ public class Invoice {
     private String updater;
 
     private Date updateTime;
-    
-    private  String status;
     
     private  String relationBuyOrSaleNum;//关联销售/采购单号
     
@@ -302,15 +300,6 @@ public class Invoice {
         this.updateTime = updateTime;
     }
 
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	
 
 	public String getSupplyComId() {
 		return supplyComId;
