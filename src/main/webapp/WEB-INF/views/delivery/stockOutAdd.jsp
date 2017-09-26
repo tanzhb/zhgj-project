@@ -84,7 +84,7 @@
 	                                                 	<select class="form-control"  name="inOutType" ng-model="record.inOutType" ng-change="changeStockOutMode(record.inOutType)" ng-init="record.inOutType='贸易'"   data-size="8">
 			                                                  <!--  <option value=""></option> -->
 			                                                   <option value="贸易">贸易</option>
-			                                                   <option value="其他">其他</option>
+			                                                  <!--  <option value="其他">其他</option> -->
 			                                             </select>
                                                      </div>
                                                      <div class="form-control-focus"> </div>
@@ -171,11 +171,12 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="operator">收货方 <span class="required"> * </span></label>
                                                     <div class="">
-                                                       <input  ng-if="!otherMode" type="text" class="form-control" value="{{shipperOrReceiverName}}" disabled="disabled">
-                                                       <select ng-if="otherMode" class="form-control" selectpicker  data-live-search="true"  id="shipperOrReceiver"  name="shipperOrReceiver" ng-model="record.shipperOrReceiver" ng-hide="deliverAdd"  data-size="8">
+                                                       <input  ng-if="!otherMode" type="text" class="form-control" value="{{record.shipperOrReceiverName}}" disabled="disabled">
+                                                       <!-- <select ng-if="otherMode" class="form-control" selectpicker  data-live-search="true"  id="shipperOrReceiver"  name="shipperOrReceiver" ng-model="record.shipperOrReceiver" ng-hide="deliverAdd"  data-size="8">
 	                                                        <option value=""></option>
 	                                                        <option  ng-repeat="customer in customers" value="{{customer.comId}}">{{customer.comName}}</option>
-	                                                    </select>
+	                                                    </select> -->
+	                                                    <input  ng-if="otherMode" type="text" class="form-control"  name="shipperOrReceiver" ng-model="record.shipperOrReceiver"  >
 	                                                    <div class="form-control-focus"> </div>
                                                     </div>
                                             </div>

@@ -1075,11 +1075,14 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 		    		for(var i in $scope.rootMateriels){
 		    			console.log("===++++++=====>"+$scope.rootMateriels[i].materielChecked);
 		    			if($scope.rootMateriels[i].materielChecked){
-		    				arr.push($scope.rootMateriels[i].serialNum);
+		    				arr.push($scope.rootMateriels[i].supplyMaterielSerial);
 		    			}
 		    		}
-		       }
-	    	   console.log(arr);
+		       }debugger;
+	    	  // $stateParams.materiels = arr; 
+	    	   
+	    	   //console.log(arr);
+	    	   //$state.go("addSaleOrder",{materiels:arr,demandPlanSerial:$scope.demandPlan.serialNum});
 	       }
 	       
 	       $scope.cancel = function(){

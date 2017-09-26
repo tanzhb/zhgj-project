@@ -142,7 +142,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="operator">发货方：</label>
                                                     <div class="col-md-8">
-                                                       <p class="control-label left" >{{record.shipperOrReceiverName}}</p>
+                                                       <p class="control-label left" >{{record.shipperOrReceiver}}</p>
                                                     </div>
                                             </div>
 										</div>

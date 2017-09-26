@@ -48,6 +48,8 @@ public class StockInOutRecord {
     
     private String docNum;
     
+    private String inOutFlag;
+    
     private int pageSize;
     
     private int pageIndex;  
@@ -251,5 +253,13 @@ public class StockInOutRecord {
 
 	public void setDocNum(String docNum) {
 		this.docNum = docNum;
+	}
+
+	public String getInOutFlag() {
+		return inOutFlag;
+	}
+
+	public void setInOutFlag(String inOutFlag) {
+		this.inOutFlag = inOutFlag;
 	}
 }

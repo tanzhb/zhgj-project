@@ -84,9 +84,9 @@
 	                                                 	<select class="form-control"  name="inOutType" ng-change="changeStockInMode(record.inOutType)" ng-model="record.inOutType" ng-init="record.inOutType='贸易'"   data-size="8">
 			                                                   <!-- <option value=""></option> -->
 			                                                   <option value="贸易">贸易</option>
-			                                                   <option  value="备品备件">备品备件</option>
+			                                                  <!--  <option  value="备品备件">备品备件</option>
 			                                                   <option  value="退货">退货</option>
-			                                                   <option  value="生产">生产</option>
+			                                                   <option  value="生产">生产</option> -->
 			                                             </select>
                                                      </div>
                                                      <div class="form-control-focus"> </div>
@@ -171,11 +171,12 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="operator">发货方 </label>
                                                     <div class="">
-                                                       <input  ng-if="!otherMode" type="text" class="form-control" value="{{shipperOrReceiverName}}" disabled="disabled">
-                                                       <select ng-if="otherMode" class="form-control" selectpicker  data-live-search="true"  id="shipperOrReceiver"  name="shipperOrReceiver" ng-model="record.shipperOrReceiver" ng-hide="deliverAdd"  data-size="8">
+                                                       <input  ng-if="!otherMode" type="text" class="form-control"  value="{{shipperOrReceiver}}" disabled="disabled">
+                                                      <!--  <select ng-if="otherMode" class="form-control" selectpicker  data-live-search="true"  id="shipperOrReceiver"  name="shipperOrReceiver" ng-model="record.shipperOrReceiver" ng-hide="deliverAdd"  data-size="8">
 	                                                        <option value=""></option>
 	                                                        <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}">{{supplier.comName}}</option>
-	                                                    </select>
+	                                                    </select> -->
+	                                                    <input  ng-if="otherMode" type="text" class="form-control"  name="shipperOrReceiver" ng-model="record.shipperOrReceiver"  >
 	                                                    <div class="form-control-focus"> </div>
                                                     </div>
                                             </div>

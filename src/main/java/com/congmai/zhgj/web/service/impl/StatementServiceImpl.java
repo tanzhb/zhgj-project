@@ -274,7 +274,7 @@ public class StatementServiceImpl implements StatementService {
 					if(CollectionUtils.isNotEmpty(paymentRecords)){
 						for(PaymentRecord record :paymentRecords){
 							StatementPaymentInfo alreadyPaymentInfo = new StatementPaymentInfo(); //已付信息
-							StatementPaymentInfo shouldPaymentInfo = new StatementPaymentInfo();	//应付信息
+						//	StatementPaymentInfo shouldPaymentInfo = new StatementPaymentInfo();	//应付信息
 							//获取本期应付信息
 							getShouldPaymentInfo2(paymentRecords,set,shouldPaymentList,map2);
 							
@@ -301,17 +301,27 @@ public class StatementServiceImpl implements StatementService {
 									InvoiceExample invoiceExample = new InvoiceExample();
 									invoiceExample.createCriteria().andPaymentSerialEqualTo(record.getSerialNum()).andDelFlgEqualTo("0");
 									List<Invoice> invoices = invoiceMapper.selectByExample(invoiceExample);
+									
+									List<String> invoiceNums = new ArrayList<String>();
+									List<String> billingDates = new ArrayList<String>();
+									
 									if(CollectionUtils.isNotEmpty(invoices)){
 										for(Invoice invoice : invoices){
 											invoice.getInvoiceNum(); //开票编号
 											invoice.getBillingDate();//开票日期
+											invoiceNums.add(invoice.getInvoiceNum());
+											billingDates.add(DateUtil.format("yyyy-MM-dd",invoice.getBillingDate()));
 										}
+										alreadyPaymentInfo.setBillNum(StringUtils.join(invoiceNums,","));//开票编号
+										alreadyPaymentInfo.setBillDate(StringUtils.join(billingDates,","));//开票日期
+									}else{
+										alreadyPaymentInfo.setBillNum("");//开票编号
+										alreadyPaymentInfo.setBillDate("");//开票日期
 									}
 									
-									alreadyPaymentInfo.setBillNum("施工中");//开票编号
-									alreadyPaymentInfo.setBillDate("施工中");//开票日期
+									
 									alreadyPaymentInfo.setPeriod("1");//账期
-									alreadyPaymentInfo.setInterest("施工中");//利息
+									alreadyPaymentInfo.setInterest("0.00");//利息
 									alreadyPaymentList.add(alreadyPaymentInfo);
 								}
 							

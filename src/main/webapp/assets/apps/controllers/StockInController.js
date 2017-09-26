@@ -34,16 +34,16 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 	 
 
 	 	
-	 	var countWarehouseAndPosition = function() {
+	 	var countWarehouseAndPosition = function() {debugger;
 	 		if($scope.takeDeliveryMateriels != undefined){
 	    		var w_arr = [];
 	    		var p_arr = [];
 	    		for(var i in $scope.takeDeliveryMateriels){
-	    			if(!isNull($scope.takeDeliveryMateriels[i].warehouseSerial)){
-	    				w_arr.push($scope.takeDeliveryMateriels[i].warehouseSerial);
+	    			if(!isNull($scope.takeDeliveryMateriels[i].stockInWarehouseSerial)){
+	    				w_arr.push($scope.takeDeliveryMateriels[i].stockInWarehouseSerial);
 	    			}
-	    			if(!isNull($scope.takeDeliveryMateriels[i].positionSerial)){
-	    				p_arr.push($scope.takeDeliveryMateriels[i].positionSerial);
+	    			if(!isNull($scope.takeDeliveryMateriels[i].stockInPositionSerial)){
+	    				p_arr.push($scope.takeDeliveryMateriels[i].stockInPositionSerial);
 	    			}
 	    		}
 	    		$scope.warehouseCount = unique(w_arr);
@@ -147,18 +147,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 	            if(isNull(takeDeliverSerial)){
 	            	stockSerial = $scope.record.serialNum;
 	            }
-	           /* for(var i in $scope.takeDeliverys){
-		            if(sd == $scope.takeDeliverys[i].takeDelivery.serialNum){
-						sd = $scope.takeDeliverys[i].serialNum;
-						$scope.deliverSerial = sd;
-						$scope.record.orderSerial = delivery.orderSerial;
-						$scope.record.orderNum = delivery.orderNum;
-					}
-	            }*/
-	            if(delivery!=null){
-	            	$scope.record.orderSerial = delivery.orderSerial;
-					$scope.record.orderNum = delivery.orderNum;	
-	            }
+
 	        	var promise = takeDeliveryService.getTakeDeliveryMaterielListForStockIn(takeDeliverSerial,stockSerial);
         		promise.then(function(data){
         			$scope.takeDeliveryMateriels = data.data;
@@ -253,10 +242,16 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 				}
 			}; 
 			
+			/**
+			 * 取消入库
+			 */
 			$scope.cancelStockIn = function(){
 				$state.go("takeDelivery");
 			}
 			
+			/**
+			 * 获得仓库名
+			 */
 			$scope.getWarehouseName = function(type){
 				for(var i in $scope.warehouses){
 					if(type=="deliver"){
@@ -283,21 +278,30 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 				}
 			}
 			
+			/**
+			 * 获取入库信息
+			 */
 			var stockInInfo = function(serialNum){
 				var promise = takeDeliveryService.getStockInInfo(serialNum);
         		promise.then(function(data){
         			$scope.record = data.data; 
-        			if(data.data.delivery!=null&&data.data.delivery.takeDelivery!=null){
+        			if(data.data.delivery!=null&&data.data.delivery.takeDelivery!=null){  //当贸易入库时
         				$scope.record.takeDeliverNum = data.data.delivery.takeDelivery.takeDeliverNum;
             			$scope.record.shipperOrReceiver = data.data.delivery.shipper;
-    					$scope.shipperOrReceiverName = data.data.delivery.shipperName;
+    					//$scope.shipperOrReceiverName = data.data.delivery.shipperName;
             			//$scope.deliver.materielCount = data.orderMateriel.length;
             			if(!isNull($stateParams.serialNum)&&($location.path()=="/stockInAdd"||$location.path()=="/stockIn")){//入库编辑或入库时时
             				$scope.deliverSerial = data.data.delivery.serialNum;
             				$scope.getTakeDeliverMateriel(data.data.delivery);
             				$scope.record.inOutType = '贸易';
+            				/*if(data.data.delivery.orderSerial!=null){
+            					$scope.record.orderNum = data.data.delivery.orderNum; //关联订单号
+            				}*/
+            			
+            			}else{
+            				$scope.getTakeDeliverMateriel(data.data.delivery);
             			}
-        			}else{
+        			}else{ //其他类型入库时
         				if(!isNull($stateParams.serialNum)&&($location.path()=="/stockInView")){//入库编辑或入库时时
         					//var de$scope.record.serialNum;
             				$scope.getTakeDeliverMateriel(data.data.delivery);
@@ -493,91 +497,126 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 		                                  { mData: 'takeDelivery.serialNum' },
 		                                  { mData: 'takeDelivery.takeDeliverNum' },
 		                                  { mData: 'orderNum' },
-		                                  { mData: 'shipperName' },
+		                                  { mData: 'shipper' },
 		                                  { mData: 'materielCount' },
 		                                  { mData: 'packageCount' },
 		                                  { mData: 'packageType' },
-		                                  { mData: 'warehouse.address' },
+		                                  { mData: 'warehouse' },
 		                                  { mData: 'deliverDate' },
 		                                  { mData: 'deliveryTransport.transportType' },
 		                                  { mData: 'takeDelivery.warehouse.address' },
-		                                  { mData: 'takeDelivery.remark' }
+		                                  { mData: 'takeDelivery.remark' },
+		                                  { mData: 'status' }
 		                            ],
 		                   'aoColumnDefs' : [ {
-		    							'targets' : 0,
-		    							'searchable' : false,
-		    							'orderable' : false,
-		    							'className' : 'dt-body-center',
-		    							'render' : function(data,
-		    									type, row, meta) {
-//		  	  	  								return '<input  type="radio" id='+data+'  ng-click="getSelectIndex('+meta.row+')"   name="takeDeliverySerial" value="'
-//		  											+ $('<div/>')
-//		  													.text(
-//		  															data)
-//		  													.html()
-//		  											+ '">';
-		  	  	  							return '<label class="mt-radio mt-radio-outline">'+
-		                                     '<input type="radio"  ng-click="getSelectIndex(\''+meta.row+'\')" name="takeDeliverySerial"  class="checkboxes" id="'+data+'" value="'+data+'" />'+
-		                                     '<span></span></label>';
-		  	
-		    							},
-		    							"createdCell": function (td, cellData, rowData, row, col) {
-		    								 $compile(td)($scope);
-		    						       }
-		    						},{
-		    							'targets' : 1,
-		    							'render' : function(data,
-		    									type, row, meta) {
-		    										if(data==null){
-		    											data="未收货";
-		    										}
-		  	  	  								return '<a href="javascript:void(0);" ng-click="takeDeliveryView(\''+row.takeDelivery.serialNum+'\')">'+data+'</a>';
-		  	
-		    							},
-		    							"createdCell": function (td, cellData, rowData, row, col) {
-		    								 $compile(td)($scope);
-		    						       }
-		    						},{
-		    							'targets' : 7,
-		    							'render' : function(data,
-		    									type, row, meta) {
-		    									if(data!=undefined){
-		  										return data;
-		  									}
-		  	  								return '';
-		  	
-		    							}
-		    						},{
-		    							'targets' : 9,
-		    							'render' : function(data,
-		    									type, row, meta) {
-		    									if(data!=undefined){
-		  										return data;
-		  									}
-		  	  								return '';
-		  	
-		    							}
-		    						},{
-		    							'targets' : 10,
-		    							'render' : function(data,
-		    									type, row, meta) {
-		    									if(data!=undefined){
-		  										return data;
-		  									}
-		  	  								return '';
-		  	
-		    							}
-		    						},{
-		    							'targets' : 11,
-		    							'render' : function(data,
-		    									type, row, meta) {
-		    										if(data!=undefined){
-		    											return data;
-		    										}
-		  	  	  								return '';
-		  	
-		    							}
-		    						}]
+   							'targets' : 0,
+							'searchable' : false,
+							'orderable' : false,
+							'className' : 'dt-body-center',
+							'render' : function(data,
+									type, row, meta) {
+	  	  								/*return '<input  type="checkbox" id='+data+'   name="serialNum" value="'
+											+ $('<div/>')
+													.text(
+															data)
+													.html()
+											+ '">';*/
+	  	  							return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
+                                 '<input type="checkbox"  name="serialNum" class="checkboxes"  id="'+data+'" value="'+data+'" data-set="#takeDeliveryTable .checkboxes" />'+
+                                 '<span></span>'+
+                             '</label>';
+	
+							},
+							"createdCell": function (td, cellData, rowData, row, col) {
+								 $compile(td)($scope);
+						       }
+						},{
+							'targets' : 1,
+							'render' : function(data,
+									type, row, meta) {
+										if(data==null){
+											data="未收货";
+										}
+	  	  								return '<a href="javascript:void(0);" ng-click="takeDeliveryView(\''+row.takeDelivery.serialNum+'\')">'+data+'</a>';
+	
+							},
+							"createdCell": function (td, cellData, rowData, row, col) {
+								 $compile(td)($scope);
+						       }
+						},{
+							'targets' : 2,
+							'render' : function(data,
+									type, row, meta) {
+									if(!isNull(data)){
+										return data;
+									}
+	  								return row.docNum;
+	
+							}
+						},{
+							'targets' : 7,
+							'render' : function(data,
+									type, row, meta) {
+									if(data!=null){
+										return data.address;
+									}
+	  								return '';
+	
+							}
+						},{
+							'targets' : 9,
+							'render' : function(data,
+									type, row, meta) {
+									if(data!=undefined){
+										return data;
+									}
+	  								return '';
+	
+							}
+						},{
+							'targets' : 10,
+							'render' : function(data,
+									type, row, meta) {
+									if(data!=undefined){
+										return data;
+									}
+	  								return '';
+	
+							}
+						},{
+							'targets' : 11,
+							'render' : function(data,
+									type, row, meta) {
+										if(data!=undefined){
+											return data;
+										}
+	  	  								return '';
+	
+							}
+						},{
+							'targets' : 12,
+							'searchable' : false,
+							'orderable' : false,
+							'className' : 'dt-body-center',
+							'render' : function(data,
+									type, row, meta) {
+									if(data=="PENDING"||data=="WAITING_FOR_APPROVAL"){
+										return '<span  class="label label-sm label-warning ng-scope">审核中</span>';
+									}else if(data=="1"){
+										return '<span  class="label label-sm label-info ng-scope">待检验</span>';
+									}else if(data=="APPROVAL_FAILED"){
+										return '<span  class="label label-sm label-danger ng-scope">未通过</span>';
+									}else if(data=="2"){
+										return '<span  class="label label-sm label-warning ng-scope">已取消</span>';
+									}else if(data=="3"){
+										return '<span  class="label label-sm label-warning ng-scope">待入库</span>';
+									}else if(data=="4"){
+										return '<span  class="label label-sm label-success ng-scope">已完成</span>';
+									}else{
+										return '<span  class="label label-sm label-danger ng-scope">待收货</span>';
+									}
+							}
+						}]
 
 		                }).on('order.dt',
 		                function() {
@@ -597,12 +636,18 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 							toastr.warning("请选择发货单");
 						}else{
 							//var serialNum = $('#buyOrder input[name="selecrOrderSerial"]:checked').val();
-							var delivery = t_table.row($scope.index).data();
+							var delivery = t_table.row($scope.index).data();debugger;
 							$scope.deliverSerial = delivery.serialNum;
 							$scope.record.takeDeliverSerial = $('#takeDelivery input[name="takeDeliverySerial"]:checked').val();
 							$scope.record.takeDeliverNum = delivery.takeDelivery.takeDeliverNum;
 							$scope.record.shipperOrReceiver = delivery.shipper;
-							$scope.shipperOrReceiverName = delivery.shipperName;
+							if(isNull(delivery.orderSerial)){
+								$scope.record.orderNum = delivery.docNum;
+							}else{
+								$scope.record.orderNum = delivery.orderNum;
+							}
+							
+							//$scope.shipperOrReceiverName = delivery.shipperName;
 							$scope.getTakeDeliverMateriel(delivery);
 							$("#takeDeliveryInfo").modal('hide'); 
 						}
@@ -845,6 +890,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 											if ($.contains(document, this)) {
 												// If checkbox is checked
 												this.checked = false;
+												$(this).data("checked",false);
 											}
 								});
 					    	}

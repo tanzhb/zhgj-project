@@ -206,7 +206,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        		$scope.deliver.warehouse.warehouseName='无';
 	        	}
 	        	if(isNull($scope.deliver.receiver)){
-	        		$scope.deliver.receiverName = "中航能科（上海）能源科技有限公司";
+	        		$scope.deliver.receiver = "中航能科（上海）能源科技有限公司";
 	        	}
 	        	if(type=="edit"){
 	        		$scope.deliverTransport = data.data.deliveryTransport;
@@ -700,11 +700,11 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	                                  { mData: 'takeDelivery.serialNum' },
 	                                  { mData: 'takeDelivery.takeDeliverNum' },
 	                                  { mData: 'orderNum' },
-	                                  { mData: 'shipperName' },
+	                                  { mData: 'shipper' },
 	                                  { mData: 'materielCount' },
 	                                  { mData: 'packageCount' },
 	                                  { mData: 'packageType' },
-	                                  { mData: 'warehouse.address' },
+	                                  { mData: 'warehouse' },
 	                                  { mData: 'deliverDate' },
 	                                  { mData: 'deliveryTransport.transportType' },
 	                                  { mData: 'takeDelivery.warehouse.address' },
@@ -747,11 +747,21 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    								 $compile(td)($scope);
 	    						       }
 	    						},{
+	    							'targets' : 2,
+	    							'render' : function(data,
+	    									type, row, meta) {
+	    									if(!isNull(data)){
+	    										return data;
+	    									}
+	  	  								return row.docNum;
+	  	
+	    							}
+	    						},{
 	    							'targets' : 7,
 	    							'render' : function(data,
 	    									type, row, meta) {
-	    									if(data!=undefined){
-	  										return data;
+	    									if(data!=null){
+	  										return data.address;
 	  									}
 	  	  								return '';
 	  	
@@ -1458,17 +1468,17 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					$scope.deliver.orderSerial = $('#buyOrder input[name="selecrOrderSerial"]:checked').val();
 					var order = order_table.row('.active').data();
 					$scope.deliver.supplyComId = order.supplyComId;
-					$scope.deliver.shipper = order.supplyComId;debugger;
+					//$scope.deliver.shipper = order.supplyComId;debugger;
 					if(!isNull(order.buyComId)){
-						$scope.deliver.receiver =  order.buyComId;
-						$scope.deliver.receiverName =  order.buyName;
+						//$scope.deliver.receiver =  order.buyComId;
+						$scope.deliver.receiver =  order.buyName;
 					}
 					
 					
 					$scope.deliver.supplyName = order.supplyName;
-					$scope.deliver.shipperName = order.supplyName;
+					$scope.deliver.shipper = order.supplyName;
 					if(isNull(order.buyComId)){
-						$scope.deliver.receiverName = "中航能科（上海）能源科技有限公司";
+						$scope.deliver.receiver = "中航能科（上海）能源科技有限公司";
 					}
 					
 					$scope.deliver.orderNum = $('#buyOrder input[name="selecrOrderSerial"]:checked').data("num");
@@ -1484,6 +1494,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  				$scope.totalDeliverCount = 0;
 	  				$scope.totalAmount = 0;
 	  				$scope.materielCount = $scope.orderMateriels.length;
+	  				$scope.deliver.materielCount = $scope.orderMateriels.length;
 	  				for(var i in $scope.orderMateriels){
 	  					$scope.totalDeliverCount += handle.formatNumber($scope.orderMateriels[i].deliverCount);
 	  					$scope.totalAmount += handle.formatNumber($scope.orderMateriels[i].amount);
@@ -2250,6 +2261,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 								if ($.contains(document, this)) {
 									// If checkbox is checked
 									this.checked = false;
+									$(this).data("checked",false);
 								}
 					});
 		    	}

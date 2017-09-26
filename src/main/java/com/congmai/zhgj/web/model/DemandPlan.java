@@ -16,6 +16,10 @@ public class DemandPlan {
 
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date releaseDate;
+    
+    private String maker;
+    
+    private String description;
 
     private String remark;
 
@@ -160,6 +164,22 @@ public class DemandPlan {
 
 	public void setPageIndex(int pageIndex) {
 		this.pageIndex = pageIndex;
+	}
+
+	public String getMaker() {
+		return maker;
+	}
+
+	public void setMaker(String maker) {
+		this.maker = maker;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	

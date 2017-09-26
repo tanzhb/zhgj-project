@@ -25,6 +25,7 @@
 								<th>运输方式</th>
 								<th>收货/提货点</th>
 								<th>备注</th>
+								<th>状态</th>
 	                        </tr>
 	                    </thead>
 	                    <tbody>

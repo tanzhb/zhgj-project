@@ -40,6 +40,11 @@
         <div class="portlet bordered">
             <div class="portlet-body">
 				<div class="portlet light">
+				 		<div class="portlet-title">
+				 			<div class="caption">基本信息</div>
+                            <div class="actions">
+                            </div>
+                        </div>
                         <div class="portlet-body form">
                             <form  id="demandPlanForm" class="form-horizontal" >
 								<div class="form-body">
@@ -121,6 +126,88 @@
 										</div>
 									</div>
 									<!--/row-->
+								</div>
+							</form>
+         				</div>
+         				<div class="portlet-title">
+				 			<div class="caption">高级筛选</div>
+                            <div class="actions">
+                            </div>
+                        </div>
+                        <div class="portlet-body form">
+                            <form  id="demandPlanForm" >
+								<div class="form-body">
+									<div class="alert alert-danger display-hide">
+                                                <button class="close" data-close="alert"></button>请先输入正确数据！</div>
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="demandPlanNum">一级分类</label>
+                                                    <div class="">
+                                                        <input type="text" class="form-control" id="demandPlanNum" name="demandPlanNum" ng-model="firstCategory" ng-hide="demandPlanAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="demandPlanView">{{demandPlan.demandPlanNum}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="description">二级分类</label>
+                                                    <div class="">
+                                                        <input type="text" class="form-control" id="description"  ng-model="secondCategory" ng-hide="demandPlanAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="demandPlanView">{{demandPlan.description}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="description">三级分类</label>
+                                                    <div class="">
+                                                        <input type="text" class="form-control" id="description"  ng-model="thirdCategory" ng-hide="demandPlanAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="demandPlanView">{{demandPlan.description}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+									</div>
+									<!--/row-->
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group">
+                                                   <label class="control-label bold" for="buyComId">供应商 <span class="required"> * </span></label>
+	                                              <div class="">
+	                                                   <select class="form-control customer" selectpicker data-live-search="true"  id="buyComId"  name="buyComId" ng-model="supply" ng-hide="demandPlanAdd"  data-size="8">
+	                                                        <option value=""></option>
+	                                                        <option  ng-repeat="customer in customers" value="{{customer.comId}}">{{customer.comName}}</option>
+	                                                   </select>
+	                                                   <div class="form-control-focus"> </div>
+                                                        <p class="control-label left" ng-show="demandPlanView">{{demandPlan.buyComName}}</p>
+	                                              </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="releaseDate">交付日期 </label>
+                                                    <div class="">
+                                                        <input type="text" set-date class="form-control date-picker" size="16" data-date-format="yyyy-mm-dd" data-date-viewmode="years"
+                                                         id="releaseDate" ng-model="submitDate" ng-hide="demandPlanAdd" readonly="readonly">
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="demandPlanView">{{demandPlan.releaseDate}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="tel">关键字</label>
+                                                    <div class="">
+                                                        <input type="text" class="form-control" id="remark"  ng-model="searchKey" ng-hide="demandPlanAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="demandPlanView">{{demandPlan.remark}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+									</div>
 								</div>
 							</form>
          				</div>

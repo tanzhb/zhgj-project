@@ -219,6 +219,13 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		record.setCreateTime(new Date());
 		record.setUpdater(currenLoginName);
 		record.setUpdateTime(new Date());
+		if(StringUtils.isEmpty(record.getTakeDeliverSerial())&&StringUtils.isEmpty(record.getDeliverSerial())){
+			if("in".equals(type)){
+				record.setInOutFlag("1"); //入库
+			}else if("out".equals(type)){
+				record.setInOutFlag("0"); //出库
+			}
+		}
 		record.setStatus("1");
 		record.setDelFlg("0");
 		stockInOutRecordMapper.insert(record);

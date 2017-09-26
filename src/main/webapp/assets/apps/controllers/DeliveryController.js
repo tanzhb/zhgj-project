@@ -2173,10 +2173,10 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
   							'targets' : 8,
   							'render' : function(data,
   									type, row, meta) {debugger;
-  									if(data!=undefined){
+  									if(!isNull(data)){
 										return data;
 									}
-	  								return "";
+	  								return "中航能科（上海）能源科技有限公司";
 	
   							}
   						},{

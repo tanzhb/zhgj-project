@@ -398,6 +398,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         .state('addSaleOrder', {
             url: "/addSaleOrder?:serialNum&:view",
             templateUrl: "rest/page/addSaleOrder",
+            params:{"materiels":null,"demandPlanSerial":null},
             data: {pageTitle: '新增销售订单'},
             controller: "saleOrderController",
             resolve: {
@@ -746,12 +747,11 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
-        
-        //对账单
-        .state('statement', {
-            url: "/statement",
-            templateUrl: "rest/page/statement",
-            data: {pageTitle: '对账单'},
+        //供应商对账单
+        .state('supplyStatement', {
+            url: "/supplyStatement",
+            templateUrl: "rest/statement/supplyStatement",
+            data: {pageTitle: '供应商对账单'},
             controller: "statementController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -769,6 +769,29 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                     });
                 }]
             }
+        })
+        //客户对账单
+        .state('buyStatement', {
+        	url: "/buyStatement",
+        	templateUrl: "rest/statement/buyStatement",
+        	data: {pageTitle: '客户对账单'},
+        	controller: "statementController",
+        	resolve: {
+        		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+        			return $ocLazyLoad.load({
+        				name: 'MetronicApp',
+        				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+        				files: [
+        				        'assets/global/plugins/datatables/datatables.min.css',
+        				        'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+        				        'assets/global/plugins/datatables/datatables.all.min.js',
+        				        'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+        				        'assets/apps/service/statementService.js',
+        				        'assets/apps/controllers/statementController.js'
+        				        ]
+        			});
+        		}]
+        	}
         })
         // 新增客户对账单
         .state('addBuyStatement', {
@@ -2606,24 +2629,27 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a  ui-sref='stockInOutCheck'>检验</a></li>";					 
-			   }else if('statement' == toState.name){//对账单
+			   }else if('buyStatement' == toState.name){//对账单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a>对账单</a></li>";					 
+				 		"<li><a>客户对账单</a></li>";					 
+			   }else if('supplyStatement' == toState.name){//对账单
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a>供应商对账单</a></li>";					 
 			   }else if('addBuyStatement' == toState.name){//新增客户对账单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a ui-sref='statement'>对账单</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='buyStatement'>客户对账单</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>新增客户对账单</a></li>";					 
 			   }else if('addSupplyStatement' == toState.name){//新增供应商对账单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a ui-sref='statement'>对账单</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='supplyStatement'>供应商对账单</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>新增供应商对账单</a></li>";					 
 			   }else if('viewBuyStatement' == toState.name){//查看客户对账单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a ui-sref='statement'>对账单</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='buyStatement'>客户对账单</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>查看客户对账单</a></li>";					 
 			   }else if('viewSupplyStatement' == toState.name){//查看供应商对账单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a ui-sref='statement'>对账单</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='supplyStatement'>供应商对账单</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>查看供应商对账单</a></li>";					 
 			   }else if('gatheringMoneyRecord' == toState.name){//应收款
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +

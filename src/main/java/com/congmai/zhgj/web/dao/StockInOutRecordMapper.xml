@@ -17,8 +17,9 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
-     <result column="inOutType" property="inOutType" jdbcType="VARCHAR" />
+    <result column="inOutType" property="inOutType" jdbcType="VARCHAR" />
     <result column="shipperOrReceiver" property="shipperOrReceiver" jdbcType="VARCHAR" />
+    <result column="inOutFlag" property="inOutFlag" jdbcType="VARCHAR" />
   </resultMap>
   <!-- 入库查询 -->
   <resultMap id="BaseResultMap2" type="com.congmai.zhgj.web.model.StockInOutRecord" >
@@ -39,6 +40,7 @@
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
      <result column="inOutType" property="inOutType" jdbcType="VARCHAR" />
     <result column="shipperOrReceiver" property="shipperOrReceiver" jdbcType="VARCHAR" />
+    <result column="inOutFlag" property="inOutFlag" jdbcType="VARCHAR" />
     <association column="shipperOrReceiver" property="shipperOrReceiverName" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"  />
     <association property="delivery" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.TakeDeliveryMapper.selectByTakeDeliveryPrimaryKeyForStockIn"></association>
   	<association property="warehouseCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countWarehouseByDeliverSerial" ></association>
@@ -61,7 +63,8 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
-     <result column="inOutType" property="inOutType" jdbcType="VARCHAR" />
+    <result column="inOutType" property="inOutType" jdbcType="VARCHAR" />
+    <result column="inOutFlag" property="inOutFlag" jdbcType="VARCHAR" />
     <result column="shipperOrReceiver" property="shipperOrReceiver" jdbcType="VARCHAR" />
     <association column="shipperOrReceiver" property="shipperOrReceiverName" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"  />
     <association property="delivery" column="deliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectByDeliveryPrimaryKey"></association>
@@ -129,7 +132,7 @@
     <sql id="Base_Column_List" >
    	serialNum, deliverSerial, takeDeliverSerial, docNum, inOutNum, stockDate, operator, 
     contactNum, status, remark, delFlg, creator, createTime, updater, updateTime, inOutType, 
-    shipperOrReceiver
+    shipperOrReceiver,inOutFlag
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.StockInOutRecordExample" >
     select
@@ -179,13 +182,15 @@
       operator, contactNum, status, 
       remark, delFlg, creator, 
       createTime, updater, updateTime, 
-      inOutType, shipperOrReceiver)
+      inOutType, shipperOrReceiver, inOutFlag
+      )
     values (#{serialNum,jdbcType=VARCHAR}, #{deliverSerial,jdbcType=VARCHAR}, #{takeDeliverSerial,jdbcType=VARCHAR}, 
       #{docNum,jdbcType=VARCHAR}, #{inOutNum,jdbcType=VARCHAR}, #{stockDate,jdbcType=DATE}, 
       #{operator,jdbcType=VARCHAR}, #{contactNum,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{inOutType,jdbcType=VARCHAR}, #{shipperOrReceiver,jdbcType=VARCHAR})
+      #{inOutType,jdbcType=VARCHAR}, #{shipperOrReceiver,jdbcType=VARCHAR}, #{inOutFlag,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.StockInOutRecord" >
     insert into stockInOutRecord
@@ -241,6 +246,9 @@
       <if test="shipperOrReceiver != null" >
         shipperOrReceiver,
       </if>
+      <if test="inOutFlag != null" >
+        inOutFlag,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
@@ -293,6 +301,9 @@
       </if>
       <if test="shipperOrReceiver != null" >
         #{shipperOrReceiver,jdbcType=VARCHAR},
+      </if>
+      <if test="inOutFlag != null" >
+        #{inOutFlag,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -356,6 +367,9 @@
       <if test="record.shipperOrReceiver != null" >
         shipperOrReceiver = #{record.shipperOrReceiver,jdbcType=VARCHAR},
       </if>
+      <if test="record.inOutFlag != null" >
+        inOutFlag = #{record.inOutFlag,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -379,7 +393,8 @@
       updater = #{record.updater,jdbcType=VARCHAR},
       updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       inOutType = #{record.inOutType,jdbcType=VARCHAR},
-      shipperOrReceiver = #{record.shipperOrReceiver,jdbcType=VARCHAR}
+      shipperOrReceiver = #{record.shipperOrReceiver,jdbcType=VARCHAR},
+      inOutFlag = #{record.inOutFlag,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -435,6 +450,9 @@
       <if test="shipperOrReceiver != null" >
         shipperOrReceiver = #{shipperOrReceiver,jdbcType=VARCHAR},
       </if>
+      <if test="inOutFlag != null" >
+        inOutFlag = #{inOutFlag,jdbcType=VARCHAR},
+      </if>
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
@@ -455,7 +473,8 @@
       updater = #{updater,jdbcType=VARCHAR},
       updateTime = #{updateTime,jdbcType=TIMESTAMP},
       inOutType = #{inOutType,jdbcType=VARCHAR},
-      shipperOrReceiver = #{shipperOrReceiver,jdbcType=VARCHAR}
+      shipperOrReceiver = #{shipperOrReceiver,jdbcType=VARCHAR},
+      inOutFlag = #{inOutFlag,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
   <update id="deleteStockInOutRecord" parameterType="java.util.List">

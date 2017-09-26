@@ -276,8 +276,8 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
         			$scope.record = data.data; debugger;
         			if(data.data.delivery!=null){
         				$scope.record.deliverNum = data.data.delivery.deliverNum;
-            			$scope.record.shipperOrReceiver = data.data.delivery.shipper;
-    					$scope.shipperOrReceiverName = data.data.delivery.shipperName;
+            			$scope.record.shipperOrReceiver = data.data.delivery.receiver;
+    					//$scope.shipperOrReceiverName = data.data.delivery.shipperName;
             			//$scope.deliver.materielCount = data.orderMateriel.length;
             			if(!isNull($stateParams.serialNum)&&($location.path()=="/stockOutAdd"||$location.path()=="/stockOut")){//出库编辑或入库时时
             				$scope.deliverSerial = data.data.delivery.serialNum;
@@ -519,16 +519,20 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 									                            	'targets' : 11,
 									                            	'render' : function(data,
 									                            			type, row, meta) {if(data!=""&&data!=null){
-										                            			if(data=='0'){
-										                            				return '未审批';
+									                            				if(data=='0'){
+										                            				return '待发货';
 										                            			}else if(data=='PENDING'){
 										                            				return '审批中';
 										                            			}else if(data=='WAITING_FOR_APPROVAL'){
 										                            				return '待审批';					                            				
 																				}else if(data=='3'){
-																					return '审批成功';
+																					return '待收货';
 																				}else if(data=='APPROVAL_FAILED'){
 																					return '审批失败';
+																				}else if(data=='4'){
+																					return '已收货';
+																				}else{
+																					return '';
 																				}
 										                            		}else{
 										                            			return "";
@@ -541,7 +545,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					};
 		            /***收货列表初始化END***/
 		            
-		            $scope.confirmDeliverySelect = function(){
+		            $scope.confirmDeliverySelect = function(){debugger;
 			  			var id_count = $('#takeDelivery input[name="takeDeliverySerial"]:checked').length;
 						if(id_count==0){
 							toastr.warning("请选择发货单");
@@ -552,7 +556,12 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 							$scope.record.deliverSerial = $('#takeDelivery input[name="takeDeliverySerial"]:checked').val();
 							$scope.record.deliverNum = delivery.deliverNum;
 							$scope.record.shipperOrReceiver = delivery.receiver;
-							$scope.shipperOrReceiverName = delivery.receiverName;
+							if(isNull(shipperOrReceiver)){
+								$scope.shipperOrReceiver = '中航能科（上海）能源科技有限公司';
+							}else{
+								//$scope.shipperOrReceiverName = delivery.receiverName;
+							}
+							//$scope.record.orderNum = ;
 							$scope.record.takeDeliverSerial = "";
 							$scope.getTakeDeliverMateriel(delivery);
 							$("#takeDeliveryInfo").modal('hide'); 
@@ -793,6 +802,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 											if ($.contains(document, this)) {
 												// If checkbox is checked
 												this.checked = false;
+												$(this).data("checked",false);
 											}
 								});
 					    	}
