@@ -101,4 +101,8 @@ public interface DeliveryMapper extends GenericDao<DeliveryMaterielVO, String> {
     public List<DeliveryMaterielVO> selectListForDetailForStockCheck(Map<String,String>map);
 
 
-    public Company selectCompanyInfo(String comId);}
+    public Company selectCompanyInfo(String comId);
+    
+
+    public void deleteOldDeliveryMateriel2(String deliverSerial);
+}

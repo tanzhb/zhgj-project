@@ -11,7 +11,27 @@ public class OrderInfo extends BaseVO {
 	 * @Field @serialVersionUID : 订单
 	 */
 	private static final long serialVersionUID = 4164102013915166314L;
-
+	
+	//已发货
+	public static final String DELIVER = "1";
+	//已收货
+	public static final String TAKEDELIVER = "2";
+	//已检验
+	public static final String CHECK = "3";
+	//已出库
+	public static final String OUTRECORD = "4";
+	//已入库
+	public static final String INRECORD = "5";
+	//已付款
+	public static final String PAY = "1";
+	//已收款
+	public static final String RECIVE = "2";
+	//已开票
+	public static final String BILL = "1";
+	//已收票
+	public static final String RECIVEBILL = "2";
+	
+	
 	private String serialNum;
 
     private String contractSerial;
@@ -96,6 +116,10 @@ public class OrderInfo extends BaseVO {
     private String buyName;
     
     private ProcessBase processBase;
+    
+    private String deliverStatus;
+    private String payStatus;
+    private String billStatus;
 
     public String getSerialNum() {
         return serialNum;
@@ -437,6 +461,30 @@ public class OrderInfo extends BaseVO {
 
 	public void setContractContent(String contractContent) {
 		this.contractContent = contractContent;
+	}
+
+	public String getDeliverStatus() {
+		return deliverStatus;
+	}
+
+	public void setDeliverStatus(String deliverStatus) {
+		this.deliverStatus = deliverStatus;
+	}
+
+	public String getPayStatus() {
+		return payStatus;
+	}
+
+	public void setPayStatus(String payStatus) {
+		this.payStatus = payStatus;
+	}
+
+	public String getBillStatus() {
+		return billStatus;
+	}
+
+	public void setBillStatus(String billStatus) {
+		this.billStatus = billStatus;
 	}
 
 

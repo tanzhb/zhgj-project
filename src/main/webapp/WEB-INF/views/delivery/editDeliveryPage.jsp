@@ -27,26 +27,27 @@
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
 		<div class="portlet bordered">
 			<div class="portlet-body">
-				<form action="#" id="form_sample_1" class="">
-					<div class="portlet light ">
-						<ul class="nav nav-tabs">
-							<li class="dropdown pull-right tabdrop">
-								<button type="submit" ng-click="editBasicInfo()" ng-show="input"
-									class="btn blue  btn-outline  btn-sm">
-									<i class="fa fa-save"></i> 保存
-								</button>
-								<button ng-click="goBack()" type="button"
-									ng-hide="saleOrderInput" class="btn red  btn-outline  btn-sm">
-									<i class="fa fa-undo"></i> 取消
-								</button>
-							</li>
-							<li class="active bold"><a data-target="#tab_1_1"
-								data-toggle="tab">基本信息</a></li>
-							<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">发货信息</a>
-							</li>
-							<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">运输信息</a></li>
-							<li class="bold"><a data-target="#tab_1_4" data-toggle="tab">收货信息</a></li>
-						</ul>
+
+				<div class="portlet light ">
+					<ul class="nav nav-tabs">
+						<li class="dropdown pull-right tabdrop">
+							<button type="submit" ng-click="editBasicInfo()" ng-show="input"
+								class="btn blue  btn-outline  btn-sm">
+								<i class="fa fa-save"></i> 保存
+							</button>
+							<button ng-click="goBack()" type="button"
+								ng-hide="saleOrderInput" class="btn red  btn-outline  btn-sm">
+								<i class="fa fa-undo"></i> 取消
+							</button>
+						</li>
+						<li class="active bold"><a data-target="#tab_1_1"
+							data-toggle="tab">基本信息</a></li>
+						<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">发货信息</a>
+						</li>
+						<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">运输信息</a></li>
+						<li class="bold"><a data-target="#tab_1_4" data-toggle="tab">收货信息</a></li>
+					</ul>
+					<form action="#" id="form_sample_1" class="">
 						<div class="tab-content">
 							<div class="tab-pane fade active in" id="tab_1_1">
 								<div class="portlet-body form">
@@ -102,7 +103,7 @@
 															onclick="return false;">
 															<input id="orderSerial" name="orderNum" type="text"
 																ng-show="input" class="form-control"
-																ng-model="delivery.orderNum" readonly="readonly">
+																ng-model="delivery.orderNum1" readonly="readonly">
 															<span class="input-group-btn"
 																style="vertical-align: top;" ng-show="input">
 																<button class="btn default" type="button">
@@ -110,7 +111,7 @@
 																</button>
 															</span>
 														</div>
-														<input type="text" ng-model="delivery.orderSerial"
+														<input type="text" name="orderSerial" ng-model="delivery.orderSerial"
 															ng-hide="true" />
 
 														<p class="form-control-static" ng-show="span">
@@ -620,18 +621,19 @@
 								</div>
 							</div>
 						</div>
-
-						<!-- 物料信息 start-->
-						<div class="portlet-title">
-							<div class="caption">物料信息</div>
-							<div class="actions" ng-if="otherMode">
-								<button class="btn blue btn-sm btn-circle"
-									ng-click="addMateriel()" onclick="return false;">
-									<i class="fa fa-plus"></i> 添加物料
-								</button>
-							</div>
+					</form>
+					<!-- 物料信息 start-->
+					<div class="portlet-title">
+						<div class="caption">物料信息</div>
+						<div class="actions" ng-if="otherMode">
+							<button class="btn blue btn-sm btn-circle"
+								ng-click="addMateriel()" onclick="return false;">
+								<i class="fa fa-plus"></i> 添加物料
+							</button>
 						</div>
-						<div class="portlet-body form">
+					</div>
+					<div class="portlet-body form">
+						<form action="#" id="form_sample_2" class="">
 							<div class="table-scrollable">
 								<table class="table table-bordered table-hover">
 									<thead>
@@ -645,7 +647,7 @@
 											<th>订单数量</th>
 											<th>发货数量</th>
 											<th>备注</th>
-											<th style="width: 100px;">操作</th>
+											<!-- <th style="width: 100px;">操作</th> -->
 										</tr>
 									</thead>
 									<tbody>
@@ -672,70 +674,88 @@
 												<p class="form-control-static">
 													{{_deliveryMateriel.unit}}</p>
 											</td>
-											<td><input type="text" name="batchNum"
-												class="form-control" ng-hide="orderMaterielInput{{$index}}"
+											<td class="form-group"><input type="text" name="batchNum"
+												id="batchNum{{$index}}" class="form-control"
+												ng-hide="orderMaterielInput"
 												ng-model="deliveryMaterielE[$index].batchNum">
 												<p class="form-control-static"
-													ng-show="orderMaterielShow{{$index}}">
+													ng-show="orderMaterielShow">
 													{{_deliveryMateriel.batchNum}}</p></td>
-											<td><input type="text" id="manufactureDate{{$index}}"
-												name="manufactureDate{{$index}}"
+											<td class="form-group"><input type="text" id="manufactureDate{{$index}}"
+												name="manufactureDate"
 												class="form-control form-control-inline input-medium date-picker"
 												data-date-format="yyyy-mm-dd" data-date-viewmode="years"
-												size="16" ng-hide="orderMaterielInput{{$index}}"
-												ng-model="deliveryMateriel[$index].manufactureDate" />
+												size="16" ng-hide="orderMaterielInput"
+												ng-model="deliveryMaterielE[$index].manufactureDate" />
 
 												<p class="form-control-static"
-													ng-show="orderMaterielShow{{$index}}">
+													ng-show="orderMaterielShow">
 													{{_deliveryMateriel.manufactureDate}}</p></td>
 											<td>
 												<p class="form-control-static">{{_deliveryMateriel.amount}}
 												</p>
 											</td>
-											<td><input type="text" id="deliverCount{{$index}}"
+											<td class="form-group"><input type="text" id="deliverCount{{$index}}"
 												name="deliverCount" class="form-control"
-												ng-hide="orderMaterielInput{{$index}}"
+												ng-hide="orderMaterielInput"
 												ng-model="deliveryMaterielE[$index].deliverCount"
+												data-ordercount="{{_deliveryMateriel.amount}}"
 												ng-blur="getTotalDeliveryCount()" />
 												<p class="form-control-static"
-													ng-show="orderMaterielShow{{$index}}">
+													ng-show="orderMaterielShow">
 													{{_deliveryMateriel.deliverCount}}</p></td>
 											<td><input type="text" name="deliverRemark{{$index}}"
-												class="form-control" ng-hide="orderMaterielInput{{$index}}"
+												class="form-control" ng-hide="orderMaterielInput"
 												ng-model="deliveryMaterielE[$index].remark">
 												<p class="form-control-static"
-													ng-show="orderMaterielShow{{$index}}">
+													ng-show="orderMaterielShow">
 													{{_deliveryMateriel.remark}}</p></td>
 
-											<td><span ng-hide="orderMaterielInput{{$index}}">
+											<!-- <td><span ng-hide="orderMaterielInput{{$index}}">
 													&nbsp;&nbsp;&nbsp;&nbsp; <a
-													ng-click="editOrderMateriel(_deliveryMateriel,$index)"><i
+													ng-click="editOrderMateriel()"><i
 														class="fa fa-save"></i></a> &nbsp;&nbsp;&nbsp; <a
 													ng-click="cancelOrderMateriel(_deliveryMateriel,$index)"><i
 														class="fa fa-undo"></i></a>
-											</span></td>
+											</span></td> -->
 										</tr>
 									</tbody>
+									
 									<tfoot>
 										<tr>
-											<th>合计</th>
-											<th>{{materielCount}}</th>
-											<th></th>
-											<th></th>
-											<th></th>
-											<th></th>
-											<th></th>
+											<td>合计</td>
+											<td>{{materielCount}}</td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
 											<td>{{totalDeliveryCount}}</td>
 											<td></td>
-											<td></td>
 										</tr>
+										<tr>
+										    <td colspan="8"></td>
+											<td style="text-align:right;">
+											<span ng-hide="orderMaterielInput"> 
+											<!-- <a ng-click="editOrderMateriel()"><i class="fa fa-save"></i></a>&nbsp;&nbsp;&nbsp;  -->
+											<button ng-click="editOrderMateriel()"
+												class="btn green  btn-outline  btn-sm">
+												<i class="fa fa-save"></i> 保存
+											</button>
+											</span>	
+											
+													
+											</td>
+									    </tr>
 									</tfoot>
 								</table>
+								
+								
 							</div>
-						</div>
-						<!-- 供应商 end-->
+						</form>
 					</div>
-				</form>
+					<!-- 供应商 end-->
+				</div>
 			</div>
 		</div>
 	</div>
