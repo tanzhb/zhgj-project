@@ -8,6 +8,7 @@ import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryTransportVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
+import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.Warehouse;
 
@@ -31,8 +32,14 @@ public interface DeliveryMapper extends GenericDao<DeliveryMaterielVO, String> {
     //删除物料
     public void deleteDeliveryS(List<String> ids);
     
+    
+    public List<Materiel> batchGetMaterielInfo(List<String> ids);
+    
     //查询发货物料对象
     public DeliveryMaterielVO selectDeliveryMaterielById(String id);
+    
+    //查询发货物料对象
+    public DeliveryMaterielVO selectDeliveryMaterielById2(String id);
     
     //查询销售订单的物料集合
     List<DeliveryMaterielVO> selectByExample(String serialNum);
@@ -64,6 +71,9 @@ public interface DeliveryMapper extends GenericDao<DeliveryMaterielVO, String> {
     //查询发货详情
     public DeliveryVO selectDetailById(String id);
     
+    //查询发货详情
+    public DeliveryVO selectDetailById2(String id);
+    
     //查询发货列表
     public List<DeliveryVO> findAllDeliveryList(String username);
     
@@ -72,6 +82,9 @@ public interface DeliveryMapper extends GenericDao<DeliveryMaterielVO, String> {
     
     //查询发货详情的发货物料
     public List<DeliveryMaterielVO> selectListForDetail(String serialNum);
+    
+    //查询发货详情的发货物料
+    public List<DeliveryMaterielVO> selectListForDetail2(String serialNum);
     
     //查询发货物料的归属销售订单
     public String selectOrderId(String orderMaterielSerialNum);
@@ -88,4 +101,8 @@ public interface DeliveryMapper extends GenericDao<DeliveryMaterielVO, String> {
     public List<DeliveryMaterielVO> selectListForDetailForStockCheck(Map<String,String>map);
 
 
-    public Company selectCompanyInfo(String comId);}
+    public Company selectCompanyInfo(String comId);
+    
+
+    public void deleteOldDeliveryMateriel2(String deliverSerial);
+}

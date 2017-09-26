@@ -16,6 +16,7 @@ import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryTransportVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
+import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.service.DeliveryService;
@@ -60,6 +61,18 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		// TODO Auto-generated method stub
 		 deliveryMapper.deleteOldDeliveryMateriel(idList);
 	}
+	 
+	 
+	 
+	 /**
+	     * 删除旧的发货物料
+	     * @param idList
+	     */
+		 @Override
+		public void deleteOldDeliveryMateriel2(String deliverSerial){
+			// TODO Auto-generated method stub
+			 deliveryMapper.deleteOldDeliveryMateriel2(deliverSerial);
+		}
 
 
 	 /**
@@ -87,6 +100,17 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 	
 
 	/**
+	 * 批量获取物料信息
+	 */
+	@Override
+	public List<Materiel> batchGetMaterielInfo(String ids) {
+		// TODO Auto-generated method stub
+		List<String> idList = ApplicationUtils.getIdList(ids);
+		return deliveryMapper.batchGetMaterielInfo(idList);
+	}
+
+
+	/**
 	 * 根据id查询发货对象
 	 * @param id
 	 * @return
@@ -97,6 +121,19 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		
 		return deliveryMapper.selectDeliveryMaterielById(id);
 	}
+
+	
+	/**
+	 * 根据id查询发货对象
+	 * @param id
+	 * @return
+	 */
+	@Override
+	public DeliveryMaterielVO selectDeliveryMaterielById2(String id) {
+		// TODO Auto-generated method stub
+		return deliveryMapper.selectDeliveryMaterielById2(id);
+	}
+
 
 	/**
 	 * 查询发货物料列表
@@ -209,6 +246,18 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		// TODO Auto-generated method stub
 		return deliveryMapper.selectDetailById(id);
 	}
+	
+	
+	/**
+	 * 通过id查询详情
+	 * @param id
+	 * @return
+	 */
+	@Override
+	public DeliveryVO selectDetailById2(String id) {
+		// TODO Auto-generated method stub
+		return deliveryMapper.selectDetailById2(id);
+	}
 
 
 	/**
@@ -244,6 +293,17 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		return deliveryMapper.selectListForDetail(serialNum);
 	}
 
+	
+	/**
+	 * 查询发货详情的发货物料
+	 * @param serialNum
+	 * @return
+	 */
+	@Override
+	public List<DeliveryMaterielVO> selectListForDetail2(String serialNum) {
+		// TODO Auto-generated method stub
+		return deliveryMapper.selectListForDetail2(serialNum);
+	}
 
 	/**
 	 * 查询发货物料的归属订单id
