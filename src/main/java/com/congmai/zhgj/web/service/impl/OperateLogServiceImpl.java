@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.congmai.zhgj.web.dao.OperateLogMapper;
 import com.congmai.zhgj.web.model.OperateLog;
+import com.congmai.zhgj.web.model.OperateLogExample;
+import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.service.OperateLogService;
 
 /**
@@ -53,9 +55,23 @@ OperateLogService {
 	}
 
 	@Override
+	public List<OperateLog> selectList(OperateLogExample m) {
+		return operateLogMapper.selectByExample(m);
+	}
+
+	@Override
 	public List<OperateLog> selectList() {
 		return operateLogMapper.selectByExample(null);
 	}
 
+	@Override
+	public List<OperateLog> findDeliverLogByOrderSerialNum(String serialNum) {
+		return operateLogMapper.findDeliverLogByOrderSerialNum(serialNum);
+	}
+
+	@Override
+	public List<OperateLog> findPayLogByOrderSerialNum(String serialNum) {
+		return operateLogMapper.findPayLogByOrderSerialNum(serialNum);
+	}
 
 }
