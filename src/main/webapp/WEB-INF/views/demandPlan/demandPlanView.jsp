@@ -144,7 +144,7 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="demandPlanNum">一级分类</label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="demandPlanNum" name="demandPlanNum" ng-model="firstCategory" ng-hide="demandPlanAdd" >
+                                                        <input type="text" class="form-control"  ng-model="demandPlan.firstCategory" ng-hide="demandPlanAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="demandPlanView">{{demandPlan.demandPlanNum}}</p>
                                                     </div>
@@ -154,7 +154,7 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="description">二级分类</label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="description"  ng-model="secondCategory" ng-hide="demandPlanAdd" >
+                                                        <input type="text" class="form-control" ng-model="demandPlan.secondCategory" ng-hide="demandPlanAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="demandPlanView">{{demandPlan.description}}</p>
                                                     </div>
@@ -164,7 +164,7 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="description">三级分类</label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="description"  ng-model="thirdCategory" ng-hide="demandPlanAdd" >
+                                                        <input type="text" class="form-control"  ng-model="demandPlan.thirdCategory" ng-hide="demandPlanAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="demandPlanView">{{demandPlan.description}}</p>
                                                     </div>
@@ -175,11 +175,11 @@
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
-                                                   <label class="control-label bold" for="buyComId">供应商 <span class="required"> * </span></label>
+                                                   <label class="control-label bold" for="buyComId">供应商</label>
 	                                              <div class="">
-	                                                   <select class="form-control customer" selectpicker data-live-search="true"  id="buyComId"  name="buyComId" ng-model="supply" ng-hide="demandPlanAdd"  data-size="8">
+	                                                   <select class="form-control customer" selectpicker data-live-search="true"  ng-model="demandPlan.supplyComId" ng-hide="demandPlanAdd"  data-size="8">
 	                                                        <option value=""></option>
-	                                                        <option  ng-repeat="customer in customers" value="{{customer.comId}}">{{customer.comName}}</option>
+	                                                        <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}">{{supplier.comName}}</option>
 	                                                   </select>
 	                                                   <div class="form-control-focus"> </div>
                                                         <p class="control-label left" ng-show="demandPlanView">{{demandPlan.buyComName}}</p>
@@ -191,7 +191,7 @@
                                                     <label class="control-label bold" for="releaseDate">交付日期 </label>
                                                     <div class="">
                                                         <input type="text" set-date class="form-control date-picker" size="16" data-date-format="yyyy-mm-dd" data-date-viewmode="years"
-                                                         id="releaseDate" ng-model="submitDate" ng-hide="demandPlanAdd" readonly="readonly">
+                                                         id="releaseDate" ng-model="demandPlan.deliveryDate" ng-hide="demandPlanAdd" readonly="readonly">
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="demandPlanView">{{demandPlan.releaseDate}}</p>
                                                     </div>
@@ -201,13 +201,24 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="tel">关键字</label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="remark"  ng-model="searchKey" ng-hide="demandPlanAdd" >
+                                                        <input type="text" class="form-control"  ng-model="demandPlan.searchKey" ng-hide="demandPlanAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="demandPlanView">{{demandPlan.remark}}</p>
                                                     </div>
                                             </div>
 										</div>
 									</div>
+									<!-- row -->
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group" align="right">
+                                                   <button   ng-hide="companyAdd" class="btn blue  btn-sm btn-circle" ng-click="searchDemandPlanMateriels()">
+                              						<i class="fa fa-search"></i> 搜索  </button>
+                                            </div>
+										</div>
+									</div>
+									<!-- row -->
+									
 								</div>
 							</form>
          				</div>

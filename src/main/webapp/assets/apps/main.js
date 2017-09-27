@@ -379,7 +379,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 							'assets/apps/service/materielService.js',
                             'assets/apps/service/orderService.js',
                             'assets/apps/controllers/saleOrderController.js',
-                            
+                            'assets/apps/service/CommonService.js',
                           //流程申请
 							'assets/global/css/dialog.css',
 							'assets/global/css/easyui.css',
@@ -398,7 +398,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         .state('addSaleOrder', {
             url: "/addSaleOrder?:serialNum&:view",
             templateUrl: "rest/page/addSaleOrder",
-            params:{"materiels":null,"demandPlanSerial":null},
+            params:{"materiels":null,"demandPlanSerial":null,"buyComId":null},
             data: {pageTitle: '新增销售订单'},
             controller: "saleOrderController",
             resolve: {
@@ -415,7 +415,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/materielService.js',
 	        	'assets/apps/service/orderService.js',
-				'assets/apps/controllers/saleOrderController.js'
+				'assets/apps/controllers/saleOrderController.js',
+	        	'assets/apps/service/CommonService.js'
                       ]
                     });
                 }]
@@ -441,7 +442,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/materielService.js',
 	        	'assets/apps/service/orderService.js',
-				'assets/apps/controllers/saleOrderController.js'
+				'assets/apps/controllers/saleOrderController.js',
+	        	'assets/apps/service/CommonService.js',
                       ]
                     });
                 }]
@@ -468,7 +470,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/materielService.js',
 	        	'assets/apps/service/orderService.js',
-				'assets/apps/controllers/saleOrderController.js'
+				'assets/apps/controllers/saleOrderController.js',
+	        	'assets/apps/service/CommonService.js'
                       ]
                     });
                 }]
@@ -495,7 +498,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/materielService.js',
 	        	'assets/apps/service/orderService.js',
-				'assets/apps/controllers/saleOrderController.js'
+				'assets/apps/controllers/saleOrderController.js',
+	        	'assets/apps/service/CommonService.js'
                       ]
                     });
                 }]
@@ -1067,7 +1071,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        				        'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
 	        				        'assets/global/plugins/datatables/datatables.all.min.js',
 	        				        'assets/apps/controllers/DemandPlanController.js',
-	        				        'assets/apps/service/DemandPlanService.js'
+	        				        'assets/apps/service/DemandPlanService.js',
+	        				        'assets/apps/service/CommonService.js'
 	        				        ]
 	        			});
 	        		}]
@@ -1089,7 +1094,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        				        'assets/apps/controllers/DemandPlanController.js',
 	        				        'assets/apps/service/DemandPlanService.js',
 	        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
-	        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css'
+	        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css',
+	        				        'assets/apps/service/CommonService.js'
 	        				        ]
 	        			});
 	        		}]
@@ -1112,7 +1118,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        				        'assets/apps/service/DemandPlanService.js',
 		        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
 		        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css',
-		        				        'assets/pages/scripts/table-datatables-scroller.min.js'
+		        				        'assets/pages/scripts/table-datatables-scroller.min.js',
+		        				        'assets/apps/service/CommonService.js'
 		        				        ]
 		        			});
 		        		}]
@@ -1369,6 +1376,70 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/apps/controllers/StockOutController.js',
 		    				        'assets/apps/service/CommonService.js',
 		    				        'assets/apps/service/TakeDeliveryService.js'
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
+		    }).state('noticeManage', {
+		    	url: "/noticeManage",
+		    	templateUrl: "rest/notice/noticeManage",
+		    	data: {pageTitle: '公告'},
+		    	reload:true, 
+		    	controller: "NoticeController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [       
+									'assets/global/plugins/datatables/datatables.min.css',                  
+									'assets/global/plugins/datatables/datatables.all.min.js',
+		    				        'assets/apps/controllers/NoticeController.js',
+		    				        'assets/apps/service/NoticeService.js'
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
+		    }).state('noticeAdd', {
+		    	url: "/noticeAdd?:serialNum",
+		    	templateUrl: "rest/notice/noticeAdd",
+		    	data: {pageTitle: '新建公告'},
+		    	reload:true, 
+		    	controller: "NoticeController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [       
+										'assets/apps/controllers/NoticeController.js',
+										'assets/apps/service/NoticeService.js',
+										'assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js',
+				    			        'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js',
+				    			        'assets/global/plugins/bootstrap-markdown/lib/markdown.js',
+				    			        'assets/global/plugins/bootstrap-markdown/js/bootstrap-markdown.js',
+				    			        'assets/global/plugins/bootstrap-summernote/summernote.min.js',
+				    			        'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css',
+								        'assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css',
+								        'assets/global/plugins/bootstrap-summernote/summernote.css'
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
+		    }).state('noticeView', {
+		    	url: "/noticeView?:serialNum",
+		    	templateUrl: "rest/notice/noticeView",
+		    	data: {pageTitle: '公告详情'},
+		    	reload:true, 
+		    	controller: "NoticeController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [       
+		    				        'assets/apps/controllers/NoticeController.js',
+		    				        'assets/apps/service/NoticeService.js'
 		    				        ]
 		    			});
 		    		}]
