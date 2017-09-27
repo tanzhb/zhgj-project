@@ -102,7 +102,7 @@ public class StockInOutCheckServiceImpl extends GenericServiceImpl<StockInOutChe
 			OrderInfo o = new OrderInfo();
 			o.setSerialNum(d.getOrderSerial());
 			o.setDeliverStatus(OrderInfo.CHECK);
-			orderInfoMapper.updateByPrimaryKey(o);
+			orderInfoMapper.updateByPrimaryKeySelective(o);
 			
 		}else if(serialNum1.indexOf("checkout")>-1){
 			createStockInOutRecord("checkout",stockInOutCheck.getDeliverSerial(),userName);//产生出库记录

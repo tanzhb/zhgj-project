@@ -38,6 +38,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
+import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.Constants;
 import com.congmai.zhgj.core.util.ExcelUtil;
@@ -273,9 +274,11 @@ public class TakeDeliveryController {
         		Subject currentUser = SecurityUtils.getSubject();
         		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
         		if(StringUtils.isNotEmpty(takeDeliveryParams.getTakeDelivery().getSerialNum())){
-        			takeDeliveryService.updateTakeDelivery(takeDeliveryParams,currenLoginName);
+        			takeDeliveryParams = this.getTakeDeliveryData(takeDeliveryParams,currenLoginName);
+        			takeDeliveryService.updateTakeDelivery(takeDeliveryParams.getDelivery(),takeDeliveryParams.getTakeDelivery(),takeDeliveryParams.getDeliveryTransport(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName);
         		}else{
-        			takeDeliveryService.insertTakeDelivery(takeDeliveryParams,currenLoginName);
+        			takeDeliveryParams = this.getTakeDeliveryData(takeDeliveryParams,currenLoginName);
+        			takeDeliveryService.insertTakeDelivery(takeDeliveryParams.getDelivery(),takeDeliveryParams.getTakeDelivery(),takeDeliveryParams.getDeliveryTransport(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName);
         		}
         		flag = "1";
         	}catch(Exception e){
@@ -306,7 +309,8 @@ public class TakeDeliveryController {
     	try{
     		Subject currentUser = SecurityUtils.getSubject();
     		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-    		takeDeliveryService.confirmTakeDelivery(takeDeliveryParams,currenLoginName);
+    		takeDeliveryParams = this.getConfirmTakeDeliveryData(takeDeliveryParams,currenLoginName);
+    		takeDeliveryService.confirmTakeDelivery(takeDeliveryParams.getTakeDelivery(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName);
     		flag = "1";
     	}catch(Exception e){
     		System.out.println(e.getMessage());
@@ -376,9 +380,11 @@ public class TakeDeliveryController {
         		Subject currentUser = SecurityUtils.getSubject();
         		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
         		if(StringUtils.isNotEmpty(takeDeliveryParams.getRecord().getSerialNum())){
-        			takeDeliveryService.updateStockInData(takeDeliveryParams,currenLoginName,"in");
+        			takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);
+        			takeDeliveryService.updateStockInData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName,"in");
         		}else{
-        			takeDeliveryService.insertStockInData(takeDeliveryParams,currenLoginName,"in");
+        			takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);
+        			takeDeliveryService.insertStockInData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName,"in");
         		}
         		flag = "1";
         	}catch(Exception e){
@@ -409,9 +415,11 @@ public class TakeDeliveryController {
         		Subject currentUser = SecurityUtils.getSubject();
         		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
         		if(StringUtils.isNotEmpty(takeDeliveryParams.getRecord().getSerialNum())){
-        			takeDeliveryService.updateStockInData(takeDeliveryParams,currenLoginName,"out");
+        			takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);
+        			takeDeliveryService.updateStockInData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName,"out");
         		}else{
-        			takeDeliveryService.insertStockInData(takeDeliveryParams,currenLoginName,"out");
+        			takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);
+        			takeDeliveryService.insertStockInData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName,"out");
         		}
         		flag = "1";
         	}catch(Exception e){
@@ -954,7 +962,89 @@ public class TakeDeliveryController {
 		}
 		return result;
 	}
+	
+	
+	
+	//********************************以下为数据处理**********************************
 
+	
+	/**
+	 * 
+	 * @Description (封装代发货数据)
+	 * @param takeDeliveryParams
+	 * @param currenLoginName
+	 * @return
+	 */
+	private TakeDeliveryParams getTakeDeliveryData(TakeDeliveryParams takeDeliveryParams,String currenLoginName){
+		String deliverySerial = ApplicationUtils.random32UUID();
+		String takeDeliverySerial = ApplicationUtils.random32UUID();
+		Date now = new Date();
+		if(StringUtils.isEmpty(takeDeliveryParams.getTakeDelivery().getSerialNum())){
+			takeDeliveryParams.getTakeDelivery().setSerialNum(takeDeliverySerial);
+			takeDeliveryParams.getTakeDelivery().setTakeDeliverNum("SH"+ApplicationUtils.getFromNumber());
+			takeDeliveryParams.getTakeDelivery().setDeliverSerial(deliverySerial);
+			takeDeliveryParams.getTakeDelivery().setStatus("0");
+			takeDeliveryParams.getTakeDelivery().setCreator(currenLoginName);
+			takeDeliveryParams.getTakeDelivery().setCreateTime(now);
+		}
+		takeDeliveryParams.getTakeDelivery().setUpdater(currenLoginName);
+		takeDeliveryParams.getTakeDelivery().setUpdateTime(now);
+		takeDeliveryParams.getTakeDelivery().setDelFlg("0");
+
+		if(takeDeliveryParams.getDelivery()!=null){
+			if(StringUtils.isEmpty(takeDeliveryParams.getDelivery().getSerialNum())){
+				takeDeliveryParams.getDelivery().setSerialNum(deliverySerial);
+				takeDeliveryParams.getDelivery().setTakeDeliverSerial(takeDeliverySerial);
+				takeDeliveryParams.getDelivery().setCreator(currenLoginName);
+				takeDeliveryParams.getDelivery().setCreateTime(now);
+			}
+			takeDeliveryParams.getDelivery().setUpdater(currenLoginName);
+			takeDeliveryParams.getDelivery().setUpdateTime(now);
+			takeDeliveryParams.getDelivery().setDelFlg("0");
+			takeDeliveryParams.getDelivery().setStatus("3"); //已发货
+		}
+		
+		if(takeDeliveryParams.getDeliveryTransport()!=null){
+			if(StringUtils.isEmpty(takeDeliveryParams.getDeliveryTransport().getSerialNum())){
+				takeDeliveryParams.getDeliveryTransport().setSerialNum(ApplicationUtils.random32UUID());
+				takeDeliveryParams.getDeliveryTransport().setDeliverSerial(deliverySerial);
+				takeDeliveryParams.getDeliveryTransport().setCreator(currenLoginName);
+				takeDeliveryParams.getDeliveryTransport().setCreateTime(now);
+			}
+			takeDeliveryParams.getDeliveryTransport().setUpdater(currenLoginName);
+			takeDeliveryParams.getDeliveryTransport().setUpdateTime(now);
+			takeDeliveryParams.getDeliveryTransport().setDelFlg("0");
+		}
+		
+		for(DeliveryMateriel materiel : takeDeliveryParams.getDeliveryMateriels()){
+			materiel.setSerialNum(ApplicationUtils.random32UUID());
+			materiel.setDeliverSerial(takeDeliveryParams.getDelivery().getSerialNum());
+			materiel.setCreator(currenLoginName);
+			materiel.setCreateTime(now);
+			materiel.setUpdater(currenLoginName);
+			materiel.setUpdateTime(now);
+			materiel.setDelFlg("0");
+		}
+		
+		return takeDeliveryParams;
+	}
+	
+	/**
+	 * 
+	 * @Description (封装收货数据)
+	 * @param takeDeliveryParams
+	 * @param currenLoginName
+	 * @return
+	 */
+	private TakeDeliveryParams getConfirmTakeDeliveryData(
+			TakeDeliveryParams takeDeliveryParams, String currenLoginName) {
+		Date now = new Date();
+		for(DeliveryMateriel materiel : takeDeliveryParams.getDeliveryMateriels()){
+			materiel.setUpdater(currenLoginName);
+			materiel.setUpdateTime(now);
+		}
+		return takeDeliveryParams;
+	}
     
 
 }
