@@ -60,6 +60,7 @@ import com.congmai.zhgj.web.activiti.processTask.taskCommand.StartActivityCmd;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
+import com.congmai.zhgj.web.model.Invoice;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.PriceList;
@@ -753,6 +754,25 @@ public class ProcessServiceImp implements IProcessService{
         String processInstanceId = processInstance.getId();
         priceList.setProcessInstanceId(processInstanceId);
         this.processBaseService.update(priceList);
+
+        logger.info("processInstanceId: "+processInstanceId);
+        //最后要设置null，就是这么做，还没研究为什么
+        this.identityService.setAuthenticatedUserId(null);
+        return processInstanceId;
+	}
+
+	@Override
+	public String startInvoice(Invoice invoice) {
+		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
+        identityService.setAuthenticatedUserId(invoice.getUserId().toString());
+        Map<String, Object> variables = new HashMap<String, Object>();
+        variables.put("entity", invoice);
+        ProcessInstance processInstance=null;
+        String businessKey = invoice.getBusinessKey();
+       processInstance = runtimeService.startProcessInstanceByKey(Constants.OUTINVOICE_KEY, businessKey, variables);
+        String processInstanceId = processInstance.getId();
+        invoice.setProcessInstanceId(processInstanceId);
+        this.processBaseService.update(invoice);
 
         logger.info("processInstanceId: "+processInstanceId);
         //最后要设置null，就是这么做，还没研究为什么
