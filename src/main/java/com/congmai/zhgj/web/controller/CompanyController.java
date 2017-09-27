@@ -593,6 +593,20 @@ public class CompanyController {
     		
     		return user;
     }
+    
+    /**
+     * @Description (获取订单编号)
+     * @param request
+     * @return
+     */
+    @RequestMapping("getOrderNum")
+    @ResponseBody
+    public Map<String, Object> getOrderNum(HttpServletRequest request) {
+    	Map<String, Object> map = new HashMap<String, Object>();
+    	String orderNum = "OR"+ApplicationUtils.getFromNumber();
+    	map.put("orderNum", orderNum);
+    	return map;
+    }
 
 
 }
