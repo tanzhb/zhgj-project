@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.web.dao.UserMapper;
+import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.UserExample;
 import com.congmai.zhgj.web.service.UserService;
@@ -70,5 +71,16 @@ public class UserServiceImpl extends GenericServiceImpl<User, Integer> implement
 	}
 
 
+	@Override
+	public User getUserInfo(Integer userId) {
+		// TODO Auto-generated method stub
+		return userMapper.getUserInfo(userId);
+	}
 
+
+	@Override
+	public Company getUserCompanyInfo(Integer userId) {
+		// TODO Auto-generated method stub
+		return userMapper.getUserCompanyInfo(userId);
+	}
 }

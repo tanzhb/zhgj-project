@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.dao.DeliveryMapper;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
@@ -346,6 +347,7 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 
 
 	@Override
+	@OperationLog(operateType = "update" ,operationDesc = "发货" ,objectSerial= "{serialNum}")
 	public void updateOrderWhenDeliveryComlete(Map<String,Object> map) {
 		// TODO Auto-generated method stub
 		deliveryMapper.updateOrderWhenDeliveryComlete(map);

@@ -104,4 +104,34 @@
         where user_id = #{userId,jdbcType=INTEGER}
     </update>
 
+
+    <select id="getUserInfo" parameterType="java.lang.Integer" resultType="com.congmai.zhgj.web.model.User">
+    SELECT
+	USER_ID AS userId,
+	USER_NAME AS userName,
+	sex,
+	department,
+	position,
+	cellPhone,
+	telephone,
+	QQ,
+	weChatNum,
+	fax,
+	email
+	FROM
+	T_USER
+	WHERE
+	USER_ID=#{userId}
+    </select>
+    
+    <select id="getUserCompanyInfo" parameterType="java.lang.Integer" resultType="com.congmai.zhgj.web.model.Company">
+    SELECT
+	b.comId,b.comName
+	FROM
+	user_company a
+	LEFT JOIN company b ON a.com_id=b.comId AND b.delFlg='0'
+	WHERE
+	a.user_id=#{userId}
+	LIMIT 0,1
+    </select>
 </mapper>

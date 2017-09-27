@@ -335,7 +335,7 @@
     
     
     <update id="updateOrderWhenDeliveryComlete" parameterType="java.util.HashMap">
-    UPDATE orderInfo SET status='3',updater=#{updater},updateTime=NOW() WHERE serialNum=#{orderSerial}
+    UPDATE orderInfo SET deliverStatus='1',updater=#{updater},updateTime=NOW() WHERE serialNum=#{orderSerial}
     </update>
   <!--查询详情物料集合  -->
     <select id="selectListForDetailForStockCheck" resultType="com.congmai.zhgj.web.model.DeliveryMaterielVO" parameterType="java.util.HashMap">

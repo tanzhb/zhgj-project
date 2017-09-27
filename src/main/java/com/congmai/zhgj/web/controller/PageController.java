@@ -486,5 +486,12 @@ public class PageController {
     @RequestMapping("/editInvoiceApply")
     public String editInvoiceApply(String serialNum,String invoiceType) {
         return "invoice/editInvoiceApply";
+    }    
+    /**
+     * 个人中心
+     */
+    @RequestMapping("/userInfo")
+    public String userInfo(){
+    	return "user/userInfo";
     }
 }

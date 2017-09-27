@@ -116,9 +116,11 @@ public class OrderInfo extends BaseVO {
     private String buyName;
     
     private ProcessBase processBase;
-    
+    //发货状态
     private String deliverStatus;
+    //付款状态
     private String payStatus;
+    //开票状态
     private String billStatus;
 
     public String getSerialNum() {

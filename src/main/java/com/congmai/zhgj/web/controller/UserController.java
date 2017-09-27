@@ -30,7 +30,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.congmai.zhgj.core.util.UserUtil;
+import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.User;
+import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.security.PasswordHelper;
 import com.congmai.zhgj.web.security.PermissionSign;
 import com.congmai.zhgj.web.security.RoleSign;
@@ -198,4 +200,16 @@ public class UserController {
 		return "拥有user:create权限,能访问";
 	}
 
+	
+	@RequestMapping(value = "/getUserInfo")
+	@ResponseBody
+	public ResponseEntity<User> getUserInfo(){
+		User user=null;
+	    user = UserUtil.getUserFromSession();
+	    user=userService.getUserInfo(user.getUserId());
+	    
+	    Company company=userService.getUserCompanyInfo(user.getUserId());
+	    user.setCompany(company);
+		return new ResponseEntity<User>(user, HttpStatus.OK);
+	}
 }

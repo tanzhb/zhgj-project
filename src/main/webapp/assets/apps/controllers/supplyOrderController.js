@@ -134,7 +134,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
     	$scope.submitOrder.serialNum = serialNum;	
     	$scope.submitOrder.status = 2;
 
-    	orderService.save($scope.submitOrder).then(
+    	orderService.recive($scope.submitOrder).then(
       		     function(data){
       		    	toastr.success('数据保存成功！');
       		    	$state.go('supplyOrder',{},{reload:true});
@@ -191,7 +191,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
                               { mData: 'materielCount' },
                               { mData: 'orderAmount' },
                               { mData: 'deliveryMode' },
-                              { mData: 'serviceModel' },
+                              { mData: 'orderType' },
                               { mData: 'saleApplySerial' },
                               { mData: 'orderSerial' },
                               { mData: 'orderDate' },
@@ -386,7 +386,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
                                   { mData: 'materielCount' },
                                   { mData: 'orderAmount' },
                                   { mData: 'deliveryMode' },
-                                  { mData: 'serviceModel' },
+                                  { mData: 'orderType' },
                                   { mData: 'saleApplySerial' },
                                   { mData: 'orderSerial' },
                                   { mData: 'orderDate' }
