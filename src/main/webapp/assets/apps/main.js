@@ -1988,7 +1988,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         files: [
 				'assets/global/plugins/datatables/datatables.min.css',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
-				
 				'assets/global/plugins/datatables/datatables.all.min.js',
 				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 				'assets/apps/scripts/angular-file-upload-shim.min.js',
@@ -2331,6 +2330,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
                         files: [                             
 					'assets/global/plugins/datatables/datatables.min.css',
+					'assets/apps/css/special.css',
 					'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 					'assets/global/plugins/datatables/datatables.all.min.js',
 					'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
@@ -2338,7 +2338,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 			        'assets/apps/scripts/angular-file-upload.min.js',
 			        'assets/apps/scripts/FileUploader.js',
 			        'assets/apps/service/UserInfoService.js',
-					'assets/apps/controllers/UserInfoController.js'
+					'assets/apps/controllers/UserInfoController.js',
+					'assets/apps/controllers/app.js',
+					'assets/apps/controllers/uploadPhoto.js'
 					]
                     });
                 }]
