@@ -1,4 +1,5 @@
-angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$scope','$http', 'settings', '$q','UserInfoService','$state','$compile','$stateParams','$filter', function($rootScope,$scope,$http,settings, $q,UserInfoService,$state,$compile,$stateParams,$filter) {
+angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$scope','$http', 'settings', '$q','UserInfoService','$state','$compile','$stateParams','$filter','FileUploader', 
+                                                                function($rootScope,$scope,$http,settings, $q,UserInfoService,$state,$compile,$stateParams,$filter,FileUploader) {
 	$scope.$on('$viewContentLoaded', function() {   
 		// initialize core components
 		handle = new pageHandle();
@@ -8,7 +9,8 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
 		$rootScope.settings.layout.pageContentWhite = true;
 		$rootScope.settings.layout.pageBodySolid = false;
 		$rootScope.settings.layout.pageSidebarClosed = false;
-		
+		$scope.input=false;
+		$scope.span=true;
 		
 		//查询登陆者的信息
     	$scope.getUserInfo();	
@@ -18,89 +20,53 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
 	$scope.getUserInfo  = function() {
 		UserInfoService.getUserInfo().then(
       		     function(data){
+      		    	 debugger
       		    	$scope.userInfo=data;
       		     },
       		     function(error){
       		         console.log("error")
       		     }
       		 );
-    	
     }; 
 	
 	
 	//修改
-	$scope.jumpToEdit = function() {
-		var ids = '';
-		// Iterate over all checkboxes in the table
-		table.$('input[type="checkbox"]').each(
-				function() {
-					// If checkbox exist in DOM
-					if ($.contains(document, this)) {
-						// If checkbox is checked
-						if (this.checked) {
-							// 将选中数据id放入ids中
-							if (ids == '') {
-								ids = this.value;
-							} else{
-								ids = "more"
-							}
-						}
-					}
-				});
-		if(ids==''){
-			toastr.warning('请选择一个合同！');return;
-		}else if(ids=='more'){
-			toastr.warning('只能选择一个合同！');return;
-		}
-		$state.go('editUserContractPage',{id:ids});
+	$scope.edit = function() {
+		$scope.input=true;
+		$scope.span=false;
 	};
 	
-	
 	//添加合同
-	$scope.saveUserContract = function() {
+	$scope.updateUserInfo = function() {
 		debugger
 		if($('#form_sample_1').valid()){//表单验证通过则执行添加功能
 		var fd = new FormData();
-		if($("input[name='files']").length){
-			var files = document.querySelector('input[name="files"]').files[0];
-			fd.append("files", files);
-		}
-        
-		if($("input[name='file']").length){
-        var file = document.querySelector('input[name="file"]').files[0];
-        fd.append("files", file);
+		if($("input[type='file']").length){
+        var file = document.querySelector('input[type="file"]').files[0];
+        fd.append("file", file);
 		}
 		
-		if($("input[id='id']").length){
-		fd.append('id', $("#id").val()); 
-		}
-		fd.append('contractNum',$scope.contractVO.contractNum); 
-        fd.append('contractType',$scope.contractVO.contractType); 
-        fd.append('firstParty',$scope.contractVO.firstParty); 
-        fd.append('firstPartySigner',$scope.contractVO.firstPartySigner); 
-        fd.append('secondParty',$scope.contractVO.secondParty); 
-        fd.append('secondPartySigner',$scope.contractVO.secondPartySigner);
-        fd.append('otherPartyContractNum',$scope.contractVO.otherPartyContractNum);
-        fd.append('startDate',$scope.contractVO.startDate); 
-        fd.append('endDate',$scope.contractVO.endDate); 
-        fd.append('signDate',$scope.contractVO.signDate); 
-        fd.append('remark',$scope.contractVO.remark);
-        fd.append('signerAddress',$scope.contractVO.signerAddress);
+		fd.append('userId', $scope.userInfo.userId); 
+		fd.append('userName',$scope.userInfo.userName); 
+        fd.append('sex',$("input[name='sex']:checked").val()); 
+        fd.append('telephone',$scope.userInfo.telephone); 
+        fd.append('QQNum',$scope.userInfo.qqnum); 
+        fd.append('fax',$scope.userInfo.fax); 
          $http({
         	  method:'POST',
-              url:"rest/contract/saveUserContract",
+              url:"rest/user/updateUserInfo",
               data: fd,
               headers: {'Content-Type':undefined}
                })   
               .success( function ( response )
                        {
-                       //上传成功的操作
-            	  toastr.success("保存合同数据成功！");
-				  $state.go('userContract');
+            	  toastr.success("修改成功！");
+            	  $scope.getUserInfo();	
+   		    	  $scope.input=false;
+   				  $scope.span=true;
                        });
 		}
 	};
-	
 	
 	//返回按钮
 	$scope.goback=function(){
@@ -176,7 +142,16 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
 	        };
 			
 			
-	
+        jQuery.validator.addMethod("isTel", function(value, element) {
+            var length = value.length;
+            var phone = /(^(\d{3,4}-)?\d{6,8}$)|(^(\d{3,4}-)?\d{6,8}(-\d{1,5})?$)|(\d{11})/;
+            return this.optional(element) || (phone.test(value));
+           }, "请填写正确的固定电话");//可以自定义默认提示信息
+        
+        jQuery.validator.addMethod("isQq", function(value, element) {  
+        	var qq=/^[1-9]\d{4,12}$/;
+            return this.optional(element) ||(qq.test(value));       
+       }, "匹配QQ"); 
 	
 	// 页面加载完成后调用，验证输入框
 	$scope.$watch('$viewContentLoaded', function() {  
@@ -189,24 +164,10 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
             focusInvalid: !1,
             ignore: "",
             messages: {
-            	
-            	contractNum:{required:"合同编号不能为空！",rangelength:jQuery.validator.format("合同编号位数必须在{0}到{1}字符之间！")
-            		/*remote:jQuery.validator.format("用户名已经被注册")*/},
-            	contractType:{required:"合同类型不能为空！"},
-            	otherPartyContractNum:{required:"对方合同号不能为空！"},
-            	firstParty:{required:"合同甲方不能为空！"},
-            	secondParty:{required:"合同乙方不能为空！"},
-            	startDate:{required:"开始日期不能为空！"},
-            	
-            	firstPartySigner:{required:"甲方签订人不能为空！"},
-            	secondPartySigner:{required:"乙方签订人不能为空！"},
-            	signerAddress:{required:"签订地址不能为空！"},
-            	
-            	endDate:{required:"结束日期不能为空！"},
-            	signDate:{required:"签订日期不能为空！"},
-            	signer:{required:"签订人不能为空！"},
-            	files:{required:"电子合同不能为空！"},
-            	file:{required:"签字合同不能为空！"},
+            	userName:{required:"用户名不能为空！",},
+            	telephone:{isTel:"请填写正确的固定电话！",},
+            	qqNum:{isQq:"请填写正确的QQ号码！",},
+            	fax:{isTel:"请填写正确的传真号码！",},
                 payment: {
                     maxlength: jQuery.validator.format("Max {0} items allowed for selection"),
                     minlength: jQuery.validator.format("At least {0} items must be selected")
@@ -221,119 +182,10 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
                 }
             },
             rules: {
-                name: {
-                    minlength: 2,
-                    required: !0
-                },
-                name2: {
-                    minlength: 6,
-                    required: !0
-                },
-                contractNum:{required:true,
-                	rangelength:[3,12]
-                	/*rangelength:[6,20],
-                    remote:{//验证用户名是否存在
-                           type:"POST",
-                           url:$rootScope.basePath + "/rest/user/selectByUsername",
-                           data:{
-                             name3:function(){return $("#name3").val();}
-                           } 
-                    }*/
-                },
-                contractType:{required:true,
-                },
-                
-                otherPartyContractNum:{required:true,
-                },
-                
-                firstParty:{required:true,
-                },
-                
-                secondParty:{required:true,
-                },
-                
-                
-                firstPartySigner:{required:true,
-                },
-                
-                secondPartySigner:{required:true,
-                },
-                
-                signerAddress:{required:true,
-                },
-                
-                
-                startDate:{required:true,
-                },
-                endDate:{required:true,
-                },
-                signDate:{required:true,
-                },
-                signer:{required:true,
-                }, 
-                files:{required:true,
-                },
-                file:{required:true,
-                },
-                email: {
-                    required: !0,
-                    email: !0
-                },
-                email2: {
-                    required: !0,
-                    email: !0
-                },
-                url: {
-                    required: !0,
-                    url: !0
-                },
-                url2: {
-                    required: !0,
-                    url: !0
-                },
-                number: {
-                    required: !0,
-                    number: !0
-                },
-                number2: {
-                    required: !0,
-                    number: !0
-                },
-                digits: {
-                    required: !0,
-                    digits: !0
-                },
-                creditcard: {
-                    required: !0,
-                    creditcard: !0
-                },
-                delivery: {
-                    required: !0
-                },
-                payment: {
-                    required: !0,
-                    minlength: 2,
-                    maxlength: 4
-                },
-                memo: {
-                    required: !0,
-                    minlength: 10,
-                    maxlength: 40
-                },
-                "checkboxes1[]": {
-                    required: !0,
-                    minlength: 2
-                },
-                "checkboxes2[]": {
-                    required: !0,
-                    minlength: 3
-                },
-                radio1: {
-                    required: !0
-                },
-                radio2: {
-                    required: !0
-                }
+                userName:{required:true,},
+                telephone:{isTel:true,},
+                qqNum:{isQq:true,},
+                fax:{isTel:true,},
             },
             invalidHandler: function(e, t) {
                 i.hide(),

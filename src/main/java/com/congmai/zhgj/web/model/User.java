@@ -53,7 +53,7 @@ public class User implements Serializable{
     private String telephone;
     
     
-    private String QQ;
+    private String QQNum;
     
     
     private String weChatNum;
@@ -63,6 +63,9 @@ public class User implements Serializable{
     
     
     private String email;
+    
+    
+    private String avatar;
     
     
     private Company company;
@@ -175,12 +178,12 @@ public class User implements Serializable{
 		this.telephone = telephone;
 	}
 
-	public String getQQ() {
-		return QQ;
+	public String getQQNum() {
+		return QQNum;
 	}
 
-	public void setQQ(String qQ) {
-		QQ = qQ;
+	public void setQQNum(String qQNum) {
+		QQNum = qQNum;
 	}
 
 	public String getWeChatNum() {
@@ -213,5 +216,13 @@ public class User implements Serializable{
 
 	public void setCompany(Company company) {
 		this.company = company;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}	
 }
