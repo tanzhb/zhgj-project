@@ -3,6 +3,7 @@ package com.congmai.zhgj.web.service;
 import java.util.List;
 
 import com.congmai.zhgj.core.generic.GenericService;
+import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.User;
 
 /**
@@ -38,5 +39,12 @@ public interface UserService extends GenericService<User, Integer> {
      * @return
      */
 	int update(User user);
- 
+	
+	
+	
+	public User getUserInfo(Integer userId);
+	
+	
+	
+	public Company getUserCompanyInfo(Integer userId);
 }

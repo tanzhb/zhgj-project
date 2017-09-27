@@ -17,6 +17,50 @@
 	                <span class="title">首页</span>
 	            </a>
 	        </li>
+        <li class="nav-item">
+            <a href="javascript:;" class="nav-link nav-toggle">
+                <i class="icon-user"></i>
+                <span class="title">个人中心</span>
+                <span class="arrow "></span>
+            </a>
+            <ul class="sub-menu">
+                <li>
+                    <a ui-sref="userInfo">
+                         个人中心</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="#">
+                        公司信息</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="#">
+                       账户安全</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="#">
+                        操作日志</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="#">
+                         消息</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="#">
+                         公告</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="#">
+                         联系人</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
         
         <shiro:hasPermission name="zhgj:baseData">
         <li class="nav-item">
