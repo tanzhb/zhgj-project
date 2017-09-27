@@ -236,6 +236,9 @@ public class PayController {
 						.singleResult();
 				if (BeanUtils.isBlank(pi)) {
 					paymentRecord.setStatus(BaseVO.APPROVAL_SUCCESS);
+					
+					//修改订单状态
+					this.payService.updateOrderStatus(paymentRecord);
 				}
 			}
 

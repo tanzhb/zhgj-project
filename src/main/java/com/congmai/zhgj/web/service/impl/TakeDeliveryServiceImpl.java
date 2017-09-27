@@ -14,6 +14,7 @@ import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.dao.Delivery2Mapper;
 import com.congmai.zhgj.web.dao.DeliveryMaterielMapper;
 import com.congmai.zhgj.web.dao.DeliveryTransportMapper;
@@ -87,10 +88,19 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	}
 
 	@Override
+	@OperationLog(operateType = "add" ,operationDesc = "代发货" ,objectSerial= "{serialNum}")
 	public void insertTakeDelivery(TakeDeliveryParams takeDeliveryParams,
 			String currenLoginName) {
 		takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams,currenLoginName);
 		delivery2Mapper.insert(takeDeliveryParams.getDelivery());
+		
+		OrderInfo orderInfo = new OrderInfo();
+		orderInfo.setSerialNum(takeDeliveryParams.getDelivery().getOrderSerial());
+		orderInfo.setDeliverStatus(OrderInfo.DELIVER);//确认发货
+		orderInfo.setUpdateTime(new Date());
+		orderInfo.setUpdater(currenLoginName);
+		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+		
 		deliveryTransportMapper.insert(takeDeliveryParams.getDeliveryTransport());
 		takeDeliveryMapper.insert(takeDeliveryParams.getTakeDelivery());
 		for(DeliveryMateriel materiel : takeDeliveryParams.getDeliveryMateriels()){
@@ -261,6 +271,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	}
 
 	@Override
+	@OperationLog(operateType = "add" ,operationDesc = "入库" ,objectSerial= "{serialNum}")
 	public void updateStockInData(TakeDeliveryParams takeDeliveryParams,
 			String currenLoginName,String type) {
 		StockInOutRecord record = takeDeliveryParams.getRecord();
@@ -285,7 +296,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			//更新订单状态
 			OrderInfo orderInfo = new OrderInfo();
 			orderInfo.setSerialNum(old_delivery.getOrderSerial());
-			orderInfo.setStatus("12");//入库完成/待收票
+			orderInfo.setDeliverStatus(OrderInfo.INRECORD);//入库完成/待收票
 			orderInfo.setUpdateTime(new Date());
 			orderInfo.setUpdater(currenLoginName);
 			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
@@ -312,10 +323,10 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			stockInOutRecordMapper.updateByExampleSelective(record, example);
 			
 			//更新订单状态
-			//OrderInfo orderInfo = new OrderInfo();
-			//orderInfo.setSerialNum(old_delivery.getOrderSerial());
-			//orderInfo.setStatus("8");//入库完成/待收票
-			//orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+			OrderInfo orderInfo = new OrderInfo();
+			orderInfo.setSerialNum(old_delivery.getOrderSerial());
+			orderInfo.setDeliverStatus(OrderInfo.OUTRECORD);//入库完成/待收票
+			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 			//更新发货状态
 			Delivery delivery = new Delivery();
 			delivery.setSerialNum(deliverySerial);
@@ -404,6 +415,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	}
 
 	@Override
+	@OperationLog(operateType = "add" ,operationDesc = "收货" ,objectSerial= "{serialNum}")
 	public void confirmTakeDelivery(TakeDeliveryParams takeDeliveryParams,
 			String currenLoginName) throws Exception {
 		takeDeliveryParams = getConfirmTakeDeliveryData(takeDeliveryParams,currenLoginName);
@@ -421,6 +433,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		//没有审批时，直接收货
 		TakeDelivery takeDelivery = takeDeliveryMapper.selectByPrimaryKey(takeDeliveryParams.getTakeDelivery().getSerialNum());
 		takeDeliveryParams.getTakeDelivery().setDeliverSerial(takeDelivery.getDeliverSerial());
+		
 		this.createStockInCheckRecord(takeDeliveryParams.getTakeDelivery(),currenLoginName);
 		
 		//删除已保存的收货物料
@@ -471,6 +484,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	}
 
 	@Override
+	@OperationLog(operateType = "add" ,operationDesc = "收货" ,objectSerial= "{serialNum}")
 	public void createStockInCheckRecord(TakeDelivery takeDelivery,
 			String currenLoginName) throws Exception {
 		StockInOutCheck check = new StockInOutCheck();
@@ -491,7 +505,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		Delivery delivery = delivery2Mapper.selectByPrimaryKey(takeDelivery.getDeliverSerial());
 		if(delivery!=null){
 			orderInfo.setSerialNum(delivery.getOrderSerial());
-			orderInfo.setStatus("5");//待检验
+			orderInfo.setDeliverStatus(OrderInfo.TAKEDELIVER);//待检验
 			orderInfo.setUpdateTime(new Date());
 			orderInfo.setUpdater(currenLoginName);
 			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);

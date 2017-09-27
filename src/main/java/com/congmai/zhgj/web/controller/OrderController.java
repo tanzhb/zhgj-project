@@ -158,11 +158,7 @@ public class OrderController {
     		insetOrder(orderInfo);
     		
     	}else{//更新
-    		Subject currentUser = SecurityUtils.getSubject();
-    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-    		orderInfo.setUpdater(currenLoginName);
-    		orderInfo.setUpdateTime(new Date());
-    		orderService.update(orderInfo);
+    		updateOrder(orderInfo);
     	}
     	/*if("1".equals(orderInfo.getStatus())){
     		//启动订单审批测试流程-start
@@ -172,6 +168,29 @@ public class OrderController {
 		
 		return orderInfo;
     }
+
+    /**
+     * 供应商接收订单
+     */
+    @RequestMapping(value = "/reciveOrder", method = RequestMethod.POST)
+    @ResponseBody
+    public OrderInfo reciveOrder(@RequestBody String params) {
+    	OrderInfo orderInfo = json2Order(params);
+    	Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		orderInfo.setUpdater(currenLoginName);
+		orderInfo.setUpdateTime(new Date());
+		orderService.reciveOrder(orderInfo);
+		return orderInfo;
+    }
+    
+	private void updateOrder(OrderInfo orderInfo) {
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		orderInfo.setUpdater(currenLoginName);
+		orderInfo.setUpdateTime(new Date());
+		orderService.update(orderInfo);
+	}
     
 	private void insetOrder(OrderInfo orderInfo) {
 		orderInfo.setSerialNum(ApplicationUtils.random32UUID());

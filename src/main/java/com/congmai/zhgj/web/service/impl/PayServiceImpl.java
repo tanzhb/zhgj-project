@@ -11,11 +11,14 @@ import org.springframework.util.CollectionUtils;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.log.annotation.OperationLog;
+import com.congmai.zhgj.web.dao.OrderInfoMapper;
 import com.congmai.zhgj.web.dao.PayMapper;
 import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.MaterielFile;
 import com.congmai.zhgj.web.model.MaterielFileExample;
+import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.PaymentFile;
 import com.congmai.zhgj.web.model.PaymentPlan;
 import com.congmai.zhgj.web.model.PaymentRecord;
@@ -36,6 +39,9 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 	//付款的dao
 	@Resource
 	private PayMapper payMapper;
+	@Resource
+	private OrderInfoMapper orderInfoMapper;
+	
 
 	@Override
 	public GenericDao<PaymentRecord,String> getDao() {
@@ -228,5 +234,15 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 	public void deleteFileOld(String paySerialNum) {
 		// TODO Auto-generated method stub
 		payMapper.deleteFileOld(paySerialNum);
+	}
+
+	@Override
+	@OperationLog(operateType = "add" ,operationDesc = "付款" ,objectSerial= "{serialNum}")
+	public void updateOrderStatus(PaymentRecord paymentRecord) {
+		OrderInfo orderInfo = new OrderInfo();
+		orderInfo.setSerialNum(paymentRecord.getOrderSerial());
+		orderInfo.setPayStatus(OrderInfo.PAY);//已付款
+		orderInfo.setUpdateTime(new Date());
+		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 	}
 }

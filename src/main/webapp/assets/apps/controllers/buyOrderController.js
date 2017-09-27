@@ -394,6 +394,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 											return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:#fcb95b">待接收</span>';
 										}else if(row.status==2){
 											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已接收</span>';
+										}else{
+											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已接收</span>';
 										}
 									}else if(row.processBase.status=="APPROVAL_FAILED"){
 										return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:red">未通过</span>';

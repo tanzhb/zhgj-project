@@ -39,6 +39,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.web.model.OperateLog;
+import com.congmai.zhgj.web.model.TakeDeliveryParams;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.OperateLogService;
 import com.congmai.zhgj.log.annotation.OperationLog;
@@ -83,7 +84,8 @@ public class OperateLogAop{
                 + "运行消耗" + (System.currentTimeMillis() - time.get()) + "ms");   
     }
     //在执行目标方法的过程中，会执行这个方法，可以在这里实现日志的记录
-    @Around("log()")
+    @SuppressWarnings("rawtypes")
+	@Around("log()")
     public Object aroundExec(ProceedingJoinPoint pjp) throws Throwable {
         Object ret = pjp.proceed();
         try {
@@ -109,7 +111,8 @@ public class OperateLogAop{
                 valueReturn.setMoudleName(log.moudleName());
                 valueReturn.setOperateType(log.operateType());
                 valueReturn.setOperationDesc(log.operationDesc());
-                valueReturn.setOperator(user.getUserId().toString());
+                valueReturn.setOperator(user.getUserName());
+                valueReturn.setCreator(user.getUserId().toString());
                 valueReturn.setOperationTime(new Date());
                 valueReturn.setOperateResult(SUCCESS);
                 valueReturn.setRequestIp(getRemoteHost(request));
@@ -117,7 +120,15 @@ public class OperateLogAop{
                 valueReturn.setServerIp(request.getLocalAddr());
                 
                 //替换动态参数，获取流水号
-                valueReturn.setObjectSerial(reflectObject(orgs[0],strFormat(log.objectSerial())));
+                if(orgs[0] instanceof Map){
+                	valueReturn.setObjectSerial(((Map)orgs[0]).get(strFormat(log.objectSerial())).toString());
+                }else if(orgs[0] instanceof String){
+                	valueReturn.setObjectSerial(orgs[0].toString());
+                }else if(orgs[0] instanceof Object){
+                	valueReturn.setObjectSerial(reflectObject(orgs[0],strFormat(log.objectSerial())));
+                }
+                
+                
                 
                 valueReturn.setSerialNum(tag.get());
                 //保存操作日志
@@ -158,7 +169,8 @@ public class OperateLogAop{
                 valueReturn.setMoudleName(log.moudleName());
                 valueReturn.setOperateType(log.operateType());
                 valueReturn.setOperationDesc(log.operationDesc());
-                valueReturn.setOperator(user.getUserId().toString());
+                valueReturn.setOperator(user.getUserName());
+                valueReturn.setCreator(user.getUserId().toString());
                 valueReturn.setOperationTime(new Date());
                 valueReturn.setOperateResult(FAILURE);
                 String errMes = e.getMessage();
@@ -170,8 +182,14 @@ public class OperateLogAop{
                 valueReturn.setRequestUrl(request.getRequestURI());
                 valueReturn.setServerIp(request.getLocalAddr());
                 
-                //替换动态参数，获取流水号
-                valueReturn.setObjectSerial(reflectObject(orgs[0],strFormat(log.objectSerial())));
+              //替换动态参数，获取流水号
+                if(orgs[0] instanceof Map){
+                	valueReturn.setObjectSerial(((Map)orgs[0]).get(strFormat(log.objectSerial())).toString());
+                }else if(orgs[0] instanceof String){
+                	valueReturn.setObjectSerial(orgs[0].toString());
+                }else if(orgs[0] instanceof Object){
+                	valueReturn.setObjectSerial(reflectObject(orgs[0],strFormat(log.objectSerial())));
+                }
                 
                 valueReturn.setSerialNum(tag.get());
                 operateLogService.insert(valueReturn);
