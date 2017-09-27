@@ -464,4 +464,13 @@ public class PageController {
     public String editPriceApply(String serialNum,String priceType) {
         return "priceList/editPriceApply";
     }
+    
+    
+    /**
+     * 个人中心
+     */
+    @RequestMapping("/userInfo")
+    public String userInfo(){
+    	return "user/userInfo";
+    }
 }
