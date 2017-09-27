@@ -494,17 +494,4 @@ public class PageController {
     public String userInfo(){
     	return "user/userInfo";
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
