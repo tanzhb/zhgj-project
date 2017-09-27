@@ -414,7 +414,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 							'targets' : 2,
 							'render' : function(data,
 									type, row, meta) {
-								var htm = data+'</br>'
+								var htm = (data==null?'':data)+'</br>'
                     			if(row.deliverStatus=="0"){
                     				return htm + '<span >未开始</span>';
 								}else if(row.deliverStatus=="1"){

@@ -105,7 +105,7 @@
 			                            <th> 关联销售合同 </th>
 			                            <th> 关联采购单 </th>
 			                            <th> 下单日期 </th>
-			                            <th> 状态 </th>
+			                           <!--  <th> 状态 </th> -->
 			                        </tr>
 			                    </thead>
 			                    <tbody>
@@ -310,3 +310,4 @@
 <!-- 删除订单modal 结束 -->
 <!-- 导入订单modal 开始 -->
 <jsp:include  page="importOrder.jsp"/>
+<jsp:include  page="viewOperateLog.jsp"/>
