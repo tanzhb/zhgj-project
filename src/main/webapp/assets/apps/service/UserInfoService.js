@@ -22,7 +22,7 @@ angular.module('MetronicApp').factory('UserInfoService', ['$rootScope', '$http',
                 deferred.reject('连接服务器出错！');  
             })  
         return deferred.promise;  
-          
     };
+    
 }]);
 

@@ -1,12 +1,17 @@
 package com.congmai.zhgj.web.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -27,7 +32,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.web.model.Company;
@@ -211,5 +218,102 @@ public class UserController {
 	    Company company=userService.getUserCompanyInfo(user.getUserId());
 	    user.setCompany(company);
 		return new ResponseEntity<User>(user, HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value = "/updateUserInfo", method = RequestMethod.POST)
+	public ResponseEntity<Void> updateUserInfo(User user,MultipartFile file) {
+		if (user == null) {
+			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		}
+		String avatar=null;
+		if(file!=null){
+			avatar=uploadFile(file);
+			user.setAvatar(avatar);
+		}
+		userService.updateUserInfo(user);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	/**
+	 * 上传执行
+	 * @param file（上传的文件）
+	 * @return
+	 */
+	public String uploadFile(MultipartFile file){
+		String filePath = getClasspath()+"uploadAttachFiles/";
+		String randomName=UUID.randomUUID().toString().toUpperCase().replaceAll("-", ""); 
+		String fileName = fileUp(file, filePath,randomName);
+		System.out.println(fileName);
+		return fileName;
+	}
+
+
+	/**
+	 * 复制文件
+	 * @param file (文件对象）
+	 * @param filePath （文件路径）
+	 * @param fileName   （文件名）
+	 * @return
+	 */
+	public  String fileUp(MultipartFile file, String filePath, String fileName){
+		String extName = ""; // 扩展名格式：
+		try {
+
+			if (file.getOriginalFilename().lastIndexOf(".") >= 0){
+				extName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+			}
+
+			copyFile(file.getInputStream(), filePath, fileName+extName).replaceAll("-", "");
+
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		return fileName+extName;
+	}
+
+
+	/**
+	 * 写文件到当前目录的upload目录中
+	 * @param in
+	 * @param fileName
+	 * @throws IOException
+	 */
+	private  String copyFile(InputStream in, String dir, String realName)
+			throws IOException {
+		File file = mkdirsmy(dir,realName);
+		FileUtils.copyInputStreamToFile(in, file);
+		return realName;
+	}
+
+
+	/**判断路径是否存在，否：创建此路径
+	 * @param dir  文件路径
+	 * @param realName  文件名
+	 * @throws IOException 
+	 */
+	public  File mkdirsmy(String dir, String realName) throws IOException{
+		File file = new File(dir, realName);
+		if (!file.exists()) {
+			if (!file.getParentFile().exists()) {
+				file.getParentFile().mkdirs();
+			}
+			file.createNewFile();
+		}
+		return file;
+	}
+
+
+
+
+	/**获取classpath1
+	 * @return
+	 */
+	public  String getClasspath(){
+		String path = (String.valueOf(Thread.currentThread().getContextClassLoader().getResource(""))+"../../").replaceAll("file:/", "").replaceAll("%20", " ").trim();	
+		if(path.indexOf(":") != 1){
+			path = File.separator + path;
+		}
+		return path;
 	}
 }
