@@ -35,7 +35,7 @@
                     </a>
                 </li>
                 <li>
-                    <a ui-sref="#">
+                    <a ui-sref="accountSecurity">
                        账户安全</span>
                     </a>
                 </li>

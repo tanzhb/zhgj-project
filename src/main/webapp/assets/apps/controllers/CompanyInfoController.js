@@ -1,5 +1,5 @@
-angular.module('MetronicApp').controller('CompanyInfoController', ['$rootScope','$scope','$http', 'settings', '$q','CompanyInfoService','$state','$compile','$stateParams','$filter','FileUploader', 
-                                                                function($rootScope,$scope,$http,settings, $q,CompanyInfoService,$state,$compile,$stateParams,$filter,FileUploader) {
+angular.module('MetronicApp').controller('CompanyInfoController', ['$rootScope','$scope','$http', 'settings', '$q','CompanyInfoService','$state','$compile','$stateParams','$filter',
+                                                                function($rootScope,$scope,$http,settings, $q,CompanyInfoService,$state,$compile,$stateParams,$filter) {
 	$scope.$on('$viewContentLoaded', function() {   
 		// initialize core components
 		handle = new pageHandle();

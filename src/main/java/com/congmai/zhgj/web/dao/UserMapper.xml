@@ -187,4 +187,14 @@
     WHERE 
     comId=#{comId}
     </update>
+    
+    
+    <update id="updateEmail" parameterType="com.congmai.zhgj.web.model.User">
+    UPDATE 
+	T_USER
+	SET
+	email=#{email}
+	WHERE
+	USER_ID=#{userId}
+    </update>
 </mapper>

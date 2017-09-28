@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.congmai.zhgj.core.util.SimpleMailSender;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.User;
@@ -261,6 +262,56 @@ public class UserController {
 	    Company company=userService.getUserCompanyInfo(user.getUserId());
 	    
 		return new ResponseEntity<Company>(company, HttpStatus.OK);	
+	}
+	
+	/**
+	 * 
+	 * @Description 修改邮箱
+	 * @param user
+	 * @return
+	 */
+	@RequestMapping(value = "/changeEmail", method = RequestMethod.POST)
+	public ResponseEntity<Void> changeEmail(@RequestBody Object password) {
+		Map m = (Map) password;
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();// 获取当前登录用户名
+		User user = userService.selectByUsername(currenLoginName);
+		
+		if (user == null) {// 当前用户过期或不存在
+			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		} else {
+			if (user.getUserPwd().equals(new SimpleHash("md5", m.get("password").toString(), ByteSource.Util.bytes(user.getCredentialsSalt()), 2).toHex())) {
+				String email=m.get("email").toString();
+				user.setEmail(email);
+				userService.updateEmail(user);
+			} else {// 原密码输入有错
+				return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+			}
+
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+	}
+	
+	
+	/**
+	 * 邮箱验证码	
+	 */
+	@RequestMapping(value="/emailmessage")
+	@ResponseBody
+	public String emailmessage(String cuEmail) throws Exception{
+		try {
+			String randommsg = String.valueOf((int)(Math.random()*9000+1000));
+			SimpleMailSender sms = new SimpleMailSender();
+			sms.sendqqmail(cuEmail, "邮箱验证", "您的验证码是:"+randommsg);
+			return randommsg;
+			// TODO 处理返回值,参见HTTP协议文档
+		} catch (Exception e) {
+			// TODO 处理异常
+			e.printStackTrace();
+		}
+		return "0";
 	}
 	
 	/**

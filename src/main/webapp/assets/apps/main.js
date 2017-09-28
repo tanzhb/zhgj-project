@@ -2476,6 +2476,30 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             }
         })
         
+        
+        .state('accountSecurity',{
+            url: "/accountSecurity",
+            templateUrl: "rest/page/accountSecurity",
+            data: {pageTitle: '账户安全'},
+            controller: "AccountSecurityController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [                             
+					'assets/global/plugins/datatables/datatables.min.css',
+					'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+					'assets/global/plugins/datatables/datatables.all.min.js',
+					'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+			        'assets/apps/service/AccountSecurityService.js',
+					'assets/apps/controllers/AccountSecurityController.js',
+					]
+                    });
+                }]
+            }
+        })
+        
         .state('editGatheringMoney', {
             url: "/editGatheringMoney:serialNum",
             templateUrl: "rest/page/editGatheringMoney",
