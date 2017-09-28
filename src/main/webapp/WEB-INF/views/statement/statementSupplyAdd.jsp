@@ -327,7 +327,7 @@
 												<td>{{payment.billNum}}</td>
 												<td></td>
 											</tr>
-											<tr ng-if="paymentList!=null||paymentList.length>0">
+											<tr ng-if="paymentList!=null&&paymentList.length>0">
 												<td></td>
 												<td></td>
 												<td></td>

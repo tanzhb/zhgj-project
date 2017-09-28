@@ -25,6 +25,7 @@
 								<th>运输方式</th>
 								<th>收货/提货点</th>
 								<th>备注</th>
+								<th>状态</th>
 	                        </tr>
 	                    </thead>
 	                    <tbody>
@@ -34,7 +35,7 @@
 	            <div class="modal-footer">
 					<button type="button" data-dismiss="modal"
 						class="btn dark btn-outline">取消</button>
-					<button type="button" ng-click="confirmSelect()" class="btn green">确定
+					<button type="button" ng-click="confirmTakeDeliverySelect()" class="btn green">确定
 						</button>
 				</div>
 			</div>

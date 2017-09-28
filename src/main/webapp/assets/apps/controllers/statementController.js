@@ -11,27 +11,23 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
         $rootScope.settings.layout.pageBodySolid = false;
         $rootScope.settings.layout.pageSidebarClosed = false;
         handle.datePickersInit("auto bottom");
-        	if($state.current.name=="statement"){      
-        	loadSupplyMainTable();// 加载供应商对账单列表
-        	loadBuyMainTable();// 加载采购商对账单列表
-        	var type = handle.getCookie("d_type");
- 			if(type=="buyStatement"){
-	 				//loadStockInTable();
-	 				//$('#delivery_tab a:last').tab('show');
-	 				$('#statement_tab a:last').parent().addClass('active');
-	 				$('#statement_tab a:first').parent().removeClass('active');
-	 				$("#tab_15_2").addClass("active");
-	 				$("#tab_15_1").removeClass("active");
-//	 				 $("#tip").text("客户对账单");
-	 		}else{
-	 				//loadTakeDelieryTable();
-	 				$('#statement_tab a:first').parent().addClass('active');
-	 				$('#statement_tab a:last').parent().removeClass('active');
-	 				$("#tab_15_1").addClass("active");
-	 				$("#tab_15_2").removeClass("active");
-//	 				 $("#tip").text("供应商对账单");
-	 				//$('#delivery_tab a:first').tab('show');
-	 		}
+        	if($state.current.name=="buyStatement"){      
+	        	
+	        	loadBuyMainTable();// 加载采购商对账单列表
+	        	//var type = handle.getCookie("d_type");
+	 			/*if(type=="buyStatement"){
+		 				$('#statement_tab a:last').parent().addClass('active');
+		 				$('#statement_tab a:first').parent().removeClass('active');
+		 				$("#tab_15_2").addClass("active");
+		 				$("#tab_15_1").removeClass("active");
+		 		}else{
+		 				$('#statement_tab a:first').parent().addClass('active');
+		 				$('#statement_tab a:last').parent().removeClass('active');
+		 				$("#tab_15_1").addClass("active");
+		 				$("#tab_15_2").removeClass("active");
+		 		}*/
+        	}else if($state.current.name=="supplyStatement"){
+        		loadSupplyMainTable();// 加载供应商对账单列表
         	}else if($state.current.name=="addBuyStatement"){
         		showdatepicker();
         		supply_validateInit();
@@ -198,7 +194,7 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
     		statementService.save($scope.statement).then(
        		     function(data){
        		    	toastr.success('数据保存成功！');
-       		    	$state.go("statement");
+       		    	$state.go("supplyStatement");
        		    	//$location.search({serialNum:data.serialNum,view:1});
        		    	//$scope.statementInput = true;
        			    //$scope.statementShow = true;
@@ -213,7 +209,7 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
     
     $scope.cancelSupplyStatement  = function() {// 取消编辑
     	if($scope.statement.serialNum==null || $scope.statement.serialNum=='') {// 如果是取消新增，返回列表页面
-    		$state.go("statement");
+    		$state.go("supplyStatement");
     		return;
 		}
     	$scope.getStatement($scope.statement.serialNum);
@@ -230,7 +226,7 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
     		statementService.save($scope.statement).then(
     				function(data){
     					toastr.success('数据保存成功！');
-    					$state.go("statement");
+    					$state.go("buyStatement");
     					//$location.search({serialNum:data.serialNum,view:1});
     					//$scope.statementInput = true;
     					//$scope.statementShow = true;
@@ -245,7 +241,7 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
     
     $scope.cancelBuyStatement  = function() {// 取消编辑
     	if($scope.statement.serialNum==null || $scope.statement.serialNum=='') {// 如果是取消新增，返回列表页面
-    		$state.go("statement");
+    		$state.go("buyStatement");
     		return;
     	}
     	$scope.getStatement($scope.statement.serialNum);
@@ -759,8 +755,11 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 								$(".modal-backdrop").remove();
 								/* supplyTable.ajax.reload(); // 重新加载datatables数据 */
 								toastr.success('数据删除成功！');
-								 $state.go('statement',{},{reload:true});
-								 
+								if($scope.deleteType=='supply'){
+									supplyTable.ajax.reload();
+								}else{
+									buyTable.ajax.reload();
+								}
 							},
 							function(errResponse) {
 								toastr.error('数据删除失败！');

@@ -86,7 +86,7 @@
                                                     <div class="">
                                                         <select class="form-control"  id="deliverType" ng-init="deliver.deliverType='贸易发货'" ng-change="changeTakeDeliveryMode(deliver.deliverType)"  name="deliverType" ng-model="deliver.deliverType" ng-hide="deliverAdd"  data-size="8">
 	                                                        <option  value="贸易发货" selected="selected" >贸易发货</option>
-	                                                        <option  value="其他发货" selected="selected" >其他发货</option>
+	                                                      <!--   <option  value="其他发货" selected="selected" >其他发货</option> -->
 	                                                    </select>
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{takeDeliver.takeDeliverNum}}</p>
@@ -110,9 +110,9 @@
                                                     </div>
                                             </div>
 											<div class="form-group" ng-if="otherMode">
-                                                    <label class="control-label bold" for="orderSerial">关联单据号</label>
+                                                    <label class="control-label bold" for="docNum">关联单据号</label>
                                                     <div class="">
-	                                                    <input type="text" class="form-control" ng-model="deliver.orderSerial" ng-hide="deliverAdd" >
+	                                                    <input type="text" class="form-control" ng-model="deliver.docNum" ng-hide="deliverAdd" >
 	                                                    <div class="form-control-focus"> </div>
                                                     </div>
                                             </div>
@@ -125,16 +125,16 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="shipper">发货方 <span class="required"> * </span></label>
                                                     <div class="">
-                                                     	<input ng-if="!otherMode" type="text" class="form-control"  value="{{deliver.shipperName}}" disabled="disabled">
+                                                     	<input ng-if="!otherMode" type="text" class="form-control" name="shipper" ng-model="deliver.shipper"  value="{{deliver.shipper}}" >
                                                        <!--  <input type="text" class="form-control" id="shipper"  name="shipper" ng-model="deliver.shipper" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.shipper}}</p> -->
-                                                        <select ng-if="otherMode" class="form-control" selectpicker  id="shipper" ng-change="setSupplyComId(deliver.shipper)"  name="shipper" ng-model="deliver.shipper" ng-hide="deliverAdd"  data-size="8">
+                                                       <!--  <select ng-if="otherMode" class="form-control" selectpicker data-live-search="true"  id="shipper" ng-change="setSupplyComId(deliver.shipper)"  name="shipper" ng-model="deliver.shipper" ng-hide="deliverAdd"  data-size="8">
 	                                                        <option value=""></option>
 	                                                        <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}">{{supplier.comName}}</option>
-	                                                    </select>
+	                                                    </select> -->
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.shipperName}}</p>
+                                                         <p class="control-label left" ng-show="deliverView">{{deliver.shipper}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -143,14 +143,14 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="receiver">收货方 <span class="required"> * </span></label>
                                                     <div class="">
-                                                     	<input ng-if="!otherMode" type="text" class="form-control"  value="{{deliver.receiverName}}" disabled="disabled">
+                                                     	<input ng-if="!otherMode" type="text" class="form-control" name="receiver" ng-model="deliver.receiver"  value="{{deliver.receiver}}" >
                                                         <!-- <input type="text" class="form-control" id="receiver"  name="receiver" ng-model="deliver.receiver" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.receiver}}</p> -->
-                                                       <select ng-if="otherMode" class="form-control" selectpicker  id="receiver"  name="receiver" ng-model="deliver.receiver" ng-hide="deliverAdd"  data-size="8">
+                                                       	<!-- <select ng-if="otherMode" class="form-control" selectpicker  data-live-search="true"  id="receiver"  name="receiver" ng-model="deliver.receiver" ng-hide="deliverAdd"  data-size="8">
 	                                                        <option value=""></option>
 	                                                        <option  ng-repeat="customer in customers" value="{{customer.comId}}">{{customer.comName}}</option>
-	                                                    </select>
+	                                                    </select> -->
                                                         <div class="form-control-focus"> </div>
                                                     </div>
                                             </div>

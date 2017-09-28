@@ -224,7 +224,7 @@
 							<div class="actions">
 								<div class="btn-group btn-group-devided" data-toggle="buttons">
 									<label class="btn btn-transparent yellow btn-circle btn-sm"
-										ng-click="stockOut()"> <i class="fa fa-arrow-up"></i> 入库
+										ng-click="stockOut()"> <i class="fa fa-arrow-up"></i> 出库
 									</label>
 									<label class="btn btn-transparent green btn-circle btn-sm"
 										ui-sref="stockOutAdd"> <i class="fa fa-plus"></i> 添加

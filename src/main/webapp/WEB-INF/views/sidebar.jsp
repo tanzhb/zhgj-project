@@ -217,10 +217,19 @@
         </shiro:hasPermission>
         <shiro:hasPermission name="zhgj:statement">
         <li class="nav-item">
-            <a ui-sref="statement">
+            <a href="javascript:;" class="nav-link nav-toggle">
                 <i class="icon-docs"></i>
                 <span class="title">对账单</span>
+                <span class="arrow "></span>
             </a>
+            <ul class="sub-menu">
+				<%-- <shiro:hasPermission name="zhgj:buyStatement:*"> --%>
+					<li><a ui-sref="supplyStatement">供应商对账单</a></li>
+				<%-- </shiro:hasPermission>
+				<shiro:hasPermission name="zhgj:supplyStatement:*"> --%>
+					<li><a ui-sref="buyStatement">客户对账单</a></li>
+				<%-- </shiro:hasPermission> --%>
+			</ul>
         </li>
 		</shiro:hasPermission>
 		<shiro:hasPermission name="zhgj:paymentReceived">
@@ -232,7 +241,7 @@
 			 <a href="javascript:;" class="nav-link nav-toggle">
                 <i class="icon-credit-card"></i>
                 <span class="title">收付款</span>
-                <span class="arrow "></span>
+               
             </a> 
 			<ul class="sub-menu">
 				<shiro:hasPermission name="zhgj:accountReceivable:*">

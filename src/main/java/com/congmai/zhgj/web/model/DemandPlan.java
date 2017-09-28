@@ -16,6 +16,10 @@ public class DemandPlan {
 
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date releaseDate;
+    
+    private String maker;
+    
+    private String description;
 
     private String remark;
 
@@ -39,6 +43,13 @@ public class DemandPlan {
     private int pageSize;
     
     private int pageIndex;
+    
+    //搜索字段
+    private String firstCategory;		//一级分类
+    private String secondCategory;		//二级分类
+    private String thirdCategory;		//三级分类
+    private String supplyComId; 		//供应商
+    private String deliveryDate; 		//交付日期
 
     public String getSerialNum() {
         return serialNum;
@@ -160,6 +171,62 @@ public class DemandPlan {
 
 	public void setPageIndex(int pageIndex) {
 		this.pageIndex = pageIndex;
+	}
+
+	public String getMaker() {
+		return maker;
+	}
+
+	public void setMaker(String maker) {
+		this.maker = maker;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getFirstCategory() {
+		return firstCategory;
+	}
+
+	public void setFirstCategory(String firstCategory) {
+		this.firstCategory = firstCategory;
+	}
+
+	public String getSecondCategory() {
+		return secondCategory;
+	}
+
+	public void setSecondCategory(String secondCategory) {
+		this.secondCategory = secondCategory;
+	}
+
+	public String getThirdCategory() {
+		return thirdCategory;
+	}
+
+	public void setThirdCategory(String thirdCategory) {
+		this.thirdCategory = thirdCategory;
+	}
+
+	public String getSupplyComId() {
+		return supplyComId;
+	}
+
+	public void setSupplyComId(String supplyComId) {
+		this.supplyComId = supplyComId;
+	}
+
+	public String getDeliveryDate() {
+		return deliveryDate;
+	}
+
+	public void setDeliveryDate(String deliveryDate) {
+		this.deliveryDate = deliveryDate;
 	}
 	
 	

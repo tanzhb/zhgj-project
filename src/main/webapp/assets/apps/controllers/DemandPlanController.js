@@ -2,7 +2,7 @@
  * 
  */
 
-angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$scope','$state','$http','demandPlanService','$location','$compile','$stateParams',function($rootScope,$scope,$state,$http,demandPlanService,$location,$compile,$stateParams) {
+angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$scope','$state','$http','demandPlanService','$location','$compile','$stateParams','commonService',function($rootScope,$scope,$state,$http,demandPlanService,$location,$compile,$stateParams,commonService) {
 	 $scope.$on('$viewContentLoaded', function() {   
 	    	// initialize core components
 		    handle = new pageHandle();
@@ -25,6 +25,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	 			$scope.serialNums = [];
 	 			selectSaleOrderTable();//加载物料列表
 	 			handle.datePickersInit();
+	 			initSuppliers();
 	 		}else{
 	 			demandPlanMaterielList();
 	 			$scope.params = [];
@@ -434,6 +435,18 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
         		},function(data){
         			//调用承诺接口reject();
         		});
+			}
+			
+			/**
+			 * 加载采购商列表
+			 */
+			var initSuppliers = function(){
+				var promise =commonService.initSuppliers();
+				promise.then(function(data){
+					$scope.suppliers = data.data;
+				},function(data){
+					//调用承诺接口reject();
+				});
 			}
 		
 		
@@ -1069,17 +1082,20 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	       };
 	       
 	       $scope.addToSaleOrder = function(){
-	    	   toastr.warning("开发中。。。");
+	    	   //toastr.warning("开发中。。。");
 	    	   var arr = [];
 	    	   if(!isNull($scope.rootMateriels)){
 		    		for(var i in $scope.rootMateriels){
 		    			console.log("===++++++=====>"+$scope.rootMateriels[i].materielChecked);
 		    			if($scope.rootMateriels[i].materielChecked){
-		    				arr.push($scope.rootMateriels[i].serialNum);
+		    				arr.push($scope.rootMateriels[i].supplyMaterielSerial);
 		    			}
 		    		}
 		       }
-	    	   console.log(arr);
+	    	  // $stateParams.materiels = arr; 
+	    	   
+	    	   //console.log(arr);
+	    	   $state.go("addSaleOrder",{materiels:arr,demandPlanSerial:$scope.demandPlan.serialNum,buyComId:$scope.demandPlan.buyComId});
 	       }
 	       
 	       $scope.cancel = function(){

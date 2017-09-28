@@ -38,4 +38,6 @@ public interface TakeDeliveryMapper extends GenericDao<TakeDelivery, String>{
     int updateByPrimaryKey(TakeDelivery record);
 
 	int countListByExample(TakeDeliverySelectExample example);
+
+	Delivery selectByTakeDeliveryPrimaryKeyForOtherType(String serialNum);
 }
