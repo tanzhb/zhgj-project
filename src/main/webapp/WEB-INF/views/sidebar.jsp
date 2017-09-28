@@ -30,12 +30,12 @@
                     </a>
                 </li>
                 <li>
-                    <a ui-sref="#">
+                    <a ui-sref="companyInfo">
                         公司信息</span>
                     </a>
                 </li>
                 <li>
-                    <a ui-sref="#">
+                    <a ui-sref="accountSecurity">
                        账户安全</span>
                     </a>
                 </li>
