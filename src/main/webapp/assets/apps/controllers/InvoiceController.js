@@ -1466,7 +1466,7 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 							 }
 							 $scope.downloadFile = function(obj){
 								 if(!handle.isNull(obj)){
-									 window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+obj.file;
+									 window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+encodeURI(encodeURI(obj.file));
 								 }else{
 									 toastr.error("下载失败!");
 								 }
