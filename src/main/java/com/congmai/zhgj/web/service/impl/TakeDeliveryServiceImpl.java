@@ -319,6 +319,45 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		
 	}
 	
+	
+	@Override
+	@OperationLog(operateType = "add" ,operationDesc = "出库" ,objectSerial= "{serialNum}")
+	public void updateStockOutData(StockInOutRecord record,
+			List<DeliveryMateriel> deliveryMateriels, String currenLoginName,
+			String string) {
+		//StockInOutRecord record = takeDeliveryParams.getRecord();
+		
+		
+		Delivery old_delivery = null;
+
+		//获取更新前的发货id
+		StockInOutRecord stockInOutRecord = stockInOutRecordMapper.selectByPrimaryKey(record.getSerialNum());
+		String deliverySerial = stockInOutRecord.getDeliverSerial();
+		old_delivery = delivery2Mapper.selectByDeliveryPrimaryKey(deliverySerial);
+		clearStockOutInfoFormMateriels(old_delivery.getDeliveryMateriels());//清除之前的出入库物料信息
+		
+		//更新入库记录
+		record.setUpdater(currenLoginName);
+		record.setStatus("1");//入库完成
+		record.setUpdateTime(new Date());
+		StockInOutRecordExample example = new StockInOutRecordExample();
+		example.createCriteria().andSerialNumEqualTo(record.getSerialNum());
+		stockInOutRecordMapper.updateByExampleSelective(record, example);
+		
+		//出库完成状态处理
+		stockOutEndHandle(old_delivery.getOrderSerial(),deliverySerial,currenLoginName);
+		
+		List<DeliveryMateriel> materiels = deliveryMateriels; //这里是出入库的物料信息
+		for(DeliveryMateriel materiel : materiels){
+			DeliveryMaterielExample example2 = new DeliveryMaterielExample();
+			example2.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
+			deliveryMaterielMapper.updateByExampleSelective(materiel, example2);
+		}
+		
+		
+		
+	}
+	
 	public  List<String> removeDuplicate(List<String> list) 
 
 	{        
@@ -544,6 +583,8 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		delivery.setUpdater(currenLoginName);
 		//delivery2Mapper.updateByPrimaryKeySelective(delivery);
 	}
+
+	
 
 
 	

@@ -105,9 +105,6 @@
   
   <select id="findDeliverLogByOrderSerialNum" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
-    <if test="distinct" >
-      distinct
-    </if>
     <include refid="Base_Column_List" />
     from operateLog
     where objectSerial in (
@@ -128,9 +125,6 @@
   
   <select id="findPayLogByOrderSerialNum" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
-    <if test="distinct" >
-      distinct
-    </if>
     <include refid="Base_Column_List" />
     from operateLog
     where objectSerial in (

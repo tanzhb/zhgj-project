@@ -73,6 +73,10 @@ public interface TakeDeliveryService extends GenericService<TakeDelivery, String
 	void confirmTakeDelivery(TakeDelivery takeDelivery,List<DeliveryMateriel> deliveryMateriels,
 			String currenLoginName)throws Exception;
 
+	void updateStockOutData(StockInOutRecord record,
+			List<DeliveryMateriel> deliveryMateriels, String currenLoginName,
+			String string);
+
 	
 	
 		

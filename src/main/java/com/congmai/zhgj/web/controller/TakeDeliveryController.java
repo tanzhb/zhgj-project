@@ -380,10 +380,10 @@ public class TakeDeliveryController {
         		Subject currentUser = SecurityUtils.getSubject();
         		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
         		if(StringUtils.isNotEmpty(takeDeliveryParams.getRecord().getSerialNum())){
-        			takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);
+        			/*takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);*/
         			takeDeliveryService.updateStockInData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName,"in");
         		}else{
-        			takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);
+        			/*takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);*/
         			takeDeliveryService.insertStockInData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName,"in");
         		}
         		flag = "1";
@@ -416,7 +416,7 @@ public class TakeDeliveryController {
         		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
         		if(StringUtils.isNotEmpty(takeDeliveryParams.getRecord().getSerialNum())){
         			takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);
-        			takeDeliveryService.updateStockInData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName,"out");
+        			takeDeliveryService.updateStockOutData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName,"out");
         		}else{
         			takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);
         			takeDeliveryService.insertStockInData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName,"out");
