@@ -51,4 +51,7 @@ public interface UserService extends GenericService<User, Integer> {
 	
 	
 	public void updateUserInfo(User user);
+	
+	
+	public void updateCompanyInfo(Company company);
 }

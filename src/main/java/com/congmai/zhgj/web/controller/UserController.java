@@ -235,6 +235,34 @@ public class UserController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
+	
+	@RequestMapping(value = "/updateCompanyInfo", method = RequestMethod.POST)
+	public ResponseEntity<Void> updateCompanyInfo(Company company) {
+		User user=null;
+	    user = UserUtil.getUserFromSession();
+	    user=userService.getUserInfo(user.getUserId());
+	    
+		if (company == null) {
+			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		}
+		company.setUpdater(String.valueOf(user.getUserId()));
+		userService.updateCompanyInfo(company);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value = "/getCompanyInfo")
+	@ResponseBody
+	public ResponseEntity<Company> getCompanyInfo(){
+		User user=null;
+	    user = UserUtil.getUserFromSession();
+	    user=userService.getUserInfo(user.getUserId());
+	    
+	    Company company=userService.getUserCompanyInfo(user.getUserId());
+	    
+		return new ResponseEntity<Company>(company, HttpStatus.OK);	
+	}
+	
 	/**
 	 * 上传执行
 	 * @param file（上传的文件）

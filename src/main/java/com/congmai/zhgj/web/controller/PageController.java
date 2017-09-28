@@ -494,4 +494,11 @@ public class PageController {
     public String userInfo(){
     	return "user/userInfo";
     }
+    /**
+     * 企业信息
+     */
+    @RequestMapping("/companyInfo")
+    public String companyInfo(){
+    	return "user/companyInfo";
+    }
 }

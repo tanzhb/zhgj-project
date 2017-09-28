@@ -36,4 +36,7 @@ public interface UserMapper extends GenericDao<User, Integer>{
     
     
     public void updateUserInfo(User user);
+    
+    
+    public void updateCompanyInfo(Company company);
 }

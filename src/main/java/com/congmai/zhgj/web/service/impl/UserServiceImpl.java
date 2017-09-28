@@ -90,4 +90,11 @@ public class UserServiceImpl extends GenericServiceImpl<User, Integer> implement
 		// TODO Auto-generated method stub
 		userMapper.updateUserInfo(user);
 	}
+
+
+	@Override
+	public void updateCompanyInfo(Company company) {
+		// TODO Auto-generated method stub
+		userMapper.updateCompanyInfo(company);
+	}
 }
