@@ -54,6 +54,7 @@ import org.springframework.stereotype.Service;
 
 import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.Constants;
+import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.activiti.processTask.taskCommand.DeleteActiveTaskCmd;
 import com.congmai.zhgj.web.activiti.processTask.taskCommand.RevokeTaskCmd;
 import com.congmai.zhgj.web.activiti.processTask.taskCommand.StartActivityCmd;
@@ -696,6 +697,7 @@ public class ProcessServiceImp implements IProcessService{
 	}
 
 	@Override
+	@OperationLog(operateType = "app" ,operationDesc = "申请" ,objectSerial= "{serialNum}")
 	public String startBuyOrderInfo(OrderInfo orderInfo) {
 
 		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
@@ -717,6 +719,7 @@ public class ProcessServiceImp implements IProcessService{
 	}
 	
 	@Override
+	@OperationLog(operateType = "app" ,operationDesc = "申请" ,objectSerial= "{serialNum}")
 	public String startSaleOrderInfo(OrderInfo orderInfo) {
 
 		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
@@ -738,6 +741,7 @@ public class ProcessServiceImp implements IProcessService{
 	}
 
 	@Override
+	@OperationLog(operateType = "app" ,operationDesc = "申请" ,objectSerial= "{serialNum}")
 	public String startPriceList(PriceList priceList) {
 		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
         identityService.setAuthenticatedUserId(priceList.getUserId().toString());
@@ -762,6 +766,7 @@ public class ProcessServiceImp implements IProcessService{
 	}
 
 	@Override
+	@OperationLog(operateType = "app" ,operationDesc = "申请" ,objectSerial= "{serialNum}")
 	public String startInvoice(Invoice invoice) {
 		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
         identityService.setAuthenticatedUserId(invoice.getUserId().toString());

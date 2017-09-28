@@ -810,6 +810,146 @@ public class DemandPlanSelectExample {
             addCriterion("c.comName like", "%"+value.toUpperCase()+"%", "comName");
             return (Criteria) this;
         }
+        
+        public Criteria andMakerIsNull() {
+            addCriterion("d.maker is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMakerIsNotNull() {
+            addCriterion("d.maker is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMakerEqualTo(String value) {
+            addCriterion("d.maker =", value, "maker");
+            return (Criteria) this;
+        }
+
+        public Criteria andMakerNotEqualTo(String value) {
+            addCriterion("d.maker <>", value, "maker");
+            return (Criteria) this;
+        }
+
+        public Criteria andMakerGreaterThan(String value) {
+            addCriterion("d.maker >", value, "maker");
+            return (Criteria) this;
+        }
+
+        public Criteria andMakerGreaterThanOrEqualTo(String value) {
+            addCriterion("d.maker >=", value, "maker");
+            return (Criteria) this;
+        }
+
+        public Criteria andMakerLessThan(String value) {
+            addCriterion("d.maker <", value, "maker");
+            return (Criteria) this;
+        }
+
+        public Criteria andMakerLessThanOrEqualTo(String value) {
+            addCriterion("d.maker <=", value, "maker");
+            return (Criteria) this;
+        }
+
+        public Criteria andMakerLike(String value) {
+            addCriterion("d.maker like", value, "maker");
+            return (Criteria) this;
+        }
+
+        public Criteria andMakerNotLike(String value) {
+            addCriterion("d.maker not like", value, "maker");
+            return (Criteria) this;
+        }
+
+        public Criteria andMakerIn(List<String> values) {
+            addCriterion("d.maker in", values, "maker");
+            return (Criteria) this;
+        }
+
+        public Criteria andMakerNotIn(List<String> values) {
+            addCriterion("d.maker not in", values, "maker");
+            return (Criteria) this;
+        }
+
+        public Criteria andMakerBetween(String value1, String value2) {
+            addCriterion("d.maker between", value1, value2, "maker");
+            return (Criteria) this;
+        }
+
+        public Criteria andMakerNotBetween(String value1, String value2) {
+            addCriterion("d.maker not between", value1, value2, "maker");
+            return (Criteria) this;
+        }
+        
+        public Criteria andDescriptionIsNull() {
+            addCriterion("d.description is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionIsNotNull() {
+            addCriterion("d.description is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionEqualTo(String value) {
+            addCriterion("d.description =", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionNotEqualTo(String value) {
+            addCriterion("d.description <>", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionGreaterThan(String value) {
+            addCriterion("d.description >", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionGreaterThanOrEqualTo(String value) {
+            addCriterion("d.description >=", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionLessThan(String value) {
+            addCriterion("d.description <", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionLessThanOrEqualTo(String value) {
+            addCriterion("d.description <=", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionLike(String value) {
+            addCriterion("d.description like", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionNotLike(String value) {
+            addCriterion("d.description not like", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionIn(List<String> values) {
+            addCriterion("d.description in", values, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionNotIn(List<String> values) {
+            addCriterion("d.description not in", values, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionBetween(String value1, String value2) {
+            addCriterion("d.description between", value1, value2, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionNotBetween(String value1, String value2) {
+            addCriterion("d.description not between", value1, value2, "description");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

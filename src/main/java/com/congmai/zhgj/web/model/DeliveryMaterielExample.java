@@ -1781,6 +1781,76 @@ public class DeliveryMaterielExample {
             addCriterion("updateTime not between", value1, value2, "updateTime");
             return (Criteria) this;
         }
+        
+        public Criteria andStockInOutRecordSerialIsNull() {
+            addCriterion("stockInOutRecordSerial is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockInOutRecordSerialIsNotNull() {
+            addCriterion("stockInOutRecordSerial is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockInOutRecordSerialEqualTo(String value) {
+            addCriterion("stockInOutRecordSerial =", value, "stockInOutRecordSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockInOutRecordSerialNotEqualTo(String value) {
+            addCriterion("stockInOutRecordSerial <>", value, "stockInOutRecordSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockInOutRecordSerialGreaterThan(String value) {
+            addCriterion("stockInOutRecordSerial >", value, "stockInOutRecordSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockInOutRecordSerialGreaterThanOrEqualTo(String value) {
+            addCriterion("stockInOutRecordSerial >=", value, "stockInOutRecordSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockInOutRecordSerialLessThan(String value) {
+            addCriterion("stockInOutRecordSerial <", value, "stockInOutRecordSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockInOutRecordSerialLessThanOrEqualTo(String value) {
+            addCriterion("stockInOutRecordSerial <=", value, "stockInOutRecordSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockInOutRecordSerialLike(String value) {
+            addCriterion("stockInOutRecordSerial like", value, "stockInOutRecordSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockInOutRecordSerialNotLike(String value) {
+            addCriterion("stockInOutRecordSerial not like", value, "stockInOutRecordSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockInOutRecordSerialIn(List<String> values) {
+            addCriterion("stockInOutRecordSerial in", values, "stockInOutRecordSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockInOutRecordSerialNotIn(List<String> values) {
+            addCriterion("stockInOutRecordSerial not in", values, "stockInOutRecordSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockInOutRecordSerialBetween(String value1, String value2) {
+            addCriterion("stockInOutRecordSerial between", value1, value2, "stockInOutRecordSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andStockInOutRecordSerialNotBetween(String value1, String value2) {
+            addCriterion("stockInOutRecordSerial not between", value1, value2, "stockInOutRecordSerial");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
