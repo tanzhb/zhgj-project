@@ -16,6 +16,13 @@ public interface UserCompanyService extends GenericService<UserCompanyKey, Strin
 	public String getUserComId(String user_id);
 	/**
 	 * 
+	 * @Description (TODO根据user_id获取企业类型)
+	 * @param user
+	 * @return
+	 */
+	public String getUserComType(String user_id);
+	/**
+	 * 
 	 * @Description (TODO根据user_id获取com_id)
 	 * @param user
 	 * @return

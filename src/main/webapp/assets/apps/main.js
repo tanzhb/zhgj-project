@@ -1444,6 +1444,28 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    			});
 		    		}]
 		    	}	        
+		    }).state('myNotice', {
+		    	url: "/myNotice",
+		    	templateUrl: "rest/notice/myNotice",
+		    	data: {pageTitle: '公告'},
+		    	reload:true, 
+		    	controller: "NoticeController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [     
+		    				        'assets/apps/css/todo-2.min.css',
+		    				        'assets/global/plugins/datatables/datatables.min.css',  
+		    				        'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
+		    				        'assets/apps/controllers/NoticeController.js',
+		    				        'assets/apps/service/NoticeService.js'
+		    				        
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
 		    }).state('paymentRecord', {
 		    	url: "/paymentRecord",
 		    	templateUrl: "rest/paymentRecord/paymentRecordManage",

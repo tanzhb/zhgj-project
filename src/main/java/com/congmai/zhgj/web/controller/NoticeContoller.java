@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,8 +26,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.web.model.Notice;
+import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.NoticeService;
 import com.congmai.zhgj.web.service.UserCompanyService;
 
@@ -103,6 +106,25 @@ public class NoticeContoller {
 		return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
     }
     
+    @RequestMapping(value="myNoticeList",method=RequestMethod.POST)
+    @ResponseBody
+    public Page<Notice> myNoticeList(@RequestBody Notice notice){
+    	Page<Notice> page = new Page<Notice>();
+    	try{
+    		User user = UserUtil.getUserFromSession();
+    		String companyType = userCompanyService.getUserComType(user.getUserId().toString());
+    		page = this.noticeService.selectMyNoticeByPage(notice, user.getUserId().toString(), companyType);
+    		if(CollectionUtils.isNotEmpty(page.getResult())){
+    			for(Notice n : page.getResult()){
+    				n.setRelaseDate(DateUtil.getInterval(DateUtil.format("yyyy-MM-dd HH:mm:ss",n.getUpdateTime())));
+    			}
+    		}
+    	}catch(Exception e){
+    		logger.warn(e.getMessage(), e);
+    	}
+    	return page;
+    }
+    
 	  /**
      * @Description (公告新增页面)
      * @param request
@@ -157,6 +179,16 @@ public class NoticeContoller {
     public String noticeView(Map<String, Object> map,String serialNum,HttpServletRequest request) {
     	return "notice/noticeView";
     }
+    
+    /**
+     * @Description (跳转至个人公告页面)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="myNotice")
+    public String myNotice(Map<String, Object> map,HttpServletRequest request) {
+    	return "notice/myNotice";
+    }
 
     
     /**
@@ -193,6 +225,26 @@ public class NoticeContoller {
     		if(StringUtils.isNotEmpty(serialNums)){
     			List<String> serialNumArray  = Arrays.asList(serialNums.split(","));
     			noticeService.deleteBatch(serialNumArray,UserUtil.getUserFromSession().getUserName());
+    		}
+    	}catch(Exception e){
+    		System.out.println(e.getMessage());
+    		flag = "1";
+    	}
+    	return flag;
+    }
+    
+    /**
+     * @Description (删除公告信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="deleteMyNotice",method=RequestMethod.POST)
+    @ResponseBody
+    public String deleteMyNotice(Map<String, Object> map,@RequestBody String serialNum,HttpServletRequest request) {
+    	String flag = "0"; //默认失败
+    	try{
+    		if(StringUtils.isNotEmpty(serialNum)){
+    			noticeService.deleteNoticeShare(serialNum,UserUtil.getUserFromSession().getUserId().toString());
     		}
     	}catch(Exception e){
     		System.out.println(e.getMessage());
