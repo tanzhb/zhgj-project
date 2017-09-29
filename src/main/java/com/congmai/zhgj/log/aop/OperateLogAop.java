@@ -120,12 +120,14 @@ public class OperateLogAop{
                 valueReturn.setServerIp(request.getLocalAddr());
                 
                 //替换动态参数，获取流水号
-                if(orgs[0] instanceof Map){
-                	valueReturn.setObjectSerial(((Map)orgs[0]).get(strFormat(log.objectSerial())).toString());
-                }else if(orgs[0] instanceof String){
-                	valueReturn.setObjectSerial(orgs[0].toString());
-                }else if(orgs[0] instanceof Object){
-                	valueReturn.setObjectSerial(reflectObject(orgs[0],strFormat(log.objectSerial())));
+                if(log.objectSerial()!=null){
+                	if(orgs[0] instanceof Map){
+                    	valueReturn.setObjectSerial(((Map)orgs[0]).get(strFormat(log.objectSerial())).toString());
+                    }else if(orgs[0] instanceof String){
+                    	valueReturn.setObjectSerial(orgs[0].toString());
+                    }else if(orgs[0] instanceof Object){
+                    	valueReturn.setObjectSerial(reflectObject(orgs[0],strFormat(log.objectSerial())));
+                    }
                 }
                 
                 
@@ -182,13 +184,15 @@ public class OperateLogAop{
                 valueReturn.setRequestUrl(request.getRequestURI());
                 valueReturn.setServerIp(request.getLocalAddr());
                 
-              //替换动态参数，获取流水号
-                if(orgs[0] instanceof Map){
-                	valueReturn.setObjectSerial(((Map)orgs[0]).get(strFormat(log.objectSerial())).toString());
-                }else if(orgs[0] instanceof String){
-                	valueReturn.setObjectSerial(orgs[0].toString());
-                }else if(orgs[0] instanceof Object){
-                	valueReturn.setObjectSerial(reflectObject(orgs[0],strFormat(log.objectSerial())));
+                //替换动态参数，获取流水号
+                if(log.objectSerial()!=null){
+                	if(orgs[0] instanceof Map){
+                    	valueReturn.setObjectSerial(((Map)orgs[0]).get(strFormat(log.objectSerial())).toString());
+                    }else if(orgs[0] instanceof String){
+                    	valueReturn.setObjectSerial(orgs[0].toString());
+                    }else if(orgs[0] instanceof Object){
+                    	valueReturn.setObjectSerial(reflectObject(orgs[0],strFormat(log.objectSerial())));
+                    }
                 }
                 
                 valueReturn.setSerialNum(tag.get());

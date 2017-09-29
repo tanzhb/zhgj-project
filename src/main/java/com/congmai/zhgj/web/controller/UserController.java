@@ -38,6 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.congmai.zhgj.core.util.SimpleMailSender;
 import com.congmai.zhgj.core.util.UserUtil;
+import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
@@ -75,6 +76,7 @@ public class UserController {
 	 * @param result
 	 * @return
 	 */
+	@OperationLog(operateType = "login" ,operationDesc = "登录")
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(@Valid User user, BindingResult result, Model model,
 			HttpServletRequest request) {
@@ -125,6 +127,7 @@ public class UserController {
 	 * @param session
 	 * @return
 	 */
+	@OperationLog(operateType = "logout" ,operationDesc = "登录")
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(HttpSession session) {
 		session.removeAttribute("userInfo");
