@@ -28,6 +28,7 @@
         <property name="locations">
             <list>
                 <value>classpath*:application.properties</value>
+                <value>classpath*:solr.properties</value>
             </list>
         </property>
     </bean>

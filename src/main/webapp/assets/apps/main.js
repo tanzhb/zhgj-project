@@ -5,7 +5,7 @@
 /* Metronic App */
 // 定义模块时引入依赖
 var MetronicApp = angular.module("MetronicApp", [ "ui.router", "ui.bootstrap",
-		"oc.lazyLoad", "ngSanitize" ]);
+		"oc.lazyLoad", "ngSanitize", "tm.pagination"]);
 
 /* Configure ocLazyLoader(refer: https://github.com/ocombe/ocLazyLoad) */
 MetronicApp.config([ '$ocLazyLoadProvider', function($ocLazyLoadProvider) {
@@ -143,19 +143,39 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
-        // Blank Page
-        .state('blank', {
-            url: "/blank",
-            templateUrl: "rest/page/blank",
-            data: {pageTitle: '空白页'},
-            controller: "BlankController",
+        // 全文检索
+        .state('solrSearch', {
+            url: "/solrSearch",
+            templateUrl: "rest/page/solrSearch",
+            data: {pageTitle: '全文检索'},
+            controller: "SolrSearchController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
                         files: [
-                            'assets/apps/controllers/BlankController.js'
+//                            'assets/global/plugins/font-awesome/css/font-awesome.min.css',
+//                            'assets/global/plugins/bootstrap/css/bootstrap.min.css',
+//                            'assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css',
+                            'assets/pages/css/search.min.css',
+//                            'assets/global/plugins/bootstrap-select/css/bootstrap-select.css',
+//                            'assets/global/css/components.min.css',
+//                            'assets/global/plugins/fancybox/source/jquery.fancybox.css',
+//                            'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
+//                            'assets/global/css/components.min.css',
+//                            'assets/global/css/plugins.min.css',
+//                            'assets/global/plugins/simple-line-icons/simple-line-icons.min.css',
+//                            'assets/layouts/layout2/css/layout.min.css',
+//                            'assets/layouts/layout2/css/themes/blue.min.css',
+//                            'assets/layouts/layout2/css/custom.min.css',
+                            
+                            //'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+                            //'assets/global/plugins/fancybox/source/jquery.fancybox.pack.js',
+                            //'assets/global/plugins/angularjs/angular.min.js',
+                            //'assets/global/plugins/tm.pagination.js',
+                            'assets/apps/controllers/SolrSearchController.js'
+                            
                         ]
                     });
                 }]

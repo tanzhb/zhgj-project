@@ -381,6 +381,14 @@ public class PageController {
     }
     
     /**
+     * 全文检索页面
+     */
+    @RequestMapping("/solrSearch")
+    public String solrSearch() {
+        return "solrSearch";
+    }
+    
+    /**
      * 请假
      */
     @RequestMapping("/addVacation")
