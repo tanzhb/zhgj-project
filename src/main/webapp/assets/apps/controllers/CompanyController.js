@@ -1287,7 +1287,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        * 企业资质初始化日期控件
 	        */
 	       $scope.repeatDone = function(){
-	    	   handle.datePickersInit();
+	    	   handle.datePickersInit("bottom");
 	    	   //$("#qualificationForm").removeData("validator").removeData("unobtrusiveValidation");
 	    	 
 	    	   //$.validator.parse($("#qualificationForm"));
