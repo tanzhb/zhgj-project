@@ -293,7 +293,7 @@ public class DateUtil {
             int h = (int) (time/3600000);//得出的时间间隔的单位是小时  
             interval = h + "小时前";  
               
-        }else if(time/(3600000*24) <= 7 && time/(3600000*24)>0){
+        }else if(time/(3600000*24) <= 2 && time/(3600000*24)>0){
         	 int date = (int) (time/(3600000*24));//得出的时间间隔的单位是小时  
              interval = date + "天前";
         }else{  

@@ -79,10 +79,16 @@
 										<!--/span-->
 										
 										<div class="col-md-4">
-											<div class="form-group form-md-line-input">
+											<div class="form-group form-md-line-input" ng-if="record.inOutType=='贸易'">
                                                     <label class="col-md-4 control-label" for="takeDeliverSerial"> 收货单号：</label>
                                                     <div class="col-md-8">
                                                          <p class="control-label left" >{{record.delivery.takeDelivery.takeDeliverNum}}</p>
+                                                    </div>
+                                            </div>
+											<div class="form-group form-md-line-input" ng-if="record.inOutType!='贸易'">
+                                                    <label class="col-md-4 control-label" for="docNum"> 关联单据号：</label>
+                                                    <div class="col-md-8">
+                                                         <p class="control-label left" >{{record.docNum}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -91,7 +97,7 @@
 									</div>
 									<!--/row-->
 									<div class="row">
-										<div class="col-md-4">
+										<div class="col-md-4" ng-if="record.inOutType=='贸易'">
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="orderSerial"> 采购订单号：</label>
                                                     <div class="col-md-8">
@@ -105,7 +111,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="supplyComId"> 入库仓库：</label>
                                                     <div class="col-md-8">
-                                                         <p class="control-label left" >{{record.warehouseCount}}</p>
+                                                         <p class="control-label left" >{{warehouseCount}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -136,7 +142,7 @@
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="operator">发货方：</label>
                                                     <div class="col-md-8">
-                                                       <p class="control-label left" >{{shipperOrReceiverName}}</p>
+                                                       <p class="control-label left" >{{record.shipperOrReceiver}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -202,7 +208,7 @@
                         </div>
                         <div class="portlet-body">
 						<div class="table-scrollable">
-							<table id="deliveryMaterielTable"
+							<table id="deliveryMaterielTable" ng-if="record.inOutType=='贸易'"
 								class="table table-striped table-bordered table-advance table-hover">
 								<thead>
 									<tr>
@@ -267,6 +273,49 @@
 									</tr>
 									<tr ng-if="record.delivery.deliveryMateriels==undefined||record.delivery.deliveryMateriels.length==0">
 											<td colspan="15" align="center">暂无数据</td>
+									</tr>
+								</tbody>
+							</table>
+							<table id="deliveryMaterielTable" ng-if="record.inOutType!='贸易'"
+								class="table table-striped table-bordered table-advance table-hover">
+								<thead>
+									<tr>
+										<th>物料编号</th>
+										<th>物料名称</th>
+										<th>规格型号</th>
+										<th>单位</th>
+										<th>入库数量</th>
+										<th>仓库</th>
+										<th>库位</th>
+										<th>备注</th>
+										<th>状态</th>
+									</tr>
+								</thead>
+								<tbody data-repeater-list="group-a"> 
+									<tr data-repeater-item ng-repeat="materiel in takeDeliveryMateriels track by $index" >
+										<td>{{materiel.orderMateriel.materiel.materielNum}}</td>
+										<td>{{materiel.orderMateriel.materiel.materielName}}</td>
+										<td>{{materiel.orderMateriel.materiel.specifications}}</td>
+										<td>{{materiel.orderMateriel.materiel.unit}}</td>
+										<td>
+											{{materiel.stockInCount}}
+										</td>
+										<td>
+											{{materiel.stockInWarehouse.warehouseName}}
+										</td>
+										<td>
+											{{materiel.stockInPosition.positionName}}
+										</td>
+										<td>
+											{{materiel.stockInRemark}}
+										</td> 
+										<td>
+											<span ng-if="record.status==0"  class="label label-sm label-warning ng-scope">待入库</span>
+											<span ng-if="record.status==1" class="label label-sm label-success ng-scope">已入库</span>
+										</td> 
+									</tr>
+									<tr ng-if="takeDeliveryMateriels==null||takeDeliveryMateriels.length==0">
+											<td colspan="9" align="center">暂无数据</td>
 									</tr>
 								</tbody>
 							</table>

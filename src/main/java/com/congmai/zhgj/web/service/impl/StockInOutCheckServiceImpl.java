@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.dao.DeliveryMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
 import com.congmai.zhgj.web.dao.StockInOutCheckMapper;
@@ -87,6 +88,7 @@ public class StockInOutCheckServiceImpl extends GenericServiceImpl<StockInOutChe
 	}
 
 	@Override
+	@OperationLog(operateType = "add" ,operationDesc = "检验" ,objectSerial= "{serialNum}")
 	public void updateStockInOutCheckStatus(String serialNum,String serialNum1,String userName) {
 		stockInOutCheckMapper.updateStockInOutCheckStatus(serialNum);
 		StockInOutCheck stockInOutCheck=stockInOutCheckMapper.selectByPrimaryKey(serialNum);
@@ -96,9 +98,12 @@ public class StockInOutCheckServiceImpl extends GenericServiceImpl<StockInOutChe
 			td.setStatus(TakeDelivery.CHECK_COMPLETE);
 			takeDeliveryMapper.updateByPrimaryKey(td);
 			DeliveryVO d=deliveryMapper.selectDetailById(td.getDeliverSerial());
-			OrderInfo o =orderInfoMapper.selectByPrimaryKey(d.getOrderSerial());
-			o.setStatus("6");
-			orderInfoMapper.updateByPrimaryKey(o);
+			
+			OrderInfo o = new OrderInfo();
+			o.setSerialNum(d.getOrderSerial());
+			o.setDeliverStatus(OrderInfo.CHECK);
+			orderInfoMapper.updateByPrimaryKeySelective(o);
+			
 		}else if(serialNum1.indexOf("checkout")>-1){
 			createStockInOutRecord("checkout",stockInOutCheck.getDeliverSerial(),userName);//产生出库记录
 			//String orderSerial=td.getDeliverSerial();

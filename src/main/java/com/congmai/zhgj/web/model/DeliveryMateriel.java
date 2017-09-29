@@ -10,6 +10,10 @@ public class DeliveryMateriel {
     private String deliverSerial;
 
     private String orderMaterielSerial;
+    
+    private String stockInOutRecordSerial;
+    
+    private String supplyMaterielSerial;
 
     private String batchNum;
 
@@ -54,6 +58,8 @@ public class DeliveryMateriel {
     private Date updateTime;
     
     private OrderMateriel orderMateriel;
+    
+    private SupplyMateriel supplyMateriel;
     
     private Warehouse warehouse;
     
@@ -414,6 +420,30 @@ public class DeliveryMateriel {
 
 	public void setStockInPosition(Warehouseposition stockInPosition) {
 		this.stockInPosition = stockInPosition;
+	}
+
+	public String getStockInOutRecordSerial() {
+		return stockInOutRecordSerial;
+	}
+
+	public void setStockInOutRecordSerial(String stockInOutRecordSerial) {
+		this.stockInOutRecordSerial = stockInOutRecordSerial;
+	}
+
+	public String getSupplyMaterielSerial() {
+		return supplyMaterielSerial;
+	}
+
+	public void setSupplyMaterielSerial(String supplyMaterielSerial) {
+		this.supplyMaterielSerial = supplyMaterielSerial;
+	}
+
+	public SupplyMateriel getSupplyMateriel() {
+		return supplyMateriel;
+	}
+
+	public void setSupplyMateriel(SupplyMateriel supplyMateriel) {
+		this.supplyMateriel = supplyMateriel;
 	}
     
     

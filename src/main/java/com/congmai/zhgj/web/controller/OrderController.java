@@ -3,6 +3,8 @@ package com.congmai.zhgj.web.controller;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -63,6 +65,9 @@ import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.MaterielExample;
+import com.congmai.zhgj.web.model.MaterielSelectExample;
+import com.congmai.zhgj.web.model.OperateLog;
+import com.congmai.zhgj.web.model.OperateLogExample;
 import com.congmai.zhgj.web.model.OrderFile;
 import com.congmai.zhgj.web.model.OrderFileExample;
 import com.congmai.zhgj.web.model.OrderMateriel;
@@ -82,6 +87,7 @@ import com.congmai.zhgj.web.service.ClauseSettlementDetailService;
 import com.congmai.zhgj.web.service.ClauseSettlementService;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.IProcessService;
+import com.congmai.zhgj.web.service.OperateLogService;
 import com.congmai.zhgj.web.service.OrderFileService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
@@ -131,6 +137,8 @@ public class OrderController {
     private UserCompanyService userCompanyService;
     @Resource
     private ProcessBaseService processBaseService;
+    @Resource
+    private OperateLogService operateLogService;
     
 	/**
 	 * 合同管理service
@@ -150,11 +158,7 @@ public class OrderController {
     		insetOrder(orderInfo);
     		
     	}else{//更新
-    		Subject currentUser = SecurityUtils.getSubject();
-    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-    		orderInfo.setUpdater(currenLoginName);
-    		orderInfo.setUpdateTime(new Date());
-    		orderService.update(orderInfo);
+    		updateOrder(orderInfo);
     	}
     	/*if("1".equals(orderInfo.getStatus())){
     		//启动订单审批测试流程-start
@@ -164,6 +168,29 @@ public class OrderController {
 		
 		return orderInfo;
     }
+
+    /**
+     * 供应商接收订单
+     */
+    @RequestMapping(value = "/reciveOrder", method = RequestMethod.POST)
+    @ResponseBody
+    public OrderInfo reciveOrder(@RequestBody String params) {
+    	OrderInfo orderInfo = json2Order(params);
+    	Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		orderInfo.setUpdater(currenLoginName);
+		orderInfo.setUpdateTime(new Date());
+		orderService.reciveOrder(orderInfo);
+		return orderInfo;
+    }
+    
+	private void updateOrder(OrderInfo orderInfo) {
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		orderInfo.setUpdater(currenLoginName);
+		orderInfo.setUpdateTime(new Date());
+		orderService.update(orderInfo);
+	}
     
 	private void insetOrder(OrderInfo orderInfo) {
 		orderInfo.setSerialNum(ApplicationUtils.random32UUID());
@@ -254,7 +281,7 @@ public class OrderController {
 	private String startSaleOrderProcess(@RequestBody String params) {
     	String flag = "0"; //默认失败
     	OrderInfo orderInfo = json2Order(params);
-    	
+    	orderInfo.setUpdateTime(new Date());
     	orderService.update(orderInfo);//更新备注
     	
 		//启动订单审批测试流程-start
@@ -551,6 +578,7 @@ public class OrderController {
 	 * @param ids
 	 * @return
 	 */
+    @OperationLog(operateType = "update" ,operationDesc = "订单删除")
 	@RequestMapping(value = "/deleteOrders", method = RequestMethod.POST)
 	public ResponseEntity<Void> deleteOrders(@RequestBody String ids) {
 		if ("".equals(ids) || ids == null) {
@@ -1188,4 +1216,126 @@ public class OrderController {
     	
          return map;
     }
+    
+    
+    /**
+     * @Description (查询订单操作日志)
+     * @param serialNum
+     * @return
+     */
+
+    @RequestMapping("/findOrderLog")
+    @ResponseBody
+    public ResponseEntity<Map> findOrderLog(String serialNum) {
+    	//MaterielExample m =new MaterielExample();
+    	OperateLogExample m =new OperateLogExample();
+    	List<OperateLog> operateLogList = new ArrayList<OperateLog>();
+    	
+		//and 条件1
+    	com.congmai.zhgj.web.model.OperateLogExample.Criteria criteria =  m.createCriteria();
+    	criteria.andObjectSerialEqualTo(serialNum);
+    	operateLogList = operateLogService.selectList(m);
+    	
+    	OrderInfo orderInfo = orderService.selectById(serialNum);
+    	List<CommentVO> commentList = null;
+    	try {
+    		if(orderInfo.getProcessBase()!=null){
+    			commentList = this.processService.getComments(orderInfo.getProcessBase().getProcessInstanceId());
+    		}
+    		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	if(commentList!=null){
+    		for(CommentVO c:commentList ){
+        		OperateLog o = new OperateLog();
+        		o.setOperationDesc("审批");
+        		o.setRemark(c.getContent());
+        		o.setOperator(c.getUserName());
+        		o.setOperationTime(c.getTime());
+        		operateLogList.add(o);
+        	}
+    	}
+    	
+    	ListSort(operateLogList);
+    	//封装datatables数据返回到前台
+		Map pageMap = new HashMap();
+		pageMap.put("draw", 1);
+		pageMap.put("recordsTotal", operateLogList==null?0:operateLogList.size());
+		pageMap.put("recordsFiltered", operateLogList==null?0:operateLogList.size());
+		pageMap.put("data", operateLogList);
+		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+
+    }
+    
+    
+    
+    /**
+     * @Description (查询订单（收货发货检验出库入库）操作日志)
+     * @param serialNum
+     * @return
+     */
+
+    @RequestMapping("/findDeliverLog")
+    @ResponseBody
+    public ResponseEntity<Map> findDeliverLog(String serialNum) {
+    	List<OperateLog> operateLogList = new ArrayList<OperateLog>();
+    	operateLogList = operateLogService.findDeliverLogByOrderSerialNum(serialNum);
+    	ListSort(operateLogList);
+    	//封装datatables数据返回到前台
+		Map pageMap = new HashMap();
+		pageMap.put("draw", 1);
+		pageMap.put("recordsTotal", operateLogList==null?0:operateLogList.size());
+		pageMap.put("recordsFiltered", operateLogList==null?0:operateLogList.size());
+		pageMap.put("data", operateLogList);
+		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+
+    }
+    
+    /**
+     * @Description (查询订单（收付款）操作日志)
+     * @param serialNum
+     * @return
+     */
+
+    @RequestMapping("/findPayLog")
+    @ResponseBody
+    public ResponseEntity<Map> findPayLog(String serialNum) {
+    	List<OperateLog> operateLogList = new ArrayList<OperateLog>();
+    	operateLogList = operateLogService.findPayLogByOrderSerialNum(serialNum);
+    	ListSort(operateLogList);
+    	//封装datatables数据返回到前台
+		Map pageMap = new HashMap();
+		pageMap.put("draw", 1);
+		pageMap.put("recordsTotal", operateLogList==null?0:operateLogList.size());
+		pageMap.put("recordsFiltered", operateLogList==null?0:operateLogList.size());
+		pageMap.put("data", operateLogList);
+		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+
+    }
+    
+    
+    public void ListSort(List<OperateLog> list) {
+    	if(list!=null){
+    		Collections.sort(list, new Comparator<OperateLog>() {
+    			@Override
+    			public int compare(OperateLog o1, OperateLog o2) {
+    				try {
+    					Date dt1 = o1.getOperationTime();
+    					Date dt2 = o2.getOperationTime();
+    					if (dt1.getTime() > dt2.getTime()) {
+    						return 1;
+    					} else if (dt1.getTime() < dt2.getTime()) {
+    						return -1;
+    					} else {
+    						return 0;
+    					}
+    				} catch (Exception e) {
+    					e.printStackTrace();
+    				}
+    				return 0;
+    			}
+    		});
+    	}
+	}
 }

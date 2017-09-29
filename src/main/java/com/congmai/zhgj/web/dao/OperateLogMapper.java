@@ -2,7 +2,9 @@ package com.congmai.zhgj.web.dao;
 
 import com.congmai.zhgj.web.model.OperateLog;
 import com.congmai.zhgj.web.model.OperateLogExample;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface OperateLogMapper {
@@ -27,4 +29,8 @@ public interface OperateLogMapper {
     int updateByPrimaryKeySelective(OperateLog record);
 
     int updateByPrimaryKey(OperateLog record);
+
+	List<OperateLog> findDeliverLogByOrderSerialNum(String serialNum);
+
+	List<OperateLog> findPayLogByOrderSerialNum(String serialNum);
 }

@@ -9,16 +9,21 @@ import org.springframework.stereotype.Service;
 
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
+import com.congmai.zhgj.web.dao.CompanyMapper;
 import com.congmai.zhgj.web.dao.UserCompanyMapper;
 import com.congmai.zhgj.web.model.UserCompanyExample;
 import com.congmai.zhgj.web.model.UserCompanyKey;
 import com.congmai.zhgj.web.service.UserCompanyService;
+import com.sun.org.apache.regexp.internal.recompile;
 @Service
 public class UserCompanyServiceImpl extends GenericServiceImpl<UserCompanyKey, String>
 		implements UserCompanyService{
 	
 	@Autowired
 	private UserCompanyMapper userCompanyMapper;
+	
+	@Autowired
+	private CompanyMapper companyMapper;
 
 	@Override
 	public GenericDao<UserCompanyKey, String> getDao() {
@@ -46,6 +51,19 @@ public class UserCompanyServiceImpl extends GenericServiceImpl<UserCompanyKey, S
 			}
 		}
 		return list;
+	}
+
+
+	@Override
+	public String getUserComType(String user_id) {
+		try{
+			String comId = getUserComId(user_id);
+			return companyMapper.selectByPrimaryKey(comId).getComType();
+		}catch(Exception e){
+			
+		}
+	
+		return null;
 	}
 
 }

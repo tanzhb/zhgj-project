@@ -142,4 +142,6 @@ public interface PayService extends GenericService<PaymentRecord, String> {
      * @return
      */
     public void deleteFileOld(String paySerialNum);
+
+	public void updateOrderStatus(PaymentRecord paymentRecord);
 }

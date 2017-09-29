@@ -44,7 +44,7 @@
 						<label class="col-md-4 control-label" for="orderSerial">
 							采购订单号：</label>
 						<div class="col-md-8">
-							<p class="control-label left">{{deliver.orderNum==null?deliver.orderSerial:deliver.orderNum}}</p>
+							<p class="control-label left">{{deliver.docNum==null?deliver.orderNum:deliver.docNum}}</p>
 						</div>
 					</div>
 				</div>
@@ -67,7 +67,7 @@
 					<div class="form-group form-md-line-input">
 						<label class="col-md-4 control-label" for="shipper"> 发货方：</label>
 						<div class="col-md-8">
-							<p class="control-label left">{{deliver.shipperName}}</p>
+							<p class="control-label left">{{deliver.shipper}}</p>
 						</div>
 					</div>
 				</div>
@@ -76,7 +76,7 @@
 					<div class="form-group form-md-line-input">
 						<label class="col-md-4 control-label" for="receiver"> 收货方：</label>
 						<div class="col-md-8">
-							<p class="control-label left">{{deliver.receiverName}}</p>
+							<p class="control-label left">{{deliver.receiver}}</p>
 						</div>
 					</div>
 				</div>

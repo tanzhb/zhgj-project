@@ -177,6 +177,14 @@ public class PageController {
         return "order/saleOrder";
     }
     
+    /**
+     * 操作日志
+     */
+    @RequestMapping("/operateLog")
+    public String operateLog() {
+        return "operateLog/operateLog";
+    }
+    
     
     /**
      * 新增采购订单
@@ -486,5 +494,26 @@ public class PageController {
     @RequestMapping("/editInvoiceApply")
     public String editInvoiceApply(String serialNum,String invoiceType) {
         return "invoice/editInvoiceApply";
+    }    
+    /**
+     * 个人中心
+     */
+    @RequestMapping("/userInfo")
+    public String userInfo(){
+    	return "user/userInfo";
+    }
+    /**
+     * 企业信息
+     */
+    @RequestMapping("/companyInfo")
+    public String companyInfo(){
+    	return "user/companyInfo";
+    }
+    /**
+     * 账户安全
+     */
+    @RequestMapping("/accountSecurity")
+    public String accountSecurity(){
+    	return "user/accountSecurity";
     }
 }

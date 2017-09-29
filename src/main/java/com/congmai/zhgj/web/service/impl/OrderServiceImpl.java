@@ -47,6 +47,11 @@ public class OrderServiceImpl implements OrderService {
 		return OrderInfoMapper.updateByPrimaryKeySelective(model);
 	}
 
+	@Override
+	@OperationLog(operateType = "update" ,operationDesc = "接收订单" ,objectSerial= "{serialNum}")
+	public void reciveOrder(OrderInfo orderInfo) {
+		OrderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+	}
 	
 	@Override
 	public int delete(String serialNum) {
@@ -112,6 +117,8 @@ public class OrderServiceImpl implements OrderService {
 	public void updateContract(ContractVO contract) {
 		contractMapper.updateContract4order(contract);
 	}
+
+
 	
 
 }

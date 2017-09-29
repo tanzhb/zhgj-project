@@ -81,11 +81,23 @@ public class StatementController {
     @Resource
     private UserCompanyService userCompanyService;
   
+    @RequestMapping("buyStatement")
+    public String butStatement() {
+    	
+		return "statement/buyStatement";
+	}
+    
+    @RequestMapping("supplyStatement")
+    public String supplyStatement() {
+    	
+    	return "statement/supplyStatement";
+    }
+    
     @RequestMapping("statementBuyAdd")
     public String statementBuyAdd() {
     	
-		return "statement/statementBuyAdd";
-	}
+    	return "statement/statementBuyAdd";
+    }
     
     @RequestMapping("statementSupplyAdd")
     public String statementSupplyAdd() {

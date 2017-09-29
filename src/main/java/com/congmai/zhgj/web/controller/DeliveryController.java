@@ -639,6 +639,7 @@ public class DeliveryController {
 			
 			String orderSerial=delivery.getOrderSerial();
 			Map<String,Object> map=new HashMap<String,Object>();
+			map.put("serialNum", serialNum);
 			map.put("updater", user.getUserId());
 			map.put("orderSerial", orderSerial);
 			deliveryService.updateOrderWhenDeliveryComlete(map);

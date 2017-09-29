@@ -167,7 +167,8 @@ public class CompanyController {
     @ResponseBody
     public Map<String,Object> getCompanyInfo(HttpServletRequest request,String comId) {
     	Map<String, Object> map = new HashMap<String, Object>();
-    	map.put("company", companyService.selectOne(comId));
+    	Company company =  companyService.selectOne(comId);
+    	map.put("company", company);
     	map.put("companyFinances", companyFinanceService.selectListByComId(comId));
      	map.put("companyQualifications", companyQualificationService.selectListByComId(comId));
     	map.put("companyContacts", companyContactService.selectListByComId(comId));
@@ -592,6 +593,20 @@ public class CompanyController {
     		User user =	UserUtil.getUserFromSession();
     		
     		return user;
+    }
+    
+    /**
+     * @Description (获取订单编号)
+     * @param request
+     * @return
+     */
+    @RequestMapping("getOrderNum")
+    @ResponseBody
+    public Map<String, Object> getOrderNum(HttpServletRequest request) {
+    	Map<String, Object> map = new HashMap<String, Object>();
+    	String orderNum = "OR"+ApplicationUtils.getFromNumber();
+    	map.put("orderNum", orderNum);
+    	return map;
     }
 
 

@@ -13,6 +13,8 @@ public class Delivery {
     private String deliverType;
 
     private String orderSerial;
+    
+    private String docNum; //单据号
 
     private String supplyComId;
 
@@ -463,6 +465,14 @@ public class Delivery {
 
 	public void setDeliverAddress(String deliverAddress) {
 		this.deliverAddress = deliverAddress;
+	}
+
+	public String getDocNum() {
+		return docNum;
+	}
+
+	public void setDocNum(String docNum) {
+		this.docNum = docNum;
 	}
 
     

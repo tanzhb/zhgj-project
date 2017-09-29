@@ -24,6 +24,10 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+ 	<result column="corporatePresence" property="corporatePresence" jdbcType="VARCHAR" />
+    <result column="openingBank" property="openingBank" jdbcType="VARCHAR" />
+    <result column="accountNumber" property="accountNumber" jdbcType="VARCHAR" />
+    <result column="billRemark" property="billRemark" jdbcType="VARCHAR" />
   </resultMap>
    <sql id="Example_Where_Clause" >
     <where >
@@ -57,7 +61,8 @@
  <sql id="Base_Column_List" >
     comId, comNum, comType, abbreviation, comName, registeredCapital, legalPerson, address, 
     taxpayeNumber, tel, contact, businessNature, comNature, businessType, classification, remark,
-    status, delFlg, creator, createTime, updater, updateTime
+    status, delFlg, creator, createTime, updater, updateTime, corporatePresence, openingBank, 
+    accountNumber, billRemark
   </sql>
   
   <select id="selectList" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.Company" >
@@ -135,24 +140,26 @@
        #{item,jdbcType=VARCHAR}
     </foreach>)  
   </update>
-  
-  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.Company" >
+
+    <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.Company" >
     insert into company (comId, comNum, comType, 
       abbreviation, comName, registeredCapital, 
       legalPerson, address, taxpayeNumber, 
       tel, contact, businessNature, 
-      comNature, businessType, classification,remark, 
-      status, creator, 
-      createTime, updater, updateTime
-      )
+      comNature, businessType, remark, 
+      classification, status, 
+      creator, createTime, updater, 
+      updateTime, corporatePresence, openingBank, 
+      accountNumber, billRemark)
     values (#{comId,jdbcType=VARCHAR}, #{comNum,jdbcType=VARCHAR}, #{comType,jdbcType=VARCHAR}, 
       #{abbreviation,jdbcType=VARCHAR}, #{comName,jdbcType=VARCHAR}, #{registeredCapital,jdbcType=VARCHAR}, 
       #{legalPerson,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{taxpayeNumber,jdbcType=VARCHAR}, 
       #{tel,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, #{businessNature,jdbcType=VARCHAR}, 
-      #{comNature,jdbcType=VARCHAR}, #{businessType,jdbcType=VARCHAR}, #{classification,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+      #{comNature,jdbcType=VARCHAR}, #{businessType,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{classification,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{corporatePresence,jdbcType=VARCHAR}, #{openingBank,jdbcType=VARCHAR}, 
+      #{accountNumber,jdbcType=VARCHAR}, #{billRemark,jdbcType=VARCHAR})
   </insert>
   
 
@@ -184,10 +191,7 @@
   
   <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.Company" >
     update company
-     <set >
-      <if test="comId != null" >
-        comId = #{comId,jdbcType=VARCHAR},
-      </if>
+    <set >
       <if test="comNum != null" >
         comNum = #{comNum,jdbcType=VARCHAR},
       </if>
@@ -227,11 +231,11 @@
       <if test="businessType != null" >
         businessType = #{businessType,jdbcType=VARCHAR},
       </if>
-      <if test="classification != null" >
-        classification = #{classification,jdbcType=VARCHAR},
-      </if>
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="classification != null" >
+        classification = #{classification,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=VARCHAR},
@@ -250,6 +254,18 @@
       </if>
       <if test="updateTime != null" >
         updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="corporatePresence != null" >
+        corporatePresence = #{corporatePresence,jdbcType=VARCHAR},
+      </if>
+      <if test="openingBank != null" >
+        openingBank = #{openingBank,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNumber != null" >
+        accountNumber = #{accountNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="billRemark != null" >
+        billRemark = #{billRemark,jdbcType=VARCHAR},
       </if>
     </set>
     where comId = #{comId,jdbcType=VARCHAR}

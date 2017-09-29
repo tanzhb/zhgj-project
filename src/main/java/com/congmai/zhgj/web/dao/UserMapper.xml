@@ -104,4 +104,107 @@
         where user_id = #{userId,jdbcType=INTEGER}
     </update>
 
+
+    <select id="getUserInfo" parameterType="java.lang.Integer" resultType="com.congmai.zhgj.web.model.User">
+    SELECT
+	USER_ID AS userId,
+	USER_NAME AS userName,
+	sex,
+	department,
+	position,
+	cellPhone,
+	telephone,
+	QQ AS QQNum,
+	weChatNum,
+	fax,
+	email,
+	avatar
+	FROM
+	T_USER
+	WHERE
+	USER_ID=#{userId}
+    </select>
+    
+    <select id="getUserCompanyInfo" parameterType="java.lang.Integer" resultType="com.congmai.zhgj.web.model.Company">
+    SELECT
+	b.comId,
+	b.comNum,
+	b.comName,
+	b.comType,
+	b.abbreviation,
+	b.businessNature,
+	b.comNature,
+	b.businessType,
+	b.registeredCapital,
+	b.legalPerson,
+	b.address,
+	b.taxpayeNumber,
+	b.tel,
+	b.remark
+	FROM
+	user_company a
+	LEFT JOIN company b ON a.com_id=b.comId AND b.delFlg='0'
+	WHERE
+	a.user_id=#{userId}
+	LIMIT 0,1
+    </select>
+    
+    
+    <update id="updateUserInfo" parameterType="com.congmai.zhgj.web.model.User">
+    UPDATE 
+	T_USER
+	SET
+	USER_NAME=#{userName},
+	sex=#{sex},
+	telephone=#{telephone},
+	QQ=#{QQNum},
+	<if test="avatar!= null and avatar!=''">
+    avatar=#{avatar},
+    </if>
+	fax=#{fax}
+	WHERE
+	USER_ID=#{userId}
+    </update>
+    
+    
+    <update id="updateCompanyInfo" parameterType="com.congmai.zhgj.web.model.Company">
+    UPDATE company SET 
+    comNum=#{comNum},
+    comName=#{comName},
+    comType=#{comType},
+    abbreviation=#{abbreviation},
+    businessNature=#{businessNature},
+    comNature=#{comNature},
+    businessType=#{businessType},
+    registeredCapital=#{registeredCapital},
+    legalPerson=#{legalPerson},
+    address=#{address},
+    taxpayeNumber=#{taxpayeNumber},
+    tel=#{tel},
+    remark=#{remark},
+    updater=#{updater},
+    updateTime=NOW()
+    WHERE 
+    comId=#{comId}
+    </update>
+    
+    
+    <update id="updateEmail" parameterType="com.congmai.zhgj.web.model.User">
+    UPDATE 
+	T_USER
+	SET
+	email=#{email}
+	WHERE
+	USER_ID=#{userId}
+    </update>
+    
+    
+    <update id="updatePhone" parameterType="com.congmai.zhgj.web.model.User">
+    UPDATE 
+	T_USER
+	SET
+	cellPhone=#{cellPhone}
+	WHERE
+	USER_ID=#{userId}
+    </update>
 </mapper>

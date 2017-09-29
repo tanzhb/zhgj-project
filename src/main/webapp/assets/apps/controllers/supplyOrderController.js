@@ -134,7 +134,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
     	$scope.submitOrder.serialNum = serialNum;	
     	$scope.submitOrder.status = 2;
 
-    	orderService.save($scope.submitOrder).then(
+    	orderService.recive($scope.submitOrder).then(
       		     function(data){
       		    	toastr.success('数据保存成功！');
       		    	$state.go('supplyOrder',{},{reload:true});
@@ -191,7 +191,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
                               { mData: 'materielCount' },
                               { mData: 'orderAmount' },
                               { mData: 'deliveryMode' },
-                              { mData: 'serviceModel' },
+                              { mData: 'orderType' },
                               { mData: 'saleApplySerial' },
                               { mData: 'orderSerial' },
                               { mData: 'orderDate' },
@@ -202,32 +202,10 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 	                            			if(data==1){
     											return '<span  class="label label-sm label-success ng-scope">待接收</span>';
     										}else if(data==2){
-    											return '<span  class="label label-sm label-success ng-scope">待发货</span>';
-    										}else if(data==3){
-    											return '<span  class="label label-sm label-success ng-scope">待收货</span>';
-    										}else if(data==4){
-    											return '<span  class="label label-sm label-success ng-scope">部分收货</span>';
-    										}else if(data==5){
-    											return '<span  class="label label-sm label-success ng-scope">待检验</span>';
-    										}else if(data==6){
-    											return '<span  class="label label-sm label-success ng-scope">待入库</span>';
-    										}else if(data==7){
-    											return '<span  class="label label-sm label-success ng-scope">部分入库</span>';
-    										}else if(data==8){
-    											return '<span  class="label label-sm label-success ng-scope">待收票</span>';
-    										}else if(data==9){
-    											return '<span  class="label label-sm label-success ng-scope">部分开票</span>';
-    										}else if(data==10){
-    											return '<span  class="label label-sm label-success ng-scope">待付款</span>';
-    										}else if(data==11){
-    											return '<span  class="label label-sm label-success ng-scope">部分付款</span>';
-    										}else if(data==12){
-    											return '<span  class="label label-sm label-success ng-scope">已完成</span>';
-    										}else if(data==13){
-    											return '<span  class="label label-sm label-success ng-scope">已取消</span>';
+    											return '<span  class="label label-sm label-success ng-scope">已接收</span>';
     										}
 	                            		}else{
-	                            			return '<span  class="label label-sm label-info ng-scope">未审批</span>';
+	                            			return '<span  class="label label-sm label-info ng-scope">待接收</span>';
 	                            		}
 	                            	}
 	                            },{ mData: 'status'}
@@ -386,7 +364,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
                                   { mData: 'materielCount' },
                                   { mData: 'orderAmount' },
                                   { mData: 'deliveryMode' },
-                                  { mData: 'serviceModel' },
+                                  { mData: 'orderType' },
                                   { mData: 'saleApplySerial' },
                                   { mData: 'orderSerial' },
                                   { mData: 'orderDate' }

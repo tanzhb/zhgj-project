@@ -36,6 +36,9 @@ public interface OrderService extends GenericService<OrderInfo, String> {
 	void insertContract(ContractVO contract);
 
 	void updateContract(ContractVO contract);
+
+
+	void reciveOrder(OrderInfo orderInfo);
 	
 
 

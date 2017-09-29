@@ -101,6 +101,37 @@
       order by ${orderByClause}
     </if>
   </select>
+  
+  
+  <select id="findDeliverLogByOrderSerialNum" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from operateLog
+    where objectSerial in (
+    select serialNum from delivery WHERE orderSerial = #{serialNum,jdbcType=VARCHAR}<!-- 发货日志   -->
+	UNION
+	select serialNum from takeDelivery WHERE deliverSerial in (select serialNum from delivery WHERE orderSerial = #{serialNum,jdbcType=VARCHAR})<!-- 收货日志   -->
+	UNION
+	select serialNum from stockInOutCheck WHERE deliverSerial in (select serialNum from delivery WHERE orderSerial = #{serialNum,jdbcType=VARCHAR})<!-- 出库检验日志   -->
+	UNION
+	select serialNum from stockInOutCheck WHERE takeDeliverSerial in (select serialNum from takeDelivery WHERE deliverSerial in (select serialNum from delivery WHERE orderSerial = #{serialNum,jdbcType=VARCHAR}))<!-- 入库检验日志   -->
+	UNION
+	select serialNum from stockInOutRecord WHERE deliverSerial in (select serialNum from delivery WHERE orderSerial = #{serialNum,jdbcType=VARCHAR})<!-- 出库记录日志   -->
+	UNION
+	select serialNum from stockInOutRecord WHERE takeDeliverSerial in (select serialNum from takeDelivery WHERE deliverSerial in (select serialNum from delivery WHERE orderSerial = #{serialNum,jdbcType=VARCHAR}))<!-- 入库记录日志   -->
+    
+    )
+  </select>
+  
+  <select id="findPayLogByOrderSerialNum" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from operateLog
+    where objectSerial in (
+    select serialNum from paymentRecord WHERE orderSerial = #{serialNum,jdbcType=VARCHAR}
+    )
+  </select>
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />

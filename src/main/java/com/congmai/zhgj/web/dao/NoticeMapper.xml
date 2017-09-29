@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.congmai.zhgj.web.dao.NoticeMapper" >
+  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.Notice" >
+    <id column="serial_num" property="serialNum" jdbcType="VARCHAR" />
+    <result column="notice_type" property="noticeType" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="com_id" property="comId" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="del_flg" property="delFlg" jdbcType="CHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.congmai.zhgj.web.model.Notice" extends="BaseResultMap" >
+    <result column="context" property="context" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <resultMap id="MyNoticeMap" type="com.congmai.zhgj.web.model.Notice" extends="ResultMapWithBLOBs" >
+    <result column="read_flg" property="readFlg" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    serial_num, notice_type, title, com_id, creator, create_time, updater, update_time, 
+    del_flg
+  </sql>
+  <sql id="Blob_Column_List" >
+    context
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.congmai.zhgj.web.model.NoticeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from notice
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.NoticeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from notice
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from notice
+    where serial_num = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from notice
+    where serial_num = #{serialNum,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.NoticeExample" >
+    delete from notice
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.congmai.zhgj.web.model.Notice" >
+    insert into notice (serial_num, notice_type, title, 
+      com_id, creator, create_time, 
+      updater, update_time, del_flg, 
+      context)
+    values (#{serialNum,jdbcType=VARCHAR}, #{noticeType,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+      #{comId,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{delFlg,jdbcType=CHAR}, 
+      #{context,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.Notice" >
+    insert into notice
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        serial_num,
+      </if>
+      <if test="noticeType != null" >
+        notice_type,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="comId != null" >
+        com_id,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updater != null" >
+        updater,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="delFlg != null" >
+        del_flg,
+      </if>
+      <if test="context != null" >
+        context,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeType != null" >
+        #{noticeType,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="comId != null" >
+        #{comId,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlg != null" >
+        #{delFlg,jdbcType=CHAR},
+      </if>
+      <if test="context != null" >
+        #{context,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.NoticeExample" resultType="java.lang.Integer" >
+    select count(*) from notice
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update notice
+    <set >
+      <if test="record.serialNum != null" >
+        serial_num = #{record.serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.noticeType != null" >
+        notice_type = #{record.noticeType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.title != null" >
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.comId != null" >
+        com_id = #{record.comId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creator != null" >
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updater != null" >
+        updater = #{record.updater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.delFlg != null" >
+        del_flg = #{record.delFlg,jdbcType=CHAR},
+      </if>
+      <if test="record.context != null" >
+        context = #{record.context,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update notice
+    set serial_num = #{record.serialNum,jdbcType=VARCHAR},
+      notice_type = #{record.noticeType,jdbcType=VARCHAR},
+      title = #{record.title,jdbcType=VARCHAR},
+      com_id = #{record.comId,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      updater = #{record.updater,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      del_flg = #{record.delFlg,jdbcType=CHAR},
+      context = #{record.context,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update notice
+    set serial_num = #{record.serialNum,jdbcType=VARCHAR},
+      notice_type = #{record.noticeType,jdbcType=VARCHAR},
+      title = #{record.title,jdbcType=VARCHAR},
+      com_id = #{record.comId,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      updater = #{record.updater,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      del_flg = #{record.delFlg,jdbcType=CHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.Notice" >
+    update notice
+    <set >
+      <if test="noticeType != null" >
+        notice_type = #{noticeType,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="comId != null" >
+        com_id = #{comId,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        updater = #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlg != null" >
+        del_flg = #{delFlg,jdbcType=CHAR},
+      </if>
+      <if test="context != null" >
+        context = #{context,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where serial_num = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.congmai.zhgj.web.model.Notice" >
+    update notice
+    set notice_type = #{noticeType,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      com_id = #{comId,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      del_flg = #{delFlg,jdbcType=CHAR},
+      context = #{context,jdbcType=LONGVARCHAR}
+    where serial_num = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.Notice" >
+    update notice
+    set notice_type = #{noticeType,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      com_id = #{comId,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      del_flg = #{delFlg,jdbcType=CHAR}
+    where serial_num = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <select id="findMyNoticeList" parameterType="com.congmai.zhgj.web.model.Notice" resultMap="MyNoticeMap">
+  	SELECT n.serial_num, n.notice_type, n.title, n.com_id, n.creator,n.context,n.create_time, n.updater, n.update_time, 
+    	   n.del_flg,ns.read_flg,ns.user_id
+     from notice n LEFT JOIN notice_share ns on n.serial_num = ns.notice_serial and ns.user_id = #{userId}
+	where n.notice_type like CONCAT('%',#{status},'%') and n.del_flg = 0 and (ns.del_flg = 0 or ns.del_flg is null)   limit #{pageIndex},#{pageSize}
+  </select>
+  <select id="countMyNoticeList" parameterType="com.congmai.zhgj.web.model.Notice" resultType="java.lang.Integer">
+  	SELECT count(n.serial_num)
+     from notice n LEFT JOIN notice_share ns on n.serial_num = ns.notice_serial and ns.user_id = #{userId}
+	where n.notice_type like CONCAT('%',#{status},'%') and n.del_flg = 0  and (ns.del_flg = 0 or ns.del_flg is null)   
+  </select>
+</mapper>
