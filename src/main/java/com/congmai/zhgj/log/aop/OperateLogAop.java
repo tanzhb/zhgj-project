@@ -20,6 +20,7 @@ import javassist.bytecode.LocalVariableAttribute;
 import javassist.bytecode.MethodInfo;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
@@ -37,6 +38,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.Constants;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.web.model.OperateLog;
 import com.congmai.zhgj.web.model.TakeDeliveryParams;
@@ -107,6 +109,10 @@ public class OperateLogAop{
                 OperationLog log = method.getAnnotation(OperationLog.class);
 
                 User user = UserUtil.getUserFromSession();
+                /*if(user==null){
+                	user = (User) ((HttpSession)orgs[0]).getAttribute(Constants.CURRENT_USER);
+                }*/
+                	
                 valueReturn.setMoudleCode(log.moudleCode());
                 valueReturn.setMoudleName(log.moudleName());
                 valueReturn.setOperateType(log.operateType());

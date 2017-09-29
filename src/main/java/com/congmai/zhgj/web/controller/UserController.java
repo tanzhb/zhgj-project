@@ -127,7 +127,7 @@ public class UserController {
 	 * @param session
 	 * @return
 	 */
-	@OperationLog(operateType = "logout" ,operationDesc = "登录")
+	/*@OperationLog(operateType = "logout" ,operationDesc = "登出")*/
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(HttpSession session) {
 		session.removeAttribute("userInfo");

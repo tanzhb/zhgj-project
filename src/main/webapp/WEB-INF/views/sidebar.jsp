@@ -40,7 +40,7 @@
                     </a>
                 </li>
                 <li>
-                    <a ui-sref="#">
+                    <a ui-sref="operateLog">
                         操作日志</span>
                     </a>
                 </li>
