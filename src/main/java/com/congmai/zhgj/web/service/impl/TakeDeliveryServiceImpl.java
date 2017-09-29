@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -14,19 +15,26 @@ import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.Constants;
 import com.congmai.zhgj.web.dao.Delivery2Mapper;
 import com.congmai.zhgj.web.dao.DeliveryMaterielMapper;
 import com.congmai.zhgj.web.dao.DeliveryTransportMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
+import com.congmai.zhgj.web.dao.OrderMaterielMapper;
 import com.congmai.zhgj.web.dao.StockInOutCheckMapper;
 import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
+import com.congmai.zhgj.web.dao.StockMapper;
 import com.congmai.zhgj.web.dao.TakeDeliveryMapper;
+import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryExample;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryMaterielExample;
 import com.congmai.zhgj.web.model.DeliveryTransportExample;
 import com.congmai.zhgj.web.model.OrderInfo;
+import com.congmai.zhgj.web.model.OrderMateriel;
+import com.congmai.zhgj.web.model.Stock;
+import com.congmai.zhgj.web.model.StockExample;
 import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.StockInOutRecordExample;
@@ -36,6 +44,7 @@ import com.congmai.zhgj.web.model.TakeDeliveryParams;
 import com.congmai.zhgj.web.model.TakeDeliverySelectExample;
 import com.congmai.zhgj.web.model.TakeDeliverySelectExample.Criteria;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
+import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.TakeDeliveryService;
 
 @Service
@@ -62,6 +71,12 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	
 	@Resource
 	private OrderInfoMapper orderInfoMapper;
+	
+	@Resource
+	private StockMapper stockMapper;
+	
+	@Resource
+	private OrderMaterielMapper orderMaterielMapper;
 	
 	@Override
 	public GenericDao<TakeDelivery, String> getDao() {
@@ -219,7 +234,56 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			//materiel.setSerialNum(ApplicationUtils.random32UUID());
 			//materiel.setDeliverSerial(record.getTakeDeliverSerial());
 			//deliveryMaterielMapper.insert(materiel);
+			createStock(materiel,new StockExample(),currenLoginName);
 		}
+	}
+
+	private void createStock(DeliveryMateriel deliveryMateriel,StockExample stockExample,String currenLoginName) {//生成自建库存
+		OrderMateriel orderMateriel=orderMaterielMapper.selectByPrimaryKey(deliveryMateriel.getOrderMaterielSerial());//获取订单物料信息
+		OrderInfo orderInfo=orderInfoMapper.selectByPrimaryKey(orderMateriel.getOrderSerial());
+		com.congmai.zhgj.web.model.StockExample.Criteria criteria=stockExample.createCriteria();
+		Boolean isStockZijian=true;//默认是自建库存
+		if(StaticConst.getValueByInfo("dailiBuy").equals(orderInfo.getOrderType())||StaticConst.getValueByInfo("dailiSale").equals(orderInfo.getOrderType())){//代理销售/代理采购
+			criteria.andMaterielSerialEqualTo(orderMateriel.getMaterielSerial()).andManageTypeEqualTo("2");//代管库存
+			isStockZijian=false;
+		}else{
+			criteria.andMaterielSerialEqualTo(orderMateriel.getMaterielSerial()).andManageTypeEqualTo("1");//自建库存
+		}
+		
+		List<Stock>  stocks=stockMapper.selectByExample(stockExample);
+		if(CollectionUtils.isEmpty(stocks)){//不存在此物料的库存,就直接新建一条库存
+			Stock stock=new Stock();
+			stock.setStockNum("KC"+ApplicationUtils.getFromNumber());
+			stock.setSerialNum(ApplicationUtils.random32UUID());
+			stock.setCurrentAmount(deliveryMateriel.getStockCount());
+			stock.setDelFlg("0");
+			stock.setCreator(currenLoginName);
+			stock.setCreateTime(new Date());
+			stock.setUpdater(currenLoginName);
+			stock.setUpdateTime(new Date());
+			if (isStockZijian) {
+				stock.setManageType("1");// 自建库存
+				stock.setMaterielOwner(StaticConst.getValueByInfo("comName"));
+				StaticConst.getValueByInfo("comName");
+			}else{
+				stock.setManageType("2");// 代管库存
+				stock.setMaterielOwner("");
+				stock.setServiceParty(StaticConst.getValueByInfo("comName"));
+			}
+			
+			
+		}else{//已存在此物料的库存,更新库存数量
+		String currenAmount=stocks.get(0).getCurrentAmount();//获取当前库存数
+		if(isStockZijian){//自建库存
+		Stock stock=new Stock();
+		stock.setSerialNum(stocks.get(0).getSerialNum());
+		stock.setCurrentAmount(Integer.parseInt(currenAmount)+Integer.parseInt(deliveryMateriel.getStockCount())+"");
+		stockMapper.updateByPrimaryKey(stock);
+		}else{
+			//判断物权方是否相同,相同更新代管库存,不同新建代管库存
+		}
+	}
+		
 	}
 
 	@Override

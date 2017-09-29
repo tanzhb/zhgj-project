@@ -282,6 +282,7 @@ angular
 															'render' : function(data,
 																	type, row, meta) {
 																var statusIcon='';//状态
+																debugger;
 						 	    								if(row.status==0){
 						 	    									statusIcon = '<span class="label label-sm label-success"  >待收票</span> '
 						 	    								}else if(row.status==2){

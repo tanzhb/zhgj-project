@@ -1431,7 +1431,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 						'assets/global/plugins/datatables/datatables.all.min.js',
 						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
-						  'assets/global/plugins/bootbox/bootbox.min.js',
+						'assets/global/plugins/bootbox/bootbox.min.js',
 				        'assets/apps/service/StockService.js',
 						'assets/apps/controllers/StockController.js'
 	                   	                        ]
@@ -1474,13 +1474,13 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        				name: 'MetronicApp',
 		        				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
 		        				files: [       
-		        				        'assets/global/plugins/datatables/datatables.min.css',                  
-		        				        'assets/global/plugins/datatables/datatables.all.min.js',
+		        				    	'assets/global/plugins/datatables/datatables.min.css',
+		        						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+		        						'assets/global/plugins/datatables/datatables.all.min.js',
+		        						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+		        						'assets/global/plugins/bootbox/bootbox.min.js',
 		        				        'assets/apps/service/StockService.js',
-		        						'assets/apps/controllers/StockController.js',
-		        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
-		        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css',
-		        				        'assets/pages/scripts/table-datatables-scroller.min.js'
+		        						'assets/apps/controllers/StockController.js'
 		        				        ]
 		        			});
 		        		}]
@@ -2548,6 +2548,10 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 						   html += "<li><a>修改自建库存</a></li>";
 					   }else html += "<li><a>修改代管库存</a></li>";
 				   }				 
+			   }else if('stockView' == toState.name){//库存详情
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a ui-sref='stock'>库存</a><i class='fa fa-angle-right'></i></li><li><a>库存详情</a></li>";
 			   }else if('priceList' == toState.name){//价格目录
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +

@@ -444,4 +444,136 @@
             #{idList}
         </foreach>
     </delete>
+    <!--获取库存所在仓库数  -->
+    <select id="getBelongWarehouseNum"  parameterType="java.lang.String"   resultType="java.lang.String">
+	select COUNT(DISTINCT warehouseSerial ) from deliveryMateriel where
+	deliveryMateriel.orderMaterielSerial in(select serialNum from
+	orderMateriel where materielSerial= #{serialNum,jdbcType=VARCHAR})
+    </select>
+    <!--获取库存关联采购单数  -->
+    <select id="countBuyNum" parameterType="java.lang.String"   resultType="java.lang.String">
+    select COUNT(o.serialNum ) from orderInfo o where
+	exists  (select  DISTINCT om.orderSerial from
+	orderMateriel  om  where om.materielSerial= #{serialNum,jdbcType=VARCHAR} and o.serialNum=om.orderSerial )
+	and o.buyComId IS NULL
+    </select>
+    <!--获取库存关联销售单数  -->
+    <select id="countSaleNum" parameterType="java.lang.String"   resultType="java.lang.String">
+      select COUNT(o.serialNum ) from orderInfo o where
+	exists (select  DISTINCT om.orderSerial from
+	orderMateriel  om  where om.materielSerial= #{serialNum,jdbcType=VARCHAR}and o.serialNum=om.orderSerial)
+	and o.supplyComId IS NULL
+    </select>
+    <!--获取库存最后入库日期  -->
+    <select id="getLastInDate" parameterType="java.lang.String"   resultType="java.lang.String">
+	SELECT MAX(sir.stockDate) FROM stockInOutRecord sir WHERE EXISTS (
+	SELECT td.serialNum FROM takeDelivery td WHERE EXISTS (
+	SELECT serialNum FROM
+	(
+	SELECT d.serialNum FROM delivery d
+	LEFT JOIN orderMateriel om ON
+	om.orderSerial = d.orderSerial
+	WHERE om.materielSerial =
+	#{serialNum,jdbcType=VARCHAR}
+	) tb
+	WHERE td.deliverSerial = tb.serialNum
+	)
+	)
+    </select>
+    <!--获取库存最后出库日期  -->
+    <select id="getLastOutDate"  parameterType="java.lang.String"   resultType="java.lang.String">
+	SELECT MAX(sir.stockDate) FROM stockInOutRecord sir WHERE EXISTS (
+	SELECT d.serialNum FROM delivery d WHERE EXISTS (
+	SELECT serialNum FROM
+	(SELECT d.serialNum FROM delivery d
+	LEFT JOIN orderMateriel om ON
+	om.orderSerial = d.orderSerial
+	WHERE om.materielSerial =
+	#{serialNum,jdbcType=VARCHAR}
+	) tb
+	WHERE
+	d.serialNum = tb.serialNum
+	)
+	)
+	
+    </select>
+     <!--获取累计出库数量 -->
+    <select id="countOutAmount" parameterType="java.lang.String"   resultType="java.lang.String">
+    SELECT  SUM( IFNULL(dm.stockCount,0)  )  from deliveryMateriel  dm where
+	EXISTS (select serialNum from
+	orderMateriel om  where om.materielSerial= #{serialNum,jdbcType=VARCHAR} and dm.orderMaterielSerial=om.serialNum)
+    
+    
+    </select>
+     <!--获取累计入库数量   -->
+     <select id="countInAmount"  parameterType="java.lang.String"   resultType="java.lang.String">
+	select SUM( IFNULL(dm.stockCount,0) ) from deliveryMateriel dm where
+	EXISTS (
+	SELECT serialNum FROM (
+	SELECT td.serialNum FROM takeDelivery td WHERE EXISTS (
+	SELECT serialNum FROM
+	(
+	SELECT d.serialNum FROM delivery d
+	LEFT JOIN
+	orderMateriel om ON
+	om.orderSerial = d.orderSerial
+	WHERE
+	om.materielSerial = #{serialNum,jdbcType=VARCHAR}
+	) tb
+	WHERE
+	td.deliverSerial = tb.serialNum
+	)
+	)temp where temp.serialNum=dm.deliverSerial
+	)
+     </select>
+     <!-- 获取库存入库记录-->
+     <select id="getStockOutRecord"  parameterType="java.lang.String"  resultMap="BaseResultMap" >
+     select <include refid="Base_Column_List" />
+      from stockInOutRecord  sir
+  where    EXISTS (SELECT deliverSerial FROM (SELECT  dm.deliverSerial from deliveryMateriel  dm where
+	EXISTS (select serialNum from
+	orderMateriel om  where om.materielSerial= #{serialNum,jdbcType=VARCHAR} and dm.orderMaterielSerial=om.serialNum))temp  WHERE sir.deliverSerial= temp.deliverSerial)
+     </select>
+     <!-- 获取库存入库记录-->
+     <select id="getStockInRecord"  parameterType="java.lang.String"  resultMap="BaseResultMap" >
+     select <include refid="Base_Column_List" />
+      from stockInOutRecord  sir
+  where    EXISTS (SELECT serialNum FROM (
+	SELECT td.serialNum FROM takeDelivery td WHERE EXISTS (
+	SELECT serialNum FROM
+	(
+	SELECT d.serialNum FROM delivery d
+	LEFT JOIN
+	orderMateriel om ON
+	om.orderSerial = d.orderSerial
+	WHERE
+	om.materielSerial = #{serialNum,jdbcType=VARCHAR}
+	) tb
+	WHERE
+	td.deliverSerial = tb.serialNum
+	)
+	)temp where temp.serialNum=sir.takeDeliverSerial
+	)
+     </select>
+     <!--获取库存相关的发货流水  -->
+     <select id="getRelationDeliverSerial"  parameterType="com.congmai.zhgj.web.model.Stock" resultType="java.lang.String">
+   SELECT d.serialNum FROM delivery d
+	LEFT JOIN
+	orderMateriel om ON
+	om.orderSerial = d.orderSerial
+	WHERE
+	om.materielSerial = #{materielSerial,jdbcType=VARCHAR}
+     </select>
+      <!--获取库存相关的收货流水  -->
+     <select id="getRelationTakeDeliverSerial"  parameterType="com.congmai.zhgj.web.model.Stock" resultType="java.lang.String">
+     SELECT  td.serialNum  from  takeDelivery td  where   EXISTS(
+     SELECT  serialNum from(SELECT d.serialNum FROM delivery d
+	LEFT JOIN
+	orderMateriel om ON
+	om.orderSerial = d.orderSerial
+	WHERE
+	om.materielSerial = #{materielSerial,jdbcType=VARCHAR})temp  where  temp.serialNum= td.deliverSerial
+     )
+     </select>
+     
 </mapper>
