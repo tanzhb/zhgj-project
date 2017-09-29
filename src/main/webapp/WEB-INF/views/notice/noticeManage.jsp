@@ -15,8 +15,8 @@
 		<div class="portlet light">
 			<div class="portlet-title">
 				<div class="caption">
-					<i class="fa fa-globe font-green"></i>
-					<span class="caption-subject font-green bold uppercase">公告</span>
+					<i class="icon-user font-green"></i>
+					<span class="caption-subject font-green bold uppercase">公告管理</span>
 				</div>
 				<div class="actions">
 					<div class="btn-group btn-group-devided" data-toggle="buttons">
@@ -40,7 +40,7 @@
                                      <span></span>
                                  </label>
 							</th>
-							<th>公告类型</th>
+							<th>公告范围</th>
 							<th>标题</th>
 							<th>创建人</th>
 							<th>更新人</th>

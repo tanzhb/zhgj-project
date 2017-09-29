@@ -136,22 +136,22 @@
 					<li class="active">
                   	<a class="bold" data-target="#tab_1_1" data-toggle="tab">基本信息</a>
               		</li>
-					<li><a class="bold" data-target="#tab_1_2" data-toggle="tab">联系人</a>
+					<li><a class="bold" data-target="#tab_1_2" data-toggle="tab">资质信息</a>
 					</li>
-					<li><a class="bold" data-target="#tab_1_3" data-toggle="tab">资质信息</a></li>
-					<li><a class="bold" data-target="#tab_1_4" data-toggle="tab">财务信息</a></li>
+					<li><a class="bold" data-target="#tab_1_3" data-toggle="tab">财务信息</a></li>
+					<li><a class="bold" data-target="#tab_1_4" data-toggle="tab">联系人</a></li>
 				</ul>
 				<div class="tab-content">
 				<div class="tab-pane fade active in" id="tab_1_1">
-                    <div class="">
+                    <div class="portlet light">
                           <div class="portlet-body form">
                              <!--  BEGIN FORM -->
-                              <form class="form-horizontal" >
+                              <form class="" >
                                   <div class="form-body">
                                       <div class="row">
                                           <div class="col-md-6">
                                               <div class="form-group">
-                                                  <label class="control-label col-md-5">企业编号：</label>
+                                                  <label class="control-label col-md-5 bold">企业编号：</label>
                                                   <div class="col-md-7">
                                                       <p class="form-control-static">{{company.comNum}}</p>
                                                   </div>
@@ -160,7 +160,7 @@
                                           <!-- /span -->
                                           <div class="col-md-6">
                                               <div class="form-group">
-                                                  <label class="control-label col-md-5">企业名称：</label>
+                                                  <label class="control-label col-md-5  bold">企业名称：</label>
                                                   <div class="col-md-7">
                                                       <p class="form-control-static">{{company.comName}}</p>
                                                   </div>
@@ -172,16 +172,16 @@
                                       <div class="row">
                                           <div class="col-md-6">
                                               <div class="form-group">
-                                                  <label class="control-label col-md-5">企业类型：</label>
+                                                  <label class="control-label col-md-5 bold">合作类型：</label>
                                                   <div class="col-md-7">
-                                                      <p class="form-control-static">{{company.comName}}</p>
+                                                      <p class="form-control-static">{{company.comTypeName}}</p>
                                                   </div>
                                               </div>
                                           </div>
                                           <!-- /span -->
                                           <div class="col-md-6">
                                               <div class="form-group">
-                                                  <label class="control-label col-md-5">企业简称：</label>
+                                                  <label class="control-label col-md-5 bold">企业简称：</label>
                                                   <div class="col-md-7">
                                                       <p class="form-control-static">{{company.abbreviation}}</p>
                                                   </div>
@@ -193,7 +193,7 @@
                                       <div class="row">
                                           <div class="col-md-6">
                                               <div class="form-group">
-                                                  <label class="control-label col-md-5">营业性质：</label>
+                                                  <label class="control-label col-md-5 bold">营业性质：</label>
                                                   <div class="col-md-7">
                                                       <p class="form-control-static">{{company.businessNature}}</p>
                                                   </div>
@@ -202,7 +202,7 @@
                                           <!-- /span -->
                                           <div class="col-md-6">
                                               <div class="form-group">
-                                                  <label class="control-label col-md-5">企业性质：</label>
+                                                  <label class="control-label col-md-5 bold">企业性质：</label>
                                                   <div class="col-md-7">
                                                       <p class="form-control-static">{{company.comNature}}</p>
                                                   </div>
@@ -214,7 +214,7 @@
                                       <div class="row">
                                           <div class="col-md-6">
                                               <div class="form-group">
-                                                  <label class="control-label col-md-5">经营类型：</label>
+                                                  <label class="control-label col-md-5 bold">经营类型：</label>
                                                   <div class="col-md-7">
                                                       <p class="form-control-static">{{company.businessType}}</p>
                                                   </div>
@@ -223,7 +223,7 @@
                                        <!--    /span -->
                                           <div class="col-md-6">
                                               <div class="form-group">
-                                                  <label class="control-label col-md-5">注册资金：</label>
+                                                  <label class="control-label col-md-5 bold">注册资金：</label>
                                                   <div class="col-md-7">
                                                       <p class="form-control-static">{{company.registeredCapital}}</p>
                                                   </div>
@@ -235,58 +235,15 @@
                                       <div class="row">
                                           <div class="col-md-6">
                                               <div class="form-group">
-                                                  <label class="control-label col-md-5">企业法人姓名：</label>
+                                                  <label class="control-label col-md-5 bold">法定代表人：</label>
                                                   <div class="col-md-7">
                                                       <p class="form-control-static">{{company.legalPerson}}</p>
                                                   </div>
                                               </div>
                                           </div>
-                                          <!-- /span -->
                                           <div class="col-md-6">
                                               <div class="form-group">
-                                                  <label class="control-label col-md-5">注册地址：</label>
-                                                  <div class="col-md-7">
-                                                      <p class="form-control-static">{{company.address}}</p>
-                                                  </div>
-                                              </div>
-                                          </div>
-                                          <!-- /span -->
-                                      </div>
-                                     <!--  /row -->
-                                      <div class="row">
-                                          <div class="col-md-6">
-                                              <div class="form-group">
-                                                  <label class="control-label col-md-5">纳税人识别号：</label>
-                                                  <div class="col-md-7">
-                                                      <p class="form-control-static">{{company.taxpayeNumber}}</p>
-                                                  </div>
-                                              </div>
-                                          </div>
-                                        <!--   /span -->
-                                          <div class="col-md-6">
-                                              <div class="form-group">
-                                                  <label class="control-label col-md-5">联系电话：</label>
-                                                  <div class="col-md-7">
-                                                      <p class="form-control-static">{{company.tel}}</p>
-                                                  </div>
-                                              </div>
-                                          </div>
-                                          <!-- /span -->
-                                      </div>
-                                    <!--   /row -->
-                                      <div class="row">
-                                          <div class="col-md-6">
-                                              <div class="form-group">
-                                                  <label class="control-label col-md-5">维护人员：</label>
-                                                  <div class="col-md-7">
-                                                      <p class="form-control-static">{{company.contact}}</p>
-                                                  </div>
-                                              </div>
-                                          </div>
-                                         <!--  /span -->
-                                          <div class="col-md-6">
-                                              <div class="form-group">
-                                                  <label class="control-label col-md-5">备注：</label>
+                                                  <label class="control-label col-md-5 bold">备注：</label>
                                                   <div class="col-md-7">
                                                       <p class="form-control-static">{{company.remark}}</p>
                                                   </div>
@@ -301,7 +258,7 @@
                           </div>
                       </div>
               		</div>
-					<div class="tab-pane fade" id="tab_1_2">
+					<div class="tab-pane fade" id="tab_1_4">
 						<div class="" id="tab2_c">
 
 							<!-- START SAMPLE TABLE PORTLET-->
@@ -344,7 +301,7 @@
 							<!-- END SAMPLE TABLE PORTLET-->
 						</div>
 					</div>
-					<div class="tab-pane fade" id="tab_1_3">
+					<div class="tab-pane fade" id="tab_1_2">
 						<!-- START SAMPLE TABLE PORTLET-->
 						<div class="">
 							<div class="portlet-body">
@@ -394,9 +351,95 @@
 						<!-- END SAMPLE TABLE PORTLET-->
 					</div>
 
-					<div class="tab-pane fade" id="tab_1_4">
+					<div class="tab-pane fade" id="tab_1_3">
 						<!-- START SAMPLE TABLE PORTLET-->
-						<div class="">
+						<div class="portlet light ">
+							<div class="portlet-title">
+								<div class="caption">开票信息</div>
+								<div class="actions"></div>
+							</div>
+							<div class="portlet-body">
+									<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label class="control-label col-md-5 bold">企业抬头：</label>
+											<div class="col-md-7">
+												<p class="form-control-static">{{company.corporatePresence}}</p>
+											</div>
+										</div>
+									</div>
+									<!-- /span -->
+									<div class="col-md-6">
+										<div class="form-group">
+											<label class="control-label col-md-5 bold">注册电话：</label>
+											<div class="col-md-7">
+												<p class="form-control-static">{{company.tel}}</p>
+											</div>
+										</div>
+									</div>
+									<!-- /span -->
+								</div>
+								<!-- /row -->
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label class="control-label col-md-5 bold">注册地址：</label>
+											<div class="col-md-7">
+												<p class="form-control-static">{{company.address}}</p>
+											</div>
+										</div>
+									</div>
+									<!-- /span -->
+									<div class="col-md-6">
+										<div class="form-group">
+											<label class="control-label col-md-5 bold">开户行：</label>
+											<div class="col-md-7">
+												<p class="form-control-static">{{company.openingBank}}</p>
+											</div>
+										</div>
+									</div>
+									<!--   /span -->
+									
+								</div>
+								<!-- /row -->
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label class="control-label col-md-5 bold">银行账号：</label>
+											<div class="col-md-7">
+												<p class="form-control-static">{{company.accountNumber}}</p>
+											</div>
+										</div>
+									</div>
+									<!--   /span -->
+									<div class="col-md-6">
+										<div class="form-group">
+											<label class="control-label col-md-5 bold">纳税人识别号：</label>
+											<div class="col-md-7">
+												<p class="form-control-static">{{company.taxpayeNumber}}</p>
+											</div>
+										</div>
+									</div>
+									<!--   /span -->
+									</div>
+									<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label class="control-label col-md-5 bold">备注：</label>
+											<div class="col-md-7">
+												<p class="form-control-static">{{company.billRemark}}</p>
+											</div>
+										</div>
+									</div>
+									<!-- /span -->
+								</div>
+								<!-- /row -->
+							
+							</div>
+							<div class="portlet-title">
+							<div class="caption">收付款信息</div>
+							<div class="actions"></div>
+							</div>
 							<div class="portlet-body">
 								<div class="table-scrollable">
 									<table
@@ -454,7 +497,7 @@
 								<div class="row">
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="control-label col-md-5">企业编号：</label>
+											<label class="control-label col-md-5 bold">企业编号：</label>
 											<div class="col-md-7">
 												<p class="form-control-static">{{company.comNum}}</p>
 											</div>
@@ -463,7 +506,7 @@
 									<!-- /span -->
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="control-label col-md-5">企业名称：</label>
+											<label class="control-label col-md-5 bold">企业名称：</label>
 											<div class="col-md-7">
 												<p class="form-control-static">{{company.comName}}</p>
 											</div>
@@ -475,7 +518,7 @@
 								<div class="row">
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="control-label col-md-5">企业类型：</label>
+											<label class="control-label col-md-5 bold">合作类型：</label>
 											<div class="col-md-7">
 												<p class="form-control-static">{{company.comTypeName}}</p>
 											</div>
@@ -484,7 +527,7 @@
 									<!--  /span -->
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="control-label col-md-5">企业简称：</label>
+											<label class="control-label col-md-5 bold">企业简称：</label>
 											<div class="col-md-7">
 												<p class="form-control-static">{{company.abbreviation}}</p>
 											</div>
@@ -496,7 +539,7 @@
 								<div class="row">
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="control-label col-md-5">营业性质：</label>
+											<label class="control-label col-md-5 bold">营业性质：</label>
 											<div class="col-md-7">
 												<p class="form-control-static">{{company.businessNature}}</p>
 											</div>
@@ -505,7 +548,7 @@
 									<!--    /span -->
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="control-label col-md-5">企业性质：</label>
+											<label class="control-label col-md-5 bold">企业性质：</label>
 											<div class="col-md-7">
 												<p class="form-control-static">{{company.comNature}}</p>
 											</div>
@@ -517,7 +560,7 @@
 								<div class="row">
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="control-label col-md-5">经营类型：</label>
+											<label class="control-label col-md-5 bold">经营类型：</label>
 											<div class="col-md-7">
 												<p class="form-control-static">{{company.businessType}}</p>
 											</div>
@@ -526,7 +569,7 @@
 									<!--      /span -->
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="control-label col-md-5">注册资金：</label>
+											<label class="control-label col-md-5 bold">注册资金：</label>
 											<div class="col-md-7">
 												<p class="form-control-static">{{company.registeredCapital}}</p>
 											</div>
@@ -538,7 +581,7 @@
 								<div class="row">
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="control-label col-md-5">企业法人姓名：</label>
+											<label class="control-label col-md-5 bold">企业法人姓名：</label>
 											<div class="col-md-7">
 												<p class="form-control-static">{{company.legalPerson}}</p>
 											</div>
@@ -547,7 +590,7 @@
 									<!-- /span -->
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="control-label col-md-5">注册地址：</label>
+											<label class="control-label col-md-5 bold">注册地址：</label>
 											<div class="col-md-7">
 												<p class="form-control-static">{{company.address}}</p>
 											</div>
@@ -559,7 +602,7 @@
 								<div class="row">
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="control-label col-md-5">纳税人识别号：</label>
+											<label class="control-label col-md-5 bold">纳税人识别号：</label>
 											<div class="col-md-7">
 												<p class="form-control-static">{{company.taxpayeNumber}}</p>
 											</div>
@@ -568,7 +611,7 @@
 									<!--   /span -->
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="control-label col-md-5">联系电话：</label>
+											<label class="control-label col-md-5 bold">联系电话：</label>
 											<div class="col-md-7">
 												<p class="form-control-static">{{company.tel}}</p>
 											</div>
@@ -580,7 +623,7 @@
 								<div class="row">
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="control-label col-md-5">维护人员：</label>
+											<label class="control-label col-md-5 bold">维护人员：</label>
 											<div class="col-md-7">
 												<p class="form-control-static">{{company.contact}}</p>
 											</div>
@@ -589,7 +632,7 @@
 									<!--  /span -->
 									<div class="col-md-6">
 										<div class="form-group">
-											<label class="control-label col-md-5">备注：</label>
+											<label class="control-label col-md-5 bold">备注：</label>
 											<div class="col-md-7">
 												<p class="form-control-static">{{company.remark}}</p>
 											</div>

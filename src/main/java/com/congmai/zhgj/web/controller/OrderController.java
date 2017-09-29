@@ -578,6 +578,7 @@ public class OrderController {
 	 * @param ids
 	 * @return
 	 */
+    @OperationLog(operateType = "update" ,operationDesc = "订单删除")
 	@RequestMapping(value = "/deleteOrders", method = RequestMethod.POST)
 	public ResponseEntity<Void> deleteOrders(@RequestBody String ids) {
 		if ("".equals(ids) || ids == null) {

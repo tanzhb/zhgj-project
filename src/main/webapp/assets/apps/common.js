@@ -298,6 +298,11 @@ function changeDateInputBorder(obj){
 }
 /********自定义验证辅助方法END**********/
 
+//去html标签及空格
+function delHtmlTag(str){
+	  return str.replace(/<[^>]+>/g,"").replace(/&nbsp;/ig, " ");//去掉所有的html标记
+}
+
 /*日期控件控制*/
 function initDatePicker(orientation){
 	$('.date-picker').datepicker({

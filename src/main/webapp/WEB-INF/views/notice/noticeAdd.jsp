@@ -43,10 +43,10 @@
 												<input type="checkbox" class="group-checkable noticeType" value="0" /> <span></span>公司内部
 											</label> <label
 												class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-												<input type="checkbox" class="group-checkable noticeType" value="1" /> <span></span>供应商
+												<input type="checkbox" class="group-checkable noticeType" value="2" /> <span></span>供应商
 											</label> <label
 												class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-												<input type="checkbox" class="group-checkable noticeType" value="2" /> <span></span>客户
+												<input type="checkbox" class="group-checkable noticeType" value="1" /> <span></span>客户
 											</label>
 										</div>
 									

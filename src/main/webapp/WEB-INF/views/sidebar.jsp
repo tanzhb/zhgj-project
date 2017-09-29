@@ -40,7 +40,7 @@
                     </a>
                 </li>
                 <li>
-                    <a ui-sref="#">
+                    <a ui-sref="operateLog">
                         操作日志</span>
                     </a>
                 </li>
@@ -50,7 +50,7 @@
                     </a>
                 </li>
                 <li>
-                    <a ui-sref="#">
+                    <a ui-sref="myNotice">
                          公告</span>
                     </a>
                 </li>

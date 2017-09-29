@@ -289,7 +289,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
                 searching: true,//是否过滤检索
                 ordering:  true,//是否排序
                 lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
-                pageLength: 5,//每页显示数量
+                pageLength: 10,//每页显示数量
                 processing: true,//loading等待框
 //                serverSide: true,
                 ajax: tableAjaxUrl,//加载数据中
