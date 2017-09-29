@@ -15,6 +15,10 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 	    		$("#summernote").summernote({
 	                height: 300
 	            });
+	    	}else if($location.path()=="/myNotice"){
+	    		var url = ctx + "/notice/myNoticeList";
+	    		//handle.createPage("myNotice",null,url,null,true);
+	    		createTable(5,1,true,$scope.params);
 	    	}else{
 	    		noticeTable();
 	    	}
@@ -27,6 +31,22 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 	    	
 	 });
 	 
+	 
+			 /**
+		      * 创建我的公告列表
+		      */
+		    function createTable(pageSize,pageIndex,init,params){debugger;
+		 	 //初始化表格数据
+		 	   handle.blockUI(null,"#myNotice");
+			    	var promise = noticeService.createTable(pageSize,pageIndex,params);
+			    	promise.then(function(data){
+			    			$scope.noticeList = data.data.result;
+			    			data.data.params=params;
+			    			handle.createPage("#myNotice",data.data,"rest/demandPlan/demandPlanList",createTable,init);
+			            },function(data){
+			               //调用承诺接口reject();
+			         });
+		    }
 	 
 	 		/**
 	 		 * 跳转至新增页面
@@ -180,6 +200,26 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
         		},function(data){
         			//调用承诺接口reject();
         		});
+			}
+			
+			$scope.delHtmlTag = function(str){
+				return delHtmlTag(str);
+			}
+			
+			
+			$scope.deleteMyNotice = function(serialNum){
+	        	handle.confirm("确定删除吗？",function(){
+	        		handle.blockUI();
+	        		var promise = noticeService.deleteMyNotice(serialNum);
+	        		promise.then(function(data){
+	        			toastr.success("删除成功");
+	        			handle.unblockUI();
+	        			createTable(5,1,true,null); // 重新加载datatables数据
+	        		},function(data){
+	        			//调用承诺接口reject();
+	        		});
+	        		
+	        	});
 			}
 
 
@@ -344,6 +384,36 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
                                  '<span></span>'+
                              '</label>';
 	
+							},
+							"createdCell": function (td, cellData, rowData, row, col) {
+								 $compile(td)($scope);
+						       }
+						}, {
+   							'targets' : 1,
+							'searchable' : false,
+							'orderable' : false,
+							'render' : function(data,
+									type, row, meta) {
+	  	  							if(data!=null){
+	  	  							  var arr = data.split(",");
+	  	  							  var show_arr = [];
+	  	  							  if(arr!=null){
+	  	  								  for(var i in arr){
+	  	  									  if(arr[i]=='0'){
+	  	  										  show_arr[i] = '公司内部';
+	  	  									  }
+	  	  									 if(arr[i]=='1'){
+	  	  										  show_arr[i] = '客户';
+	  	  									  }
+	  	  									 if(arr[i]=='2'){
+	  	  										 show_arr[i] = '供应商';
+	  	  									 }
+	  	  								  }
+	  	  								  return show_arr.join("/");
+	  	  							  }
+	  	  							  
+	  	  							}
+	  	  							return "";
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);

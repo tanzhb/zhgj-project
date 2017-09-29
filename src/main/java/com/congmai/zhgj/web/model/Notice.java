@@ -28,6 +28,14 @@ public class Notice {
     private int pageIndex;
     
     private int pageSize;
+    
+    private String status;
+    
+    private String readFlg;
+    
+    private String userId;
+    
+    private String relaseDate;
 
     public String getSerialNum() {
         return serialNum;
@@ -124,5 +132,37 @@ public class Notice {
 
 	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getReadFlg() {
+		return readFlg;
+	}
+
+	public void setReadFlg(String readFlg) {
+		this.readFlg = readFlg;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getRelaseDate() {
+		return relaseDate;
+	}
+
+	public void setRelaseDate(String relaseDate) {
+		this.relaseDate = relaseDate;
 	}
 }

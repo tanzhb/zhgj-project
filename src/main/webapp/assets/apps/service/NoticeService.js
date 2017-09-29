@@ -52,6 +52,38 @@ angular.module('MetronicApp').service('noticeService',['$http','$q',function($ht
 		return deferred.promise;//返回承诺
 	}
 	
+	/**
+	 * 获取列表数据
+	 */
+	this.createTable = function(pageSize,pageIndex,params){
+		var deferred = $q.defer();
+		var notice = {};
+		notice.pageSize = pageSize;
+		notice.pageIndex = pageIndex;
+		$http.post("rest/notice/myNoticeList",   
+				notice
+    	).then(function success(result) {
+            deferred.resolve(result);//请求成功
+        }, function error(err) {
+            deferred.reject(err);//请求失败
+        });
+		return deferred.promise;//返回承诺
+	}
+	
+	/**
+	 * 获取列表数据
+	 */
+	this.deleteMyNotice = function(serialNum){
+		var deferred = $q.defer();
+		$http.post("rest/notice/deleteMyNotice",   
+				serialNum
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
 	
 
 

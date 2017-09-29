@@ -50,7 +50,7 @@
                     </a>
                 </li>
                 <li>
-                    <a ui-sref="#">
+                    <a ui-sref="myNotice">
                          公告</span>
                     </a>
                 </li>

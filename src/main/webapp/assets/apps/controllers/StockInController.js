@@ -521,10 +521,9 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 															data)
 													.html()
 											+ '">';*/
-	  	  							return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
-                                 '<input type="checkbox"  name="serialNum" class="checkboxes"  id="'+data+'" value="'+data+'" data-set="#takeDeliveryTable .checkboxes" />'+
-                                 '<span></span>'+
-                             '</label>';
+								return '<label class="mt-radio mt-radio-outline">'+
+                                '<input type="radio"  ng-click="getSelectIndex(\''+meta.row+'\')" name="takeDeliverySerial"  class="checkboxes" id="'+data+'" value="'+data+'" />'+
+                                '<span></span></label>';
 	
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
@@ -633,7 +632,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 		            $scope.confirmTakeDeliverySelect = function(){
 			  			var id_count = $('#takeDelivery input[name="takeDeliverySerial"]:checked').length;
 						if(id_count==0){
-							toastr.warning("请选择发货单");
+							toastr.warning("请选择收货单");
 						}else{
 							//var serialNum = $('#buyOrder input[name="selecrOrderSerial"]:checked').val();
 							var delivery = t_table.row($scope.index).data();debugger;
