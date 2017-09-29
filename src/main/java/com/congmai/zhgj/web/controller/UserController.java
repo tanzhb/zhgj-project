@@ -3,6 +3,8 @@ package com.congmai.zhgj.web.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -22,6 +25,7 @@ import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -34,18 +38,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.SimpleMailSender;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.log.annotation.OperationLog;
+import com.congmai.zhgj.log.aop.OperateLogAop;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.OperateLog;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.security.PasswordHelper;
 import com.congmai.zhgj.web.security.PermissionSign;
 import com.congmai.zhgj.web.security.RoleSign;
 import com.congmai.zhgj.web.security.SecurityRealm;
+import com.congmai.zhgj.web.service.OperateLogService;
 import com.congmai.zhgj.web.service.UserService;
 
 /**
@@ -68,6 +78,9 @@ public class UserController {
 	
 	@Autowired
     private SecurityRealm securityRealm;
+	
+	@Resource
+	private OperateLogService operateLogService;
 
 	/**
 	 * 用户登录
@@ -121,6 +134,9 @@ public class UserController {
 		return "redirect:/";
 	}
 
+	
+	HttpServletRequest request = null;
+    public static final String SUCCESS = "success";
 	/**
 	 * 用户登出
 	 * 
@@ -130,6 +146,25 @@ public class UserController {
 	/*@OperationLog(operateType = "logout" ,operationDesc = "登出")*/
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(HttpSession session) {
+		request=  ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+		if(request!=null){
+			OperateLog valueReturn =  new OperateLog();
+			User user = UserUtil.getUserFromSession();
+	        valueReturn.setOperateType("logout");
+	        valueReturn.setOperationDesc("登出");
+	        valueReturn.setOperator(user.getUserName());
+	        valueReturn.setCreator(user.getUserId().toString());
+	        valueReturn.setOperationTime(new Date());
+	        valueReturn.setOperateResult(SUCCESS);
+	        valueReturn.setRequestIp(OperateLogAop.getRemoteHost(request));
+	        valueReturn.setRequestUrl(request.getRequestURI());
+	        valueReturn.setServerIp(request.getLocalAddr());
+	        valueReturn.setSerialNum(ApplicationUtils.random32UUID());
+	        //保存操作日志
+	        operateLogService.insert(valueReturn);
+		}
+		
+            
 		session.removeAttribute("userInfo");
 		// 登出操作
 		Subject subject = SecurityUtils.getSubject();
