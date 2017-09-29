@@ -15,6 +15,12 @@
   <resultMap id="ResultMapWithBLOBs" type="com.congmai.zhgj.web.model.Notice" extends="BaseResultMap" >
     <result column="context" property="context" jdbcType="LONGVARCHAR" />
   </resultMap>
+  
+  <resultMap id="MyNoticeMap" type="com.congmai.zhgj.web.model.Notice" extends="ResultMapWithBLOBs" >
+    <result column="read_flg" property="readFlg" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+  </resultMap>
+  
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -338,4 +344,15 @@
       del_flg = #{delFlg,jdbcType=CHAR}
     where serial_num = #{serialNum,jdbcType=VARCHAR}
   </update>
+  <select id="findMyNoticeList" parameterType="com.congmai.zhgj.web.model.Notice" resultMap="MyNoticeMap">
+  	SELECT n.serial_num, n.notice_type, n.title, n.com_id, n.creator,n.context,n.create_time, n.updater, n.update_time, 
+    	   n.del_flg,ns.read_flg,ns.user_id
+     from notice n LEFT JOIN notice_share ns on n.serial_num = ns.notice_serial and ns.user_id = #{userId}
+	where n.notice_type like CONCAT('%',#{status},'%') and n.del_flg = 0 and (ns.del_flg = 0 or ns.del_flg is null)   limit #{pageIndex},#{pageSize}
+  </select>
+  <select id="countMyNoticeList" parameterType="com.congmai.zhgj.web.model.Notice" resultType="java.lang.Integer">
+  	SELECT count(n.serial_num)
+     from notice n LEFT JOIN notice_share ns on n.serial_num = ns.notice_serial and ns.user_id = #{userId}
+	where n.notice_type like CONCAT('%',#{status},'%') and n.del_flg = 0  and (ns.del_flg = 0 or ns.del_flg is null)   
+  </select>
 </mapper>

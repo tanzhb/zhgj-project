@@ -10,6 +10,11 @@ public class NoticeExample {
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
+    
+    private int pageIndex;
+    
+    private int pageSize;
+
 
     public NoticeExample() {
         oredCriteria = new ArrayList<Criteria>();
@@ -64,7 +69,23 @@ public class NoticeExample {
         distinct = false;
     }
 
-    protected abstract static class GeneratedCriteria {
+    public int getPageIndex() {
+		return pageIndex;
+	}
+
+	public void setPageIndex(int pageIndex) {
+		this.pageIndex = pageIndex;
+	}
+
+	public int getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	protected abstract static class GeneratedCriteria {
         protected List<Criterion> criteria;
 
         protected GeneratedCriteria() {

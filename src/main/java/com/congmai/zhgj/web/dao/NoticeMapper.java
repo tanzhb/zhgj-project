@@ -36,4 +36,8 @@ public interface NoticeMapper extends GenericDao<Notice, String>{
     int updateByPrimaryKeyWithBLOBs(Notice record);
 
     int updateByPrimaryKey(Notice record);
+    
+    List<Notice> findMyNoticeList(Notice notice);
+
+	int countMyNoticeList(Notice notice);
 }
