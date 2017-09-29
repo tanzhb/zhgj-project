@@ -256,7 +256,7 @@
 										<td>{{info.orderStatus}}</td>
 										<td></td>
 									</tr>
-									<tr>
+									<tr ng-if="orderList!=null&&orderList.length>0">
 										<td></td>
 										<td></td>
 										<td>合计：</td>
@@ -270,9 +270,9 @@
 										<td>{{totalUnReadyAmount|currency:'￥'}}</td>
 										<td></td>
 									</tr>
-									<!-- <tr ng-if="orderList==undefined||orderList.length==0">
+									<tr ng-if="orderList==null||orderList.length==0">
 											<td colspan="13" align="center">暂无数据</td>
-									</tr> -->
+									</tr>
 								</tbody>
 							</table>
 						</div>
@@ -327,7 +327,7 @@
 												<td>{{payment.billNum}}</td>
 												<td></td>
 											</tr>
-											<tr>
+											<tr ng-if="paymentList!=null&&paymentList.length>0">
 												<td></td>
 												<td></td>
 												<td></td>
@@ -340,6 +340,9 @@
 												<td></td>
 												<td></td>
 												<td></td>
+											</tr>
+											<tr ng-if="paymentList==null||paymentList.length==0">
+												<td colspan="13" align="center">暂无数据</td>
 											</tr>
 										</tbody>
 									</table>
@@ -380,7 +383,7 @@
 												<td>{{payment.billNum}}</td>
 												<td></td>
 											</tr>
-											<tr>
+											<tr ng-if="alreadyPaymentList==null&&alreadyPaymentList.length>0">
 												<td></td>
 												<td></td>
 												<td></td>
@@ -393,6 +396,9 @@
 												<td></td>
 												<td></td>
 												<td></td>
+											</tr>
+											<tr ng-if="alreadyPaymentList==null||alreadyPaymentList.length==0">
+												<td colspan="13" align="center">暂无数据</td>
 											</tr>
 										</tbody>
 									</table>

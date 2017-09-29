@@ -112,7 +112,7 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="orderSerial"> 采购订单号</label>
                                                     <div class="">
-                                                    		<input type="text" class="form-control" value="{{record.orderNum}}" disabled="disabled">
+                                                    		<input type="text" class="form-control" value="{{record.delivery.orderNum}}" disabled="disabled">
                                                          <!-- <p class="control-label left" >{{record.orderNum}}</p> -->
                                                     </div>
                                             </div>
@@ -158,7 +158,7 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="operator">发货方 <span class="required"> * </span></label>
                                                     <div class="">
-                                                       <input type="text" class="form-control" value="{{shipperOrReceiverName}}" disabled="disabled">
+                                                       <input type="text" class="form-control" value="{{record.shipperOrReceiver}}" disabled="disabled">
                                                     </div>
                                             </div>
 										</div>

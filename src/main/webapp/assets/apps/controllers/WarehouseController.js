@@ -117,7 +117,7 @@ angular
 
 												"aoColumns" : [
 													{
-													mData : 'serialNum',
+													mData : 'serialNum'/*,
 														 mRender : function(
 																	data,
 																	type,
@@ -126,7 +126,7 @@ angular
 																return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
 																		"<input type='checkbox' class='checkboxes' value='"+data+"'/>" +
 																		"<span></span></label>";
-															}
+															}*/
 													},
 													 {
 														mData : 'warehouseNum'
@@ -152,13 +152,16 @@ angular
 													'className' : 'dt-body-center',
 													'render' : function(data,
 															type, full, meta) {
-														return '<input type="checkbox" id="'+data+'" name="id[]" value="'
+														/*return '<input type="checkbox" id="'+data+'" name="id[]" value="'
 																+ $('<div/>')
 																		.text(
 																				data)
 																		.html()
-																		+ '" data-check="false"  ng-click="showPosition(\''+full.serialNum+'\')" >';
-													},"createdCell": function (td, cellData, rowData, row, col) {
+																		+ '" data-check="false"  ng-click="showPosition(\''+full.serialNum+'\')" >';*/
+														return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
+					                                     '<input type="checkbox" data-check="false" class="checkboxes" ng-click="showPosition(\''+full.serialNum+'\')" id="'+data+'" value="'+data+'" data-set="#sample_warehouse .checkboxes" />'+
+					                                     '<span></span></label>';
+													},"createdCell": function (td, cellData, rowData, full, col) {
 														 $compile(td)($scope);
 												    }
 												},{

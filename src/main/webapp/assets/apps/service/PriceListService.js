@@ -8,7 +8,9 @@ angular.module('MetronicApp').factory('priceListService', ['$rootScope', '$http'
         selectBySerialNum:selectBySerialNum,
         saveLadderPrice:saveLadderPrice,
         deleteLadderPrice:deleteLadderPrice,
-        getLadderPriceInfo:getLadderPriceInfo
+        getLadderPriceInfo:getLadderPriceInfo,
+        startPriceProcess:startPriceProcess,
+        getAuditInfos:getAuditInfos
         
     };
 
@@ -16,7 +18,7 @@ angular.module('MetronicApp').factory('priceListService', ['$rootScope', '$http'
     //保存价格
     function savePriceList(priceList){
         var deferred = $q.defer();  
-        $http.post($rootScope.basePath+"/rest/priceList/savePriceListInfo", priceList).success(function (data) {  
+        $http.post($rootScope.basePath+"/rest/priceList/savePriceListInfo", JSON.stringify(priceList)).success(function (data) {  
             // 如果连接成功，延时返回给调用者  
             deferred.resolve(data);  
         })  
@@ -101,6 +103,27 @@ angular.module('MetronicApp').factory('priceListService', ['$rootScope', '$http'
             });
             return deferred.promise;//返回承诺
 	}
-    
+	function startPriceProcess (priceListInfo){
+		var deferred = $q.defer();
+		$http.post("rest/priceList/startPriceProcess", priceListInfo
+		).success(function (data) {
+            // 如果连接成功，延时返回给调用者
+            deferred.resolve(data);
+        }).error(function () {
+            deferred.reject('连接服务器出错！');
+        })
+		return deferred.promise;
+	}
+	 function getAuditInfos (ids) {
+				        var deferred = $q.defer();  
+				        $http.post(ctx + "rest/priceList/toApproval/" + ids).success(function (data) {  
+				        	// 如果连接成功，延时返回给调用者  
+				            deferred.resolve(data);  
+				        })  
+				            .error(function () {  
+				                deferred.reject('连接服务器出错！');  
+				            })  
+				        return deferred.promise;  
+				    }
 
 }]);

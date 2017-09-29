@@ -13,6 +13,8 @@ public class Delivery {
     private String deliverType;
 
     private String orderSerial;
+    
+    private String docNum; //单据号
 
     private String supplyComId;
 
@@ -53,6 +55,14 @@ public class Delivery {
     private String contactNum;
 
     private String deliverRemark;
+    
+    private String processInstanceId;
+    
+    private String deliverAddress;
+
+    private String reason;
+
+    private Integer userId;
 
     private String delFlg;
 
@@ -423,6 +433,46 @@ public class Delivery {
 
 	public void setShipperName(String shipperName) {
 		this.shipperName = shipperName;
+	}
+
+	public String getProcessInstanceId() {
+		return processInstanceId;
+	}
+
+	public void setProcessInstanceId(String processInstanceId) {
+		this.processInstanceId = processInstanceId;
+	}
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	public String getDeliverAddress() {
+		return deliverAddress;
+	}
+
+	public void setDeliverAddress(String deliverAddress) {
+		this.deliverAddress = deliverAddress;
+	}
+
+	public String getDocNum() {
+		return docNum;
+	}
+
+	public void setDocNum(String docNum) {
+		this.docNum = docNum;
 	}
 
     

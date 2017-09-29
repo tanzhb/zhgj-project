@@ -370,7 +370,8 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 							                            	'orderable' : false,
 							                            	'className' : 'dt-body-center',
 							                            	'render' : function(data,type, full, meta) {
-							                            		return '<input type="radio" name="id[]" ng-click="getOderInfo(\''+$('<div/>').text(data).html()+'\')" value="'+ $('<div/>').text(data).html()+ '">';
+							                            		/*return '<input type="radio" name="id[]" ng-click="getOderInfo(\''+$('<div/>').text(data).html()+'\')" value="'+ $('<div/>').text(data).html()+ '">';*/
+							                            		return '<label class="mt-radio mt-radio-outline"><input type="radio" ng-click="getOderInfo(\''+$('<div/>').text(data).html()+'\')" value="'+ $('<div/>').text(data).html()+ '" name="id[]" /><span></span></label>';
 							                            	},
 							                            	"createdCell": function (td, cellData, rowData, row, col) {
 							                            		$compile(td)($scope);
@@ -465,7 +466,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 							                            	'orderable' : false,
 							                            	'className' : 'dt-body-center',
 							                            	'render' : function(data,type, full, meta) {
-							                            		return '<input type="radio" name="id[]" ng-click="getOderInfo1(\''+$('<div/>').text(data).html()+'\')" value="'+ $('<div/>').text(data).html()+ '">';
+							                            		return '<label class="mt-radio mt-radio-outline"><input type="radio" ng-click="getOderInfo1(\''+$('<div/>').text(data).html()+'\')" value="'+ $('<div/>').text(data).html()+ '" name="id[]" /><span></span></label>';
 							                            	},
 							                            	"createdCell": function (td, cellData, rowData, row, col) {
 							                            		$compile(td)($scope);

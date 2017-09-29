@@ -10,8 +10,10 @@ import org.activiti.engine.runtime.ProcessInstance;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
+import com.congmai.zhgj.web.model.Invoice;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.PaymentRecord;
+import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Vacation;
 
@@ -203,5 +205,18 @@ public interface IProcessService {
      * @throws Exception
      */
 	public String startSaleOrderInfo(OrderInfo orderInfo);
+	
+	/**
+     * 激活价格流程
+     * @param processInstanceId
+     * @throws Exception
+     */
+	public String startPriceList(PriceList priceList);
+	/**
+     * 激活发票流程
+     * @param processInstanceId
+     * @throws Exception
+     */
+	public String startInvoice(Invoice invoice);
 
 }

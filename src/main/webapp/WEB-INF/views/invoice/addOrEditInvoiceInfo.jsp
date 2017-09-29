@@ -41,14 +41,20 @@
                         <div class="portlet-title">
                             <div class="caption"><span ng-if="inOrOut.indexOf('in')>-1" >进项票信息</span><span  ng-if="inOrOut.indexOf('out')>-1">销项票信息</span></div>    
                             <div class="actions">
-                                <button  ng-show="invoiceView"    class="btn purple  btn-sm btn-circle " ng-click="editInvoice()">
+                                <button  ng-show="invoiceView"    class="btn purple  btn-sm btn-circle " ng-click="editInvoice()"  ng-if="inOrOut.indexOf('confirm')<0">
                                             <i class="fa fa-edit"></i> 编辑 </button>
-                                <button   ng-hide="invoiceEdit"    ng-if="inOrOut.length>3"   class="btn purple  btn-sm btn-circle " ng-click="cancelEditInvoice()">
+                                <button   ng-hide="invoiceEdit"    ng-if="inOrOut.length>3&&inOrOut.indexOf('confirm')<0"   class="btn purple  btn-sm btn-circle " ng-click="cancelEditInvoice()" >
                                             <i class="fa fa-undo"></i> 取消 </button>
                                             <button   ng-hide="invoiceEdit"    ng-if="inOrOut.length<=3"   class="btn red  btn-sm btn-circle" ui-sref="invoice">
                                             <i class="fa fa-undo"></i> 取消 </button>
-                                <button  ng-hide="invoiceAdd"   type="submit"   class="btn green  btn-sm btn-circle"   ng-click="saveInvoice()">
+                                <button  ng-hide="invoiceAdd"   type="submit"   class="btn green  btn-sm btn-circle"   ng-click="saveInvoice()"  ng-if="inOrOut.indexOf('confirm')<0">
                                             <i class="fa fa-save"></i> 保存 </button>
+                                            <button   ng-hide="invoiceEdit"  class="btn green  btn-sm btn-circle" ng-click="saveInvoice('confirmIn')" ng-if="inOrOut.indexOf('in')>-1&&inOrOut.indexOf('confirm')>-1">
+                              		<i class="fa fa-check"></i> 确认收票 </button>
+                              		<button   ng-hide="invoiceEdit"  class="btn green  btn-sm btn-circle" ng-click="saveInvoice('confirmOut')" ng-if="inOrOut.indexOf('out')>-1&&inOrOut.indexOf('confirm')>-1">
+                              		<i class="fa fa-check"></i> 确认开票 </button>
+                              		<button    ng-if="inOrOut.indexOf('confirm')>-1"   class="btn red  btn-sm btn-circle" ui-sref="invoice">
+                                            <i class="fa fa-undo"></i> 取消 </button>
                             </div>
                         </div>
                          <div class="tab-content">
@@ -62,9 +68,10 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="invoiceNum"> <span class="required"> * </span>	<span  ng-if="inOrOut.indexOf('in')>-1"  > 进项</span><span   ng-if="inOrOut.indexOf('out')>-1" > 销项</span>发票编号 :</label>
                                                     <div class=" ">
-                                                        <input type="text" class="form-control" id="invoiceNum" name="invoiceNum" ng-model="invoice.invoiceNum"  ng-hide="invoiceAdd" />
+                                                        <input type="text" class="form-control" id="invoiceNum" name="invoiceNum" ng-model="invoice.invoiceNum"  ng-hide="invoiceAdd"   ng-if="inOrOut.indexOf('confirm')<0"  />
                                                         <div class="form-control-focus"> </div>
                                                           <p class="control-label left"   ng-show="invoiceView">{{invoice.invoiceNum}}</p> 
+                                                          <p class="control-label left"   ng-if="inOrOut.indexOf('confirm')>-1">{{invoice.invoiceNum}}</p>
                                                          <!--  存放物料流水号-->
                                                     </div>
                                             </div>
@@ -74,7 +81,7 @@
                                                             <div class="form-group">
                                                     <label class="control-label bold" for="contactNum"> <span class="required"> * </span>发票类型 :</label>
                                                     <div class=" ">
-                                                    <select class="form-control" id="invoiceType"  ng-hide="invoiceAdd" name="invoiceType"  ng-model="invoice.invoiceType"  >
+                                                    <select class="form-control" id="invoiceType"  ng-hide="invoiceAdd" name="invoiceType"  ng-model="invoice.invoiceType"   ng-if="inOrOut.indexOf('confirm')<0" >
                                             <option value=""></option>
                                             <option value="服务费发票" >服务费发票</option>
                                            	<option value="采购发票" >采购发票</option>
@@ -83,6 +90,7 @@
                                                  
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="invoiceView">{{invoice.invoiceType}}</p> 
+                                                                         <p class="control-label left"   ng-if="inOrOut.indexOf('confirm')>-1">{{invoice.invoiceNum}}</p>
                                                                     </div>
                                                                 </div>
                                                        </div>
@@ -91,7 +99,7 @@
                                                                 <div class="form-group">
                                                                 <label class="control-label bold" for="relationBuyOrSaleNum"><span class="required"> * </span>  <span  ng-if="inOrOut.indexOf('in')>-1"  > 关联采购单号</span><span   ng-if="inOrOut.indexOf('out')>-1" > 关联销售订单号</span> :</label>
                                                                     <div class="">
-                                                                    <div class="input-group" ng-if="inOrOut.indexOf('in')>-1"   ng-click="selectBuyOrSaleOrderInfo('buy')" data-target="#buyOrderInfo" data-toggle="modal">
+                                                                    <div class="input-group" ng-if="inOrOut.indexOf('in')>-1&&inOrOut.indexOf('confirm')<0"   ng-click="selectBuyOrSaleOrderInfo('buy')" data-target="#buyOrderInfo" data-toggle="modal">
 	                                                        <input type="text" class="form-control" placeholder=""  id="relationBuyOrSaleNum"      name ="relationBuyOrSaleNum"  ng-hide="invoiceAdd"   
 												ng-model="invoice.relationBuyOrSaleNum" > 
 	                                                        <span class="input-group-btn" style="vertical-align: top;" ng-hide="invoiceAdd"  >
@@ -100,7 +108,7 @@
 	                                                            </button>
 	                                                        </span>
                                                          </div>
-                                                         <div class="input-group" ng-if="inOrOut.indexOf('out')>-1"   ng-click="selectBuyOrSaleOrderInfo('sale')" data-target="#saleOrderInfo" data-toggle="modal"  >
+                                                         <div class="input-group" ng-if="inOrOut.indexOf('out')>-1&&inOrOut.indexOf('confirm')<0"   ng-click="selectBuyOrSaleOrderInfo('sale')" data-target="#saleOrderInfo" data-toggle="modal"  >
 	                                                       <input type="text" class="form-control" placeholder=""  id="relationBuyOrSaleNum"      name ="relationBuyOrSaleNum"  ng-hide="invoiceAdd"    onkey
 												ng-model="invoice.relationBuyOrSaleNum" > 
 	                                                        <span class="input-group-btn" style="vertical-align: top;" ng-hide="invoiceAdd"  >
@@ -111,6 +119,7 @@
                                                          </div>
                                                                        <div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="invoiceView"  >{{invoice.relationBuyOrSaleNum}}</p> 
+                                                                        <p class="control-label left" ng-if="inOrOut.indexOf('confirm')>-1"  >{{invoice.relationBuyOrSaleNum}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>  
@@ -181,13 +190,15 @@
                                                             <div class="form-group">
                                                     <label class="control-label bold" for="billWay"><span class="required"> * </span>开票方式 :</label>
                                                     <div class=" " >
-                                                    <div  ng-hide="invoiceAdd" >
+                                                    <div  ng-hide="invoiceAdd"   ng-if="inOrOut.indexOf('confirm')<0">
                                 	<input type="radio"  ng-model="invoice.billWay" name="billWay" ng-checked="invoice.billWay=='1'" value="1"> 先票后款
                         			<input type="radio"  ng-model="invoice.billWay" name="billWay" ng-checked="invoice.billWay!='1'" value="0"> 先款后票
                         			</div>
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="invoiceView"   ng-if="invoice.billWay!='1'">先款后票</p> 
                                                                         <p class="control-label left" ng-show="invoiceView"   ng-if="invoice.billWay=='1'">先票后款</p> 
+                                                                        <p class="control-label left"   ng-if="invoice.billWay!='1'&&inOrOut.indexOf('confirm')>-1">先款后票</p> 
+                                                                        <p class="control-label left"   ng-if="invoice.billWay=='1'&&inOrOut.indexOf('confirm')>-1">先票后款</p> 
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -195,13 +206,15 @@
                                                              <div class="form-group">
                                                     <label class="control-label bold" for="checker"> <span class="required"> * </span> <span  ng-if="inOrOut.indexOf('in')>-1"  >是否付款</span><span   ng-if="inOrOut.indexOf('out')>-1" > 是否收款</span> :</label>
                                                     <div class=" ">
-                                                    <div ng-hide="invoiceAdd" >
+                                                    <div ng-hide="invoiceAdd"  ng-if="inOrOut.indexOf('confirm')<0">
                                 	<input type="radio"  ng-model="invoice.paymentStatus" name="paymentStatus" ng-checked="invoice.paymentStatus=='是'" value="是"> 是
-                        			<input type="radio"  ng-model="invoice.paymentStatus" name="paymentStatus" ng-checked="invoice.paymentStatus!='是'" value="否"> 否
+                        			<input type="radio"  ng-model="invoice.paymentStatus" name="paymentStatus" ng-checked="invoice.paymentStatus!='是'" value="否"> 否 
                         			</div>
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="invoiceView"  ng-if="invoice.paymentStatus!='是'" >否</p> 
                                                                           <p class="control-label left" ng-show="invoiceView"  ng-if="invoice.paymentStatus=='是'" >是</p> 
+                                                                          <p class="control-label left"   ng-if="invoice.paymentStatus!='是'&&inOrOut.indexOf('confirm')>-1">否</p> 
+                                                                        <p class="control-label left"   ng-if="invoice.paymentStatus=='是'&&inOrOut.indexOf('confirm')>-1">是</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -212,10 +225,11 @@
                                                              <div class="form-group">
                                                     <label class="control-label bold" for="status">  申请日期: </label>
                                                  <div class=" ">
-                                                                        <input type="text"  class="form-control form-control-inline date-picker"     data-date-format="yyyy-mm-dd"  data-date-viewmode="years"   placeholder=""  id="submitDate" name ="submitDate"   ng-hide="invoiceAdd"  
+                                                                        <input type="text"  class="form-control form-control-inline date-picker"   ng-if="inOrOut.indexOf('confirm')<0"  data-date-format="yyyy-mm-dd"  data-date-viewmode="years"   placeholder=""  id="submitDate" name ="submitDate"   ng-hide="invoiceAdd"  
 												ng-model="invoice.submitDate" /> 
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="invoiceView">{{invoice.submitDate | date:'yyyy-MM-dd'}}</p> 
+                                                                        <p class="control-label left" ng-if="inOrOut.indexOf('confirm')>-1">{{invoice.submitDate | date:'yyyy-MM-dd'}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -223,21 +237,23 @@
                                                              <div class="form-group">
                                                     <label class="control-label bold" for="checker"> 申请部门:</label>
                                                     <div class=" ">
-                                                       <input type="text"  class="form-control" placeholder=""  id="submitDepartment" name ="submitDepartment"   ng-hide="invoiceAdd"  
+                                                       <input type="text"  class="form-control" placeholder=""  id="submitDepartment" name ="submitDepartment"   ng-hide="invoiceAdd"   ng-if="inOrOut.indexOf('confirm')<0"
 												ng-model="invoice.submitDepartment" > 
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="invoiceView">{{invoice.submitDepartment}}</p> 
+                                                                        <p class="control-label left" ng-if="inOrOut.indexOf('confirm')>-1">{{invoice.submitDepartment}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                               <div class="col-md-4">
                                                              <div class="form-group">
                                                     <label class="control-label bold" for="checker"> 申请人:</label>
-                                                    <div class=" ">
-                                                       <input type="text"  class="form-control" placeholder=""  id="submitter" name ="submitter"   ng-hide="invoiceAdd"  
+                                                    <div class=" "> 
+                                                       <input type="text"  class="form-control" placeholder=""  id="submitter" name ="submitter"   ng-hide="invoiceAdd"   ng-if="inOrOut.indexOf('confirm')<0"
 												ng-model="invoice.submitter" > 
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="invoiceView">{{invoice.submitter}}</p> 
+                                                                        <p class="control-label left" ng-show="invoiceView">{{invoice.submitter}}</p>
+                                                                        <p class="control-label left" ng-if="inOrOut.indexOf('confirm')>-1">{{invoice.submitter}}</p>  
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -250,13 +266,15 @@
                                                              <div class="form-group">
                                                     <label class="control-label bold" for="checker"> 备注:</label>
                                                     <div class=" ">
-                                                       <input type="text"  class="form-control" placeholder=""  id="billingRemark" name ="billingRemark"   ng-hide="invoiceAdd"   ng-if="inOrOut.indexOf('in')>-1" 
+                                                       <input type="text"  class="form-control" placeholder=""  id="billingRemark" name ="billingRemark"   ng-hide="invoiceAdd"   ng-if="inOrOut.indexOf('in')>-1&&inOrOut.indexOf('confirm')<0" 
 												ng-model="invoice.billingRemark" >
-												 <input type="text"  class="form-control" placeholder=""  id="receiptRemark" name ="receiptRemark"   ng-hide="invoiceAdd"   ng-if="inOrOut.indexOf('out')>-1" 
+												 <input type="text"  class="form-control" placeholder=""  id="receiptRemark" name ="receiptRemark"   ng-hide="invoiceAdd"   ng-if="inOrOut.indexOf('out')>-1&&inOrOut.indexOf('confirm')<0" 
 												ng-model="invoice.receiptRemark" > 
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="invoiceView"   ng-if="inOrOut.indexOf('in')>-1"  >{{invoice.billingRemark}}</p> 
                                                                          <p class="control-label left" ng-show="invoiceView"  ng-if="inOrOut.indexOf('out')>-1"  >{{invoice.receiptRemark}}</p> 
+                                                                          <p class="control-label left"   ng-if="inOrOut.indexOf('confirm')>-1" >{{invoice.billingRemark}}</p> 
+                                                                         <p class="control-label left"  ng-if="inOrOut.indexOf('confirm')>-1" >{{invoice.receiptRemark}}</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -264,10 +282,11 @@
                                                              <div class="form-group">
                                                     <label class="control-label bold" for="checker"> 申请开票日期:</label>
                                                     <div class=" ">
-												   <input type="text"  class="form-control form-control-inline date-picker"     data-date-format="yyyy-mm-dd"  data-date-viewmode="years"   placeholder=""  id="receiptDate" name ="receiptDate"   ng-hide="invoiceAdd"  
+												   <input type="text"  class="form-control form-control-inline date-picker"   ng-if="inOrOut.indexOf('confirm')<0"  data-date-format="yyyy-mm-dd"  data-date-viewmode="years"   placeholder=""  id="receiptDate" name ="receiptDate"   ng-hide="invoiceAdd"  
 												ng-model="invoice.receiptDate" /> 
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="invoiceView">{{invoice.receiptDate | date:'yyyy-MM-dd'}}</p>
+                                                                         <p class="control-label left"  ng-if="inOrOut.indexOf('confirm')>-1" >{{invoice.receiptDate | date:'yyyy-MM-dd'}}</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -278,11 +297,12 @@
                                                                 <div class="form-group">
                                                     <label class="control-label bold" for=""><span class="required"> * </span> 开票方:</label>
                                                     <div class="">
-                                                     <input type="text" class="form-control"   id="comName" name ="comName"       ng-hide="invoiceAdd"   
+                                                     <input type="text" class="form-control"   id="comName" name ="comName"       ng-hide="invoiceAdd"    ng-if="inOrOut.indexOf('confirm')<0" 
 												ng-model="invoice.comName" /> 
 												 
 												<div class="form-control-focus"> </div>
                                                                          <p class="control-label left"    ng-show="invoiceView"   >{{invoice.supplyComId}}</p> 
+                                                                           <p class="control-label left"  ng-if="inOrOut.indexOf('confirm')>-1" >{{invoice.supplyComId}}</p>
                                                                     </div>
                                                                       
                                                                 </div>
@@ -291,11 +311,12 @@
                                                                 <div class="form-group">
                                                     <label class="control-label bold" for=""><span class="required"> * </span> 联系电话 :</label>
                                                     <div class="">
-                                                     <input type="text" class="form-control"   id="tel" name ="tel"       ng-hide="invoiceAdd"   
+                                                     <input type="text" class="form-control"   id="tel" name ="tel"       ng-hide="invoiceAdd"    ng-if="inOrOut.indexOf('confirm')<0" 
 												ng-model="invoice.tel" /> 
 												 
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left"    ng-show="invoiceView"    >{{invoice.tel}}</p> 
+                                                                         <p class="control-label left"  ng-if="inOrOut.indexOf('confirm')>-1" >{{invoice.tel}}</p>
                                                                     </div>
                                                                       
                                                                 </div>
@@ -304,10 +325,11 @@
                                                                 <div class="form-group">
                                                     <label class="control-label bold" for=""> 备注 :</label>
                                                     <div class="">
-                                                     <input type="text" class="form-control"   id="secondRemark" name ="secondRemark"       ng-hide="invoiceAdd"   
+                                                     <input type="text" class="form-control"   id="secondRemark" name ="secondRemark"       ng-hide="invoiceAdd"     ng-if="inOrOut.indexOf('confirm')<0" 
 												ng-model="invoice.secondRemark" /> 
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left"    ng-show="invoiceView"     >{{invoice.secondRemark}}</p> 
+                                                                         <p class="control-label left"  ng-if="inOrOut.indexOf('confirm')>-1" >{{invoice.secondRemark}}</p>
                                                                     </div>
                                                                       
                                                                 </div>
@@ -319,13 +341,15 @@
                                                                 <div class="form-group">
                                                     <label class="control-label bold" for=""><span class="required"> * </span> 收票方:</label>
                                                     <div class="">
-                                                     <input type="text" class="form-control"   id="comName" name ="comName"       ng-hide="invoiceAdd"   
+                                                     <input type="text" class="form-control"   id="comName" name ="comName"       ng-hide="invoiceAdd"    ng-if="inOrOut.indexOf('confirm')<0" 
 												ng-model="invoice.comName" /> 
 												 
 												<div class="form-control-focus"> </div>
 												 
                                                                         <p class="control-label left"    ng-show="invoiceView"   ng-if="inOrOut.indexOf('out')>-1"   >{{invoice.buyComId}}</p> 
                                                                          <p class="control-label left"    ng-show="invoiceView"   ng-if="inOrOut.indexOf('in')>-1"   >{{invoice.supplyComId}}</p> 
+                                                                         <p class="control-label left"     ng-if="inOrOut.indexOf('out')>-1&&inOrOut.indexOf('confirm')>-1"   >{{invoice.buyComId}}</p> 
+                                                                         <p class="control-label left"      ng-if="inOrOut.indexOf('in')>-1&&inOrOut.indexOf('confirm')>-1"   >{{invoice.supplyComId}}</p>
                                                                     </div>
                                                                       
                                                                 </div>
@@ -334,11 +358,12 @@
                                                                 <div class="form-group">
                                                     <label class="control-label bold" for=""><span class="required"> * </span> 企业全称 :</label>
                                                     <div class="">
-                                                     <input type="text" class="form-control"   id="companyName" name ="companyName"       ng-hide="invoiceAdd"   
+                                                     <input type="text" class="form-control"   id="companyName" name ="companyName"       ng-hide="invoiceAdd"    ng-if="inOrOut.indexOf('confirm')<0" 
 												ng-model="invoice.companyName" /> 
 												 
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left"    ng-show="invoiceView"   ng-if="inOrOut.indexOf('out')>-1"   >{{invoice.companyName}}</p> 
+                                                                        <p class="control-label left"    ng-show="invoiceView"   ng-if="inOrOut.indexOf('out')>-1"   >{{invoice.companyName}}</p>
+                                                                        <p class="control-label left"      ng-if="inOrOut.indexOf('confirm')>-1"   >{{invoice.companyName}}</p>  
                                                                     </div>
                                                                       
                                                                 </div>
@@ -347,10 +372,11 @@
                                                                 <div class="form-group">
                                                     <label class="control-label bold" for=""><span class="required"> * </span> 地址 :</label>
                                                     <div class="">
-                                                     <input type="text" class="form-control"   id="address" name ="address"       ng-hide="invoiceAdd"   
+                                                     <input type="text" class="form-control"   id="address" name ="address"       ng-hide="invoiceAdd"    ng-if="inOrOut.indexOf('confirm')<0" 
 												ng-model="invoice.address" /> 
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left"    ng-show="invoiceView"     >{{invoice.address}}</p> 
+                                                                        <p class="control-label left"    ng-if="inOrOut.indexOf('confirm')>-1"     >{{invoice.address}}</p> 
                                                                     </div>
                                                                       
                                                                 </div>
@@ -362,12 +388,13 @@
                                                                 <div class="form-group">
                                                     <label class="control-label bold" for=""><span class="required"> * </span>联系电话:</label>
                                                     <div class="">
-                                                     <input type="text" class="form-control"   id="tel" name ="tel"       ng-hide="invoiceAdd"   
+                                                     <input type="text" class="form-control"   id="tel" name ="tel"       ng-hide="invoiceAdd"    ng-if="inOrOut.indexOf('confirm')<0" 
 												ng-model="invoice.tel" /> 
 												 
 												<div class="form-control-focus"> </div>
 												 
                                                                         <p class="control-label left"    ng-show="invoiceView"    >{{invoice.tel}}</p> 
+                                                                        <p class="control-label left"    ng-if="inOrOut.indexOf('confirm')>-1"     >{{invoice.tel}}</p> 
                                                                          
                                                                     </div>
                                                                       
@@ -377,11 +404,19 @@
                                                                 <div class="form-group">
                                                     <label class="control-label bold" for=""><span class="required"> * </span> 开户银行 :</label>
                                                     <div class="">
-                                                     <input type="text" class="form-control"   id="bankName" name ="bankName"       ng-hide="invoiceAdd"   
-												ng-model="invoice.bankName" /> 
+                                                    <%--  <input type="text" class="form-control"   id="bankName" name ="bankName"       ng-hide="invoiceAdd"    ng-if="inOrOut.indexOf('confirm')<0" 
+												ng-model="invoice.bankName" />  --%>
+												 <div   ng-hide="invoiceAdd">
+                                                     <select class="form-control" data-live-search="true" data-size=""   id="bankName"  name ="bankName"    ng-model="invoice.bankName">
+                                                     <!-- <option  ng-repeat="op in buyCom " value="{{op.comId}}"  > {{op.comName}}</option> -->
+                                                      <option value=""></option>
+                                                      <option  ng-repeat="companyFinance in companyFinances" value="{{companyFinance.openingBank}}" >{{companyFinance.openingBank}}</option>
+                                                    </select>
+                                                    </div>
 												 
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left"    ng-show="invoiceView"     >{{invoice.bankName}}</p> 
+                                                                        <p class="control-label left"    ng-show="invoiceView"     >{{invoice.bankName}}</p>
+                                                                          <p class="control-label left"    ng-if="inOrOut.indexOf('confirm')>-1"     >{{invoice.bankName}}</p>  
                                                                     </div>
                                                                       
                                                                 </div>
@@ -390,10 +425,17 @@
                                                                 <div class="form-group">
                                                     <label class="control-label bold" for=""><span class="required"> * </span> 账号:</label>
                                                     <div class="">
-                                                     <input type="text" class="form-control"   id="account" name ="account"       ng-hide="invoiceAdd"   
-												ng-model="invoice.account" /> 
+                                                    <%--  <input type="text" class="form-control"   id="account" name ="account"       ng-hide="invoiceAdd"    ng-if="inOrOut.indexOf('confirm')<0" 
+												ng-model="invoice.account" />  --%>
+												 <div  ng-hide="invoiceAdd">
+                                                     <select class="form-control" data-live-search="true" data-size=""   id="account"  name ="account"    ng-model="invoice.account">
+                                                      <option value=""></option>
+                                                      <option  ng-repeat="companyFinance in companyFinances" value="{{companyFinance.accountNumber}}" >{{companyFinance.accountNumber}}</option>
+                                                    </select>
+                                                    </div>
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left"    ng-show="invoiceView"     >{{invoice.account}}</p> 
+                                                                        <p class="control-label left"      ng-if="inOrOut.indexOf('confirm')>-1"      >{{invoice.account}}</p>
                                                                     </div>
                                                                       
                                                                 </div>
@@ -405,12 +447,13 @@
                                                                 <div class="form-group">
                                                     <label class="control-label bold" for=""><span class="required"> * </span> 企业纳税号:</label>
                                                     <div class="">
-                                                     <input type="text" class="form-control"   id="taxNum" name ="taxNum"       ng-hide="invoiceAdd"   
+                                                     <input type="text" class="form-control"   id="taxNum" name ="taxNum"       ng-hide="invoiceAdd"    ng-if="inOrOut.indexOf('confirm')<0" 
 												ng-model="invoice.taxNum" /> 
 												 
 												<div class="form-control-focus"> </div>
 												 
                                                                          <p class="control-label left"    ng-show="invoiceView"     >{{invoice.taxNum}}</p> 
+                                                                         <p class="control-label left"    ng-if="inOrOut.indexOf('confirm')>-1"    >{{invoice.taxNum}}</p>
                                                                     </div>
                                                                       
                                                                 </div>
@@ -419,10 +462,11 @@
                                                                 <div class="form-group">
                                                     <label class="control-label bold" for=""> 备注 :</label>
                                                     <div class="">
-                                                     <input type="text" class="form-control"   id="secondRemark" name ="secondRemark"       ng-hide="invoiceAdd"   
+                                                     <input type="text" class="form-control"   id="secondRemark" name ="secondRemark"       ng-hide="invoiceAdd"    ng-if="inOrOut.indexOf('confirm')<0" 
 												ng-model="invoice.secondRemark" /> 
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left"    ng-show="invoiceView"     >{{invoice.secondRemark}}</p> 
+                                                                         <p class="control-label left"    ng-if="inOrOut.indexOf('confirm')>-1"    >{{invoice.secondRemark}}</p>
                                                                     </div>
                                                                       
                                                                 </div>
@@ -591,6 +635,7 @@
                                                                         <p class="control-label left" ng-show="invoiceView">{{invoice.thirdRemark}}</p> 
                                                                     </div>
                                             </div>
+										</div>
 										</div>
 										 </form>
                                                         </div><!-- row END-->

@@ -3,6 +3,8 @@ package com.congmai.zhgj.web.controller;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +49,7 @@ import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
+import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.BOMMateriel;
 import com.congmai.zhgj.web.model.BOMMaterielExample;
@@ -62,6 +65,9 @@ import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.MaterielExample;
+import com.congmai.zhgj.web.model.MaterielSelectExample;
+import com.congmai.zhgj.web.model.OperateLog;
+import com.congmai.zhgj.web.model.OperateLogExample;
 import com.congmai.zhgj.web.model.OrderFile;
 import com.congmai.zhgj.web.model.OrderFileExample;
 import com.congmai.zhgj.web.model.OrderMateriel;
@@ -81,6 +87,7 @@ import com.congmai.zhgj.web.service.ClauseSettlementDetailService;
 import com.congmai.zhgj.web.service.ClauseSettlementService;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.IProcessService;
+import com.congmai.zhgj.web.service.OperateLogService;
 import com.congmai.zhgj.web.service.OrderFileService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
@@ -130,6 +137,8 @@ public class OrderController {
     private UserCompanyService userCompanyService;
     @Resource
     private ProcessBaseService processBaseService;
+    @Resource
+    private OperateLogService operateLogService;
     
 	/**
 	 * 合同管理service
@@ -146,25 +155,11 @@ public class OrderController {
     	OrderInfo orderInfo = json2Order(params);
             
     	if(orderInfo.getSerialNum()==null||orderInfo.getSerialNum().isEmpty()){//新增
-    		orderInfo.setSerialNum(ApplicationUtils.random32UUID());
-    		Subject currentUser = SecurityUtils.getSubject();
-    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-    		orderInfo.setCreator(currenLoginName);
-    		orderInfo.setUpdater(currenLoginName);
-    		orderInfo.setCreateTime(new Date());
-    		orderInfo.setUpdateTime(new Date());
-    		orderInfo.setStatus("0");
-    		
-    		orderService.insert(orderInfo);
+    		insetOrder(orderInfo);
     		
     	}else{//更新
-    		Subject currentUser = SecurityUtils.getSubject();
-    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-    		orderInfo.setUpdater(currenLoginName);
-    		orderInfo.setUpdateTime(new Date());
-    		orderService.update(orderInfo);
+    		updateOrder(orderInfo);
     	}
-    	
     	/*if("1".equals(orderInfo.getStatus())){
     		//启动订单审批测试流程-start
     		startOrderProcess(orderInfo);
@@ -173,6 +168,42 @@ public class OrderController {
 		
 		return orderInfo;
     }
+
+    /**
+     * 供应商接收订单
+     */
+    @RequestMapping(value = "/reciveOrder", method = RequestMethod.POST)
+    @ResponseBody
+    public OrderInfo reciveOrder(@RequestBody String params) {
+    	OrderInfo orderInfo = json2Order(params);
+    	Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		orderInfo.setUpdater(currenLoginName);
+		orderInfo.setUpdateTime(new Date());
+		orderService.reciveOrder(orderInfo);
+		return orderInfo;
+    }
+    
+	private void updateOrder(OrderInfo orderInfo) {
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		orderInfo.setUpdater(currenLoginName);
+		orderInfo.setUpdateTime(new Date());
+		orderService.update(orderInfo);
+	}
+    
+	private void insetOrder(OrderInfo orderInfo) {
+		orderInfo.setSerialNum(ApplicationUtils.random32UUID());
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		orderInfo.setCreator(currenLoginName);
+		orderInfo.setUpdater(currenLoginName);
+		orderInfo.setCreateTime(new Date());
+		orderInfo.setUpdateTime(new Date());
+		orderInfo.setStatus("0");
+		
+		orderService.insert(orderInfo);
+	}
 
 	private OrderInfo json2Order(String params) {
 		params = params.replace("\\", "");
@@ -215,7 +246,7 @@ public class OrderController {
 		try {
 			String processInstanceId = this.processService.startBuyOrderInfo(orderInfo);
 //                message.setStatus(Boolean.TRUE);
-//    			message.setMessage("请假流程已启动，流程ID：" + processInstanceId);
+//    			message.setMessage("订单流程已启动，流程ID：" + processInstanceId);
 		    logger.info("processInstanceId: "+processInstanceId);
 		    flag = "1";
 		} catch (ActivitiException e) {
@@ -224,14 +255,14 @@ public class OrderController {
 		        logger.warn("没有部署流程!", e);
 //        			message.setMessage("没有部署流程，请联系系统管理员，在[流程定义]中部署相应流程文件！");
 		    } else {
-		        logger.error("启动请假流程失败：", e);
-//                    message.setMessage("启动请假流程失败，系统内部错误！");
+		        logger.error("启动订单流程失败：", e);
+//                    message.setMessage("启动订单流程失败，系统内部错误！");
 		    }
 		    throw e;
 		} catch (Exception e) {
-		    logger.error("启动请假流程失败：", e);
+		    logger.error("启动订单流程失败：", e);
 //                message.setStatus(Boolean.FALSE);
-//                message.setMessage("启动请假流程失败，系统内部错误！");
+//                message.setMessage("启动订单流程失败，系统内部错误！");
 		    throw e;
 		}
         //启动订单审批测试流程-end
@@ -250,14 +281,14 @@ public class OrderController {
 	private String startSaleOrderProcess(@RequestBody String params) {
     	String flag = "0"; //默认失败
     	OrderInfo orderInfo = json2Order(params);
-    	
+    	orderInfo.setUpdateTime(new Date());
     	orderService.update(orderInfo);//更新备注
     	
 		//启动订单审批测试流程-start
 		User user = UserUtil.getUserFromSession();
 		orderInfo.setUserId(user.getUserId());
 		orderInfo.setUser_name(user.getUserName());
-		orderInfo.setTitle(user.getUserName()+orderInfo.getOrderNum()+" 的订单申请");
+		orderInfo.setTitle(user.getUserName()+" 的订单申请");
 		orderInfo.setBusinessType(BaseVO.SALEORDER); 			//业务类型：采购订单
 		orderInfo.setStatus(BaseVO.PENDING);					//审批中
     	orderInfo.setApplyDate(new Date());
@@ -268,7 +299,7 @@ public class OrderController {
 		try {
 			String processInstanceId = this.processService.startSaleOrderInfo(orderInfo);
 //                message.setStatus(Boolean.TRUE);
-//    			message.setMessage("请假流程已启动，流程ID：" + processInstanceId);
+//    			message.setMessage("订单流程已启动，流程ID：" + processInstanceId);
 		    logger.info("processInstanceId: "+processInstanceId);
 		    flag = "1";
 		} catch (ActivitiException e) {
@@ -277,14 +308,14 @@ public class OrderController {
 		        logger.warn("没有部署流程!", e);
 //        			message.setMessage("没有部署流程，请联系系统管理员，在[流程定义]中部署相应流程文件！");
 		    } else {
-		        logger.error("启动请假流程失败：", e);
-//                    message.setMessage("启动请假流程失败，系统内部错误！");
+		        logger.error("启动订单流程失败：", e);
+//                    message.setMessage("启动订单流程失败，系统内部错误！");
 		    }
 		    throw e;
 		} catch (Exception e) {
-		    logger.error("启动请假流程失败：", e);
+		    logger.error("启动订单流程失败：", e);
 //                message.setStatus(Boolean.FALSE);
-//                message.setMessage("启动请假流程失败，系统内部错误！");
+//                message.setMessage("启动订单流程失败，系统内部错误！");
 		    throw e;
 		}
         //启动订单审批测试流程-end
@@ -398,7 +429,7 @@ public class OrderController {
 	
     
     /**
-	 * 调整请假申请
+	 * 调整订单申请
 	 * @param vacation
 	 * @param taskId
 	 * @param processInstanceId
@@ -415,7 +446,8 @@ public class OrderController {
 			@RequestParam("processInstanceId") String processInstanceId,
 			@RequestParam("reApply") Boolean reApply,
 			@RequestParam("orderId") String orderId,
-			@RequestParam("reason") String reason) throws Exception{
+			@RequestParam("reason") String reason,
+			@RequestParam("orderType") String orderType) throws Exception{
 		String result = "";
 		User user = UserUtil.getUserFromSession();
 
@@ -425,22 +457,27 @@ public class OrderController {
         Map<String, Object> variables = new HashMap<String, Object>();
         orderInfo.setUserId(user.getUserId());
         orderInfo.setUser_name(user.getUserName());
-        orderInfo.setBusinessType(BaseVO.BUYORDER);
+        if(BaseVO.SALEORDER.equals(orderType)){
+        	orderInfo.setBusinessType(BaseVO.SALEORDER);
+        }else{
+        	orderInfo.setBusinessType(BaseVO.BUYORDER);
+        }
+        
         orderInfo.setApplyDate(new Date());
         orderInfo.setBusinessKey(orderId);
         orderInfo.setProcessInstanceId(processInstanceId);
         String content = "";
         if(reApply){
-        	//修改请假申请
-        	orderInfo.setTitle(user.getUserName()+" 的请假申请！");
+        	//修改订单申请
+        	orderInfo.setTitle(user.getUserName()+" 的订单申请！");
         	orderInfo.setStatus(BaseVO.PENDING);
 	        content = "重新申请";
-	        result = "任务办理完成，请假申请已重新提交！";
+	        result = "任务办理完成，订单申请已重新提交！";
         }else{
-        	orderInfo.setTitle(user.getUserName()+" 的请假申请已取消！");
+        	orderInfo.setTitle(user.getUserName()+" 的订单申请已取消！");
         	orderInfo.setStatus(BaseVO.APPROVAL_FAILED);
         	content = "取消申请";
-        	result = "任务办理完成，已经取消您的请假申请！";
+        	result = "任务办理完成，已经取消您的订单申请！";
         }
         try {
     		this.processBaseService.update(orderInfo);
@@ -541,6 +578,7 @@ public class OrderController {
 	 * @param ids
 	 * @return
 	 */
+    @OperationLog(operateType = "update" ,operationDesc = "订单删除")
 	@RequestMapping(value = "/deleteOrders", method = RequestMethod.POST)
 	public ResponseEntity<Void> deleteOrders(@RequestBody String ids) {
 		if ("".equals(ids) || ids == null) {
@@ -1178,4 +1216,126 @@ public class OrderController {
     	
          return map;
     }
+    
+    
+    /**
+     * @Description (查询订单操作日志)
+     * @param serialNum
+     * @return
+     */
+
+    @RequestMapping("/findOrderLog")
+    @ResponseBody
+    public ResponseEntity<Map> findOrderLog(String serialNum) {
+    	//MaterielExample m =new MaterielExample();
+    	OperateLogExample m =new OperateLogExample();
+    	List<OperateLog> operateLogList = new ArrayList<OperateLog>();
+    	
+		//and 条件1
+    	com.congmai.zhgj.web.model.OperateLogExample.Criteria criteria =  m.createCriteria();
+    	criteria.andObjectSerialEqualTo(serialNum);
+    	operateLogList = operateLogService.selectList(m);
+    	
+    	OrderInfo orderInfo = orderService.selectById(serialNum);
+    	List<CommentVO> commentList = null;
+    	try {
+    		if(orderInfo.getProcessBase()!=null){
+    			commentList = this.processService.getComments(orderInfo.getProcessBase().getProcessInstanceId());
+    		}
+    		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	if(commentList!=null){
+    		for(CommentVO c:commentList ){
+        		OperateLog o = new OperateLog();
+        		o.setOperationDesc("审批");
+        		o.setRemark(c.getContent());
+        		o.setOperator(c.getUserName());
+        		o.setOperationTime(c.getTime());
+        		operateLogList.add(o);
+        	}
+    	}
+    	
+    	ListSort(operateLogList);
+    	//封装datatables数据返回到前台
+		Map pageMap = new HashMap();
+		pageMap.put("draw", 1);
+		pageMap.put("recordsTotal", operateLogList==null?0:operateLogList.size());
+		pageMap.put("recordsFiltered", operateLogList==null?0:operateLogList.size());
+		pageMap.put("data", operateLogList);
+		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+
+    }
+    
+    
+    
+    /**
+     * @Description (查询订单（收货发货检验出库入库）操作日志)
+     * @param serialNum
+     * @return
+     */
+
+    @RequestMapping("/findDeliverLog")
+    @ResponseBody
+    public ResponseEntity<Map> findDeliverLog(String serialNum) {
+    	List<OperateLog> operateLogList = new ArrayList<OperateLog>();
+    	operateLogList = operateLogService.findDeliverLogByOrderSerialNum(serialNum);
+    	ListSort(operateLogList);
+    	//封装datatables数据返回到前台
+		Map pageMap = new HashMap();
+		pageMap.put("draw", 1);
+		pageMap.put("recordsTotal", operateLogList==null?0:operateLogList.size());
+		pageMap.put("recordsFiltered", operateLogList==null?0:operateLogList.size());
+		pageMap.put("data", operateLogList);
+		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+
+    }
+    
+    /**
+     * @Description (查询订单（收付款）操作日志)
+     * @param serialNum
+     * @return
+     */
+
+    @RequestMapping("/findPayLog")
+    @ResponseBody
+    public ResponseEntity<Map> findPayLog(String serialNum) {
+    	List<OperateLog> operateLogList = new ArrayList<OperateLog>();
+    	operateLogList = operateLogService.findPayLogByOrderSerialNum(serialNum);
+    	ListSort(operateLogList);
+    	//封装datatables数据返回到前台
+		Map pageMap = new HashMap();
+		pageMap.put("draw", 1);
+		pageMap.put("recordsTotal", operateLogList==null?0:operateLogList.size());
+		pageMap.put("recordsFiltered", operateLogList==null?0:operateLogList.size());
+		pageMap.put("data", operateLogList);
+		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+
+    }
+    
+    
+    public void ListSort(List<OperateLog> list) {
+    	if(list!=null){
+    		Collections.sort(list, new Comparator<OperateLog>() {
+    			@Override
+    			public int compare(OperateLog o1, OperateLog o2) {
+    				try {
+    					Date dt1 = o1.getOperationTime();
+    					Date dt2 = o2.getOperationTime();
+    					if (dt1.getTime() > dt2.getTime()) {
+    						return 1;
+    					} else if (dt1.getTime() < dt2.getTime()) {
+    						return -1;
+    					} else {
+    						return 0;
+    					}
+    				} catch (Exception e) {
+    					e.printStackTrace();
+    				}
+    				return 0;
+    			}
+    		});
+    	}
+	}
 }

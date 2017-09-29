@@ -54,6 +54,13 @@ public class Company {
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     
+    private String corporatePresence;
+
+    private String openingBank;
+
+    private String accountNumber;
+
+    private String billRemark;
     
     //冗余字段
     
@@ -287,6 +294,38 @@ public class Company {
 
 	public void setComIds(List<String> comIds) {
 		this.comIds = comIds;
+	}
+
+	public String getCorporatePresence() {
+		return corporatePresence;
+	}
+
+	public void setCorporatePresence(String corporatePresence) {
+		this.corporatePresence = corporatePresence;
+	}
+
+	public String getOpeningBank() {
+		return openingBank;
+	}
+
+	public void setOpeningBank(String openingBank) {
+		this.openingBank = openingBank;
+	}
+
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+
+	public String getBillRemark() {
+		return billRemark;
+	}
+
+	public void setBillRemark(String billRemark) {
+		this.billRemark = billRemark;
 	}
     
     

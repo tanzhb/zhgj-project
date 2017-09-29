@@ -44,9 +44,9 @@
 				<li class="active"><a href="#apply" data-toggle="tab"
 					ng-click="toApply()"> 订单 </a></li>
 				<li><a href="#daiban" data-toggle="tab" ng-click="toDaiban()">
-						待办 </a></li>
+						待办 <dbQuantity/></a></li>
 				<li><a href="#yiban" data-toggle="tab" ng-click="toYiban()">
-						已办 </a></li>
+						已办 <ybQuantity/></a></li>
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane active" id="apply">
@@ -55,7 +55,6 @@
 							<div class="actions">
 								<label class="btn btn-transparent yellow btn-circle btn-sm"
 										ng-click="submitBuyApply()"> <i class="glyphicon glyphicon-play"></i> 申请</label>
-									</label>
 								<shiro:hasPermission name="buyNormalOrder:add">
 									<label class="btn btn-transparent green btn-circle btn-sm"
 										ui-sref="addBuyOrder"> <i class="fa fa-plus"></i> 添加
@@ -90,7 +89,7 @@
 							</div>
 			            </div>
 			            <div class="portlet-body">
-			                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_2">
+			                <table class="table table-striped table-bordered table-hover table-checkable order-column" style="text-align: center" id="sample_2">
 			                    <thead>
 			                        <tr>
 			                            <th>
@@ -100,15 +99,15 @@
                                             </label>
                                         </th>
 			                            <th> 采购订单号 </th>
-			                            <th> 供应方 </th>
+			                            <th> 卖方 </th>
 			                            <th> 采购商品 </th>
 			                            <th> 金额 </th>
 			                            <th> 配送 </th>
-			                            <th> 服务模式 </th>
+			                            <th> 采购类型 </th>
 			                            <th> 关联采购合同 </th>
 			                            <th> 关联销售单 </th>
 			                            <th> 下单日期 </th>
-			                            <th style="white-space: nowrap;">状态</th>
+			                            <!-- <th style="white-space: nowrap;">状态</th> -->
 			                        </tr>
 			                    </thead>
 			                    <tbody>
@@ -265,11 +264,11 @@
                                     </label>
                                 </th>
 	                            <th> 采购订单号 </th>
-	                            <th> 供应方 </th>
+	                            <th> 卖方 </th>
 	                            <th> 采购商品 </th>
 	                            <th> 金额 </th>
 	                            <th> 配送 </th>
-	                            <th> 服务模式 </th>
+	                            <th> 采购类型 </th>
 	                            <th> 关联采购合同 </th>
 	                            <th> 关联销售单 </th>
 	                            <th> 下单日期 </th>
@@ -312,3 +311,4 @@
 <!-- 删除订单modal 结束 -->
 <!-- 导入订单modal 开始 -->
 <jsp:include  page="importOrder.jsp"/>
+<jsp:include  page="viewOperateLog.jsp"/>

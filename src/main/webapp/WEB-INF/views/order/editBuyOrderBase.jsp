@@ -34,7 +34,7 @@ margin-right: 20px;
 	<!-- <li class="bold"><a data-target="#tab_1_10" data-toggle="tab">备注</a></li> -->
 	
 </ul>
-<div class="tab-content">
+<div class="tab-content" style="min-height: 300px;">
 	<div class="tab-pane fade active in" id="tab_1_1">
 		<div class="portlet-title" style="min-height: 48px;">
               <div class="tools" style="float:right" id="noprintdiv">
@@ -1318,7 +1318,7 @@ margin-right: 20px;
                      <div class="row">
                      	<div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label bold">送货方式：</label>
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>送货方式：</label>
                                  <div class="">
                                  		<select class="form-control" id="deliveryMode"  ng-hide="clauseDeliveryInput" name="deliveryMode"  ng-model="clauseDelivery.deliveryMode" >
                                            <option value=""></option>

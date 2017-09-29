@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.controller;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,13 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.activiti.engine.ActivitiException;
+import org.activiti.engine.ActivitiObjectNotFoundException;
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
+import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
+import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.codehaus.jackson.JsonParseException;
@@ -21,15 +29,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.UserUtil;
@@ -37,15 +49,21 @@ import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.enums.ComType;
 import com.congmai.zhgj.web.enums.StaticConst;
+import com.congmai.zhgj.web.model.BaseVO;
+import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.LadderPrice;
 import com.congmai.zhgj.web.model.Materiel;
+import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.PriceListExample;
+import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.CompanyService;
+import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.LadderPriceService;
 import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.PriceListService;
+import com.congmai.zhgj.web.service.ProcessBaseService;
 import com.congmai.zhgj.web.service.UserCompanyService;
 
 
@@ -59,7 +77,7 @@ import com.congmai.zhgj.web.service.UserCompanyService;
 @Controller
 @RequestMapping(value = "/priceList")
 public class PriceListController {
-
+	private static final Logger logger = Logger.getLogger(PriceListController.class);
     @Resource
     private PriceListService  priceListService;
     @Autowired
@@ -70,6 +88,14 @@ public class PriceListController {
    	private CompanyService  companyService;
     @Autowired
     private UserCompanyService userCompanyService;
+    @Autowired
+    protected TaskService taskService;
+	@Autowired
+	private IProcessService processService;
+	 @Resource
+	 private ProcessBaseService processBaseService;
+	 @Autowired
+	 protected RuntimeService runtimeService;
     
     
     /**
@@ -103,9 +129,10 @@ public class PriceListController {
      * @throws JsonParseException 
      */
     @RequestMapping(value = "/savePriceListInfo", method = RequestMethod.POST)
-	public ResponseEntity<PriceList> savePriceDetail(@RequestBody PriceList priceList,UriComponentsBuilder ucBuilder){//
+	public ResponseEntity<PriceList> savePriceDetail(@RequestBody String params,UriComponentsBuilder ucBuilder){//
     	Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		PriceList priceList=JSON.parseObject(params, PriceList.class);
     	try{
     		if(StringUtils.isEmpty(priceList.getSerialNum())){
     			priceList.setSerialNum(ApplicationUtils.random32UUID());
@@ -417,5 +444,273 @@ public class PriceListController {
 			}
 	    	
 	         return map;
+	    }
+	    private PriceList  json2PriceList(String params) {
+			params = params.replace("\\", "");
+			ObjectMapper objectMapper = new ObjectMapper();  
+			PriceList priceList = new PriceList();
+			try {
+				priceList = objectMapper.readValue(params, PriceList.class);
+			}catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			return priceList;
+		}
+
+	    /**
+	     * 
+	     * @Description (启动价格流程)
+	     * @param orderInfo
+	     * @return
+	     */
+	    @RequestMapping(value = "/startPriceProcess", method = RequestMethod.POST)
+	    @ResponseBody
+		private String startPriceProcess(@RequestBody String params) {
+	    	String flag = "0"; //默认失败
+	    	PriceList priceList = json2PriceList(params);
+	    	priceListService.update(priceList);//更新备注
+	    	
+			//启动订单审批测试流程-start
+			User user = UserUtil.getUserFromSession();
+			priceList.setUserId(user.getUserId());
+			priceList.setUser_name(user.getUserName());
+			if("buyPrice".equals(priceList.getPriceType())){
+				priceList.setTitle(user.getUserName()+" 的采购价格申请");
+				priceList.setBusinessType(BaseVO.BUYPRICE); 	
+			}else{
+				priceList.setTitle(user.getUserName()+" 的销售价格申请");
+				priceList.setBusinessType(BaseVO.SALEPRICE); 	
+			}
+			priceList.setStatus(BaseVO.PENDING);					//审批中
+			priceList.setApplyDate(new Date());
+			priceList.setReason(priceList.getRemark());
+	    	processBaseService.insert(priceList);
+			String businessKey = priceList.getSerialNum().toString();
+			priceList.setBusinessKey(businessKey);
+			try {
+				String processInstanceId = this.processService.startPriceList(priceList);
+//	                message.setStatus(Boolean.TRUE);
+//	    			message.setMessage("请假流程已启动，流程ID：" + processInstanceId);
+			    logger.info("processInstanceId: "+processInstanceId);
+			    flag = "1";
+			} catch (ActivitiException e) {
+//	            	message.setStatus(Boolean.FALSE);
+			    if (e.getMessage().indexOf("no processes deployed with key") != -1) {
+			        logger.warn("没有部署流程!", e);
+//	        			message.setMessage("没有部署流程，请联系系统管理员，在[流程定义]中部署相应流程文件！");
+			    } else {
+			        logger.error("启动价格流程失败：", e);
+//	                    message.setMessage("启动请假流程失败，系统内部错误！");
+			    }
+			    throw e;
+			} catch (Exception e) {
+			    logger.error("启动价格流程失败：", e);
+//	                message.setStatus(Boolean.FALSE);
+//	                message.setMessage("启动请假流程失败，系统内部错误！");
+			    throw e;
+			}
+	        //启动订单审批测试流程-end
+			return flag;
+		}
+	    
+	    
+	    
+	    
+	    /**
+	     * 审批价格流程
+	     * @param taskId
+	     * @param model
+	     * @return
+	     * @throws NumberFormatException
+	     * @throws Exception
+	     */
+//		@RequiresPermissions("user:order:toApproval") 	//*代表 经理、总监、人力
+	    @RequestMapping(value = "/toApproval/{taskId}", method = RequestMethod.POST, produces = "application/json")
+	    public @ResponseBody Map<String, Object> toApproval(@PathVariable("taskId") String taskId) throws NumberFormatException, Exception{
+	    	Task task = this.taskService.createTaskQuery().taskId(taskId).singleResult();
+			// 根据任务查询流程实例
+	    	String processInstanceId = task.getProcessInstanceId();
+			ProcessInstance pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+			PriceList priceList = (PriceList) this.runtimeService.getVariable(pi.getId(), "entity");
+			priceList.setTask(task);
+			priceList.setProcessInstanceId(processInstanceId);
+			List<CommentVO> commentList = this.processService.getComments(processInstanceId);
+			String taskDefinitionKey = task.getTaskDefinitionKey();
+			logger.info("taskDefinitionKey: "+taskDefinitionKey);
+			String result = null;
+			if("modifyApply".equals(taskDefinitionKey)){
+				result = "modify";
+			}else{
+				result = "audit";
+			}
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("actionType", result);
+			map.put("priceList", priceList);
+			map.put("commentList", commentList);
+	    	return map;
+	    }
+	    
+	    
+	    /**
+	     * 完成任务
+	     * @param content
+	     * @param completeFlag
+	     * @param taskId
+	     * @param redirectAttributes
+	     * @param session
+	     * @return
+	     * @throws Exception
+	     */
+//		@RequiresPermissions("user:order:complate")  //数据库中权限字符串为user:*:complate， 通配符*匹配到order所以有权限操作 
+	    @RequestMapping(value = "/complate/{taskId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+		@ResponseBody
+	    public String complate(
+	    		@RequestParam("priceId") String priceId,
+	    		@RequestParam("content") String content,
+	    		@RequestParam("processInstanceId") String processInstanceId,
+	    		@RequestParam("completeFlag") Boolean completeFlag,
+	    		@PathVariable("taskId") String taskId, 
+	    		@RequestParam("priceType") String priceType,
+	    		RedirectAttributes redirectAttributes) throws Exception{
+	    	User user = UserUtil.getUserFromSession();
+	    	String result = "";
+	    	try {
+	    		PriceList priceList = this.priceListService.selectById(priceId);
+	    		PriceList basePriceList = (PriceList) this.runtimeService.getVariable(processInstanceId, "entity");
+	    		Map<String, Object> variables = new HashMap<String, Object>();
+	    		variables.put("isPass", completeFlag);
+	    		if(!completeFlag){
+	    			if("buy".equals(priceType)){
+	    				basePriceList.setTitle(basePriceList.getUser_name()+" 的采购价格申请失败,需修改后重新提交！");
+	    			}else{
+	    				basePriceList.setTitle(basePriceList.getUser_name()+" 的销售价格申请失败,需修改后重新提交！");
+	    			}
+	    			priceList.setStatus(BaseVO.APPROVAL_FAILED);
+	    			variables.put("entity", basePriceList);
+	    		}else{
+	    			priceList.setStatus(BaseVO.PENDING);					//审批中
+	    		}
+	    		// 完成任务
+	    		this.processService.complete(taskId, content, user.getUserId().toString(), variables);
+	    		
+	    		if(completeFlag){
+	    			//此处需要修改，不能根据人来判断审批是否结束。应该根据流程实例id(processInstanceId)来判定。
+	    			//判断指定ID的实例是否存在，如果结果为空，则代表流程结束，实例已被删除(移到历史库中)
+	    			ProcessInstance pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+	    			if(BeanUtils.isBlank(pi)){
+	    				priceList.setStatus(BaseVO.APPROVAL_SUCCESS);
+	    			}
+	    		}
+	    		
+	    		this.processBaseService.update(priceList);
+	    		
+	    		if(BaseVO.APPROVAL_SUCCESS.equals(priceList.getStatus())){//订单完成，需更新状态为1(订单待接收)
+	    			PriceList priceListori = new PriceList();
+	    			priceListori.setSerialNum(priceList.getSerialNum());
+	    			priceListori.setStatus("1");
+	    			this.priceListService.update(priceListori);
+	    		}
+	    		
+	    		result = "任务办理完成！";
+			} catch (ActivitiObjectNotFoundException e) {
+				result = "此任务不存在，请联系管理员！";
+				throw e;
+			} catch (ActivitiException e) {
+				result = "此任务正在协办，您不能办理此任务！";
+				throw e;
+			} catch (Exception e) {
+				result = "任务办理失败，请联系管理员！";
+				throw e;
+			}
+			return result;
+	    }
+		
+	    
+	    /**
+		 * 调整请假申请
+		 * @param vacation
+		 * @param taskId
+		 * @param processInstanceId
+		 * @param reApply
+		 * @param session
+		 * @return
+		 * @throws Exception
+		 */
+//		@RequiresPermissions("user:vacation:modify")
+		@RequestMapping(value = "/modifyPrice/{taskId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+		@ResponseBody
+		public String modifyPrice(
+				@PathVariable("taskId") String taskId,
+				@RequestParam("processInstanceId") String processInstanceId,
+				@RequestParam("reApply") Boolean reApply,
+				@RequestParam("priceId") String priceId,
+				@RequestParam("priceType") String priceType,
+				@RequestParam("reason") String reason) throws Exception{
+			String result = "";
+			User user = UserUtil.getUserFromSession();
+
+			PriceList priceList = new PriceList();
+			priceList.setSerialNum(priceId);
+			
+	        Map<String, Object> variables = new HashMap<String, Object>();
+	        priceList.setUserId(user.getUserId());
+	        priceList.setUser_name(user.getUserName());
+	        priceList.setApplyDate(new Date());
+	        priceList.setBusinessKey(priceId);
+	        priceList.setProcessInstanceId(processInstanceId);
+	        String content = "";
+	        if(reApply){
+	        	//修改价格申请
+	        	if("buy".equals(priceType)){
+	        		priceList.setTitle(user.getUserName()+" 的采购价格申请！");
+	        		 priceList.setBusinessType(BaseVO.BUYPRICE);
+	        		 content = "重新申请采购价格";
+	 		        result = "任务办理完成，采购价格申请已重新提交！";
+    			}else{
+    				priceList.setTitle(user.getUserName()+" 的销售价格申请！");
+    				priceList.setBusinessType(BaseVO.SALEPRICE);
+	        		 content = "重新申请销售价格";
+	 		        result = "任务办理完成，销售价格申请已重新提交！";
+    			}
+	        	priceList.setStatus(BaseVO.PENDING);
+		       
+	        }else{
+	        	if("buy".equals(priceType)){
+	        		priceList.setTitle(user.getUserName()+" 的采购价格申请已取消！");
+	        		priceList.setBusinessType(BaseVO.BUYPRICE);
+	        		 content = "取消申请采购价格";
+	 		        result = "任务办理完成，已经取消您的采购价格申请！";
+    			}else{
+    				priceList.setTitle(user.getUserName()+" 的销售价格申请！");
+    				priceList.setBusinessType(BaseVO.SALEPRICE);
+	        		 content = "取消申请销售价格";
+	 		        result = "任务办理完成，已经取消您的销售价格申请！";
+    			}
+	        	priceList.setStatus(BaseVO.APPROVAL_FAILED);
+	        }
+	        try {
+	    		this.processBaseService.update(priceList);
+				variables.put("entity", priceList);
+				variables.put("reApply", reApply);
+				this.processService.complete(taskId, content, user.getUserId().toString(), variables);
+				
+			} catch (ActivitiObjectNotFoundException e) {
+//				message.setStatus(Boolean.FALSE);
+//				message.setMessage("此任务不存在，请联系管理员！");
+				result = "此任务不存在，请联系管理员！";
+				throw e;
+			} catch (ActivitiException e) {
+//				message.setStatus(Boolean.FALSE);
+//				message.setMessage("此任务正在协办，您不能办理此任务！");
+				result = "此任务正在协办，您不能办理此任务！";
+				throw e;
+			} catch (Exception e) {
+//				message.setStatus(Boolean.FALSE);
+//				message.setMessage("任务办理失败，请联系管理员！");
+				result = "任务办理失败，请联系管理员！";
+				throw e;
+			}
+			
+	    	return result;
 	    }
 }

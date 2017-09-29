@@ -1,12 +1,20 @@
 package com.congmai.zhgj.web.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -17,6 +25,7 @@ import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,14 +36,26 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.SimpleMailSender;
 import com.congmai.zhgj.core.util.UserUtil;
+import com.congmai.zhgj.log.annotation.OperationLog;
+import com.congmai.zhgj.log.aop.OperateLogAop;
+import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.OperateLog;
 import com.congmai.zhgj.web.model.User;
+import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.security.PasswordHelper;
 import com.congmai.zhgj.web.security.PermissionSign;
 import com.congmai.zhgj.web.security.RoleSign;
 import com.congmai.zhgj.web.security.SecurityRealm;
+import com.congmai.zhgj.web.service.OperateLogService;
 import com.congmai.zhgj.web.service.UserService;
 
 /**
@@ -57,6 +78,9 @@ public class UserController {
 	
 	@Autowired
     private SecurityRealm securityRealm;
+	
+	@Resource
+	private OperateLogService operateLogService;
 
 	/**
 	 * 用户登录
@@ -65,6 +89,7 @@ public class UserController {
 	 * @param result
 	 * @return
 	 */
+	@OperationLog(operateType = "login" ,operationDesc = "登录")
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(@Valid User user, BindingResult result, Model model,
 			HttpServletRequest request) {
@@ -109,14 +134,37 @@ public class UserController {
 		return "redirect:/";
 	}
 
+	
+	HttpServletRequest request = null;
+    public static final String SUCCESS = "success";
 	/**
 	 * 用户登出
 	 * 
 	 * @param session
 	 * @return
 	 */
+	/*@OperationLog(operateType = "logout" ,operationDesc = "登出")*/
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(HttpSession session) {
+		request=  ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+		if(request!=null){
+			OperateLog valueReturn =  new OperateLog();
+			User user = UserUtil.getUserFromSession();
+	        valueReturn.setOperateType("logout");
+	        valueReturn.setOperationDesc("登出");
+	        valueReturn.setOperator(user.getUserName());
+	        valueReturn.setCreator(user.getUserId().toString());
+	        valueReturn.setOperationTime(new Date());
+	        valueReturn.setOperateResult(SUCCESS);
+	        valueReturn.setRequestIp(OperateLogAop.getRemoteHost(request));
+	        valueReturn.setRequestUrl(request.getRequestURI());
+	        valueReturn.setServerIp(request.getLocalAddr());
+	        valueReturn.setSerialNum(ApplicationUtils.random32UUID());
+	        //保存操作日志
+	        operateLogService.insert(valueReturn);
+		}
+		
+            
 		session.removeAttribute("userInfo");
 		// 登出操作
 		Subject subject = SecurityUtils.getSubject();
@@ -198,4 +246,221 @@ public class UserController {
 		return "拥有user:create权限,能访问";
 	}
 
+	
+	@RequestMapping(value = "/getUserInfo")
+	@ResponseBody
+	public ResponseEntity<User> getUserInfo(){
+		User user=null;
+	    user = UserUtil.getUserFromSession();
+	    user=userService.getUserInfo(user.getUserId());
+	    
+	    Company company=userService.getUserCompanyInfo(user.getUserId());
+	    user.setCompany(company);
+		return new ResponseEntity<User>(user, HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value = "/updateUserInfo", method = RequestMethod.POST)
+	public ResponseEntity<Void> updateUserInfo(User user,MultipartFile file) {
+		if (user == null) {
+			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		}
+		String avatar=null;
+		if(file!=null){
+			avatar=uploadFile(file);
+			user.setAvatar(avatar);
+		}
+		userService.updateUserInfo(user);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value = "/updateCompanyInfo", method = RequestMethod.POST)
+	public ResponseEntity<Void> updateCompanyInfo(Company company) {
+		User user=null;
+	    user = UserUtil.getUserFromSession();
+	    user=userService.getUserInfo(user.getUserId());
+	    
+		if (company == null) {
+			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		}
+		company.setUpdater(String.valueOf(user.getUserId()));
+		userService.updateCompanyInfo(company);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value = "/getCompanyInfo")
+	@ResponseBody
+	public ResponseEntity<Company> getCompanyInfo(){
+		User user=null;
+	    user = UserUtil.getUserFromSession();
+	    user=userService.getUserInfo(user.getUserId());
+	    
+	    Company company=userService.getUserCompanyInfo(user.getUserId());
+	    
+		return new ResponseEntity<Company>(company, HttpStatus.OK);	
+	}
+	
+	/**
+	 * 
+	 * @Description 修改邮箱
+	 * @param user
+	 * @return
+	 */
+	@RequestMapping(value = "/changeEmail", method = RequestMethod.POST)
+	public ResponseEntity<Void> changeEmail(@RequestBody Object password) {
+		Map m = (Map) password;
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();// 获取当前登录用户名
+		User user = userService.selectByUsername(currenLoginName);
+		
+		if (user == null) {// 当前用户过期或不存在
+			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		} else {
+			if (user.getUserPwd().equals(new SimpleHash("md5", m.get("password").toString(), ByteSource.Util.bytes(user.getCredentialsSalt()), 2).toHex())) {
+				String email=m.get("email").toString();
+				user.setEmail(email);
+				userService.updateEmail(user);
+			} else {// 原密码输入有错
+				return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+			}
+
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+	}
+	
+	/**
+	 * 
+	 * @Description 修改手机
+	 * @param user
+	 * @return
+	 */
+	@RequestMapping(value = "/changePhone", method = RequestMethod.POST)
+	public ResponseEntity<Void> changePhone(@RequestBody Object phone) {
+		Map m = (Map) phone;
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();// 获取当前登录用户名
+		User user = userService.selectByUsername(currenLoginName);
+		
+		if (user == null) {// 当前用户过期或不存在
+			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		} else {
+			if (user.getUserPwd().equals(new SimpleHash("md5", m.get("password").toString(), ByteSource.Util.bytes(user.getCredentialsSalt()), 2).toHex())) {
+				String phoneNumber=m.get("phone").toString();
+				user.setCellPhone(phoneNumber);
+				userService.updatePhone(user);
+			} else {// 原密码输入有错
+				return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+			}
+
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+	}
+	
+	
+	/**
+	 * 邮箱验证码	
+	 */
+	@RequestMapping(value="/emailmessage")
+	@ResponseBody
+	public String emailmessage(String cuEmail) throws Exception{
+		try {
+			String randommsg = String.valueOf((int)(Math.random()*9000+1000));
+			SimpleMailSender sms = new SimpleMailSender();
+			sms.sendqqmail(cuEmail, "邮箱验证", "您的验证码是:"+randommsg);
+			return randommsg;
+			// TODO 处理返回值,参见HTTP协议文档
+		} catch (Exception e) {
+			// TODO 处理异常
+			e.printStackTrace();
+		}
+		return "0";
+	}
+	
+	/**
+	 * 上传执行
+	 * @param file（上传的文件）
+	 * @return
+	 */
+	public String uploadFile(MultipartFile file){
+		String filePath = getClasspath()+"uploadAttachFiles/";
+		String randomName=UUID.randomUUID().toString().toUpperCase().replaceAll("-", ""); 
+		String fileName = fileUp(file, filePath,randomName);
+		System.out.println(fileName);
+		return fileName;
+	}
+
+
+	/**
+	 * 复制文件
+	 * @param file (文件对象）
+	 * @param filePath （文件路径）
+	 * @param fileName   （文件名）
+	 * @return
+	 */
+	public  String fileUp(MultipartFile file, String filePath, String fileName){
+		String extName = ""; // 扩展名格式：
+		try {
+
+			if (file.getOriginalFilename().lastIndexOf(".") >= 0){
+				extName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+			}
+
+			copyFile(file.getInputStream(), filePath, fileName+extName).replaceAll("-", "");
+
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		return fileName+extName;
+	}
+
+
+	/**
+	 * 写文件到当前目录的upload目录中
+	 * @param in
+	 * @param fileName
+	 * @throws IOException
+	 */
+	private  String copyFile(InputStream in, String dir, String realName)
+			throws IOException {
+		File file = mkdirsmy(dir,realName);
+		FileUtils.copyInputStreamToFile(in, file);
+		return realName;
+	}
+
+
+	/**判断路径是否存在，否：创建此路径
+	 * @param dir  文件路径
+	 * @param realName  文件名
+	 * @throws IOException 
+	 */
+	public  File mkdirsmy(String dir, String realName) throws IOException{
+		File file = new File(dir, realName);
+		if (!file.exists()) {
+			if (!file.getParentFile().exists()) {
+				file.getParentFile().mkdirs();
+			}
+			file.createNewFile();
+		}
+		return file;
+	}
+
+
+
+
+	/**获取classpath1
+	 * @return
+	 */
+	public  String getClasspath(){
+		String path = (String.valueOf(Thread.currentThread().getContextClassLoader().getResource(""))+"../../").replaceAll("file:/", "").replaceAll("%20", " ").trim();	
+		if(path.indexOf(":") != 1){
+			path = File.separator + path;
+		}
+		return path;
+	}
 }

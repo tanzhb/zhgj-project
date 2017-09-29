@@ -36,6 +36,7 @@ import com.congmai.zhgj.web.model.PaymentPlanExample;
 import com.congmai.zhgj.web.model.PaymentPlanView;
 import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.PaymentRecordExample;
+import com.congmai.zhgj.web.model.PaymentRecordExample.Criteria;
 import com.congmai.zhgj.web.model.Statement;
 import com.congmai.zhgj.web.model.StatementExample;
 import com.congmai.zhgj.web.model.StatementOrderInfo;
@@ -239,94 +240,94 @@ public class StatementServiceImpl implements StatementService {
 		Map<String,Object> map = new HashMap<String, Object>();
 		
 		List<StatementOrderInfo> list = new ArrayList<StatementOrderInfo>(); //账单信息
-		List<StatementPaymentInfo> paymentList = new ArrayList<StatementPaymentInfo>(); //本月应付
+		List<StatementPaymentInfo> shouldPaymentList = new ArrayList<StatementPaymentInfo>(); //本月应付
 		List<StatementPaymentInfo> alreadyPaymentList = new ArrayList<StatementPaymentInfo>(); //本月已付
 		try{
-					//构造付款查询条件
-					PaymentPlanExample example3 = new PaymentPlanExample();
-					if(StringUtils.isNotEmpty(supplyComId)){
-						example3.createCriteria().andSupplyComIdEqualTo(supplyComId).andBuyComIdIsNull()
+					PaymentRecordExample paymentRecordExample = new PaymentRecordExample(); 
+					Criteria criteria = paymentRecordExample.createCriteria();
+					if(StringUtils.isNotEmpty(supplyComId)){ //供应商对账单
+						if(StringUtils.isEmpty(buyComId)){
+							criteria.andBuyComIdIsNull();
+						}else{
+							criteria.andBuyComIdEqualTo(buyComId);
+						}
+						criteria.andSupplyComIdEqualTo(supplyComId)
 						.andPlayPaymentDateGreaterThanOrEqualTo(DateUtil.getMonthFirstDay(DateUtil.parse("yyyy-MM-dd", statementDate)))
 						.andPlayPaymentDateLessThanOrEqualTo(DateUtil.getMonthLastDay(DateUtil.parse("yyyy-MM-dd", statementDate)));
-					}else{
-						example3.createCriteria().andBuyComIdEqualTo(buyComId).andSupplyComIdIsNull()
+					}else{ //客户对账单
+						if(StringUtils.isEmpty(supplyComId)){
+							criteria.andSupplyComIdIsNull();
+						}else{
+							criteria.andSupplyComIdEqualTo(supplyComId);
+						}
+						criteria.andBuyComIdEqualTo(buyComId)
 						.andPlayPaymentDateGreaterThanOrEqualTo(DateUtil.getMonthFirstDay(DateUtil.parse("yyyy-MM-dd", statementDate)))
 						.andPlayPaymentDateLessThanOrEqualTo(DateUtil.getMonthLastDay(DateUtil.parse("yyyy-MM-dd", statementDate)));
 					}
-					
-					//根据条件获取付款计划
-					List<PaymentPlanView> paymentPlanViews = paymentPlanViewMapper.selectByExample(example3);
 					Map<String,Map<String,Double>> map2 = new HashMap<String, Map<String,Double>>();
  					Set<OrderInfo> set = new HashSet<OrderInfo>();
  					
  					//计算期初
  					calcStatementBegin(supplyComId,buyComId,statementDate,map);
  					
- 					
-					if(CollectionUtils.isNotEmpty(paymentPlanViews)){
+					List<PaymentRecord> paymentRecords = paymentRecordMapper.selectByExample(paymentRecordExample);
+					if(CollectionUtils.isNotEmpty(paymentRecords)){
+						for(PaymentRecord record :paymentRecords){
+							StatementPaymentInfo alreadyPaymentInfo = new StatementPaymentInfo(); //已付信息
+						//	StatementPaymentInfo shouldPaymentInfo = new StatementPaymentInfo();	//应付信息
+							//获取本期应付信息
+							getShouldPaymentInfo2(paymentRecords,set,shouldPaymentList,map2);
 							
-								//获取本期应付信息
-								getShouldPaymentInfo(paymentPlanViews,set,paymentList,map2);
-								
-								//构造付款记录查询条件
-								PaymentRecordExample example4 = new PaymentRecordExample();
-								if(StringUtils.isNotEmpty(supplyComId)){//供应对账单
-									example4.createCriteria().andSupplyComIdEqualTo(supplyComId).andBuyComIdIsNull()
-									.andPaymentDateGreaterThanOrEqualTo(DateUtil.getMonthFirstDay(DateUtil.parse("yyyy-MM-dd", statementDate)))
-									.andPaymentDateLessThanOrEqualTo(DateUtil.getMonthLastDay(DateUtil.parse("yyyy-MM-dd", statementDate)));
-								}else{//客户对账单
-									example4.createCriteria().andBuyComIdEqualTo(buyComId).andSupplyComIdIsNull()
-									.andPaymentDateGreaterThanOrEqualTo(DateUtil.getMonthFirstDay(DateUtil.parse("yyyy-MM-dd", statementDate)))
-									.andPaymentDateLessThanOrEqualTo(DateUtil.getMonthLastDay(DateUtil.parse("yyyy-MM-dd", statementDate)));
-								}
-								
-								//根据条件获取付款计划
-								List<PaymentRecord> records = paymentRecordMapper.selectByExample(example4);
-								
-								//获取本期已付信息
-								if(CollectionUtils.isNotEmpty(records)){
-									for(PaymentRecord record :records){
-										StatementPaymentInfo statementPaymentInfo = new StatementPaymentInfo();
-										PaymentPlanView plan =paymentPlanViewMapper.selectByPrimaryKey(record.getPaymentPlanSerial());
-										if(plan !=null){
-											//获取订单信息
-											OrderInfo order = orderInfoMapper.selectByPrimaryKey(plan.getOrderSerial());
-											double paymentAmount = Handle.stringToDouble(plan.getPaymentAmount());//获取付款金额
-											if(order!=null){
-												if(map2.containsKey(order.getSerialNum())){
-													//累加已付款金额
-													map2.get(order.getSerialNum()).put("totalPaymentAmount",map2.get(order.getSerialNum()).get("totalPaymentAmount")+ paymentAmount);
-												}
-												statementPaymentInfo.setPaymentPlanNum(plan.getPaymentPlanNum());//付款计划编号
-												statementPaymentInfo.setPaymentPlanDate(DateUtil.format("yyyy-MM-dd", plan.getPlayPaymentDate()));//计划付款日期
-												statementPaymentInfo.setPaymentNode(plan.getPaymentNode());//付款节点
-												statementPaymentInfo.setPaymentStatus(plan.getStatus());//付款状态
-												statementPaymentInfo.setPaymentAmount(String.valueOf(paymentAmount));//付款金额
-												statementPaymentInfo.setOrderNum(order.getOrderNum());//订单编号
-												statementPaymentInfo.setIsBill(record.getIsBill());//是否开票
-												//paymentSerial
-												InvoiceExample invoiceExample = new InvoiceExample();
-												invoiceExample.createCriteria().andPaymentSerialEqualTo(record.getSerialNum()).andDelFlgEqualTo("0");
-												List<Invoice> invoices = invoiceMapper.selectByExample(invoiceExample);
-												if(CollectionUtils.isNotEmpty(invoices)){
-													for(Invoice invoice : invoices){
-														
-													}
-												}
-												
-												statementPaymentInfo.setBillNum("施工中");//开票编号
-												statementPaymentInfo.setBillDate("施工中");//开票日期
-												statementPaymentInfo.setPeriod("1");//账期
-												statementPaymentInfo.setInterest("施工中");//利息
-												alreadyPaymentList.add(statementPaymentInfo);
-											}
-										}
+							if(record != null){
+
+								//获取订单信息
+								OrderInfo order = orderInfoMapper.selectByPrimaryKey(record.getOrderSerial());
+								double paymentAmount = Handle.stringToDouble(record.getPaymentAmount());//获取实际付款金额
+								if(order!=null){
+									if(map2.containsKey(order.getSerialNum())){
+										//累加已付款金额
+										map2.get(order.getSerialNum()).put("totalPaymentAmount",map2.get(order.getSerialNum()).get("totalPaymentAmount")+ paymentAmount);
 									}
+									alreadyPaymentInfo.setPaymentNum(record.getPaymentNum());//付款计划编号
+									alreadyPaymentInfo.setPaymentPlanDate(DateUtil.format("yyyy-MM-dd", record.getPlayPaymentDate()));//计划付款日期
+									alreadyPaymentInfo.setPaymentNode(record.getPaymentNode());//付款节点
+									alreadyPaymentInfo.setPaymentStatus(record.getStatus());//付款状态
+									alreadyPaymentInfo.setPaymentAmount(String.valueOf(paymentAmount));//付款金额
+									alreadyPaymentInfo.setOrderNum(order.getOrderNum());//订单编号
+									alreadyPaymentInfo.setIsBill(record.getIsBill());//是否开票
+									//paymentSerial
+									
+									//开票信息
+									InvoiceExample invoiceExample = new InvoiceExample();
+									invoiceExample.createCriteria().andPaymentSerialEqualTo(record.getSerialNum()).andDelFlgEqualTo("0");
+									List<Invoice> invoices = invoiceMapper.selectByExample(invoiceExample);
+									
+									List<String> invoiceNums = new ArrayList<String>();
+									List<String> billingDates = new ArrayList<String>();
+									
+									if(CollectionUtils.isNotEmpty(invoices)){
+										for(Invoice invoice : invoices){
+											invoice.getInvoiceNum(); //开票编号
+											invoice.getBillingDate();//开票日期
+											invoiceNums.add(invoice.getInvoiceNum());
+											billingDates.add(DateUtil.format("yyyy-MM-dd",invoice.getBillingDate()));
+										}
+										alreadyPaymentInfo.setBillNum(StringUtils.join(invoiceNums,","));//开票编号
+										alreadyPaymentInfo.setBillDate(StringUtils.join(billingDates,","));//开票日期
+									}else{
+										alreadyPaymentInfo.setBillNum("");//开票编号
+										alreadyPaymentInfo.setBillDate("");//开票日期
+									}
+									
+									
+									alreadyPaymentInfo.setPeriod("1");//账期
+									alreadyPaymentInfo.setInterest("0.00");//利息
+									alreadyPaymentList.add(alreadyPaymentInfo);
 								}
-								
-								getOrderInfo(set,map2,list);
-								
-								
+							
+							}
+						}
+						getOrderInfo(set,map2,list);
 					}
 							
 				} catch (Exception e) {
@@ -338,7 +339,7 @@ public class StatementServiceImpl implements StatementService {
 				/*	}
 				}*/
 				map.put("orderList", list);
-				map.put("paymentList", paymentList);
+				map.put("paymentList", shouldPaymentList);
 				map.put("alreadyPaymentList", alreadyPaymentList);
 				return map;
 	}
@@ -402,7 +403,7 @@ public class StatementServiceImpl implements StatementService {
 				if(CollectionUtils.isNotEmpty(records)){
 					record = records.get(0);
 				}
-				statementPaymentInfo.setPaymentPlanNum(plan.getPaymentPlanNum());//付款计划编号
+				//statementPaymentInfo.setPaymentPlanNum(plan.getPaymentPlanNum());//付款计划编号
 				statementPaymentInfo.setPaymentPlanDate(DateUtil.format("yyyy-MM-dd", plan.getPlayPaymentDate()));//计划付款日期
 				statementPaymentInfo.setPaymentNode(plan.getPaymentNode());//支付节点
 				statementPaymentInfo.setPaymentStatus(plan.getStatus());//支付状态
@@ -427,6 +428,63 @@ public class StatementServiceImpl implements StatementService {
 					_map.put("totalReadyAmount", readyAmount);
 					_map.put("totalUnReadyAmount", unReadyAmount);
 					map2.put(order.getSerialNum(),_map);
+				}
+			
+		}
+	}
+	
+	/**
+	 * 
+	 * @Description (TODO获取本期应付信息)
+	 * @param paymentPlanViews
+	 * @param set
+	 * @param paymentList
+	 * @param moneyCountMap
+	 */
+	private void getShouldPaymentInfo2(List<PaymentRecord> paymentRecord,Set<OrderInfo> set,List<StatementPaymentInfo> paymentList,Map<String,Map<String, Double>> moneyCountMap){
+		for(PaymentRecord record :paymentRecord){
+			
+			StatementPaymentInfo shouldPaymentInfo = new StatementPaymentInfo();
+			
+			//获取付款计划关联订单信息，去重放入set,统计数据
+			OrderInfoExample orderExample = new OrderInfoExample();
+			orderExample.createCriteria().andSerialNumEqualTo(record.getOrderSerial());
+			OrderInfo order = orderInfoMapper.selectByPrimaryKey(record.getOrderSerial());
+			set.add(order);
+			
+
+			//PaymentRecord record = null;
+			double applyPaymentAmount = Handle.stringToDouble(record.getApplyPaymentAmount()); //获取应付金额
+			
+			//需要在发票记录中计算
+			double readyAmount = Handle.stringToDouble("0"); //获取已开金额
+			double unReadyAmount = Handle.stringToDouble("0"); //获取未开金额
+			
+				shouldPaymentInfo.setPaymentNum(record.getPaymentNum());//付款计划编号
+				shouldPaymentInfo.setPaymentPlanDate(DateUtil.format("yyyy-MM-dd", record.getPlayPaymentDate()));//计划付款日期
+				shouldPaymentInfo.setPaymentNode(record.getPaymentNode());//支付节点
+				shouldPaymentInfo.setPaymentStatus(record.getStatus());//支付状态
+				shouldPaymentInfo.setPaymentAmount(String.valueOf(applyPaymentAmount));//应付金额
+				shouldPaymentInfo.setOrderNum(order.getOrderNum());//订单编号
+				if(record!=null){
+					shouldPaymentInfo.setIsBill(record.getIsBill());//是否开票
+					shouldPaymentInfo.setBillNum("施工中");//开票金额
+					shouldPaymentInfo.setBillDate("施工中");//开票日期
+				}
+				shouldPaymentInfo.setPeriod("1");//账期
+				shouldPaymentInfo.setInterest("施工中");//利息
+				paymentList.add(shouldPaymentInfo);
+				
+				
+				if(moneyCountMap.containsKey(order.getSerialNum())){
+					moneyCountMap.get(order.getSerialNum()).put("totalPaymentAmount",0D);
+					moneyCountMap.get(order.getSerialNum()).put("totalReadyAmount",moneyCountMap.get(order.getSerialNum()).get("totalReadyAmount")+ readyAmount);//累计已开票金额
+					moneyCountMap.get(order.getSerialNum()).put("totalUnReadyAmount",moneyCountMap.get(order.getSerialNum()).get("totalUnReadyAmount")+ unReadyAmount);//累计未开票金额
+				}else{
+					Map<String,Double> _map = new HashMap<String, Double>();
+					_map.put("totalReadyAmount", readyAmount);
+					_map.put("totalUnReadyAmount", unReadyAmount);
+					moneyCountMap.put(order.getSerialNum(),_map);
 				}
 			
 		}

@@ -1242,6 +1242,76 @@ public class StockInOutRecordExample {
             addCriterion("shipperOrReceiver not between", value1, value2, "shipperOrReceiver");
             return (Criteria) this;
         }
+        
+        public Criteria andInOutFlagIsNull() {
+            addCriterion("inOutFlag is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutFlagIsNotNull() {
+            addCriterion("inOutFlag is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutFlagEqualTo(String value) {
+            addCriterion("inOutFlag =", value, "inOutFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutFlagNotEqualTo(String value) {
+            addCriterion("inOutFlag <>", value, "inOutFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutFlagGreaterThan(String value) {
+            addCriterion("inOutFlag >", value, "inOutFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutFlagGreaterThanOrEqualTo(String value) {
+            addCriterion("inOutFlag >=", value, "inOutFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutFlagLessThan(String value) {
+            addCriterion("inOutFlag <", value, "inOutFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutFlagLessThanOrEqualTo(String value) {
+            addCriterion("inOutFlag <=", value, "inOutFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutFlagLike(String value) {
+            addCriterion("inOutFlag like", value, "inOutFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutFlagNotLike(String value) {
+            addCriterion("inOutFlag not like", value, "inOutFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutFlagIn(List<String> values) {
+            addCriterion("inOutFlag in", values, "inOutFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutFlagNotIn(List<String> values) {
+            addCriterion("inOutFlag not in", values, "inOutFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutFlagBetween(String value1, String value2) {
+            addCriterion("inOutFlag between", value1, value2, "inOutFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andInOutFlagNotBetween(String value1, String value2) {
+            addCriterion("inOutFlag not between", value1, value2, "inOutFlag");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

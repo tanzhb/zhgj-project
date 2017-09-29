@@ -26,17 +26,11 @@ angular
 						 App.initAjax();
 						 if($location.path()=="/addPriceList"){
 							 debugger;
-							 $('.date-picker').datepicker({
-								 rtl: App.isRTL(),
-								 orientation: "left",
-								 autoclose: true,
-								 language:"zh-CN"
-							 })//初始化icheck控件
 							 if($stateParams.buyOrSale.length<=4){
 								 debugger;
 								 $scope.ladderprices=[{}];
 								 _index = 0; 
-								 $scope.priceList.isLadderPrice="0";
+								// $scope.priceList.isLadderPrice="0";
 								 getPriceListInfo($stateParams.buyOrSale);
 								 $scope.isChecked=false;
 								 $scope.priceListAdd=true;
@@ -52,22 +46,18 @@ angular
 								 $scope.ladderpriceView=true;
 								 $scope.ladderpriceEdit=false;//隐藏取消
 							 }
-							 $scope.buyOrSale=$stateParams.buyOrSale;
+							
 							 if($stateParams.buyOrSale.indexOf("buy")>-1){
 								 initSuppliers();
 							 }else{
 								 initCustomers(); 
 							 }
-							 handle.pageRepeater();
+						/*	 handle.pageRepeater();
 							 selectParentMateriel();//选择物料表格初始化
-							 initFormiCheck();
+							 initFormiCheck();*/
 							
 
-						 }else if($location.path()=="/invoiceView"){
-					 			debugger;
-					 			$scope.buyOrSale=$stateParams.priceList;
-					 			getInvoiceInfo($stateParams.priceList);//查看价格
-				 		}else if($location.path()=="/priceList"){
+						 }else if($location.path()=="/priceList"){
 				 			debugger;
 				 			if($stateParams.buyOrSale=='sale'){
 				 				debugger;
@@ -84,11 +74,38 @@ angular
 				 				$("#tab_sale").removeClass("active")
 				 				loadPriceListBuyTable();//加载销售价格列表
 				 			}
+					 		}else{
+					 			 getPriceListInfo($stateParams.buyOrSale);
 					 		}
-						/* if(){
-							 debugger;
-							 loadPriceListTable();//加载价格列表
-						 }*/
+						 $scope.buyOrSale=$stateParams.buyOrSale;
+						 $scope.type=$stateParams.type;
+						  if($location.path()=="/approvalPriceApply"||$location.path()=="/editPriceApply"){
+						 $scope.taskId=$stateParams.taskId;
+						 $scope.processInstanceId=$stateParams.processInstanceId;
+						var comments =$stateParams.comments;
+						 if(comments == ""||comments == null){
+	    						$("#comment_audit").html( "<tr><td colspan='3' align='center'>无内容</td></tr>");
+	    					}else{ $("#comment_audit").html(comments);}
+						 if($location.path()=="/editPriceApply"){
+							 if($stateParams.buyOrSale.indexOf("buy")>-1){
+								 initSuppliers();
+							 }else{
+								 initCustomers(); 
+							 }
+							 $scope.priceListView =false;
+							 $scope.priceListAdd =true ;
+							 $scope.priceListEdit =false;
+	    					}
+					 }
+						  handle.pageRepeater();
+							 selectParentMateriel();//选择物料表格初始化
+							 initFormiCheck();
+							 $('.date-picker').datepicker({
+								 rtl: App.isRTL(),
+								 orientation: "left",
+								 autoclose: true,
+								 language:"zh-CN"
+							 })//初始化icheck控件
 						 // set default layout mode
 						 $rootScope.settings.layout.pageContentWhite = true;
 						 $rootScope.settings.layout.pageBodySolid = false;
@@ -295,6 +312,44 @@ angular
 				 // 添加checkbox功能
 				 // ***************************************
 			 }*/
+
+	 			//***************************************流程处理相关start
+	        	var dbBuyPricetable;//待办采购价格table
+	        	var dbSalePricetable;//待办销售价格table
+				var endTaskBuyPriceTable;//已办采购价格table
+				var endTaskSalePriceTable;//已办销售价格table
+				
+
+				// 显示采购价格
+				$scope.toApplyBuyPrice = function() {
+					$('#buyPriceTab a[href="#applyBuyPrice"]').tab('show');
+				};
+				// 采购价格待办流程
+				$scope.toDaibanBuyPrice = function() {
+					debugger;
+					$('#buyPriceTab a[href="#daibanBuyPrice"]').tab('show');
+					dbBuyPricetable = showDbBuyPriceTable();								
+				};
+				// 采购价格已办流程
+				$scope.toYibanBuyPrice = function() {
+					$('#buyPriceTab a[href="#yibanBuyPrice"]').tab('show');
+					debugger;
+					endTaskBuyPriceTable = showYbBuyPriceTable();
+				};
+				// 显示销售价格
+				$scope.toApplySalePrice = function() {
+					$('#salePriceTab a[href="#applySalePrice"]').tab('show');
+				};
+				// 销售价格待办流程
+				$scope.toDaibanSalePrice = function() {
+					$('#salePriceTab a[href="#daibanSalePrice"]').tab('show');
+					dbSalePricetable = showDbSalePriceTable();								
+				};
+				// 销售价格已办流程
+				$scope.toYibanSalePrice = function() {
+					$('#salePriceTab a[href="#yibanSalePrice"]').tab('show');
+					endTaskSalePriceTable = showYbSalePriceTable();
+				};
 			 
 				// 构建datatables开始***************************************
 				var tableAjaxUrl ;
@@ -408,9 +463,34 @@ function loadPriceListBuyTable(){
 								                            			  return "";
 								                            		  }
 								                            	  }
-								                              },{
+								                              },/*{
 								                            	  mData : 'status'
-								                              }],
+								                              }*/
+								                              { mData: 'processBase',
+									                            	mRender:function(data,
+									    									type, row, meta){
+									                            		if(data!=""&&data!=null){
+									                            			if(data.status=="PENDING"||data.status=="WAITING_FOR_APPROVAL"){
+									    										return '<span  class="label label-sm label-warning ng-scope">审核中</span>';
+									    									}else if(data.status=="APPROVAL_SUCCESS"){
+									    										if(row.status==1){
+									    											return '<span  class="label label-sm label-success ng-scope">生效中</span>';
+									    										}else if(row.status==2){
+									    											return '<span  class="label label-sm label-success ng-scope">将失效</span>';
+									    										}else if(row.status==3){
+									    											return '<span  class="label label-sm label-success ng-scope">已失效</span>';
+									    										}
+									    									}else if(data.status=="APPROVAL_FAILED"){
+									    										return '<span  class="label label-sm label-danger ng-scope">未通过</span>';
+									    									}else{
+									    										return '<span  class="label label-sm label-info ng-scope">未审批</span>';
+									    									}
+									                            		}else{
+									                            			return '<span  class="label label-sm label-info ng-scope">未审批</span>';
+									                            		}
+									                            	}
+									                            }
+								                              ],
 								                              'aoColumnDefs' : [ 
 								                                                 {
 								                            	  'targets' : 0,
@@ -601,9 +681,32 @@ function loadPriceListSaleTable(){
 	                            			  return "";
 	                            		  }
 	                            	  }
-	                              },{
+	                              },/*{
 	                            	  mData : 'status'
-	                              }],
+	                              }*/ { mData: 'processBase',
+		                            	mRender:function(data,
+		    									type, row, meta){
+		                            		if(data!=""&&data!=null){
+		                            			if(data.status=="PENDING"||data.status=="WAITING_FOR_APPROVAL"){
+		    										return '<span  class="label label-sm label-warning ng-scope">审核中</span>';
+		    									}else if(data.status=="APPROVAL_SUCCESS"){
+		    										if(row.status==1){
+		    											return '<span  class="label label-sm label-success ng-scope">生效中</span>';
+		    										}else if(row.status==2){
+		    											return '<span  class="label label-sm label-success ng-scope">将失效</span>';
+		    										}else if(row.status==3){
+		    											return '<span  class="label label-sm label-success ng-scope">已失效</span>';
+		    										}
+		    									}else if(data.status=="APPROVAL_FAILED"){
+		    										return '<span  class="label label-sm label-danger ng-scope">未通过</span>';
+		    									}else{
+		    										return '<span  class="label label-sm label-info ng-scope">未审批</span>';
+		    									}
+		                            		}else{
+		                            			return '<span  class="label label-sm label-info ng-scope">未审批</span>';
+		                            		}
+		                            	}
+		                            }],
 	                              'aoColumnDefs' : [ {
 	                            	  'targets' : 0,
 	                            	  'searchable' : false,
@@ -688,12 +791,17 @@ function loadPriceListSaleTable(){
 			 // 添加价格开始***************************************
 			 $scope.addPriceList = function(judgeString) {
 				 debugger;
-				 $state.go('addPriceList',{buyOrSale:judgeString},{reload:true}); 
+				 $state.go('addPriceList',{buyOrSale:judgeString,type:'edit'},{reload:true}); 
 			 }
 			 $scope.editPriceList = function(){
 				 debugger;
 				 var priceList=$scope.priceList;
 				 getPriceListInfo($scope.priceList.serialNum);
+				 if($scope.buyOrSale.indexOf("buy")>-1){
+					 initSuppliers();
+				 }else{
+					 initCustomers(); 
+				 }
 				 $scope.priceList=priceList;
 				 $scope.priceListView =false;
 				 $scope.priceListAdd =true ;
@@ -843,7 +951,8 @@ function loadPriceListSaleTable(){
 						 countStart:{digits:"必须是数字！"},
 						 countEnd:{digits:"必须是数字！"},
 						 price:{digits:"必须是数字！"},
-						 inclusivePrice:{}
+						 inclusivePrice:{},
+						 ladderInclusivePrice:{}
 					 },
 					 rules: {
 						 priceNum:{required:true},
@@ -863,7 +972,8 @@ function loadPriceListSaleTable(){
 						 countStart:{digits:true},
 						 countEnd:{digits:true},
 						 price:{digits:true},
-						 inclusivePrice:{inclusivePriceNumCheck:!0}
+						 inclusivePrice:{inclusivePriceNumCheck:!0},
+						 ladderInclusivePrice:{digits:true,ladderPriceNumCheck:!0}
 					 },
 					 invalidHandler: function(e, t) {
 						 i.hide(),
@@ -901,7 +1011,15 @@ function loadPriceListSaleTable(){
 					$(element).removeData();
 					return this.optional(element) || Number($(element).data("topprice")) == NaN?false:(Number($(element).data("topprice"))-value>= 0);
 				}, "最低限价不能超过最高限价");
-			
+			 jQuery.validator.addMethod("ladderPriceNumCheck", function (value, element) {//梯度价格判断
+	    			debugger;
+					$(element).removeData();
+					if(/^[-\+]?\d+(\.\d+)?$/.test(value)==false||value==NaN||(Number(value)*100+"").indexOf(".")>-1){
+						toastr.warning("只能包含小数点和数字,且只能有两位小数");
+						$("#inclusivePrice").focus();
+						}
+					return this.optional(element) || Number($(element).data("ladderprice")) == NaN?false:(Number($(element).data("ladderprice"))-value<= 0);
+				}, "梯度单价不能超过梯度含税价格");
 			 function getLadderPriceInfo(serialNum){//获取阶梯价格详情
 				 if(!handle.isNull(serialNum)){
 					 debugger;
@@ -936,12 +1054,11 @@ function loadPriceListSaleTable(){
 			 };
 
 			 /**
-			  * 显示价格信息(弹框)
+			  * 显示价格信息
 			  */
 			 $scope.showPriceListInfoModal = function(serialNum,judgeString){
-				 $state.go("addPriceList",{buyOrSale:serialNum+judgeString});
-				 /*getPriceListInfo(serialNum);
-				 $('#viewPriceList').modal('show');*/ 
+				 $state.go("addPriceList",{buyOrSale:serialNum+judgeString+'view'});
+				
 			 };
 
 			 //创建对象(上传附件开始)
@@ -992,7 +1109,7 @@ function loadPriceListSaleTable(){
 			 }
 			 $scope.downloadFile = function(obj){
 				 if(!handle.isNull(obj)){
-					 window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+obj.file;
+					 window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+encodeURI(encodeURI(obj.file));
 				 }else{
 					 toastr.error("下载失败!");
 				 }
@@ -1383,5 +1500,769 @@ function loadPriceListSaleTable(){
 
 
 			  }); 
+			  
+		      //********审批流程列表****************//
+		        function showDbBuyPriceTable(){
+		        	
+		        	var table = $("#dbBuyPriceTable")
+		        	.DataTable(
+		        			{
+		        				language : {
+		        					aria : {
+		        						sortAscending : ": activate to sort column ascending",
+		        						sortDescending : ": activate to sort column descending"
+		        					},
+		        					emptyTable : "空表",
+		        					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+		        					infoEmpty : "没有数据",
+		        					infoFiltered : "(从 _MAX_ 条数据中检索)",
+		        					lengthMenu : "每页显示 _MENU_ 条数据",
+		        					search : "查询:",
+		        					zeroRecords : "抱歉， 没有找到！",
+		        					paginate : {
+		        						"sFirst" : "首页",
+		        						"sPrevious" : "前一页",
+		        						"sNext" : "后一页",
+		        						"sLast" : "尾页"
+		        					}
+		        				},
 
+		        				buttons : [
+		        						{
+		        							text : "办理",
+		        							className : "btn default",
+		        							action: function(e, dt, node, config) { 
+		        								
+		        								var ids = '';
+		        								table.$('input[type="checkbox"]').each(function() {
+		        									if ($.contains(document, this)) {											
+		        										if (this.checked) {
+		        											// 将选中数据id放入ids中
+		        											if (ids == '') {
+		        												ids = this.value;
+		        											} else
+		        												ids = 'more';
+		        										}
+		        									}
+		        								});
+		        								
+		        								if(ids==''){
+		        									toastr.warning('请选择一个办理！');return;
+		        								}else if(ids=='more'){
+		        									toastr.warning('只能选择一个办理！');return;
+		        								} else {
+		        									priceListService
+		        									.getAuditInfos(ids)
+													.then(
+															function(result) {													
+		        												var comments = ""//添加评论
+			        												for (var i=0;i<result.commentList.length;i++){
+			        													comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+			        													+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
+			        												}
+			        												if(result.actionType == 'audit'){//审批流程
+			        													console.log(ids+"---"+result.priceList.processInstanceId);
+			        													$state.go('approvalPriceApply',{buyOrSale:result.priceList.serialNum+'buy', serialNum:result.priceList.serialNum,taskId:ids, comments:comments,processInstanceId:result.priceList.processInstanceId});
+			        												}else{
+			        													$state.go('editPriceApply',{buyOrSale:result.priceList.serialNum+'buy', serialNum:result.priceList.serialNum,taskId:ids, comments:comments,processInstanceId:result.priceList.processInstanceId});
+			        												}
+			        											},
+															function(errResponse) {
+			        												toastr.warning("办理失败！");
+			        												console.error('Error while apply ap');
+			        											}
+			
+													);
+		        								}
+		        							}
+		        						},
+		        						{
+		        							text : "签收",
+		        							className : "btn default",
+		        							action: function(e, dt, node, config) { 
+		        								var ids = '';
+		        								table.$('input[type="checkbox"]').each(function() {
+		        									if ($.contains(document, this)) {											
+		        										if (this.checked) {
+		        											// 将选中数据id放入ids中
+		        											if (ids == '') {
+		        												ids = this.value;
+		        											} else
+		        												ids = 'more';
+		        										}
+		        									}
+		        								});
+		        								
+		        								if(ids==''){
+		        									toastr.warning('请选择一个签收！');return;
+		        								}else if(ids=='more'){
+		        									toastr.warning('只能选择一个签收！');return;
+		        								} else {
+		        									claimTask(ids, 'dbBuyPriceTable');
+		        								}
+		        								
+		        							}
+		        						},
+		        						{
+		        							text : "转办",
+		        							className : "btn default"
+		        						},
+		        						{
+		        							text : "委派",
+		        							className : "btn default"
+		        						},
+		        						{
+		        							text : "跳转",
+		        							className : "btn default"
+		        						} ],
+		        				dom : "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
+		        				order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+
+		        				bRetrieve : true,
+		        				lengthMenu : [
+		        						[ 5, 10, 15, 30, -1 ],
+		        						[ 5, 10, 15, 30,
+		        								"All" ] ],
+		        				pageLength : 10,// 每页显示数量
+		        				processing : true,// loading等待框
+
+		        				ajax : ctx
+		        						+ "/rest/processAction/todoTask/" + 'buyPrice',// 加载待办列表数据
+
+		        				"aoColumns" : [
+		        					              { mData: 'taskId'},
+		        									{
+		        										mData : 'assign',
+		        										mRender : function(
+		        												data) {
+		        											if (data == '') {
+		        												return "待签收";
+		        											} else {
+		        												return "待办理";
+		        											}
+		        										}
+		        									},
+		        									{
+		        										mData : 'userName'
+		        									},
+		        									{
+		        										mData : 'title'
+		        									},
+		        									{
+		        										mData : 'taskName',
+		        										mRender : function(
+		        												data,
+		        												type,
+		        												row,
+		        												meta) {
+		        											return "<a class='trace' onclick=\"graphTrace('"
+		        													+ row.processInstanceId + "','" + ctx 
+		        													+ "')\" id='diagram' href='javascript:;' pid='"
+		        													+ row.id
+		        													+ "' pdid='"
+		        													+ row.processDefinitionId
+		        													+ "' title='see'>"
+		        													+ data
+		        													+ "</a>";
+		        										}
+		        									},
+		        									{
+		        										mData : 'owner',
+		        										mRender : function(
+		        												data,
+		        												type,
+		        												row,
+		        												meta) {
+		        											if (data != ''
+		        													&& data != row.assign) {
+		        												return row.assign
+		        														+ " (原执行人："
+		        														+ data
+		        														+ ")";
+		        											} else {
+		        												return row.assign;
+		        											}
+		        										}
+		        									},
+		        									{
+		        										mData : 'createTime',
+		        										mRender : function(
+		        												data) {
+		        											if (data != null) {
+		        												return timeStamp2String(data);
+		        											} else
+		        												return '';
+		        										}
+		        									},
+		        									{
+		        										mData : 'suspended',
+		        										mRender : function(
+		        												data) {
+		        											if (data) {
+		        												return "已挂起";
+		        											} else {
+		        												return "正常";
+		        											}
+		        										}
+		        									} ],
+		        						'aoColumnDefs': [ {
+		        	                    	'targets' : 0,
+		        	                    	'searchable' : false,
+		        	                    	'orderable' : false,
+		        	                    	'className' : 'dt-body-center',
+		        	                    	'render' : function(data,type, full, meta) {
+		        								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+		        								"<input type='checkbox' class='checkboxes' value="+ data +" />" +
+		        								"<span></span></label>";
+		        							
+		        	                    	}
+		        	                    } 
+		        	                    ]
+
+		        			})
+		        			
+		        			
+		        			$("#dbBuyPriceTable").find(".group-checkable").change(function() {
+					            var e = jQuery(this).attr("data-set"),
+					            t = jQuery(this).is(":checked");
+					            jQuery(e).each(function() {
+					                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+					            })
+					        }),
+					        $("#dbBuyPriceTable").on("change", "tbody tr .checkboxes",
+					        function() {
+					            $(this).parents("tr").toggleClass("active")
+					        })
+	        
+		        			return table;
+		        	
+		        	
+		        }
+		        $scope.cancelPage  = function(judgeString) {// 取消申请
+		        	 $state.go("priceList",{buyOrSale:judgeString});
+		        };
+		        //********审批流程start****************//
+			       $scope.submitPriceApply= function(judgeString) {// 进入申请审批页面
+			        	if(table.rows('.active').data().length != 1){
+			    			showToastr('toast-top-center', 'warning', '请选择一条任务进行流程申请！')
+			    		}else{
+			    			var processBase = table.row('.active').data().processBase;
+			    			if(processBase != null){
+			    				showToastr('toast-top-center', 'warning', '该价格已发起流程审批，不能再次申请！')
+			    			}else $state.go('submitPriceApply',{buyOrSale:table.row('.active').data().serialNum+judgeString});
+			    		}     	
+			        };
+			        
+			        
+			        $scope.confirmPriceApply  = function(judgeString) {// 进入提交申请
+			        	$scope.submitPriceList = {}
+			        	$scope.submitPriceList.serialNum = $scope.priceList.serialNum;
+			        	$scope.submitPriceList.remark = $scope.priceList.remark;
+			        	if(judgeString=='buy'){
+			        		$scope.submitPriceList.priceType="buyPrice";
+			        	}else{
+			        		$scope.submitPriceList.priceType="salePrice";
+			        	}
+			        	//启动流程
+			        	priceListService.startPriceProcess($scope.submitPriceList).then(
+			          		     function(data){
+			          		    	if(data == "1"){
+				        				toastr.success("提交申请成功！");
+				        				$scope.cancelPage();
+				        			}else{
+				        				toastr.error("提交申请失败！");
+						            	console.log(data);
+				        			}
+			          		     },
+			          		     function(error){
+			          		         $scope.error = error;
+			          		         toastr.error('数据保存出错！');
+			          		     }
+			          		 );
+			    		
+			        };
+			        
+			      //********审批流程列表****************//
+		        function doPrice(_url, mydata, modal){
+		        	$.ajax( {
+		    	        url : _url,
+		    	        dataType:"text",
+		    	        type: 'POST',
+		    	        data : mydata,
+		    	        success : function(data) {
+		    	        	showToastr('toast-bottom-right', 'success', data);
+		    	        	$scope.cancelPage();
+		    	        }
+		    	     });
+		    	}
+		    	
+		    	//审批通过
+		    	$scope.pricePass = function(judgeString) {
+		    		debugger;
+		    		console.log( $("#taskId").val()+"--");
+		    	    var mydata={"processInstanceId":$("#processInstanceId").val(),"priceId":$scope.priceList.serialNum,"content":$("#content").val(),
+		    				"completeFlag":true,"priceType":judgeString};
+		    	    var _url = ctx + "rest/priceList/complate/" + $("#taskId").val();
+		    	    doPrice(_url, mydata, 'audit');
+		    	};
+		    	//审批不通过
+		    	$scope.priceUnPass = function(judgeString) {
+		    		debugger;
+		    		var mydata={"processInstanceId":$("#processInstanceId").val(),"priceId":$scope.priceList.serialNum,"content":$("#content").val(),
+		    				"completeFlag":false,"priceType":judgeString};
+		    		var _url = ctx + "rest/priceList/complate/" + $("#taskId").val();
+		    		doPrice(_url, mydata, 'audit');
+		    	};
+		    	
+		    	//重新申请
+		    	$scope.replyPrice = function(judgeString) {
+		    		debugger;
+		    	    var mydata={"processInstanceId":$("#processInstanceId").val(),
+		    				"reApply":true,"priceId":$scope.priceList.serialNum,"reason":$scope.priceList.reason,"priceType":judgeString};
+		    		var _url = ctx + "rest/priceList/modifyPrice/" + $("#taskId").val();
+		    		doPrice(_url, mydata, 'modify');
+		    	};
+		    	//取消申请
+		    	$scope.cancelApplyPrice = function(judgeString) {
+		    		debugger;
+		    	     var mydata={"processInstanceId":$("#processInstanceId").val(),
+		    				"reApply":false,"priceId":$scope.priceList.serialNum,"reason":$scope.priceList.reason,"priceType":judgeString};
+		    		var _url = ctx + "rest/priceList/modifyPrice/" + $("#taskId").val();
+		    		doPrice(_url, mydata, 'modify' );
+		    	};
+
+		        function showYbBuyPriceTable(){
+		        	var endTaskTable = $("#endTaskBuyPriceTable").DataTable(
+		        			{
+		        				language : {
+		        					aria : {
+		        						sortAscending : ": activate to sort column ascending",
+		        						sortDescending : ": activate to sort column descending"
+		        					},
+		        					emptyTable : "空表",
+		        					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+		        					infoEmpty : "没有数据",
+		        					infoFiltered : "(从 _MAX_ 条数据中检索)",
+		        					lengthMenu : "每页显示 _MENU_ 条数据",
+		        					search : "查询:",
+		        					zeroRecords : "抱歉， 没有找到！",
+		        					paginate : {
+		        						"sFirst" : "首页",
+		        						"sPrevious" : "前一页",
+		        						"sNext" : "后一页",
+		        						"sLast" : "尾页"
+		        					}
+		        				},
+		        				order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+		        				bRetrieve : true,
+		        				lengthMenu : [
+		        						[ 5, 10, 15, 30, -1 ],
+		        						[ 5, 10, 15, 30,
+		        								"All" ] ],
+		        				pageLength : 10,// 每页显示数量
+		        				processing : true,// loading等待框
+
+		        				ajax : ctx
+		        						+ "/rest/processAction/endTask/"+'buyPrice',// 加载已办列表数据
+
+		        				"aoColumns" : [
+		        						{
+		        							mData : 'businessType',
+		        							mRender : function(
+		        									data) {
+		        								return "采购价格申请";
+		        							}
+		        						},
+		        						{
+		        							mData : 'userName'
+		        						},
+		        						{
+		        							mData : 'title'
+		        						},
+		        						{
+		        							mData : 'startTime',
+		        							mRender : function(
+		        									data,
+		        									type,
+		        									row,
+		        									meta) {
+		        								return timeStamp2String(data);
+		        							}
+		        						},
+		        						{
+		        							mData : 'claimTime',
+		        							mRender : function(
+		        									data,
+		        									type,
+		        									row,
+		        									meta) {
+		        								if(data != null){
+		        		                			return timeStamp2String(data);
+		        		                		}else{
+		        		                			return "无需签收";
+		        		                		}
+		        							}
+		        						},
+		        						{
+		        							mData : 'endTime',
+		        							mRender : function(
+		        									data) {
+		        								if (data != null) {
+		        									return timeStamp2String(data);
+		        								} else
+		        									return '';
+		        							}
+		        						},
+		        						{
+		        							mData : 'deleteReason'
+		        						},
+		        						{
+		        							mData : 'version'
+		        						},
+		        						{
+		        							mData : 'revoke',
+		        							mRender : function(data,type,row,meta) {
+		        								return "<a href='javascript:void(0);' onclick=\"revoke('"+row.taskId+"','"+row.processInstanceId+"','endTaskBuyPriceTable')\">撤销</a>";
+		        							}
+		        						}
+		        						]
+
+		        			})
+		         return endTaskTable;
+		        }
+    function showDbSalePriceTable(){
+		        	
+		        	var table = $("#dbSalePriceTable")
+		        	.DataTable(
+		        			{
+		        				language : {
+		        					aria : {
+		        						sortAscending : ": activate to sort column ascending",
+		        						sortDescending : ": activate to sort column descending"
+		        					},
+		        					emptyTable : "空表",
+		        					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+		        					infoEmpty : "没有数据",
+		        					infoFiltered : "(从 _MAX_ 条数据中检索)",
+		        					lengthMenu : "每页显示 _MENU_ 条数据",
+		        					search : "查询:",
+		        					zeroRecords : "抱歉， 没有找到！",
+		        					paginate : {
+		        						"sFirst" : "首页",
+		        						"sPrevious" : "前一页",
+		        						"sNext" : "后一页",
+		        						"sLast" : "尾页"
+		        					}
+		        				},
+
+		        				buttons : [
+		        						{
+		        							text : "办理",
+		        							className : "btn default",
+		        							action: function(e, dt, node, config) { 
+		        								
+		        								var ids = '';
+		        								table.$('input[type="checkbox"]').each(function() {
+		        									if ($.contains(document, this)) {											
+		        										if (this.checked) {
+		        											// 将选中数据id放入ids中
+		        											if (ids == '') {
+		        												ids = this.value;
+		        											} else
+		        												ids = 'more';
+		        										}
+		        									}
+		        								});
+		        								
+		        								if(ids==''){
+		        									toastr.warning('请选择一个办理！');return;
+		        								}else if(ids=='more'){
+		        									toastr.warning('只能选择一个办理！');return;
+		        								} else {
+		        									priceListService
+		        									.getAuditInfos(ids)
+													.then(
+															function(result) {													
+		        												var comments = ""//添加评论
+			        												for (var i=0;i<result.commentList.length;i++){
+			        													comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+			        													+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
+			        												}
+			        												if(result.actionType == 'audit'){//审批流程
+			        													$state.go('approvalPriceApply',{buyOrSale:result.priceList.serialNum+'sale',serialNum:result.priceList.serialNum, taskId:ids, comments:comments,processInstanceId:result.priceList.processInstanceId});
+			        												}else{
+			        													$state.go('editPriceApply',{buyOrSale:result.priceList.serialNum+'sale',serialNum:result.priceList.serialNum, taskId:ids, comments:comments,processInstanceId:result.priceList.processInstanceId});
+			        												}
+			        											},
+															function(errResponse) {
+			        												toastr.warning("办理失败！");
+			        												console.error('Error while apply ap');
+			        											}
+			
+													);
+		        								}
+		        							}
+		        						},
+		        						{
+		        							text : "签收",
+		        							className : "btn default",
+		        							action: function(e, dt, node, config) { 
+		        								var ids = '';
+		        								table.$('input[type="checkbox"]').each(function() {
+		        									if ($.contains(document, this)) {											
+		        										if (this.checked) {
+		        											// 将选中数据id放入ids中
+		        											if (ids == '') {
+		        												ids = this.value;
+		        											} else
+		        												ids = 'more';
+		        										}
+		        									}
+		        								});
+		        								
+		        								if(ids==''){
+		        									toastr.warning('请选择一个签收！');return;
+		        								}else if(ids=='more'){
+		        									toastr.warning('只能选择一个签收！');return;
+		        								} else {
+		        									claimTask(ids, 'dbSalePriceTable');
+		        								}
+		        								
+		        							}
+		        						},
+		        						{
+		        							text : "转办",
+		        							className : "btn default"
+		        						},
+		        						{
+		        							text : "委派",
+		        							className : "btn default"
+		        						},
+		        						{
+		        							text : "跳转",
+		        							className : "btn default"
+		        						} ],
+		        				dom : "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
+		        				order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+
+		        				bRetrieve : true,
+		        				lengthMenu : [
+		        						[ 5, 10, 15, 30, -1 ],
+		        						[ 5, 10, 15, 30,
+		        								"All" ] ],
+		        				pageLength : 10,// 每页显示数量
+		        				processing : true,// loading等待框
+
+		        				ajax : ctx
+		        						+ "/rest/processAction/todoTask/" + 'salePrice',// 加载待办列表数据
+
+		        				"aoColumns" : [
+		        					              { mData: 'taskId'},
+		        									{
+		        										mData : 'assign',
+		        										mRender : function(
+		        												data) {
+		        											if (data == '') {
+		        												return "待签收";
+		        											} else {
+		        												return "待办理";
+		        											}
+		        										}
+		        									},
+		        									{
+		        										mData : 'userName'
+		        									},
+		        									{
+		        										mData : 'title'
+		        									},
+		        									{
+		        										mData : 'taskName',
+		        										mRender : function(
+		        												data,
+		        												type,
+		        												row,
+		        												meta) {
+		        											return "<a class='trace' onclick=\"graphTrace('"
+		        													+ row.processInstanceId + "','" + ctx 
+		        													+ "')\" id='diagram' href='javascript:;' pid='"
+		        													+ row.id
+		        													+ "' pdid='"
+		        													+ row.processDefinitionId
+		        													+ "' title='see'>"
+		        													+ data
+		        													+ "</a>";
+		        										}
+		        									},
+		        									{
+		        										mData : 'owner',
+		        										mRender : function(
+		        												data,
+		        												type,
+		        												row,
+		        												meta) {
+		        											if (data != ''
+		        													&& data != row.assign) {
+		        												return row.assign
+		        														+ " (原执行人："
+		        														+ data
+		        														+ ")";
+		        											} else {
+		        												return row.assign;
+		        											}
+		        										}
+		        									},
+		        									{
+		        										mData : 'createTime',
+		        										mRender : function(
+		        												data) {
+		        											if (data != null) {
+		        												return timeStamp2String(data);
+		        											} else
+		        												return '';
+		        										}
+		        									},
+		        									{
+		        										mData : 'suspended',
+		        										mRender : function(
+		        												data) {
+		        											if (data) {
+		        												return "已挂起";
+		        											} else {
+		        												return "正常";
+		        											}
+		        										}
+		        									} ],
+		        						'aoColumnDefs': [ {
+		        	                    	'targets' : 0,
+		        	                    	'searchable' : false,
+		        	                    	'orderable' : false,
+		        	                    	'className' : 'dt-body-center',
+		        	                    	'render' : function(data,type, full, meta) {
+		        								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+		        								"<input type='checkbox' class='checkboxes' value="+ data +" />" +
+		        								"<span></span></label>";
+		        							
+		        	                    	}
+		        	                    } 
+		        	                    ]
+
+		        			})
+		        			
+		        			
+		        			$("#dbSalePriceTable").find(".group-checkable").change(function() {
+					            var e = jQuery(this).attr("data-set"),
+					            t = jQuery(this).is(":checked");
+					            jQuery(e).each(function() {
+					                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+					            })
+					        }),
+					        $("#dbSalePriceTable").on("change", "tbody tr .checkboxes",
+					        function() {
+					            $(this).parents("tr").toggleClass("active")
+					        })
+	        
+		        			return table;
+		        	
+		        	
+		        }
+
+		        function showYbSalePriceTable(){
+		        	var endTaskTable = $("#endTaskSalePriceTable").DataTable(
+		        			{
+		        				language : {
+		        					aria : {
+		        						sortAscending : ": activate to sort column ascending",
+		        						sortDescending : ": activate to sort column descending"
+		        					},
+		        					emptyTable : "空表",
+		        					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+		        					infoEmpty : "没有数据",
+		        					infoFiltered : "(从 _MAX_ 条数据中检索)",
+		        					lengthMenu : "每页显示 _MENU_ 条数据",
+		        					search : "查询:",
+		        					zeroRecords : "抱歉， 没有找到！",
+		        					paginate : {
+		        						"sFirst" : "首页",
+		        						"sPrevious" : "前一页",
+		        						"sNext" : "后一页",
+		        						"sLast" : "尾页"
+		        					}
+		        				},
+		        				order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+		        				bRetrieve : true,
+		        				lengthMenu : [
+		        						[ 5, 10, 15, 30, -1 ],
+		        						[ 5, 10, 15, 30,
+		        								"All" ] ],
+		        				pageLength : 10,// 每页显示数量
+		        				processing : true,// loading等待框
+
+		        				ajax : ctx
+		        						+ "/rest/processAction/endTask/"+'salePrice',// 加载已办列表数据
+
+		        				"aoColumns" : [
+		        						{
+		        							mData : 'businessType',
+		        							mRender : function(
+		        									data) {
+		        								return "销售价格申请";
+		        							}
+		        						},
+		        						{
+		        							mData : 'userName'
+		        						},
+		        						{
+		        							mData : 'title'
+		        						},
+		        						{
+		        							mData : 'startTime',
+		        							mRender : function(
+		        									data,
+		        									type,
+		        									row,
+		        									meta) {
+		        								return timeStamp2String(data);
+		        							}
+		        						},
+		        						{
+		        							mData : 'claimTime',
+		        							mRender : function(
+		        									data,
+		        									type,
+		        									row,
+		        									meta) {
+		        								if(data != null){
+		        		                			return timeStamp2String(data);
+		        		                		}else{
+		        		                			return "无需签收";
+		        		                		}
+		        							}
+		        						},
+		        						{
+		        							mData : 'endTime',
+		        							mRender : function(
+		        									data) {
+		        								if (data != null) {
+		        									return timeStamp2String(data);
+		        								} else
+		        									return '';
+		        							}
+		        						},
+		        						{
+		        							mData : 'deleteReason'
+		        						},
+		        						{
+		        							mData : 'version'
+		        						},
+		        						{
+		        							mData : 'revoke',
+		        							mRender : function(data,type,row,meta) {
+		        								return "<a href='javascript:void(0);' onclick=\"revoke('"+row.taskId+"','"+row.processInstanceId+"','endTaskSalePriceTable')\">撤销</a>";
+		        							}
+		        						}
+		        						]
+
+		        			})
+		         return endTaskTable;
+		        }
 		 } ]);

@@ -5,10 +5,11 @@ import java.util.List;
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericService;
 import com.congmai.zhgj.web.model.Delivery;
+import com.congmai.zhgj.web.model.DeliveryMateriel;
+import com.congmai.zhgj.web.model.DeliveryTransport;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.model.TakeDeliveryParams;
-
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 
 public interface TakeDeliveryService extends GenericService<TakeDelivery, String>{
@@ -17,16 +18,15 @@ public interface TakeDeliveryService extends GenericService<TakeDelivery, String
 
 	Page<Delivery> selectByPage(Delivery takeDelivery);
 
-	void insertTakeDelivery(TakeDeliveryParams takeDeliveryParams,
+	void insertTakeDelivery(Delivery delivery,TakeDelivery takeDelivery,DeliveryTransport deliveryTransport,List<DeliveryMateriel> deliveryMateriels,
 			String currenLoginName);
 
 	void deleteBatch(List<String> serialNumArray);
 
-	void updateTakeDelivery(TakeDeliveryParams takeDeliveryParams,
+	void updateTakeDelivery(Delivery delivery,TakeDelivery takeDelivery,DeliveryTransport deliveryTransport,List<DeliveryMateriel> deliveryMateriels,
 			String currenLoginName);
 
-	void insertStockInData(TakeDeliveryParams takeDeliveryParams,
-			String currenLoginName);
+	void insertStockInData(StockInOutRecord record,List<DeliveryMateriel> deliveryMateriels,String currenLoginName,String type);
 
 	Page<Delivery> selectStockInListByPage(StockInOutRecord record);
 	
@@ -34,8 +34,7 @@ public interface TakeDeliveryService extends GenericService<TakeDelivery, String
 
 	void deleteStockInInfo(List<String> serialNumArray);
 
-	void updateStockInData(TakeDeliveryParams takeDeliveryParams,
-			String currenLoginName,String type);
+	void updateStockInData(StockInOutRecord record,List<DeliveryMateriel> deliveryMateriels,String currenLoginName,String type);
 	
 	TakeDelivery selectByPrimaryKey(String serialNum);
 	
@@ -71,8 +70,12 @@ public interface TakeDeliveryService extends GenericService<TakeDelivery, String
 	 * @param takeDeliveryParams
 	 * @param currenLoginName
 	 */
-	void confirmTakeDelivery(TakeDeliveryParams takeDeliveryParams,
+	void confirmTakeDelivery(TakeDelivery takeDelivery,List<DeliveryMateriel> deliveryMateriels,
 			String currenLoginName)throws Exception;
+
+	void updateStockOutData(StockInOutRecord record,
+			List<DeliveryMateriel> deliveryMateriels, String currenLoginName,
+			String string);
 
 	
 	

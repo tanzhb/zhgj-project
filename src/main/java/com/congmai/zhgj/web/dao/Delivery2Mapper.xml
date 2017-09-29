@@ -6,6 +6,7 @@
     <result column="deliverNum" property="deliverNum" jdbcType="VARCHAR" />
     <result column="takeDeliverSerial" property="takeDeliverSerial" jdbcType="VARCHAR" />
     <result column="deliverType" property="deliverType" jdbcType="VARCHAR" />
+     <result column="docNum" property="docNum" jdbcType="VARCHAR" />
     <result column="orderSerial" property="orderSerial" jdbcType="VARCHAR" />
     <result column="supplyComId" property="supplyComId" jdbcType="VARCHAR" />
     <result column="shipper" property="shipper" jdbcType="VARCHAR" />
@@ -32,6 +33,7 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="deliverAddress" property="deliverAddress" jdbcType="VARCHAR" />
     <association property="deliveryTransport"  javaType="com.congmai.zhgj.web.model.DeliveryTransport">
     	 <result column="transportType" property="transportType" jdbcType="VARCHAR" />
 		 <result column="transport" property="transport" jdbcType="VARCHAR" />
@@ -51,6 +53,7 @@
          <result column="contactNum" property="contactNum" jdbcType="VARCHAR" />
          <result column="takeDeliverNum" property="takeDeliverNum" jdbcType="VARCHAR" />
          <result column="take_delivery_remark" property="remark" jdbcType="VARCHAR" />
+         <result column="takeDeliverAddress" property="takeDeliverAddress" jdbcType="VARCHAR" />
          <association column="tdWarehouseSerial" property="warehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>
     </association>
     <association column="warehouseSerial" property="warehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>
@@ -140,10 +143,11 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    serialNum, deliverNum,deliverType,orderSerial,takeDeliverSerial,supplyComId, shipper, receiver, makeDate, maker, 
-    remark, status, approval, approvalDate, warehouseSerial, materielCount, deliverDate, 
-    packageCount, materielWeight, packageType, packageSpecifications, serviceMoney, deliverer, 
-    contactNum, deliverRemark, delFlg, creator, createTime, updater, updateTime
+     serialNum, deliverNum, deliverType, orderSerial, docNum, takeDeliverSerial, supplyComId, 
+    shipper, receiver, makeDate, maker, remark, status, approval, approvalDate, warehouseSerial, 
+    materielCount, deliverDate, packageCount, materielWeight, packageType, packageSpecifications, 
+    serviceMoney, deliverer, contactNum, deliverRemark, deliverAddress, processInstanceId, 
+    reason, userId, delFlg, creator, createTime, updater, updateTime
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -227,25 +231,29 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-<insert id="insert" parameterType="com.congmai.zhgj.web.model.Delivery" >
-    insert into delivery (serialNum, deliverNum,deliverType, orderSerial, 
-      takeDeliverSerial, supplyComId, shipper, 
-      receiver, makeDate, maker, 
-      remark, status, approval, 
-      approvalDate, warehouseSerial, materielCount, 
-      deliverDate, packageCount, materielWeight, 
-      packageType, packageSpecifications, serviceMoney, 
-      deliverer, contactNum, deliverRemark, 
+  <insert id="insert" parameterType="com.congmai.zhgj.web.model.Delivery" >
+    insert into delivery (serialNum, deliverNum, deliverType, 
+      orderSerial, docNum, takeDeliverSerial, 
+      supplyComId, shipper, receiver, 
+      makeDate, maker, remark, 
+      status, approval, approvalDate, 
+      warehouseSerial, materielCount, deliverDate, 
+      packageCount, materielWeight, packageType, 
+      packageSpecifications, serviceMoney, deliverer, 
+      contactNum, deliverRemark, deliverAddress, 
+      processInstanceId, reason, userId, 
       delFlg, creator, createTime, 
       updater, updateTime)
-    values (#{serialNum,jdbcType=VARCHAR}, #{deliverNum,jdbcType=VARCHAR}, #{deliverType,jdbcType=VARCHAR}, #{orderSerial,jdbcType=VARCHAR}, 
-      #{takeDeliverSerial,jdbcType=VARCHAR}, #{supplyComId,jdbcType=VARCHAR}, #{shipper,jdbcType=VARCHAR}, 
-      #{receiver,jdbcType=VARCHAR}, #{makeDate,jdbcType=DATE}, #{maker,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{approval,jdbcType=VARCHAR}, 
-      #{approvalDate,jdbcType=DATE}, #{warehouseSerial,jdbcType=VARCHAR}, #{materielCount,jdbcType=VARCHAR}, 
-      #{deliverDate,jdbcType=DATE}, #{packageCount,jdbcType=VARCHAR}, #{materielWeight,jdbcType=VARCHAR}, 
-      #{packageType,jdbcType=VARCHAR}, #{packageSpecifications,jdbcType=VARCHAR}, #{serviceMoney,jdbcType=VARCHAR}, 
-      #{deliverer,jdbcType=VARCHAR}, #{contactNum,jdbcType=VARCHAR}, #{deliverRemark,jdbcType=VARCHAR}, 
+    values (#{serialNum,jdbcType=VARCHAR}, #{deliverNum,jdbcType=VARCHAR}, #{deliverType,jdbcType=VARCHAR}, 
+      #{orderSerial,jdbcType=VARCHAR}, #{docNum,jdbcType=VARCHAR}, #{takeDeliverSerial,jdbcType=VARCHAR}, 
+      #{supplyComId,jdbcType=VARCHAR}, #{shipper,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, 
+      #{makeDate,jdbcType=DATE}, #{maker,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{approval,jdbcType=VARCHAR}, #{approvalDate,jdbcType=DATE}, 
+      #{warehouseSerial,jdbcType=VARCHAR}, #{materielCount,jdbcType=VARCHAR}, #{deliverDate,jdbcType=DATE}, 
+      #{packageCount,jdbcType=VARCHAR}, #{materielWeight,jdbcType=VARCHAR}, #{packageType,jdbcType=VARCHAR}, 
+      #{packageSpecifications,jdbcType=VARCHAR}, #{serviceMoney,jdbcType=VARCHAR}, #{deliverer,jdbcType=VARCHAR}, 
+      #{contactNum,jdbcType=VARCHAR}, #{deliverRemark,jdbcType=VARCHAR}, #{deliverAddress,jdbcType=VARCHAR}, 
+      #{processInstanceId,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
       #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
@@ -263,6 +271,9 @@
       </if>
       <if test="orderSerial != null" >
         orderSerial,
+      </if>
+      <if test="docNum != null" >
+        docNum,
       </if>
       <if test="takeDeliverSerial != null" >
         takeDeliverSerial,
@@ -327,6 +338,18 @@
       <if test="deliverRemark != null" >
         deliverRemark,
       </if>
+      <if test="deliverAddress != null" >
+        deliverAddress,
+      </if>
+      <if test="processInstanceId != null" >
+        processInstanceId,
+      </if>
+      <if test="reason != null" >
+        reason,
+      </if>
+      <if test="userId != null" >
+        userId,
+      </if>
       <if test="delFlg != null" >
         delFlg,
       </if>
@@ -355,6 +378,9 @@
       </if>
       <if test="orderSerial != null" >
         #{orderSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="docNum != null" >
+        #{docNum,jdbcType=VARCHAR},
       </if>
       <if test="takeDeliverSerial != null" >
         #{takeDeliverSerial,jdbcType=VARCHAR},
@@ -419,6 +445,18 @@
       <if test="deliverRemark != null" >
         #{deliverRemark,jdbcType=VARCHAR},
       </if>
+      <if test="deliverAddress != null" >
+        #{deliverAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="processInstanceId != null" >
+        #{processInstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null" >
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
       <if test="delFlg != null" >
         #{delFlg,jdbcType=VARCHAR},
       </if>
@@ -456,6 +494,9 @@
       </if>
       <if test="record.orderSerial != null" >
         orderSerial = #{record.orderSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docNum != null" >
+        docNum = #{record.docNum,jdbcType=VARCHAR},
       </if>
       <if test="record.takeDeliverSerial != null" >
         takeDeliverSerial = #{record.takeDeliverSerial,jdbcType=VARCHAR},
@@ -520,6 +561,18 @@
       <if test="record.deliverRemark != null" >
         deliverRemark = #{record.deliverRemark,jdbcType=VARCHAR},
       </if>
+      <if test="record.deliverAddress != null" >
+        deliverAddress = #{record.deliverAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.processInstanceId != null" >
+        processInstanceId = #{record.processInstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reason != null" >
+        reason = #{record.reason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null" >
+        userId = #{record.userId,jdbcType=INTEGER},
+      </if>
       <if test="record.delFlg != null" >
         delFlg = #{record.delFlg,jdbcType=VARCHAR},
       </if>
@@ -546,6 +599,7 @@
       deliverNum = #{record.deliverNum,jdbcType=VARCHAR},
       deliverType = #{record.deliverType,jdbcType=VARCHAR},
       orderSerial = #{record.orderSerial,jdbcType=VARCHAR},
+      docNum = #{record.docNum,jdbcType=VARCHAR},
       takeDeliverSerial = #{record.takeDeliverSerial,jdbcType=VARCHAR},
       supplyComId = #{record.supplyComId,jdbcType=VARCHAR},
       shipper = #{record.shipper,jdbcType=VARCHAR},
@@ -567,6 +621,10 @@
       deliverer = #{record.deliverer,jdbcType=VARCHAR},
       contactNum = #{record.contactNum,jdbcType=VARCHAR},
       deliverRemark = #{record.deliverRemark,jdbcType=VARCHAR},
+      deliverAddress = #{record.deliverAddress,jdbcType=VARCHAR},
+      processInstanceId = #{record.processInstanceId,jdbcType=VARCHAR},
+      reason = #{record.reason,jdbcType=VARCHAR},
+      userId = #{record.userId,jdbcType=INTEGER},
       delFlg = #{record.delFlg,jdbcType=VARCHAR},
       creator = #{record.creator,jdbcType=VARCHAR},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
@@ -587,6 +645,9 @@
       </if>
       <if test="orderSerial != null" >
         orderSerial = #{orderSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="docNum != null" >
+        docNum = #{docNum,jdbcType=VARCHAR},
       </if>
       <if test="takeDeliverSerial != null" >
         takeDeliverSerial = #{takeDeliverSerial,jdbcType=VARCHAR},
@@ -651,6 +712,18 @@
       <if test="deliverRemark != null" >
         deliverRemark = #{deliverRemark,jdbcType=VARCHAR},
       </if>
+      <if test="deliverAddress != null" >
+        deliverAddress = #{deliverAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="processInstanceId != null" >
+        processInstanceId = #{processInstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null" >
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        userId = #{userId,jdbcType=INTEGER},
+      </if>
       <if test="delFlg != null" >
         delFlg = #{delFlg,jdbcType=VARCHAR},
       </if>
@@ -674,6 +747,7 @@
     set deliverNum = #{deliverNum,jdbcType=VARCHAR},
       deliverType = #{deliverType,jdbcType=VARCHAR},
       orderSerial = #{orderSerial,jdbcType=VARCHAR},
+      docNum = #{docNum,jdbcType=VARCHAR},
       takeDeliverSerial = #{takeDeliverSerial,jdbcType=VARCHAR},
       supplyComId = #{supplyComId,jdbcType=VARCHAR},
       shipper = #{shipper,jdbcType=VARCHAR},
@@ -695,6 +769,10 @@
       deliverer = #{deliverer,jdbcType=VARCHAR},
       contactNum = #{contactNum,jdbcType=VARCHAR},
       deliverRemark = #{deliverRemark,jdbcType=VARCHAR},
+      deliverAddress = #{deliverAddress,jdbcType=VARCHAR},
+      processInstanceId = #{processInstanceId,jdbcType=VARCHAR},
+      reason = #{reason,jdbcType=VARCHAR},
+      userId = #{userId,jdbcType=INTEGER},
       delFlg = #{delFlg,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP},
@@ -702,6 +780,12 @@
       updateTime = #{updateTime,jdbcType=TIMESTAMP}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
+  <select id="selectDeliverNumByDeliverSerial" resultType="java.lang.String" parameterType="java.lang.String" >
+    select 
+      deliverNum
+    from delivery
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
   <select id="selectOrderNumByOrderSerial" resultType="java.lang.String" parameterType="java.lang.String" >
     select 
       orderNum

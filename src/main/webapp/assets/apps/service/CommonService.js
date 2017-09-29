@@ -46,6 +46,20 @@ angular.module('MetronicApp').service('commonService',['$http','$q',function($ht
         });
         return deferred.promise;//返回承诺
 	}
+	
+	/**
+	 * 获取订单编号
+	 */
+	this.getOrderNum = function (){
+		var deferred = $q.defer();
+		$http.get("rest/company/getOrderNum")
+		.then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
 
 	
 	

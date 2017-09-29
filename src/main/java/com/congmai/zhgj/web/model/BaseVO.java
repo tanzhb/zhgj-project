@@ -52,6 +52,10 @@ public class BaseVO implements Serializable{
 	//审批失败
 	public static final String APPROVAL_FAILED = "APPROVAL_FAILED";
 	
+	public final static String BUYPRICE = "buyPrice";	//采购价格
+	public final static String SALEPRICE = "salePrice";	//销售价格
+	public final static String OUTINVOICE = "outInvoice";	//销项票
+	
 	
 	// 申请人id
 	//private Integer user_id;

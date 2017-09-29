@@ -67,8 +67,8 @@
 							
 							<p>
 								<input type="hidden" name="serialNum" id="serialNum" value="" />
-								<input type="hidden" name="taskId" id="taskId" value="" />
-								<input type="hidden" name="processInstanceId" id="processInstanceId" value="" />
+								<input type="hidden" name="taskId" id="taskId" value="{{taskId}}" />
+								<input type="hidden" name="processInstanceId" id="processInstanceId" value="{{processInstanceId}}" />
 							</p>
 						</div>
 					</div>

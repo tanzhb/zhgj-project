@@ -58,7 +58,9 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 			list = companyMapper.selectList(company);
 			if(CollectionUtils.isNotEmpty(list)){
 				for(Company vo:list){
-					vo.setComTypeName(ComType.getInfo(vo.getComType()));
+					if(StringUtils.isNotEmpty(vo.getComType())){
+						vo.setComTypeName(ComType.getInfo(vo.getComType()));
+					}
 				}
 			}
 			count = companyMapper.countList(company);
@@ -72,7 +74,7 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 	@Override
 	public Company selectOne(String id) {
 		Company com = companyMapper.selectByPrimaryKey(id);
-		if(com !=null){
+		if(com !=null && StringUtils.isNotBlank(com.getComType())){
 			com.setComTypeName(ComType.getInfo(com.getComType()));
 		}
 		return com;

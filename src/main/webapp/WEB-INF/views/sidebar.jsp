@@ -17,6 +17,50 @@
 	                <span class="title">首页</span>
 	            </a>
 	        </li>
+        <li class="nav-item">
+            <a href="javascript:;" class="nav-link nav-toggle">
+                <i class="icon-user"></i>
+                <span class="title">个人中心</span>
+                <span class="arrow "></span>
+            </a>
+            <ul class="sub-menu">
+                <li>
+                    <a ui-sref="userInfo">
+                         个人中心</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="companyInfo">
+                        公司信息</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="accountSecurity">
+                       账户安全</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="operateLog">
+                        操作日志</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="#">
+                         消息</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="myNotice">
+                         公告</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="#">
+                         联系人</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
         
         <shiro:hasPermission name="zhgj:baseData">
         <li class="nav-item">
@@ -173,10 +217,19 @@
         </shiro:hasPermission>
         <shiro:hasPermission name="zhgj:statement">
         <li class="nav-item">
-            <a ui-sref="statement">
+            <a href="javascript:;" class="nav-link nav-toggle">
                 <i class="icon-docs"></i>
                 <span class="title">对账单</span>
+                <span class="arrow "></span>
             </a>
+            <ul class="sub-menu">
+				<%-- <shiro:hasPermission name="zhgj:buyStatement:*"> --%>
+					<li><a ui-sref="supplyStatement">供应商对账单</a></li>
+				<%-- </shiro:hasPermission>
+				<shiro:hasPermission name="zhgj:supplyStatement:*"> --%>
+					<li><a ui-sref="buyStatement">客户对账单</a></li>
+				<%-- </shiro:hasPermission> --%>
+			</ul>
         </li>
 		</shiro:hasPermission>
 		<shiro:hasPermission name="zhgj:paymentReceived">
@@ -188,7 +241,7 @@
 			 <a href="javascript:;" class="nav-link nav-toggle">
                 <i class="icon-credit-card"></i>
                 <span class="title">收付款</span>
-                <span class="arrow "></span>
+               
             </a> 
 			<ul class="sub-menu">
 				<shiro:hasPermission name="zhgj:accountReceivable:*">

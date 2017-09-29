@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.congmai.zhgj.core.generic.GenericDao;
+import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.UserExample;
 
@@ -24,4 +25,24 @@ public interface UserMapper extends GenericDao<User, Integer>{
     List<User> selectByExample(UserExample example);
     
     int updateByPrimaryKeySelective(User record);
+    
+    
+    public User getUserInfo(Integer userId);
+    
+    
+    
+    public Company getUserCompanyInfo(Integer userId);
+    
+    
+    
+    public void updateUserInfo(User user);
+    
+    
+    public void updateCompanyInfo(Company company);
+    
+    
+    public void updateEmail(User user);
+    
+    
+    public void updatePhone(User user);
 }

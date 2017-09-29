@@ -430,4 +430,16 @@
       updateTime = #{updateTime,jdbcType=TIMESTAMP}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
+   <select id="selectOrderMaterielOrDeliveryMaterielByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    (SELECT 
+   		serialNum,materielSerial
+    from orderMateriel
+    where serialNum = #{serialNum,jdbcType=VARCHAR}) union
+    (SELECT
+			s.serialNum as serialNum,
+			m.serialNum AS materielSerial
+		FROM
+			supplyMateriel s LEFT JOIN materiel m on m.materielId = s.materielId and m.isLatestVersion = '1'
+		WHERE s.serialNum = #{serialNum,jdbcType=VARCHAR})
+  </select>
 </mapper>

@@ -37,6 +37,39 @@ public class User implements Serializable{
 
     private Integer groupId;
     
+    
+    private String sex;
+    
+    
+    private String department;
+    
+    
+    private String position;
+    
+    
+    private String cellPhone;
+    
+    
+    private String telephone;
+    
+    
+    private String QQNum;
+    
+    
+    private String weChatNum;
+    
+    
+    private String fax;
+    
+    
+    private String email;
+    
+    
+    private String avatar;
+    
+    
+    private Company company;
+    
 	public User(){
 		
 	}
@@ -103,5 +136,93 @@ public class User implements Serializable{
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+
+	public String getPosition() {
+		return position;
+	}
+
+	public void setPosition(String position) {
+		this.position = position;
+	}
+
+	public String getCellPhone() {
+		return cellPhone;
+	}
+
+	public void setCellPhone(String cellPhone) {
+		this.cellPhone = cellPhone;
+	}
+
+	public String getTelephone() {
+		return telephone;
+	}
+
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
+
+	public String getQQNum() {
+		return QQNum;
+	}
+
+	public void setQQNum(String qQNum) {
+		QQNum = qQNum;
+	}
+
+	public String getWeChatNum() {
+		return weChatNum;
+	}
+
+	public void setWeChatNum(String weChatNum) {
+		this.weChatNum = weChatNum;
+	}
+
+	public String getFax() {
+		return fax;
+	}
+
+	public void setFax(String fax) {
+		this.fax = fax;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}	
 }

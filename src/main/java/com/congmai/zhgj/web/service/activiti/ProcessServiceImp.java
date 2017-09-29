@@ -54,14 +54,17 @@ import org.springframework.stereotype.Service;
 
 import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.Constants;
+import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.activiti.processTask.taskCommand.DeleteActiveTaskCmd;
 import com.congmai.zhgj.web.activiti.processTask.taskCommand.RevokeTaskCmd;
 import com.congmai.zhgj.web.activiti.processTask.taskCommand.StartActivityCmd;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
+import com.congmai.zhgj.web.model.Invoice;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.PaymentRecord;
+import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Vacation;
 import com.congmai.zhgj.web.service.DeliveryService;
@@ -694,6 +697,7 @@ public class ProcessServiceImp implements IProcessService{
 	}
 
 	@Override
+	@OperationLog(operateType = "app" ,operationDesc = "申请" ,objectSerial= "{serialNum}")
 	public String startBuyOrderInfo(OrderInfo orderInfo) {
 
 		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
@@ -702,7 +706,7 @@ public class ProcessServiceImp implements IProcessService{
         variables.put("entity", orderInfo);
 
         String businessKey = orderInfo.getBusinessKey();
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("com.congmai.zhgj.buyOrder", businessKey, variables);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(Constants.BUYORDER, businessKey, variables);
         String processInstanceId = processInstance.getId();
         orderInfo.setProcessInstanceId(processInstanceId);
         this.processBaseService.update(orderInfo);
@@ -715,6 +719,7 @@ public class ProcessServiceImp implements IProcessService{
 	}
 	
 	@Override
+	@OperationLog(operateType = "app" ,operationDesc = "申请" ,objectSerial= "{serialNum}")
 	public String startSaleOrderInfo(OrderInfo orderInfo) {
 
 		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
@@ -723,7 +728,7 @@ public class ProcessServiceImp implements IProcessService{
         variables.put("entity", orderInfo);
 
         String businessKey = orderInfo.getBusinessKey();
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("com.congmai.zhgj.saleOrder", businessKey, variables);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(Constants.SALEORDER, businessKey, variables);
         String processInstanceId = processInstance.getId();
         orderInfo.setProcessInstanceId(processInstanceId);
         this.processBaseService.update(orderInfo);
@@ -733,5 +738,50 @@ public class ProcessServiceImp implements IProcessService{
         this.identityService.setAuthenticatedUserId(null);
         return processInstanceId;
 	
+	}
+
+	@Override
+	@OperationLog(operateType = "app" ,operationDesc = "申请" ,objectSerial= "{serialNum}")
+	public String startPriceList(PriceList priceList) {
+		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
+        identityService.setAuthenticatedUserId(priceList.getUserId().toString());
+        Map<String, Object> variables = new HashMap<String, Object>();
+        variables.put("entity", priceList);
+        ProcessInstance processInstance=null;
+        String businessKey = priceList.getBusinessKey();
+        if("buyPrice".equals(priceList.getPriceType())){
+        	processInstance = runtimeService.startProcessInstanceByKey(Constants.BUYPRICE_KEY, businessKey, variables);
+        }else if("salePrice".equals(priceList.getPriceType())){
+        	processInstance = runtimeService.startProcessInstanceByKey(Constants.SALEPRICE_KEY, businessKey, variables);
+        }
+     
+        String processInstanceId = processInstance.getId();
+        priceList.setProcessInstanceId(processInstanceId);
+        this.processBaseService.update(priceList);
+
+        logger.info("processInstanceId: "+processInstanceId);
+        //最后要设置null，就是这么做，还没研究为什么
+        this.identityService.setAuthenticatedUserId(null);
+        return processInstanceId;
+	}
+
+	@Override
+	@OperationLog(operateType = "app" ,operationDesc = "申请" ,objectSerial= "{serialNum}")
+	public String startInvoice(Invoice invoice) {
+		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
+        identityService.setAuthenticatedUserId(invoice.getUserId().toString());
+        Map<String, Object> variables = new HashMap<String, Object>();
+        variables.put("entity", invoice);
+        ProcessInstance processInstance=null;
+        String businessKey = invoice.getBusinessKey();
+       processInstance = runtimeService.startProcessInstanceByKey(Constants.OUTINVOICE_KEY, businessKey, variables);
+        String processInstanceId = processInstance.getId();
+        invoice.setProcessInstanceId(processInstanceId);
+        this.processBaseService.update(invoice);
+
+        logger.info("processInstanceId: "+processInstanceId);
+        //最后要设置null，就是这么做，还没研究为什么
+        this.identityService.setAuthenticatedUserId(null);
+        return processInstanceId;
 	}
 }

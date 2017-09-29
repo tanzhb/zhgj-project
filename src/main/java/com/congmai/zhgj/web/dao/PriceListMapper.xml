@@ -31,6 +31,7 @@
     <result column="unitPrice" property="unitPrice" jdbcType="VARCHAR" />
     <result column="topPrice" property="topPrice" jdbcType="VARCHAR" />
     <result column="floorPrice" property="floorPrice" jdbcType="VARCHAR" />
+    <association property="processBase" column="serialNum" select="com.congmai.zhgj.web.dao.ProcessBaseMapper.selectByPrimaryKey"></association>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >

@@ -177,6 +177,14 @@ public class PageController {
         return "order/saleOrder";
     }
     
+    /**
+     * 操作日志
+     */
+    @RequestMapping("/operateLog")
+    public String operateLog() {
+        return "operateLog/operateLog";
+    }
+    
     
     /**
      * 新增采购订单
@@ -192,6 +200,14 @@ public class PageController {
     @RequestMapping("/viewBuyOrder")
     public String viewBuyOrder(String serialNum) {
         return "order/viewBuyOrder";
+    }
+    
+    /**
+     * 查看销售订单
+     */
+    @RequestMapping("/viewSaleOrder")
+    public String viewSaleOrder(String serialNum) {
+        return "order/viewSaleOrder";
     }
     /**
      * 供应商查看订单
@@ -210,11 +226,27 @@ public class PageController {
     }
     
     /**
+     * 销售订单提交申请
+     */
+    @RequestMapping("/submitSaleApply")
+    public String submitSaleApply(String serialNum,String view) {
+        return "order/submitSaleApply";
+    }
+    
+    /**
      * 审批采购订单
      */
     @RequestMapping("/approvalBuyApply")
     public String approvalBuyApply(String serialNum,String view) {
         return "order/approvalBuyApply";
+    }
+    
+    /**
+     * 审批销售订单
+     */
+    @RequestMapping("/approvalSaleApply")
+    public String approvalSaleApply(String serialNum,String view) {
+        return "order/approvalSaleApply";
     }
     
     /**
@@ -225,7 +257,13 @@ public class PageController {
         return "order/editBuyApply";
     }
     
-    
+    /**
+     * 重新编辑销售订单申请
+     */
+    @RequestMapping("/editSaleApply")
+    public String editSaleApply(String serialNum,String view) {
+        return "order/editSaleApply";
+    }
     
     /**
      * 采购订单
@@ -419,5 +457,71 @@ public class PageController {
     public String error500() {
         return "500";
     }
-
+    /**
+     * 价格提交申请
+     */
+    @RequestMapping("/submitPriceApply")
+    public String submitPriceApply(String serialNum,String priceType) {
+        return "priceList/submitPriceApply";
+    }
+    
+    /**
+     * 审批采购订单
+     */
+    @RequestMapping("/approvalPriceApply")
+    public String approvalPriceApply(String serialNum,String priceType) {
+        return "priceList/approvalPriceApply";
+    }
+    
+    /**
+     * 重新编辑价格申请
+     */
+    @RequestMapping("/editPriceApply")
+    public String editPriceApply(String serialNum,String priceType) {
+        return "priceList/editPriceApply";
+    }
+    /**
+     * 发票提交申请
+     */
+    @RequestMapping("/submitInvoiceApply")
+    public String submitInvoiceApply(String serialNum,String invoiceType) {
+        return "invoice/submitInvoiceApply";
+    }
+    
+    /**
+     * 审批发票
+     */
+    @RequestMapping("/approvalInvoiceApply")
+    public String approvalInvoiceApply(String serialNum,String invoiceType) {
+        return "invoice/approvalInvoiceApply";
+    }
+    
+    /**
+     * 重新编辑发票申请
+     */
+    @RequestMapping("/editInvoiceApply")
+    public String editInvoiceApply(String serialNum,String invoiceType) {
+        return "invoice/editInvoiceApply";
+    }    
+    /**
+     * 个人中心
+     */
+    @RequestMapping("/userInfo")
+    public String userInfo(){
+    	return "user/userInfo";
+    }
+    /**
+     * 企业信息
+     */
+    @RequestMapping("/companyInfo")
+    public String companyInfo(){
+    	return "user/companyInfo";
+    }
+    /**
+     * 账户安全
+     */
+    @RequestMapping("/accountSecurity")
+    public String accountSecurity(){
+    	return "user/accountSecurity";
+    }
 }

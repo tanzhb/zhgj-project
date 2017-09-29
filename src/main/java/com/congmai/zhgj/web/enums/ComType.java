@@ -41,8 +41,12 @@ public enum ComType {
 		/**
 		 * @Field @SUPPLIER : TODO(保险公司)
 		 */
-		INSURANCE_COMPANY("8","保险公司");
+		INSURANCE_COMPANY("8","保险公司"),
 		
+		/**
+		 * 贸易商
+		 */
+		TRAFFICKER("9","贸易商");
 		
 		private String value;
 		private String info;
