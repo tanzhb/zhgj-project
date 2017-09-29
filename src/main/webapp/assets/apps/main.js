@@ -41,7 +41,7 @@ MetronicApp.factory('settings', [ '$rootScope', function($rootScope) {
 		globalPath : 'assets/global',
 		layoutPath : 'assets/layouts/layout2',
 	};
-
+	WebSocketInit();
 	$rootScope.settings = settings;
 	$rootScope.basePath = getRootPath();
 

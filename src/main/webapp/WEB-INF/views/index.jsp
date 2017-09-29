@@ -235,7 +235,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		type="text/javascript"></script>
 	<!-- END APP LEVEL JQUERY SCRIPTS -->
 	<!-- BEGIN PAGE SCRIPTS -->
- 
+ 	<script src="assets/apps/scripts/sockjs-0.3.4.min.js" type="text/javascript" ></script>
     <script src="assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js" type="text/javascript"></script>
     <script src="assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
     <script src="assets/global/plugins/jquery-repeater/jquery.repeater.js" type="text/javascript"></script>
