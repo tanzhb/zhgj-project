@@ -1403,26 +1403,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    			});
 		    		}]
 		    	}	        
-		    }).state('noticeManage', {
-		    	url: "/noticeManage",
-		    	templateUrl: "rest/notice/noticeManage",
-		    	data: {pageTitle: '公告'},
-		    	reload:true, 
-		    	controller: "NoticeController",
-		    	resolve: {
-		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
-		    			return $ocLazyLoad.load({
-		    				name: 'MetronicApp',
-		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
-		    				files: [       
-									'assets/global/plugins/datatables/datatables.min.css',                  
-									'assets/global/plugins/datatables/datatables.all.min.js',
-		    				        'assets/apps/controllers/NoticeController.js',
-		    				        'assets/apps/service/NoticeService.js'
-		    				        ]
-		    			});
-		    		}]
-		    	}	        
 		    }).state('noticeAdd', {
 		    	url: "/noticeAdd?:serialNum",
 		    	templateUrl: "rest/notice/noticeAdd",
@@ -1480,7 +1460,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
 		    				files: [     
 		    				        'assets/apps/css/todo-2.min.css',
-		    				        'assets/global/plugins/datatables/datatables.min.css',  
+		    				        'assets/global/plugins/datatables/datatables.min.css',                 
+									'assets/global/plugins/datatables/datatables.all.min.js',
 		    				        'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
 		    				        'assets/apps/controllers/NoticeController.js',
 		    				        'assets/apps/service/NoticeService.js'
@@ -2924,6 +2905,15 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a ui-sref='supplyStatement'>供应商对账单</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>查看供应商对账单</a></li>";					 
+			   }else if('myNotice' == toState.name){//公告
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a>公告</a></li>";					 
+			   }else if('noticeAdd' == toState.name){//查看供应商对账单
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a ui-sref='myNotice'>公告</a> <i class='fa fa-angle-right'></i></li>";		
+				   if(toParams.serialNum != undefined){
+						 html += "<li><a>修改公告</a></li>";
+					 } else html += "<li><a>新建公告</a></li>";
 			   }else if('gatheringMoneyRecord' == toState.name){//应收款
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" +
