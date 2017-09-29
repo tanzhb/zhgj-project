@@ -117,13 +117,14 @@
                                                          <select class="form-control" id="comType"  ng-hide="companyAdd" name="comType"  ng-model="company.comType" >
                                                             <option value=""></option>
                                                            	<option value="1" >采购商</option>
-                                                             <option value="2" >供应商</option>
-                                                             <option value="3" >承运人</option>
-                                                             <option value="4" >外协仓</option>
-                                                             <option value="5" >境外供应商</option>
-                                                             <option value="6" >装卸公司</option>
-                                                             <option value="7" >银行</option>
-                                                             <option value="8" >保险公司</option>
+                                                            <option value="2" >供应商</option>
+                                                            <option value="9" >贸易商</option>
+                                                            <option value="3" >承运人</option>
+                                                            <option value="4" >外协仓</option>
+                                                            <option value="5" >境外供应商</option>
+                                                            <option value="6" >装卸公司</option>
+                                                            <option value="7" >银行</option>
+                                                            <option value="8" >保险公司</option>
                                                         </select>
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="companyView">{{company.comTypeName}}</p>
@@ -151,9 +152,9 @@
 												<div class="">
 													<select class="form-control" id="businessNature" ng-hide="companyAdd"  ng-model="company.businessNature" >
                                                             <option value=""></option>
-                                                           	 <option value="国有企业" >加工制造</option>
-                                                             <option value="民营企业" >分销/交易</option>
-                                                             <option value="合资企业" >仓储供应</option>
+                                                           	 <option value="加工制造" >加工制造</option>
+                                                             <option value="分销/交易" >分销/交易</option>
+                                                             <option value="仓储供应" >仓储供应</option>
                                                              <option value="其他" >其他</option>
                                                     </select>
                                                     <div class="form-control-focus"> </div>
@@ -275,7 +276,7 @@
 													<div  ng-hide="companyQualificationAdd" class="input-group date date-picker"
 														 data-date-format="yyyy-mm-dd"
 														data-date-viewmode="years">
-														<input type="text" class="form-control" readonly="" style="min-width: 100px;" id="validityDate{{$index}}" ng-model="companyQualification.validityDate" name="validityDate"
+														<input type="text" class="form-control" readonly="" style="min-width: 100px;" id="validityDate{{$index}}" ng-model="companyQualification.validityDate" 
 															placeholder="有效期"> <span class="input-group-btn">
 															<button class="btn default " type="button">
 																<i class="fa fa-calendar"></i>

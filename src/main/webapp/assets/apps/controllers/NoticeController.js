@@ -13,16 +13,25 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 	    			noticeInfo($stateParams.serialNum);
 	    		}
 	    		$("#summernote").summernote({
-	                height: 300
+	                height: 400
 	            });
-	    	}else if($location.path()=="/myNotice"){
-	    		var url = ctx + "/notice/myNoticeList";
-	    		//handle.createPage("myNotice",null,url,null,true);
-	    		createTable(5,1,true,$scope.params);
-	    	}else{
-	    		noticeTable();
 	    	}
-	    		
+	    	
+	    	var type = handle.getCookie("d_type");debugger;
+ 			if(type=="notices"){
+	 				$('#notice_tab a:last').parent().addClass('active');
+	 				$('#notice_tab a:first').parent().removeClass('active');
+	 				$("#portlet_tab2_2").addClass("active");
+	 				$("#portlet_tab2_1").removeClass("active");
+	 				$scope.notices();
+	 		}else{
+	 				//loadTakeDelieryTable();
+	 				$('#notice_tab a:first').parent().addClass('active');
+	 				$('#notice_tab a:last').parent().removeClass('active');
+	 				$("#portlet_tab2_1").addClass("active");
+	 				$("#portlet_tab2_2").removeClass("active");
+	 				createTable(5,1,true,$scope.params);
+	 		}	
 	    	// set default layout mode
 	    	$rootScope.settings.layout.pageContentWhite = true;
 	        $rootScope.settings.layout.pageBodySolid = false;
@@ -30,6 +39,33 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 	       
 	    	
 	 });
+	 
+	 		$scope.notices = function(){
+	 			if(table==undefined){
+	 				noticeTable();
+	 			}else{
+	 				table.ajax.reload();
+	 			}
+	 			
+	 		}
+	 		
+	 		$scope.myNoticeList = function(){
+	 			createTable(5,1,true,null);
+	 		}
+	 		
+	 		 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+			        // 获取已激活的标签页的名称
+			        var activeTab = $(e.target).text(); debugger;
+			        // 获取前一个激活的标签页的名称
+			       // var previousTab = $(e.relatedTarget).text(); 
+			        var absurl = $location.absUrl();
+			        $("#tip").text(activeTab);
+			        if(activeTab=="公告列表"){
+			        	handle.addCookie("d_type","notices",24);
+			        }else if(activeTab=="最新公告"){
+			        	handle.addCookie("d_type","newNotice",24);
+			        }
+			});
 	 
 	 
 			 /**
@@ -103,7 +139,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 					promise.then(function(data) {
 						if(data.data == "1"){
 							toastr.success("发布成功！");
-							$state.go("noticeManage");
+							$state.go("myNotice");
 						}else{
 							toastr.error("发布失败！请联系管理员");
 						}
@@ -121,7 +157,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 			 * 取消发布
 			 */
 			$scope.cancelNotice = function(){
-				$state.go("noticeManage");
+				$state.go("myNotice");
 			}
 			
 		    /**
