@@ -332,6 +332,36 @@ public class UserController {
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 	
+	/**
+	 * 
+	 * @Description 修改手机
+	 * @param user
+	 * @return
+	 */
+	@RequestMapping(value = "/changePhone", method = RequestMethod.POST)
+	public ResponseEntity<Void> changePhone(@RequestBody Object phone) {
+		Map m = (Map) phone;
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();// 获取当前登录用户名
+		User user = userService.selectByUsername(currenLoginName);
+		
+		if (user == null) {// 当前用户过期或不存在
+			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		} else {
+			if (user.getUserPwd().equals(new SimpleHash("md5", m.get("password").toString(), ByteSource.Util.bytes(user.getCredentialsSalt()), 2).toHex())) {
+				String phoneNumber=m.get("phone").toString();
+				user.setCellPhone(phoneNumber);
+				userService.updatePhone(user);
+			} else {// 原密码输入有错
+				return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+			}
+
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+	}
+	
 	
 	/**
 	 * 邮箱验证码	
