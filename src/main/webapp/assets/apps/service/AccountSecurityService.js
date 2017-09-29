@@ -7,6 +7,8 @@ angular.module('MetronicApp').factory('AccountSecurityService', ['$rootScope', '
     		getUserInfo:getUserInfo,
     		
     		updateEmail:updateEmail,
+    		
+    		updatePhone:updatePhone,
     };
 
     return factory;
@@ -26,10 +28,24 @@ angular.module('MetronicApp').factory('AccountSecurityService', ['$rootScope', '
         return deferred.promise;  
     };
     
-  //修改密码
+  //修改邮箱
     function updateEmail(changeEmail){
         var deferred = $q.defer();  
         $http.post($rootScope.basePath + "/rest/user/changeEmail", changeEmail).success(function (data) {  
+            // 如果连接成功，延时返回给调用者  
+            deferred.resolve(data);  
+        })  
+            .error(function () {  
+                deferred.reject('连接服务器出错！');  
+            })  
+        return deferred.promise;  
+          
+    };
+    
+  //修改邮箱
+    function updatePhone(changePhone){
+        var deferred = $q.defer();  
+        $http.post($rootScope.basePath + "/rest/user/changePhone", changePhone).success(function (data) {  
             // 如果连接成功，延时返回给调用者  
             deferred.resolve(data);  
         })  

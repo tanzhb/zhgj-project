@@ -197,4 +197,14 @@
 	WHERE
 	USER_ID=#{userId}
     </update>
+    
+    
+    <update id="updatePhone" parameterType="com.congmai.zhgj.web.model.User">
+    UPDATE 
+	T_USER
+	SET
+	cellPhone=#{cellPhone}
+	WHERE
+	USER_ID=#{userId}
+    </update>
 </mapper>

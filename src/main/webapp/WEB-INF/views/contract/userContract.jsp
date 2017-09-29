@@ -137,8 +137,11 @@
 							<table class="table table-bordered" id="sample_2_1">
 								<thead>
 									<tr>
-										<th style="text-align: center"><input name="select_all"
-											value="1" id="example-select-all" type="radio" /></th>
+										<th style="text-align: center">
+										<label class="mt-radio mt-radio-outline">
+											<input type="radio" value="1" name="id[]"/> <span></span>
+									     </label>	
+											</th>
 
 										<th style="white-space: nowrap;">合同编号</th>
 										<th style="white-space: nowrap;">企业名称</th>
@@ -223,8 +226,9 @@
 							<table class="table table-bordered" id="sample_2_2">
 								<thead>
 									<tr>
-										<th style="text-align: center"><input name="select_all"
-											value="1" id="example-select-all" type="radio" /></th>
+										<th style="text-align: center"><label class="mt-radio mt-radio-outline">
+											<input type="radio" value="1" name="id[]"/> <span></span>
+									     </label></th>
 
 										<th style="white-space: nowrap;">合同编号</th>
 										<th style="white-space: nowrap;">企业名称</th>
