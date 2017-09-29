@@ -16,6 +16,15 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <association property="belongWarehouseNum" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getBelongWarehouseNum"></association><!--  所在仓库数-->
+    <association property="relationBuyNum" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countBuyNum"></association><!--  关联采购单数-->
+    <association property="relationSaleNum" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countSaleNum"></association><!--  关联销售单数-->
+    <association property="lastInDate" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getLastInDate"></association><!--  最后入库日期-->
+    <association property="lastOutDate" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getLastOutDate"></association><!--  最后出库日期-->
+    <association property="countInAmount" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countInAmount"></association> <!--  累计入库数量-->
+     <association property="countOutAmount" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countOutAmount"></association> <!--  累计出库数量-->
+     <!-- <association property="preSaleAmount" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countBuyNum"></association> --><!--  预售数量-->
+     <!-- <association property="onRoadAmount" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countBuyNum"></association> --><!--  在途数量-->
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >

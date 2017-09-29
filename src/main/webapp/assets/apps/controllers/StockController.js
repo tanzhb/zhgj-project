@@ -33,6 +33,10 @@ angular
 										 		}else if($location.path()=="/stockView"){
 										 			debugger;
 										 			getStockDetailInfo($stateParams.stockSerialNum);//查看库位详情页面
+										 			//loadZkTable($stateParams.stockSerialNum);//在库数量
+										 			loadStockInTable($stateParams.stockSerialNum,"sample_stockinview");//入库记录
+										 			loadStockOutTable($stateParams.stockSerialNum,"sample_stockoutview");//出库记录
+										 		//	loadPdTable();//盘点记录
 									 		}else{
 										 			loadStockzijianTable();
 										 			loadStockdaiguanTable();
@@ -79,18 +83,6 @@ angular
 			function loadStockzijianTable(){
 							var a = 0;
 							tableAjaxUrl= "rest/stock/getStockList?manageType=1";
-							/*App.getViewPort().width < App
-									.getResponsiveBreakpoint("md") ? $(
-									".page-header").hasClass(
-									"page-header-fixed-mobile")
-									&& (a = $(".page-header").outerHeight(!0))
-									: $(".page-header").hasClass(
-											"navbar-fixed-top") ? a = $(
-											".page-header").outerHeight(!0)
-											: $("body").hasClass(
-													"page-header-fixed")
-													&& (a = 64);*/
-
 									tablezijian = $("#sample_zijian")
 									.DataTable(
 											{
@@ -133,7 +125,7 @@ angular
 
 												"aoColumns" : [
 													{
-													mData : 'serialNum',
+													mData : 'serialNum'/*,
 						                            	  mRender : function(
 																	data,
 																	type,
@@ -142,7 +134,7 @@ angular
 																return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
 																		"<input type='checkbox' class='checkboxes' value='"+data+"'/>" +
 																		"<span></span></label>";
-															}
+															}*/
 													},
 													 {
 														mData : 'stockNum'
@@ -164,9 +156,9 @@ angular
 														mData : 'onRoadAmount'
 													}, {
 														mData : 'canSaleAmount'
-													},/*{
+													},{
 														mData : 'riskGrade'
-													},*/ {
+													}, {
 														mData : 'status'
 													}
 													],
@@ -177,12 +169,15 @@ angular
 													'className' : 'dt-body-center',
 													'render' : function(data,
 															type, full, meta) {
-														return '<input type="checkbox" id="'+data+'" name="id[]" value="'
+														/*return '<input type="checkbox" id="'+data+'" name="id[]" value="'
 																+ $('<div/>')
 																		.text(
 																				data)
 																		.html()
-																		+ '" data-check="false"  >';
+																		+ '" data-check="false" ng-click="showStockRecord(\''+full.serialNum+'\')" >';*/
+														return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
+					                                     '<input type="checkbox" data-check="false" class="checkboxes" ng-click="showStockRecord(\''+full.serialNum+'\')" id="'+data+'" value="'+data+'" data-set="#sample_zijian .checkboxes" />'+
+					                                     '<span></span></label>';
 													},"createdCell": function (td, cellData, rowData, full, col) {
 														 $compile(td)($scope);
 												    }
@@ -226,62 +221,10 @@ angular
 										        $(this).parents("tr").toggleClass("active")
 										    })
 										   return tablezijian;
-						/*	// 添加checkbox功能***************************************
-							// Handle click on "Select all" control
-							$('#example-select-zijian-all').on(
-									'click',
-									function() {
-										// Check/uncheck all checkboxes in the
-										// table
-										var rows = tablezijian.rows({
-											'search' : 'applied'
-										}).nodes();
-										$('input[type="checkbox"]', rows).prop(
-												'checked', this.checked);
-									});
-
-							// Handle click on checkbox to set state of "Select
-							// all" control
-							$('#sample_zijian tbody')
-									.on(
-											'change',
-											'input[type="checkbox"]',
-											function() {
-												// If checkbox is not checked
-												if (!this.checked) {
-													var el = $(
-															'#example-select-zijian-all')
-															.get(0);
-													// If "Select all" control
-													// is checked and has
-													// 'indeterminate' property
-													if (el
-															&& el.checked
-															&& ('indeterminate' in el)) {
-														// Set visual state of
-														// "Select all" control
-														// as 'indeterminate'
-														el.indeterminate = true;
-													}
-												}
-											});
-							// 添加checkbox功能
-							// ***************************************
-*/							}
+											}
 			function loadStockdaiguanTable(){
 				var a = 0;
 				tableAjaxUrl= "rest/stock/getStockList?manageType=2";
-			/*	App.getViewPort().width < App
-						.getResponsiveBreakpoint("md") ? $(
-						".page-header").hasClass(
-						"page-header-fixed-mobile")
-						&& (a = $(".page-header").outerHeight(!0))
-						: $(".page-header").hasClass(
-								"navbar-fixed-top") ? a = $(
-								".page-header").outerHeight(!0)
-								: $("body").hasClass(
-										"page-header-fixed")
-										&& (a = 64);*/
 
 								tabledaiguan = $("#sample_daiguan")
 						.DataTable(
@@ -325,7 +268,7 @@ angular
 
 									"aoColumns" : [
 										{
-										mData : 'serialNum',
+										mData : 'serialNum'/*,
 		                            	  mRender : function(
 													data,
 													type,
@@ -334,7 +277,7 @@ angular
 												return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
 														"<input type='checkbox' class='checkboxes' value='"+data+"'/>" +
 														"<span></span></label>";
-											}
+											}*/
 										},
 										 {
 											mData : 'stockNum'
@@ -356,9 +299,9 @@ angular
 											mData : 'onRoadAmount'
 										}, {
 											mData : 'canSaleAmount'
-										},/*{
+										},{
 											mData : 'riskGrade'
-										},*/ {
+										}, {
 											mData : 'status'
 										}
 										],
@@ -369,12 +312,15 @@ angular
 										'className' : 'dt-body-center',
 										'render' : function(data,
 												type, full, meta) {
-											return '<input type="checkbox" id="'+data+'" name="id[]" value="'
+											/*return '<input type="checkbox" id="'+data+'" name="id[]" value="'
 													+ $('<div/>')
 															.text(
 																	data)
 															.html()
-															+ '" data-check="false"  >';
+															+ '" data-check="false"  ng-click="showStockRecord(\''+full.serialNum+'\')">';*/
+											return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
+		                                     '<input type="checkbox" data-check="false" class="checkboxes" ng-click="showStockRecord(\''+full.serialNum+'\')" id="'+data+'" value="'+data+'" data-set="#sample_daiguan .checkboxes" />'+
+		                                     '<span></span></label>';
 										},"createdCell": function (td, cellData, rowData, full, col) {
 											 $compile(td)($scope);
 									    }
@@ -418,49 +364,179 @@ angular
 							        $(this).parents("tr").toggleClass("active")
 							    })
 							   return tabledaiguan;
-			/*	// 添加checkbox功能***************************************
-				// Handle click on "Select all" control
-				$('#example-select-daiguan-all').on(
-						'click',
-						function() {
-							// Check/uncheck all checkboxes in the
-							// table
-							var rows = tabledaiguan.rows({
-								'search' : 'applied'
-							}).nodes();
-							$('input[type="checkbox"]', rows).prop(
-									'checked', this.checked);
-						});
-
-				// Handle click on checkbox to set state of "Select
-				// all" control
-				$('#sample_daiguan tbody')
-						.on(
-								'change',
-								'input[type="checkbox"]',
-								function() {
-									// If checkbox is not checked
-									if (!this.checked) {
-										var el = $(
-												'#example-select-daiguan-all')
-												.get(0);
-										// If "Select all" control
-										// is checked and has
-										// 'indeterminate' property
-										if (el
-												&& el.checked
-												&& ('indeterminate' in el)) {
-											// Set visual state of
-											// "Select all" control
-											// as 'indeterminate'
-											el.indeterminate = true;
-										}
-									}
-								});
-				// 添加checkbox功能
-				// ***************************************
-*/				}
+						}
+			var stockInTable,stockOutTable;
+			function loadStockInTable(serialNum,tableid){
+				var a = 0;
+				debugger;
+				 if(stockInTable!=undefined){
+					 stockInTable.destroy();
+		 	    	 }
+				 tableAjaxUrl="rest/stock/stockInList?serialNum="+serialNum
+				
 			
+				stockInTable = $("#"+tableid)
+						.DataTable(
+								{
+									language : {
+										aria : {
+											sortAscending : ": activate to sort column ascending",
+											sortDescending : ": activate to sort column descending"
+										},
+										emptyTable : "空表",
+										info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+										infoEmpty : "没有数据",
+										infoFiltered : "(从 _MAX_ 条数据中检索)",
+										lengthMenu : "每页显示 _MENU_ 条数据",
+										search : "查询:",
+										zeroRecords : "抱歉， 没有找到！",
+										paginate : {
+											"sFirst" : "首页",
+											"sPrevious" : "前一页",
+											"sNext" : "后一页",
+											"sLast" : "尾页"
+										}
+									},
+									/*fixedHeader : {// 固定表头、表底
+										header : !0,
+										footer : !0,
+										headerOffset : a
+									},*/
+									// select: true,行多选
+									order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+									bRetrieve : true,
+									// searching: true,//是否过滤检索
+									// ordering: true,//是否排序
+									lengthMenu : [
+											[ 5, 10, 15, 30, -1 ],
+											[ 5, 10, 15, 30, "All" ] ],
+									pageLength : 10,// 每页显示数量
+									processing : true,// loading等待框
+									// serverSide: true,
+								     ajax :tableAjaxUrl,
+			  		                    "aoColumns": [
+			  		                                   { mData: 'stockInOutRecord.inOutNum' },
+	  		                                           { mData: 'stockInOutRecord.inOutType' },
+	  		                                          { mData: 'stockInOutRecord.order.orderNum' },
+	  		                                          { mData: 'batchNum' },
+	  		                                          { mData: 'stockInOutRecord.stockDate' },
+	 	  		                                      { mData: 'stockCount' },
+	 	  		                                      { mData: 'warehouse.warehouseName' },
+		  		                                      { mData: 'position.positionName' },
+		  		                                       { mData: 'remark' }//备注
+                                                     
+			  		                            ],
+			  		                   'aoColumnDefs' : [ {
+											'targets' : 2,
+											'render' : function(data,
+													type, row, meta) {
+		 	    								if(data==''||data==null){
+		 	    									return "";
+		 	    								}
+												
+											}
+										} ],
+
+								})
+				// 构建datatables结束***************************************
+							   return stockInTable;
+								}
+			function loadStockOutTable(serialNum,tableid){
+				var a = 0;
+				debugger;
+				 if(stockOutTable!=undefined){
+					 stockOutTable.destroy();
+		 	    	 }
+					App.getViewPort().width < App
+					.getResponsiveBreakpoint("md") ? $(
+					".page-header").hasClass(
+					"page-header-fixed-mobile")
+					&& (a = $(".page-header").outerHeight(!0))
+					: $(".page-header").hasClass(
+							"navbar-fixed-top") ? a = $(
+							".page-header").outerHeight(!0)
+							: $("body").hasClass(
+									"page-header-fixed")
+									&& (a = 64);
+							tableAjaxUrl="rest/stock/stockOutList?serialNum="+serialNum
+							/* tableAjaxUrl={ "url":$rootScope.basePath
+									+ "/rest/stock/stockOutList?serialNum="+serialNum,// 加载数据中user表数据    
+									"contentType": "application/json",
+								    "type": "GET",
+								    "data": function ( d ) {
+								      return JSON.stringify( d );
+								    }}*/
+				stockOutTable = $("#"+tableid)
+						.DataTable(
+								{
+									language : {
+										aria : {
+											sortAscending : ": activate to sort column ascending",
+											sortDescending : ": activate to sort column descending"
+										},
+										emptyTable : "空表",
+										info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+										infoEmpty : "没有数据",
+										infoFiltered : "(从 _MAX_ 条数据中检索)",
+										lengthMenu : "每页显示 _MENU_ 条数据",
+										search : "查询:",
+										zeroRecords : "抱歉， 没有找到！",
+										paginate : {
+											"sFirst" : "首页",
+											"sPrevious" : "前一页",
+											"sNext" : "后一页",
+											"sLast" : "尾页"
+										}
+									},
+									/*fixedHeader : {// 固定表头、表底
+										header : !0,
+										footer : !0,
+										headerOffset : a
+									},*/
+									// select: true,行多选
+									order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+									bRetrieve : true,
+									// searching: true,//是否过滤检索
+									// ordering: true,//是否排序
+									lengthMenu : [
+											[ 5, 10, 15, 30, -1 ],
+											[ 5, 10, 15, 30, "All" ] ],
+									pageLength : 10,// 每页显示数量
+									processing : true,// loading等待框
+									// serverSide: true,
+								     ajax :/*{ "url":$rootScope.basePath
+			  		  						+ "/rest/stock/stockOutList?serialNum="+serialNum,//加载出库记录  
+			  		  						"contentType": "application/json",
+			  		  					    "type": "POST",
+			  		  					    "data": function ( d ) {
+			  		  					      return JSON.stringify( d );
+			  		  					    }}*/tableAjaxUrl,
+			  		                    "aoColumns": [
+			  		                                    { mData: 'stockInOutRecord.inOutNum' },
+                                                        { mData: 'stockInOutRecord.inOutType' },
+                                                        { mData: 'stockInOutRecord.order.orderNum' },
+                                                        { mData: 'batchNum' },
+                                                        { mData: 'stockInOutRecord.stockDate' },
+                                                        { mData: 'stockCount' },
+			  		                                  { mData: 'warehouse.warehouseName' },
+			  		                                  { mData: 'position.positionName' },
+			  		                                  { mData: 'remark' }//备注
+			  		                            ],
+			  		                   'aoColumnDefs' : [{
+											'targets' : 2,
+											'render' : function(data,
+													type, row, meta) {
+		 	    								if(data==''||data==null){
+		 	    									return "";
+		 	    								}
+												
+											}
+										}],
+
+								})
+				// 构建datatables结束***************************************
+							   return stockOutTable;
+								}
 			 $scope.showStock=function(judgeString){
 				 $state.go('stock',{stockSerialNum:judgeString}); //切换tab
 			}
@@ -699,6 +775,11 @@ angular
 					 	                    console.log('排序');
 					 	                })
 					 	            };
+					 	            
+					 	           $scope.showStockRecord=function(serialNum){//列表页显示出入库记录
+					 	        	  loadStockInTable(serialNum,"sample_stockin");//入库记录
+							 			loadStockOutTable(serialNum,"sample_stockout");//出库记录
+					 	           }
 						$scope.selectMaterialForStock=function(serialNum,materielName,materielNum,specifications){
 							debugger;
 							$scope.row = {};

@@ -9,10 +9,14 @@ import org.springframework.stereotype.Service;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.web.dao.DeliveryMaterielMapper;
+import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
 import com.congmai.zhgj.web.dao.StockMapper;
+import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.Stock;
 import com.congmai.zhgj.web.model.StockExample;
 import com.congmai.zhgj.web.model.StockExample.Criteria;
+import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.service.StockService;
 
 /**
@@ -27,6 +31,11 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 
 	 @Resource
 	    private StockMapper  stockMapper;
+	 @Resource
+	    private StockInOutRecordMapper stockInOutRecordMapper;
+	 
+	 @Resource
+	    private DeliveryMaterielMapper deliveryMaterielMapper;
 
 	@Override
 	public GenericDao<Stock, String> getDao() {
@@ -47,6 +56,28 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
     	criteria.andDelFlgEqualTo("0");
     	criteria.andManageTypeEqualTo(manageType);
 		return stockMapper.selectByExample(se);
+	}
+
+	@Override
+	public List<String> getRelationDeliverSerialList(Stock stock) {
+		return stockInOutRecordMapper.getRelationDeliverSerial(stock);
+	}
+
+	@Override
+	public List<String> getRelationTakeDeliverSerialList(Stock stock) {
+		return stockInOutRecordMapper.getRelationTakeDeliverSerial(stock);
+	}
+
+	@Override
+	public List<DeliveryMateriel> getDeliverMaterialListForIn(
+			List<String> takeDeliverSerialList) {
+		return deliveryMaterielMapper.getDetailByRelationTakeDeliverSerialList(takeDeliverSerialList);
+	}
+
+	@Override
+	public List<DeliveryMateriel> getDeliverMaterialListForOut(
+			List<String> deliverSerialList) {
+		return deliveryMaterielMapper.getDetailByRelationDeliverSerialList(deliverSerialList);
 	}
    
 	

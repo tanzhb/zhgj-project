@@ -226,16 +226,19 @@
                     	<div class="portlet-body">
 				<table
 					class="table table-striped table-bordered table-hover "
-					id="sample_zijian">
+					id="sample_stockin">
 					<thead>
 					<tr>
 							<th>入库明细号</th>
                             <th> 入库类型</th>
+                            <th> 关联单据</th>
+                            <th>商品采购批次号 </th>
                             <th>入库日期</th>
                             <th>入库数量</th>
-                            <th>关联批次号 </th>
-                            <th>供应商 </th>
-                            <th>关联单号 </th>
+                            <th>仓库 </th>
+                             <th>库位 </th>
+                            <!-- <th>供应商 </th>
+                            <th>关联单号 </th> -->
                             <th>备注</th>
 						</tr>
 						
@@ -264,16 +267,19 @@
 					       <div class="portlet-body">
 				<table
 					class="table table-striped table-bordered table-hover "
-					id="sample_zijian">
+					id="sample_stockout">
 					<thead>
 					<tr>
 							<th>出库明细号</th>
                             <th> 出库类型</th>
+                            <th> 关联单据</th>
+                            <th>商品采购批次号 </th>
                             <th>出库日期</th>
                             <th>出库数量</th>
-                            <th>关联批次号 </th>
-                            <th>采购商商 </th>
-                            <th>关联单号 </th>
+                            <th>仓库 </th>
+                            <th>库位</th>
+                            <!-- <th>采购商 </th>
+                            <th>关联单号 </th> -->
                             <th>备注</th>
 						</tr>
 						
