@@ -261,12 +261,6 @@
             </a>
         </li>
         </shiro:hasPermission>
-        <li class="nav-item">
-            <a ui-sref="noticeManage">
-                <i class="icon-layers"></i>
-                <span class="title">公告管理</span>
-            </a>
-        </li>
         <!-- <li class="nav-item">
             <a href="javascript:;" class="nav-link nav-toggle">
                 <i class="icon-settings"></i>

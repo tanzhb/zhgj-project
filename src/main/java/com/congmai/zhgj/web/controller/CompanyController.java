@@ -167,7 +167,8 @@ public class CompanyController {
     @ResponseBody
     public Map<String,Object> getCompanyInfo(HttpServletRequest request,String comId) {
     	Map<String, Object> map = new HashMap<String, Object>();
-    	map.put("company", companyService.selectOne(comId));
+    	Company company =  companyService.selectOne(comId);
+    	map.put("company", company);
     	map.put("companyFinances", companyFinanceService.selectListByComId(comId));
      	map.put("companyQualifications", companyQualificationService.selectListByComId(comId));
     	map.put("companyContacts", companyContactService.selectListByComId(comId));

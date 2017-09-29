@@ -23,7 +23,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	 			loadTable();
 	 		//	 $("#comViewPage").html($compile($("#comViewContent").html())($scope));
 	 			$("#sample_3_tools > li > a.tool-action").on("click",
-	 			        function(){debugger;
+	 			        function(){
 	 			            var e=$(this).attr("data-action");
 	 			           $("#companyTable").DataTable().button(e).trigger();
 	 			 })
@@ -845,6 +845,9 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        		$scope.companyView = true;
 	       			$scope.companyAdd = true;
 	       			$scope.companyEdit = false;
+	        	}else if(type=="bill"){
+	        		$scope.billView = true;
+	       			$scope.billAdd = true;
 	        	}else{
 	       			$scope.companyQualificationView = true;
 	       			$scope.companyQualificationAdd = true;
@@ -853,7 +856,63 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        	//$scope.cancelCompanyQualification();
 	        };
 	        
+	        /*************开票信息START*****************/
+	        /**
+	         * 编辑
+	         */
+	        $scope.editBillInfo=function (comId) {
+	        	$scope.billView = false;
+	        	$scope.billAdd = false;
+	        	
+	        };  
 	        
+	        /**
+	         * 保存
+	         */
+	        $scope.saveBillInfo=function () {
+	        	if($scope.company==null||isNull($scope.company.comId)){
+	        		toastr.warning("您的企业信息还未保存！");
+	        		return;
+	        	}
+        		handle.blockUI();
+        		var company = {};
+        		company.comId = $scope.company.comId;
+        		company.corporatePresence = $scope.company.corporatePresence;
+        		company.tel = $scope.company.tel;
+        		company.address = $scope.company.address;
+        		company.corporatePresence = $scope.company.corporatePresence;
+        		company.openingBank = $scope.company.openingBank;
+        		company.accountNumber = $scope.company.accountNumber;
+        		company.taxpayeNumber = $scope.company.taxpayeNumber;
+        		company.billRemark = $scope.company.billRemark;
+        		var promise = companyService.saveCompany(company);
+        		promise.then(function(data){
+        			if(!handle.isNull(data.data)){
+        				$(".modal-backdrop").remove();
+	        			toastr.success("保存成功");
+	        			handle.unblockUI();
+	        			//var company = data.data;
+	        			getCompanyInfo(company.comId,"company");
+	        			console.log(data.data);
+	        			$scope.billView = true;
+	        			$scope.billAdd = true;
+        			}else{
+        				$(".modal-backdrop").remove();
+	        			handle.unblockUI();
+        				toastr.error("保存失败！请联系管理员");
+		            	console.log(data);
+        			}
+        			
+        		},function(data){
+        			//调用承诺接口reject();
+        			$(".modal-backdrop").remove();
+        			handle.unblockUI();
+        			toastr.error("保存失败！请联系管理员");
+	            	console.log(data);
+        		});
+	        	
+	        }; 
+	        /*************开票信息END*****************/
 	        
 	        /**
 	         * 搜索
@@ -1428,7 +1487,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	       
 	       $scope.downloadFile = function(obj){
 	    	   if(!handle.isNull(obj)){
-	    		   window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+obj.qualificatioImage;
+	    		   window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+encodeURI(encodeURI(obj.qualificatioImage));
 	    	   }else{
 	    		   toastr.error("下载失败!");
 	    	   }
@@ -1459,14 +1518,22 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        if(activeTab=="企业信息"){
 	        	$scope.basicInfo = false;
 	        	$scope.qualificationInfo = false;
+	        	$scope.billInfo = false;
 	        	$scope.$apply();
 	        }else if(activeTab=="资质信息"){
 	        	$scope.basicInfo = true;
 	        	$scope.qualificationInfo = true;
+	        	$scope.billInfo = false;
+	        	$scope.$apply();
+	        }else if(activeTab=="财务信息"){
+	        	$scope.basicInfo = true;
+	        	$scope.qualificationInfo = false;
+	        	$scope.billInfo = true;
 	        	$scope.$apply();
 	        }else{
 	        	$scope.basicInfo = true;
 	        	$scope.qualificationInfo = false;
+	        	$scope.billInfo = false;
 	        	$scope.$apply();
 	        }
 	     });
