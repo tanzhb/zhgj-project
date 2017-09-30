@@ -177,6 +177,7 @@ public class NoticeContoller {
      */
     @RequestMapping(value="noticeView")
     public String noticeView(Map<String, Object> map,String serialNum,HttpServletRequest request) {
+    	
     	return "notice/noticeView";
     }
     
@@ -203,6 +204,9 @@ public class NoticeContoller {
     	try{
     		if(StringUtils.isNotEmpty(serialNum)){
     			notice = noticeService.selectById(serialNum);
+    			if(notice!=null){
+    				notice.setRelaseDate(DateUtil.getInterval(DateUtil.format("yyyy-MM-dd HH:mm:ss",notice.getUpdateTime())));
+    			}
     		}
     		
     	}catch(Exception e){
@@ -238,13 +242,13 @@ public class NoticeContoller {
      * @param request
      * @return
      */
-    @RequestMapping(value="deleteMyNotice",method=RequestMethod.POST)
+    @RequestMapping(value="readMyNotice",method=RequestMethod.POST)
     @ResponseBody
-    public String deleteMyNotice(Map<String, Object> map,@RequestBody String serialNum,HttpServletRequest request) {
+    public String readMyNotice(Map<String, Object> map,@RequestBody String serialNum,HttpServletRequest request) {
     	String flag = "0"; //默认失败
     	try{
     		if(StringUtils.isNotEmpty(serialNum)){
-    			noticeService.deleteNoticeShare(serialNum,UserUtil.getUserFromSession().getUserId().toString());
+    			noticeService.readNoticeShare(serialNum,UserUtil.getUserFromSession().getUserId().toString());
     		}
     	}catch(Exception e){
     		System.out.println(e.getMessage());

@@ -8,30 +8,40 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 	    	// initialize core components
 		    handle = new pageHandle();
 	    	App.initAjax();
-	    	if($location.path()=="/noticeAdd"||$location.path()=="/noticeView"){debugger;
+	    	if($location.path()=="/noticeAdd"||$location.path()=="/noticeView"){
 	    		if(!isNull($stateParams.serialNum)){
 	    			noticeInfo($stateParams.serialNum);
 	    		}
-	    		$("#summernote").summernote({
-	                height: 400
-	            });
+	    		if($("#summernote")!=undefined){
+		    		$("#summernote").summernote({
+		                height: 500,
+		                lang:"zh-CN",
+		                callbacks:{
+			                onImageUpload: function(files, editor, $editable) {  
+			                    uploadFile(files[0],editor,$editable);  
+			                }
+		                }  
+		            });
+	    		}
+	    	}else{
+	    		var type = handle.getCookie("d_type");
+	 			if(type=="notices"){
+		 				$('#notice_tab a:last').parent().addClass('active');
+		 				$('#notice_tab a:first').parent().removeClass('active');
+		 				$("#portlet_tab2_2").addClass("active");
+		 				$("#portlet_tab2_1").removeClass("active");
+		 				$scope.notices();
+		 		}else if(type=="newNotice"){
+		 				//loadTakeDelieryTable();
+		 				$('#notice_tab a:first').parent().addClass('active');
+		 				$('#notice_tab a:last').parent().removeClass('active');
+		 				$("#portlet_tab2_1").addClass("active");
+		 				$("#portlet_tab2_2").removeClass("active");
+		 				createTable(5,1,true,$scope.params);
+		 		}	
 	    	}
 	    	
-	    	var type = handle.getCookie("d_type");debugger;
- 			if(type=="notices"){
-	 				$('#notice_tab a:last').parent().addClass('active');
-	 				$('#notice_tab a:first').parent().removeClass('active');
-	 				$("#portlet_tab2_2").addClass("active");
-	 				$("#portlet_tab2_1").removeClass("active");
-	 				$scope.notices();
-	 		}else{
-	 				//loadTakeDelieryTable();
-	 				$('#notice_tab a:first').parent().addClass('active');
-	 				$('#notice_tab a:last').parent().removeClass('active');
-	 				$("#portlet_tab2_1").addClass("active");
-	 				$("#portlet_tab2_2").removeClass("active");
-	 				createTable(5,1,true,$scope.params);
-	 		}	
+	    	
 	    	// set default layout mode
 	    	$rootScope.settings.layout.pageContentWhite = true;
 	        $rootScope.settings.layout.pageBodySolid = false;
@@ -39,6 +49,48 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 	       
 	    	
 	 });
+	 
+	 		var uploadFile = function(file, editor, $editable){
+	 			$(".note-toolbar.btn-toolbar").append('正在上传图片');  
+	 			var filename = false;  
+	 			try{  
+	 			filename = file['name'];  
+	 			//alert(filename);  
+	 			} catch(e){filename = false;}  
+	 			if(!filename){$(".note-alarm").remove();}  
+	 			//以上防止在图片在编辑器内拖拽引发第二次上传导致的提示错误  
+	 			var ext = filename.substr(filename.lastIndexOf("."));  
+	 			ext = ext.toUpperCase();  
+	 			var timestamp = new Date().getTime();  
+	 			//var name = timestamp+"_"+$("#summernote").attr('aid')+ext;  
+	 			//name是文件名，自己随意定义，aid是我自己增加的属性用于区分文件用户  
+	 			data = new FormData();  
+	 			data.append("file", file);    
+	 			  
+	 			$.ajax({  
+	 			data: data,  
+	 			type: "POST",  
+	 			url: ctx+"rest/fileOperate/uploadSingleFile", //图片上传出来的url，返回的是图片上传后的路径，http格式 
+	 			cache: false,  
+	 			processData : false,  
+	 	        // 告诉jQuery不要去设置Content-Type请求头  
+	 	        contentType : false,  
+	 			success: function(data) {  
+	 			//data是返回的hash,key之类的值，key是定义的文件名  
+	 			//alert(data);  
+	 			//把图片放到编辑框中。editor.insertImage 是参数，写死。后面的http是网上的图片资源路径。  
+	 			//网上很多就是这一步出错。  
+	 			$('#summernote').summernote('editor.insertImage',ctx+"rest/fileOperate/downloadFile?fileName="+data.filename);  
+	 			  
+	 			$(".note-alarm").html("上传成功,请等待加载");  
+	 			setTimeout(function(){$(".note-alarm").remove();},3000);  
+	 			},  
+	 			error:function(){  
+	 			$(".note-alarm").html("上传失败");  
+	 			setTimeout(function(){$(".note-alarm").remove();},3000);  
+	 			}  
+	 			});  
+	 		}
 	 
 	 		$scope.notices = function(){
 	 			if(table==undefined){
@@ -55,7 +107,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 	 		
 	 		 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 			        // 获取已激活的标签页的名称
-			        var activeTab = $(e.target).text(); debugger;
+			        var activeTab = $(e.target).text(); 
 			        // 获取前一个激活的标签页的名称
 			       // var previousTab = $(e.relatedTarget).text(); 
 			        var absurl = $location.absUrl();
@@ -71,7 +123,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 			 /**
 		      * 创建我的公告列表
 		      */
-		    function createTable(pageSize,pageIndex,init,params){debugger;
+		    function createTable(pageSize,pageIndex,init,params){
 		 	 //初始化表格数据
 		 	   handle.blockUI(null,"#myNotice");
 			    	var promise = noticeService.createTable(pageSize,pageIndex,params);
@@ -113,16 +165,45 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 	 		$scope.toAddNotice = function(){
 	 			
 	 		}
-*/	 		
+*/	 
+	 		
+	 		
+	 		var formCheck = function(){
+	 			var noticeTitle = $("#noticeTitle").val();
+	 			var checked = $("#noticeCheck").find("input:checked");
+	 			var context = $('#summernote').summernote('code');
+	 			if(isNull(noticeTitle)){
+	 				toastr.warning("请填写标题");
+	 				return false;
+	 			}
+	 		
+	 			if(isNull(checked)||checked.length==0){
+	 				toastr.warning("请选择公告范围");
+	 				return false;
+	 		    }
+	 			
+	 			if(isNull(context)||context=='<p><br></p>'){
+	 				toastr.warning("请填写公告内容");
+	 				return false;
+	 			}else if(context>60000){
+	 				toastr.warning("公告内容超出最大限度");
+	 				return false;
+	 			}
+	 			
+	 			return true;
+	 		}
 	        /**
 	         * 发布公告
 	         */
 			$scope.saveNotice = function() {
 				//if($('#noticeForm').valid()){
+					if(!formCheck()){
+						return;
+					}
 				    var context = $('#summernote').summernote('code');
 				    notice = {};
 				    notice.context = context;
-				    notice.title = $scope.param.title;debugger;
+				    notice.title = $scope.param.title;
 				    if(!isNull($scope.param.serialNum)){
 				    	notice.serialNum = $scope.param.serialNum;
 				    }
@@ -208,30 +289,37 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 			 */
 			var noticeInfo = function(serialNum){
 				var promise = noticeService.getNoticeInfo(serialNum);
-        		promise.then(function(data){debugger;
+        		promise.then(function(data){
         			//$scope.notice = data.data;
         			if(!isNull(serialNum)){
-        				$('#summernote').summernote('code', data.data.context);
+        				if($location.path()!="/noticeView"){
+        					$('#summernote').summernote('code', data.data.context);
+        					var checked = $("#noticeCheck").find("input");
+         				    var vals=[];
+         				    if(!isNull(checked)){
+         				    	for(var i=0;i<checked.length;i++){
+         				    		vals[i] = checked[i].value;
+         					    }
+         				    }
+            				if(!isNull(data.data.noticeType)){
+            					var arr = data.data.noticeType.split(",");
+            					for(var i=0; i<arr.length; i++){
+            						for(var j=0;j<checked.length;j++){
+            							if(arr[i] == checked[j].value){
+            								checked[j].checked = true;
+            							}
+             					    }
+            					}
+            				}
+        				}
+        				
         				$scope.param = {};
         				$scope.param.title = data.data.title;
         				$scope.param.serialNum = data.data.serialNum;
-        				 var checked = $("#noticeCheck").find("input");
-     				    var vals=[];
-     				    if(!isNull(checked)){
-     				    	for(var i=0;i<checked.length;i++){
-     				    		vals[i] = checked[i].value;
-     					    }
-     				    }
-        				if(!isNull(data.data.noticeType)){
-        					var arr = data.data.noticeType.split(",");
-        					for(var i=0; i<arr.length; i++){
-        						for(var j=0;j<checked.length;j++){
-        							if(arr[i] == checked[j].value){
-        								checked[j].checked = true;
-        							}
-         					    }
-        					}
-        				}
+        				$scope.param.context = data.data.context;
+        				$scope.param.updater = data.data.updater;
+        				$scope.param.relaseDate = data.data.relaseDate;
+        				
         			}
         		},function(data){
         			//调用承诺接口reject();
@@ -256,6 +344,15 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 	        		});
 	        		
 	        	});
+			}
+			
+			$scope.myNoticeView = function(serialNum){
+				var promise = noticeService.readMyNotice(serialNum);
+        		promise.then(function(data){
+        		},function(data){
+        			//调用承诺接口reject();
+        		});
+				$state.go("noticeView",{serialNum:serialNum});
 			}
 
 
@@ -369,7 +466,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 		                        footer: !0,
 		                        headerOffset: a
 		                    },*/
-		                    order: [[1, "asc"]],//默认排序列及排序方式
+		                    order: [[5, "desc"]],//默认排序列及排序方式
 		                    bRetrieve : true,
 		  					'scrollX': false,
 		  					  buttons: [
@@ -381,7 +478,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 		                    searching: true,//是否过滤检索
 		                    ordering:  true,//是否排序
 		                    lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
-		                    pageLength: 5,//每页显示数量
+		                    pageLength: 15,//每页显示数量
 		                    processing: true,//loading等待框
 		                    bRetrieve : true,
 //		                    serverSide: true,
@@ -448,6 +545,17 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 	  	  								  return show_arr.join("/");
 	  	  							  }
 	  	  							  
+	  	  							}
+	  	  							return "";
+							}
+						}, {
+   							'targets' : 2,
+							'searchable' : false,
+							'orderable' : false,
+							'render' : function(data,
+									type, row, meta) {
+	  	  							if(data!=null){
+	  	  							  return '<a href="javascript:;" ng-click="myNoticeView(\''+row.serialNum+'\')">'+data+'</a>';
 	  	  							}
 	  	  							return "";
 							},
