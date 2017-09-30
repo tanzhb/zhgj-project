@@ -3005,6 +3005,16 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				   "<li><a ui-sref='invoice'>发票</a><i class='fa fa-angle-right'></i></li><li><a>销项票重新申请</a></li>";
 				  
+			   }else if('userInfo' == toState.name){//个人信息
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a ui-sref='#'>个人中心</a><i class='fa fa-angle-right'></i></li><li><a>个人信息</a></li>";
+			   }else if('companyInfo' == toState.name){//企业信息
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a ui-sref='#'>个人中心</a><i class='fa fa-angle-right'></i></li><li><a>企业信息</a></li>";
+			   }else if('accountSecurity' == toState.name){//账号安全
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a ui-sref='#'>个人中心</a><i class='fa fa-angle-right'></i></li><li><a>账号安全</a></li>";
+				  
 			   }else if('addOrEditStockInOutCheck' == toState.name){//新增修改检验                  
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 			 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
