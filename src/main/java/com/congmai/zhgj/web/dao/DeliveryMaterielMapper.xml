@@ -730,4 +730,12 @@
         </foreach>
      
      </select> 
+     
+       <update id="updateDeliveryMateriel"  parameterType="com.congmai.zhgj.web.model.DeliveryMateriel" >
+    update deliveryMateriel
+    SET
+      qualifiedCount = #{qualifiedCount},
+      unqualifiedCount = #{unqualifiedCount}
+    where serialNum = #{serialNum}
+  </update>
 </mapper>
