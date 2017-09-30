@@ -13,7 +13,7 @@ angular.module('MetronicApp').factory('UserInfoService', ['$rootScope', '$http',
     function getUserInfo(){
         var deferred = $q.defer();  
 
-        $.get("rest/user/getUserInfo",).success(function (data) { 
+        $.get("rest/user/getUserInfo").success(function (data) { 
             // 如果连接成功，延时返回给调用者  
             deferred.resolve(data);
             
