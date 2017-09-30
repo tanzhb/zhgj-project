@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.apache.commons.lang.time.DateFormatUtils;
+
 public class DateUtil {
 	
 	/**
@@ -343,4 +345,19 @@ public class DateUtil {
 		String dateString=sdf.format(date);
 		return dateString;
 	}   
+	
+	/**
+	 * 格式化日期为字符串，格式为年月日时分秒
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public static String formatDateTimess(Date date) {
+		String result = "";
+		if (date != null) {
+			result = DateFormatUtils.format(date,
+					"yyyy-MM-dd HH:mm:ss");
+		}
+		return result;
+	}
 }  

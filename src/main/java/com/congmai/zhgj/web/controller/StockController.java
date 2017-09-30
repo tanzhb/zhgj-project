@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,18 +30,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.enums.ComType;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.LadderPrice;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.PriceListExample;
 import com.congmai.zhgj.web.model.Stock;
 import com.congmai.zhgj.web.model.StockExample;
+import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.StockExample.Criteria;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.LadderPriceService;
@@ -258,4 +262,48 @@ public class StockController {
 	    	
 	         return map;
 	    }
+	    
+	    /**
+		  * @Description (获取入库记录)
+		  * @param request
+		  * @return
+		  */
+		 @RequestMapping(value="stockInList",method=RequestMethod.GET)
+		 public ResponseEntity<Map<String,Object>> stockInList(String serialNum) {
+			 Stock stock=stockService.selectById(serialNum);
+			 List<String>takeDeliverSerialList=stockService.getRelationTakeDeliverSerialList(stock);
+			 List<DeliveryMateriel>stockInList=new  ArrayList<DeliveryMateriel>();
+			 if(!CollectionUtils.isEmpty(takeDeliverSerialList)){
+				 stockInList=stockService.getDeliverMaterialListForIn(takeDeliverSerialList);
+			 }
+				 
+			 // 封装datatables数据返回到前台
+			 Map<String,Object> pageMap = new HashMap<String,Object>();
+			 pageMap.put("draw", 1);
+			 pageMap.put("recordsTotal", stockInList==null?0:stockInList.size());
+			 pageMap.put("recordsFiltered", stockInList==null?0:stockInList.size());
+			 pageMap.put("data", stockInList);
+			 return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
+		 }
+		  /**
+		  * @Description (获取出库记录)
+		  * @param request
+		  * @return
+		  */
+		 @RequestMapping(value="stockOutList",method=RequestMethod.GET)
+		 public ResponseEntity<Map<String,Object>> stockOutList( String serialNum) {
+			 Stock stock=stockService.selectById(serialNum);
+			 List<String>deliverSerialList=stockService.getRelationDeliverSerialList(stock);
+			 List<DeliveryMateriel>stockOutList=new  ArrayList<DeliveryMateriel>();
+			 if(!CollectionUtils.isEmpty(deliverSerialList)){
+				 stockOutList=stockService.getDeliverMaterialListForOut(deliverSerialList);
+			 }
+				 // 封装datatables数据返回到前台
+				 Map<String,Object> pageMap = new HashMap<String,Object>();
+				 pageMap.put("draw", 1);
+				 pageMap.put("recordsTotal", stockOutList==null?0:stockOutList.size());
+				 pageMap.put("recordsFiltered", stockOutList==null?0:stockOutList.size());
+				 pageMap.put("data", stockOutList);
+				 return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
+		 }
 }

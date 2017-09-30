@@ -54,4 +54,7 @@ public class Constants {
 
 	/***************** 销项票KEY *****************/
 	public static final String OUTINVOICE_KEY = "com.congmai.zhgj.outInvoice";
+	
+	
+	
 }

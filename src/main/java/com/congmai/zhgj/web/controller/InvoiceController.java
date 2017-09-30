@@ -149,6 +149,15 @@ public class InvoiceController {
     			invoiceService.insert(invoice);
     		}else{
     			invoiceService.update(invoice);
+    			if("2".equals(invoice.getStatus())){
+    				OrderInfo orderInfo=new OrderInfo();
+    				if(StringUtils.isEmpty(invoice.getSupplyComId())){
+    					orderInfo.setBillStatus(OrderInfo.BILL);
+    				}else{
+    					orderInfo.setBillStatus(OrderInfo.RECIVEBILL);
+    				}
+    				orderService.update(orderInfo);
+    			}
     		}
     		
     	}catch(Exception e){
@@ -343,9 +352,9 @@ public class InvoiceController {
 	private String startInvoiceProcess(@RequestBody String params) {
     	String flag = "0"; //默认失败
     	Invoice invoice = json2Invoice(params);
-    	//invoiceService.update(invoice);//更新备注
+    	invoiceService.update(invoice);//更新理由
     	
-		//启动订单审批测试流程-start
+		//启动发票审批测试流程-start
 		User user = UserUtil.getUserFromSession();
 		invoice.setUserId(user.getUserId());
 		invoice.setUser_name(user.getUserName());
@@ -379,7 +388,7 @@ public class InvoiceController {
 //                message.setMessage("启动请假流程失败，系统内部错误！");
 		    throw e;
 		}
-        //启动订单审批测试流程-end
+        //启动发票审批测试流程-end
 		return flag;
 	}
     
@@ -469,7 +478,7 @@ public class InvoiceController {
     		
     		this.processBaseService.update(invoice);
     		
-    		if(BaseVO.APPROVAL_SUCCESS.equals(invoice.getStatus())){//订单完成，需更新状态为1(订单待接收)
+    		if(BaseVO.APPROVAL_SUCCESS.equals(invoice.getStatus())){//发票完成，需更新状态为1(发票待接收)
     			Invoice invoiceori = new Invoice();
     			invoiceori.setSerialNum(invoice.getSerialNum());
     			invoiceori.setStatus("1");

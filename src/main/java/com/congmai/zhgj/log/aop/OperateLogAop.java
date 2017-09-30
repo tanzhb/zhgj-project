@@ -270,7 +270,7 @@ public class OperateLogAop{
      * @param request
      * @return
      */
-    private  String getRemoteHost(javax.servlet.http.HttpServletRequest request){
+    public static String getRemoteHost(javax.servlet.http.HttpServletRequest request){
         String ip = request.getHeader("x-forwarded-for");
         if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)){
             ip = request.getHeader("Proxy-Client-IP");

@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.model;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName Stock
@@ -11,7 +12,7 @@ import java.util.Date;
  */
 public class Stock {
     private String serialNum;
-
+ 
     private String materielSerial;//物料流水号
 
     private String stockNum;//库存编号
@@ -60,9 +61,9 @@ public class Stock {
     
     private String  stockCost;//库存成本
     
-    private String  relationSaleNum;//关联销售单号
+    private String  relationSaleNum;//关联销售单号数量
     
-    private String  relationBuyNum;//关联采购单号
+    private String  relationBuyNum;//关联采购单号数量
     
     private String  riskGrade;//风险等级
     
