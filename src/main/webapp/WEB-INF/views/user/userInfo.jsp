@@ -40,14 +40,27 @@
 			</div>
 			<div class="portlet-body">{{userInfo.userName}}个人用户</div>
 			<div class="portlet-body">
-				管理权限：超级管理员&nbsp;&nbsp;&nbsp; <i class="fa fa-edit"
+				管理权限：
+				   <span ng-if="userInfo.groupId=='2'">总监</span> 
+				   <span ng-if="userInfo.groupId=='3'">员工</span> 
+				   <span ng-if="userInfo.groupId=='4'">财务</span> 
+				   <span ng-if="userInfo.groupId=='5'">人事</span> 
+				   <span ng-if="userInfo.groupId=='6'">经理</span> 
+				   <span ng-if="userInfo.groupId=='7'">超级管理员</span> 
+				   <span ng-if="userInfo.groupId=='11'">采购部</span> 
+				   <span ng-if="userInfo.groupId=='12'">FT事业部</span> 
+				   <span ng-if="userInfo.groupId=='13'">财务部</span> 
+				   <span ng-if="userInfo.groupId=='14'">仓储部</span> 
+				   <span ng-if="userInfo.groupId=='15'">供应商</span> 
+				   <span ng-if="userInfo.groupId=='17'">评审</span> 
+				&nbsp;&nbsp;&nbsp; <i class="fa fa-edit"
 					ng-click="editSignContract($event)"></i>
 
 			</div>
 			<div class="portlet-body">
 				<span class="caption-subject font-green bold uppercase">新消息：</span>&nbsp;&nbsp;5条&nbsp;|&nbsp;
 				<span class="caption-subject font-green bold uppercase">公告：</span>&nbsp;&nbsp;2条&nbsp;|&nbsp;
-				<span class="caption-subject font-green bold uppercase">任务：</span>&nbsp;&nbsp;4条
+				<!-- <span class="caption-subject font-green bold uppercase">任务：</span>&nbsp;&nbsp;4条 -->
 			</div>
 
 			<div class="portlet-body">
