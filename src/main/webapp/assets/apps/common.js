@@ -303,6 +303,31 @@ function delHtmlTag(str){
 	  return str.replace(/<[^>]+>/g,"").replace(/&nbsp;/ig, " ");//去掉所有的html标记
 }
 
+
+//图片展示
+function showImg(src,title){
+	var html = "<div style='width:900px;'><img style='width:100%;height:100%;' src="+src+" alt='图片无法显示' /></div>";
+	
+	//html = $("#img").html();
+	layer.open({
+		  type:1,
+		  title:false,
+		  offset: '100px',
+		  shadeClose: true,
+		  maxWidth:900,
+		  content: html
+	});
+}
+
+function isImg(filename){
+	if(!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(filename))
+	{
+	  return false;
+	}
+	return true;
+}
+
+
 /*日期控件控制*/
 function initDatePicker(orientation){
 	$('.date-picker').datepicker({

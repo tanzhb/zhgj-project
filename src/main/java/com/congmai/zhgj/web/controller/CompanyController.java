@@ -43,6 +43,7 @@ import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.enums.ComType;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.CompanyAddress;
 import com.congmai.zhgj.web.model.CompanyContact;
 import com.congmai.zhgj.web.model.CompanyExample;
 import com.congmai.zhgj.web.model.CompanyExample.Criteria;
@@ -50,6 +51,7 @@ import com.congmai.zhgj.web.model.CompanyFinance;
 import com.congmai.zhgj.web.model.CompanyQualification;
 import com.congmai.zhgj.web.model.DataTablesParams;
 import com.congmai.zhgj.web.model.User;
+import com.congmai.zhgj.web.service.CompanyAddressService;
 import com.congmai.zhgj.web.service.CompanyContactService;
 import com.congmai.zhgj.web.service.CompanyFinanceService;
 import com.congmai.zhgj.web.service.CompanyQualificationService;
@@ -79,6 +81,8 @@ public class CompanyController {
 	private CompanyFinanceService companyFinanceService;
 	@Autowired
 	private UserCompanyService userCompanyService;
+	@Autowired
+	private CompanyAddressService companyAddressService;
 	
 	  /**
      * @Description (企业信息首页)
@@ -172,6 +176,7 @@ public class CompanyController {
     	map.put("companyFinances", companyFinanceService.selectListByComId(comId));
      	map.put("companyQualifications", companyQualificationService.selectListByComId(comId));
     	map.put("companyContacts", companyContactService.selectListByComId(comId));
+    	map.put("companyAddresses", companyAddressService.selectListByComId(comId));
     	return map;
     }
     
@@ -201,6 +206,7 @@ public class CompanyController {
     	map.put("companyFinances", companyFinanceService.selectListByComId(comId));
      	map.put("companyQualifications", companyQualificationService.selectListByComId(comId));
     	map.put("companyContacts", companyContactService.selectListByComId(comId));
+    	map.put("companyAddresses", companyAddressService.selectListByComId(comId));
     	return "company/companyView";
     }
     
@@ -400,6 +406,65 @@ public class CompanyController {
     	try{
     		
     		companyContactService.delete(serialNum);
+    		
+    		
+    		flag = "1";
+    	}catch(Exception e){
+    		System.out.println(e.getMessage());
+    	}
+    	return flag;
+    }
+    
+    /**
+     * @Description (保存联系地址)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="saveCompanyAddress",method=RequestMethod.POST)
+    @ResponseBody
+    public List<CompanyAddress> saveCompanyAddress(Map<String, Object> map,@RequestBody CompanyAddress companyAddress,HttpServletRequest request) {
+    	String flag ="0"; //默认失败
+    	List<CompanyAddress> companyAddresses = null;
+    	try{
+    		Subject currentUser = SecurityUtils.getSubject();
+    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+    		if(StringUtils.isEmpty(companyAddress.getSerialNum())){
+    			companyAddress.setSerialNum(ApplicationUtils.random32UUID());
+    			companyAddress.setDelFlg("0");
+    			companyAddress.setCreateTime(new Date());
+    			companyAddress.setCreator(currenLoginName);
+    			companyAddress.setUpdateTime(new Date());
+    			companyAddress.setUpdater(currenLoginName);
+    			companyAddressService.insert(companyAddress);
+    		}else{
+    			companyAddress.setUpdateTime(new Date());
+    			companyAddress.setUpdater(currenLoginName);
+    			companyAddressService.update(companyAddress);
+    		}
+    		
+    		companyAddresses = companyAddressService.selectListByComId(companyAddress.getComId());
+    		
+    		flag = "1";
+    	}catch(Exception e){
+    		System.out.println(e.getMessage());
+    		return null;
+    	}
+    	return companyAddresses;
+    }
+    
+    /**
+     * @Description (删除联系地址)
+     * @param request
+     * @return
+     */
+    @RequestMapping("deleteCompanyAddress")
+    @ResponseBody
+    public String deleteCompanyAddress(Map<String, Object> map,String serialNum) {
+    	String flag ="0"; //默认失败
+    	
+    	try{
+    		
+    		companyAddressService.delete(serialNum);
     		
     		
     		flag = "1";
