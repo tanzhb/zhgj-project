@@ -5,7 +5,7 @@
 /* Metronic App */
 // 定义模块时引入依赖
 var MetronicApp = angular.module("MetronicApp", [ "ui.router", "ui.bootstrap",
-		"oc.lazyLoad", "ngSanitize" ]);
+		"oc.lazyLoad", "ngSanitize", "tm.pagination"]);
 
 /* Configure ocLazyLoader(refer: https://github.com/ocombe/ocLazyLoad) */
 MetronicApp.config([ '$ocLazyLoadProvider', function($ocLazyLoadProvider) {
@@ -143,19 +143,20 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
-        // Blank Page
-        .state('blank', {
-            url: "/blank",
-            templateUrl: "rest/page/blank",
-            data: {pageTitle: '空白页'},
-            controller: "BlankController",
+        // 全文检索
+        .state('solrSearch', {
+            url: "/solrSearch",
+            templateUrl: "rest/page/solrSearch",
+            data: {pageTitle: '全文检索'},
+            controller: "SolrSearchController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
                         files: [
-                            'assets/apps/controllers/BlankController.js'
+                            'assets/pages/css/search.min.css',
+                            'assets/apps/controllers/SolrSearchController.js'                            
                         ]
                     });
                 }]
@@ -3033,6 +3034,9 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 						   html += "<li><a>入库检验确认</a></li>";
 					   }else html += "<li><a>出库检验确认</a></li>";
 				   }
+			   }else if('solrSearch' == toState.name){//全文检索   
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a>全文检索</a></i></li>";	
 			   }
 			   angular.element("#dashboard").empty();
 			   var template = angular.element(html);

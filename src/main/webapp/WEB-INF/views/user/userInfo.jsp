@@ -23,23 +23,16 @@
 				</div>
 			</div>
 
-			<div class="portlet-body">
+			<div class="portlet-body" ng-app="app">
 				<div class="sp-page-content" style="float:left;" ng-controller="addPhotoCtrl as ctl">
 					<div class="sp-page-box" style="float:left;">
 						<div class="sp-page-boxcolumn span2" style="float:left;">
 							<span class="sp-upload" style="float:left;"> 
-							
 							<img ng-if="userInfo.avatar!=null&&userInfo.avatar!=''" class="sp-upload-photo" alt="" ng-src="uploadAttachFiles/{{userInfo.avatar}}" style="float:left;"/> 
 							<img ng-if="userInfo.avatar==null||userInfo.avatar==''" class="sp-upload-photo" alt="" ng-src="{{ctl.info.photo}}" style="float:left;"/>	
-								
 								<input type="file"
 								name="paymentVoucher" id="paymentVoucher" upload-img
 								class="sp-upload-img" />
-								<!-- <input type="file"
-								name="..." nv-file-select uploader="uploader"
-								onchange="angular.element(this).scope().up(this.files[0])"
-								ng-model="file[0].file"
-								ng-click="uploadFile(0)" class="sp-upload-img"/> -->
 							</span>
 						</div>
 					</div>
