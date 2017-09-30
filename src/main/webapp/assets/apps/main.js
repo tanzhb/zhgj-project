@@ -3034,6 +3034,9 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 						   html += "<li><a>入库检验确认</a></li>";
 					   }else html += "<li><a>出库检验确认</a></li>";
 				   }
+			   }else if('solrSearch' == toState.name){//全文检索   
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a>全文检索</a></i></li>";	
 			   }
 			   angular.element("#dashboard").empty();
 			   var template = angular.element(html);
