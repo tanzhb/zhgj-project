@@ -49,7 +49,7 @@
 										请先输入正确数据！
 									</div>
 									<div class="row">
-										<div class="col-md-6">
+										<div class="col-md-4">
 											<div class="form-group">
 												<label class="control-label bold" for="comNum">企业编号
 													<span class="required"> * </span>
@@ -65,7 +65,7 @@
 										</div>
 
 										<!--/span-->
-										<div class="col-md-6">
+										<div class="col-md-4">
 											<div class="form-group">
 												<label class="control-label bold" for="comName">企业名称
 													<span class="required"> * </span>
@@ -80,10 +80,7 @@
 											</div>
 										</div>
 										<!--/span-->
-									</div>
-									<!--/row-->
-									<div class="row">
-										<div class="col-md-6">
+										<div class="col-md-4">
 											<div class="form-group">
 												<label class="control-label bold" for="comType">企业类型
 													<span class="required"> * </span>
@@ -107,7 +104,11 @@
 											</div>
 										</div>
 										<!--/span-->
-										<div class="col-md-6">
+									</div>
+									<!--/row-->
+									
+									<div class="row">
+										<div class="col-md-4">
 											<div class="form-group ">
 												<label class="control-label bold" for="abbreviation">企业简称</label>
 												<div class="">
@@ -120,25 +121,22 @@
 											</div>
 										</div>
 										<!--/span-->
-									</div>
-									<!--/row-->
-									<div class="row">
-										<div class="col-md-6">
+										<div class="col-md-4">
 											<div class="form-group ">
 												<label class="control-label bold" for="businessNature">经营性质</label>
 												<div class="">
 													<select class="form-control" id="businessNature"
 														ng-show="companyAdd" ng-model="company.businessNature">
-														<option value="国有企业">加工制造</option>
-														<option value="民营企业">分销/交易</option>
-														<option value="合资企业">仓储供应</option>
+														<option value="加工制造">加工制造</option>
+														<option value="分销/交易">分销/交易</option>
+														<option value="仓储供应">仓储供应</option>
 													</select>
 													<div class="form-control-focus"></div>
 													<p class="control-label left" ng-show="companyView">{{company.businessNature}}</p>
 												</div>
 											</div>
 										</div>
-										<div class="col-md-6">
+										<div class="col-md-4">
 											<div class="form-group">
 												<label class="control-label bold" for="comNature">企业性质
 													<span class="required"> * </span>
@@ -160,7 +158,7 @@
 									</div>
 									<!--/row-->
 									<div class="row">
-										<div class="col-md-6">
+										<div class="col-md-4">
 											<div class="form-group">
 												<label class="control-label bold" for="businessType">经营类型</label>
 												<div class="">
@@ -171,7 +169,7 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-6">
+										<div class="col-md-4">
 											<div class="form-group">
 												<label class="control-label bold" for="registeredCapital">注册资金</label>
 												<div class="">
@@ -190,10 +188,7 @@
 												</div>
 											</div>
 										</div>
-									</div>
-									<!--/row-->
-									<div class="row">
-										<div class="col-md-6">
+										<div class="col-md-4">
 											<div class="form-group">
 												<label class="control-label bold" for="legalPerson">企业法人姓名
 													<span class="required"> * </span>
@@ -207,7 +202,10 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-6">
+									</div>
+									<!--/row-->
+									<div class="row">
+									<div class="col-md-4">
 											<div class="form-group">
 												<label class="control-label bold" for="address">注册地址
 													<span class="required"> * </span>
@@ -221,10 +219,7 @@
 												</div>
 											</div>
 										</div>
-									</div>
-									<!--/row-->
-									<div class="row">
-										<div class="col-md-6">
+										<div class="col-md-4">
 											<div class="form-group">
 												<label class="control-label bold" for="taxpayeNumber">纳税人识别号
 													<span class="required"> * </span>
@@ -238,7 +233,7 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-6">
+										<div class="col-md-4">
 											<div class="form-group">
 												<label class="control-label bold" for="tel">联系电话</label>
 												<div class="">

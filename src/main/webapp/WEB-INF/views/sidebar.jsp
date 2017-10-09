@@ -40,7 +40,7 @@
                     </a>
                 </li>
                 <li>
-                    <a ui-sref="#">
+                    <a ui-sref="operateLog">
                         操作日志</span>
                     </a>
                 </li>
@@ -290,15 +290,6 @@
                 </li>
             </ul>
         </li> -->
-        <%-- <shiro:hasAnyRoles name="lcsq,manager,hr,director">
-        
-        </shiro:hasAnyRoles>
-        <li class="nav-item">
-            <a ui-sref="vacation">
-                <i class="icon-refresh"></i>
-                <span class="title">请假</span>
-            </a>
-        </li> --%>
     </ul>
     <!-- END SIDEBAR MENU -->
 </div>

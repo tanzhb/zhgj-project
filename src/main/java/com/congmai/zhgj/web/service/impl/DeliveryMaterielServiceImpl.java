@@ -93,7 +93,7 @@ public class DeliveryMaterielServiceImpl extends GenericServiceImpl<DeliveryMate
 	}
 @Override
 	public int updateDeliveryMateriel(DeliveryMateriel record) {
-		deliveryMaterielMapper.updateDeliveryMateriel(record);
+		((DeliveryMaterielService) deliveryMaterielMapper).updateDeliveryMateriel(record);
 		return 1;
 	}
 

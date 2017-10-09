@@ -177,6 +177,14 @@ public class PageController {
         return "order/saleOrder";
     }
     
+    /**
+     * 操作日志
+     */
+    @RequestMapping("/operateLog")
+    public String operateLog() {
+        return "operateLog/operateLog";
+    }
+    
     
     /**
      * 新增采购订单
@@ -408,6 +416,14 @@ public class PageController {
     @RequestMapping("/delivery")
     public String delivery() {
         return "delivery/delivery";
+    }
+    
+    /**
+     * 全文检索页面
+     */
+    @RequestMapping("/solrSearch")
+    public String solrSearch() {
+        return "solrSearch";
     }
     
     /**

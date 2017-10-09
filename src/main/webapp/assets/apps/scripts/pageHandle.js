@@ -128,7 +128,7 @@ pageHandle = (function(){
 	
 	//日期控件初始化
 	var _datePickersInit = function(_type,_id){
-				if(isNull(_type)){
+				if(this.isNull(_type)){
 					_type = "left"; 
 				}
 				if(this.isNull(_id)){

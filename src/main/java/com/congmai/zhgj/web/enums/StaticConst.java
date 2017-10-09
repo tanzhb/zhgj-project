@@ -32,7 +32,20 @@ public enum StaticConst {
 	/**
 	 * @Field @ORDER_TYPE : TODO(订单类型)
 	 */
-	ORDER_TYPE("orderTypeIn","标准采购(内贸)");
+	ORDER_TYPE("orderTypeIn","标准采购(内贸)"),
+	/**
+	 * @Field @COMNAME : TODO(平台名称)
+	 */
+	COMNAME("comName","中航能科（上海）能源科技有限公司"),
+	/**
+	 * @Field @DAILIBUY : TODO(平台名称)
+	 */
+	DAILIBUY("dailiBuy","代理采购"),
+	/**
+	 * @Field @DAILISALE : TODO(平台名称)
+	 */
+	DAILISALE("dailiSale","代理销售");
+	
 	
 	
 	private String value;

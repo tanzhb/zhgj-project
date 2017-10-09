@@ -23,23 +23,16 @@
 				</div>
 			</div>
 
-			<div class="portlet-body">
+			<div class="portlet-body" ng-app="app">
 				<div class="sp-page-content" style="float:left;" ng-controller="addPhotoCtrl as ctl">
 					<div class="sp-page-box" style="float:left;">
 						<div class="sp-page-boxcolumn span2" style="float:left;">
 							<span class="sp-upload" style="float:left;"> 
-							
 							<img ng-if="userInfo.avatar!=null&&userInfo.avatar!=''" class="sp-upload-photo" alt="" ng-src="uploadAttachFiles/{{userInfo.avatar}}" style="float:left;"/> 
 							<img ng-if="userInfo.avatar==null||userInfo.avatar==''" class="sp-upload-photo" alt="" ng-src="{{ctl.info.photo}}" style="float:left;"/>	
-								
 								<input type="file"
 								name="paymentVoucher" id="paymentVoucher" upload-img
 								class="sp-upload-img" />
-								<!-- <input type="file"
-								name="..." nv-file-select uploader="uploader"
-								onchange="angular.element(this).scope().up(this.files[0])"
-								ng-model="file[0].file"
-								ng-click="uploadFile(0)" class="sp-upload-img"/> -->
 							</span>
 						</div>
 					</div>
@@ -47,14 +40,27 @@
 			</div>
 			<div class="portlet-body">{{userInfo.userName}}个人用户</div>
 			<div class="portlet-body">
-				管理权限：超级管理员&nbsp;&nbsp;&nbsp; <i class="fa fa-edit"
+				管理权限：
+				   <span ng-if="userInfo.groupId=='2'">总监</span> 
+				   <span ng-if="userInfo.groupId=='3'">员工</span> 
+				   <span ng-if="userInfo.groupId=='4'">财务</span> 
+				   <span ng-if="userInfo.groupId=='5'">人事</span> 
+				   <span ng-if="userInfo.groupId=='6'">经理</span> 
+				   <span ng-if="userInfo.groupId=='7'">超级管理员</span> 
+				   <span ng-if="userInfo.groupId=='11'">采购部</span> 
+				   <span ng-if="userInfo.groupId=='12'">FT事业部</span> 
+				   <span ng-if="userInfo.groupId=='13'">财务部</span> 
+				   <span ng-if="userInfo.groupId=='14'">仓储部</span> 
+				   <span ng-if="userInfo.groupId=='15'">供应商</span> 
+				   <span ng-if="userInfo.groupId=='17'">评审</span> 
+				&nbsp;&nbsp;&nbsp; <i class="fa fa-edit"
 					ng-click="editSignContract($event)"></i>
 
 			</div>
 			<div class="portlet-body">
 				<span class="caption-subject font-green bold uppercase">新消息：</span>&nbsp;&nbsp;5条&nbsp;|&nbsp;
 				<span class="caption-subject font-green bold uppercase">公告：</span>&nbsp;&nbsp;2条&nbsp;|&nbsp;
-				<span class="caption-subject font-green bold uppercase">任务：</span>&nbsp;&nbsp;4条
+				<!-- <span class="caption-subject font-green bold uppercase">任务：</span>&nbsp;&nbsp;4条 -->
 			</div>
 
 			<div class="portlet-body">

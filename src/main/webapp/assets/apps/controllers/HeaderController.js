@@ -1,10 +1,57 @@
-angular.module('MetronicApp').controller('HeaderController', function($rootScope, $scope, $http, $timeout, UserService) {
+angular.module('MetronicApp').controller('HeaderController', function($rootScope, $scope, $window, $sce, $state, $http, $timeout,$stateParams, UserService) {
     $scope.$on('$viewContentLoaded', function() {   
         // initialize core components
         App.initAjax();
+        
+        $("#hide").val("all");//本页面用,默认列出全部关键字
     });
+    
+    $scope.select1 = function() {//选择采购订单
+    	$("#selValue").text("采购订单");
+    	$("#hide").val("purchaseOrder");//本页面用
+    	$rootScope.searchType = "purchaseOrder";//solrSearch.jsp调用
+    }
+    $scope.select2 = function() {//选择销售订单
+    	$("#selValue").text("销售订单");
+    	$("#hide").val("saleOrder");//本页面用
+    	$rootScope.searchType = "saleOrder";//solrSearch.jsp调用
+    }
+    $scope.selectAll = function() {//选择全部
+    	$("#selValue").text("全部");
+    	$("#hide").val("all");//本页面用
+    	$rootScope.searchType = "all";//solrSearch.jsp调用
+    }
+ 
 
-    // set sidebar closed and body solid layout mode
+    $scope.search = function() {
+    	if($("#searchInput").val() == '' || $("#searchInput").val().trim() == ''){
+    		toastr.warning("查询条件不能为空！");
+    		return;
+    	}
+    	
+    	var queryStr = "search_fields:" + $("#searchInput").val();
+    	var searchType = $("#hide").val();
+    	UserService
+		.solrSearch(queryStr,searchType,0,10)
+		.then(
+				function(data) {
+					$state.go('solrSearch',{},{reload:true});
+					$rootScope.searchList = data[0].datas;	
+					$rootScope.totalItems = data[0].total;
+					$rootScope.queryStr = queryStr;
+				},
+				function(errResponse) {
+					toastr.warning("未找到相关信息！");
+					console
+							.error('Error while search');
+				}
+		);
+
+	};
+	
+
+
+    // set sidebar closed and body solid layout mode 
     $rootScope.settings.layout.pageContentWhite = true;
     $rootScope.settings.layout.pageBodySolid = false;
     $rootScope.settings.layout.pageSidebarClosed = false;

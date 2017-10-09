@@ -10,6 +10,7 @@
         <param-value>
             classpath*:applicationContext.xml
             classpath*:applicationContext-shiro.xml
+            classpath*:applicationContext-solr.xml
         </param-value>
     </context-param>
     <!-- 配置Spring上下文监听器 -->

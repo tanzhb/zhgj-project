@@ -692,9 +692,10 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        				$(".modal-backdrop").remove();
 		        			toastr.success("保存成功");
 		        			handle.unblockUI();
-		        			var company = data.data;
+		        			var company = data.data;debugger;
 		        			//$state.go('companyAdd',company,{reload:true});
 		        			//$scope.company = company
+		        		
 		        			getCompanyInfo(company.comId,"company");
 		        			console.log(data.data);
 		        			$scope.companyView = true;
@@ -1100,6 +1101,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        * 新增联系人信息
 	        */
 	       $scope.addCompanyContact = function(){
+	    	   $scope.title = null;
 	    	   if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
 		    		 toastr.warning("您的企业信息还未保存");
 		    		 return;
@@ -1116,6 +1118,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        */
 	       $scope.editCompanyContact = function(serialNum){
 	    	   $("#contactor").modal("show");
+	    	   $scope.title = "修改";
 	    	   for(var i=0;i<$scope.companyContacts.length;i++){
 	    		   if($scope.companyContacts[i].serialNum==serialNum){
 	    			   $scope.companyContact = $scope.companyContacts[i];
@@ -1149,6 +1152,105 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        		
 	        	});
 	       }
+	       
+	       /***************************************************联系地址START*************************************************
+	       /**
+	        * 保存联系地址信息
+	        */
+	       $scope.saveCompanyAddress = function(){
+	    	   if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
+	    		   toastr.warning("您的企业信息还未保存");
+	    		   return;
+	    	   }else{
+	    		   if(handle.isNull($scope.companyAddress)){
+	    			   $scope.companyAddress = {}
+	    		   }
+	    		   $scope.companyAddress.comId = $scope.company.comId;
+	    		   $scope.companyAddress.createTime = null;
+	    		   $scope.companyAddress.updateTime = null;
+	    	   }
+	    	   if($('#companyAddressForm').valid()){
+	    		   console.log($scope.companyAddress);
+	    		   var promise = companyService.saveCompanyAddress($scope.companyAddress);
+	    		   promise.then(function(data){
+	    			   //$(".modal-backdrop").remove();
+	    			   if(!handle.isNull(data.data)){
+	    				   toastr.success("保存成功");
+	    				   $("#address").modal("hide");
+	    				   $scope.companyAddress = {};
+	    				   $scope.companyAddresses = data.data;
+	    			   }else{
+	    				   $("#address").modal("hide");
+	    				   toastr.error("保存失败！请联系管理员");
+	    			   }
+	    		   },function(data){
+	    			   //调用承诺接口reject();
+	    			   toastr.error("保存失败！请联系管理员");
+	    			   console.log(data);
+	    		   });
+	    	   }
+	    	   
+	       }
+	       
+	       /**
+	        * 新增联系地址信息
+	        */
+	       $scope.addCompanyAddress = function(){
+	    	   $scope.title = null;
+	    	   if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
+	    		   toastr.warning("您的企业信息还未保存");
+	    		   return;
+	    	   }else{
+	    		   $scope.companyAddress = {};
+	    		   $("#address").modal("show");
+	    	   }
+	    	   
+	       }
+	       
+	       
+	       /**
+	        * 编辑联系地址信息
+	        */
+	       $scope.editCompanyAddress = function(serialNum){
+	    	   $scope.title = "修改";
+	    	   $("#address").modal("show");
+	    	   for(var i=0;i<$scope.companyAddresses.length;i++){
+	    		   if($scope.companyAddresses[i].serialNum==serialNum){
+	    			   $scope.companyAddress = $scope.companyAddresses[i];
+	    			   break;
+	    		   }
+	    	   }
+	    	   
+	       }
+	       
+	       /**
+	        * 删除联系地址信息
+	        */
+	       $scope.deleteCompanyAddress = function(serialNum){
+	    	   handle.confirm("确定删除吗？",function(){
+	    		   handle.blockUI();
+	    		   var promise = companyService.deleteCompanyAddress(serialNum);
+	    		   promise.then(function(data){
+	    			   //handle.showMesssage("success","删除成功","提示");
+	    			   toastr.success("删除成功");
+	    			   handle.unblockUI();
+	    			   for(var i=0;i<$scope.companyAddresses.length;i++){
+	    				   if($scope.companyAddresses[i].serialNum==serialNum){
+	    					   $scope.companyAddresses.splice(i,1);
+	    					   break;
+	    				   }
+	    			   }
+	    			   // $state.go('company',{},{reload:true}); 
+	    		   },function(data){
+	    			   //调用承诺接口reject();
+	    		   });
+	    		   
+	    	   });
+	       }
+	       
+	       
+	       /***************************************************联系地址END*************************************************
+	       
 	       
 	       /**
 	        * 保存财务信息
@@ -1194,6 +1296,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        * 新增财务信息
 	        */
 	       $scope.addCompanyFinance = function(){
+	    	   $scope.title = null;
 	    	   if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
 		    		 toastr.warning("您的企业信息还未保存");
 		    		 return;
@@ -1209,6 +1312,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        */
 	       $scope.editCompanyFinance = function(serialNum){
 	    	   $("#finance").modal("show");
+	    	   $scope.title = "修改";
 	    	   for(var i=0;i<$scope.companyFinances.length;i++){
 	    		   if($scope.companyFinances[i].serialNum==serialNum){
 	    			   $scope.companyFinance = $scope.companyFinances[i];
@@ -1287,7 +1391,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        * 企业资质初始化日期控件
 	        */
 	       $scope.repeatDone = function(){
-	    	   handle.datePickersInit();
+	    	   handle.datePickersInit("bottom");
 	    	   //$("#qualificationForm").removeData("validator").removeData("unobtrusiveValidation");
 	    	 
 	    	   //$.validator.parse($("#qualificationForm"));
@@ -1358,8 +1462,11 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    	   var call = "operation_c"+index;
 	    	   if(type=='finance'){
 	    		   call =  "operation_f"+index;
+	    	   }else if(type=="address"){
+	    		   call =  "operation_a"+index;
 	    	   }
 	    	   $scope[call] = true;
+	    	  // $scope.$apply();
 	       };
 	       
 	       /**
@@ -1369,8 +1476,11 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    	   var call = "operation_c"+index;
 	    	   if(type=='finance'){
 	    		   call =  "operation_f"+index;
+	    	   }else if(type=="address"){
+	    		   call =  "operation_a"+index;
 	    	   }
 	    	   $scope[call]= false;
+	    	   //$scope.$apply();
 	       };
 	       
 	       
@@ -1378,6 +1488,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    	   if(!handle.isNull(comId)){
 	    			 var promise = companyService.getCompanyInfo(comId);
 	 	        	promise.then(function(data){
+	 	        		$scope.companyQualifications = [];
 	 	        		if(type=="companyQualification"){
 	 	        			if(!handle.isNull(data.data.companyQualifications)){
 		 	        			$scope.companyQualifications = data.data.companyQualifications;
@@ -1385,20 +1496,25 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		 	        		}
 	 	        		}else if(type=="company"){
 	 	        			$scope.company = data.data.company;
+	 	        			if(isNull(data.data.company.corporatePresence)&&!isNull(data.data.company.comName)){
+		        				$scope.company.corporatePresence = data.data.company.comName;
+		        			}
 	 	        		}else{
 	 	        			$scope.company = data.data.company;
 		 	        		if(!handle.isNull(data.data.companyQualifications)){
 		 	        			$scope.companyQualifications = data.data.companyQualifications;
 		 	        			_index = data.data.companyQualifications.length-1;
 		 	        		}
-		 	        		
+		 	        		debugger;
 		 	        		$scope.companyContacts = data.data.companyContacts;
 		 	        		$scope.companyFinances = data.data.companyFinances;
+		 	        		$scope.companyAddresses = data.data.companyAddresses;
 		 	        		
 		 	        		data.data.comId = comId; //将企业id也放入数组，一边取消操作
 		 	        		if($scope.companyInfo!=undefined){
 		 	        			$scope.companyInfo.push(data.data); //将返回信息添加至checkbox选中数组
 		 	        		}
+		 	        		
 	 	        		}
 	 	        		
 	 	        		
@@ -1418,12 +1534,17 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    	    
 	       })*/
 	       $('#contactor').on('hide.bs.modal', function (e) {  
-	    	   if(handle.isNull($scope.company)&&handle.isNull($scope.company.comId)){
+	    	   if(!handle.isNull($scope.company)&&!handle.isNull($scope.company.comId)){
 	    		   getCompanyInfo($scope.company.comId);
 	    	   }
 	       })
-	       $('#finance').on('hide.bs.modal', function (e) {  
-	    	   if(handle.isNull($scope.company)&&handle.isNull($scope.company.comId)){
+	       $('#finance').on('hide.bs.modal', function (e) {
+	    	   if(!handle.isNull($scope.company)&&!handle.isNull($scope.company.comId)){
+	    		   getCompanyInfo($scope.company.comId);
+	    	   }
+	       })
+	       $('#address').on('hide.bs.modal', function (e) {
+	    	   if(!handle.isNull($scope.company)&&!handle.isNull($scope.company.comId)){
 	    		   getCompanyInfo($scope.company.comId);
 	    	   }
 	       })
@@ -1487,7 +1608,14 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	       
 	       $scope.downloadFile = function(obj){
 	    	   if(!handle.isNull(obj)){
-	    		   window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+encodeURI(encodeURI(obj.qualificatioImage));
+	    		   
+	    		   var url = $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+encodeURI(encodeURI(obj.qualificatioImage));
+	    		   if(isImg(obj.qualificatioImage)){//图片类型
+	    			   showImg(url); 
+	    		   }else{//其他类型
+	    			   window.location.href = url;
+	    		   }
+	    		  
 	    	   }else{
 	    		   toastr.error("下载失败!");
 	    	   }

@@ -2,6 +2,8 @@ package com.congmai.zhgj.web.dao;
 
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.web.model.Delivery;
+import com.congmai.zhgj.web.model.DeliveryMateriel;
+import com.congmai.zhgj.web.model.Stock;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.StockInOutRecordExample;
 
@@ -38,4 +40,10 @@ public interface StockInOutRecordMapper  extends GenericDao<StockInOutRecord,Str
 	StockInOutRecord selectStockInInfoByPrimaryKey(String serialNum);
 	
 	StockInOutRecord selectStockOutInfoByPrimaryKey(String serialNum);
+	
+	 List<String>getRelationDeliverSerial(Stock record);//获取发货流水
+	    
+	  List<String> getRelationTakeDeliverSerial(Stock record);//获取收货流水
+	    
+	 
 }

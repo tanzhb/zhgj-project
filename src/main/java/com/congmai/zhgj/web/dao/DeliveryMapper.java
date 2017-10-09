@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryTransportVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
@@ -105,4 +106,6 @@ public interface DeliveryMapper extends GenericDao<DeliveryMaterielVO, String> {
     
 
     public void deleteOldDeliveryMateriel2(String deliverSerial);
+    
+   
 }

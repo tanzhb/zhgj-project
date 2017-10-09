@@ -28,6 +28,7 @@
         <property name="locations">
             <list>
                 <value>classpath*:application.properties</value>
+                <value>classpath*:solr.properties</value>
             </list>
         </property>
     </bean>
@@ -64,6 +65,13 @@
 
         <!-- 配置监控统计拦截的filters -->
         <property name="filters" value="stat"/>
+        
+        <!-- 超过时间限制是否回收 -->  
+		<property name="removeAbandoned" value="true" />  
+		<!-- 超时时间；单位为秒。180秒=3分钟 -->  
+		<property name="removeAbandonedTimeout" value="180" />  
+		<!-- 关闭abanded连接时输出错误日志 -->  
+		<property name="logAbandoned" value="true" />     
     </bean>
 
     <!-- mybatis文件配置，扫描所有mapper文件 -->

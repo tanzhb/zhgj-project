@@ -20,6 +20,7 @@ import javassist.bytecode.LocalVariableAttribute;
 import javassist.bytecode.MethodInfo;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
@@ -37,6 +38,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.Constants;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.web.model.OperateLog;
 import com.congmai.zhgj.web.model.TakeDeliveryParams;
@@ -107,6 +109,10 @@ public class OperateLogAop{
                 OperationLog log = method.getAnnotation(OperationLog.class);
 
                 User user = UserUtil.getUserFromSession();
+                /*if(user==null){
+                	user = (User) ((HttpSession)orgs[0]).getAttribute(Constants.CURRENT_USER);
+                }*/
+                	
                 valueReturn.setMoudleCode(log.moudleCode());
                 valueReturn.setMoudleName(log.moudleName());
                 valueReturn.setOperateType(log.operateType());
@@ -120,12 +126,14 @@ public class OperateLogAop{
                 valueReturn.setServerIp(request.getLocalAddr());
                 
                 //替换动态参数，获取流水号
-                if(orgs[0] instanceof Map){
-                	valueReturn.setObjectSerial(((Map)orgs[0]).get(strFormat(log.objectSerial())).toString());
-                }else if(orgs[0] instanceof String){
-                	valueReturn.setObjectSerial(orgs[0].toString());
-                }else if(orgs[0] instanceof Object){
-                	valueReturn.setObjectSerial(reflectObject(orgs[0],strFormat(log.objectSerial())));
+                if(log.objectSerial()!=null){
+                	if(orgs[0] instanceof Map){
+                    	valueReturn.setObjectSerial(((Map)orgs[0]).get(strFormat(log.objectSerial())).toString());
+                    }else if(orgs[0] instanceof String){
+                    	valueReturn.setObjectSerial(orgs[0].toString());
+                    }else if(orgs[0] instanceof Object){
+                    	valueReturn.setObjectSerial(reflectObject(orgs[0],strFormat(log.objectSerial())));
+                    }
                 }
                 
                 
@@ -182,13 +190,15 @@ public class OperateLogAop{
                 valueReturn.setRequestUrl(request.getRequestURI());
                 valueReturn.setServerIp(request.getLocalAddr());
                 
-              //替换动态参数，获取流水号
-                if(orgs[0] instanceof Map){
-                	valueReturn.setObjectSerial(((Map)orgs[0]).get(strFormat(log.objectSerial())).toString());
-                }else if(orgs[0] instanceof String){
-                	valueReturn.setObjectSerial(orgs[0].toString());
-                }else if(orgs[0] instanceof Object){
-                	valueReturn.setObjectSerial(reflectObject(orgs[0],strFormat(log.objectSerial())));
+                //替换动态参数，获取流水号
+                if(log.objectSerial()!=null){
+                	if(orgs[0] instanceof Map){
+                    	valueReturn.setObjectSerial(((Map)orgs[0]).get(strFormat(log.objectSerial())).toString());
+                    }else if(orgs[0] instanceof String){
+                    	valueReturn.setObjectSerial(orgs[0].toString());
+                    }else if(orgs[0] instanceof Object){
+                    	valueReturn.setObjectSerial(reflectObject(orgs[0],strFormat(log.objectSerial())));
+                    }
                 }
                 
                 valueReturn.setSerialNum(tag.get());
@@ -260,7 +270,7 @@ public class OperateLogAop{
      * @param request
      * @return
      */
-    private  String getRemoteHost(javax.servlet.http.HttpServletRequest request){
+    public static String getRemoteHost(javax.servlet.http.HttpServletRequest request){
         String ip = request.getHeader("x-forwarded-for");
         if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)){
             ip = request.getHeader("Proxy-Client-IP");

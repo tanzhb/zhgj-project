@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.congmai.zhgj.core.generic.GenericDao;
+import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.Stock;
 import com.congmai.zhgj.web.model.StockExample;
 
@@ -32,4 +33,8 @@ public interface StockMapper extends GenericDao<Stock,String>{
     int updateByPrimaryKey(Stock record);
     
     int deleteStock(List<String>serialNums);//批量删除库存信息
+    
+   
+    
+    
 }

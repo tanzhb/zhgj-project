@@ -184,7 +184,7 @@
                                                          <div class="row" >
                                                             <div class="col-md-6" >
                                                              <div class="form-group">
-                                                    <label class="control-label bold" for="serviceParty"> <span class="required"> * </span>服务方:</label>
+                                                    <label class="control-label bold" for="serviceParty"  ng-if="manageType.indexOf('daiguan')>-1||manageType.indexOf('jinwai')>-1"> <span class="required"> * </span>服务方:</label>
                                                     <div class="  ">
                                                                         <input type="text" class="form-control"   id="serviceParty" name ="serviceParty"  ng-hide="stockAdd"     value=""  ng-if="manageType.indexOf('daiguan')>-1||manageType.indexOf('jinwai')>-1" 
 												ng-model="stock.serviceParty" > 
@@ -195,7 +195,7 @@
                                                             </div>
                                                               <div class="col-md-6" >
                                                             <div class="form-group">
-                                                    <label class="control-label bold" for="materielOwner"> <span class="required"> * </span>物权方 :</label>
+                                                    <label class="control-label bold" for="materielOwner" ng-if="manageType.indexOf('daiguan')>-1||manageType.indexOf('jinwai')>-1"> <span class="required"> * </span>物权方 :</label>
                                                     <div class="  ">
                                                                         <input type="text"  class="form-control"  id="materielOwner" name ="materielOwner"   ng-hide="stockAdd"   value=""  ng-if="manageType.indexOf('daiguan')>-1||manageType.indexOf('jinwai')>-1" 
 												ng-model="stock.materielOwner" > 

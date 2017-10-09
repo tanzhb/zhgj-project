@@ -9,7 +9,8 @@ angular.module('MetronicApp').factory('UserService', ['$rootScope', '$http', '$q
         delUsers:delUsers,
         selectByUsername:selectByUsername,
         selectById:selectById,
-        updatePass:updatePass
+        updatePass:updatePass,
+        solrSearch:solrSearch
     };
 
     return factory;
@@ -101,6 +102,22 @@ angular.module('MetronicApp').factory('UserService', ['$rootScope', '$http', '$q
         return deferred.promise;  
           
     };
+    
+    //全文检索
+    function solrSearch(queryStr, searchType, start, rows) {
+        var deferred = $q.defer();
+        $http.post(ctx + "rest/search/queryPage", {queryStr:queryStr,searchType:searchType,start:start,rows:rows})
+            .then(
+            function (response) {
+                deferred.resolve(response.data);
+            },
+            function(errResponse){
+                console.error('Error while solr search');
+                deferred.reject(errResponse);
+            }
+        );
+        return deferred.promise;
+    }
 
     
 
