@@ -7,8 +7,8 @@ angular
 						'$rootScope',
 						'$scope',
 						'settings',
-						'$sce', 'UserService', 
-						function($rootScope, $scope, settings, $sce, UserService) {
+						'$sce', '$state','UserService', 
+						function($rootScope, $scope, settings, $sce, $state, UserService) {
 							$scope
 									.$on(
 											'$viewContentLoaded',
@@ -25,6 +25,12 @@ angular
 							$scope.TrustDangerousSnippet = function(post) {// ng-repeat循环含有html标签时，添加html信任，显示标签
 								return $sce.trustAsHtml(post.search_fields);
 							};
+							
+							//点击title查看订单详情
+							$scope.viewBuyOrder = function(serialNum){
+						    	$state.go("viewBuyOrder",{serialNum:serialNum});
+						    }
+							
 							//配置分页基本参数
 							$scope.paginationConf = {
 								currentPage : 1,

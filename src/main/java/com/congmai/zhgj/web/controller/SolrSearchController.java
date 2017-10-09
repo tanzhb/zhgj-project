@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrDocument;
@@ -219,10 +220,23 @@ public class SolrSearchController {
 				SolrQuery query = new SolrQuery();
 	            
 				query.set("q","search_fields:"+queryStr);
-
-	            query.setRows(1000);
-	            
+				query.setRows(1000);
+				
+				 /** 分组查询统计每个searchType数量开始 */
+//	            query.addFacetField(new String[] {"buyComId","supplyComId"});//设置需要facet的字段
+//	            query.setFacetLimit(10);// 限制facet返回的数量
+//	            query.setFacet(true);
+//	            query.setFacetMissing(false);//不统计null的值
+//	            query.setFacetMinCount(1);// 设置返回的数据中每个分组的数据最小值，比如设置为1，则统计数量最小为1，不然不显示
 	            QueryResponse qResponse = httpSolrClient.query(query);
+//	            List<FacetField> facets = qResponse.getFacetFields();//返回的facet列表            
+	            /** 分组查询统计每个searchType数量结束 */
+				
+				
+
+	            
+	            
+	            
 	            
 	            SolrDocumentList list = qResponse.getResults();
 	            
@@ -286,6 +300,7 @@ public class SolrSearchController {
             }
             //设定查询字段
             query.setQuery(queryStr);
+                        
             //指定返回结果字段
             query.setIncludeScore(true);
             // query.set("fl","id,name");
@@ -308,20 +323,31 @@ public class SolrSearchController {
             //一个表中多个字段高亮
             query.setParam("hl.preserveMulti", true);
             
-//            //设定高亮字段
-//            query.addHighlightField("search_fields");
-//            //设定拼写检查
-//            query.setRequestHandler("/spell");
+            //根据检索类型添加过滤器，汇总总数据，方便分页
+            if(!"all".equals(searchType)){
+            	if(searchType.equals("purchaseOrder")){
+            		query.addFilterQuery("-buyComId:*");
+            	}else if(searchType.equals("saleOrder")){
+            		query.addFilterQuery("-supplyComId:*");
+            	}
+            }
+            
+            
+            //设置显示字段
+//            query.setParam("fl", "search_fields,orderNum,orderType,rate,tradeType");
+            
             QueryResponse res = httpSolrClient.query(query);
             Map<String, Map<String, List<String>>> maplist=res.getHighlighting();
+            
+            
            //获取bean
            //  List<Object> bean = response.getBeans(Object.class);
             SolrDocumentList list = res.getResults();
             
+            
             for(SolrDocument solrDocument:list){
             	String string = "";
             	String title = "";//每行结果名称，用于页面显示
-//            	long num = 0l; //查询结果总数
             	
                 Object id=solrDocument.get("id");//企业或物料id
                 Object orderNum = solrDocument.get("orderNum");//采购/销售订单号               
@@ -361,11 +387,15 @@ public class SolrSearchController {
                 	string = "id号：" + id + ";" + StringUtils.join(stringlist.toArray(),",") ;
                 }
                 
-                
+                solrDocument.put("id", id);
                 solrDocument.put("title", title);
                 solrDocument.put("search_fields", string);
             }
             
+            
+            
+           
+            //结果总数，用于翻页
             long num = list.getNumFound();
             
             Map mp = new HashMap();
