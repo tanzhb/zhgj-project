@@ -229,8 +229,11 @@ margin-right: 20px;
                                      <p ng-if="buyOrder.status==1"  
                                      ng-click="viewOrderLog(buyOrder.serialNum)" style="color:#fcb95b"> 待接收 </p>
                                      
+                                      <p ng-if="buyOrder.status==3"  
+                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:#fcb95b"> 待签合同 </p>
+                                     
                                      <p ng-if="buyOrder.status==2"   
-                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:green"> 已接收 </p>
+                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:green"> 已确认 </p>
                                      
                                      <p ng-if="buyOrder.processBase.status=='APPROVAL_FAILED'"   
                                      ng-click="viewOrderLog(buyOrder.serialNum)" style="color:red"> 未通过 </p>
@@ -345,8 +348,11 @@ margin-right: 20px;
                                      <p ng-if="buyOrder.status==1"  
                                      ng-click="viewOrderLog(buyOrder.serialNum)" style="color:#fcb95b"> 待接收 </p>
                                      
+                                      <p ng-if="buyOrder.status==3"  
+                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:#fcb95b"> 待签合同 </p>
+                                     
                                      <p ng-if="buyOrder.status==2"   
-                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:green"> 已接收 </p>
+                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:green"> 已确认 </p>
                                      
                                      <p ng-if="buyOrder.processBase.status=='APPROVAL_FAILED'"   
                                      ng-click="viewOrderLog(buyOrder.serialNum)" style="color:red"> 未通过 </p>
@@ -479,8 +485,11 @@ margin-right: 20px;
                                      <p ng-if="buyOrder.status==1"  
                                      ng-click="viewOrderLog(buyOrder.serialNum)" style="color:#fcb95b"> 待接收 </p>
                                      
+                                      <p ng-if="buyOrder.status==3"  
+                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:#fcb95b"> 待签合同 </p>
+                                     
                                      <p ng-if="buyOrder.status==2"   
-                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:green"> 已接收 </p>
+                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:green"> 已确认 </p>
                                      
                                      <p ng-if="buyOrder.processBase.status=='APPROVAL_FAILED'"   
                                      ng-click="viewOrderLog(buyOrder.serialNum)" style="color:red"> 未通过 </p>

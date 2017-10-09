@@ -244,7 +244,7 @@ margin-right: 20px;
                      </div>
                      <div class="row">
                          
-                          <div class="col-md-4">
+                          <!-- <div class="col-md-4">
                          	<div class="form-group ">
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>制单人：</label>
                                  <div class="">
@@ -267,7 +267,7 @@ margin-right: 20px;
                                  </div>
                                  
                              </div>
-                         </div>
+                         </div> -->
                          <!--/span-->
                          <div class="col-md-4">
                              <div class="form-group ">
@@ -282,9 +282,7 @@ margin-right: 20px;
                                  
                              </div>
                          </div>
-                     </div>
-                     <div class="row">
-                        	<div class="col-md-4">
+                         <div class="col-md-4">
                               <div class="form-group ">
                                  <label class="control-label bold">客户合同号：</label>
                                   <div class="">
@@ -306,7 +304,7 @@ margin-right: 20px;
                                  </div>
                                  
                              </div>
-                         </div>
+                     		</div>
                          <!--/span-->
                      </div>
                      <!--/row-->
@@ -387,34 +385,7 @@ margin-right: 20px;
                                  </div>
                              </div>
                          </div>
-                          <div class="col-md-4">
-                         	<div class="form-group ">
-                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>制单人：</label>
-                                 <div class="">
-                                 <input type="text" name="maker" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.maker"  >
-                                     <div class="form-control-focus"> </div>
-                                     <span class="help-block" ng-hide="saleOrderInput">请输入制单人</span>
-                                     <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.maker}} </p>
-                                 </div>
-                             </div>
-                         </div>
                          <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label bold">制单日期：</label>
-                                 <div class="">
-                                 <input type="text" name="makeDate" class="form-control form-control-inline input-medium date-picker" 
-                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="saleOrderInput" ng-model="saleOrder.makeDate" repeat-done="renderDone()" >
-                                     <div class="form-control-focus"> </div>
-                                     <span class="help-block" ng-hide="saleOrderInput">请选择制单日期</span>
-                                     <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.makeDate}} </p>
-                                 </div>
-                                 
-                             </div>
-                         </div>
-                         <!--/span-->
-                     </div>  
-                     <div class="row">
-                        <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label bold">销售日期：</label>
                                  <div class="">
@@ -438,6 +409,34 @@ margin-right: 20px;
                                   </div>
                               </div>
                           </div>
+                          <!-- <div class="col-md-4">
+                         	<div class="form-group ">
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>制单人：</label>
+                                 <div class="">
+                                 <input type="text" name="maker" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.maker"  >
+                                     <div class="form-control-focus"> </div>
+                                     <span class="help-block" ng-hide="saleOrderInput">请输入制单人</span>
+                                     <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.maker}} </p>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label bold">制单日期：</label>
+                                 <div class="">
+                                 <input type="text" name="makeDate" class="form-control form-control-inline input-medium date-picker" 
+                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="saleOrderInput" ng-model="saleOrder.makeDate" repeat-done="renderDone()" >
+                                     <div class="form-control-focus"> </div>
+                                     <span class="help-block" ng-hide="saleOrderInput">请选择制单日期</span>
+                                     <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.makeDate}} </p>
+                                 </div>
+                                 
+                             </div>
+                         </div> -->
+                         <!--/span-->
+                     </div>  
+                     <div class="row">
+                        
                           <div class="col-md-4">
                              <div class="form-group ">
                                 <label class="control-label bold">备注：</label>
@@ -556,7 +555,7 @@ margin-right: 20px;
                      </div>
                      <div class="row">
                          
-                          <div class="col-md-4">
+                          <!-- <div class="col-md-4">
                          	<div class="form-group ">
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>制单人：</label>
                                  <div class="">
@@ -579,7 +578,7 @@ margin-right: 20px;
                                  </div>
                                  
                              </div>
-                         </div>
+                         </div> -->
                          <!--/span-->
                          <div class="col-md-4">
                              <div class="form-group ">
@@ -594,25 +593,7 @@ margin-right: 20px;
                                  
                              </div>
                          </div>
-                         <!--/span-->
-                     </div>
-                     <!-- <div class="row">
                          <div class="col-md-4">
-                         	<div class="form-group ">
-                                 <label class="control-label bold">关联需求计划单号：</label>
-                                 <div class="">
-                                 <input type="text"  name="demandPlanSerial" class="form-control" ng-hide="saleOrderInput"  ng-model="saleOrder.demandPlanSerial"  >
-                                     <div class="form-control-focus"> </div>
-                                     <span class="help-block" ng-hide="saleOrderInput">请选择需求计划单号</span>
-                                     <p class="form-control-static" ng-show="saleOrderShow">{{saleOrder.demandPlanSerial}} </p>
-                                 </div>
-                                 
-                             </div>
-                         </div>
-                         /span
-                     </div> -->
-                     <div class="row">
-                        <div class="col-md-4">
                               <div class="form-group ">
                                  <label class="control-label bold">客户合同号：</label>
                                   <div class="">
@@ -637,6 +618,21 @@ margin-right: 20px;
                          </div>
                          <!--/span-->
                      </div>
+                     <!-- <div class="row">
+                         <div class="col-md-4">
+                         	<div class="form-group ">
+                                 <label class="control-label bold">关联需求计划单号：</label>
+                                 <div class="">
+                                 <input type="text"  name="demandPlanSerial" class="form-control" ng-hide="saleOrderInput"  ng-model="saleOrder.demandPlanSerial"  >
+                                     <div class="form-control-focus"> </div>
+                                     <span class="help-block" ng-hide="saleOrderInput">请选择需求计划单号</span>
+                                     <p class="form-control-static" ng-show="saleOrderShow">{{saleOrder.demandPlanSerial}} </p>
+                                 </div>
+                                 
+                             </div>
+                         </div>
+                         /span
+                     </div> -->
                      <!--/row-->
                      </div>
                  </div>

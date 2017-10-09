@@ -206,10 +206,11 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 
     		orderService.save($scope.saleOrder).then(
        		     function(data){
-       		    	$scope.saleOrder.serialNum = data.serialNum;
+       		    	$scope.saleOrder = data;
        		    	$scope.contract.orderSerial = data.serialNum;
-       		    	$scope.contract.contractNum = $scope.saleOrder.orderNum;
+       		    	$scope.contract.contractNum = $scope.buyOrder.orderNum;
 	   	    		$scope.contract.comId = $scope.saleOrder.buyComId;
+	   	    		$scope.contract.signDate = $scope.saleOrder.orderDate;
 	   	    		orderService.saveContract($scope.contract).then(
 	   	       		     function(data){
 	   	       		    	toastr.success('数据保存成功！');

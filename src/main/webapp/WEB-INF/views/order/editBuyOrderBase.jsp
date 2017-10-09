@@ -232,7 +232,7 @@ margin-right: 20px;
                          </div>
                      </div>
                      <div class="row">
-                         <div class="col-md-4">
+                         <!-- <div class="col-md-4">
                          	<div class="form-group ">
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>制单人：</label>
                                  <div class="">
@@ -255,7 +255,7 @@ margin-right: 20px;
                                  </div>
                                  
                              </div>
-                         </div>
+                         </div> -->
                          <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label bold">采购日期：</label>
@@ -269,10 +269,7 @@ margin-right: 20px;
                                  
                              </div>
                          </div>
-                         <!--/span-->
-                     </div>
-                  <div class="row">
-                  		<div class="col-md-4">
+                         <div class="col-md-4">
                              <div class="form-group ">
                                 <label class="control-label bold">供应商合同号：</label>
                                  <div class="">
@@ -361,7 +358,7 @@ margin-right: 20px;
                              </div>
                          </div>
                          <!--/span-->
-                         <div class="col-md-4">
+                         <!-- <div class="col-md-4">
                          	<div class="form-group ">
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>制单人：</label>
                                  <div class="">
@@ -384,10 +381,7 @@ margin-right: 20px;
                                  </div>
                                  
                              </div>
-                         </div>
-                     </div>
-                     <div class="row">
-                         <!--/span-->
+                         </div> -->
                          <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label bold">采购日期：</label>
@@ -412,6 +406,9 @@ margin-right: 20px;
                                  </div>
                              </div>
                          </div>
+                     </div>
+                     <div class="row">
+                         <!--/span-->
                          <div class="col-md-4">
                              <div class="form-group ">
                                 <label class="control-label bold">备注：</label>
@@ -528,7 +525,7 @@ margin-right: 20px;
                      </div>
                      <div class="row">
                      	
-                         <div class="col-md-4">
+                         <!-- <div class="col-md-4">
                          	<div class="form-group ">
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>制单人：</label>
                                  <div class="">
@@ -551,7 +548,7 @@ margin-right: 20px;
                                  </div>
                                  
                              </div>
-                         </div>
+                         </div> -->
                          <!--/span-->
                          <div class="col-md-4">
                              <div class="form-group ">
@@ -566,10 +563,6 @@ margin-right: 20px;
                                  
                              </div>
                          </div>
-                         <!--/span-->
-                     </div>
-                     <div class="row">
-                         <!--/span-->
                          <div class="col-md-4">
                              <div class="form-group ">
                                 <label class="control-label bold">供应商合同号：</label>
@@ -593,6 +586,7 @@ margin-right: 20px;
                                  
                              </div>
                          </div>
+                         <!--/span-->
                      </div>
                      <!--/row-->
                      </div>

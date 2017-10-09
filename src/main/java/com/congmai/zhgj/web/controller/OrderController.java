@@ -1,7 +1,5 @@
 package com.congmai.zhgj.web.controller;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -16,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.ActivitiObjectNotFoundException;
-import org.activiti.engine.IdentityService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -25,8 +22,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +46,6 @@ import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.enums.StaticConst;
-import com.congmai.zhgj.web.model.BOMMateriel;
-import com.congmai.zhgj.web.model.BOMMaterielExample;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.ClauseFramework;
 import com.congmai.zhgj.web.model.ClauseAdvance;
@@ -64,20 +57,14 @@ import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.ContractVO;
-import com.congmai.zhgj.web.model.MaterielExample;
-import com.congmai.zhgj.web.model.MaterielSelectExample;
 import com.congmai.zhgj.web.model.OperateLog;
 import com.congmai.zhgj.web.model.OperateLogExample;
 import com.congmai.zhgj.web.model.OrderFile;
 import com.congmai.zhgj.web.model.OrderFileExample;
 import com.congmai.zhgj.web.model.OrderMateriel;
-import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.OrderInfo;
-import com.congmai.zhgj.web.model.OrderInfoExample;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.User;
-import com.congmai.zhgj.web.model.Vacation;
-import com.congmai.zhgj.web.model.OrderInfoExample.Criteria;
 import com.congmai.zhgj.web.service.ClauseAdvanceService;
 import com.congmai.zhgj.web.service.ClauseAfterSalesService;
 import com.congmai.zhgj.web.service.ClauseCheckAcceptService;
@@ -165,7 +152,7 @@ public class OrderController {
     		startOrderProcess(orderInfo);
     		//启动订单审批测试流程-end
     	}*/
-		
+    	orderInfo = orderService.selectById(orderInfo.getSerialNum());
 		return orderInfo;
     }
 
@@ -198,8 +185,10 @@ public class OrderController {
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
 		orderInfo.setCreator(currenLoginName);
 		orderInfo.setUpdater(currenLoginName);
+		orderInfo.setMaker(currenLoginName);
 		orderInfo.setCreateTime(new Date());
 		orderInfo.setUpdateTime(new Date());
+		orderInfo.setMakeDate(new Date());
 		orderInfo.setStatus("0");
 		
 		orderService.insert(orderInfo);
@@ -217,15 +206,16 @@ public class OrderController {
 		return orderInfo;
 	}
 
+
     /**
      * 
      * @Description (启动采购订单流程)
-     * @param orderInfo
+     * @param params
      * @return
      */
     @RequestMapping(value = "/startBuyOrderProcess", method = RequestMethod.POST)
     @ResponseBody
-	private String startBuyOrderProcess(@RequestBody String params) {
+    public String startBuyOrderProcess(@RequestBody String params) {
     	String flag = "0"; //默认失败
     	OrderInfo orderInfo = json2Order(params);
     	orderInfo.setUpdateTime(new Date());
@@ -273,12 +263,12 @@ public class OrderController {
     /**
      * 
      * @Description (启动销售订单流程)
-     * @param orderInfo
+     * @param params
      * @return
      */
     @RequestMapping(value = "/startSaleOrderProcess", method = RequestMethod.POST)
     @ResponseBody
-	private String startSaleOrderProcess(@RequestBody String params) {
+    public String startSaleOrderProcess(@RequestBody String params) {
     	String flag = "0"; //默认失败
     	OrderInfo orderInfo = json2Order(params);
     	orderInfo.setUpdateTime(new Date());
@@ -1136,7 +1126,7 @@ public class OrderController {
 				    		orderInfo.setUpdater(currenLoginName);
 				    		orderInfo.setCreateTime(new Date());
 				    		orderInfo.setUpdateTime(new Date());
-				    		orderInfo.setStatus("1");
+				    		orderInfo.setStatus("0");
 				    		
 				    		orderService.insert(orderInfo);
 						}catch(Exception  e){
@@ -1198,7 +1188,7 @@ public class OrderController {
 				    		orderInfo.setUpdater(currenLoginName);
 				    		orderInfo.setCreateTime(new Date());
 				    		orderInfo.setUpdateTime(new Date());
-				    		orderInfo.setStatus("1");
+				    		orderInfo.setStatus("0");
 				    		
 				    		orderService.insert(orderInfo);
 						}catch(Exception  e){
@@ -1338,4 +1328,7 @@ public class OrderController {
     		});
     	}
 	}
+    
+    
+    
 }
