@@ -139,7 +139,7 @@
 					<li><a class="bold" data-target="#tab_1_2" data-toggle="tab">资质信息</a>
 					</li>
 					<li><a class="bold" data-target="#tab_1_3" data-toggle="tab">财务信息</a></li>
-					<li><a class="bold" data-target="#tab_1_4" data-toggle="tab">联系人</a></li>
+					<li><a class="bold" data-target="#tab_1_4" data-toggle="tab">联系方式</a></li>
 				</ul>
 				<div class="tab-content">
 				<div class="tab-pane fade active in" id="tab_1_1">
@@ -262,7 +262,11 @@
 						<div class="" id="tab2_c">
 
 							<!-- START SAMPLE TABLE PORTLET-->
-							<div class="">
+							<div class="portlet light">
+								<div class="portlet-title">
+									<div class="caption">联系人</div>
+									<div class="actions"></div>
+								</div>
 								<div class="portlet-body">
 									<div class="table-scrollable">
 										<table
@@ -292,6 +296,38 @@
 												</tr>
 												<tr ng-if="companyContacts==undefined||companyContacts.length==0">
 													<td colspan="8"  align="center">暂无数据</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<div class="portlet-title">
+									<div class="caption">联系地址</div>
+									<div class="actions"></div>
+								</div>
+								<div class="portlet-body">
+									<div class="table-scrollable">
+										<table
+											class="table table-striped table-bordered table-advance table-hover">
+											<thead>
+												<tr>
+													    <th>地址</th>
+	                                                    <th>邮编</th>
+	                                                    <th>电话</th>
+	                                                    <th>手机</th>
+	                                                    <th>备注</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr ng-repeat="_address in companyAddresses">
+													<td>{{_address.address}}</td>
+                                                    <td>{{_address.zipCode}}</td>
+                                                    <td>{{_address.contactTel}}</td>
+                                                    <td>{{_address.mobileNum}}</td>
+                                                    <td>{{_address.remark}}</td>
+												</tr>
+												<tr ng-if="companyAddresses==undefined||companyAddresses.length==0">
+													<td colspan="5"  align="center">暂无数据</td>
 												</tr>
 											</tbody>
 										</table>
@@ -328,8 +364,9 @@
 													无</td>
 												<td
 													ng-if="companyQualification.qualificatioImage!=null&&companyQualification.qualificatioImage!=''">
+													<div id="img" style="display: none;"><div><img alt="" style="width:100%;height:100%;" src="${pageContext.request.contextPath}/rest/fileOperate/downloadFile?fileName={{companyQualification.qualificatioImage}}"></div></div>  
 													<a href="javascript:;"
-													ng-click="downloadFile(companyQualification)">{{companyQualification.qualificatioImage.substring(companyQualification.qualificatioImage.indexOf("_")+1)}}</a>
+													ng-click="downloadFile(companyQualification)" >{{companyQualification.qualificatioImage.substring(companyQualification.qualificatioImage.indexOf("_")+1)}}</a>
 												</td>
 												<td>{{companyQualification.remark}}</td>
 												<td><span ng-if="companyQualification.status==0"

@@ -20,7 +20,7 @@
     border-color: #a2aeb5;
  }
 </style>
-<div class="row">
+<div class="row" >
 	<div class="col-md-12">
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
 		<div class="portlet light ">
@@ -53,8 +53,8 @@
 									</a>
 										<div class="media-body todo-comment">
 											<p class="todo-comment-p">
-												<font ng-if="notice.readFlag==null">未读</font> <font
-													ng-if="notice.readFlag==1">已读</font>
+												<font ng-if="notice.readFlg==null">未读</font> <font
+													ng-if="notice.readFlg==1">已读</font>
 											</p>
 											<p class="todo-comment-head">
 												<span class="todo-comment-username">{{notice.updater}}</span>
@@ -62,7 +62,10 @@
 											</p>
 											<p class="todo-text-color">
 												<font style="font-weight: bolder;">{{notice.title}}:
-												</font> {{delHtmlTag(notice.context)}} &nbsp;<a>查看详情</a>&nbsp;&nbsp;<a
+												</font> {{delHtmlTag(notice.context)}} &nbsp;
+												<a href="javascript:;"
+													ng-click="myNoticeView(notice.serialNum)">查看详情</a>&nbsp;&nbsp;
+												<a
 													href="javascript:;"
 													ng-click="deleteMyNotice(notice.serialNum)">点击删除</a> <br>
 											</p>

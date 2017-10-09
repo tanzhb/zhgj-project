@@ -235,6 +235,11 @@ License: You must have a valid license purchased only from themeforest(the above
 		type="text/javascript"></script>
 	<!-- END APP LEVEL JQUERY SCRIPTS -->
 	<!-- BEGIN PAGE SCRIPTS -->
+	
+	<script src="assets/apps/scripts/bootstrap3-typeahead.js"
+	type="text/javascript"></script>
+	<script src="assets/global/plugins/tm.pagination.js"
+	type="text/javascript"></script>
  
     <script src="assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js" type="text/javascript"></script>
     <script src="assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
@@ -251,6 +256,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	<script src="assets/apps/scripts/angular-file-upload-shim.min.js" type="text/javascript"></script>
 	<script src="assets/apps/scripts/angular-file-upload.min.js" type="text/javascript"></script>
 	<script src="assets/apps/scripts/FileUploader.js" type="text/javascript"></script>
+	<script src="assets/apps/scripts/layer/layer.js" type="text/javascript"></script>
 <!-- 	<script src="assets/global/plugins/datatables/datatables.all.min.js" type="text/javascript"></script>
     <script src="assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script> -->
 	<!-- END  PAGE SCRIPTS -->

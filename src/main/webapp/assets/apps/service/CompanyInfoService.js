@@ -15,7 +15,7 @@ angular.module('MetronicApp').factory('CompanyInfoService', ['$rootScope', '$htt
     function getCompanyInfo(){
         var deferred = $q.defer();  
 
-        $.get("rest/user/getCompanyInfo",).success(function (data) { 
+        $.get("rest/user/getCompanyInfo").success(function (data) { 
             // 如果连接成功，延时返回给调用者  
             deferred.resolve(data);
             

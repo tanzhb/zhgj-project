@@ -1,7 +1,12 @@
 package com.congmai.zhgj.core.util;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 
 /**
  * 
@@ -37,4 +42,43 @@ public class BeanUtils {
 		}
 		return false;
 	}
+	
+	/**
+     * 将SolrDocument转换成Bean
+     * @param record
+     * @param clazz
+     * @return
+     */
+    public static Object toBean(SolrDocument record, SolrDocument clazz) throws InstantiationException, IllegalAccessException{
+        Object obj = null;
+        obj = clazz;
+        java.lang.reflect.Field[] fields = clazz.getClass().getDeclaredFields();
+        for(java.lang.reflect.Field field:fields){
+            Object value = record.get(field.getName());
+            try {
+            	org.apache.commons.beanutils.BeanUtils.setProperty(obj, field.getName(), value);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+        return obj;
+    }
+    
+    /**
+     * 将SolrDocumentList转换成BeanList
+     * @param records
+     * @param clazz
+     * @return
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
+     */
+    public static Object toBeanList(SolrDocumentList records, SolrDocument clazz) throws InstantiationException, IllegalAccessException{
+        List list = new ArrayList();
+        for(SolrDocument record : records){
+            list.add(toBean(record,clazz));
+        }
+        return list;
+    }
 }

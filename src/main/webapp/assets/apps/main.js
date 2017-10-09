@@ -5,7 +5,7 @@
 /* Metronic App */
 // 定义模块时引入依赖
 var MetronicApp = angular.module("MetronicApp", [ "ui.router", "ui.bootstrap",
-		"oc.lazyLoad", "ngSanitize" ]);
+		"oc.lazyLoad", "ngSanitize", "tm.pagination"]);
 
 /* Configure ocLazyLoader(refer: https://github.com/ocombe/ocLazyLoad) */
 MetronicApp.config([ '$ocLazyLoadProvider', function($ocLazyLoadProvider) {
@@ -143,19 +143,20 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
-        // Blank Page
-        .state('blank', {
-            url: "/blank",
-            templateUrl: "rest/page/blank",
-            data: {pageTitle: '空白页'},
-            controller: "BlankController",
+        // 全文检索
+        .state('solrSearch', {
+            url: "/solrSearch",
+            templateUrl: "rest/page/solrSearch",
+            data: {pageTitle: '全文检索'},
+            controller: "SolrSearchController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
                     return $ocLazyLoad.load({
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
                         files: [
-                            'assets/apps/controllers/BlankController.js'
+                            'assets/pages/css/search.min.css',
+                            'assets/apps/controllers/SolrSearchController.js'                            
                         ]
                     });
                 }]
@@ -1417,14 +1418,11 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				files: [       
 										'assets/apps/controllers/NoticeController.js',
 										'assets/apps/service/NoticeService.js',
-										'assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js',
-				    			        'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js',
-				    			        'assets/global/plugins/bootstrap-markdown/lib/markdown.js',
 				    			        'assets/global/plugins/bootstrap-markdown/js/bootstrap-markdown.js',
-				    			        'assets/global/plugins/bootstrap-summernote/summernote.min.js',
-				    			        'assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css',
-								        'assets/global/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css',
-								        'assets/global/plugins/bootstrap-summernote/summernote.css'
+				    			        'assets/global/plugins/bootstrap-summernote/summernote.css',
+				    			        'assets/global/plugins/bootstrap-summernote/lang/summernote-zh-CN.min.js',
+				    			        'assets/global/plugins/bootstrap-summernote/summernote.min.js'
+								        
 		    				        ]
 		    			});
 		    		}]
@@ -2912,12 +2910,15 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 			   }else if('myNotice' == toState.name){//公告
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				   "<li><a>公告</a></li>";					 
-			   }else if('noticeAdd' == toState.name){//查看供应商对账单
+			   }else if('noticeAdd' == toState.name){//新建公告
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				   "<li><a ui-sref='myNotice'>公告</a> <i class='fa fa-angle-right'></i></li>";		
 				   if(toParams.serialNum != undefined){
 						 html += "<li><a>修改公告</a></li>";
 					 } else html += "<li><a>新建公告</a></li>";
+			   }else if('noticeView' == toState.name){//公告详情
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a ui-sref='myNotice'>公告</a> <i class='fa fa-angle-right'></i></li><li><a>公告详情</a></li>";
 			   }else if('gatheringMoneyRecord' == toState.name){//应收款
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" +
@@ -3004,6 +3005,16 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				   "<li><a ui-sref='invoice'>发票</a><i class='fa fa-angle-right'></i></li><li><a>销项票重新申请</a></li>";
 				  
+			   }else if('userInfo' == toState.name){//个人信息
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a ui-sref='#'>个人中心</a><i class='fa fa-angle-right'></i></li><li><a>个人信息</a></li>";
+			   }else if('companyInfo' == toState.name){//企业信息
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a ui-sref='#'>个人中心</a><i class='fa fa-angle-right'></i></li><li><a>企业信息</a></li>";
+			   }else if('accountSecurity' == toState.name){//账号安全
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a ui-sref='#'>个人中心</a><i class='fa fa-angle-right'></i></li><li><a>账号安全</a></li>";
+				  
 			   }else if('addOrEditStockInOutCheck' == toState.name){//新增修改检验                  
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 			 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
@@ -3033,6 +3044,9 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 						   html += "<li><a>入库检验确认</a></li>";
 					   }else html += "<li><a>出库检验确认</a></li>";
 				   }
+			   }else if('solrSearch' == toState.name){//全文检索   
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a>全文检索</a></i></li>";	
 			   }
 			   angular.element("#dashboard").empty();
 			   var template = angular.element(html);

@@ -109,6 +109,7 @@
     SELECT
 	USER_ID AS userId,
 	USER_NAME AS userName,
+	GROUP_ID AS groupId,
 	sex,
 	department,
 	position,
