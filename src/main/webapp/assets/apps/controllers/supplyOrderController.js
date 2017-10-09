@@ -200,12 +200,12 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 	    									type, row, meta){
 	                            		if(data!=""&&data!=null){
 	                            			if(data==1){
-    											return '<span  class="label label-sm label-success ng-scope">待接收</span>';
+    											return '<span  class="label label-sm label-success ng-scope">待确认</span>';
     										}else if(data==2){
-    											return '<span  class="label label-sm label-success ng-scope">已接收</span>';
+    											return '<span  class="label label-sm label-success ng-scope">已确认</span>';
     										}
 	                            		}else{
-	                            			return '<span  class="label label-sm label-info ng-scope">待接收</span>';
+	                            			return '<span  class="label label-sm label-info ng-scope">待确认</span>';
 	                            		}
 	                            	}
 	                            },{ mData: 'status'}
@@ -248,7 +248,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 							'render' : function(data,
 									type, row, meta) {
 								if(data==1){
-									return '<a href="javascript:void(0);" ng-click="recive(\''+row.serialNum+'\')">接收</a>';
+									return '<a href="javascript:void(0);" ng-click="recive(\''+row.serialNum+'\')">确认</a>';
 								}else{
 									return "";
 								}

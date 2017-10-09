@@ -870,11 +870,11 @@ margin-right: 20px;
 								<th>库存数量</th>
 								<th>采购数量</th>
 								<th>指导单价</th>
-								<th>采购单价</th>
+								<th>不含税单价</th>
 								<th>币种</th>
 								<th>税率</th>
-								<th>含税采购单价</th>
-								<th>金额</th>
+								<th>含税单价</th>
+								<th>不含税金额</th>
 								<th>税额</th>
 								<th ng-if="buyOrder.tradeType =='外贸'">关税率</th>
 								<th ng-if="buyOrder.tradeType =='外贸'">关税金额</th>
@@ -884,7 +884,7 @@ margin-right: 20px;
 								<th ng-if="buyOrder.settlementClause =='折扣折让'">折后金额</th>
 								<th ng-if="buyOrder.settlementClause =='红票'">红票金额</th>
 								
-								<th>价税合计</th>
+								<th>含税金额</th>
 								<th>交付日期</th>
 								<th>最晚交付日期</th>
 								<th>交付/提货地点</th>
@@ -1069,7 +1069,7 @@ margin-right: 20px;
                          </div>
                          <div class="col-md-4">
                          		<div class="form-group ">
-                              	<label class="control-label bold">价税合计：</label>
+                              	<label class="control-label bold">含税金额：</label>
                                  <div class="">
                                   <p class="form-control-static"> {{totalRateAndAmount()}} </p>
                                   </div>
