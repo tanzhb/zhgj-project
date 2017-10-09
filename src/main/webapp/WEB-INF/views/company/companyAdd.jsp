@@ -74,7 +74,7 @@
 					<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">资质信息</a>
 					</li>
 					<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">财务信息</a></li>
-					<li class="bold"><a data-target="#tab_1_4" data-toggle="tab">联系人</a></li>
+					<li class="bold"><a data-target="#tab_1_4" data-toggle="tab">联系方式</a></li>
 				</ul>
 				<div class="tab-content">
 				<div class="tab-pane fade active in" id="tab_1_1">
@@ -357,6 +357,11 @@
 				</div>
 				<div class="tab-pane fade" id="tab_1_4">
 						<div class="portlet-body form">
+								<div class="portlet light ">
+												<div class="portlet-title">
+													<div class="caption">联系人</div>
+													<div class="actions"></div>
+												</div>
 			                                    <div class="table-scrollable">
 			                                        <table class="table table-striped table-bordered table-advance table-hover">
 			                                            <thead>
@@ -401,7 +406,50 @@
 			                                            <i class="fa fa-plus"></i> 增加
 			                                     	</a>
 			                                	</div>
+			                                	<div class="portlet-title">
+													<div class="caption">联系地址</div>
+													<div class="actions"></div>
+												</div>
+			                                	 <div class="table-scrollable">
+			                                        <table class="table table-striped table-bordered table-advance table-hover">
+			                                            <thead>
+			                                                <tr>
+			                                                    <th>地址</th>
+			                                                    <th>邮编</th>
+			                                                    <th>电话</th>
+			                                                    <th>手机</th>
+			                                                    <th>备注</th>
+			                                                    <th style="width:65px;">操作</th>
+			                                                </tr>
+			                                            </thead>
+			                                            <tbody  ng-if="companyAddress.length==0">
+			                                             	<tr>
+			                                                    <td colspan="6" align="center" >暂无数据</td>
+			                                                </tr>
+			                                            </tbody>
+			                                            <tbody ng-repeat="_address in companyAddresses track by $index">
+			                                                <tr ng-mouseover="showOperation('address',$index)" ng-mouseleave="hideOperation('address',$index)">
+			                                                    <td>{{_address.address}}</td>
+			                                                    <td>{{_address.zipCode}}</td>
+			                                                    <td>{{_address.contactTel}}</td>
+			                                                    <td>{{_address.mobileNum}}</td>
+			                                                    <td>{{_address.remark}}</td>
+			                                                    <td ng-show="operation_a{{$index}}">
+			                                                    	<a ng-click="editCompanyAddress(_address.serialNum)"><i class="fa fa-edit" title="编辑"></i></a>
+			                                                    	&nbsp;&nbsp;&nbsp;
+			                                                    	<a ng-click="deleteCompanyAddress(_address.serialNum)"><i class="fa fa-trash" title="删除"></i></a>
+			                                                    </td>
+			                                                </tr>
+			                                            </tbody>
+			                                        </table>
+			                                    </div>
+			                                    <div class="form-actions right">
+												 	<a  class="btn blue btn-sm"  ng-click="addCompanyAddress()"   >
+			                                            <i class="fa fa-plus"></i> 增加
+			                                     	</a>
+			                                	</div>
                              </div>
+                         </div>
 				</div>
 				<div class="tab-pane fade" id="tab_1_3">
 					<div class="portlet light ">
@@ -419,7 +467,7 @@
 												</label>
 												<div class="">
 													<input type="text" class="form-control" id="corporatePresence"
-														ng-model="company.corporatePresence"
+														ng-model="company.corporatePresence" 
 														ng-hide="billAdd">
 													<div class="form-control-focus"></div>
 													<p class="control-label left" ng-show="billView">{{company.corporatePresence}}</p>
@@ -446,7 +494,7 @@
 												<label class="control-label bold" for="address">注册地址
 												</label>
 												<div class="">
-													<input type="text" class="form-control" id="address"
+													<input type="text" class="form-control" 
 														ng-model="company.address"
 														ng-hide="billAdd">
 													<div class="form-control-focus"></div>
@@ -525,7 +573,7 @@
 											<th>户名</th>
 											<th>账号</th>
 											<th>备注</th>
-											<th style="min-width: 60px;"></th>
+											<th style="min-width: 60px;max-width: 100px">操作</th>
 										</tr>
 									</thead>
 									<tbody ng-if="companyFinances.length==0">
@@ -577,7 +625,7 @@
          <div class="modal-content">
              <div class="modal-header">
                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                 <h4 class="modal-title" >{{contactTitle==null?'新建':contactTitle}}联系人</h4>
+                 <h4 class="modal-title" >{{title==null?'新建':title}}联系人</h4>
              </div>
              <div class="modal-body">
                <div class="form-body" >
@@ -701,7 +749,7 @@
          <div class="modal-content">
              <div class="modal-header">
                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                 <h4 class="modal-title" >{{financeTitle==null?'新建':'financeTitle'}}账号</h4>
+                 <h4 class="modal-title" >{{title==null?'新建':title}}账号</h4>
              </div>
              <div class="modal-body">
                <div class="form-body" >
@@ -769,6 +817,95 @@
      <!-- /.modal-dialog -->
  </div>
 <!-- 财务信息modal END -->
+
+
+<!-- 联系地址modal START -->
+ <div class="modal fade modal-overflow in" id="address" tabindex="-1" role="address" aria-hidden="true" data-backdrop="static">
+     <div class="modal-dialog">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                 <h4 class="modal-title" >{{title==null?'新建':title}}联系地址</h4>
+             </div>
+             <div class="modal-body">
+               <div class="form-body" >
+               <div class="alert alert-danger display-hide">
+                                                <button class="close" data-close="alert"></button>表单数据未填写完整</div>
+               <form id="companyAddressForm" class="form-horizontal">
+                 <div class="row">
+                     <div class="col-md-12">
+                         <div class="form-group">
+                                 <label class="col-md-4 control-label" for="address">地址：</label>
+                                 <div class="col-md-6">
+                                     <input type="text" class="form-control"  name="address" ng-model="companyAddress.address"  >
+                                     <div class="form-control-focus"> </div>
+                                 </div>
+                         </div>
+                     </div>
+                 </div>
+                 <!--/row-->
+                 <div class="row">
+                     <div class="col-md-12">
+                         <div class="form-group">
+                                 <label class="col-md-4 control-label" for="zipCode">邮编：</label>
+                                 <div class="col-md-6">
+                                     <input type="text" class="form-control" id="zipCode" name="zipCode" ng-model="companyAddress.zipCode"  >
+                                     <div class="form-control-focus"> </div>
+                                 </div>
+                         </div>
+                     </div>
+                 </div>
+                 <!--/row-->
+                 <div class="row">
+                     <div class="col-md-12">
+                         <div class="form-group">
+                                 <label class="col-md-4 control-label" for="contactTel">联系电话：</label>
+                                 <div class="col-md-6">
+                                     <input type="text" class="form-control" name="contactTel" ng-model="companyAddress.contactTel"  >
+                                     <div class="form-control-focus"> </div>
+                                 </div>
+                         </div>
+                     </div>
+                 </div>
+                 <!-- row -->
+                 <div class="row">
+                     <div class="col-md-12">
+                         <div class="form-group">
+                                 <label class="col-md-4 control-label" for="mobileNum">手机：</label>
+                                 <div class="col-md-6">
+                                     <input type="text" class="form-control" id="mobileNum" name="mobileNum" ng-model="companyAddress.mobileNum"  >
+                                     <div class="form-control-focus"> </div>
+                                 </div>
+                         </div>
+                     </div>
+                 </div>
+                 <!-- row -->
+                 <div class="row">
+                     <div class="col-md-12">
+                         <div class="form-group">
+                                 <label class="col-md-4 control-label" for="remark">备注：</label>
+                                 <div class="col-md-6">
+                                     <input type="text" class="form-control" ng-model="companyAddress.remark"  >
+                                     <div class="form-control-focus"> </div>
+                                 </div>
+                         </div>
+                     </div>
+                 </div>
+                 <!-- row -->
+                 </form>
+             </div>
+             </div>
+             <div class="modal-footer">
+                 <button type="button" class="btn btn-outline sbold red" data-dismiss="modal">取消</button>
+                 <button type="button" class="btn btn-outline sbold blue" ng-click="saveCompanyAddress()">保存</button>
+             </div>
+             
+         </div>
+         <!-- /.modal-content -->
+     </div>
+     <!-- /.modal-dialog -->
+ </div>
+<!-- 联系地址modal END -->
 
 
 <!-- END MAIN CONTENT -->

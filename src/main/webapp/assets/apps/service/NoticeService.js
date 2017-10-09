@@ -85,6 +85,21 @@ angular.module('MetronicApp').service('noticeService',['$http','$q',function($ht
 		return deferred.promise;//返回承诺
 	}
 	
+	/**
+	 * 获取列表数据
+	 */
+	this.readMyNotice = function(serialNum){
+		var deferred = $q.defer();
+		$http.post("rest/notice/readMyNotice",   
+				serialNum
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
+	
 
 
 
