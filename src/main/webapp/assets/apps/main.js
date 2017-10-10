@@ -41,7 +41,7 @@ MetronicApp.factory('settings', [ '$rootScope', function($rootScope) {
 		globalPath : 'assets/global',
 		layoutPath : 'assets/layouts/layout2',
 	};
-
+	WebSocketInit();
 	$rootScope.settings = settings;
 	$rootScope.basePath = getRootPath();
 
@@ -1463,6 +1463,28 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
 		    				        'assets/apps/controllers/NoticeController.js',
 		    				        'assets/apps/service/NoticeService.js'
+		    				        
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
+		    }).state('myMessage', {
+		    	url: "/myMessage",
+		    	templateUrl: "rest/message/myMessage",
+		    	data: {pageTitle: '消息'},
+		    	reload:true, 
+		    	controller: "MessageController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [     
+		    				        'assets/apps/css/todo.min.css',
+		    				        'assets/global/plugins/datatables/datatables.min.css',      
+		    				        'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
+		    				        'assets/apps/controllers/MessageController.js',
+		    				        'assets/apps/service/MessageService.js'
 		    				        
 		    				        ]
 		    			});
