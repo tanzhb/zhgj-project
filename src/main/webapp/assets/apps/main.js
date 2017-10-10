@@ -41,7 +41,7 @@ MetronicApp.factory('settings', [ '$rootScope', function($rootScope) {
 		globalPath : 'assets/global',
 		layoutPath : 'assets/layouts/layout2',
 	};
-	WebSocketInit();
+	
 	$rootScope.settings = settings;
 	$rootScope.basePath = getRootPath();
 
@@ -49,14 +49,43 @@ MetronicApp.factory('settings', [ '$rootScope', function($rootScope) {
 } ]);
 
 /* Setup App Main Controller */
-MetronicApp.controller('AppController', [ '$scope', '$rootScope',
-		function($scope, $rootScope) {
+MetronicApp.controller('AppController', [ '$scope', '$rootScope','$compile',
+		function($scope, $rootScope, $compile) {
 			$scope.$on('$viewContentLoaded', function() {
 				// App.initComponents(); // init core components
 				// Layout.init(); // Init entire layout(header, footer, sidebar,
 				// etc) on page load if the partials included in server side
 				// instead of loading with ng-include directive
+				WebSocketInit();
 			});
+			
+			var webSocket;
+			function WebSocketInit(){
+				if(!webSocket){
+					if ('WebSocket' in window) {
+						webSocket = 
+							new WebSocket('ws://'+getWSPath_web()+'rest/webSocketServer');
+					} else if ('MozWebSocket' in window) {
+						webSocket = 
+							new WebSocket('ws://'+getWSPath_web()+'rest/webSocketServer');
+					}
+				}
+				webSocket.onerror = function(event) {
+					console.log('webSocket is error!');
+				};
+				webSocket.onopen = function(event) {
+					console.log('webSocket is open!');
+					//webSocket.send('Hello Server!');
+				};
+				webSocket.onmessage = function(event) {
+					var obj = eval('(' + event.data+ ')'); 
+					
+					//showToastr('toast-bottom-right','success',obj.context);
+					var html = $compile('<div>' + obj.context + '</div>')($scope);
+					toastr8(obj.messageType,obj.context);
+					$("#messageDiv").html(html);
+				};
+			}
 		} ]);
 
 /*******************************************************************************
@@ -2932,6 +2961,9 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 			   }else if('myNotice' == toState.name){//公告
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				   "<li><a>公告</a></li>";					 
+			   }else if('myMessage' == toState.name){//消息
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a>消息</a></li>";					 
 			   }else if('noticeAdd' == toState.name){//新建公告
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				   "<li><a ui-sref='myNotice'>公告</a> <i class='fa fa-angle-right'></i></li>";		

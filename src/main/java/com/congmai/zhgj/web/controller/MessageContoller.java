@@ -67,7 +67,7 @@ public class MessageContoller {
     @RequestMapping(value="businessMessageList",method=RequestMethod.POST)
     @ResponseBody
     public Page<Message> businessMessageList(@RequestBody Message message){
-    	Page<Message> page = new Page<Message>();
+    	Page<Message> page = null;
     	try{
     		User user = UserUtil.getUserFromSession();
     		page = this.messageService.selectBusinessMessageByPage(message, user.getUserId().toString());
@@ -114,6 +114,9 @@ public class MessageContoller {
     	String flag = "0"; //默认失败
     	try{
     		if(StringUtils.isNotEmpty(serialNum)){
+    			if(serialNum.contains("=")){
+    				serialNum = serialNum.replace("=", "");
+    			}
     			messageService.readMessage(serialNum,UserUtil.getUserFromSession().getUserName());
     		}
     	}catch(Exception e){

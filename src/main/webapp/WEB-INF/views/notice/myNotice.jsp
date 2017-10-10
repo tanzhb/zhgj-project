@@ -50,7 +50,7 @@
 										<a class="pull-left" href="javascript:;"> <img
 											class="todo-userpic" src="assets/pages/img/avatars/team1.jpg"
 											width="27px" height="27px">
-									</a>
+										</a>
 										<div class="media-body todo-comment">
 											<p class="todo-comment-p">
 												<font ng-if="notice.readFlg==null">未读</font> <font

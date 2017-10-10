@@ -44,10 +44,11 @@ public class MessageServiceImpl extends GenericServiceImpl<Message, String> impl
 			String userId) {
 		message.setMessageType(MessageConstants.SYSTEM_MESSAGE);
 		message.setReceiverId(userId);
-		message.setPageIndex(message.getPageIndex()-1);
+		//message.setPageIndex(message.getPageIndex()-1);
+		message.setStart((message.getPageIndex()-1)*message.getPageSize());
 		List<Message> messages = messageMapper.findMessageList(message);
 		int count = messageMapper.countMessageList(message);
-		Page<Message> page = new Page<Message>();
+		Page<Message> page = new Page<Message>(message.getPageIndex(),message.getPageSize());
 		page.setResult(messages);
 		page.setTotalCount(count);
 		return page;
@@ -58,10 +59,10 @@ public class MessageServiceImpl extends GenericServiceImpl<Message, String> impl
 			String userId) {
 		message.setMessageType(MessageConstants.BUSSINESS_MESSAGE);
 		message.setReceiverId(userId);
-		message.setPageIndex(message.getPageIndex()-1);
+		message.setStart((message.getPageIndex()-1)*message.getPageSize());
 		List<Message> messages = messageMapper.findMessageList(message);
 		int count = messageMapper.countMessageList(message);
-		Page<Message> page = new Page<Message>();
+		Page<Message> page = new Page<Message>(message.getPageIndex(),message.getPageSize());
 		page.setResult(messages);
 		page.setTotalCount(count);
 		return page;

@@ -29,6 +29,8 @@ public class Notice {
     
     private int pageSize;
     
+    private int start;
+    
     private String status;
     
     private String readFlg;
@@ -164,5 +166,13 @@ public class Notice {
 
 	public void setRelaseDate(String relaseDate) {
 		this.relaseDate = relaseDate;
+	}
+
+	public int getStart() {
+		return start;
+	}
+
+	public void setStart(int start) {
+		this.start = start;
 	}
 }

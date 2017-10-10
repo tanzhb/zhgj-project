@@ -221,8 +221,8 @@ function showToastr(position, type, info){
 //初始化toastr结束
 
 //win8提示样式
-function toastr8(str){
-	              var t = {
+function toastr8(title,str){
+	              /*var t = {
 						theme : 'ebony',
 						sticky : false,
 						horizontalEdge : 'bottom',
@@ -232,7 +232,31 @@ function toastr8(str){
 							|| (t.life = 10000), $
 							.notific8("zindex", 11500), $.notific8(str, t), n.attr("disabled", "disabled"), setTimeout(function() {
 						n.removeAttr("disabled")
-					}, 1e3);
+					}, 1e3);*/
+					
+					layer.open({
+						  type: 1
+						  ,title:title
+						  ,offset: 'rb' //具体配置参考：offset参数项
+						  ,content: '<div id="messageDiv" style="padding: 10px 20px;">'+str+'</div>'
+						  ,shade: 0 //不显示遮罩
+						  ,yes: function(){
+						    layer.closeAll();
+						  }
+						});
+}
+
+function readAndClose(serialNum){
+	$.ajax({
+		url:ctx+"rest/message/readMessage",
+		type:'POST',
+		data:serialNum,
+		dataType:'json',
+		success:function(data){
+			
+		}
+	});
+	layer.closeAll();
 }
 
 // 为空判断
@@ -615,30 +639,4 @@ function getWSPath_web() {
     }else{
     	return (localhostPaht + projectName +"/");
     }
-}
-
-var webSocket;
-function WebSocketInit(){
-	if(!webSocket){
-		if ('WebSocket' in window) {
-			webSocket = 
-				new WebSocket('ws://'+getWSPath_web()+'rest/webSocketServer');
-		} else if ('MozWebSocket' in window) {
-			webSocket = 
-				new WebSocket('ws://'+getWSPath_web()+'rest/webSocketServer');
-		}
-	}
-	webSocket.onerror = function(event) {
-		console.log('webSocket is error!');
-	};
-	webSocket.onopen = function(event) {
-		console.log('webSocket is open!');
-		//webSocket.send('Hello Server!');
-	};
-	webSocket.onmessage = function(event) {
-		var obj = eval('(' + event.data+ ')'); 
-		
-		//showToastr('toast-bottom-right','success',obj.context);
-		toastr8(obj.context);
-	};
 }

@@ -19,7 +19,7 @@ public class WebSocketProcessor implements MessageProcessor {
 	private SystemWebSocketHandler handler;
 	
 	//订单申请审批提示
-	private static String message1 = "尊敬的${paramer_a}，您好！</br>${paramer_b}新建采购订单 ${paramer_c}等待您的审批。<a href='javascript:;' ui-sref='${paramer_d}'> 马上处理</a> </br>备注：${paramer_e}。</br>祝您工作愉快！";
+	private static String message1 = "尊敬的${paramer_a}，您好！</br>${paramer_b}新建采购订单&nbsp;${paramer_c}&nbsp;等待您的审批。<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_f}')>马上处理</a> </br>备注：${paramer_e}。</br>祝您工作愉快！";
 	
 	static{
 		MessageTemplate.register("1", DEFAULT_MSG_TEMPLATE, null, message1);

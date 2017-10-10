@@ -106,9 +106,9 @@ angular.module('MetronicApp').service('messageService',['$http','$q',function($h
 	/**
 	 * 获取列表数据
 	 */
-	this.readMyMessage = function(serialNum){
+	this.readMessage = function(serialNum){
 		var deferred = $q.defer();
-		$http.post("rest/message/readMyMessage",   
+		$http.post("rest/message/readMessage",   
 				serialNum
 		).then(function success(result) {
 			deferred.resolve(result);//请求成功

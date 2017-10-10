@@ -2,13 +2,13 @@
  * 
  */
 
-angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scope','$state','$http','noticeService','$location','$compile','$stateParams',
-                                                             function($rootScope,$scope,$state,$http,noticeService,$location,$compile,$stateParams) {
+angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scope','$state','$http','noticeService','$location','$compile','$stateParams','$sce',
+                                                             function($rootScope,$scope,$state,$http,noticeService,$location,$compile,$stateParams,$sce) {
 	 $scope.$on('$viewContentLoaded', function() {   
 	    	// initialize core components
 		    handle = new pageHandle();
 	    	App.initAjax();
-	    	if($location.path()=="/noticeAdd"||$location.path()=="/noticeView"){
+	    	if($location.path()=="/noticeAdd"){
 	    		if(!isNull($stateParams.serialNum)){
 	    			noticeInfo($stateParams.serialNum);
 	    		}
@@ -22,6 +22,10 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 			                }
 		                }  
 		            });
+	    		}
+	    	}else if($location.path()=="/noticeView"){
+	    		if(!isNull($stateParams.serialNum)){
+	    			noticeInfo($stateParams.serialNum);
 	    		}
 	    	}else{
 	    		var type = handle.getCookie("d_type");
@@ -322,7 +326,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
         				$scope.param = {};
         				$scope.param.title = data.data.title;
         				$scope.param.serialNum = data.data.serialNum;
-        				$scope.param.context = data.data.context;
+        				$scope.param.context = $sce.trustAsHtml(data.data.context);
         				$scope.param.updater = data.data.updater;
         				$scope.param.relaseDate = data.data.relaseDate;
         				

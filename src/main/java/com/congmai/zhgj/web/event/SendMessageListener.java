@@ -68,6 +68,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				properties.put("paramer_b", user.getUserName());
 				properties.put("paramer_c", order.getOrderNum());
 				properties.put("paramer_d", MessageConstants.APPLY_BUY_ORDER_URL);
+				properties.put("paramer_f", messageVO.getSerialNum());
 				if(StringUtils.isNotBlank(order.getReason())){
 					properties.put("paramer_e", order.getReason());
 				}else{
