@@ -715,9 +715,9 @@ margin-right: 20px;
 	<div class="tab-pane fade " id="tab_1_4">
 		<!-- 订单物料 start-->
           <div class="portlet-body form">
-		     <form id="form_sample_5"   >
+		     <form    >
 		         <div class="table-scrollable">
-                         <table class="table table-bordered table-hover">
+                         <table class="table table-bordered table-hover" id="form_sample_5" >
                              <thead>
                                  <tr>
 								<th>商品编号</th>

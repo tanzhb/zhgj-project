@@ -575,8 +575,10 @@ public class DeliveryController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String suppluComId=delivery.getSupplyComId();
 		Company company=deliveryService.selectCompanyInfo(suppluComId);
-		delivery.setSupplyComId(company.getComName());
-		delivery.setShipper(company.getComName());
+		if(company!=null){
+			delivery.setSupplyComId(company.getComName());
+			delivery.setShipper(company.getComName());
+		}
 		map.put("delivery", delivery);
 
 		List<DeliveryMaterielVO> deliveryMateriels=null;

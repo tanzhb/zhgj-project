@@ -40,15 +40,21 @@
 				<div class="tab-content">
 					<div class="tab-pane active" id="portlet_tab2_1">
 						<!-- ng-repeat="message in messageList track by message.serialNum" -->
+						<div ng-if="messageList==null||messageList.length==0" class="row todo-container">
+							<div class="todo-tasks-container" align="center" style="padding: 0px 20px;border:0px solid #ebf0f5;">
+									暂无消息
+							</div>
+						</div>
 						<div class="row todo-container">
 							<div class="todo-tasks-container" style="padding: 0px 20px;border:0px solid #ebf0f5;">
 								<ul class="todo-tasks-content">
-									<li class="todo-tasks-item" style="padding: 20px 0;" ng-repeat="message in messageList track by message.serialNum">
-										<h4 class="todo-inline">
-											<a data-toggle="modal" href="#todo-task-modal">{{delHtmlTag(message.context)}}</a>
+									<li class="todo-tasks-item" style="padding: 20px 0 0 0;" ng-repeat="message in messageList track by message.serialNum">
+										<h4 class="todo-inline" style="font-size: 15px;font-weight: 500;">
+											<p>{{delHtmlTag(message.context)}}&nbsp;<a ng-click="messageView(message.serialNum,message.objectSerial,message.actionName)" >查看</a></p>
 										</h4>
 										<p class="todo-inline todo-float-r">
-											
+											<font ng-if="message.readFlg=='1'">已读</font>
+											<font ng-if="message.readFlg=='0'">未读</font>
 										</p>
 									</li>
 								</ul>
@@ -70,11 +76,16 @@
 						</div>
 					</div>
 					<div class="tab-pane" id="portlet_tab2_2">
+						<div ng-if="messageList==null||messageList.length==0" class="row todo-container">
+							<div class="todo-tasks-container" align="center" style="padding: 0px 20px;border:0px solid #ebf0f5;">
+									暂无消息
+							</div>
+						</div>
 						<div class="row todo-container">
 							<div class="todo-tasks-container" style="padding: 0px 20px;border:0px solid #ebf0f5;">
 								<ul class="todo-tasks-content">
 									<li class="todo-tasks-item" style="padding: 20px 0;" ng-repeat="message in messageList track by message.serialNum">
-										<h4 class="todo-inline">
+										<h4 class="todo-inline" style="font-size: 15px;font-weight: 500;">
 											<a data-toggle="modal" href="#todo-task-modal">{{delHtmlTag(message.context)}}</a>
 										</h4>
 										<p class="todo-inline todo-float-r">
