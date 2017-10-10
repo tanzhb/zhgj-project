@@ -220,7 +220,22 @@ function showToastr(position, type, info){
 }
 //初始化toastr结束
 
-//为空判断
+//win8提示样式
+function toastr8(str){
+	              var t = {
+						theme : 'ebony',
+						sticky : false,
+						horizontalEdge : 'bottom',
+						verticalEdge : 'right'
+					}, n = $(this);
+					false, t.sticky
+							|| (t.life = 10000), $
+							.notific8("zindex", 11500), $.notific8(str, t), n.attr("disabled", "disabled"), setTimeout(function() {
+						n.removeAttr("disabled")
+					}, 1e3);
+}
+
+// 为空判断
 var isNull = function(str) {
 	if (str == "" || str == undefined)
 		return true;
@@ -230,7 +245,7 @@ var isNull = function(str) {
 }
 
 
-//页面打印方法start********/
+// 页面打印方法start********/
 function printdiv(printpage)
 {
 	var headstr = "<html><head><title></title></head><body>";
@@ -618,9 +633,12 @@ function WebSocketInit(){
 	};
 	webSocket.onopen = function(event) {
 		console.log('webSocket is open!');
-		webSocket.send('Hello Server!');
+		//webSocket.send('Hello Server!');
 	};
 	webSocket.onmessage = function(event) {
-		//var obj = eval('(' + event.data+ ')');
-		alert(event.data);
+		var obj = eval('(' + event.data+ ')'); 
+		
+		//showToastr('toast-bottom-right','success',obj.context);
+		toastr8(obj.context);
 	};
+}

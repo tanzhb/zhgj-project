@@ -95,6 +95,8 @@ License: You must have a valid license purchased only from themeforest(the above
 <link href="assets/global/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" type="text/css" />
 <link href="assets/apps/css/common.css"
 	rel="stylesheet" type="text/css" />
+<link href="assets/global/plugins/jquery-notific8/jquery.notific8.min.css"
+	rel="stylesheet" type="text/css" />
 <!-- <link href="assets/global/plugins/datatables/datatables.min.css" rel="stylesheet"
 	type="text/css" />
 <link href="assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet"
@@ -207,6 +209,8 @@ License: You must have a valid license purchased only from themeforest(the above
 		src="assets/global/plugins/angularjs/plugins/ui-bootstrap-tpls.min.js"
 		type="text/javascript"></script>
 	<script src="assets/global/plugins/bootstrap-toastr/toastr.min.js"
+		type="text/javascript"></script>
+	<script src="assets/global/plugins/jquery-notific8/jquery.notific8.min.js"
 		type="text/javascript"></script>
 	<script
 		src="assets/global/plugins/jquery-validation/js/jquery.validate.min.js"

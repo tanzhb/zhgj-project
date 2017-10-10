@@ -1,11 +1,14 @@
 package com.congmai.zhgj.web.dao;
 
+import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.web.model.Message;
 import com.congmai.zhgj.web.model.MessageExample;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
-public interface MessageMapper {
+public interface MessageMapper extends GenericDao<Message, String>{
     int countByExample(MessageExample example);
 
     int deleteByExample(MessageExample example);
@@ -33,4 +36,8 @@ public interface MessageMapper {
     int updateByPrimaryKeyWithBLOBs(Message record);
 
     int updateByPrimaryKey(Message record);
+
+	List<Message> findMessageList(Message message);
+
+	int countMessageList(Message message);
 }

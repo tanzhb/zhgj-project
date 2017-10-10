@@ -53,7 +53,7 @@ public class NoticeServiceImpl extends GenericServiceImpl<Notice, String> implem
 		noticeExample.createCriteria().andSerialNumIn(serialNumArray);
 		Notice notice = new Notice();
 		notice.setDelFlg("1"); //删除
-		notice.setUpdater("");
+		notice.setUpdater(currentLoginName);
 		notice.setUpdateTime(new Date());
 		noticeMapper.updateByExampleSelective(notice, noticeExample);
 		

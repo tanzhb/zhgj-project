@@ -10,8 +10,6 @@ import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 
-import com.congmai.zhgj.web.model.MessageCode;
-
 
 @Component
 public class SystemWebSocketHandler implements WebSocketHandler{

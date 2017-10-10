@@ -36,6 +36,10 @@ public class Message {
     private String creatorDelFlag;
     private String receiverDelFlag;
     
+    private int pageIndex;
+    
+    private int pageSize;
+    
 
     public String getSerialNum() {
         return serialNum;
@@ -171,5 +175,21 @@ public class Message {
 
 	public void setReceiverDelFlag(String receiverDelFlag) {
 		this.receiverDelFlag = receiverDelFlag;
+	}
+
+	public int getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	public int getPageIndex() {
+		return pageIndex;
+	}
+
+	public void setPageIndex(int pageIndex) {
+		this.pageIndex = pageIndex;
 	}
 }
