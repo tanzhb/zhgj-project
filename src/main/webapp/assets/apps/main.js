@@ -2669,6 +2669,11 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a ui-sref='userContract'>合同信息</a><i class='fa fa-angle-right'></i></li>" + 
 					 	"<li><a>修改合同</a></li>";
+			   }else if('saleOrderSign' == toState.name){//合同签订
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='userContract'>合同信息</a><i class='fa fa-angle-right'></i></li>" + 
+					 	"<li><a>合同签订</a></li>";
 			   }else if('warehouse' == toState.name){//仓库管理
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
