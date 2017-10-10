@@ -249,7 +249,17 @@ angular.module('MetronicApp').service('orderService',
 				            deferred.reject(err);//请求失败
 				        });
 				        return deferred.promise;//返回承诺
-				  },
+				  },//初始化仓库
+				  initWarehouse : function (){
+						var deferred = $q.defer();
+						$http.get("rest/takeDelivery/initWarehouse")
+						.then(function success(result) {
+							deferred.resolve(result);//请求成功
+						}, function error(err) {
+							deferred.reject(err);//请求失败
+						});
+						return deferred.promise;//返回承诺
+					},
 				  getAuditInfos : function (ids) {
 				        var deferred = $q.defer();  
 				        $http.post(ctx + "rest/order/toApproval/" + ids).success(function (data) {  
