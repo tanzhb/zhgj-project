@@ -127,6 +127,15 @@ public class OrderController {
     @Resource
     private OperateLogService operateLogService;
     
+    
+	//销售订单
+	public static final String SALEORDER = "sale";
+	
+	//采购订单
+	public static final String BUYORDER = "buy";
+	
+/*	//供应商订单（因为是平台方创建，显示需限制为已发布）
+	public static final String SUPPLYORDER = "supply";*/
 	/**
 	 * 合同管理service
 	 */
@@ -499,55 +508,39 @@ public class OrderController {
     }
     /**
      * 
-     * @Description 查询订单列表
-     * @param parent(若有值，则查询它及上级物料是它的物料)
+     * @Description (各类订单列表查询)
+     * @param type（只分为销售：sale，采购:buy两种）
+     * @param selectFor(自定义参数值，用于控制生成查询sql)
+     * @param fram（是否框架合同1是0否）
      * @return
      */
     @RequestMapping("/findOrderList")
     @ResponseBody
     public ResponseEntity<Map> findOrderList(String type,String selectFor,String fram) {
     	List<OrderInfo> orderInfoList = new ArrayList<OrderInfo>();
-//    	OrderInfoExample m =new OrderInfoExample();
-//    	//and 条件1
-//    	Criteria criteria =  m.createCriteria();
-//    	criteria.andDelFlgEqualTo("0");
-//    	if("sale".equals(type)){//平台销售订单供应商为空
-//    		criteria.andSupplyComIdIsNull();
-//    	}else if("buy".equals(type)){//平台采购订单采购商为空
-//    		criteria.andBuyComIdIsNull();
-//    	}
-//    	/*//and 条件2,未发布可编辑的物料
-//    	Criteria criteria2 =  m.createCriteria();
-//    	criteria2.andStatusEqualTo("0");
-//    	criteria2.andDelFlgEqualTo("0");
-//    	//or 条件
-//    	m.or(criteria2);*/
-//    	//排序字段
-//    	m.setOrderByClause("updateTime DESC");
     	String comId = null;
     	User user = UserUtil.getUserFromSession();
     	if(user!=null){
 			comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
 			if(comId==null){
-				comId = "null";
+				comId = "null";//null此处可看做是平台方的公司id
 			}
 		}
+    	/******以上看做每个用户都有自己的公司id******/
     	
     	OrderInfo parm =new OrderInfo();
-    	if("sale".equals(type)){//平台销售订单供应商为空
+    	if(SALEORDER.equals(type)){//查找公司销售订单
     		parm.setSupplyComId(comId);
-    	}else if("buy".equals(type)){//平台采购订单采购商为空
+    		if("delivery".equals(selectFor)){//为发货查找自己公司待发货的销售订单
+    			parm.setStatus("2");
+    		}
+    		if("supplyOrder".equals(selectFor)){//供应商订单(状态不为0，本公司销售订单)
+        		parm.setStatus("000");
+        	}
+    	}else if(BUYORDER.equals(type)){//查找公司采购订单
     		parm.setBuyComId(comId);
-    		if("delivery".equals(selectFor)){
-    			parm.setStatus("2");
-    		}
-    	}else if("supply".equals(type)){//供应商订单(状态不为0)
-    		parm.setSupplyComId(comId);
-    		parm.setStatus("000");
-    		if("delivery".equals(selectFor)){
-    			parm.setStatus("2");
-    		}
     	}
+    	
     	if("1".equals(fram)){
     		orderInfoList = orderService.selectFramList(parm);
     	}else{

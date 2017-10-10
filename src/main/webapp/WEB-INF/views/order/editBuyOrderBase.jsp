@@ -959,16 +959,23 @@ margin-right: 20px;
 		                          </td>
 		                          <td>  
 		                          		<input type="text"  style="width: 100px!important" name="deliveryDate{{$index}}" class="form-control form-control-inline input-medium date-picker" 
-                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].deliveryDate"  >
+                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].deliveryDate"  ng-change="setAllDeliveryDate(_orderMateriel,$index)">
                                      		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.deliveryDate}} </p>
 		                          </td>
 		                          <td>  
 		                          		<input type="text"  style="width: 100px!important" name="lastDeliveryDate{{$index}}" class="form-control form-control-inline input-medium date-picker" 
-                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].lastDeliveryDate"  >
+                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].lastDeliveryDate"  ng-change="setAllLastDeliveryDate(_orderMateriel,$index)" >
                                      		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.lastDeliveryDate}} </p>
 		                          </td>
 		                          <td>  
-		                          		<input type="text"  name="deliveryAddress{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].deliveryAddress"  >
+		                          		<select  ng-if="$first" name="deliveryAddress{{$index}}" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].deliveryAddress" class="bs-select form-control order" data-live-search="true"  ng-init="warehouses[0].serialNum" ng-change="setAllDeliveryAddress(_orderMateriel)"  data-size="8">
+                                              <!--  <option value=""></option> -->
+                                               <option  ng-repeat="warehouse in warehouses" value="{{warehouse.warehouseName}}">{{warehouse.warehouseName}}</option>
+                                         </select>
+                                         <select  ng-if="!$first" name="deliveryAddress{{$index}}" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].deliveryAddress" class="bs-select form-control order" data-live-search="true"  ng-init="warehouses[0].serialNum" data-size="8">
+                                              <!--  <option value=""></option> -->
+                                               <option  ng-repeat="warehouse in warehouses" value="{{warehouse.warehouseName}}">{{warehouse.warehouseName}}</option>
+                                         </select>
                                      		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.deliveryAddress}} </p>
 		                          </td>
                                      
