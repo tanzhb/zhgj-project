@@ -220,7 +220,22 @@ function showToastr(position, type, info){
 }
 //初始化toastr结束
 
-//为空判断
+//win8提示样式
+function toastr8(str){
+	              var t = {
+						theme : 'ebony',
+						sticky : false,
+						horizontalEdge : 'bottom',
+						verticalEdge : 'right'
+					}, n = $(this);
+					false, t.sticky
+							|| (t.life = 10000), $
+							.notific8("zindex", 11500), $.notific8(str, t), n.attr("disabled", "disabled"), setTimeout(function() {
+						n.removeAttr("disabled")
+					}, 1e3);
+}
+
+// 为空判断
 var isNull = function(str) {
 	if (str == "" || str == undefined)
 		return true;
@@ -230,7 +245,7 @@ var isNull = function(str) {
 }
 
 
-//页面打印方法start********/
+// 页面打印方法start********/
 function printdiv(printpage)
 {
 	var headstr = "<html><head><title></title></head><body>";
@@ -583,4 +598,47 @@ function initPageBar($rootScope, path){
 	if(path == 'addPay'){
 		$("#loadPageBar").innerHTML = "<li><a ui-sref='paymentRecordC'>付款</a> <i class='fa fa-angle-right'></i></li><li><a>新增付款1</a></li>";
 	}
+}
+
+function getWSPath_web() {
+    //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
+    var curWwwPath = window.document.location.href;
+    //获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
+    var pathName = window.document.location.pathname;
+    var pos = curWwwPath.indexOf(pathName);
+    //获取主机地址，如： http://localhost:8083
+    var localhostPaht = curWwwPath.substring(7, pos);//去掉http://
+    //获取带"/"的项目名，如：/uimcardprj
+    var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+    if(localhostPaht.indexOf("www")>-1){
+    	return (localhostPaht +"/");
+    }else{
+    	return (localhostPaht + projectName +"/");
+    }
+}
+
+var webSocket;
+function WebSocketInit(){
+	if(!webSocket){
+		if ('WebSocket' in window) {
+			webSocket = 
+				new WebSocket('ws://'+getWSPath_web()+'rest/webSocketServer');
+		} else if ('MozWebSocket' in window) {
+			webSocket = 
+				new WebSocket('ws://'+getWSPath_web()+'rest/webSocketServer');
+		}
+	}
+	webSocket.onerror = function(event) {
+		console.log('webSocket is error!');
+	};
+	webSocket.onopen = function(event) {
+		console.log('webSocket is open!');
+		//webSocket.send('Hello Server!');
+	};
+	webSocket.onmessage = function(event) {
+		var obj = eval('(' + event.data+ ')'); 
+		
+		//showToastr('toast-bottom-right','success',obj.context);
+		toastr8(obj.context);
+	};
 }

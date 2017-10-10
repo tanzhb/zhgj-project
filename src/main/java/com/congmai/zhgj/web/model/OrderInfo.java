@@ -31,6 +31,13 @@ public class OrderInfo extends BaseVO {
 	//已收票
 	public static final String RECIVEBILL = "2";
 	
+	//待确认
+	public static final String TOBECONFIRMED = "1";
+	//已确认
+	public static final String CONFIRMED = "2";
+	//待签合同
+	public static final String SIGNCONTRACT = "3";
+	
 	
 	private String serialNum;
 

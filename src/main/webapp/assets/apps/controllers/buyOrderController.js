@@ -220,10 +220,11 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 
     		orderService.save($scope.buyOrder).then(
        		     function(data){
-       		    	$scope.buyOrder.serialNum = data.serialNum;
+       		    	$scope.buyOrder = data;
        		    	$scope.contract.orderSerial = data.serialNum;
        		    	$scope.contract.contractNum = $scope.buyOrder.orderNum;
 	   	    		$scope.contract.comId = $scope.buyOrder.supplyComId;
+	   	    		$scope.contract.signDate = $scope.buyOrder.orderDate;
 	   	    		orderService.saveContract($scope.contract).then(
 	   	       		     function(data){
 	   	       		    	toastr.success('数据保存成功！');
@@ -391,11 +392,13 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 										return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">审核中</span>';
 									}else if(row.processBase.status=="APPROVAL_SUCCESS"){
 										if(row.status==1){
-											return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:#fcb95b">待接收</span>';
+											return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:#fcb95b">待确认</span>';
 										}else if(row.status==2){
-											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已接收</span>';
+											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已确认</span>';
+										}else if(row.status==3){
+											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">待签合同</span>';
 										}else{
-											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已接收</span>';
+											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已确认</span>';
 										}
 									}else if(row.processBase.status=="APPROVAL_FAILED"){
 										return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:red">未通过</span>';

@@ -95,6 +95,8 @@ License: You must have a valid license purchased only from themeforest(the above
 <link href="assets/global/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" type="text/css" />
 <link href="assets/apps/css/common.css"
 	rel="stylesheet" type="text/css" />
+<link href="assets/global/plugins/jquery-notific8/jquery.notific8.min.css"
+	rel="stylesheet" type="text/css" />
 <!-- <link href="assets/global/plugins/datatables/datatables.min.css" rel="stylesheet"
 	type="text/css" />
 <link href="assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet"
@@ -208,6 +210,8 @@ License: You must have a valid license purchased only from themeforest(the above
 		type="text/javascript"></script>
 	<script src="assets/global/plugins/bootstrap-toastr/toastr.min.js"
 		type="text/javascript"></script>
+	<script src="assets/global/plugins/jquery-notific8/jquery.notific8.min.js"
+		type="text/javascript"></script>
 	<script
 		src="assets/global/plugins/jquery-validation/js/jquery.validate.min.js"
 		type="text/javascript"></script>
@@ -240,8 +244,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	type="text/javascript"></script>
 	<script src="assets/global/plugins/tm.pagination.js"
 	type="text/javascript"></script>
- 
-    <script src="assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js" type="text/javascript"></script>
+ 	<script src="assets/apps/scripts/sockjs-0.3.4.min.js" type="text/javascript" ></script>    <script src="assets/global/plugins/bootstrap-tabdrop/js/bootstrap-tabdrop.js" type="text/javascript"></script>
     <script src="assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
     <script src="assets/global/plugins/jquery-repeater/jquery.repeater.js" type="text/javascript"></script>
     <script src="assets/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
