@@ -42,6 +42,8 @@ import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.enums.ComType;
+import com.congmai.zhgj.web.event.EventExample;
+import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyAddress;
 import com.congmai.zhgj.web.model.CompanyContact;
@@ -240,6 +242,8 @@ public class CompanyController {
         			company.setUpdater(currenLoginName);
         			companyService.update(company);
         		}
+        		
+        		EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(company,"saveCompany"));
         		
         		flag = "1";
         	}catch(Exception e){

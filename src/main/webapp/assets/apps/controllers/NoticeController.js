@@ -38,6 +38,12 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 		 				$("#portlet_tab2_1").addClass("active");
 		 				$("#portlet_tab2_2").removeClass("active");
 		 				createTable(5,1,true,$scope.params);
+		 		}else{
+		 				$('#notice_tab a:last').parent().addClass('active');
+		 				$('#notice_tab a:first').parent().removeClass('active');
+		 				$("#portlet_tab2_2").addClass("active");
+		 				$("#portlet_tab2_1").removeClass("active");
+		 				$scope.notices();
 		 		}	
 	    	}
 	    	

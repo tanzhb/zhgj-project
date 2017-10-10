@@ -3,6 +3,7 @@ package com.congmai.zhgj.web.service.impl;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -112,12 +113,34 @@ public class ContractServiceImpl extends GenericServiceImpl<ContractVO, String> 
 
 	
 	/**
-	 * 更新用户对象
+	 * 更新用户合同
 	 * @param contractVO
 	 */
 	@Override
 	public void updateContract(ContractVO contractVO) {
 		// TODO Auto-generated method stub
 		contractMapper.updateContract(contractVO);
+	}
+
+
+	/**
+	 * 签订销售合同
+	 * @param contractVO
+	 */
+	@Override
+	public void signSaleContract(ContractVO contractVO) {
+		// TODO Auto-generated method stub
+		contractMapper.signSaleContract(contractVO);
+	}
+
+
+	/**
+	 * 签订销售合同后更新订单
+	 * @param contractVO
+	 */
+	@Override
+	public void updateOrderAfterSign(Map<String,Object> map) {
+		// TODO Auto-generated method stub
+		contractMapper.updateOrderAfterSign(map);
 	}
 }
