@@ -626,9 +626,9 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 																type,
 																row,
 																meta) {
-															return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
-																	"<input type='checkbox' class='checkboxes' value='1' />" +
-																	"<span></span></label>";
+															return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">' +
+																	'<input type="checkbox" name="id[]" value="'+ $('<div/>').text(data).html()+ '">' +
+																	'<span></span></label>';
 														}
 						                            },
 							                            { mData: 'deliverNum' },
@@ -651,7 +651,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 							                            			}else if(data=='WAITING_FOR_APPROVAL'){
 							                            				return '待审批';					                            				
 																	}else if(data=='3'){
-																		return '待收货';
+																		return '完成';
 																	}else if(data=='APPROVAL_FAILED'){
 																		return '审批失败';
 																	}else if(data=='4'){
