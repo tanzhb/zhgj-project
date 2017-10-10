@@ -944,14 +944,30 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	                        name: 'MetronicApp',
 	                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
 	                        files: [                             
-	                    'assets/global/plugins/datatables/datatables.min.css',
+	                   'assets/global/plugins/datatables/datatables.min.css',
 						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+						
+						
+						'assets/global/scripts/datatable.js',
 						'assets/global/plugins/datatables/datatables.all.min.js',
 						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
-						'assets/apps/scripts/angular-file-upload-shim.min.js',
-				        'assets/apps/scripts/angular-file-upload.min.js',
-				        'assets/apps/service/ContractService.js',
+						'assets/apps/scripts/pageHandle.js',
+						'assets/apps/service/ContractService.js',
 	                    'assets/apps/controllers/ContractController.js',
+					    'assets/apps/scripts/angular-file-upload.min.js',
+						'assets/apps/controllers/app.js',
+						'assets/apps/controllers/uploadPhoto.js',
+		
+		
+						//流程申请
+						'assets/global/css/dialog.css',
+						'assets/global/css/easyui.css',
+						'assets/global/css/datagrid.css',
+						'assets/global/css/jquery.qtip.min.css',
+			         
+						'assets/global/plugins/jquery.easyui.min.js',
+						'assets/global/plugins/jquery.qtip.min.js',
+						'assets/global/plugins/jquery.outerhtml.js',
 	                   	                        ]
 	                    });
 	                }]
@@ -992,6 +1008,33 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             url: "/editUserContractPage:id",
             templateUrl: "rest/contract/editUserContractPage",
             data: {pageTitle: '修改合同'},
+            controller: "ContractController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [                             
+					'assets/global/plugins/datatables/datatables.min.css',
+					'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+					'assets/global/plugins/datatables/datatables.all.min.js',
+					'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+					'assets/apps/scripts/angular-file-upload-shim.min.js',
+					'assets/apps/scripts/angular-file-upload.min.js',
+					'assets/apps/scripts/FileUploader.js',
+					'assets/apps/service/ContractService.js',
+					'assets/apps/controllers/ContractController.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        
+        .state('saleOrderSign', {
+        	params:{data:null},
+            url: "/saleOrderSign:id",
+            templateUrl: "rest/contract/saleOrderSign",
+            data: {pageTitle: '合同签订'},
             controller: "ContractController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -2674,6 +2717,11 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a ui-sref='userContract'>合同信息</a><i class='fa fa-angle-right'></i></li>" + 
 					 	"<li><a>修改合同</a></li>";
+			   }else if('saleOrderSign' == toState.name){//合同签订
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='userContract'>合同信息</a><i class='fa fa-angle-right'></i></li>" + 
+					 	"<li><a>合同签订</a></li>";
 			   }else if('warehouse' == toState.name){//仓库管理
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +

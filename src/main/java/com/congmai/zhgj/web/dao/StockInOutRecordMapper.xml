@@ -564,7 +564,7 @@
 	)temp where temp.serialNum=dm.deliverSerial
 	)
      </select>
-     <!-- 获取库存入库记录-->
+     <!-- 获取库存出库记录-->
      <select id="getStockOutRecord"  parameterType="java.lang.String"  resultMap="BaseResultMap" >
      select <include refid="Base_Column_List" />
       from stockInOutRecord  sir

@@ -697,15 +697,18 @@
     from deliveryMateriel dm 
     left join stockInOutRecord s 
     on dm.deliverSerial = s.serialNum and dm.delFlg = '0'
-  </select><!-- 获取出库记录中出库明细   -->     <select id="getDetailByRelationDeliverSerialList"  resultMap="BaseResultMap2" parameterType="java.util.List" >
+  </select>
+  <!-- 获取出库记录中出库明细   -->     
+  <select id="getDetailByRelationDeliverSerialList"  resultMap="BaseResultMap2" parameterType="java.util.List" >
      select
    		dm.serialNum,dm.stockCount,dm.batchNum,s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial, s.inOutNum,s.inOutType,s.stockDate, s.operator, s.contactNum, 
     	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,dm.orderMaterielSerial,o.orderNum,o.buyComId,
     	 dm.warehouseSerial as warehouseSerial,dm.positionSerial as  positionSerial
     from stockInOutRecord s
-    left join takeDelivery td on td.serialNum = s.takeDeliverSerial
-    LEFT JOIN delivery d ON d.takeDeliverSerial = td.serialNum
-    left join deliveryMateriel dm on td.serialNum = dm.deliverSerial
+    <!-- left join takeDelivery td on td.serialNum = s.takeDeliverSerial -->
+   <!--  LEFT JOIN delivery d ON d.takeDeliverSerial = td.serialNum -->
+   left join delivery d on d.serialNum = s.deliverSerial
+    left join deliveryMateriel dm on d.serialNum = dm.deliverSerial
     left join orderInfo o on o.serialNum = d.orderSerial
     where  dm.delFlg=0 and s.delFlg=0  and  s.deliverSerial in 
         <foreach item="idList" collection="list" open="(" close=")" separator=",">

@@ -40,7 +40,7 @@
     SELECT
 	a.serialNum AS id,a.contractNum,b.buyComId AS comId,
 	a.contractType,COUNT(DISTINCT b.serialNum) AS orderAmount,a.signDate,a.signer,a.startDate,a.endDate,
-    a.versionNO,a.status
+    a.versionNO,b.status
 	FROM
 	contract a
 	LEFT JOIN orderInfo b ON a.serialNum=b.contractSerial
@@ -53,7 +53,7 @@
     <select id="queryBuyContractList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ContractVO">
     SELECT
 	a.serialNum AS id,a.contractNum,b.supplyComId AS comId,a.contractType,COUNT(DISTINCT b.serialNum) AS orderAmount,a.signDate,a.signer,a.startDate,a.endDate,
-	a.versionNO,a.status
+	a.versionNO,b.status
 	FROM
 	contract a
 	LEFT JOIN orderInfo b ON a.serialNum=b.contractSerial
@@ -88,26 +88,28 @@
     <!--查询合同对象  -->
     <select id="selectContractById" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ContractVO">
     SELECT 
-    serialNum AS Id,
-	contractNum,
-	contractType,
-	firstParty,
-	secondParty,
-	firstPartySigner,
-	secondPartySigner,
-	otherPartyContractNum,
-	signerAddress,
-	startDate,
-	endDate,
-	signDate,
-	signer,
-	remark,
-	electronicContract,
-	signContract
+    a.serialNum AS Id,
+	a.contractNum,
+	a.contractType,
+	a.firstParty,
+	a.secondParty,
+	a.firstPartySigner,
+	a.secondPartySigner,
+	a.otherPartyContractNum,
+	a.signerAddress,
+	a.startDate,
+	a.endDate,
+	a.signDate,
+	a.signer,
+	a.remark,
+	a.electronicContract,
+	a.signContract,
+	b.serialNum AS orderSerial
 	FROM
-	contract
+	contract a
+	LEFT JOIN orderInfo b ON a.serialNum=b.contractSerial
 	WHERE 
-	serialNum=#{id}
+	a.serialNum=#{id}
     </select>
     
     <!--更新合同  -->
@@ -131,7 +133,7 @@
     electronicContract = #{electronicContract},  
     </if> 
     
-    <if test="electronicContract!=null">  
+    <if test="signContract!=null">  
     signContract = #{signContract},  
     </if> 
 	
@@ -141,6 +143,30 @@
 	updateTime=NOW()
 	WHERE
 	serialNum=#{id}
+    </update>
+    
+    
+    <update id="signSaleContract" parameterType="com.congmai.zhgj.web.model.ContractVO">
+    UPDATE
+	contract
+	SET
+    signContract = #{signContract},  
+	updater=#{updater},
+	updateTime=NOW()
+	WHERE
+	serialNum=#{id}
+    </update>
+    
+    
+    <update id="updateOrderAfterSign" parameterType="java.util.HashMap">
+    UPDATE
+	orderInfo
+	SET
+    status ='2',  
+	updater=#{updater},
+	updateTime=NOW()
+	WHERE
+	serialNum=#{serialNum}
     </update>
     
     

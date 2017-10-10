@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.web.model.ContractVO;
@@ -41,5 +42,9 @@ public interface ContractMapper extends GenericDao<ContractVO, String> {
     //订单中更新合同
     public void updateContract4order(ContractVO record);
     
+    //签订销售合同 
+    public void signSaleContract(ContractVO contractVO);
     
+    //签订销售合同 后更新订单
+    public void updateOrderAfterSign(Map<String,Object> map);
 }
