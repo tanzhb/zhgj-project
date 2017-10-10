@@ -121,11 +121,10 @@
 													<input type="checkbox" class="group-checkable"
 													data-set="#noticeTable .checkboxes" /> <span></span>
 											</label></th>
-											<th>公告范围</th>
 											<th>标题</th>
-											<th>创建人</th>
-											<th>更新人</th>
-											<th>更新时间</th>
+											<th>接收对象</th>
+											<th>发布人</th>
+											<th>发布时间</th>
 										</tr>
 									</thead>
 									<tbody>
