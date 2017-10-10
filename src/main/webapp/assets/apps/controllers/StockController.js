@@ -33,7 +33,7 @@ angular
 										 		}else if($location.path()=="/stockView"){
 										 			debugger;
 										 			getStockDetailInfo($stateParams.stockSerialNum);//查看库位详情页面
-										 			//loadZkTable($stateParams.stockSerialNum);//在库数量
+										 			loadZkTable($stateParams.stockSerialNum,"sample_inm");//在库数量
 										 			loadStockInTable($stateParams.stockSerialNum,"sample_stockinview");//入库记录
 										 			loadStockOutTable($stateParams.stockSerialNum,"sample_stockoutview");//出库记录
 										 		//	loadPdTable();//盘点记录
@@ -365,7 +365,7 @@ angular
 							    })
 							   return tabledaiguan;
 						}
-			var stockInTable,stockOutTable;
+			var stockInTable,stockOutTable,stockZkTable;
 			function loadStockInTable(serialNum,tableid){
 				var a = 0;
 				debugger;
@@ -417,12 +417,12 @@ angular
 			  		                    "aoColumns": [
 			  		                                   { mData: 'stockInOutRecord.inOutNum' },
 	  		                                           { mData: 'stockInOutRecord.inOutType' },
-	  		                                          { mData: 'stockInOutRecord.order.orderNum' },
+	  		                                          { mData: 'stockInOutRecord.order' },
 	  		                                          { mData: 'batchNum' },
 	  		                                          { mData: 'stockInOutRecord.stockDate' },
 	 	  		                                      { mData: 'stockCount' },
-	 	  		                                      { mData: 'warehouse.warehouseName' },
-		  		                                      { mData: 'position.positionName' },
+	 	  		                                      { mData: 'warehouse' },
+		  		                                      { mData: 'position' },
 		  		                                       { mData: 'remark' }//备注
                                                      
 			  		                            ],
@@ -432,6 +432,30 @@ angular
 													type, row, meta) {
 		 	    								if(data==''||data==null){
 		 	    									return "";
+		 	    								}else{
+		 	    									return data.orderNum;
+		 	    								}
+												
+											}
+										},{
+											'targets' : 7,
+											'render' : function(data,
+													type, row, meta) {
+		 	    								if(data==''||data==null){
+		 	    									return "";
+		 	    								}else{
+		 	    									return data.positionName;
+		 	    								}
+												
+											}
+										},{
+											'targets' : 6,
+											'render' : function(data,
+													type, row, meta) {
+		 	    								if(data==''||data==null){
+		 	    									return "";
+		 	    								}else{
+		 	    									return data.warehouseName;
 		 	    								}
 												
 											}
@@ -514,12 +538,12 @@ angular
 			  		                    "aoColumns": [
 			  		                                    { mData: 'stockInOutRecord.inOutNum' },
                                                         { mData: 'stockInOutRecord.inOutType' },
-                                                        { mData: 'stockInOutRecord.order.orderNum' },
-                                                        { mData: 'batchNum' },
+                                                        { mData: 'stockInOutRecord.inOutNum' },
+                                                        { mData: 'stockInOutRecord.inOutNum' },
                                                         { mData: 'stockInOutRecord.stockDate' },
                                                         { mData: 'stockCount' },
-			  		                                  { mData: 'warehouse.warehouseName' },
-			  		                                  { mData: 'position.positionName' },
+			  		                                  { mData: 'warehouse' },
+			  		                                  { mData: 'position' },
 			  		                                  { mData: 'remark' }//备注
 			  		                            ],
 			  		                   'aoColumnDefs' : [{
@@ -528,6 +552,30 @@ angular
 													type, row, meta) {
 		 	    								if(data==''||data==null){
 		 	    									return "";
+		 	    								}else{
+		 	    									return data.orderNum;
+		 	    								}
+												
+											}
+										},{
+											'targets' : 7,
+											'render' : function(data,
+													type, row, meta) {
+		 	    								if(data==''||data==null){
+		 	    									return "";
+		 	    								}else{
+		 	    									return data.positionName;
+		 	    								}
+												
+											}
+										},{
+											'targets' : 6,
+											'render' : function(data,
+													type, row, meta) {
+		 	    								if(data==''||data==null){
+		 	    									return "";
+		 	    								}else{
+		 	    									return data.warehouseName;
 		 	    								}
 												
 											}
@@ -536,6 +584,110 @@ angular
 								})
 				// 构建datatables结束***************************************
 							   return stockOutTable;
+								}
+			
+			function loadZkTable(serialNum,tableid){
+				var a = 0;
+				debugger;
+				 if(stockZkTable!=undefined){
+					 stockZkTable.destroy();
+		 	    	 }
+				 tableAjaxUrl="rest/stock/stockInList?serialNum="+serialNum
+				
+			
+				 stockZkTable = $("#"+tableid)
+						.DataTable(
+								{
+									language : {
+										aria : {
+											sortAscending : ": activate to sort column ascending",
+											sortDescending : ": activate to sort column descending"
+										},
+										emptyTable : "空表",
+										info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+										infoEmpty : "没有数据",
+										infoFiltered : "(从 _MAX_ 条数据中检索)",
+										lengthMenu : "每页显示 _MENU_ 条数据",
+										search : "查询:",
+										zeroRecords : "抱歉， 没有找到！",
+										paginate : {
+											"sFirst" : "首页",
+											"sPrevious" : "前一页",
+											"sNext" : "后一页",
+											"sLast" : "尾页"
+										}
+									},
+									/*fixedHeader : {// 固定表头、表底
+										header : !0,
+										footer : !0,
+										headerOffset : a
+									},*/
+									// select: true,行多选
+									order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+									bRetrieve : true,
+									// searching: true,//是否过滤检索
+									// ordering: true,//是否排序
+									lengthMenu : [
+											[ 5, 10, 15, 30, -1 ],
+											[ 5, 10, 15, 30, "All" ] ],
+									pageLength : 10,// 每页显示数量
+									processing : true,// loading等待框
+									// serverSide: true,
+								     ajax :tableAjaxUrl,
+			  		                    "aoColumns": [
+                                                        
+			  		                                   { mData: 'stockInOutRecord.inOutNum' },
+	  		                                           { mData: 'stockInOutRecord.inOutType' },
+	  		                                          { mData: 'stockInOutRecord.inOutNum' },
+	  		                                          { mData: 'stockInOutRecord.shipperOrReceiverName' },
+	  		                                          { mData: 'stockInOutRecord.stockDate' },
+	 	  		                                      { mData: 'warehouse' },
+	 	  		                                      { mData: 'stockCount' },
+		  		                                      { mData: 'position' },
+		  		                                       { mData: 'remark' },//备注
+		  		                                     { mData: 'stockInOutRecord.stockDate' },
+                                                     { mData: 'remark' }
+                                                     
+			  		                            ],
+			  		                   'aoColumnDefs' : [ {
+											'targets' : 7,
+											'render' : function(data,
+													type, row, meta) {
+		 	    								if(data==''||data==null){
+		 	    									return "";
+		 	    								}else{
+		 	    									return data.positionName;
+		 	    								}
+												
+											}
+										},{
+											'targets' : 5,
+											'render' : function(data,
+													type, row, meta) {
+		 	    								if(data==''||data==null){
+		 	    									return "";
+		 	    								}else{
+		 	    									return data.warehouseName;
+		 	    								}
+												
+											}
+										},{
+											'targets' : 9,
+											'render' : function(data,
+													type, row, meta) {
+		 	    								if(data==''||data==null){
+		 	    									return "";
+		 	    								}else{
+		 	    									debugger;
+		 	    									return daysBetween(timeStamp2ShortString(Date.parse(new Date())),data);
+		 	    								}
+												
+											}
+										}  ],
+
+								})
+				// 构建datatables结束***************************************
+							   return stockZkTable;
 								}
 			 $scope.showStock=function(judgeString){
 				 $state.go('stock',{stockSerialNum:judgeString}); //切换tab
