@@ -25,8 +25,14 @@ angular.module('MetronicApp').service('noticeService',['$http','$q',function($ht
 	 */
 	this.saveNotice = function (notice){
 		var deferred = $q.defer();
+		var postCfg = {
+			    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+			    transformRequest: function (data) {
+			        return $.param(data);
+			    }
+			};
 		$http.post("rest/notice/saveNotice", 
-			notice//传整个表单数据  
+				notice,postCfg//传整个表单数据  
 		).then(function success(result) {
 			deferred.resolve(result);//请求成功
 		}, function error(err) {
@@ -60,8 +66,14 @@ angular.module('MetronicApp').service('noticeService',['$http','$q',function($ht
 		var notice = {};
 		notice.pageSize = pageSize;
 		notice.pageIndex = pageIndex;
+		var postCfg = {
+			    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+			    transformRequest: function (data) {
+			        return $.param(data);
+			    }
+			};
 		$http.post("rest/notice/myNoticeList",   
-				notice
+				notice,postCfg
     	).then(function success(result) {
             deferred.resolve(result);//请求成功
         }, function error(err) {
@@ -101,6 +113,46 @@ angular.module('MetronicApp').service('noticeService',['$http','$q',function($ht
 	}
 	
 
+	/**
+	 * 获取列表数据
+	 */
+	this.applyNotice = function(notice){
+		var deferred = $q.defer();
+		var postCfg = {
+			    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+			    transformRequest: function (data) {
+			        return $.param(data);
+			    }
+			};
+		$http.post("rest/notice/applyNotice",   
+				notice,postCfg
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
+	
+	
+	/**
+	 * 获取列表数据
+	 */
+	this.getAuditInfos = function(id){
+		var deferred = $q.defer();
+		$http.post(ctx+"rest/notice/toApproval/" + id
+		).success(function (data) {  
+        	
+        	// 如果连接成功，延时返回给调用者  
+            deferred.resolve(data);  
+        })  
+            .error(function () {  
+                deferred.reject('连接服务器出错！');  
+            })  
+        return deferred.promise;  
+	}
+	
+	
 
 
 }]); 

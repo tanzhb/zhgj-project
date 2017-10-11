@@ -4,12 +4,19 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class Notice {
-    private String serialNum;
+public class Notice extends BaseVO{
+    /**
+	 * @Field @serialVersionUID : TODO(这里用一句话描述这个类的作用)
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private String serialNum;
+	
+	private String noticeNum;
 
     private String noticeType;
 
-    private String title;
+    private String noticeTitle;
 
     private String comId;
 
@@ -29,13 +36,22 @@ public class Notice {
     
     private int pageSize;
     
-    private String status;
-    
     private String readFlg;
     
-    private String userId;
+    private String user_id;
     
     private String relaseDate;
+    
+    private String isPublish;
+    
+    private String publisher;
+    
+    private Date publishTime;
+    
+    
+    public static final String COMPLETE = "1"; //申请通过
+
+	public static final String CANCEL = "2";  //申请取消
 
     public String getSerialNum() {
         return serialNum;
@@ -51,14 +67,6 @@ public class Notice {
 
     public void setNoticeType(String noticeType) {
         this.noticeType = noticeType == null ? null : noticeType.trim();
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title == null ? null : title.trim();
     }
 
     public String getComId() {
@@ -93,7 +101,7 @@ public class Notice {
         this.updater = updater == null ? null : updater.trim();
     }
 
-    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd HH:mm")
+    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd HH:mm:ss")
     public Date getUpdateTime() {
         return updateTime;
     }
@@ -134,28 +142,12 @@ public class Notice {
 		this.pageSize = pageSize;
 	}
 
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
 	public String getReadFlg() {
 		return readFlg;
 	}
 
 	public void setReadFlg(String readFlg) {
 		this.readFlg = readFlg;
-	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
 	}
 
 	public String getRelaseDate() {
@@ -165,4 +157,54 @@ public class Notice {
 	public void setRelaseDate(String relaseDate) {
 		this.relaseDate = relaseDate;
 	}
+	
+
+    public String getIsPublish() {
+		return isPublish;
+	}
+
+	public void setIsPublish(String isPublish) {
+		this.isPublish = isPublish;
+	}
+
+	public String getUser_id() {
+		return user_id;
+	}
+
+	public void setUser_id(String user_id) {
+		this.user_id = user_id;
+	}
+
+	public String getPublisher() {
+		return publisher;
+	}
+
+	public void setPublisher(String publisher) {
+		this.publisher = publisher;
+	}
+
+	public Date getPublishTime() {
+		return publishTime;
+	}
+
+	public void setPublishTime(Date publishTime) {
+		this.publishTime = publishTime;
+	}
+
+	public String getNoticeNum() {
+		return noticeNum;
+	}
+
+	public void setNoticeNum(String noticeNum) {
+		this.noticeNum = noticeNum;
+	}
+
+	public String getNoticeTitle() {
+		return noticeTitle;
+	}
+
+	public void setNoticeTitle(String noticeTitle) {
+		this.noticeTitle = noticeTitle;
+	}
+
 }

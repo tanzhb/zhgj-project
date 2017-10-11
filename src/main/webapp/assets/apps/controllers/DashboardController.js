@@ -37,6 +37,8 @@ dashModule.controller('DashboardController', function($rootScope, $scope, $state
 					workflowName = "销售订单流程";
 				}else if(workflowType == 'takeDelivery'){
 					workflowName = "收货流程";
+				}else if(workflowType == 'notice'){
+					workflowName = "公告流程";
 				}else{
 					workflowName = "未命名";
 				}
@@ -78,6 +80,8 @@ dashModule.controller('DashboardController', function($rootScope, $scope, $state
 					workflowName = "销售订单流程";
 				}else if(workflowType == 'takeDelivery'){
 					workflowName = "收货流程";
+				}else if(workflowType == 'notice'){
+					workflowName = "公告流程";
 				}else{
 					workflowName = "未命名";
 				}
