@@ -1035,7 +1035,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
                      pageLength: 5,// 每页显示数量
                      processing: true,// loading等待框
 // serverSide: true,
-                     ajax: "rest/materiel/findMaterielList?isLatestVersion=1",// 加载数据中
+                     ajax: "rest/materiel/findMaterielList?isLatestVersion=1&type=sale",// 加载数据中
                      "aoColumns": [
                                    { mData: 'serialNum' },
                                    { mData: 'materielNum' },
@@ -2733,12 +2733,19 @@ var e = $("#form_clauseSettlement"),
 			       	return Number($scope.arithmeticAmount(scope))+Number($scope.arithmeticRateAmount(scope));
 		       };
 		       
-		       
-		       $scope._arithmeticRateUnit  = function(scope) {//计算含税销售单价
-			       	if(scope._orderMateriel.orderUnitPrice&&$scope.saleOrder.rate){
-			       		return (scope._orderMateriel.orderUnitPrice*($scope.saleOrder.rate/100+1)).toFixed(4);
+		       $scope._arithmeticRateUnit  = function(_orderMateriel) {//计算含税销售单价
+			       	if(_orderMateriel.orderUnitPrice&&$scope.saleOrder.rate){
+			       		_orderMateriel.orderRateUnit  =  (_orderMateriel.orderUnitPrice*($scope.saleOrder.rate/100+1)).toFixed(4);
 			       	}else{
-			       		return 0;
+			       		_orderMateriel.orderRateUnit  =   0;
+			       	}
+		       };
+		       
+		       $scope._arithmeticUnitPrice  = function(_orderMateriel) {//计算不含税销售单价
+			       	if(_orderMateriel.orderRateUnit&&$scope.saleOrder.rate){
+			       		_orderMateriel.orderUnitPrice  =  (_orderMateriel.orderRateUnit/($scope.saleOrder.rate/100+1)).toFixed(4);
+			       	}else{
+			       		_orderMateriel.orderUnitPrice  =   0;
 			       	}
 		       };
 		       

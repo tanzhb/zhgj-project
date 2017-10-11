@@ -8,6 +8,7 @@
     <result column="supplyMaterielSerial" property="supplyMaterielSerial" jdbcType="VARCHAR" />
     <result column="amount" property="amount" jdbcType="VARCHAR" />
     <result column="orderUnitPrice" property="orderUnitPrice" jdbcType="VARCHAR" />
+    <result column="orderRateUnit" property="orderRateUnit" jdbcType="VARCHAR" />
     <result column="money" property="money" jdbcType="VARCHAR" />
     <result column="deliveryDate" property="deliveryDate" jdbcType="DATE" />
     <result column="lastDeliveryDate" property="lastDeliveryDate" jdbcType="DATE" />
@@ -83,7 +84,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    serialNum, orderSerial, materielSerial, supplyMaterielSerial, amount, orderUnitPrice, 
+    serialNum, orderSerial, materielSerial, supplyMaterielSerial, amount, orderUnitPrice, orderRateUnit,
     money, deliveryDate, lastDeliveryDate, deliveryAddress, customsRate, discountRate, serviceRate, redTicket,
     delFlg, creator, createTime, updater, updateTime
   </sql>
@@ -119,13 +120,13 @@
   </delete>
   <insert id="insert" parameterType="com.congmai.zhgj.web.model.OrderMateriel" >
     insert into orderMateriel (serialNum, orderSerial, materielSerial, 
-      supplyMaterielSerial, amount, orderUnitPrice, 
+      supplyMaterielSerial, amount, orderUnitPrice, orderRateUnit,
       money, deliveryDate, lastDeliveryDate, 
       deliveryAddress, customsRate, discountRate, serviceRate, redTicket,
       creator, createTime, 
       updater, updateTime)
     values (#{serialNum,jdbcType=VARCHAR}, #{orderSerial,jdbcType=VARCHAR}, #{materielSerial,jdbcType=VARCHAR}, 
-      #{supplyMaterielSerial,jdbcType=VARCHAR}, #{amount,jdbcType=VARCHAR}, #{orderUnitPrice,jdbcType=VARCHAR}, 
+      #{supplyMaterielSerial,jdbcType=VARCHAR}, #{amount,jdbcType=VARCHAR}, #{orderUnitPrice,jdbcType=VARCHAR}, #{orderRateUnit,jdbcType=VARCHAR},
       #{money,jdbcType=VARCHAR}, #{deliveryDate,jdbcType=DATE}, #{lastDeliveryDate,jdbcType=DATE}, 
       #{deliveryAddress,jdbcType=VARCHAR}, #{customsRate,jdbcType=VARCHAR}, #{discountRate,jdbcType=VARCHAR}, #{serviceRate,jdbcType=VARCHAR},#{redTicket,jdbcType=VARCHAR}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
@@ -151,6 +152,9 @@
       </if>
       <if test="orderUnitPrice != null" >
         orderUnitPrice,
+      </if>
+      <if test="orderRateUnit != null" >
+        orderRateUnit,
       </if>
       <if test="money != null" >
         money,
@@ -210,6 +214,9 @@
       </if>
       <if test="orderUnitPrice != null" >
         #{orderUnitPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="orderRateUnit != null" >
+        #{orderRateUnit,jdbcType=VARCHAR},
       </if>
       <if test="money != null" >
         #{money,jdbcType=VARCHAR},
@@ -279,6 +286,9 @@
       <if test="record.orderUnitPrice != null" >
         orderUnitPrice = #{record.orderUnitPrice,jdbcType=VARCHAR},
       </if>
+      <if test="record.orderRateUnit != null" >
+        orderRateUnit = #{record.orderRateUnit,jdbcType=VARCHAR},
+      </if>
       <if test="record.money != null" >
         money = #{record.money,jdbcType=VARCHAR},
       </if>
@@ -331,6 +341,7 @@
       supplyMaterielSerial = #{record.supplyMaterielSerial,jdbcType=VARCHAR},
       amount = #{record.amount,jdbcType=VARCHAR},
       orderUnitPrice = #{record.orderUnitPrice,jdbcType=VARCHAR},
+      orderRateUnit = #{record.orderRateUnit,jdbcType=VARCHAR},
       money = #{record.money,jdbcType=VARCHAR},
       deliveryDate = #{record.deliveryDate,jdbcType=DATE},
       lastDeliveryDate = #{record.lastDeliveryDate,jdbcType=DATE},
@@ -365,6 +376,9 @@
       </if>
       <if test="orderUnitPrice != null" >
         orderUnitPrice = #{orderUnitPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="orderRateUnit != null" >
+        orderRateUnit = #{orderRateUnit,jdbcType=VARCHAR},
       </if>
       <if test="money != null" >
         money = #{money,jdbcType=VARCHAR},
@@ -415,6 +429,7 @@
       supplyMaterielSerial = #{supplyMaterielSerial,jdbcType=VARCHAR},
       amount = #{amount,jdbcType=VARCHAR},
       orderUnitPrice = #{orderUnitPrice,jdbcType=VARCHAR},
+      orderRateUnit = #{orderRateUnit,jdbcType=VARCHAR},
       money = #{money,jdbcType=VARCHAR},
       deliveryDate = #{deliveryDate,jdbcType=DATE},
       lastDeliveryDate = #{lastDeliveryDate,jdbcType=DATE},

@@ -185,7 +185,12 @@ public class OrderController {
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
 		orderInfo.setUpdater(currenLoginName);
 		orderInfo.setUpdateTime(new Date());
-		orderService.update(orderInfo);
+		if(StringUtils.isNotEmpty(orderInfo.getStatus())){
+			orderService.updateStatus(orderInfo);
+		}else{
+			orderService.update(orderInfo);
+		}
+		
 	}
     
 	private void insetOrder(OrderInfo orderInfo) {
@@ -228,7 +233,7 @@ public class OrderController {
     	String flag = "0"; //默认失败
     	OrderInfo orderInfo = json2Order(params);
     	orderInfo.setUpdateTime(new Date());
-    	orderService.update(orderInfo);//更新备注
+    	orderService.updateStatus(orderInfo);//更新备注
     	
 		//启动订单审批测试流程-start
 		User user = UserUtil.getUserFromSession();
@@ -284,7 +289,7 @@ public class OrderController {
     	String flag = "0"; //默认失败
     	OrderInfo orderInfo = json2Order(params);
     	orderInfo.setUpdateTime(new Date());
-    	orderService.update(orderInfo);//更新备注
+    	orderService.updateStatus(orderInfo);//更新备注
     	
 		//启动订单审批测试流程-start
 		User user = UserUtil.getUserFromSession();
@@ -412,7 +417,7 @@ public class OrderController {
     			OrderInfo oi = new OrderInfo();
     			oi.setSerialNum(order.getSerialNum());
     			oi.setStatus("1");
-    			this.orderService.update(oi);
+    			this.orderService.updateStatus(oi);
     		}
     		
     		result = "任务办理完成！";
@@ -579,7 +584,7 @@ public class OrderController {
 			Subject currentUser = SecurityUtils.getSubject();
 			String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
 	    	m.setUpdater(currenLoginName);
-			orderService.update(m);
+			orderService.updateStatus(m);
 		}
 
 		return new ResponseEntity<Void>(HttpStatus.OK);

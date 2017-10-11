@@ -914,7 +914,8 @@ margin-right: 20px;
                                      		<p class="form-control-static" > {{_orderMateriel.materiel.unitPrice}} </p>
 		                          </td>
 		                          <td>  
-		                          		<input type="text"  name="orderUnitPrice{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].orderUnitPrice"  ng-keyup="clearNoNumPoint(orderMateriel[$index],'orderUnitPrice')" >
+		                          		<input type="text"  name="orderUnitPrice{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].orderUnitPrice"  
+		                          		ng-keyup="" ng-change="clearNoNumPoint(orderMateriel[$index],'orderUnitPrice');_arithmeticRateUnit(_orderMateriel)">
                                      		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.orderUnitPrice}} </p>
 		                          </td>
 		                          <td>  
@@ -924,7 +925,9 @@ margin-right: 20px;
                                      		<p class="form-control-static" > {{buyOrder.rate}}% </p>
 		                          </td>
 		                          <td>  
-                                     		<p class="form-control-static"> {{_arithmeticRateUnit(this)}} </p>
+		                          		<input type="text"  name="orderRateUnit{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].orderRateUnit" 
+		                          		 ng-keyup="" ng-change="clearNoNumPoint(orderMateriel[$index],'orderRateUnit');_arithmeticUnitPrice(_orderMateriel)">
+                                     		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.orderRateUnit}} </p>
 		                          </td>
 		                          <td>  
                                      		<p class="form-control-static" > {{_arithmeticAmount(this)}} </p>

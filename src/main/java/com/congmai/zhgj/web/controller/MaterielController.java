@@ -277,16 +277,21 @@ public class MaterielController {
 		materielService.insert(materiel);
 	}
 
+	//销售订单
+	public static final String SALEORDER = "sale";
+	//采购订单
+	public static final String BUYORDER = "buy";
     /**
      * 
      * @Description 查询物料列表//全部查询，或根据父节点查询
      * @param parent(若有值，则查询它及上级物料是它的物料)
      * @param isLatestVersion(若有值为1，则查询所以已发布的正式物料)
+     * @param type
      * @return
      */
     @RequestMapping("/findMaterielList")
     @ResponseBody
-    public ResponseEntity<Map> findMaterielList(String parent,String isLatestVersion) {
+    public ResponseEntity<Map> findMaterielList(String parent,String isLatestVersion,String type) {
     	//MaterielExample m =new MaterielExample();
     	MaterielSelectExample m =new MaterielSelectExample();
     	List<Materiel> materielList = new ArrayList<Materiel>();
@@ -341,6 +346,15 @@ public class MaterielController {
         	findChildList(parent,materielList);
     	}
     	//封装datatables数据返回到前台
+    	
+    	if(SALEORDER.equals(type)&&materielList!=null&&materielList.size()>1){
+    		for(int i=0;i<materielList.size();i++){
+    			if(materielList.get(i).getSupplyMateriels()==null||materielList.get(i).getSupplyMateriels().size()<1){
+    				materielList.remove(i);
+    				i--;
+    			}
+    		}
+    	}
 		Map pageMap = new HashMap();
 		pageMap.put("draw", 1);
 		pageMap.put("recordsTotal", materielList==null?0:materielList.size());
