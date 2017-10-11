@@ -49,6 +49,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.alibaba.druid.util.StringUtils;
+import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
@@ -67,6 +68,7 @@ import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.PaymentRecord;
+import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
@@ -75,6 +77,7 @@ import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
+import com.congmai.zhgj.web.service.StockInOutCheckService;
 import com.congmai.zhgj.web.service.UserCompanyService;
 import com.congmai.zhgj.web.service.WarehouseService;
 
@@ -136,6 +139,10 @@ public class DeliveryController {
 	
 	@Autowired
 	protected TaskService taskService;
+	
+	
+	@Resource
+	private StockInOutCheckService  stockInOutCheckService;
 
 	 /**
      * @Description (查询仓库列表)
@@ -221,6 +228,22 @@ public class DeliveryController {
 		deliveryService.updateOrderWhenDeliveryComlete(map);
 		
 		deliveryService.goDelivery(map);
+		
+		StockInOutCheck stockInOutCheck=new StockInOutCheck();
+		stockInOutCheck.setSerialNum(ApplicationUtils.random32UUID());
+		stockInOutCheck.setDeliverSerial(serialNum);
+		stockInOutCheck.setTakeDeliverSerial(delivery.getTakeDeliverSerialNum());
+		stockInOutCheck.setChecker(currenLoginName);
+		stockInOutCheck.setCreator(currenLoginName);
+		stockInOutCheck.setCreateTime(new Date());
+		stockInOutCheck.setUpdater(currenLoginName);
+		stockInOutCheck.setUpdateTime(new Date());
+		stockInOutCheck.setStatus("0");//待检验
+		stockInOutCheck.setCheckDate(new Date());
+		stockInOutCheck.setDelFlg("0");
+		stockInOutCheckService.insert(stockInOutCheck);
+		
+		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("/delivery").buildAndExpand(serialNum).toUri());
 
@@ -552,8 +575,10 @@ public class DeliveryController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String suppluComId=delivery.getSupplyComId();
 		Company company=deliveryService.selectCompanyInfo(suppluComId);
-		delivery.setSupplyComId(company.getComName());
-		delivery.setShipper(company.getComName());
+		if(company!=null){
+			delivery.setSupplyComId(company.getComName());
+			delivery.setShipper(company.getComName());
+		}
 		map.put("delivery", delivery);
 
 		List<DeliveryMaterielVO> deliveryMateriels=null;

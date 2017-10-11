@@ -2,13 +2,13 @@
  * 
  */
 
-angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scope','$state','$http','noticeService','$location','$compile','$stateParams',
-                                                             function($rootScope,$scope,$state,$http,noticeService,$location,$compile,$stateParams) {
+angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scope','$state','$http','noticeService','$location','$compile','$stateParams','$sce',
+                                                             function($rootScope,$scope,$state,$http,noticeService,$location,$compile,$stateParams,$sce) {
 	 $scope.$on('$viewContentLoaded', function() {   
 	    	// initialize core components
 		    handle = new pageHandle();
 	    	App.initAjax();
-	    	if($location.path()=="/noticeAdd"||$location.path()=="/noticeView"){
+	    	if($location.path()=="/noticeAdd"){
 	    		if(!isNull($stateParams.serialNum)){
 	    			noticeInfo($stateParams.serialNum);
 	    		}
@@ -22,6 +22,10 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 			                }
 		                }  
 		            });
+	    		}
+	    	}else if($location.path()=="/noticeView"){
+	    		if(!isNull($stateParams.serialNum)){
+	    			noticeInfo($stateParams.serialNum);
 	    		}
 	    	}else{
 	    		var type = handle.getCookie("d_type");
@@ -38,6 +42,12 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 		 				$("#portlet_tab2_1").addClass("active");
 		 				$("#portlet_tab2_2").removeClass("active");
 		 				createTable(5,1,true,$scope.params);
+		 		}else{
+		 				$('#notice_tab a:last').parent().addClass('active');
+		 				$('#notice_tab a:first').parent().removeClass('active');
+		 				$("#portlet_tab2_2").addClass("active");
+		 				$("#portlet_tab2_1").removeClass("active");
+		 				$scope.notices();
 		 		}	
 	    	}
 	    	
@@ -316,7 +326,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
         				$scope.param = {};
         				$scope.param.title = data.data.title;
         				$scope.param.serialNum = data.data.serialNum;
-        				$scope.param.context = data.data.context;
+        				$scope.param.context = $sce.trustAsHtml(data.data.context);
         				$scope.param.updater = data.data.updater;
         				$scope.param.relaseDate = data.data.relaseDate;
         				
@@ -466,7 +476,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 		                        footer: !0,
 		                        headerOffset: a
 		                    },*/
-		                    order: [[5, "desc"]],//默认排序列及排序方式
+		                    order: [[4, "desc"]],//默认排序列及排序方式
 		                    bRetrieve : true,
 		  					'scrollX': false,
 		  					  buttons: [
@@ -493,9 +503,9 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 		                    "aoColumns": [
 		                                 
 		                                  { mData: 'serialNum' },
-		                                  { mData: 'noticeType' },
 		                                  { mData: 'title' },
-		                                  { mData: 'creator' },
+		                                  { mData: 'noticeType' },
+		                                  /*{ mData: 'creator' },*/
 		                                  { mData: 'updater' },
 		                                  { mData: 'updateTime' }
 		                            ],
@@ -522,7 +532,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 								 $compile(td)($scope);
 						       }
 						}, {
-   							'targets' : 1,
+   							'targets' : 2,
 							'searchable' : false,
 							'orderable' : false,
 							'render' : function(data,
@@ -549,7 +559,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 	  	  							return "";
 							}
 						}, {
-   							'targets' : 2,
+   							'targets' : 1,
 							'searchable' : false,
 							'orderable' : false,
 							'render' : function(data,

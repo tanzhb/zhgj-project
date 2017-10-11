@@ -92,6 +92,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
             		dateSelectSetting();//日期选择限制
             		//加载客户
                 	initCustomers();
+                	initWarehouse();
             	}
             	
             	$scope.noShow = true;
@@ -164,15 +165,21 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
         	}
     });
     
+    $scope.changeFlag = true
     $scope.repeatDone = function(scope){
+    	$scope.changeFlag = false;
     	var date1= scope._orderMateriel.deliveryDate;
     	var date2= scope._orderMateriel.lastDeliveryDate;
+    	/*var date3= scope.buyOrder.orderDate;*/
     	$scope.datepickerInit();
     	if(scope._orderMateriel){
     		scope._orderMateriel.deliveryDate = date1;
     		scope._orderMateriel.lastDeliveryDate = date2;
     	}
+    	$scope.changeFlag = true;
+    	/*scope.buyOrder.orderDate = date3;*/
    };
+   
    
    $scope.renderDone = function(){
 	   	var date3= $scope.saleOrder.orderDate;
@@ -206,10 +213,11 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 
     		orderService.save($scope.saleOrder).then(
        		     function(data){
-       		    	$scope.saleOrder.serialNum = data.serialNum;
+       		    	$scope.saleOrder = data;
        		    	$scope.contract.orderSerial = data.serialNum;
        		    	$scope.contract.contractNum = $scope.saleOrder.orderNum;
 	   	    		$scope.contract.comId = $scope.saleOrder.buyComId;
+	   	    		$scope.contract.signDate = $scope.saleOrder.orderDate;
 	   	    		orderService.saveContract($scope.contract).then(
 	   	       		     function(data){
 	   	       		    	toastr.success('数据保存成功！');
@@ -379,7 +387,13 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
                         			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
 										return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">审核中</span>';
 									}else if(row.processBase.status=="APPROVAL_SUCCESS"){
-										return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:green">已发布</span>';
+										if(row.status==1){
+											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">待签合同</span>';
+										}else if(row.status==2){
+											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已确认</span>';
+										}else{
+											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已确认</span>';
+										}
 									}else if(row.processBase.status=="APPROVAL_FAILED"){
 										return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:red">未通过</span>';
 									}else{
@@ -961,6 +975,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
           		    	$scope.copyMateriels = angular.copy($scope.orderMateriel);
           		    	//加载客户
                     	initCustomers();
+                    	initWarehouse();
                     	
                     	$("#serialNum").val(serialNum);//赋值给隐藏input，通过和不通过时调用
     					$("#taskId").val(taskId);//赋值给隐藏input，通过和不通过时调用
@@ -1507,6 +1522,35 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 	        	}
 	        };  
 	        
+	        
+	        //选择第一个，设置后面的数据
+			$scope.setAllDeliveryAddress = function(orderMateriel){
+				 for(var i=1;i<$scope.orderMateriel.length;i++){
+					 if($scope["orderMaterielInput"+i] != true/*&&isNull($scope.orderMateriel[i].deliveryAddress)*/){
+						 $scope.orderMateriel[i].deliveryAddress = orderMateriel.deliveryAddress;
+					 }
+				 }
+			}
+			
+			$scope.setAllDeliveryDate = function(orderMateriel,index){
+				if(index==0&&$scope.changeFlag){
+					for(var i=1;i<$scope.orderMateriel.length;i++){
+						 if($scope["orderMaterielInput"+i] != true/*&&isNull($scope.orderMateriel[i].deliveryAddress)*/){
+							 $scope.orderMateriel[i].deliveryDate = orderMateriel.deliveryDate;
+						 }
+					 }
+				}
+			}
+			
+			$scope.setAllLastDeliveryDate = function(orderMateriel,index){
+				if(index==0&&$scope.changeFlag){ 
+					for(var i=1;i<$scope.orderMateriel.length;i++){
+						 if($scope["orderMaterielInput"+i] != true/*&&isNull($scope.orderMateriel[i].deliveryAddress)*/){
+							 $scope.orderMateriel[i].lastDeliveryDate = orderMateriel.lastDeliveryDate;
+						 }
+					 }
+				}
+			}
 
 
 			function indexOf(arr, item) {
@@ -2790,6 +2834,18 @@ var e = $("#form_clauseSettlement"),
 		        	},function(data){
 		        		//调用承诺接口reject();
 		        	});
+			}
+			
+			/**
+			 * 加载仓库数据
+			 */
+			var initWarehouse = function(){
+			var promise = orderService.initWarehouse();
+			promise.then(function(data){
+				$scope.warehouses = data.data;
+			},function(data){
+				//调用承诺接口reject();
+			});
 			}
     	 
 			//********审批流程start****************//

@@ -27,7 +27,7 @@
 								<div class="col-md-1">
 								</div>
 								<div class="col-md-10">
-										<h1>{{param.title}}</h1>
+										<h2>{{param.title}}</h2>
 								</div>
 								<div class="col-md-1">
 										<button  class="btn defualt  btn-sm btn-circle"

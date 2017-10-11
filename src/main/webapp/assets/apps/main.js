@@ -41,7 +41,7 @@ MetronicApp.factory('settings', [ '$rootScope', function($rootScope) {
 		globalPath : 'assets/global',
 		layoutPath : 'assets/layouts/layout2',
 	};
-
+	
 	$rootScope.settings = settings;
 	$rootScope.basePath = getRootPath();
 
@@ -49,14 +49,43 @@ MetronicApp.factory('settings', [ '$rootScope', function($rootScope) {
 } ]);
 
 /* Setup App Main Controller */
-MetronicApp.controller('AppController', [ '$scope', '$rootScope',
-		function($scope, $rootScope) {
+MetronicApp.controller('AppController', [ '$scope', '$rootScope','$compile',
+		function($scope, $rootScope, $compile) {
 			$scope.$on('$viewContentLoaded', function() {
 				// App.initComponents(); // init core components
 				// Layout.init(); // Init entire layout(header, footer, sidebar,
 				// etc) on page load if the partials included in server side
 				// instead of loading with ng-include directive
+				WebSocketInit();
 			});
+			
+			var webSocket;
+			function WebSocketInit(){
+				if(!webSocket){
+					if ('WebSocket' in window) {
+						webSocket = 
+							new WebSocket('ws://'+getWSPath_web()+'rest/webSocketServer');
+					} else if ('MozWebSocket' in window) {
+						webSocket = 
+							new WebSocket('ws://'+getWSPath_web()+'rest/webSocketServer');
+					}
+				}
+				webSocket.onerror = function(event) {
+					console.log('webSocket is error!');
+				};
+				webSocket.onopen = function(event) {
+					console.log('webSocket is open!');
+					//webSocket.send('Hello Server!');
+				};
+				webSocket.onmessage = function(event) {
+					var obj = eval('(' + event.data+ ')'); 
+					
+					//showToastr('toast-bottom-right','success',obj.context);
+					var html = $compile('<div>' + obj.context + '</div>')($scope);
+					toastr8(obj.messageType,obj.context);
+					$("#messageDiv").html(html);
+				};
+			}
 		} ]);
 
 /*******************************************************************************
@@ -661,6 +690,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/materielService.js',
 	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/CommonService.js',
 				'assets/apps/controllers/saleOrderController.js'
                       ]
                     });
@@ -915,14 +945,30 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	                        name: 'MetronicApp',
 	                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
 	                        files: [                             
-	                    'assets/global/plugins/datatables/datatables.min.css',
+	                   'assets/global/plugins/datatables/datatables.min.css',
 						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+						
+						
+						'assets/global/scripts/datatable.js',
 						'assets/global/plugins/datatables/datatables.all.min.js',
 						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
-						'assets/apps/scripts/angular-file-upload-shim.min.js',
-				        'assets/apps/scripts/angular-file-upload.min.js',
-				        'assets/apps/service/ContractService.js',
+						'assets/apps/scripts/pageHandle.js',
+						'assets/apps/service/ContractService.js',
 	                    'assets/apps/controllers/ContractController.js',
+					    'assets/apps/scripts/angular-file-upload.min.js',
+						'assets/apps/controllers/app.js',
+						'assets/apps/controllers/uploadPhoto.js',
+		
+		
+						//流程申请
+						'assets/global/css/dialog.css',
+						'assets/global/css/easyui.css',
+						'assets/global/css/datagrid.css',
+						'assets/global/css/jquery.qtip.min.css',
+			         
+						'assets/global/plugins/jquery.easyui.min.js',
+						'assets/global/plugins/jquery.qtip.min.js',
+						'assets/global/plugins/jquery.outerhtml.js',
 	                   	                        ]
 	                    });
 	                }]
@@ -963,6 +1009,33 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             url: "/editUserContractPage:id",
             templateUrl: "rest/contract/editUserContractPage",
             data: {pageTitle: '修改合同'},
+            controller: "ContractController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [                             
+					'assets/global/plugins/datatables/datatables.min.css',
+					'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+					'assets/global/plugins/datatables/datatables.all.min.js',
+					'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+					'assets/apps/scripts/angular-file-upload-shim.min.js',
+					'assets/apps/scripts/angular-file-upload.min.js',
+					'assets/apps/scripts/FileUploader.js',
+					'assets/apps/service/ContractService.js',
+					'assets/apps/controllers/ContractController.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        
+        .state('saleOrderSign', {
+        	params:{data:null},
+            url: "/saleOrderSign:id",
+            templateUrl: "rest/contract/saleOrderSign",
+            data: {pageTitle: '合同签订'},
             controller: "ContractController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -1463,6 +1536,28 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
 		    				        'assets/apps/controllers/NoticeController.js',
 		    				        'assets/apps/service/NoticeService.js'
+		    				        
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
+		    }).state('myMessage', {
+		    	url: "/myMessage",
+		    	templateUrl: "rest/message/myMessage",
+		    	data: {pageTitle: '消息'},
+		    	reload:true, 
+		    	controller: "MessageController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [     
+		    				        'assets/apps/css/todo.min.css',
+		    				        'assets/global/plugins/datatables/datatables.min.css',      
+		    				        'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
+		    				        'assets/apps/controllers/MessageController.js',
+		    				        'assets/apps/service/MessageService.js'
 		    				        
 		    				        ]
 		    			});
@@ -2623,6 +2718,11 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a ui-sref='userContract'>合同信息</a><i class='fa fa-angle-right'></i></li>" + 
 					 	"<li><a>修改合同</a></li>";
+			   }else if('saleOrderSign' == toState.name){//合同签订
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='userContract'>合同信息</a><i class='fa fa-angle-right'></i></li>" + 
+					 	"<li><a>合同签订</a></li>";
 			   }else if('warehouse' == toState.name){//仓库管理
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
@@ -2910,6 +3010,9 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 			   }else if('myNotice' == toState.name){//公告
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				   "<li><a>公告</a></li>";					 
+			   }else if('myMessage' == toState.name){//消息
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a>消息</a></li>";					 
 			   }else if('noticeAdd' == toState.name){//新建公告
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				   "<li><a ui-sref='myNotice'>公告</a> <i class='fa fa-angle-right'></i></li>";		

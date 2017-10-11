@@ -8,7 +8,7 @@
 .jquery-notific8-container.bottom.right { right: 0; }
 .jquery-notific8-container.bottom.left { left: 0; }
 
-.jquery-notific8-notification { position: relative; display: none; padding: 0.625em; color: #fff; height: 4.125em; max-height: 4.125em; overflow: hidden; border-style: solid; border-width: 2px; width: 21.4375em; }
+.jquery-notific8-notification { position: relative; display: none; padding: 0.625em; color: #fff; min-height: 4.125em; max-height: 6.125em; overflow: hidden; border-style: solid; border-width: 2px; width: 21.4375em; }
 .jquery-notific8-notification:hover .jquery-notific8-close { display: block; }
 
 .jquery-notific8-heading { font-weight: bold; margin-bottom: 0.3125em; }

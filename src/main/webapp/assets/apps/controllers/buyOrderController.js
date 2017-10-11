@@ -89,6 +89,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		dateSelectSetting();//日期选择限制
             		// 加载数据
                 	initSuppliers();
+                	initWarehouse();
                 	//合同内容
                 	$scope.buyOrder.contractContent = '111100';
                 	$scope.initContractContent();
@@ -175,8 +176,9 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 		var _url = ctx + "rest/order/modifyOrder/" + $("#taskId").val();
 		doOrder(_url, mydata, 'modify' );
 	};
-	
+	$scope.changeFlag = true
     $scope.repeatDone = function(scope){
+    	$scope.changeFlag = false;
     	var date1= scope._orderMateriel.deliveryDate;
     	var date2= scope._orderMateriel.lastDeliveryDate;
     	/*var date3= scope.buyOrder.orderDate;*/
@@ -185,8 +187,14 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     		scope._orderMateriel.deliveryDate = date1;
     		scope._orderMateriel.lastDeliveryDate = date2;
     	}
+    	$scope.changeFlag = true;
     	/*scope.buyOrder.orderDate = date3;*/
    };
+   
+   $scope.repeatMaterielList = function(scope){
+	   searchMaterielList();//订单物料可检索化
+  };
+
    
    $scope.renderDone = function(){
    	var date3= $scope.buyOrder.orderDate;
@@ -220,10 +228,11 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 
     		orderService.save($scope.buyOrder).then(
        		     function(data){
-       		    	$scope.buyOrder.serialNum = data.serialNum;
+       		    	$scope.buyOrder = data;
        		    	$scope.contract.orderSerial = data.serialNum;
        		    	$scope.contract.contractNum = $scope.buyOrder.orderNum;
 	   	    		$scope.contract.comId = $scope.buyOrder.supplyComId;
+	   	    		$scope.contract.signDate = $scope.buyOrder.orderDate;
 	   	    		orderService.saveContract($scope.contract).then(
 	   	       		     function(data){
 	   	       		    	toastr.success('数据保存成功！');
@@ -391,11 +400,13 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 										return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">审核中</span>';
 									}else if(row.processBase.status=="APPROVAL_SUCCESS"){
 										if(row.status==1){
-											return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:#fcb95b">待接收</span>';
+											return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:#fcb95b">待确认</span>';
 										}else if(row.status==2){
-											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已接收</span>';
+											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已确认</span>';
+										}else if(row.status==3){
+											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">待签合同</span>';
 										}else{
-											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已接收</span>';
+											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已确认</span>';
 										}
 									}else if(row.processBase.status=="APPROVAL_FAILED"){
 										return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:red">未通过</span>';
@@ -975,6 +986,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
           		    	
           		    	// 加载数据
                     	initSuppliers();
+                    	initWarehouse();
                     	
           		    	$("#serialNum").val(serialNum);//赋值给隐藏input，通过和不通过时调用
     					$("#taskId").val(taskId);//赋值给隐藏input，通过和不通过时调用
@@ -1466,7 +1478,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	        	$scope["orderMaterielInput"+index] = true;
 				$scope["orderMaterielShow"+index] = true;
 	        	for(var i=0;i<$scope.copyMateriels.length;i++){
-	        		if(materiel.serialNum == $scope.copyMateriels[i].serialNum && !isNull(materiel.supplyMaterielSerial)){ // 如果是以保存的物料，回滚
+	        		if(materiel.serialNum == $scope.copyMateriels[i].serialNum){ // 如果是以保存的物料，回滚
 	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)] = $scope.copyMateriels[i];
 						break;
 	        		}
@@ -1482,6 +1494,36 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	        };  
 	        
 
+	        
+	        //选择第一个，设置后面的数据
+			$scope.setAllDeliveryAddress = function(orderMateriel){
+				 for(var i=1;i<$scope.orderMateriel.length;i++){
+					 if($scope["orderMaterielInput"+i] != true/*&&isNull($scope.orderMateriel[i].deliveryAddress)*/){
+						 $scope.orderMateriel[i].deliveryAddress = orderMateriel.deliveryAddress;
+					 }
+				 }
+			}
+			
+			$scope.setAllDeliveryDate = function(orderMateriel,index){
+				if(index==0&&$scope.changeFlag){
+					for(var i=1;i<$scope.orderMateriel.length;i++){
+						 if($scope["orderMaterielInput"+i] != true/*&&isNull($scope.orderMateriel[i].deliveryAddress)*/){
+							 $scope.orderMateriel[i].deliveryDate = orderMateriel.deliveryDate;
+						 }
+					 }
+				}
+			}
+			
+			$scope.setAllLastDeliveryDate = function(orderMateriel,index){
+				if(index==0&&$scope.changeFlag){ 
+					for(var i=1;i<$scope.orderMateriel.length;i++){
+						 if($scope["orderMaterielInput"+i] != true/*&&isNull($scope.orderMateriel[i].deliveryAddress)*/){
+							 $scope.orderMateriel[i].lastDeliveryDate = orderMateriel.lastDeliveryDate;
+						 }
+					 }
+				}
+			}
+			 
 
 			function indexOf(arr, item) {
 				for (var i = 0; i < arr.length; i++) {
@@ -3210,6 +3252,18 @@ var e = $("#form_clauseSettlement"),
         	});
 	}
 	
+	/**
+	 * 加载仓库数据
+	 */
+	var initWarehouse = function(){
+	var promise = orderService.initWarehouse();
+	promise.then(function(data){
+		$scope.warehouses = data.data;
+	},function(data){
+		//调用承诺接口reject();
+	});
+	}
+	
 	/***************日志表格 start************************/
 	var logTable 
 	$scope.viewOrderLog = function (serialNum){
@@ -3301,6 +3355,54 @@ var e = $("#form_clauseSettlement"),
 	 
 	 
 	 /***************日志表格 end************************/
+	 
+	 
+	 /** *************订单物料明细可检索化  start*************** */
+     
+     var searchMaterielList = function() {
+              a = 0;
+              App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
+              table = $("#form_sample_5").DataTable({
+                  language: {
+                      aria: {
+                          sortAscending: ": activate to sort column ascending",
+                          sortDescending: ": activate to sort column descending"
+                      },
+                      emptyTable: "空表",
+                      info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                      infoEmpty: "没有数据",
+                      // infoFiltered: "(filtered1 from _MAX_ total
+							// entries)",
+                      lengthMenu: "每页显示 _MENU_ 条数据",
+                      search: "查询:",
+                      zeroRecords: "抱歉， 没有找到！",
+                      paginate: {
+                          "sFirst": "首页",
+                          "sPrevious": "前一页",
+                          "sNext": "后一页",
+                          "sLast": "尾页"
+                       }
+                  },
+  /*
+		 * fixedHeader: {//固定表头、表底 header: !0, footer: !0, headerOffset: a },
+		 */
+                  order: [[1, "asc"]],// 默认排序列及排序方式
+                  searching: true,// 是否过滤检索
+                  ordering:  true,// 是否排序
+                  lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
+                  pageLength: "All",// 每页显示数量
+                  processing: true,
+                  data: $scope.orderMateriel
+
+              }).on('order.dt',
+                      function() {
+                  console.log('排序');
+              }).on('page.dt', 
+              function () {
+            	  console.log('翻页');
+	          })
+          };
+          /** *************订单物料明细可检索化  end*************** */
 }]);
 
 

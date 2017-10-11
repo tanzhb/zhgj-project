@@ -220,7 +220,46 @@ function showToastr(position, type, info){
 }
 //初始化toastr结束
 
-//为空判断
+//win8提示样式
+function toastr8(title,str){
+	              /*var t = {
+						theme : 'ebony',
+						sticky : false,
+						horizontalEdge : 'bottom',
+						verticalEdge : 'right'
+					}, n = $(this);
+					false, t.sticky
+							|| (t.life = 10000), $
+							.notific8("zindex", 11500), $.notific8(str, t), n.attr("disabled", "disabled"), setTimeout(function() {
+						n.removeAttr("disabled")
+					}, 1e3);*/
+					
+					layer.open({
+						  type: 1
+						  ,title:title
+						  ,offset: 'rb' //具体配置参考：offset参数项
+						  ,content: '<div id="messageDiv" style="padding: 10px 20px;">'+str+'</div>'
+						  ,shade: 0 //不显示遮罩
+						  ,yes: function(){
+						    layer.closeAll();
+						  }
+						});
+}
+
+function readAndClose(serialNum){
+	$.ajax({
+		url:ctx+"rest/message/readMessage",
+		type:'POST',
+		data:serialNum,
+		dataType:'json',
+		success:function(data){
+			
+		}
+	});
+	layer.closeAll();
+}
+
+// 为空判断
 var isNull = function(str) {
 	if (str == "" || str == undefined)
 		return true;
@@ -230,7 +269,7 @@ var isNull = function(str) {
 }
 
 
-//页面打印方法start********/
+// 页面打印方法start********/
 function printdiv(printpage)
 {
 	var headstr = "<html><head><title></title></head><body>";
@@ -583,4 +622,21 @@ function initPageBar($rootScope, path){
 	if(path == 'addPay'){
 		$("#loadPageBar").innerHTML = "<li><a ui-sref='paymentRecordC'>付款</a> <i class='fa fa-angle-right'></i></li><li><a>新增付款1</a></li>";
 	}
+}
+
+function getWSPath_web() {
+    //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
+    var curWwwPath = window.document.location.href;
+    //获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
+    var pathName = window.document.location.pathname;
+    var pos = curWwwPath.indexOf(pathName);
+    //获取主机地址，如： http://localhost:8083
+    var localhostPaht = curWwwPath.substring(7, pos);//去掉http://
+    //获取带"/"的项目名，如：/uimcardprj
+    var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+    if(localhostPaht.indexOf("www")>-1){
+    	return (localhostPaht +"/");
+    }else{
+    	return (localhostPaht + projectName +"/");
+    }
 }

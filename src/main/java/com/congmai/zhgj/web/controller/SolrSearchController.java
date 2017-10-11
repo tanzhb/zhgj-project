@@ -347,6 +347,7 @@ public class SolrSearchController {
             
             for(SolrDocument solrDocument:list){
             	String string = "";
+            	String goType = "";//前台页面点击titel跳转，根据该类型跳转到不同查看页面
             	String title = "";//每行结果名称，用于页面显示
             	
                 Object id=solrDocument.get("id");//企业或物料id
@@ -374,20 +375,25 @@ public class SolrSearchController {
                 
                 if(searchType.equals("purchaseOrder") && buyComId == null){//采购订单
                 	title = "采购订单;单号：" + orderNum;
+                	goType = "buyOrder";
                 	string = "id号：" + id + ";" + StringUtils.join(stringlist.toArray(),",") ;
                 }else if(searchType.equals("saleOrder") && supplyComId == null){//销售订单
                 	title = "销售订单;单号：" + orderNum;
+                	goType = "saleOrder";
                 	string = "id号：" + id + ";" + StringUtils.join(stringlist.toArray(),",") ;
                 }else if(searchType.equals("all")){//全部
                 	if(buyComId == null){
                 		title = "采购订单;单号：" + orderNum;
+                		goType = "buyOrder";
                 	}else if(supplyComId == null){
                 		title = "销售订单;单号：" + orderNum;
+                		goType = "saleOrder";
                 	}
                 	string = "id号：" + id + ";" + StringUtils.join(stringlist.toArray(),",") ;
                 }
                 
                 solrDocument.put("id", id);
+                solrDocument.put("goType", goType);
                 solrDocument.put("title", title);
                 solrDocument.put("search_fields", string);
             }

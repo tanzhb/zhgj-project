@@ -348,7 +348,7 @@
   	SELECT n.serial_num, n.notice_type, n.title, n.com_id, n.creator,n.context,n.create_time, n.updater, n.update_time, 
     	   n.del_flg,ns.read_flg,ns.user_id
      from notice n LEFT JOIN notice_share ns on n.serial_num = ns.notice_serial and ns.user_id = #{userId}
-	where n.notice_type like CONCAT('%',#{status},'%') and n.del_flg = 0 and (ns.del_flg = 0 or ns.del_flg is null) order by n.update_time desc limit #{pageIndex},#{pageSize}
+	where n.notice_type like CONCAT('%',#{status},'%') and n.del_flg = 0 and (ns.del_flg = 0 or ns.del_flg is null) order by n.update_time desc limit #{start},#{pageSize}
   </select>
   <select id="countMyNoticeList" parameterType="com.congmai.zhgj.web.model.Notice" resultType="java.lang.Integer">
   	SELECT count(n.serial_num)

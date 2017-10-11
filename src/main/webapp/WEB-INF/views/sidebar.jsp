@@ -45,7 +45,7 @@
                     </a>
                 </li>
                 <li>
-                    <a ui-sref="#">
+                    <a ui-sref="myMessage">
                          消息</span>
                     </a>
                 </li>

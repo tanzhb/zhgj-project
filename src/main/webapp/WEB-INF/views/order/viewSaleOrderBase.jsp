@@ -240,8 +240,11 @@ margin-right: 20px;
                                      ng-click="viewOrderLog(saleOrder.serialNum)" style="color:#fcb95b"> 审核中 </p>
                                      
                                      <p ng-if="saleOrder.status==1"   
-                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 已发布 </p>
+                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 待签合同 </p>
                                      
+                                     <p ng-if="saleOrder.status==2"   
+                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 已确认 </p>
+                                                                          
                                      <p ng-if="saleOrder.processBase.status=='APPROVAL_FAILED'"   
                                      ng-click="viewOrderLog(saleOrder.serialNum)" style="color:red"> 未通过 </p>
                                      
@@ -367,7 +370,10 @@ margin-right: 20px;
                                      ng-click="viewOrderLog(saleOrder.serialNum)" style="color:#fcb95b"> 审核中 </p>
                                      
                                      <p ng-if="saleOrder.status==1"   
-                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 已接收 </p>
+                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 待签合同 </p>
+                                     
+                                     <p ng-if="saleOrder.status==2"   
+                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 已确认 </p>
                                      
                                      <p ng-if="saleOrder.processBase.status=='APPROVAL_FAILED'"   
                                      ng-click="viewOrderLog(saleOrder.serialNum)" style="color:red"> 未通过 </p>
@@ -514,7 +520,10 @@ margin-right: 20px;
                                      ng-click="viewOrderLog(saleOrder.serialNum)" style="color:#fcb95b"> 审核中 </p>
                                      
                                      <p ng-if="saleOrder.status==1"   
-                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 已接收 </p>
+                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 待签合同 </p>
+                                     
+                                     <p ng-if="saleOrder.status==2"   
+                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 已确认 </p>
                                      
                                      <p ng-if="saleOrder.processBase.status=='APPROVAL_FAILED'"   
                                      ng-click="viewOrderLog(saleOrder.serialNum)" style="color:red"> 未通过 </p>
@@ -764,12 +773,12 @@ margin-right: 20px;
 									<th>库存数量</th>
 									<th>销售数量</th>
 									<th>指导单价</th>
-									<th>销售单价</th>
+									<th>不含税单价</th>
 									<th>币种</th>
 									<th  ng-if="saleOrder.tradeType =='外贸'">退税率</th>
 									<th  ng-if="saleOrder.tradeType !='外贸'">税率</th>
-									<th>含税销售单价</th>
-									<th>金额</th>
+									<th>含税单价</th>
+									<th>不含税金额</th>
 									<th>税额</th>
 									
 									<th ng-if="saleOrder.settlementClause =='服务费'">服务费率</th>
@@ -778,7 +787,7 @@ margin-right: 20px;
 									<th ng-if="saleOrder.settlementClause =='折扣折让'">折后金额</th>
 									<th ng-if="saleOrder.settlementClause =='红票'">红票金额</th>
 									
-									<th>价税合计</th>
+									<th>含税金额</th>
 									<th>交付日期</th>
 									<th>最晚交付日期</th>
 									<th>交付/提货地点</th>
@@ -928,7 +937,7 @@ margin-right: 20px;
                          </div>
                          <div class="col-md-4">
                          		<div class="form-group ">
-                              	<label class="control-label col-md-5 bold">价税合计：</label>
+                              	<label class="control-label col-md-5 bold">含税金额：</label>
                                  <div class="control-label col-md-7">
                                   <p > {{totalRateAndAmount()}} </p>
                                   </div>

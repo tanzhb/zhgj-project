@@ -132,7 +132,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
     $scope.recive = function(serialNum){
     	$scope.submitOrder = {}
     	$scope.submitOrder.serialNum = serialNum;	
-    	$scope.submitOrder.status = 2;
+    	$scope.submitOrder.status = 3;
 
     	orderService.recive($scope.submitOrder).then(
       		     function(data){
@@ -148,7 +148,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
     
     
     var table;
-    var tableAjaxUrl = "rest/order/findOrderList?type=supply";
+    var tableAjaxUrl = "rest/order/findOrderList?type=sale&selectFor=supplyOrder";
     var loadMainTable = function() {
             a = 0;
             App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
@@ -200,12 +200,16 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 	    									type, row, meta){
 	                            		if(data!=""&&data!=null){
 	                            			if(data==1){
-    											return '<span  class="label label-sm label-success ng-scope">待接收</span>';
+    											return '<span  class="label label-sm label-info ng-scope">待确认</span>';
+    										}else if(data==3){
+    											return '<span  class="label label-sm label-info ng-scope">待签合同</span>';
     										}else if(data==2){
-    											return '<span  class="label label-sm label-success ng-scope">已接收</span>';
+    											return '<span  class="label label-sm label-success ng-scope">已确认</span>';
+    										}else{
+    											return '';
     										}
 	                            		}else{
-	                            			return '<span  class="label label-sm label-info ng-scope">待接收</span>';
+	                            			return '';
 	                            		}
 	                            	}
 	                            },{ mData: 'status'}
@@ -248,7 +252,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 							'render' : function(data,
 									type, row, meta) {
 								if(data==1){
-									return '<a href="javascript:void(0);" ng-click="recive(\''+row.serialNum+'\')">接收</a>';
+									return '<a href="javascript:void(0);" ng-click="recive(\''+row.serialNum+'\')">确认</a>';
 								}else{
 									return "";
 								}
@@ -321,7 +325,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
         };
         
         var framTable;
-        var framTableAjaxUrl = "rest/order/findOrderList?type=supply&&fram=1";
+        var framTableAjaxUrl = "rest/order/findOrderList?type=sale&selectFor=supplyOrder&fram=1";
         var loadMainFramTable = function() {
                 a = 0;
                 App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
