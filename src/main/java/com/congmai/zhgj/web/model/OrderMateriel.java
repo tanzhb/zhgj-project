@@ -22,6 +22,8 @@ public class OrderMateriel {
     private String amount;
 
     private String orderUnitPrice;
+    
+    private String orderRateUnit;
 
     private String money;
 
@@ -217,6 +219,14 @@ public class OrderMateriel {
 
 	public void setCustomsRate(String customsRate) {
 		this.customsRate = customsRate;
+	}
+
+	public String getOrderRateUnit() {
+		return orderRateUnit;
+	}
+
+	public void setOrderRateUnit(String orderRateUnit) {
+		this.orderRateUnit = orderRateUnit;
 	}
 
     

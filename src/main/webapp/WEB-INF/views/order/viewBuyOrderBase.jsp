@@ -784,7 +784,7 @@ margin-right: 20px;
                                      		<p class="form-control-static" > {{buyOrder.rate}}% </p>
 		                          </td>
 		                          <td>  
-                                     		<p class="form-control-static"> {{_arithmeticRateUnit(this)}} </p>
+                                     		<p class="form-control-static"> {{_orderMateriel.orderRateUnit}} </p>
 		                          </td>
 		                          <td>  
                                      		<p class="form-control-static" > {{_arithmeticAmount(this)}} </p>

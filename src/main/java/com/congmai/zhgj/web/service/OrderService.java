@@ -40,7 +40,7 @@ public interface OrderService extends GenericService<OrderInfo, String> {
 
 	void reciveOrder(OrderInfo orderInfo);
 	
-
+	int updateStatus(OrderInfo orderInfo);
 
 
 }
