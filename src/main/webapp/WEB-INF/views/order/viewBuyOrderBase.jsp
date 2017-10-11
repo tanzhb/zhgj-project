@@ -229,8 +229,11 @@ margin-right: 20px;
                                      <p ng-if="buyOrder.status==1"  
                                      ng-click="viewOrderLog(buyOrder.serialNum)" style="color:#fcb95b"> 待接收 </p>
                                      
+                                      <p ng-if="buyOrder.status==3"  
+                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:#fcb95b"> 待签合同 </p>
+                                     
                                      <p ng-if="buyOrder.status==2"   
-                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:green"> 已接收 </p>
+                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:green"> 已确认 </p>
                                      
                                      <p ng-if="buyOrder.processBase.status=='APPROVAL_FAILED'"   
                                      ng-click="viewOrderLog(buyOrder.serialNum)" style="color:red"> 未通过 </p>
@@ -345,8 +348,11 @@ margin-right: 20px;
                                      <p ng-if="buyOrder.status==1"  
                                      ng-click="viewOrderLog(buyOrder.serialNum)" style="color:#fcb95b"> 待接收 </p>
                                      
+                                      <p ng-if="buyOrder.status==3"  
+                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:#fcb95b"> 待签合同 </p>
+                                     
                                      <p ng-if="buyOrder.status==2"   
-                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:green"> 已接收 </p>
+                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:green"> 已确认 </p>
                                      
                                      <p ng-if="buyOrder.processBase.status=='APPROVAL_FAILED'"   
                                      ng-click="viewOrderLog(buyOrder.serialNum)" style="color:red"> 未通过 </p>
@@ -479,8 +485,11 @@ margin-right: 20px;
                                      <p ng-if="buyOrder.status==1"  
                                      ng-click="viewOrderLog(buyOrder.serialNum)" style="color:#fcb95b"> 待接收 </p>
                                      
+                                      <p ng-if="buyOrder.status==3"  
+                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:#fcb95b"> 待签合同 </p>
+                                     
                                      <p ng-if="buyOrder.status==2"   
-                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:green"> 已接收 </p>
+                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:green"> 已确认 </p>
                                      
                                      <p ng-if="buyOrder.processBase.status=='APPROVAL_FAILED'"   
                                      ng-click="viewOrderLog(buyOrder.serialNum)" style="color:red"> 未通过 </p>
@@ -706,9 +715,9 @@ margin-right: 20px;
 	<div class="tab-pane fade " id="tab_1_4">
 		<!-- 订单物料 start-->
           <div class="portlet-body form">
-		     <form id="form_sample_5"   >
+		     <form    >
 		         <div class="table-scrollable">
-                         <table class="table table-bordered table-hover">
+                         <table class="table table-bordered table-hover" id="form_sample_5" >
                              <thead>
                                  <tr>
 								<th>商品编号</th>
@@ -719,11 +728,11 @@ margin-right: 20px;
 								<th>库存数量</th>
 								<th>采购数量</th>
 								<th>指导单价</th>
-								<th>采购单价</th>
+								<th>不含税单价</th>
 								<th>币种</th>
 								<th>税率</th>
-								<th>含税采购单价</th>
-								<th>金额</th>
+								<th>含税单价</th>
+								<th>不含税金额</th>
 								<th>税额</th>
 								<th ng-if="buyOrder.tradeType =='外贸'">关税率</th>
 								<th ng-if="buyOrder.tradeType =='外贸'">关税金额</th>
@@ -733,7 +742,7 @@ margin-right: 20px;
 								<th ng-if="buyOrder.settlementClause =='折扣折让'">折后金额</th>
 								<th ng-if="buyOrder.settlementClause =='红票'">红票金额</th>
 								
-								<th>价税合计</th>
+								<th>含税金额</th>
 								<th>交付日期</th>
 								<th>最晚交付日期</th>
 								<th>交付/提货地点</th>
@@ -775,7 +784,7 @@ margin-right: 20px;
                                      		<p class="form-control-static" > {{buyOrder.rate}}% </p>
 		                          </td>
 		                          <td>  
-                                     		<p class="form-control-static"> {{_arithmeticRateUnit(this)}} </p>
+                                     		<p class="form-control-static"> {{_orderMateriel.orderRateUnit}} </p>
 		                          </td>
 		                          <td>  
                                      		<p class="form-control-static" > {{_arithmeticAmount(this)}} </p>
@@ -877,7 +886,7 @@ margin-right: 20px;
                          </div>
                          <div class="col-md-4">
                          		<div class="form-group ">
-                              	<label class="control-label col-md-5 bold">价税合计：</label>
+                              	<label class="control-label col-md-5 bold">含税金额：</label>
                                  <div class="control-label col-md-7">
                                   <p > {{totalRateAndAmount()}} </p>
                                   </div>

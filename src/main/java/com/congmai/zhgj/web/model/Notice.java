@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class Notice extends BaseVO{
     /**
-	 * @Field @serialVersionUID : TODO(这里用一句话描述这个类的作用)
+	 * @Field @serialVersionUID : TODO(������һ�仰��������������)
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -36,6 +36,8 @@ public class Notice extends BaseVO{
     
     private int pageSize;
     
+    private int start;
+    
     private String readFlg;
     
     private String user_id;
@@ -49,9 +51,9 @@ public class Notice extends BaseVO{
     private Date publishTime;
     
     
-    public static final String COMPLETE = "1"; //申请通过
+    public static final String COMPLETE = "1"; //����ͨ��
 
-	public static final String CANCEL = "2";  //申请取消
+	public static final String CANCEL = "2";  //����ȡ��
 
     public String getSerialNum() {
         return serialNum;
@@ -205,6 +207,14 @@ public class Notice extends BaseVO{
 
 	public void setNoticeTitle(String noticeTitle) {
 		this.noticeTitle = noticeTitle;
+	}
+
+	public int getStart() {
+		return start;
+	}
+
+	public void setStart(int start) {
+		this.start = start;
 	}
 
 }

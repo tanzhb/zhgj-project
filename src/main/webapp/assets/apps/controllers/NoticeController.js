@@ -2,8 +2,8 @@
  * 
  */
 
-angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scope','$state','$http','noticeService','$location','$compile','$stateParams',
-                                                             function($rootScope,$scope,$state,$http,noticeService,$location,$compile,$stateParams) {
+angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scope','$state','$http','noticeService','$location','$compile','$stateParams','$sce',
+                                                             function($rootScope,$scope,$state,$http,noticeService,$location,$compile,$stateParams,$sce) {
 	 $scope.$on('$viewContentLoaded', function() {   
 	    	// initialize core components
 		    handle = new pageHandle();
@@ -344,7 +344,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
         				$scope.param = {};
         				$scope.param.noticeTitle = data.data.noticeTitle;
         				$scope.param.serialNum = data.data.serialNum;
-        				$scope.param.context = data.data.context;
+        				$scope.param.context = $sce.trustAsHtml(data.data.context);
         				$scope.param.updater = data.data.updater;
         				$scope.param.relaseDate = data.data.relaseDate;
         				if(!isNull(taskId)){

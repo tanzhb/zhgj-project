@@ -21,6 +21,9 @@ public class MyHandshakeInterceptor extends HttpSessionHandshakeInterceptor{
 	public boolean beforeHandshake(ServerHttpRequest request,
 			ServerHttpResponse response, WebSocketHandler handler,
 			Map<String, Object> map) throws Exception {
+		if(request.getHeaders().containsKey("Sec-WebSocket-Extensions")) {
+            request.getHeaders().set("Sec-WebSocket-Extensions", "permessage-deflate");
+        }
 		if (request instanceof ServletServerHttpRequest) {
 			ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
 			HttpSession session = servletRequest.getServletRequest().getSession(false);

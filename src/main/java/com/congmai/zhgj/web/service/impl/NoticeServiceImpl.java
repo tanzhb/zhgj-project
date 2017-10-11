@@ -68,10 +68,11 @@ public class NoticeServiceImpl extends GenericServiceImpl<Notice, String> implem
 		}else{
 			notice.setStatus("0");
 		}
-		notice.setPageIndex(notice.getPageIndex()-1);
+		//notice.setPageIndex(notice.getPageIndex()-1);
+		notice.setStart((notice.getPageIndex()-1)*notice.getPageSize());
 		List<Notice> notices = noticeMapper.findMyNoticeList(notice);
 		int count = noticeMapper.countMyNoticeList(notice);
-		Page<Notice> page = new Page<Notice>();
+		Page<Notice> page = new Page<Notice>(notice.getPageIndex(),notice.getPageSize());
 		page.setResult(notices);
 		page.setTotalCount(count);
 		return page;

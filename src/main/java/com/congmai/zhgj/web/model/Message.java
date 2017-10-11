@@ -40,6 +40,8 @@ public class Message {
     
     private int pageSize;
     
+    private int start;
+    
 
     public String getSerialNum() {
         return serialNum;
@@ -191,5 +193,13 @@ public class Message {
 
 	public void setPageIndex(int pageIndex) {
 		this.pageIndex = pageIndex;
+	}
+
+	public int getStart() {
+		return start;
+	}
+
+	public void setStart(int start) {
+		this.start = start;
 	}
 }
