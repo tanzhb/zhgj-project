@@ -10,6 +10,7 @@ import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryTransportVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.Materiel;
+import com.congmai.zhgj.web.model.RelationFile;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.Warehouse;
 
@@ -23,6 +24,9 @@ public interface DeliveryMapper extends GenericDao<DeliveryMaterielVO, String> {
     
 	//添加发货物料
     int insertDeliveryMateriel(DeliveryMaterielVO record);
+    
+    //批量添加附件
+    public void insertAttachFiles(List<RelationFile> list);
     
     //删除旧的发货物料
     public void deleteOldDeliveryMateriel(List<String> list);

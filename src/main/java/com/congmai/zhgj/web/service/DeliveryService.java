@@ -9,6 +9,7 @@ import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryTransportVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.Materiel;
+import com.congmai.zhgj.web.model.RelationFile;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.Warehouse;
 
@@ -25,6 +26,14 @@ public interface DeliveryService extends GenericService<DeliveryMaterielVO, Stri
 	 * @param contractVO
 	 */
     public void insertDeliveryMateriel(DeliveryMaterielVO deliveryMaterielVO);
+    
+    
+    
+    /**
+     * 批量添加附件
+     * @param list（附件集合）
+     */
+    public void insertAttachFiles(List<RelationFile> list);
     
     
     /**

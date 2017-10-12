@@ -18,6 +18,7 @@ import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryTransportVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.Materiel;
+import com.congmai.zhgj.web.model.RelationFile;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.service.DeliveryService;
@@ -53,6 +54,17 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 	}
 	
 	
+	/**
+     * 批量添加附件
+     * @param list（附件集合）
+     */
+	@Override
+	public void insertAttachFiles(List<RelationFile> list) {
+		// TODO Auto-generated method stub
+		deliveryMapper.insertAttachFiles(list);
+	}
+
+
 	/**
      * 删除旧的发货物料
      * @param idList

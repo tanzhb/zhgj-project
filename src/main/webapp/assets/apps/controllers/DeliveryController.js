@@ -1,4 +1,5 @@
-angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$scope','$http', 'settings', '$q','DeliveryService','$state','$compile','$stateParams','$filter','$location', function($rootScope,$scope,$http,settings, $q,DeliveryService,$state,$compile,$stateParams,$filter,$location) {
+angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$scope','$http', 'settings', '$q','DeliveryService','$state','$compile','$stateParams','$filter','$location','FileUploader',
+                                                                function($rootScope,$scope,$http,settings, $q,DeliveryService,$state,$compile,$stateParams,$filter,$location,FileUploader) {
 	$scope.$on('$viewContentLoaded', function() {   
 		// initialize core components
 		handle = new pageHandle();
@@ -258,14 +259,17 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			toastr.error("请先保存基本信息！");	
 			return;
 		}
-		var batchNumFlag=batchNumCheck(index);
-		if(!batchNumFlag){return false;}
+		/*var batchNumFlag=batchNumCheck(index);
+		if(!batchNumFlag){return false;}*/
+		var attachFile=$("#batchNumReal"+index).text();
+		
 		var manufactureDateFlag=manufactureDateCheck(index);
 		if(!manufactureDateFlag){return false;}
 		var deliveryCountFlag=deliveryCountCheck(index);
 		if(!deliveryCountFlag){return false;}
 		
 		deliveryMateriel.deliverSerial=$scope.delivery.serialNum;
+		deliveryMateriel.attachFile=attachFile;
 		
 		var promise = DeliveryService.saveDeliveryMateriel(deliveryMateriel);
 		promise.then(function(data) {
@@ -274,8 +278,6 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 				toastr.success("保存成功");
 				handle.unblockUI();
 				$scope.deliveryMaterielE[index] = data;
-				$scope.deliveryMaterielE[index] = data;
-				console.log(data.data);
 				$scope["orderMaterielInput"+index] = true;
 				$scope["orderMaterielShow"+index] = true;
 				$(".alert-danger").hide();
@@ -323,7 +325,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	 * 编辑销售订单物料信息
 	 */
 	$scope.editOrderMateriel = function() {
-		debugger
+		
 		//判断基本信息是否保存，未保存先保存基本信息
 		if($scope.isBasicInfoSaved!='1'){
 			toastr.error("请先保存基本信息！");	
@@ -909,6 +911,208 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		}
     	
     	
+    	 /**
+         * 选择物料页面弹出
+         */
+    	$scope.addAttachFile = function (index){
+    		$("#basicMaterielInfoII").modal("show");
+    		$scope.fileIndex=index;
+		}
+    	
+    	//********附件  start****************//
+		var _fileIndex = 0;
+	    $scope.saveFile  = function(fileIndex) {//保存File信息
+	    	debugger
+	    	if($scope.file==null){
+	    		toastr.warning("请上传文件！");
+	    		return false;
+	    	}
+	    	
+	    	var html="";
+	    	var htmlReal="";
+	    	for(var i=0;i<$scope.file.length;i++){
+	    		if($scope.file[i].file==null||$scope.file[i].file==''){
+	    			toastr.warning("上传文件不能为空！");
+		    		return false;
+	    		}
+	    		if($scope.file[i].remark){
+	    			htmlReal+=$scope.file[i].file+','+$scope.file[i].remark+'&';
+	    		}else{
+	    			htmlReal+=$scope.file[i].file+','+'&';
+	    		}
+	    		
+	    		var w=$scope.file[i].file.indexOf('_');
+	    		var sub_str_file=$scope.file[i].file.substring(w+1); 
+	    		
+	    		var asd="'"+$scope.file[i].file+"'";
+	    		html+='<a href="javascript:;" ng-click="downloadFile1('+asd+')">'+ sub_str_file+'</a>&nbsp;';
+			}
+	    	$("#batchNum"+fileIndex).html($compile(html)($scope))
+	    	$("#addBatchNum"+fileIndex).hide();
+	    	$("#batchNumReal"+fileIndex).html(htmlReal);
+	    	 $('#basicMaterielInfoII').modal('hide');// 保存成功后关闭模态框
+	    	$(".modal-backdrop").remove();
+	    	$("#fileTable tbody tr").remove();
+	    	_fileIndex=0;
+	    	$scope.file=null;
+	    }; 	
+	    
+	    /**
+        * File新增一行
+        */
+	    $scope.addFile = function(){
+		    	   if($scope.file){}else{$scope.file =[{}]}
+		    	   $scope.file[_fileIndex] = {};
+		    	   _fileIndex++;
+	    };
+	    
+	    //下载文件查看详情时
+	       $scope.downloadFile1 = function(str){
+	    	 window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+encodeURI(encodeURI(str));
+	       }
+	    
+	    
+	    $scope.updateFile  = function() {//更新File信息
+	    	if($scope.pay.serialNum==null||$scope.pay.serialNum=='') {//上级物料为空的处理
+	    		toastr.error('请先保存基本信息！');return
+			}
+	    	/*if($('#form_sample_4').valid()){*/
+	    		PayService.updateFile($scope.file).then(
+	       		     function(data){
+	       		    	toastr.success('数据保存成功！');
+	       		    	$scope.inputFile=false;
+	       		    	$scope.cancelFile();
+	       		    	
+	       		     },
+	       		     function(error){
+	       		    	toastr.error('数据保存出错！');
+	       		         $scope.error = error;
+	       		     }
+	       		 );
+	    	/*}*/
+	    	
+	    }; 
+	    
+	    $scope.cancelFile  = function() {//取消编辑File信息
+	    	$scope.fileInfoInput = true;
+		    $scope.fileInfoShow = true;
+	    };
+	    
+	    $scope.editFile  = function() {//进入编辑File信息
+	    	$scope.fileInfoInput = false;
+		    $scope.fileInfoShow = false;
+	    };
+	    
+	    
+	    /**
+        * File删除一行
+        */
+       $scope.deleteFile = function(index){
+    	   $scope.file.splice(index,1);
+    	   _fileIndex--;
+       };
+       
+       
+      var validateFileInit = function() {
+        	var e = $("#form_sample_4");
+	        r = $(".alert-danger", e),
+	        i = $(".alert-success", e);
+	        e.validate({
+	            errorElement: "span",
+	            errorClass: "help-block help-block-error",
+	            focusInvalid: !1,
+	            ignore: "",
+	            messages: {
+	            },
+            	rules: {
+            			
+            			},
+            		invalidHandler: function(e, t) {
+                    i.hide(), r.show(), App.scrollTo(r, -200)
+                },
+	            invalidHandler: function(e, t) {
+	                i.hide(),
+	                r.show(),
+	                App.scrollTo(r, -200)
+	            },
+	            errorPlacement: function(e, r) {
+	                r.is(":checkbox") ? e.insertAfter(r.closest(".md-checkbox-list, .md-checkbox-inline, .checkbox-list, .checkbox-inline")) : r.is(":radio") ? e.insertAfter(r.closest(".md-radio-list, .md-radio-inline, .radio-list,.radio-inline")) : e.insertAfter(r)
+	            },
+	            highlight: function(e) {
+	                $(e).closest(".form-group").addClass("has-error")
+	            },
+	            unhighlight: function(e) {
+	                $(e).closest(".form-group").removeClass("has-error")
+	            },
+	            success: function(e) {
+	                e.closest(".form-group").removeClass("has-error")
+	            },
+	            submitHandler: function(e) {
+	                i.show(),
+	                r.hide()
+	            }})
+        };
+
+      //创建对象
+  	  var uploader = $scope.uploader = new FileUploader({url:'rest/fileOperate/uploadSingleFile'});
+  	 
+  	  uploader.onAfterAddingFile = function(item){
+  		  if(item.file.size>10000000){
+  			  //toastr.warning("文件大小超过10M！");
+  			  uploader.cancelAll();
+  		  }
+  	  }
+  	  
+  	  //添加文件到上传队列后
+  	  uploader.onCompleteAll = function () {
+  		  uploader.clearQueue();
+  	  };
+  	  //上传成功
+  	  uploader.onSuccessItem = function (fileItem,response, status, headers) {
+  		  if (status == 200){ 
+  			  if(response==""){
+  				  toastr.error("上传失败！");
+  				  return;
+  			  }
+  		  		toastr.success("上传成功！");
+  		  		$scope.file[uploadSelectIndex].file = response.filename;
+  		  }else{
+  			  toastr.error("上传失败！");
+  			$scope.file[uploadSelectIndex].file = response.filename;
+  		  }
+  		};
+  	  //上传失败
+  	  uploader.onErrorItem = function (fileItem, response, status, headers) {
+  			toastr.error("上传失败！");
+  	  };
+  	  
+
+       var uploadSelectIndex;
+  	  $scope.uploadFile = function(index){
+  		uploadSelectIndex = index;
+  	  }
+  	  
+  	  $scope.up = function(file){
+  		  uploader.clearQueue();
+  		  uploader.addToQueue(file);
+  		  uploader.uploadAll();
+  	  }
+  	  //下载文件上传时
+       $scope.downloadFile = function(obj){
+    	   if(!handle.isNull(obj)){
+    		   window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+encodeURI(encodeURI(obj.file));
+    	   }else{
+    		   toastr.error("下载失败!");
+    	   }
+       }
+       
+       $scope.removefile = function(index){
+    	   $scope.file[index].file = "";
+       }
+        
+	  //********附件  end****************//
+    	
+    	
     	
     	 /**
  		 * 遍历checkbox,检查并处理已取消的元素
@@ -967,7 +1171,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		
 		/*alert($stateParams.tabHref)*/
 		if($stateParams.tabHref == '1'){//首页待办列表传过来的参数
-			debugger
+			
 			$('#accountPayableTab a[href="#daiban"]').tab('show');
 			if(dbTable == undefined){
 				dbTable = showDbTable();
@@ -1317,7 +1521,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		
 		//审批通过
 		$scope.apPass = function() {
-			debugger
+			
 		    var mydata={"serialNum":$("#serialNum").val(),"content":$("#content").val(),
 					"isPass":true, "taskId":$("#taskId").val()};
 		    var _url = ctx + "rest/delivery/complete";
@@ -1388,7 +1592,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	        $scope.getSaleOrderInfo  = function(serialNum) {
 	        	DeliveryService.getSaleOrderInfo(serialNum).then(
 	          		     function(data){
-	          		    	 debugger
+	          		    	 
 	          		    	$scope.saleOrder=data.orderInfo;
 	          		    	
 	          		    	if($scope.delivery!=null){
@@ -1510,7 +1714,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	        
 	        
 	        $scope.getTotalDeliveryCount=function(){
-	        	debugger
+	        	
 	        	var totalCount=parseInt(0);
 	        	var check=/^[1-9]\d*|0$/;
 	        	for(var i=0;i<length;i++){
@@ -2245,7 +2449,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
   						},{
   							'targets' : 8,
   							'render' : function(data,
-  									type, row, meta) {debugger;
+  									type, row, meta) {
   									if(!isNull(data)){
 										return data;
 									}
@@ -2255,7 +2459,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
   						},{
   							'targets' : 9,
   							'render' : function(data,
-  									type, row, meta) {debugger;
+  									type, row, meta) {
   									if(isNull(data)||isNull(data.deliverNum)){
 										return row.stockInOutRecord.docNum;
 									}
