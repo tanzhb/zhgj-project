@@ -8,11 +8,23 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 	    	// initialize core components
 		    handle = new pageHandle();
 	    	App.initAjax();
+	    	if($stateParams.tabHref == '1'){//首页待办列表传过来的参数
+	    		handle.addCookie("d_type","notices");
+ 				$('#notice_tab a[data-target="#tab_25_2"]').tab('show');
+ 				//showDbTable();
+ 				 $scope.toDaiban();
+ 	 		 }else if($stateParams.tabHref == '2'){
+ 	 			handle.addCookie("d_type","notices");
+ 	 			    $('#notice_tab a[data-target="#tab_25_3"]').tab('show');
+ 	 			 	$scope.toYiban();
+ 	 		 }
+	    	
 	    	if($location.path()!="/myNotice"){
 	    		if(!isNull($stateParams.serialNum)){
 	    			noticeInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);
 	    		}
-	    		if($("#summernote")!=undefined){
+	    		
+	    		if($("#summernote").html()!=undefined){
 		    		$("#summernote").summernote({
 		                height: 500,
 		                lang:"zh-CN",
@@ -47,14 +59,6 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 		 		}	
 	    	}
 	    	
-	    	if($stateParams.tabHref == '1'){//首页待办列表传过来的参数
- 				$('#notice_tab a[data-target="#tab_25_2"]').tab('show');
- 				//showDbTable();
- 				 $scope.toDaiban();
- 	 		 }else if($stateParams.tabHref == '2'){
- 	 			    $('#notice_tab a[data-target="#tab_25_3"]').tab('show');
- 	 			 	$scope.toYiban();
- 	 		 }
 	    	
 	    	// set default layout mode
 	    	$rootScope.settings.layout.pageContentWhite = true;
@@ -176,7 +180,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 						toastr.warning("该公告审核中，不能修改！");
 						return;
 					}
-					var serialNum = table.$('input[name="serialNum"]:checked').val();
+					var serialNum = nTable.$('input[name="serialNum"]:checked').val();
 					$state.go("noticeAdd",{serialNum:serialNum});
 				}
 	 		}
@@ -391,81 +395,8 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 			}
 
 
-		 // 页面加载完成后调用，验证输入框
-			$scope.$watch('$viewContentLoaded', function() {  
-							var e = $("#noticeForm"),
-					        r = $(".alert-danger", e),
-					        i = $(".alert-success", e);
-					        e.validate({
-					            errorElement: "span",
-					            errorClass: "help-block help-block-error",
-					            focusInvalid: !1,
-					            ignore: "",
-					            messages: {
-					            	inOutNum:{required:"入库单号不能为空！"},
-					            	takeDeliverSerial:{required:"收货单号不能为空！"},
-					            	stockDate:{required:"入库日期不能为空！"},
-					            	operator:{required:"操作员不能为空！"},
-					            	contactNum:{required:"联系方式不能为空！"},
-					            	stockCount:{required:"入库数量不能为空！",digits:"发货数量必须为数字！"},
-					            	warehouseSerial:{required:"仓库不能为空！"}
-					            	//positionSerial:{required:"库位不能为空！"}
-					            },
-					            rules: {
-					            	inOutNum: {
-					                    required: !0
-					                },
-					                takeDeliverSerial: {
-					                    required: !0
-					                },
-					                stockDate: {
-					                	required: !0
-					                },
-					                operator: {
-					                	required: !0
-					                },
-					                warehouseSerial: {
-					                	required: !0
-					                },
-					                /*positionSerial: {
-					                	required: !0
-					                },*/
-					                stockCount: {
-					                	required: !0,
-					                	digits:!0,
-					                	StockInNumCheck:!0
-					                },
-					                contactNum: {
-					                	//required: !0,
-					                	isPhone: !0
-					                }
-					            },
-					            invalidHandler: function(e, t) {
-					                i.hide(),
-					                r.show(),
-					                App.scrollTo(r, -200)
-					            },
-					            errorPlacement: function(e, r) {
-					                r.is(":checkbox") ? e.insertAfter(r.closest(".md-checkbox-list, .md-checkbox-inline, .checkbox-list, .checkbox-inline")) : r.is(":radio") ? e.insertAfter(r.closest(".md-radio-list, .md-radio-inline, .radio-list,.radio-inline")) : e.insertAfter(r)
-					            },
-					            highlight: function(e) {
-					                $(e).closest(".form-group").addClass("has-error")
-					            },
-					            unhighlight: function(e) {
-					                $(e).closest(".form-group").removeClass("has-error")
-					            },
-					            success: function(e) {
-					                e.closest(".form-group").removeClass("has-error")
-					            },
-					            submitHandler: function(e) {
-					                i.show(),
-					                r.hide()
-					            }
-					        })   
-		}); 					
-	         
 	       
-		       /***选择收货列表初始化START***/
+		       /***选择公告列表初始化START***/
 		       var nTable;
 		       var noticeTable = function() {
 		                a = 0;
@@ -513,7 +444,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 //		                    serverSide: true,
 		                   // ajax: "rest/notice/noticeList",//加载数据中
 		                    ajax :{ "url":$rootScope.basePath
-		  						+ "/rest/notice/noticeList",// 加载数据中收货列表的数据    
+		  						+ "/rest/notice/noticeList",// 加载数据中公告列表的数据    
 		  						"contentType": "application/json",
 		  					    "type": "POST",
 		  					    "data": function ( d ) {
@@ -660,13 +591,13 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 			        function() {
 			            $(this).parents("tr").toggleClass("active")
 			        })
-		            /***收货列表初始化END***/
+		            /***公告列表初始化END***/
 			        
 			        
 		/*******************************************申请JS START*******************************************/
 			        
 			        /**
-					 * 去收货
+					 * 去申请公告
 					 */
 					$scope.toApplyNotice = function(){
 						var id_count = $('#noticeTable input[name="serialNum"]:checked').length;
@@ -793,7 +724,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 					var apply_table;
 			  		function showDbTable(){
 				  	  
-		  		      var tableAjaxUrl = ctx + "/rest/processAction/todoTask/"+ 'notice';// 加载待办列表数据
+		  		      var tableAjaxUrl = ctx + "/rest/processAction/todoTask/"+ 'myNotice';// 加载待办列表数据
 		  		    //  var loadApplyTable = function() {
 		  		             // a = 0;
 		  		              //App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
@@ -867,7 +798,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 		  		  							'render' : function(data,
 		  		  									type, row, meta) {
 		  		  								if (data == "notice") {
-													return "收货申请";
+													return "公告申请";
 												} else{
 													return data;
 												}
@@ -965,7 +896,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 			  		var y_table;
 			  		function showYbTable(){
 			  			
-			  			var tableAjaxUrl = ctx + "/rest/processAction/endTask/" + 'notice';// 加载待办列表数据
+			  			var tableAjaxUrl = ctx + "/rest/processAction/endTask/" + 'myNotice';// 加载待办列表数据
 			  			//  var loadApplyTable = function() {
 			  			// a = 0;
 			  			//App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
@@ -1042,6 +973,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 			  				           ajax: tableAjaxUrl,// 加载数据中
 			  				           "aoColumns": [
 			  				                        /* { mData: 'taskId' },*/
+			  				                         { mData: 'businessType' },
 			  				                         { mData: 'userName' },
 			  				                         { mData: 'title' },
 			  				                         { mData: 'startTime' },
@@ -1064,7 +996,16 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 			  				                        		 $compile(td)($scope);
 			  				                        	 }
 			  				                         },*/{
-			  				                        	 'targets' : 2,
+			  				                        	 'targets' : 0,
+			  				                        	 'searchable' : false,
+			  				                        	 'orderable' : false,
+			  				                        	 'render' : function(data,
+			  				                        			 type, row, meta) {
+			  				                        		 
+			  				                        		return "公告申请";
+			  				                        	 }
+			  				                         },{
+			  				                        	 'targets' : 3,
 			  				                        	 'searchable' : false,
 			  				                        	 'orderable' : false,
 			  				                        	 'render' : function(data,
@@ -1072,7 +1013,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 			  				                        		return timeStamp2String(data);
 			  				                        	 }
 			  				                         },{
-			  				                        	 'targets' : 3,
+			  				                        	 'targets' : 4,
 			  				                        	 'searchable' : false,
 			  				                        	 'orderable' : false,
 			  				                        	 'render' : function(data,
@@ -1084,7 +1025,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 			  						                		}
 			  				                        	 }
 			  				                         },{
-			  				                        	 'targets' : 4,
+			  				                        	 'targets' : 5,
 			  				                        	 'searchable' : false,
 			  				                        	 'orderable' : false,
 			  				                        	 'render' : function(data,
@@ -1095,7 +1036,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 			  													return '';
 			  				                        	   }
 			  				                         },{
-			  				                        	 'targets' : 7,
+			  				                        	 'targets' : 8,
 			  				                        	 'searchable' : false,
 			  				                        	 'orderable' : false,
 			  				                        	 'render' : function(data,

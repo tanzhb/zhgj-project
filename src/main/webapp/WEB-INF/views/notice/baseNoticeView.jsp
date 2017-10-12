@@ -5,7 +5,7 @@
 		<div class="row" align="center">
 			<div class="col-md-1"></div>
 			<div class="col-md-10">
-				<h1>{{param.noticeTitle}}</h1>
+				<h3 style="margin-top: 10px;font-weight: bolder;">{{param.noticeTitle}}</h3>
 			</div>
 			<div class="col-md-1">
 				<button class="btn defualt  btn-sm btn-circle" ui-sref='myNotice'>
@@ -23,7 +23,7 @@
 				<div class="portlet light form-fit ">
 					<div class="portlet-body form">
 						<div class="col-md-12" style="padding: 20px 0;">
-							<div ng-bind-html="param.context"></div>
+							<div ng-bind-html="param.context" style="margin: 0 auto;"></div>
 						</div>
 					</div>
 				</div>

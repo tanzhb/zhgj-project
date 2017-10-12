@@ -120,7 +120,7 @@
 																data-toggle="buttons">
 																<label
 																	class="btn btn-transparent yellow btn-circle btn-sm"
-																	ng-click="toApplyNotice()"> <i class="fa fa-plus"></i>
+																	ng-click="toApplyNotice()"> <i class="glyphicon glyphicon-play"></i>
 																	申请
 																</label> <label
 																	class="btn btn-transparent green btn-circle btn-sm"
@@ -248,6 +248,7 @@
 																	<th>申请人</th>
 																	<th>标题</th>
 																	<th>任务开始时间</th>
+																	<th>任务签收时间</th>
 																	<th>任务结束时间</th>
 																	<th>流程结束原因</th>
 																	<th>流程版本号</th>

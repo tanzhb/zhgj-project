@@ -1577,7 +1577,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    		}]
 		    	}	        
 		    }).state('myNotice', {
-		    	url: "/myNotice",
+		    	url: "/myNotice?:tabHref",
 		    	templateUrl: "rest/notice/myNotice",
 		    	data: {pageTitle: '公告'},
 		    	reload:true, 
@@ -3247,8 +3247,8 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 						getTodoTaskLength('takeDelivery', 'takeDelivery');
 						getEndTaskLength('takeDelivery', 'takeDelivery');
 					}else if('myNotice' == toState.name){ //公告
-						getTodoTaskLength('myNotice', 'notice');
-						getEndTaskLength('myNotice', 'notice');
+						getTodoTaskLength('myNotice', 'myNotice');
+						getEndTaskLength('myNotice', 'myNotice');
 					}else if('saleOrder' == toState.name){
 						getTodoTaskLength('saleOrder', 'saleOrder');
 						getEndTaskLength('saleOrder', 'saleOrder');

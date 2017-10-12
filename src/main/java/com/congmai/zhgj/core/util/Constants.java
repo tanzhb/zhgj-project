@@ -43,7 +43,7 @@ public class Constants {
 	public static final String NOTICE_KEY = "com.congmai.zhgj.notice";
 	
 	/***************** 单据类型-公告 *****************/
-	public static final String NOTICE = "notice";
+	public static final String NOTICE = "myNotice";
 	
 	/***************** 采购价格KEY *****************/
 	public static final String BUYPRICE_KEY = "com.congmai.zhgj.buyPrice";
