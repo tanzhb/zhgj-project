@@ -368,4 +368,16 @@
     <select id="selectCompanyInfo" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.Company">
     SELECT comName FROM company WHERE comId=#{comId}
     </select>
+    
+    
+    <!--批量添加附件  -->
+    <insert id="insertAttachFiles" parameterType="java.util.List">
+    insert into relationFile (serialNum,relationSerial,isReadable,fileType,fileDescribe,file,uploader,uploadDate,delFlg,creator,createTime,updater,updateTime)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+        (#{item.serialNum}, #{item.relationSerial},'0',#{item.fileType}
+        ,#{item.fileDescribe},#{item.file},#{item.uploader},NOW()
+        ,'0',#{item.creator},NOW(),#{item.updater},NOW())
+    </foreach>
+    </insert>
     </mapper>
