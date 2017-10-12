@@ -3,6 +3,7 @@ package com.congmai.zhgj.web.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,6 +77,17 @@ public class MessageServiceImpl extends GenericServiceImpl<Message, String> impl
 		message.setUpdater(userName);
 		message.setUpdateTime(new Date());
 		messageMapper.updateByPrimaryKeySelective(message);
+	}
+
+	@Override
+	public void insertBatch(Message messageVO) {
+		if(CollectionUtils.isNotEmpty(messageVO.getReceiverIds())){
+			for(String receiverId : messageVO.getReceiverIds()){
+				messageVO.setReceiverId(receiverId);
+				messageMapper.insert(messageVO);
+			}
+		}
+		
 	}
 
 }

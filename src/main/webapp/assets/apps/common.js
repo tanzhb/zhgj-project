@@ -240,6 +240,7 @@ function toastr8(title,str){
 						  ,offset: 'rb' //具体配置参考：offset参数项
 						  ,content: '<div id="messageDiv" style="padding: 10px 20px;">'+str+'</div>'
 						  ,shade: 0 //不显示遮罩
+						  ,time:8000
 						  ,yes: function(){
 						    layer.closeAll();
 						  }

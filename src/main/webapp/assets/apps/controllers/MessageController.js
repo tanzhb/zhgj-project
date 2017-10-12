@@ -48,9 +48,9 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 			       // var previousTab = $(e.relatedTarget).text(); 
 			        var absurl = $location.absUrl();
 			        $("#tip").text(activeTab);
-			        if(activeTab=="公告列表"){
+			        if(activeTab=="系统消息"){
 			        	handle.addCookie("d_type","systemMessage",24);
-			        }else if(activeTab=="最新公告"){
+			        }else if(activeTab=="业务提醒"){
 			        	handle.addCookie("d_type","businessMessage",24);
 			        }
 			});
@@ -133,7 +133,7 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 
 
 			$scope.delHtmlTag = function(str){
-				str = str.replace("马上处理","");
+				str = str.replace("马上处理","").replace("查看","");
 				return delHtmlTag(str);
 			}
 			
@@ -155,8 +155,12 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 			
 			$scope.messageView = function(serialNum,objSerial,actionName){
 				readMessage(serialNum);
-				if(actionName=="applyBuyOrder"){
+				if(actionName=="applyBuyOrder"||actionName=="refuseBuyOrder"){
 					$state.go("buyOrder",{tabHref:'1'});
+				}else if(actionName=="confirmBuyOrder"){
+					$state.go("supplyOrder");
+				}else if(actionName=="beConfirmBuyOrder"||actionName=="agreeBuyOrder"){
+					$state.go("buyOrder");
 				}
 			}
 			

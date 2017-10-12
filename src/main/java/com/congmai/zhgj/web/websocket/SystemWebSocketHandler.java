@@ -2,6 +2,7 @@ package com.congmai.zhgj.web.websocket;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -59,13 +60,33 @@ public class SystemWebSocketHandler implements WebSocketHandler{
 	 * 给所有在线用户发送消息
 	 * @param message
 	 */
-	public void sendMessageToUsers(TextMessage message) {
+	public void sendMessageToAll(TextMessage message) {
 		for (WebSocketSession user : users) {
 			if (user.isOpen()) {
 				try {
 					user.sendMessage(message);
 				} catch (IOException e) {
 					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 给多个用户发送消息
+	 * @param message
+	 */
+	public void sendMessageToUsers(List<String> userIds,TextMessage message) {
+		for (WebSocketSession user : users) {
+			for(String userId : userIds){
+				if (user.getHandshakeAttributes().get("userId").equals(userId)) {
+					if (user.isOpen()) {
+						try {
+							user.sendMessage(message);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
 				}
 			}
 		}
