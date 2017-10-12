@@ -601,25 +601,14 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 									"sLast" : "尾页"
 								}
 							},
-							/*fixedHeader : {// 固定表头、表底
-								header : !0,
-								footer : !0,
-								headerOffset : a
-							},*/
-							// select: true,行多选
 							order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
 							bRetrieve : true,
-							//"sScrollX": "100%",
-							//"sScrollXInner": "110%",
 							"bScrollCollapse": true,
-							// searching: true,//是否过滤检索
-							// ordering: true,//是否排序
 							lengthMenu : [
 							              [ 5, 10, 15,15, 30, -1 ],
 							              [ 5, 10, 15, 15,30, "All" ] ],
 							              pageLength : 10,// 每页显示数量
 							              processing : true,// loading等待框
-							              // serverSide: true,
 							              ajax:"rest/delivery/findAllDeliveryList",//加载数据中user表数据
 							              "aoColumns": [
 							                            { mData: 'serialNum',
@@ -628,9 +617,9 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 																type,
 																row,
 																meta) {
-															return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">' +
-																	'<input type="checkbox" name="id[]" value="'+ $('<div/>').text(data).html()+ '">' +
-																	'<span></span></label>';
+						                            		return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+															"<input type='checkbox' class='checkboxes' value='1' />" +
+															"<span></span></label>";
 														}
 						                            },
 							                            { mData: 'deliverNum' },
@@ -673,7 +662,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 							                            	'orderable' : false,
 							                            	'className' : 'dt-body-center',
 							                            	'render' : function(data,type, full, meta) {
-							                            		return '<input type="checkbox" name="id[]" value="'+ $('<div/>').text(data).html()+ '">';
+							                            		return '<label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" class="checkbox" value="'+ $('<div/>').text(data).html()+ '" name="id[]" /><span></span></label>';
 							                            	}
 							                            } ,
 							                            {
@@ -692,12 +681,12 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 							                            	console.log('排序');
 							                            })
 							                            
-							                            $("#sample_2").find(".group-checkable").change(function() {
-											            var e = jQuery(this).attr("data-set"),
-											            t = jQuery(this).is(":checked");
-											            jQuery(e).each(function() {
-											                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
-											            })
+						                            $("#sample_2").find(".group-checkable").change(function() {
+										            var e = jQuery(this).attr("data-set"),
+										            t = jQuery(this).is(":checked");
+										            jQuery(e).each(function() {
+										                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+										            })
 											        }),
 											        $("#sample_2").on("change", "tbody tr .checkboxes",
 											        function() {
@@ -1934,6 +1923,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	   		$state.go('delivery',{tabHref:1});//返回待办列表
 	   	};
 		
+	   	
 		//修改
 		$scope.jumpToEdit = function() {		
 			if(table.rows('.active').data().length != 1){

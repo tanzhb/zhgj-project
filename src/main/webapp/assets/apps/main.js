@@ -2027,9 +2027,14 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 			'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
 			'assets/global/plugins/datatables/datatables.all.min.js',
 			'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+			
+			'assets/apps/scripts/angular-file-upload-shim.min.js',
+		    'assets/apps/scripts/angular-file-upload.min.js',
+		    'assets/apps/scripts/FileUploader.js',
+		    
 			'assets/apps/scripts/pageHandle.js',
-			'assets/apps/service/DeliveryService.js',
-			'assets/apps/controllers/DeliveryController.js'
+        	'assets/apps/service/DeliveryService.js',
+			'assets/apps/controllers/DeliveryController.js',
                         ]
                     });
                 }]
