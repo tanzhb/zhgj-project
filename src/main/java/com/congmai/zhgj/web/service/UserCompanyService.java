@@ -3,6 +3,8 @@ package com.congmai.zhgj.web.service;
 import java.util.List;
 
 import com.congmai.zhgj.core.generic.GenericService;
+import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.UserCompanyKey;
 
 public interface UserCompanyService extends GenericService<UserCompanyKey, String>{
@@ -28,4 +30,20 @@ public interface UserCompanyService extends GenericService<UserCompanyKey, Strin
 	 * @return
 	 */
 	public List<String> getComIdsByUserId(String user_id);
+	
+	/**
+	 * 
+	 * @Description (获取公司下的所有人员ID)
+	 * @param supplyComId
+	 * @return
+	 */
+	public List<UserCompanyKey> getUsersByComId(String comId);
+	
+	/**
+	 * 
+	 * @Description (TODO根据user_id获取企业 )
+	 * @param user
+	 * @return
+	 */
+	public Company getCompany(String userId);
 }

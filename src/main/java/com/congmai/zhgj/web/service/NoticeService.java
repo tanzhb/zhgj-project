@@ -46,4 +46,8 @@ public interface NoticeService extends GenericService<Notice, String> {
 	 */
 	void readNoticeShare(String serialNum,String userId);
 
+	void updateByPrimaryKeySelective(Notice notice);
+
+	Notice selectByPrimaryKey(String serialNum);
+
 }

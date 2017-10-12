@@ -1518,8 +1518,66 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    			});
 		    		}]
 		    	}	        
+		    }).state('noticeApply', {
+		    	url: "/noticeApply?:serialNum",
+		    	templateUrl: "rest/notice/noticeApply",
+		    	data: {pageTitle: '公告申请'},
+		    	reload:true, 
+		    	controller: "NoticeController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [       
+		    				        'assets/apps/controllers/NoticeController.js',
+		    				        'assets/apps/service/NoticeService.js'
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
+		    }).state('noticeAudit', {
+		    	url: "/noticeAudit?:serialNum&:taskId&:comments",
+		    	templateUrl: "rest/notice/noticeAudit",
+		    	data: {pageTitle: '公告审核'},
+		    	reload:true, 
+		    	controller: "NoticeController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [       
+		    				        'assets/apps/controllers/NoticeController.js',
+		    				        'assets/apps/service/NoticeService.js'
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
+		    }).state('noticeAdjustment', {
+		    	url: "/noticeAdjustment?:serialNum&:taskId&:comments",
+		    	templateUrl: "rest/notice/noticeAdjustment",
+		    	data: {pageTitle: '公告调整'},
+		    	reload:true, 
+		    	controller: "NoticeController",
+		    	resolve: {
+		    		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		    			return $ocLazyLoad.load({
+		    				name: 'MetronicApp',
+		    				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		    				files: [       
+		    				        'assets/apps/controllers/NoticeController.js',
+		    				        'assets/apps/service/NoticeService.js',
+		    				        'assets/global/plugins/bootstrap-markdown/js/bootstrap-markdown.js',
+			    			        'assets/global/plugins/bootstrap-summernote/summernote.css',
+			    			        'assets/global/plugins/bootstrap-summernote/lang/summernote-zh-CN.min.js',
+			    			        'assets/global/plugins/bootstrap-summernote/summernote.min.js'
+		    				        ]
+		    			});
+		    		}]
+		    	}	        
 		    }).state('myNotice', {
-		    	url: "/myNotice",
+		    	url: "/myNotice?:tabHref",
 		    	templateUrl: "rest/notice/myNotice",
 		    	data: {pageTitle: '公告'},
 		    	reload:true, 
@@ -1535,8 +1593,16 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 									'assets/global/plugins/datatables/datatables.all.min.js',
 		    				        'assets/global/plugins/bootstrap-paginator/bootstrap-paginator.js',
 		    				        'assets/apps/controllers/NoticeController.js',
-		    				        'assets/apps/service/NoticeService.js'
-		    				        
+		    				        'assets/apps/service/NoticeService.js',
+		    				        //流程申请
+		    						'assets/global/css/dialog.css',
+		    						'assets/global/css/easyui.css',
+		    						'assets/global/css/datagrid.css',
+		    						'assets/global/css/jquery.qtip.min.css',
+		    			         
+		    						'assets/global/plugins/jquery.easyui.min.js',
+		    						'assets/global/plugins/jquery.qtip.min.js',
+		    						'assets/global/plugins/jquery.outerhtml.js'
 		    				        ]
 		    			});
 		    		}]
@@ -3034,6 +3100,15 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 			   }else if('noticeView' == toState.name){//公告详情
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				   "<li><a ui-sref='myNotice'>公告</a> <i class='fa fa-angle-right'></i></li><li><a>公告详情</a></li>";
+			   }else if('noticeApply' == toState.name){//公告申请
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a ui-sref='myNotice'>公告</a> <i class='fa fa-angle-right'></i></li><li><a>公告申请</a></li>";
+			   }else if('noticeAudit' == toState.name){//公告审核
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a ui-sref='myNotice'>公告</a> <i class='fa fa-angle-right'></i></li><li><a>公告审核</a></li>";
+			   }else if('noticeAdjustment' == toState.name){//公告申请调整
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a ui-sref='myNotice'>公告</a> <i class='fa fa-angle-right'></i></li><li><a>公告申请调整</a></li>";
 			   }else if('gatheringMoneyRecord' == toState.name){//应收款
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" +
@@ -3183,6 +3258,9 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					}else if('takeDelivery' == toState.name){ //收货
 						getTodoTaskLength('takeDelivery', 'takeDelivery');
 						getEndTaskLength('takeDelivery', 'takeDelivery');
+					}else if('myNotice' == toState.name){ //公告
+						getTodoTaskLength('myNotice', 'myNotice');
+						getEndTaskLength('myNotice', 'myNotice');
 					}else if('saleOrder' == toState.name){
 						getTodoTaskLength('saleOrder', 'saleOrder');
 						getEndTaskLength('saleOrder', 'saleOrder');

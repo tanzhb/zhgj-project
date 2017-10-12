@@ -4,13 +4,22 @@
   <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.Notice" >
     <id column="serial_num" property="serialNum" jdbcType="VARCHAR" />
     <result column="notice_type" property="noticeType" jdbcType="VARCHAR" />
-    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="notice_num" property="noticeNum" jdbcType="VARCHAR" />
+    <result column="notice_title" property="noticeTitle" jdbcType="VARCHAR" />
     <result column="com_id" property="comId" jdbcType="VARCHAR" />
+    <result column="publisher" property="publisher" jdbcType="VARCHAR" />
+    <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="is_publish" property="isPublish" jdbcType="CHAR" />
     <result column="del_flg" property="delFlg" jdbcType="CHAR" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="process_Instance_id" property="processInstanceId" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="apply_date" property="applyDate" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.congmai.zhgj.web.model.Notice" extends="BaseResultMap" >
     <result column="context" property="context" jdbcType="LONGVARCHAR" />
@@ -18,7 +27,7 @@
   
   <resultMap id="MyNoticeMap" type="com.congmai.zhgj.web.model.Notice" extends="ResultMapWithBLOBs" >
     <result column="read_flg" property="readFlg" jdbcType="VARCHAR" />
-    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="userId" property="user_id" jdbcType="VARCHAR" />
   </resultMap>
   
   <sql id="Example_Where_Clause" >
@@ -80,8 +89,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    serial_num, notice_type, title, com_id, creator, create_time, updater, update_time, 
-    del_flg
+     serial_num, notice_num,notice_type, notice_title, com_id, publisher, publish_time, creator, create_time, 
+    updater, update_time, is_publish, del_flg, reason, process_Instance_id, user_id, 
+    apply_date, status
   </sql>
   <sql id="Blob_Column_List" >
     context
@@ -134,15 +144,21 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.congmai.zhgj.web.model.Notice" >
-    insert into notice (serial_num, notice_type, title, 
-      com_id, creator, create_time, 
-      updater, update_time, del_flg, 
-      context)
-    values (#{serialNum,jdbcType=VARCHAR}, #{noticeType,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
-      #{comId,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{delFlg,jdbcType=CHAR}, 
-      #{context,jdbcType=LONGVARCHAR})
+ <insert id="insert" parameterType="com.congmai.zhgj.web.model.Notice" >
+    insert into notice (serial_num, notice_num, notice_type, notice_title, 
+      com_id, publisher, publish_time, 
+      creator, create_time, updater, 
+      update_time, is_publish, del_flg, 
+      reason, process_Instance_id, user_id, 
+      apply_date, status, context
+      )
+    values (#{serialNum,jdbcType=VARCHAR}, #{noticeNum,jdbcType=VARCHAR}, #{noticeType,jdbcType=VARCHAR}, #{noticeTitle,jdbcType=VARCHAR}, 
+      #{comId,jdbcType=VARCHAR}, #{publisher,jdbcType=VARCHAR}, #{publishTime,jdbcType=TIMESTAMP}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{isPublish,jdbcType=CHAR}, #{delFlg,jdbcType=CHAR}, 
+      #{reason,jdbcType=VARCHAR}, #{processInstanceId,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
+      #{applyDate,jdbcType=DATE}, #{status,jdbcType=VARCHAR}, #{context,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.Notice" >
     insert into notice
@@ -153,11 +169,20 @@
       <if test="noticeType != null" >
         notice_type,
       </if>
-      <if test="title != null" >
-        title,
+      <if test="noticeNum != null" >
+        notice_num,
+      </if>
+      <if test="noticeTitle != null" >
+        notice_title,
       </if>
       <if test="comId != null" >
         com_id,
+      </if>
+      <if test="publisher != null" >
+        publisher,
+      </if>
+      <if test="publishTime != null" >
+        publish_time,
       </if>
       <if test="creator != null" >
         creator,
@@ -171,8 +196,26 @@
       <if test="updateTime != null" >
         update_time,
       </if>
+      <if test="isPublish != null" >
+        is_publish,
+      </if>
       <if test="delFlg != null" >
         del_flg,
+      </if>
+      <if test="reason != null" >
+        reason,
+      </if>
+      <if test="processInstanceId != null" >
+        process_Instance_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="applyDate != null" >
+        apply_date,
+      </if>
+      <if test="status != null" >
+        status,
       </if>
       <if test="context != null" >
         context,
@@ -185,11 +228,20 @@
       <if test="noticeType != null" >
         #{noticeType,jdbcType=VARCHAR},
       </if>
-      <if test="title != null" >
-        #{title,jdbcType=VARCHAR},
+      <if test="noticeNum != null" >
+        #{noticeNum,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeTitle != null" >
+        #{noticeTitle,jdbcType=VARCHAR},
       </if>
       <if test="comId != null" >
         #{comId,jdbcType=VARCHAR},
+      </if>
+      <if test="publisher != null" >
+        #{publisher,jdbcType=VARCHAR},
+      </if>
+      <if test="publishTime != null" >
+        #{publishTime,jdbcType=TIMESTAMP},
       </if>
       <if test="creator != null" >
         #{creator,jdbcType=VARCHAR},
@@ -203,8 +255,26 @@
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="isPublish != null" >
+        #{isPublish,jdbcType=CHAR},
+      </if>
       <if test="delFlg != null" >
         #{delFlg,jdbcType=CHAR},
+      </if>
+      <if test="reason != null" >
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="processInstanceId != null" >
+        #{processInstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="applyDate != null" >
+        #{applyDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
       </if>
       <if test="context != null" >
         #{context,jdbcType=LONGVARCHAR},
@@ -217,7 +287,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+ <update id="updateByExampleSelective" parameterType="map" >
     update notice
     <set >
       <if test="record.serialNum != null" >
@@ -226,11 +296,20 @@
       <if test="record.noticeType != null" >
         notice_type = #{record.noticeType,jdbcType=VARCHAR},
       </if>
-      <if test="record.title != null" >
-        title = #{record.title,jdbcType=VARCHAR},
+      <if test="record.noticeNum != null" >
+        notice_num = #{record.noticeNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.noticeTitle != null" >
+        notice_title = #{record.noticeTitle,jdbcType=VARCHAR},
       </if>
       <if test="record.comId != null" >
         com_id = #{record.comId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.publisher != null" >
+        publisher = #{record.publisher,jdbcType=VARCHAR},
+      </if>
+      <if test="record.publishTime != null" >
+        publish_time = #{record.publishTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.creator != null" >
         creator = #{record.creator,jdbcType=VARCHAR},
@@ -244,8 +323,26 @@
       <if test="record.updateTime != null" >
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.isPublish != null" >
+        is_publish = #{record.isPublish,jdbcType=CHAR},
+      </if>
       <if test="record.delFlg != null" >
         del_flg = #{record.delFlg,jdbcType=CHAR},
+      </if>
+      <if test="record.reason != null" >
+        reason = #{record.reason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.processInstanceId != null" >
+        process_Instance_id = #{record.processInstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.applyDate != null" >
+        apply_date = #{record.applyDate,jdbcType=DATE},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
       <if test="record.context != null" >
         context = #{record.context,jdbcType=LONGVARCHAR},
@@ -259,13 +356,22 @@
     update notice
     set serial_num = #{record.serialNum,jdbcType=VARCHAR},
       notice_type = #{record.noticeType,jdbcType=VARCHAR},
-      title = #{record.title,jdbcType=VARCHAR},
+      notice_num = #{record.noticeNum,jdbcType=VARCHAR},
+      notice_title = #{record.noticeTitle,jdbcType=VARCHAR},
       com_id = #{record.comId,jdbcType=VARCHAR},
+      publisher = #{record.publisher,jdbcType=VARCHAR},
+      publish_time = #{record.publishTime,jdbcType=TIMESTAMP},
       creator = #{record.creator,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       updater = #{record.updater,jdbcType=VARCHAR},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      is_publish = #{record.isPublish,jdbcType=CHAR},
       del_flg = #{record.delFlg,jdbcType=CHAR},
+      reason = #{record.reason,jdbcType=VARCHAR},
+      process_Instance_id = #{record.processInstanceId,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      apply_date = #{record.applyDate,jdbcType=DATE},
+      status = #{record.status,jdbcType=VARCHAR},
       context = #{record.context,jdbcType=LONGVARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -275,13 +381,22 @@
     update notice
     set serial_num = #{record.serialNum,jdbcType=VARCHAR},
       notice_type = #{record.noticeType,jdbcType=VARCHAR},
-      title = #{record.title,jdbcType=VARCHAR},
+      notice_num = #{record.noticeNum,jdbcType=VARCHAR},
+      notice_title = #{record.noticeTitle,jdbcType=VARCHAR},
       com_id = #{record.comId,jdbcType=VARCHAR},
+      publisher = #{record.publisher,jdbcType=VARCHAR},
+      publish_time = #{record.publishTime,jdbcType=TIMESTAMP},
       creator = #{record.creator,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       updater = #{record.updater,jdbcType=VARCHAR},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      del_flg = #{record.delFlg,jdbcType=CHAR}
+      is_publish = #{record.isPublish,jdbcType=CHAR},
+      del_flg = #{record.delFlg,jdbcType=CHAR},
+      reason = #{record.reason,jdbcType=VARCHAR},
+      process_Instance_id = #{record.processInstanceId,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      apply_date = #{record.applyDate,jdbcType=DATE},
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -292,11 +407,20 @@
       <if test="noticeType != null" >
         notice_type = #{noticeType,jdbcType=VARCHAR},
       </if>
-      <if test="title != null" >
-        title = #{title,jdbcType=VARCHAR},
+      <if test="noticeNum != null" >
+        notice_num = #{noticeNum,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeTitle != null" >
+        notice_title = #{noticeTitle,jdbcType=VARCHAR},
       </if>
       <if test="comId != null" >
         com_id = #{comId,jdbcType=VARCHAR},
+      </if>
+      <if test="publisher != null" >
+        publisher = #{publisher,jdbcType=VARCHAR},
+      </if>
+      <if test="publishTime != null" >
+        publish_time = #{publishTime,jdbcType=TIMESTAMP},
       </if>
       <if test="creator != null" >
         creator = #{creator,jdbcType=VARCHAR},
@@ -310,8 +434,26 @@
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="isPublish != null" >
+        is_publish = #{isPublish,jdbcType=CHAR},
+      </if>
       <if test="delFlg != null" >
         del_flg = #{delFlg,jdbcType=CHAR},
+      </if>
+      <if test="reason != null" >
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="processInstanceId != null" >
+        process_Instance_id = #{processInstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="applyDate != null" >
+        apply_date = #{applyDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
       </if>
       <if test="context != null" >
         context = #{context,jdbcType=LONGVARCHAR},
@@ -322,37 +464,55 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.congmai.zhgj.web.model.Notice" >
     update notice
     set notice_type = #{noticeType,jdbcType=VARCHAR},
-      title = #{title,jdbcType=VARCHAR},
+      notice_num = #{noticeNum,jdbcType=VARCHAR},
+      notice_title = #{noticeTitle,jdbcType=VARCHAR},
       com_id = #{comId,jdbcType=VARCHAR},
+      publisher = #{publisher,jdbcType=VARCHAR},
+      publish_time = #{publishTime,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       updater = #{updater,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_publish = #{isPublish,jdbcType=CHAR},
       del_flg = #{delFlg,jdbcType=CHAR},
+      reason = #{reason,jdbcType=VARCHAR},
+      process_Instance_id = #{processInstanceId,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      apply_date = #{applyDate,jdbcType=DATE},
+      status = #{status,jdbcType=VARCHAR},
       context = #{context,jdbcType=LONGVARCHAR}
     where serial_num = #{serialNum,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.Notice" >
     update notice
     set notice_type = #{noticeType,jdbcType=VARCHAR},
-      title = #{title,jdbcType=VARCHAR},
+      notice_num = #{noticeNum,jdbcType=VARCHAR},
+      notice_title = #{noticeTitle,jdbcType=VARCHAR},
       com_id = #{comId,jdbcType=VARCHAR},
+      publisher = #{publisher,jdbcType=VARCHAR},
+      publish_time = #{publishTime,jdbcType=TIMESTAMP},
       creator = #{creator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       updater = #{updater,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      del_flg = #{delFlg,jdbcType=CHAR}
+      is_publish = #{isPublish,jdbcType=CHAR},
+      del_flg = #{delFlg,jdbcType=CHAR},
+      reason = #{reason,jdbcType=VARCHAR},
+      process_Instance_id = #{processInstanceId,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      apply_date = #{applyDate,jdbcType=DATE},
+      status = #{status,jdbcType=VARCHAR}
     where serial_num = #{serialNum,jdbcType=VARCHAR}
   </update>
   <select id="findMyNoticeList" parameterType="com.congmai.zhgj.web.model.Notice" resultMap="MyNoticeMap">
-  	SELECT n.serial_num, n.notice_type, n.title, n.com_id, n.creator,n.context,n.create_time, n.updater, n.update_time, 
-    	   n.del_flg,ns.read_flg,ns.user_id
-     from notice n LEFT JOIN notice_share ns on n.serial_num = ns.notice_serial and ns.user_id = #{userId}
-	where n.notice_type like CONCAT('%',#{status},'%') and n.del_flg = 0 and (ns.del_flg = 0 or ns.del_flg is null) order by n.update_time desc limit #{start},#{pageSize}
+  	SELECT n.serial_num, n.notice_type, n.notice_title, n.com_id, n.creator,n.context,n.create_time, n.updater, n.update_time, 
+    	   n.del_flg,ns.read_flg,ns.user_id as userId
+     from notice n LEFT JOIN notice_share ns on n.serial_num = ns.notice_serial and ns.user_id = #{user_id}
+	where n.notice_type like CONCAT('%',#{status},'%') and n.del_flg = 0 and (ns.del_flg = 0 or ns.del_flg is null) and n.status = '1' order by n.update_time desc limit #{pageIndex},#{pageSize}
   </select>
   <select id="countMyNoticeList" parameterType="com.congmai.zhgj.web.model.Notice" resultType="java.lang.Integer">
   	SELECT count(n.serial_num)
-     from notice n LEFT JOIN notice_share ns on n.serial_num = ns.notice_serial and ns.user_id = #{userId}
-	where n.notice_type like CONCAT('%',#{status},'%') and n.del_flg = 0  and (ns.del_flg = 0 or ns.del_flg is null)   
+     from notice n LEFT JOIN notice_share ns on n.serial_num = ns.notice_serial and ns.user_id = #{user_id}
+	where n.notice_type like CONCAT('%',#{status},'%') and n.del_flg = 0  and (ns.del_flg = 0 or ns.del_flg is null) and n.status = '1'  
   </select>
 </mapper>
