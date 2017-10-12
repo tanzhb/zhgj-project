@@ -17,4 +17,6 @@ public interface MessageService extends GenericService<Message, String>{
 
 	void readMessage(String serialNum, String string);
 
+	void insertBatch(Message messageVO);
+
 }
