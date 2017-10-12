@@ -690,6 +690,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/materielService.js',
 	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/CommonService.js',
 				'assets/apps/controllers/saleOrderController.js'
                       ]
                     });

@@ -1420,7 +1420,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	       };
     	 
     	 /**
-			 * 保存销售订单物料信息
+			 * 保存采购订单物料信息
 			 */
 			$scope.saveOrderMateriel = function(orderMateriel,index) {
 /*
@@ -1535,7 +1535,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 			}
 	        
 	        /**
-			 * 编辑销售订单物料
+			 * 编辑采购订单物料
 			 */
 	        $scope.editOrderMateriel=function (materiel) {
 	        	// .show_materiels = false;
@@ -2637,7 +2637,7 @@ var e = $("#form_clauseSettlement"),
 			       	}
 		       };
 		       
-		       $scope.arithmeticRateUnit  = function(scope) {//计算含税销售单价
+		       $scope.arithmeticRateUnit  = function(scope) {//计算含税采购单价
 			       	if(scope.orderUnitPrice&&$scope.buyOrder.rate){
 			       		return (scope.orderUnitPrice*($scope.buyOrder.rate/100+1)).toFixed(4);
 			       	}else{
@@ -2677,11 +2677,19 @@ var e = $("#form_clauseSettlement"),
 		       };
 		       
 		       
-		       $scope._arithmeticRateUnit  = function(scope) {//计算含税销售单价
-			       	if(scope._orderMateriel.orderUnitPrice&&$scope.buyOrder.rate){
-			       		return (scope._orderMateriel.orderUnitPrice*($scope.buyOrder.rate/100+1)).toFixed(4);
+		       $scope._arithmeticRateUnit  = function(_orderMateriel) {//计算含税采购单价
+			       	if(_orderMateriel.orderUnitPrice&&$scope.buyOrder.rate){
+			       		_orderMateriel.orderRateUnit  =  (_orderMateriel.orderUnitPrice*($scope.buyOrder.rate/100+1)).toFixed(4);
 			       	}else{
-			       		return 0;
+			       		_orderMateriel.orderRateUnit  =   0;
+			       	}
+		       };
+		       
+		       $scope._arithmeticUnitPrice  = function(_orderMateriel) {//计算不含税采购单价
+			       	if(_orderMateriel.orderRateUnit&&$scope.buyOrder.rate){
+			       		_orderMateriel.orderUnitPrice  =  (_orderMateriel.orderRateUnit/($scope.buyOrder.rate/100+1)).toFixed(4);
+			       	}else{
+			       		_orderMateriel.orderUnitPrice  =   0;
 			       	}
 		       };
 		       

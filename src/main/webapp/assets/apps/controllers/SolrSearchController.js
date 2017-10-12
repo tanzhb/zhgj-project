@@ -7,8 +7,8 @@ angular
 						'$rootScope',
 						'$scope',
 						'settings',
-						'$sce', 'UserService', 
-						function($rootScope, $scope, settings, $sce, UserService) {
+						'$sce', '$state','UserService', 
+						function($rootScope, $scope, settings, $sce, $state, UserService) {
 							$scope
 									.$on(
 											'$viewContentLoaded',
@@ -25,6 +25,17 @@ angular
 							$scope.TrustDangerousSnippet = function(post) {// ng-repeat循环含有html标签时，添加html信任，显示标签
 								return $sce.trustAsHtml(post.search_fields);
 							};
+							
+							//点击title查看订单详情
+							$scope.viewBuyOrder = function(serialNum, goType){
+								if(goType == 'buyOrder'){//跳转到采购订单详情页面
+									$state.go("viewBuyOrder",{serialNum:serialNum});
+								}else if(goType == 'saleOrder'){//跳转到销售订单详情页面
+									$state.go("viewSaleOrder",{serialNum:serialNum});
+								}
+						    	
+						    }
+							
 							//配置分页基本参数
 							$scope.paginationConf = {
 								currentPage : 1,
@@ -33,11 +44,8 @@ angular
 								pagesLength : 15,
 								perPageOptions : [ 10, 20, 30, 40, 50 ],
 								onChange : function() {
-									console.log("$rootScope.searchType = " + $rootScope.searchType);
 									
-									console.log("$scope.paginationConf.itemsPerPage = " + $scope.paginationConf.itemsPerPage);
 									var start = ($scope.paginationConf.currentPage - 1)*10;
-									console.log("start = " + start);
 									UserService
 									.solrSearch($rootScope.queryStr,$rootScope.searchType,start,$scope.paginationConf.itemsPerPage)
 									.then(

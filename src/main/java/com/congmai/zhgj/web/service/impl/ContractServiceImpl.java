@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.dao.ContractMapper;
 import com.congmai.zhgj.web.dao.UserMapper;
 import com.congmai.zhgj.web.model.ContractVO;
@@ -139,6 +140,7 @@ public class ContractServiceImpl extends GenericServiceImpl<ContractVO, String> 
 	 * @param contractVO
 	 */
 	@Override
+	@OperationLog(operateType = "update" ,operationDesc = "签订合同" ,objectSerial= "{serialNum}")
 	public void updateOrderAfterSign(Map<String,Object> map) {
 		// TODO Auto-generated method stub
 		contractMapper.updateOrderAfterSign(map);
