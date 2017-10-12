@@ -285,7 +285,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 	        	handle.confirm("确定删除吗？",function(){
 	        		var ids = '';
 					// Iterate over all checkboxes in the table
-					table.$('input[name="serialNum"]').each(
+					nTable.$('input[name="serialNum"]').each(
 							function() {
 								// If checkbox exist in DOM
 								if ($.contains(document, this)) {
@@ -305,7 +305,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 	        		promise.then(function(data){
 	        			toastr.success("删除成功");
 	        			handle.unblockUI();
-	        			table.ajax.reload(); // 重新加载datatables数据
+	        			nTable.ajax.reload(); // 重新加载datatables数据
 	        			/*$state.go('company',{},{reload:true}); */
 	        		},function(data){
 	        			//调用承诺接口reject();

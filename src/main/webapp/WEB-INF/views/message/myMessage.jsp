@@ -31,9 +31,9 @@
 				</div>
 				<ul class="nav nav-tabs" id="message_tab">
 					<li class="active" ><a data-target="#portlet_tab2_1"  ng-click="businessMessageList()"
-						data-toggle="tab">业务提醒</a></li>
+						data-toggle="tab">业务提醒<businessMessage/></a></li>
 					<li ><a data-target="#portlet_tab2_2" ng-click="systemMessageList()"
-						data-toggle="tab">系统消息</a></li>
+						data-toggle="tab">系统消息<systemMessage/></a></li>
 				</ul>
 			</div>
 			<div class="portlet-body" id="businessMessage">

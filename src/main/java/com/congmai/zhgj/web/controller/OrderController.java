@@ -259,7 +259,6 @@ public class OrderController {
 //    			message.setMessage("订单流程已启动，流程ID：" + processInstanceId);
 		    logger.info("processInstanceId: "+processInstanceId);
 		    
-		    orderInfo.setOrderNum("100000001"); //需要订单编号
 		    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(orderInfo,MessageConstants.APPLY_BUY_ORDER));
 		    
 		    flag = "1";
@@ -517,8 +516,8 @@ public class OrderController {
 			
 			//发送消息
 			if(reApply){
-				  orderInfo.setOrderNum("100000001"); //需要订单编号
 			        //申请消息
+				   orderInfo = orderService.selectById(orderInfo.getSerialNum());
 				   EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(orderInfo,MessageConstants.APPLY_BUY_ORDER));
 			}
 		} catch (ActivitiObjectNotFoundException e) {

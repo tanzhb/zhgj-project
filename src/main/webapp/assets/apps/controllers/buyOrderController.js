@@ -2794,6 +2794,7 @@ var e = $("#form_clauseSettlement"),
 		        	$scope.submitOrder = {}
 		        	$scope.submitOrder.serialNum = $scope.buyOrder.serialNum;
 		        	$scope.submitOrder.remark = $scope.buyOrder.remark;
+		        	$scope.submitOrder.orderNum = $scope.buyOrder.orderNum;
 		        	//启动流程
 		        	orderService.startBuyOrderProcess($scope.submitOrder).then(
 		          		     function(data){

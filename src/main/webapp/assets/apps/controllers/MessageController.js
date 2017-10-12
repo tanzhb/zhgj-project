@@ -2,8 +2,8 @@
  * 
  */
 
-angular.module('MetronicApp').controller('MessageController',['$rootScope','$scope','$state','$http','messageService','$location','$compile','$stateParams',
-                                                             function($rootScope,$scope,$state,$http,messageService,$location,$compile,$stateParams) {
+angular.module('MetronicApp').controller('MessageController',['$rootScope','$scope','$state','$http','messageService','$location','$compile','$stateParams', '$q',
+                                                             function($rootScope,$scope,$state,$http,messageService,$location,$compile,$stateParams,$q) {
 	 $scope.$on('$viewContentLoaded', function() {   
 	    	// initialize core components
 		    handle = new pageHandle();
@@ -23,7 +23,7 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 	 				
 		 			$scope.businessMessageList();
 		 		}	
-	    	
+	 			getMessageCount();
 	    	
 	    	// set default layout mode
 	    	$rootScope.settings.layout.pageContentWhite = true;
@@ -40,6 +40,21 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 	 		$scope.systemMessageList = function(){
 	 			createSystemMessageTable(10,1,true,null);
 	 		}
+	 		
+	 		function getMessageCount(){
+	 			 var promise = messageService.systemMessageSize();
+	 			 promise.then(function(data){
+	 				$scope.systemMessageSize = data; 
+	 			 },function(data){
+	 				 //调用承诺接口reject();
+	 			 });
+	 			 var promise2 = messageService.businessMessageSize();
+	 			 promise2.then(function(data){
+	 				 $scope.businessMessageSize = data; 
+	 			 },function(data){
+	 				 //调用承诺接口reject();
+	 			 });
+			}
 	 		
 	 		 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 			        // 获取已激活的标签页的名称
