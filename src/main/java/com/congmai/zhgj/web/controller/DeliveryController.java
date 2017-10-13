@@ -683,6 +683,7 @@ public class DeliveryController {
 				attachFile=attachFile+file+","+remark+"&";
 			}
 			deliveryMaterielVO.setAttachFile(attachFile);
+			deliveryMaterielVO.setFiles(files);
 		}
 		
 		map.put("deliveryMateriels", deliveryMateriels);

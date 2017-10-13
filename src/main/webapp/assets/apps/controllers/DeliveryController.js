@@ -980,6 +980,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	    
 	    //下载文件查看详情时
 	       $scope.downloadFile1 = function(str){
+	    	   debugger
 	    	 window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+encodeURI(encodeURI(str));
 	       }
 	    

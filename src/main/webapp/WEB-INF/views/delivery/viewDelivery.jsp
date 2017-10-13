@@ -1,27 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!-- BEGIN PAGE HEADER-->
-
-<!-- <h3 class="page-title">发货信息</h3>
-<div class="page-bar">
-	<ul class="page-breadcrumb">
-		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
-			class="fa fa-angle-right"></i></li>
-		<li><a ui-sref="delivery">发货</a> <i class="fa fa-angle-right"></i>
-		</li>
-		<li><a>发货详情</a></li>
-	</ul>
-	<div class="page-toolbar">
-		<div class="btn-group pull-right">
-			<button type="button"
-				class="btn btn-fit-height grey-salt dropdown-toggle"
-				onclick="printdiv('saleOrderPrint')">
-				<i class="fa fa-print"></i> 打印
-			</button>
-
-		</div>
-	</div>
-</div> -->
 <div class="row" id="saleOrderPrint">
 	<div class="col-md-12">
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
@@ -592,7 +571,7 @@
 											<th>物料名称</th>
 											<th>规格型号</th>
 											<th>单位</th>
-											<th>批次号</th>
+											<th>附件</th>
 											<th>生产日期</th>
 											<th>订单数量</th>
 											<th>发货数量</th>
@@ -623,7 +602,11 @@
 											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.materielName}}</p></td>
 											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.specifications}}</p></td>
 											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.unit}}</p></td>
-											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.batchNum}}</p></td>
+											<td style="white-space: nowrap;"><p class="form-control-static">
+											
+											<a href="javascript:;" ng-click="downloadFile1(item.file)" ng-repeat="item in _deliveryMateriel.files">{{item.file|limitTo:30:item.file.indexOf('_')+1}}&nbsp;</a>
+											
+											</p></td>
 											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.manufactureDate}}</p></td>
 											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.amount}}</p></td>
 											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.deliverCount}}</p></td>
