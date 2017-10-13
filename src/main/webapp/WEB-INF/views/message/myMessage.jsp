@@ -31,9 +31,9 @@
 				</div>
 				<ul class="nav nav-tabs" id="message_tab">
 					<li class="active" ><a data-target="#portlet_tab2_1"  ng-click="businessMessageList()"
-						data-toggle="tab">业务提醒</a></li>
+						data-toggle="tab">业务提醒<businessMessage/></a></li>
 					<li ><a data-target="#portlet_tab2_2" ng-click="systemMessageList()"
-						data-toggle="tab">系统消息</a></li>
+						data-toggle="tab">系统消息<systemMessage/></a></li>
 				</ul>
 			</div>
 			<div class="portlet-body" id="businessMessage">
@@ -50,7 +50,7 @@
 								<ul class="todo-tasks-content">
 									<li class="todo-tasks-item" style="padding: 20px 0 0 0;" ng-repeat="message in messageList track by message.serialNum">
 										<h4 class="todo-inline" style="font-size: 15px;font-weight: 500;">
-											<p>{{delHtmlTag(message.context)}}&nbsp;<a ng-click="messageView(message.serialNum,message.objectSerial,message.actionName)" >查看</a></p>
+											<p><i class="glyphicon glyphicon-envelope"></i>&nbsp;&nbsp;{{delHtmlTag(message.context)}}&nbsp;<a ng-click="messageView(message.serialNum,message.objectSerial,message.actionName)" >查看</a></p>
 										</h4>
 										<p class="todo-inline todo-float-r">
 											<font ng-if="message.readFlg=='1'">已读</font>
@@ -84,12 +84,13 @@
 						<div class="row todo-container">
 							<div class="todo-tasks-container" style="padding: 0px 20px;border:0px solid #ebf0f5;">
 								<ul class="todo-tasks-content">
-									<li class="todo-tasks-item" style="padding: 20px 0;" ng-repeat="message in messageList track by message.serialNum">
+									<li class="todo-tasks-item" style="padding: 20px 0 0 0;" ng-repeat="message in messageList track by message.serialNum">
 										<h4 class="todo-inline" style="font-size: 15px;font-weight: 500;">
-											<a data-toggle="modal" href="#todo-task-modal">{{delHtmlTag(message.context)}}</a>
+											<p><i class="glyphicon glyphicon-envelope"></i>&nbsp;&nbsp;{{delHtmlTag(message.context)}}&nbsp;<a ng-click="messageView(message.serialNum,message.objectSerial,message.actionName)" >查看</a></p>
 										</h4>
 										<p class="todo-inline todo-float-r">
-											
+											<font ng-if="message.readFlg=='1'">已读</font>
+											<font ng-if="message.readFlg=='0'">未读</font>
 										</p>
 									</li>
 								</ul>

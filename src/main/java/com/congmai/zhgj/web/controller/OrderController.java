@@ -41,17 +41,20 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
-import com.congmai.zhgj.core.util.ExcelUtil;
-import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
+import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.MessageConstants;
+import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.enums.StaticConst;
+import com.congmai.zhgj.web.event.EventExample;
+import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.BaseVO;
-import com.congmai.zhgj.web.model.ClauseFramework;
 import com.congmai.zhgj.web.model.ClauseAdvance;
 import com.congmai.zhgj.web.model.ClauseAfterSales;
 import com.congmai.zhgj.web.model.ClauseCheckAccept;
 import com.congmai.zhgj.web.model.ClauseDelivery;
+import com.congmai.zhgj.web.model.ClauseFramework;
 import com.congmai.zhgj.web.model.ClauseFrameworkExample;
 import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
@@ -61,8 +64,8 @@ import com.congmai.zhgj.web.model.OperateLog;
 import com.congmai.zhgj.web.model.OperateLogExample;
 import com.congmai.zhgj.web.model.OrderFile;
 import com.congmai.zhgj.web.model.OrderFileExample;
-import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderInfo;
+import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.ClauseAdvanceService;
@@ -78,8 +81,8 @@ import com.congmai.zhgj.web.service.OperateLogService;
 import com.congmai.zhgj.web.service.OrderFileService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
-import com.congmai.zhgj.web.service.UserCompanyService;
 import com.congmai.zhgj.web.service.ProcessBaseService;
+import com.congmai.zhgj.web.service.UserCompanyService;
 
 
 /**
@@ -177,6 +180,9 @@ public class OrderController {
 		orderInfo.setUpdater(currenLoginName);
 		orderInfo.setUpdateTime(new Date());
 		orderService.reciveOrder(orderInfo);
+		
+		orderInfo = orderService.selectById(orderInfo.getSerialNum());
+		EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(orderInfo,MessageConstants.BE_CONFIRM_BUY_ORDER));
 		return orderInfo;
     }
     
@@ -253,7 +259,7 @@ public class OrderController {
 //    			message.setMessage("订单流程已启动，流程ID：" + processInstanceId);
 		    logger.info("processInstanceId: "+processInstanceId);
 		    
-		    // EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(orderInfo,MessageConstants.APPLY_BUY_ORDER));
+		    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(orderInfo,MessageConstants.APPLY_BUY_ORDER));
 		    
 		    flag = "1";
 		} catch (ActivitiException e) {
@@ -396,18 +402,32 @@ public class OrderController {
     			baseOrderInfo.setTitle(baseOrderInfo.getUser_name()+" 的订单申请失败,需修改后重新提交！");
     			order.setStatus(BaseVO.APPROVAL_FAILED);
     			variables.put("entity", baseOrderInfo);
+    			
+    			
+    	
     		}else{
     			order.setStatus(BaseVO.PENDING);					//审批中
     		}
     		// 完成任务
     		this.processService.complete(taskId, content, user.getUserId().toString(), variables);
     		
+    		//发送消息
+    		if(!completeFlag){
+    			//采购订单驳回消息
+    			order.setProcessInstanceId(processInstanceId);
+    		    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.REFUSE_BUY_ORDER));
+    		}
     		if(completeFlag){
     			//此处需要修改，不能根据人来判断审批是否结束。应该根据流程实例id(processInstanceId)来判定。
     			//判断指定ID的实例是否存在，如果结果为空，则代表流程结束，实例已被删除(移到历史库中)
     			ProcessInstance pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
     			if(BeanUtils.isBlank(pi)){
     				order.setStatus(BaseVO.APPROVAL_SUCCESS);
+    				
+    				//采购订单审核通过消息
+        		    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.AGREE_BUY_ORDER));
+        		    //采购订单待确认（发给供应商）
+        		    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.CONFIRM_BUY_ORDER));
     			}
     		}
     		
@@ -480,6 +500,8 @@ public class OrderController {
         	orderInfo.setStatus(BaseVO.PENDING);
 	        content = "重新申请";
 	        result = "任务办理完成，订单申请已重新提交！";
+	        
+	      
         }else{
         	orderInfo.setTitle(user.getUserName()+" 的订单申请已取消！");
         	orderInfo.setStatus(BaseVO.APPROVAL_FAILED);
@@ -492,6 +514,12 @@ public class OrderController {
 			variables.put("reApply", reApply);
 			this.processService.complete(taskId, content, user.getUserId().toString(), variables);
 			
+			//发送消息
+			if(reApply){
+			        //申请消息
+				   orderInfo = orderService.selectById(orderInfo.getSerialNum());
+				   EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(orderInfo,MessageConstants.APPLY_BUY_ORDER));
+			}
 		} catch (ActivitiObjectNotFoundException e) {
 //			message.setStatus(Boolean.FALSE);
 //			message.setMessage("此任务不存在，请联系管理员！");

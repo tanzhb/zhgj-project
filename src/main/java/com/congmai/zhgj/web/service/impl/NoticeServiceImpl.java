@@ -62,7 +62,7 @@ public class NoticeServiceImpl extends GenericServiceImpl<Notice, String> implem
 	@Override
 	public Page<Notice> selectMyNoticeByPage(Notice notice, String userId,
 			String companyType) {
-		notice.setUserId(userId);
+		notice.setUser_id(userId);
 		if(StringUtils.isNotEmpty(companyType)){
 			notice.setStatus(companyType);
 		}else{
@@ -86,6 +86,7 @@ public class NoticeServiceImpl extends GenericServiceImpl<Notice, String> implem
 		NoticeShare share = new NoticeShare();
 		if(count>0){
 			share.setNoticeSerial(serialNum);
+			share.setUserId(userId);
 			share.setDelFlg("1");
 			noticeShareMapper.updateByPrimaryKeySelective(share);
 		}else{
@@ -105,6 +106,7 @@ public class NoticeServiceImpl extends GenericServiceImpl<Notice, String> implem
 		NoticeShare share = new NoticeShare();
 		if(count>0){
 			share.setNoticeSerial(serialNum);
+			share.setUserId(userId);
 			share.setReadFlg("1");
 			noticeShareMapper.updateByPrimaryKeySelective(share);
 		}else{
@@ -115,6 +117,17 @@ public class NoticeServiceImpl extends GenericServiceImpl<Notice, String> implem
 			noticeShareMapper.insert(share);
 		}
 		
+	}
+
+	@Override
+	public void updateByPrimaryKeySelective(Notice notice) {
+		this.noticeMapper.updateByPrimaryKeySelective(notice);
+		
+	}
+
+	@Override
+	public Notice selectByPrimaryKey(String serialNum) {
+		return this.noticeMapper.selectByPrimaryKey(serialNum);
 	}
 
 

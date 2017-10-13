@@ -11,6 +11,8 @@ import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.web.dao.CompanyMapper;
 import com.congmai.zhgj.web.dao.UserCompanyMapper;
+import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.UserCompanyExample;
 import com.congmai.zhgj.web.model.UserCompanyKey;
 import com.congmai.zhgj.web.service.UserCompanyService;
@@ -63,6 +65,27 @@ public class UserCompanyServiceImpl extends GenericServiceImpl<UserCompanyKey, S
 			
 		}
 	
+		return null;
+	}
+
+
+	@Override
+	public List<UserCompanyKey> getUsersByComId(String comId) {
+		UserCompanyExample example = new UserCompanyExample();
+		example.createCriteria().andCom_idEqualTo(comId);
+		List<UserCompanyKey> list = userCompanyMapper.selectByExample(example);
+		return list;
+	}
+
+
+	@Override
+	public Company getCompany(String userId) {
+		try{
+			String comId = getUserComId(userId);
+			return companyMapper.selectByPrimaryKey(comId);
+		}catch(Exception e){
+			
+		}
 		return null;
 	}
 
