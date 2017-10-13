@@ -4,7 +4,22 @@ angular.module('MetronicApp').controller('HeaderController', function($rootScope
         App.initAjax();
         
         $("#hide").val("all");//本页面用,默认列出全部关键字
+        alert(123);
+        $scope.getUserInfo();
     });
+    
+  //根据参数查询对象
+	$scope.getUserInfo  = function() {
+		debugger
+		UserService.getUserInfo().then(
+      		     function(data){
+      		    	$scope.userInfo=data;
+      		     },
+      		     function(error){
+      		         console.log("error")
+      		     }
+      		 );
+    };
     
     $scope.select1 = function() {//选择采购订单
     	$("#selValue").text("采购订单");

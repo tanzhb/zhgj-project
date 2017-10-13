@@ -351,9 +351,10 @@
 				<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
 				<li class="dropdown dropdown-user"><a href="#"
 					class="dropdown-toggle" dropdown-menu-hover data-toggle="dropdown"
-					data-close-others="true"> <img alt="" class="img-circle"
+					data-close-others="true"> <img alt="" class="img-circle" id="avatar"
 						src="assets/pages/media/users/avatar3.jpg" /> <span
 						class="username username-hide-on-mobile"> <shiro:principal />
+						<!-- ng-src="uploadAttachFiles/{{userInfo.avatar}}" -->
 					</span> <i class="fa fa-angle-down"></i>
 				</a>
 					<ul class="dropdown-menu dropdown-menu-default">
