@@ -40,6 +40,7 @@ import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.LadderPrice;
 import com.congmai.zhgj.web.model.Materiel;
+import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.PriceListExample;
 import com.congmai.zhgj.web.model.Stock;
@@ -49,6 +50,7 @@ import com.congmai.zhgj.web.model.StockExample.Criteria;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.LadderPriceService;
 import com.congmai.zhgj.web.service.MaterielService;
+import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.PriceListService;
 import com.congmai.zhgj.web.service.StockService;
 
@@ -70,6 +72,8 @@ public class StockController {
     private MaterielService  materielService;
     @Resource
     private CompanyService  companyService;
+    @Resource
+    private OrderService  orderService;
     /**
      * 库存信息列表展示
      * 
@@ -269,13 +273,23 @@ public class StockController {
 		  * @return
 		  */
 		 @RequestMapping(value="stockInList",method=RequestMethod.GET)
-		 public ResponseEntity<Map<String,Object>> stockInList(String serialNum) {
+		 public ResponseEntity<Map<String,Object>> stockInList(String serialNum,String orderSerial) {
 			 Stock stock=stockService.selectById(serialNum);
-			 List<String>takeDeliverSerialList=stockService.getRelationTakeDeliverSerialList(stock);
+			 List<String>takeDeliverSerialList=new  ArrayList<String>();
 			 List<DeliveryMateriel>stockInList=new  ArrayList<DeliveryMateriel>();
-			 if(!CollectionUtils.isEmpty(takeDeliverSerialList)){
-				 stockInList=stockService.getDeliverMaterialListForIn(takeDeliverSerialList);
+			 if(StringUtils.isEmpty(orderSerial)){
+				 takeDeliverSerialList=stockService.getRelationTakeDeliverSerialList(stock);
+				 stockInList=stockService.getDeliverMaterialListForIn(takeDeliverSerialList,null);
+			 }else{
+				 List<Stock> stockList=stockService.selectStockListByMaterielSerial(serialNum);
+				for(Stock stock1:stockList){
+					List<String>takeDeliverSerial=stockService.getRelationTakeDeliverSerialList(stock1);
+					takeDeliverSerialList.addAll(takeDeliverSerial);
+				}
+				OrderInfo o=orderService.selectById(orderSerial);
+				 stockInList=stockService.getDeliverMaterialListForIn(takeDeliverSerialList,o.getBuyComId()==null?"zhgj":o.getBuyComId());
 			 }
+			
 				 
 			 // 封装datatables数据返回到前台
 			 Map<String,Object> pageMap = new HashMap<String,Object>();

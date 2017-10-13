@@ -25,6 +25,7 @@ import com.congmai.zhgj.web.dao.OrderMaterielMapper;
 import com.congmai.zhgj.web.dao.StockInOutCheckMapper;
 import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
 import com.congmai.zhgj.web.dao.StockMapper;
+import com.congmai.zhgj.web.dao.StockOutBatchMapper;
 import com.congmai.zhgj.web.dao.TakeDeliveryMapper;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.Delivery;
@@ -40,6 +41,7 @@ import com.congmai.zhgj.web.model.StockExample;
 import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.StockInOutRecordExample;
+import com.congmai.zhgj.web.model.StockOutBatch;
 import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.model.TakeDeliveryExample;
 import com.congmai.zhgj.web.model.TakeDeliveryParams;
@@ -79,6 +81,9 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	
 	@Resource
 	private OrderMaterielMapper orderMaterielMapper;
+	
+	@Resource
+	private StockOutBatchMapper stockOutBatchMapper;
 	
 	@Override
 	public GenericDao<TakeDelivery, String> getDao() {
@@ -386,7 +391,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	@Override
 	@OperationLog(operateType = "add" ,operationDesc = "出库" ,objectSerial= "{serialNum}")
 	public void updateStockOutData(StockInOutRecord record,
-			List<DeliveryMateriel> deliveryMateriels, String currenLoginName,
+			List<DeliveryMateriel> deliveryMateriels,List<StockOutBatch> stockOutMateriels, String currenLoginName,
 			String string) {
 		//StockInOutRecord record = takeDeliveryParams.getRecord();
 		
@@ -416,7 +421,19 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			example2.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
 			deliveryMaterielMapper.updateByExampleSelective(materiel, example2);
 		}
-		
+		//保存出库来源批次
+				List<StockOutBatch> stockOutMaterielsNew = stockOutMateriels; //这里是入库的物料信息
+				for (StockOutBatch stockOutBatch : stockOutMaterielsNew) {
+					if (StringUtils.isEmpty(stockOutBatch.getSerialNum())) {
+						stockOutBatch.setSerialNum(ApplicationUtils.random32UUID());
+						stockOutBatch.setUpdater(currenLoginName);
+						stockOutBatch.setUpdateTime(new Date());
+						stockOutBatch.setCreator(currenLoginName);
+						stockOutBatch.setCreateTime(new Date());
+						stockOutBatch.setDelFlg("0");
+						stockOutBatchMapper.insert(stockOutBatch);
+					}
+				}
 		
 		
 	}

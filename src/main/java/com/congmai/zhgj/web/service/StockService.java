@@ -16,8 +16,9 @@ public interface StockService extends GenericService<Stock, String>{
 	 
 	 List<String> getRelationDeliverSerialList(Stock   stock);//获取库存相关发货流水
 	 List<String> getRelationTakeDeliverSerialList(Stock   stock);//获取库存相关收获流水
-	 List<DeliveryMateriel>getDeliverMaterialListForIn(List<String>takeDeliverSerialList);//获取库存入库记录
+	 List<DeliveryMateriel>getDeliverMaterialListForIn(List<String>takeDeliverSerialList,String buyComId);//获取库存入库记录
 	 List<DeliveryMateriel>getDeliverMaterialListForOut(List<String>deliverSerialList);//获取库存出库记录
+	 List<Stock> selectStockListByMaterielSerial(String  materielSerial);//通过基本物料流水获取库存信息
 
 	
 	

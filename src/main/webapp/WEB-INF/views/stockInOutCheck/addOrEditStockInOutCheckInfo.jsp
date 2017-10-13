@@ -122,7 +122,7 @@
 												 <input type="text" class="form-control" placeholder=""  id="relationBuyNum" name ="relationBuyNum"   ng-if="inOrOut.indexOf('in')>-1&&inOrOut.indexOf('check')<0"  ng-hide="stockInOutCheckAdd"   readonly
 												ng-model="stockInOutCheck.relationBuyNum" > 
                                                                        <div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="stockInOutCheckView"  ng-if="inOrOut.indexOf('out')>-1&&&&inOrOut.indexOf('checkout')<0" >{{stockInOutCheck.relationSaleNum}}</p> 
+                                                                        <p class="control-label left" ng-show="stockInOutCheckView"  ng-if="inOrOut.indexOf('out')>-1&&inOrOut.indexOf('checkout')<0" >{{stockInOutCheck.relationSaleNum}}</p> 
                                                                         <p class="control-label left" ng-show="stockInOutCheckView"  ng-if="inOrOut.indexOf('in')>-1&&inOrOut.indexOf('checkin')<0" >{{stockInOutCheck.relationBuyNum}}</p> 
                                                                           <p class="control-label left"  ng-if="inOrOut.indexOf('checkout')>-1" >{{stockInOutCheck.relationSaleNum}}</p> 
                                                                         <p class="control-label left"  ng-if="inOrOut.indexOf('checkin')>-1" >{{stockInOutCheck.relationBuyNum}}</p> 
