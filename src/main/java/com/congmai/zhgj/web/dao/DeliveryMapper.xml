@@ -380,4 +380,9 @@
         ,'0',#{item.creator},NOW(),#{item.updater},NOW())
     </foreach>
     </insert>
+    
+    
+    <select id="getAttachFileInfo" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.RelationFile">
+    SELECT file,fileDescribe AS remark,uploader,uploadDate FROM relationFile WHERE relationSerial=#{serialNum}
+    </select>
     </mapper>

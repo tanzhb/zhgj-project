@@ -111,5 +111,6 @@ public interface DeliveryMapper extends GenericDao<DeliveryMaterielVO, String> {
 
     public void deleteOldDeliveryMateriel2(String deliverSerial);
     
-   
+    
+    public List<RelationFile> getAttachFileInfo(String relationSerial);
 }

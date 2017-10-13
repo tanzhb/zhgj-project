@@ -56,11 +56,44 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     		
     		
     		saveFile:saveFile,
+    		
+    		
+    		getAttachFileInfo:getAttachFileInfo,
     };
 
     return factory;
     
     
+  //获取附件
+    function getAttachFileInfo(serialNum) {
+    	debugger
+   		var deferred = $q.defer();
+    		
+   		/*$http.post("rest/delivery/getAttachFileInfo",data
+   		).success(function (data) {
+               // 如果连接成功，延时返回给调用者
+               deferred.resolve(data);
+           }).error(function () {
+               deferred.reject('连接服务器出错！');
+           })*/
+           
+        $http({    
+            method: "POST",    
+            url: "rest/delivery/getAttachFileInfo",    
+            params: {  
+            	serialNum: serialNum,  
+            }  
+        }).success(function (data) {
+            // 如果连接成功，延时返回给调用者
+            deferred.resolve(data);
+        }).error(function () {
+            deferred.reject('连接服务器出错！');
+        })
+   		
+   		return deferred.promise;
+   	};
+   	
+   	
     //保存附件
     function saveFile(File) {
    		var deferred = $q.defer();

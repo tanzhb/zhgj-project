@@ -331,46 +331,6 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			toastr.error("请先保存基本信息！");	
 			return;
 		}
-		
-		/*var batchNum=deliveryMateriel.batchNum;
-		if($.trim(batchNum)==""||$.trim(batchNum)==null){
-			toastr.error("批次号不能为空！");	
-			return;
-		}
-		
-		var manufactureDate=deliveryMateriel.manufactureDate;
-		if($.trim(manufactureDate)==""||$.trim(manufactureDate)==null){
-			toastr.error("生产日期不能为空！");	
-			return;
-		}
-		
-		var deliverCount=deliveryMateriel.deliverCount;
-		if($.trim(deliverCount)==""||$.trim(deliverCount)==null){
-			toastr.error("发货数量不能为空！");	
-			return;
-		}
-		
-		var reg = /^(0|[1-9]\d*)$/;
-		if(!reg.test(deliverCount)){
-			toastr.error("发货数量只能是正整数！");	
-			return;
-		}
-		
-		var amount=deliveryMateriel.amount;
-		if(parseInt(deliverCount)>parseInt(amount)){
-			toastr.error("发货数量不能大于订单数量！");	
-			return;
-		}*/
-		/*var batchNumFlag=batchNumCheck(index);
-		if(!batchNumFlag){return false;}
-		var manufactureDateFlag=manufactureDateCheck(index);
-		if(!manufactureDateFlag){return false;}
-		var deliveryCountFlag=deliveryCountCheck(index);
-		if(!deliveryCountFlag){return false;}*/
-		
-		/*if(deliveryMateriel.serialNum==null||deliveryMateriel.serialNum==""){
-			deliveryMateriel.deliverSerial=$scope.delivery.serialNum;
-		}*/
 		if($('#form_sample_2').valid()){
 		handle.blockUI();
 		var params = {};
@@ -381,7 +341,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			param.deliverSerial=$scope.delivery.serialNum;
 			param.orderMaterielSerial = $scope.deliveryMaterielE[i].orderMaterielSerial;
 			param.supplyMaterielSerial = $scope.deliveryMaterielE[i].supplyMaterielSerial;
-			param.batchNum = $scope.deliveryMaterielE[i].batchNum;
+			param.attachFile =$("#batchNumReal"+i).text();
 			param.manufactureDate = $scope.deliveryMaterielE[i].manufactureDate;
 			param.deliverCount = $scope.deliveryMaterielE[i].deliverCount;
 			param.remark = $scope.deliveryMaterielE[i].remark;
@@ -901,22 +861,82 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
     	
     	
     	 /**
-         * 选择物料页面弹出
+         * 添加页面弹出
          */
     	$scope.addAttachFile = function (index){
     		$("#basicMaterielInfoII").modal("show");
     		$scope.fileIndex=index;
 		}
     	
+    	/**
+         * 编辑页面弹出
+         */
+    	$scope.addAttachFileEdit = function (index,serialNum){
+    		$("#basicMaterielInfoII").modal("show");
+    		$scope.fileIndex=index;
+    		 $scope.getAttachFileInfo(serialNum);
+		}
+    	var _fileIndex = 0;
+    	
+    	 $scope.getAttachFileInfo=function(serialNum){
+    		 DeliveryService.getAttachFileInfo(serialNum).then(
+          		     function(data){
+          		    	$scope.file=data.fileList;
+          		    	if(data.fileList!=null){
+          		    		_fileIndex=data.fileList.length;
+          		    	}
+          		     },
+          		     function(error){
+          		         $scope.error = error;
+          		     }
+          		 );
+    		 
+    	 }
+    	
+    	
     	//********附件  start****************//
-		var _fileIndex = 0;
+		
+		
 	    $scope.saveFile  = function(fileIndex) {//保存File信息
 	    	debugger
-	    	if($scope.file==null){
+	    	/*if($scope.file==null){
 	    		toastr.warning("请上传文件！");
 	    		return false;
+	    	}*/
+	    	
+	    	var html="";
+	    	var htmlReal="";
+	    	if($scope.file!=null){
+	    		for(var i=0;i<$scope.file.length;i++){
+		    		if($scope.file[i].file==null||$scope.file[i].file==''){
+		    			toastr.warning("上传文件不能为空！");
+			    		return false;
+		    		}
+		    		if($scope.file[i].remark){
+		    			htmlReal+=$scope.file[i].file+','+$scope.file[i].remark+'&';
+		    		}else{
+		    			htmlReal+=$scope.file[i].file+','+'&';
+		    		}
+		    		
+		    		var w=$scope.file[i].file.indexOf('_');
+		    		var sub_str_file=$scope.file[i].file.substring(w+1); 
+		    		
+		    		var asd="'"+$scope.file[i].file+"'";
+		    		html+='<a href="javascript:;" ng-click="downloadFile1('+asd+')">'+ sub_str_file+'</a>&nbsp;';
+				}	
 	    	}
 	    	
+	    	$("#batchNum"+fileIndex).html($compile(html)($scope))
+	    	$("#addBatchNum"+fileIndex).hide();
+	    	$("#batchNumReal"+fileIndex).html(htmlReal);
+	    	 $('#basicMaterielInfoII').modal('hide');// 保存成功后关闭模态框
+	    	$(".modal-backdrop").remove();
+	    	$("#fileTable tbody tr").remove();
+	    	_fileIndex=0;
+	    	$scope.file=null;
+	    }; 	
+	    
+	    $scope.saveFileEdit = function(fileIndex) {//保存File信息
 	    	var html="";
 	    	var htmlReal="";
 	    	for(var i=0;i<$scope.file.length;i++){
@@ -944,12 +964,15 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	    	$("#fileTable tbody tr").remove();
 	    	_fileIndex=0;
 	    	$scope.file=null;
-	    }; 	
+	    	var fileRelation=fileRelation+fileIndex;
+	    	$scope.fileRelation=false;
+	    };
 	    
 	    /**
         * File新增一行
         */
 	    $scope.addFile = function(){
+	    	debugger
 		    	   if($scope.file){}else{$scope.file =[{}]}
 		    	   $scope.file[_fileIndex] = {};
 		    	   _fileIndex++;
