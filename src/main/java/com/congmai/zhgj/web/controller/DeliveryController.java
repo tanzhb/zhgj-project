@@ -675,7 +675,7 @@ public class DeliveryController {
 		}
 		
 		for(DeliveryMaterielVO deliveryMaterielVO:deliveryMateriels){
-			String attachFile=null;
+			String attachFile="";
 			List<RelationFile> files=deliveryService.getAttachFileInfo(deliveryMaterielVO.getSerialNum());
 			for(RelationFile relationFile:files){
 				String file=relationFile.getFile();
