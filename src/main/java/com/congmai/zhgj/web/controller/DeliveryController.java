@@ -276,6 +276,24 @@ public class DeliveryController {
 	}
 	
 	
+	
+	/**
+	 * 
+	 * @Description 获取附件信息
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "/getAttachFileInfo")
+	@ResponseBody
+	public Map<String, Object> getAttachFileInfo(String serialNum) {
+		Map<String, Object> map = new HashMap<String, Object>();
+    	
+    	List<RelationFile> fileList=deliveryService.getAttachFileInfo(serialNum);
+    	map.put("fileList", fileList);
+    	return map;
+	}
+	
+	
 	/**
 	 * 批量获取物料信息
 	 * @return
@@ -365,32 +383,67 @@ public class DeliveryController {
     @RequestMapping(value="editDeliveryMateriel",method=RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<List<DeliveryMaterielVO>> editDeliveryMateriel(Map<String, Object> map,HttpServletRequest request,String params) {
-    	  JSONArray array = JSONArray.fromObject(params); 
-    	  List<DeliveryMaterielVO> list = JSONArray.toList(array, DeliveryMaterielVO.class);//
-    	  String deliverSerial=null;
-    	  if(list.size()>0){
-    		   deliverSerial=list.get(0).getDeliverSerial();
-    		  deliveryService.deleteOldDeliveryMateriel2(deliverSerial);
-    	  }
-    	  
-    	  Subject currentUser = SecurityUtils.getSubject();
-  		  String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-    	  for(DeliveryMaterielVO deliveryMaterielVO:list){
-    		  deliveryMaterielVO.setSerialNum(ApplicationUtils.random32UUID());
-    		  deliveryMaterielVO.setCreator(currenLoginName);
-    		  deliveryMaterielVO.setUpdater(currenLoginName);
-    		  deliveryService.insertDeliveryMateriel(deliveryMaterielVO);
-    	  }
-    	  
+    	JSONArray array = JSONArray.fromObject(params); 
+    	List<DeliveryMaterielVO> list = JSONArray.toList(array, DeliveryMaterielVO.class);//
+    	String deliverSerial=null;
+    	if(list.size()>0){
+    		deliverSerial=list.get(0).getDeliverSerial();
+    		deliveryService.deleteOldDeliveryMateriel2(deliverSerial);
+    	}
+
+    	Subject currentUser = SecurityUtils.getSubject();
+    	String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+    	for(DeliveryMaterielVO deliveryMaterielVO:list){
+    		deliveryMaterielVO.setSerialNum(ApplicationUtils.random32UUID());
+    		deliveryMaterielVO.setCreator(currenLoginName);
+    		deliveryMaterielVO.setUpdater(currenLoginName);
+    		deliveryService.insertDeliveryMateriel(deliveryMaterielVO);
+
+    		//附件
+    		List<RelationFile> files=new ArrayList<RelationFile>();
+
+    		//如果附件不为空时执行添加操作
+    		if(!StringUtils.isEmpty(deliveryMaterielVO.getAttachFile())){
+    			String attachFile[]=deliveryMaterielVO.getAttachFile().split("&");
+    			for(String detail:attachFile){
+    				RelationFile item=new RelationFile();
+    				String attachFileDetail[]=detail.split(",");
+    				String file=attachFileDetail[0];
+
+    				//描述不为空时添加描述
+    				String describe=null;
+    				if(attachFileDetail.length>1){
+    					if(attachFileDetail[1]!=null){
+    						describe=attachFileDetail[1];	
+    					}	
+    				}
+
+
+    				item.setSerialNum(ApplicationUtils.random32UUID());
+    				item.setRelationSerial(deliveryMaterielVO.getSerialNum());
+    				item.setFileType("delivery");
+    				item.setFileDescribe(describe);
+    				item.setFile(file);
+    				item.setUploader(currenLoginName);
+    				item.setCreator(currenLoginName);
+    				item.setUpdater(currenLoginName);
+    				files.add(item);
+    			}
+
+    			//批量添加附件
+    			deliveryService.insertAttachFiles(files);
+    		}
+    	}
+
     	List<DeliveryMaterielVO> deliveryMateriels=null;
-  		deliveryMateriels = deliveryService.selectListForDetail(deliverSerial);
-  		if(deliveryMateriels.size()>0){
-  			String materielNum=deliveryMateriels.get(0).getMaterielNum();
-  			if(StringUtils.isEmpty(materielNum)){
-  			deliveryMateriels = deliveryService.selectListForDetail2(deliverSerial);	
-  			}	
-  		}
-    	  
+    	deliveryMateriels = deliveryService.selectListForDetail(deliverSerial);
+    	if(deliveryMateriels.size()>0){
+    		String materielNum=deliveryMateriels.get(0).getMaterielNum();
+    		if(StringUtils.isEmpty(materielNum)){
+    			deliveryMateriels = deliveryService.selectListForDetail2(deliverSerial);	
+    		}	
+    	}
+
     	return new ResponseEntity<List<DeliveryMaterielVO>>(deliveryMateriels, HttpStatus.CREATED);
     }
     
@@ -620,6 +673,19 @@ public class DeliveryController {
 			deliveryMateriels = deliveryService.selectListForDetail2(serialNum);	
 			}	
 		}
+		
+		for(DeliveryMaterielVO deliveryMaterielVO:deliveryMateriels){
+			String attachFile="";
+			List<RelationFile> files=deliveryService.getAttachFileInfo(deliveryMaterielVO.getSerialNum());
+			for(RelationFile relationFile:files){
+				String file=relationFile.getFile();
+				String remark=relationFile.getRemark();
+				attachFile=attachFile+file+","+remark+"&";
+			}
+			deliveryMaterielVO.setAttachFile(attachFile);
+			deliveryMaterielVO.setFiles(files);
+		}
+		
 		map.put("deliveryMateriels", deliveryMateriels);
 		return map;
 	}

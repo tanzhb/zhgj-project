@@ -20,8 +20,21 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
 	$scope.getUserInfo  = function() {
 		UserInfoService.getUserInfo().then(
       		     function(data){
-      		    	 debugger
       		    	$scope.userInfo=data;
+      		     },
+      		     function(error){
+      		         console.log("error")
+      		     }
+      		 );
+    }; 
+    
+    
+  //根据参数查询对象
+	var getUserInfoA  = function() {
+		UserInfoService.getUserInfo().then(
+      		     function(data){
+      		    	$scope.userInfo=data;
+      		    	$("#avatar").attr("src","uploadAttachFiles/"+$scope.userInfo.avatar);
       		     },
       		     function(error){
       		         console.log("error")
@@ -38,7 +51,7 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
 	
 	//添加合同
 	$scope.updateUserInfo = function() {
-		debugger
+		
 		if($('#form_sample_1').valid()){//表单验证通过则执行添加功能
 		var fd = new FormData();
 		if($("input[type='file']").length){
@@ -61,9 +74,12 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
               .success( function ( response )
                        {
             	  toastr.success("修改成功！");
-            	  $scope.getUserInfo();	
    		    	  $scope.input=false;
    				  $scope.span=true;
+   				  getUserInfoA();
+   				
+   				
+   				/*$("#avatar").attr("src","assets/pages/media/users/avatar3.jpg");*/
                        });
 		}
 	};

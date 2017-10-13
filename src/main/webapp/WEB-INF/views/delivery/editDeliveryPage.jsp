@@ -2,26 +2,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!-- BEGIN PAGE HEADER-->
-
-<!-- <div class="page-bar">
-	<ul class="page-breadcrumb">
-		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
-			class="fa fa-angle-right"></i></li>
-		<li><a ui-sref="delivery">发货</a> <i class="fa fa-angle-right"></i>
-		</li>
-		<li><a>编辑发货</a></li>
-	</ul>
-	<div class="page-toolbar">
-		<div class="btn-group pull-right">
-			<button type="button"
-				class="btn btn-fit-height grey-salt dropdown-toggle"
-				onclick="printdiv('saleOrderPrint')">
-				<i class="fa fa-print"></i> 打印
-			</button>
-
-		</div>
-	</div>
-</div> -->
 <div class="row" id="saleOrderPrint">
 	<div class="col-md-12">
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
@@ -642,7 +622,7 @@
 											<th>物料名称</th>
 											<th>规格型号</th>
 											<th>单位</th>
-											<th>批次号</th>
+											<th>附件</th>
 											<th>生产日期</th>
 											<th>订单数量</th>
 											<th>发货数量</th>
@@ -674,13 +654,16 @@
 												<p class="form-control-static">
 													{{_deliveryMateriel.unit}}</p>
 											</td>
-											<td class="form-group"><input type="text" name="batchNum"
-												id="batchNum{{$index}}" class="form-control"
-												ng-hide="orderMaterielInput"
-												ng-model="deliveryMaterielE[$index].batchNum">
-												<p class="form-control-static"
-													ng-show="orderMaterielShow">
-													{{_deliveryMateriel.batchNum}}</p></td>
+											<td class="form-group">
+											<p id="batchNumReal{{$index}}" ng-hide="true">{{_deliveryMateriel.attachFile}}</p>
+												
+											<p class="form-control-static" id="batchNum{{$index}}">
+											<a href="javascript:;" class="btn btn-xs green" id="addBatchNum{{$index}}"
+											ng-click="addAttachFileEdit($index,_deliveryMateriel.serialNum)" onclick="return false;" ng-init="fileRelation$index='true'" ng-show="fileRelation$index"><i
+												class="fa fa-plus"></i>修改
+										    </a>
+											</p>
+											</td>
 											<td class="form-group"><input type="text" id="manufactureDate{{$index}}"
 												name="manufactureDate"
 												class="form-control form-control-inline input-medium date-picker"
@@ -848,6 +831,106 @@
 				<button type="button" ng-click="confirmSelectMateriel()"
 					class="btn green">确定</button>
 			</div>
+		</div>
+	</div>
+</div>
+
+<div id="basicMaterielInfoII" class="modal fade" tabindex="-1"
+	data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog">
+		<div class="modal-content" style="width: 800px;">
+		
+				<div class="portlet-title" style="min-height: 48px;">
+					<div class="tools" style="float:right;margin-top:20px;" id="noprintdiv">
+						<button type="submit" ng-click="saveFileEdit(fileIndex)"
+							class="btn green  btn-circle  btn-sm" >
+							<i class="fa fa-save"></i> 保存
+						</button>
+						<button  data-dismiss="modal" type="button"
+							class="btn defualt  btn-circle  btn-sm">
+							<i class="fa fa-undo"></i> 取消
+						</button>
+					</div>
+				</div>
+				<div class="portlet-body form">
+					<form id="form_sample_4">
+						<div class="table-scrollable">
+							<table class="table table-bordered table-hover" id="fileTable">
+								<thead>
+									<tr>
+										<th>文件</th>
+										<th>备注</th>
+										<th>上传人</th>
+										<th>上传时间</th>
+										<th style="width: 100px;"></th>
+									</tr>
+								</thead>
+
+								<tbody>
+									<tr ng-repeat="_file in file track by $index"
+										ng-mouseover="showOperation('file',$index)"
+										ng-mouseleave="hideOperation('file',$index)">
+										<td>
+											<div 
+												ng-if="file[$index].file==null||file[$index].file==''"
+												class="fileinput fileinput-new" data-provides="fileinput">
+												<span class="btn blue btn-outline btn-file"> <span
+													class="fileinput-new">上传附件</span> <span
+													class="fileinput-exists">更改</span> <input type="file"
+													name="..." nv-file-select uploader="uploader"
+													onchange="angular.element(this).scope().up(this.files[0])"
+													ng-model="file[$index].file" ng-click="uploadFile($index)">
+												</span> <span class="fileinput-filename">{{_file.file.substring(_file.file.indexOf("_")+1)}}</span>
+												&nbsp; <a href="javascript:;" class="close fileinput-exists"
+													ng-click="removefile($index)" data-dismiss="fileinput">
+												</a>
+											</div>
+											<div 
+												ng-if="file[$index].file!=null&&file[$index].file!=''"
+												class="fileinput fileinput-exists" data-provides="fileinput">
+												<span class="btn blue btn-outline btn-file"> <span
+													class="fileinput-new">上传附件</span> <span
+													class="fileinput-exists">更改</span> <input type="file"
+													name="..." nv-file-select uploader="uploader"
+													onchange="angular.element(this).scope().up(this.files[0])"
+													ng-model="file[$index].file" ng-click="uploadFile($index)">
+												</span> <span class="fileinput-filename">{{_file.file.substring(_file.file.indexOf("_")+1)}}</span>
+												&nbsp; <a href="javascript:;" class="close fileinput-exists"
+													ng-click="removefile($index)" data-dismiss="fileinput">
+												</a>
+											</div> <label ng-show="fileInfoShow"
+											ng-if="file[$index].file==null||file[$index].file==''"
+											class="c_edit">未上传附件</label> <label ng-show="fileInfoShow"
+											ng-if="file[$index].file!=null&&file[$index].file!=''"
+											class="c_edit"><a href="javascript:;"
+												ng-click="downloadFile(file[$index])">{{_file.file.substring(_file.file.indexOf("_")+1)}}</a></label>
+										</td>
+										<td>
+											<p class="form-control-static" ng-show="fileInfoShow">{{_file.remark}}</p>
+											<input type="text" name="remark[$index]" name="remark"
+											class="form-control" 
+											ng-model="file[$index].remark">
+										</td>
+										<td><p class="form-control-static">{{_file.uploader}}</p></td>
+										<td><p class="form-control-static">{{_file.uploadDate}}</p></td>
+
+
+										<td><a
+											href="javascript:;" class="btn red btn-sm"
+											 ng-click="deleteFile($index)"> <i
+												class="fa fa-close"></i>
+										</a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="form-actions right">
+							<a class="btn blue btn-sm" 
+								ng-click="addFile()"> <i class="fa fa-plus"></i> 增加
+							</a>
+						</div>
+					</form>
+				</div>
 		</div>
 	</div>
 </div>

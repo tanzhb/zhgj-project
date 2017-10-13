@@ -388,4 +388,10 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		 return deliveryMapper.selectCompanyInfo(comId);
 	}
 
+
+	@Override
+	public List<RelationFile> getAttachFileInfo(String relationSerial) {
+		// TODO Auto-generated method stub
+		 return deliveryMapper.getAttachFileInfo(relationSerial);
+	}
 }

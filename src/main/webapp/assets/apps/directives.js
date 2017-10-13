@@ -112,7 +112,6 @@ MetronicApp.directive('selectpicker', function ($timeout) {
 
 
 MetronicApp.directive('dbquantity', function() {  
-	debugger;
     return {  
         restrict: 'E',  
         template: '<span class="badge badge-danger" style="position: relative;top: -4px;"> {{dbsLength}} </span>',  
@@ -121,7 +120,6 @@ MetronicApp.directive('dbquantity', function() {
     };  
 });
 MetronicApp.directive('ybquantity', function() {  
-	debugger;
     return {  
         restrict: 'E',  
         template: '<span class="badge badge-danger" style="position: relative;top: -4px;"> {{ybsLength}} </span>',
@@ -130,7 +128,6 @@ MetronicApp.directive('ybquantity', function() {
     };  
 }); 
 MetronicApp.directive('dbquantity1', function() {  
-	debugger;
     return {  
         restrict: 'E',  
         template: '<span class="badge badge-danger" style="position: relative;top: -4px;"> {{dbsLength1}} </span>',  
@@ -139,7 +136,6 @@ MetronicApp.directive('dbquantity1', function() {
     };  
 });
 MetronicApp.directive('ybquantity1', function() {  
-	debugger;
     return {  
         restrict: 'E',  
         template: '<span class="badge badge-danger" style="position: relative;top: -4px;"> {{ybsLength1}} </span>',
@@ -149,7 +145,6 @@ MetronicApp.directive('ybquantity1', function() {
 }); 
 
 MetronicApp.directive('systemmessage', function() {  
-	debugger;
     return {  
         restrict: 'E',  
         template: '<span class="badge badge-danger" style="position: relative;top: -4px;"> {{systemMessageSize}} </span>',
@@ -159,7 +154,6 @@ MetronicApp.directive('systemmessage', function() {
 }); 
 
 MetronicApp.directive('businessmessage', function() {  
-	debugger;
     return {  
         restrict: 'E',  
         template: '<span class="badge badge-danger" style="position: relative;top: -4px;"> {{businessMessageSize}} </span>',

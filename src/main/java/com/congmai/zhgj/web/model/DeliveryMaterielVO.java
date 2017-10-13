@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.model;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -108,6 +109,9 @@ public class DeliveryMaterielVO {
 	
 	
 	private String attachFile;
+	
+	
+	private List<RelationFile> files;
 	
 	
 
@@ -383,6 +387,14 @@ public class DeliveryMaterielVO {
 
 	public void setAttachFile(String attachFile) {
 		this.attachFile = attachFile;
+	}
+
+	public List<RelationFile> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<RelationFile> files) {
+		this.files = files;
 	}
 
 }

@@ -641,3 +641,9 @@ function getWSPath_web() {
     	return (localhostPaht + projectName +"/");
     }
 }
+
+$(function(){
+     $.ajax({ url: "rest/user/getUserInfo",method: "POST",  success: function(data){
+         $("#avatar").attr("src","uploadAttachFiles/"+data.avatar);
+       }});
+})

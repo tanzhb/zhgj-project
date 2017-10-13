@@ -231,4 +231,8 @@ public interface DeliveryService extends GenericService<DeliveryMaterielVO, Stri
 	
 	
 	public Company selectCompanyInfo(String comId);
+	
+	
+	
+	public List<RelationFile> getAttachFileInfo(String relationSerial);
 }
