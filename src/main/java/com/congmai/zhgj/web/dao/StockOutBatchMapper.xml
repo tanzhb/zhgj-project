@@ -320,4 +320,24 @@
       updateTime = #{updateTime,jdbcType=TIMESTAMP}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
+  <select id="selectStockOutBatchBySerialNum"    parameterType="java.lang.String"  resultType="com.congmai.zhgj.web.model.StockOutBatch">
+   select
+    <include refid="Base_Column_List" />
+    from stockOutBatch
+    where  stockOutMaterielSerial=#{serialNum,jdbcType=VARCHAR} and delFlg=0
+  </select>
+    <select id="selectInOutNumsBySerialNum"    parameterType="java.lang.String"  resultType="java.lang.String"><!--selectSumBySerialNum  -->
+   select
+    group_concat(srd.inOutNum)
+    from stockOutBatch
+    left join   stockInOutRecord srd on srd.serialNum= stockOutBatch.stockInSerial
+    where  stockOutMaterielSerial=#{serialNum,jdbcType=VARCHAR} and stockOutBatch.delFlg=0
+  </select>
+  <select id="selectSumBySerialNum"    parameterType="java.lang.String"  resultType="java.lang.String">
+   select
+   SUM(IFNULL(stockOutBatch.outCount,0)) as sumStockOutCount
+    from stockOutBatch 
+    left join   stockInOutRecord srd on srd.serialNum= stockOutBatch.stockInSerial
+    where  stockInMaterielSerial=#{serialNum,jdbcType=VARCHAR} and stockOutBatch.delFlg=0
+  </select>
 </mapper>

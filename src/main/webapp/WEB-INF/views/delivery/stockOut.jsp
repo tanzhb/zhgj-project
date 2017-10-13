@@ -252,6 +252,7 @@
                                                  <div class="form-control-focus"> </div>
 										</td>
 										<td >
+										<span id="{{materiel.serialNum}}"></span>
                                                 <button class="btn blue btn-sm btn-circle"
 								ng-click="showStockBatch($index,materiel.orderMateriel.materielSerial,materiel.orderMateriel.orderSerial,materiel.serialNum)" onclick="return false;"  data-toggle="modal" >
 								<i class="fa fa-plus"></i>选择批次

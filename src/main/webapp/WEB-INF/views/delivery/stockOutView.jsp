@@ -226,8 +226,9 @@
 										<th>备注</th>
 										<th>出库数量</th>
 										<th>未出数量</th>
-										<th>仓库</th>
-										<th>库位</th>
+										<!-- <th>仓库</th>
+										<th>库位</th> -->
+										<th>出库批次</th> 
 										<th>备注</th> 
 									</tr>
 								</thead>
@@ -248,12 +249,13 @@
 										<td>
 											{{materiel.unstockCount}}
 										</td>
-										<td>
+										<!-- <td>
 											{{materiel.warehouse.warehouseName}}
 										</td>
 										<td>
 											{{materiel.position.positionName}}
-										</td>
+										</td> -->
+										<td >{{materiel.inOutNums}}</td>
 										<td>
 											{{materiel.stockRemark}}
 										</td> 
@@ -272,8 +274,9 @@
 										<th>规格型号</th>
 										<th>单位</th>
 										<th>出库数量</th>
-										<th>仓库</th>
-										<th>库位</th>
+										<!-- <th>仓库</th>
+										<th>库位</th> -->
+										<th>出库批次</th> 
 										<th>备注</th> 
 										<th>状态</th>
 								</thead>
@@ -286,12 +289,13 @@
 										<td>
 											{{materiel.stockCount}}
 										</td>
-										<td>
+										<!-- <td>
 											{{materiel.warehouse.warehouseName}}
 										</td>
 										<td>
 											{{materiel.position.positionName}}
-										</td>
+										</td> -->
+										<td >{{materiel.inOutNums}}</td>
 										<td>
 											{{materiel.stockRemark}}
 										</td> 

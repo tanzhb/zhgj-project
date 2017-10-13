@@ -539,7 +539,7 @@ angular
 			  		                                    { mData: 'stockInOutRecord.inOutNum' },
                                                         { mData: 'stockInOutRecord.inOutType' },
                                                         { mData: 'stockInOutRecord.inOutNum' },
-                                                        { mData: 'stockInOutRecord.inOutNum' },
+                                                        { mData: 'stockInOutRecord.inOutType' },
                                                         { mData: 'stockInOutRecord.stockDate' },
                                                         { mData: 'stockCount' },
 			  		                                  { mData: 'warehouse' },
@@ -547,13 +547,24 @@ angular
 			  		                                  { mData: 'remark' }//备注
 			  		                            ],
 			  		                   'aoColumnDefs' : [{
+											'targets' : 0,
+											'render' : function(data,
+													type, row, meta) {
+		 	    								if(data==''||data==null){
+		 	    									return "";
+		 	    								}else{
+		 	    									return data;
+		 	    								}
+												
+											}
+										},{
 											'targets' : 2,
 											'render' : function(data,
 													type, row, meta) {
 		 	    								if(data==''||data==null){
 		 	    									return "";
 		 	    								}else{
-		 	    									return data.orderNum;
+		 	    									return data;
 		 	    								}
 												
 											}
@@ -635,7 +646,6 @@ angular
 									// serverSide: true,
 								     ajax :tableAjaxUrl,
 			  		                    "aoColumns": [
-                                                        
 			  		                                   { mData: 'stockInOutRecord.inOutNum' },
 	  		                                           { mData: 'stockInOutRecord.inOutType' },
 	  		                                          { mData: 'stockInOutRecord.inOutNum' },
@@ -643,22 +653,44 @@ angular
 	  		                                          { mData: 'stockInOutRecord.stockDate' },
 	 	  		                                      { mData: 'warehouse' },
 	 	  		                                      { mData: 'stockCount' },
-		  		                                      { mData: 'h' },
-		  		                                       { mData: 'remark' },//备注
+		  		                                      { mData: 'sumStockOutCount' },
+		  		                                       { mData: 'remark' },//结存数量
 		  		                                     { mData: 'stockInOutRecord.stockDate' },
                                                      { mData: 'remark' }
                                                      
 			  		                            ],
 			  		                   'aoColumnDefs' : [ {
+											'targets' : 2,
+											'render' : function(data,
+													type, row, meta) {
+												debugger;
+		 	    								if(data==undefined){
+		 	    									return "";
+		 	    								}else{
+		 	    									return data;
+		 	    								}
+												
+											}
+										},{
 											'targets' : 7,
 											'render' : function(data,
 													type, row, meta) {
 		 	    								if(data==''||data==null){
-		 	    									return "";
+		 	    									return '0';
 		 	    								}else{
-		 	    									return data.positionName;
+		 	    									return data;
 		 	    								}
 												
+											}
+										},{
+											'targets' : 8,
+											'render' : function(data,
+													type, row, meta) {
+												if(row.sumStockOutCount!=undefined){
+													return row.stockCount-row.sumStockOutCount;
+												}else{
+													return row.stockCount;
+												}
 											}
 										},{
 											'targets' : 5,
@@ -667,10 +699,11 @@ angular
 		 	    								if(data==''||data==null){
 		 	    									return "";
 		 	    								}else{
-		 	    									return data.warehouseName;
+		 	    									return '<span title="仓库:'+row.warehouse.warehouseName+'&nbsp;&nbsp;&nbsp;&nbsp;库位:'+row.position.positionName+'">'+data.warehouseName+'</span>';
 		 	    								}
-												
-											}
+											},"createdCell": function (td, cellData, rowData, row, col) {
+												 $compile(td)($scope);
+										    }
 										},{
 											'targets' : 9,
 											'render' : function(data,

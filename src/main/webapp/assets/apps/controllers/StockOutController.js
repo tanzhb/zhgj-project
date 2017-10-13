@@ -218,7 +218,12 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 						param.stockRemark = $scope.takeDeliveryMateriels[i].stockRemark;
 						params.deliveryMateriels.push(param);
 					}
-					var serialNums=$scope.arraySerialNums;
+					var arraySerialNums=$scope.arraySerialNums;
+					debugger;
+					var serialNums=new Array();
+					for(var i=0;i < arraySerialNums.length;i++){
+						serialNums=serialNums.concat($scope["arraySerialNums"+arraySerialNums[i]]);
+					}
 					for(var i=0;i < serialNums.length;i++){
 						param = {};
 						var arrays=serialNums[i].split(",");
@@ -435,13 +440,14 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 	  			if(stockOutCount==0||stockOutCount==NaN){
 	  				toastr.warning("请先输入正确的出库数量");
 	  			}else{
-	  			   if(stockBatchTable!=undefined){
+	  				$('#stockBatchInfo').modal('show');//显示批次弹框
+	  			  /* if(stockBatchTable!=undefined){
 	 	            	  stockBatchTable.ajax.reload(); 
-	 	            	 setTimeout(showDetail(),5000);
+	 	            	 
 	 			 	    	 }else{
 	  				loadStockBatchTable(stockOutCount,materielSerialNum,orderSerial,deliveryMaterielSerialNum);
-	 			 	    	 }
-	  				$('#stockBatchInfo').modal('show');//显示批次弹框
+	 			 	    	 }*/
+	  				loadStockBatchTable(stockOutCount,materielSerialNum,orderSerial,deliveryMaterielSerialNum);
 	  			}
 	  		}
 			  
@@ -453,13 +459,14 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 	 			stockBatchTable.$('input[type="checkbox"]').each(function() { //遍历所有checkbox
 	 				debugger;
 	 					if ($.contains(document, this)) {
-	 						 var serialNums=$scope.arraySerialNums;
+	 						 var serialNums=$scope["arraySerialNums"+$scope.deliveryMaterielSerialNum];
 							 for(var i=0;i<serialNums.length;i++){
 								  var arrays=serialNums[i].split(",");
-								 if(arrays[0]==$(this).attr("id")){
+								 if(arrays[0]==$(this).attr("id")&&$scope.deliveryMaterielSerialNum==arrays[2]){
 									$("#"+arrays[0]).attr("checked",true);
 										$("#stockOutCount"+arrays[0]).attr("readonly",false);
-										$("#stockOutCount"+arrays[0]).val(arrays[1]);
+										//$("#stockOutCount"+arrays[0]).val(arrays[1]);
+										$scope["stockValue"+arrays[0]] = arrays[1];
 										$("#stockOutCount"+arrays[0]).css("border","1px solid");
 								 }
 							 }
@@ -469,13 +476,19 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 	  		 var stockBatchTable,tableUrl;//批次弹框
 	 	       var loadStockBatchTable = function(stockOutCount,materielSerialNum,orderSerial,deliveryMaterielSerialNum) {
 	 	    	   $scope.deliveryMaterielSerialNum=deliveryMaterielSerialNum;
+	 	    	   $scope.stockOutCount=stockOutCount;
+	 	    	   if($scope['totalCount'+$scope.deliveryMaterielSerialNum]!=undefined){
+	 	    		   $scope.totalCount=$scope['totalCount'+$scope.deliveryMaterielSerialNum];
+	 	    	   }else{
+	 	    		  $scope.totalCount=0;
+	 	    	   }
 	 	    	  tableUrl="rest/stock/stockInList?serialNum="+materielSerialNum+"&orderSerial="+orderSerial;
 	 	    	   debugger;
 	 	                a = 0;
 	 	                App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
-	 	            /*   if(stockBatchTable!=undefined){
-	 	            	  stockBatchTable.ajax.reload(); 
-	 			 	    	 }*/
+	 	               if(stockBatchTable!=undefined){
+	 	            	  stockBatchTable.destroy(); 
+	 			 	    	 }
 	 	                stockBatchTable = $("#select_sample_stockBatch")
 	 	    			.DataTable({
 	 	                    language: {
@@ -561,11 +574,15 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 										'className' : 'dt-body-center',
 										'render' : function(data,
 												type, row, meta) {
-												return '<input  type="text"   style="border:none" readonly="readonly"   id="stockOutCount'+row.serialNum+'" ng-model="stockValue'+row.serialNum+'"  ng-init="stockValue'+row.serialNum+'=\''+0+'\'"  ng-blur="judgeNumber(\''+row.stockCount+'\',\''+stockOutCount+'\',\''+row.serialNum+'\')" />';
+												return '<input  type="text"   style="border:none" readonly="readonly"   name="'+row.stockInOutRecord.inOutNum+'"  id="stockOutCount'+row.serialNum+'" ng-model="stockValue'+row.serialNum+'"  ng-init="stockValue'+row.serialNum+'=\''+0+'\'"  ng-blur="judgeNumber(\''+row.stockCount+'\',\''+stockOutCount+'\',\''+row.serialNum+'\')" />';
 										},"createdCell": function (td, cellData, rowData, row, col) {
 											 $compile(td)($scope);
 									    }
-									}]
+									}],
+									//stateSave:false,
+									"fnInitComplete":function(settings) {//fnInitComplete stateLoadCallback
+					                	   showDetail();
+					                   }
 
 	 	                });
 	 	               $("#select_sample_stockBatch").find(".group-checkable").change(function() {
@@ -579,20 +596,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					    function() {
 					        $(this).parents("tr").toggleClass("active")
 					    })
-					    /*if($scope.arraySerialNums!=undefined){
-					    	 var serialNums=$scope.arraySerialNums;
-							 for(var i=0;i<serialNums.length;i++){
-								  var arrays=serialNums[i].split(",");
-								 if(arrays[2]==orderMaterielSerialNum){
-										$("#stockOutCount"+arrays[0]).attr("readonly",false);
-										$("#stockOutCount"+arrays[0]).val(arrays[1]);
-										$("#stockOutCount"+arrays[0]).css("border","1px solid");
-										$("#"+arrays[0]).attr("checked",true);
-								 }
-								  
-							 }
-		 	            	   alert(1);
-		 	               }*/
+                  
 					   return stockBatchTable;
 	 	               
 	 	              
@@ -724,9 +728,10 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					
 					$scope.showStockOutCount=function(serialNum,stockOutCount){//选中checkbox显示输入框
 						debugger;
+						var value;
 						if($scope.totalCount==undefined){
 							$scope.totalCount=0;
-						}else if($scope.totalCount>=stockOutCount){
+						}else if($scope.totalCount>=stockOutCount&&$("#stockOutCount"+serialNum).val()==0){
 							 toastr.warning("不需再选批次！");
 							 $("#"+serialNum).attr("checked",false);
 							 return;
@@ -737,7 +742,10 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 						}else{
 							$("#stockOutCount"+serialNum).css("border","none");
 							$("#stockOutCount"+serialNum).attr("readonly",true);
+							value=$("#stockOutCount"+serialNum).val();
 							$("#stockOutCount"+serialNum).val(0);//重新置为0
+							$scope.totalCount=($scope.totalCount-Number(value));
+							 toastr.warning("重新选择出库,数量为"+value+"!");
 							
 						}
 						
@@ -770,7 +778,8 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 							  var value=$("#stockOutCount"+serialNum).val();
 							  count=count+Number(value);
 						 }
-						 $scope.totalCount=count;
+						 $scope['totalCount'+$scope.deliveryMaterielSerialNum]=count;
+						 $scope.totalCount=$scope['totalCount'+$scope.deliveryMaterielSerialNum];
 						 if(count>stockOutCount){
 							 toastr.warning("各批次总出库数量不得大于总出库数量！");
 							 $("#stockOutCount"+serialNum).val(0); 
@@ -786,16 +795,48 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 							 toastr.warning("未勾选批次"); 
 							 return;
 						 }
-						 $scope.arraySerialNums = null;
+						 if($scope.totalCount<0){
+							 toastr.warning("未勾选批次"); 
+							 return;
+						 }
+						 //$scope.arraySerialNums = null;
+						 var arraySerialNums=$scope.arraySerialNums;
+						 if($scope.arraySerialNums==undefined){
+							 arraySerialNums= new Array();
+							 arraySerialNums.push($scope.deliveryMaterielSerialNum);
+						 }else{
+							 var flag=true;
+							 for(var i=0;i<arraySerialNums.length;i++){
+								 if(arraySerialNums[i]==$scope.deliveryMaterielSerialNum){
+									 flag=false;
+								 }
+							 }
+							 if(flag){
+								 arraySerialNums.push($scope.deliveryMaterielSerialNum);
+							 }
+						 }
+						 $scope.arraySerialNums=arraySerialNums;
+						 $scope["arraySerialNums"+$scope.deliveryMaterielSerialNum] = null;
 						 var serialNums=new Array();
 						 for(var i=0;i<checkboxs.length;i++){
 							 var serialNum=$(checkboxs[i]).val();
 							  var value=$("#stockOutCount"+serialNum).val();//出库数量
 							  var rukuSerialNum=$("#"+serialNum).attr("name");//入库单流水
-							  var addvalue=serialNum+","+value+","+$scope.deliveryMaterielSerialNum+","+rukuSerialNum;//拼接checkbox选中流水和之前设定的出库数值以及发货物料流水和入库单流水
+							  var  inOutNum=$("#stockOutCount"+serialNum).attr("name");//入库批次号
+							  var addvalue=serialNum+","+value+","+$scope.deliveryMaterielSerialNum+","+rukuSerialNum+","+inOutNum;//拼接checkbox选中流水和之前设定的出库数值以及发货物料流水和入库单流水以及入库批次号
 							  serialNums[i]=addvalue;
 						 }
-						 $scope.arraySerialNums=serialNums;
+						 var inOutNums="";
+						 for(var i=0;i<serialNums.length;i++){
+							 var arrayValue=serialNums[i].split(",");
+							 inOutNums=inOutNums+arrayValue[4];
+							 if(i!=serialNums.length-1){
+								 inOutNums= inOutNums+",";
+							 }
+						 }
+						 $("#"+$scope.deliveryMaterielSerialNum).html(inOutNums);
+						 //$scope.arraySerialNums=serialNums;
+						 $scope["arraySerialNums"+$scope.deliveryMaterielSerialNum] =serialNums;
 						 $('#stockBatchInfo').modal('hide');//显示批次弹框
 					}
 		            /***收货列表初始化END***/

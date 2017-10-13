@@ -82,6 +82,7 @@
 	     <result column="dmRemark" property="remark" jdbcType="VARCHAR" />
 	     <association column="dmWarehouseSerial" property="warehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>
 	     <association column="orderMaterielSerial" property="orderMateriel" select="com.congmai.zhgj.web.dao.OrderMaterielMapper.selectByPrimaryKey" ></association>
+	     <association column="dmSerialNum" property="inOutNums" select="com.congmai.zhgj.web.dao.StockOutBatchMapper.selectInOutNumsBySerialNum" ></association><!-- 取出批次号-->
     </collection>
   </resultMap>
   <sql id="Example_Where_Clause" >

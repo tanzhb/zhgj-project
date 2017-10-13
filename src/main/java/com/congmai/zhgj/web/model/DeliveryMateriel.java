@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.model;
 
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -80,8 +81,18 @@ public class DeliveryMateriel {
     private  String  stockInRemark;
     private Warehouse stockInWarehouse;
     private Warehouseposition stockInPosition;
-    
-    private int pageIndex;
+    private List<StockOutBatch> stockOutMateriels;//关联出库批次信息
+    private String  inOutNums;//关联出库批次号
+    private String sumStockOutCount;//出库数量
+    public List<StockOutBatch> getStockOutMateriels() {
+		return stockOutMateriels;
+	}
+
+	public void setStockOutMateriels(List<StockOutBatch> stockOutMateriels) {
+		this.stockOutMateriels = stockOutMateriels;
+	}
+
+	private int pageIndex;
     
     private int pageSize;
 
@@ -453,6 +464,24 @@ public class DeliveryMateriel {
 	public void setBuyComId(String buyComId) {
 		this.buyComId = buyComId;
 	}
+
+	public String getInOutNums() {
+		return inOutNums;
+	}
+
+	public void setInOutNums(String inOutNums) {
+		this.inOutNums = inOutNums;
+	}
+
+	public String getSumStockOutCount() {
+		return sumStockOutCount;
+	}
+
+	public void setSumStockOutCount(String sumStockOutCount) {
+		this.sumStockOutCount = sumStockOutCount;
+	}
+
+	
     
     
 }

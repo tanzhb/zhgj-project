@@ -42,6 +42,8 @@
     <association column="warehouseSerial" property="warehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>
     <association column="stockInPositionSerial" property="stockInPosition" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectPositionByPositionSerial" ></association>
     <association column="positionSerial" property="position" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectPositionByPositionSerial" ></association>
+    <association column="serialNum" property="stockOutMateriels" select="com.congmai.zhgj.web.dao.StockOutBatchMapper.selectStockOutBatchBySerialNum" ></association><!--  根据发货物料取出批次相关出库批次详情-->
+     <association column="serialNum" property="inOutNums" select="com.congmai.zhgj.web.dao.StockOutBatchMapper.selectInOutNumsBySerialNum" ></association>
   </resultMap>
   <resultMap id="BaseResultMap2" type="com.congmai.zhgj.web.model.DeliveryMateriel" >
   	<id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
@@ -83,6 +85,8 @@
     	 <result property="deliverNum" column="deliverNum" jdbcType="VARCHAR" />
     	 <association property="supplyName" column="supplyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
     </association>
+    <!-- 获取已出库数量和  -->
+    <association property="sumStockOutCount" column="serialNum" select="com.congmai.zhgj.web.dao.StockOutBatchMapper.selectSumBySerialNum"></association>
   </resultMap>
     <resultMap id="BaseResultMap3" type="com.congmai.zhgj.web.model.DeliveryMateriel" >
     	<id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
@@ -702,7 +706,7 @@
   <!-- 获取出库记录中出库明细   -->     
   <select id="getDetailByRelationDeliverSerialList"  resultMap="BaseResultMap2" parameterType="java.util.List" >
      select
-   		dm.serialNum,dm.stockCount,dm.batchNum,s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial, s.inOutNum,s.inOutType,s.stockDate, s.operator, s.contactNum, 
+   		dm.serialNum as serialNum ,dm.stockCount,dm.batchNum,s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial, s.inOutNum,s.inOutType,s.stockDate, s.operator, s.contactNum, 
     	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,dm.orderMaterielSerial,o.orderNum,o.buyComId,
     	 dm.warehouseSerial as warehouseSerial,dm.positionSerial as  positionSerial
     from stockInOutRecord s
@@ -720,7 +724,7 @@
    <!--   获取入库记录中入库明细   -->
      <select id="getDetailByRelationTakeDeliverSerialList"  resultMap="BaseResultMap2" parameterType="java.util.List">
      select
-   		dm.serialNum,dm.stockCount,dm.batchNum,s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial, s.inOutNum,s.inOutType,s.stockDate, s.operator, s.contactNum, 
+   		dm.serialNum as serialNum ,dm.stockCount,dm.batchNum,s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial, s.inOutNum,s.inOutType,s.stockDate, s.operator, s.contactNum, 
     	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,dm.orderMaterielSerial,o.orderNum,o.buyComId,
     	dm.warehouseSerial as warehouseSerial,dm.positionSerial as  positionSerial
     from stockInOutRecord s
