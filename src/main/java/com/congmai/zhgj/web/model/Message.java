@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.model;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 public class Message {
@@ -17,6 +18,8 @@ public class Message {
     private String title;
 
     private String receiverId;
+    
+    private List<String> receiverIds;
 
     private String creator;
 
@@ -39,6 +42,8 @@ public class Message {
     private int pageIndex;
     
     private int pageSize;
+    
+    private int start;
     
 
     public String getSerialNum() {
@@ -191,5 +196,21 @@ public class Message {
 
 	public void setPageIndex(int pageIndex) {
 		this.pageIndex = pageIndex;
+	}
+
+	public int getStart() {
+		return start;
+	}
+
+	public void setStart(int start) {
+		this.start = start;
+	}
+
+	public List<String> getReceiverIds() {
+		return receiverIds;
+	}
+
+	public void setReceiverIds(List<String> receiverIds) {
+		this.receiverIds = receiverIds;
 	}
 }

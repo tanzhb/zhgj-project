@@ -107,6 +107,9 @@ public class DeliveryMaterielVO {
 	private String supplyMaterielSerial;
 	
 	
+	private String attachFile;
+	
+	
 
 
 	public String getSerialNum() {
@@ -372,6 +375,14 @@ public class DeliveryMaterielVO {
 
 	public void setSupplyMaterielSerial(String supplyMaterielSerial) {
 		this.supplyMaterielSerial = supplyMaterielSerial;
+	}
+
+	public String getAttachFile() {
+		return attachFile;
+	}
+
+	public void setAttachFile(String attachFile) {
+		this.attachFile = attachFile;
 	}
 
 }

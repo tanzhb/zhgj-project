@@ -2,8 +2,8 @@
  * 
  */
 
-angular.module('MetronicApp').controller('MessageController',['$rootScope','$scope','$state','$http','messageService','$location','$compile','$stateParams',
-                                                             function($rootScope,$scope,$state,$http,messageService,$location,$compile,$stateParams) {
+angular.module('MetronicApp').controller('MessageController',['$rootScope','$scope','$state','$http','messageService','$location','$compile','$stateParams', '$q',
+                                                             function($rootScope,$scope,$state,$http,messageService,$location,$compile,$stateParams,$q) {
 	 $scope.$on('$viewContentLoaded', function() {   
 	    	// initialize core components
 		    handle = new pageHandle();
@@ -23,7 +23,7 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 	 				
 		 			$scope.businessMessageList();
 		 		}	
-	    	
+	 			getMessageCount();
 	    	
 	    	// set default layout mode
 	    	$rootScope.settings.layout.pageContentWhite = true;
@@ -35,11 +35,26 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 	 
 
 	 		$scope.businessMessageList = function(){
-	 			createBusinessMessageTable(5,1,true,null);
+	 			createBusinessMessageTable(10,1,true,null);
 	 		}
 	 		$scope.systemMessageList = function(){
-	 			createSystemMessageTable(5,1,true,null);
+	 			createSystemMessageTable(10,1,true,null);
 	 		}
+	 		
+	 		function getMessageCount(){
+	 			 var promise = messageService.systemMessageSize();
+	 			 promise.then(function(data){
+	 				$scope.systemMessageSize = data; 
+	 			 },function(data){
+	 				 //调用承诺接口reject();
+	 			 });
+	 			 var promise2 = messageService.businessMessageSize();
+	 			 promise2.then(function(data){
+	 				 $scope.businessMessageSize = data; 
+	 			 },function(data){
+	 				 //调用承诺接口reject();
+	 			 });
+			}
 	 		
 	 		 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 			        // 获取已激活的标签页的名称
@@ -48,9 +63,9 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 			       // var previousTab = $(e.relatedTarget).text(); 
 			        var absurl = $location.absUrl();
 			        $("#tip").text(activeTab);
-			        if(activeTab=="公告列表"){
+			        if(activeTab=="系统消息"){
 			        	handle.addCookie("d_type","systemMessage",24);
-			        }else if(activeTab=="最新公告"){
+			        }else if(activeTab=="业务提醒"){
 			        	handle.addCookie("d_type","businessMessage",24);
 			        }
 			});
@@ -63,7 +78,7 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 	 			 //初始化表格数据
 	 			 handle.blockUI(null,"#businessMessage");
 	 			 var promise = messageService.createBusinessMessageTable(pageSize,pageIndex,params);
-	 			 promise.then(function(data){debugger;
+	 			 promise.then(function(data){
 	 				 $scope.messageList = data.data.result;
 	 				 data.data.params=params;
 	 				 handle.createPage("#businessMessage",data.data,"rest/message/businessMessageList",createBusinessMessageTable,init);
@@ -79,7 +94,7 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 	 			 //初始化表格数据
 	 			 handle.blockUI(null,"#systemMessage");
 	 			 var promise = messageService.createSystemMessageTable(pageSize,pageIndex,params);
-	 			 promise.then(function(data){debugger;
+	 			 promise.then(function(data){
 	 				 $scope.messageList = data.data.result;
 	 				 data.data.params=params;
 	 				 handle.createPage("#systemMessage",data.data,"rest/message/systemMessageList",createSystemMessageTable,init);
@@ -133,6 +148,7 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 
 
 			$scope.delHtmlTag = function(str){
+				str = str.replace("马上处理","").replace("查看","");
 				return delHtmlTag(str);
 			}
 			
@@ -144,7 +160,7 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 	        		promise.then(function(data){
 	        			toastr.success("删除成功");
 	        			handle.unblockUI();
-	        			createTable(5,1,true,null); // 重新加载datatables数据
+	        			createTable(10,1,true,null); // 重新加载datatables数据
 	        		},function(data){
 	        			//调用承诺接口reject();
 	        		});
@@ -152,9 +168,24 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 	        	});
 			}
 			
-			$scope.myMessageView = function(serialNum){
+			$scope.messageView = function(serialNum,objSerial,actionName){
+				readMessage(serialNum);
+				if(actionName=="applyBuyOrder"||actionName=="refuseBuyOrder"){
+					$state.go("buyOrder",{tabHref:'1'});
+				}else if(actionName=="confirmBuyOrder"){
+					$state.go("supplyOrder");
+				}else if(actionName=="beConfirmBuyOrder"||actionName=="agreeBuyOrder"){
+					$state.go("buyOrder");
+				}
+			}
 			
-				$state.go("messageView",{serialNum:serialNum});
+			var readMessage = function(serialNum){
+				var promise = messageService.readMessage(serialNum);
+        		promise.then(function(data){
+        			
+        		},function(data){
+        			//调用承诺接口reject();
+        		});
 			}
 
 }]); 

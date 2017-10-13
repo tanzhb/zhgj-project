@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
+import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.web.model.Message;
 import com.congmai.zhgj.web.model.User;
@@ -67,7 +68,7 @@ public class MessageContoller {
     @RequestMapping(value="businessMessageList",method=RequestMethod.POST)
     @ResponseBody
     public Page<Message> businessMessageList(@RequestBody Message message){
-    	Page<Message> page = new Page<Message>();
+    	Page<Message> page = null;
     	try{
     		User user = UserUtil.getUserFromSession();
     		page = this.messageService.selectBusinessMessageByPage(message, user.getUserId().toString());
@@ -114,6 +115,9 @@ public class MessageContoller {
     	String flag = "0"; //默认失败
     	try{
     		if(StringUtils.isNotEmpty(serialNum)){
+    			if(serialNum.contains("=")){
+    				serialNum = serialNum.replace("=", "");
+    			}
     			messageService.readMessage(serialNum,UserUtil.getUserFromSession().getUserName());
     		}
     	}catch(Exception e){
@@ -122,4 +126,47 @@ public class MessageContoller {
     	}
     	return flag;
     }
+    
+    
+    /**
+     * @Description (读消息)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="systemMessageSize")
+    @ResponseBody
+    public String systemMessageSize(Map<String, Object> map,HttpServletRequest request) {
+    	int flag = 0; //默认失败
+    	try{
+    		User user = UserUtil.getUserFromSession();
+    		if(user != null){
+    		
+    			flag = messageService.messageSize(user.getUserId(),MessageConstants.SYSTEM_MESSAGE);
+    		}
+    	}catch(Exception e){
+    		System.out.println(e.getMessage());
+    	}
+    	return String.valueOf(flag);
+    }
+    /**
+     * @Description (读消息)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="businessMessageSize")
+    @ResponseBody
+    public String businessMessageSize(Map<String, Object> map,HttpServletRequest request) {
+    	int flag = 0; //默认失败
+    	try{
+    		User user = UserUtil.getUserFromSession();
+    		if(user != null){
+    			flag = messageService.messageSize(user.getUserId(),MessageConstants.BUSSINESS_MESSAGE);
+    		}
+    	}catch(Exception e){
+    		System.out.println(e.getMessage());
+    	}
+    	return String.valueOf(flag);
+    }
+    
+    
 }

@@ -8,6 +8,11 @@ public class Constants {
 	public static final String DB_NAME = "mysql";
 	public static final String MESSAGE = "message";
 	
+	public static final String DEL_FLAG_DEFUALT = "0";	//未删表示
+	public static final String DELETE = "1";	//已删标识
+	public static final String READ_FLAG_DEFUALT = "0";	//未读标识
+	public static final String READ = "1";	//已读标识
+	
 	/***************** session key *****************/
     public static final String CURRENT_USER = "user";
     public static final String SESSION_FORCE_LOGOUT_KEY = "session.force.logout";
@@ -38,6 +43,12 @@ public class Constants {
 	
 	/***************** 单据类型-收货 *****************/
 	public static final String TAKEDELIVERY = "takeDelivery";
+	
+	/***************** 公告流程KEY *****************/
+	public static final String NOTICE_KEY = "com.congmai.zhgj.notice";
+	
+	/***************** 单据类型-公告 *****************/
+	public static final String NOTICE = "myNotice";
 	
 	/***************** 采购价格KEY *****************/
 	public static final String BUYPRICE_KEY = "com.congmai.zhgj.buyPrice";

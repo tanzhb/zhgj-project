@@ -88,7 +88,7 @@
                                                      <input type="checkbox" class="group-checkable" id="example-select-all"/>
                                                      <span></span>
                                                  </label>
-                                             </th>
+                                         </th>
 
 										<th style="white-space: nowrap;">合同编号</th>
 										<th style="white-space: nowrap;">甲方</th>
@@ -125,6 +125,10 @@
 									class="caption-subject font-green bold uppercase">销售合同列表</span>
 							</div>
 							<div class="actions">
+							<label
+									class="btn btn-transparent green btn-outline btn-circle btn-sm"
+									data-toggle="modal" ng-click="saleOrderSign()"><i
+									class="fa fa-pencil"></i>签订</label>
 								<label
 									class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
 									ng-click="exportSaleContract()"> <i
@@ -134,14 +138,20 @@
 						</div>
 
 						<div class="portlet-body">
-							<table class="table table-bordered" id="sample_2_1">
+							<table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_2_1">
 								<thead>
 									<tr>
-										<th style="text-align: center">
+										<!-- <th style="text-align: center">
 										<label class="mt-radio mt-radio-outline">
 											<input type="radio" value="1" name="id[]"/> <span></span>
 									     </label>	
-											</th>
+										</th> -->
+										<th>
+                                            <label class="mt-radio mt-radio-single mt-radio-outline">
+                                                <input type="radio" class="group-checkable" name="id[]"/>
+                                                <span></span>
+                                            </label>
+                                        </th>
 
 										<th style="white-space: nowrap;">合同编号</th>
 										<th style="white-space: nowrap;">企业名称</th>
@@ -214,6 +224,10 @@
 									class="caption-subject font-green bold uppercase">采购合同列表</span>
 							</div>
 							<div class="actions">
+							<label
+									class="btn btn-transparent green btn-outline btn-circle btn-sm"
+									data-toggle="modal" ng-click="buyOrderSign()"><i
+									class="fa fa-pencil"></i>签订</label>
 								<label
 									class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
 									ng-click="exportBuyContract()"> <i
@@ -223,13 +237,18 @@
 						</div>
 
 						<div class="portlet-body">
-							<table class="table table-bordered" id="sample_2_2">
+							<table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_2_2">
 								<thead>
 									<tr>
-										<th style="text-align: center"><label class="mt-radio mt-radio-outline">
+										<!-- <th style="text-align: center"><label class="mt-radio mt-radio-outline">
 											<input type="radio" value="1" name="id[]"/> <span></span>
-									     </label></th>
-
+									     </label></th> -->
+									     <th style="text-align: center">
+									     <label class="mt-radio mt-radio-single mt-radio-outline">
+                                                <input type="radio" class="group-checkable" name="id[]"/>
+                                                <span></span>
+                                         </label>
+                                         </th>
 										<th style="white-space: nowrap;">合同编号</th>
 										<th style="white-space: nowrap;">企业名称</th>
 										<th style="white-space: nowrap;">合同类型</th>

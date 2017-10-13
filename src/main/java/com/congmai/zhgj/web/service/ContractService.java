@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.congmai.zhgj.core.generic.GenericService;
 import com.congmai.zhgj.web.model.ContractVO;
@@ -64,8 +65,22 @@ public interface ContractService extends GenericService<ContractVO, String> {
 	
 	
 	/**
-	 * 更新用户对象
+	 * 更新用户合同
 	 * @param contractVO
 	 */
 	public void updateContract(ContractVO contractVO);
+	
+	
+	/**
+	 * 签订销售合同
+	 * @param contractVO
+	 */
+	public void signSaleContract(ContractVO contractVO);
+	
+	
+	/**
+	 * 签订销售合同后更新订单
+	 * @param contractVO
+	 */
+	public void updateOrderAfterSign(Map<String,Object> map);
 }

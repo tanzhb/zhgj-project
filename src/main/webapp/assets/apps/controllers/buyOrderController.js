@@ -89,6 +89,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		dateSelectSetting();//日期选择限制
             		// 加载数据
                 	initSuppliers();
+                	initWarehouse();
                 	//合同内容
                 	$scope.buyOrder.contractContent = '111100';
                 	$scope.initContractContent();
@@ -175,8 +176,9 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 		var _url = ctx + "rest/order/modifyOrder/" + $("#taskId").val();
 		doOrder(_url, mydata, 'modify' );
 	};
-	
+	$scope.changeFlag = true
     $scope.repeatDone = function(scope){
+    	$scope.changeFlag = false;
     	var date1= scope._orderMateriel.deliveryDate;
     	var date2= scope._orderMateriel.lastDeliveryDate;
     	/*var date3= scope.buyOrder.orderDate;*/
@@ -185,8 +187,14 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     		scope._orderMateriel.deliveryDate = date1;
     		scope._orderMateriel.lastDeliveryDate = date2;
     	}
+    	$scope.changeFlag = true;
     	/*scope.buyOrder.orderDate = date3;*/
    };
+   
+   $scope.repeatMaterielList = function(scope){
+	   searchMaterielList();//订单物料可检索化
+  };
+
    
    $scope.renderDone = function(){
    	var date3= $scope.buyOrder.orderDate;
@@ -914,6 +922,13 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
           		     function(data){//加载页面对象
           		    	$scope.buyOrder=data.orderInfo;
           		    	$scope.orderMateriel=data.orderMateriel;
+          		    	
+          		    	if($state.current.name=="viewBuyOrder"){//查看页面构造物料查询分页
+          		    		$scope.queryForPage();
+          		    	}
+          		    	
+          		    	
+          		    	
           		    	$scope.contract=data.contract;
           		    	$scope.clauseAfterSales=data.clauseAfterSales;
           		    	$scope.clauseAdvance=data.clauseAdvance;
@@ -978,6 +993,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
           		    	
           		    	// 加载数据
                     	initSuppliers();
+                    	initWarehouse();
                     	
           		    	$("#serialNum").val(serialNum);//赋值给隐藏input，通过和不通过时调用
     					$("#taskId").val(taskId);//赋值给隐藏input，通过和不通过时调用
@@ -1411,7 +1427,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	       };
     	 
     	 /**
-			 * 保存销售订单物料信息
+			 * 保存采购订单物料信息
 			 */
 			$scope.saveOrderMateriel = function(orderMateriel,index) {
 /*
@@ -1469,7 +1485,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	        	$scope["orderMaterielInput"+index] = true;
 				$scope["orderMaterielShow"+index] = true;
 	        	for(var i=0;i<$scope.copyMateriels.length;i++){
-	        		if(materiel.serialNum == $scope.copyMateriels[i].serialNum && !isNull(materiel.supplyMaterielSerial)){ // 如果是以保存的物料，回滚
+	        		if(materiel.serialNum == $scope.copyMateriels[i].serialNum){ // 如果是以保存的物料，回滚
 	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)] = $scope.copyMateriels[i];
 						break;
 	        		}
@@ -1485,6 +1501,36 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	        };  
 	        
 
+	        
+	        //选择第一个，设置后面的数据
+			$scope.setAllDeliveryAddress = function(orderMateriel){
+				 for(var i=1;i<$scope.orderMateriel.length;i++){
+					 if($scope["orderMaterielInput"+i] != true/*&&isNull($scope.orderMateriel[i].deliveryAddress)*/){
+						 $scope.orderMateriel[i].deliveryAddress = orderMateriel.deliveryAddress;
+					 }
+				 }
+			}
+			
+			$scope.setAllDeliveryDate = function(orderMateriel,index){
+				if(index==0&&$scope.changeFlag){
+					for(var i=1;i<$scope.orderMateriel.length;i++){
+						 if($scope["orderMaterielInput"+i] != true/*&&isNull($scope.orderMateriel[i].deliveryAddress)*/){
+							 $scope.orderMateriel[i].deliveryDate = orderMateriel.deliveryDate;
+						 }
+					 }
+				}
+			}
+			
+			$scope.setAllLastDeliveryDate = function(orderMateriel,index){
+				if(index==0&&$scope.changeFlag){ 
+					for(var i=1;i<$scope.orderMateriel.length;i++){
+						 if($scope["orderMaterielInput"+i] != true/*&&isNull($scope.orderMateriel[i].deliveryAddress)*/){
+							 $scope.orderMateriel[i].lastDeliveryDate = orderMateriel.lastDeliveryDate;
+						 }
+					 }
+				}
+			}
+			 
 
 			function indexOf(arr, item) {
 				for (var i = 0; i < arr.length; i++) {
@@ -1496,7 +1542,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 			}
 	        
 	        /**
-			 * 编辑销售订单物料
+			 * 编辑采购订单物料
 			 */
 	        $scope.editOrderMateriel=function (materiel) {
 	        	// .show_materiels = false;
@@ -2598,7 +2644,7 @@ var e = $("#form_clauseSettlement"),
 			       	}
 		       };
 		       
-		       $scope.arithmeticRateUnit  = function(scope) {//计算含税销售单价
+		       $scope.arithmeticRateUnit  = function(scope) {//计算含税采购单价
 			       	if(scope.orderUnitPrice&&$scope.buyOrder.rate){
 			       		return (scope.orderUnitPrice*($scope.buyOrder.rate/100+1)).toFixed(4);
 			       	}else{
@@ -2638,11 +2684,19 @@ var e = $("#form_clauseSettlement"),
 		       };
 		       
 		       
-		       $scope._arithmeticRateUnit  = function(scope) {//计算含税销售单价
-			       	if(scope._orderMateriel.orderUnitPrice&&$scope.buyOrder.rate){
-			       		return (scope._orderMateriel.orderUnitPrice*($scope.buyOrder.rate/100+1)).toFixed(4);
+		       $scope._arithmeticRateUnit  = function(_orderMateriel) {//计算含税采购单价
+			       	if(_orderMateriel.orderUnitPrice&&$scope.buyOrder.rate){
+			       		_orderMateriel.orderRateUnit  =  (_orderMateriel.orderUnitPrice*($scope.buyOrder.rate/100+1)).toFixed(4);
 			       	}else{
-			       		return 0;
+			       		_orderMateriel.orderRateUnit  =   0;
+			       	}
+		       };
+		       
+		       $scope._arithmeticUnitPrice  = function(_orderMateriel) {//计算不含税采购单价
+			       	if(_orderMateriel.orderRateUnit&&$scope.buyOrder.rate){
+			       		_orderMateriel.orderUnitPrice  =  (_orderMateriel.orderRateUnit/($scope.buyOrder.rate/100+1)).toFixed(4);
+			       	}else{
+			       		_orderMateriel.orderUnitPrice  =   0;
 			       	}
 		       };
 		       
@@ -2747,6 +2801,7 @@ var e = $("#form_clauseSettlement"),
 		        	$scope.submitOrder = {}
 		        	$scope.submitOrder.serialNum = $scope.buyOrder.serialNum;
 		        	$scope.submitOrder.remark = $scope.buyOrder.remark;
+		        	$scope.submitOrder.orderNum = $scope.buyOrder.orderNum;
 		        	//启动流程
 		        	orderService.startBuyOrderProcess($scope.submitOrder).then(
 		          		     function(data){
@@ -3213,6 +3268,18 @@ var e = $("#form_clauseSettlement"),
         	});
 	}
 	
+	/**
+	 * 加载仓库数据
+	 */
+	var initWarehouse = function(){
+	var promise = orderService.initWarehouse();
+	promise.then(function(data){
+		$scope.warehouses = data.data;
+	},function(data){
+		//调用承诺接口reject();
+	});
+	}
+	
 	/***************日志表格 start************************/
 	var logTable 
 	$scope.viewOrderLog = function (serialNum){
@@ -3304,6 +3371,67 @@ var e = $("#form_clauseSettlement"),
 	 
 	 
 	 /***************日志表格 end************************/
+	 
+	 
+	 /** *************订单物料明细可检索化  start*************** */
+	 $scope.pageIndex = 1; //记录当前页
+	 $scope.pageSize = '10'; //每页的记录数
+	 $scope.totalPage = '1'; //记录总页数
+	 $scope.dispalyOrderMateriel = [];//页面显示结果
+	 $scope.filterOrderMateriel = [];//查询筛选结果
+	 
+	 $scope.createFilterList = function(){
+		 $scope.filterOrderMateriel = [];
+		if($scope.orderMateriel.length>0&&$scope.queryStr&&!isNull($scope.queryStr)){
+			for(var i = 0;i < $scope.orderMateriel.length;i++){// data.data为选择的标准物料
+				if(($scope.orderMateriel)[i].materiel.materielNum.indexOf($scope.queryStr)>=0){
+					$scope.filterOrderMateriel.push(angular.copy(($scope.orderMateriel)[i]));
+				}else if(($scope.orderMateriel)[i].materiel.materielName.indexOf($scope.queryStr)>=0){
+					$scope.filterOrderMateriel.push(angular.copy(($scope.orderMateriel)[i]));
+				}else if(($scope.orderMateriel)[i].materiel.specifications.indexOf($scope.queryStr)>=0){
+					$scope.filterOrderMateriel.push(angular.copy(($scope.orderMateriel)[i]));
+				}
+			}
+		}else{
+			$scope.filterOrderMateriel = angular.copy($scope.orderMateriel);
+		}
+		
+	 };
+	 
+	 $scope.createDispalyList = function(){
+		 $scope.dispalyOrderMateriel = $scope.filterOrderMateriel.slice(
+				 ($scope.pageIndex-1)*$scope.pageSize,
+				 $scope.pageIndex*$scope.pageSize);
+		 
+		 $scope.totalPage = Math.ceil($scope.filterOrderMateriel.length/$scope.pageSize);
+	 };
+	 
+	 $scope.queryForPage = function(){
+		 $scope.createFilterList();
+		 $scope.pageIndex = 1; //设置为第一页
+		 $scope.createDispalyList();
+	 };
+	 
+	 $scope.link2ThisPage = function(index){
+		 $scope.pageIndex = index;
+		 $scope.createDispalyList();
+	 }
+	 
+	 $scope.link2PreviousPage = function(){
+		 $scope.pageIndex--;
+		 $scope.createDispalyList();
+	 }
+	 
+	 $scope.link2NextPage = function(){
+		 $scope.pageIndex++;
+		 $scope.createDispalyList();
+	 }
+	 
+	/** *************订单物料明细可检索化  end*************** */
+          
+          
+          
+          
 }]);
 
 

@@ -156,7 +156,7 @@ public class InvoiceController {
     				}else{
     					orderInfo.setBillStatus(OrderInfo.RECIVEBILL);
     				}
-    				orderService.update(orderInfo);
+    				orderService.updateStatus(orderInfo);
     			}
     		}
     		

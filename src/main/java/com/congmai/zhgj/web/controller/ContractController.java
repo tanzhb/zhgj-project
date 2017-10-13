@@ -206,6 +206,49 @@ public class ContractController {
 
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
+	
+	
+	
+	/**
+	 * 签订用户合同
+	 * @param contractVO（合同对象）
+	 * @param request（http 请求对象）
+	 * @param ucBuilder
+	 * @return 操作结果
+	 */
+	@RequestMapping(value = "/signSaleContract", method = RequestMethod.POST)
+	public ResponseEntity<Void> signSaleContract(@Valid ContractVO contractVO, HttpServletRequest request,
+			UriComponentsBuilder ucBuilder,@RequestParam(value = "files")MultipartFile files) {
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
+
+
+		String signContract=null;
+		//只有在文件组不为空时上传文件
+		if(files!=null){
+			signContract=uploadFile(files); 
+		}
+		
+			//如果id不为空执行更新
+			User user1=(User) request.getSession().getAttribute("userInfo");
+			contractVO.setUpdater(currenLoginName);
+
+			//给各自的文件字段赋值文件名
+			contractVO.setSignContract(signContract);
+
+			contractService.signSaleContract(contractVO);
+			
+			Map<String,Object> map=new HashMap<String,Object>();
+			map.put("updater", currenLoginName);
+			map.put("serialNum", contractVO.getOrderSerial());
+			contractService.updateOrderAfterSign(map);
+
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(ucBuilder.path("/userContract").buildAndExpand(contractVO.getId()).toUri());
+
+		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+	}
 
 	/**
 	 * @Description (导出合同信息)
@@ -382,6 +425,16 @@ public class ContractController {
 	@RequestMapping(value = "/editUserContractPage")
 	public String editUserContractPage(String id,String view) {
 		return "contract/editUserContractPage";
+	}
+	
+	
+	/**
+	 * 跳转到签订页面
+	 * @return
+	 */
+	@RequestMapping(value = "/saleOrderSign")
+	public String saleOrderSign(String id,String view) {
+		return "contract/saleOrderSign";
 	}
 	
 	

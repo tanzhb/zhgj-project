@@ -38,8 +38,6 @@
 									class="caption-subject font-green bold uppercase">发货列表</span>
 							</div>
 							<div class="actions" ng-controller='MyCtrl'>
-									<!-- <label class="btn btn-transparent yellow btn-circle btn-sm" ng-click="jumpToApplyPay()"><i class="glyphicon glyphicon-play"></i> 申请</label> -->
-									
 									<label class="btn btn-transparent green btn-circle btn-sm"
 									ng-click="jumpToUrl('addDelivery')"> <i
 									class="fa fa-plus"></i> 添加
@@ -48,8 +46,6 @@
 								</label> <label class="btn btn-transparent red btn-circle btn-sm"
 									ng-click="del()"> <i class="fa fa-minus"></i> 删除
 								</label>
-								<!-- <label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
-	                                              <i class="fa fa-upload"></i> 导入</label> -->
 								<label
 									class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
 									ng-click="exportContract()"> <i
@@ -82,14 +78,6 @@
 
 						<div class="portlet-body">
 							<div class="tabbable-custom ">
-								<!-- <ul class="nav nav-tabs " id="accountPayableTab">
-									<li class="active"><a href="#apply" data-toggle="tab"
-										ng-click="toApply()"> 待申请 </a></li>
-									<li><a href="#daiban" data-toggle="tab"
-										ng-click="toDaiban()"> 待办流程 </a></li>
-									<li><a href="#yiban" data-toggle="tab"
-										ng-click="toYiban()"> 已办流程 </a></li>
-								</ul> -->
 								<div class="tab-content">
 									<div class="tab-pane active" id="apply">
 										<table
@@ -97,9 +85,6 @@
 											id="sample_2">
 											<thead>
 												<tr>
-													<!-- <th style="text-align: center"><input
-														name="select_all" value="1" id="example-select-all"
-														class="group-checkable" type="checkbox" /></th> -->
 													<th style="text-align: center;"><label
 														class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
 															<input type="checkbox" class="group-checkable"

@@ -51,7 +51,6 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 	
 	//添加合同
 	$scope.saveUserContract = function() {
-		debugger
 		if($('#form_sample_1').valid()){//表单验证通过则执行添加功能
 		var fd = new FormData();
 		if($("input[name='files']").length){
@@ -67,19 +66,6 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 		if($("input[id='id']").length){
 		fd.append('id', $("#id").val()); 
 		}
-		
-        /*fd.append('contractNum', $("#contractNum").val()); 
-        fd.append('contractType', $("#contractType").val()); 
-        fd.append('firstParty',$scope.contractVO.firstParty); 
-        fd.append('firstPartySigner',$scope.contractVO.firstPartySigner); 
-        fd.append('secondParty',$scope.contractVO.secondParty); 
-        fd.append('secondPartySigner',$scope.contractVO.secondPartySigner);
-        fd.append('otherPartyContractNum',$scope.contractVO.otherPartyContractNum);
-        fd.append('startDate', $("#startDate").val()); 
-        fd.append('endDate', $("#endDate").val()); 
-        fd.append('signDate', $("#signDate").val()); 
-        fd.append('signer', $("#signer").val()); 
-        fd.append('remark', $("#remark").val());*/ 
 		fd.append('contractNum',$scope.contractVO.contractNum); 
         fd.append('contractType',$scope.contractVO.contractType); 
         fd.append('firstParty',$scope.contractVO.firstParty); 
@@ -106,6 +92,31 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
                        });
 		}
 	};
+	
+	$scope.signSaleContract = function() {
+		if($('#form_sample_1').valid()){//表单验证通过则执行添加功能
+			debugger
+			var fd = new FormData();
+			if($("input[name='file']").length){
+	        var file = document.querySelector('input[name="file"]').files[0];
+	        fd.append("files", file);
+			}
+			fd.append('id',$scope.contractVO.id); 
+			fd.append('orderSerial',$scope.contractVO.orderSerial); 
+	         $http({
+	        	  method:'POST',
+	              url:"rest/contract/signSaleContract",
+	              data: fd,
+	              headers: {'Content-Type':undefined}
+	               })   
+	              .success( function ( response )
+	                       {
+	                       //上传成功的操作
+	            	  toastr.success("签订合同数据成功！");
+					  $state.go('userContract');
+	                       });
+			}
+		};
 	
 	
 	//返回按钮
@@ -268,9 +279,6 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 							                            		}
 							                            	}
 							                            }
-							                            /*,
-
-				              { mData: 'id' }*/
 							                            ],
 							                            'aoColumnDefs': [ {
 							                            	'targets' : 0,
@@ -301,9 +309,6 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 		
 		var table1;
 		var loadMainTable1 = function() {
-			var a = 0;
-			App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile")&& (a = $(".page-header").outerHeight(!0)): 
-				$(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0): $("body").hasClass("page-header-fixed")&& (a = 64);
 
 				 table1 = $("#sample_2_1").DataTable(
 						{
@@ -339,7 +344,17 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 							              // serverSide: true,
 							              ajax:"rest/contract/querySaleContractList",//加载数据中user表数据
 							              "aoColumns": [
-							                            { mData: 'id'},
+							                            { mData: 'id',
+						                            	mRender : function(
+																data,
+																type,
+																row,
+																meta) {
+															return '<label class="mt-radio mt-radio-single mt-radio-outline">' +
+																	'<input type="radio" class="radio" ng-click="getOderInfo(\''+$('<div/>').text(data).html()+'\')" value="'+ $('<div/>').text(data).html()+ '" name="id[]" />' +
+																	'<span></span></label>';
+														}
+						                            },
 							                            { mData: 'contractNum' },
 							                            { mData: 'comId' },
 							                            { mData: 'contractType' },
@@ -353,16 +368,19 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 							                            	mRender:function(data){
 							                            		if(data!=""&&data!=null){
 							                            			if(data=='0'){
-							                            				return '初始';
+							                            				return '待审批';
+							                            			}else if(data=='2'){
+							                            				return '已签订';
+							                            			}else if(data=='3'||data=='1'){
+							                            				return '待签订';
+							                            			}else{
+							                            				return '';
 							                            			}
 							                            		}else{
 							                            			return "";
 							                            		}
 							                            	}
 							                            }
-							                            /*,
-
-				              { mData: 'id' }*/
 							                            ],
 							                            'aoColumnDefs': [ {
 							                            	'targets' : 0,
@@ -370,8 +388,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 							                            	'orderable' : false,
 							                            	'className' : 'dt-body-center',
 							                            	'render' : function(data,type, full, meta) {
-							                            		/*return '<input type="radio" name="id[]" ng-click="getOderInfo(\''+$('<div/>').text(data).html()+'\')" value="'+ $('<div/>').text(data).html()+ '">';*/
-							                            		return '<label class="mt-radio mt-radio-outline"><input type="radio" ng-click="getOderInfo(\''+$('<div/>').text(data).html()+'\')" value="'+ $('<div/>').text(data).html()+ '" name="id[]" /><span></span></label>';
+							                            		return '<label class="mt-radio mt-radio-outline"><input type="radio" class="radio" ng-click="getOderInfo(\''+$('<div/>').text(data).html()+'\')" value="'+ $('<div/>').text(data).html()+ '" name="id[]" /><span></span></label>';
 							                            	},
 							                            	"createdCell": function (td, cellData, rowData, row, col) {
 							                            		$compile(td)($scope);
@@ -392,15 +409,51 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 							                            		function() {
 							                            	console.log('排序');
 							                            })
+											        $("#sample_2_1").on("click", "tbody tr .radio",
+											        function() {
+											            $(this).parents("tr").toggleClass("active")
+											            $(this).parents("tr").siblings().removeClass("active")
+											        })
 		}
+		
+		//销售订单签订
+		$scope.saleOrderSign = function() {
+			var ids = '';
+			// Iterate over all checkboxes in the table
+			table1.$('input[type="radio"]').each(
+					function() {
+						// If checkbox exist in DOM
+						if ($.contains(document, this)) {
+							// If checkbox is checked
+							if (this.checked) {
+								// 将选中数据id放入ids中
+								if (ids == '') {
+									ids = this.value;
+								} else{
+									ids = "more"
+								}
+							}
+						}
+					});
+			
+			
+			if(ids==''){
+				toastr.warning('请选择一个合同！');return;
+			}else if(ids=='more'){
+				toastr.warning('只能选择一个合同！');return;
+			}
+			var status = table1.row('.active').data().status;
+			if(status!='3'&&status!='1'){
+				toastr.warning('只能签订状态为‘待签订’的合同！');return;
+			}
+			
+			$state.go('saleOrderSign',{id:ids});
+			/*alert(ids);*/
+		};
 		
 		
 		var table2;
 		var loadMainTable2 = function() {
-			var a = 0;
-			App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile")&& (a = $(".page-header").outerHeight(!0)): 
-				$(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0): $("body").hasClass("page-header-fixed")&& (a = 64);
-
 				 table2 = $("#sample_2_2").DataTable(
 						{
 							language : {
@@ -435,7 +488,18 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 							              // serverSide: true,
 							              ajax:"rest/contract/queryBuyContractList",//加载数据中user表数据
 							              "aoColumns": [
-							                            { mData: 'id'},
+							                            /*{ mData: 'id'},*/
+							                             { mData: 'id',
+						                            	mRender : function(
+																data,
+																type,
+																row,
+																meta) {
+															return '<label class="mt-radio mt-radio-single mt-radio-outline">' +
+																	'<input type="radio" class="radio" ng-click="getOderInfo1(\''+$('<div/>').text(data).html()+'\')" value="'+ $('<div/>').text(data).html()+ '" name="id[]" />' +
+																	'<span></span></label>';
+														}
+						                            },
 							                            { mData: 'contractNum' },
 							                            { mData: 'comId' },
 							                            { mData: 'contractType' },
@@ -449,24 +513,39 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 							                            	mRender:function(data){
 							                            		if(data!=""&&data!=null){
 							                            			if(data=='0'){
-							                            				return '初始';
+							                            				return '待审批';
+							                            			}else if(data=='2'){
+							                            				return '已签订';
+							                            			}else if(data=='3'||data=='1'){
+							                            				return '待签订';
+							                            			}else{
+							                            				return '';
 							                            			}
 							                            		}else{
 							                            			return "";
 							                            		}
 							                            	}
 							                            }
-							                            /*,
-
-				              { mData: 'id' }*/
 							                            ],
-							                            'aoColumnDefs': [ {
+							                            'aoColumnDefs': [/* {
 							                            	'targets' : 0,
 							                            	'searchable' : false,
 							                            	'orderable' : false,
 							                            	'className' : 'dt-body-center',
 							                            	'render' : function(data,type, full, meta) {
 							                            		return '<label class="mt-radio mt-radio-outline"><input type="radio" ng-click="getOderInfo1(\''+$('<div/>').text(data).html()+'\')" value="'+ $('<div/>').text(data).html()+ '" name="id[]" /><span></span></label>';
+							                            	},
+							                            	"createdCell": function (td, cellData, rowData, row, col) {
+							                            		$compile(td)($scope);
+							                            	}
+							                            } ,*/
+		                                             {
+							                            	'targets' : 0,
+							                            	'searchable' : false,
+							                            	'orderable' : false,
+							                            	'className' : 'dt-body-center',
+							                            	'render' : function(data,type, full, meta) {
+							                            		return '<label class="mt-radio mt-radio-outline"><input type="radio" class="radio" ng-click="getOderInfo1(\''+$('<div/>').text(data).html()+'\')" value="'+ $('<div/>').text(data).html()+ '" name="id[]" /><span></span></label>';
 							                            	},
 							                            	"createdCell": function (td, cellData, rowData, row, col) {
 							                            		$compile(td)($scope);
@@ -487,7 +566,46 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 							                            		function() {
 							                            	console.log('排序');
 							                            })
+							                            
+							                        $("#sample_2_2").on("click", "tbody tr .radio",
+											        function() {
+											            $(this).parents("tr").toggleClass("active")
+											            $(this).parents("tr").siblings().removeClass("active")
+											        })
 		}
+		
+		
+		//采购订单签订
+		$scope.buyOrderSign = function() {
+			var ids = '';
+			// Iterate over all checkboxes in the table
+			table2.$('input[type="radio"]').each(
+					function() {
+						// If checkbox exist in DOM
+						if ($.contains(document, this)) {
+							// If checkbox is checked
+							if (this.checked) {
+								// 将选中数据id放入ids中
+								if (ids == '') {
+									ids = this.value;
+								} else{
+									ids = "more"
+								}
+							}
+						}
+					});
+			if(ids==''){
+				toastr.warning('请选择一个合同！');return;
+			}else if(ids=='more'){
+				toastr.warning('只能选择一个合同！');return;
+			}
+			var status = table2.row('.active').data().status;
+			if(status!='3'&&status!='1'){
+				toastr.warning('只能签订状态为‘待签订’的合同！');return;
+			}
+			
+			$state.go('saleOrderSign',{id:ids});
+		};
 		
 		
 		$scope.getOderInfo=function(serialNum){
