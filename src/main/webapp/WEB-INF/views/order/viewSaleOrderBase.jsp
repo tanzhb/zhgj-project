@@ -759,6 +759,29 @@ margin-right: 20px;
 			<!-- 订单物料 start-->
            <div class="portlet-body form">
 			     <form id="form_sample_5"   >
+				     <div class="row">
+						<div class="col-md-6 col-sm-6">
+							<div class="dataTables_length" id="sample_5_length">
+								<label>每页显示 <select name="sample_5_length"
+									aria-controls="sample_5" ng-model="pageSize" ng-change="createDispalyList()"
+									class="form-control input-sm input-xsmall input-inline">
+									<option value="5">5</option>
+									<option value="10">10</option>
+									<option value="15">15</option>
+									<option value="30">30</option>
+									<option value="99999">All</option>
+									</select> 条数据
+								</label>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-6">
+							<div id="sample_5_filter" style="text-align: right;">
+								<label>查询:<input type="search" ng-model="queryStr"  ng-change="queryForPage()"
+									class="form-control input-sm input-small input-inline"
+									placeholder="" aria-controls="sample_5"></label>
+							</div>
+						</div>
+					</div>
 			         <div class="table-scrollable" >
                           <table class="table table-bordered table-hover">
                               <thead>
@@ -794,7 +817,7 @@ margin-right: 20px;
                                   </tr>
                               </thead>
                               <tbody>
-                                  <tr ng-repeat="_orderMateriel in orderMateriel track by $index" ng-mouseover="showOperation('orderMateriel',$index)" ng-mouseleave="hideOperation('orderMateriel',$index)"  repeat-done="repeatDone(this)">
+                                  <tr ng-repeat="_orderMateriel in dispalyOrderMateriel track by $index" ng-mouseover="showOperation('orderMateriel',$index)" ng-mouseleave="hideOperation('orderMateriel',$index)"  repeat-done="repeatDone(this)">
 			                          <td>
                                             <!-- <span ng-hide="orderMaterielInput{{$index}}"><a href="javascript：;" ng-click="addMateriel('single',$index)">{{_orderMateriel.materiel.materielNum}}</a></span> -->
 			                                <p class="form-control-static" > {{_orderMateriel.materiel.materielNum}} </p>
@@ -905,7 +928,33 @@ margin-right: 20px;
                               </tbody>
                           </table>
                       </div>
-                  </form>
+                 	<div class="row">
+						<div class="col-md-5 col-sm-5">
+							<div class="dataTables_info" id="sample_5_info" role="status"
+								aria-live="polite">从 {{(pageIndex-1)*pageSize+1>filterOrderMateriel.length?filterOrderMateriel.length:(pageIndex-1)*pageSize+1}}
+								到 {{pageIndex*pageSize>filterOrderMateriel.length?filterOrderMateriel.length:pageIndex*pageSize}} /共 {{filterOrderMateriel.length}} 条数据（从{{orderMateriel.length}}条数据中筛选）</div>
+						</div>
+						<div class="col-md-7 col-sm-7">
+							<div  style="text-align: right;" id="sample_5_paginate">
+								<ul class="pagination" style="visibility: visible;">
+									<li class="prev" ng-if="pageIndex>1"><a href="#" ng-click="link2PreviousPage()" title="前一页"><i
+											class="fa fa-angle-left"></i></a></li>
+									<li class="prev disabled" ng-if="1>=pageIndex"><a href="#" title="前一页"><i
+											class="fa fa-angle-left"></i></a></li>
+									<li ng-if="pageIndex-2>0"><a href="#" ng-click="link2ThisPage(pageIndex-2)">{{pageIndex-2}}</a></li>
+									<li ng-if="pageIndex-1>0"><a href="#" ng-click="link2ThisPage(pageIndex-1)">{{pageIndex-1}}</a></li>
+									<li class="active"><a href="#">{{pageIndex}}</a></li>
+									<li ng-if="totalPage>pageIndex"><a href="#" ng-click="link2ThisPage(pageIndex+1)">{{pageIndex+1}}</a></li>
+									<li ng-if="totalPage>pageIndex+1"><a href="#" ng-click="link2ThisPage(pageIndex+2)">{{pageIndex+2}}</a></li>
+									<li class="next disabled" ng-if="pageIndex>=totalPage"><a href="#" ><i
+											class="fa fa-angle-right"></i></a></li>
+									<li class="next" ng-if="totalPage>pageIndex"><a href="#" ng-click="link2NextPage()" title="后一页"><i
+											class="fa fa-angle-right"></i></a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+                 </form>
           </div>
           <!-- 订单物料 end-->
 		</div>
