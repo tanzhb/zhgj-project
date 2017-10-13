@@ -17,6 +17,8 @@ public class TakeDeliveryParams {
 	
 	private List<DeliveryMateriel> deliveryMateriels;
 	
+	private List<StockOutBatch> stockOutMateriels;//出库批次信息
+	
 	private StockInOutRecord record;
 
 	public Delivery getDelivery() {
@@ -57,6 +59,14 @@ public class TakeDeliveryParams {
 
 	public void setRecord(StockInOutRecord record) {
 		this.record = record;
+	}
+
+	public List<StockOutBatch> getStockOutMateriels() {
+		return stockOutMateriels;
+	}
+
+	public void setStockOutMateriels(List<StockOutBatch> stockOutMateriels) {
+		this.stockOutMateriels = stockOutMateriels;
 	}
 	
 	

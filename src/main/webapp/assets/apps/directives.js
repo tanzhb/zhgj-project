@@ -147,3 +147,23 @@ MetronicApp.directive('ybquantity1', function() {
         replace: true  
     };  
 }); 
+
+MetronicApp.directive('systemmessage', function() {  
+	debugger;
+    return {  
+        restrict: 'E',  
+        template: '<span class="badge badge-danger" style="position: relative;top: -4px;"> {{systemMessageSize}} </span>',
+        scope:true,
+        replace: true  
+    };  
+}); 
+
+MetronicApp.directive('businessmessage', function() {  
+	debugger;
+    return {  
+        restrict: 'E',  
+        template: '<span class="badge badge-danger" style="position: relative;top: -4px;"> {{businessMessageSize}} </span>',
+        scope:true,
+        replace: true  
+    };  
+}); 

@@ -922,6 +922,13 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
           		     function(data){//加载页面对象
           		    	$scope.buyOrder=data.orderInfo;
           		    	$scope.orderMateriel=data.orderMateriel;
+          		    	
+          		    	if($state.current.name=="viewBuyOrder"){//查看页面构造物料查询分页
+          		    		$scope.queryForPage();
+          		    	}
+          		    	
+          		    	
+          		    	
           		    	$scope.contract=data.contract;
           		    	$scope.clauseAfterSales=data.clauseAfterSales;
           		    	$scope.clauseAdvance=data.clauseAdvance;
@@ -2794,6 +2801,7 @@ var e = $("#form_clauseSettlement"),
 		        	$scope.submitOrder = {}
 		        	$scope.submitOrder.serialNum = $scope.buyOrder.serialNum;
 		        	$scope.submitOrder.remark = $scope.buyOrder.remark;
+		        	$scope.submitOrder.orderNum = $scope.buyOrder.orderNum;
 		        	//启动流程
 		        	orderService.startBuyOrderProcess($scope.submitOrder).then(
 		          		     function(data){
@@ -3366,51 +3374,64 @@ var e = $("#form_clauseSettlement"),
 	 
 	 
 	 /** *************订单物料明细可检索化  start*************** */
-     
-     var searchMaterielList = function() {
-              a = 0;
-              App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
-              table = $("#form_sample_5").DataTable({
-                  language: {
-                      aria: {
-                          sortAscending: ": activate to sort column ascending",
-                          sortDescending: ": activate to sort column descending"
-                      },
-                      emptyTable: "空表",
-                      info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
-                      infoEmpty: "没有数据",
-                      // infoFiltered: "(filtered1 from _MAX_ total
-							// entries)",
-                      lengthMenu: "每页显示 _MENU_ 条数据",
-                      search: "查询:",
-                      zeroRecords: "抱歉， 没有找到！",
-                      paginate: {
-                          "sFirst": "首页",
-                          "sPrevious": "前一页",
-                          "sNext": "后一页",
-                          "sLast": "尾页"
-                       }
-                  },
-  /*
-		 * fixedHeader: {//固定表头、表底 header: !0, footer: !0, headerOffset: a },
-		 */
-                  order: [[1, "asc"]],// 默认排序列及排序方式
-                  searching: true,// 是否过滤检索
-                  ordering:  true,// 是否排序
-                  lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
-                  pageLength: "All",// 每页显示数量
-                  processing: true,
-                  data: $scope.orderMateriel
-
-              }).on('order.dt',
-                      function() {
-                  console.log('排序');
-              }).on('page.dt', 
-              function () {
-            	  console.log('翻页');
-	          })
-          };
-          /** *************订单物料明细可检索化  end*************** */
+	 $scope.pageIndex = 1; //记录当前页
+	 $scope.pageSize = '10'; //每页的记录数
+	 $scope.totalPage = '1'; //记录总页数
+	 $scope.dispalyOrderMateriel = [];//页面显示结果
+	 $scope.filterOrderMateriel = [];//查询筛选结果
+	 
+	 $scope.createFilterList = function(){
+		 $scope.filterOrderMateriel = [];
+		if($scope.orderMateriel.length>0&&$scope.queryStr&&!isNull($scope.queryStr)){
+			for(var i = 0;i < $scope.orderMateriel.length;i++){// data.data为选择的标准物料
+				if(($scope.orderMateriel)[i].materiel.materielNum.indexOf($scope.queryStr)>=0){
+					$scope.filterOrderMateriel.push(angular.copy(($scope.orderMateriel)[i]));
+				}else if(($scope.orderMateriel)[i].materiel.materielName.indexOf($scope.queryStr)>=0){
+					$scope.filterOrderMateriel.push(angular.copy(($scope.orderMateriel)[i]));
+				}else if(($scope.orderMateriel)[i].materiel.specifications.indexOf($scope.queryStr)>=0){
+					$scope.filterOrderMateriel.push(angular.copy(($scope.orderMateriel)[i]));
+				}
+			}
+		}else{
+			$scope.filterOrderMateriel = angular.copy($scope.orderMateriel);
+		}
+		
+	 };
+	 
+	 $scope.createDispalyList = function(){
+		 $scope.dispalyOrderMateriel = $scope.filterOrderMateriel.slice(
+				 ($scope.pageIndex-1)*$scope.pageSize,
+				 $scope.pageIndex*$scope.pageSize);
+		 
+		 $scope.totalPage = Math.ceil($scope.filterOrderMateriel.length/$scope.pageSize);
+	 };
+	 
+	 $scope.queryForPage = function(){
+		 $scope.createFilterList();
+		 $scope.pageIndex = 1; //设置为第一页
+		 $scope.createDispalyList();
+	 };
+	 
+	 $scope.link2ThisPage = function(index){
+		 $scope.pageIndex = index;
+		 $scope.createDispalyList();
+	 }
+	 
+	 $scope.link2PreviousPage = function(){
+		 $scope.pageIndex--;
+		 $scope.createDispalyList();
+	 }
+	 
+	 $scope.link2NextPage = function(){
+		 $scope.pageIndex++;
+		 $scope.createDispalyList();
+	 }
+	 
+	/** *************订单物料明细可检索化  end*************** */
+          
+          
+          
+          
 }]);
 
 

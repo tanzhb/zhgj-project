@@ -185,11 +185,13 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 	         */
 			$scope.saveStockIn = function() {
 				if($('#stockInForm').valid()){
+					debugger;
 					handle.blockUI();
 					var params = {};
 					params.record = $scope.record;
 					params.record.deliverSerial = $scope.deliverSerial;
 					params.deliveryMateriels = [];
+					params.stockOutMateriels = [];
 					params.record.takeDeliverSerial = '';
 					var param
 					for(var i=0;i < $scope.takeDeliveryMateriels.length;i++){
@@ -216,7 +218,17 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 						param.stockRemark = $scope.takeDeliveryMateriels[i].stockRemark;
 						params.deliveryMateriels.push(param);
 					}
-					
+					var serialNums=$scope.arraySerialNums;
+					for(var i=0;i < serialNums.length;i++){
+						param = {};
+						var arrays=serialNums[i].split(",");
+						param.stockOutSerial = $scope.record.serialNum;//出库单流水
+						param.stockInMaterielSerial=arrays[0];//入库物料流水
+						param.stockOutMaterielSerial=arrays[2];//出库物料流水(发货物料流水)
+						param.outCount=arrays[1];//出库数量
+						param.stockInSerial=arrays[3];//入库单流水
+						params.stockOutMateriels.push(param);
+					}
 					var promise = takeDeliveryService
 							.saveStockOutData(params);
 					promise.then(function(data) {
@@ -313,9 +325,8 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 				if(isNaN(Number($(element).data("delivercount")))){
 					return -1;
 				}
-			    return this.optional(element) || Number($(element).data("delivercount"))-value >= 0;
-			}, "出库数量不能超过发货数量");
-
+			    return this.optional(element) || (Number($(element).data("delivercount"))-value >= 0&&Number($(element).data("currentstock"))-value >= 0);
+			}, "出库数量不能超过发货数量且出库数量不能超过当前库存数量");
 		 // 页面加载完成后调用，验证输出框
 			$scope.$watch('$viewContentLoaded', function() {  
 							var e = $("#stockInForm"),
@@ -358,8 +369,9 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					                stockCount: {
 					                	required: !0,
 					                	digits:!0,
-					                	StockOutNumCheck:!0
-					                },
+					                	StockOutNumCheck:!0/*,
+					                	StockOutNumCheck1:!0,//出库数量必须小等于当前库存数量
+*/					                },
 					                contactNum: {
 					                	required: !0,
 					                	isPhone: !0
@@ -417,8 +429,174 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 	  				   
 	  			}
 	  		}
-			
-			   
+	  		$scope.showStockBatch=function(index,materielSerialNum,orderSerial,deliveryMaterielSerialNum){//选择批次  materielSerialNum为基本物料流水 orderSerial 订单流水 deliveryMaterielSerialNum 发货物料流水
+	  			debugger;
+	  			var stockOutCount=Number($("#stockCount"+index).val());//获取出库数量
+	  			if(stockOutCount==0||stockOutCount==NaN){
+	  				toastr.warning("请先输入正确的出库数量");
+	  			}else{
+	  			   if(stockBatchTable!=undefined){
+	 	            	  stockBatchTable.ajax.reload(); 
+	 	            	 setTimeout(showDetail(),5000);
+	 			 	    	 }else{
+	  				loadStockBatchTable(stockOutCount,materielSerialNum,orderSerial,deliveryMaterielSerialNum);
+	 			 	    	 }
+	  				$('#stockBatchInfo').modal('show');//显示批次弹框
+	  			}
+	  		}
+			  
+	  	 	 /**
+	 		 * 遍历checkbox将之前保存的出库情况展示出来
+	 		 */
+	 		function showDetail(){
+	 			//m_table.$('input[type="checkbox"]')
+	 			stockBatchTable.$('input[type="checkbox"]').each(function() { //遍历所有checkbox
+	 				debugger;
+	 					if ($.contains(document, this)) {
+	 						 var serialNums=$scope.arraySerialNums;
+							 for(var i=0;i<serialNums.length;i++){
+								  var arrays=serialNums[i].split(",");
+								 if(arrays[0]==$(this).attr("id")){
+									$("#"+arrays[0]).attr("checked",true);
+										$("#stockOutCount"+arrays[0]).attr("readonly",false);
+										$("#stockOutCount"+arrays[0]).val(arrays[1]);
+										$("#stockOutCount"+arrays[0]).css("border","1px solid");
+								 }
+							 }
+	 					}
+	 			});
+	 		}
+	  		 var stockBatchTable,tableUrl;//批次弹框
+	 	       var loadStockBatchTable = function(stockOutCount,materielSerialNum,orderSerial,deliveryMaterielSerialNum) {
+	 	    	   $scope.deliveryMaterielSerialNum=deliveryMaterielSerialNum;
+	 	    	  tableUrl="rest/stock/stockInList?serialNum="+materielSerialNum+"&orderSerial="+orderSerial;
+	 	    	   debugger;
+	 	                a = 0;
+	 	                App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
+	 	            /*   if(stockBatchTable!=undefined){
+	 	            	  stockBatchTable.ajax.reload(); 
+	 			 	    	 }*/
+	 	                stockBatchTable = $("#select_sample_stockBatch")
+	 	    			.DataTable({
+	 	                    language: {
+	 	                        aria: {
+	 	                            sortAscending: ": activate to sort column ascending",
+	 	                            sortDescending: ": activate to sort column descending"
+	 	                        },
+	 	                        emptyTable: "空表",
+	 	                        info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+	 	                        infoEmpty: "没有数据",
+	 	                        //infoFiltered: "(filtered1 from _MAX_ total entries)",
+	 	                        lengthMenu: "每页显示 _MENU_ 条数据",
+	 	                        search: "查询:",
+	 	                        zeroRecords: "抱歉， 没有找到！",
+	 	                        paginate: {
+	 	                            "sFirst": "首页",
+	 	                            "sPrevious": "前一页",
+	 	                            "sNext": "后一页",
+	 	                            "sLast": "尾页"
+	 	                         }
+	 	                    },
+	 	    /*                fixedHeader: {//固定表头、表底
+	 	                        header: !0,
+	 	                        footer: !0,
+	 	                        headerOffset: a
+	 	                    },*/
+	 	                    order: [[1, "asc"]],//默认排序列及排序方式
+	 	                    searching: true,//是否过滤检索
+	 	                    ordering:  true,//是否排序
+	 	                  /* destroy:true,*/
+	 	                    lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
+	 	                    pageLength: 5,//每页显示数量
+	 	                    processing: true,//loading等待框
+//	 	                    serverSide: true,
+	 	                    ajax: tableUrl,//加载数据中 
+	 	                    "aoColumns": [
+	 	                                 { mData: 'serialNum' },
+	 	                                 { mData: 'stockInOutRecord.inOutNum' },
+	 	                                 { mData: 'stockInOutRecord.stockDate' },
+	 	                                 { mData: 'warehouse' },
+	 	                                 { mData: 'position' },
+	 	                                 { mData: 'stockCount' },
+	 	                                 { mData: 'stockInOutRecord.inOutNum' }
+	 	                            ],
+	 	                   'aoColumnDefs' : [ {
+	 	    							'targets' : 0,
+	 	    							'searchable' : false,
+	 	    							'orderable' : false,
+	 	    							
+	 	    							'render' : function(data,
+	 	    									type, row, meta) {
+	 	    								return  '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
+		                                     '<input type="checkbox" data-check="false"  name="'+row.stockInOutRecord.serialNum+'" class="checkboxes" ng-click="showStockOutCount(\''+row.serialNum+'\',\''+stockOutCount+'\')" id="'+data+'" value="'+data+'" data-set="#select_sample_stockBatch .checkboxes" />'+
+		                                     '<span></span></label>';
+	 	    							},
+	 	    							"createdCell": function (td, cellData, rowData, row, col) {
+	 	    								 $compile(td)($scope);
+	 	    						       }
+	 	    						},{
+										'targets' : 3,
+										'render' : function(data,
+												type, row, meta) {
+	 	    								if(data==''||data==null){
+	 	    									return "";
+	 	    								}else{
+	 	    									return data.warehouseName;
+	 	    								}
+											
+										}
+									},{
+										'targets' : 4,
+										'render' : function(data,
+												type, row, meta) {
+	 	    								if(data==''||data==null){
+	 	    									return "";
+	 	    								}else{
+	 	    									return data.positionName;
+	 	    								}
+											
+										}
+									}, {
+										'targets' : 6,
+										'className' : 'dt-body-center',
+										'render' : function(data,
+												type, row, meta) {
+												return '<input  type="text"   style="border:none" readonly="readonly"   id="stockOutCount'+row.serialNum+'" ng-model="stockValue'+row.serialNum+'"  ng-init="stockValue'+row.serialNum+'=\''+0+'\'"  ng-blur="judgeNumber(\''+row.stockCount+'\',\''+stockOutCount+'\',\''+row.serialNum+'\')" />';
+										},"createdCell": function (td, cellData, rowData, row, col) {
+											 $compile(td)($scope);
+									    }
+									}]
+
+	 	                });
+	 	               $("#select_sample_stockBatch").find(".group-checkable").change(function() {
+					        var e = jQuery(this).attr("data-set"),
+					        t = jQuery(this).is(":checked");
+					        jQuery(e).each(function() {
+					            t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+					        })
+					    }),
+					    $("#select_sample_stockBatch").on("change", "tbody tr .checkboxes",
+					    function() {
+					        $(this).parents("tr").toggleClass("active")
+					    })
+					    /*if($scope.arraySerialNums!=undefined){
+					    	 var serialNums=$scope.arraySerialNums;
+							 for(var i=0;i<serialNums.length;i++){
+								  var arrays=serialNums[i].split(",");
+								 if(arrays[2]==orderMaterielSerialNum){
+										$("#stockOutCount"+arrays[0]).attr("readonly",false);
+										$("#stockOutCount"+arrays[0]).val(arrays[1]);
+										$("#stockOutCount"+arrays[0]).css("border","1px solid");
+										$("#"+arrays[0]).attr("checked",true);
+								 }
+								  
+							 }
+		 	            	   alert(1);
+		 	               }*/
+					   return stockBatchTable;
+	 	               
+	 	              
+	 	            };
 		       /***选择收货列表初始化START***/
 		       var t_table;
 		       var loadDelieryTable = function() {
@@ -543,6 +721,83 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 									                            	console.log('排序');
 									                            })
 					};
+					
+					$scope.showStockOutCount=function(serialNum,stockOutCount){//选中checkbox显示输入框
+						debugger;
+						if($scope.totalCount==undefined){
+							$scope.totalCount=0;
+						}else if($scope.totalCount>=stockOutCount){
+							 toastr.warning("不需再选批次！");
+							 $("#"+serialNum).attr("checked",false);
+							 return;
+						}
+						if($("#"+serialNum).is(':checked')){
+							$("#stockOutCount"+serialNum).css("border","1px solid");
+							$("#stockOutCount"+serialNum).attr("readonly",false);
+						}else{
+							$("#stockOutCount"+serialNum).css("border","none");
+							$("#stockOutCount"+serialNum).attr("readonly",true);
+							$("#stockOutCount"+serialNum).val(0);//重新置为0
+							
+						}
+						
+						
+					}
+					
+					$scope.judgeNumber=function(stockCount,stockOutCount,serialNum){
+
+						 var value=$("#stockOutCount"+serialNum).val();
+						 debugger;
+						 if(isNaN(value)&&value%1!=0){
+							 toastr.warning("必须为正整数！");
+							 return;
+						 }
+						 if(Number(value)>Number(stockOutCount)){
+							toastr.warning("当前出库数量不得大于总出库数量！");
+							  $("#stockOutCount"+serialNum).empty();
+							 $("#stockOutCount"+serialNum).focus(); 
+							 return;
+						 }else if(Number(value)>Number(stockCount)){
+							 toastr.warning("当前出库数量不得大于结存数量！");
+							  $("#stockOutCount"+serialNum).empty();
+							 $("#stockOutCount"+serialNum).focus(); 
+							 return;
+						 }
+						 var checkboxs=$('input[class="checkboxes"]:checked');
+						 var count=0;
+						 for(var i=0;i<checkboxs.length;i++){
+							  var serialNum=$(checkboxs[i]).val();
+							  var value=$("#stockOutCount"+serialNum).val();
+							  count=count+Number(value);
+						 }
+						 $scope.totalCount=count;
+						 if(count>stockOutCount){
+							 toastr.warning("各批次总出库数量不得大于总出库数量！");
+							 $("#stockOutCount"+serialNum).val(0); 
+						 }else if(count<stockOutCount){
+							 toastr.info("还需出库"+(stockOutCount-count));
+						 }
+					 }
+					
+					$scope.confirmSave=function(){//保存批次
+						debugger;
+						 var checkboxs=$('input[class="checkboxes"]:checked');
+						 if(checkboxs.length==0){
+							 toastr.warning("未勾选批次"); 
+							 return;
+						 }
+						 $scope.arraySerialNums = null;
+						 var serialNums=new Array();
+						 for(var i=0;i<checkboxs.length;i++){
+							 var serialNum=$(checkboxs[i]).val();
+							  var value=$("#stockOutCount"+serialNum).val();//出库数量
+							  var rukuSerialNum=$("#"+serialNum).attr("name");//入库单流水
+							  var addvalue=serialNum+","+value+","+$scope.deliveryMaterielSerialNum+","+rukuSerialNum;//拼接checkbox选中流水和之前设定的出库数值以及发货物料流水和入库单流水
+							  serialNums[i]=addvalue;
+						 }
+						 $scope.arraySerialNums=serialNums;
+						 $('#stockBatchInfo').modal('hide');//显示批次弹框
+					}
 		            /***收货列表初始化END***/
 		            
 		            $scope.confirmDeliverySelect = function(){debugger;

@@ -8,6 +8,7 @@ import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryTransport;
 import com.congmai.zhgj.web.model.StockInOutRecord;
+import com.congmai.zhgj.web.model.StockOutBatch;
 import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.model.TakeDeliveryParams;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
@@ -74,7 +75,7 @@ public interface TakeDeliveryService extends GenericService<TakeDelivery, String
 			String currenLoginName)throws Exception;
 
 	void updateStockOutData(StockInOutRecord record,
-			List<DeliveryMateriel> deliveryMateriels, String currenLoginName,
+			List<DeliveryMateriel> deliveryMateriels,List<StockOutBatch> stockOutMateriels, String currenLoginName,
 			String string);
 
 	

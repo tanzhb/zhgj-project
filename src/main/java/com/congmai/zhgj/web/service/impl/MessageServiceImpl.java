@@ -90,4 +90,11 @@ public class MessageServiceImpl extends GenericServiceImpl<Message, String> impl
 		
 	}
 
+	@Override
+	public int messageSize(Integer userId, String messageType) {
+		MessageExample example = new MessageExample();
+		example.createCriteria().andMessageTypeEqualTo(messageType).andReceiverIdEqualTo(userId.toString()).andReadFlgEqualTo("0");
+		return messageMapper.countByExample(example);
+	}
+
 }

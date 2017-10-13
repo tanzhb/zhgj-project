@@ -118,6 +118,34 @@ angular.module('MetronicApp').service('messageService',['$http','$q',function($h
 		return deferred.promise;//返回承诺
 	}
 	
+	/**
+	 * 获取系统消息
+	 */
+	this.systemMessageSize = function(){
+		var deferred = $q.defer();
+		$.get(ctx + "/rest/message/systemMessageSize").success(function (data) {
+	        // 如果连接成功，延时返回给调用者  
+	        deferred.resolve(data);
+	    }).error(function () {  
+	        deferred.reject('连接服务器出错！');  
+	    })
+	    return deferred.promise;
+	}
+	
+	/**
+	 * 获取业务提醒
+	 */
+	this.businessMessageSize = function(){
+		var deferred = $q.defer();
+		$.get(ctx + "/rest/message/businessMessageSize").success(function (data) {
+	        // 如果连接成功，延时返回给调用者  
+	        deferred.resolve(data);
+	    }).error(function () {  
+	        deferred.reject('连接服务器出错！');  
+	    })
+	    return deferred.promise;
+	}
+	
 
 
 

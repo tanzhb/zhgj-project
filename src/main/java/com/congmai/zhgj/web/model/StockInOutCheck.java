@@ -3,6 +3,8 @@ package com.congmai.zhgj.web.model;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 /**
  * @ClassName StockInOutCheck
  * @Description TODO(出入库检验)
@@ -20,7 +22,8 @@ public class StockInOutCheck {
     private String checkNum;
 
     private String checkParty;
-
+    
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date checkDate;
 
     private String checker;

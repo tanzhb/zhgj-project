@@ -227,9 +227,11 @@
 										<th>发货数量</th>
 										<th>备注</th>
 										<th>出库数量</th>
+										<th><span class="required" style="color: red"> * </span>出库批次</th>
+										<th>当前库存</th>
 										<th>未出数量</th>
-										<th>仓库</th>
-										<th>库位</th>
+										<!-- <th>仓库</th>
+										<th>库位</th> -->
 										<th>备注</th> 
 									</tr>
 								</thead>
@@ -245,26 +247,36 @@
 										<td>{{materiel.deliverCount}}</td>
 										<td>{{materiel.deliverRemark}}</td>
 										<td class="form-group">
-                                                 <input type="text" class="form-control input-small" id="stockCount{{$index}}" name="stockCount" data-delivercount="{{materiel.deliverCount}}"  ng-model="materiel.stockCount" ng-hide="deliverAdd" >
+                                                 <input type="text" class="form-control input-small" id="stockCount{{$index}}" name="stockCount" data-delivercount="{{materiel.deliverCount}}"   data-currentstock="{{materiel.deliverCount}}"    ng-model="materiel.stockCount" ng-hide="deliverAdd" >
+                                                 
                                                  <div class="form-control-focus"> </div>
+										</td>
+										<td >
+                                                <button class="btn blue btn-sm btn-circle"
+								ng-click="showStockBatch($index,materiel.orderMateriel.materielSerial,materiel.orderMateriel.orderSerial,materiel.serialNum)" onclick="return false;"  data-toggle="modal" >
+								<i class="fa fa-plus"></i>选择批次
+							</button>
+										</td>
+										<td>
+											{{materiel.deliverCount}}
 										</td>
 										<td>
 											<span ng-if="materiel.deliverCount!=undefined && materiel.stockCount!=undedined">{{materiel.deliverCount-materiel.stockCount}}</span>
 										</td>
-										<td class="form-group">
+										<!-- <td class="form-group">
                                                 <select class="bs-select form-control order" data-live-search="true"  id="warehouseSerial" ng-init="warehouses[0].serialNum" ng-change="getPositions(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
-	                                                 <!--  <option value=""></option> -->
+	                                                  <option value=""></option>
 	                                                  <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
 	                                            </select>
 	                                            <div class="form-control-focus"></div>
 										</td>
 										<td class="form-group">
                                                 <select class="bs-select form-control order" data-live-search="true"  id="positionSerial" ng-change="countPosition()" ng-init="materiel.warehousePositons[0].serialNum"   name="positionSerial" ng-model="materiel.positionSerial"    data-size="8">
-	                                                   <!-- <option value=""></option> -->
+	                                                   <option value=""></option>
 	                                                   <option  ng-repeat="warehousePositon in materiel.warehousePositons" value="{{warehousePositon.serialNum}}">{{warehousePositon.positionName}}</option>
 	                                             </select>
 	                                             <div class="form-control-focus"> </div>
-										</td>
+										</td> -->
 										<td class="form-group">
                                                  <input type="text" class="form-control input-small" id="stockRemark{{$index}}" name="stockRemark" data-delivercount="{{materiel.stockRemark}}"  ng-model="materiel.stockRemark"  >
                                                  <div class="form-control-focus"> </div>
@@ -299,3 +311,27 @@
 </div>
 <!-- END MAIN CONTENT -->
 <jsp:include page="selectDelivery.jsp"></jsp:include>
+<jsp:include page="selectStockBatch.jsp"></jsp:include>
+ <script>
+ function judgeNumber(stockCount,stockOutCount,serialNum){
+
+	 var value=$("#stockOutCount"+serialNum).val();
+	 debugger;
+	 if(isNaN(value)&&value%1!=0){
+		 toastr.warning("必须为正整数！");
+		 return;
+	 }
+	 if(Number(value)>Number(stockOutCount)){
+		toastr.warning("当前出库数量不得大于总出库数量！");
+		/*  $("#stockOutCount"+serialNum).empty();
+		 $("#stockOutCount"+serialNum).focus(); */
+		 return;
+	 }else if(Number(value)>Number(stockCount)){
+		 toastr.warning("当前出库数量不得大于结存数量！");
+		/*  $("#stockOutCount"+serialNum).empty();
+		 $("#stockOutCount"+serialNum).focus(); */
+		 return;
+	 }
+	 $scope.totalCount;
+ }
+</script> 

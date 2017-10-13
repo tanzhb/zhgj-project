@@ -19,4 +19,6 @@ public interface MessageService extends GenericService<Message, String>{
 
 	void insertBatch(Message messageVO);
 
+	int messageSize(Integer userId, String systemMessage);
+
 }

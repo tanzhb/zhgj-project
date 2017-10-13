@@ -68,7 +68,7 @@ public class DeliveryMateriel {
     private StockInOutRecord stockInOutRecord;
     
     private Delivery delivery;
-    
+    private String buyComId;//物权方comId
     private  String stockInSerialNum;
     private  String stockInQualifiedCount;
     private  String stockInUnqualifiedCount;
@@ -444,6 +444,14 @@ public class DeliveryMateriel {
 
 	public void setSupplyMateriel(SupplyMateriel supplyMateriel) {
 		this.supplyMateriel = supplyMateriel;
+	}
+
+	public String getBuyComId() {
+		return buyComId;
+	}
+
+	public void setBuyComId(String buyComId) {
+		this.buyComId = buyComId;
 	}
     
     

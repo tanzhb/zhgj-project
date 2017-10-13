@@ -643,7 +643,7 @@ angular
 	  		                                          { mData: 'stockInOutRecord.stockDate' },
 	 	  		                                      { mData: 'warehouse' },
 	 	  		                                      { mData: 'stockCount' },
-		  		                                      { mData: 'position' },
+		  		                                      { mData: 'h' },
 		  		                                       { mData: 'remark' },//备注
 		  		                                     { mData: 'stockInOutRecord.stockDate' },
                                                      { mData: 'remark' }
