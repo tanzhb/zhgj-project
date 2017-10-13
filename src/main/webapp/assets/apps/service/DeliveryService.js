@@ -66,7 +66,7 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     
   //获取附件
     function getAttachFileInfo(serialNum) {
-    	debugger
+    	
    		var deferred = $q.defer();
     		
    		/*$http.post("rest/delivery/getAttachFileInfo",data
@@ -111,7 +111,7 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     
     
     function batchGetMaterielInfo(ids){
-    	debugger
+    	
     	var deferred = $q.defer();  
         $http.post(ctx + "rest/delivery/batchGetMaterielInfo",ids).success(function (data) {  
         	
@@ -171,7 +171,7 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     
   //保存订单物料
     function saveDeliveryMateriel (deliveryMateriel){
-    	debugger
+    	
 		var deferred = $q.defer();
 		$.post("rest/delivery/saveDeliveryMateriel", {
 			attachFile:deliveryMateriel.attachFile,
@@ -310,7 +310,7 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     
     
     function apApplyAngain($scope){
-    	debugger
+    	
     	var deferred = $q.defer();
 		$.post("rest/delivery/modifyApplyAp", {
 			serialNum:$scope.delivery.serialNum,

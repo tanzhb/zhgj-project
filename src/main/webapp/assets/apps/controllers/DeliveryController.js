@@ -898,7 +898,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		
 		
 	    $scope.saveFile  = function(fileIndex) {//保存File信息
-	    	debugger
+	    	
 	    	/*if($scope.file==null){
 	    		toastr.warning("请上传文件！");
 	    		return false;
@@ -972,7 +972,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
         * File新增一行
         */
 	    $scope.addFile = function(){
-	    	debugger
+	    	
 		    	   if($scope.file){}else{$scope.file =[{}]}
 		    	   $scope.file[_fileIndex] = {};
 		    	   _fileIndex++;
@@ -980,7 +980,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	    
 	    //下载文件查看详情时
 	       $scope.downloadFile1 = function(str){
-	    	   debugger
+	    	   
 	    	 window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+encodeURI(encodeURI(str));
 	       }
 	    
