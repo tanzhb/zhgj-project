@@ -927,8 +927,6 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
           		    		$scope.queryForPage();
           		    	}
           		    	
-          		    	
-          		    	
           		    	$scope.contract=data.contract;
           		    	$scope.clauseAfterSales=data.clauseAfterSales;
           		    	$scope.clauseAdvance=data.clauseAdvance;
