@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.congmai.zhgj.core.generic.GenericService;
 import com.congmai.zhgj.web.model.ClauseSettlement;
@@ -36,6 +37,14 @@ public interface PayService extends GenericService<PaymentRecord, String> {
      */
 	public void delPaymentRecord(String ids);
 	
+	
+	/**
+     * 
+     * @Description 确认收款
+     * @param ids
+     * @return
+     */
+	public void confirmGatheringMoney(Map<String,Object> map);
 	
 	/**
 	 * 根据id查询付款对象

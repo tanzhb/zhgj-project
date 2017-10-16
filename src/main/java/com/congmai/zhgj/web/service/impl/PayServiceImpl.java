@@ -2,6 +2,7 @@ package com.congmai.zhgj.web.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -139,6 +140,18 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 		payMapper.delPaymentRecord(idList);
 	}
 	
+
+	/**
+     * 
+     * @Description 确认收款
+     * @param ids
+     * @return
+     */
+	@Override
+	public void confirmGatheringMoney(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		payMapper.confirmGatheringMoney(map);
+	}
 
 	/**
 	 * 根据id查询付款对象

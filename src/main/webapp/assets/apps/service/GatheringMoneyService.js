@@ -24,6 +24,10 @@ angular.module('MetronicApp').factory('GatheringMoneyService', ['$rootScope', '$
     		
     		//更新附件
     		updateFile:updateFile,
+    		
+    		
+    		//确认收款
+    		confirmGatheringMoney:confirmGatheringMoney,
     };
 
     return factory;
@@ -75,6 +79,21 @@ angular.module('MetronicApp').factory('GatheringMoneyService', ['$rootScope', '$
         return deferred.promise;  
           
     };
+    
+    
+    //确认收款
+    function confirmGatheringMoney(serialNum){
+    	var deferred = $q.defer();  
+        $http.post($rootScope.basePath + "/rest/pay/confirmGatheringMoney", serialNum).success(function (data) {  
+            // 如果连接成功，延时返回给调用者  
+            deferred.resolve(data);  
+        })  
+            .error(function () {  
+                deferred.reject('连接服务器出错！');  
+            })  
+        return deferred.promise; 
+    	
+    }
     
   //通过用户id查找付款
     function selectPay(serialNum){
