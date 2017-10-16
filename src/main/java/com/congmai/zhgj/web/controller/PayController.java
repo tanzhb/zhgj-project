@@ -729,6 +729,31 @@ public class PayController {
 		payService.delPaymentRecord(ids);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
+	
+	
+	
+	/**
+	 * 确认收款
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/confirmGatheringMoney", method = RequestMethod.POST)
+	public ResponseEntity<Void> confirmGatheringMoney(@RequestBody String serialNum) {
+		if ("".equals(serialNum) || serialNum == null) {
+			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		}
+		
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();// 获取当前登录用户名
+
+		Map<String,Object> map=new HashMap<String,Object>();
+		map.put("updater", currenLoginName);
+		map.put("serialNum", serialNum);
+		payService.confirmGatheringMoney(map);
+		
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
 
 	/**
 	 * 通过id查询付款详情

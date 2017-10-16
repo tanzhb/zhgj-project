@@ -55,7 +55,6 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 
 	//根据参数查询对象
 	$scope.getPayInfo  = function(serialNum) {
-		debugger
 		GatheringMoneyService.selectPay(serialNum).then(
       		     function(data){
       		    	$scope.pay=data;
@@ -79,6 +78,17 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 		$state.go('gatheringMoneyRecord');
 	}
 
+	//确认收款
+	$scope.confirmGatheringMoney=function(serialNum){
+		GatheringMoneyService.confirmGatheringMoney(serialNum).then(
+     		     function(data){
+     		    	$state.go('gatheringMoneyRecord',{},{reload:true}); // 重新加载datatables数据
+     		     },
+     		     function(error){
+     		         console.log("error")
+     		     }
+     		 );
+	}
 	//打印
 	$scope.print=function(){
 		window.print();  
@@ -517,6 +527,8 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 						                            		if(data!=""&&data!=null){
 						                            			if(data=='0'){
 						                            				return '初始';
+						                            			}else{
+						                            				return '';
 						                            			}
 						                            		}else{
 						                            			return "";
