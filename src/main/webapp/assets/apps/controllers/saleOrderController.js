@@ -416,7 +416,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
                     			if(row.deliverStatus=="0"){
                     				return htm + '<span >未开始</span>';
 								}else if(row.deliverStatus=="1"){
-                    				return htm + '<span style="color:green" >已发货</span>';
+                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已发货</span>';
 								}else if(row.deliverStatus=="2"){
                     				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已收货</span>';
 								}else if(row.deliverStatus=="3"){
