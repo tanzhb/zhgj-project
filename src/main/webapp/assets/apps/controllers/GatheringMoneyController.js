@@ -63,6 +63,8 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
       		    	$scope.file[i].paymentSerial = $scope.pay.serialNum;
       		    	}
       		    	$scope.chnAmount=convertCurrency($scope.pay.applyPaymentAmount);
+      		    	debugger
+      		    	$scope.clauseSettlementList=data.clauseSettList;
       		     },
       		     function(error){
       		         console.log("error")
@@ -131,6 +133,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 						var orderSerial=data.orderInfo.serialNum;
 						$scope.orderSerial=data.orderInfo.serialNum;
 						$scope.deliveryMaterielE=data.clauList;
+						$scope.clauseSettlementList=data.clauseSettlementDetail;
 					}else{
 						$scope.pay.orderNum=data.orderInfo.orderNum;
 						$scope.pay.orderSerial=data.orderInfo.serialNum;
@@ -138,6 +141,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 						$scope.pay.supplyComId=data.orderInfo.supplyComId;
 						$scope.pay.deliveryAmount=null;
 						buyComId=data.orderInfo.buyComId;
+						$scope.clauseSettlementList=data.clauseSettlementDetail;
 					}
 				},
 				function(error){
@@ -178,6 +182,9 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 	//********附件  start****************//
 		var _fileIndex = 0;
 	    $scope.saveFile  = function() {//保存File信息
+	    	if($scope.pay==null){
+	    		toastr.error('请先保存基本信息！');return	
+	    	}
 	    	if($scope.pay.serialNum==null||$scope.pay.serialNum=='') {//上级物料为空的处理
 	    		toastr.error('请先保存基本信息！');return
 			}
@@ -356,6 +363,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 
 	//添加收款
 	$scope.saveBasicInfo=function (){
+		debugger
 		if($('#form_sample_1').valid()){
 			var fd = new FormData();
 			debugger
@@ -393,7 +401,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 			.success( function ( data )
 					{
 				//上传成功的操作
-				toastr.success("保存应付款数据成功！");
+				toastr.success("保存应收款数据成功！");
 				handle.unblockUI();
 				$scope.pay= data;
 				$scope.span = true;
@@ -446,7 +454,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 			.success( function ( data )
 					{
 				//上传成功的操作
-				toastr.success("保存应付款数据成功！");
+				toastr.success("保存应收款数据成功！");
 				handle.unblockUI();
 				$scope.pay= data;
 				$scope.span = true;

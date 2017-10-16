@@ -134,4 +134,8 @@ public interface PayMapper extends GenericDao<PaymentRecord, String> {
      * @param map
      */
     public void confirmGatheringMoney(Map<String, Object> map);
+    
+    
+    
+    public List<ClauseSettlementDetail> selectClauseSettlementDetailList2(String serialNum);
 }

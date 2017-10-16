@@ -69,6 +69,18 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 
 	
 	/**
+	 * 查询采购合同的结算条款列表
+	 * @param orderId （采购订单id）
+	 * @return
+	 */
+	@Override
+	public List<ClauseSettlementDetail> selectClauseSettlementDetailList2(
+			String serialNum) {
+		// TODO Auto-generated method stub
+		return payMapper.selectClauseSettlementDetailList2(serialNum);
+	}
+
+	/**
 	 * 添加应付款
 	 * @param contractVO
 	 */
