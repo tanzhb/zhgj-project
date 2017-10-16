@@ -460,6 +460,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 	 				debugger;
 	 					if ($.contains(document, this)) {
 	 						 var serialNums=$scope["arraySerialNums"+$scope.deliveryMaterielSerialNum];
+	 						 if(serialNums!=undefined){
 							 for(var i=0;i<serialNums.length;i++){
 								  var arrays=serialNums[i].split(",");
 								 if(arrays[0]==$(this).attr("id")&&$scope.deliveryMaterielSerialNum==arrays[2]){
@@ -470,6 +471,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 										$("#stockOutCount"+arrays[0]).css("border","1px solid");
 								 }
 							 }
+	 						 }
 	 					}
 	 			});
 	 		}
@@ -574,7 +576,12 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 										'className' : 'dt-body-center',
 										'render' : function(data,
 												type, row, meta) {
-												return '<input  type="text"   style="border:none" readonly="readonly"   name="'+row.stockInOutRecord.inOutNum+'"  id="stockOutCount'+row.serialNum+'" ng-model="stockValue'+row.serialNum+'"  ng-init="stockValue'+row.serialNum+'=\''+0+'\'"  ng-blur="judgeNumber(\''+row.stockCount+'\',\''+stockOutCount+'\',\''+row.serialNum+'\')" />';
+											if(row.warehouse==''||row.warehouse==null){
+												return '<input  type="text"   style="border:none" readonly="readonly"   name="'+row.stockInOutRecord.inOutNum+','+"noWarehouse"+'"  id="stockOutCount'+row.serialNum+'" ng-model="stockValue'+row.serialNum+'"  ng-init="stockValue'+row.serialNum+'=\''+0+'\'"  ng-blur="judgeNumber(\''+row.stockCount+'\',\''+stockOutCount+'\',\''+row.serialNum+'\')" />';
+											}else{
+												return '<input  type="text"   style="border:none" readonly="readonly"   name="'+row.stockInOutRecord.inOutNum+','+row.warehouse.serialNum+'"  id="stockOutCount'+row.serialNum+'" ng-model="stockValue'+row.serialNum+'"  ng-init="stockValue'+row.serialNum+'=\''+0+'\'"  ng-blur="judgeNumber(\''+row.stockCount+'\',\''+stockOutCount+'\',\''+row.serialNum+'\')" />';
+											}
+												
 										},"createdCell": function (td, cellData, rowData, row, col) {
 											 $compile(td)($scope);
 									    }
@@ -726,7 +733,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 									                            })
 					};
 					
-					$scope.showStockOutCount=function(serialNum,stockOutCount){//选中checkbox显示输入框
+					$scope.showStockOutCount=function(serialNum,stockOutCount,warehouseSerialNum){//选中checkbox显示输入框
 						debugger;
 						var value;
 						if($scope.totalCount==undefined){
@@ -823,17 +830,32 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 							  var value=$("#stockOutCount"+serialNum).val();//出库数量
 							  var rukuSerialNum=$("#"+serialNum).attr("name");//入库单流水
 							  var  inOutNum=$("#stockOutCount"+serialNum).attr("name");//入库批次号
-							  var addvalue=serialNum+","+value+","+$scope.deliveryMaterielSerialNum+","+rukuSerialNum+","+inOutNum;//拼接checkbox选中流水和之前设定的出库数值以及发货物料流水和入库单流水以及入库批次号
+							  var nameArrays=inOutNum.split(",");
+							  var addvalue=serialNum+","+value+","+$scope.deliveryMaterielSerialNum+","+rukuSerialNum+","+nameArrays[0]+","+nameArrays[1];//拼接checkbox选中流水和之前设定的出库数值以及发货物料流水和入库单流水以及入库批次号
 							  serialNums[i]=addvalue;
 						 }
 						 var inOutNums="";
+						 var warehouseSerialNums=new Array();
 						 for(var i=0;i<serialNums.length;i++){
 							 var arrayValue=serialNums[i].split(",");
 							 inOutNums=inOutNums+arrayValue[4];
+							  if(arrayValue[5]!='noWarehouse'){
+								  warehouseSerialNums.push(arrayValue[5]);
+							  }
 							 if(i!=serialNums.length-1){
 								 inOutNums= inOutNums+",";
 							 }
 						 }
+						 var warehouseArrays=$scope["warehouse"+$scope.deliveryMaterielSerialNum];
+						 if(warehouseArrays!=undefined){
+							 delete $scope["warehouse"+$scope.deliveryMaterielSerialNum];
+						 }
+						 $scope["warehouse"+$scope.deliveryMaterielSerialNum]=warehouseSerialNums;
+						 var warehouse=new  Array();
+						 for(var i=0;i < arraySerialNums.length;i++){
+							 warehouse=warehouse.concat($scope["warehouse"+$scope.deliveryMaterielSerialNum]);
+							}
+						 $scope.warehouseCount = unique(warehouse);
 						 $("#"+$scope.deliveryMaterielSerialNum).html(inOutNums);
 						 //$scope.arraySerialNums=serialNums;
 						 $scope["arraySerialNums"+$scope.deliveryMaterielSerialNum] =serialNums;

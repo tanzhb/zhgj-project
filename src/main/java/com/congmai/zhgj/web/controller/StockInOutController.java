@@ -224,8 +224,10 @@ public class StockInOutController {
     		TakeDelivery takeDeliveryVO=takeDeliveryService.selectByPrimaryKey(stockInOutCheck.getTakeDeliverSerial());
     		stockInOutCheck.setTakeDeliverNum(takeDeliveryVO.getTakeDeliverNum());
     		DeliveryVO deliveryVO=deliveryService.selectDetailById(takeDeliveryVO.getDeliverSerial());
+    		if(deliveryVO.getSupplyComId()!=null){
     		Company  company=companyService.selectById(deliveryVO.getSupplyComId());
-    	 	stockInOutCheck.setSupplyName(company.getComName());
+    		stockInOutCheck.setSupplyName(company.getComName());
+    		}
     	 	OrderInfo orderInfo=orderService.selectById(deliveryVO.getOrderSerial());
     	 	stockInOutCheck.setRelationBuyNum(orderInfo.getOrderNum());
     	}else if (serialNum.indexOf("out")>-1){//出库
@@ -234,9 +236,10 @@ public class StockInOutController {
     	 	stockInOutCheck.setDeliverNum(deliveryVO.getDeliverNum());
     	 	OrderInfo orderInfo=orderService.selectById(deliveryVO.getOrderSerial());
     	 stockInOutCheck.setRelationSaleNum(orderInfo.getOrderNum());
-    	 	Company  company=companyService.selectById(deliveryVO.getSupplyComId());
-    	 	stockInOutCheck.setSupplyName(company.getComName());
-    	 	
+    	 if(deliveryVO.getSupplyComId()!=null){
+     		Company  company=companyService.selectById(deliveryVO.getSupplyComId());
+     		stockInOutCheck.setSupplyName(company.getComName());
+     		}
     	}
     	for(DeliveryMaterielVO dmo:deliveryMateriels){
 			dmo.setQualifiedCount(dmo.getQualifiedCount()==null?"0":dmo.getQualifiedCount());

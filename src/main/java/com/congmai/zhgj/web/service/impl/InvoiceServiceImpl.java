@@ -92,6 +92,24 @@ public class InvoiceServiceImpl extends GenericServiceImpl<Invoice, String> impl
 		
 		return invoice;
 	}
+
+	@Override
+	public void confirmInvoiceIn(OrderInfo o, Invoice in) {//进项票确认
+		// TODO Auto-generated method stub
+		o.setBillStatus(OrderInfo.RECIVEBILL);
+		o.setSerialNum(in.getOrderSerial());
+		orderInfoMapper.updateByPrimaryKey(o);
+		
+		
+	}
+
+	@Override
+	public void confirmInvoiceOut(OrderInfo o, Invoice in) {//销项票确认
+		// TODO Auto-generated method stub
+		o.setBillStatus(OrderInfo.BILL);
+		o.setSerialNum(in.getOrderSerial());
+		orderInfoMapper.updateByPrimaryKey(o);
+	}
 	}
 	
 	
