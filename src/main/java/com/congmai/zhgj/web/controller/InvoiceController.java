@@ -200,6 +200,10 @@ public class InvoiceController {
 		for(Invoice invoice:invoices){
 			OrderInfo order=orderService.selectById(invoice.getOrderSerial());
 			invoice.setRelationBuyOrSaleNum(order.getOrderNum());
+			Company c=companyService.selectOne(invoice.getSupplyComId()==null?invoice.getBuyComId():invoice.getSupplyComId());
+    		if(c!=null){
+    			invoice.setComName(c.getComName());
+    		}
 		}
        
 		// 封装datatables数据返回到前台
