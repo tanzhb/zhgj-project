@@ -432,42 +432,57 @@
 				<!--/row-->
 				<div class="row">
 					<div class="col-md-4">
-						<div class="form-group form-md-line-input">
+						<div class="form-group">
 							<label class="col-md-4 control-label" for="takeDeliverNum">
-								收货单号：</label>
+								<span class="required"> * </span>收货单号:
+							</label>
 							<div class="col-md-8">
-								<p class="control-label left">{{deliver.takeDelivery.takeDeliverNum}}</p>
+								<input type="text" class="form-control" id="takeDeliverNum"
+									name="takeDeliverNum" ng-model="takeDeliver.takeDeliverNum"
+									ng-hide="deliverAdd">
+								<div class="form-control-focus"></div>
+								<p class="control-label left" ng-show="deliverView">{{takeDeliver.takeDeliverNum}}</p>
 							</div>
 						</div>
 					</div>
 					<div class="col-md-4">
-						<div class="form-group form-md-line-input">
-							<label class="col-md-4 control-label" for="tdReceiver">
-								实际收货日期：</label>
+						<div class="form-group">
+							<label class="col-md-4 control-label" for="actualDate"><span
+								class="required"> * </span>实际收货日期 :</label>
 							<div class="col-md-8">
-								<p class="control-label left">{{deliver.takeDelivery.actualDate}}</p>
+								<input type="text" class="form-control date-picker"
+									data-date-format="yyyy-mm-dd" data-date-viewmode="years"
+									id="actualDate" name="actualDate"
+									ng-model="takeDeliver.actualDate" readonly="readonly">
+								<div class="form-control-focus"></div>
+								<p class="control-label left" ng-show="deliverView">{{takeDeliver.actualDate}}</p>
 							</div>
 						</div>
 					</div>
 
 					<!--/span-->
 					<div class="col-md-4">
-						<div class="form-group form-md-line-input">
-							<label class="col-md-4 control-label" for="tdContactNum">
-								收货人：</label>
+						<div class="form-group">
+							<label class="col-md-4 control-label"><span
+								class="required"> * </span>收货人:</label>
 							<div class="col-md-8">
-								<p class="control-label left">{{deliver.takeDelivery.taker}}</p>
+								<input type="text" class="form-control" id="taker" name="taker"
+									ng-model="takeDeliver.taker">
+								<div class="form-control-focus"></div>
 							</div>
 						</div>
 					</div>
 					<!--/span-->
 				</div>
+				<!--/row-->
 				<div class="row">
 					<div class="col-md-4">
-						<div class="form-group form-md-line-input">
-							<label class="col-md-4 control-label">备注：</label>
+						<div class="form-group">
+							<label class="col-md-4 control-label" for="takeDeliverDate">备注:</label>
 							<div class="col-md-8">
-								<p class="control-label left">{{deliver.takeDelivery.takeDate}}</p>
+								<input type="text" class="form-control" id="takeRemark"
+									name="takeRemark" ng-model="takeDeliver.takeRemark">
+								<div class="form-control-focus"></div>
 							</div>
 						</div>
 					</div>
@@ -478,74 +493,76 @@
 		</div>
 	</div>
 	<div class="tab-pane fade" id="tab_1_3">
-		<div class="portlet-body">
-			<div class="table-scrollable">
-				<table id="deliveryMaterielTable"
-					class="table table-striped table-bordered table-advance table-hover">
-					<thead>
-						<tr>
-							<th rowspan="2">物料编号</th>
-							<th rowspan="2">物料名称</th>
-							<th rowspan="2">规格型号</th>
-							<th rowspan="2">单位</th>
-							<th rowspan="2">生产日期</th>
-							<th colspan="3" style="text-align: center;">发货</th>
-							<th colspan="4" style="text-align: center;">收货</th>
-							<th colspan="3" style="text-align: center;">检验</th>
-							<th colspan="5" style="text-align: center;">入库</th>
-							<th rowspan="2">状态</th>
-						</tr>
-						<tr>
-							<th>订单数量</th>
-							<th>发货数量</th>
-							<th>备注</th>
-							<th>实收数量</th>
-							<th>拒收数量</th>
-							<th>附件</th>
-							<th>备注</th>
-							<th>合格数量</th>
-							<th>不合格数量</th>
-							<th>备注</th>
-							<th>入库数量</th>
-							<th>未入数量</th>
-							<th>仓库</th>
-							<th>库位</th>
-							<th>备注</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr
-							ng-repeat="materiel in deliver.deliveryMateriels track by $index">
-							<td>{{materiel.orderMateriel.materiel.materielNum}}</td>
-							<td>{{materiel.orderMateriel.materiel.materielName}}</td>
-							<td>{{materiel.orderMateriel.materiel.specifications}}</td>
-							<td>{{materiel.orderMateriel.materiel.unit}}</td>
-							<td>{{materiel.manufactureDate}}</td>
-							<td>{{materiel.orderMateriel.amount}}</td>
-							<td>{{materiel.deliverCount}}</td>
-							<td>{{materiel.deliverRemark}}</td>
-							<td>{{materiel.acceptCount}}</td>
-							<td>{{materiel.refuseCount}}</td>
-							<td>
-								<a href="javascript:;" ng-click="downloadFile1(item.file)" ng-repeat="item in materiel.files">{{item.file|limitTo:30:item.file.indexOf('_')+1}}&nbsp;</a>
-							</td>
-							<td>{{materiel.takeRemark}}</td>
-							<td>{{materiel.stockInQualifiedCount}}</td>
-							<td>{{materiel.stockInUnqualifiedCount}}</td>
-							<td>{{materiel.stockInCheckRemark}}</td>
-							<td>{{materiel.stockInCount}}</td>
-							<td>{{materiel.unstockInCount}}</td>
-							<td>{{materiel.stockInWarehouse.warehouseName}}</td>
-							<td>{{materiel.stockInPosition.positionName}}</td>
-							<td>{{materiel.stockInRemark}}</td>
-							<td></td>
-						</tr>
-						<tr
-							ng-if="deliver.deliveryMateriels==undefined||deliver.deliveryMateriels.length==0">
-							<td colspan="22" align="center">暂无数据</td>
-						</tr>
-					</tbody>
-				</table>
+		<div class="portlet-body form">
+			<div class="form-body">
+						<!-- <div class="table-scrollable"> -->
+							<table id="deliveryMaterielTable"
+								class="table table-striped table-bordered table-advance table-hover">
+								<thead>
+									<tr>
+										<th  rowspan="2">物料编号</th>
+										<th  rowspan="2">物料名称</th>
+										<th  rowspan="2">规格型号</th>
+										<th  rowspan="2">单位</th>
+										<th  rowspan="2">附件</th>
+										<th  rowspan="2">生产日期</th>
+										<th colspan="3" style="text-align: center;">发货</th>
+										<th colspan="3"  style="text-align: center;">收货</th>
+										<th rowspan="2">状态</th>
+									</tr>
+									<tr>
+										<th>订单数量</th>
+										<th>发货数量</th>
+										<th>备注</th>
+										<th>实收数量</th>
+										<th>拒收数量</th>
+										<th>备注</th>
+									</tr>
+								</thead>
+								<tbody > 
+									<tr ng-repeat="materiel in deliver.deliveryMateriels track by $index" >
+										<td>{{materiel.orderMateriel.materiel.materielNum}}</td>
+										<td>{{materiel.orderMateriel.materiel.materielName}}</td>
+										<td>{{materiel.orderMateriel.materiel.specifications}}</td>
+										<td>{{materiel.orderMateriel.materiel.unit}}</td>
+										<td>
+                                           <p id="batchNumReal{{$index}}" ng-hide="true"> </p>
+												
+											<p class="form-control-static" id="batchNum{{$index}}">
+											<a href="javascript:;" class="btn btn-xs green" id="addBatchNum{{$index}}"
+											ng-click="addAttachFile($index)" onclick="return false;"> <i
+												class="fa fa-plus"></i>添加
+										    </a>
+											</p>
+                                        </td>
+										<td>
+											{{materiel.manufactureDate}}
+										</td>
+										<td>{{materiel.orderMateriel.amount}}</td>
+										<td>
+                                            {{materiel.deliverCount}}
+										</td>
+										<td>
+                                            {{materiel.deliverRemark}}
+										</td>
+										<td class="form-group">
+                                                 <input type="text" class="form-control" id="acceptCount{{$index}}" name="acceptCount" data-delivercount="{{materiel.deliverCount}}"  ng-model="materiel.acceptCount" ng-hide="deliverAdd" >
+                                                 <div class="form-control-focus"> </div>
+										</td>
+										<td><span class="help-block"></span>
+											<span ng-if="materiel.deliverCount!=undefined && materiel.acceptCount!=undedined">{{materiel.deliverCount-materiel.acceptCount}}</span>
+										</td>
+										<td>
+                                                 <input type="text" class="form-control" id="takeRemark{{$index}}" name="takeRemark"  ng-model="materiel.takeRemark" ng-hide="deliverAdd" >
+                                                 <div class="form-control-focus"> </div>
+										</td>
+									</tr>
+									<tr ng-if="deliver.deliveryMateriels==undefined||deliver.deliveryMateriels.length==0">
+											<td colspan="22" align="center">暂无数据</td>
+									</tr>
+								</tbody>
+							</table>
+						<!-- </div> -->
 			</div>
 		</div>
 	</div>
