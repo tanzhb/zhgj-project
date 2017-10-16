@@ -504,34 +504,30 @@
     </select>
     <!--获取库存最后入库日期  -->
     <select id="getLastInDate" parameterType="java.lang.String"   resultType="java.lang.String">
-	SELECT MAX(sir.stockDate) FROM stockInOutRecord sir WHERE EXISTS (
-	SELECT td.serialNum FROM takeDelivery td WHERE EXISTS (
-	SELECT serialNum FROM
-	(
+		SELECT MAX(sir.stockDate) FROM stockInOutRecord sir WHERE EXISTS (
+	select serialNum  from (
+SELECT td.serialNum FROM takeDelivery td, (
 	SELECT d.serialNum FROM delivery d
 	LEFT JOIN orderMateriel om ON
 	om.orderSerial = d.orderSerial
 	WHERE om.materielSerial =
 	#{serialNum,jdbcType=VARCHAR}
-	) tb
+	) tb  
 	WHERE td.deliverSerial = tb.serialNum
-	)
-	)
+	)tc  where tc.serialNum=sir.takeDeliverSerial
+	) 
     </select>
     <!--获取库存最后出库日期  -->
     <select id="getLastOutDate"  parameterType="java.lang.String"   resultType="java.lang.String">
 	SELECT MAX(sir.stockDate) FROM stockInOutRecord sir WHERE EXISTS (
-	SELECT d.serialNum FROM delivery d WHERE EXISTS (
-	SELECT serialNum FROM
-	(SELECT d.serialNum FROM delivery d
+	select serialNum  from (
+	SELECT d.serialNum FROM delivery d ,	(SELECT d.serialNum FROM delivery d
 	LEFT JOIN orderMateriel om ON
 	om.orderSerial = d.orderSerial
 	WHERE om.materielSerial =
 	#{serialNum,jdbcType=VARCHAR}
-	) tb
-	WHERE
-	d.serialNum = tb.serialNum
-	)
+	) tb WHERE d.serialNum = tb.serialNum
+	)tc  where tc.serialNum=sir.deliverSerial
 	)
 	
     </select>
