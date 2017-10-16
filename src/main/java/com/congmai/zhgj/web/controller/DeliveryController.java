@@ -233,7 +233,8 @@ public class DeliveryController {
 		StockInOutCheck stockInOutCheck=new StockInOutCheck();
 		stockInOutCheck.setSerialNum(ApplicationUtils.random32UUID());
 		stockInOutCheck.setDeliverSerial(serialNum);
-		stockInOutCheck.setTakeDeliverSerial(delivery.getTakeDeliverSerialNum());
+		stockInOutCheck.setTakeDeliverSerial("checkout");
+		//stockInOutCheck.setTakeDeliverSerial(delivery.getTakeDeliverSerialNum());
 		stockInOutCheck.setChecker(currenLoginName);
 		stockInOutCheck.setCreator(currenLoginName);
 		stockInOutCheck.setCreateTime(new Date());

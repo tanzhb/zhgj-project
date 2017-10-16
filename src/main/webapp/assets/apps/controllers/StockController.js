@@ -699,7 +699,7 @@ angular
 		 	    								if(data==''||data==null){
 		 	    									return "";
 		 	    								}else{
-		 	    									return '<span title="仓库:'+row.warehouse.warehouseName+'&nbsp;&nbsp;&nbsp;&nbsp;库位:'+row.position.positionName+'">'+data.warehouseName+'</span>';
+		 	    									return '<span title="仓库:'+row.warehouse.warehouseName+'&nbsp;&nbsp;&nbsp;&nbsp;\n库位:'+row.position.positionName+'">'+data.warehouseName+'</span>';
 		 	    								}
 											},"createdCell": function (td, cellData, rowData, row, col) {
 												 $compile(td)($scope);
