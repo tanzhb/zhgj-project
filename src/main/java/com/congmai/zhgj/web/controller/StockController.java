@@ -143,8 +143,7 @@ public class StockController {
 			stock.setMaterielName(m.getMaterielName());
 			stock.setMaterielNum(m.getMaterielNum());
 			stock.setSpecifications(m.getSpecifications());
-			stock.setBelongWarehouseNum("0");
-			stock.setCurrentAmount("0");
+			stock.setCurrentAmount((Integer.parseInt(stock.getCountInAmount()==null?"0":stock.getCountInAmount())-Integer.parseInt(stock.getCountOutAmount()==null?"0":stock.getCountOutAmount()))+"");
 			stock.setAverrageWhAge("0");
 			stock.setPreSaleAmount("0");
 			stock.setOnRoadAmount("0");

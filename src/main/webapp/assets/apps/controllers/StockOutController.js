@@ -572,6 +572,14 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 											
 										}
 									}, {
+										'targets' : 5,
+										'render' : function(data,
+												type, row, meta) {
+	 	    									return row.stockCount-row.sumStockOutCount;
+	 	    								
+											
+										}
+									},{
 										'targets' : 6,
 										'className' : 'dt-body-center',
 										'render' : function(data,
