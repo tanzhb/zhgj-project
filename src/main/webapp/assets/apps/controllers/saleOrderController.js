@@ -2986,6 +2986,10 @@ var e = $("#form_clauseSettlement"),
 		        								}else if(ids=='more'){
 		        									toastr.warning('只能选择一个办理！');return;
 		        								} else {
+		        									if(table.row('.active').data().assign == ''){
+		    											showToastr('toast-top-center', 'warning', '此任务您还没有签收，请【签收】任务后再处理任务！')
+		    											return;
+		    										}
 		        									orderService
 		        									.getAuditInfos(ids)
 													.then(
