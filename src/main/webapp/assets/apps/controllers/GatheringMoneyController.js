@@ -55,7 +55,6 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 
 	//根据参数查询对象
 	$scope.getPayInfo  = function(serialNum) {
-		debugger
 		GatheringMoneyService.selectPay(serialNum).then(
       		     function(data){
       		    	$scope.pay=data;
@@ -64,6 +63,8 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
       		    	$scope.file[i].paymentSerial = $scope.pay.serialNum;
       		    	}
       		    	$scope.chnAmount=convertCurrency($scope.pay.applyPaymentAmount);
+      		    	debugger
+      		    	$scope.clauseSettlementList=data.clauseSettList;
       		     },
       		     function(error){
       		         console.log("error")
@@ -79,6 +80,17 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 		$state.go('gatheringMoneyRecord');
 	}
 
+	//确认收款
+	$scope.confirmGatheringMoney=function(serialNum){
+		GatheringMoneyService.confirmGatheringMoney(serialNum).then(
+     		     function(data){
+     		    	$state.go('gatheringMoneyRecord',{},{reload:true}); // 重新加载datatables数据
+     		     },
+     		     function(error){
+     		         console.log("error")
+     		     }
+     		 );
+	}
 	//打印
 	$scope.print=function(){
 		window.print();  
@@ -121,6 +133,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 						var orderSerial=data.orderInfo.serialNum;
 						$scope.orderSerial=data.orderInfo.serialNum;
 						$scope.deliveryMaterielE=data.clauList;
+						$scope.clauseSettlementList=data.clauseSettlementDetail;
 					}else{
 						$scope.pay.orderNum=data.orderInfo.orderNum;
 						$scope.pay.orderSerial=data.orderInfo.serialNum;
@@ -128,6 +141,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 						$scope.pay.supplyComId=data.orderInfo.supplyComId;
 						$scope.pay.deliveryAmount=null;
 						buyComId=data.orderInfo.buyComId;
+						$scope.clauseSettlementList=data.clauseSettlementDetail;
 					}
 				},
 				function(error){
@@ -168,6 +182,9 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 	//********附件  start****************//
 		var _fileIndex = 0;
 	    $scope.saveFile  = function() {//保存File信息
+	    	if($scope.pay==null){
+	    		toastr.error('请先保存基本信息！');return	
+	    	}
 	    	if($scope.pay.serialNum==null||$scope.pay.serialNum=='') {//上级物料为空的处理
 	    		toastr.error('请先保存基本信息！');return
 			}
@@ -346,6 +363,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 
 	//添加收款
 	$scope.saveBasicInfo=function (){
+		debugger
 		if($('#form_sample_1').valid()){
 			var fd = new FormData();
 			debugger
@@ -383,7 +401,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 			.success( function ( data )
 					{
 				//上传成功的操作
-				toastr.success("保存应付款数据成功！");
+				toastr.success("保存应收款数据成功！");
 				handle.unblockUI();
 				$scope.pay= data;
 				$scope.span = true;
@@ -436,7 +454,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 			.success( function ( data )
 					{
 				//上传成功的操作
-				toastr.success("保存应付款数据成功！");
+				toastr.success("保存应收款数据成功！");
 				handle.unblockUI();
 				$scope.pay= data;
 				$scope.span = true;
@@ -517,6 +535,8 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 						                            		if(data!=""&&data!=null){
 						                            			if(data=='0'){
 						                            				return '初始';
+						                            			}else{
+						                            				return '';
 						                            			}
 						                            		}else{
 						                            			return "";
@@ -577,7 +597,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 					"sLast": "尾页"
 				}
 			},
-			order: [[1, "asc"]],// 默认排序列及排序方式
+			order: [[9, "desc"]],// 默认排序列及排序方式
 			searching: true,// 是否过滤检索
 			ordering:  true,// 是否排序
 			lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
@@ -587,9 +607,9 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 			"aoColumns": [
 			              { mData: 'serialNum' },
 			              { mData: 'orderNum' },
-			              { mData: 'supplyComId' },
-			              { mData: null },
-			              { mData: null },
+			              { mData: 'buyName' },
+			              { mData: 'materielCount' },
+                          { mData: 'orderAmount' },
 			              { mData: 'deliveryMode' },
 			              { mData: 'serviceModel' },
 			              { mData: 'saleApplySerial' },

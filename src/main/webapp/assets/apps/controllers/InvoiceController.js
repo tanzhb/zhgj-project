@@ -201,7 +201,7 @@ angular
 															},{
 																mData : 'relationBuyOrSaleNum'
 															}, {
-																mData : 'supplyComId'
+																mData : 'comName'
 															},{
 																mData : 'invoiceAmount'
 															}, {
@@ -421,7 +421,7 @@ angular
 											},{
 												mData : 'relationBuyOrSaleNum'
 											}, {
-												mData : 'buyComId'
+												mData : 'comName'
 											},{
 												mData : 'invoiceAmount'
 											}, {

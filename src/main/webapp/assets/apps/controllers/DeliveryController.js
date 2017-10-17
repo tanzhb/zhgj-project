@@ -697,7 +697,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	                "aoColumns": [
 	                              { mData: 'serialNum' },
 	                              { mData: 'orderNum' },
-	                              { mData: 'buyComId' },
+	                              { mData: 'buyName'},
 	                              { mData: 'orderNum' },
 	                              { mData: 'orderNum' },
 	                              { mData: 'deliveryMode' },

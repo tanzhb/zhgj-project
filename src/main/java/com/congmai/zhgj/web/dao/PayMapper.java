@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.web.model.ClauseSettlement;
@@ -126,4 +127,15 @@ public interface PayMapper extends GenericDao<PaymentRecord, String> {
      * @param record
      */
     public void deleteFileOld(String paySerialNum);
+    
+    
+    /**
+     * 确认收款
+     * @param map
+     */
+    public void confirmGatheringMoney(Map<String, Object> map);
+    
+    
+    
+    public List<ClauseSettlementDetail> selectClauseSettlementDetailList2(String serialNum);
 }

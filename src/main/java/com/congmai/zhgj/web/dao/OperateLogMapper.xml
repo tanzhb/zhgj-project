@@ -128,7 +128,9 @@
     <include refid="Base_Column_List" />
     from operateLog
     where objectSerial in (
-    select serialNum from paymentRecord WHERE orderSerial = #{serialNum,jdbcType=VARCHAR}
+    select serialNum from paymentRecord WHERE orderSerial = #{serialNum,jdbcType=VARCHAR}<!-- 收付款日志   -->
+    UNION
+    select serialNum from invoice WHERE orderSerial = #{serialNum,jdbcType=VARCHAR}<!-- 收开票日志   -->
     )
   </select>
   

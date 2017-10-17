@@ -54,6 +54,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
       		    	$scope.file[i].paymentSerial = $scope.pay.serialNum;
       		    	}
       		    	$scope.chnAmount=convertCurrency($scope.pay.applyPaymentAmount);
+      		    	$scope.clauseSettlementList=data.clauseSettList;
       		    	
       		    	$("#serialNum").val(serialNum);//赋值给隐藏input，通过和不通过时调用
 					$("#taskId").val(ids);//赋值给隐藏input，通过和不通过时调用
@@ -121,13 +122,14 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 						var orderSerial=data.orderInfo.serialNum;
 						$scope.orderSerial=data.orderInfo.serialNum;
 						$scope.deliveryMaterielE=data.clauList;
+						$scope.clauseSettlementList=data.clauseSettlementDetail;
 					}else{
 						$scope.pay.orderNum=data.orderInfo.orderNum;
 						$scope.pay.orderSerial=data.orderInfo.serialNum;
 						$scope.pay.orderAmount=data.orderInfo.orderAmount;
 						$scope.pay.paiedMoney=data.orderInfo.paiedMoney;
 						$scope.pay.billedMoney=data.orderInfo.billedMoney;
-						
+						$scope.clauseSettlementList=data.clauseSettlementDetail;
 						
 						
 						$scope.pay.supplyComId=data.orderInfo.supplyComId;
@@ -173,6 +175,9 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	//********附件  start****************//
 		var _fileIndex = 0;
 	    $scope.saveFile  = function() {//保存File信息
+	    	if($scope.pay==null){
+	    		toastr.error('请先保存基本信息！');return
+	    	}
 	    	if($scope.pay.serialNum==null||$scope.pay.serialNum=='') {//上级物料为空的处理
 	    		toastr.error('请先保存基本信息！');return
 			}
@@ -1204,7 +1209,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 					"sLast": "尾页"
 				}
 			},
-			order: [[1, "asc"]],// 默认排序列及排序方式
+			order: [[9, "desc"]],// 默认排序列及排序方式
 			searching: true,// 是否过滤检索
 			ordering:  true,// 是否排序
 			lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
@@ -1214,9 +1219,9 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 			"aoColumns": [
 			              { mData: 'serialNum' },
 			              { mData: 'orderNum' },
-			              { mData: 'supplyComId' },
-			              { mData: null },
-			              { mData: null },
+			              { mData: 'supplyName' },
+			              { mData: 'materielCount' },
+                          { mData: 'orderAmount' },
 			              { mData: 'deliveryMode' },
 			              { mData: 'serviceModel' },
 			              { mData: 'saleApplySerial' },

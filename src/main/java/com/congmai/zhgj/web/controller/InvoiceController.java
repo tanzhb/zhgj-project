@@ -152,11 +152,13 @@ public class InvoiceController {
     			if("2".equals(invoice.getStatus())){
     				OrderInfo orderInfo=new OrderInfo();
     				if(StringUtils.isEmpty(invoice.getSupplyComId())){
-    					orderInfo.setBillStatus(OrderInfo.BILL);
+    					invoiceService.confirmInvoiceOut(invoice,orderInfo);
+    					//orderInfo.setBillStatus(OrderInfo.BILL);
     				}else{
-    					orderInfo.setBillStatus(OrderInfo.RECIVEBILL);
+    					invoiceService.confirmInvoiceIn(invoice,orderInfo);
+    					//orderInfo.setBillStatus(OrderInfo.RECIVEBILL);
     				}
-    				orderService.updateStatus(orderInfo);
+    				//orderService.updateStatus(orderInfo);
     			}
     		}
     		
@@ -198,6 +200,10 @@ public class InvoiceController {
 		for(Invoice invoice:invoices){
 			OrderInfo order=orderService.selectById(invoice.getOrderSerial());
 			invoice.setRelationBuyOrSaleNum(order.getOrderNum());
+			Company c=companyService.selectOne(invoice.getSupplyComId()==null?invoice.getBuyComId():invoice.getSupplyComId());
+    		if(c!=null){
+    			invoice.setComName(c.getComName());
+    		}
 		}
        
 		// 封装datatables数据返回到前台
@@ -224,7 +230,10 @@ public class InvoiceController {
     	OrderInfo orderInfo=orderService.selectById(invoice.getOrderSerial());
     		invoice.setRelationBuyOrSaleNum(orderInfo.getOrderNum());
     		invoice.setOrderAmount(orderInfo.getOrderAmount());
-    		invoice.setComName(invoice.getSupplyComId()==null?invoice.getBuyComId():invoice.getSupplyComId());
+    		Company c=companyService.selectOne(invoice.getSupplyComId()==null?invoice.getBuyComId():invoice.getSupplyComId());
+    		if(c!=null){
+    			invoice.setComName(c.getComName());
+    		}
     		map.put("invoice",invoice);
     	
     }

@@ -339,6 +339,10 @@ public class PayController {
 		List<ClauseSettlementDetail> clauList = payService
 				.selectClauseSettlementDetailList(serialNum);
 		map.put("clauList", clauList);
+		
+		List<ClauseSettlementDetail> clauseSettlementDetail = payService
+				.selectClauseSettlementDetailList2(serialNum);
+		map.put("clauseSettlementDetail", clauseSettlementDetail);
 		return map;
 	}
 	
@@ -514,9 +518,10 @@ public class PayController {
 		List<PaymentFile> file;
 		try {
 			file = objectMapper.readValue(params, javaType);
-			String paySerialNum = file.get(0).getPaymentSerial();
-			payService.deleteFileOld(paySerialNum);
-
+			if(file.size()>0){
+				String paySerialNum = file.get(0).getPaymentSerial();
+				payService.deleteFileOld(paySerialNum);	
+			}
 			if (!CollectionUtils.isEmpty(file)) {
 				Subject currentUser = SecurityUtils.getSubject();
 				String currenLoginName = currentUser.getPrincipal().toString();// 获取当前登录用户名
@@ -729,6 +734,31 @@ public class PayController {
 		payService.delPaymentRecord(ids);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
+	
+	
+	
+	/**
+	 * 确认收款
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/confirmGatheringMoney", method = RequestMethod.POST)
+	public ResponseEntity<Void> confirmGatheringMoney(@RequestBody String serialNum) {
+		if ("".equals(serialNum) || serialNum == null) {
+			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		}
+		
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();// 获取当前登录用户名
+
+		Map<String,Object> map=new HashMap<String,Object>();
+		map.put("updater", currenLoginName);
+		map.put("serialNum", serialNum);
+		payService.confirmGatheringMoney(map);
+		
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
 
 	/**
 	 * 通过id查询付款详情
@@ -748,12 +778,11 @@ public class PayController {
 		c.setBilledMoney(billedMoney);
 		List<PaymentFile> list = payService.selectFileList(serialNum);
 		c.setFileList(list);
-
-		/*
-		 * List<ClauseSettlementDetail>
-		 * clauList=payService.selectClauseSettlementDetailList
-		 * (c.getOrderSerial()); c.setClauseSettList(clauList);
-		 */
+		
+		List<ClauseSettlementDetail> clauseSettlementDetail = payService
+				.selectClauseSettlementDetailList2(c.getOrderSerial());
+		
+		c.setClauseSettList(clauseSettlementDetail);
 		return new ResponseEntity<PaymentRecord>(c, HttpStatus.OK);
 	}
 

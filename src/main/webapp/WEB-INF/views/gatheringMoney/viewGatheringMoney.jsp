@@ -1,26 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!-- BEGIN PAGE HEADER-->
-
-<!-- <div class="page-bar">
-	<ul class="page-breadcrumb">
-		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
-			class="fa fa-angle-right"></i></li>
-		<li><a ui-sref="gatheringMoneyRecord">收款</a> <i class="fa fa-angle-right"></i>
-		</li>
-		<li><a>收款详情</a></li>
-	</ul>
-	<div class="page-toolbar">
-		<div class="btn-group pull-right">
-			<button type="button"
-				class="btn btn-fit-height grey-salt dropdown-toggle"
-				onclick="printdiv('saleOrderPrint')">
-				<i class="fa fa-print"></i> 打印
-			</button>
-
-		</div>
-	</div>
-</div> -->
 <div class="row" id="saleOrderPrint">
 	<div class="col-md-12">
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
@@ -29,6 +9,19 @@
 				<form action="#" id="form_sample_1" class="">
 					<div class="portlet light ">
 						<ul class="nav nav-tabs">
+						
+						<li class="dropdown pull-right tabdrop">
+							<button class="btn green  btn-sm btn-circle" ng-if="pay.status=='0'"
+								ng-click="confirmGatheringMoney(pay.serialNum)">
+								<i class="fa fa-check"></i>确认收款
+							</button>
+							<button
+								class="btn defualt  btn-sm btn-circle" ng-click="goBack()"
+								onclick="return false;">
+								<i class="fa fa-mail-reply"></i> 取消
+							</button>
+						</li>
+						
 							<li class="active bold"><a data-target="#tab_1_1"
 								data-toggle="tab">收款信息</a></li>
 							<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">付款信息</a>

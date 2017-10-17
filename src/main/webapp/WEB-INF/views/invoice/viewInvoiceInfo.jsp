@@ -215,7 +215,7 @@
                                                     <label class="control-label bold" for=""><span class="required"> * </span> 开票方:</label>
                                                     <div class="">
                                                    
-                                                                         <p class="control-label left"     >{{invoice.supplyComId}}</p> 
+                                                                         <p class="control-label left"     >{{invoice.comName}}</p> 
                                                                     </div>
                                                                       
                                                                 </div>
@@ -249,7 +249,7 @@
                                                     <div class="">
                                                    
 												 
-                                                                        <p class="control-label left"      ng-if="inOrOut.indexOf('out')>-1"   >{{invoice.buyComId}}</p> 
+                                                                        <p class="control-label left"      ng-if="inOrOut.indexOf('out')>-1"   >{{invoice.comName}}</p> 
                                                                          <p class="control-label left"     ng-if="inOrOut.indexOf('in')>-1"   >{{invoice.supplyComId}}</p> 
                                                                     </div>
                                                                       

@@ -38,6 +38,18 @@
 	AND d.delFlg='0'
     </select>
     
+    
+    <!--查询结算条款列表  -->
+   <select id="selectClauseSettlementDetailList2" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ClauseSettlementDetail">
+    SELECT
+	c.paymentType,c.deliveryNode
+	FROM
+	orderInfo a 
+	LEFT JOIN clauseSettlement b ON a.contractSerial=b.contractSerial 
+	LEFT JOIN clauseSettlementDetail c ON b.serialNum=c.clauseSettlementSerial
+	WHERE a.serialNum=#{serialNum}
+    </select>
+    
     <!--查询结算条款详情  -->
     <select id="selectClauseDetail" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ClauseSettlement">
     SELECT
@@ -198,4 +210,10 @@
     <delete id="deleteFileOld" parameterType="java.lang.String">
     DELETE FROM paymentFile WHERE paymentSerial=#{paySerialNum}
     </delete>
+    
+    
+    <!--确认收款  -->
+    <update id="confirmGatheringMoney" parameterType="java.util.HashMap">
+    UPDATE paymentRecord SET status='1',updater=#{updater},updateTime=NOW() WHERE serialNum=#{serialNum}
+    </update>
 </mapper>
