@@ -10,8 +10,8 @@ public interface InvoiceService extends GenericService<Invoice, String>{
 	void deleteInvoice(String serialNumList);//删除发票
 	List<Invoice>getAllInvoice(String  InOut,String serialNum);//获取发票记录
 	 Invoice  getDetailInfo(Invoice invoice);
-	void confirmInvoiceIn(OrderInfo o,Invoice in);//进项票确认
-	void confirmInvoiceOut(OrderInfo o,Invoice in);//销项票确认
+	void confirmInvoiceIn(Invoice in,OrderInfo o);//进项票确认
+	void confirmInvoiceOut(Invoice out,OrderInfo o);//销项票确认
 	
 	
 }

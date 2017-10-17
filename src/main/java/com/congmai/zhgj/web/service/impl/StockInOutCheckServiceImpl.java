@@ -110,6 +110,12 @@ public class StockInOutCheckServiceImpl extends GenericServiceImpl<StockInOutChe
 			/*Delivery d=deliveryMapper.
 			d.setStatus("");
 			deliveryMapper.updateByPrimaryKey(d);*/
+			
+			DeliveryVO d=deliveryMapper.selectDetailById(stockInOutCheck.getDeliverSerial());
+			OrderInfo o = new OrderInfo();
+			o.setSerialNum(d.getOrderSerial());
+			o.setDeliverStatus(OrderInfo.CHECK);
+			orderInfoMapper.updateByPrimaryKeySelective(o);
 		}
 		
 	}

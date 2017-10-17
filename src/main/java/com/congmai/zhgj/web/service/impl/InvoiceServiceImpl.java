@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.dao.InvoiceBillingRecordMapper;
 import com.congmai.zhgj.web.dao.InvoiceMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
@@ -94,7 +95,8 @@ public class InvoiceServiceImpl extends GenericServiceImpl<Invoice, String> impl
 	}
 
 	@Override
-	public void confirmInvoiceIn(OrderInfo o, Invoice in) {//进项票确认
+	@OperationLog(operateType = "add" ,operationDesc = "收票" ,objectSerial= "{serialNum}")
+	public void confirmInvoiceIn(Invoice in,OrderInfo o) {//进项票确认
 		// TODO Auto-generated method stub
 		o.setBillStatus(OrderInfo.RECIVEBILL);
 		o.setSerialNum(in.getOrderSerial());
@@ -104,10 +106,11 @@ public class InvoiceServiceImpl extends GenericServiceImpl<Invoice, String> impl
 	}
 
 	@Override
-	public void confirmInvoiceOut(OrderInfo o, Invoice in) {//销项票确认
+	@OperationLog(operateType = "add" ,operationDesc = "开票" ,objectSerial= "{serialNum}")
+	public void confirmInvoiceOut(Invoice out,OrderInfo o) {//销项票确认
 		// TODO Auto-generated method stub
 		o.setBillStatus(OrderInfo.BILL);
-		o.setSerialNum(in.getOrderSerial());
+		o.setSerialNum(out.getOrderSerial());
 		orderInfoMapper.updateByPrimaryKey(o);
 	}
 	}
