@@ -1219,9 +1219,9 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 			"aoColumns": [
 			              { mData: 'serialNum' },
 			              { mData: 'orderNum' },
-			              { mData: 'supplyComId' },
-			              { mData: null },
-			              { mData: null },
+			              { mData: 'supplyName' },
+			              { mData: 'materielCount' },
+                          { mData: 'orderAmount' },
 			              { mData: 'deliveryMode' },
 			              { mData: 'serviceModel' },
 			              { mData: 'saleApplySerial' },

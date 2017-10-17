@@ -607,9 +607,9 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 			"aoColumns": [
 			              { mData: 'serialNum' },
 			              { mData: 'orderNum' },
-			              { mData: 'supplyComId' },
-			              { mData: null },
-			              { mData: null },
+			              { mData: 'buyName' },
+			              { mData: 'materielCount' },
+                          { mData: 'orderAmount' },
 			              { mData: 'deliveryMode' },
 			              { mData: 'serviceModel' },
 			              { mData: 'saleApplySerial' },
