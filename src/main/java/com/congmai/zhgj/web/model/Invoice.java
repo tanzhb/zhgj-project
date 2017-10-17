@@ -10,7 +10,7 @@ import java.util.Date;
  * @version 1.0.0
  */
 public class Invoice extends BaseVO{
-
+	private static final long serialVersionUID = 416410201393366314L;
     private String serialNum;
 
     private String invoiceNum;//发票编号
