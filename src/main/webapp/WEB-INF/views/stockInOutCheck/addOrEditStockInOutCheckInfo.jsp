@@ -51,9 +51,9 @@
                                             <i class="fa fa-undo"></i> 取消 </button>
                                             <button   ng-hide="stockInOutCheckEdit"    ng-if="inOrOut.length<=3&&inOrOut.indexOf('check')<0"   class="btn red  btn-sm btn-circle " ui-sref="stockInOutCheck">
                                             <i class="fa fa-undo"></i> 取消 </button>
-                                            <button   type="submit"  ng-if="inOrOut.indexOf('checkin')>-1&&stockInOutCheck.status==0"  class="btn green  btn-sm btn-circle "   ng-click="confirmStockInOutCheck('checkin')">
+                                            <button   type="submit"  ng-if="inOrOut.indexOf('in')>-1&&inOrOut.indexOf('check')>0"  class="btn green  btn-sm btn-circle "   ng-click="confirmStockInOutCheck('checkin')">
                                             <i class="fa fa-save"></i> 确认检验 </button>
-                                             <button    type="submit"  ng-if="inOrOut.indexOf('checkout')>-1&&stockInOutCheck.status==0"  class="btn green  btn-sm btn-circle "   ng-click="confirmStockInOutCheck('checkout')">
+                                             <button    type="submit"  ng-if="inOrOut.indexOf('out')>-1&&inOrOut.indexOf('check')>0"  class="btn green  btn-sm btn-circle "   ng-click="confirmStockInOutCheck('checkout')">
                                             <i class="fa fa-save"></i> 确认检验 </button>
                                 <button  ng-hide="stockInOutCheckAdd"   type="submit"  ng-if="inOrOut.indexOf('check')<0"  class="btn green  btn-sm btn-circle "   ng-click="saveStockInOutCheck()">
                                             <i class="fa fa-save"></i> 保存 </button>
@@ -85,7 +85,7 @@
                                                                 <div class="form-group">
                                                     <label class="control-label bold" for=""><span class="required"> * </span> <span  ng-if="inOrOut.indexOf('in')>-1"  >收货单号</span><span   ng-if="inOrOut.indexOf('out')>-1" >发货单号</span> :</label>
                                                     <div class="">
-                                                             <div class="input-group" ng-if="inOrOut.indexOf('in')>-1&&inOrOut.indexOf('check')<0"   ng-click="selectDeliverOrTakeDelivery('in')" data-target="#takeDeliveryInfo" data-toggle="modal"  >
+                                                             <div class="input-group" ng-if="inOrOut.indexOf('in')>-1&&inOrOut.indexOf('check')<0" ng-hide="stockInOutCheckAdd"  ng-click="selectDeliverOrTakeDelivery('in')" data-target="#takeDeliveryInfo" data-toggle="modal"  >
 	                                                        <input type="text" class="form-control"   id="takeDeliverNum" name ="takeDeliverNum"  readonly     ng-hide="stockInOutCheckAdd"   readonly="readonly"
 												ng-model="stockInOutCheck.takeDeliverNum" />
 	                                                        <span class="input-group-btn" style="vertical-align: top;">
@@ -94,7 +94,7 @@
 	                                                            </button>
 	                                                        </span>
                                                          </div>
-                                                           <div class="input-group" ng-if="inOrOut.indexOf('out')>-1&&inOrOut.indexOf('check')<0"   ng-click="selectDeliverOrTakeDelivery('out')" data-target="#deliverInfo" data-toggle="modal"  >
+                                                           <div class="input-group" ng-if="inOrOut.indexOf('out')>-1&&inOrOut.indexOf('check')<0"   ng-hide="stockInOutCheckAdd"  ng-click="selectDeliverOrTakeDelivery('out')" data-target="#deliverInfo" data-toggle="modal"  >
 	                                                        <input type="text" class="form-control"   id="deliverNum" name ="deliverNum"  readonly    ng-hide="stockInOutCheckAdd"   readonly="readonly"
 												ng-model="stockInOutCheck.deliverNum" />
 	                                                        <span class="input-group-btn" style="vertical-align: top;">

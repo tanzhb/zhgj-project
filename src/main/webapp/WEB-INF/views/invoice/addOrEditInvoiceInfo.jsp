@@ -223,10 +223,12 @@
                                                          <div class="row">
                                                             <div class="col-md-4">
                                                              <div class="form-group">
-                                                    <label class="control-label bold" for="status">  申请日期: </label>
-                                                 <div class=" ">
-                                                                        <input type="text"  class="form-control form-control-inline date-picker"   ng-if="inOrOut.indexOf('confirm')<0"  data-date-format="yyyy-mm-dd"  data-date-viewmode="years"   placeholder=""  id="submitDate" name ="submitDate"   ng-hide="invoiceAdd"  
-												ng-model="invoice.submitDate" /> 
+                                                    <label class="control-label bold" for="status">  申请日期: </label><!--  ng-if="inOrOut.indexOf('confirm')<0"  -->
+                                                 <div class="">
+                                                 <div ng-if="inOrOut.indexOf('confirm')<0" >
+                                                                        <input type="text"  class="form-control form-control-inline date-picker"  data-date-format="yyyy-mm-dd"  data-date-viewmode="years"   placeholder=""  id="submitDate" name ="submitDate"    
+												ng-model="invoice.submitDate"   ng-hide="invoiceAdd" /> 
+												</div>
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="invoiceView">{{invoice.submitDate | date:'yyyy-MM-dd'}}</p> 
                                                                         <p class="control-label left" ng-if="inOrOut.indexOf('confirm')>-1">{{invoice.submitDate | date:'yyyy-MM-dd'}}</p> 
@@ -282,8 +284,10 @@
                                                              <div class="form-group">
                                                     <label class="control-label bold" for="checker"> 申请开票日期:</label>
                                                     <div class=" ">
-												   <input type="text"  class="form-control form-control-inline date-picker"   ng-if="inOrOut.indexOf('confirm')<0"  data-date-format="yyyy-mm-dd"  data-date-viewmode="years"   placeholder=""  id="receiptDate" name ="receiptDate"   ng-hide="invoiceAdd"  
+                                                    <div ng-if="inOrOut.indexOf('confirm')<0" >
+												   <input type="text"  class="form-control form-control-inline date-picker"    data-date-format="yyyy-mm-dd"  data-date-viewmode="years"   placeholder=""  id="receiptDate" name ="receiptDate"   ng-hide="invoiceAdd"  
 												ng-model="invoice.receiptDate" /> 
+												</div>
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="invoiceView">{{invoice.receiptDate | date:'yyyy-MM-dd'}}</p>
                                                                          <p class="control-label left"  ng-if="inOrOut.indexOf('confirm')>-1" >{{invoice.receiptDate | date:'yyyy-MM-dd'}}</p>
@@ -301,8 +305,8 @@
 												ng-model="invoice.comName" /> 
 												 
 												<div class="form-control-focus"> </div>
-                                                                         <p class="control-label left"    ng-show="invoiceView"   >{{invoice.supplyComId}}</p> 
-                                                                           <p class="control-label left"  ng-if="inOrOut.indexOf('confirm')>-1" >{{invoice.supplyComId}}</p>
+                                                                         <p class="control-label left"    ng-show="invoiceView"   >{{invoice.comName}}</p> 
+                                                                           <p class="control-label left"  ng-if="inOrOut.indexOf('confirm')>-1" >{{invoice.comName}}</p>
                                                                     </div>
                                                                       
                                                                 </div>
@@ -346,10 +350,10 @@
 												 
 												<div class="form-control-focus"> </div>
 												 
-                                                                        <p class="control-label left"    ng-show="invoiceView"   ng-if="inOrOut.indexOf('out')>-1"   >{{invoice.buyComId}}</p> 
-                                                                         <p class="control-label left"    ng-show="invoiceView"   ng-if="inOrOut.indexOf('in')>-1"   >{{invoice.supplyComId}}</p> 
-                                                                         <p class="control-label left"     ng-if="inOrOut.indexOf('out')>-1&&inOrOut.indexOf('confirm')>-1"   >{{invoice.buyComId}}</p> 
-                                                                         <p class="control-label left"      ng-if="inOrOut.indexOf('in')>-1&&inOrOut.indexOf('confirm')>-1"   >{{invoice.supplyComId}}</p>
+                                                                        <p class="control-label left"    ng-show="invoiceView"   ng-if="inOrOut.indexOf('out')>-1"   >{{invoice.comName}}</p> 
+                                                                         <p class="control-label left"    ng-show="invoiceView"   ng-if="inOrOut.indexOf('in')>-1"   >{{invoice.comName}}</p> 
+                                                                         <p class="control-label left"     ng-if="inOrOut.indexOf('out')>-1&&inOrOut.indexOf('confirm')>-1"   >{{invoice.comName}}</p> 
+                                                                         <p class="control-label left"      ng-if="inOrOut.indexOf('in')>-1&&inOrOut.indexOf('confirm')>-1"   >{{invoice.comName}}</p>
                                                                     </div>
                                                                       
                                                                 </div>

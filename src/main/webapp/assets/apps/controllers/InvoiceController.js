@@ -26,11 +26,11 @@ angular
 												App.initAjax();
 												if($location.path()=="/addOrEditInvoice"&&$stateParams.inOrOut!='showout'){
 													$('.date-picker').datepicker({
-														rtl: App.isRTL(),
-														orientation: "left",
-														autoclose: true,
-														language:"zh-CN"
-										        	})
+														 rtl: App.isRTL(),
+														 orientation: "left",
+														 autoclose: true,
+														 language:"zh-CN"
+													 })
 										        	debugger;
 													$scope.inOrOut=$stateParams.inOrOut;
 												if($scope.inOrOut.length>3){
@@ -80,7 +80,7 @@ angular
 															 $scope.inOrOut=$stateParams.inOrOut;
 														 
 										 		}
-											
+												
 												// set default layout mode
 												$rootScope.settings.layout.pageContentWhite = true;
 												$rootScope.settings.layout.pageBodySolid = false;
@@ -946,6 +946,15 @@ $scope.editBillingRecord=function (serialNum,judgeString){
 	$("#cancel"+serialNum).css("display","inline-block");
 	$("#"+serialNum).focus();
 }
+$scope.datepickerInit = function(scope){
+	   $('.date-picker').datepicker({
+			rtl: App.isRTL(),
+			orientation: "left",
+			autoclose: true,
+			dateFormat:"yyyy-mm-dd",
+			language: "zh-CN"
+	})
+};
 $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 	$("#"+serialNum).attr("readonly",true);
 	$("#"+serialNum).css("border","none");

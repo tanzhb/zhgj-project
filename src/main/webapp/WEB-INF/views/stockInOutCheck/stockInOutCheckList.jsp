@@ -50,7 +50,7 @@
 	                                              <i class="fa fa-plus"></i> 添加</label>
 	                                               <label class="btn btn-transparent yellow btn-circle btn-sm"
 										ng-click="toEditStockInOutPage('checkin')"> <i class="glyphicon glyphicon-play"></i>检验</label>
-						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditStockInOutPage('checkin')">
+						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditStockInOutPage('inedit')">
 	                                              <i class="fa fa-edit"></i> 修改</label>
 						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delStockInOutCheck('In')" >
 	                                              <i class="fa fa-minus"></i> 删除</label>
@@ -240,7 +240,7 @@
 	                                              <i class="fa fa-plus"></i> 添加</label>
 	                    <label class="btn btn-transparent yellow btn-circle btn-sm"
 										ng-click="toEditStockInOutPage('checkout')"> <i class="glyphicon glyphicon-play"></i> 检验</label>
-						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditStockInOutPage('checkout')">
+						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditStockInOutPage('outedit')">
 	                                              <i class="fa fa-edit"></i> 修改</label>
 						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delStockInOutCheck('Out')" >
 	                                              <i class="fa fa-minus"></i> 删除</label>
