@@ -62,6 +62,15 @@ public interface PayService extends GenericService<PaymentRecord, String> {
 	 */
 	public List<ClauseSettlementDetail> selectClauseSettlementDetailList(String orderId);
 	
+	
+	
+	/**
+	 * 查询采购合同的结算条款列表
+	 * @param orderId （采购订单id）
+	 * @return
+	 */
+	public List<ClauseSettlementDetail> selectClauseSettlementDetailList2(String serialNum);
+	
 	/**
 	 * 添加应付款
 	 * @param contractVO

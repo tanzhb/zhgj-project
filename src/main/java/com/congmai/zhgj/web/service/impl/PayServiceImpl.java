@@ -69,6 +69,18 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 
 	
 	/**
+	 * 查询采购合同的结算条款列表
+	 * @param orderId （采购订单id）
+	 * @return
+	 */
+	@Override
+	public List<ClauseSettlementDetail> selectClauseSettlementDetailList2(
+			String serialNum) {
+		// TODO Auto-generated method stub
+		return payMapper.selectClauseSettlementDetailList2(serialNum);
+	}
+
+	/**
 	 * 添加应付款
 	 * @param contractVO
 	 */
@@ -148,9 +160,19 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
      * @return
      */
 	@Override
+	@OperationLog(operateType = "add" ,operationDesc = "收款" ,objectSerial= "{serialNum}")
 	public void confirmGatheringMoney(Map<String, Object> map) {
 		// TODO Auto-generated method stub
 		payMapper.confirmGatheringMoney(map);
+		PaymentRecord paymentRecord = selectPayById(map.get("serialNum").toString());
+		if(paymentRecord!=null){
+			OrderInfo orderInfo = new OrderInfo();
+			orderInfo.setSerialNum(paymentRecord.getOrderSerial());
+			orderInfo.setPayStatus(OrderInfo.RECIVE);//已收款
+			orderInfo.setUpdateTime(new Date());
+			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+		}
+		
 	}
 
 	/**

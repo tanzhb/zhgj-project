@@ -38,6 +38,18 @@
 	AND d.delFlg='0'
     </select>
     
+    
+    <!--查询结算条款列表  -->
+   <select id="selectClauseSettlementDetailList2" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ClauseSettlementDetail">
+    SELECT
+	c.paymentType,c.deliveryNode
+	FROM
+	orderInfo a 
+	LEFT JOIN clauseSettlement b ON a.contractSerial=b.contractSerial 
+	LEFT JOIN clauseSettlementDetail c ON b.serialNum=c.clauseSettlementSerial
+	WHERE a.serialNum=#{serialNum}
+    </select>
+    
     <!--查询结算条款详情  -->
     <select id="selectClauseDetail" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ClauseSettlement">
     SELECT

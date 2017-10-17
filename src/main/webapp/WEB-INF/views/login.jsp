@@ -67,7 +67,8 @@ License: You must have a valid license purchased only from themeforest(the above
                 <div class="col-md-6 login-container bs-reset mt-login-5-bsfix">
                     <div class="login-content">
                         <h1>中航能科供应链服务平台</h1>
-                        <p> Lorem ipsum dolor sit amet, coectetuer adipiscing elit sed diam nonummy et nibh euismod aliquam erat volutpat. Lorem ipsum dolor sit amet, coectetuer adipiscing. </p>
+                        <h3>让工业变得简单 </h3>
+                        <p style="font-size:17px"> Make Industry Simple </p>
                         <form action="rest/user/login" class="login-form" method="post">
                             <div class="alert alert-danger display-hide">
                                 <button class="close" data-close="alert"></button>

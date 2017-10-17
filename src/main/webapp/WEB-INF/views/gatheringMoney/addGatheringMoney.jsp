@@ -1,25 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!-- BEGIN PAGE HEADER-->
-<!-- <div class="page-bar">
-	<ul class="page-breadcrumb">
-		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
-			class="fa fa-angle-right"></i></li>
-		<li><a ui-sref="gatheringMoneyRecord">收款</a> <i class="fa fa-angle-right"></i>
-		</li>
-		<li><a>新增收款</a></li>
-	</ul>
-	<div class="page-toolbar">
-		<div class="btn-group pull-right">
-			<button type="button"
-				class="btn btn-fit-height grey-salt dropdown-toggle"
-				onclick="printdiv('saleOrderPrint')">
-				<i class="fa fa-print"></i> 打印
-			</button>
-
-		</div>
-	</div>
-</div> -->
 <div class="row" id="saleOrderPrint">
 	<div class="col-md-12">
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
@@ -214,10 +195,12 @@
 															ng-model="paymentRecord.payType"
 														    ng-show="input">
 															<option value="">支付类型</option>
-															<option value="预付款">预付款</option>
+															
+															<option value="{{item.paymentType}}" ng-repeat="item in clauseSettlementList"  ng-bind="item.paymentType"></option>
+															<!-- <option value="预付款">预付款</option>
 															<option value="中期款">中期款</option>
 															<option value="全款">全款</option>
-															<option value="尾款">尾款</option>
+															<option value="尾款">尾款</option> -->
 														</select>
 														<p class="form-control-static" ng-show="span">{{pay.payType}}</p>
 													</div>
@@ -234,13 +217,14 @@
 															ng-model="paymentRecord.paymentNode"
 														    ng-show="input">
 															<option value="">支付节点</option>
-															<option value="合同签订">合同签订</option>
+															<option ng-repeat="item in clauseSettlementList" value="{{item.deliveryNode}}">{{item.deliveryNode}}</option>
+															<!-- <option value="合同签订">合同签订</option>
 															<option value="提货前">提货前</option>
 															<option value="到货后">到货后</option>
 															<option value="验收后">验收后</option>
 															<option value="质保期满">质保期满</option>
 															<option value="销售出库">销售出库</option>
-															<option value="收到委托方付款">收到委托方付款</option>
+															<option value="收到委托方付款">收到委托方付款</option> -->
 														</select>
 														<p class="form-control-static" ng-show="span">{{pay.paymentNode}}</p>
 													</div>

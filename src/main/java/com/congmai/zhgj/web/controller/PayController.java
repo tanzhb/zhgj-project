@@ -339,6 +339,10 @@ public class PayController {
 		List<ClauseSettlementDetail> clauList = payService
 				.selectClauseSettlementDetailList(serialNum);
 		map.put("clauList", clauList);
+		
+		List<ClauseSettlementDetail> clauseSettlementDetail = payService
+				.selectClauseSettlementDetailList2(serialNum);
+		map.put("clauseSettlementDetail", clauseSettlementDetail);
 		return map;
 	}
 	
@@ -514,9 +518,10 @@ public class PayController {
 		List<PaymentFile> file;
 		try {
 			file = objectMapper.readValue(params, javaType);
-			String paySerialNum = file.get(0).getPaymentSerial();
-			payService.deleteFileOld(paySerialNum);
-
+			if(file.size()>0){
+				String paySerialNum = file.get(0).getPaymentSerial();
+				payService.deleteFileOld(paySerialNum);	
+			}
 			if (!CollectionUtils.isEmpty(file)) {
 				Subject currentUser = SecurityUtils.getSubject();
 				String currenLoginName = currentUser.getPrincipal().toString();// 获取当前登录用户名
@@ -773,12 +778,11 @@ public class PayController {
 		c.setBilledMoney(billedMoney);
 		List<PaymentFile> list = payService.selectFileList(serialNum);
 		c.setFileList(list);
-
-		/*
-		 * List<ClauseSettlementDetail>
-		 * clauList=payService.selectClauseSettlementDetailList
-		 * (c.getOrderSerial()); c.setClauseSettList(clauList);
-		 */
+		
+		List<ClauseSettlementDetail> clauseSettlementDetail = payService
+				.selectClauseSettlementDetailList2(c.getOrderSerial());
+		
+		c.setClauseSettList(clauseSettlementDetail);
 		return new ResponseEntity<PaymentRecord>(c, HttpStatus.OK);
 	}
 
