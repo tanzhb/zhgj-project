@@ -2904,11 +2904,16 @@ var e = $("#form_clauseSettlement"),
 		        									}
 		        								});
 		        								
+		        								
 		        								if(ids==''){
 		        									toastr.warning('请选择一个办理！');return;
 		        								}else if(ids=='more'){
 		        									toastr.warning('只能选择一个办理！');return;
 		        								} else {
+		        									if(table.row('.active').data().assign == ''){
+		    											showToastr('toast-top-center', 'warning', '此任务您还没有签收，请【签收】任务后再处理任务！')
+		    											return;
+		    										}
 		        									orderService
 		        									.getAuditInfos(ids)
 													.then(
@@ -3200,44 +3205,7 @@ var e = $("#form_clauseSettlement"),
 		        	
 		        	if(assign == ''){
 		        		toastr.warning("此任务您还没有签收，请【签收】任务后再处理任务！！");
-		        	}else{		
-		        		$.ajax({url:ctx + "/rest/order/toApproval/" + taskId,
-		        			type: 'POST',
-		        			dataType: 'json',
-		        			success:function(result){
-		        				$("#taskId").val(taskId);
-		        				$("#processInstanceId").val(processInstanceId);																					
-		        				$("#orderId").val(result.orderInfo.serialNum);
-		        				
-		        				var comments = ""//添加评论
-		        				for (var i=0;i<result.commentList.length;i++){
-		        					comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
-		        					+ timeStamp2String2(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
-		        				}
-		        				
-		        				if(result.actionType == 'audit'){//审批流程
-		        					if(comments == ""){
-		        						comments = "无评论";
-		        					}else $("#comment_audit").html(comments);
-//		        					$("#audit_beginDate").val(timeStamp2String2(result.order.beginDate));
-//		        					$("#audit_endDate").val(timeStamp2String2(result.order.endDate));
-//		        					$("#audit_days").val(result.order.days);
-//		        					$("#audit_orderType").val(result.order.orderType);
-		        					$("#audit_reason").val(result.orderInfo.remark);
-		        					$('#auditOrderModal').modal('show');
-		        				}else{//result.actionType == 'modify' 更改流程
-		        					if(comments == ""){
-		        						comments = "无评论";
-		        					}else $("#comment_modify").html(comments);
-//		        					$("#modify_beginDate").val(timeStamp2String2(result.order.beginDate));
-//		        					$("#modify_endDate").val(timeStamp2String2(result.order.endDate));
-//		        					$("#modify_days").val(result.order.days);
-//		        					$("#modify_orderType").val(result.order.orderType);
-		        					$("#modify_reason").val(result.orderInfo.reason);
-		        					$('#modifyOrderModal').modal('show');
-		        				}
-		        				
-		        		}});
+		        	}else{
 		        		
 		        	}
 		        	

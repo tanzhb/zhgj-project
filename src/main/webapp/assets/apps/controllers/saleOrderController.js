@@ -416,7 +416,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
                     			if(row.deliverStatus=="0"){
                     				return htm + '<span >未开始</span>';
 								}else if(row.deliverStatus=="1"){
-                    				return htm + '<span style="color:green" >已发货</span>';
+                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已发货</span>';
 								}else if(row.deliverStatus=="2"){
                     				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已收货</span>';
 								}else if(row.deliverStatus=="3"){
@@ -2986,6 +2986,10 @@ var e = $("#form_clauseSettlement"),
 		        								}else if(ids=='more'){
 		        									toastr.warning('只能选择一个办理！');return;
 		        								} else {
+		        									if(table.row('.active').data().assign == ''){
+		    											showToastr('toast-top-center', 'warning', '此任务您还没有签收，请【签收】任务后再处理任务！')
+		    											return;
+		    										}
 		        									orderService
 		        									.getAuditInfos(ids)
 													.then(
