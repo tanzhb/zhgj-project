@@ -6,6 +6,8 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
@@ -15,9 +17,12 @@ import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.web.dao.CompanyMapper;
 import com.congmai.zhgj.web.dao.DemandPlanMaterielMapper;
 import com.congmai.zhgj.web.dao.MaterielMapper;
+import com.congmai.zhgj.web.model.DemandPlan;
+import com.congmai.zhgj.web.model.DemandPlanExample;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.DemandPlanMaterielExample;
 import com.congmai.zhgj.web.model.DemandPlanMaterielExample.Criteria;
+import com.congmai.zhgj.web.model.DemandPlanMaterielSelectExample;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
 import com.congmai.zhgj.web.service.DemandPlanMaterielService;
@@ -26,7 +31,7 @@ import com.congmai.zhgj.web.service.DemandPlanMaterielService;
 public class DemandPlanMaterielServiceImpl extends GenericServiceImpl<DemandPlanMateriel,String>
 		implements DemandPlanMaterielService {
 
-
+	private Logger logger =  LoggerFactory.getLogger(DemandPlanMaterielServiceImpl.class);
 	
 	@Resource
 	private DemandPlanMaterielMapper demandPlanMaterielMapper;
@@ -128,6 +133,28 @@ public class DemandPlanMaterielServiceImpl extends GenericServiceImpl<DemandPlan
 	public String selectSupplyName(String materielSerial) {
 		
 		return demandPlanMaterielMapper.selectSupplyName(materielSerial);
+	}
+
+	@Override
+	public List<DemandPlanMateriel> searchDemandPlanMateriels(DemandPlan search) {
+		//DemandPlanMaterielSelectExample example = new DemandPlanMaterielSelectExample();
+		//example.createCriteria();
+		List<DemandPlanMateriel> materiels = demandPlanMaterielMapper.searchMateriels(search);
+		if(CollectionUtils.isNotEmpty(materiels)){
+			try {
+				for(DemandPlanMateriel materiel : materiels){
+					materiel.setMaterielNum(materiel.getMateriel().getMaterielNum());
+					materiel.setMaterielName(materiel.getMateriel().getMaterielName());
+					materiel.setSpecifications(materiel.getMateriel().getSpecifications());
+					materiel.setUnit(materiel.getMateriel().getUnit());
+				}
+			} catch (Exception e) {
+				logger.warn(e.getMessage(), e);
+			}
+			
+		}
+	
+		return listHandle(demandPlanMaterielMapper.searchMateriels(search));
 	}
 	
 

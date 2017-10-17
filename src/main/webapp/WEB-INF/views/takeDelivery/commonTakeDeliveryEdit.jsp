@@ -493,8 +493,31 @@
 		</div>
 	</div>
 	<div class="tab-pane fade" id="tab_1_3">
-		<div class="portlet-body form">
-			<div class="form-body">
+		<div class="portlet-body">
+			<div class="row">
+				<div class="col-md-6 col-sm-6">
+					<div class="dataTables_length" id="sample_5_length">
+						<label>每页显示 <select name="sample_5_length"
+							aria-controls="sample_5" ng-model="pageSize" ng-change="createDispalyList()"
+							class="form-control input-sm input-xsmall input-inline">
+							<option value="5">5</option>
+							<option value="10">10</option>
+							<option value="15">15</option>
+							<option value="30">30</option>
+							<option value="99999">All</option>
+							</select> 条数据
+						</label>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-6">
+					<div id="sample_5_filter" style="text-align: right;">
+						<label>查询:<input type="search" ng-model="queryStr"  ng-change="queryForPage()"
+							class="form-control input-sm input-small input-inline"
+							placeholder="" aria-controls="sample_5"></label>
+					</div>
+				</div>
+			</div>
+			<div class="row">
 						<!-- <div class="table-scrollable"> -->
 							<table id="deliveryMaterielTable"
 								class="table table-striped table-bordered table-advance table-hover">
@@ -563,7 +586,6 @@
 								</tbody>
 							</table>
 						<!-- </div> -->
-			</div>
 		</div>
 	</div>
 </div>

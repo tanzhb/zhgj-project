@@ -44,7 +44,10 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.Constants;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.UserUtil;
+import com.congmai.zhgj.web.event.EventExample;
+import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.Company;
@@ -335,6 +338,10 @@ public class TakeDeliveryController {
     		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
     		takeDeliveryParams = this.getConfirmTakeDeliveryData(takeDeliveryParams,currenLoginName);
     		takeDeliveryService.confirmTakeDelivery(takeDeliveryParams.getTakeDelivery(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName);
+    		
+    		//收货消息
+    		EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.TAKE_DELIVERY));
+    		
     		flag = "1";
     	}catch(Exception e){
     		System.out.println(e.getMessage());

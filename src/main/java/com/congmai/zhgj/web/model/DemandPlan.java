@@ -49,7 +49,8 @@ public class DemandPlan {
     private String secondCategory;		//二级分类
     private String thirdCategory;		//三级分类
     private String supplyComId; 		//供应商
-    private String deliveryDate; 		//交付日期
+    private String deliveryStartDate; 		//交付日期
+    private String deliveryEndDate; 		//交付日期
 
     public String getSerialNum() {
         return serialNum;
@@ -221,12 +222,20 @@ public class DemandPlan {
 		this.supplyComId = supplyComId;
 	}
 
-	public String getDeliveryDate() {
-		return deliveryDate;
+	public String getDeliveryStartDate() {
+		return deliveryStartDate;
 	}
 
-	public void setDeliveryDate(String deliveryDate) {
-		this.deliveryDate = deliveryDate;
+	public void setDeliveryStartDate(String deliveryStartDate) {
+		this.deliveryStartDate = deliveryStartDate;
+	}
+
+	public String getDeliveryEndDate() {
+		return deliveryEndDate;
+	}
+
+	public void setDeliveryEndDate(String deliveryEndDate) {
+		this.deliveryEndDate = deliveryEndDate;
 	}
 	
 	

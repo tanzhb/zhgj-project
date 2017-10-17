@@ -176,6 +176,8 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 					$state.go("supplyOrder");
 				}else if(actionName=="beConfirmBuyOrder"||actionName=="agreeBuyOrder"){
 					$state.go("buyOrder");
+				}else if(actionName=="takeDelivery"){
+					$state.go("delivery");
 				}
 			}
 			

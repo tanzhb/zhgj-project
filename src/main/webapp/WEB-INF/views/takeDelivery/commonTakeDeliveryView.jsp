@@ -479,6 +479,29 @@
 	</div>
 	<div class="tab-pane fade" id="tab_1_3">
 		<div class="portlet-body">
+			<div class="row">
+				<div class="col-md-6 col-sm-6">
+					<div class="dataTables_length" id="sample_5_length">
+						<label>每页显示 <select name="sample_5_length"
+							aria-controls="sample_5" ng-model="pageSize" ng-change="createDispalyList()"
+							class="form-control input-sm input-xsmall input-inline">
+							<option value="5">5</option>
+							<option value="10">10</option>
+							<option value="15">15</option>
+							<option value="30">30</option>
+							<option value="99999">All</option>
+							</select> 条数据
+						</label>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-6">
+					<div id="sample_5_filter" style="text-align: right;">
+						<label>查询:<input type="search" ng-model="queryStr"  ng-change="queryForPage()"
+							class="form-control input-sm input-small input-inline"
+							placeholder="" aria-controls="sample_5"></label>
+					</div>
+				</div>
+			</div>
 			<div class="table-scrollable">
 				<table id="deliveryMaterielTable"
 					class="table table-striped table-bordered table-advance table-hover">
@@ -491,8 +514,8 @@
 							<th rowspan="2">生产日期</th>
 							<th colspan="3" style="text-align: center;">发货</th>
 							<th colspan="4" style="text-align: center;">收货</th>
-							<th colspan="3" style="text-align: center;">检验</th>
-							<th colspan="5" style="text-align: center;">入库</th>
+						<!-- 	<th colspan="3" style="text-align: center;">检验</th>
+							<th colspan="5" style="text-align: center;">入库</th> -->
 							<th rowspan="2">状态</th>
 						</tr>
 						<tr>
@@ -503,19 +526,19 @@
 							<th>拒收数量</th>
 							<th>附件</th>
 							<th>备注</th>
-							<th>合格数量</th>
+							<!-- <th>合格数量</th>
 							<th>不合格数量</th>
 							<th>备注</th>
 							<th>入库数量</th>
 							<th>未入数量</th>
 							<th>仓库</th>
 							<th>库位</th>
-							<th>备注</th>
+							<th>备注</th> -->
 						</tr>
 					</thead>
 					<tbody>
 						<tr
-							ng-repeat="materiel in deliver.deliveryMateriels track by $index">
+							ng-repeat="materiel in dispalyDeliveryMateriel track by $index">
 							<td>{{materiel.orderMateriel.materiel.materielNum}}</td>
 							<td>{{materiel.orderMateriel.materiel.materielName}}</td>
 							<td>{{materiel.orderMateriel.materiel.specifications}}</td>
@@ -530,23 +553,55 @@
 								<a href="javascript:;" ng-click="downloadFile1(item.file)" ng-repeat="item in materiel.files">{{item.file|limitTo:30:item.file.indexOf('_')+1}}&nbsp;</a>
 							</td>
 							<td>{{materiel.takeRemark}}</td>
-							<td>{{materiel.stockInQualifiedCount}}</td>
+							<!-- <td>{{materiel.stockInQualifiedCount}}</td>
 							<td>{{materiel.stockInUnqualifiedCount}}</td>
 							<td>{{materiel.stockInCheckRemark}}</td>
 							<td>{{materiel.stockInCount}}</td>
 							<td>{{materiel.unstockInCount}}</td>
 							<td>{{materiel.stockInWarehouse.warehouseName}}</td>
 							<td>{{materiel.stockInPosition.positionName}}</td>
-							<td>{{materiel.stockInRemark}}</td>
+							<td>{{materiel.stockInRemark}}</td> -->
 							<td></td>
 						</tr>
 						<tr
 							ng-if="deliver.deliveryMateriels==undefined||deliver.deliveryMateriels.length==0">
-							<td colspan="22" align="center">暂无数据</td>
+							<td colspan="14" align="center">暂无数据</td>
+						</tr>
+						<tr
+							ng-if="(!(deliver.deliveryMateriels==undefined||deliver.deliveryMateriels.length==0))&&dispalyDeliveryMateriel==0">
+							<td colspan="14" align="center">没有符合条件的物料信息</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
+			
+			<div class="row">
+				<div class="col-md-5 col-sm-5">
+					<div class="dataTables_info" id="sample_5_info" role="status"
+						aria-live="polite">从 {{(pageIndex-1)*pageSize+1>filterDeliveryMateriel.length?filterDeliveryMateriel.length:(pageIndex-1)*pageSize+1}}
+						到 {{pageIndex*pageSize>filterDeliveryMateriel.length?filterDeliveryMateriel.length:pageIndex*pageSize}} /共 {{filterDeliveryMateriel.length}} 条数据（从{{deliveryMateriels.length}}条数据中筛选）</div>
+				</div>
+				<div class="col-md-7 col-sm-7">
+					<div  style="text-align: right;" id="sample_5_paginate">
+						<ul class="pagination" style="visibility: visible;">
+							<li class="prev" ng-if="pageIndex>1"><a href="#" ng-click="link2PreviousPage()" title="前一页"><i
+									class="fa fa-angle-left"></i></a></li>
+							<li class="prev disabled" ng-if="1>=pageIndex"><a href="#" title="前一页"><i
+									class="fa fa-angle-left"></i></a></li>
+							<li ng-if="pageIndex-2>0"><a href="#" ng-click="link2ThisPage(pageIndex-2)">{{pageIndex-2}}</a></li>
+							<li ng-if="pageIndex-1>0"><a href="#" ng-click="link2ThisPage(pageIndex-1)">{{pageIndex-1}}</a></li>
+							<li class="active"><a href="#">{{pageIndex}}</a></li>
+							<li ng-if="totalPage>pageIndex"><a href="#" ng-click="link2ThisPage(pageIndex+1)">{{pageIndex+1}}</a></li>
+							<li ng-if="totalPage>pageIndex+1"><a href="#" ng-click="link2ThisPage(pageIndex+2)">{{pageIndex+2}}</a></li>
+							<li class="next disabled" ng-if="pageIndex>=totalPage"><a href="#" ><i
+									class="fa fa-angle-right"></i></a></li>
+							<li class="next" ng-if="totalPage>pageIndex"><a href="#" ng-click="link2NextPage()" title="后一页"><i
+									class="fa fa-angle-right"></i></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			
 		</div>
 	</div>
 </div>

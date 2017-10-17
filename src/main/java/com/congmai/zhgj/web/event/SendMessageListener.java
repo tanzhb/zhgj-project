@@ -18,8 +18,11 @@ import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.web.model.AlertVO;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyAddress;
+import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.Message;
 import com.congmai.zhgj.web.model.OrderInfo;
+import com.congmai.zhgj.web.model.TakeDelivery;
+import com.congmai.zhgj.web.model.TakeDeliveryParams;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.UserCompanyKey;
 import com.congmai.zhgj.web.service.ActRuTaskService;
@@ -76,10 +79,17 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 			confirmBuyOrderMessage(event);
 		}else if(MessageConstants.BE_CONFIRM_BUY_ORDER.equals(event.getAction())){ //采购订单被确认
 			beConfirmBuyOrderMessage(event);
+		}else if(MessageConstants.SINGLE_AGREE_BUY_ORDER.equals(event.getAction())){ //采购订单单个审批通过
+			singleAgreeBuyOrderMessage(event);
+		}else if(MessageConstants.NO_TAKE_DELIVERY.equals(event.getAction())){ //采购订单单个审批通过
+			noTakeDeliveryMessage(event);
+		}else if(MessageConstants.TAKE_DELIVERY.equals(event.getAction())){ //采购订单单个审批通过
+			takeDeliveryMessage(event);
 		}
 		
 	}
 	
+
 	/**
 	 * 
 	 * @Description (采购订单申请消息)
@@ -90,10 +100,14 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 			initServie();
 			User user = UserUtil.getUserFromSession();
 			if(user != null){
+				OrderInfo order = (OrderInfo) event.getSource();
+				
+				if(order.getMaker()!=null){
+					user = userService.selectByUsername(order.getMaker());
+				}
 				Message messageVO = this.createMessage(event,user);
 				messageVO.setMessageType(MessageConstants.BUSSINESS_MESSAGE);
 				messageVO.setTempleteType(MessageConstants.TEMP_APPLY_BUY_ORDER); //采购订单申请消息
-				OrderInfo order = (OrderInfo) event.getSource();
 				messageVO.setObjectSerial(order.getSerialNum());
 				
 				
@@ -300,6 +314,104 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * 
+	 * @Description (采购订单单个节点通过消息)
+	 * @param event
+	 */
+	private void singleAgreeBuyOrderMessage(SendMessageEvent event) {
+		try {
+			initServie();
+			User user = UserUtil.getUserFromSession();
+			if(user != null){
+				Message messageVO = this.createMessage(event,user);
+				
+				messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+				messageVO.setTempleteType(MessageConstants.TEMP_SINGLE_AGREE_BUY_ORDER); //采购订单申请消息
+				OrderInfo order = (OrderInfo) event.getSource();
+				messageVO.setObjectSerial(order.getSerialNum());
+				
+				
+				Properties properties = new Properties();
+				User maker = userService.selectByUsername(order.getMaker());
+				if( maker!=null ){
+					messageVO.setReceiverId(maker.getUserId().toString());
+					properties.put("paramer_a", maker.getUserName());
+				}else{
+					throw new Exception("没有找到消息接受者！");
+				}
+				properties.put("paramer_b", order.getOrderNum());
+				properties.put("paramer_c", user.getUserName());
+				properties.put("paramer_d", MessageConstants.URL_AGREE_BUY_ORDER);
+				properties.put("paramer_e", messageVO.getSerialNum());
+				
+				properties.put("paramer_f", "无"); //这里得去找审批评论
+				
+				messageVO.setProperties(properties);
+				messageProcessor.sendMessageToUser(messageVO);
+				messageService.insert(messageVO);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 
+	 * @Description (收货消息)
+	 * @param event
+	 */
+	private void takeDeliveryMessage(SendMessageEvent event) {
+		try {
+			initServie();
+			User user = UserUtil.getUserFromSession();
+			if(user != null){
+				Message messageVO = this.createMessage(event,user);
+				
+				messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+				messageVO.setTempleteType(MessageConstants.TEMP_TAKE_DELIVERY); //收货消息
+				TakeDeliveryParams params = (TakeDeliveryParams) event.getSource();
+				messageVO.setObjectSerial(params.getTakeDelivery().getSerialNum());
+				
+				
+				Properties properties = new Properties();
+				Company company = companyService.selectById(params.getDelivery().getSupplyComId());
+				
+				List<UserCompanyKey> users = userCompanyService.getUsersByComId(params.getDelivery().getSupplyComId());
+				List<String> userIds = new ArrayList<String>();
+				
+				for(UserCompanyKey uc : users){
+					userIds.add(uc.getUser_id());
+				}
+				
+				messageVO.setReceiverIds(userIds);
+				
+				properties.put("paramer_a", company.getComName());
+				properties.put("paramer_b", user.getUserName());
+				properties.put("paramer_c", params.getDelivery().getDeliverNum());
+				properties.put("paramer_d", MessageConstants.URL_TAKE_DELIVERY);
+				properties.put("paramer_e", messageVO.getSerialNum());
+				
+				messageVO.setProperties(properties);
+				messageProcessor.sendMessageToUsers(messageVO);
+				messageService.insertBatch(messageVO);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	/**
+	 * 
+	 * @Description (逾期未收货)
+	 * @param event
+	 */
+	private void noTakeDeliveryMessage(SendMessageEvent event) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

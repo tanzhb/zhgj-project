@@ -1,5 +1,7 @@
 package com.congmai.zhgj.web.service;
 
+import java.util.List;
+
 import com.congmai.zhgj.core.generic.GenericService;
 import com.congmai.zhgj.web.model.Group;
 import com.congmai.zhgj.web.model.Role;
@@ -20,4 +22,12 @@ public interface GroupService extends GenericService<Group, Integer> {
      * @return
      */
 	Group selectGroupById(Integer groupId);
+	
+	/**
+	 * 
+	 * @Description (根据用户类型获得用户组组员id)
+	 * @param type
+	 * @return
+	 */
+	List<String> selectUserIdsByGroupType(String type);
 }

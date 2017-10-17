@@ -29,6 +29,35 @@
     <result column="accountNumber" property="accountNumber" jdbcType="VARCHAR" />
     <result column="billRemark" property="billRemark" jdbcType="VARCHAR" />
   </resultMap>
+  <resultMap id="BaseResultMap2" type="com.congmai.zhgj.web.model.Company" >
+    <result column="comId" property="comId" jdbcType="VARCHAR" />
+    <result column="comNum" property="comNum" jdbcType="VARCHAR" />
+    <result column="comType" property="comType" jdbcType="VARCHAR" />
+    <result column="abbreviation" property="abbreviation" jdbcType="VARCHAR" />
+    <result column="comName" property="comName" jdbcType="VARCHAR" />
+    <result column="registeredCapital" property="registeredCapital" jdbcType="VARCHAR" />
+    <result column="legalPerson" property="legalPerson" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="taxpayeNumber" property="taxpayeNumber" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="contact" property="contact" jdbcType="VARCHAR" />
+    <result column="businessNature" property="businessNature" jdbcType="VARCHAR" />
+    <result column="comNature" property="comNature" jdbcType="VARCHAR" />
+    <result column="businessType" property="businessType" jdbcType="VARCHAR" />
+    <result column="classification" property="classification" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+ 	<result column="corporatePresence" property="corporatePresence" jdbcType="VARCHAR" />
+    <result column="openingBank" property="openingBank" jdbcType="VARCHAR" />
+    <result column="accountNumber" property="accountNumber" jdbcType="VARCHAR" />
+    <result column="billRemark" property="billRemark" jdbcType="VARCHAR" />
+    <collection column="comId" property="companyQualifications"  select="com.congmai.zhgj.web.dao.CompanyQualificationMapper.selectByComId"></collection>
+  </resultMap>
    <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -65,7 +94,7 @@
     accountNumber, billRemark
   </sql>
   
-  <select id="selectList" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.Company" >
+  <select id="selectList" resultMap="BaseResultMap2" parameterType="com.congmai.zhgj.web.model.Company" >
     select
     <include refid="Base_Column_List" />
     from company
