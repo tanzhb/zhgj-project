@@ -10,7 +10,7 @@ import java.util.Date;
  * @version 1.0.0
  */
 public class Invoice extends BaseVO{
-
+	private static final long serialVersionUID = 416410201393366314L;
     private String serialNum;
 
     private String invoiceNum;//发票编号
@@ -41,7 +41,7 @@ public class Invoice extends BaseVO{
 
     private Date submitDate;//申请日期
     
-    private Date submitDepartment;//申请部门
+    private String submitDepartment;//申请部门
 
     private String billingRemark;
 
@@ -397,11 +397,11 @@ public class Invoice extends BaseVO{
 		this.approvalDate = approvalDate;
 	}
 
-	public Date getSubmitDepartment() {
+	public String getSubmitDepartment() {
 		return submitDepartment;
 	}
 
-	public void setSubmitDepartment(Date submitDepartment) {
+	public void setSubmitDepartment(String submitDepartment) {
 		this.submitDepartment = submitDepartment;
 	}
 

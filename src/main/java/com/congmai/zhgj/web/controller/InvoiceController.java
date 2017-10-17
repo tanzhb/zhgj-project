@@ -288,7 +288,7 @@ public class InvoiceController {
 		}else if(serialNum.indexOf("out")>-1){//销项票
 			orderInfo = orderService.selectById(serialNum.substring(0, 32));
 			company=companyService.selectById(orderInfo.getBuyComId());
-			companyFinanceList=companyFinanceService.selectListByComId(company.getComId());
+			//companyFinanceList=companyFinanceService.selectListByComId(company.getComId());
 		}else{
 			orderInfo= orderService.selectById(serialNum);
 		}
@@ -361,7 +361,7 @@ public class InvoiceController {
 	private String startInvoiceProcess(@RequestBody String params) {
     	String flag = "0"; //默认失败
     	Invoice invoice = json2Invoice(params);
-    	invoiceService.update(invoice);//更新理由
+    	//invoiceService.update(invoice);//更新理由
     	
 		//启动发票审批测试流程-start
 		User user = UserUtil.getUserFromSession();
@@ -590,7 +590,7 @@ public class InvoiceController {
 				result = "0";// 已开票
 			} else {
 				ProcessBase processBase = processBaseService
-						.selectBaseById(serialNum);
+						.selectBaseById(serialNum.substring(0, 32));
 				if (processBase == null) {
 					result = "1";// 未申请审批
 				} else if ("APPROVAL_SUCCESS".equals(processBase.getStatus())) {

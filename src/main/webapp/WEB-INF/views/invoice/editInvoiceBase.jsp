@@ -242,7 +242,7 @@
 												ng-model="invoice.comName" /> 
 												 
 												<div class="form-control-focus"> </div>
-                                                                         <p class="control-label left"    ng-show="invoiceView"   >{{invoice.supplyComId}}</p> 
+                                                                         <p class="control-label left"    ng-show="invoiceView"   >{{invoice.comName}}</p> 
                                                                     </div>
                                                                       
                                                                 </div>
@@ -284,8 +284,8 @@
 												 
 												<div class="form-control-focus"> </div>
 												 
-                                                                        <p class="control-label left"    ng-show="invoiceView"   ng-if="inOrOut.indexOf('out')>-1"   >{{invoice.buyComId}}</p> 
-                                                                         <p class="control-label left"    ng-show="invoiceView"   ng-if="inOrOut.indexOf('in')>-1"   >{{invoice.supplyComId}}</p> 
+                                                                        <p class="control-label left"    ng-show="invoiceView"   ng-if="inOrOut.indexOf('out')>-1"   >{{invoice.comName}}</p> 
+                                                                         <p class="control-label left"    ng-show="invoiceView"   ng-if="inOrOut.indexOf('in')>-1"   >{{invoice.comName}}</p> 
                                                                     </div>
                                                                       
                                                                 </div>
