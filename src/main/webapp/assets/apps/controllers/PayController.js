@@ -1209,7 +1209,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 					"sLast": "尾页"
 				}
 			},
-			order: [[1, "asc"]],// 默认排序列及排序方式
+			order: [[9, "desc"]],// 默认排序列及排序方式
 			searching: true,// 是否过滤检索
 			ordering:  true,// 是否排序
 			lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
