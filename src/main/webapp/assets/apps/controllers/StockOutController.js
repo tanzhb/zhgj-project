@@ -543,7 +543,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 	 	    							'render' : function(data,
 	 	    									type, row, meta) {
 	 	    								return  '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
-		                                     '<input type="checkbox" data-check="false"  name="'+row.stockInOutRecord.serialNum+'" class="checkboxes" ng-click="showStockOutCount(\''+row.serialNum+'\',\''+stockOutCount+'\')" id="'+data+'" value="'+data+'" data-set="#select_sample_stockBatch .checkboxes" />'+
+		                                     '<input type="checkbox" data-check="false"  name="'+row.stockInOutRecord.serialNum+'" class="checkboxes" ng-click="showStockOutCount(\''+row.serialNum+'\',\''+stockOutCount+'\',\''+row.stockCount+'\')" id="'+data+'" value="'+data+'" data-set="#select_sample_stockBatch .checkboxes" />'+
 		                                     '<span></span></label>';
 	 	    							},
 	 	    							"createdCell": function (td, cellData, rowData, row, col) {
@@ -585,9 +585,9 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 										'render' : function(data,
 												type, row, meta) {
 											if(row.warehouse==''||row.warehouse==null){
-												return '<input  type="text"   style="border:none" readonly="readonly"   name="'+row.stockInOutRecord.inOutNum+','+"noWarehouse"+'"  id="stockOutCount'+row.serialNum+'" ng-model="stockValue'+row.serialNum+'"  ng-init="stockValue'+row.serialNum+'=\''+0+'\'"  ng-blur="judgeNumber(\''+row.stockCount+'\',\''+stockOutCount+'\',\''+row.serialNum+'\')" />';
+												return '<input  type="text"  class="form-control"   style="border:none" readonly="readonly"   name="'+row.stockInOutRecord.inOutNum+','+"noWarehouse"+'"  id="stockOutCount'+row.serialNum+'" ng-model="stockValue'+row.serialNum+'"  ng-init="stockValue'+row.serialNum+'=\''+0+'\'"  ng-blur="judgeNumber(\''+row.stockCount+'\',\''+stockOutCount+'\',\''+row.serialNum+'\')" />';
 											}else{
-												return '<input  type="text"   style="border:none" readonly="readonly"   name="'+row.stockInOutRecord.inOutNum+','+row.warehouse.serialNum+'"  id="stockOutCount'+row.serialNum+'" ng-model="stockValue'+row.serialNum+'"  ng-init="stockValue'+row.serialNum+'=\''+0+'\'"  ng-blur="judgeNumber(\''+row.stockCount+'\',\''+stockOutCount+'\',\''+row.serialNum+'\')" />';
+												return '<input  type="text"    class="form-control"  style="border:none" readonly="readonly"   name="'+row.stockInOutRecord.inOutNum+','+row.warehouse.serialNum+'"  id="stockOutCount'+row.serialNum+'" ng-model="stockValue'+row.serialNum+'"  ng-init="stockValue'+row.serialNum+'=\''+0+'\'"  ng-blur="judgeNumber(\''+row.stockCount+'\',\''+stockOutCount+'\',\''+row.serialNum+'\')" />';
 											}
 												
 										},"createdCell": function (td, cellData, rowData, row, col) {
@@ -741,7 +741,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 									                            })
 					};
 					
-					$scope.showStockOutCount=function(serialNum,stockOutCount,warehouseSerialNum){//选中checkbox显示输入框
+					$scope.showStockOutCount=function(serialNum,stockOutCount,stockCount){//选中checkbox显示输入框
 						debugger;
 						var value;
 						if($scope.totalCount==undefined){
@@ -763,7 +763,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 							 toastr.warning("重新选择出库,数量为"+value+"!");
 							
 						}
-						
+						$scope.judgeNumber(stockCount,stockOutCount,serialNum);
 						
 					}
 					
@@ -771,8 +771,8 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 
 						 var value=$("#stockOutCount"+serialNum).val();
 						 debugger;
-						 if(isNaN(value)&&value%1!=0){
-							 toastr.warning("必须为正整数！");
+						 if(isNaN(value)||value%1!=0||value==0){
+							 toastr.warning("出库数量必须为正整数！");
 							 return;
 						 }
 						 if(Number(value)>Number(stockOutCount)){

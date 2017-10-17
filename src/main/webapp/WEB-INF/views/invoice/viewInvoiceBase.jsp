@@ -208,8 +208,8 @@
                                                     <div class="">
                                                    
 												 
-                                                                        <p class="control-label left"      ng-if="inOrOut.indexOf('out')>-1"   >{{invoice.buyComId}}</p> 
-                                                                         <p class="control-label left"     ng-if="inOrOut.indexOf('in')>-1"   >{{invoice.supplyComId}}</p> 
+                                                                        <p class="control-label left"      ng-if="inOrOut.indexOf('out')>-1"   >{{invoice.comName}}</p> 
+                                                                         <p class="control-label left"     ng-if="inOrOut.indexOf('in')>-1"   >{{invoice.comName}}</p> 
                                                                     </div>
                                                                       
                                                                 </div>

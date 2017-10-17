@@ -361,7 +361,7 @@ public class InvoiceController {
 	private String startInvoiceProcess(@RequestBody String params) {
     	String flag = "0"; //默认失败
     	Invoice invoice = json2Invoice(params);
-    	invoiceService.update(invoice);//更新理由
+    	//invoiceService.update(invoice);//更新理由
     	
 		//启动发票审批测试流程-start
 		User user = UserUtil.getUserFromSession();
