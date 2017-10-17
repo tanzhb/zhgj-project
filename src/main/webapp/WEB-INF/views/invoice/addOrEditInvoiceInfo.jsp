@@ -221,14 +221,24 @@
                                                         </div>
                                                         
                                                          <div class="row">
-                                                            <div class="col-md-4">
+                                                            <div class="col-md-4"  ng-hide="inOrOut.indexOf('confirm')>-1">
+                                                             <div class="form-group">
+                                                    <label class="control-label bold" for="status">  申请日期: </label><!--  ng-if="inOrOut.indexOf('confirm')<0"  -->
+                                                  <div class=" ">
+                                                <%--  <div ng-if="inOrOut.indexOf('confirm')<0" > --%>
+                                                                        <input type="text"  class="form-control form-control-inline date-picker"  data-date-format="yyyy-mm-dd"  data-date-viewmode="years"   placeholder=""  id="submitDate" name ="submitDate"    
+												ng-model="invoice.submitDate"   ng-hide="invoiceAdd" /> 
+												<!-- </div> -->
+												<div class="form-control-focus"> </div>
+                                                                        <p class="control-label left" ng-show="invoiceView">{{invoice.submitDate | date:'yyyy-MM-dd'}}</p> 
+                                                                        <p class="control-label left" ng-if="inOrOut.indexOf('confirm')>-1">{{invoice.submitDate | date:'yyyy-MM-dd'}}</p> 
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                             <div class="col-md-4"  ng-if="inOrOut.indexOf('confirm')>-1" >
                                                              <div class="form-group">
                                                     <label class="control-label bold" for="status">  申请日期: </label><!--  ng-if="inOrOut.indexOf('confirm')<0"  -->
                                                  <div class="">
-                                                 <div ng-if="inOrOut.indexOf('confirm')<0" >
-                                                                        <input type="text"  class="form-control form-control-inline date-picker"  data-date-format="yyyy-mm-dd"  data-date-viewmode="years"   placeholder=""  id="submitDate" name ="submitDate"    
-												ng-model="invoice.submitDate"   ng-hide="invoiceAdd" /> 
-												</div>
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="invoiceView">{{invoice.submitDate | date:'yyyy-MM-dd'}}</p> 
                                                                         <p class="control-label left" ng-if="inOrOut.indexOf('confirm')>-1">{{invoice.submitDate | date:'yyyy-MM-dd'}}</p> 
@@ -280,21 +290,30 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                             <div class="col-md-4"  ng-show="inOrOut.indexOf('out')>-1">
+                                                             <div class="col-md-4"  ng-show="inOrOut.indexOf('out')>-1&&inOrOut.indexOf('confirm')<0">
                                                              <div class="form-group">
                                                     <label class="control-label bold" for="checker"> 申请开票日期:</label>
                                                     <div class=" ">
-                                                    <div ng-if="inOrOut.indexOf('confirm')<0" >
+                                                    <%-- <div ng-if="inOrOut.indexOf('confirm')<0" > --%>
 												   <input type="text"  class="form-control form-control-inline date-picker"    data-date-format="yyyy-mm-dd"  data-date-viewmode="years"   placeholder=""  id="receiptDate" name ="receiptDate"   ng-hide="invoiceAdd"  
 												ng-model="invoice.receiptDate" /> 
-												</div>
+												<!-- </div> -->
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="invoiceView">{{invoice.receiptDate | date:'yyyy-MM-dd'}}</p>
                                                                          <p class="control-label left"  ng-if="inOrOut.indexOf('confirm')>-1" >{{invoice.receiptDate | date:'yyyy-MM-dd'}}</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                              
+                                               <div class="col-md-4"  ng-show="inOrOut.indexOf('out')>-1&&inOrOut.indexOf('confirm')>-1">
+                                                             <div class="form-group">
+                                                    <label class="control-label bold" for="checker"> 申请开票日期:</label>
+                                                    <div class=" ">
+												<div class="form-control-focus"> </div>
+                                                                        <p class="control-label left" ng-show="invoiceView">{{invoice.receiptDate | date:'yyyy-MM-dd'}}</p>
+                                                                         <p class="control-label left"  ng-if="inOrOut.indexOf('confirm')>-1" >{{invoice.receiptDate | date:'yyyy-MM-dd'}}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                      <div class="row"  ng-if="inOrOut.indexOf('in')>-1" >
                                                              <div class="col-md-4"  >
@@ -410,7 +429,7 @@
                                                     <div class="">
                                                     <%--  <input type="text" class="form-control"   id="bankName" name ="bankName"       ng-hide="invoiceAdd"    ng-if="inOrOut.indexOf('confirm')<0" 
 												ng-model="invoice.bankName" />  --%>
-												 <div   ng-hide="invoiceAdd">
+												 <div  ng-if="inOrOut.indexOf('confirm')<0" >
                                                      <select class="form-control" data-live-search="true" data-size=""   id="bankName"  name ="bankName"    ng-model="invoice.bankName">
                                                      <!-- <option  ng-repeat="op in buyCom " value="{{op.comId}}"  > {{op.comName}}</option> -->
                                                       <option value=""></option>
@@ -431,7 +450,7 @@
                                                     <div class="">
                                                     <%--  <input type="text" class="form-control"   id="account" name ="account"       ng-hide="invoiceAdd"    ng-if="inOrOut.indexOf('confirm')<0" 
 												ng-model="invoice.account" />  --%>
-												 <div  ng-hide="invoiceAdd">
+												 <div  ng-if="inOrOut.indexOf('confirm')<0" ><!--  ng-hide="invoiceAdd"-->
                                                      <select class="form-control" data-live-search="true" data-size=""   id="account"  name ="account"    ng-model="invoice.account">
                                                       <option value=""></option>
                                                       <option  ng-repeat="companyFinance in companyFinances" value="{{companyFinance.accountNumber}}" >{{companyFinance.accountNumber}}</option>

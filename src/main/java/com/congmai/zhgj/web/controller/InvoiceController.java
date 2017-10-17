@@ -288,7 +288,7 @@ public class InvoiceController {
 		}else if(serialNum.indexOf("out")>-1){//销项票
 			orderInfo = orderService.selectById(serialNum.substring(0, 32));
 			company=companyService.selectById(orderInfo.getBuyComId());
-			companyFinanceList=companyFinanceService.selectListByComId(company.getComId());
+			//companyFinanceList=companyFinanceService.selectListByComId(company.getComId());
 		}else{
 			orderInfo= orderService.selectById(serialNum);
 		}
@@ -590,7 +590,7 @@ public class InvoiceController {
 				result = "0";// 已开票
 			} else {
 				ProcessBase processBase = processBaseService
-						.selectBaseById(serialNum);
+						.selectBaseById(serialNum.substring(0, 32));
 				if (processBase == null) {
 					result = "1";// 未申请审批
 				} else if ("APPROVAL_SUCCESS".equals(processBase.getStatus())) {
