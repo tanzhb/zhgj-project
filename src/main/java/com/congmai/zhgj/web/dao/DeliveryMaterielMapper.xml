@@ -638,7 +638,7 @@
     from stockInOutRecord s
     left join delivery d on d.serialNum = s.deliverSerial
     left join deliveryMateriel dm on d.serialNum = dm.deliverSerial and dm.stockInOutRecordSerial is null and dm.delFlg = 0
-    left join deliveryMateriel dm2 on s.serialNum = dm2.stockInOutRecordSerial and dm2.deliverSerial = '' and dm2.delFlg = 0 and s.inOutFlag = '0'
+    left join deliveryMateriel dm2 on s.serialNum = dm2.stockInOutRecordSerial and dm2.deliverSerial = '' and dm2.delFlg = 0
     left join orderInfo o on o.serialNum = d.orderSerial
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -662,7 +662,7 @@
     left join takeDelivery td on td.serialNum = s.takeDeliverSerial
     LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
     left join deliveryMateriel dm on td.serialNum = dm.deliverSerial and dm.stockInOutRecordSerial is null and dm.delFlg = 0
-    left join deliveryMateriel dm2 on s.serialNum = dm2.stockInOutRecordSerial and dm2.deliverSerial = '' and dm2.delFlg = 0 and s.inOutFlag = '1'
+    left join deliveryMateriel dm2 on s.serialNum = dm2.stockInOutRecordSerial and dm2.deliverSerial = '' and dm2.delFlg = 0
     left join orderInfo o on o.serialNum = d.orderSerial
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />

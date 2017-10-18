@@ -61,6 +61,8 @@ public class StockInOutRecord {
     private int positionCount;
     
     private OrderInfo order;
+    
+    private String buyComId;
 
     public String getSerialNum() {
         return serialNum;
@@ -261,5 +263,13 @@ public class StockInOutRecord {
 
 	public void setInOutFlag(String inOutFlag) {
 		this.inOutFlag = inOutFlag;
+	}
+
+	public String getBuyComId() {
+		return buyComId;
+	}
+
+	public void setBuyComId(String buyComId) {
+		this.buyComId = buyComId;
 	}
 }

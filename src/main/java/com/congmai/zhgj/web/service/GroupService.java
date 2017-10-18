@@ -5,6 +5,7 @@ import java.util.List;
 import com.congmai.zhgj.core.generic.GenericService;
 import com.congmai.zhgj.web.model.Group;
 import com.congmai.zhgj.web.model.Role;
+import com.congmai.zhgj.web.model.User;
 
 /**
  * 
@@ -29,5 +30,5 @@ public interface GroupService extends GenericService<Group, Integer> {
 	 * @param type
 	 * @return
 	 */
-	List<String> selectUserIdsByGroupType(String type);
+	List<User> selectUserIdsByGroupType(String type);
 }

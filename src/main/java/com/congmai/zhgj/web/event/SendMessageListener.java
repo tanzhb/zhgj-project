@@ -5,7 +5,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
@@ -19,18 +22,27 @@ import com.congmai.zhgj.web.model.AlertVO;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyAddress;
 import com.congmai.zhgj.web.model.Delivery;
+import com.congmai.zhgj.web.model.DeliveryMateriel;
+import com.congmai.zhgj.web.model.DeliveryMaterielExample;
+import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.Message;
 import com.congmai.zhgj.web.model.OrderInfo;
+import com.congmai.zhgj.web.model.StockInOutCheck;
+import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.model.TakeDeliveryParams;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.UserCompanyKey;
 import com.congmai.zhgj.web.service.ActRuTaskService;
 import com.congmai.zhgj.web.service.CompanyService;
+import com.congmai.zhgj.web.service.DeliveryMaterielService;
+import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.GroupService;
 import com.congmai.zhgj.web.service.MessageProcessor;
 import com.congmai.zhgj.web.service.MessageService;
 import com.congmai.zhgj.web.service.OrderService;
+import com.congmai.zhgj.web.service.StockInOutCheckService;
+import com.congmai.zhgj.web.service.TakeDeliveryService;
 import com.congmai.zhgj.web.service.UserCompanyService;
 import com.congmai.zhgj.web.service.UserService;
 import com.congmai.zhgj.web.service.impl.WebSocketProcessor;
@@ -45,6 +57,7 @@ import com.congmai.zhgj.web.service.impl.WebSocketProcessor;
 @Component
 public class SendMessageListener implements  ApplicationListener<SendMessageEvent> {
 
+	private Logger logger = LoggerFactory.getLogger(SendMessageListener.class);
 	
 	private MessageProcessor messageProcessor = null;
 	
@@ -62,6 +75,14 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 	
 	private OrderService orderService = null;
 	
+	private DeliveryService deliveryService = null;
+	
+	private TakeDeliveryService takeDeliveryService = null;
+	
+	private DeliveryMaterielService deliveryMaterielService = null;
+	
+	private StockInOutCheckService stockInOutCheckService = null;
+	
 	private void initService(){
 		messageProcessor = ApplicationContextHelper.getBean(WebSocketProcessor.class);
 		messageService =  ApplicationContextHelper.getBean(MessageService.class);
@@ -71,6 +92,10 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 		userService =  ApplicationContextHelper.getBean(UserService.class);
 		groupService =  ApplicationContextHelper.getBean(GroupService.class);
 		orderService =  ApplicationContextHelper.getBean(OrderService.class);
+		deliveryService =  ApplicationContextHelper.getBean(DeliveryService.class);
+		takeDeliveryService =  ApplicationContextHelper.getBean(TakeDeliveryService.class);
+		stockInOutCheckService =  ApplicationContextHelper.getBean(StockInOutCheckService.class);
+		deliveryMaterielService =  ApplicationContextHelper.getBean(DeliveryMaterielService.class);
 	}
 
 	@Override
@@ -158,7 +183,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				messageService.insert(messageVO);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.warn(e.getMessage(), e);
 		}
 		
 		
@@ -202,7 +227,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				messageService.insert(messageVO);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.warn(e.getMessage(), e);
 		}
 	}
 	/**
@@ -243,7 +268,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				messageService.insert(messageVO);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.warn(e.getMessage(), e);
 		}
 	}
 	
@@ -295,7 +320,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				messageService.insertBatch(messageVO);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.warn(e.getMessage(), e);
 		}
 	}
 	
@@ -337,7 +362,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				messageService.insert(messageVO);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.warn(e.getMessage(), e);
 		}
 	}
 	
@@ -379,7 +404,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				messageService.insert(messageVO);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.warn(e.getMessage(), e);
 		}
 	}
 	
@@ -424,7 +449,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				messageService.insertBatch(messageVO);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.warn(e.getMessage(), e);
 		}
 		
 	}
@@ -448,75 +473,683 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 	 */
 	private void deliveryMessage(SendMessageEvent event) {
 		
-		/*try {
+		try {
 			initService();
 			User user = UserUtil.getUserFromSession();
 			if(user != null){
-				Message messageVO = this.createMessage(event,user);
-				
-				messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
-				messageVO.setTempleteType(MessageConstants.TEMP_TAKE_DELIVERY); //收货消息
-				Delivery delivery = (Delivery) event.getSource();
-				messageVO.setObjectSerial(delivery.getSerialNum());
-				
+				DeliveryVO delivery = (DeliveryVO) event.getSource();
+				OrderInfo order = orderService.selectById(delivery.getOrderSerial());
+				List<User> users = groupService.selectUserIdsByGroupType(Constants.PURCHASE);
 				Properties properties = new Properties();
+				if(StringUtils.isEmpty(order.getBuyComId())){ //发给采购
+					//users = groupService.selectUserIdsByGroupType(Constants.PURCHASE);
+					if(CollectionUtils.isNotEmpty(users)){
+						for(User u : users){
+							Message messageVO = this.createMessage(event,user);
+							
+							messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+							messageVO.setTempleteType(MessageConstants.TEMP_DELIVERY); //收货消息
+							
+							messageVO.setObjectSerial(delivery.getSerialNum());
+							
+							
+							messageVO.setReceiverId(u.getUserId().toString());
+							properties.put("paramer_a", u.getUserName());
+							properties.put("paramer_b", order.getOrderNum());
+							properties.put("paramer_c", delivery.getDeliverNum());
+							properties.put("paramer_d", MessageConstants.URL_DELIVERY);
+							properties.put("paramer_e", messageVO.getSerialNum());
+							
+							messageVO.setProperties(properties);
+							messageProcessor.sendMessageToUser(messageVO);
+							messageService.insert(messageVO);
+						}
+					}
+				}else{   //发给客户
+					users = new ArrayList<User>();
+					Company company = companyService.selectById(order.getBuyComId());
+					Message messageVO = this.createMessage(event,user);
+					List<UserCompanyKey> userCompanyKeys = userCompanyService.getUsersByComId(order.getBuyComId());
+					List<String> userIds = new ArrayList<String>();
+					for(UserCompanyKey uc : userCompanyKeys){
+						userIds.add(uc.getUser_id());
+					}
+					messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+					messageVO.setTempleteType(MessageConstants.TEMP_DELIVERY); //收货消息
+					
+					messageVO.setObjectSerial(delivery.getSerialNum());
+					messageVO.setReceiverIds(userIds);
+					
+					properties.put("paramer_a", company.getComName());
+					properties.put("paramer_b", order.getOrderNum());
+					properties.put("paramer_c", delivery.getDeliverNum());
+					properties.put("paramer_d", MessageConstants.URL_DELIVERY);
+					properties.put("paramer_e", messageVO.getSerialNum());
+					
+					messageVO.setProperties(properties);
+					
+					messageVO.setProperties(properties);
+					messageProcessor.sendMessageToUsers(messageVO);
+					messageService.insertBatch(messageVO);
+				}
 				
-				List<String> userIds = groupService.selectUserIdsByGroupType(Constants.SALES);
-				
-				messageVO.setReceiverIds(userIds);
-				
-				properties.put("paramer_a", company.getComName());
-				properties.put("paramer_b", user.getUserName());
-				properties.put("paramer_c", params.getDelivery().getDeliverNum());
-				properties.put("paramer_d", MessageConstants.URL_TAKE_DELIVERY);
-				properties.put("paramer_e", messageVO.getSerialNum());
-				
-				messageVO.setProperties(properties);
-				messageProcessor.sendMessageToUsers(messageVO);
-				messageService.insertBatch(messageVO);
+			
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-		}*/
+			logger.warn(e.getMessage(), e);
+		}
 	}
 
+	/**
+	 * 
+	 * @Description (出库消息to采购)
+	 * @param event
+	 */
 	private void outToBuyMessage(SendMessageEvent event) {
-		
-		
+		try {
+			initService();
+			User user = UserUtil.getUserFromSession();
+			if(user != null){
+				TakeDeliveryParams params = (TakeDeliveryParams) event.getSource();
+				
+				Properties properties = new Properties();
+				DeliveryVO delivery = deliveryService.selectDetailById(params.getRecord().getDeliverSerial());
+				OrderInfo order = orderService.selectById(delivery.getOrderSerial());
+				Integer count = 0;
+				for(DeliveryMateriel dm : params.getDeliveryMateriels()){
+					count += Integer.parseInt(dm.getStockCount());
+				}
+				List<User> users = null;
+				if(StringUtils.isEmpty(order.getBuyComId())){ //发给采购
+					users = groupService.selectUserIdsByGroupType(Constants.PURCHASE);
+					if(CollectionUtils.isNotEmpty(users)){
+						for(User u : users){
+							Message messageVO = this.createMessage(event,user);
+							
+							messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+							messageVO.setTempleteType(MessageConstants.TEMP_OUT_TO_BUY); //收货消息
+							messageVO.setObjectSerial(params.getRecord().getSerialNum());
+							messageVO.setReceiverId(u.getUserId().toString());
+							properties.put("paramer_a", u.getUserName());
+							properties.put("paramer_b", delivery.getDeliverNum());
+							properties.put("paramer_c", count);
+							properties.put("paramer_d", order.getOrderNum());
+							properties.put("paramer_e", MessageConstants.URL_OUT_TO_BUY);
+							properties.put("paramer_f", messageVO.getSerialNum());
+							
+							messageVO.setProperties(properties);
+							messageProcessor.sendMessageToUser(messageVO);
+							messageService.insert(messageVO);
+						}
+					}
+				}else{   //发给客户
+					users = new ArrayList<User>();
+					Company company = companyService.selectById(order.getBuyComId());
+					Message messageVO = this.createMessage(event,user);
+					List<UserCompanyKey> userCompanyKeys = userCompanyService.getUsersByComId(order.getBuyComId());
+					List<String> userIds = new ArrayList<String>();
+					for(UserCompanyKey uc : userCompanyKeys){
+						userIds.add(uc.getUser_id());
+					}
+					messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+					messageVO.setTempleteType(MessageConstants.TEMP_OUT_TO_BUY); //收货消息
+					messageVO.setObjectSerial(params.getRecord().getSerialNum());
+					messageVO.setReceiverIds(userIds);
+					
+					properties.put("paramer_a", company.getComName());
+					properties.put("paramer_b", delivery.getDeliverNum());
+					properties.put("paramer_c", count);
+					properties.put("paramer_d", order.getOrderNum());
+					properties.put("paramer_e", MessageConstants.URL_OUT_TO_BUY);
+					properties.put("paramer_f", messageVO.getSerialNum());
+					
+					messageVO.setProperties(properties);
+					messageProcessor.sendMessageToUsers(messageVO);
+					messageService.insertBatch(messageVO);
+				}
+				
+			
+			}
+		} catch (Exception e) {
+			logger.warn(e.getMessage(), e);
+		}
 	}
 
+	/**
+	 * 
+	 * @Description (出库消息to供应)
+	 * @param event
+	 */
 	private void outToSaleMessage(SendMessageEvent event) {
-		
-		
+		try {
+			initService();
+			User user = UserUtil.getUserFromSession();
+			if(user != null){
+				
+				TakeDeliveryParams params = (TakeDeliveryParams) event.getSource();
+				
+				Properties properties = new Properties();
+				DeliveryVO delivery = deliveryService.selectDetailById(params.getRecord().getDeliverSerial());
+				OrderInfo order = orderService.selectById(delivery.getOrderSerial());
+				Integer count = 0;
+				for(DeliveryMateriel dm : params.getDeliveryMateriels()){
+					count += Integer.parseInt(dm.getStockCount());
+				}
+				List<User> users = null;
+				if(StringUtils.isEmpty(order.getBuyComId())){ //发给采购
+					users = groupService.selectUserIdsByGroupType(Constants.PURCHASE);
+					if(CollectionUtils.isNotEmpty(users)){
+						for(User u : users){
+							Message messageVO = this.createMessage(event,user);
+							
+							messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+							messageVO.setTempleteType(MessageConstants.TEMP_OUT_TO_SALE); //收货消息
+							messageVO.setObjectSerial(params.getRecord().getSerialNum());
+							messageVO.setReceiverId(u.getUserId().toString());
+							properties.put("paramer_a", u.getUserName());
+							properties.put("paramer_b", delivery.getDeliverNum());
+							properties.put("paramer_c", count);
+							properties.put("paramer_d", order.getOrderNum());
+							properties.put("paramer_e", MessageConstants.URL_OUT_TO_SALE);
+							properties.put("paramer_f", messageVO.getSerialNum());
+							
+							messageVO.setProperties(properties);
+							messageProcessor.sendMessageToUser(messageVO);
+							messageService.insert(messageVO);
+						}
+					}
+				}else{   //发给客户
+					users = new ArrayList<User>();
+					Company company = companyService.selectById(order.getBuyComId());
+					Message messageVO = this.createMessage(event,user);
+					List<UserCompanyKey> userCompanyKeys = userCompanyService.getUsersByComId(order.getBuyComId());
+					List<String> userIds = new ArrayList<String>();
+					for(UserCompanyKey uc : userCompanyKeys){
+						userIds.add(uc.getUser_id());
+					}
+					messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+					messageVO.setTempleteType(MessageConstants.TEMP_OUT_TO_SALE); //收货消息
+					messageVO.setObjectSerial(params.getRecord().getSerialNum());
+					messageVO.setReceiverIds(userIds);
+					
+					properties.put("paramer_a", company.getComName());
+					properties.put("paramer_b", delivery.getDeliverNum());
+					properties.put("paramer_c", count);
+					properties.put("paramer_d", order.getOrderNum());
+					properties.put("paramer_e", MessageConstants.URL_OUT_TO_SALE);
+					properties.put("paramer_f", messageVO.getSerialNum());
+					
+					messageVO.setProperties(properties);
+					messageProcessor.sendMessageToUsers(messageVO);
+					messageService.insertBatch(messageVO);
+				}
+			}
+		} catch (Exception e) {
+			logger.warn(e.getMessage(), e);
+		}
 	}
 
+	/**
+	 * 
+	 * @Description (出库检验消息  to 采购)
+	 * @param event
+	 */
 	private void outCheckToBuyMessage(SendMessageEvent event) {
-		
+		try {
+			initService();
+			User user = UserUtil.getUserFromSession();
+			if(user != null){
+			
+				StockInOutCheck check = (StockInOutCheck) event.getSource();
+				
+				Properties properties = new Properties();
+				DeliveryVO delivery = deliveryService.selectDetailById(check.getDeliverSerial());
+				
+				
+				OrderInfo order = orderService.selectById(delivery.getOrderSerial());
+				Integer qualifiedCount = 0;
+				Integer unQualifiedCount = 0;
+				//stockInOutCheckService.
+				List<DeliveryMateriel> deliveryMateriels = getDeliveryMateriels(delivery.getSerialNum());
+				
+				for(DeliveryMateriel dm : deliveryMateriels){
+					qualifiedCount += Integer.parseInt(dm.getQualifiedCount());
+					unQualifiedCount += Integer.parseInt(dm.getUnqualifiedCount());
+				}
+				List<User> users = null;
+				if(StringUtils.isEmpty(order.getBuyComId())){ //发给采购
+					users = groupService.selectUserIdsByGroupType(Constants.PURCHASE);
+					if(CollectionUtils.isNotEmpty(users)){
+						for(User u : users){
+							Message messageVO = this.createMessage(event,user);
+							messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+							messageVO.setTempleteType(MessageConstants.TEMP_OUT_CHECK_TO_BUY); //收货消息
+							messageVO.setObjectSerial(check.getSerialNum());
+							messageVO.setReceiverId(u.getUserId().toString());
+							properties.put("paramer_a", u.getUserName());
+							properties.put("paramer_b", delivery.getDeliverNum());
+							properties.put("paramer_c", qualifiedCount+unQualifiedCount);
+							properties.put("paramer_d", unQualifiedCount);
+							properties.put("paramer_e", order.getOrderNum());
+							properties.put("paramer_f", MessageConstants.URL_OUT_CHECK_TO_BUY);
+							properties.put("paramer_g", messageVO.getSerialNum());
+							
+							messageVO.setProperties(properties);
+							messageProcessor.sendMessageToUser(messageVO);
+							messageService.insert(messageVO);
+						}
+					}
+				}else{   //发给客户
+					users = new ArrayList<User>();
+					Company company = companyService.selectById(order.getBuyComId());
+					Message messageVO = this.createMessage(event,user);
+					List<UserCompanyKey> userCompanyKeys = userCompanyService.getUsersByComId(order.getBuyComId());
+					List<String> userIds = new ArrayList<String>();
+					for(UserCompanyKey uc : userCompanyKeys){
+						userIds.add(uc.getUser_id());
+					}
+					messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+					messageVO.setTempleteType(MessageConstants.TEMP_OUT_CHECK_TO_BUY); //收货消息
+					messageVO.setObjectSerial(check.getSerialNum());
+					messageVO.setReceiverIds(userIds);
+					
+					properties.put("paramer_a", company.getComName());
+					properties.put("paramer_b", delivery.getDeliverNum());
+					properties.put("paramer_c", qualifiedCount+unQualifiedCount);
+					properties.put("paramer_d", unQualifiedCount);
+					properties.put("paramer_e", order.getOrderNum());
+					properties.put("paramer_f", MessageConstants.URL_OUT_CHECK_TO_BUY);
+					properties.put("paramer_g", messageVO.getSerialNum());
+					
+					messageVO.setProperties(properties);
+					messageProcessor.sendMessageToUsers(messageVO);
+					messageService.insertBatch(messageVO);
+				}
+			}
+		} catch (Exception e) {
+			logger.warn(e.getMessage(), e);
+		}
 		
 	}
 
+	/**
+	 * 
+	 * @Description (出库检验消息  to 供应)
+	 * @param event
+	 */
 	private void outCheckToSaleMessage(SendMessageEvent event) {
-		
-		
+		try {
+			initService();
+			User user = UserUtil.getUserFromSession();
+			if(user != null){
+				
+				StockInOutCheck check = (StockInOutCheck) event.getSource();
+				
+				Properties properties = new Properties();
+				DeliveryVO delivery = deliveryService.selectDetailById(check.getDeliverSerial());
+				OrderInfo order = orderService.selectById(delivery.getOrderSerial());
+				Integer qualifiedCount = 0;
+				Integer unQualifiedCount = 0;
+				
+				List<DeliveryMateriel> deliveryMateriels = getDeliveryMateriels(delivery.getSerialNum());
+				
+				for(DeliveryMateriel dm : deliveryMateriels){
+					qualifiedCount += Integer.parseInt(dm.getQualifiedCount());
+					unQualifiedCount += Integer.parseInt(dm.getUnqualifiedCount());
+				}
+				List<User> users = null;
+				if(StringUtils.isEmpty(order.getSupplyComId())){ //发给销售
+					users = groupService.selectUserIdsByGroupType(Constants.PURCHASE);
+					if(CollectionUtils.isNotEmpty(users)){
+						for(User u : users){
+							Message messageVO = this.createMessage(event,user);
+							messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+							messageVO.setTempleteType(MessageConstants.TEMP_OUT_CHECK_TO_SALE); //收货消息
+							messageVO.setObjectSerial(check.getSerialNum());
+							messageVO.setReceiverId(u.getUserId().toString());
+							properties.put("paramer_a", u.getUserName());
+							properties.put("paramer_b", delivery.getDeliverNum());
+							properties.put("paramer_c", qualifiedCount+unQualifiedCount);
+							properties.put("paramer_d", MessageConstants.URL_OUT_CHECK_TO_SALE);
+							properties.put("paramer_e", messageVO.getSerialNum());
+							
+							messageVO.setProperties(properties);
+							messageProcessor.sendMessageToUser(messageVO);
+							messageService.insert(messageVO);
+						}
+					}
+				}else{   //发给供应商
+					users = new ArrayList<User>();
+					Company company = companyService.selectById(order.getSupplyComId());
+					Message messageVO = this.createMessage(event,user);
+					List<UserCompanyKey> userCompanyKeys = userCompanyService.getUsersByComId(order.getSupplyComId());
+					List<String> userIds = new ArrayList<String>();
+					for(UserCompanyKey uc : userCompanyKeys){
+						userIds.add(uc.getUser_id());
+					}
+					messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+					messageVO.setTempleteType(MessageConstants.TEMP_OUT_CHECK_TO_SALE); //收货消息
+					messageVO.setObjectSerial(check.getSerialNum());
+					messageVO.setReceiverIds(userIds);
+					
+					properties.put("paramer_a", company.getComName());
+					properties.put("paramer_b", delivery.getDeliverNum());
+					properties.put("paramer_c", qualifiedCount+unQualifiedCount);
+					properties.put("paramer_d", MessageConstants.URL_OUT_CHECK_TO_SALE);
+					properties.put("paramer_e", messageVO.getSerialNum());
+					
+					messageVO.setProperties(properties);
+					messageProcessor.sendMessageToUsers(messageVO);
+					messageService.insertBatch(messageVO);
+				}
+			}
+		} catch (Exception e) {
+			logger.warn(e.getMessage(), e);
+		}
 	}
 
+	/**
+	 * 
+	 * @Description (TODO入库检验 to 采购)
+	 * @param event
+	 */
 	private void inCheckToBuyMessage(SendMessageEvent event) {
-		
-		
+		try {
+			initService();
+			User user = UserUtil.getUserFromSession();
+			if(user != null){
+				
+				StockInOutCheck check = (StockInOutCheck) event.getSource();
+				
+				Properties properties = new Properties();
+				TakeDelivery takeDelivery = takeDeliveryService.selectById(check.getTakeDeliverSerial());
+				DeliveryVO delivery = deliveryService.selectDetailById(takeDelivery.getDeliverSerial());
+				OrderInfo order = orderService.selectById(delivery.getOrderSerial());
+				Integer qualifiedCount = 0;
+				Integer unQualifiedCount = 0;
+				
+				List<DeliveryMateriel> deliveryMateriels = getDeliveryMateriels(takeDelivery.getSerialNum());
+				
+				for(DeliveryMateriel dm : deliveryMateriels){
+					qualifiedCount += Integer.parseInt(dm.getQualifiedCount());
+					unQualifiedCount += Integer.parseInt(dm.getUnqualifiedCount());
+				}
+				List<User> users = null;
+				if(StringUtils.isEmpty(order.getBuyComId())){ //发给采购
+					users = groupService.selectUserIdsByGroupType(Constants.PURCHASE);
+					if(CollectionUtils.isNotEmpty(users)){
+						for(User u : users){
+							Message messageVO = this.createMessage(event,user);
+							
+							messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+							messageVO.setTempleteType(MessageConstants.TEMP_IN_CHECK_TO_BUY); //收货消息
+							messageVO.setObjectSerial(check.getSerialNum());
+							messageVO.setReceiverId(u.getUserId().toString());
+							properties.put("paramer_a", u.getUserName());
+							properties.put("paramer_b", takeDelivery.getTakeDeliverNum());
+							properties.put("paramer_c", qualifiedCount+unQualifiedCount);
+							properties.put("paramer_d", MessageConstants.URL_IN_CHECK_TO_BUY);
+							properties.put("paramer_e", messageVO.getSerialNum());
+							
+							messageVO.setProperties(properties);
+							messageProcessor.sendMessageToUser(messageVO);
+							messageService.insert(messageVO);
+						}
+					}
+				}else{   //发给客户
+					users = new ArrayList<User>();
+					Company company = companyService.selectById(order.getBuyComId());
+					Message messageVO = this.createMessage(event,user);
+					List<UserCompanyKey> userCompanyKeys = userCompanyService.getUsersByComId(order.getBuyComId());
+					List<String> userIds = new ArrayList<String>();
+					for(UserCompanyKey uc : userCompanyKeys){
+						userIds.add(uc.getUser_id());
+					}
+					messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+					messageVO.setTempleteType(MessageConstants.TEMP_IN_CHECK_TO_BUY); //收货消息
+					messageVO.setObjectSerial(check.getSerialNum());
+					messageVO.setReceiverIds(userIds);
+					
+					properties.put("paramer_a", company.getComName());
+					properties.put("paramer_b", takeDelivery.getTakeDeliverNum());
+					properties.put("paramer_c", qualifiedCount+unQualifiedCount);
+					properties.put("paramer_d", MessageConstants.URL_IN_CHECK_TO_BUY);
+					properties.put("paramer_e", messageVO.getSerialNum());
+					
+					messageVO.setProperties(properties);
+					messageProcessor.sendMessageToUsers(messageVO);
+					messageService.insertBatch(messageVO);
+				}
+			}
+		} catch (Exception e) {
+			logger.warn(e.getMessage(), e);
+		}
 	}
 
+	/**
+	 * 
+	 * @Description (入库检验 to 供应)
+	 * @param event
+	 */
 	private void inCheckToSaleMessage(SendMessageEvent event) {
-		
+		try {
+			initService();
+			User user = UserUtil.getUserFromSession();
+			if(user != null){
+				StockInOutCheck check = (StockInOutCheck) event.getSource();
+				
+				Properties properties = new Properties();
+				TakeDelivery takeDelivery = takeDeliveryService.selectById(check.getTakeDeliverSerial());
+				DeliveryVO delivery = deliveryService.selectDetailById(takeDelivery.getDeliverSerial());
+				OrderInfo order = orderService.selectById(delivery.getOrderSerial());
+				Integer qualifiedCount = 0;
+				Integer unQualifiedCount = 0;
+				
+				List<DeliveryMateriel> deliveryMateriels = getDeliveryMateriels(takeDelivery.getSerialNum());
+				for(DeliveryMateriel dm : deliveryMateriels){
+					qualifiedCount += Integer.parseInt(dm.getQualifiedCount());
+					unQualifiedCount += Integer.parseInt(dm.getUnqualifiedCount());
+				}
+				List<User> users = null;
+				if(StringUtils.isEmpty(order.getSupplyComId())){ //发给销售
+					users = groupService.selectUserIdsByGroupType(Constants.SALES);
+					if(CollectionUtils.isNotEmpty(users)){
+						for(User u : users){
+							Message messageVO = this.createMessage(event,user);
+							
+							messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+							messageVO.setTempleteType(MessageConstants.TEMP_IN_CHECK_TO_SALE); //收货消息
+							messageVO.setObjectSerial(check.getSerialNum());
+							messageVO.setReceiverId(u.getUserId().toString());
+							properties.put("paramer_a", u.getUserName());
+							properties.put("paramer_b", delivery.getDeliverNum());
+							properties.put("paramer_c", qualifiedCount+unQualifiedCount);
+							properties.put("paramer_d", unQualifiedCount);
+							properties.put("paramer_e", order.getOrderNum());
+							properties.put("paramer_f", MessageConstants.URL_IN_CHECK_TO_SALE);
+							properties.put("paramer_g", messageVO.getSerialNum());
+							
+							messageVO.setProperties(properties);
+							messageProcessor.sendMessageToUser(messageVO);
+							messageService.insert(messageVO);
+						}
+					}
+				}else{   //发给供应商
+					users = new ArrayList<User>();
+					Company company = companyService.selectById(order.getSupplyComId());
+					Message messageVO = this.createMessage(event,user);
+					List<UserCompanyKey> userCompanyKeys = userCompanyService.getUsersByComId(order.getSupplyComId());
+					List<String> userIds = new ArrayList<String>();
+					for(UserCompanyKey uc : userCompanyKeys){
+						userIds.add(uc.getUser_id());
+					}
+					messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+					messageVO.setTempleteType(MessageConstants.TEMP_IN_CHECK_TO_SALE); //收货消息
+					messageVO.setObjectSerial(check.getSerialNum());
+					messageVO.setReceiverIds(userIds);
+					
+					properties.put("paramer_a", company.getComName());
+					properties.put("paramer_b", delivery.getDeliverNum());
+					properties.put("paramer_c", qualifiedCount+unQualifiedCount);
+					properties.put("paramer_d", unQualifiedCount);
+					properties.put("paramer_e", order.getOrderNum());
+					properties.put("paramer_f", MessageConstants.URL_IN_CHECK_TO_SALE);
+					properties.put("paramer_g", messageVO.getSerialNum());
+					
+					messageVO.setProperties(properties);
+					messageProcessor.sendMessageToUsers(messageVO);
+					messageService.insertBatch(messageVO);
+				}
+			}
+		} catch (Exception e) {
+			logger.warn(e.getMessage(), e);
+		}
 		
 	}
 
+	/**
+	 * 
+	 * @Description (入库 to 采购)
+	 * @param event
+	 */
 	private void inToBuyMessage(SendMessageEvent event) {
-		
+		try {
+			initService();
+			User user = UserUtil.getUserFromSession();
+			if(user != null){
+				StockInOutCheck check = (StockInOutCheck) event.getSource();
+				
+				Properties properties = new Properties();
+				TakeDelivery takeDelivery = takeDeliveryService.selectById(check.getTakeDeliverSerial());
+				DeliveryVO delivery = deliveryService.selectDetailById(takeDelivery.getDeliverSerial());
+				OrderInfo order = orderService.selectById(delivery.getOrderSerial());
+				Integer count = 0;
+				for(DeliveryMateriel dm : check.getDeliverMaterials()){
+					count += Integer.parseInt(dm.getStockInCount());
+				}
+				List<User> users = null;
+				if(StringUtils.isEmpty(order.getBuyComId())){ //发给采购
+					users = groupService.selectUserIdsByGroupType(Constants.PURCHASE);
+					if(CollectionUtils.isNotEmpty(users)){
+						for(User u : users){
+							Message messageVO = this.createMessage(event,user);
+							
+							messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+							messageVO.setTempleteType(MessageConstants.TEMP_IN_TO_BUY); //收货消息
+							messageVO.setObjectSerial(check.getSerialNum());
+							messageVO.setReceiverId(u.getUserId().toString());
+							properties.put("paramer_a", u.getUserName());
+							properties.put("paramer_b", takeDelivery.getTakeDeliverNum());
+							properties.put("paramer_c", count);
+							properties.put("paramer_d", order.getOrderNum());
+							properties.put("paramer_e", MessageConstants.URL_IN_TO_BUY);
+							properties.put("paramer_f", messageVO.getSerialNum());
+							
+							messageVO.setProperties(properties);
+							messageProcessor.sendMessageToUser(messageVO);
+							messageService.insert(messageVO);
+						}
+					}
+				}else{   //发给客户
+					users = new ArrayList<User>();
+					Company company = companyService.selectById(order.getBuyComId());
+					Message messageVO = this.createMessage(event,user);
+					List<UserCompanyKey> userCompanyKeys = userCompanyService.getUsersByComId(order.getBuyComId());
+					List<String> userIds = new ArrayList<String>();
+					for(UserCompanyKey uc : userCompanyKeys){
+						userIds.add(uc.getUser_id());
+					}
+					messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+					messageVO.setTempleteType(MessageConstants.TEMP_IN_TO_BUY); //收货消息
+					messageVO.setObjectSerial(check.getSerialNum());
+					messageVO.setReceiverIds(userIds);
+					
+					properties.put("paramer_a", company.getComName());
+					properties.put("paramer_b", takeDelivery.getTakeDeliverNum());
+					properties.put("paramer_c", count);
+					properties.put("paramer_d", order.getOrderNum());
+					properties.put("paramer_e", MessageConstants.URL_IN_TO_BUY);
+					properties.put("paramer_f", messageVO.getSerialNum());
+					
+					messageVO.setProperties(properties);
+					messageProcessor.sendMessageToUsers(messageVO);
+					messageService.insertBatch(messageVO);
+				}
+			}
+		} catch (Exception e) {
+			logger.warn(e.getMessage(), e);
+		}
 		
 	}
 
 	private void inToSaleMessage(SendMessageEvent event) {
-		// TODO Auto-generated method stub
+		try {
+			initService();
+			User user = UserUtil.getUserFromSession();
+			if(user != null){
+				
+				StockInOutCheck check = (StockInOutCheck) event.getSource();
+				
+				Properties properties = new Properties();
+				TakeDelivery takeDelivery = takeDeliveryService.selectById(check.getTakeDeliverSerial());
+				DeliveryVO delivery = deliveryService.selectDetailById(takeDelivery.getDeliverSerial());
+				OrderInfo order = orderService.selectById(delivery.getOrderSerial());
+				Integer count = 0;
+				for(DeliveryMateriel dm : check.getDeliverMaterials()){
+					count += Integer.parseInt(dm.getStockInCount());
+				}
+				List<User> users = null;
+				if(StringUtils.isEmpty(order.getSupplyComId())){ //发给销售
+					users = groupService.selectUserIdsByGroupType(Constants.SALES);
+					if(CollectionUtils.isNotEmpty(users)){
+						for(User u : users){
+							Message messageVO = this.createMessage(event,user);
+							
+							messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+							messageVO.setTempleteType(MessageConstants.TEMP_IN_TO_SALE); //收货消息
+							messageVO.setObjectSerial(check.getSerialNum());
+							messageVO.setReceiverId(u.getUserId().toString());
+							properties.put("paramer_a", u.getUserName());
+							properties.put("paramer_b", delivery.getDeliverNum());
+							properties.put("paramer_c", count);
+							properties.put("paramer_d", order.getOrderNum());
+							properties.put("paramer_e", MessageConstants.URL_IN_TO_SALE);
+							properties.put("paramer_f", messageVO.getSerialNum());
+							
+							messageVO.setProperties(properties);
+							messageProcessor.sendMessageToUser(messageVO);
+							messageService.insert(messageVO);
+						}
+					}
+				}else{   //发给供应商
+					users = new ArrayList<User>();
+					Company company = companyService.selectById(order.getSupplyComId());
+					Message messageVO = this.createMessage(event,user);
+					List<UserCompanyKey> userCompanyKeys = userCompanyService.getUsersByComId(order.getSupplyComId());
+					List<String> userIds = new ArrayList<String>();
+					for(UserCompanyKey uc : userCompanyKeys){
+						userIds.add(uc.getUser_id());
+					}
+					messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+					messageVO.setTempleteType(MessageConstants.TEMP_IN_TO_SALE); //收货消息
+					messageVO.setObjectSerial(check.getSerialNum());
+					messageVO.setReceiverIds(userIds);
+					
+					properties.put("paramer_a", company.getComName());
+					properties.put("paramer_b", delivery.getDeliverNum());
+					properties.put("paramer_c", count);
+					properties.put("paramer_d", order.getOrderNum());
+					properties.put("paramer_e", MessageConstants.URL_IN_TO_SALE);
+					properties.put("paramer_f", messageVO.getSerialNum());
+					
+					messageVO.setProperties(properties);
+					messageProcessor.sendMessageToUsers(messageVO);
+					messageService.insertBatch(messageVO);
+				}
+			}
+		} catch (Exception e) {
+			logger.warn(e.getMessage(), e);
+		}
 		
 	}
 	
@@ -539,6 +1172,13 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 		messageVO.setUpdater(user.getUserName());
 		messageVO.setUpdateTime(new Date());
 		return messageVO;
+	}
+	
+	
+	private List<DeliveryMateriel> getDeliveryMateriels(String deliverSerial){
+		DeliveryMaterielExample example = new DeliveryMaterielExample();
+		example.createCriteria().andDelFlgEqualTo(Constants.DEL_FLAG_DEFUALT).andDeliverSerialEqualTo(deliverSerial);
+		return deliveryMaterielService.selectByExample(example);
 	}
 
 }

@@ -21,6 +21,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 	    		}
 	    	}else{
 	    			stockInInfo($stateParams.serialNum);
+	    			
 	    	}
 	    		
 	    	// set default layout mode
@@ -300,7 +301,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
             			
             			}else{
             				$scope.getTakeDeliverMateriel(data.data.delivery);
-            				$scope.createFilterList();
+            				$scope.queryForPage();
             			}
             			
         			}else{ //其他类型入库时

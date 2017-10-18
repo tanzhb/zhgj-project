@@ -96,7 +96,7 @@ public class MessageConstants {
 	/**
 	 * 发货
 	 */
-	public static final String DELIVERY = "takeDelivery";
+	public static final String DELIVERY = "delivery";
 	/*========================发货相关消息End==============================*/
 	
 	/*===========出入库相关消息Start====== ========*/

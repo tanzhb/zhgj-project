@@ -643,6 +643,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		takeDelivery.setStatus("4");//收货完成
 		takeDelivery.setUpdateTime(new Date());
 		takeDelivery.setUpdater(currenLoginName);
+		takeDeliveryMapper.updateByPrimaryKeySelective(takeDelivery);
 	}
 	
 	/**
@@ -662,11 +663,11 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		orderInfo.setUpdater(currenLoginName);
 		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 		//更新发货状态
-		Delivery delivery = new Delivery();
-		delivery.setSerialNum(deliverySerial);
-		delivery.setStatus("4");//状态未定
-		delivery.setUpdateTime(new Date());
-		delivery.setUpdater(currenLoginName);
+		//Delivery delivery = new Delivery();
+		//delivery.setSerialNum(deliverySerial);
+		//delivery.setStatus("4");//状态未定
+		//delivery.setUpdateTime(new Date());
+		//delivery.setUpdater(currenLoginName);
 		//delivery2Mapper.updateByPrimaryKeySelective(delivery);
 	}
 
