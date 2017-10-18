@@ -569,7 +569,7 @@
                                             {{materiel.deliverRemark}}
 										</td>
 										<td class="form-group">
-                                                 <input type="text" class="form-control" id="acceptCount{{$index}}" name="acceptCount" data-delivercount="{{materiel.deliverCount}}"  ng-model="materiel.acceptCount" ng-hide="deliverAdd" >
+                                                 <input type="text" class="form-control" id="acceptCount{{$index}}" name="acceptCount" data-delivercount="{{materiel.deliverCount}}" ng-init="materiel.acceptCount=materiel.deliverCount" ng-model="materiel.acceptCount" ng-hide="deliverAdd" >
                                                  <div class="form-control-focus"> </div>
 										</td>
 										<td><span class="help-block"></span>

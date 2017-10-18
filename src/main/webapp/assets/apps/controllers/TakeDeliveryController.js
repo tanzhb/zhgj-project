@@ -679,7 +679,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	                        footer: !0,
 	                        headerOffset: a
 	                    },*/
-	                    order: [[1, "asc"]],//默认排序列及排序方式
+	                    order: [[9, "desc"]],//默认排序列及排序方式
 	                    bRetrieve : true,
 	  					'scrollX': false,
 	  					  buttons: [
@@ -706,6 +706,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	                    "aoColumns": [
 	                                  { mData: 'takeDelivery.serialNum' },
 	                                  { mData: 'takeDelivery.takeDeliverNum' },
+	                                  { mData: 'deliverNum' },
 	                                  { mData: 'orderNum' },
 	                                  { mData: 'shipper' },
 	                                  { mData: 'materielCount' },
@@ -746,7 +747,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    									type, row, meta) {
 	    										if(data==null){
 	    											data="未收货";
-	    										}
+	    										}debugger;
 	  	  	  								return '<a href="javascript:void(0);" ng-click="takeDeliveryView(\''+row.takeDelivery.serialNum+'\')">'+data+'</a>';
 	  	
 	    							},
@@ -754,7 +755,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    								 $compile(td)($scope);
 	    						       }
 	    						},{
-	    							'targets' : 2,
+	    							'targets' : 3,
 	    							'render' : function(data,
 	    									type, row, meta) {
 	    									if(!isNull(data)){
@@ -764,21 +765,11 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  	
 	    							}
 	    						},{
-	    							'targets' : 7,
+	    							'targets' : 8,
 	    							'render' : function(data,
 	    									type, row, meta) {
 	    									if(data!=null){
 	  										return data.address;
-	  									}
-	  	  								return '';
-	  	
-	    							}
-	    						},{
-	    							'targets' : 9,
-	    							'render' : function(data,
-	    									type, row, meta) {
-	    									if(data!=undefined){
-	  										return data;
 	  									}
 	  	  								return '';
 	  	
@@ -797,6 +788,16 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    							'targets' : 11,
 	    							'render' : function(data,
 	    									type, row, meta) {
+	    									if(data!=undefined){
+	  										return data;
+	  									}
+	  	  								return '';
+	  	
+	    							}
+	    						},{
+	    							'targets' : 12,
+	    							'render' : function(data,
+	    									type, row, meta) {
 	    										if(data!=undefined){
 	    											return data;
 	    										}
@@ -804,7 +805,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  	
 	    							}
 	    						},{
-	    							'targets' : 12,
+	    							'targets' : 13,
 	    							'searchable' : false,
 	    							'orderable' : false,
 	    							'className' : 'dt-body-center',
