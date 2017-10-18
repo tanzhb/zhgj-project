@@ -63,4 +63,12 @@ public interface CompanyService extends GenericService<Company, String>{
 	 */
 	void deleteCompany(String comId);
 	
+	/**
+	 * 
+	 * @Description (获取企业信息)
+	 * @param company
+	 * @return
+	 */
+	List<Company> selectAll();
+	
 }

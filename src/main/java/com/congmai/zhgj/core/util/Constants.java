@@ -68,4 +68,26 @@ public class Constants {
 	
 	
 	
+	
+	/******************************=======用户组类型START=====**********************************/
+	/**
+	 * 财务
+	 */
+	public static final String FINANCIAL =  "financial";
+	/**
+	 * 仓储
+	 */
+	public static final String STORAGE =  "storage";
+	/**
+	 * 采购
+	 */
+	public static final String PURCHASE =  "purchase";
+	/**
+	 * 销售
+	 */
+	public static final String SALES =  "sales";
+	/******************************=======用户组类型END=====**********************************/
+	
+	
+	
 }

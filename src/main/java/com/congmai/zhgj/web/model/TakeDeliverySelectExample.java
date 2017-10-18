@@ -1106,6 +1106,16 @@ public class TakeDeliverySelectExample {
         	addCriterion("d.status <>", value1,"status");
         	return (Criteria) this;
         }
+        
+        public Criteria andDeliverBuyComIdEqualTo(String value1) {
+        	addCriterion("d.buyComId = ", value1, "buyComId");
+        	return (Criteria) this;
+        }
+        
+        public Criteria andDeliverBuyComIdIsNull() {
+        	addCriterion("d.buyComId is null");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

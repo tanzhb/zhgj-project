@@ -1,7 +1,11 @@
 package com.congmai.zhgj.web.dao;
 
+import java.util.List;
+
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.web.model.Group;
+import com.congmai.zhgj.web.model.GroupExample;
+import com.congmai.zhgj.web.model.GroupSelectExample;
 
 /**
  * 
@@ -19,4 +23,12 @@ public interface GroupMapper extends GenericDao<Group, Integer> {
      * @return
      */
 	Group selectGroupById(Integer id);
+	
+	/**
+	 * 
+	 * @Description (根据条件查询组信息)
+	 * @param example
+	 * @return
+	 */
+	List<Group> selectByExample(GroupSelectExample example);
 }

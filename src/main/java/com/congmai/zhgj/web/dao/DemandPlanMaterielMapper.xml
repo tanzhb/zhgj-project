@@ -81,6 +81,10 @@
     serialNum, demandPlanSerial, materielSerial, supplyMaterielSerial, amount, deliveryDate, 
     deliveryAddress, delFlg, creator, createTime, updater, updateTime, remark
   </sql>
+  <sql id="Base_Column_List2" >
+    dm.serialNum, dm.demandPlanSerial, dm.materielSerial, dm.supplyMaterielSerial, dm.amount, dm.deliveryDate, 
+    dm.deliveryAddress, dm.delFlg, dm.creator, dm.createTime, dm.updater, dm.updateTime, dm.remark
+  </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.DemandPlanMaterielExample" >
     select
     <if test="distinct" >
@@ -366,5 +370,38 @@
     from supplyMateriel sm
     left join company c 
     on c.comId = sm.supplyComId where sm.serialNum = #{value}
+  </select>
+  
+  <select id="searchMateriels" parameterType="com.congmai.zhgj.web.model.DemandPlan" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List2" />
+    from demandPlanMateriel dm
+    left join materiel m on m.serialNum = dm.materielSerial
+    left join supplyMateriel sm on sm.serialNum = dm.supplyMaterielSerial 
+    where 1=1
+    <if test="firstCategory != null  and firstCategory != ''" >
+        and m.category1 like CONCAT('%',#{firstCategory,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="secondCategory != null  and secondCategory != ''" >
+        and m.category2 like CONCAT('%',#{secondCategory,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="thirdCategory != null  and thirdCategory != ''" >
+        and m.category3 like CONCAT('%',#{thirdCategory,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="supplyComId != null and supplyComId != ''" >
+        and sm.supplyComId = #{supplyComId,jdbcType=VARCHAR}
+    </if>
+    <if test="searchKey != null and searchKey != ''" >
+         and (m.materielNum like CONCAT('%',#{searchKey,jdbcType=VARCHAR},'%') or
+        	m.materielName like CONCAT('%',#{searchKey,jdbcType=VARCHAR},'%') or 
+        	m.specifications like CONCAT('%',#{searchKey,jdbcType=VARCHAR},'%'))
+    </if>
+    <if test="deliveryStartDate != null and deliveryStartDate != ''" >
+        and dm.deliveryDate &gt;= #{deliveryStartDate,jdbcType=VARCHAR}
+    </if>
+    <if test="deliveryEndDate != null and deliveryEndDate != ''" >
+        and dm.deliveryDate &lt;= #{deliveryEndDate,jdbcType=VARCHAR}
+    </if>
+    and dm.demandPlanSerial = #{serialNum,jdbcType=VARCHAR} and dm.delFlg = '0' order by dm.createTime desc
   </select>
 </mapper>
