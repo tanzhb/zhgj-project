@@ -241,7 +241,7 @@
 			 <a href="javascript:;" class="nav-link nav-toggle">
                 <i class="icon-credit-card"></i>
                 <span class="title">收付款</span>
-               
+               <span class="arrow "></span>
             </a> 
 			<ul class="sub-menu">
 				<shiro:hasPermission name="zhgj:accountReceivable:*">

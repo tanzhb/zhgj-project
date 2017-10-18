@@ -188,7 +188,7 @@
 															<div class="btn-group btn-group-devided"
 																data-toggle="buttons">
 																<label class="btn default btn-sm"
-																	ng-click="noticeReceive()"> 签收 </label>
+																	ng-click="receiveNotice()"> 签收 </label>
 															</div>
 														</div>
 														<div class="tools"></div>

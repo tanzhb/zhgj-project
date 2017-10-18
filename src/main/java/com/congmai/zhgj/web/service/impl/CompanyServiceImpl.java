@@ -176,6 +176,14 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 	}
 
 
+	@Override
+	public List<Company> selectAll() {
+		Company company = new Company();
+		company.setPageSize(-1);
+		return companyMapper.selectList(company);
+	}
+
+
 
 	
 }

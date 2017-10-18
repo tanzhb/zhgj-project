@@ -40,6 +40,7 @@ import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.dao.MaterielMapper;
 import com.congmai.zhgj.web.dao.SupplyMaterielMapper;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DemandPlan;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.Materiel;
@@ -532,6 +533,28 @@ public class DemandPlanController {
     		dataMap.put("demandPlanList",demandPlanList);
     		ExcelUtil.export(request, response, dataMap, "demandPlan", "需求计划");
     }
+    
+    
+    /**
+     * @Description (保存)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="searchDemandPlan",method=RequestMethod.POST)
+    @ResponseBody
+    public List<DemandPlanMateriel> searchDemandPlan(Map<String, Object> map,@RequestBody DemandPlan search,HttpServletRequest request) {
+    	//String flag ="0"; //默认失败
+    	List<DemandPlanMateriel> demandPlanMateriels = null;
+        	try{
+        		demandPlanMateriels = demandPlanMaterielService.searchDemandPlanMateriels(search);
+        		//flag = "1";
+        	}catch(Exception e){
+        		System.out.println(e.getMessage());
+        		return null;
+        	}
+    	return demandPlanMateriels;
+    }
+    
 
     /**
      * 

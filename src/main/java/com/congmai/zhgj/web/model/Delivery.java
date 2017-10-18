@@ -17,6 +17,8 @@ public class Delivery {
     private String docNum; //单据号
 
     private String supplyComId;
+    
+    private String buyComId; //采购商Id
 
     private String shipper;
 
@@ -92,6 +94,8 @@ public class Delivery {
     private int pageSize;
     
     private String supplyName;
+    
+    private String buyName;
     
     private String shipperName;
     
@@ -473,6 +477,22 @@ public class Delivery {
 
 	public void setDocNum(String docNum) {
 		this.docNum = docNum;
+	}
+
+	public String getBuyComId() {
+		return buyComId;
+	}
+
+	public void setBuyComId(String buyComId) {
+		this.buyComId = buyComId;
+	}
+
+	public String getBuyName() {
+		return buyName;
+	}
+
+	public void setBuyName(String buyName) {
+		this.buyName = buyName;
 	}
 
     

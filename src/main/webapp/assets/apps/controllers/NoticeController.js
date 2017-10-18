@@ -59,7 +59,10 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 		 		}	
 	    	}
 	    	
-	    	
+	    	 $("#sample_n2").on("change", "tbody tr .checkboxes",
+				        function() {
+				            $(this).parents("tr").toggleClass("active")
+			  })
 	    	// set default layout mode
 	    	$rootScope.settings.layout.pageContentWhite = true;
 	        $rootScope.settings.layout.pageBodySolid = false;
@@ -645,20 +648,25 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 			  		$scope.receiveNotice = function(){
 			  			var id_count = $('#sample_n2 input[name="serialNum"]:checked').length;
 						if(id_count==0){
-							toastr.warning("请选择您要办理的记录");
+							toastr.warning("'请选择一条任务进行签收！");
 						}else{
-							
-							var ids = $('#sample_n2 input[name="serialNum"]:checked').val();
-							claimTask(ids, 'sample_n2');
+							if(apply_table.row('.active').data().assign != ''){
+								toastr.warning('该任务已签收！');return;
+							}else{
+								var ids = $('#sample_n2 input[name="serialNum"]:checked').val();
+								claimTask(ids, 'sample_n2');
+							}
 						}
 			  		}
 			  		/**
-					 * 去班里
+					 * 去办理
 					 */
 					$scope.noticeAudit = function(){
 						var id_count = $('#sample_n2 input[name="serialNum"]:checked').length;
 						if(id_count==0){
 							toastr.warning("请选择您要办理的记录");
+						}else if(apply_table.row('.active').data().assign == ''){
+							showToastr('toast-top-center', 'warning', '此任务您还没有签收，请【签收】任务后再处理任务！')
 						}else{
 							
 								var ids = $('#sample_n2 input[name="serialNum"]:checked').val();
@@ -785,7 +793,7 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 		  		  							'orderable' : false,
 		  		  							'render' : function(data,
 		  		  									type, row, meta) {
-		  		  								if(data=""){
+		  		  								if(data==''){
 		  		  									return "待签收";
 		  		  								}else{
 		  		  									return "待处理";
@@ -888,7 +896,15 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 		  		              function() {
 		  		                  console.log('排序');
 		  		              });
-
+		  		        	
+			  		  /*	$("#sample_n2").find(".group-checkable").change(function() {
+				            var e = jQuery(this).attr("data-set"),
+				            t = jQuery(this).is(":checked");
+				            jQuery(e).each(function() {
+				                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+				            })
+				        }),*/
+		  		     
 					        
 		  		    //  };
 			  		}
