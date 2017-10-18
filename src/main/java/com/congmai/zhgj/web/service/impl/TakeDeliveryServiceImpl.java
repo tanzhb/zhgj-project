@@ -235,7 +235,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			//materiel.setSerialNum(ApplicationUtils.random32UUID());
 			//materiel.setDeliverSerial(record.getTakeDeliverSerial());
 			//deliveryMaterielMapper.insert(materiel);
-			createStock(materiel,new StockExample(),currenLoginName);
+//			createStock(materiel,new StockExample(),currenLoginName);
 		}
 		
 	}
@@ -426,6 +426,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			DeliveryMaterielExample example2 = new DeliveryMaterielExample();
 			example2.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
 			deliveryMaterielMapper.updateByExampleSelective(materiel, example2);
+			createStock(materiel,new StockExample(),currenLoginName);
 		}
 		//保存出库来源批次
 				List<StockOutBatch> stockOutMaterielsNew = stockOutMateriels; //这里是入库的物料信息
