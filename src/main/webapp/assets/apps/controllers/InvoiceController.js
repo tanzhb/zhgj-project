@@ -907,6 +907,10 @@ $scope.saveBillingRecord=function (serialNum,judgeString,invoiceBillingRecordSer
 		 toastr.warning("请先保存销项票信息！");
 		 return;
 	}
+	if(Number($("#"+serialNum).val())>billAmount){
+		toastr.warning("开票数量不能大于可开数量！");
+		 return;
+	}
 	debugger;
 	$scope.invoiceBillingRecord = {};
 	$scope.invoiceBillingRecord.serialNum=invoiceBillingRecordSerial;
@@ -1003,9 +1007,16 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 															}else{
 																toastr.success("确认开票成功！");
 															}
-															$scope.invoice = data;
+															$scope.showInvoiceInfo(data.serialNum,"out");
+																
+															/*$scope.invoice = data;
+															 $scope.invoice.receiptDate=timeStamp2ShortString(data.receiptDate);
+									 	        			 $scope.invoice.billingDate=timeStamp2ShortString(data.billingDate);
+									 	        			 $scope.invoice.submitDate=timeStamp2ShortString(data.submitDate);
+									 	        			 $scope.invoice.approvalDate=timeStamp2ShortString(data.approvalDate);
+									 	        			 $scope.invoice.capitalMoney=convertCurrency(data.billOrReceiptMoney);
 										        			$scope.invoiceAdd = true;
-										        			$scope.invoiceEdit = true;
+										        			$scope.invoiceEdit = true;*/
 											        			$(".alert-danger").hide();
 											        			
 															},
@@ -1654,8 +1665,7 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 							        						{
 							        							text : "办理",
 							        							className : "btn default",
-							        							action: function(e, dt, node, config) { 
-							        								
+							        							action: function(e, dt, node, config) {
 							        								var ids = '';
 							        								table.$('input[type="checkbox"]').each(function() {
 							        									if ($.contains(document, this)) {											
@@ -1674,6 +1684,10 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 							        								}else if(ids=='more'){
 							        									toastr.warning('只能选择一个办理！');return;
 							        								} else {
+							        									if(table.row('.active').data().assign == ''){
+							    											showToastr('toast-top-center', 'warning', '此任务您还没有签收，请【签收】任务后再处理任务！')
+							    											return;
+							    										}else{
 							        									InvoiceService
 							        									.getAuditInfos(ids)
 																		.then(
@@ -1694,7 +1708,7 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 								        												console.error('Error while apply ap');
 								        											}
 								
-																		);
+																		);}
 							        								}
 							        							}
 							        						},
@@ -1860,7 +1874,13 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 							        	
 							        	
 							        }
-
+							       function handleTask(assign, taskId, processInstanceId){
+							    		
+							    		if(assign == ''){
+							    			toastr.warning("此任务您还没有签收，请【签收】任务后再处理任务！！");
+							    			return;
+							    		}
+							       }
 							        function showYbOutInvoiceTable(){
 							        	var endTaskTable = $("#endTaskOutInvoiceTable").DataTable(
 							        			{

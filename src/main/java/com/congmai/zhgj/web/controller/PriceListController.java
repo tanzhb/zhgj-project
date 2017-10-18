@@ -468,7 +468,7 @@ public class PriceListController {
 		private String startPriceProcess(@RequestBody String params) {
 	    	String flag = "0"; //默认失败
 	    	PriceList priceList = json2PriceList(params);
-	    	priceListService.update(priceList);//更新备注
+	    //	priceListService.update(priceList);//更新备注
 	    	
 			//启动订单审批测试流程-start
 			User user = UserUtil.getUserFromSession();

@@ -1551,6 +1551,10 @@ function loadPriceListSaleTable(){
 		        								}else if(ids=='more'){
 		        									toastr.warning('只能选择一个办理！');return;
 		        								} else {
+		        									if(table.row('.active').data().assign == ''){
+		    											showToastr('toast-top-center', 'warning', '此任务您还没有签收，请【签收】任务后再处理任务！')
+		    											return;
+		    										}else{
 		        									priceListService
 		        									.getAuditInfos(ids)
 													.then(
@@ -1572,7 +1576,7 @@ function loadPriceListSaleTable(){
 			        												console.error('Error while apply ap');
 			        											}
 			
-													);
+													);}
 		        								}
 		        							}
 		        						},
@@ -1979,6 +1983,10 @@ function loadPriceListSaleTable(){
 		        								}else if(ids=='more'){
 		        									toastr.warning('只能选择一个办理！');return;
 		        								} else {
+		        									if(table.row('.active').data().assign == ''){
+		    											showToastr('toast-top-center', 'warning', '此任务您还没有签收，请【签收】任务后再处理任务！')
+		    											return;
+		    										}else{
 		        									priceListService
 		        									.getAuditInfos(ids)
 													.then(
@@ -2000,6 +2008,7 @@ function loadPriceListSaleTable(){
 			        											}
 			
 													);
+		        								}
 		        								}
 		        							}
 		        						},

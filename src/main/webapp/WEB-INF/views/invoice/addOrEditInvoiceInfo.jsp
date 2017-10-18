@@ -427,9 +427,9 @@
                                                                 <div class="form-group">
                                                     <label class="control-label bold" for=""><span class="required"> * </span> 开户银行 :</label>
                                                     <div class="">
-                                                    <%--  <input type="text" class="form-control"   id="bankName" name ="bankName"       ng-hide="invoiceAdd"    ng-if="inOrOut.indexOf('confirm')<0" 
+                                                    <%--  <input type="text" class="form-control"   id="bankName" name ="bankName"       ng-hide="invoiceAdd"     
 												ng-model="invoice.bankName" />  --%>
-												 <div  ng-if="inOrOut.indexOf('confirm')<0" >
+												 <div  ng-if="inOrOut.indexOf('confirm')<0">
                                                      <select class="form-control" data-live-search="true" data-size=""   id="bankName"  name ="bankName"    ng-model="invoice.bankName">
                                                      <!-- <option  ng-repeat="op in buyCom " value="{{op.comId}}"  > {{op.comName}}</option> -->
                                                       <option value=""></option>
@@ -450,7 +450,7 @@
                                                     <div class="">
                                                     <%--  <input type="text" class="form-control"   id="account" name ="account"       ng-hide="invoiceAdd"    ng-if="inOrOut.indexOf('confirm')<0" 
 												ng-model="invoice.account" />  --%>
-												 <div  ng-if="inOrOut.indexOf('confirm')<0" ><!--  ng-hide="invoiceAdd"-->
+												 <div  ng-if="inOrOut.indexOf('confirm')<0"><!--  ng-hide="invoiceAdd"-->
                                                      <select class="form-control" data-live-search="true" data-size=""   id="account"  name ="account"    ng-model="invoice.account">
                                                       <option value=""></option>
                                                       <option  ng-repeat="companyFinance in companyFinances" value="{{companyFinance.accountNumber}}" >{{companyFinance.accountNumber}}</option>
