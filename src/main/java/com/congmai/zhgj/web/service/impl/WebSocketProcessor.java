@@ -54,13 +54,13 @@ public class WebSocketProcessor implements MessageProcessor {
 	private static String message81 = "尊敬的${paramer_a}，您好！</br>销售订单号${paramer_b} 已进行部分发货，发货单号${paramer_c}。"+
 			"<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_e}')>查看</a>";
 
-	//已出库检验(to采购)
-	private static String message101 = "尊敬的${paramer_a}，您好！</br>发货单号${paramer_b}已完成检验 ${paramer_c} 件，请通知工作人员进行出库下架。"+
-			"<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_e}')>查看</a>";
-	
-	//已出库检验（to供应）
-	private static String message102 = "尊敬的${paramer_a}，您好！</br>发货单号${paramer_b} 已完成入库检验${paramer_c}件，不合格品 ${paramer_d} 件，关联销售订单号${paramer_e}。"+
+	//已出库检验（to采购）
+	private static String message102 = "尊敬的${paramer_a}，您好！</br>发货单号${paramer_b} 已完成出库检验${paramer_c}件，不合格品 ${paramer_d} 件，关联销售订单号${paramer_e}。"+
 			"<a href='javascript:;' ui-sref=${paramer_f} onclick=readAndClose('${paramer_g}')>查看</a>";
+	
+	//已出库检验(to供应)
+	private static String message101 = "尊敬的${paramer_a}，您好！</br>发货单号${paramer_b}已完成出库检验 ${paramer_c} 件，请通知工作人员进行出库下架。"+
+			"<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_e}')>查看</a>";
 	
 	//已出库（to采购）
 	private static String message93 = "尊敬的${paramer_a}，您好！</br>发货单号${paramer_b}已完成出库${paramer_c} 件，关联销售订单号${paramer_d}。"+

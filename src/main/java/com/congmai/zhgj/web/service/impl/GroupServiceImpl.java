@@ -46,7 +46,7 @@ public class GroupServiceImpl extends GenericServiceImpl<Group, Integer> impleme
     }
 
 	@Override
-	public List<String> selectUserIdsByGroupType(String type) {
+	public List<User> selectUserIdsByGroupType(String type) {
 		GroupSelectExample example = new GroupSelectExample();
 		example.createCriteria().andTypeEqualTo(type);
 		List<Group> groups = groupMapper.selectByExample(example);
@@ -57,13 +57,13 @@ public class GroupServiceImpl extends GenericServiceImpl<Group, Integer> impleme
 				UserExample userExample = new UserExample();
 				userExample.createCriteria().andGroupIdEqualTo(group.getId());
 				List<User> users= userMapper.selectByExample(userExample);
-				List<String> userIds = new ArrayList<String>();
+				/*List<String> userIds = new ArrayList<String>();
 				if(CollectionUtils.isNotEmpty(users)){
 					for(User user : users){
 						userIds.add(user.getUserId().toString());
 					}
-				}
-				return userIds;
+				}*/
+				return users;
 			}
 			
 		}

@@ -300,12 +300,15 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
             				$scope.deliverSerial = data.data.delivery.serialNum;
             				$scope.getTakeDeliverMateriel(data.data.delivery);
             				$scope.record.inOutType = '贸易';
+            			}else{
+            				$scope.getTakeDeliverMateriel(data.data.delivery);
+            				$scope.queryForPage();
             			}
         			}else{
         				if(!isNull($stateParams.serialNum)&&($location.path()=="/stockOutView")){//出库编辑或出库时
         					//var de$scope.record.serialNum;
             				$scope.getTakeDeliverMateriel(data.data.delivery);
-            				$scope.createFilterList();
+            				//$scope.createFilterList();
             			}
         			}
         			
