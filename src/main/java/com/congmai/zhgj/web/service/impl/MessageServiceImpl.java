@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
+import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.web.dao.MessageMapper;
 import com.congmai.zhgj.web.model.Message;
@@ -84,6 +85,7 @@ public class MessageServiceImpl extends GenericServiceImpl<Message, String> impl
 		if(CollectionUtils.isNotEmpty(messageVO.getReceiverIds())){
 			for(String receiverId : messageVO.getReceiverIds()){
 				messageVO.setReceiverId(receiverId);
+				messageVO.setSerialNum(ApplicationUtils.random32UUID());
 				messageMapper.insert(messageVO);
 			}
 		}

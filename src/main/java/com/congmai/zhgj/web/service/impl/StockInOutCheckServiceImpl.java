@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.dao.DeliveryMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
@@ -18,6 +19,8 @@ import com.congmai.zhgj.web.dao.StockInOutCheckMapper;
 import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
 import com.congmai.zhgj.web.dao.StockMapper;
 import com.congmai.zhgj.web.dao.TakeDeliveryMapper;
+import com.congmai.zhgj.web.event.EventExample;
+import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryVO;
@@ -104,6 +107,11 @@ public class StockInOutCheckServiceImpl extends GenericServiceImpl<StockInOutChe
 			o.setDeliverStatus(OrderInfo.CHECK);
 			orderInfoMapper.updateByPrimaryKeySelective(o);
 			
+			//入库检验消息  to 采购
+			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutCheck,MessageConstants.IN_CHECK_TO_BUY));
+			//入库检验消息  to 供应
+			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutCheck,MessageConstants.IN_CHECK_TO_SALE));
+			
 		}else if(serialNum1.indexOf("checkout")>-1){
 			createStockInOutRecord("checkout",stockInOutCheck.getDeliverSerial(),userName);//产生出库记录
 			//String orderSerial=td.getDeliverSerial();
@@ -116,6 +124,11 @@ public class StockInOutCheckServiceImpl extends GenericServiceImpl<StockInOutChe
 			o.setSerialNum(d.getOrderSerial());
 			o.setDeliverStatus(OrderInfo.CHECK);
 			orderInfoMapper.updateByPrimaryKeySelective(o);
+			
+			//出库检验消息  to 采购
+			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutCheck,MessageConstants.OUT_CHECK_TO_BUY));
+			//出库检验消息  to 供应
+			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutCheck,MessageConstants.OUT_CHECK_TO_SALE));
 		}
 		
 	}

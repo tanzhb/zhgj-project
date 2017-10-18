@@ -258,7 +258,7 @@
 									</tr>
 								</thead>
 								<tbody data-repeater-list="group-a"> 
-									<tr data-repeater-item ng-repeat="materiel in record.delivery.deliveryMateriels track by $index" >
+									<tr data-repeater-item ng-repeat="materiel in dispalyDeliveryMateriel track by $index" >
 										<td>{{materiel.orderMateriel.materiel.materielNum}}</td>
 										<td>{{materiel.orderMateriel.materiel.materielName}}</td>
 										<td>{{materiel.orderMateriel.materiel.specifications}}</td>

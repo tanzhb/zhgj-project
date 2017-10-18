@@ -53,9 +53,12 @@ import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
+import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.web.event.EventExample;
+import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.Company;
@@ -248,7 +251,10 @@ public class DeliveryController {
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("/delivery").buildAndExpand(serialNum).toUri());
-
+		
+		//发货消息
+		EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(delivery,MessageConstants.DELIVERY));
+		
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
     

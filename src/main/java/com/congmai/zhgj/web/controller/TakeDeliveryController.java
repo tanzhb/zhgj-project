@@ -413,6 +413,11 @@ public class TakeDeliveryController {
         		if(StringUtils.isNotEmpty(takeDeliveryParams.getRecord().getSerialNum())){
         			/*takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);*/
         			takeDeliveryService.updateStockInData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName,"in");
+        			
+        			//入库消息  to 采购
+        			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.IN_TO_BUY));
+        			//入库消息  to 供应
+        			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.IN_TO_SALE));
         		}else{
         			/*takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);*/
         			takeDeliveryService.insertStockInData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName,"in");
@@ -445,10 +450,15 @@ public class TakeDeliveryController {
         	try{
         		Subject currentUser = SecurityUtils.getSubject();
         		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-        		if(StringUtils.isNotEmpty(takeDeliveryParams.getRecord().getSerialNum())){
+        		if(StringUtils.isNotEmpty(takeDeliveryParams.getRecord().getSerialNum())){//确认出库
         			//takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);
         			takeDeliveryService.updateStockOutData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),takeDeliveryParams.getStockOutMateriels(),currenLoginName,"out");
-        		}else{//确认出库
+        			
+        			//出库消息  to 采购
+        			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.OUT_TO_BUY));
+        			//出库消息  to 供应
+        			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.OUT_TO_SALE));
+        		}else{
         			//takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);
         			takeDeliveryService.insertStockInData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName,"out");
         		}
