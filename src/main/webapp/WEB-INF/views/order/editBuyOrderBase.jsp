@@ -1055,8 +1055,16 @@ margin-right: 20px;
                          <button class="close" data-close="alert"></button> 请先输入正确数据！ </div>
                      <div class="row">
                          <div class="col-md-4">
+                         		<div class="form-group ">
+                              	<label class="control-label bold">含税金额：</label>
+                                 <div class="">
+                                  <p class="form-control-static"> {{totalRateAndAmount()}} </p>
+                                  </div>
+                              </div>
+                         </div>
+                         <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label bold">商品金额：</label>
+                                 <label class="control-label bold">不含税金额：</label>
                                  <div class="">
                                  <p class="form-control-static"> {{totalAmount()}} </p>
                                  </div>
@@ -1071,14 +1079,7 @@ margin-right: 20px;
                                   </div>
                               </div>
                          </div>
-                         <div class="col-md-4">
-                         		<div class="form-group ">
-                              	<label class="control-label bold">含税金额：</label>
-                                 <div class="">
-                                  <p class="form-control-static"> {{totalRateAndAmount()}} </p>
-                                  </div>
-                              </div>
-                         </div>
+                         
                          <!--/span-->
                      </div>
                      <!--/row-->
@@ -1175,7 +1176,7 @@ margin-right: 20px;
 		                          </td>
 		                          <td>
                                      		<input type="text" id="deliveryAmount[$index]" name="deliveryAmount" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].deliveryAmount"  
-                                     		ng-keyup="clearNoNumPoint(clauseSettlement.CSD[$index],'deliveryAmount')" >
+                                     		ng-keyup="clearNoNumPoint(clauseSettlement.CSD[$index],'deliveryAmount');_arithmeticRate(this)" >
 		                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.deliveryAmount}} </p>
 		                          </td>
 		                          <td>
@@ -1201,7 +1202,8 @@ margin-right: 20px;
 		                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.billingAmount}} </p>
 		                          </td>
 		                          <td>
-                                     		<input type="text" id="unbilledAmount[$index]" name="unbilledAmount" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].unbilledAmount"  >
+                                     		<input type="text" id="unbilledAmount[$index]" name="unbilledAmount" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].unbilledAmount" 
+                                     		ng-keyup="clearNoNumPoint(clauseSettlement.CSD[$index],'unbilledAmount');_arithmeticBilledAmount(this)" >
 		                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.unbilledAmount}} </p>
 		                          </td>
 		                          <td>

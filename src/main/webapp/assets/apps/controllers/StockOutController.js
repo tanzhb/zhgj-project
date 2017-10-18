@@ -305,6 +305,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
         				if(!isNull($stateParams.serialNum)&&($location.path()=="/stockOutView")){//出库编辑或出库时
         					//var de$scope.record.serialNum;
             				$scope.getTakeDeliverMateriel(data.data.delivery);
+            				$scope.createFilterList();
             			}
         			}
         			
@@ -882,11 +883,11 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 							$scope.record.deliverSerial = $('#takeDelivery input[name="takeDeliverySerial"]:checked').val();
 							$scope.record.deliverNum = delivery.deliverNum;
 							$scope.record.shipperOrReceiver = delivery.receiver;
-							if(isNull(shipperOrReceiver)){
-								$scope.shipperOrReceiver = '中航能科（上海）能源科技有限公司';
-							}else{
+							//if(isNull($scope.record.shipperOrReceiver)){
+							//	$scope.shipperOrReceiver = '中航能科（上海）能源科技有限公司';
+							//}else{
 								//$scope.shipperOrReceiverName = delivery.receiverName;
-							}
+							//}
 							//$scope.record.orderNum = ;
 							$scope.record.takeDeliverSerial = "";
 							$scope.getTakeDeliverMateriel(delivery);
@@ -1205,5 +1206,62 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 							}
 				         
 				          /***选择物料列表初始化END***/
+							
+							
+						/** *************入库物料明细可检索化  start*************** */
+							 $scope.pageIndex = 1; //记录当前页
+							 $scope.pageSize = '10'; //每页的记录数
+							 $scope.totalPage = '1'; //记录总页数
+							 $scope.dispalyDeliveryMateriel = [];//页面显示结果
+							 $scope.filterDeliveryMateriel = [];//查询筛选结果
+							 
+							 $scope.createFilterList = function(){
+								 $scope.filterDeliveryMateriel = [];
+								if($scope.record.delivery.deliveryMateriels.length>0&&$scope.queryStr&&!isNull($scope.queryStr)){
+									for(var i = 0;i < $scope.record.delivery.deliveryMateriels.length;i++){// data.data为选择的标准物料
+										if(($scope.record.delivery.deliveryMateriels)[i].orderMateriel.materiel.materielNum.indexOf($scope.queryStr)>=0){
+											$scope.filterDeliveryMateriel.push(angular.copy(($scope.record.delivery.deliveryMateriels)[i]));
+										}else if(($scope.record.delivery.deliveryMateriels)[i].orderMateriel.materiel.materielName.indexOf($scope.queryStr)>=0){
+											$scope.filterDeliveryMateriel.push(angular.copy(($scope.record.delivery.deliveryMateriels)[i]));
+										}else if(($scope.record.delivery.deliveryMateriels)[i].orderMateriel.materiel.specifications.indexOf($scope.queryStr)>=0){
+											$scope.filterDeliveryMateriel.push(angular.copy(($scope.record.delivery.deliveryMateriels)[i]));
+										}
+									}
+								}else{
+									$scope.filterDeliveryMateriel = angular.copy($scope.record.delivery.deliveryMateriels);
+								}
+								
+							 };
+							 
+							 $scope.createDispalyList = function(){
+								 $scope.dispalyDeliveryMateriel = $scope.filterDeliveryMateriel.slice(
+										 ($scope.pageIndex-1)*$scope.pageSize,
+										 $scope.pageIndex*$scope.pageSize);
+								 
+								 $scope.totalPage = Math.ceil($scope.filterDeliveryMateriel.length/$scope.pageSize);
+							 };
+							 
+							 $scope.queryForPage = function(){
+								 $scope.createFilterList();
+								 $scope.pageIndex = 1; //设置为第一页
+								 $scope.createDispalyList();
+							 };
+							 
+							 $scope.link2ThisPage = function(index){
+								 $scope.pageIndex = index;
+								 $scope.createDispalyList();
+							 }
+							 
+							 $scope.link2PreviousPage = function(){
+								 $scope.pageIndex--;
+								 $scope.createDispalyList();
+							 }
+							 
+							 $scope.link2NextPage = function(){
+								 $scope.pageIndex++;
+								 $scope.createDispalyList();
+							 }
+							 
+							/** *************入库物料明细可检索化  end*************** */
 
 }]); 

@@ -204,93 +204,13 @@ angular.module('MetronicApp').service('demandPlanService',['$http','$q',function
 		return deferred.promise;//返回承诺
 	}
 	
-	
 	/**
-	 * 保存企业资质
+	 * 搜索需求计划
 	 */
-	this.saveCompanyQualification = function (companyQualifications){
+	this.searchDemandPlan = function(search){
 		var deferred = $q.defer();
-		var params = {};  
-	    params = JSON.stringify(companyQualifications); 
-		$http.post("rest/company/saveCompanyQualification",  
-				params//传整个表单数据  
-    	).then(function success(result) {
-            deferred.resolve(result);//请求成功
-        }, function error(err) {
-            deferred.reject(err);//请求失败
-        });
-        return deferred.promise;//返回承诺
-	}
-	
-	/**
-	 * 编辑企业资质
-	 */
-	this.editCompanyQualification = function(serialNum){
-		var deferred = $q.defer();
-		$http.get("rest/company/viewCompanyQualification", {  
-    		params:{serialNum:serialNum,cache:false}//传整个表单数据  
-    	}).then(function success(result) {
-            deferred.resolve(result);//请求成功
-        }, function error(err) {
-            deferred.reject(err);//请求失败
-        });
-        return deferred.promise;//返回承诺
-    	
-	}
-	
-	/**
-	 * 删除企业资质
-	 */
-	this.deleteCompanyQualification = function(serialNum){
-		var deferred = $q.defer();
-		 $http.get("rest/company/deleteCompanyQualification", {  
-	        	params:{serialNum:serialNum,cache:false}//传整个表单数据  
-	        }).then(function success(result) {
-                deferred.resolve(result);//请求成功
-            }, function error(err) {
-                deferred.reject(err);//请求失败
-            });
-            return deferred.promise;//返回承诺
-	}
-	
-	/**
-	 * 保存联系人
-	 */
-	this.saveCompanyContact = function (companyContact){
-		var deferred = $q.defer();
-		$http.post("rest/company/saveCompanyContact", 
-    		companyContact//传整个表单数据  
-		).then(function success(result) {
-            deferred.resolve(result);//请求成功
-        }, function error(err) {
-            deferred.reject(err);//请求失败
-        });
-        return deferred.promise;//返回承诺
-	}
-	
-	
-	/**
-	 * 删除联系人
-	 */
-	this.deleteCompanyContact = function (serialNum){
-		var deferred = $q.defer();
-		$http.get("rest/company/deleteCompanyContact",{  
-			params:{serialNum:serialNum}//传整个表单数据  
-		}).then(function success(result) {
-			deferred.resolve(result);//请求成功
-		}, function error(err) {
-			deferred.reject(err);//请求失败
-		});
-		return deferred.promise;//返回承诺
-	}
-	
-	/**
-	 * 保存财务信息
-	 */
-	this.saveCompanyFinance = function (companyFinance){
-		var deferred = $q.defer();
-		$http.post("rest/company/saveCompanyFinance", 
-			companyFinance//传整个表单数据  
+		$http.post("rest/demandPlan/searchDemandPlan",   
+				search
 		).then(function success(result) {
 			deferred.resolve(result);//请求成功
 		}, function error(err) {
@@ -299,21 +219,6 @@ angular.module('MetronicApp').service('demandPlanService',['$http','$q',function
 		return deferred.promise;//返回承诺
 	}
 	
-	/**
-	 * 删除财务信息
-	 */
-	this.deleteCompanyFinance = function (serialNum){
-		var deferred = $q.defer();
-		$http.get("rest/company/deleteCompanyFinance",{  
-			params:{serialNum:serialNum}//传整个表单数据  
-		}).then(function success(result) {
-			deferred.resolve(result);//请求成功
-		}, function error(err) {
-			deferred.reject(err);//请求失败
-		});
-		return deferred.promise;//返回承诺
-	}
-
 
 
 }]); 

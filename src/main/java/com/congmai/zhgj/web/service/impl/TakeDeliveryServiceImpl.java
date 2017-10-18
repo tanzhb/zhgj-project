@@ -98,6 +98,12 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		example.setPageSize(-1);
 		Criteria c =  example.createCriteria();
 		c.andDelFlgEqualTo("0");
+		
+		if(StringUtils.isNotEmpty(takeDelivery.getBuyComId())){ //根据用户所在企业筛选收货单
+			c.andDeliverBuyComIdEqualTo(takeDelivery.getBuyComId());
+		}else{
+			c.andDeliverBuyComIdIsNull();
+		}
 		if(StringUtils.isNotBlank(takeDelivery.getStatus())){
 			c.andStatusEqualTo(takeDelivery.getStatus());
 		}

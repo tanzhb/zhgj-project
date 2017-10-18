@@ -79,6 +79,7 @@
 															data-set="#takeDeliveryTable .checkboxes" /> <span></span>
 													</label></th>
 													<th>收货单编号</th>
+													<th>发货单编号</th>
 													<th>订单编号</th>
 													<th>发货方</th>
 													<th>物料</th>

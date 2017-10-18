@@ -44,9 +44,9 @@
             <div class="portlet-body">
 				<div class="portlet light ">
 				 	
-						<jsp:include page="commonTakeDeliveryView.jsp"></jsp:include>
+						<jsp:include page="commonTakeDeliveryEdit.jsp"></jsp:include>
          				
-         				<div class="portlet-title">
+         				<!-- <div class="portlet-title">
                             <div class="actions">
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                                             </div>
 										</div>
 						
-										<!--/span-->
+										/span
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="col-md-4 control-label" ><span class="required"> * </span>收货人:</label>
@@ -84,9 +84,9 @@
                                                     </div>
                                             </div>
 										</div>
-										<!--/span-->
+										/span
 									</div>
-									<!--/row-->
+									/row
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
@@ -97,14 +97,14 @@
                                                     </div>
                                             </div>
 										</div>
-										<!--/span-->
+										/span
 									</div>
-									<!--/row-->
+									/row
 								</div>
-						</div>
+						</div> -->
          			<!-- 收货信息END -->
          			<!-- 物料信息START -->
-                        <div class="portlet-title">
+                      <!--   <div class="portlet-title">
                             <div class="caption">物料信息</div>
                             <div class="actions">
                             </div>
@@ -171,7 +171,7 @@
 								</tbody>
 							</table>
 						</div>
-					  </div> 
+					  </div>  -->
          			<!-- 物料信息END -->
          			 <div class="row" align="center">
          			 	 <!-- <button   class="btn blue  btn-sm btn-circle" ng-click="applyTakeDelivery()" >
@@ -211,3 +211,4 @@
 		</div>
 	</div>
 <!-- 申请modal 结束 -->
+<jsp:include page="../upload/uploadPage.jsp"></jsp:include>

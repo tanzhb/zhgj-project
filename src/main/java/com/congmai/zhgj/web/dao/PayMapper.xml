@@ -48,6 +48,7 @@
 	LEFT JOIN clauseSettlement b ON a.contractSerial=b.contractSerial 
 	LEFT JOIN clauseSettlementDetail c ON b.serialNum=c.clauseSettlementSerial
 	WHERE a.serialNum=#{serialNum}
+	AND c.delFlg='0'
     </select>
     
     <!--查询结算条款详情  -->

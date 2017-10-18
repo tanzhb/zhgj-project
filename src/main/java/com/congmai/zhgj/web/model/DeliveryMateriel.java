@@ -84,6 +84,8 @@ public class DeliveryMateriel {
     private List<StockOutBatch> stockOutMateriels;//关联出库批次信息
     private String  inOutNums;//关联出库批次号
     private String sumStockOutCount;//出库数量
+    private String attachFile;
+	private List<RelationFile> files;
     public List<StockOutBatch> getStockOutMateriels() {
 		return stockOutMateriels;
 	}
@@ -479,6 +481,22 @@ public class DeliveryMateriel {
 
 	public void setSumStockOutCount(String sumStockOutCount) {
 		this.sumStockOutCount = sumStockOutCount;
+	}
+
+	public String getAttachFile() {
+		return attachFile;
+	}
+
+	public void setAttachFile(String attachFile) {
+		this.attachFile = attachFile;
+	}
+
+	public List<RelationFile> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<RelationFile> files) {
+		this.files = files;
 	}
 
 	

@@ -70,6 +70,8 @@ public class Company {
     private String searchKey;
     private String comTypeName;
     private List<String> comIds;
+    
+    private List<CompanyQualification> companyQualifications;
  
     public String getComId() {
         return comId;
@@ -326,6 +328,14 @@ public class Company {
 
 	public void setBillRemark(String billRemark) {
 		this.billRemark = billRemark;
+	}
+
+	public List<CompanyQualification> getCompanyQualifications() {
+		return companyQualifications;
+	}
+
+	public void setCompanyQualifications(List<CompanyQualification> companyQualifications) {
+		this.companyQualifications = companyQualifications;
 	}
     
     

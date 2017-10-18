@@ -100,7 +100,7 @@ public class InvoiceServiceImpl extends GenericServiceImpl<Invoice, String> impl
 		// TODO Auto-generated method stub
 		o.setBillStatus(OrderInfo.RECIVEBILL);
 		o.setSerialNum(in.getOrderSerial());
-		orderInfoMapper.updateByPrimaryKey(o);
+		orderInfoMapper.updateByPrimaryKeySelective(o);
 		
 		
 	}
@@ -111,7 +111,7 @@ public class InvoiceServiceImpl extends GenericServiceImpl<Invoice, String> impl
 		// TODO Auto-generated method stub
 		o.setBillStatus(OrderInfo.BILL);
 		o.setSerialNum(out.getOrderSerial());
-		orderInfoMapper.updateByPrimaryKey(o);
+		orderInfoMapper.updateByPrimaryKeySelective(o);
 	}
 	}
 	

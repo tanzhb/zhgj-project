@@ -968,8 +968,16 @@ margin-right: 20px;
                          <button class="close" data-close="alert"></button> 请先输入正确数据！ </div>
                      <div class="row">
                          <div class="col-md-4">
+                         		<div class="form-group ">
+                              	<label class="control-label col-md-5 bold">含税金额：</label>
+                                 <div class="control-label col-md-7">
+                                  <p > {{totalRateAndAmount()}} </p>
+                                  </div>
+                              </div>
+                         </div>
+                         <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">商品金额：</label>
+                                 <label class="control-label col-md-5 bold">不含税金额：</label>
                                  <div class="control-label col-md-7">
                                  <p > {{totalAmount()}} </p>
                                  </div>
@@ -978,20 +986,13 @@ margin-right: 20px;
                          <!--/span-->
                          <div class="col-md-4">
                          		<div class="form-group ">
-                              	<label class="control-label col-md-5 bold">税额(含关税)：</label>
+                              	<label class="control-label col-md-5 bold">税额：</label>
                                  <div class="control-label col-md-7">
-                                  <p >{{totalRateAndCustomsAmount()}}</p>
+                                  <p >{{totalRateAmount()}}</p>
                                   </div>
                               </div>
                          </div>
-                         <div class="col-md-4">
-                         		<div class="form-group ">
-                              	<label class="control-label col-md-5 bold">含税金额：</label>
-                                 <div class="control-label col-md-7">
-                                  <p > {{totalRateAndAmount()}} </p>
-                                  </div>
-                              </div>
-                         </div>
+                         
                          <!--/span-->
                      </div>
                      <!--/row-->

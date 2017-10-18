@@ -1906,10 +1906,71 @@ var e = $("#form_clauseSettlement"),
       */
     $scope.addCSD = function(){
     	if($scope.clauseSettlement.CSD){}else{$scope.clauseSettlement.CSD =[{}]}
- 	    $scope.clauseSettlement.CSD[_index] = {};
+ 	    
+    	$scope.clauseSettlement.CSD[_index] = {};
+ 	    $scope.clauseSettlement.CSD[_index].deliveryRate = 100 - $scope._totalRate();
+ 	    $scope.clauseSettlement.CSD[_index].deliveryAmount = ($scope.totalOrderAmount()*$scope.clauseSettlement.CSD[_index].deliveryRate/100).toFixed(2);
+ 	    $scope.clauseSettlement.CSD[_index].billingAmount = $scope.clauseSettlement.CSD[_index].deliveryAmount;
+ 	    $scope.clauseSettlement.CSD[_index].unbilledAmount = 0;
+ 	    
  	   _index++;
     };
     
+    
+    $scope._totalRate  = function() {//计算总的支付比例
+       	var totalRate = 0;
+    	for(var i=0;i<$scope.clauseSettlement.CSD.length;i++){
+    		if($scope.clauseSettlement.CSD[i].deliveryRate){
+    			totalRate = totalRate + Number($scope.clauseSettlement.CSD[i].deliveryRate);
+    		}
+       	}
+    	return totalRate;
+   };
+   
+   $scope._arithmeticRate  = function(scope) {//计算支付比例
+      	
+	   scope._CSD.deliveryRate =  ((scope._CSD.deliveryAmount/$scope.totalOrderAmount())*100).toFixed(2);
+	   
+	   if($scope._totalRate()>100){
+      		scope._CSD.deliveryRate = scope._CSD.deliveryRate - $scope._totalRate() + 100
+      	}
+   	
+	   $scope._arithmeticDeliveryAmount(scope);
+  };
+  
+    $scope._arithmeticDeliveryAmount  = function(scope) {//计算支付金额
+       	if($scope._totalRate()>100){
+       		scope._CSD.deliveryRate = scope._CSD.deliveryRate - $scope._totalRate() + 100
+       	}
+    	
+    	if(scope._CSD.deliveryRate){
+       		scope._CSD.deliveryAmount =  ($scope.totalOrderAmount()*scope._CSD.deliveryRate/100).toFixed(2);
+       	}
+       	scope._CSD.billingAmount = scope._CSD.deliveryAmount;
+   		scope._CSD.unbilledAmount = 0
+   };
+   
+   $scope._arithmeticUnbilledAmount  = function(scope) {//计算未开金额
+       	if(scope._CSD.billingAmount&&scope._CSD.deliveryAmount){
+       		scope._CSD.unbilledAmount =  (Number(scope._CSD.deliveryAmount) - Number(scope._CSD.billingAmount)).toFixed(2);
+       	}
+       	if(scope._CSD.unbilledAmount<0){
+       		scope._CSD.billingAmount = scope._CSD.deliveryAmount;
+       		scope._CSD.unbilledAmount = 0 ;
+       	}
+   };
+   
+   $scope._arithmeticBilledAmount  = function(scope) {//计算已开金额
+      	if(scope._CSD.unbilledAmount&&scope._CSD.deliveryAmount){
+      		scope._CSD.billingAmount =  (Number(scope._CSD.deliveryAmount) - Number(scope._CSD.unbilledAmount)).toFixed(2);
+      	}
+      	if(scope._CSD.billingAmount<0){
+      		scope._CSD.unbilledAmount = scope._CSD.deliveryAmount;
+      		scope._CSD.billingAmount = 0 ;
+      	}
+  };
+   
+   
     /**
      * ClauseFramework删除一行
      */
@@ -2768,7 +2829,7 @@ var e = $("#form_clauseSettlement"),
           		 );
 		      }
 		     
-		     $scope._arithmeticDeliveryAmount  = function(scope) {//计算支付金额
+		     /*$scope._arithmeticDeliveryAmount  = function(scope) {//计算支付金额
 			       	if(scope._CSD.deliveryRate){
 			       		scope._CSD.deliveryAmount =  ($scope.totalOrderAmount()*scope._CSD.deliveryRate/100).toFixed(2);
 			       	}
@@ -2779,7 +2840,7 @@ var e = $("#form_clauseSettlement"),
 			       	if(scope._CSD.billingAmount&&scope._CSD.deliveryAmount){
 			       		scope._CSD.unbilledAmount =  (Number(scope._CSD.deliveryAmount) - Number(scope._CSD.billingAmount)).toFixed(2);
 			       	}
-		       };
+		       };*/
 		     //********订单物料合计，结算条款end****************//
 		       
 		     //********审批流程start****************//
@@ -2904,11 +2965,16 @@ var e = $("#form_clauseSettlement"),
 		        									}
 		        								});
 		        								
+		        								
 		        								if(ids==''){
 		        									toastr.warning('请选择一个办理！');return;
 		        								}else if(ids=='more'){
 		        									toastr.warning('只能选择一个办理！');return;
 		        								} else {
+		        									if(table.row('.active').data().assign == ''){
+		    											showToastr('toast-top-center', 'warning', '此任务您还没有签收，请【签收】任务后再处理任务！')
+		    											return;
+		    										}
 		        									orderService
 		        									.getAuditInfos(ids)
 													.then(
@@ -3200,44 +3266,7 @@ var e = $("#form_clauseSettlement"),
 		        	
 		        	if(assign == ''){
 		        		toastr.warning("此任务您还没有签收，请【签收】任务后再处理任务！！");
-		        	}else{		
-		        		$.ajax({url:ctx + "/rest/order/toApproval/" + taskId,
-		        			type: 'POST',
-		        			dataType: 'json',
-		        			success:function(result){
-		        				$("#taskId").val(taskId);
-		        				$("#processInstanceId").val(processInstanceId);																					
-		        				$("#orderId").val(result.orderInfo.serialNum);
-		        				
-		        				var comments = ""//添加评论
-		        				for (var i=0;i<result.commentList.length;i++){
-		        					comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
-		        					+ timeStamp2String2(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
-		        				}
-		        				
-		        				if(result.actionType == 'audit'){//审批流程
-		        					if(comments == ""){
-		        						comments = "无评论";
-		        					}else $("#comment_audit").html(comments);
-//		        					$("#audit_beginDate").val(timeStamp2String2(result.order.beginDate));
-//		        					$("#audit_endDate").val(timeStamp2String2(result.order.endDate));
-//		        					$("#audit_days").val(result.order.days);
-//		        					$("#audit_orderType").val(result.order.orderType);
-		        					$("#audit_reason").val(result.orderInfo.remark);
-		        					$('#auditOrderModal').modal('show');
-		        				}else{//result.actionType == 'modify' 更改流程
-		        					if(comments == ""){
-		        						comments = "无评论";
-		        					}else $("#comment_modify").html(comments);
-//		        					$("#modify_beginDate").val(timeStamp2String2(result.order.beginDate));
-//		        					$("#modify_endDate").val(timeStamp2String2(result.order.endDate));
-//		        					$("#modify_days").val(result.order.days);
-//		        					$("#modify_orderType").val(result.order.orderType);
-		        					$("#modify_reason").val(result.orderInfo.reason);
-		        					$('#modifyOrderModal').modal('show');
-		        				}
-		        				
-		        		}});
+		        	}else{
 		        		
 		        	}
 		        	

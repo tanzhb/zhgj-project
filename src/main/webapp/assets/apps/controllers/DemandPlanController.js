@@ -731,6 +731,19 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	    		 }
 		    }
 	        
+	        
+	        $scope.searchDemandPlanMateriels = function(){
+	        	$scope.search.serialNum = $scope.demandPlan.serialNum;
+	        	var promise = demandPlanService.searchDemandPlan($scope.search);
+        		promise.then(function(data){
+        			//if(!handle.isNull(data.data)){
+        				$scope.rootMateriels = data.data;
+        			//}e;se
+        		},function(data){
+        			//调用承诺接口reject();
+        		});
+	        }
+	        
 	        /**
 	         * 获取需求计划基本信息
 	         */
