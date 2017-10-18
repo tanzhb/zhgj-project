@@ -35,5 +35,12 @@ public interface DemandPlanMaterielService extends GenericService<DemandPlanMate
 	String selectMaterielSerialByMaterielNum(String materielNum);
 	
 	String selectSupplyName(String materielSerial);
+
+	/**
+	 * 
+	 * @Description (根据条件搜索需求计划物料)
+	 * @param search
+	 */
+	public List<DemandPlanMateriel> searchDemandPlanMateriels(DemandPlan search);
 	
 }

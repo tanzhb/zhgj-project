@@ -1,5 +1,6 @@
 package com.congmai.zhgj.web.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -42,18 +44,23 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.Constants;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.UserUtil;
+import com.congmai.zhgj.web.event.EventExample;
+import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryMaterielExample;
+import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderInfoExample;
 import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.PaymentRecord;
+import com.congmai.zhgj.web.model.RelationFile;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.StockInOutRecordExample;
 import com.congmai.zhgj.web.model.TakeDelivery;
@@ -64,10 +71,12 @@ import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.WarehouseExample;
 import com.congmai.zhgj.web.model.Warehouseposition;import com.congmai.zhgj.web.model.WarehousepositionExample;
 import com.congmai.zhgj.web.service.DeliveryMaterielService;
+import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.DeliveryTransportService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
+import com.congmai.zhgj.web.service.RelationFileService;
 import com.congmai.zhgj.web.service.TakeDeliveryService;
 import com.congmai.zhgj.web.service.UserCompanyService;
 import com.congmai.zhgj.web.service.WarehouseService;
@@ -107,6 +116,9 @@ public class TakeDeliveryController {
 	
 	@Autowired
 	private WarehousepositionService warehousepositionService; 
+	
+	@Autowired
+	private RelationFileService relationFileService;
 	
 	@Autowired
 	protected RuntimeService runtimeService;
@@ -170,7 +182,7 @@ public class TakeDeliveryController {
 		if(user !=null){
 			comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));//获取用户的企业ID
 		}
-		
+		takeDelivery.setBuyComId(comId);
     	Page<Delivery> takeDeliverys = takeDeliveryService.selectByPage(takeDelivery);
     	
     	
@@ -246,7 +258,22 @@ public class TakeDeliveryController {
     @ResponseBody
     public Delivery getTakeDeliveryInfo(HttpServletRequest request,String serialNum) {
     	
-    	return takeDeliveryService.selectByTakeDeliveryPrimaryKey(serialNum);
+    	Delivery delivery = takeDeliveryService.selectByTakeDeliveryPrimaryKey(serialNum);
+    	if(delivery!=null&&CollectionUtils.isNotEmpty(delivery.getDeliveryMateriels())){
+    		for(DeliveryMateriel deliveryMaterielVO:delivery.getDeliveryMateriels()){
+    			String attachFile="";
+    			List<RelationFile> files=relationFileService.getAttachFileInfo("takeDelivery",deliveryMaterielVO.getSerialNum());
+    			for(RelationFile relationFile:files){
+    				String file=relationFile.getFile();
+    				String remark=relationFile.getRemark();
+    				attachFile=attachFile+file+","+remark+"&";
+    			}
+    			deliveryMaterielVO.setAttachFile(attachFile);
+    			deliveryMaterielVO.setFiles(files);
+    		}
+    	}
+    	
+    	return delivery;
     }
     
 	    
@@ -311,6 +338,10 @@ public class TakeDeliveryController {
     		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
     		takeDeliveryParams = this.getConfirmTakeDeliveryData(takeDeliveryParams,currenLoginName);
     		takeDeliveryService.confirmTakeDelivery(takeDeliveryParams.getTakeDelivery(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName);
+    		
+    		//收货消息
+    		EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.TAKE_DELIVERY));
+    		
     		flag = "1";
     	}catch(Exception e){
     		System.out.println(e.getMessage());
@@ -1040,6 +1071,42 @@ public class TakeDeliveryController {
 			TakeDeliveryParams takeDeliveryParams, String currenLoginName) {
 		Date now = new Date();
 		for(DeliveryMateriel materiel : takeDeliveryParams.getDeliveryMateriels()){
+			//附件
+    		List<RelationFile> files=new ArrayList<RelationFile>();
+    		
+    		//如果附件不为空时执行添加操作
+    		if(!StringUtils.isEmpty(materiel.getAttachFile())){
+    			String attachFile[]=materiel.getAttachFile().split("&");
+    			for(String detail:attachFile){
+    				RelationFile item=new RelationFile();
+    				String attachFileDetail[]=detail.split(",");
+    				String file=attachFileDetail[0];
+    				
+    				//描述不为空时添加描述
+    				String describe=null;
+    				if(attachFileDetail.length>1){
+    					if(attachFileDetail[1]!=null){
+           				 describe=attachFileDetail[1];	
+           				}	
+    				}
+    				
+    				
+    				item.setSerialNum(ApplicationUtils.random32UUID());
+    				item.setRelationSerial(materiel.getSerialNum());
+    				item.setFileType("takeDelivery");
+    				item.setFileDescribe(describe);
+    				item.setFile(file);
+    				item.setUploader(currenLoginName);
+    				item.setCreator(currenLoginName);
+    				item.setUpdater(currenLoginName);
+    				item.setDelFlg("0");
+    				item.setIsReadable("0");
+    				files.add(item);
+    			}
+    			
+    			//批量添加附件
+    			relationFileService.insertAttachFiles(files);
+    		}
 			materiel.setUpdater(currenLoginName);
 			materiel.setUpdateTime(now);
 		}

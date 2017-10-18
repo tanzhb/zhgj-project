@@ -501,6 +501,76 @@ public class DeliveryExample {
             addCriterion("supplyComId not between", value1, value2, "supplyComId");
             return (Criteria) this;
         }
+        
+        public Criteria andBuyComIdIsNull() {
+            addCriterion("buyComId is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyComIdIsNotNull() {
+            addCriterion("buyComId is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyComIdEqualTo(String value) {
+            addCriterion("buyComId =", value, "buyComId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyComIdNotEqualTo(String value) {
+            addCriterion("buyComId <>", value, "buyComId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyComIdGreaterThan(String value) {
+            addCriterion("buyComId >", value, "buyComId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyComIdGreaterThanOrEqualTo(String value) {
+            addCriterion("buyComId >=", value, "buyComId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyComIdLessThan(String value) {
+            addCriterion("buyComId <", value, "buyComId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyComIdLessThanOrEqualTo(String value) {
+            addCriterion("buyComId <=", value, "buyComId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyComIdLike(String value) {
+            addCriterion("buyComId like", value, "buyComId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyComIdNotLike(String value) {
+            addCriterion("buyComId not like", value, "buyComId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyComIdIn(List<String> values) {
+            addCriterion("buyComId in", values, "buyComId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyComIdNotIn(List<String> values) {
+            addCriterion("buyComId not in", values, "buyComId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyComIdBetween(String value1, String value2) {
+            addCriterion("buyComId between", value1, value2, "buyComId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuyComIdNotBetween(String value1, String value2) {
+            addCriterion("buyComId not between", value1, value2, "buyComId");
+            return (Criteria) this;
+        }
 
         public Criteria andShipperIsNull() {
             addCriterion("shipper is null");

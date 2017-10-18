@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.dao;
 
 import com.congmai.zhgj.core.generic.GenericDao;
+import com.congmai.zhgj.web.model.DemandPlan;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.DemandPlanMaterielExample;
 
@@ -34,4 +35,6 @@ public interface DemandPlanMaterielMapper extends GenericDao<DemandPlanMateriel,
     int updateByPrimaryKey(DemandPlanMateriel record);
     
     String selectSupplyName(String materielSerial);
+
+	List<DemandPlanMateriel> searchMateriels(DemandPlan demandPlan);
 }

@@ -9,6 +9,7 @@
      <result column="docNum" property="docNum" jdbcType="VARCHAR" />
     <result column="orderSerial" property="orderSerial" jdbcType="VARCHAR" />
     <result column="supplyComId" property="supplyComId" jdbcType="VARCHAR" />
+    <result column="buyComId" property="buyComId" jdbcType="VARCHAR" />
     <result column="shipper" property="shipper" jdbcType="VARCHAR" />
     <result column="receiver" property="receiver" jdbcType="VARCHAR" />
     <result column="makeDate" property="makeDate" jdbcType="DATE" />
@@ -144,7 +145,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-     serialNum, deliverNum, deliverType, orderSerial, docNum, takeDeliverSerial, supplyComId, 
+     serialNum, deliverNum, deliverType, orderSerial, docNum, takeDeliverSerial, supplyComId, buyComId,
     shipper, receiver, makeDate, maker, remark, status, approval, approvalDate, warehouseSerial, 
     materielCount, deliverDate, packageCount, materielWeight, packageType, packageSpecifications, 
     serviceMoney, deliverer, contactNum, deliverRemark, deliverAddress, processInstanceId, 
@@ -190,7 +191,7 @@
   </select>
   <select id="selectByTakeDeliveryPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
-    d.serialNum, d.deliverNum,d.deliverType, d.orderSerial, d.supplyComId, d.shipper, d.receiver, d.makeDate, d.maker, 
+    d.serialNum, d.deliverNum,d.deliverType, d.orderSerial, d.supplyComId,d.buyComId, d.shipper, d.receiver, d.makeDate, d.maker, 
     d.remark, d.status, d.approval, d.approvalDate, d.warehouseSerial as warehouseSerial, d.materielCount, d.deliverDate, 
     d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, 
     d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.serialNum as dmSerialNum,dm.batchNum,
@@ -207,7 +208,7 @@
   </select>
   <select id="selectByDeliveryPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
-    d.serialNum, d.deliverNum,d.deliverType, d.orderSerial, d.supplyComId, d.shipper, d.receiver, d.makeDate, d.maker, 
+    d.serialNum, d.deliverNum,d.deliverType, d.orderSerial, d.supplyComId,d.buyComId, d.shipper, d.receiver, d.makeDate, d.maker, 
     d.remark, d.status, d.approval, d.approvalDate, d.warehouseSerial as warehouseSerial, d.materielCount, d.deliverDate, 
     d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, 
     d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.serialNum as dmSerialNum,dm.batchNum,
@@ -235,7 +236,7 @@
   <insert id="insert" parameterType="com.congmai.zhgj.web.model.Delivery" >
     insert into delivery (serialNum, deliverNum, deliverType, 
       orderSerial, docNum, takeDeliverSerial, 
-      supplyComId, shipper, receiver, 
+      supplyComId, buyComId, shipper, receiver, 
       makeDate, maker, remark, 
       status, approval, approvalDate, 
       warehouseSerial, materielCount, deliverDate, 
@@ -247,7 +248,7 @@
       updater, updateTime)
     values (#{serialNum,jdbcType=VARCHAR}, #{deliverNum,jdbcType=VARCHAR}, #{deliverType,jdbcType=VARCHAR}, 
       #{orderSerial,jdbcType=VARCHAR}, #{docNum,jdbcType=VARCHAR}, #{takeDeliverSerial,jdbcType=VARCHAR}, 
-      #{supplyComId,jdbcType=VARCHAR}, #{shipper,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, 
+      #{supplyComId,jdbcType=VARCHAR}, #{buyComId,jdbcType=VARCHAR}, #{shipper,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, 
       #{makeDate,jdbcType=DATE}, #{maker,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
       #{status,jdbcType=VARCHAR}, #{approval,jdbcType=VARCHAR}, #{approvalDate,jdbcType=DATE}, 
       #{warehouseSerial,jdbcType=VARCHAR}, #{materielCount,jdbcType=VARCHAR}, #{deliverDate,jdbcType=DATE}, 
@@ -281,6 +282,9 @@
       </if>
       <if test="supplyComId != null" >
         supplyComId,
+      </if>
+      <if test="buyComId != null" >
+        buyComId,
       </if>
       <if test="shipper != null" >
         shipper,
@@ -505,6 +509,9 @@
       <if test="record.supplyComId != null" >
         supplyComId = #{record.supplyComId,jdbcType=VARCHAR},
       </if>
+      <if test="record.buyComId != null" >
+        buyComId = #{record.buyComId,jdbcType=VARCHAR},
+      </if>
       <if test="record.shipper != null" >
         shipper = #{record.shipper,jdbcType=VARCHAR},
       </if>
@@ -603,6 +610,7 @@
       docNum = #{record.docNum,jdbcType=VARCHAR},
       takeDeliverSerial = #{record.takeDeliverSerial,jdbcType=VARCHAR},
       supplyComId = #{record.supplyComId,jdbcType=VARCHAR},
+      buyComId = #{record.buyComId,jdbcType=VARCHAR},
       shipper = #{record.shipper,jdbcType=VARCHAR},
       receiver = #{record.receiver,jdbcType=VARCHAR},
       makeDate = #{record.makeDate,jdbcType=DATE},
@@ -655,6 +663,9 @@
       </if>
       <if test="supplyComId != null" >
         supplyComId = #{supplyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="buyComId != null" >
+        buyComId = #{buyComId,jdbcType=VARCHAR},
       </if>
       <if test="shipper != null" >
         shipper = #{shipper,jdbcType=VARCHAR},
@@ -751,6 +762,7 @@
       docNum = #{docNum,jdbcType=VARCHAR},
       takeDeliverSerial = #{takeDeliverSerial,jdbcType=VARCHAR},
       supplyComId = #{supplyComId,jdbcType=VARCHAR},
+      buyComId = #{buyComId,jdbcType=VARCHAR},
       shipper = #{shipper,jdbcType=VARCHAR},
       receiver = #{receiver,jdbcType=VARCHAR},
       makeDate = #{makeDate,jdbcType=DATE},

@@ -33,6 +33,7 @@
     <result column="orderSerial" property="orderSerial" jdbcType="VARCHAR" />
      <result column="docNum" property="docNum" jdbcType="VARCHAR" />
     <result column="supplyComId" property="supplyComId" jdbcType="VARCHAR" />
+    <result column="buyComId" property="buyComId" jdbcType="VARCHAR" />
     <result column="shipper" property="shipper" jdbcType="VARCHAR" />
     <result column="receiver" property="receiver" jdbcType="VARCHAR" />
     <result column="makeDate" property="makeDate" jdbcType="DATE" />
@@ -91,8 +92,9 @@
     </association>
     <association column="warehouseSerial" property="warehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>
     <association property="supplyName" column="supplyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
-    <association property="shipperName" column="shipper" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
-    <association property="receiverName" column="receiver" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
+    <association property="buyName" column="buyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
+   <!--  <association property="shipperName" column="shipper" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
+    <association property="receiverName" column="receiver" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association> -->
     <association property="orderNum" column="orderSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectOrderNumByOrderSerial"></association>
      <association property="orderAmount" column="orderSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectOrderAmountByOrderSerial"></association>
     <collection property="deliveryMateriels" ofType="com.congmai.zhgj.web.model.DeliveryMateriel">
@@ -140,12 +142,14 @@
     <result column="orderSerial" property="orderSerial" jdbcType="VARCHAR" />
     <result column="docNum" property="docNum" jdbcType="VARCHAR" />
     <result column="supplyComId" property="supplyComId" jdbcType="VARCHAR" />
+    <result column="buyComId" property="buyComId" jdbcType="VARCHAR" />
     <association property="takeDelivery" javaType="com.congmai.zhgj.web.model.TakeDelivery">
     	 <result column="tdSerialNum" property="serialNum" jdbcType="VARCHAR" />
          <result column="takeDeliverNum" property="takeDeliverNum" jdbcType="VARCHAR" />
          <association column="tdWarehouseSerial" property="warehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>
     </association>
     <association property="supplyName" column="supplyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
+    <association property="buyName" column="buyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
     <collection property="deliveryMateriels" ofType="com.congmai.zhgj.web.model.DeliveryMateriel">
     	<!--  <result column="orderMaterielSerial" property="orderMaterielSerial" jdbcType="VARCHAR" /> -->
 	     <result column="batchNum" property="batchNum" jdbcType="VARCHAR" />
@@ -238,7 +242,7 @@
     d.serialNum, d.deliverNum,d.deliverType, d.orderSerial,d.docNum,d.shipper, d.receiver, d.makeDate, d.maker, 
     d.remark, d.approval, d.approvalDate, d.warehouseSerial, d.materielCount, d.deliverDate, 
     d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, 
-    dt.transportType,d.supplyComId,
+    dt.transportType,d.supplyComId,d.buyComId,
 	td.serialNum as tdSerialNum,td.warehouseSerial as tdWarehouseSerial,td.takeDeliverDate,td.receiver as tdReceiver,td.contactNum as tdContactNum,td.takeDeliverNum,td.remark as take_delivery_remark,
 	td.status
     from takeDelivery td
@@ -253,7 +257,7 @@
   </select>
   <select id="selectByTakeDeliveryPrimaryKey" resultMap="BaseResultMap2" parameterType="java.lang.String" >
     select
-    d.serialNum, d.deliverNum,d.deliverType,d.docNum, d.orderSerial, d.supplyComId, d.shipper, d.receiver, d.makeDate, d.maker, 
+    d.serialNum, d.deliverNum,d.deliverType,d.docNum, d.orderSerial, d.supplyComId, d.buyComId, d.shipper, d.receiver, d.makeDate, d.maker, 
     d.remark, d.approval, d.approvalDate, d.warehouseSerial as warehouseSerial, d.materielCount, d.deliverDate,d.deliverAddress, 
     d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, 
     d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.batchNum,    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.batchNum,dm.serialNum as dmSerialNum,
@@ -273,7 +277,7 @@
   </select>
   <select id="selectByTakeDeliveryPrimaryKeyForOtherType" resultMap="BaseResultMap2" parameterType="java.lang.String" >
     select
-    d.serialNum, d.deliverNum,d.deliverType,d.docNum, d.orderSerial, d.supplyComId, d.shipper, d.receiver, d.makeDate, d.maker, 
+    d.serialNum, d.deliverNum,d.deliverType,d.docNum, d.orderSerial, d.supplyComId, d.buyComId, d.shipper, d.receiver, d.makeDate, d.maker, 
     d.remark, d.approval, d.approvalDate, d.warehouseSerial as warehouseSerial, d.materielCount, d.deliverDate,d.deliverAddress, 
     d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, 
     d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.batchNum,    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.batchNum,dm.serialNum as dmSerialNum,
@@ -675,7 +679,7 @@
   </update>
       <select id="selectByTakeDeliveryPrimaryKeyForStockIn" resultMap="BaseResultMap2" parameterType="java.lang.String" >
     select
-    d.serialNum, d.deliverNum,d.deliverType, d.orderSerial,d.docNum,d.supplyComId,d.shipper,d.receiver,dm.serialNum as dmSerialNum,dm.batchNum,
+    d.serialNum, d.deliverNum,d.deliverType, d.orderSerial,d.docNum,d.supplyComId,d.buyComId,d.shipper,d.receiver,dm.serialNum as dmSerialNum,dm.batchNum,
     dm.manufactureDate,dm.deliverCount,dm.deliverRemark,
     dm2.acceptCount,dm2.refuseCount,dm2.takeRemark,dm.qualifiedCount,dm.unqualifiedCount,dm.checkRemark,dm.warehouseSerial as dmWarehouseSerial,
 	dm.positionSerial as dmPositionSerial,dm.stockCount,dm.unstockCount,dm.stockRemark,dm.remark as dmRemark,dm.warehouseSerial as dmWarehouseSerial,dm.orderMaterielSerial,

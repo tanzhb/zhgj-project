@@ -2,8 +2,8 @@
  * 
  */
 
-angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope','$scope','$state','$http','takeDeliveryService','orderService','$location','$compile','$stateParams','commonService',
-                                                                   function($rootScope,$scope,$state,$http,takeDeliveryService,orderService,$location,$compile,$stateParams,commonService) {
+angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope','$scope','$state','$http','takeDeliveryService','orderService','$location','$compile','$stateParams','commonService','FileUploader',
+                                                                   function($rootScope,$scope,$state,$http,takeDeliveryService,orderService,$location,$compile,$stateParams,commonService,FileUploader) {
 	 $scope.$on('$viewContentLoaded', function() {   
 	    	// initialize core components
 		    handle = new pageHandle();
@@ -211,6 +211,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        	if(type=="edit"){
 	        		$scope.deliverTransport = data.data.deliveryTransport;
 	        		$scope.orderMateriels = data.data.deliveryMateriels;
+	        		if($state.current.name=="takeDeliveryView"){//查看页面构造物料查询分页
+      		    		$scope.queryForPage();
+      		    	}
 	        		for(var i in data.data.deliveryMateriels){
 	        			if(data.data.deliveryMateriels[i].orderMateriel!=null){
 	        				$scope.orderMateriels[i].materiel = data.data.deliveryMateriels[i].orderMateriel.materiel;
@@ -321,11 +324,14 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					handle.blockUI();
 					var params = {};
 					params.takeDelivery = {};
+					params.delivery = {};
 					params.takeDelivery.serialNum = $scope.deliver.takeDelivery.serialNum;
 					params.takeDelivery.takeDeliverNum = $scope.takeDeliver.takeDeliverNum;
 					params.takeDelivery.actualDate = $scope.takeDeliver.actualDate;
 					params.takeDelivery.taker = $scope.takeDeliver.taker;
 					params.takeDelivery.takeRemark = $scope.takeDeliver.takeRemark;
+					params.delivery.supplyComId = $scope.deliver.supplyComId;
+					params.delivery.deliverNum = $scope.deliver.deliverNum;
 					params.deliveryMateriels = [];
 					var param;
 					for(var i=0;i < $scope.deliver.deliveryMateriels.length;i++){
@@ -345,6 +351,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 						param.acceptCount = $scope.deliver.deliveryMateriels[i].acceptCount;
 						param.refuseCount = $scope.deliver.deliveryMateriels[i].deliverCount-$scope.deliver.deliveryMateriels[i].acceptCount;
 						param.takeRemark = $scope.deliver.deliveryMateriels[i].takeRemark;
+						param.attachFile = $("#batchNumReal"+i).text();
 						params.deliveryMateriels.push(param);
 					}
 					
@@ -423,7 +430,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					if(table.row('.active').data().status != '0' && table.row('.active').data().status < 1){
 						showToastr('toast-top-center', 'warning', '该收货单已经申请流程审批，不能进行再次收货！');
 					}else if(table.row('.active').data().status == 4){
-						showToastr('toast-top-center', 'warning', '该收货单已经已收货完成！');
+						showToastr('toast-top-center', 'warning', '该收货单已经收货完成！');
 					}else if(table.row('.active').data().status > 2 || table.row('.active').data().status == 1){
 						showToastr('toast-top-center', 'warning', '该收货单已经进入检验入库流程，不能进行再次收货！');
 					}else{
@@ -684,7 +691,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	                    searching: true,//是否过滤检索
 	                    ordering:  true,//是否排序
 	                    lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
-	                    pageLength: 5,//每页显示数量
+	                    pageLength: 10,//每页显示数量
 	                    processing: true,//loading等待框
 	                    bRetrieve : true,
 //	                    serverSide: true,
@@ -1234,7 +1241,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		    						},{
 	  		    							'targets' : 3,
 	  		    							'render' : function(data,
-	  		    									type, row, meta) {debugger;
+	  		    									type, row, meta) {
 	  		    								
 	  		    								if(data==null){
 	  		    									return row.supplyMateriel.materiel.materielName;
@@ -1468,7 +1475,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					$scope.deliver.orderSerial = $('#buyOrder input[name="selecrOrderSerial"]:checked').val();
 					var order = order_table.row('.active').data();
 					$scope.deliver.supplyComId = order.supplyComId;
-					//$scope.deliver.shipper = order.supplyComId;debugger;
+					$scope.deliver.buyComId = order.buyComId;
+					//$scope.deliver.shipper = order.supplyComId;
 					if(!isNull(order.buyComId)){
 						//$scope.deliver.receiver =  order.buyComId;
 						$scope.deliver.receiver =  order.buyName;
@@ -2338,5 +2346,347 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 				}
 	         
 	          /***选择物料列表初始化END***/
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+		    	
+		    	//********附件  start****************//
+
+		    	 /**
+		         * 添加页面弹出
+		         */
+		    	$scope.addAttachFile = function (index){
+		    		$("#basicMaterielInfoII").modal("show");
+		    		$scope.fileIndex=index;
+				}
+		    	
+		    	/**
+		         * 编辑页面弹出
+		         */
+		    	$scope.addAttachFileEdit = function (index,serialNum){
+		    		$("#basicMaterielInfoII").modal("show");
+		    		$scope.fileIndex=index;
+		    		 $scope.getAttachFileInfo(serialNum);
+				}
+		    	var _fileIndex = 0;
+		    	
+		    	 $scope.getAttachFileInfo=function(serialNum){
+		    		 DeliveryService.getAttachFileInfo(serialNum).then(
+		          		     function(data){
+		          		    	$scope.file=data.fileList;
+		          		    	if(data.fileList!=null){
+		          		    		_fileIndex=data.fileList.length;
+		          		    	}
+		          		     },
+		          		     function(error){
+		          		         $scope.error = error;
+		          		     }
+		          		 );
+		    		 
+		    	 }
+				
+			    $scope.saveFile  = function(fileIndex) {//保存File信息
+			    	
+			    	/*if($scope.file==null){
+			    		toastr.warning("请上传文件！");
+			    		return false;
+			    	}*/
+			    	
+			    	var html="";
+			    	var htmlReal="";
+			    	if($scope.file!=null){
+			    		for(var i=0;i<$scope.file.length;i++){
+				    		if($scope.file[i].file==null||$scope.file[i].file==''){
+				    			toastr.warning("上传文件不能为空！");
+					    		return false;
+				    		}
+				    		if($scope.file[i].remark){
+				    			htmlReal+=$scope.file[i].file+','+$scope.file[i].remark+'&';
+				    		}else{
+				    			htmlReal+=$scope.file[i].file+','+'&';
+				    		}
+				    		
+				    		var w=$scope.file[i].file.indexOf('_');
+				    		var sub_str_file=$scope.file[i].file.substring(w+1); 
+				    		
+				    		var asd="'"+$scope.file[i].file+"'";
+				    		html+='<a href="javascript:;" ng-click="downloadFile1('+asd+')">'+ sub_str_file+'</a>&nbsp;';
+						}	
+			    	}
+			    	
+			    	$("#batchNum"+fileIndex).html($compile(html)($scope))
+			    	$("#addBatchNum"+fileIndex).hide();
+			    	$("#batchNumReal"+fileIndex).html(htmlReal);
+			    	 $('#basicMaterielInfoII').modal('hide');// 保存成功后关闭模态框
+			    	$(".modal-backdrop").remove();
+			    	$("#fileTable tbody tr").remove();
+			    	_fileIndex=0;
+			    	$scope.file=null;
+			    }; 	
+			    
+			    $scope.saveFileEdit = function(fileIndex) {//保存File信息
+			    	var html="";
+			    	var htmlReal="";
+			    	for(var i=0;i<$scope.file.length;i++){
+			    		if($scope.file[i].file==null||$scope.file[i].file==''){
+			    			toastr.warning("上传文件不能为空！");
+				    		return false;
+			    		}
+			    		if($scope.file[i].remark){
+			    			htmlReal+=$scope.file[i].file+','+$scope.file[i].remark+'&';
+			    		}else{
+			    			htmlReal+=$scope.file[i].file+','+'&';
+			    		}
+			    		
+			    		var w=$scope.file[i].file.indexOf('_');
+			    		var sub_str_file=$scope.file[i].file.substring(w+1); 
+			    		
+			    		var asd="'"+$scope.file[i].file+"'";
+			    		html+='<a href="javascript:;" ng-click="downloadFile1('+asd+')">'+ sub_str_file+'</a>&nbsp;';
+					}
+			    	$("#batchNum"+fileIndex).html($compile(html)($scope))
+			    	$("#addBatchNum"+fileIndex).hide();
+			    	$("#batchNumReal"+fileIndex).html(htmlReal);
+			    	 $('#basicMaterielInfoII').modal('hide');// 保存成功后关闭模态框
+			    	$(".modal-backdrop").remove();
+			    	$("#fileTable tbody tr").remove();
+			    	_fileIndex=0;
+			    	$scope.file=null;
+			    	var fileRelation=fileRelation+fileIndex;
+			    	$scope.fileRelation=false;
+			    };
+			    
+			    /**
+		        * File新增一行
+		        */
+			    $scope.addFile = function(){
+			    	
+				    	   if($scope.file){}else{$scope.file =[{}]}
+				    	   $scope.file[_fileIndex] = {};
+				    	   _fileIndex++;
+			    };
+			    
+			    //下载文件查看详情时
+			       $scope.downloadFile1 = function(str){
+			    	   
+			    	 window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+encodeURI(encodeURI(str));
+			       }
+			    
+			    
+			    $scope.updateFile  = function() {//更新File信息
+			    	if($scope.pay.serialNum==null||$scope.pay.serialNum=='') {//上级物料为空的处理
+			    		toastr.error('请先保存基本信息！');return
+					}
+			    	/*if($('#form_sample_4').valid()){*/
+			    		PayService.updateFile($scope.file).then(
+			       		     function(data){
+			       		    	toastr.success('数据保存成功！');
+			       		    	$scope.inputFile=false;
+			       		    	$scope.cancelFile();
+			       		    	
+			       		     },
+			       		     function(error){
+			       		    	toastr.error('数据保存出错！');
+			       		         $scope.error = error;
+			       		     }
+			       		 );
+			    	/*}*/
+			    	
+			    }; 
+			    
+			    $scope.cancelFile  = function() {//取消编辑File信息
+			    	$scope.fileInfoInput = true;
+				    $scope.fileInfoShow = true;
+			    };
+			    
+			    $scope.editFile  = function() {//进入编辑File信息
+			    	$scope.fileInfoInput = false;
+				    $scope.fileInfoShow = false;
+			    };
+			    
+			    
+			    /**
+		        * File删除一行
+		        */
+		       $scope.deleteFile = function(index){
+		    	   $scope.file.splice(index,1);
+		    	   _fileIndex--;
+		       };
+		       
+		       
+		      var validateFileInit = function() {
+		        	var e = $("#form_sample_4");
+			        r = $(".alert-danger", e),
+			        i = $(".alert-success", e);
+			        e.validate({
+			            errorElement: "span",
+			            errorClass: "help-block help-block-error",
+			            focusInvalid: !1,
+			            ignore: "",
+			            messages: {
+			            },
+		            	rules: {
+		            			
+		            			},
+		            		invalidHandler: function(e, t) {
+		                    i.hide(), r.show(), App.scrollTo(r, -200)
+		                },
+			            invalidHandler: function(e, t) {
+			                i.hide(),
+			                r.show(),
+			                App.scrollTo(r, -200)
+			            },
+			            errorPlacement: function(e, r) {
+			                r.is(":checkbox") ? e.insertAfter(r.closest(".md-checkbox-list, .md-checkbox-inline, .checkbox-list, .checkbox-inline")) : r.is(":radio") ? e.insertAfter(r.closest(".md-radio-list, .md-radio-inline, .radio-list,.radio-inline")) : e.insertAfter(r)
+			            },
+			            highlight: function(e) {
+			                $(e).closest(".form-group").addClass("has-error")
+			            },
+			            unhighlight: function(e) {
+			                $(e).closest(".form-group").removeClass("has-error")
+			            },
+			            success: function(e) {
+			                e.closest(".form-group").removeClass("has-error")
+			            },
+			            submitHandler: function(e) {
+			                i.show(),
+			                r.hide()
+			            }})
+		        };
+
+		      //创建对象
+		  	  var uploader = $scope.uploader = new FileUploader({url:'rest/fileOperate/uploadSingleFile'});
+		  	 
+		  	  uploader.onAfterAddingFile = function(item){
+		  		  if(item.file.size>10000000){
+		  			  //toastr.warning("文件大小超过10M！");
+		  			  uploader.cancelAll();
+		  		  }
+		  	  }
+		  	  
+		  	  //添加文件到上传队列后
+		  	  uploader.onCompleteAll = function () {
+		  		  uploader.clearQueue();
+		  	  };
+		  	  //上传成功
+		  	  uploader.onSuccessItem = function (fileItem,response, status, headers) {
+		  		  if (status == 200){ 
+		  			  if(response==""){
+		  				  toastr.error("上传失败！");
+		  				  return;
+		  			  }
+		  		  		toastr.success("上传成功！");
+		  		  		$scope.file[uploadSelectIndex].file = response.filename;
+		  		  }else{
+		  			  toastr.error("上传失败！");
+		  			  $scope.file[uploadSelectIndex].file = response.filename;
+		  		  }
+		  		};
+		  	  //上传失败
+		  	  uploader.onErrorItem = function (fileItem, response, status, headers) {
+		  			toastr.error("上传失败！");
+		  	  };
+		  	  
+
+		       var uploadSelectIndex;
+		  	  $scope.uploadFile = function(index){
+		  		uploadSelectIndex = index;
+		  	  }
+		  	  
+		  	  $scope.up = function(file){
+		  		  uploader.clearQueue();
+		  		  uploader.addToQueue(file);
+		  		  uploader.uploadAll();
+		  	  }
+		  	  //下载文件上传时
+		       $scope.downloadFile = function(obj){
+		    	   if(!handle.isNull(obj)){
+		    		   window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+encodeURI(encodeURI(obj.file));
+		    	   }else{
+		    		   toastr.error("下载失败!");
+		    	   }
+		       }
+		       
+		       $scope.removefile = function(index){
+		    	   $scope.file[index].file = "";
+		       }
+		        
+			  //********附件  end****************//
+		    		
+				
+		    /********************************物料模糊检索及分页 START *********************************/
+		  	 /** *************订单物料明细可检索化  start*************** */
+		  	 $scope.pageIndex = 1; //记录当前页
+		  	 $scope.pageSize = '10'; //每页的记录数
+		  	 $scope.totalPage = '1'; //记录总页数
+		  	 $scope.dispalyDeliveryMateriel = [];//页面显示结果
+		  	 $scope.filterDeliveryMateriel = [];//查询筛选结果
+		  	 
+		  	 $scope.createFilterList = function(){
+		  		 $scope.filterDeliveryMateriel = [];
+		  		if($scope.deliver.deliveryMateriels.length>0&&$scope.queryStr&&!isNull($scope.queryStr)){
+		  			for(var i = 0;i < $scope.deliver.deliveryMateriels.length;i++){// data.data为选择的标准物料
+		  				if(($scope.deliver.deliveryMateriels)[i].orderMateriel.materiel.materielNum.indexOf($scope.queryStr)>=0){
+		  					$scope.filterDeliveryMateriel.push(angular.copy(($scope.deliver.deliveryMateriels)[i]));
+		  				}else if(($scope.deliver.deliveryMateriels)[i].orderMateriel.materiel.materielName.indexOf($scope.queryStr)>=0){
+		  					$scope.filterDeliveryMateriel.push(angular.copy(($scope.deliver.deliveryMateriels)[i]));
+		  				}else if(($scope.deliver.deliveryMateriels)[i].orderMateriel.materiel.specifications.indexOf($scope.queryStr)>=0){
+		  					$scope.filterDeliveryMateriel.push(angular.copy(($scope.deliver.deliveryMateriels)[i]));
+		  				}
+		  			}
+		  		}else{
+		  			$scope.filterDeliveryMateriel = angular.copy($scope.deliver.deliveryMateriels);
+		  		}
+		  		
+		  	 };
+		  	 
+		  	 $scope.createDispalyList = function(){
+		  		 $scope.dispalyDeliveryMateriel = $scope.filterDeliveryMateriel.slice(
+		  				 ($scope.pageIndex-1)*$scope.pageSize,
+		  				 $scope.pageIndex*$scope.pageSize);
+		  		 
+		  		 $scope.totalPage = Math.ceil($scope.filterDeliveryMateriel.length/$scope.pageSize);
+		  	 };
+		  	 
+		  	 $scope.queryForPage = function(){
+		  		 $scope.createFilterList();
+		  		 $scope.pageIndex = 1; //设置为第一页
+		  		 $scope.createDispalyList();
+		  	 };
+		  	 
+		  	 $scope.link2ThisPage = function(index){
+		  		 $scope.pageIndex = index;
+		  		 $scope.createDispalyList();
+		  	 }
+		  	 
+		  	 $scope.link2PreviousPage = function(){
+		  		 $scope.pageIndex--;
+		  		 $scope.createDispalyList();
+		  	 }
+		  	 
+		  	 $scope.link2NextPage = function(){
+		  		 $scope.pageIndex++;
+		  		 $scope.createDispalyList();
+		  	 }
+		  	 
+		  	/** *************订单物料明细可检索化  end*************** */
+		            
+		    /********************************物料模糊检索及分页 END *********************************/
+				
+				
+				
+				
+				
+				
+				
 
 }]); 
