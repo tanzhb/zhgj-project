@@ -299,7 +299,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                </div><!-- 物料信息 END-->
+                                </div>物料信息 END
                                 
         <!-- END EXAMPLE TABLE PORTLET-->
     

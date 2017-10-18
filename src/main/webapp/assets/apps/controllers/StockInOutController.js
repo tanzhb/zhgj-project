@@ -646,6 +646,7 @@ angular
 					 	    		aoColumnsForInOrOut= [
 				 	                                 { mData: 'takeDelivery.serialNum' },
 					 	                                { mData: 'takeDelivery.takeDeliverNum' },
+					 	                               { mData: 'orderAmount' },
 					 	                                { mData: 'orderNum' },
 					 	                               { mData: 'supplyName' },
 					 	                                { mData: 'shipper' },
@@ -764,6 +765,7 @@ angular
 							                            { mData: 'serialNum'},
 							                            { mData: 'deliverNum' },
 							                            { mData: 'orderNum' },
+							                            { mData: 'orderAmount' },
 							                            { mData: 'supplyName' },
 							                            { mData: 'materielCount' },
 							                            { mData: 'packageCount' },
@@ -866,6 +868,147 @@ angular
 							}
 					);
 					}
+				/*	var  materielTable;
+					function loadMaterielTable(judgeString,serialNum){
+						var a = 0,deliverOrTakeDeliverSerial;
+						if($scope.stockInOutCheck.serialNum==undefined){
+							deliverOrTakeDeliverSerial=orderSerial+'edit';
+						}else{
+							serialNum=orderSerial+'no'+$scope.stockInOutCheck.serialNum;
+						}
+						 if(materielTable!=undefined){
+							 materielTable.destroy();
+				 	    	 }
+						tableAjaxUrl= "rest/stockInOut/getMaterialBySerialNum?serialNum="+orderSerial 
+						App.getViewPort().width < App
+								.getResponsiveBreakpoint("md") ? $(
+								".page-header").hasClass(
+								"page-header-fixed-mobile")
+								&& (a = $(".page-header").outerHeight(!0))
+								: $(".page-header").hasClass(
+										"navbar-fixed-top") ? a = $(
+										".page-header").outerHeight(!0)
+										: $("body").hasClass(
+												"page-header-fixed")
+												&& (a = 64);
+										
+										materielInTable = $("#sample_inm")
+										.DataTable(
+												{
+													language : {
+														aria : {
+															sortAscending : ": activate to sort column ascending",
+															sortDescending : ": activate to sort column descending"
+														},
+														emptyTable : "空表",
+														info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+														infoEmpty : "没有数据",
+														infoFiltered : "(从 _MAX_ 条数据中检索)",
+														lengthMenu : "每页显示 _MENU_ 条数据",
+														search : "查询:",
+														zeroRecords : "抱歉， 没有找到！",
+														paginate : {
+															"sFirst" : "首页",
+															"sPrevious" : "前一页",
+															"sNext" : "后一页",
+															"sLast" : "尾页"
+														}
+													},
+													fixedHeader : {// 固定表头、表底
+														header : !0,
+														footer : !0,
+														headerOffset : a
+													},
+													// select: true,行多选
+													order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+													bRetrieve : true,
+													// searching: true,//是否过滤检索
+													// ordering: true,//是否排序
+													lengthMenu : [
+															[ 5, 10, 15, 30, -1 ],
+															[ 5, 10, 15, 30, "All" ] ],
+													pageLength : 10,// 每页显示数量
+													processing : true,// loading等待框
+													// serverSide: true,
+													ajax : tableAjaxUrl,// 加载数据中发票表数据
+
+													"aoColumns" : [
+													   {
+													    mData : 'serialNum'
+													   },
+														{
+														mData : 'materielNum'
+														},{
+															mData : 'materielName'
+														},  {
+															mData : 'specifications'
+														},{
+															mData : 'unit'
+														}, {
+															mData : 'amount'
+														},{
+															mData : 'canBillAmount'
+														}, {
+															mData : 'billAmount'
+														}, { 
+															mData : 'orderUnitPrice',
+															mRender:function(data){
+							                            		if(data!=""&&data!=null){
+							                            			return $filter('currency')(data,'￥');
+							                            		}else{
+							                            			return $filter('currency')(0,'￥');
+							                            		}
+							                            	}
+														}, {
+															mData : 'money'
+														},{
+															mData : 'status'
+														}
+														],
+													'aoColumnDefs' : [  {
+														'targets' : 6,
+														'className' : 'dt-body-center',
+														'render' : function(data,
+																type, row, meta) {
+															if(serialNum.indexOf("view")>-1){
+																return data;
+															}else{
+																return '<input  type="text"  value="'+row.billAmount+'"      id="'+row.serialNum+'"  onchange="judgeNumber(\''+row.canBillAmount+'\',\''+row.serialNum+'\',\''+judgeString+'\')" />';
+															}
+														},"createdCell": function (td, cellData, rowData, row, col) {
+															 $compile(td)($scope);
+													    }
+													} ,{
+														'targets' : 8,
+														'render' : function(data,
+																type, row, meta) {
+															return '<span id="money'+row.serialNum+'">'+$filter('currency')(data,'￥')+'</span>';
+															//return data;
+														},"createdCell": function (td, cellData, rowData, row, col) {
+															 $compile(td)($scope);
+													    }
+													} ,{
+														'targets' : 9,
+														'searchable' : false,
+														'orderable' : false,
+														'render' : function(data,
+																type, row, meta) {
+															if(serialNum.indexOf("view")>-1){
+																return "";
+															}else{
+															return '<a   id="save'+row.serialNum+'" ng-click="saveBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.invoiceBillingRecordSerial+'\',\''+row.billAmount+'\',\''+row.orderUnitPrice+'\',\''+row.money+'\')">  <i class="fa fa-save" title="保存"></i> </a>&nbsp;<a   style="display:none"  id="edit'+row.serialNum+'"  ng-click="editBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\')"><i class="fa fa-edit" title="编辑"></i></a>'
+															+ '&nbsp;<a  id="cancel'+row.serialNum+'" ng-click="cancelEditBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.billAmount+'\')"><i class="fa fa-undo"  title="取消"></i></a>';
+															}//return data;
+														},"createdCell": function (td, cellData, rowData, row, col) {
+															 $compile(td)($scope);
+													    }
+													}  ],
+												});
+									
+						// 构建datatables结束***************************************
+						}*/
+
+		
 						   // 确认选择发货单开始***************************************
 		 	    		$scope.confirmSelectDeliverOrTakeDeliveryInfo = function(judgeString) {
 		 	    			var ids = '';
@@ -915,6 +1058,8 @@ angular
 		 	            	$('#deliverInfo').modal('hide');// 选择成功后关闭模态框
 		 	    			}
 		 	    			$scope.materials=$scope.row.materials;
+		 	    			//loadMaterielTable(judgeString,$scope.row.serialNum);//加载物料table
+		 	    			
 		 	    			$(".modal-backdrop").remove();
 		 	    		};  // 确认选择发货单结束***************************************
 		 	    		jQuery.validator.addMethod("qualifiedNumCheck", function (value, element) {
@@ -1022,6 +1167,8 @@ angular
 						 	            });
 						    		 }
 						       }
+							 
+								
 							       /**
 							        * 下载EXCEL模板
 							        */

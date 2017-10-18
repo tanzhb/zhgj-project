@@ -160,12 +160,18 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 	        	var promise = takeDeliveryService.getTakeDeliveryMaterielList(deliverSerial,stockSerial);
         		promise.then(function(data){
         			$scope.takeDeliveryMateriels = data.data;
+        			var deliveryMaterielSerialNums=new Array();
     				for(var i in data.data){
     					if(data.data[i].supplyMateriel!=null){
         					$scope.takeDeliveryMateriels[i].orderMateriel = data.data[i].supplyMateriel;
         					delete $scope.takeDeliveryMateriels[i].supplyMateriel;
     					}
+    					if(data.data[i].serialNum!=null){
+    						deliveryMaterielSerialNums.push(data.data[i].serialNum);
+    					}
     				}
+    				debugger;
+    				$scope.deliveryMaterielSerialNums=deliveryMaterielSerialNums;//把所有发货物料流水存到该数组
     				//$scope.record.warehosueCount = data.data.length;
         			countWarehouseAndPosition();
         			//$scope.deliver.materielCount = data.orderMateriel.length;
