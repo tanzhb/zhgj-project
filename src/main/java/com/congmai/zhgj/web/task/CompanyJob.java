@@ -25,7 +25,7 @@ public class CompanyJob {
 	  /**  
      * 企业资质过期检查定时任务  
      */    
-    @Scheduled(cron = "0 52 8 * * ?")   
+    //@Scheduled(cron = "0 52 8 * * ?")   
     public void checkCompanyQualification(){  
     	
     	List<Company> list = companyService.selectAll();

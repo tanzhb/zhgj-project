@@ -579,7 +579,7 @@
 				<div class="col-md-5 col-sm-5">
 					<div class="dataTables_info" id="sample_5_info" role="status"
 						aria-live="polite">从 {{(pageIndex-1)*pageSize+1>filterDeliveryMateriel.length?filterDeliveryMateriel.length:(pageIndex-1)*pageSize+1}}
-						到 {{pageIndex*pageSize>filterDeliveryMateriel.length?filterDeliveryMateriel.length:pageIndex*pageSize}} /共 {{filterDeliveryMateriel.length}} 条数据（从{{deliveryMateriels.length}}条数据中筛选）</div>
+						到 {{pageIndex*pageSize>filterDeliveryMateriel.length?filterDeliveryMateriel.length:pageIndex*pageSize}} /共 {{filterDeliveryMateriel.length}} 条数据（从{{deliver.deliveryMateriels.length}}条数据中筛选）</div>
 				</div>
 				<div class="col-md-7 col-sm-7">
 					<div  style="text-align: right;" id="sample_5_paginate">
