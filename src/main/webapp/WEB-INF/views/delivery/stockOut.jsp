@@ -247,7 +247,7 @@
 										<td>{{materiel.deliverCount}}</td>
 										<td>{{materiel.deliverRemark}}</td>
 										<td class="form-group">
-                                                 <input type="text" class="form-control input-small" id="stockCount{{$index}}" name="stockCount" data-delivercount="{{materiel.deliverCount}}"   data-currentstock="{{materiel.deliverCount}}"    ng-model="materiel.stockCount" ng-hide="deliverAdd" >
+                                                 <input type="text" class="form-control input-small" id="stockCountinline{{materiel.serialNum}}" name="stockCount" data-delivercount="{{materiel.deliverCount}}"   data-currentstock="{{materiel.deliverCount}}"    ng-model="materiel.stockCount" ng-hide="deliverAdd" >
                                                  
                                                  <div class="form-control-focus"> </div>
 										</td>

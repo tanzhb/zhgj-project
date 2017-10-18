@@ -192,7 +192,6 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 			$scope.saveStockIn = function() {
 				if($('#stockInForm').valid()){
 					debugger;
-					handle.blockUI();
 					var params = {};
 					params.record = $scope.record;
 					params.record.deliverSerial = $scope.deliverSerial;
@@ -225,6 +224,14 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 						params.deliveryMateriels.push(param);
 					}
 					var arraySerialNums=$scope.arraySerialNums;
+					var deliveryMaterielSerialNums =$scope.deliveryMaterielSerialNums;
+					for(var i=0;i < deliveryMaterielSerialNums.length;i++){
+						if($scope["arraySerialNums"+deliveryMaterielSerialNums[i]]==undefined){
+							toastr.warning("存在未选择出库批次的物料!");
+							return;
+						}
+					}
+					handle.blockUI();
 					debugger;
 					var serialNums=new Array();
 					for(var i=0;i < arraySerialNums.length;i++){
@@ -843,15 +850,18 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 						 $scope.arraySerialNums=arraySerialNums;
 						 $scope["arraySerialNums"+$scope.deliveryMaterielSerialNum] = null;
 						 var serialNums=new Array();
+						 var  count=0;//出库和
 						 for(var i=0;i<checkboxs.length;i++){
 							 var serialNum=$(checkboxs[i]).val();
 							  var value=$("#stockOutCount"+serialNum).val();//出库数量
+							  count=count+Number(value);
 							  var rukuSerialNum=$("#"+serialNum).attr("name");//入库单流水
 							  var  inOutNum=$("#stockOutCount"+serialNum).attr("name");//入库批次号
 							  var nameArrays=inOutNum.split(",");
 							  var addvalue=serialNum+","+value+","+$scope.deliveryMaterielSerialNum+","+rukuSerialNum+","+nameArrays[0]+","+nameArrays[1];//拼接checkbox选中流水和之前设定的出库数值以及发货物料流水和入库单流水以及入库批次号
 							  serialNums[i]=addvalue;
 						 }
+						 $("#stockCountinline"+$scope.deliveryMaterielSerialNum).val(count);
 						 var inOutNums="";
 						 var warehouseSerialNums=new Array();
 						 for(var i=0;i<serialNums.length;i++){
