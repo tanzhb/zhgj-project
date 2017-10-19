@@ -1174,20 +1174,20 @@ margin-right: 20px;
 			         <div class="table-scrollable">
                           <table class="table table-bordered table-hover">
                               <thead>
-                                  <tr>
-                                      <th>支付类型</th>
-                                      <th>支付节点</th>
-                                      <th>账期</th>
-                                      <th>支付比率%</th>
-                                      <th>支付金额</th>
-                                      <th>支付方式</th>
-                                      <th>开票方式</th>
-                                      <th>开票金额</th>
-                                      <th>未开金额</th>
-                                      <th>备注</th>
-                                      <th style="width:100px;"></th>
-                                  </tr>
-                              </thead>
+                                 <tr>
+                                     <th style="width:150px">支付类型</th>
+                                     <th style="width:150px">支付节点</th>
+                                     <th style="width:70px">账期</th>
+                                     <th style="width:50px">支付比率%</th>
+                                     <th style="width:150px">支付金额</th>
+                                     <th style="width:150px">支付方式</th>
+                                     <th style="width:150px">开票方式</th>
+                                     <th style="width:150px">开票金额</th>
+                                     <th style="width:150px">未开金额</th>
+                                     <th style="width:150px">备注</th>
+                                     <th style="width:100px;"></th>
+                                 </tr>
+                             </thead>
                               <tbody>
                                   <tr ng-repeat="_CSD in clauseSettlement.CSD track by $index" ng-mouseover="showOperation('csd',$index)" ng-mouseleave="hideOperation('csd',$index)">
                                       <td>
@@ -1252,7 +1252,7 @@ margin-right: 20px;
 		                          </td>
 		                          <td>
                                      		<input type="text" id="unbilledAmount[$index]" name="unbilledAmount" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].unbilledAmount" 
-                                     		ng-keyup="clearNoNumPoint(clauseSettlement.CSD[$index],'unbilledAmount');_arithmeticBilledAmount(this)" >
+                                     		readonly >
 		                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.unbilledAmount}} </p>
 		                          </td>
 			                          <td>
