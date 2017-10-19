@@ -245,7 +245,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		OrderInfo orderInfo=orderInfoMapper.selectByPrimaryKey(orderMateriel.getOrderSerial());
 		com.congmai.zhgj.web.model.StockExample.Criteria criteria=stockExample.createCriteria();
 		Boolean isStockZijian=true;//默认是自建库存
-		if(StaticConst.getValueByInfo("dailiBuy").equals(orderInfo.getOrderType())||StaticConst.getValueByInfo("dailiSale").equals(orderInfo.getOrderType())){//代理销售/代理采购
+		if(StaticConst.getInfo("dailiBuy").equals(orderInfo.getOrderType())||StaticConst.getInfo("dailiSale").equals(orderInfo.getOrderType())){//代理销售/代理采购
 			criteria.andMaterielSerialEqualTo(orderMateriel.getMaterielSerial()).andManageTypeEqualTo("2");//代管库存
 			isStockZijian=false;
 		}else{
@@ -272,7 +272,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 				stock.setMaterielOwner("");
 				stock.setServiceParty(StaticConst.getValueByInfo("comName"));
 			}
-			
+			stockMapper.insert(stock);
 			
 		}else{//已存在此物料的库存,更新库存数量
 		String currenAmount=stocks.get(0).getCurrentAmount();//获取当前库存数
