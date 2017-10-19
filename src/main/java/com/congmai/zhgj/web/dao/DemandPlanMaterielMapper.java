@@ -23,6 +23,8 @@ public interface DemandPlanMaterielMapper extends GenericDao<DemandPlanMateriel,
     int insertSelective(DemandPlanMateriel record);
 
     List<DemandPlanMateriel> selectByExample(DemandPlanMaterielExample example);
+    
+    List<DemandPlanMateriel> selectMaterielsByExample(DemandPlanMaterielExample example);
 
     DemandPlanMateriel selectByPrimaryKey(String serialNum);
 

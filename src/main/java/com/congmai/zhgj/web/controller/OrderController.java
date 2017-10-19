@@ -60,6 +60,7 @@ import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.OperateLog;
 import com.congmai.zhgj.web.model.OperateLogExample;
 import com.congmai.zhgj.web.model.OrderFile;
@@ -76,6 +77,7 @@ import com.congmai.zhgj.web.service.ClauseFrameworkService;
 import com.congmai.zhgj.web.service.ClauseSettlementDetailService;
 import com.congmai.zhgj.web.service.ClauseSettlementService;
 import com.congmai.zhgj.web.service.ContractService;
+import com.congmai.zhgj.web.service.DemandPlanMaterielService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.OperateLogService;
 import com.congmai.zhgj.web.service.OrderFileService;
@@ -129,6 +131,8 @@ public class OrderController {
     private ProcessBaseService processBaseService;
     @Resource
     private OperateLogService operateLogService;
+    @Resource
+    private DemandPlanMaterielService demandPlanMaterielService;
     
     
 	//销售订单
@@ -558,7 +562,7 @@ public class OrderController {
      */
     @RequestMapping("/findOrderList")
     @ResponseBody
-    public ResponseEntity<Map> findOrderList(String type,String selectFor,String fram) {
+    public ResponseEntity<Map> findOrderList(String type,String selectFor,String fram,@RequestParam(required=false)String demandPlanSerial) {
     	List<OrderInfo> orderInfoList = new ArrayList<OrderInfo>();
     	String comId = null;
     	User user = UserUtil.getUserFromSession();
@@ -579,6 +583,10 @@ public class OrderController {
     		if("supplyOrder".equals(selectFor)){//供应商订单(状态不为0，本公司销售订单)
         		parm.setStatus("000");
         	}
+    		//历史销售订单条件
+        	if(StringUtils.isNotEmpty(demandPlanSerial)){
+        		parm.setDemandPlanSerial(demandPlanSerial);
+        	}
     	}else if(BUYORDER.equals(type)){//查找公司采购订单
     		parm.setBuyComId(comId);
     	}
@@ -589,6 +597,7 @@ public class OrderController {
     		orderInfoList = orderService.selectCommenList(parm);
     	}
     	
+
     	
     	//封装datatables数据返回到前台
 		Map pageMap = new HashMap();
@@ -712,6 +721,9 @@ public class OrderController {
         			orderMateriel.setUpdateTime(new Date());
         			orderMateriel.setUpdater(currenLoginName);
         			orderMaterielService.insert(orderMateriel);
+        			
+        			//需求计划物料加入订单流水
+        			updateDemandPlanMateriel(orderMateriel.getOrderSerial(),orderMateriel.getDemandPlanMaterielSerial());
         		}else{
         			orderMateriel.setUpdateTime(new Date());
         			orderMateriel.setUpdater(currenLoginName);
@@ -1367,6 +1379,11 @@ public class OrderController {
     	}
 	}
     
-    
+    private void updateDemandPlanMateriel(String orderSerial,String serialNum){
+    	DemandPlanMateriel materiel = new DemandPlanMateriel();
+    	materiel.setSerialNum(serialNum);
+    	materiel.setOrderSerial(orderSerial);
+    	demandPlanMaterielService.update(materiel);
+    }
     
 }

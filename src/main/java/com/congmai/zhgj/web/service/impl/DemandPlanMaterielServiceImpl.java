@@ -1,5 +1,6 @@
 package com.congmai.zhgj.web.service.impl;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.web.dao.CompanyMapper;
 import com.congmai.zhgj.web.dao.DemandPlanMaterielMapper;
 import com.congmai.zhgj.web.dao.MaterielMapper;
+import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DemandPlan;
 import com.congmai.zhgj.web.model.DemandPlanExample;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
@@ -155,6 +157,13 @@ public class DemandPlanMaterielServiceImpl extends GenericServiceImpl<DemandPlan
 		}
 	
 		return listHandle(demandPlanMaterielMapper.searchMateriels(search));
+	}
+
+	@Override
+	public List<DemandPlanMateriel> selectListByIds(String ids) {
+		DemandPlanMaterielExample example = new DemandPlanMaterielExample();
+		example.createCriteria().andSerialNumIn(Arrays.asList(ids.split(",")));
+		return demandPlanMaterielMapper.selectMaterielsByExample(example);
 	}
 	
 

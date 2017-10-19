@@ -271,12 +271,12 @@
 		                                     </table>
 	                                     </div>
                                      </div> -->
-                                    <div class="table-scrollable">
-                                        <table class="table table-striped table-bordered table-advance table-hover">
+                                    <!-- <div class="table-scrollable">
+                                        <table class="table table-striped table-bordered table-advance table-hover" id="demandPlanMateriels">
                                             <thead>
                                                 <tr>
                                                     <th width="1%" align="right">
-                                                    	<!-- <label><div class="checker"><span><input type="checkbox" ng-model="materielAllChecked" ></span></div></label> -->
+                                                    	<label><div class="checker"><span><input type="checkbox" ng-model="materielAllChecked" ></span></div></label>
                                                     	<label class="mt-checkbox mt-checkbox-outline"  >
                                                             <input type="checkbox" ng-model="materielAllChecked" ng-click="checkedOrCancelAll()">
                                                             <span></span>
@@ -291,7 +291,7 @@
                                                     <th>距离交付</th>
                                                     <th>交付地点</th>
                                                     <th>供应商</th>
-                                                   <!--  <th style="width: 140px;"></th> -->
+                                                    <th style="width: 140px;"></th>
                                                 </tr>
                                             </thead>
                                            <tbody ng-if="rootMateriels.length==0">
@@ -302,9 +302,9 @@
                                             <tbody  style="position: relative; overflow: auto; height: 300px; width: 100%;">
                                                 <tr ng-repeat="materiel in rootMateriels track by $index"  repeat-done="repeatDone()" ng-mouseover="showOperation('contact',$index)" ng-mouseleave="hideOperation('contact',$index)">
                                                     <th>
-                                                    	<!-- <label><div class="checker"><span><input type="checkbox" ng-model="materielChecked"  value="1"></span></div></label> -->
-                                                    	<label class="mt-checkbox mt-checkbox-outline">
-                                                          <!--   <input type="checkbox" ng-checked="materielAllChecked"  ng-model="materiel.aaaaaa" ng-click="aa()"> -->
+                                                    	<label><div class="checker"><span><input type="checkbox" ng-model="materielChecked"  value="1"></span></div></label>
+                                                    	<label class="mt-checkbox mt-checkbox-outline" ng-if="materiel.orderSerial == null">
+                                                            <input type="checkbox" ng-checked="materielAllChecked"  ng-model="materiel.aaaaaa" ng-click="aa()">
                                                             <input type="checkbox" ng-checked="materielAllChecked"  ng-model="materiel.materielChecked" ng-click="aa()">
                                                             <span></span>
                                                         </label>
@@ -350,6 +350,164 @@
 	                                                    <span class="help-block"></span>
 	                                                    <label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.supplyName}}</label>
                                                     </td>
+                                                    <td style="width: 140px;">
+                                                    	<span>
+                                                    		&nbsp;&nbsp;&nbsp;&nbsp;
+	                                                    	<a ng-hide="demandPlanMaterielEdit{{$index}}" ng-click="saveDemandPlanMateriel(materiel,$index)">保存</a>
+	                                                    	&nbsp;&nbsp;&nbsp;
+	                                                    	<a ng-hide="demandPlanMaterielEdit{{$index}}" ng-click="cancelDemandPlanMateriel(materiel,$index)">撤销</a>
+	                                                    </span>
+	                                                    <span  ng-show="operation_c{{$index}}">
+	                                                    	<a ng-show="demandPlanMaterielView{{$index}}"   ng-click="editDemandPlanMateriel(materiel)">变更</a>
+	                                                    	&nbsp;&nbsp;&nbsp;
+	                                                    	<a ng-show="demandPlanMaterielView{{$index}}"  ng-click="deleteDemandPlanMateriel(materiel)">删除</a>
+                                                    	</span>
+                                                    	
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div> -->
+
+
+
+
+
+
+
+								<div class="dataTables_scroll">
+									<div class="dataTables_scrollHead"
+										style="overflow: hidden; position: relative; border: 0px; width: 100%;">
+										<div class="dataTables_scrollHeadInner"
+											style="box-sizing: content-box;">
+											<table
+												class="table table-striped table-bordered table-hover order-column dataTable no-footer"
+												role="grid" style="margin-left: 0px; ">
+												<thead>
+													<tr role="row">
+														<th tabindex="0"
+															aria-controls="sample_1" rowspan="1" colspan="1"
+															style="width: 2%;">
+															<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline"  >
+                                                            <input type="checkbox" ng-model="materielAllChecked" ng-click="checkedOrCancelAll()">
+                                                            <span></span>
+                                                        </label>
+														</th>
+														<th tabindex="0" aria-controls="sample_1"
+															rowspan="1" colspan="1" style="width: 10%;">物料编号</th>
+														<th tabindex="0" aria-controls="sample_1"
+															rowspan="1" colspan="1" style="width: 15%;">物料名称</th>
+														<th tabindex="0" aria-controls="sample_1"
+															rowspan="1" colspan="1" style="width: 15%;">物料规格</th>
+														<th tabindex="0" aria-controls="sample_1"
+															rowspan="1" colspan="1" style="width: 5%;">单位</th>
+														<th tabindex="0" aria-controls="sample_1"
+															rowspan="1" colspan="1" style="width: 5%;">数量</th>
+														<th tabindex="0" aria-controls="sample_1"
+															rowspan="1" colspan="1" style="width: 10%;">交付日期</th>
+														<th tabindex="0" aria-controls="sample_1"
+															rowspan="1" colspan="1" style="width: 10%;">距离交付</th>
+														<th tabindex="0" aria-controls="sample_1"
+															rowspan="1" colspan="1" style="width: 13%;">交付地点</th>
+														<th tabindex="0" aria-controls="sample_1"
+															rowspan="1" colspan="1" style="width: 15%;">供应商</th>
+													</tr>
+												</thead>
+											</table>
+										</div>
+									</div>
+									<div class="dataTables_scrollBody"
+										style="position: relative; overflow: auto; height: 300px; width: 100%;">
+										<table
+											class="table table-striped table-bordered table-hover order-column dataTable no-footer"
+											id="sample_1" role="grid" aria-describedby="sample_1_info" style="width: 100%; position: absolute; top: 0px; left: 0px;">
+											<thead >
+													<tr role="row" style="height: 0px;">
+														<th tabindex="0"
+															aria-controls="sample_1" rowspan="1" colspan="1"
+															style="width: 2%;height: 0px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px;">
+														<div class="dataTables_sizing"
+															style="height: 0; overflow: hidden;">
+															<label
+																class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+																<input type="checkbox" ng-model="materielAllChecked"
+																ng-click="checkedOrCancelAll()"> <span></span>
+															</label>
+														</div>
+
+														</th>
+														<th tabindex="0" aria-controls="sample_1"
+															rowspan="1" colspan="1" style="width: 10%;height: 0px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px;"><div class="dataTables_sizing" style="height:0;overflow:hidden;">物料编号</div></th>
+														<th tabindex="0" aria-controls="sample_1"
+															rowspan="1" colspan="1" style="width: 15%;height: 0px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px;"><div class="dataTables_sizing" style="height:0;overflow:hidden;">物料名称</div></th>
+														<th tabindex="0" aria-controls="sample_1"
+															rowspan="1" colspan="1" style="width: 15%;height: 0px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px;"><div class="dataTables_sizing" style="height:0;overflow:hidden;">物料规格</div></th>
+														<th tabindex="0" aria-controls="sample_1"
+															rowspan="1" colspan="1" style="width: 5%;height: 0px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px;"><div class="dataTables_sizing" style="height:0;overflow:hidden;">单位</div></th>
+														<th tabindex="0" aria-controls="sample_1"
+															rowspan="1" colspan="1" style="width: 5%;height: 0px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px;"><div class="dataTables_sizing" style="height:0;overflow:hidden;">数量</div></th>
+														<th tabindex="0" aria-controls="sample_1"
+															rowspan="1" colspan="1" style="width: 10%;height: 0px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px;"><div class="dataTables_sizing" style="height:0;overflow:hidden;">交付日期</div></th>
+														<th tabindex="0" aria-controls="sample_1"
+															rowspan="1" colspan="1" style="width: 10%;height: 0px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px;"><div class="dataTables_sizing" style="height:0;overflow:hidden;">距离交付</div></th>
+														<th tabindex="0" aria-controls="sample_1"
+															rowspan="1" colspan="1" style="width: 13%;height: 0px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px;"><div class="dataTables_sizing" style="height:0;overflow:hidden;">交付地点</div></th>
+														<th tabindex="0" aria-controls="sample_1"
+															rowspan="1" colspan="1" style="width: 15%;height: 0px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px;"><div class="dataTables_sizing" style="height:0;overflow:hidden;">供应商</div></th>
+													</tr>
+												</thead>
+
+											<tbody>
+											 <tr ng-repeat="materiel in rootMateriels track by $index"  repeat-done="repeatDone()" ng-mouseover="showOperation('contact',$index)" ng-mouseleave="hideOperation('contact',$index)">
+                                                    <th width="2%" class="dt-body-center" >
+                                                    	<!-- <label><div class="checker"><span><input type="checkbox" ng-model="materielChecked"  value="1"></span></div></label> -->
+                                                    	<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline" ng-if="materiel.orderSerial == null">
+                                                          <!--   <input type="checkbox" ng-checked="materielAllChecked"  ng-model="materiel.aaaaaa" ng-click="aa()"> -->
+                                                            <input type="checkbox" ng-checked="materielAllChecked"  ng-model="materiel.materielChecked" ng-click="aa()">
+                                                            <span></span>
+                                                        </label>
+                                                    </th>
+                                                    <td width="10%"><span class="help-block"></span>
+                                                    	<span ng-show="demandPlanMaterielView{{$index}}">{{materiel.materielNum}}</span>
+                                                    	<span ng-hide="demandPlanMaterielEdit{{$index}}"><a href="javascript:;" ng-click="addMateriel('single',$index)">{{materiel.materielNum}}</a></span>
+                                                    </td>
+                                                    <td width="15%"><span class="help-block"></span><label>{{materiel.materielName}}</label></td>
+                                                    <td width="15%"><span class="help-block"></span><label>{{materiel.specifications}}</label></td>
+                                                    <td width="5%"><span class="help-block"></span><label>{{materiel.unit}}</label></td>
+                                                    <td width="5%">
+                                                    	<input type="text" ng-hide="demandPlanMaterielEdit{{$index}}" class="form-control  input-small" id="amount{{$index}}" ng-model="materiel.amount" value="">
+                                                   	 	<span class="help-block"></span>
+                                                   	 	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.amount}}</label>
+                                                    </td>
+                                                    <td width="10%">
+	                                                    <div  ng-hide="demandPlanMaterielEdit{{$index}}" class="input-group input-medium date date-picker"
+															 data-date-format="yyyy-mm-dd"
+															data-date-viewmode="years">
+															<input type="text" class="form-control" readonly="" id="deliveryDate{{$index}}" ng-model="materiel.deliveryDate" name="deliveryDate"
+																> <span class="input-group-btn">
+																<button class="btn default " type="button">
+																	<i class="fa fa-calendar"></i>
+																</button>
+															</span>
+														</div>
+														<span class="help-block"></span>
+														<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.deliveryDate}}</label>
+                                                    </td>
+                                                    <td>{{materiel.remainTime}}</td>
+                                                    <td width="13%">
+                                                    	<input  ng-hide="demandPlanMaterielEdit{{$index}}" type="text" class="form-control" id="deliveryAddress{{$index}}" ng-model="materiel.deliveryAddress" value="">
+                                                    	<span class="help-block"></span>
+                                                    	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.deliveryAddress}}</label>
+                                                    </td>
+                                                    <td width="15%">
+                                                    	<select ng-hide="demandPlanMaterielEdit{{$index}}"  class="form-control" ng-model="materiel.supplyMaterielSerial" >
+	                                                    	<option ng-repeat="m in materiel.supplyMateriels" value="{{m.serialNum}}"  >
+	                                                    		{{m.supply.comName}}
+	                                                    	</option>
+	                                                    </select>
+	                                                    <span class="help-block"></span>
+	                                                    <label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.supplyName}}</label>
+                                                    </td>
                                                     <!-- <td style="width: 140px;">
                                                     	<span>
                                                     		&nbsp;&nbsp;&nbsp;&nbsp;
@@ -365,10 +523,26 @@
                                                     	
                                                     </td> -->
                                                 </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                          	 </div>
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+							</div>
                           	 <div>
                           	 	<div class="row" align="center">
                           	 		 <button   ng-hide="companyAdd" class="btn green  btn-sm btn-circle" ng-click="addToSaleOrder()">
