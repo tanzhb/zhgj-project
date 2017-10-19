@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.DemandPlanMateriel" >
     <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
     <result column="demandPlanSerial" property="demandPlanSerial" jdbcType="VARCHAR" />
+    <result column="orderSerial" property="orderSerial" jdbcType="VARCHAR" />
     <result column="materielSerial" property="materielSerial" jdbcType="VARCHAR" />
     <result column="supplyMaterielSerial" property="supplyMaterielSerial" jdbcType="VARCHAR" />
     <result column="amount" property="amount" jdbcType="VARCHAR" />
@@ -16,8 +17,26 @@
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <association property="materiel" column="materielSerial" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByPrimaryKey" ></association>
+    <association property="supplyMateriel" column="supplyMaterielSerial" select="com.congmai.zhgj.web.dao.SupplyMaterielMapper.selectByPrimaryKey" ></association>
     <association property="supplyName" column="supplyMaterielSerial" select="com.congmai.zhgj.web.dao.DemandPlanMaterielMapper.selectSupplyName" ></association>
     <association property="demandPlan" column="demandPlanSerial" select="com.congmai.zhgj.web.dao.DemandPlanMapper.selectByPrimaryKey" ></association>
+  </resultMap>
+  <resultMap id="BaseResultMap2" type="com.congmai.zhgj.web.model.DemandPlanMateriel" >
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="demandPlanSerial" property="demandPlanSerial" jdbcType="VARCHAR" />
+    <result column="orderSerial" property="orderSerial" jdbcType="VARCHAR" />
+    <result column="materielSerial" property="materielSerial" jdbcType="VARCHAR" />
+    <result column="supplyMaterielSerial" property="supplyMaterielSerial" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="VARCHAR" />
+    <result column="deliveryDate" property="deliveryDate" jdbcType="DATE" />
+    <result column="deliveryAddress" property="deliveryAddress" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <association property="supplyMateriel" column="supplyMaterielSerial" select="com.congmai.zhgj.web.dao.SupplyMaterielMapper.selectByPrimaryKey" ></association>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -77,12 +96,13 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Base_Column_List" >
-    serialNum, demandPlanSerial, materielSerial, supplyMaterielSerial, amount, deliveryDate, 
-    deliveryAddress, delFlg, creator, createTime, updater, updateTime, remark
+	<sql id="Base_Column_List" >
+    serialNum, orderSerial, demandPlanSerial, materielSerial, supplyMaterielSerial, amount, 
+    deliveryDate, deliveryAddress, delFlg, creator, createTime, updater, updateTime, 
+    remark
   </sql>
   <sql id="Base_Column_List2" >
-    dm.serialNum, dm.demandPlanSerial, dm.materielSerial, dm.supplyMaterielSerial, dm.amount, dm.deliveryDate, 
+    dm.serialNum,dm.orderSerial,dm.demandPlanSerial, dm.materielSerial, dm.supplyMaterielSerial, dm.amount, dm.deliveryDate, 
     dm.deliveryAddress, dm.delFlg, dm.creator, dm.createTime, dm.updater, dm.updateTime, dm.remark
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.DemandPlanMaterielExample" >
@@ -102,6 +122,20 @@
      limit #{start},#{limit}
      </if>
   </select>
+  <select id="selectMaterielsByExample" resultMap="BaseResultMap2" parameterType="com.congmai.zhgj.web.model.DemandPlanMaterielExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from demandPlanMateriel
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
@@ -119,12 +153,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.congmai.zhgj.web.model.DemandPlanMateriel" >
-    insert into demandPlanMateriel (serialNum, demandPlanSerial, materielSerial, 
+    insert into demandPlanMateriel (serialNum, orderSerial, demandPlanSerial, materielSerial, 
       supplyMaterielSerial, amount, deliveryDate, 
       deliveryAddress, creator, 
       createTime, updater, updateTime, 
       remark)
-    values (#{serialNum,jdbcType=VARCHAR}, #{demandPlanSerial,jdbcType=VARCHAR}, #{materielSerial,jdbcType=VARCHAR}, 
+    values (#{serialNum,jdbcType=VARCHAR}, #{orderSerial,jdbcType=VARCHAR}, #{demandPlanSerial,jdbcType=VARCHAR}, #{materielSerial,jdbcType=VARCHAR}, 
       #{supplyMaterielSerial,jdbcType=VARCHAR}, #{amount,jdbcType=VARCHAR}, #{deliveryDate,jdbcType=DATE}, 
       #{deliveryAddress,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
@@ -132,14 +166,14 @@
   </insert>
   
    <insert id="insertBatch"  parameterType="java.util.List"> 
-	    insert into demandPlanMateriel (serialNum, demandPlanSerial, materielSerial, 
+	    insert into demandPlanMateriel (serialNum, orderSerial,demandPlanSerial, materielSerial, 
       	supplyMaterielSerial, amount, deliveryDate, 
       	deliveryAddress, creator, 
       	createTime, updater, updateTime, 
       	remark)
     	values 
 	    <foreach collection="list" item="item" index="index" separator="," >  
-	     (	#{item.serialNum,jdbcType=VARCHAR}, #{item.demandPlanSerial,jdbcType=VARCHAR}, #{item.materielSerial,jdbcType=VARCHAR}, 
+	     (	#{item.serialNum,jdbcType=VARCHAR}, #{item.orderSerial,jdbcType=VARCHAR},#{item.demandPlanSerial,jdbcType=VARCHAR}, #{item.materielSerial,jdbcType=VARCHAR}, 
       		#{item.supplyMaterielSerial,jdbcType=VARCHAR}, #{item.amount,jdbcType=VARCHAR}, #{item.deliveryDate,jdbcType=DATE}, 
       		#{item.deliveryAddress,jdbcType=VARCHAR}, #{item.creator,jdbcType=VARCHAR}, 
      		#{item.createTime,jdbcType=TIMESTAMP}, #{item.updater,jdbcType=VARCHAR}, #{item.updateTime,jdbcType=TIMESTAMP}, 
@@ -244,6 +278,9 @@
       <if test="record.serialNum != null" >
         serialNum = #{record.serialNum,jdbcType=VARCHAR},
       </if>
+      <if test="record.orderSerial != null" >
+        orderSerial = #{record.orderSerial,jdbcType=VARCHAR},
+      </if>
       <if test="record.demandPlanSerial != null" >
         demandPlanSerial = #{record.demandPlanSerial,jdbcType=VARCHAR},
       </if>
@@ -307,6 +344,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.DemandPlanMateriel" >
     update demandPlanMateriel
     <set >
+      <if test="orderSerial != null" >
+        orderSerial = #{orderSerial,jdbcType=VARCHAR},
+      </if>
       <if test="demandPlanSerial != null" >
         demandPlanSerial = #{demandPlanSerial,jdbcType=VARCHAR},
       </if>

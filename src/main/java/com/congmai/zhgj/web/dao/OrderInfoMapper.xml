@@ -216,6 +216,9 @@ orderInfo.billStatus, orderInfo.delFlg,
 		 	AND (contract.contractType is null or
 	        contract.contractType != '框架合同')
 		 </if>
+		 <if test="demandPlanSerial != null" >
+		 	AND orderInfo.demandPlanSerial =  #{demandPlanSerial,jdbcType=VARCHAR}
+		 </if>
 		ORDER BY
 			updateTime DESC 
   </select>

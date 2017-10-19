@@ -120,6 +120,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     		    }
             	
             	if(!isNull($stateParams.materiels)){
+            		$scope.isInit = true;
 	        		$scope.saleOrder.currency = '人民币';
 	        		$scope.saleOrder.buyComId = $stateParams.buyComId;
 	        		$scope.saleOrder.demandPlanSerial = $stateParams.demandPlanSerial;
@@ -231,6 +232,11 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
        		    	/*$location.search({serialNum:data.serialNum,view:1});*/
        		    	$scope.saleOrderInput = true;
        			    $scope.saleOrderShow = true;
+       			    
+	       			 if(!isNull($stateParams.demandPlanSerial)&&!isNull($stateParams.materiels)&&$scope.isInit){
+	         			getDemandPlanMateriels($stateParams.materiels);
+	         			$scope.isInit = false;
+	       			 }
        		     },
        		     function(error){
        		         $scope.error = error;
@@ -238,9 +244,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
        		     }
        		 );
     		
-    		if(!isNull($stateParams.demandPlanSerial)&&!isNull($stateParams.materiels)){
-    			getDemandPlanMateriels($stateParams.materiels);
-    		}
+    		
     	}
     	
     }; 	
@@ -1617,40 +1621,26 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     	 /** *************订单物料操作 end*************** */
 	        
 	        
-	        /** *************订单物料操作 start*************** */
+	        /** *************需求物料操作 start*************** */
 	        var getDemandPlanMateriels = function(ids){
 		        	handle.blockUI();
-	        		var promise = materielService.chooseMateriels(ids.join());
+	        		var promise = materielService.chooseDemandPlanMateriels(ids.join());
 	        		promise.then(function(data){
 	        			toastr.success("添加成功！");
 	        			handle.unblockUI();
-	        			if($scope.orderMateriel.length==0){
-	        				for(var i = 0;i < data.data.length;i++){// data.data为选择的供应物料
+	        			for(var i = 0;i < data.data.length;i++){// data.data为选择的供应物料
 	        					$scope.tempMateriel = {};
-	        					$scope.tempMateriel.materiel = (data.data)[i].materiel;
+	        					$scope.tempMateriel.materiel = (data.data)[i].supplyMateriel.materiel;
 	        					$scope.tempMateriel.orderSerial = $scope.saleOrder.serialNum;
-	        					$scope.tempMateriel.materielSerial = (data.data)[i].materiel.serialNum;
-	        					$scope.tempMateriel.supplyMaterielSerial = (data.data)[i].serialNum;
-	        					$scope.tempMateriel.supplyMateriel = (data.data)[i];
+	        					$scope.tempMateriel.demandPlanMaterielSerial = (data.data)[i].serialNum;
+	        					$scope.tempMateriel.materielSerial = (data.data)[i].supplyMateriel.materiel.serialNum;
+	        					$scope.tempMateriel.supplyMaterielSerial = (data.data)[i].supplyMateriel.serialNum;
+	        					$scope.tempMateriel.supplyMateriel = (data.data)[i].supplyMateriel;
+	        					$scope.tempMateriel.amount = (data.data)[i].amount;
+	        					$scope.tempMateriel.deliveryDate = (data.data)[i].deliveryDate;
 	        					$scope.orderMateriel.push($scope.tempMateriel);
 	        					$scope["orderMaterielInput"+i] = false;
 	        					$scope["orderMaterielShow"+i] = false;
-	        				}
-	        			}else{
-	        				var length = $scope.orderMateriel.length; 
-	        				for(var i = 0;i < data.data.length;i++){// data.data为选择的供应物料
-	        					$scope.tempMateriel = {};
-	        					$scope.tempMateriel.materiel = (data.data)[i].materiel;
-	        					$scope.tempMateriel.orderSerial = $scope.saleOrder.serialNum;
-	        					$scope.tempMateriel.materielSerial = (data.data)[i].materiel.serialNum;
-	        					$scope.tempMateriel.supplyMaterielSerial = (data.data)[i].serialNum;
-	        					$scope.tempMateriel.supplyMateriel = (data.data)[i];
-	        					$scope.orderMateriel.push($scope.tempMateriel);
-		        				$scope["orderMaterielInput"+(length+i)] = false;
-								$scope["orderMaterielShow"+(length+i)] = false;
-								/*$scope["orderMaterielInput" + ($scope.orderMateriel.length-1)] = true;
-								$scope["orderMaterielShow" + ($scope.orderMateriel.length-1)] = true;*/
-			        		}
 	        			}
 	        			$scope.copyMateriels = angular.copy($scope.orderMateriel);
 		        });

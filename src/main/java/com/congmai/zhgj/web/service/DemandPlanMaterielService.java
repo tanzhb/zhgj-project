@@ -4,8 +4,10 @@ import java.util.List;
 
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericService;
+import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DemandPlan;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
+import com.congmai.zhgj.web.model.SupplyMateriel;
 
 public interface DemandPlanMaterielService extends GenericService<DemandPlanMateriel, String>{
 	
@@ -42,5 +44,7 @@ public interface DemandPlanMaterielService extends GenericService<DemandPlanMate
 	 * @param search
 	 */
 	public List<DemandPlanMateriel> searchDemandPlanMateriels(DemandPlan search);
+
+	public List<DemandPlanMateriel> selectListByIds(String ids);
 	
 }

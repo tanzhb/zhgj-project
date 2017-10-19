@@ -52,6 +52,8 @@ public class OrderMateriel {
     private String updater;
 
     private Date updateTime;
+    
+    private String demandPlanMaterielSerial;
 
     public String getSerialNum() {
         return serialNum;
@@ -227,6 +229,14 @@ public class OrderMateriel {
 
 	public void setOrderRateUnit(String orderRateUnit) {
 		this.orderRateUnit = orderRateUnit;
+	}
+
+	public String getDemandPlanMaterielSerial() {
+		return demandPlanMaterielSerial;
+	}
+
+	public void setDemandPlanMaterielSerial(String demandPlanMaterielSerial) {
+		this.demandPlanMaterielSerial = demandPlanMaterielSerial;
 	}
 
     

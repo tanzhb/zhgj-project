@@ -11,6 +11,8 @@ public class DemandPlanMateriel {
     private String serialNum;
 
     private String demandPlanSerial;
+    
+    private String orderSerial;
 
     private String materielSerial;
 
@@ -61,6 +63,9 @@ public class DemandPlanMateriel {
     private String daysBeforeDelivery;
     
     private List<SupplyMateriel> supplyMateriels;
+    
+    private SupplyMateriel supplyMateriel;
+    
     public String getSerialNum() {
         return serialNum;
     }
@@ -268,5 +273,21 @@ public class DemandPlanMateriel {
 
 	public void setSupplyMateriels(List<SupplyMateriel> supplyMateriels) {
 		this.supplyMateriels = supplyMateriels;
+	}
+
+	public SupplyMateriel getSupplyMateriel() {
+		return supplyMateriel;
+	}
+
+	public void setSupplyMateriel(SupplyMateriel supplyMateriel) {
+		this.supplyMateriel = supplyMateriel;
+	}
+
+	public String getOrderSerial() {
+		return orderSerial;
+	}
+
+	public void setOrderSerial(String orderSerial) {
+		this.orderSerial = orderSerial;
 	}
 	}

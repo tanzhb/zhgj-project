@@ -20,6 +20,8 @@ import org.apache.shiro.subject.Subject;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,6 +63,8 @@ import com.congmai.zhgj.web.service.DemandPlanService;
 @Controller
 @RequestMapping("demandPlan")
 public class DemandPlanController {
+	
+	Logger logger = LoggerFactory.getLogger(DemandPlanController.class);
 	
 	@Autowired
 	private DemandPlanService demandPlanService;
@@ -141,7 +145,7 @@ public class DemandPlanController {
         		
         		flag = "1";
         	}catch(Exception e){
-        		System.out.println(e.getMessage());
+        		logger.warn(e.getMessage(), e);
         		return null;
         	}
     	return demandPlan;
@@ -187,7 +191,7 @@ public class DemandPlanController {
     		
     		
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		logger.warn(e.getMessage(), e);
     		return null;
     	}
     	return demandPlan;
@@ -223,7 +227,7 @@ public class DemandPlanController {
     		map.put("demandPlan", demandPlan);
     		map.put("demandPlanMateriels", demandPlanMateriels);
     	}catch(Exception e){
-    		System.out.println("获取需求计划出错"+e.getMessage());
+    		logger.warn(e.getMessage(), e);
     		return null;
     	}
     	return map;
@@ -244,7 +248,7 @@ public class DemandPlanController {
     			demandPlanService.deleteBatch(serialNumArray);
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		logger.warn(e.getMessage(), e);
     		flag = "1";
     	}
     	return flag;
@@ -263,7 +267,7 @@ public class DemandPlanController {
     	try {
     		list = demandPlanService.chooseMateriel(ids);
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			logger.warn(e.getMessage(), e);
 		}
     	
     	return list;
@@ -342,13 +346,13 @@ public class DemandPlanController {
 				try {
 					remainTime = DateUtil.daysBetween(new Date(), materiel.getDeliveryDate());
 				} catch (Exception e) {
-					System.out.println("deliverDate----"+e.getMessage());
+					logger.warn(e.getMessage(), e);
 				}
 				materiel.setRemainTime(String.valueOf(remainTime<0?0:remainTime));
         		
         		flag = "1";
         	}catch(Exception e){
-        		System.out.println(e.getMessage());
+        		logger.warn(e.getMessage(), e);
         		return null;
         	}
     	return materiel;
@@ -371,7 +375,7 @@ public class DemandPlanController {
         		
         		
         	}catch(Exception e){
-        		System.out.println(e.getMessage());
+        		logger.warn(e.getMessage(), e);
         		return null;
         	}
     	return materiel;
@@ -393,10 +397,28 @@ public class DemandPlanController {
     		}
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		logger.warn(e.getMessage(), e);
     		
     	}
     	return flag;
+    }
+    
+    /**
+     * @Description (保存续期计划物料信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="chooseDemandPlanMateriels",method=RequestMethod.POST)
+    @ResponseBody
+    public List<DemandPlanMateriel> chooseDemandPlanMateriels(Map<String, Object> map,@RequestBody String ids) {
+    	List<DemandPlanMateriel> list = null;
+    	try {
+    		list = demandPlanMaterielService.selectListByIds(ids);
+		} catch (Exception e) {
+			logger.warn(e.getMessage(), e);
+		}
+    	
+    	return list;
     }
     
     /**
@@ -497,7 +519,7 @@ public class DemandPlanController {
 								demandPlanMateriels.add(materiel);
 							}
 						}catch(Exception  e){
-							e.printStackTrace();
+							logger.warn(e.getMessage(), e);
 							throw new Exception("第"+(i+1)+"行数据异常请检查，数据内容："+row.toString());
 						}
 						
@@ -516,6 +538,7 @@ public class DemandPlanController {
 			map.put("data", "success");
 		} catch (Exception e1) {
 			map.put("data", e1.getMessage());
+			logger.warn(e1.getMessage(), e1);
 		}
     	
          return map;
@@ -549,7 +572,7 @@ public class DemandPlanController {
         		demandPlanMateriels = demandPlanMaterielService.searchDemandPlanMateriels(search);
         		//flag = "1";
         	}catch(Exception e){
-        		System.out.println(e.getMessage());
+        		logger.warn(e.getMessage(), e);
         		return null;
         	}
     	return demandPlanMateriels;

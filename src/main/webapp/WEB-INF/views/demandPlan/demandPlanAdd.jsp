@@ -224,18 +224,22 @@
 	                                                    <label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.supplyName}}</label>
                                                     </td>
                                                     <td style="width: 140px;min-width: 120px;">
-                                                    	<span>
-                                                    		&nbsp;&nbsp;&nbsp;&nbsp;
-	                                                    	<a ng-hide="demandPlanMaterielEdit{{$index}}" ng-click="saveDemandPlanMateriel(materiel,$index)">保存</a>
-	                                                    	&nbsp;&nbsp;&nbsp;
-	                                                    	<a ng-hide="demandPlanMaterielEdit{{$index}}" ng-click="cancelDemandPlanMateriel(materiel,$index)">撤销</a>
-	                                                    </span>
-	                                                    <span  ng-show="operation_c{{$index}}">
-	                                                    	<a ng-show="demandPlanMaterielView{{$index}}"   ng-click="editDemandPlanMateriel(materiel)">变更</a>
-	                                                    	&nbsp;&nbsp;&nbsp;
-	                                                    	<a ng-show="demandPlanMaterielView{{$index}}"  ng-click="deleteDemandPlanMateriel(materiel)">删除</a>
+                                                    	<span ng-if="materiel.orderSerial == null">
+	                                                    	<span>
+	                                                    		&nbsp;&nbsp;&nbsp;&nbsp;
+		                                                    	<a ng-hide="demandPlanMaterielEdit{{$index}}" ng-click="saveDemandPlanMateriel(materiel,$index)">保存</a>
+		                                                    	&nbsp;&nbsp;&nbsp;
+		                                                    	<a ng-hide="demandPlanMaterielEdit{{$index}}" ng-click="cancelDemandPlanMateriel(materiel,$index)">撤销</a>
+		                                                    </span>
+		                                                    <span  ng-show="operation_c{{$index}}">
+		                                                    	<a ng-show="demandPlanMaterielView{{$index}}"   ng-click="editDemandPlanMateriel(materiel)">变更</a>
+		                                                    	&nbsp;&nbsp;&nbsp;
+		                                                    	<a ng-show="demandPlanMaterielView{{$index}}"  ng-click="deleteDemandPlanMateriel(materiel)">删除</a>
+	                                                    	</span>
                                                     	</span>
-                                                    	
+                                                    	<span ng-if="materiel.orderSerial != null" class="label label-sm label-info ng-scope">
+                                                    		已加入销售订单
+                                                    	</span>
                                                     </td>
                                                 </tr>
                                             </tbody>
