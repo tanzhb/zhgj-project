@@ -344,7 +344,7 @@ public class TakeDeliveryController {
     		
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		logger.warn(e.getMessage(), e);
     		return null;
     	}
     	return flag;
@@ -366,7 +366,7 @@ public class TakeDeliveryController {
     			takeDeliveryService.deleteBatch(serialNumArray);
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		logger.warn(e.getMessage(), e);
     		flag = "1";
     	}
     	return flag;
@@ -424,7 +424,7 @@ public class TakeDeliveryController {
         		}
         		flag = "1";
         	}catch(Exception e){
-        		System.out.println(e.getMessage());
+        		logger.warn(e.getMessage(), e);
         		return null;
         	}
     	return flag;
@@ -441,12 +441,8 @@ public class TakeDeliveryController {
     	String flag ="0"; //默认失败
 
     	
-  	   	  TakeDeliveryParams  takeDeliveryParams = null;
-		   try {
-			   takeDeliveryParams = JSON.parseObject(params, TakeDeliveryParams.class);
-			} catch (Exception e) {
-		    	System.out.println(this.getClass()+"---------"+ e.getMessage());
-			}
+  	   	  	TakeDeliveryParams  takeDeliveryParams = null;
+			takeDeliveryParams = JSON.parseObject(params, TakeDeliveryParams.class);
         	try{
         		Subject currentUser = SecurityUtils.getSubject();
         		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
@@ -464,7 +460,7 @@ public class TakeDeliveryController {
         		}
         		flag = "1";
         	}catch(Exception e){
-        		System.out.println(e.getMessage());
+        		logger.warn(e.getMessage(), e);
         		return null;
         	}
     	return flag;
@@ -680,8 +676,7 @@ public class TakeDeliveryController {
 	    			takeDeliveryService.deleteStockInInfo(serialNumArray);
 	    		}
 	    	}catch(Exception e){
-	    		System.out.println(e.getMessage());
-	    		e.printStackTrace();
+	    		logger.warn(e.getMessage(), e);
 	    		flag = "1";
 	    	}
 	    	return flag;

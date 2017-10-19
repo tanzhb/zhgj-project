@@ -380,23 +380,24 @@ public class MessageConstants {
 	
 	
 	/*=======出入库检验相关消息Start===================*/
+	/**
+	 * 入库已检验消息(发给采购)
+	 */
+	public static final String TEMP_IN_CHECK_TO_BUY = "103";
+	/**
+	 * 入库已检验消息(发给供应)
+	 */
+	public static final String TEMP_IN_CHECK_TO_SALE = "104";
 	//10
 	/**
 	 *  出库已检验消息(发给采购)
 	 */
-	public static final String TEMP_IN_CHECK_TO_BUY = "101";
+	public static final String TEMP_OUT_CHECK_TO_BUY = "102";
 	/** 
 	 * 出库已检验消息(发给供应)
 	 */
-	public static final String TEMP_IN_CHECK_TO_SALE = "102";
-	/**
-	 * 入库已检验消息(发给采购)
-	 */
-	public static final String TEMP_OUT_CHECK_TO_BUY = "103";
-	/**
-	 * 入库已检验消息(发给供应)
-	 */
-	public static final String TEMP_OUT_CHECK_TO_SALE = "104";
+	public static final String TEMP_OUT_CHECK_TO_SALE = "101";
+
 	/*===========出入库检验相关消息End=================*/
 	
 	
