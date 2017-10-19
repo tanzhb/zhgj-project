@@ -299,7 +299,6 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
                               { mData: 'materielName' },
                               { mData: 'specifications' },
                               { mData: 'unit' },
-                              { mData: 'parentMateriel' },
                               { mData: 'type' },
                               { mData: 'originCountry' },
                               { mData: 'brand' },
@@ -335,18 +334,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 								 $compile(td)($scope);
 						       }
 						},{
-							'targets' : 5,
-							/*'className' : 'dt-body-center',*/
-							'render' : function(data,
-									type, full, meta) {
-								if(data==null){
-									return  ''
-								}else{
-									return  data.materielName
-								}
-							}
-						},{
-							'targets' : 9,
+							'targets' : 8,
 							/*'className' : 'dt-body-center',*/
 							'render' : function(data,
 									type, full, meta) {

@@ -104,7 +104,8 @@
 	a.remark,
 	a.electronicContract,
 	a.signContract,
-	b.serialNum AS orderSerial
+	b.serialNum AS orderSerial,
+	a.contractNumber
 	FROM
 	contract a
 	LEFT JOIN orderInfo b ON a.serialNum=b.contractSerial
