@@ -27,6 +27,8 @@ public class User implements Serializable{
 	
 	private String userName;
 	
+	private String displayName;
+	
 	private String userPwd;
 	
 	private String userSalt; // 加密密码的盐
@@ -88,6 +90,14 @@ public class User implements Serializable{
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 
 	public String getUserPwd() {

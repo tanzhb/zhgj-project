@@ -353,7 +353,8 @@
 					class="dropdown-toggle" dropdown-menu-hover data-toggle="dropdown"
 					data-close-others="true"> <img alt="" class="img-circle" id="avatar"
 						src="assets/pages/media/users/avatar3.jpg" /> <span
-						class="username username-hide-on-mobile"> <shiro:principal />
+						class="username username-hide-on-mobile" id="usernameOfUserInfo"> 
+						<shiro:principal />
 						<!-- ng-src="uploadAttachFiles/{{userInfo.avatar}}" -->
 					</span> <i class="fa fa-angle-down"></i>
 				</a>
