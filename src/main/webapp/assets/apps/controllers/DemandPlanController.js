@@ -1078,20 +1078,20 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	    	   if($scope.materielAllChecked){
 	    		   if(!isNull($scope.rootMateriels)){
 			    		for(var i in $scope.rootMateriels){
-			    			$scope.rootMateriels[i].materielChecked = true;
-			    			console.log("===++++++=====>"+$scope.rootMateriels[i].materielChecked);
+			    			if($scope.rootMateriels[i].orderSerial == null){
+			    				$scope.rootMateriels[i].materielChecked = true;
+			    			}
 			    		}
 			       }
 	    	   }else{
 	    		   if(!isNull($scope.rootMateriels)){
 			    		for(var i in $scope.rootMateriels){
-			    			$scope.rootMateriels[i].materielChecked = false;
-			    			console.log("===++++++=====>"+$scope.rootMateriels[i].materielChecked);
+			    			if($scope.rootMateriels[i].orderSerial == null){
+			    				$scope.rootMateriels[i].materielChecked = false;
+			    			}
 			    		}
 			       }
 	    	   }
-	    	   //debugger;
-	    	   console.log("==============>"+$scope.materielAllChecked);
 	       };
 	       
 	       $scope.addToSaleOrder = function(){
@@ -1099,9 +1099,8 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	    	   var arr = [];
 	    	   if(!isNull($scope.rootMateriels)){
 		    		for(var i in $scope.rootMateriels){
-		    			console.log("===++++++=====>"+$scope.rootMateriels[i].materielChecked);
 		    			if($scope.rootMateriels[i].materielChecked){
-		    				arr.push($scope.rootMateriels[i].supplyMaterielSerial);
+		    				arr.push($scope.rootMateriels[i].serialNum);
 		    			}
 		    		}
 		       }
@@ -1119,7 +1118,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	       /*******************************************历史订单Start********************************************/
 
 	       var s_table;
-	       var tableAjaxUrl = "rest/order/findOrderList?type=sale";
+	       var tableAjaxUrl = "rest/order/findOrderList?type=sale&demandPlanSerial="+$stateParams.serialNum;
 	       var selectSaleOrderTable = function() {
 	               a = 0;
 	               App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
@@ -1150,6 +1149,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	                   order: [[1, "asc"]],// 默认排序列及排序方式
 	                   searching: true,// 是否过滤检索
 	                   ordering:  true,// 是否排序
+	                   autoWidth: false,
 	                   lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
 	                   pageLength: 5,// 每页显示数量
 	                   processing: true,// loading等待框
@@ -1157,43 +1157,115 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	                   ajax: tableAjaxUrl,// 加载数据中
 	                   "aoColumns": [
 	                                /* { mData: 'serialNum' },*/
-	                                 { mData: 'orderNum' },
-	                                 { mData: 'buyComId' },
-	                                 { mData: null },
-	                                 { mData: null },
-	                                 { mData: 'deliveryMode' },
-	                                 { mData: 'serviceModel' },
-	                                 { mData: 'saleApplySerial' },
-	                                 { mData: 'orderSerial' },
-	                                 { mData: 'orderDate' },
-	                                 { mData: 'serialNum' }
+		                              { mData: 'orderNum' },
+		                              { mData: 'buyName' },
+		                              { mData: 'materielCount' },
+		                              { mData: 'orderAmount' },
+		                              { mData: 'deliveryMode' },
+		                              { mData: 'orderType' },
+		                              { mData: 'saleApplySerial' },
+		                              { mData: 'orderSerial' },
+		                              { mData: 'orderDate' },
+		                              { mData: 'orderDate' }
 
 	                           ],
-	                  'aoColumnDefs' : [ /*{
-	   							'targets' : 0,
-	   							'searchable' : false,
-	   							'orderable' : false,
-	   							'render' : function(data,
-	   									type, full, meta) {
-	   								return '<input type="checkbox" id="'+data+'" ng-click="getSaleOrderInfo_(\''+data+'\')" name="serialNum[]" value="'
-	   													+ $('<div/>')
-	   													.text(
-	   															data)
-	   													.html()
-	   											+ '">';
-	   							},
-	   							"createdCell": function (td, cellData, rowData, row, col) {
-	   								 $compile(td)($scope);
-	   						       }
-	   						},*/{
-	   							'targets' : 9,
-	   							'searchable' : false,
-	   							'orderable' : false,
-	   							'render' : function(data,
-	   									type, full, meta) {
-	   								return '<a>查看</a>';
-	   							}
-	   						} ]
+	                  aoColumnDefs: [{
+	                	  	'width':'180px',
+							'targets' : 0,
+							'className' : 'dt-body-center',
+							'render' : function(data,
+									type, row, meta) {
+								var clickhtm = '<span>'+data+'</span></br>'
+								if(row.processBase!=""&&row.processBase!=null){
+                        			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
+										return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">审核中</span>';
+									}else if(row.processBase.status=="APPROVAL_SUCCESS"){
+										if(row.status==1){
+											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">待签合同</span>';
+										}else if(row.status==2){
+											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已确认</span>';
+										}else{
+											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已确认</span>';
+										}
+									}else if(row.processBase.status=="APPROVAL_FAILED"){
+										return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:red">未通过</span>';
+									}else{
+										return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未发布</span>';
+									}
+                        		}else{
+                        			return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未发布</span>';
+                        		}
+								
+							
+							},
+							"createdCell": function (td, cellData, rowData, row, col) {
+								 $compile(td)($scope);
+						       }
+						},{
+							'targets' : 1,
+							'className' : 'dt-body-center',
+							'render' : function(data,
+									type, row, meta) {
+								var htm = (data==null?'':data)+'</br>'
+                    			if(row.deliverStatus=="0"){
+                    				return htm + '<span >未开始</span>';
+								}else if(row.deliverStatus=="1"){
+                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已发货</span>';
+								}else if(row.deliverStatus=="2"){
+                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已收货</span>';
+								}else if(row.deliverStatus=="3"){
+                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已检验</span>';
+								}else if(row.deliverStatus=="4"){
+                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已出库</span>';
+								}else if(row.deliverStatus=="5"){
+                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已入库</span>';
+								}else{
+									return htm + '<span>未开始</span>';
+								}
+							},
+							"createdCell": function (td, cellData, rowData, row, col) {
+								 $compile(td)($scope);
+						       }
+						},{
+							'targets' : 2,
+							'render' : function(data,
+									type, row, meta) {
+								var htm = (data==null?'':data)+'</br>'
+
+                    			if(row.payStatus=="0"){
+                    				return htm + '<span >未付款</span>';
+								}else if(row.payStatus=="1"){
+                    				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">已付款</span>';
+								}else if(row.payStatus=="2"){
+                    				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">已收款</span>';
+								}else{
+									return htm + '<span >未付款</span>';
+								}
+							},
+							"createdCell": function (td, cellData, rowData, row, col) {
+								 $compile(td)($scope);
+						       }
+						}, {
+							'targets' : 6,
+							'render' : function(data,
+									type, row, meta) {
+								if(isNull(row.contract)){
+									return ""
+								}else{
+									return row.contract.contractNum
+								}
+							}
+						},{
+   							'targets' : 9,
+   							'className' : 'dt-body-center',
+   							'render' : function(data,
+   									type, row, meta) {
+   								return '<a href="javascript:;" ui-sref="viewSaleOrder({\'serialNum\':\'' + row.serialNum + '\'})" >查看</a>';
+   							},
+							"createdCell": function (td, cellData, rowData, row, col) {
+								 $compile(td)($scope);
+						       }
+   						} ]
 
 	               }).on('order.dt',
 	               function() {
@@ -1248,6 +1320,62 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	    
 	       
 	       /*******************************************历史订单End********************************************/
+	           
+	           
+	           
+	       /*************************************************查看需求计划物料START***********************************************/
+	           /*var e=$("#sample_1");
+	           e.dataTable({
+	               language: {
+	                   aria: {
+	                       sortAscending: ": activate to sort column ascending",
+	                       sortDescending: ": activate to sort column descending"
+	                   },
+	                   emptyTable: "No data available in table",
+	                   info: "Showing _START_ to _END_ of _TOTAL_ entries",
+	                   infoEmpty: "No entries found",
+	                   infoFiltered: "(filtered1 from _MAX_ total entries)",
+	                   lengthMenu: "_MENU_ entries",
+	                   search: "Search:",
+	                   zeroRecords: "No matching records found"
+	               },
+	               scrollY: 300,
+	               deferRender: !0,
+	               scroller: !0,
+	               stateSave: !0,
+	               order: [
+	                   [
+	                       0,
+	                       "asc"
+	                   ]
+	               ],
+	               lengthMenu: [
+	                   [
+	                       10,
+	                       15,
+	                       20,
+	                       -1
+	                   ],
+	                   [
+	                       10,
+	                       15,
+	                       20,
+	                       "All"
+	                   ]
+	               ],
+	               pageLength: 10,
+	               ajax:function(e,t,n){
+	            	   		
+	                          t({
+	                                   draw: e.draw,
+	                                   data: null,
+	                                   recordsTotal: 5e6,
+	                                   recordsFiltered: 5e6
+	                               })
+	               }
+	           //    dom: "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>"
+	           })*/
+	       /*************************************************查看需求计划物料END*************************************************/
 }]); 
 
 /*var changeSelectValue = function (value,obj){

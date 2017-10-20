@@ -206,6 +206,76 @@ public class DemandPlanMaterielExample {
             return (Criteria) this;
         }
 
+        public Criteria andOrderSerialIsNull() {
+            addCriterion("orderSerial is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderSerialIsNotNull() {
+            addCriterion("orderSerial is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderSerialEqualTo(String value) {
+            addCriterion("orderSerial =", value, "orderSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderSerialNotEqualTo(String value) {
+            addCriterion("orderSerial <>", value, "orderSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderSerialGreaterThan(String value) {
+            addCriterion("orderSerial >", value, "orderSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderSerialGreaterThanOrEqualTo(String value) {
+            addCriterion("orderSerial >=", value, "orderSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderSerialLessThan(String value) {
+            addCriterion("orderSerial <", value, "orderSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderSerialLessThanOrEqualTo(String value) {
+            addCriterion("orderSerial <=", value, "orderSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderSerialLike(String value) {
+            addCriterion("orderSerial like", value, "orderSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderSerialNotLike(String value) {
+            addCriterion("orderSerial not like", value, "orderSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderSerialIn(List<String> values) {
+            addCriterion("orderSerial in", values, "orderSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderSerialNotIn(List<String> values) {
+            addCriterion("orderSerial not in", values, "orderSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderSerialBetween(String value1, String value2) {
+            addCriterion("orderSerial between", value1, value2, "orderSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderSerialNotBetween(String value1, String value2) {
+            addCriterion("orderSerial not between", value1, value2, "orderSerial");
+            return (Criteria) this;
+        }
+
         public Criteria andDemandPlanSerialIsNull() {
             addCriterion("demandPlanSerial is null");
             return (Criteria) this;
@@ -1125,6 +1195,7 @@ public class DemandPlanMaterielExample {
 	public void setLimit(int limit) {
 		this.limit = limit;
 	}
+    
     
     
 }
