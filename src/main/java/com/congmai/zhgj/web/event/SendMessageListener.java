@@ -1017,14 +1017,14 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 			initService();
 			User user = UserUtil.getUserFromSession();
 			if(user != null){
-				StockInOutCheck check = (StockInOutCheck) event.getSource();
+				TakeDeliveryParams params = (TakeDeliveryParams) event.getSource();
 				
 				Properties properties = new Properties();
-				TakeDelivery takeDelivery = takeDeliveryService.selectById(check.getTakeDeliverSerial());
+				TakeDelivery takeDelivery = takeDeliveryService.selectById(params.getRecord().getTakeDeliverSerial());
 				DeliveryVO delivery = deliveryService.selectDetailById(takeDelivery.getDeliverSerial());
 				OrderInfo order = orderService.selectById(delivery.getOrderSerial());
 				Integer count = 0;
-				for(DeliveryMateriel dm : check.getDeliverMaterials()){
+				for(DeliveryMateriel dm : params.getDeliveryMateriels()){
 					count += Integer.parseInt(dm.getStockInCount());
 				}
 				List<User> users = null;
@@ -1036,7 +1036,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							
 							messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
 							messageVO.setTempleteType(MessageConstants.TEMP_IN_TO_BUY); //收货消息
-							messageVO.setObjectSerial(check.getSerialNum());
+							messageVO.setObjectSerial(params.getRecord().getSerialNum());
 							messageVO.setReceiverId(u.getUserId().toString());
 							properties.put("paramer_a", u.getUserName());
 							properties.put("paramer_b", takeDelivery.getTakeDeliverNum());
@@ -1061,7 +1061,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					}
 					messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
 					messageVO.setTempleteType(MessageConstants.TEMP_IN_TO_BUY); //收货消息
-					messageVO.setObjectSerial(check.getSerialNum());
+					messageVO.setObjectSerial(params.getRecord().getSerialNum());
 					messageVO.setReceiverIds(userIds);
 					
 					properties.put("paramer_a", company.getComName());
@@ -1088,14 +1088,14 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 			User user = UserUtil.getUserFromSession();
 			if(user != null){
 				
-				StockInOutCheck check = (StockInOutCheck) event.getSource();
+				TakeDeliveryParams params = (TakeDeliveryParams) event.getSource();
 				
 				Properties properties = new Properties();
-				TakeDelivery takeDelivery = takeDeliveryService.selectById(check.getTakeDeliverSerial());
+				TakeDelivery takeDelivery = takeDeliveryService.selectById(params.getRecord().getTakeDeliverSerial());
 				DeliveryVO delivery = deliveryService.selectDetailById(takeDelivery.getDeliverSerial());
 				OrderInfo order = orderService.selectById(delivery.getOrderSerial());
 				Integer count = 0;
-				for(DeliveryMateriel dm : check.getDeliverMaterials()){
+				for(DeliveryMateriel dm : params.getDeliveryMateriels()){
 					count += Integer.parseInt(dm.getStockInCount());
 				}
 				List<User> users = null;
@@ -1107,7 +1107,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							
 							messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
 							messageVO.setTempleteType(MessageConstants.TEMP_IN_TO_SALE); //收货消息
-							messageVO.setObjectSerial(check.getSerialNum());
+							messageVO.setObjectSerial(params.getRecord().getSerialNum());
 							messageVO.setReceiverId(u.getUserId().toString());
 							properties.put("paramer_a", u.getUserName());
 							properties.put("paramer_b", delivery.getDeliverNum());
@@ -1132,7 +1132,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					}
 					messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
 					messageVO.setTempleteType(MessageConstants.TEMP_IN_TO_SALE); //收货消息
-					messageVO.setObjectSerial(check.getSerialNum());
+					messageVO.setObjectSerial(params.getRecord().getSerialNum());
 					messageVO.setReceiverIds(userIds);
 					
 					properties.put("paramer_a", company.getComName());

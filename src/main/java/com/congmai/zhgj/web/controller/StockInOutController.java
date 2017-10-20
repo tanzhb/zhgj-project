@@ -131,7 +131,11 @@ public class StockInOutController {
     				//出库检验消息  to 供应
     				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(check,MessageConstants.OUT_CHECK_TO_SALE));
     			}else if("checkin".equals(stockInOutCheck.getDeliverSerial())){
-    				
+    				//入库检验消息  to 采购
+    				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(check,MessageConstants.IN_CHECK_TO_BUY));
+    				//入库检验消息  to 供应
+    				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(check,MessageConstants.IN_CHECK_TO_SALE));
+
     			}
     		}
     	}catch(Exception e){
