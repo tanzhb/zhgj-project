@@ -40,11 +40,11 @@ public enum StaticConst {
 	/**
 	 * @Field @DAILIBUY : TODO(平台名称)
 	 */
-	DAILIBUY("dailiBuy","代理采购"),
+	DAILIBUY("dailiBuy","委托采购"),
 	/**
 	 * @Field @DAILISALE : TODO(平台名称)
 	 */
-	DAILISALE("dailiSale","代理销售");
+	DAILISALE("dailiSale","委托销售");
 	
 	
 	
