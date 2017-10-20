@@ -45,7 +45,8 @@
 	contract a
 	LEFT JOIN orderInfo b ON a.serialNum=b.contractSerial
 	WHERE a.delFlg='0' AND b.supplyComId IS NULL AND b.delFlg='0'
-	AND a.creator=#{userId}
+	and b.status !=0
+	<!-- AND a.creator=#{userId} -->
 	GROUP BY(a.serialNum)
     </select>
     
@@ -58,7 +59,8 @@
 	contract a
 	LEFT JOIN orderInfo b ON a.serialNum=b.contractSerial
 	WHERE a.delFlg='0' AND b.buyComId IS NULL AND b.delFlg='0'
-	AND a.creator=#{userId}
+	and b.status !=0
+	<!-- AND a.creator=#{userId} -->
 	GROUP BY(a.serialNum)
     </select>
     
