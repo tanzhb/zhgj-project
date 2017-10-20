@@ -204,7 +204,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 						param.stockCount = $scope.takeDeliveryMateriels[i].stockCount;
 						if(isNull($scope.takeDeliveryMateriels[i].supplyMaterielSerial)){ //贸易出库
 							param.serialNum = $scope.takeDeliveryMateriels[i].serialNum;
-							param.unstockCount = $scope.takeDeliveryMateriels[i].acceptCount-$scope.takeDeliveryMateriels[i].stockCount;
+							param.unstockCount = $scope.takeDeliveryMateriels[i].deliverCount-$scope.takeDeliveryMateriels[i].stockCount;
 							param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].orderMaterielSerial;
 						}else{//其他出库
 							//param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].serialNum;
@@ -455,7 +455,8 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 	  		}
 	  		$scope.showStockBatch=function(index,materielSerialNum,orderSerial,deliveryMaterielSerialNum){//选择批次  materielSerialNum为基本物料流水 orderSerial 订单流水 deliveryMaterielSerialNum 发货物料流水
 	  			
-	  			var stockOutCount=Number($("#stockCount"+index).val());//获取出库数量
+	  			var stockOutCount=Number($("#stockCountinline"+deliveryMaterielSerialNum).val());//获取出库数量
+	  			debugger;
 	  			if(stockOutCount==0||stockOutCount==NaN){
 	  				toastr.warning("请先输入正确的出库数量");
 	  			}else{
@@ -821,7 +822,15 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 							 toastr.info("还需出库"+(stockOutCount-count));
 						 }
 					 }
-					
+					$scope.deleteOrdinaryData=function(deliveryMaterielSerialNum){
+						if($scope["arraySerialNums"+deliveryMaterielSerialNum]!=undefined){
+							delete $scope["arraySerialNums"+deliveryMaterielSerialNum];
+							$scope['totalCount'+deliveryMaterielSerialNum]=0;
+							 $("#"+$scope.deliveryMaterielSerialNum).html(" ");
+							 toastr.warning("重新选择出库批次");
+							 
+						}
+					}
 					$scope.confirmSave=function(){//保存批次
 						
 						 var checkboxs=$('input[class="checkboxes"]:checked');
@@ -862,6 +871,10 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 							  var nameArrays=inOutNum.split(",");
 							  var addvalue=serialNum+","+value+","+$scope.deliveryMaterielSerialNum+","+rukuSerialNum+","+nameArrays[0]+","+nameArrays[1];//拼接checkbox选中流水和之前设定的出库数值以及发货物料流水和入库单流水以及入库批次号
 							  serialNums[i]=addvalue;
+						 }
+						 if(count> $scope.stockOutCount){
+								toastr.warning("当前总出库数量已大于出库数量!");
+								return;
 						 }
 						 $("#stockCountinline"+$scope.deliveryMaterielSerialNum).val(count);
 						 var inOutNums="";

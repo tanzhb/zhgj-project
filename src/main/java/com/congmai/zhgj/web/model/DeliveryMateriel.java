@@ -85,6 +85,7 @@ public class DeliveryMateriel {
     private String  inOutNums;//关联出库批次号
     private String sumStockOutCount;//出库数量
     private String attachFile;
+    private String currentStockAmount;//当前库存总数(基本物料)
 	private List<RelationFile> files;
     public List<StockOutBatch> getStockOutMateriels() {
 		return stockOutMateriels;
@@ -497,6 +498,14 @@ public class DeliveryMateriel {
 
 	public void setFiles(List<RelationFile> files) {
 		this.files = files;
+	}
+
+	public String getCurrentStockAmount() {
+		return currentStockAmount;
+	}
+
+	public void setCurrentStockAmount(String currentStockAmount) {
+		this.currentStockAmount = currentStockAmount;
 	}
 
 	

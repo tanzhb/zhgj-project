@@ -37,7 +37,7 @@ angular
 										 		}else if($location.path()=="/stockInOutCheckView"){
 										 			debugger;
 										 			$scope.inOrOut=$stateParams.inOrOut;
-										 			getStockInOutCheckInfo($stateParams.inOrOut);//查看出入库检验详情页面
+										 			getStockInOutCheckInfo($stateParams.inOrOut,"view");//查看出入库检验详情页面
 									 		}else if($location.path()=="/confirmStockInOutCheck"){
 									 			$('.date-picker').datepicker({
 													rtl: App.isRTL(),
@@ -581,7 +581,7 @@ angular
 									param = {};
 									param.serialNum = $scope.materials[i].serialNum;
 									param.qualifiedCount = $scope.materials[i].qualifiedCount;
-									if($scope.inOrOut.indexOf("in")){
+									if($scope.inOrOut.indexOf("in")>-1){
 										param.unqualifiedCount= $scope.materials[i].acceptCount-$scope.materials[i].qualifiedCount;
 									}else{
 										param.unqualifiedCount= $scope.materials[i].deliverCount-$scope.materials[i].qualifiedCount;
@@ -868,18 +868,19 @@ angular
 							}
 					);
 					}
-				/*	var  materielTable;
-					function loadMaterielTable(judgeString,serialNum){
-						var a = 0,deliverOrTakeDeliverSerial;
-						if($scope.stockInOutCheck.serialNum==undefined){
-							deliverOrTakeDeliverSerial=orderSerial+'edit';
-						}else{
-							serialNum=orderSerial+'no'+$scope.stockInOutCheck.serialNum;
-						}
+					var  materielTable;
+					function loadMaterielTable(serialNum){
+						var a = 0,tableid;
+						var status=$scope.stockInOutCheck.status;
 						 if(materielTable!=undefined){
 							 materielTable.destroy();
 				 	    	 }
-						tableAjaxUrl= "rest/stockInOut/getMaterialBySerialNum?serialNum="+orderSerial 
+						 if(serialNum.indexOf("in")>-1){
+							 tableid="sample_inview";
+						 }else{
+							 tableid="sample_outview";
+						 }
+						tableAjaxUrl= "rest/stockInOut/stockInOutCheckViewDetail?serialNum="+serialNum;
 						App.getViewPort().width < App
 								.getResponsiveBreakpoint("md") ? $(
 								".page-header").hasClass(
@@ -892,7 +893,7 @@ angular
 												"page-header-fixed")
 												&& (a = 64);
 										
-										materielInTable = $("#sample_inm")
+										materielInTable = $("#"+tableid)
 										.DataTable(
 												{
 													language : {
@@ -930,83 +931,109 @@ angular
 													pageLength : 10,// 每页显示数量
 													processing : true,// loading等待框
 													// serverSide: true,
+													/* ajax :{ "url":$rootScope.basePath
+									  						+ "/rest/stockInOut/stockInOutCheckViewDetail?serialNum="+serialNum,// 
+									  						"contentType": "application/json",
+									  					    "type": "POST",
+									  					    "data": function ( data ) {
+									  					    	debugger;
+									  					      return data.materials;
+									  					    }},*/
 													ajax : tableAjaxUrl,// 加载数据中发票表数据
 
 													"aoColumns" : [
 													   {
-													    mData : 'serialNum'
+													    mData : 'materielNum'
 													   },
 														{
-														mData : 'materielNum'
+														mData : 'materielName'
 														},{
-															mData : 'materielName'
-														},  {
 															mData : 'specifications'
-														},{
+														},  {
 															mData : 'unit'
-														}, {
-															mData : 'amount'
 														},{
-															mData : 'canBillAmount'
+															mData : 'batchNum'
 														}, {
-															mData : 'billAmount'
+															mData : 'manufactureDate'
+														},{
+															mData : 'amount'//orderMateriel.amount
+														}, {
+															mData : 'deliverCount'
 														}, { 
-															mData : 'orderUnitPrice',
-															mRender:function(data){
-							                            		if(data!=""&&data!=null){
-							                            			return $filter('currency')(data,'￥');
-							                            		}else{
-							                            			return $filter('currency')(0,'￥');
-							                            		}
-							                            	}
+															mData : 'deliverRemark'
+															
 														}, {
-															mData : 'money'
+															mData : 'stockCount'//acceptCount
+														},{
+															mData : 'unstockCount'//refuseCount
+														},{
+															mData : 'stockRemark'//takeRemark
+														}, {
+															mData : 'qualifiedCount'
+														},{
+															mData : 'unqualifiedCount'
+														},{
+															mData : 'checkRemark'
 														},{
 															mData : 'status'
 														}
 														],
-													'aoColumnDefs' : [  {
-														'targets' : 6,
-														'className' : 'dt-body-center',
-														'render' : function(data,
-																type, row, meta) {
-															if(serialNum.indexOf("view")>-1){
-																return data;
-															}else{
-																return '<input  type="text"  value="'+row.billAmount+'"      id="'+row.serialNum+'"  onchange="judgeNumber(\''+row.canBillAmount+'\',\''+row.serialNum+'\',\''+judgeString+'\')" />';
-															}
-														},"createdCell": function (td, cellData, rowData, row, col) {
-															 $compile(td)($scope);
-													    }
-													} ,{
-														'targets' : 8,
-														'render' : function(data,
-																type, row, meta) {
-															return '<span id="money'+row.serialNum+'">'+$filter('currency')(data,'￥')+'</span>';
-															//return data;
-														},"createdCell": function (td, cellData, rowData, row, col) {
-															 $compile(td)($scope);
-													    }
-													} ,{
-														'targets' : 9,
-														'searchable' : false,
-														'orderable' : false,
-														'render' : function(data,
-																type, row, meta) {
-															if(serialNum.indexOf("view")>-1){
-																return "";
-															}else{
-															return '<a   id="save'+row.serialNum+'" ng-click="saveBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.invoiceBillingRecordSerial+'\',\''+row.billAmount+'\',\''+row.orderUnitPrice+'\',\''+row.money+'\')">  <i class="fa fa-save" title="保存"></i> </a>&nbsp;<a   style="display:none"  id="edit'+row.serialNum+'"  ng-click="editBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\')"><i class="fa fa-edit" title="编辑"></i></a>'
-															+ '&nbsp;<a  id="cancel'+row.serialNum+'" ng-click="cancelEditBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.billAmount+'\')"><i class="fa fa-undo"  title="取消"></i></a>';
-															}//return data;
-														},"createdCell": function (td, cellData, rowData, row, col) {
-															 $compile(td)($scope);
-													    }
-													}  ],
+													'aoColumnDefs' : [
+													                  {'targets' : 6,
+													                	 'render' : function(data,
+													                		type, row, meta) {
+													                		 return  row.amount;
+													                	  }
+													                  }, 
+													                  {'targets' : 9,
+														                	 'render' : function(data,
+																                		type, row, meta) {
+														                			if(serialNum.indexOf("in")>-1){
+																	                	 return row.acceptCount;
+																	                		  }else{
+																	                			  return  row.stockCount;
+																	                		  }
+																                	  }
+																                  
+													                  }, 
+													                  {'targets' : 10,
+																	                	 'render' : function(data,
+																			                		type, row, meta) {
+																	                			if(serialNum.indexOf("in")>-1){
+																				                	 return row.refuseCount;
+																				                		  }else{
+																				                			  return  row.unstockCount;
+																				                		  }
+																			                	  }
+																			                 
+													                  },
+													                  {'targets' : 11,
+													                	  'render' : function(data,
+													                		 type, row, meta) {
+																				   if(serialNum.indexOf("in")>-1){
+																				return row.takeRemark;
+																					  }else{
+																				return  row.stockRemark;
+																				  }
+
+																			 }
+																						                  
+													                  },
+													                  {'targets' : 15,
+																		'render' : function(data,
+																			type, row, meta) {
+																			if(status==0){
+																				 return '<span  class="label label-sm label-info ng-scope">待检验</span>';
+																					 }else if(status==1){
+																					return  '<span  class="label label-sm label-success ng-scope">已检验</span>';
+																					 }
+																				}
+																		 }
+													                  ],
 												});
 									
 						// 构建datatables结束***************************************
-						}*/
+						}
 
 		
 						   // 确认选择发货单开始***************************************
@@ -1133,7 +1160,7 @@ angular
 						        })   							}); 
 							
 							
-							 function getStockInOutCheckInfo(serialNum){//获取出入库检验信息
+							 function getStockInOutCheckInfo(serialNum,judgeString){//获取出入库检验信息
 						    	   if(!handle.isNull(serialNum)){
 						    		   debugger;
 						    			 var promise =StockInOutService .selectDetailBySerialNum(serialNum);
@@ -1148,6 +1175,9 @@ angular
 						 	        			 }else{
 						 	        				 $("#deliverSerial").val(data.stockInOutCheck.deliverSerial);
 						 	        				$("#takeDeliverSerial").val('checkout');
+						 	        			 }
+						 	        			 if(judgeString!=undefined){
+						 	        				loadMaterielTable(serialNum);
 						 	        			 }
 						 	        			
 						 	            },function(data){

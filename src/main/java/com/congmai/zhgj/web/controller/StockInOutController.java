@@ -210,6 +210,31 @@ public class StockInOutController {
      * @return
      */
   
+    @RequestMapping(value = "/stockInOutCheckViewDetail")
+    @ResponseBody
+    public  ResponseEntity<Map<String,Object>> viewStockInOutCheckDetai(HttpServletRequest request, String  serialNum) {
+    	Map<String, Object> map = new HashMap<String, Object>();
+    	StockInOutCheck stockInOutCheck=stockInOutCheckService.selectById(serialNum.substring(0, 32));
+    	if(stockInOutCheck!=null){
+    	/*map.put("stockInOutCheck",stockInOutCheck);*/
+    	List<DeliveryMaterielVO> deliveryMateriels=null;
+    	if(serialNum.indexOf("in")>-1){//入库
+  		deliveryMateriels=deliveryService.selectListForDetailForStockCheck(stockInOutCheck.getTakeDeliverSerial(),"in");
+    	}else if (serialNum.indexOf("out")>-1){//出库
+    	 	deliveryMateriels = deliveryService.selectListForDetailForStockCheck(stockInOutCheck.getDeliverSerial(),"out");
+    	}
+    	for(DeliveryMaterielVO dmo:deliveryMateriels){
+			dmo.setQualifiedCount(dmo.getQualifiedCount()==null?"0":dmo.getQualifiedCount());
+			dmo.setUnqualifiedCount(dmo.getUnqualifiedCount()==null?"0":dmo.getUnqualifiedCount());
+			
+		}
+	 	map.put("draw", 1);
+	 	map.put("recordsTotal",  deliveryMateriels==null?0:deliveryMateriels.size());
+	 	map.put("recordsFiltered",  deliveryMateriels==null?0:deliveryMateriels.size());
+	 	map.put("data", deliveryMateriels);
+    }
+    	return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
+    }
     @RequestMapping(value = "/stockInOutCheckView", method = RequestMethod.POST)
     @ResponseBody
     public Map viewStockInOutCheck(HttpServletRequest request, @RequestBody String  serialNum) {
@@ -254,7 +279,6 @@ public class StockInOutController {
     	
     	return map;
     }
-    
     @RequestMapping(value = "/getMaterialBySerialNum", method = RequestMethod.POST)
     public ResponseEntity<Map> getMaterialBySerialNum(HttpServletRequest request, @RequestBody String  serialNum) {
     	Map<String, Object> map = new HashMap<String, Object>();

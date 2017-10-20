@@ -127,8 +127,7 @@
                                                                 <label class="col-md-4 control-label" for="status">状态 :</label>
                                                                     <div class="col-md-8">
                                                                     <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==0" >待检验</span>
-                                                                    <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==1" >待审批</span>
-                                                                    <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==2" >已检验</span>
+                                                                    <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==1" >已检验</span>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -142,7 +141,7 @@
                             <div class="actions">
                             </div>
                         </div>
-                          <div class="portlet-body form">
+                        <!--   <div class="portlet-body form">
                                     <div class="table-scrollable">
                                         <table class="table table-striped table-bordered table-advance table-hover"  >
                                             <thead>
@@ -206,13 +205,92 @@
 										<td>{{materiel.checkRemark}}</td>
 										<td><span class="label label-sm label-success"  ng-if="stockInOutCheck.status==0" >待检验</span>
                                                   <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==1" >待审批</span>
-                                                   <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==2" >已检验</span></td>
+                                                   <span class="label label-sm label-success"  ng-if="stockInOutCheck.status==1" >已检验</span></td>
                                                 </tr>
                                                 <tr ng-if="materials!=null"><td colspan="3">合计</td><td >{{materials.length}}</td><td></td><td></td><td></td><td   >{{stockInOutCheck.totalDeliverCount}}</td></tr>
                                             </tbody>
                                         </table>
                                     </div>
-                                </div><!-- 物料信息 END-->
+                                </div>物料信息 END -->
+                                <div class="portlet-body"  ng-if="inOrOut.indexOf('in')>-1"><!-- 入库检验物料--  -->
+				<table
+					class="table table-striped table-bordered table-hover "
+					id="sample_inview">
+					   <thead>
+                                                <tr >
+                                                    <th rowspan="2" style="text-align: center;vertical-align: middle">物料编号</th>
+                                                    <th  rowspan="2"  style="text-align: center;vertical-align: middle">物料名称</th>
+                                                    <th   rowspan="2" style="text-align: center;vertical-align: middle">规格型号</th>
+                                                    <th  rowspan="2" style="text-align: center;vertical-align: middle">单位</th>
+                                                    <th    rowspan="2"  style="text-align: center;vertical-align: middle">批次号</th>
+                                                     <th   rowspan="2"  style="text-align: center;vertical-align: middle">生产日期</th>
+                                                    <th   colspan="3"  style="text-align: center">发货</th>
+                                                     <th   colspan="3" style="text-align: center">收货</th>
+                                                    <th  colspan="3" style="text-align: center">检验</th>
+                                                    <th    rowspan="2"  style="text-align: center;vertical-align: middle">状态</th>
+                                                </tr>
+                                            
+                                             <tr >
+                                                 <td style="text-align: center">订单数量</td>
+                                                  <td style="text-align: center">发货数量</td>
+                                                  <td  style="text-align: center">备注</td>
+                                                 <td  style="text-align: center">实收数量</span></td>
+                                                  <td  style="text-align: center">拒收数量</span></td>
+                                                  <td  style="text-align: center">备注</td>
+                                                   <td  style="text-align: center">合格数量</td>
+                                                  <td   style="text-align: center">不合格数量</td>
+                                                   <td  style="text-align: center">备注</td>
+                                                  
+                                                </tr> 
+                                                </thead>
+					
+					<tbody>
+					</tbody>
+					<tfoot>
+					<tr ng-if="materials!=null"><td colspan="3">合计</td><td >{{materials.length}}</td><td></td><td></td><td></td><td   >{{stockInOutCheck.totalDeliverCount}}</td></tr>
+					</tfoot>
+				</table>
+			</div>
+			
+			  <div class="portlet-body"  ng-if="inOrOut.indexOf('out')>-1"><!-- 出库检验物料--  -->
+				<table
+					class="table table-striped table-bordered table-hover "
+					id="sample_outview">
+					  <thead>
+                                                <tr >
+                                                    <th rowspan="2" style="text-align: center;vertical-align: middle">物料编号</th>
+                                                    <th  rowspan="2"  style="text-align: center;vertical-align: middle">物料名称</th>
+                                                    <th   rowspan="2" style="text-align: center;vertical-align: middle">规格型号</th>
+                                                    <th  rowspan="2" style="text-align: center;vertical-align: middle">单位</th>
+                                                    <th    rowspan="2"  style="text-align: center;vertical-align: middle">批次号</th>
+                                                     <th   rowspan="2"  style="text-align: center;vertical-align: middle">生产日期</th>
+                                                    <th   colspan="3"  style="text-align: center">发货</th>
+                                                     <th   colspan="3" style="text-align: center">出库</th>
+                                                    <th  colspan="3" style="text-align: center">检验</th>
+                                                    <th    rowspan="2"  style="text-align: center;vertical-align: middle">状态</th>
+                                                </tr>
+                                            
+                                             <tr >
+                                                 <td style="text-align: center">订单数量</td>
+                                                  <td style="text-align: center">发货数量</td>
+                                                  <td  style="text-align: center">备注</td>
+                                                 <td  style="text-align: center">出库数量</span></td>
+                                                  <td  style="text-align: center">未出数量</span></td>
+                                                  <td  style="text-align: center">备注</td>
+                                                   <td  style="text-align: center">合格数量</td>
+                                                  <td   style="text-align: center">不合格数量</td>
+                                                   <td  style="text-align: center">备注</td>
+                                                  
+                                                </tr> 
+                                                </thead>
+					
+					<tbody>
+					</tbody>
+					<tfoot>
+					<tr ng-if="materials!=null"><td colspan="3">合计</td><td >{{materials.length}}</td><td></td><td></td><td></td><td   >{{stockInOutCheck.totalDeliverCount}}</td></tr>
+					</tfoot>
+				</table>
+			</div>
 				</div>
 				
         </div>

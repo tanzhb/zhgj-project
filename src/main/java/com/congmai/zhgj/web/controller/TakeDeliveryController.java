@@ -46,6 +46,7 @@ import com.congmai.zhgj.core.util.Constants;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.UserUtil;
+import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.event.EventExample;
 import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.BaseVO;
@@ -61,6 +62,7 @@ import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.RelationFile;
+import com.congmai.zhgj.web.model.StockExample;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.StockInOutRecordExample;
 import com.congmai.zhgj.web.model.TakeDelivery;
@@ -77,6 +79,7 @@ import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.RelationFileService;
+import com.congmai.zhgj.web.service.StockService;
 import com.congmai.zhgj.web.service.TakeDeliveryService;
 import com.congmai.zhgj.web.service.UserCompanyService;
 import com.congmai.zhgj.web.service.WarehouseService;
@@ -134,6 +137,8 @@ public class TakeDeliveryController {
 	@Autowired
 	private UserCompanyService userCompanyService;
 	
+	@Autowired
+	private StockService stockService;
 	
 	
 	@RequestMapping("takeDeliveryManage")
@@ -755,7 +760,30 @@ public class TakeDeliveryController {
     	if(StringUtils.isNotBlank(deliverySerial)){
     		DeliveryMaterielExample example = new DeliveryMaterielExample();
         	example.createCriteria().andDelFlgEqualTo("0").andDeliverSerialEqualTo(deliverySerial);
-        	return deliveryMaterielService.selectByExample(example);
+        	 List<DeliveryMateriel> deliveryMateriels=deliveryMaterielService.selectByExample(example);
+        	 //先判断该订单是普通采购还是代采购
+        	 OrderMateriel orderMateriel =deliveryMateriels.get(0).getOrderMateriel();
+     		OrderInfo orderInfo=orderService.selectById(orderMateriel.getOrderSerial());
+     		StockExample stockExample =new StockExample();
+     		com.congmai.zhgj.web.model.StockExample.Criteria criteria=stockExample.createCriteria();
+     		Boolean isStockZijian=true;//默认是自建库存
+     		if(StaticConst.getInfo("dailiBuy").equals(orderInfo.getOrderType())||StaticConst.getInfo("dailiSale").equals(orderInfo.getOrderType())){//代理销售/代理采购
+     			isStockZijian=false;
+     		}
+        	 for(DeliveryMateriel d:deliveryMateriels){
+        		 String materielSerial=d.getOrderMateriel().getMaterielSerial();//基本物料流水
+        		if(isStockZijian){
+        			String countInAmountZijian=stockService.getCountInAmountForZijian(materielSerial);
+        			String countOutAmountZijian=stockService.getCountOutAmountForZijian(materielSerial);
+        			d.setCurrentStockAmount(Integer.parseInt(countInAmountZijian==null?"0":countInAmountZijian)-Integer.parseInt(countOutAmountZijian==null?"0":countOutAmountZijian)+"");
+        		}else{
+        			String countInAmountDaiguan=stockService.getCountInAmountForDaiguan(materielSerial);
+        			String countOutAmountDaiguan=stockService.getCountOutAmountForDaiguan(materielSerial);
+        			d.setCurrentStockAmount(Integer.parseInt(countInAmountDaiguan==null?"0":countInAmountDaiguan)-Integer.parseInt(countOutAmountDaiguan==null?"0":countOutAmountDaiguan)+"");
+        		}
+        		 
+        	 }
+        	return deliveryMateriels;
     	}else if(StringUtils.isNotBlank(stockSerial)){
     		DeliveryMaterielExample example = new DeliveryMaterielExample();
         	example.createCriteria().andDelFlgEqualTo("0").andStockInOutRecordSerialEqualTo(stockSerial);

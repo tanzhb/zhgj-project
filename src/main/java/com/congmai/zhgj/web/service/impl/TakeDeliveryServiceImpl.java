@@ -245,7 +245,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		OrderInfo orderInfo=orderInfoMapper.selectByPrimaryKey(orderMateriel.getOrderSerial());
 		com.congmai.zhgj.web.model.StockExample.Criteria criteria=stockExample.createCriteria();
 		Boolean isStockZijian=true;//默认是自建库存
-		if(StaticConst.getValueByInfo("dailiBuy").equals(orderInfo.getOrderType())||StaticConst.getValueByInfo("dailiSale").equals(orderInfo.getOrderType())){//代理销售/代理采购
+		if(StaticConst.getInfo("dailiBuy").equals(orderInfo.getOrderType())||StaticConst.getInfo("dailiSale").equals(orderInfo.getOrderType())){//代理销售/代理采购
 			criteria.andMaterielSerialEqualTo(orderMateriel.getMaterielSerial()).andManageTypeEqualTo("2");//代管库存
 			isStockZijian=false;
 		}else{
@@ -263,28 +263,28 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			stock.setCreateTime(new Date());
 			stock.setUpdater(currenLoginName);
 			stock.setUpdateTime(new Date());
+			stock.setMaterielSerial(orderMateriel.getMateriel().getSerialNum());
 			if (isStockZijian) {
 				stock.setManageType("1");// 自建库存
-				stock.setMaterielOwner(StaticConst.getValueByInfo("comName"));
-				StaticConst.getValueByInfo("comName");
+				stock.setMaterielOwner(StaticConst.getInfo("comName"));
 			}else{
 				stock.setManageType("2");// 代管库存
 				stock.setMaterielOwner("");
-				stock.setServiceParty(StaticConst.getValueByInfo("comName"));
+				stock.setServiceParty(StaticConst.getInfo("comName"));
 			}
+			stockMapper.insert(stock);
 			
-			
-		}else{//已存在此物料的库存,更新库存数量
-		String currenAmount=stocks.get(0).getCurrentAmount();//获取当前库存数
-		if(isStockZijian){//自建库存
-		Stock stock=new Stock();
-		stock.setSerialNum(stocks.get(0).getSerialNum());
-		stock.setCurrentAmount(Integer.parseInt(currenAmount)+Integer.parseInt(deliveryMateriel.getStockCount())+"");
-		stockMapper.updateByPrimaryKey(stock);
+		}/*else{//已存在此物料的库存,更新库存数量
+//		Integer currenAmount=Integer.parseInt(stocks.get(0).getCountInAmount()==null?"0":stocks.get(0).getCountInAmount())-Integer.parseInt(stocks.get(0).getCountOutAmount()==null?"0":stocks.get(0).getCountOutAmount());//获取当前库存数
+//		if(isStockZijian){//自建库存
+//		Stock stock=new Stock();
+//		stock.setSerialNum(stocks.get(0).getSerialNum());
+//		stock.setCurrentAmount(currenAmount-Integer.parseInt(deliveryMateriel.getStockCount())+"");
+		//stockMapper.updateByPrimaryKey(stock);
 		}else{
 			//判断物权方是否相同,相同更新代管库存,不同新建代管库存
-		}
-	}
+		}*/
+	//}
 		
 	}
 
