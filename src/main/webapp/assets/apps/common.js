@@ -645,5 +645,6 @@ function getWSPath_web() {
 $(function(){
      $.ajax({ url: "rest/user/getUserInfo",method: "POST",  success: function(data){
          $("#avatar").attr("src","uploadAttachFiles/"+data.avatar);
+         $("#usernameOfUserInfo").html(data.displayName);
        }});
 })

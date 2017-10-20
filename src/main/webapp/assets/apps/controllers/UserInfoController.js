@@ -35,6 +35,7 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
       		     function(data){
       		    	$scope.userInfo=data;
       		    	$("#avatar").attr("src","uploadAttachFiles/"+$scope.userInfo.avatar);
+      		    	$("#usernameOfUserInfo").html($scope.userInfo.displayName);
       		     },
       		     function(error){
       		         console.log("error")
@@ -60,7 +61,7 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
 		}
 		
 		fd.append('userId', $scope.userInfo.userId); 
-		fd.append('userName',$scope.userInfo.userName); 
+		fd.append('displayName',$scope.userInfo.displayName); 
         fd.append('sex',$("input[name='sex']:checked").val()); 
         fd.append('telephone',$scope.userInfo.telephone); 
         fd.append('QQNum',$scope.userInfo.qqnum); 
