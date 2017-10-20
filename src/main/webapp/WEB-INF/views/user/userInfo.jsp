@@ -68,13 +68,20 @@
 					<div class="table-scrollable">
 						<table class="table table-bordered table-hover">
 							<tbody>
+							    <tr>
+									<td style="width: 20%;"><span class="required"
+										style="color: red;" aria-required="true"> * </span>账号</td>
+									<td style="width: 80%;" class="form-group">
+									<p class="form-control-static"> {{userInfo.userName}}</p>
+										   </td>
+								</tr>
 								<tr>
 									<td style="width: 20%;"><span class="required"
 										style="color: red;" aria-required="true"> * </span> 姓名</td>
 									<td style="width: 80%;" class="form-group">
-									<input type="text" class="form-control" ng-model="userInfo.userName"
+									<input type="text" class="form-control" ng-model="userInfo.displayName"
 										 name="userName" ng-show="input" />
-									<p class="form-control-static" ng-show="span"> {{userInfo.userName}}</p>
+									<p class="form-control-static" ng-show="span"> {{userInfo.displayName}}</p>
 										</td>
 								</tr>
 								<tr>
@@ -145,62 +152,3 @@
 		<!-- END BORDERED TABLE PORTLET-->
 	</div>
 </div>
-<script>
-
-       $('#signDate').datepicker({
-    	   rtl: App.isRTL(),
-	   		orientation: "left",
-	   		autoclose: true,
-	   		dateFormat:"yyyy-mm-dd",
-	   		language: "zh-CN"
-    	}).on('changeDate',function(ev){
-    		var endDate=$("#endDate").val();
-    		var signDate=$("#signDate").val();
-    		
-    		if(endDate<signDate&&$.trim(endDate)!=""&&endDate!=null){
-        		toastr.warning('签订时间不能大于结束时间 ！');
-        		$("#signDate").val("");
-        		}else{
-        		}
-    		}); 
-     
-    	 $('#startDate').datepicker({
-    	   language: "zh-CN",
-    		autoclose: true,
-    		todayBtn: 'linked',
-    		 todayHighlight: true
-    		}).on('changeDate',function(ev){
-    		var startDate=$("#startDate").val();
-    		var endDate=$("#endDate").val();
-    		if(startDate>endDate&&endDate!=null&&$.trim(endDate)!=""){
-    		toastr.warning('开始时间不能大于结束时间  ！');
-    		$("#startDate").val("");
-    		}
-    		
-    		
-    		});
-    	
-    	
-    		$('#endDate').datepicker({
-    		language: "zh-CN",
-    		autoclose: true,
-    		todayBtn: 'linked',
-    		todayHighlight: true
-    		}).on('changeDate',function(ev){
-    		var startDate=$("#startDate").val();
-    		var endDate=$("#endDate").val();
-    		var signDate=$("#signDate").val();
-    		
-    		if(endDate<startDate&&startDate!=null&&$.trim(startDate)!=""){
-    		toastr.warning('结束时间不能小于开始时间 ！');
-    		$("#endDate").val("");
-    		}else{
-    		}
-    		
-    		if(endDate<signDate&&signDate!=null&&$.trim(signDate)!=""){
-        		toastr.warning('结束时间不能小于签订时间 ！');
-        		$("#endDate").val("");
-        		}else{
-        		}
-    		}); 
-</script>

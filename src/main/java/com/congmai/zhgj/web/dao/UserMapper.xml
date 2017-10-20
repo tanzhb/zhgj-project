@@ -109,6 +109,7 @@
     SELECT
 	USER_ID AS userId,
 	USER_NAME AS userName,
+	displayName,
 	GROUP_ID AS groupId,
 	sex,
 	department,
@@ -155,7 +156,7 @@
     UPDATE 
 	T_USER
 	SET
-	USER_NAME=#{userName},
+	displayName=#{displayName},
 	sex=#{sex},
 	telephone=#{telephone},
 	QQ=#{QQNum},
