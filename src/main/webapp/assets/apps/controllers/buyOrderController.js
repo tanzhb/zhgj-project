@@ -83,6 +83,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		$scope.contract.contractType="采购合同";
             		$scope.buyOrder.orderType="普通采购";
             		$scope.buyOrder.tradeType="内贸";
+            		/*$scope.buyOrder.currency="人民币";*/
             		$scope.clauseSettlement = {};
             		$scope.buyOrder.seller ="中航能科（上海）能源科技有限公司";
             		$scope.buyOrder.rate = 17;
@@ -261,7 +262,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     		$state.go("buyOrder");
     		return;
 		}
-    	$scope.getBuyOrderInfo($scope.buyOrder.serialNum);
+    	$scope.getBuyOrderInfo($scope.buyOrder.serialNum,$stateParams.taskId, $stateParams.comments,$stateParams.processInstanceId);
     	$scope.cancelOrder();
     	
     };

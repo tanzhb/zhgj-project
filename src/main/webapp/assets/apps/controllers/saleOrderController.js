@@ -254,7 +254,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     		$state.go("saleOrder");
     		return;
 		}
-    	$scope.getSaleOrderInfo($scope.saleOrder.serialNum);
+    	$scope.getSaleOrderInfo($scope.saleOrder.serialNum,$stateParams.taskId, $stateParams.comments,$stateParams.processInstanceId);
     	$scope.cancelOrder();
     	
     };
