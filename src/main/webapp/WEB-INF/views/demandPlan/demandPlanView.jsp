@@ -34,9 +34,9 @@
 </div> -->
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
-<div class="row">
+<!-- <div class="row">
     <div class="col-md-12">
-        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        BEGIN EXAMPLE TABLE PORTLET
         <div class="portlet bordered">
             <div class="portlet-body">
 				<div class="portlet light">
@@ -48,8 +48,6 @@
                         <div class="portlet-body form">
                             <form  id="demandPlanForm" class="form-horizontal" >
 								<div class="form-body">
-									<div class="alert alert-danger display-hide">
-                                                <button class="close" data-close="alert"></button>请先输入正确数据！</div>
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group form-md-line-input">
@@ -68,7 +66,7 @@
                                             </div>
 										</div>
 									</div>
-									<!--/row-->
+									/row
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group form-md-line-input">
@@ -87,7 +85,7 @@
                                             </div>
 										</div>
 									</div>
-									<!--/row-->
+									/row
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group form-md-line-input">
@@ -106,7 +104,7 @@
                                             </div>
 										</div>
 									</div>
-									<!--/row-->
+									/row
 									<div class="row">
 										<div class="col-md-6">
 											<div class="form-group form-md-line-input">
@@ -125,7 +123,7 @@
                                             </div>
 										</div>
 									</div>
-									<!--/row-->
+									/row
 								</div>
 							</form>
          				</div>
@@ -168,7 +166,7 @@
                                             </div>
 										</div>
 									</div>
-									<!--/row-->
+									/row
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
@@ -210,7 +208,7 @@
                                             </div>
 										</div>
 									</div>
-									<!-- row -->
+									row
 									<div class="row">
 										<div class="col-md-12">
 											<div class="form-group" align="right">
@@ -219,27 +217,30 @@
                                             </div>
 										</div>
 									</div>
-									<!-- row -->
+									row
 								</div>
 							</form>
          				</div>
 				  </div>
         	</div>
-        <!-- END EXAMPLE TABLE PORTLET-->
+        END EXAMPLE TABLE PORTLET
     	</div>
 	</div>
-</div>
+</div> -->
 
 <div class="row">
 	<div class="col-md-12">
 		<div class="portlet light" id="comViewPage">
 			<div class="portlet-body" id="comViewContent">
 				<ul class="nav nav-tabs">
-				 	<li class="active">
-                 		 <a data-target="#tab_1_1" data-toggle="tab">物料信息</a>
+				 	<li class="bold active">
+                 		 <a data-target="#tab_1_1" data-toggle="tab">基本信息</a>
               		</li> 
-					<li>
-						<a data-target="#tab_1_2" data-toggle="tab">历史订单</a>
+              		<li class="bold">
+                 		 <a data-target="#tab_1_2" data-toggle="tab">物料信息</a>
+              		</li>
+					<li class="bold">
+						<a data-target="#tab_1_3" data-toggle="tab">历史订单</a>
 					</li>
 					<!-- <li>
 						 <a href="javascript:;"  class="btn blue btn-outline" style="padding: 10px 15px;" ng-click="addMateriel()" >
@@ -249,6 +250,139 @@
 				</ul>
 				<div class="tab-content">
 					<div class="tab-pane fade active in" id="tab_1_1">
+						<div class="">
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label bold" for="demandPlanNum"> 需求计划号：</label>
+                                                    <div class="col-md-7">
+                                                         <p class="control-label left" >{{demandPlan.demandPlanNum}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                   <label class="col-md-4 control-label bold" for="buyComId"> 需求客户：</label>
+	                                              <div class="col-md-7">
+                                                        <p class="control-label left" >{{demandPlan.buyComName}}</p>
+	                                              </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                   <label class="col-md-4 control-label bold" for="customerPlanNum"> 客户计划号：</label>
+	                                              <div class="col-md-7">
+                                                        <p class="control-label left" >{{demandPlan.customerPlanNum}}</p>
+	                                              </div>
+                                            </div>
+										</div>
+									</div>
+									<!--/row-->
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                   <label class="col-md-4 control-label bold" for="source"> 需求来源：</label>
+	                                              <div class="col-md-7">
+                                                        <p class="control-label left" >{{demandPlan.source}}</p>
+	                                              </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                   <label class="col-md-4 control-label bold" for="customerPrincipal"> 客户负责人：</label>
+	                                              <div class="col-md-7">
+                                                        <p class="control-label left" >{{demandPlan.customerPrincipal}}</p>
+	                                              </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                   <label class="col-md-4 control-label bold" for="maker"> 制单人：</label>
+	                                              <div class="col-md-7">
+                                                        <p class="control-label left" >{{demandPlan.maker}}</p>
+	                                              </div>
+                                            </div>
+										</div>
+										</div>
+										<!--/row-->
+										<div class="row">
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                   <label class="col-md-4 control-label bold" for="description"> 需求描述：</label>
+	                                              <div class="col-md-7">
+                                                        <p class="control-label left" >{{demandPlan.description}}</p>
+	                                              </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                   <label class="col-md-4 control-label bold" for="releaseDate"> 制单日期：</label>
+	                                              <div class="col-md-7">
+                                                        <p class="control-label left" >{{demandPlan.releaseDate}}</p>
+	                                              </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                   <label class="col-md-4 control-label bold" for="remark"> 备注：</label>
+	                                              <div class="col-md-7">
+                                                        <p class="control-label left" >{{demandPlan.remark}}</p>
+	                                              </div>
+                                            </div>
+										</div>
+										
+										</div>
+									<!--/row-->
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label bold" for="legalPerson">包含物料：</label>
+                                                    <div class="col-md-7">
+                                                         <p class="control-label left" >{{rootMateriels.length}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label bold" for="address">包含供应商：</label>
+                                                    <div class="col-md-7">
+                                                         <p class="control-label left">{{supplyCount==null?0:supplyCount}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label bold" for="releaseDate"> 发布日期：</label>
+                                                    <div class="col-md-7">
+                                                         <p class="control-label left" >{{demandPlan.releaseDate}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+									</div>
+									<!--/row-->
+									<div class="row">
+										
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label bold" for="tel">更新时间：</label>
+                                                    <div class="col-md-7">
+                                                         <p class="control-label left" >{{demandPlan.updateTime}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label bold" for="releaseDate"> 更新人：</label>
+                                                    <div class="col-md-7">
+                                                         <p class="control-label left" >{{demandPlan.updater}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+									</div>
+									<!--/row-->
+								</div>
+					</div>
+					<div class="tab-pane fade in" id="tab_1_2">
                     	<div class="" id="tab2_c">
                     		 <div class="portlet-body form">
                     		 		<!-- <div class="dataTables_scrollHead" style="overflow: hidden; position: relative; border: 0px; width: 100%;">
@@ -371,7 +505,91 @@
 
 
 
+<div class="">
+									<div class="alert alert-danger display-hide">
+                                                <button class="close" data-close="alert"></button>请先输入正确数据！</div>
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="demandPlanNum">一级分类</label>
+                                                    <div class="">
+                                                        <input type="text" class="form-control"  ng-model="search.firstCategory" ng-hide="demandPlanAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                    </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="description">二级分类</label>
+                                                    <div class="">
+                                                        <input type="text" class="form-control" ng-model="search.secondCategory" ng-hide="demandPlanAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                    </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="description">三级分类</label>
+                                                    <div class="">
+                                                        <input type="text" class="form-control"  ng-model="search.thirdCategory" ng-hide="demandPlanAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                    </div>
+                                            </div>
+										</div>
+									</div>
+									<!--/row-->
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group">
+                                                   <label class="control-label bold" for="buyComId">供应商</label>
+	                                              <div class="">
+	                                                   <select class="form-control customer" selectpicker data-live-search="true"  ng-model="search.supplyComId" ng-hide="demandPlanAdd"  data-size="8">
+	                                                        <option value=""></option>
+	                                                        <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}">{{supplier.comName}}</option>
+	                                                   </select>
+	                                                   <div class="form-control-focus"> </div>
+	                                              </div>
+                                            </div>
+										</div>
+									<div class="col-md-4">
+										<div class="form-group">
+											<label class="control-label bold" for="releaseDate">交付日期
+											</label>
+											<div class="">
+												<div
+													class="input-group input-large date-picker input-daterange"
+													data-date-format="yyyy-mm-dd">
+													<input type="text" class="form-control"
+														ng-model="search.deliveryStartDate" name="from"> <span
+														class="input-group-addon"> to </span> <input type="text"
+														class="form-control" ng-model="search.deliveryEndDate" name="to">
 
+												</div>
+												<div class="form-control-focus"></div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="tel">关键字</label>
+                                                    <div class="">
+                                                        <input type="text" class="form-control"  ng-model="search.searchKey" ng-hide="demandPlanAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                    </div>
+                                            </div>
+										</div>
+									</div>
+									<!-- row -->
+									<div class="row">
+										<div class="col-md-12">
+											<div class="form-group" align="right">
+                                                   <button   ng-hide="companyAdd" class="btn blue  btn-sm btn-circle" ng-click="searchDemandPlanMateriels()">
+                              						<i class="fa fa-search"></i> 搜索  </button>
+                                            </div>
+										</div>
+									</div>
+									<!-- row -->
+								</div>
 
 
 
@@ -379,7 +597,7 @@
 									<div class="dataTables_scrollHead"
 										style="overflow: hidden; position: relative; border: 0px; width: 100%;">
 										<div class="dataTables_scrollHeadInner"
-											style="box-sizing: content-box;">
+											style="box-sizing: content-box;padding-right: 17px;">
 											<table
 												class="table table-striped table-bordered table-hover order-column dataTable no-footer"
 												role="grid" style="margin-left: 0px; ">
@@ -417,7 +635,7 @@
 										</div>
 									</div>
 									<div class="dataTables_scrollBody"
-										style="position: relative; overflow: auto; height: 300px; width: 100%;">
+										style="position: relative;overflow: scroll;overflow-x: hidden; height: 400px; width: 100%;">
 										<table
 											class="table table-striped table-bordered table-hover order-column dataTable no-footer"
 											id="sample_1" role="grid" aria-describedby="sample_1_info" style="width: 100%; position: absolute; top: 0px; left: 0px;">
@@ -555,7 +773,7 @@
 							<!-- END SAMPLE TABLE PORTLET-->
 						</div>
                     </div>
-					<div class="tab-pane fade" id="tab_1_2">
+					<div class="tab-pane fade" id="tab_1_3">
 						<div class="" id="tab2_c">
 							<jsp:include page="selectSaleOrder.jsp"></jsp:include>
 							<!-- END SAMPLE TABLE PORTLET-->

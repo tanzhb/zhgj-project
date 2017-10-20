@@ -13,6 +13,13 @@ public class DemandPlan {
     private String buyComId;
 
     private String demandPlanNum;
+    
+
+    private String source;
+
+    private String customerPrincipal;
+
+    private String customerPlanNum;
 
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date releaseDate;
@@ -236,6 +243,30 @@ public class DemandPlan {
 
 	public void setDeliveryEndDate(String deliveryEndDate) {
 		this.deliveryEndDate = deliveryEndDate;
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public String getCustomerPrincipal() {
+		return customerPrincipal;
+	}
+
+	public void setCustomerPrincipal(String customerPrincipal) {
+		this.customerPrincipal = customerPrincipal;
+	}
+
+	public String getCustomerPlanNum() {
+		return customerPlanNum;
+	}
+
+	public void setCustomerPlanNum(String customerPlanNum) {
+		this.customerPlanNum = customerPlanNum;
 	}
 	
 	
