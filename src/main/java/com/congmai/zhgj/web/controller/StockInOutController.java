@@ -1,6 +1,5 @@
 package com.congmai.zhgj.web.controller;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +28,9 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.MessageConstants;
+import com.congmai.zhgj.web.event.EventExample;
+import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
@@ -36,9 +38,7 @@ import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.StockInOutCheck;
-import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.TakeDelivery;
-import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.DeliveryMaterielService;
 import com.congmai.zhgj.web.service.DeliveryService;
@@ -121,6 +121,18 @@ public class StockInOutController {
     		}
     		for(DeliveryMateriel deliveryMateriel:stockInOutCheck.getDeliverMaterials()){
     			deliveryMaterielService.updateDeliveryMateriel(deliveryMateriel);
+    		}
+    		
+    		if("1".equals(stockInOutCheck.getStatus())){
+    			StockInOutCheck check = stockInOutCheckService.selectById(stockInOutCheck.getSerialNum());
+    			if("checkout".equals(stockInOutCheck.getTakeDeliverSerial())){ //出库检验
+    				//出库检验消息  to 采购
+    				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(check,MessageConstants.OUT_CHECK_TO_BUY));
+    				//出库检验消息  to 供应
+    				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(check,MessageConstants.OUT_CHECK_TO_SALE));
+    			}else if("checkin".equals(stockInOutCheck.getDeliverSerial())){
+    				
+    			}
     		}
     	}catch(Exception e){
     		System.out.println(e.getMessage());
