@@ -5,6 +5,9 @@
     <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
     <result column="buyComId" property="buyComId" jdbcType="VARCHAR" />
     <result column="demandPlanNum" property="demandPlanNum" jdbcType="VARCHAR" />
+    <result column="source" property="source" jdbcType="VARCHAR" />
+    <result column="customerPrincipal" property="customerPrincipal" jdbcType="VARCHAR" />
+    <result column="customerPlanNum" property="customerPlanNum" jdbcType="VARCHAR" />
     <result column="maker" property="maker" jdbcType="VARCHAR" />
     <result column="releaseDate" property="releaseDate" jdbcType="DATE" />
     <result column="description" property="description" jdbcType="VARCHAR" />
@@ -75,11 +78,11 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-   serialNum, buyComId, demandPlanNum, maker, releaseDate, description, remark, delFlg, 
-    creator, createTime, updater, updateTime
+   serialNum, demandPlanNum, buyComId, source, customerPrincipal, customerPlanNum, releaseDate, 
+    maker, description, remark, delFlg, creator, createTime, updater, updateTime
   </sql>
   <sql id="Base_Column_List2" >
-    d.serialNum, d.buyComId, d.demandPlanNum, d.maker, d.releaseDate, d.description, d.remark, d.delFlg, d.creator, d.createTime, 
+    d.serialNum, d.buyComId, d.source, d.customerPrincipal, d.customerPlanNum, d.demandPlanNum, d.maker, d.releaseDate, d.description, d.remark, d.delFlg, d.creator, d.createTime, 
     d.updater, d.updateTime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.DemandPlanSelectExample" >
@@ -116,13 +119,15 @@
     </if>
   </delete>
  <insert id="insert" parameterType="com.congmai.zhgj.web.model.DemandPlan" >
-    insert into demandPlan (serialNum, buyComId, demandPlanNum, 
-      maker, releaseDate, description, 
+    insert into demandPlan (serialNum, demandPlanNum, buyComId, 
+      source, customerPrincipal, customerPlanNum, 
+      releaseDate, maker, description, 
       remark, delFlg, creator, 
       createTime, updater, updateTime
       )
-    values (#{serialNum,jdbcType=VARCHAR}, #{buyComId,jdbcType=VARCHAR}, #{demandPlanNum,jdbcType=VARCHAR}, 
-      #{maker,jdbcType=VARCHAR}, #{releaseDate,jdbcType=DATE}, #{description,jdbcType=VARCHAR}, 
+    values (#{serialNum,jdbcType=VARCHAR}, #{demandPlanNum,jdbcType=VARCHAR}, #{buyComId,jdbcType=VARCHAR}, 
+      #{source,jdbcType=VARCHAR}, #{customerPrincipal,jdbcType=VARCHAR}, #{customerPlanNum,jdbcType=VARCHAR}, 
+      #{releaseDate,jdbcType=DATE}, #{maker,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
       )
@@ -133,17 +138,26 @@
       <if test="serialNum != null" >
         serialNum,
       </if>
-      <if test="buyComId != null" >
-        buyComId,
-      </if>
       <if test="demandPlanNum != null" >
         demandPlanNum,
       </if>
-      <if test="maker != null" >
-        maker,
+      <if test="buyComId != null" >
+        buyComId,
+      </if>
+      <if test="source != null" >
+        source,
+      </if>
+      <if test="customerPrincipal != null" >
+        customerPrincipal,
+      </if>
+      <if test="customerPlanNum != null" >
+        customerPlanNum,
       </if>
       <if test="releaseDate != null" >
         releaseDate,
+      </if>
+      <if test="maker != null" >
+        maker,
       </if>
       <if test="description != null" >
         description,
@@ -171,17 +185,26 @@
       <if test="serialNum != null" >
         #{serialNum,jdbcType=VARCHAR},
       </if>
-      <if test="buyComId != null" >
-        #{buyComId,jdbcType=VARCHAR},
-      </if>
       <if test="demandPlanNum != null" >
         #{demandPlanNum,jdbcType=VARCHAR},
       </if>
-      <if test="maker != null" >
-        #{maker,jdbcType=VARCHAR},
+      <if test="buyComId != null" >
+        #{buyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="customerPrincipal != null" >
+        #{customerPrincipal,jdbcType=VARCHAR},
+      </if>
+      <if test="customerPlanNum != null" >
+        #{customerPlanNum,jdbcType=VARCHAR},
       </if>
       <if test="releaseDate != null" >
         #{releaseDate,jdbcType=DATE},
+      </if>
+      <if test="maker != null" >
+        #{maker,jdbcType=VARCHAR},
       </if>
       <if test="description != null" >
         #{description,jdbcType=VARCHAR},
@@ -219,17 +242,26 @@
       <if test="record.serialNum != null" >
         serialNum = #{record.serialNum,jdbcType=VARCHAR},
       </if>
-      <if test="record.buyComId != null" >
-        buyComId = #{record.buyComId,jdbcType=VARCHAR},
-      </if>
       <if test="record.demandPlanNum != null" >
         demandPlanNum = #{record.demandPlanNum,jdbcType=VARCHAR},
       </if>
-      <if test="record.maker != null" >
-        maker = #{record.maker,jdbcType=VARCHAR},
+      <if test="record.buyComId != null" >
+        buyComId = #{record.buyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.source != null" >
+        source = #{record.source,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customerPrincipal != null" >
+        customerPrincipal = #{record.customerPrincipal,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customerPlanNum != null" >
+        customerPlanNum = #{record.customerPlanNum,jdbcType=VARCHAR},
       </if>
       <if test="record.releaseDate != null" >
         releaseDate = #{record.releaseDate,jdbcType=DATE},
+      </if>
+      <if test="record.maker != null" >
+        maker = #{record.maker,jdbcType=VARCHAR},
       </if>
       <if test="record.description != null" >
         description = #{record.description,jdbcType=VARCHAR},
@@ -260,10 +292,13 @@
   <update id="updateByExample" parameterType="map" >
     update demandPlan
     set serialNum = #{record.serialNum,jdbcType=VARCHAR},
-      buyComId = #{record.buyComId,jdbcType=VARCHAR},
       demandPlanNum = #{record.demandPlanNum,jdbcType=VARCHAR},
-      maker = #{record.maker,jdbcType=VARCHAR},
+      buyComId = #{record.buyComId,jdbcType=VARCHAR},
+      source = #{record.source,jdbcType=VARCHAR},
+      customerPrincipal = #{record.customerPrincipal,jdbcType=VARCHAR},
+      customerPlanNum = #{record.customerPlanNum,jdbcType=VARCHAR},
       releaseDate = #{record.releaseDate,jdbcType=DATE},
+      maker = #{record.maker,jdbcType=VARCHAR},
       description = #{record.description,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       delFlg = #{record.delFlg,jdbcType=VARCHAR},
@@ -278,17 +313,26 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.DemandPlan" >
     update demandPlan
     <set >
-      <if test="buyComId != null" >
-        buyComId = #{buyComId,jdbcType=VARCHAR},
-      </if>
       <if test="demandPlanNum != null" >
         demandPlanNum = #{demandPlanNum,jdbcType=VARCHAR},
       </if>
-      <if test="maker != null" >
-        maker = #{maker,jdbcType=VARCHAR},
+      <if test="buyComId != null" >
+        buyComId = #{buyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        source = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="customerPrincipal != null" >
+        customerPrincipal = #{customerPrincipal,jdbcType=VARCHAR},
+      </if>
+      <if test="customerPlanNum != null" >
+        customerPlanNum = #{customerPlanNum,jdbcType=VARCHAR},
       </if>
       <if test="releaseDate != null" >
         releaseDate = #{releaseDate,jdbcType=DATE},
+      </if>
+      <if test="maker != null" >
+        maker = #{maker,jdbcType=VARCHAR},
       </if>
       <if test="description != null" >
         description = #{description,jdbcType=VARCHAR},
@@ -316,10 +360,13 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.DemandPlan" >
     update demandPlan
-    set buyComId = #{buyComId,jdbcType=VARCHAR},
-      demandPlanNum = #{demandPlanNum,jdbcType=VARCHAR},
-      maker = #{maker,jdbcType=VARCHAR},
+    set demandPlanNum = #{demandPlanNum,jdbcType=VARCHAR},
+      buyComId = #{buyComId,jdbcType=VARCHAR},
+      source = #{source,jdbcType=VARCHAR},
+      customerPrincipal = #{customerPrincipal,jdbcType=VARCHAR},
+      customerPlanNum = #{customerPlanNum,jdbcType=VARCHAR},
       releaseDate = #{releaseDate,jdbcType=DATE},
+      maker = #{maker,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       delFlg = #{delFlg,jdbcType=VARCHAR},
