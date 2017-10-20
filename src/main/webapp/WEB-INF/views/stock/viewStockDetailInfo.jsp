@@ -125,9 +125,11 @@ margin-right: 20px;
                                                     <label class="control-label col-md-3 bold" for="currentAmount"> 库存数量 :</label>
                                                     <div class="control-label col-md-7">
                                                          <!--  <p class="form-control-static" >{{stock.currentAmount}}</p>  -->
-                                                         <p class="form-control-static"   ng-if="stock.countInAmount==null">暂无库存</p>
-                                                         <p class="form-control-static"   ng-if="stock.countInAmount!=null&&stock.countOutAmount==null">{{stock.countInAmount}}</p>
-                                                         <p class="form-control-static"   ng-if="stock.countInAmount!=null&&stock.countOutAmount!=null">{{stock.countInAmount-stock.countOutAmount}}</p>
+                                                         <p class="form-control-static"   ng-if="stock.countInAmountZijian==null||stock.countInAmountDaiguan==null>暂无库存</p>
+                                                         <p class="form-control-static"   ng-if="stock.countInAmountZijian!=null&&stock.countOutAmountZijian==null&&stock.manageType=='1'">{{stock.countInAmountZijian}}</p>
+                                                         <p class="form-control-static"   ng-if="stock.countInAmountZijian!=null&&stock.countOutAmountZijian!=null&&stock.manageType=='1'">{{stock.countInAmountZijian-stock.countOutAmountZijian}}</p>
+                                                         <p class="form-control-static"   ng-if="stock.countInAmountDaiguan!=null&&stock.countOutAmountDaiguan==null&&stock.manageType=='2'">{{stock.countInAmountDaiguan}}</p>
+                                                         <p class="form-control-static"   ng-if="stock.countInAmountDaiguan!=null&&stock.countOutAmountDaiguan!=null&&stock.manageType=='2'">{{stock.countInAmountDaiguan-stock.countOutAmountDaiguan}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -155,8 +157,9 @@ margin-right: 20px;
 											<div class="form-group">
                                                     <label class="control-label col-md-3 bold" for="countInAmount"> 累计入库数量 :</label>
                                                     <div class="control-label col-md-7">
-                                                          <p class="form-control-static"   ng-if="stock.countInAmount!=null">{{stock.countInAmount}}</p> 
-                                                          <p class="form-control-static"   ng-if="stock.countInAmount==null">暂无入库</p>
+                                                          <p class="form-control-static"   ng-if="stock.countInAmountDaiguan!=null&&stock.manageType=='2'">{{stock.countInAmountDaiguan}}</p> 
+                                                           <p class="form-control-static"   ng-if="stock.countInAmountZijian!=null&&stock.manageType=='1'">{{stock.countInAmountZijian}}</p> 
+                                                          <p class="form-control-static"   ng-if="stock.countInAmountZijian==null&&tock.countInAmountDaiguan==null">暂无入库</p>
                                                     </div>
                                             </div>
 										</div>
@@ -164,8 +167,9 @@ margin-right: 20px;
                                                                 <div class="form-group">
                                                                 <label class="control-label col-md-3 bold" for="countOutAmount">累计出库数量 :</label>
                                                                     <div class="control-label col-md-7">
-                                                           <p class="form-control-static"   ng-if="stock.countOutAmount!=null">{{stock.countOutAmount}}</p> 
-                                                          <p class="form-control-static"   ng-if="stock.countOutAmount==null">暂无入库</p>
+                                                           <p class="form-control-static"   ng-if="stock.countOutAmountDaiguan!=null&&stock.manageType=='2'">{{stock.countOutAmountDaiguan}}</p> 
+                                                            <p class="form-control-static"   ng-if="stock.countOutAmountZijian!=null&&stock.manageType=='1'">{{stock.countOutAmountZijian}}</p> 
+                                                          <p class="form-control-static"   ng-if="stock.countOutAmountZijian==null&&stock.countOutAmountDaiguan==null">暂无出库</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -173,8 +177,9 @@ margin-right: 20px;
                                                                 <div class="form-group">
                                                                 <label class="control-label col-md-3 bold" for="lastInDate">最后入库日期 :</label>
                                                                     <div class="control-label col-md-7">
-                                                           <p class="form-control-static"   ng-if="stock.lastInDate!=null">{{stock.lastInDate}}</p> 
-                                                          <p class="form-control-static"   ng-if="stock.lastInDate==null">暂无入库日期</p>
+                                                           <p class="form-control-static"   ng-if="stock.lastInDateDaiguan!=null&&stock.manageType=='2'">{{stock.lastInDateDaiguan}}</p> 
+                                                            <p class="form-control-static"   ng-if="stock.lastInDateZijian!=null&&stock.manageType=='1'">{{stock.lastInDateZijian}}</p>
+                                                          <p class="form-control-static"   ng-if="stock.lastInDateDaiguan==null&&stock.lastInDateZijian==null">暂无入库日期</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -184,8 +189,9 @@ margin-right: 20px;
 											<div class="form-group">
                                                     <label class="control-label col-md-3 bold" for="lastOutDate"> 最后出库日期 :</label>
                                                     <div class="control-label col-md-7">
-                                                          <p class="form-control-static"   ng-if="stock.lastOutDate!=null">{{stock.lastOutDate}}</p> 
-                                                          <p class="form-control-static"   ng-if="stock.lastOutDate==null">暂无入库日期</p>
+                                                          <p class="form-control-static"   ng-if="stock.lastOutDateDaiguan!=null&&stock.manageType=='2'">{{stock.lastOutDateDaiguan}}</p> 
+                                                           <p class="form-control-static"   ng-if="stock.lastOutDateZijian!=null&&stock.manageType=='1'">{{stock.lastOutDateZijian}}</p> 
+                                                          <p class="form-control-static"   ng-if="stock.lastOutDateDaiguan==null&&stock.lastOutDateZijian==null">暂无出库日期</p>
                                                     </div>
                                             </div>
 										</div>
@@ -193,7 +199,8 @@ margin-right: 20px;
                                                                 <div class="form-group">
                                                                 <label class="control-label col-md-3 bold" for="relationBuyNum">关联采购单号 :</label>
                                                                     <div class="control-label col-md-7">
-                                                                        <p class="form-control-static" >{{stock.relationBuyNum}}</p> 
+                                                                        <p class="form-control-static"  ng-if="stock.manageType=='1'">{{stock.relationBuyNumZijian}}</p> 
+                                                                         <p class="form-control-static"  ng-if="stock.manageType=='2'">{{stock.relationBuyNumDaiguan}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -201,7 +208,8 @@ margin-right: 20px;
                                                                 <div class="form-group">
                                                                 <label class="control-label col-md-3 bold" for="relationSaleNum">关联销售单号 :</label>
                                                                     <div class="control-label col-md-7">
-                                                                        <p class="form-control-static" >{{stock.relationSaleNum}}</p> 
+                                                                         <p class="form-control-static"  ng-if="stock.manageType=='1'">{{stock.relationSaleNumZijian}}</p> 
+                                                                         <p class="form-control-static"  ng-if="stock.manageType=='2'">{{stock.relationSaleNumDaiguan}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -211,7 +219,8 @@ margin-right: 20px;
 											<div class="form-group">
                                                     <label class="control-label col-md-3 bold" for="belongWarehouseNum">所在仓库 :</label>
                                                     <div class="control-label col-md-7">
-                                                          <p class="form-control-static" >{{stock.belongWarehouseNum}}</p> 
+                                                           <p class="form-control-static"  ng-if="stock.manageType=='1'">{{stock.belongWarehouseNumZijian}}</p> 
+                                                           <p class="form-control-static"  ng-if="stock.manageType=='2'">{{stock.belongWarehouseNumDaiguan}}</p> 
                                                     </div>
                                             </div>
 										</div>

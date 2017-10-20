@@ -51,9 +51,18 @@ public interface DeliveryMaterielMapper extends GenericDao<DeliveryMateriel, Str
 //根据出入库流水查询发货物料信息
 	List<DeliveryMateriel> getListByStockSerial(String serialNum);
 
-  List<DeliveryMateriel> getDetailByRelationDeliverSerialList(List<String>serialNums);//获取出库明细
+  List<DeliveryMateriel> getDetailByRelationDeliverSerialListForZijian(List<String>serialNums);//获取出库明细自建
 
+   List<DeliveryMateriel> getDetailByRelationTakeDeliverSerialListForZijian(List<String>serialNums);//获取入库明细自建
+   
+   List<DeliveryMateriel> getDetailByRelationDeliverSerialListForDaiguan(List<String>serialNums);//获取出库明细代管
+
+   List<DeliveryMateriel> getDetailByRelationTakeDeliverSerialListForDaiguan(List<String>serialNums);//获取入库明细代管
+   
    List<DeliveryMateriel> getDetailByRelationTakeDeliverSerialList(List<String>serialNums);//获取入库明细
+   
+   
+   
 
 }
 

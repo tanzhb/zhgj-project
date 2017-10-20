@@ -62,20 +62,41 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 
 	@Override
 	public List<String> getRelationDeliverSerialList(Stock stock) {
-		return stockInOutRecordMapper.getRelationDeliverSerial(stock);
+		List<String> Strings=null;
+		if("1".equals(stock.getManageType())){//自建
+			Strings= stockInOutRecordMapper.getRelationDeliverSerialForZijian(stock);
+		}else if("2".equals(stock.getManageType())){//代管
+			Strings= stockInOutRecordMapper.getRelationDeliverSerialForDaiguan(stock);
+		}
+		/*return deliveryMaterielMapper.getDetailByRelationDeliverSerialList(deliverSerialList);*/
+		return Strings;
+		//return stockInOutRecordMapper.getRelationDeliverSerial(stock);
 	}
 
 	@Override
 	public List<String> getRelationTakeDeliverSerialList(Stock stock) {
-		return stockInOutRecordMapper.getRelationTakeDeliverSerial(stock);
+		List<String> Strings=null;
+		if("1".equals(stock.getManageType())){//自建
+			Strings= stockInOutRecordMapper.getRelationTakeDeliverSerialForZijian(stock);
+		}else if("2".equals(stock.getManageType())){//代管
+			Strings= stockInOutRecordMapper.getRelationTakeDeliverSerialForDaiguan(stock);
+		}
+		/*return deliveryMaterielMapper.getDetailByRelationDeliverSerialList(deliverSerialList);*/
+		return Strings;
+		//return stockInOutRecordMapper.getRelationTakeDeliverSerial(stock);
 	}
 
 	@Override
 	public List<DeliveryMateriel> getDeliverMaterialListForIn(
-			List<String> takeDeliverSerialList,String buyComId) {
+			List<String> takeDeliverSerialList,String buyComId,Stock   stock) {
 		List<DeliveryMateriel>deliverMateriels=null;
 		if(StringUtils.isEmpty(buyComId)){
-			deliverMateriels= deliveryMaterielMapper.getDetailByRelationTakeDeliverSerialList(takeDeliverSerialList);
+			if("1".equals(stock.getManageType())){//自建
+				deliverMateriels=deliveryMaterielMapper.getDetailByRelationTakeDeliverSerialListForZijian(takeDeliverSerialList);
+			}else if("2".equals(stock.getManageType())){
+				deliverMateriels= deliveryMaterielMapper.getDetailByRelationTakeDeliverSerialListForDaiguan(takeDeliverSerialList);
+			}
+			
 		}else{
 			deliverMateriels= deliveryMaterielMapper.getDetailByRelationTakeDeliverSerialList(takeDeliverSerialList);
 			List<DeliveryMateriel>deliverMaterielsTwo=new ArrayList<DeliveryMateriel>();
@@ -93,8 +114,15 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 
 	@Override
 	public List<DeliveryMateriel> getDeliverMaterialListForOut(
-			List<String> deliverSerialList) {
-		return deliveryMaterielMapper.getDetailByRelationDeliverSerialList(deliverSerialList);
+			List<String> deliverSerialList,Stock   stock) {
+		List<DeliveryMateriel> deliveryMateriels=null;
+		if("1".equals(stock.getManageType())){//自建
+			deliveryMateriels= deliveryMaterielMapper.getDetailByRelationDeliverSerialListForZijian(deliverSerialList);
+		}else if("2".equals(stock.getManageType())){//代管
+			deliveryMateriels= deliveryMaterielMapper.getDetailByRelationDeliverSerialListForDaiguan(deliverSerialList);
+		}
+		/*return deliveryMaterielMapper.getDetailByRelationDeliverSerialList(deliverSerialList);*/
+		return deliveryMateriels;
 	}
 
 	@Override
@@ -104,6 +132,30 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
     	criteria.andDelFlgEqualTo("0");
     	criteria.andManageTypeEqualTo("1");
 		return stockMapper.selectByExample(example);
+	}
+
+	@Override
+	public String getCountInAmountForZijian(String serialNum) {
+		// TODO Auto-generated method stub
+		return stockInOutRecordMapper.countInAmountForZijian(serialNum);
+	}
+
+	@Override
+	public String getCountOutAmountForZijian(String serialNum) {
+		// TODO Auto-generated method stub
+		return stockInOutRecordMapper.countOutAmountForZijian(serialNum);
+	}
+
+	@Override
+	public String getCountInAmountForDaiguan(String serialNum) {
+		// TODO Auto-generated method stub
+		return stockInOutRecordMapper.countInAmountForDaiguan(serialNum);
+	}
+
+	@Override
+	public String getCountOutAmountForDaiguan(String serialNum) {
+		// TODO Auto-generated method stub
+		return stockInOutRecordMapper.countOutAmountForDaiguan(serialNum);
 	}
    
 	

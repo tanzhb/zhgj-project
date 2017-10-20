@@ -143,7 +143,11 @@ public class StockController {
 			stock.setMaterielName(m.getMaterielName());
 			stock.setMaterielNum(m.getMaterielNum());
 			stock.setSpecifications(m.getSpecifications());
-			stock.setCurrentAmount((Integer.parseInt(stock.getCountInAmount()==null?"0":stock.getCountInAmount())-Integer.parseInt(stock.getCountOutAmount()==null?"0":stock.getCountOutAmount()))+"");
+			if("1".equals(manageType)){//自建
+				stock.setCurrentAmount((Integer.parseInt(stock.getCountInAmountZijian()==null?"0":stock.getCountInAmountZijian())-Integer.parseInt(stock.getCountOutAmountZijian()==null?"0":stock.getCountOutAmountZijian()))+"");
+			}else if("2".equals(manageType)){//代管
+				stock.setCurrentAmount((Integer.parseInt(stock.getCountInAmountDaiguan()==null?"0":stock.getCountInAmountDaiguan())-Integer.parseInt(stock.getCountOutAmountDaiguan()==null?"0":stock.getCountOutAmountDaiguan()))+"");
+			}
 			stock.setAverrageWhAge("0");
 			stock.setPreSaleAmount("0");
 			stock.setOnRoadAmount("0");
@@ -278,7 +282,7 @@ public class StockController {
 			 List<DeliveryMateriel>stockInList=new  ArrayList<DeliveryMateriel>();
 			 if(StringUtils.isEmpty(orderSerial)){
 				 takeDeliverSerialList=stockService.getRelationTakeDeliverSerialList(stock);
-				 stockInList=stockService.getDeliverMaterialListForIn(takeDeliverSerialList,null);
+				 stockInList=stockService.getDeliverMaterialListForIn(takeDeliverSerialList,null,stock);
 			 }else{
 				 List<Stock> stockList=stockService.selectStockListByMaterielSerial(serialNum);
 				for(Stock stock1:stockList){
@@ -286,7 +290,7 @@ public class StockController {
 					takeDeliverSerialList.addAll(takeDeliverSerial);
 				}
 				OrderInfo o=orderService.selectById(orderSerial);
-				 stockInList=stockService.getDeliverMaterialListForIn(takeDeliverSerialList,o.getBuyComId()==null?"zhgj":o.getBuyComId());
+				 stockInList=stockService.getDeliverMaterialListForIn(takeDeliverSerialList,o.getBuyComId()==null?"zhgj":o.getBuyComId(),null);
 			 }
 			
 				 
@@ -309,7 +313,7 @@ public class StockController {
 			 List<String>deliverSerialList=stockService.getRelationDeliverSerialList(stock);
 			 List<DeliveryMateriel>stockOutList=new  ArrayList<DeliveryMateriel>();
 			 if(!CollectionUtils.isEmpty(deliverSerialList)){
-				 stockOutList=stockService.getDeliverMaterialListForOut(deliverSerialList);
+				 stockOutList=stockService.getDeliverMaterialListForOut(deliverSerialList,stock);
 			 }
 				 // 封装datatables数据返回到前台
 				 Map<String,Object> pageMap = new HashMap<String,Object>();

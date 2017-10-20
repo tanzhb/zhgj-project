@@ -41,9 +41,18 @@ public interface StockInOutRecordMapper  extends GenericDao<StockInOutRecord,Str
 	
 	StockInOutRecord selectStockOutInfoByPrimaryKey(String serialNum);
 	
-	 List<String>getRelationDeliverSerial(Stock record);//获取发货流水
+	 List<String>getRelationDeliverSerialForZijian(Stock record);//获取发货流水自建
 	    
-	  List<String> getRelationTakeDeliverSerial(Stock record);//获取收货流水
+	  List<String> getRelationTakeDeliverSerialForZijian(Stock record);//获取收货流水自建
+	  
+	  List<String>getRelationDeliverSerialForDaiguan(Stock record);//获取发货流水代管
+	    
+	  List<String> getRelationTakeDeliverSerialForDaiguan(Stock record);//获取收货流水代管
+	  
+	  String  countInAmountForZijian(String serialNum);//自建库存根据基本物料流水查入库总数
+		String  countOutAmountForZijian(String serialNum);//自建库存根据基本物料流水查出库总数
+		String  countInAmountForDaiguan(String serialNum);//代管库存根据基本物料流水查入库总数
+		String  countOutAmountForDaiguan(String serialNum);//代管库存根据基本物料流水查出库总数
 	    
 	 
 }

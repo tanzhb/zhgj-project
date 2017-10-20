@@ -226,7 +226,7 @@
 										<th>订单数量</th>
 										<th>发货数量</th>
 										<th>备注</th>
-										<th>出库数量</th>
+										<th><span class="required" style="color: red"> * </span>出库数量</th>
 										<th><span class="required" style="color: red"> * </span>出库批次</th>
 										<th>当前库存</th>
 										<th>未出数量</th>
@@ -247,7 +247,7 @@
 										<td>{{materiel.deliverCount}}</td>
 										<td>{{materiel.deliverRemark}}</td>
 										<td class="form-group">
-                                                 <input type="text" class="form-control input-small" id="stockCountinline{{materiel.serialNum}}" name="stockCount" data-delivercount="{{materiel.deliverCount}}"   data-currentstock="{{materiel.deliverCount}}"    ng-model="materiel.stockCount" ng-hide="deliverAdd" >
+                                                 <input type="text" class="form-control input-small" id="stockCountinline{{materiel.serialNum}}" name="stockCount" data-delivercount="{{materiel.deliverCount}}"   data-currentstock="{{materiel.currentStockAmount}}"    ng-change="deleteOrdinaryData(materiel.serialNum)"    ng-model="materiel.stockCount" ng-hide="deliverAdd" >
                                                  
                                                  <div class="form-control-focus"> </div>
 										</td>
@@ -259,7 +259,7 @@
 							</button>
 										</td>
 										<td>
-											{{materiel.deliverCount}}
+											{{materiel.currentStockAmount}}
 										</td>
 										<td>
 											<span ng-if="materiel.deliverCount!=undefined && materiel.stockCount!=undedined">{{materiel.deliverCount-materiel.stockCount}}</span>

@@ -145,7 +145,7 @@ angular
 													}, {
 														mData : 'specifications'
 													},{
-														mData : 'belongWarehouseNum'
+														mData : 'belongWarehouseNumZijian'
 													}, {
 														mData : 'currentAmount'
 													}, {
@@ -288,7 +288,7 @@ angular
 										}, {
 											mData : 'specifications'
 										},{
-											mData : 'belongWarehouseNum'
+											mData : 'belongWarehouseNumDaiguan'
 										}, {
 											mData : 'currentAmount'
 										}, {
