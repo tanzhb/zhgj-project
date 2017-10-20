@@ -81,7 +81,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		$scope.buyOrder={};
             		$scope.contract={};
             		$scope.contract.contractType="采购合同";
-            		$scope.buyOrder.orderType="普通采购";
+            		$scope.buyOrder.orderType="贸易采购";
             		$scope.buyOrder.tradeType="内贸";
             		/*$scope.buyOrder.currency="人民币";*/
             		$scope.clauseSettlement = {};
@@ -231,8 +231,11 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
        		     function(data){
        		    	$scope.buyOrder = data;
        		    	$scope.contract.orderSerial = data.serialNum;
-       		    	$scope.contract.contractNum = $scope.buyOrder.orderNum;
-	   	    		$scope.contract.comId = $scope.buyOrder.supplyComId;
+       		    	if(isNull($scope.contract.contractNum)){
+       		    		$scope.contract.contractNum = $scope.buyOrder.orderNum;
+       		    	}
+	   	    		
+       		    	$scope.contract.comId = $scope.buyOrder.supplyComId;
 	   	    		$scope.contract.signDate = $scope.buyOrder.orderDate;
 	   	    		orderService.saveContract($scope.contract).then(
 	   	       		     function(data){
@@ -2570,7 +2573,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	        	orderService.save($scope.submitOrder).then(
 	          		     function(data){
 	          		    	$scope.contract.orderSerial = data.serialNum;
-	           		    	$scope.contract.contractNum = $scope.buyOrder.orderNum;
+	          		    	if(isNull($scope.contract.contractNum)){
+	           		    		$scope.contract.contractNum = $scope.buyOrder.orderNum;
+	           		    	}
 	    	   	    		$scope.contract.comId = $scope.buyOrder.supplyComId;
 	    	   	    		orderService.saveContract($scope.contract).then(
 	    	   	       		     function(data){
@@ -2686,7 +2691,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			       		for(var i=0;i<$scope.orderMateriel.length;i++){
 			       			total = total + Number($scope.arithmeticAmount($scope.orderMateriel[i]));
 			       		}
-			       		return total
+			       		return total.toFixed(2)
 			       	}else{
 			       		return 0;
 			       	}
