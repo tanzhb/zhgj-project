@@ -277,6 +277,25 @@
 											</div>
 										</div>
 										<!--/row-->
+										
+										
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="control-label bold" ng-if="contractVO.supplyComId==null">关联销售订单号
+													<span class="required" aria-required="true"> * </span></label>
+													
+													<label class="control-label bold" ng-if="contractVO.supplyComId!=null">关联采购订单号
+													<span class="required" aria-required="true"> * </span></label>
+													
+													
+													<div class="">
+													<p class="form-control-static" >{{contractVO.orderNum}}</p>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!--/row-->
 									</div>
 								</div>
 
