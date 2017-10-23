@@ -511,8 +511,8 @@
 							<th rowspan="2">物料名称</th>
 							<th rowspan="2">规格型号</th>
 							<th rowspan="2">单位</th>
-							<th rowspan="2">生产日期</th>
-							<th colspan="3" style="text-align: center;">发货</th>
+							<!-- <th rowspan="2">生产日期</th> -->
+							<th colspan="4" style="text-align: center;">发货</th>
 							<th colspan="4" style="text-align: center;">收货</th>
 						<!-- 	<th colspan="3" style="text-align: center;">检验</th>
 							<th colspan="5" style="text-align: center;">入库</th> -->
@@ -521,6 +521,7 @@
 						<tr>
 							<th>订单数量</th>
 							<th>发货数量</th>
+							<th>附件</th>
 							<th>备注</th>
 							<th>实收数量</th>
 							<th>拒收数量</th>
@@ -543,9 +544,12 @@
 							<td>{{materiel.orderMateriel.materiel.materielName}}</td>
 							<td>{{materiel.orderMateriel.materiel.specifications}}</td>
 							<td>{{materiel.orderMateriel.materiel.unit}}</td>
-							<td>{{materiel.manufactureDate}}</td>
+							<!-- <td>{{materiel.manufactureDate}}</td> -->
 							<td>{{materiel.orderMateriel.amount}}</td>
 							<td>{{materiel.deliverCount}}</td>
+							<td>
+								<a href="javascript:;" ng-click="downloadFile1(item.file)" ng-repeat="item in materiel.deliveryFiles">{{item.file|limitTo:30:item.file.indexOf('_')+1}}&nbsp;</a>
+							</td>
 							<td>{{materiel.deliverRemark}}</td>
 							<td>{{materiel.acceptCount}}</td>
 							<td>{{materiel.refuseCount}}</td>
@@ -565,11 +569,11 @@
 						</tr>
 						<tr
 							ng-if="deliver.deliveryMateriels==undefined||deliver.deliveryMateriels.length==0">
-							<td colspan="14" align="center">暂无数据</td>
+							<td colspan="13" align="center">暂无数据</td>
 						</tr>
 						<tr
 							ng-if="(!(deliver.deliveryMateriels==undefined||deliver.deliveryMateriels.length==0))&&dispalyDeliveryMateriel==0">
-							<td colspan="14" align="center">没有符合条件的物料信息</td>
+							<td colspan="13" align="center">没有符合条件的物料信息</td>
 						</tr>
 					</tbody>
 				</table>

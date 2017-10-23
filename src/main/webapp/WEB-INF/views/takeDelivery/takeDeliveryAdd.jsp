@@ -555,10 +555,10 @@
 														<th rowspan="2">物料名称</th>
 														<th rowspan="2">规格型号</th>
 														<th rowspan="2">单位</th>
-														<th style="min-width: 120px;" rowspan="2">批次号<span
-															class="required2"> * </span></th>
-														<th style="min-width: 120px;" rowspan="2">生产日期</th>
-														<th colspan="3"
+													<!-- 	<th style="min-width: 120px;" rowspan="2">批次号<span
+															class="required2"> * </span></th> -->
+													<!-- 	<th style="min-width: 120px;" rowspan="2">生产日期</th> -->
+														<th colspan="4"
 															style="text-align: center; min-width: 100px;">发货</th>
 														<!-- <th colspan="3"  style="text-align: center;min-width: 100px;">收货</th> -->
 														<!-- <th colspan="3"  style="text-align: center;">检验</th>
@@ -568,6 +568,7 @@
 													<tr>
 														<th>订单数量</th>
 														<th>发货数量<span class="required2"> * </span></th>
+														<th>附件</th>
 														<th style="min-width: 120px;">备注</th>
 														<!-- <th>实收数量<span class="required2"> * </span></th>
 										<th>拒收数量</th>
@@ -585,28 +586,37 @@
 												<tbody>
 													<tr
 														ng-repeat="materiel in orderMateriels track by materiel.serialNum"
-														repeat-done="repeatDone(this)">
+														>
 														<td><span class="help-block"></span>{{materiel.materiel.materielNum}}</td>
 														<td><span class="help-block"></span>{{materiel.materiel.materielName}}</td>
 														<td><span class="help-block"></span>{{materiel.materiel.specifications}}</td>
 														<td><span class="help-block"></span>{{materiel.materiel.unit}}</td>
-														<td class="form-group"><input type="text"
+														<!-- <td class="form-group"><input type="text"
 															class="form-control" id="batchNum{{$index}}"
 															name="batchNum" ng-model="materiel.batchNum"
 															ng-hide="deliverAdd">
-															<div class="form-control-focus"></div></td>
-														<td class="form-group"><input type="text"
+															<div class="form-control-focus"></div></td> -->
+														<!-- <td class="form-group"><input type="text"
 															class="form-control date date-picker"
 															data-date-format="yyyy-mm-dd" data-date-viewmode="years"
 															readonly="" id="manufactureDate{{$index}}"
 															ng-model="materiel.manufactureDate" placeholder="">
-															<span class="help-block"></span></td>
+															<span class="help-block"></span></td> -->
 														<td><span class="help-block"></span>{{materiel.amount}}</td>
 														<td class="form-group"><input type="text"
 															class="form-control" id="deliverCount{{$index}}"
 															name="deliverCount" data-ordercount="{{materiel.amount}}"
 															ng-model="materiel.deliverCount" ng-hide="deliverAdd">
 															<div class="form-control-focus"></div></td>
+														<td class="form-group">
+															 <p id="batchNumReal{{$index}}" ng-hide="true"> </p>
+															<p class="form-control-static" id="batchNum{{$index}}">
+															<a href="javascript:;" class="btn btn-xs green" id="addBatchNum{{$index}}"
+															ng-click="addAttachFile($index)" onclick="return false;"> <i
+																class="fa fa-plus"></i>添加
+														    </a>
+															</p>
+														</td>
 														<td class="form-group"><input type="text"
 															class="form-control" id="deliverRemark{{$index}}"
 															name="deliverRemark" ng-model="materiel.deliverRemark"
@@ -617,10 +627,9 @@
 														<td colspan="2" class="bold" align="right">合计：</td>
 														<td>{{calcTotalNum()}}{{materielCount}}</td>
 														<td></td>
-														<td></td>
-														<td></td>
 														<td>{{totalAmount}}</td>
 														<td>{{totalDeliverCount}}</td>
+														<td></td>
 														<td></td>
 													</tr>
 													<tr ng-if="orderMateriels==null||orderMateriels.length==0">
@@ -729,3 +738,4 @@
 <!-- END MAIN CONTENT -->
 <jsp:include page="selectBuyOrder.jsp"></jsp:include>
 <jsp:include page="../demandPlan/selectMateriel.jsp"></jsp:include>
+<jsp:include page="../upload/uploadPage.jsp"></jsp:include>
