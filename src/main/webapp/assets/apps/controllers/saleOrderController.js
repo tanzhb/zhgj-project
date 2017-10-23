@@ -81,7 +81,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
             		$scope.saleOrder.seller ="中航能科（上海）能源科技有限公司";
             		
             		$scope.contract.contractType="销售合同";
-            		$scope.saleOrder.orderType="普通销售";
+            		$scope.saleOrder.orderType="贸易销售";
             		$scope.saleOrder.tradeType="内贸";
             		$scope.saleOrder.rate = 17;
                 	//合同内容
@@ -216,7 +216,9 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
        		     function(data){
        		    	$scope.saleOrder = data;
        		    	$scope.contract.orderSerial = data.serialNum;
-       		    	$scope.contract.contractNum = $scope.saleOrder.orderNum;
+       		    	if(isNull($scope.contract.contractNum)){
+       		    		$scope.contract.contractNum = $scope.saleOrder.orderNum;
+       		    	}
 	   	    		$scope.contract.comId = $scope.saleOrder.buyComId;
 	   	    		$scope.contract.signDate = $scope.saleOrder.orderDate;
 	   	    		orderService.saveContract($scope.contract).then(
@@ -2625,7 +2627,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	        	orderService.save($scope.submitOrder).then(
 	          		     function(data){
 	          		    	$scope.contract.orderSerial = data.serialNum;
-	           		    	$scope.contract.contractNum = $scope.saleOrder.orderNum;
+	          		    	if(isNull($scope.contract.contractNum)){
+	          		    		$scope.contract.contractNum = $scope.saleOrder.orderNum;
+	          		    	}
 	    	   	    		$scope.contract.comId = $scope.saleOrder.buyComId;
 	    	   	    		orderService.saveContract($scope.contract).then(
 	    	   	       		     function(data){
@@ -2762,7 +2766,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			       		for(var i=0;i<$scope.orderMateriel.length;i++){
 			       			total = total + Number($scope.arithmeticAmount($scope.orderMateriel[i]));
 			       		}
-			       		return total
+			       		return total.toFixed(2)
 			       	}else{
 			       		return 0;
 			       	}
