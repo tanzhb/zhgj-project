@@ -28,7 +28,7 @@
 					<div class="sp-page-box" style="float:left;">
 						<div class="sp-page-boxcolumn span2" style="float:left;">
 							<span class="sp-upload" style="float:left;"> 
-							<img ng-if="userInfo.avatar!=null&&userInfo.avatar!=''" class="sp-upload-photo" alt="" ng-src="uploadAttachFiles/{{userInfo.avatar}}" style="float:left;"/> 
+							<img ng-if="userInfo.avatar!=null&&userInfo.avatar!=''" class="sp-upload-photo" alt="" ng-src="${pageContext.request.contextPath}/rest/fileOperate/downloadFile?fileName={{userInfo.avatar}}" style="float:left;"/> 
 							<img ng-if="userInfo.avatar==null||userInfo.avatar==''" class="sp-upload-photo" alt="" ng-src="{{ctl.info.photo}}" style="float:left;"/>	
 								<input type="file"
 								name="paymentVoucher" id="paymentVoucher" upload-img

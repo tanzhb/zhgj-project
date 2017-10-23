@@ -131,7 +131,6 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 	
 	//根据参数查询对象
 	$scope.getUserContractInfo  = function(id) {
-		debugger
 		ContractService.selectUserContract(id).then(
       		     function(data){
       		    	$scope.contractVO=data;
@@ -419,7 +418,6 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 		//销售订单签订
 		$scope.saleOrderSign = function() {
 			var ids = '';
-			// Iterate over all checkboxes in the table
 			table1.$('input[type="radio"]').each(
 					function() {
 						// If checkbox exist in DOM
@@ -609,7 +607,6 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 		
 		
 		$scope.getOderInfo=function(serialNum){
-			/*alert(id);*/
 			ContractService.getOderInfo(serialNum).then(
          		     function(data){
          		    	$scope.orderInfo=data;
@@ -622,7 +619,6 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 		}
 		
 		$scope.getOderInfo1=function(serialNum){
-			/*alert(id);*/
 			ContractService.getOderInfo(serialNum).then(
          		     function(data){
          		    	$scope.orderInfo1=data;
@@ -691,8 +687,8 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 	            }).error(function (data, status, headers, config) {
 	                //upload failed
 	            });*/
-				window.open($rootScope.basePath+"/uploadAttachFiles/"+name);
-				/* window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+name;*/
+				/*window.open($rootScope.basePath+"/uploadAttachFiles/"+name);*/
+				 window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+encodeURI(encodeURI(name));
 	        };
 				
 				

@@ -32,7 +32,7 @@
 						</button>
 
 						<button type="submit" ng-click="updateCompanyInfo()"
-							class="btn green  btn-circle  btn-sm">
+							class="btn green  btn-circle  btn-sm" ng-if="company.comNum!=null&&company.comNum!=''">
 							<i class="fa fa-save"></i> 保存
 						</button>
 					</div>

@@ -124,8 +124,7 @@ margin-right: 20px;
 											<div class="form-group">
                                                     <label class="control-label col-md-3 bold" for="currentAmount"> 库存数量 :</label>
                                                     <div class="control-label col-md-7">
-                                                         <!--  <p class="form-control-static" >{{stock.currentAmount}}</p>  -->
-                                                         <p class="form-control-static"   ng-if="stock.countInAmountZijian==null||stock.countInAmountDaiguan==null>暂无库存</p>
+                                                         <p class="form-control-static"   ng-if="stock.countInAmountZijian==null||stock.countInAmountDaiguan==null">暂无库存</p>
                                                          <p class="form-control-static"   ng-if="stock.countInAmountZijian!=null&&stock.countOutAmountZijian==null&&stock.manageType=='1'">{{stock.countInAmountZijian}}</p>
                                                          <p class="form-control-static"   ng-if="stock.countInAmountZijian!=null&&stock.countOutAmountZijian!=null&&stock.manageType=='1'">{{stock.countInAmountZijian-stock.countOutAmountZijian}}</p>
                                                          <p class="form-control-static"   ng-if="stock.countInAmountDaiguan!=null&&stock.countOutAmountDaiguan==null&&stock.manageType=='2'">{{stock.countInAmountDaiguan}}</p>

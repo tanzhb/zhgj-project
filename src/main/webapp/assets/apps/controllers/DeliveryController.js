@@ -23,8 +23,6 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		$scope.input = true;
 		
 		
-		$scope.supplyComId="中航能科";
-		$scope.shipper="中航能科";
 		$scope.transportType="水路运输";
 		$scope.serialNums = [];	
 		$scope.orderSerial=null;
@@ -158,6 +156,9 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 				$scope.supplyComId=data.comName;
 				$scope.shipper=data.comName;
 				$scope.receiver="中航能科"
+			}else{
+				$scope.shipper="中航能科";
+				$scope.receiver=data.comName;
 			}
 		}, function(data) {
 			// 调用承诺接口reject();
@@ -386,8 +387,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 				toastr.success("保存成功");
 				handle.unblockUI();
 				$scope.delivery= data;
-				/*$scope.deliveryMateriel[index] = data;
-				console.log(data.data);*/
+				getSupplyComId();
 				$scope.span = true;
 				$scope.input = false;
 				$(".alert-danger").hide();

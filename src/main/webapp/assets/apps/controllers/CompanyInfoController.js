@@ -20,20 +20,21 @@ angular.module('MetronicApp').controller('CompanyInfoController', ['$rootScope',
 	$scope.getCompanyInfo  = function() {
 		CompanyInfoService.getCompanyInfo().then(
       		     function(data){
+      		    	 debugger
       		    	$scope.company=data;
-      		    	if(data.comType='1'){
+      		    	if(data.comType=='1'){
       		    		$scope.company.comTypeName='采购商';
-      		    	}else if(data.comType='2'){
+      		    	}else if(data.comType=='2'){
       		    		$scope.company.comTypeName='供应商';
-      		    	}else if(data.comType='3'){
+      		    	}else if(data.comType=='3'){
       		    		$scope.company.comTypeName='承运人';
-      		    	}else if(data.comType='4'){
+      		    	}else if(data.comType=='4'){
       		    		$scope.company.comTypeName='外协仓';
-      		    	}else if(data.comType='5'){
+      		    	}else if(data.comType=='5'){
       		    		$scope.company.comTypeName='境外供应商';
-      		    	}else if(data.comType='6'){
+      		    	}else if(data.comType=='6'){
       		    		$scope.company.comTypeName='装卸公司';
-      		    	}else if(data.comType='7'){
+      		    	}else if(data.comType=='7'){
       		    		$scope.company.comTypeName='银行';
       		    	}else{
       		    		$scope.company.comTypeName='保险公司';
