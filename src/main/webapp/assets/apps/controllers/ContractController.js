@@ -691,8 +691,8 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 	            }).error(function (data, status, headers, config) {
 	                //upload failed
 	            });*/
-				window.open($rootScope.basePath+"/uploadAttachFiles/"+name);
-				/* window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+name;*/
+				/*window.open($rootScope.basePath+"/uploadAttachFiles/"+name);*/
+				 window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+encodeURI(encodeURI(name));
 	        };
 				
 				
