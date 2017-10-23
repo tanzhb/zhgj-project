@@ -63,6 +63,8 @@ public class StockInOutRecord {
     private OrderInfo order;
     
     private String buyComId;
+    
+    private String supplyComId;
 
     public String getSerialNum() {
         return serialNum;
@@ -271,5 +273,13 @@ public class StockInOutRecord {
 
 	public void setBuyComId(String buyComId) {
 		this.buyComId = buyComId;
+	}
+
+	public String getSupplyComId() {
+		return supplyComId;
+	}
+
+	public void setSupplyComId(String supplyComId) {
+		this.supplyComId = supplyComId;
 	}
 }

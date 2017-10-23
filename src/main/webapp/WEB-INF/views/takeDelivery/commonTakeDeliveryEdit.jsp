@@ -527,18 +527,19 @@
 										<th  rowspan="2">物料名称</th>
 										<th  rowspan="2">规格型号</th>
 										<th  rowspan="2">单位</th>
-										<th  rowspan="2">附件</th>
-										<th  rowspan="2">生产日期</th>
-										<th colspan="3" style="text-align: center;">发货</th>
-										<th colspan="3"  style="text-align: center;">收货</th>
+										<!-- <th  rowspan="2">生产日期</th> -->
+										<th colspan="4" style="text-align: center;">发货</th>
+										<th colspan="4"  style="text-align: center;">收货</th>
 										<th rowspan="2">状态</th>
 									</tr>
 									<tr>
 										<th>订单数量</th>
 										<th>发货数量</th>
+										<th>附件</th>
 										<th>备注</th>
 										<th>实收数量</th>
 										<th>拒收数量</th>
+										<th>附件</th>
 										<th>备注</th>
 									</tr>
 								</thead>
@@ -548,22 +549,16 @@
 										<td>{{materiel.orderMateriel.materiel.materielName}}</td>
 										<td>{{materiel.orderMateriel.materiel.specifications}}</td>
 										<td>{{materiel.orderMateriel.materiel.unit}}</td>
-										<td>
-                                           <p id="batchNumReal{{$index}}" ng-hide="true"> </p>
-												
-											<p class="form-control-static" id="batchNum{{$index}}">
-											<a href="javascript:;" class="btn btn-xs green" id="addBatchNum{{$index}}"
-											ng-click="addAttachFile($index)" onclick="return false;"> <i
-												class="fa fa-plus"></i>添加
-										    </a>
-											</p>
-                                        </td>
-										<td>
+										
+										<!-- <td>
 											{{materiel.manufactureDate}}
-										</td>
+										</td> -->
 										<td>{{materiel.orderMateriel.amount}}</td>
 										<td>
                                             {{materiel.deliverCount}}
+										</td>
+										<td>
+											<a href="javascript:;" ng-click="downloadFile1(item.file)" ng-repeat="item in materiel.deliveryFiles">{{item.file|limitTo:30:item.file.indexOf('_')+1}}&nbsp;</a>
 										</td>
 										<td>
                                             {{materiel.deliverRemark}}
@@ -575,6 +570,16 @@
 										<td><span class="help-block"></span>
 											<span ng-if="materiel.deliverCount!=undefined && materiel.acceptCount!=undedined">{{materiel.deliverCount-materiel.acceptCount}}</span>
 										</td>
+										<td>
+                                           <p id="batchNumReal{{$index}}" ng-hide="true"> </p>
+												
+											<p class="form-control-static" id="batchNum{{$index}}">
+											<a href="javascript:;" class="btn btn-xs green" id="addBatchNum{{$index}}"
+											ng-click="addAttachFile($index)" onclick="return false;"> <i
+												class="fa fa-plus"></i>添加
+										    </a>
+											</p>
+                                        </td>
 										<td>
                                                  <input type="text" class="form-control" id="takeRemark{{$index}}" name="takeRemark"  ng-model="materiel.takeRemark" ng-hide="deliverAdd" >
                                                  <div class="form-control-focus"> </div>

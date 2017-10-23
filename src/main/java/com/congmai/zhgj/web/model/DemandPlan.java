@@ -27,6 +27,8 @@ public class DemandPlan {
     private String maker;
     
     private String description;
+    
+    private Date updateDate;
 
     private String remark;
 
@@ -267,6 +269,15 @@ public class DemandPlan {
 
 	public void setCustomerPlanNum(String customerPlanNum) {
 		this.customerPlanNum = customerPlanNum;
+	}
+
+	@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 	
 	

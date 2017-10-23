@@ -10,6 +10,7 @@
     <result column="customerPlanNum" property="customerPlanNum" jdbcType="VARCHAR" />
     <result column="maker" property="maker" jdbcType="VARCHAR" />
     <result column="releaseDate" property="releaseDate" jdbcType="DATE" />
+    <result column="updateDate" property="updateDate" jdbcType="DATE" />
     <result column="description" property="description" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
@@ -79,10 +80,10 @@
   </sql>
   <sql id="Base_Column_List" >
    serialNum, demandPlanNum, buyComId, source, customerPrincipal, customerPlanNum, releaseDate, 
-    maker, description, remark, delFlg, creator, createTime, updater, updateTime
+    maker, description, updateDate, remark, delFlg, creator, createTime, updater, updateTime
   </sql>
   <sql id="Base_Column_List2" >
-    d.serialNum, d.buyComId, d.source, d.customerPrincipal, d.customerPlanNum, d.demandPlanNum, d.maker, d.releaseDate, d.description, d.remark, d.delFlg, d.creator, d.createTime, 
+    d.serialNum, d.buyComId, d.source, d.customerPrincipal, d.customerPlanNum, d.demandPlanNum, d.maker, d.releaseDate, d.description, d.updateDate, d.remark, d.delFlg, d.creator, d.createTime, 
     d.updater, d.updateTime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.DemandPlanSelectExample" >
@@ -118,19 +119,19 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
- <insert id="insert" parameterType="com.congmai.zhgj.web.model.DemandPlan" >
+<insert id="insert" parameterType="com.congmai.zhgj.web.model.DemandPlan" >
     insert into demandPlan (serialNum, demandPlanNum, buyComId, 
       source, customerPrincipal, customerPlanNum, 
       releaseDate, maker, description, 
-      remark, delFlg, creator, 
-      createTime, updater, updateTime
-      )
+      updateDate, remark, delFlg, 
+      creator, createTime, updater, 
+      updateTime)
     values (#{serialNum,jdbcType=VARCHAR}, #{demandPlanNum,jdbcType=VARCHAR}, #{buyComId,jdbcType=VARCHAR}, 
       #{source,jdbcType=VARCHAR}, #{customerPrincipal,jdbcType=VARCHAR}, #{customerPlanNum,jdbcType=VARCHAR}, 
       #{releaseDate,jdbcType=DATE}, #{maker,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+      #{updateDate,jdbcType=DATE}, #{remark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.DemandPlan" >
     insert into demandPlan
@@ -161,6 +162,9 @@
       </if>
       <if test="description != null" >
         description,
+      </if>
+      <if test="updateDate != null" >
+        updateDate,
       </if>
       <if test="remark != null" >
         remark,
@@ -209,6 +213,9 @@
       <if test="description != null" >
         #{description,jdbcType=VARCHAR},
       </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=DATE},
+      </if>
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
       </if>
@@ -236,7 +243,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+ <update id="updateByExampleSelective" parameterType="map" >
     update demandPlan
     <set >
       <if test="record.serialNum != null" >
@@ -265,6 +272,9 @@
       </if>
       <if test="record.description != null" >
         description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateDate != null" >
+        updateDate = #{record.updateDate,jdbcType=DATE},
       </if>
       <if test="record.remark != null" >
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -300,6 +310,7 @@
       releaseDate = #{record.releaseDate,jdbcType=DATE},
       maker = #{record.maker,jdbcType=VARCHAR},
       description = #{record.description,jdbcType=VARCHAR},
+      updateDate = #{record.updateDate,jdbcType=DATE},
       remark = #{record.remark,jdbcType=VARCHAR},
       delFlg = #{record.delFlg,jdbcType=VARCHAR},
       creator = #{record.creator,jdbcType=VARCHAR},
@@ -337,6 +348,9 @@
       <if test="description != null" >
         description = #{description,jdbcType=VARCHAR},
       </if>
+      <if test="updateDate != null" >
+        updateDate = #{updateDate,jdbcType=DATE},
+      </if>
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
       </if>
@@ -368,6 +382,7 @@
       releaseDate = #{releaseDate,jdbcType=DATE},
       maker = #{maker,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
+      updateDate = #{updateDate,jdbcType=DATE},
       remark = #{remark,jdbcType=VARCHAR},
       delFlg = #{delFlg,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},

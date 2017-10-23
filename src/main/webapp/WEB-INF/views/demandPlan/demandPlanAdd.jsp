@@ -195,6 +195,24 @@
 											</div>
 										</div>
 										<!-- row -->
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold" for="updateDate">更新日期
+													</label>
+													<div class="">
+														<input type="text" set-date
+															class="form-control date-picker" size="16"
+															data-date-format="yyyy-mm-dd" data-date-viewmode="years"
+															id="releaseDate" ng-model="demandPlan.updateDate"
+															ng-hide="demandPlanAdd" readonly="readonly">
+														<div class="form-control-focus"></div>
+														<p class="control-label left" ng-show="demandPlanView">{{demandPlan.updateDate}}</p>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!-- row -->
 									</div>
 								</form>
 							</div>

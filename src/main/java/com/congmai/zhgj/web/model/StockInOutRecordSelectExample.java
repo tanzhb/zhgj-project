@@ -1318,6 +1318,27 @@ public class StockInOutRecordSelectExample {
         }
         
         
+        public Criteria andBuyComIdEqualTo(String value) {
+            addCriterion("d.buyComId =", value, "buyComId");
+            return (Criteria) this;
+        }
+        
+        public Criteria andBuyComIdIsNull() {
+            addCriterion("d.buyComId is null");
+            return (Criteria) this;
+        }
+        
+        public Criteria andSupplyComIdEqualTo(String value) {
+            addCriterion("d.supplyComId =", value, "supplyComId");
+            return (Criteria) this;
+        }
+        
+        public Criteria andSupplyComIdIsNull() {
+            addCriterion("d.supplyComId is null");
+            return (Criteria) this;
+        }
+        
+        
     }
 
     public static class Criteria extends GeneratedCriteria {

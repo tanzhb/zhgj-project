@@ -87,6 +87,10 @@ public class DeliveryMateriel {
     private String attachFile;
     private String currentStockAmount;//当前库存总数(基本物料)
 	private List<RelationFile> files;
+	
+	private String deliveryAttachFile;
+	private List<RelationFile> deliveryFiles;
+	
     public List<StockOutBatch> getStockOutMateriels() {
 		return stockOutMateriels;
 	}
@@ -506,6 +510,22 @@ public class DeliveryMateriel {
 
 	public void setCurrentStockAmount(String currentStockAmount) {
 		this.currentStockAmount = currentStockAmount;
+	}
+
+	public List<RelationFile> getDeliveryFiles() {
+		return deliveryFiles;
+	}
+
+	public void setDeliveryFiles(List<RelationFile> deliveryFiles) {
+		this.deliveryFiles = deliveryFiles;
+	}
+
+	public String getDeliveryAttachFile() {
+		return deliveryAttachFile;
+	}
+
+	public void setDeliveryAttachFile(String deliveryAttachFile) {
+		this.deliveryAttachFile = deliveryAttachFile;
 	}
 
 	

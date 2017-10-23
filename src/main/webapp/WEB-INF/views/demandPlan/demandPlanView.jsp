@@ -297,9 +297,9 @@
 										</div>
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
-                                                   <label class="col-md-4 control-label bold" for="maker"> 制单人：</label>
+                                                   <label class="col-md-4 control-label bold" for="description"> 需求描述：</label>
 	                                              <div class="col-md-7">
-                                                        <p class="control-label left" >{{demandPlan.maker}}</p>
+                                                        <p class="control-label left" >{{demandPlan.description}}</p>
 	                                              </div>
                                             </div>
 										</div>
@@ -308,9 +308,9 @@
 										<div class="row">
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
-                                                   <label class="col-md-4 control-label bold" for="description"> 需求描述：</label>
+                                                   <label class="col-md-4 control-label bold" for="maker"> 制单人：</label>
 	                                              <div class="col-md-7">
-                                                        <p class="control-label left" >{{demandPlan.description}}</p>
+                                                        <p class="control-label left" >{{demandPlan.maker}}</p>
 	                                              </div>
                                             </div>
 										</div>
@@ -364,17 +364,9 @@
 										
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label bold" for="tel">更新时间：</label>
+                                                    <label class="col-md-4 control-label bold" for="tel">更新日期：</label>
                                                     <div class="col-md-7">
-                                                         <p class="control-label left" >{{demandPlan.updateTime}}</p>
-                                                    </div>
-                                            </div>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label bold" for="releaseDate"> 更新人：</label>
-                                                    <div class="col-md-7">
-                                                         <p class="control-label left" >{{demandPlan.updater}}</p>
+                                                         <p class="control-label left" >{{demandPlan.updateDate}}</p>
                                                     </div>
                                             </div>
 										</div>
