@@ -156,7 +156,7 @@
 														<input type="text" class="form-control" name="receiver"
 															ng-model="delivery.receiver" ng-show="input" />
 														<p class="form-control-static" ng-show="span">
-															{{receiver}}</p>
+															{{delivery.receiver}}</p>
 														<div class="form-control-focus"></div>
 													</div>
 

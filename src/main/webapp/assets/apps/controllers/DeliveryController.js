@@ -158,7 +158,9 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 				$scope.receiver="中航能科"
 			}else{
 				$scope.shipper="中航能科";
-				$scope.receiver=data.comName;
+				if($scope.delivery!=null){
+					$scope.receiver=$scope.delivery.receiver;
+				}
 			}
 		}, function(data) {
 			// 调用承诺接口reject();
