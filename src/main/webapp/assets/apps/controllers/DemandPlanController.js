@@ -17,14 +17,14 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	    			$scope.demandPlanView =true;
 	    		}
 	    		selectParentMateriel();//加载物料列表
-	    		handle.datePickersInit("auto bottom");
+	    		handle.datePickersInit("bottom");
 	    		initCustomers();
 	 		}else if($location.path()=="/demandPlanView"){
 	 			getDemandPlanInfo($stateParams.serialNum);
 	 			selectParentMateriel();
 	 			$scope.serialNums = [];
 	 			selectSaleOrderTable();//加载物料列表
-	 			handle.datePickersInit();
+	 			handle.datePickersInit("auto bottom");
 	 			initSuppliers();
 	 		}else{
 	 			demandPlanMaterielList();
@@ -977,7 +977,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	        * 需求物料初始化日期控件
 	        */
 	       $scope.repeatDone = function(){
-	    	   handle.datePickersInit();
+	    	   handle.datePickersInit("auto bottom");
 	       };
 	       
 	       

@@ -83,7 +83,7 @@ public class WebSocketProcessor implements MessageProcessor {
 	
 	//已入库（to供应）
 	private static String message92 = "尊敬的${paramer_a}，您好！</br>发货单号${paramer_b}对方已完成入库 ${paramer_c} 件，关联销售订单号${paramer_d}。"+
-			"<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_e}')>查看</a>";
+			"<a href='javascript:;' ui-sref=${paramer_e} onclick=readAndClose('${paramer_f}')>查看</a>";
 
 	
 	static{
