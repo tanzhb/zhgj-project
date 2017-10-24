@@ -642,9 +642,20 @@ function getWSPath_web() {
     }
 }
 
+function getWSPath_web1() {
+    //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
+    var curWwwPath = window.document.location.href;
+    //获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
+    var pathName = window.document.location.pathname;
+    
+    return pathName;
+}
+
+
 $(function(){
+	var rootPath=getWSPath_web1();
      $.ajax({ url: "rest/user/getUserInfo",method: "POST",  success: function(data){
-         $("#avatar").attr("src","uploadAttachFiles/"+data.avatar);
+         $("#avatar").attr("src",rootPath+"rest/fileOperate/downloadFile?fileName="+data.avatar);
          $("#usernameOfUserInfo").html(data.displayName);
        }});
 })

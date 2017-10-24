@@ -124,6 +124,12 @@ public class ContractVO {
     //对方合同号
     private String otherPartyContractNum;
     
+    
+    private String supplyComId;
+    
+    
+    private String orderNum;
+    
 	public String getId() {
 		return id;
 	}
@@ -413,5 +419,21 @@ public class ContractVO {
 
 	public void setOrderAmount(String orderAmount) {
 		this.orderAmount = orderAmount;
+	}
+
+	public String getSupplyComId() {
+		return supplyComId;
+	}
+
+	public void setSupplyComId(String supplyComId) {
+		this.supplyComId = supplyComId;
+	}
+
+	public String getOrderNum() {
+		return orderNum;
+	}
+
+	public void setOrderNum(String orderNum) {
+		this.orderNum = orderNum;
 	}
 }

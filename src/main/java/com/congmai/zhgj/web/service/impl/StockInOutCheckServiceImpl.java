@@ -108,9 +108,9 @@ public class StockInOutCheckServiceImpl extends GenericServiceImpl<StockInOutChe
 			orderInfoMapper.updateByPrimaryKeySelective(o);
 			
 			//入库检验消息  to 采购
-			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutCheck,MessageConstants.IN_CHECK_TO_BUY));
+			//EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutCheck,MessageConstants.IN_CHECK_TO_BUY));
 			//入库检验消息  to 供应
-			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutCheck,MessageConstants.IN_CHECK_TO_SALE));
+			//EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutCheck,MessageConstants.IN_CHECK_TO_SALE));
 			
 		}else if(serialNum1.indexOf("checkout")>-1){
 			createStockInOutRecord("checkout",stockInOutCheck.getDeliverSerial(),userName);//产生出库记录
@@ -126,9 +126,9 @@ public class StockInOutCheckServiceImpl extends GenericServiceImpl<StockInOutChe
 			orderInfoMapper.updateByPrimaryKeySelective(o);
 			
 			//出库检验消息  to 采购
-			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutCheck,MessageConstants.OUT_CHECK_TO_BUY));
+			//EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutCheck,MessageConstants.OUT_CHECK_TO_BUY));
 			//出库检验消息  to 供应
-			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutCheck,MessageConstants.OUT_CHECK_TO_SALE));
+			//EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutCheck,MessageConstants.OUT_CHECK_TO_SALE));
 		}
 		
 	}

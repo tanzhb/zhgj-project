@@ -275,6 +275,16 @@ public class TakeDeliveryController {
     			}
     			deliveryMaterielVO.setAttachFile(attachFile);
     			deliveryMaterielVO.setFiles(files);
+    			
+    			String deliveryAttachFile="";
+    			List<RelationFile> deliveryFiles=relationFileService.getAttachFileInfo("delivery",deliveryMaterielVO.getSerialNum());
+    			for(RelationFile relationFile:deliveryFiles){
+    				String file=relationFile.getFile();
+    				String remark=relationFile.getRemark();
+    				deliveryAttachFile=deliveryAttachFile+file+","+remark+"&";
+    			}
+    			deliveryMaterielVO.setDeliveryAttachFile(deliveryAttachFile);
+    			deliveryMaterielVO.setDeliveryFiles(deliveryFiles);
     		}
     	}
     	
@@ -321,7 +331,7 @@ public class TakeDeliveryController {
     }
     
     /**
-     * @Description (确认发货)
+     * @Description (确认收货)
      * @param request
      * @return
      */
@@ -336,7 +346,7 @@ public class TakeDeliveryController {
     	try {
     		takeDeliveryParams = JSON.parseObject(params, TakeDeliveryParams.class);
     	} catch (Exception e) {
-    		System.out.println(this.getClass()+"---------"+ e.getMessage());
+    		logger.warn(e.getMessage(), e);
     	}
     	try{
     		Subject currentUser = SecurityUtils.getSubject();
@@ -654,14 +664,21 @@ public class TakeDeliveryController {
 				}*/
 		 record.setPageIndex(0);
 		 record.setPageSize(-1);
-		 Page<DeliveryMateriel> takeDeliverys = deliveryMaterielService.selectListByExample(record,"out");
-		 //List<Company> companys = companyService.selectByPage(company).getResult();
-		 // 封装datatables数据返回到前台
+		 
+		 User user = UserUtil.getUserFromSession();
 		 Map<String,Object> pageMap = new HashMap<String,Object>();
-		 pageMap.put("draw", 1);
-		 pageMap.put("recordsTotal", record==null?0:takeDeliverys.getTotalCount());
-		 pageMap.put("recordsFiltered", record==null?0:takeDeliverys.getTotalCount());
-		 pageMap.put("data", takeDeliverys.getResult());
+		 if(user != null){
+			 String comId = userCompanyService.getUserComId(user.getUserId().toString());
+			 record.setSupplyComId(comId);
+			 Page<DeliveryMateriel> takeDeliverys = deliveryMaterielService.selectListByExample(record,"out");
+			 //List<Company> companys = companyService.selectByPage(company).getResult();
+			 // 封装datatables数据返回到前台
+			 pageMap.put("draw", 1);
+			 pageMap.put("recordsTotal", record==null?0:takeDeliverys.getTotalCount());
+			 pageMap.put("recordsFiltered", record==null?0:takeDeliverys.getTotalCount());
+			 pageMap.put("data", takeDeliverys.getResult());
+		 }
+		
 		 return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
 	 }
 	 
@@ -1081,6 +1098,10 @@ public class TakeDeliveryController {
 		}
 		
 		for(DeliveryMateriel materiel : takeDeliveryParams.getDeliveryMateriels()){
+			//附件
+    		List<RelationFile> files=new ArrayList<RelationFile>();
+    		
+    
 			materiel.setSerialNum(ApplicationUtils.random32UUID());
 			materiel.setDeliverSerial(takeDeliveryParams.getDelivery().getSerialNum());
 			materiel.setCreator(currenLoginName);
@@ -1088,6 +1109,41 @@ public class TakeDeliveryController {
 			materiel.setUpdater(currenLoginName);
 			materiel.setUpdateTime(now);
 			materiel.setDelFlg("0");
+			
+			
+			//如果附件不为空时执行添加操作
+    		if(!StringUtils.isEmpty(materiel.getAttachFile())){
+    			String attachFile[]=materiel.getAttachFile().split("&");
+    			for(String detail:attachFile){
+    				RelationFile item=new RelationFile();
+    				String attachFileDetail[]=detail.split(",");
+    				String file=attachFileDetail[0];
+    				
+    				//描述不为空时添加描述
+    				String describe=null;
+    				if(attachFileDetail.length>1){
+    					if(attachFileDetail[1]!=null){
+           				 describe=attachFileDetail[1];	
+           				}	
+    				}
+    				
+    				
+    				item.setSerialNum(ApplicationUtils.random32UUID());
+    				item.setRelationSerial(materiel.getSerialNum());
+    				item.setFileType("delivery");
+    				item.setFileDescribe(describe);
+    				item.setFile(file);
+    				item.setUploader(currenLoginName);
+    				item.setCreator(currenLoginName);
+    				item.setUpdater(currenLoginName);
+    				item.setDelFlg("0");
+    				item.setIsReadable("0");
+    				files.add(item);
+    			}
+    			
+    			//批量添加附件
+    			relationFileService.insertAttachFiles(files);
+    		}	
 		}
 		
 		return takeDeliveryParams;

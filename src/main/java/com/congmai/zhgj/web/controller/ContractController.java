@@ -25,7 +25,9 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;  
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;  
 import org.springframework.http.HttpStatus;  
 import org.springframework.http.MediaType;  
@@ -71,6 +73,9 @@ public class ContractController {
 	 */
 	@Resource
 	private ContractService contractService;
+	
+	@Autowired  
+	Environment env;
 
 	/**
 	 * 
@@ -313,7 +318,7 @@ public class ContractController {
 	 * @return
 	 */
 	public String uploadFile(MultipartFile file){
-		String filePath = getClasspath()+"uploadAttachFiles/";
+		String filePath = env.getProperty("upload_path");
 		String randomName=UUID.randomUUID().toString().toUpperCase().replaceAll("-", ""); 
 		String fileName = fileUp(file, filePath,randomName);
 		System.out.println(fileName);

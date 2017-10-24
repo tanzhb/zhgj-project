@@ -34,7 +34,9 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
 		UserInfoService.getUserInfo().then(
       		     function(data){
       		    	$scope.userInfo=data;
-      		    	$("#avatar").attr("src","uploadAttachFiles/"+$scope.userInfo.avatar);
+      		    	/*$("#avatar").attr("src","uploadAttachFiles/"+$scope.userInfo.avatar);*/
+      		    	var rootPath=getWSPath_web1();
+      		    	$("#avatar").attr("src",rootPath+"rest/fileOperate/downloadFile?fileName="+data.avatar);
       		    	$("#usernameOfUserInfo").html($scope.userInfo.displayName);
       		     },
       		     function(error){

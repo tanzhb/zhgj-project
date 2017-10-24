@@ -27,6 +27,7 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -81,6 +82,9 @@ public class UserController {
 	
 	@Resource
 	private OperateLogService operateLogService;
+	
+	@Autowired  
+	Environment env;
 
 	/**
 	 * 用户登录
@@ -388,7 +392,10 @@ public class UserController {
 	 * @return
 	 */
 	public String uploadFile(MultipartFile file){
-		String filePath = getClasspath()+"uploadAttachFiles/";
+		/*String filePath = getClasspath()+"uploadAttachFiles/";*/
+		
+		String filePath = env.getProperty("upload_path");
+		
 		String randomName=UUID.randomUUID().toString().toUpperCase().replaceAll("-", ""); 
 		String fileName = fileUp(file, filePath,randomName);
 		System.out.println(fileName);

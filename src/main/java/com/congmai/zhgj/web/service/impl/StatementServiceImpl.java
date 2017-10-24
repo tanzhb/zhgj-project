@@ -14,6 +14,7 @@ import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.hibernate.hql.internal.ast.tree.OrderByClause;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +56,9 @@ import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
  */
 @Service
 public class StatementServiceImpl implements StatementService {
+	
+	Logger logger = Logger.getLogger(StatementServiceImpl.class);
+	
     @Resource
     private StatementMapper statementMapper;
     
@@ -124,116 +128,6 @@ public class StatementServiceImpl implements StatementService {
 
 	}
 
-/*	@Override
-	public Map<String, Object> getOrderAndPaymentRecords(String supplyComId,
-			String statementDate) {
-		Map<String,Object> map = new HashMap<String, Object>();
-		OrderInfoExample example = new OrderInfoExample();
-		example.createCriteria().andSupplyComIdEqualTo(supplyComId).andBuyComIdIsNull().andDelFlgEqualTo("0");
-		List<OrderInfo> orderList = orderInfoMapper.selectByExample(example);
-		
-		List<StatementOrderInfo> list = new ArrayList<StatementOrderInfo>(); //账单信息
-		List<StatementPaymentInfo> paymentList = new ArrayList<StatementPaymentInfo>(); //本月应付
-		List<StatementPaymentInfo> alreadyPaymentList = new ArrayList<StatementPaymentInfo>(); //本月已付
-		if(CollectionUtils.isNotEmpty(orderList)){
-			for(OrderInfo o : orderList){
-				StatementOrderInfo statementOrderInfo = new StatementOrderInfo();
-				double totalPaymentAmount = 0; //实付金额
-				double totalMoney = 0; //应付金额
-				double totalServiceMoney = 0;  //服务费
-				double totalReadyAmount = 0; //已开金额
-				double totalUnReadyAmount = 0; //未开金额
-				try {
-					OrderMaterielExample example2 = new OrderMaterielExample();
-					example2.createCriteria().andOrderSerialEqualTo(o.getSerialNum());
-					List<OrderMateriel> orderMateriels = orderMaterielMapper.selectByExample(example2);
-					if(CollectionUtils.isNotEmpty(orderMateriels)){
-						for(OrderMateriel m : orderMateriels){
-							
-							double money = Handle.stringToDouble(m.getMoney());
-							totalMoney += money;
-							double serviceRate = Handle.stringToDouble(m.getServiceRate());
-							double serviceMoney  = money*serviceRate;
-							
-							totalServiceMoney += serviceMoney; 
-						}
-					}
-					
-					PaymentPlanExample example3 = new PaymentPlanExample();
-					example3.createCriteria().andOrderSerialEqualTo(o.getSerialNum()).andDelFlgEqualTo("0");
-					List<PaymentPlanView> paymentPlanViews = paymentPlanViewMapper.selectByExample(example3);
-					if(CollectionUtils.isNotEmpty(paymentPlanViews)){
-						for(PaymentPlanView plan :paymentPlanViews){
-							StatementPaymentInfo statementPaymentInfo = new StatementPaymentInfo();
-							
-							PaymentRecordExample example4 = new PaymentRecordExample();
-							example4.createCriteria().andDelFlgEqualTo("0").andPaymentPlanSerialEqualTo(plan.getSerialNum());
-							List<PaymentRecord> records = paymentRecordMapper.selectByExample(example4);
-							//PaymentRecord record = null;
-							double paymentAmount = Handle.stringToDouble(plan.getPaymentAmount());
-							double readyAmount = Handle.stringToDouble(plan.getReadyAmount());
-							double unReadyAmount = Handle.stringToDouble(plan.getUnreadyAmount());
-							if(CollectionUtils.isNotEmpty(records)){
-								PaymentRecord record = records.get(0);
-								statementPaymentInfo.setPaymentPlanNum(plan.getPaymentPlanNum());
-								statementPaymentInfo.setPaymentPlanDate(DateUtil.format("yyyy-MM-dd", plan.getPlayPaymentDate()));
-								statementPaymentInfo.setPaymentNode(plan.getPaymentNode());
-								statementPaymentInfo.setPaymentStatus(plan.getStatus());
-								statementPaymentInfo.setPaymentAmount(String.valueOf(paymentAmount));
-								statementPaymentInfo.setOrderNum(o.getOrderNum());
-								statementPaymentInfo.setIsBill(record.getIsBill());
-								statementPaymentInfo.setBillNum("敬请期待");
-								statementPaymentInfo.setBillDate("敬请期待");
-								statementPaymentInfo.setPeriod("1");
-								statementPaymentInfo.setInterest("额。。");
-								
-								alreadyPaymentList.add(statementPaymentInfo);
-								paymentList.add(statementPaymentInfo);
-								totalPaymentAmount += paymentAmount;
-								totalReadyAmount += readyAmount;
-								totalUnReadyAmount += unReadyAmount;
-							}else{
-								statementPaymentInfo.setPaymentPlanNum(plan.getPaymentPlanNum());
-								statementPaymentInfo.setPaymentPlanDate(DateUtil.format("yyyy-MM-dd", plan.getPlayPaymentDate()));
-								statementPaymentInfo.setPaymentNode(plan.getPaymentNode());
-								statementPaymentInfo.setPaymentStatus(plan.getStatus());
-								statementPaymentInfo.setPaymentAmount(String.valueOf(paymentAmount));
-								statementPaymentInfo.setOrderNum(o.getOrderNum());
-								statementPaymentInfo.setBillNum("敬请期待");
-								statementPaymentInfo.setBillDate("敬请期待");
-								statementPaymentInfo.setPeriod("1");
-								statementPaymentInfo.setInterest("额。。");
-								paymentList.add(statementPaymentInfo);
-							}
-							
-						}
-					}
-					statementOrderInfo.setOrderNum(o.getOrderNum());
-					statementOrderInfo.setOrderDate(DateUtil.format("yyyy-MM-dd",o.getOrderDate()));
-					statementOrderInfo.setOrderStatus(o.getStatus());
-					statementOrderInfo.setContractNum(o.getContractSerial());
-					statementOrderInfo.setTotalMoney(String.valueOf(totalMoney));
-					statementOrderInfo.setPaymentMoney(String.valueOf(totalMoney));
-					statementOrderInfo.setTotalPaymentAmount(String.valueOf(totalPaymentAmount));
-					statementOrderInfo.setTotalUnPaymentMoney(String.valueOf(totalMoney-totalPaymentAmount));
-					statementOrderInfo.setTotalServiceMoney(String.valueOf(totalServiceMoney));
-					statementOrderInfo.setTotalReadyAmount(String.valueOf(totalReadyAmount));
-					statementOrderInfo.setTotalUnReadyAmount(String.valueOf(totalUnReadyAmount));
-					list.add(statementOrderInfo);
-				} catch (Exception e) {
-					e.printStackTrace();
-					System.out.println(this.getClass()+"-------->"+e.getMessage()+":"+e.getStackTrace());
-				}
-				
-				
-			}
-		}
-		map.put("orderList", list);
-		map.put("paymentList", paymentList);
-		map.put("alreadyPaymentList", alreadyPaymentList);
-		return map;
-	}*/
-	
 	@Override
 	public Map<String, Object> getOrderAndPaymentRecords(String supplyComId,String buyComId,
 			String statementDate){
@@ -276,7 +170,7 @@ public class StatementServiceImpl implements StatementService {
 							StatementPaymentInfo alreadyPaymentInfo = new StatementPaymentInfo(); //已付信息
 						//	StatementPaymentInfo shouldPaymentInfo = new StatementPaymentInfo();	//应付信息
 							//获取本期应付信息
-							getShouldPaymentInfo2(paymentRecords,set,shouldPaymentList,map2);
+							getShouldPaymentInfo(paymentRecords,set,shouldPaymentList,map2);
 							
 							if(record != null){
 
@@ -331,8 +225,7 @@ public class StatementServiceImpl implements StatementService {
 					}
 							
 				} catch (Exception e) {
-							e.printStackTrace();
-							System.out.println(this.getClass()+"-------->"+e.getMessage()+":"+e.getStackTrace());
+					logger.warn(e.getMessage(), e);
 				}
 						
 						
@@ -372,66 +265,7 @@ public class StatementServiceImpl implements StatementService {
 		
 	}
 	
-	/**
-	 * 
-	 * @Description (TODO获取本期应付信息)
-	 * @param paymentPlanViews
-	 * @param set
-	 * @param paymentList
-	 * @param map2
-	 */
-	private void getShouldPaymentInfo(List<PaymentPlanView> paymentPlanViews,Set<OrderInfo> set,List<StatementPaymentInfo> paymentList,Map<String,Map<String, Double>> map2){
-		for(PaymentPlanView plan :paymentPlanViews){
-			
-			StatementPaymentInfo statementPaymentInfo = new StatementPaymentInfo();
-			
-			//获取付款计划关联订单信息，去重放入set,统计数据
-			OrderInfoExample orderExample = new OrderInfoExample();
-			orderExample.createCriteria().andSerialNumEqualTo(plan.getOrderSerial());
-			OrderInfo order = orderInfoMapper.selectByPrimaryKey(plan.getOrderSerial());
-			set.add(orderInfoMapper.selectByPrimaryKey(plan.getOrderSerial()));
-			
-			//构造付款计划查询条件
-			PaymentRecordExample example4 = new PaymentRecordExample();
-			example4.createCriteria().andDelFlgEqualTo("0").andPaymentPlanSerialEqualTo(plan.getSerialNum());
-			//付款计划列表
-			List<PaymentRecord> records = paymentRecordMapper.selectByExample(example4);
-			PaymentRecord record = null;
-			double paymentAmount = Handle.stringToDouble(plan.getPaymentAmount()); //获取应付金额
-			double readyAmount = Handle.stringToDouble(plan.getReadyAmount()); //获取已开金额
-			double unReadyAmount = Handle.stringToDouble(plan.getUnreadyAmount()); //获取未开金额
-				if(CollectionUtils.isNotEmpty(records)){
-					record = records.get(0);
-				}
-				//statementPaymentInfo.setPaymentPlanNum(plan.getPaymentPlanNum());//付款计划编号
-				statementPaymentInfo.setPaymentPlanDate(DateUtil.format("yyyy-MM-dd", plan.getPlayPaymentDate()));//计划付款日期
-				statementPaymentInfo.setPaymentNode(plan.getPaymentNode());//支付节点
-				statementPaymentInfo.setPaymentStatus(plan.getStatus());//支付状态
-				statementPaymentInfo.setPaymentAmount(String.valueOf(paymentAmount));//应付金额
-				statementPaymentInfo.setOrderNum(order.getOrderNum());//订单编号
-				if(record!=null){
-					statementPaymentInfo.setIsBill(record.getIsBill());//是否开票
-					statementPaymentInfo.setBillNum("施工中");//开票金额
-					statementPaymentInfo.setBillDate("施工中");//开票日期
-				}
-				statementPaymentInfo.setPeriod("1");//账期
-				statementPaymentInfo.setInterest("施工中");//利息
-				paymentList.add(statementPaymentInfo);
-				
-				
-				if(map2.containsKey(order.getSerialNum())){
-					map2.get(order.getSerialNum()).put("totalPaymentAmount",0D);
-					map2.get(order.getSerialNum()).put("totalReadyAmount",map2.get(order.getSerialNum()).get("totalReadyAmount")+ readyAmount);//累计已开票金额
-					map2.get(order.getSerialNum()).put("totalUnReadyAmount",map2.get(order.getSerialNum()).get("totalUnReadyAmount")+ unReadyAmount);//累计未开票金额
-				}else{
-					Map<String,Double> _map = new HashMap<String, Double>();
-					_map.put("totalReadyAmount", readyAmount);
-					_map.put("totalUnReadyAmount", unReadyAmount);
-					map2.put(order.getSerialNum(),_map);
-				}
-			
-		}
-	}
+
 	
 	/**
 	 * 
@@ -441,7 +275,7 @@ public class StatementServiceImpl implements StatementService {
 	 * @param paymentList
 	 * @param moneyCountMap
 	 */
-	private void getShouldPaymentInfo2(List<PaymentRecord> paymentRecord,Set<OrderInfo> set,List<StatementPaymentInfo> paymentList,Map<String,Map<String, Double>> moneyCountMap){
+	private void getShouldPaymentInfo(List<PaymentRecord> paymentRecord,Set<OrderInfo> set,List<StatementPaymentInfo> paymentList,Map<String,Map<String, Double>> moneyCountMap){
 		for(PaymentRecord record :paymentRecord){
 			
 			StatementPaymentInfo shouldPaymentInfo = new StatementPaymentInfo();
@@ -530,8 +364,7 @@ public class StatementServiceImpl implements StatementService {
 					statementOrderInfo.setTotalUnReadyAmount(String.valueOf(totalUnReadyAmount));
 					list.add(statementOrderInfo);
 				} catch (Exception e) {
-					e.printStackTrace();
-					System.out.println(this.getClass()+"-------->"+e.getMessage()+":"+e.getStackTrace());
+					logger.warn(e.getMessage(), e);
 				}
 			
 				
@@ -555,7 +388,7 @@ public class StatementServiceImpl implements StatementService {
 				return false;
 			}
 		} catch (ParseException e) {
-			e.printStackTrace();
+			logger.warn(e.getMessage(), e);
 			return true;
 		}
 		return true;

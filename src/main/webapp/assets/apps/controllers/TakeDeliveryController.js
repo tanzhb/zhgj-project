@@ -294,6 +294,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 						param.acceptCount = $scope.orderMateriels[i].acceptCount;
 						param.refuseCount = $scope.orderMateriels[i].deliverCount-$scope.orderMateriels[i].acceptCount;
 						param.takeRemark = $scope.orderMateriels[i].takeRemark;
+						param.attachFile = $("#batchNumReal"+i).text();
 						params.deliveryMateriels.push(param);
 					}
 					

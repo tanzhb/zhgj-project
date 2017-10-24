@@ -38,7 +38,7 @@
     <!--查询销售合同列表  -->
     <select id="querySaleContractList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ContractVO">
     SELECT
-	a.serialNum AS id,a.contractNum,b.buyComId AS comId,
+	a.serialNum AS id,a.contractNum,(SELECT comName FROM company WHERE comId=b.buyComId) AS comId,
 	a.contractType,COUNT(DISTINCT b.serialNum) AS orderAmount,a.signDate,a.signer,a.startDate,a.endDate,
     a.versionNO,b.status
 	FROM
@@ -53,7 +53,7 @@
      <!--查询采购合同列表  -->
     <select id="queryBuyContractList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ContractVO">
     SELECT
-	a.serialNum AS id,a.contractNum,b.supplyComId AS comId,a.contractType,COUNT(DISTINCT b.serialNum) AS orderAmount,a.signDate,a.signer,a.startDate,a.endDate,
+	a.serialNum AS id,a.contractNum,(SELECT comName FROM company WHERE comId=b.supplyComId) AS comId,a.contractType,COUNT(DISTINCT b.serialNum) AS orderAmount,a.signDate,a.signer,a.startDate,a.endDate,
 	a.versionNO,b.status
 	FROM
 	contract a
@@ -67,7 +67,7 @@
     
     <select id="queryOrderInfo" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.OrderInfo">
     SELECT
-	a.serialNum,a.orderNum,a.orderType,a.orderAmount,COUNT(DISTINCT b.serialNum) AS materielAmount,a.buyComId,a.supplyComId,a.maker,a.orderDate,a.status
+	a.serialNum,a.orderNum,a.orderType,a.orderAmount,COUNT(DISTINCT b.serialNum) AS materielAmount,(SELECT comName FROM company WHERE comId=a.buyComId) AS buyComId,(SELECT comName FROM company WHERE comId=a.supplyComId) AS supplyComId,a.maker,a.orderDate,a.status
 	FROM
 	orderInfo a
 	LEFT JOIN orderMateriel b ON a.serialNum=b.orderSerial
@@ -107,6 +107,8 @@
 	a.electronicContract,
 	a.signContract,
 	b.serialNum AS orderSerial,
+	b.supplyComId,
+	b.orderNum,
 	a.contractNumber
 	FROM
 	contract a
