@@ -35,6 +35,8 @@ import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.web.model.BOMMateriel;
 import com.congmai.zhgj.web.model.BOMMaterielExample;
+import com.congmai.zhgj.web.model.Category;
+import com.congmai.zhgj.web.model.CompanyCode;
 import com.congmai.zhgj.web.model.JsonTreeData;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
@@ -45,6 +47,7 @@ import com.congmai.zhgj.web.model.MaterielFileExample;
 import com.congmai.zhgj.web.model.MaterielSelectExample;
 import com.congmai.zhgj.web.model.SupplyMateriel;
 import com.congmai.zhgj.web.model.SupplyMaterielExample;
+import com.congmai.zhgj.web.service.CategoryService;
 import com.congmai.zhgj.web.service.MaterielFileService;
 import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.SupplyMaterielService;
@@ -76,6 +79,9 @@ public class MaterielController {
     
     @Resource
     private UserCompanyService userCompanyService;
+    
+    @Resource
+    private CategoryService categoryService;
     
     /**
      * 保存物料
@@ -654,4 +660,85 @@ public class MaterielController {
     	
     	return list;
     }
+    
+    
+    
+	/**
+	 * 
+	 * @Description 初始化物料分类
+	 * @return
+	 */
+	@RequestMapping(value = "/getCategoryList")
+	@ResponseBody
+	public Map getCategoryList() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<Category> fristCategoryList = this.categoryService.queryCategoryListByParent("0");
+		map.put("fristCategoryList", fristCategoryList);
+		if(fristCategoryList!=null&&fristCategoryList.size()>0){
+			List<Category> secondCategoryList = this.categoryService.queryCategoryListByParent(fristCategoryList.get(0).getCategoryId());
+			map.put("secondCategoryList", secondCategoryList);
+			if(secondCategoryList!=null&&secondCategoryList.size()>0){
+				List<Category> thirdCategoryList = this.categoryService.queryCategoryListByParent(secondCategoryList.get(0).getCategoryId());
+				map.put("thirdCategoryList", thirdCategoryList);
+				if(thirdCategoryList!=null&&thirdCategoryList.size()>0){
+					List<Category> fourthCategoryList = this.categoryService.queryCategoryListByParent(thirdCategoryList.get(0).getCategoryId());
+					map.put("fourthCategoryList", fourthCategoryList);
+				}
+			}
+		}
+		/*List<CompanyCode> functionTypeList = sysMyTagService.selectTypeList("functionType");*/
+		return map;
+	}
+	
+	/**
+	 * 
+	 * @return 
+	 * @Description 查询下级分类
+	 * @return
+	 */
+	@RequestMapping(value = "/queryCategoryListByParent")
+	@ResponseBody
+	public List<Category> queryCategoryListByParent(String parentId) {
+		List<Category> list = this.categoryService.queryCategoryListByParent(parentId);
+		return list;
+	}
+	
+	
+	@RequestMapping(value = "/saveCategory", method = RequestMethod.POST)
+    @ResponseBody
+	public Category saveCategory(@RequestBody Category category) {
+		Integer list = (Integer)this.categoryService.selectMaxSortByParentId(category.getParentId());
+		if(list==null||list==0){
+			category.setSort(1);
+		}else{
+			category.setSort(list+1);
+		}
+		category.setCategoryId(ApplicationUtils.random32UUID());
+		category.setLevel(category.getLevel());
+		category.setParentId(category.getParentId());
+		category.setCategoryName(category.getCategoryName());
+		
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		category.setCreater(currenLoginName);
+		category.setUpdater(currenLoginName);
+		category.setCreateTime(new Date());
+		category.setUpdateTime(new Date());
+		this.categoryService.insert(category);
+		return category;
+	}
+	@RequestMapping(value = "/deleteCategory", method = RequestMethod.POST)
+    @ResponseBody
+	public Category deleteCategory(@RequestBody Category category) {
+		Category c = new Category();
+		c.setCategoryId(category.getCategoryId());
+		c.setDelFlg("1");
+		c.setUpdateTime(new Date());
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+    	c.setUpdater(currenLoginName);
+    	categoryService.update(c);
+    	return category;
+		
+	}
 }
