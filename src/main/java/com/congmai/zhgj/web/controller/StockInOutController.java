@@ -283,7 +283,12 @@ public class StockInOutController {
      		}
     	}
     	for(DeliveryMaterielVO dmo:deliveryMateriels){
-			dmo.setQualifiedCount(dmo.getQualifiedCount()==null?"0":dmo.getQualifiedCount());
+    		if(serialNum.indexOf("out")>-1){
+    			dmo.setQualifiedCount(dmo.getQualifiedCount()==null?dmo.getDeliverCount():dmo.getQualifiedCount());
+    		}else{
+    			dmo.setQualifiedCount(dmo.getQualifiedCount()==null?dmo.getAcceptCount():dmo.getQualifiedCount());
+    		}
+			
 			dmo.setUnqualifiedCount(dmo.getUnqualifiedCount()==null?"0":dmo.getUnqualifiedCount());
 			totalDeliverCount+=Integer.parseInt(dmo.getDeliverCount());
 		}
@@ -304,6 +309,7 @@ public class StockInOutController {
     	}else if (serialNum.indexOf("out")>-1){//出库
     	 deliveryMateriels = deliveryService.selectListForDetailForStockCheck(serialNum.substring(0, 32),"out");
     	}
+    	
 	 	map.put("materials", deliveryMateriels);
     	return new ResponseEntity<Map>(map, HttpStatus.OK);
     }

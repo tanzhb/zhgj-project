@@ -1,9 +1,12 @@
 package com.congmai.zhgj.web.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -17,9 +20,12 @@ import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.core.util.Constants;
+import com.congmai.zhgj.web.dao.CustomsFormMapper;
 import com.congmai.zhgj.web.dao.Delivery2Mapper;
+import com.congmai.zhgj.web.dao.DeliveryMapper;
 import com.congmai.zhgj.web.dao.DeliveryMaterielMapper;
 import com.congmai.zhgj.web.dao.DeliveryTransportMapper;
+import com.congmai.zhgj.web.dao.MaterielMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
 import com.congmai.zhgj.web.dao.OrderMaterielMapper;
 import com.congmai.zhgj.web.dao.StockInOutCheckMapper;
@@ -28,12 +34,15 @@ import com.congmai.zhgj.web.dao.StockMapper;
 import com.congmai.zhgj.web.dao.StockOutBatchMapper;
 import com.congmai.zhgj.web.dao.TakeDeliveryMapper;
 import com.congmai.zhgj.web.enums.StaticConst;
+import com.congmai.zhgj.web.model.CustomsForm;
 import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryExample;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryMaterielExample;
 import com.congmai.zhgj.web.model.DeliveryTransport;
 import com.congmai.zhgj.web.model.DeliveryTransportExample;
+import com.congmai.zhgj.web.model.DeliveryVO;
+import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.Stock;
@@ -84,6 +93,15 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	
 	@Resource
 	private StockOutBatchMapper stockOutBatchMapper;
+	
+	@Resource
+	private MaterielMapper materielMapper;
+	
+	@Resource
+	private DeliveryMapper deliveryMapper;
+	
+	@Resource
+	private CustomsFormMapper customsFormMapper;
 	
 	@Override
 	public GenericDao<TakeDelivery, String> getDao() {
@@ -410,7 +428,11 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		String deliverySerial = stockInOutRecord.getDeliverSerial();
 		old_delivery = delivery2Mapper.selectByDeliveryPrimaryKey(deliverySerial);
 		clearStockOutInfoFormMateriels(old_delivery.getDeliveryMateriels());//清除之前的出入库物料信息
-		
+		//自动生成报关单
+		OrderInfo o=orderInfoMapper.selectByPrimaryKey(old_delivery.getOrderSerial());
+		if(StaticConst.getInfo("waimao").equals(o.getTradeType())){//外贸
+		createCustomsDeclarationForm(deliverySerial,currenLoginName);
+		}
 		//更新入库记录
 		record.setUpdater(currenLoginName);
 		record.setStatus("1");//入库完成
@@ -446,6 +468,56 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		
 	}
 	
+	//自动生成报关单
+		public void createCustomsDeclarationForm(String deliverySerial ,String currenLoginName){
+			DeliveryVO d=deliveryMapper.selectDetailById(deliverySerial);
+			String orderSerial =d.getOrderSerial();//获取订单流水
+			Map<String,String>map=new HashMap<String,String>();
+			map.put("orderSerial", orderSerial);
+			map.put("invoiceSerial", null);
+			List<Materiel> materiels = materielMapper.selectMaterielByOrderSerial(map);
+			DeliveryTransportExample de=new DeliveryTransportExample();
+			com.congmai.zhgj.web.model.DeliveryTransportExample.Criteria  c=de.createCriteria();
+			c.andDelFlgEqualTo("0");
+			c.andDeliverSerialEqualTo(deliverySerial);
+			List<DeliveryTransport>ds =deliveryTransportMapper.selectByExample(de);
+			DeliveryTransport deliveryTransport=null;
+			if(CollectionUtils.isNotEmpty(ds)){
+				deliveryTransport=ds.get(0);
+			}
+			BigDecimal deliverAmount=BigDecimal.ZERO;//deliverAmount发货金额
+			BigDecimal addedTax=BigDecimal.ZERO;//addedTax增值税
+			BigDecimal customsAmount=BigDecimal.ZERO;//customsAmount关税额
+			for(Materiel materiel:materiels){
+				materiel.setMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getBillAmount()).setScale(2,BigDecimal.ROUND_HALF_UP )).toString());
+				if(!StringUtils.isEmpty(materiel.getRate())){//	税额
+					materiel.setRateMoney(new BigDecimal(materiel.getRate()).multiply(new BigDecimal(materiel.getOrderUnitPrice())).multiply(new BigDecimal(materiel.getAmount())).divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
+					addedTax=addedTax.add(new BigDecimal(materiel.getRateMoney()));
+				}
+				if(!StringUtils.isEmpty(materiel.getCustomsRate())){//关税额
+					materiel.setCustomRateMoney(new BigDecimal(materiel.getCustomsRate()).multiply(new BigDecimal(materiel.getOrderUnitPrice())).multiply(new BigDecimal(materiel.getAmount())).divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
+					customsAmount=customsAmount.add(new BigDecimal(materiel.getCustomRateMoney()));
+				}
+				materiel.setMaterielMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getAmount())).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
+				deliverAmount=deliverAmount.add(new BigDecimal(materiel.getMaterielMoney()));
+			}
+			CustomsForm customsForm=new  CustomsForm();
+			customsForm.setStatus("0");
+    		customsForm.setSerialNum(ApplicationUtils.random32UUID());
+    		customsForm.setCustomsFormType("declaration");
+    		customsForm.setCreator(currenLoginName);
+    		customsForm.setCreateTime(new Date());
+    		customsForm.setDeliverSerial(deliverySerial);
+    		customsForm.setOrderSerial(orderSerial);
+    		customsForm.setDeliverAmount(deliverAmount.toString());
+    		customsForm.setAddedTax(addedTax.toString());
+    		customsForm.setCustomsAmount(customsAmount.toString());
+    		customsForm.setShipNumber(deliveryTransport==null?"":deliveryTransport.getShipNumber());
+    		customsForm.setPlayArrivalDate(deliveryTransport==null?null:deliveryTransport.getPlayArrivalDate());
+    		customsForm.setPort(deliveryTransport==null?null:deliveryTransport.getPort());
+    		customsFormMapper.insert(customsForm);
+			
+		}
 	public  List<String> removeDuplicate(List<String> list) 
 
 	{        
@@ -520,15 +592,21 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		//takeDelivery.set(takeDeliveryParams.getTakeDelivery().getSerialNum());
 		//takeDelivery.setSerialNum(takeDeliveryParams.getTakeDelivery().getSerialNum());
 		//takeDelivery.setSerialNum(takeDeliveryParams.getTakeDelivery().getSerialNum());
-		
-		takeDelivery.setStatus(TakeDelivery.APPLY_COMPLETE); //待检验
+		DeliveryVO d=deliveryMapper.selectDetailById(takeDelivery.getDeliverSerial());
+		OrderInfo o=orderInfoMapper.selectByPrimaryKey(d.getOrderSerial());
+		if("1".equals(o.getContractContent().substring(4, 5))){//验收条款有效
+			takeDelivery.setStatus(TakeDelivery.APPLY_COMPLETE); //待检验
+			this.createStockInCheckRecord(takeDelivery,currenLoginName);
+		}else{
+			takeDelivery.setStatus(TakeDelivery.APPLY_COMPLETE); //待检验
+		}
 		takeDeliveryMapper.updateByPrimaryKeySelective(takeDelivery);
 		
 		//没有审批时，直接收货
 		TakeDelivery _takeDelivery = takeDeliveryMapper.selectByPrimaryKey(takeDelivery.getSerialNum());
 		takeDelivery.setDeliverSerial(_takeDelivery.getDeliverSerial());
 		
-		this.createStockInCheckRecord(takeDelivery,currenLoginName);
+		
 		
 		//删除已保存的收货物料
 		DeliveryMaterielExample example = new DeliveryMaterielExample();
