@@ -195,7 +195,9 @@
 	FROM orderMateriel a 
 	LEFT JOIN invoiceBillingRecord b ON a.serialNum=b.orderMaterielSerial
 	LEFT JOIN materiel c ON a.materielSerial=c.serialNum
-	WHERE a.orderSerial=#{serialNum}
+	LEFT JOIN invoice i ON i.serialNum=b.invoiceSerial
+	WHERE a.orderSerial=#{serialNum} and  i.status='2'
+	
     </select>
     
     <!--查询收付款对象的附件集合  -->

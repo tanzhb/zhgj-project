@@ -1033,7 +1033,18 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 							// 修改发票开始***************************************							
 							$scope.toEditInvoicePage = function(judgeString) {//跳转至修改发票信息页面
 								debugger;
-								var id_count = table.$('input[type="checkbox"]:checked').length;
+								 if(table.rows('.active').data().length != 1){
+										showToastr('toast-top-center', 'warning', '请选择一条数据进行修改！')
+									}else{
+										if(judgeString=='out'&&table.row('.active').data().processBase !=null){
+											showToastr('toast-top-center', 'warning', '该条数据已经申请流程审批，不能进行修改！')
+										}else if(judgeString=='in'&&table.row('.active').data().status!=0) {
+											showToastr('toast-top-center', 'warning', '该条数据已经确认收票，不能进行修改！')
+										}else {
+											var serialNum = table.$('input[type="checkbox"]:checked').val();
+											$state.go("addOrEditInvoice",{inOrOut:serialNum+judgeString});
+										}
+								/*var id_count = table.$('input[type="checkbox"]:checked').length;
 								if(id_count==0){
 									toastr.warning("请选择一条数据进行编辑");
 								}else if(id_count>1){
@@ -1041,7 +1052,8 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 								}else{
 									var serialNum = table.$('input[type="checkbox"]:checked').val();
 									$state.go("addOrEditInvoice",{inOrOut:serialNum+judgeString});
-								}
+								}*/
+									}
 							};
 							// 修改发票结束***************************************							
 
@@ -1309,6 +1321,8 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 	 	    				$scope.invoice.orderAmount=$scope.row.orderAmount;//订单金额
 	 	    				$scope.invoice.relationBuyOrSaleNum=$scope.row.orderNum;//订单编号
 	 	    				$scope.invoice.currency=$scope.row.currency;
+	 	    				$scope.invoice.unBillOrReceiptMoney=$scope.row.orderInfo.unBillOrReceiptMoney;
+	 	    				$scope.invoice.unPayOrReceiptMoney=$scope.row.orderInfo.unPayOrReceiptMoney;
 	 	    				
 		 	    			if(judgeString=='buy'){
 		 	    				$scope.invoice.supplyComId=$scope.row.comId;

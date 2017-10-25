@@ -90,7 +90,7 @@ public class Materiel {
 
     private String customsSupervisionConditions;
     
-    private String customsCode;
+    private String customsCode;//海关编码
 
     private String qualityDate;
 
@@ -114,7 +114,7 @@ public class Materiel {
     
     private String  canBillAmount;//可开/可收数量
     
-    private String  orderUnitPrice;//含税单价
+    private String  orderUnitPrice;//不含税单价
     
     private String amount ;//订单数量
     
@@ -128,9 +128,63 @@ public class Materiel {
     
     private String supplyMaterielSerial;
     
+    private String customsRate;//关税率
+    
+    private String customRateMoney;//关税额
+    
+    private String rate;//税率
+    
+    private String rateMoney;//税额
+    
+    private  String materielMoney;//金额(报关单/清关单物料中的金额)
+    
+    
+    
+   
+    
     
 
-    public String getSerialNum() {
+    public String getCustomsRate() {
+		return customsRate;
+	}
+
+	public void setCustomsRate(String customsRate) {
+		this.customsRate = customsRate;
+	}
+
+	public String getCustomRateMoney() {
+		return customRateMoney;
+	}
+
+	public void setCustomRateMoney(String customRateMoney) {
+		this.customRateMoney = customRateMoney;
+	}
+
+	public String getRate() {
+		return rate;
+	}
+
+	public void setRate(String rate) {
+		this.rate = rate;
+	}
+
+	public String getRateMoney() {
+		return rateMoney;
+	}
+
+	public void setRateMoney(String rateMoney) {
+		this.rateMoney = rateMoney;
+	}
+
+	public String getMaterielMoney() {
+		return materielMoney;
+	}
+
+	public void setMaterielMoney(String materielMoney) {
+		this.materielMoney = materielMoney;
+	}
+
+	public String getSerialNum() {
         return serialNum;
     }
 

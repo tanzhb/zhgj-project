@@ -2750,7 +2750,114 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                     });
                 }]
             }
-        })}]);
+        })
+        
+           //报关单
+        .state('customsDeclarationForm', {
+            url: "/customsDeclarationForm",
+            templateUrl: "rest/customsForm/customsDeclarationForm",
+            data: {pageTitle: '报关单'},
+            controller: "CustomsFormController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+							'assets/global/plugins/datatables/datatables.min.css',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+							'assets/global/plugins/datatables/datatables.all.min.js',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+							'assets/apps/scripts/angular-file-upload.min.js',
+							  'assets/apps/service/orderService.js',
+							'assets/apps/service/CustomsFormService.js',
+							'assets/apps/controllers/CustomsFormController.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        
+          // 新增修改报关单/清关单
+        .state('addCustomsForm', {
+            url: "/addCustomsForm?:serialNum&:customsFormType",//:buyOrSale&:priceType
+            templateUrl: "rest/customsForm/addCustomsForm",
+            data: {pageTitle: '新增报关单'},
+            controller: "CustomsFormController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				  'assets/apps/service/orderService.js',
+				'assets/apps/service/CustomsFormService.js',
+				'assets/apps/controllers/CustomsFormController.js'
+                      ]
+                    });
+                }]
+            }
+        })
+           // 查看报关单/清关单
+        .state('viewCustomsForm', {
+            url: "/viewCustomsForm?:serialNum&:customsFormType",
+            templateUrl: "rest/customsForm/viewCustomsForm",
+            data: {pageTitle: '查看详情'},
+            controller: "CustomsFormController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				  'assets/apps/service/orderService.js',
+				'assets/apps/service/CustomsFormService.js',
+				'assets/apps/controllers/CustomsFormController.js'
+                      ]
+                    });
+                }]
+            }
+        })
+            //清关单
+        .state('customsClearanceForm', {
+            url: "/customsClearanceForm",
+            templateUrl: "rest/customsForm/customsClearanceForm",
+            data: {pageTitle: '清关单'},
+            controller: "CustomsFormController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+							'assets/global/plugins/datatables/datatables.min.css',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+							'assets/global/plugins/datatables/datatables.all.min.js',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+							'assets/apps/scripts/angular-file-upload.min.js',
+							  'assets/apps/service/orderService.js',
+							'assets/apps/service/CustomsFormService.js',
+							'assets/apps/controllers/CustomsFormController.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        
+        
+        }]);
 
 
 
@@ -3259,6 +3366,35 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 						   html += "<li><a>入库检验确认</a></li>";
 					   }else html += "<li><a>出库检验确认</a></li>";
 				   }
+			   }else if('customsClearanceForm' == toState.name){//清关单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>清关单列表</a></li>";					 
+			   }else if('customsDeclarationForm' == toState.name){//报关单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>报关单列表</a></li>";					 
+			   }else if('addCustomsForm' == toState.name){//新增清关单/报关单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>"; 
+					 if(toParams.customsFormType == 'clearance'){
+						 html += "<li><a>采购订单</a><i class='fa fa-angle-right'></i></li><li><a ui-sref='customsClearanceForm'>清关单列表</a><i class='fa fa-angle-right'></i></li";
+					 } else html += "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li><li><a  ui-sref='customsDeclarationForm'>报关单列表</a><i class='fa fa-angle-right'></i></li>";
+				 		if(toParams.serialNum != undefined){
+				 			if(toParams.customsFormType == 'clearance'){
+								 html += "<li><a>修改清关单</a></li>";
+							 } else html += "<li><a>修改报关单</a></li>";
+						 } else {
+							 if(toParams.customsFormType == 'clearance'){
+								 html += "<li><a>新增清关单</a></li>";
+							 } else html += "<li><a>新增报关单</a></li>";
+						 }
+				 		
+			   }else if('viewCustomsForm' == toState.name){//查看清关单/报关单
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>";
+					 if(toParams.customsFormType == 'clearance'){
+						 html += "<li><a>采购订单</a><i class='fa fa-angle-right'></i></li><li><li><a ui-sref='customsClearanceForm'>清关单列表</a><i class='fa fa-angle-right'></i></li><li><a>查看清关单</a></li>";
+					 } else html += "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li><li><a ui-sref='customsDeclarationForm'>报关单列表</a><i class='fa fa-angle-right'></i></li><li><a>查看报关单</a></li>";
+				 	
 			   }else if('solrSearch' == toState.name){//全文检索   
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 			 		"<li><a>全文检索</a></i></li>";	

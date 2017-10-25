@@ -186,7 +186,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 					var param;
 					for(var i=0;i < $scope.takeDeliveryMateriels.length;i++){
 						param = {};
-//						param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].orderMaterielSerial;
+					param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].orderMaterielSerial;//生成库存使用到
 //						param.batchNum = $scope.takeDeliveryMateriels[i].batchNum;
 //						param.manufactureDate = $scope.takeDeliveryMateriels[i].manufactureDate;
 //						param.deliverCount = $scope.takeDeliveryMateriels[i].deliverCount;

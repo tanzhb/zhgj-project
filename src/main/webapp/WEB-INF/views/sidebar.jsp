@@ -137,6 +137,13 @@
                     </a>
                 </li>
                 </shiro:hasPermission>
+                 <shiro:hasPermission name="zhgj:saleOrder:*">
+                <li>
+                    <a ui-sref="customsDeclarationForm">
+                        报关单</span>
+                    </a>
+                </li>
+                </shiro:hasPermission>
             </ul>
         </li>
         </shiro:hasPermission>
@@ -163,6 +170,13 @@
                 <li>
                     <a ui-sref="purchaseForecast">
                          采购预测</span>
+                    </a>
+                </li>
+                </shiro:hasPermission>
+                	<shiro:hasPermission name="zhgj:buyOrder:*">
+                <li>
+                    <a ui-sref="customsClearanceForm">
+                      清关单</span>
                     </a>
                 </li>
                 </shiro:hasPermission>
