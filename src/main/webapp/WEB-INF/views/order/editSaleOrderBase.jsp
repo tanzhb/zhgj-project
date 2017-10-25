@@ -58,8 +58,8 @@ margin-right: 20px;
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>销售类型：</label>
                                  <div class="">
                                  	<div ng-hide="saleOrderInput">
-		                               	<input type="radio"  ng-model="saleOrder.orderType" name="saleType" ng-checked="saleOrder.orderType=='普通销售'" value="普通销售"> 普通销售
-		                       			<input type="radio"  ng-model="saleOrder.orderType" name="saleType" ng-checked="saleOrder.orderType=='代理销售'" value="代理销售"> 代理销售
+		                               	<input type="radio"  ng-model="saleOrder.orderType" name="saleType" ng-checked="saleOrder.orderType=='贸易销售'" value="贸易销售"> 贸易销售
+		                       			<input type="radio"  ng-model="saleOrder.orderType" name="saleType" ng-checked="saleOrder.orderType=='委托销售'" value="委托销售"> 委托销售
 	                                 </div>
                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.orderType}} </p>
                                  </div>
@@ -178,7 +178,7 @@ margin-right: 20px;
                      <!--/row-->
                      
                      <!--/row-->
-                     <div ng-if="saleOrder.orderType =='普通销售' && saleOrder.tradeType =='内贸'">
+                     <div ng-if="saleOrder.orderType =='贸易销售' && saleOrder.tradeType =='内贸'">
                      <div class="row">
                      		<!--/span-->
                          <div class="col-md-4">
@@ -284,12 +284,12 @@ margin-right: 20px;
                          </div>
                          <div class="col-md-4">
                               <div class="form-group ">
-                                 <label class="control-label bold">客户合同号：</label>
+                                 <label class="control-label bold">销售合同号：</label>
                                   <div class="">
-                                  <input type="text" name="contractNumber" class="form-control" ng-hide="saleOrderInput" ng-model="contract.contractNumber"  >
+                                  <input type="text" name="contractNum" class="form-control" ng-hide="saleOrderInput" ng-model="contract.contractNum"  >
                                       <div class="form-control-focus"> </div>
-                                      <span class="help-block" ng-hide="saleOrderInput">请输入客户合同号</span>
-                                      <p class="form-control-static" ng-show="saleOrderShow"> {{contract.contractNumber}} </p>
+                                      <span class="help-block" ng-hide="saleOrderInput">请输入合同号</span>
+                                      <p class="form-control-static" ng-show="saleOrderShow"> {{contract.contractNum}} </p>
                                   </div>
                               </div>
                           </div>
@@ -309,7 +309,7 @@ margin-right: 20px;
                      </div>
                      <!--/row-->
                      </div>
-                     <div ng-if="saleOrder.orderType =='普通销售' && saleOrder.tradeType =='外贸'">
+                     <div ng-if="saleOrder.orderType =='贸易销售' && saleOrder.tradeType =='外贸'">
                      <div class="row">
                      		<!--/span-->
                          <div class="col-md-4">
@@ -454,7 +454,7 @@ margin-right: 20px;
                      </div>
                      <!--/row-->
                      </div>
-                     <div ng-if="saleOrder.orderType =='代理销售'">
+                     <div ng-if="saleOrder.orderType =='委托销售'">
                      <div class="row">
                      		<!--/span-->
                          <div class="col-md-4">
@@ -505,7 +505,7 @@ margin-right: 20px;
                                  <div class="">
                                  		<select class="form-control" id="settlementClause"  ng-hide="saleOrderInput" name="settlementClause"  ng-model="saleOrder.settlementClause" >
                                            <option value=""></option>
-                                           <option value="普通销售" >普通销售</option>
+                                           <option value="贸易销售" >贸易销售</option>
                                           	<option value="进销差" >进销差</option>
                                             <option value="服务费" >服务费</option>
                                             <option value="折扣折让" >折扣折让</option>
@@ -1174,20 +1174,20 @@ margin-right: 20px;
 			         <div class="table-scrollable">
                           <table class="table table-bordered table-hover">
                               <thead>
-                                  <tr>
-                                      <th>支付类型</th>
-                                      <th>支付节点</th>
-                                      <th>账期</th>
-                                      <th>支付比率%</th>
-                                      <th>支付金额</th>
-                                      <th>支付方式</th>
-                                      <th>开票方式</th>
-                                      <th>开票金额</th>
-                                      <th>未开金额</th>
-                                      <th>备注</th>
-                                      <th style="width:100px;"></th>
-                                  </tr>
-                              </thead>
+                                 <tr>
+                                     <th style="width:150px">支付类型</th>
+                                     <th style="width:150px">支付节点</th>
+                                     <th style="width:70px">账期</th>
+                                     <th style="width:50px">支付比率%</th>
+                                     <th style="width:150px">支付金额</th>
+                                     <th style="width:150px">支付方式</th>
+                                     <th style="width:150px">开票方式</th>
+                                     <th style="width:150px">开票金额</th>
+                                     <th style="width:150px">未开金额</th>
+                                     <th style="width:150px">备注</th>
+                                     <th style="width:100px;"></th>
+                                 </tr>
+                             </thead>
                               <tbody>
                                   <tr ng-repeat="_CSD in clauseSettlement.CSD track by $index" ng-mouseover="showOperation('csd',$index)" ng-mouseleave="hideOperation('csd',$index)">
                                       <td>
@@ -1252,7 +1252,7 @@ margin-right: 20px;
 		                          </td>
 		                          <td>
                                      		<input type="text" id="unbilledAmount[$index]" name="unbilledAmount" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].unbilledAmount" 
-                                     		ng-keyup="clearNoNumPoint(clauseSettlement.CSD[$index],'unbilledAmount');_arithmeticBilledAmount(this)" >
+                                     		readonly >
 		                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.unbilledAmount}} </p>
 		                          </td>
 			                          <td>

@@ -78,9 +78,17 @@ public class DeliveryMaterielServiceImpl extends GenericServiceImpl<DeliveryMate
 		Criteria c = example.createCriteria();
 		c.andDelFlgEqualTo("0");
 		if("in".equals(type)){
+			
 			c.andDeliverSerialEqualTo("");
 			c.andInOutFlagEqualTo("1");//入库
 			Criteria c2 = example.or();
+			if(StringUtils.isEmpty(record.getBuyComId())){
+				c.andBuyComIdIsNull();
+				c2.andBuyComIdIsNull();
+			}else{
+				c.andBuyComIdEqualTo(record.getBuyComId());
+				c2.andBuyComIdEqualTo(record.getBuyComId());
+			}
 			c2.andDeliverSerialEqualTo(""); 
 			c2.andInOutFlagIsNull();//出库;
 			c2.andDelFlgEqualTo("0");
@@ -90,6 +98,13 @@ public class DeliveryMaterielServiceImpl extends GenericServiceImpl<DeliveryMate
 			c.andTakeDeliverSerialEqualTo(""); 
 			c.andInOutFlagEqualTo("0");//出库
 			Criteria c2 = example.or();
+			if(StringUtils.isEmpty(record.getSupplyComId())){
+				c.andSupplyComIdIsNull();
+				c2.andSupplyComIdIsNull();
+			}else{
+				c.andSupplyComIdEqualTo(record.getSupplyComId());
+				c2.andSupplyComIdEqualTo(record.getSupplyComId());
+			}
 			c2.andTakeDeliverSerialEqualTo(""); 
 			c2.andInOutFlagIsNull();//出库
 			c2.andDelFlgEqualTo("0");

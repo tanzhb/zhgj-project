@@ -139,7 +139,7 @@ margin-right: 20px;
                      <!--/row-->
                      
                      <!--/row-->
-                     <div ng-if="saleOrder.orderType =='普通销售' && saleOrder.tradeType =='内贸'">
+                     <div ng-if="saleOrder.orderType =='贸易销售' && saleOrder.tradeType =='内贸'">
                      <div class="row">
                      		<!--/span-->
                          <div class="col-md-4">
@@ -217,9 +217,9 @@ margin-right: 20px;
                      <div class="row">
                         	<div class="col-md-4">
                               <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">客户合同号：</label>
+                                 <label class="control-label col-md-5 bold">销售合同号：</label>
                                   <div class="control-label col-md-7">
-                                      <p  > {{contract.contractNumber}} </p>
+                                      <p  > {{contract.contractNum}} </p>
                                   </div>
                               </div>
                           </div>
@@ -258,7 +258,7 @@ margin-right: 20px;
                      </div>
                      <!--/row-->
                      </div>
-                     <div ng-if="saleOrder.orderType =='普通销售' && saleOrder.tradeType =='外贸'">
+                     <div ng-if="saleOrder.orderType =='贸易销售' && saleOrder.tradeType =='外贸'">
                      <div class="row">
                      		<!--/span-->
                          <div class="col-md-4">
@@ -387,7 +387,7 @@ margin-right: 20px;
                      </div>
                      <!--/row-->
                      </div>
-                     <div ng-if="saleOrder.orderType =='代理销售'">
+                     <div ng-if="saleOrder.orderType =='委托销售'">
                      <div class="row">
                      		<!--/span-->
                          <div class="col-md-4">

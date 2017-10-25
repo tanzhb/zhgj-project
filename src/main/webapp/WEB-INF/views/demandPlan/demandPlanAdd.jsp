@@ -15,150 +15,211 @@
 	float: left;
 }
 </style>
-<!-- <div class="page-bar">
-    <ul class="page-breadcrumb">
-        <li>
-            <i class="fa fa-home"></i>
-            <a ui-sref="dashboard">首页</a>
-            <i class="fa fa-angle-right"></i>
-        </li>
-        <li>
-            <a ui-sref="datatablesmanaged">基础数据</a>
-            <i class="fa fa-angle-right"></i>
-        </li>
-        <li>
-            <a ui-sref="demandPlan">需求计划</a>
-        </li>
-    </ul>
-
-</div> -->
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
 <div class="row">
-    <div class="col-md-12">
-        <!-- BEGIN EXAMPLE TABLE PORTLET-->
-        <div class="portlet bordered">
-            <div class="portlet-body">
-				<div class="portlet light ">
-                        <div class="portlet-title">
-                            <div class="caption">需求计划</div>
-                            <div class="actions">
-                              
-                                <button   ng-hide="demandPlanAdd" class="btn green btn-sm btn-circle" ng-click="saveDemandPlan()">
-                                            <i class="fa fa-check"></i> 保存 </button>
-                                <button   ng-show="demandPlanView" class="btn purple  btn-sm btn-circle" ng-click="editDemandPlanBasic()">
-                                            <i class="fa fa-edit"></i> 编辑 </button>
-                                <button   ng-hide="demandPlanAdd" class="btn defualt  btn-sm btn-circle" ng-click="cancelDemandPlanBasic()">
-                                            <i class="fa fa-mail-reply"></i> 取消 </button>
-                            </div>
-                        </div>
-                        <div class="portlet-body form">
-                            <form  id="demandPlanForm" >
-								<div class="form-body">
-									<div class="alert alert-danger display-hide">
-                                                <button class="close" data-close="alert"></button>请先输入正确数据！</div>
-									<div class="row">
-										<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold" for="demandPlanNum">需求计划编号 <span class="required"> * </span></label>
-                                                    <div class="">
-                                                        <input type="text" class="form-control" id="demandPlanNum" name="demandPlanNum" ng-model="demandPlan.demandPlanNum" ng-hide="demandPlanAdd" >
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="demandPlanView">{{demandPlan.demandPlanNum}}</p>
-                                                    </div>
-                                            </div>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-                                                   <label class="control-label bold" for="buyComId">客户 <span class="required"> * </span></label>
-	                                              <div class="">
-	                                                   <select class="form-control customer" selectpicker data-live-search="true"  id="buyComId"  name="buyComId" ng-model="demandPlan.buyComId" ng-hide="demandPlanAdd"  data-size="8">
-	                                                        <option value=""></option>
-	                                                        <option  ng-repeat="customer in customers" value="{{customer.comId}}">{{customer.comName}}</option>
-	                                                   </select>
-	                                                   <div class="form-control-focus"> </div>
-                                                        <p class="control-label left" ng-show="demandPlanView">{{demandPlan.buyComName}}</p>
-	                                              </div>
-                                            </div>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold" for="description">描述</label>
-                                                    <div class="">
-                                                        <input type="text" class="form-control" id="description"  ng-model="demandPlan.description" ng-hide="demandPlanAdd" >
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="demandPlanView">{{demandPlan.description}}</p>
-                                                    </div>
-                                            </div>
-										</div>
-									</div>
-									<!--/row-->
-									<div class="row">
-										<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold" for="maker">制单人</label>
-                                                    <div class="">
-                                                        <input type="text" class="form-control" id="maker"  ng-model="demandPlan.maker" ng-hide="demandPlanAdd" >
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="demandPlanView">{{demandPlan.maker}}</p>
-                                                    </div>
-                                            </div>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold" for="releaseDate">制单日期 </label>
-                                                    <div class="">
-                                                        <input type="text" set-date class="form-control date-picker" size="16" data-date-format="yyyy-mm-dd" data-date-viewmode="years"
-                                                         id="releaseDate" ng-model="demandPlan.releaseDate" ng-hide="demandPlanAdd" readonly="readonly">
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="demandPlanView">{{demandPlan.releaseDate}}</p>
-                                                    </div>
-                                            </div>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold" for="tel">备注</label>
-                                                    <div class="">
-                                                        <input type="text" class="form-control" id="remark"  ng-model="demandPlan.remark" ng-hide="demandPlanAdd" >
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="demandPlanView">{{demandPlan.remark}}</p>
-                                                    </div>
-                                            </div>
-										</div>
-									</div>
-								</div>
-							</form>
-         				</div>
-				</div>
-				
-        </div>
-        <!-- END EXAMPLE TABLE PORTLET-->
-    </div>
-</div>
-</div>
-<div class="row">
 	<div class="col-md-12">
-		<div class="portlet light" id="comViewPage">
-			<div class="portlet-body" id="comViewContent">
-				<ul class="nav nav-tabs">
-					
-				 	<li class="active">
-                 		 <a data-target="#tab_1_1" data-toggle="tab">物料信息</a>
-              		</li> 
-              		<li>
-						 <a href="javascript:;"  class="btn blue" style="padding: 10px 15px;"  ng-click="addMateriel()" >
+		<!-- BEGIN EXAMPLE TABLE PORTLET-->
+	 <div class="portlet bordered">
+            <div class="portlet-body">
+				<div class="portlet light "> 
+
+
+		<ul class="nav nav-tabs" id="demandPlanUl">
+			<li ng-hide="saveButton" class="dropdown pull-right tabdrop" >
+								<button ng-hide="demandPlanAdd"
+										class="btn green btn-sm btn-circle"
+										ng-click="saveDemandPlan()">
+										<i class="fa fa-check"></i> 保存
+									</button>
+									<button ng-show="demandPlanView"
+										class="btn purple  btn-sm btn-circle"
+										ng-click="editDemandPlanBasic()">
+										<i class="fa fa-edit"></i> 编辑
+									</button>
+									<button ng-hide="demandPlanAdd"
+										class="btn defualt  btn-sm btn-circle"
+										ng-click="cancelDemandPlanBasic()">
+										<i class="fa fa-mail-reply"></i> 取消
+									</button>
+                                
+			</li>
+			<li ng-show="materielButton" class="dropdown pull-right tabdrop" >
+                   <button class="btn blue btn-sm btn-circle" ng-click="addMateriel()">
                               <i class="fa fa-plus"></i>新增物料
-                         </a>    
-					</li>
+					</button>
 					<!-- <li>
 						 <a href="javascript:;" data-target="#tab_1_2" data-toggle="tab" class="btn blue btn-outline" style="padding: 10px 15px;" ng-click="addMateriel()" >
                               <i class="fa fa-plus"></i>新增物料
                          </a>
-					</li> -->
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pane fade active in" id="tab_1_1">
-                    	<div class="" id="tab2_c">
+					</li>   -->       
+			</li>
+			<li class="active bold"><a data-target="#tab_1_1"
+				data-toggle="tab">基本信息</a></li>
+			<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">物料信息</a>
+			</li>
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane fade active in" id="tab_1_1">
+				<!-- <div class="portlet bordered">
+					portlet-body
+					<div class="portlet-body">
+						<div class="portlet light "> -->
+							<div class="portlet-body form">
+								<form id="demandPlanForm">
+									<div class="form-body">
+										<div class="alert alert-danger display-hide">
+											<button class="close" data-close="alert"></button>
+											请先输入正确数据！
+										</div>
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold" for="demandPlanNum">需求计划号
+														<span class="required"> * </span>
+													</label>
+													<div class="">
+														<input type="text" class="form-control" id="demandPlanNum"
+															name="demandPlanNum" ng-model="demandPlan.demandPlanNum"
+															ng-hide="demandPlanAdd">
+														<div class="form-control-focus"></div>
+														<p class="control-label left" ng-show="demandPlanView">{{demandPlan.demandPlanNum}}</p>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold" for="buyComId">需求客户
+														<span class="required"> * </span>
+													</label>
+													<div class="">
+														<select class="form-control customer" selectpicker
+															data-live-search="true" id="buyComId" name="buyComId"
+															ng-model="demandPlan.buyComId" ng-hide="demandPlanAdd"
+															data-size="8">
+															<option value=""></option>
+															<option ng-repeat="customer in customers"
+																value="{{customer.comId}}">{{customer.comName}}</option>
+														</select>
+														<div class="form-control-focus"></div>
+														<p class="control-label left" ng-show="demandPlanView">{{demandPlan.buyComName}}</p>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold" for="customerPlanNum">客户计划号</label>
+													<div class="">
+														<input type="text" class="form-control" id="customerPlanNum"
+															ng-model="demandPlan.customerPlanNum" ng-hide="demandPlanAdd">
+														<div class="form-control-focus"></div>
+														<p class="control-label left" ng-show="demandPlanView">{{demandPlan.customerPlanNum}}</p>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!--/row-->
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold" for="source">需求来源</label>
+													<div class="">
+														<input type="text" class="form-control" id="source"
+															ng-model="demandPlan.source" ng-hide="demandPlanAdd">
+														<div class="form-control-focus"></div>
+														<p class="control-label left" ng-show="demandPlanView">{{demandPlan.source}}</p>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold" for="customerPrincipal">客户负责人</label>
+													<div class="">
+														<input type="text" class="form-control" id="customerPrincipal"
+															ng-model="demandPlan.customerPrincipal" ng-hide="demandPlanAdd">
+														<div class="form-control-focus"></div>
+														<p class="control-label left" ng-show="demandPlanView">{{demandPlan.customerPrincipal}}</p>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold" for="maker">制单人</label>
+													<div class="">
+														<input type="text" class="form-control" id="maker"
+															ng-model="demandPlan.maker" ng-hide="demandPlanAdd">
+														<div class="form-control-focus"></div>
+														<p class="control-label left" ng-show="demandPlanView">{{demandPlan.maker}}</p>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!-- row -->
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold" for="description">需求描述</label>
+													<div class="">
+														<input type="text" class="form-control" id="description"
+															ng-model="demandPlan.description" ng-hide="demandPlanAdd">
+														<div class="form-control-focus"></div>
+														<p class="control-label left" ng-show="demandPlanView">{{demandPlan.description}}</p>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold" for="releaseDate">制单日期
+													</label>
+													<div class="">
+														<input type="text" set-date
+															class="form-control date-picker" size="16"
+															data-date-format="yyyy-mm-dd" data-date-viewmode="years"
+															id="releaseDate" ng-model="demandPlan.releaseDate"
+															ng-hide="demandPlanAdd" readonly="readonly">
+														<div class="form-control-focus"></div>
+														<p class="control-label left" ng-show="demandPlanView">{{demandPlan.releaseDate}}</p>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold" for="tel">备注</label>
+													<div class="">
+														<input type="text" class="form-control" id="remark"
+															ng-model="demandPlan.remark" ng-hide="demandPlanAdd">
+														<div class="form-control-focus"></div>
+														<p class="control-label left" ng-show="demandPlanView">{{demandPlan.remark}}</p>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!-- row -->
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold" for="updateDate">更新日期
+													</label>
+													<div class="">
+														<input type="text" set-date
+															class="form-control date-picker" size="16"
+															data-date-format="yyyy-mm-dd" data-date-viewmode="years"
+															id="releaseDate" ng-model="demandPlan.updateDate"
+															ng-hide="demandPlanAdd" readonly="readonly">
+														<div class="form-control-focus"></div>
+														<p class="control-label left" ng-show="demandPlanView">{{demandPlan.updateDate}}</p>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!-- row -->
+									</div>
+								</form>
+							</div>
+				
+			</div>
+			<div class="tab-pane fade in" id="tab_1_2">
+					<div class="" id="tab2_c">
                     		 <div class="portlet-body form">
                                     <div class="table-scrollable">
                                         <table class="table table-striped table-bordered table-advance table-hover">
@@ -248,12 +309,44 @@
                           				</div>
 							<!-- END SAMPLE TABLE PORTLET-->
 						</div>
+			</div>
+		</div>
+			 	</div>
+					</div>
+				</div> 
+	</div>
+</div>
+<!-- END EXAMPLE TABLE PORTLET-->
+
+<!-- <div class="row">
+	<div class="col-md-12">
+		<div class="portlet light" id="comViewPage">
+			<div class="portlet-body" id="comViewContent">
+				<ul class="nav nav-tabs">
+					
+				 	<li class="active">
+                 		 <a data-target="#tab_1_1" data-toggle="tab">物料信息</a>
+              		</li> 
+              		<li>
+						 <a href="javascript:;"  class="btn blue" style="padding: 10px 15px;"  ng-click="addMateriel()" >
+                              <i class="fa fa-plus"></i>新增物料
+                         </a>    
+					</li>
+					<li>
+						 <a href="javascript:;" data-target="#tab_1_2" data-toggle="tab" class="btn blue btn-outline" style="padding: 10px 15px;" ng-click="addMateriel()" >
+                              <i class="fa fa-plus"></i>新增物料
+                         </a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane fade active in" id="tab_1_1">
+                    	
                     </div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
+</div> -->
 
 <jsp:include page="selectMateriel.jsp"></jsp:include>
 

@@ -204,9 +204,9 @@ margin-right: 20px;
                   <div class="row">
                   		<div class="col-md-4">
                              <div class="form-group ">
-                                <label class="control-label col-md-5 bold">供应商合同号：</label>
+                                <label class="control-label col-md-5 bold">采购合同号：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{contract.contractNumber}} </p>
+                                     <p  > {{contract.contractNum}} </p>
                                  </div>
                              </div>
                          </div>
@@ -366,7 +366,7 @@ margin-right: 20px;
                      </div>
                      <!--/row-->
                      </div>
-                     <div ng-if="buyOrder.orderType =='代理采购'">
+                     <div ng-if="buyOrder.orderType =='委托采购'">
                      <div class="row">
                      	<div class="col-md-4">
                          	<div class="form-group ">

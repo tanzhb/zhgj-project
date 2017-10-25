@@ -17,14 +17,14 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	    			$scope.demandPlanView =true;
 	    		}
 	    		selectParentMateriel();//加载物料列表
-	    		handle.datePickersInit("auto bottom");
+	    		handle.datePickersInit("bottom");
 	    		initCustomers();
 	 		}else if($location.path()=="/demandPlanView"){
 	 			getDemandPlanInfo($stateParams.serialNum);
 	 			selectParentMateriel();
 	 			$scope.serialNums = [];
 	 			selectSaleOrderTable();//加载物料列表
-	 			handle.datePickersInit();
+	 			handle.datePickersInit("auto bottom");
 	 			initSuppliers();
 	 		}else{
 	 			demandPlanMaterielList();
@@ -977,7 +977,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	        * 需求物料初始化日期控件
 	        */
 	       $scope.repeatDone = function(){
-	    	   handle.datePickersInit();
+	    	   handle.datePickersInit("auto bottom");
 	       };
 	       
 	       
@@ -1321,7 +1321,24 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	       
 	       /*******************************************历史订单End********************************************/
 	           
-	           
+	       
+
+		       $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+		        // 获取已激活的标签页的名称
+		        var activeTab = $(e.target).text(); 
+		        // 获取前一个激活的标签页的名称
+		       // var previousTab = $(e.relatedTarget).text(); 
+		        var absurl = $location.absUrl();
+		        if(activeTab=="基本信息"){
+		        	$scope.saveButton = false;
+		        	$scope.materielButton = false;
+		        	$scope.$apply();
+		        }else if(activeTab=="物料信息"){
+		        	$scope.saveButton = true;
+		        	$scope.materielButton = true;
+		        	$scope.$apply();
+		        }
+		     });
 	           
 	       /*************************************************查看需求计划物料START***********************************************/
 	           /*var e=$("#sample_1");

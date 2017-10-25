@@ -81,7 +81,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
             		$scope.saleOrder.seller ="中航能科（上海）能源科技有限公司";
             		
             		$scope.contract.contractType="销售合同";
-            		$scope.saleOrder.orderType="普通销售";
+            		$scope.saleOrder.orderType="贸易销售";
             		$scope.saleOrder.tradeType="内贸";
             		$scope.saleOrder.rate = 17;
                 	//合同内容
@@ -216,7 +216,9 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
        		     function(data){
        		    	$scope.saleOrder = data;
        		    	$scope.contract.orderSerial = data.serialNum;
-       		    	$scope.contract.contractNum = $scope.saleOrder.orderNum;
+       		    	if(isNull($scope.contract.contractNum)){
+       		    		$scope.contract.contractNum = $scope.saleOrder.orderNum;
+       		    	}
 	   	    		$scope.contract.comId = $scope.saleOrder.buyComId;
 	   	    		$scope.contract.signDate = $scope.saleOrder.orderDate;
 	   	    		orderService.saveContract($scope.contract).then(
@@ -254,7 +256,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     		$state.go("saleOrder");
     		return;
 		}
-    	$scope.getSaleOrderInfo($scope.saleOrder.serialNum);
+    	$scope.getSaleOrderInfo($scope.saleOrder.serialNum,$stateParams.taskId, $stateParams.comments,$stateParams.processInstanceId);
     	$scope.cancelOrder();
     	
     };
@@ -1962,73 +1964,103 @@ var e = $("#form_clauseSettlement"),
     
     var _index = 0;
     /**
-      * ClauseFramework新增一行
-      */
-    $scope.addCSD = function(){
-    	if($scope.clauseSettlement.CSD){}else{$scope.clauseSettlement.CSD =[{}]}
- 	    
-    	$scope.clauseSettlement.CSD[_index] = {};
- 	    $scope.clauseSettlement.CSD[_index].deliveryRate = 100 - $scope._totalRate();
- 	    $scope.clauseSettlement.CSD[_index].deliveryAmount = ($scope.totalOrderAmount()*$scope.clauseSettlement.CSD[_index].deliveryRate/100).toFixed(2);
- 	    $scope.clauseSettlement.CSD[_index].billingAmount = $scope.clauseSettlement.CSD[_index].deliveryAmount;
- 	    $scope.clauseSettlement.CSD[_index].unbilledAmount = 0;
- 	    
- 	   _index++;
-    };
-    
-    
-    $scope._totalRate  = function() {//计算总的支付比例
-       	var totalRate = 0;
-    	for(var i=0;i<$scope.clauseSettlement.CSD.length;i++){
-    		if($scope.clauseSettlement.CSD[i].deliveryRate){
-    			totalRate = totalRate + Number($scope.clauseSettlement.CSD[i].deliveryRate);
-    		}
-       	}
-    	return totalRate;
+     * ClauseFramework新增一行
+     */
+   $scope.addCSD = function(){
+   	if($scope.clauseSettlement.CSD){}else{$scope.clauseSettlement.CSD =[{}]}
+	    
+   	$scope.clauseSettlement.CSD[_index] = {};
+	    $scope.clauseSettlement.CSD[_index].deliveryRate = 100 - $scope._totalRate();
+	    $scope.clauseSettlement.CSD[_index].deliveryAmount = ($scope.totalOrderAmount()*$scope.clauseSettlement.CSD[_index].deliveryRate/100).toFixed(2);
+	    $scope.clauseSettlement.CSD[_index].billingAmount =  Number($scope._totaldeliveryAmount()) - Number($scope._totalbillingAmount());
+	    $scope.clauseSettlement.CSD[_index].unbilledAmount = 0;
+	    
+	   _index++;
    };
    
-   $scope._arithmeticRate  = function(scope) {//计算支付比例
-      	
+   
+   $scope._totalRate  = function() {//计算总的支付比例
+      	var totalRate = 0;
+   	for(var i=0;i<$scope.clauseSettlement.CSD.length;i++){
+   		if($scope.clauseSettlement.CSD[i].deliveryRate){
+   			totalRate = totalRate + Number($scope.clauseSettlement.CSD[i].deliveryRate);
+   		}
+      	}
+   	return totalRate;
+  };
+  
+  
+ $scope._totalUnbilledAmount  = function() {//计算所有未开票金额
+     	var totalUnbilledAmount = 0;
+  	for(var i=0;i<$scope.clauseSettlement.CSD.length;i++){
+  		if($scope.clauseSettlement.CSD[i].unbilledAmount){
+  			totalUnbilledAmount = totalUnbilledAmount + Number($scope.clauseSettlement.CSD[i].unbilledAmount);
+  		}
+     	}
+  	return totalUnbilledAmount;
+ };
+ 
+ $scope._totalbillingAmount  = function() {//计算所有开票金额
+   	var totalbillingAmount = 0;
+	for(var i=0;i<$scope.clauseSettlement.CSD.length;i++){
+		if($scope.clauseSettlement.CSD[i].billingAmount){
+			totalbillingAmount = totalbillingAmount + Number($scope.clauseSettlement.CSD[i].billingAmount);
+		}
+   	}
+	return totalbillingAmount;
+};
+$scope._totaldeliveryAmount  = function() {//计算所有支付金额
+	var totaldeliveryAmount = 0;
+	for(var i=0;i<$scope.clauseSettlement.CSD.length;i++){
+		if($scope.clauseSettlement.CSD[i].deliveryAmount){
+			totaldeliveryAmount = totaldeliveryAmount + Number($scope.clauseSettlement.CSD[i].deliveryAmount);
+		}
+	}
+	return totaldeliveryAmount;
+};
+  
+  $scope._arithmeticRate  = function(scope) {//计算支付比例
+     	
 	   scope._CSD.deliveryRate =  ((scope._CSD.deliveryAmount/$scope.totalOrderAmount())*100).toFixed(2);
 	   
 	   if($scope._totalRate()>100){
+     		scope._CSD.deliveryRate = scope._CSD.deliveryRate - $scope._totalRate() + 100
+     	}
+  	
+	   $scope._arithmeticDeliveryAmount(scope);
+ };
+ 
+   $scope._arithmeticDeliveryAmount  = function(scope) {//计算支付金额
+      	if($scope._totalRate()>100){
       		scope._CSD.deliveryRate = scope._CSD.deliveryRate - $scope._totalRate() + 100
       	}
    	
-	   $scope._arithmeticDeliveryAmount(scope);
+   	if(scope._CSD.deliveryRate){
+      		scope._CSD.deliveryAmount =  ($scope.totalOrderAmount()*scope._CSD.deliveryRate/100).toFixed(2);
+      	}
+   	scope._CSD.billingAmount = (Number($scope._totaldeliveryAmount()) - Number($scope._totalbillingAmount()) + Number(scope._CSD.billingAmount)).toFixed(2);
+  		scope._CSD.unbilledAmount = 0 ;
   };
   
-    $scope._arithmeticDeliveryAmount  = function(scope) {//计算支付金额
-       	if($scope._totalRate()>100){
-       		scope._CSD.deliveryRate = scope._CSD.deliveryRate - $scope._totalRate() + 100
-       	}
-    	
-    	if(scope._CSD.deliveryRate){
-       		scope._CSD.deliveryAmount =  ($scope.totalOrderAmount()*scope._CSD.deliveryRate/100).toFixed(2);
-       	}
-       	scope._CSD.billingAmount = scope._CSD.deliveryAmount;
-   		scope._CSD.unbilledAmount = 0
-   };
-   
-   $scope._arithmeticUnbilledAmount  = function(scope) {//计算未开金额
-       	if(scope._CSD.billingAmount&&scope._CSD.deliveryAmount){
-       		scope._CSD.unbilledAmount =  (Number(scope._CSD.deliveryAmount) - Number(scope._CSD.billingAmount)).toFixed(2);
-       	}
-       	if(scope._CSD.unbilledAmount<0){
-       		scope._CSD.billingAmount = scope._CSD.deliveryAmount;
-       		scope._CSD.unbilledAmount = 0 ;
-       	}
-   };
-   
-   $scope._arithmeticBilledAmount  = function(scope) {//计算已开金额
-      	if(scope._CSD.unbilledAmount&&scope._CSD.deliveryAmount){
-      		scope._CSD.billingAmount =  (Number(scope._CSD.deliveryAmount) - Number(scope._CSD.unbilledAmount)).toFixed(2);
+  $scope._arithmeticUnbilledAmount  = function(scope) {//计算未开金额
+      	if(scope._CSD.billingAmount&&scope._CSD.deliveryAmount){
+      		scope._CSD.unbilledAmount =  (Number($scope._totaldeliveryAmount()) - Number($scope._totalbillingAmount())).toFixed(2);
       	}
-      	if(scope._CSD.billingAmount<0){
-      		scope._CSD.unbilledAmount = scope._CSD.deliveryAmount;
-      		scope._CSD.billingAmount = 0 ;
+      	if(scope._CSD.unbilledAmount<0){
+      		scope._CSD.billingAmount = (Number($scope._totaldeliveryAmount()) - Number($scope._totalbillingAmount()) + Number(scope._CSD.billingAmount)).toFixed(2);
+      		scope._CSD.unbilledAmount = 0 ;
       	}
   };
+  
+  $scope._arithmeticBilledAmount  = function(scope) {//计算已开金额
+     	if(scope._CSD.unbilledAmount&&scope._CSD.deliveryAmount){
+     		scope._CSD.billingAmount =  (Number(scope._CSD.deliveryAmount) - Number(scope._CSD.unbilledAmount)).toFixed(2);
+     	}
+     	if(scope._CSD.billingAmount<0){
+     		scope._CSD.unbilledAmount = scope._CSD.deliveryAmount;
+     		scope._CSD.billingAmount = 0 ;
+     	}
+ };
     
     /**
      * ClauseFramework删除一行
@@ -2595,7 +2627,9 @@ var e = $("#form_clauseSettlement"),
 	        	orderService.save($scope.submitOrder).then(
 	          		     function(data){
 	          		    	$scope.contract.orderSerial = data.serialNum;
-	           		    	$scope.contract.contractNum = $scope.saleOrder.orderNum;
+	          		    	if(isNull($scope.contract.contractNum)){
+	          		    		$scope.contract.contractNum = $scope.saleOrder.orderNum;
+	          		    	}
 	    	   	    		$scope.contract.comId = $scope.saleOrder.buyComId;
 	    	   	    		orderService.saveContract($scope.contract).then(
 	    	   	       		     function(data){
@@ -2732,7 +2766,7 @@ var e = $("#form_clauseSettlement"),
 			       		for(var i=0;i<$scope.orderMateriel.length;i++){
 			       			total = total + Number($scope.arithmeticAmount($scope.orderMateriel[i]));
 			       		}
-			       		return total
+			       		return total.toFixed(2)
 			       	}else{
 			       		return 0;
 			       	}
