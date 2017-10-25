@@ -353,9 +353,12 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         files: [
 							'assets/global/plugins/datatables/datatables.min.css',
 							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+							'assets/global/plugins/jstree/dist/themes/default/style.min.css',
 							'assets/global/plugins/datatables/datatables.all.min.js',
 							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 					        'assets/apps/scripts/angular-file-upload.min.js',
+					        'assets/global/plugins/jstree/dist/jstree.min.js',
+                            'assets/pages/scripts/ui-tree.min.js',
                             'assets/apps/service/materielService.js',
                             'assets/apps/controllers/materielController.js'
                         ]

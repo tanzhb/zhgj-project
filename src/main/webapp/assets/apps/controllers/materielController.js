@@ -13,7 +13,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
         if($state.current.name=="materiel"){
         	loadMainTable();//加载物料列表
         	
-        	/*loadTree();//加载物料树*/
+        	loadTree();//加载物料树
         	}else{
         	$('.date-picker').datepicker({
 				rtl: App.isRTL(),
@@ -34,6 +34,9 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
         	}else{
         		$scope.opration = '新增';
         		$scope.materiel = {}
+        		
+        		//加载物料分类
+            	$scope.queryCategoryListByParent('frist','0');
         	}
         	
         	if($stateParams.view==1){//切换为查看
@@ -66,7 +69,6 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
         	$scope.BOM =[{}];//bom初始化
         	
 /*        	$scope.file =[{}];//附件初始化*/
-        	 
         }
     });
     
@@ -218,6 +220,18 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
       	        		$scope.BOMShow=true;
       	        	}
       		    	
+      		    	//加载物料分类
+      	        	$scope.queryCategoryListByParent('frist','0');
+      	        	if(!isNull($scope.materiel.category1)){
+      	        		$scope.queryCategoryListByParent('second',$scope.materiel.type);
+      	        	}
+      	        	if(!isNull($scope.materiel.category1)){
+      	        		$scope.queryCategoryListByParent('third',$scope.materiel.category1);
+      	        	}
+      	        	if(!isNull($scope.materiel.category2)){
+      	        		$scope.queryCategoryListByParent('fourth',$scope.materiel.category2);
+      	        	}
+      		    	
       		    	if(!isNull(data.BOM)){
  	        			$scope.BOM = data.BOM;
  	        			_index = $scope.BOM.length;
@@ -299,10 +313,10 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
                               { mData: 'materielName' },
                               { mData: 'specifications' },
                               { mData: 'unit' },
-                              { mData: 'type' },
+                              { mData: 'typeName' },
                               { mData: 'originCountry' },
                               { mData: 'brand' },
-                              { mData: null },
+                              /*{ mData: null },*/
                               { mData: 'versionNO' },
                               { mData: 'status' }
                         ],
@@ -334,13 +348,24 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 								 $compile(td)($scope);
 						       }
 						},{
-							'targets' : 8,
-							/*'className' : 'dt-body-center',*/
+							'targets' : 9,
+							'className' : 'dt-body-center',
+							'render' : function(data,
+									type, full, meta) {
+								if(data==1){
+									return '已发布'
+								}else{
+									return '未发布'
+								}
+							}
+						}/*,{
+							'targets' : 7,
+							'className' : 'dt-body-center',
 							'render' : function(data,
 									type, full, meta) {
 								return  ''
 							}
-						}  ]
+						}*/  ]
 
             }).on('order.dt',
             function() {
@@ -413,7 +438,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
                     },
                     data: {
                         url: function(e) {
-                            return "rest/materiel/findMaterielTree"
+                            return "rest/materiel/findMaterielCategoryTree"
                         },
                         data: function(e) {
                             return {
@@ -1246,4 +1271,173 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 			            }})
 		        };
 	   	  //********附件  end****************//
+	      //********物料分类 start****************//
+		        $scope.queryCategoryListByLevel = function(level){
+		        	if(level=="second"){
+		        		parentId = $scope.materiel.type;
+		        	}else if(level=="third"){
+		        		parentId = $scope.materiel.category1;
+		        	}else if(level=="fourth"){
+		        		parentId = $scope.materiel.category2;
+		        	}
+		        	$scope.queryCategoryListByParent(level,parentId);
+		        }
+		        $scope.queryCategoryListByParent = function(level,parentId){
+		        	if(level=="second"){
+		        		$scope.fristCategory = parentId;
+		        	}else if(level=="third"){
+		        		$scope.secondCategory = parentId;
+		        	}else if(level=="fourth"){
+		        		$scope.thirdCategory = parentId;
+		        	}
+		        	materielService.queryCategoryListByParent(parentId).then(
+		        			function(data){
+		          		    	if(level=="frist"){
+		          		    		$scope.fristCategoryList = data;
+		          		    		$scope.secondCategoryList = [];
+		          		    		$scope.thirdCategoryList = [];
+		          		    		$scope.fourthCategoryList = [];
+		          		    		$scope.fristCategory = null;
+		          		    		$scope.secondCategory = null;
+		          		    		$scope.thirdCategory = null;
+		    		        	}else if(level=="second"){
+		    		        		$scope.secondCategoryList = data;
+		          		    		$scope.thirdCategoryList = [];
+		          		    		$scope.fourthCategoryList = [];
+		          		    		$scope.secondCategory = null;
+		          		    		$scope.thirdCategory = null;
+		    		        	}else if(level=="third"){
+		    		        		$scope.thirdCategoryList = data;
+		          		    		$scope.fourthCategoryList = [];
+		          		    		$scope.thirdCategory = null;
+		    		        	}else if(level=="fourth"){
+		    		        		$scope.fourthCategoryList = data;
+		    		        	}
+		          		     },
+		          		     function(error){
+		          		         $scope.error = error;
+		          		         toastr.error('数据查询出错！');
+		          		     }
+		        	 );
+		        	
+		        }
+		        $scope.addCategory = function(level){
+		        	$scope.category = {};
+		        	$scope.category.parentId = null;
+		        	if(level=="frist"){
+		        		$scope.category.parentId = '0';
+		        		$scope.category.level = '1';
+		        	}else if(level=="second"){
+		        		$scope.category.parentId = $scope.fristCategory;
+		        		$scope.category.level = '2';
+		        	}else if(level=="third"){
+		        		$scope.category.parentId = $scope.secondCategory;
+		        		$scope.category.level = '3';
+		        	}else if(level=="fourth"){
+		        		$scope.category.parentId = $scope.thirdCategory; 
+		        		$scope.category.level = '4';
+		        	}
+		        	if($scope.category.parentId == null){
+		        		$('#addCategory').modal('hide')
+		        		toastr.error('请选择上级物料分类！');
+		        		return
+		        	}
+		        	$('#addCategory').modal('show')
+		        }; 
+		        
+		        $scope.addCategoryConfirm = function(level){
+		        	materielService.saveCategory($scope.category).then(
+		          		     function(data){
+		          		    	toastr.success('数据保存成功！');
+		          		    	$scope.category.categoryName = null;
+		          		    	$('#addCategory').modal('hide')
+		          		    	
+		          		    	if($scope.category.level == '1'){
+		          		    		$scope.fristCategoryList.push(data);
+		          		    	}else if($scope.category.level == '2'){
+		          		    		$scope.secondCategoryList.push(data);
+		          		    	}else if($scope.category.level == '3'){
+		          		    		$scope.thirdCategoryList.push(data);
+		          		    	}else if($scope.category.level == '4'){
+		          		    		$scope.fourthCategoryList.push(data);
+		          		    	}
+		          		     },
+		          		     function(error){
+		          		         $scope.error = error;
+		          		         toastr.error('数据保存出错！');
+		          		     }
+		          		 );
+		        };
+		        
+		        $scope.deleteCategory = function(level){
+		        	$scope.category = {};
+		        	$scope.category.categoryId = null;
+		        	if(level=="frist"){
+		        		$scope.category.categoryId = $scope.fristCategory;
+		        		$scope.category.level = '1';
+		        	}else if(level=="second"){
+		        		$scope.category.categoryId = $scope.secondCategory;
+		        		$scope.category.level = '2';
+		        	}else if(level=="third"){
+		        		$scope.category.categoryId = $scope.thirdCategory;
+		        		$scope.category.level = '3';
+		        	}else if(level=="fourth"){
+		        		$scope.category.categoryId = $scope.fourthCategory; 
+		        		$scope.category.level = '4';
+		        	}
+		        	if($scope.category.categoryId == null){
+		        		$('#deleteCategory').modal('hide')
+		        		toastr.error('请选择要删除的物料分类！');
+		        		return
+		        	}
+		        	$('#deleteCategory').modal('show')
+		        	
+		        }; 
+		        
+		        $scope.deleteCategoryConfirm = function(level){
+		        	materielService.deleteCategory($scope.category).then(
+		          		     function(data){
+		          		    	toastr.success('数据保存成功！');
+		          		    	if($scope.category.level == '1'){
+		          		    		$scope.removeCategory($scope.fristCategoryList,data)
+		          		    		$scope.secondCategoryList = [];
+		          		    		$scope.thirdCategoryList = [];
+		          		    		$scope.fourthCategoryList = [];
+		          		    		$scope.fristCategory = null;
+		          		    		$scope.secondCategory = null;
+		          		    		$scope.thirdCategory = null;
+		          		    	}else if($scope.category.level == '2'){
+		          		    		$scope.removeCategory($scope.secondCategoryList,data)
+		          		    		$scope.thirdCategoryList = [];
+		          		    		$scope.fourthCategoryList = [];
+		          		    		$scope.secondCategory = null;
+		          		    		$scope.thirdCategory = null;
+		          		    	}else if($scope.category.level == '3'){
+		          		    		$scope.removeCategory($scope.thirdCategoryList,data)
+		          		    		$scope.fourthCategoryList = [];
+		          		    		$scope.thirdCategory = null;
+		          		    	}else if($scope.category.level == '4'){
+		          		    		$scope.removeCategory($scope.fourthCategoryList,data)
+		          		    	}
+		          		    	$("#tab_"+$scope.category.level+" .active").removeClass("active");
+		          		    	$('#deleteCategory').modal('hide')
+		          		     },
+		          		     function(error){
+		          		         $scope.error = error;
+		          		         toastr.error('数据保存出错！');
+		          		     }
+		          		 );
+		        	
+		        	
+		        };
+		        
+		        $scope.removeCategory  = function(list,category){
+		        	for(var i=0;i<list.length;i++){
+        				if(category.categoryId == list[i].categoryId){
+        					list.splice(i,1);
+        				}
+        			}
+		        }
+		        
+	      //********物料分类  end****************//
 }]);
