@@ -708,8 +708,8 @@
 														<td></td>
 														<td></td>
 														<td></td>
-														<td></td>
 														<td>{{totalDeliveryCount}}</td>
+														<td></td>
 														<td></td>
 													</tr>
 												</tfoot>
