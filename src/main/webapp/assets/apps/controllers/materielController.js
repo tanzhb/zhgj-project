@@ -34,6 +34,9 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
         	}else{
         		$scope.opration = '新增';
         		$scope.materiel = {}
+        		
+        		//加载物料分类
+            	$scope.queryCategoryListByParent('frist','0');
         	}
         	
         	if($stateParams.view==1){//切换为查看
@@ -66,7 +69,6 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
         	$scope.BOM =[{}];//bom初始化
         	
 /*        	$scope.file =[{}];//附件初始化*/
-        	 
         }
     });
     
@@ -218,6 +220,18 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
       	        		$scope.BOMShow=true;
       	        	}
       		    	
+      		    	//加载物料分类
+      	        	$scope.queryCategoryListByParent('frist','0');
+      	        	if(!isNull($scope.materiel.category1)){
+      	        		$scope.queryCategoryListByParent('second',$scope.materiel.type);
+      	        	}
+      	        	if(!isNull($scope.materiel.category1)){
+      	        		$scope.queryCategoryListByParent('third',$scope.materiel.category1);
+      	        	}
+      	        	if(!isNull($scope.materiel.category2)){
+      	        		$scope.queryCategoryListByParent('fourth',$scope.materiel.category2);
+      	        	}
+      		    	
       		    	if(!isNull(data.BOM)){
  	        			$scope.BOM = data.BOM;
  	        			_index = $scope.BOM.length;
@@ -299,10 +313,10 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
                               { mData: 'materielName' },
                               { mData: 'specifications' },
                               { mData: 'unit' },
-                              { mData: 'type' },
+                              { mData: 'typeName' },
                               { mData: 'originCountry' },
                               { mData: 'brand' },
-                              { mData: null },
+                              /*{ mData: null },*/
                               { mData: 'versionNO' },
                               { mData: 'status' }
                         ],
@@ -334,13 +348,24 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 								 $compile(td)($scope);
 						       }
 						},{
-							'targets' : 8,
-							/*'className' : 'dt-body-center',*/
+							'targets' : 9,
+							'className' : 'dt-body-center',
+							'render' : function(data,
+									type, full, meta) {
+								if(data==1){
+									return '已发布'
+								}else{
+									return '未发布'
+								}
+							}
+						}/*,{
+							'targets' : 7,
+							'className' : 'dt-body-center',
 							'render' : function(data,
 									type, full, meta) {
 								return  ''
 							}
-						}  ]
+						}*/  ]
 
             }).on('order.dt',
             function() {
@@ -413,7 +438,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
                     },
                     data: {
                         url: function(e) {
-                            return "rest/materiel/findMaterielTree"
+                            return "rest/materiel/findMaterielCategoryTree"
                         },
                         data: function(e) {
                             return {
@@ -1247,6 +1272,16 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 		        };
 	   	  //********附件  end****************//
 	      //********物料分类 start****************//
+		        $scope.queryCategoryListByLevel = function(level){
+		        	if(level=="second"){
+		        		parentId = $scope.materiel.type;
+		        	}else if(level=="third"){
+		        		parentId = $scope.materiel.category1;
+		        	}else if(level=="fourth"){
+		        		parentId = $scope.materiel.category2;
+		        	}
+		        	$scope.queryCategoryListByParent(level,parentId);
+		        }
 		        $scope.queryCategoryListByParent = function(level,parentId){
 		        	if(level=="second"){
 		        		$scope.fristCategory = parentId;

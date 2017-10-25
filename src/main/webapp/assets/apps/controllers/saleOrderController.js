@@ -2832,7 +2832,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		       
 		       $scope._arithmeticUnitPrice  = function(_orderMateriel) {//计算不含税销售单价
 			       	if(_orderMateriel.orderRateUnit&&$scope.saleOrder.rate){
-			       		_orderMateriel.orderUnitPrice  =  (_orderMateriel.orderRateUnit/($scope.saleOrder.rate/100+1)).toFixed(4);
+			       		_orderMateriel.orderUnitPrice  =  (_orderMateriel.orderRateUnit/($scope.saleOrder.rate/100+1)).toFixed(9);
 			       	}else{
 			       		_orderMateriel.orderUnitPrice  =   0;
 			       	}

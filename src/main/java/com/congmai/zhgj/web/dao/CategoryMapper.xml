@@ -95,6 +95,12 @@
     from category
     where categoryId = #{categoryId,jdbcType=VARCHAR}
   </select>
+  <select id="selectNameByPrimaryKey" resultType="java.lang.String" parameterType="java.lang.String" >
+    select 
+    categoryName
+    from category
+    where categoryId = #{categoryId,jdbcType=VARCHAR}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from category
     where categoryId = #{categoryId,jdbcType=VARCHAR}

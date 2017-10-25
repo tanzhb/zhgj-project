@@ -35,6 +35,12 @@ public class Materiel {
     private String category1;
     private String category2;
     private String category3;
+    
+    private String typeName;
+    private String categoryName1;
+    private String categoryName2;
+    private String categoryName3;
+    
     private String materielAttribute;
 
     private String mnemonicCode;
@@ -610,6 +616,38 @@ public class Materiel {
 
 	public void setSupplyMaterielSerial(String supplyMaterielSerial) {
 		this.supplyMaterielSerial = supplyMaterielSerial;
+	}
+
+	public String getTypeName() {
+		return typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
+
+	public String getCategoryName1() {
+		return categoryName1;
+	}
+
+	public void setCategoryName1(String categoryName1) {
+		this.categoryName1 = categoryName1;
+	}
+
+	public String getCategoryName2() {
+		return categoryName2;
+	}
+
+	public void setCategoryName2(String categoryName2) {
+		this.categoryName2 = categoryName2;
+	}
+
+	public String getCategoryName3() {
+		return categoryName3;
+	}
+
+	public void setCategoryName3(String categoryName3) {
+		this.categoryName3 = categoryName3;
 	}
     
 }

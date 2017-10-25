@@ -290,7 +290,7 @@ public class MaterielController {
     /**
      * 
      * @Description 查询物料列表//全部查询，或根据父节点查询
-     * @param parent(若有值，则查询它及上级物料是它的物料)
+     * @param parent(若有值，则查询该分类下的物料)
      * @param isLatestVersion(若有值为1，则查询所以已发布的正式物料)
      * @param type
      * @return
@@ -329,16 +329,39 @@ public class MaterielController {
         	}
         	materielList = materielService.selectList(m);
     	}else{//根据父节点查询
+    		
+    		Category category = this.categoryService.selectById(parent);
+    		
     		//and 条件1
         	com.congmai.zhgj.web.model.MaterielSelectExample.Criteria criteria =  m.createCriteria();
         	criteria.andIsLatestVersionEqualTo("1");
         	criteria.andDelFlgEqualTo("0");
-        	criteria.andSerialNumEqualTo(parent);
+        	if(category!=null){
+        		if("1".equals(category.getLevel())){
+        			criteria.andTypeEqualTo(parent);
+        		}else if("2".equals(category.getLevel())){
+        			criteria.andCategory1EqualTo(parent);
+        		}else if("3".equals(category.getLevel())){
+        			criteria.andCategory2EqualTo(parent);
+        		}else if("4".equals(category.getLevel())){
+        			criteria.andCategory3EqualTo(parent);
+        		}
+        	}
         	//and 条件2
         	com.congmai.zhgj.web.model.MaterielSelectExample.Criteria criteria2 =  m.createCriteria();
         	criteria2.andStatusEqualTo("0");
         	criteria2.andDelFlgEqualTo("0");
-        	criteria2.andSerialNumEqualTo(parent);
+        	if(category!=null){
+        		if("1".equals(category.getLevel())){
+        			criteria2.andTypeEqualTo(parent);
+        		}else if("2".equals(category.getLevel())){
+        			criteria2.andCategory1EqualTo(parent);
+        		}else if("3".equals(category.getLevel())){
+        			criteria2.andCategory2EqualTo(parent);
+        		}else if("4".equals(category.getLevel())){
+        			criteria2.andCategory3EqualTo(parent);
+        		}
+        	}
         	//or 条件
         	m.or(criteria2);
         	//排序字段
@@ -349,7 +372,7 @@ public class MaterielController {
         	materielList = materielService.selectList(m);
         	
         	//查询下级物料
-        	findChildList(parent,materielList);
+        	/*findChildList(parent,materielList);*/
     	}
     	//封装datatables数据返回到前台
     	
@@ -453,7 +476,38 @@ public class MaterielController {
     }
     
     
-    
+    /**
+     * 
+     * @Description 按父id查询子分类
+     * @param parent
+     * @return
+     */
+    @RequestMapping("/findMaterielCategoryTree")
+    @ResponseBody
+    public List<JsonTreeData> findMaterielCategoryTree(String parent) {
+    	if("#".equals(parent)){
+    		parent = "0";
+    	}
+    	List<Category> list = this.categoryService.queryCategoryListByParent(parent);
+    	
+    	if (list.isEmpty()) {
+			return new ArrayList<JsonTreeData>();
+		}
+    	
+    	List<JsonTreeData> treeDataList = new ArrayList<JsonTreeData>();
+        /*为了整理成公用的方法，所以将查询结果进行二次转换。 */
+       for (Category c : list) {
+           JsonTreeData treeData = new JsonTreeData();
+           treeData.setId(c.getCategoryId());
+           treeData.setPid(c.getParentId());
+           treeData.setText(c.getCategoryName());
+           treeData.setChildren(true);
+           treeDataList.add(treeData);
+       }
+/*       //最后得到结果集,经过FirstJSON转换后就可得所需的json格式
+       List<JsonTreeData> newTreeDataList = TreeNodeUtil.getfatherNode(treeDataList);*/
+       return treeDataList;
+    }
 	/**
 	 * 
 	 * @Description 批量删除物料

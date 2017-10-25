@@ -123,7 +123,7 @@ margin-bottom: 20px;
 				                            <th> 类别 </th>
 				                            <th> 原产国 </th>
 				                            <th> 品牌 </th>
-				                            <th> 供应商 </th>
+				                            <!-- <th> 供应商 </th> -->
 				                            <th> 版本 </th>
 				                            <th> 状态 </th>
 				                        </tr>
@@ -215,7 +215,7 @@ margin-bottom: 20px;
 								                              <div class="form-group">
 								                                  <label class="control-label col-md-5 bold">物料大类</label>
 								                                  <label class="control-label col-md-7">
-								                                      {{materiel.type}}
+								                                      {{materiel.typeName}}
 								                                  </label>
 								
 								                              </div>
@@ -224,7 +224,7 @@ margin-bottom: 20px;
 								                              <div class="form-group">
 								                                  <label class="control-label col-md-5 bold">一级分类</label>
 								                                  <label class="control-label col-md-7">
-								                                      {{materiel.category1}}
+								                                      {{materiel.categoryName1}}
 								                                  </label>
 								
 								                              </div>
@@ -238,7 +238,7 @@ margin-bottom: 20px;
 								                              <div class="form-group">
 								                                  <label class="control-label col-md-5 bold">二级分类</label>
 								                                  <label class="control-label col-md-7">
-								                                      {{materiel.category2}}
+								                                      {{materiel.categoryName2}}
 								                                  </label>
 								
 								                              </div>
@@ -247,7 +247,7 @@ margin-bottom: 20px;
 								                              <div class="form-group">
 								                                  <label class="control-label col-md-5 bold">三级分类</label>
 								                                  <label class="control-label col-md-7">
-								                                      {{materiel.category3}}
+								                                      {{materiel.categoryName3}}
 								                                  </label>
 								
 								                              </div>
@@ -909,7 +909,7 @@ margin-bottom: 20px;
                               <div class="form-group">
                                   <label class="control-label col-md-5 bold">物料大类</label>
                                   <label class="control-label col-md-7">
-                                      {{materiel.type}}
+                                      {{materiel.typeName}}
                                   </label>
 
                               </div>
@@ -918,7 +918,7 @@ margin-bottom: 20px;
                               <div class="form-group">
                                   <label class="control-label col-md-5 bold">一级分类</label>
                                   <label class="control-label col-md-7">
-                                      {{materiel.category1}}
+                                      {{materiel.categoryName1}}
                                   </label>
 
                               </div>
@@ -930,7 +930,7 @@ margin-bottom: 20px;
                               <div class="form-group">
                                   <label class="control-label col-md-5 bold">二级分类</label>
                                   <label class="control-label col-md-7">
-                                      {{materiel.category2}}
+                                      {{materiel.categoryName2}}
                                   </label>
 
                               </div>
@@ -939,7 +939,7 @@ margin-bottom: 20px;
                               <div class="form-group">
                                   <label class="control-label col-md-5 bold">三级分类</label>
                                   <label class="control-label col-md-7">
-                                      {{materiel.category3}}
+                                      {{materiel.categoryName3}}
                                   </label>
 
                               </div>
