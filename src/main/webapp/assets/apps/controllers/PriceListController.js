@@ -903,15 +903,25 @@ function loadPriceListSaleTable(){
 			 // 修改价格开始***************************************							
 			 $scope.toEditPriceListPage = function(judgeString) {//弹出框修改价格信息
 				 debugger;
-				 var id_count = table.$('input[type="checkbox"]:checked').length;
+				 if(table.rows('.active').data().length != 1){
+						showToastr('toast-top-center', 'warning', '请选择一条数据进行修改！')
+					}else{
+						if(table.row('.active').data().processBase !=null){
+							showToastr('toast-top-center', 'warning', '该条数据已经申请流程审批，不能进行修改！')
+						}else {
+							 var serialNum = table.$('input[type="checkbox"]:checked').val();
+							 $state.go("addPriceList",{buyOrSale:serialNum+judgeString});
+						}
+					} 
+				/* var id_count = table.$('input[type="checkbox"]:checked').length;
 				 if(id_count==0){
 					 toastr.warning("请选择一条数据进行编辑");
 				 }else if(id_count>1){
 					 toastr.warning("只能选择一条数据进行编辑");
 				 }else{
 					 var serialNum = table.$('input[type="checkbox"]:checked').val();
-					 $state.go("addPriceList",{buyOrSale:serialNum+judgeString});
-				 }
+							 $state.go("addPriceList",{buyOrSale:serialNum+judgeString});
+				 }*/
 			 };
 			 // 修改价格结束***************************************							
 			 /*$scope.showOrHide = function() {//控制阶梯div的显示与隐藏

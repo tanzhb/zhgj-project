@@ -224,17 +224,6 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
         })   
 	});
 	
-	var batchNumCheck=function validateOneElement(index) {
-		 //验证id="form1"的表单中id="elementId"的表单元素
-		var batchNumFlag=$("#form_sample_2").validate().element($("#batchNum"+index+""));
-		return batchNumFlag;
-		}
-	
-	var manufactureDateCheck=function validateOneElement(index) {
-		 //验证id="form1"的表单中id="elementId"的表单元素
-		var manufactureDateFlag=$("#form_sample_2").validate().element($("#manufactureDate"+index+""))
-		return manufactureDateFlag;
-		}
 	
 	var deliveryCountCheck=function validateOneElement(index) {
 		 //验证id="form1"的表单中id="elementId"的表单元素
@@ -266,8 +255,6 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		if(!batchNumFlag){return false;}*/
 		var attachFile=$("#batchNumReal"+index).text();
 		
-		var manufactureDateFlag=manufactureDateCheck(index);
-		if(!manufactureDateFlag){return false;}
 		var deliveryCountFlag=deliveryCountCheck(index);
 		if(!deliveryCountFlag){return false;}
 		

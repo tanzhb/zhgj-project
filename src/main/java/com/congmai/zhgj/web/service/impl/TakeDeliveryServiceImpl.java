@@ -246,10 +246,10 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		com.congmai.zhgj.web.model.StockExample.Criteria criteria=stockExample.createCriteria();
 		Boolean isStockZijian=true;//默认是自建库存
 		if(StaticConst.getInfo("dailiBuy").equals(orderInfo.getOrderType())||StaticConst.getInfo("dailiSale").equals(orderInfo.getOrderType())){//代理销售/代理采购
-			criteria.andMaterielSerialEqualTo(orderMateriel.getMaterielSerial()).andManageTypeEqualTo("2");//代管库存
+			criteria.andMaterielSerialEqualTo(orderMateriel.getMaterielSerial()).andManageTypeEqualTo("2").andDelFlgEqualTo("0");//代管库存
 			isStockZijian=false;
 		}else{
-			criteria.andMaterielSerialEqualTo(orderMateriel.getMaterielSerial()).andManageTypeEqualTo("1");//自建库存
+			criteria.andMaterielSerialEqualTo(orderMateriel.getMaterielSerial()).andManageTypeEqualTo("1").andDelFlgEqualTo("0");//自建库存
 		}
 		
 		List<Stock>  stocks=stockMapper.selectByExample(stockExample);
@@ -387,6 +387,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			DeliveryMaterielExample example2 = new DeliveryMaterielExample();
 			example2.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
 			deliveryMaterielMapper.updateByExampleSelective(materiel, example2);
+			createStock(materiel,new StockExample(),currenLoginName);
 		}
 		
 		
@@ -426,7 +427,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			DeliveryMaterielExample example2 = new DeliveryMaterielExample();
 			example2.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
 			deliveryMaterielMapper.updateByExampleSelective(materiel, example2);
-			createStock(materiel,new StockExample(),currenLoginName);
+			/*createStock(materiel,new StockExample(),currenLoginName);*/
 		}
 		//保存出库来源批次
 				List<StockOutBatch> stockOutMaterielsNew = stockOutMateriels; //这里是入库的物料信息

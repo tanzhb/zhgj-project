@@ -129,6 +129,10 @@ public class OrderInfo extends BaseVO {
     private String payStatus;
     //开票状态
     private String billStatus;
+    
+    private String unPayOrReceiptMoney;//未付/未收金额(发票里面用);
+    
+    private  String unBillOrReceiptMoney;//未开票/收票金额(发票里面用);
 
     public String getSerialNum() {
         return serialNum;
@@ -496,6 +500,22 @@ public class OrderInfo extends BaseVO {
 		this.billStatus = billStatus;
 	}
 
+	public String getUnPayOrReceiptMoney() {
+		return unPayOrReceiptMoney;
+	}
+
+	public void setUnPayOrReceiptMoney(String unPayOrReceiptMoney) {
+		this.unPayOrReceiptMoney = unPayOrReceiptMoney;
+	}
+
+	public String getUnBillOrReceiptMoney() {
+		return unBillOrReceiptMoney;
+	}
+
+	public void setUnBillOrReceiptMoney(String unBillOrReceiptMoney) {
+		this.unBillOrReceiptMoney = unBillOrReceiptMoney;
+	}
+	
 
 	
 }

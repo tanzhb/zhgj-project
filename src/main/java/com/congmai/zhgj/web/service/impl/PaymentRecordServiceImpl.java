@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
+import com.congmai.zhgj.web.dao.PayMapper;
 import com.congmai.zhgj.web.dao.PaymentRecordMapper;
 import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.PaymentRecordExample;
@@ -17,8 +18,9 @@ public class PaymentRecordServiceImpl extends GenericServiceImpl<PaymentRecord, 
 		implements PaymentRecordSerive {
 
 	@Autowired
-	private PaymentRecordMapper paymentRecordMapper;
-	
+	private PaymentRecordMapper paymentRecordMapper;//PayMapper
+	@Autowired
+	private PayMapper payMapper;
 	@Override
 	public GenericDao<PaymentRecord, String> getDao() {
 		
@@ -48,6 +50,18 @@ public class PaymentRecordServiceImpl extends GenericServiceImpl<PaymentRecord, 
 		page.setResult(paymentRecordMapper.selectByExample(example));
 		page.setTotalCount(paymentRecordMapper.countByExample(example));
 		return page;
+	}
+
+	@Override
+	public String selectPaiedMoney(String serialNum) {
+		// TODO Auto-generated method stub
+		return payMapper.selectPaiedMoney(serialNum);
+	}
+
+	@Override
+	public String selectBilledMoney(String serialNum) {
+		// TODO Auto-generated method stub
+		return payMapper.selectBilledMoney(serialNum);
 	}
 
 

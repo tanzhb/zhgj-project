@@ -679,8 +679,8 @@
 												<td></td>
 												<td></td>
 												<td></td>
-												<td></td>
 												<td>{{totalDeliveryCount}}</td>
+												<td></td>
 											</tr>
 											<tr>
 												<td colspan="7"></td>

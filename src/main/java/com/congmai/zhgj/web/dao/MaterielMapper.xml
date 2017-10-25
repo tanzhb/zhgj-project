@@ -860,7 +860,7 @@
   </update>
   <select id="selectMaterielByOrderSerial"   parameterType="java.util.Map"   resultType="com.congmai.zhgj.web.model.Materiel">
   select m.materielNum,m.materielName,m.unit , m.specifications, om.amount  as amount ,
-  IFNULL(om.canBillAmount,om.amount)  AS canBillAmount,om.orderUnitPrice  as orderUnitPrice,om.serialNum as serialNum
+  IFNULL(om.canBillAmount,om.amount)  AS canBillAmount,om.orderUnitPrice  as orderUnitPrice,om.serialNum as serialNum,o.rate,o.currency,om.customsCode,om.customsRate
   <if test="invoiceSerial!=null">
   , IFNULL(ibr.billCount,0) as billAmount
   ,ibr.serialNum as invoiceBillingRecordSerial
@@ -870,6 +870,7 @@
   </if>
   from  orderMateriel om
   left join materiel m  on  om.materielSerial=m.serialNum
+  left  join orderInfo o  on  o.serialNum=om.orderSerial
     <if test="invoiceSerial!=null">
    left join invoiceBillingRecord ibr on   ibr.orderMaterielSerial=om.serialNum 
    </if>
