@@ -1592,7 +1592,6 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 			 */
 	        $scope.deleteOrderMateriel=function (materiel) {
 	        	handle.confirm("确定删除吗？",function(){
-	        		handle.blockUI();
 	        		if($scope.orderMateriel.length > 0){
 	        			for(var i=0;i<$scope.orderMateriel.length;i++){
 	        				if(materiel == $scope.orderMateriel[i]){
@@ -1601,11 +1600,12 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 	        			}
 	        		}
 	        		if(!isNull(materiel.serialNum)){
+	        			handle.blockUI();
 	        			var promise = orderService.deleteOrderMateriel(materiel.serialNum);
 		        		promise.then(function(data){
+		        			handle.unblockUI(); 
 		        			if(data.data == "1"){
 		        				toastr.success("删除成功");
-			        			handle.unblockUI(); 
 		        			}else{
 		        				toastr.error("删除失败！请联系管理员");
 				            	console.log(data);
@@ -1615,6 +1615,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 		 	               // 调用承诺接口reject();
 		 	            	toastr.error("删除失败！请联系管理员");
 			            	console.log(data);
+			            	handle.unblockUI(); 
 		 	            });
 	        		}
 	        	});
