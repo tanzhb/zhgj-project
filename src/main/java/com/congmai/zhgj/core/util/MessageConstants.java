@@ -13,6 +13,14 @@ public class MessageConstants {
 	public static final String BUSSINESS_MESSAGE = "业务提醒";
 	
 	
+	/**
+	 * 平台
+	 */
+	public static final String PLATFORM_NAME = "中航能科（上海）能源科技有限公司";
+	
+	
+	
+	
 	/*========================采购订单相关消息Start==============================*/
 	/**
 	 * 采购订单申请消息
@@ -228,20 +236,20 @@ public class MessageConstants {
 	/**
 	 * 入库完成消息(发给采购)
 	 */
-	public static final String URL_IN_TO_BUY = "inCheck";
+	public static final String URL_IN_TO_BUY = "takeDelivery";
 	/**
 	 * 入库完成消息(发给供应)
 	 */
-	public static final String URL_IN_TO_SALE = "inCheck";
+	public static final String URL_IN_TO_SALE = "delivery";
 	
 	/**
 	 * 出库完成消息(发给采购)
 	 */
-	public static final String URL_OUT_TO_BUY = "outCheck";
+	public static final String URL_OUT_TO_BUY = "takeDelivery";
 	/**
 	 * 出库完成消息(发给供应)
 	 */
-	public static final String URL_OUT_TO_SALE = "outCheck";
+	public static final String URL_OUT_TO_SALE = "delivery";
 	/*========================出入库相关消息End==============================*/
 	
 	/*========================出入库检验相关消息Start==============================*/
@@ -249,19 +257,19 @@ public class MessageConstants {
 	/**
 	 * 出库已检验消息
 	 */
-	public static final String URL_IN_CHECK_TO_BUY = "inCheckToBuy";
+	public static final String URL_IN_CHECK_TO_BUY = "takeDelivery";
 	/**
 	 * 出库已检验消息
 	 */
-	public static final String URL_IN_CHECK_TO_SALE = "inCheckToSale";
+	public static final String URL_IN_CHECK_TO_SALE = "takeDelivery";
 	/**
 	 * 入库已检验消息
 	 */
-	public static final String URL_OUT_CHECK_TO_BUY = "outCheckToBuy";
+	public static final String URL_OUT_CHECK_TO_BUY = "takeDelivery";
 	/**
 	 * 入库已检验消息
 	 */
-	public static final String URL_OUT_CHECK_TO_SALE = "outCheckToSale";
+	public static final String URL_OUT_CHECK_TO_SALE = "takeDelivery";
 	/*========================出入库检验相关消息End==============================*/
 	
 

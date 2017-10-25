@@ -425,20 +425,29 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				TakeDeliveryParams params = (TakeDeliveryParams) event.getSource();
 				messageVO.setObjectSerial(params.getTakeDelivery().getSerialNum());
 				
-				
-				Properties properties = new Properties();
-				Company company = companyService.selectById(params.getDelivery().getSupplyComId());
-				
-				List<UserCompanyKey> users = userCompanyService.getUsersByComId(params.getDelivery().getSupplyComId());
 				List<String> userIds = new ArrayList<String>();
+				Properties properties = new Properties();
 				
-				for(UserCompanyKey uc : users){
-					userIds.add(uc.getUser_id());
+				
+				if(StringUtils.isEmpty(params.getDelivery().getSupplyComId())){ //销售方为平台
+					List<User> users = groupService.selectUserIdsByGroupType(Constants.SALES);
+					for(User uc : users){
+						userIds.add(uc.getUserId().toString());
+					}
+					properties.put("paramer_a", MessageConstants.PLATFORM_NAME);
+				}else{
+					Company company = companyService.selectById(params.getDelivery().getSupplyComId());
+					List<UserCompanyKey> users = userCompanyService.getUsersByComId(params.getDelivery().getSupplyComId());
+					for(UserCompanyKey uc : users){
+						userIds.add(uc.getUser_id());
+					}
+					properties.put("paramer_a", company.getComName());
 				}
+				
 				
 				messageVO.setReceiverIds(userIds);
 				
-				properties.put("paramer_a", company.getComName());
+				
 				properties.put("paramer_b", user.getUserName());
 				properties.put("paramer_c", params.getDelivery().getDeliverNum());
 				properties.put("paramer_d", MessageConstants.URL_TAKE_DELIVERY);
@@ -479,10 +488,10 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 			if(user != null){
 				DeliveryVO delivery = (DeliveryVO) event.getSource();
 				OrderInfo order = orderService.selectById(delivery.getOrderSerial());
-				List<User> users = groupService.selectUserIdsByGroupType(Constants.PURCHASE);
+				List<User> users = null;
 				Properties properties = new Properties();
 				if(StringUtils.isEmpty(order.getBuyComId())){ //发给采购
-					//users = groupService.selectUserIdsByGroupType(Constants.PURCHASE);
+					users = groupService.selectUserIdsByGroupType(Constants.PURCHASE);
 					if(CollectionUtils.isNotEmpty(users)){
 						for(User u : users){
 							Message messageVO = this.createMessage(event,user);
@@ -799,7 +808,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				}
 				List<User> users = null;
 				if(StringUtils.isEmpty(order.getSupplyComId())){ //发给销售
-					users = groupService.selectUserIdsByGroupType(Constants.PURCHASE);
+					users = groupService.selectUserIdsByGroupType(Constants.SALES);
 					if(CollectionUtils.isNotEmpty(users)){
 						for(User u : users){
 							Message messageVO = this.createMessage(event,user);
