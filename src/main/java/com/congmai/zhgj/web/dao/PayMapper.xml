@@ -96,7 +96,7 @@
     <!--通过id查询收付款详情  -->
     <select id="selectPayById" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.PaymentRecord">
      SELECT
-	a.serialNum,a.paymentNum,a.paymentType,b.orderNum,b.serialNum AS orderSerial,a.supplyComId,
+	a.serialNum,a.paymentNum,a.paymentType,b.orderNum,b.serialNum AS orderSerial,a.supplyComId,a.buyComId,
 	b.orderAmount,a.applyPaymentAmount,a.applyCurrency,a.playPaymentDate,a.payType,a.paymentNode,a.nodeNum,
 	a.billStyle,a.isBill,a.applyDate,a.applicant,a.applyDept,a.remark,
     a.payee,a.contact,a.contactNum,a.bank,a.accountName,a.accountNumber,a.status,a.reason,a.processInstanceId,a.userId
@@ -106,6 +106,35 @@
 	WHERE a.serialNum=#{serialNum}
     </select>
     
+    <!--付款节点是“合同签订”时查询日期  -->
+    <select id="selectDateTypeContract" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ContractVO">
+    SELECT
+	b.signDate
+	FROM
+	orderInfo a LEFT JOIN contract b ON a.contractSerial=b.serialNum
+	WHERE
+	a.serialNum=#{serialNum}
+    </select>
+    
+    <!--付款节点是“提货前”时查询日期  -->
+    <select id="selectDateTypeDelivery" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.DeliveryVO">
+    SELECT
+	deliverDate
+	FROM
+	delivery
+	WHERE
+	orderSerial=#{serialNum}
+    </select>
+    
+    <!--付款节点是“到货后”时查询日期  -->
+    <select id="selectDateTypeTakeDelivery" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.TakeDeliveryVO">
+    SELECT
+	b.takeDeliverDate
+	FROM
+	delivery a LEFT JOIN takeDelivery b ON a.serialNum=b.deliverSerial
+	WHERE
+	a.orderSerial=#{serialNum}
+    </select>
     
     <!--删除收付款  -->
     <update id="delPaymentRecord" parameterType="java.util.List">

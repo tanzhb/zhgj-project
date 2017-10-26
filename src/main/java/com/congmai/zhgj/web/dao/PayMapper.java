@@ -7,9 +7,11 @@ import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.PaymentFile;
 import com.congmai.zhgj.web.model.PaymentPlan;
 import com.congmai.zhgj.web.model.PaymentRecord;
+import com.congmai.zhgj.web.model.TakeDeliveryVO;
 
 /**
  * 
@@ -138,4 +140,26 @@ public interface PayMapper extends GenericDao<PaymentRecord, String> {
     
     
     public List<ClauseSettlementDetail> selectClauseSettlementDetailList2(String serialNum);
+    
+    
+    /**
+	 * 当支付节点是“合同签订”时，查询日期
+	 * @param serialNum
+	 * @return
+	 */
+    public ContractVO selectDateTypeContract(String serialNum);
+    
+    /**
+	 * 当支付节点是“提货前”时，查询日期
+	 * @param serialNum
+	 * @return
+	 */
+    public DeliveryVO selectDateTypeDelivery(String serialNum);
+    
+    /**
+	 * 当支付节点是“到货后”时，查询日期
+	 * @param serialNum
+	 * @return
+	 */
+    public TakeDeliveryVO selectDateTypeTakeDelivery(String serialNum);
 }
