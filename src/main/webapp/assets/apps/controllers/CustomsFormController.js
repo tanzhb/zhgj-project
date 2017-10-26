@@ -73,12 +73,41 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 			}else if(table.rows('.active').data().length != 1&&judgeString=='clearance'){
 				showToastr('toast-top-center', 'warning', '请选择一条清关单进行修改！')
 			}else{
-				var serialNum = table.$('input[type="checkbox"]:checked').val();
-				 $state.go("addCustomsForm",{serialNum:serialNum,customsFormType:judgeString});
+				if(table.row('.active').data().status!=1){
+					var serialNum = table.$('input[type="checkbox"]:checked').val();
+					 $state.go("addCustomsForm",{serialNum:serialNum,customsFormType:judgeString});
+				}else{
+					if(judgeString=='declaration'){
+						showToastr('toast-top-center', 'warning', '已确认的报关单不能修改！')
+					}else if(judgeString=='clearance'){
+						showToastr('toast-top-center', 'warning', '已确认的清关单不能修改！')
+					}
+				}
+				
 			}
 			
 			} 
-   
+	 $scope.confirmCustomsForm = function(judgeString) {//确认信息
+		 if(table.rows('.active').data().length != 1&&judgeString.indexOf('declaration')>-1){
+				showToastr('toast-top-center', 'warning', '请选择一条报关单进行确认！')
+			}else if(table.rows('.active').data().length != 1&&judgeString.indexOf('clearance')>-1){
+				showToastr('toast-top-center', 'warning', '请选择一条清关单进行确认！')
+			}else{
+				if(table.row('.active').data().status!=1){
+					var serialNum = table.$('input[type="checkbox"]:checked').val();
+					 $state.go("addCustomsForm",{serialNum:serialNum,customsFormType:judgeString});
+				}else{
+					if(judgeString.indexOf('declaration')>-1){
+						showToastr('toast-top-center', 'warning', '已确认的报关单不能再次确认！')
+					}else if(judgeString.indexOf('clearance')>-1){
+						showToastr('toast-top-center', 'warning', '已确认的清关单不能再次确认！')
+					}
+				}
+				
+			
+			}
+			
+			} 
     var table;
     var loadDeclarationTable = function() {
     	var judgeString='declaration';
@@ -124,9 +153,30 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
                               { mData: 'playArrivalDate' },
                               { mData: 'port' },
                               { mData: 'deliverNum' },
-                              { mData: 'deliverAmount' },
-                              { mData: 'addedTax' },
-                              { mData: 'customsAmount' },
+                              { mData: 'deliverAmount' ,
+									mRender:function(data){
+	                            		if(data!=""&&data!=null){
+	                            			return $filter('currency')(data,'');
+	                            		}else{
+	                            			return $filter('currency')(0,'');
+	                            		}
+	                            	}},
+                              { mData: 'addedTax',
+										mRender:function(data){
+		                            		if(data!=""&&data!=null){
+		                            			return $filter('currency')(data,'');
+		                            		}else{
+		                            			return $filter('currency')(0,'');
+		                            		}
+		                            	} },
+                              { mData: 'customsAmount',
+											mRender:function(data){
+			                            		if(data!=""&&data!=null){
+			                            			return $filter('currency')(data,'');
+			                            		}else{
+			                            			return $filter('currency')(0,'');
+			                            		}
+			                            	} },
                               { mData: 'agentUnit' },
                               { mData: 'fileCount' },
                               { mData: 'createTime' },
@@ -154,6 +204,20 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
                     		  //return data;
                     	  },"createdCell": function (td, cellData, rowData, row, col) {
                     		  $compile(td)($scope);
+                    	  }
+                      },{
+                      	  'targets' : 12,
+                    	  'render' : function(data,
+                    			  type, row, meta) {
+                    		  if(data!=""&&data!=null){
+                  				if(data=='0'){
+                        				return '<span  class="label label-sm label-info ng-scope">待确认</span>';
+                        			}else if(data=='1'){
+                        				return '<span  class="label label-sm label-success ng-scope">已确认</span>';
+                        			}
+                        		}else{
+                        			return "";
+                        		}
                     	  }
                       } ]
 
@@ -262,9 +326,30 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
                                   { mData: 'playArrivalDate' },
                                   { mData: 'port' },
                                   { mData: 'deliverNum' },
-                                  { mData: 'deliverAmount' },
-                                  { mData: 'addedTax' },
-                                  { mData: 'customsAmount' },
+                                  { mData: 'deliverAmount',
+										mRender:function(data){
+		                            		if(data!=""&&data!=null){
+		                            			return $filter('currency')(data,'');
+		                            		}else{
+		                            			return $filter('currency')(0,'');
+		                            		}
+		                            	} },
+                                  { mData: 'addedTax',
+											mRender:function(data){
+			                            		if(data!=""&&data!=null){
+			                            			return $filter('currency')(data,'');
+			                            		}else{
+			                            			return $filter('currency')(0,'');
+			                            		}
+			                            	} },
+                                  { mData: 'customsAmount',
+												mRender:function(data){
+				                            		if(data!=""&&data!=null){
+				                            			return $filter('currency')(data,'');
+				                            		}else{
+				                            			return $filter('currency')(0,'');
+				                            		}
+				                            	} },
                                   { mData: 'agentUnit' },
                                   { mData: 'fileCount' },
                                   { mData: 'createTime' },
@@ -292,6 +377,20 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
     	                    		  //return data;
     	                    	  },"createdCell": function (td, cellData, rowData, row, col) {
     	                    		  $compile(td)($scope);
+    	                    	  }
+    	                      },{
+    	                      	  'targets' : 12,
+    	                    	  'render' : function(data,
+    	                    			  type, row, meta) {
+    	                    		  if(data!=""&&data!=null){
+    	                    			  if(data=='0'){
+    	                        				return '<span  class="label label-sm label-info ng-scope">待确认</span>';
+    	                        			}else if(data=='1'){
+    	                        				return '<span  class="label label-sm label-success ng-scope">已确认</span>';
+    	                        			}
+	                            		}else{
+	                            			return "";
+	                            		}
     	                    	  }
     	                      }]
 
@@ -877,7 +976,15 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 		 $scope.customsFormEdit =false;
 	}
 	$scope.saveCustomsForm=function(judgeString){
-		$scope.customsForm.customsFormType=judgeString;
+		if(judgeString.indexOf("clearance")>-1){
+			$scope.customsForm.customsFormType='clearance';
+		}else if(judgeString.indexOf("declaration")>-1){
+			$scope.customsForm.customsFormType='declaration';
+		}
+		
+		if(judgeString.indexOf("confirm")>-1){
+			$scope.customsForm.status='1';
+		}
 		if($('#customsForm').valid()){
 		customsFormService.saveCustomsForm($scope.customsForm)
 		 .then(
@@ -887,6 +994,10 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 						 toastr.success("保存清关单成功！");
 					 }else  if(judgeString=="declaration"){
 						 toastr.success("保存报关单成功！");
+					 }else  if(judgeString.indexOf("clearance")>-1&&judgeString.indexOf('confirm')>-1){
+						 toastr.success("确认清关成功！");
+					 }else  if(judgeString=="declaration"&&judgeString.indexOf('confirm')>-1){
+						 toastr.success("确认报关成功！");
 					 }
 					 $scope.customsForm =data;
 					 $scope.customsFormEdit =true;
@@ -956,6 +1067,58 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 		 })   							});
 	
 }
+	
+	  /**
+     * 下载EXCEL模板
+     */
+    $scope.downloadImportTemp = function(type){
+ 	   window.location.href=$rootScope.basePath+"/rest/customsForm/downloadImportTemp?type="+type;
+    }
+    
+    /**
+     * 上传EXCEL
+     */
+    $scope.uploadExcel = function(customsFormType){
+    	debugger;
+ 	    var file = document.querySelector('input[type=file]').files[0];
+ 	    if(handle.isNull(file)){
+ 	    	toastr.warning("请选择Excel文件！");
+ 	    }
+ 	    var type = file.name.substring(file.name.lastIndexOf("."));
+ 	   if(type != ".xls"){
+ 		toastr.warning("文件格式不正确，需要xls类型的Excel文档");
+ 		   return;
+ 	   }
+ 	   	handle.blockUI("正在导入中，请不要进行其他操作"); 
+ 	   	var promise = customsFormService.uploadExcel(customsFormType);
+			promise.then(function(data){
+				handle.unblockUI(); 
+				if(data.data.data=="success"){
+					toastr.success("导入成功");
+					table.ajax.reload();
+				}else{
+					toastr.error(data.data.data);
+				}
+				$('#import').modal('hide'); 
+         },function(data){
+            //调用承诺接口reject();
+         	toastr.error("操作失败");
+         	$('#import').modal('hide'); 
+         });
+ 	   
+    }
+    $scope.exportCustomsForm = function(type){
+	    	 handle.blockUI("正在导出数据，请稍后"); 
+	    	 window.location.href=$rootScope.basePath+"/rest/customsForm/exportCustomsForm?type="+type;
+	    	 handle.unblockUI(); 
+	       }
+	       
+    $('#import').on('hide.bs.modal', function (e) { 
+ 	   $("#resetFile").trigger("click");
+ 	  //$("#file_span input[type='file']").remove();
+ 	  //$(".fileinput-filename").val("");
+ 	  //$("#file_span").appendTo('<input type="file" file-model="excelFile" accept=".xls" name="...">');
+    })
           
           
           

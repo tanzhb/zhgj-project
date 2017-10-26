@@ -56,6 +56,22 @@ angular.module('MetronicApp').service('customsFormService',
 	                    deferred.reject('连接服务器出错！');
 	                })
 					return deferred.promise;
+				},
+			    
+			 uploadExcel:function(params){
+					var deferred = $q.defer();
+					var fd = new FormData();
+			        var file = document.querySelector('input[type=file]').files[0];
+			        fd.append('excelFile', file);
+			        fd.append('type', params);
+					$http.post("rest/customsForm/customsFormImport",  
+							fd,{headers:{'Content-Type': undefined},transformRequest: angular.identity}
+					).then(function success(result) {
+						deferred.resolve(result);//请求成功
+					}, function error(err) {
+						deferred.reject(err);//请求失败
+					});
+					return deferred.promise;//返回承诺
 				}
 			}
 		} ]);

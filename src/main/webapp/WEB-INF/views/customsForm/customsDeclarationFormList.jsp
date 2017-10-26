@@ -3,19 +3,13 @@
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 
 <div class="tabbable-line">
-   
-    <div class="tab-content">
-    	<!-- 采购价格列表---START -->
-        <div class="tab-pane active" id="tab_buy">
-        <div class="portlet-body">
-			<div class="tabbable-custom ">
-			<ul class="nav nav-tabs " id="buyPriceTab">
-				<li class="active"><a href="#applyBuyPrice" data-toggle="tab"
-					ng-click="toApplyBuyPrice()"> 报关单 </a></li>
+			<ul class="nav nav-tabs " >
+				<li class="active"><a href="#declaration" data-toggle="tab"
+					> 报关单 </a></li>
 			</ul>
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
         <div class="tab-content">
-				<div class="tab-pane active" id="applyBuyPrice">
+				<div class="tab-pane active" id="declaration">
 		<div class="portlet light">
 			<div class="portlet-title">
 			<!-- 	<div class="caption">
@@ -25,7 +19,7 @@
 				<div class="actions">
 				<div class="btn-group btn-group-devided" data-toggle="buttons">
 				<label class="btn btn-transparent yellow btn-circle btn-sm"
-										ng-click="submitPriceApply('buy')"> <i class="glyphicon glyphicon-play"></i> 确认</label>
+										ng-click="confirmCustomsForm('confirmdeclaration')"> <i class="glyphicon glyphicon-play"></i> 确认</label>
 					<shiro:hasPermission name="buyPrice:add">
 						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addCustomsForm('declaration')">
 	                                              <i class="fa fa-plus"></i> 添加</label>
@@ -38,10 +32,10 @@
 						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delCustomsForm('declaration')" >
 	                                              <i class="fa fa-minus"></i> 删除</label>
 	                </shiro:hasPermission>
-	                <shiro:hasPermission name="buyPrice:import">
+	                <%-- <shiro:hasPermission name="buyPrice:import">
 						<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
 	                                              <i class="fa fa-upload"></i> 导入</label>
-					</shiro:hasPermission>	    
+					</shiro:hasPermission>	   --%>  
 					<shiro:hasPermission name="buyPrice:export">                                          
 						<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportCustomsForm('declaration')">
 	                                              <i class="fa fa-file-excel-o"></i> 导出</label>
@@ -50,7 +44,7 @@
 				</div>
 			</div>
 
-			<!-- 删除清关单start -->
+			<!-- 删除报关单start -->
 				<div id="deldeclarationModal" class="modal fade" tabindex=
 
 				data-backdrop="static" data-keyboard="false">
@@ -73,7 +67,78 @@
 					</div>
 				</div>
 			</div>
-<!-- 删除采购价格end -->
+<!-- 删除报关单end -->
+
+			<!-- 导入modal START -->
+<div class="modal fade" id="import" role="import" aria-hidden="true">
+     <div class="modal-dialog" >
+	    <div class="modal-content">
+	 		<div class="modal-header">
+	            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+	            <h4 class="modal-title" >报关单导入</h4>
+	        </div>
+	        <div class="modal-body">
+	          		<!-- <div class="col-md-12"> -->
+	          		 <div class="">
+                           <div class="portlet-body form">
+                              <!--  BEGIN FORM -->
+                               <form class="form-horizontal" role="form">
+                                   <div class="form-body">
+                                   		<form id="fileImport" method="post" enctype="multipart/form-data" >
+	                                       <div class="row">
+	                                           <div class="col-md-2">
+	                                               <div class="form-group">
+	                                               		<!-- <div class="col-md-4">
+	                                               		</div> -->
+	                                               		<div class="col-md-12">
+	                                               			<button type="button" class="btn blue" ng-click="downloadImportTemp('declaration')">下载模板</button>
+	                                               		</div>
+	                                               </div>
+	                                           </div>
+	                                           <div class="col-md-7">
+	                                               <div class="form-group">
+	                                               		 <div class="fileinput fileinput-new" data-provides="fileinput">
+	                                                        <div class="input-group input-large">
+	                                                            <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+	                                                                <i class="fa fa-file fileinput-exists"></i>&nbsp;
+	                                                                <span class="fileinput-filename"> </span>
+	                                                            </div>
+	                                                            <span class="input-group-addon btn default btn-file" id="file_span">
+	                                                                <span class="fileinput-new"> 选择文件 </span>
+	                                                                <span class="fileinput-exists">更换</span>
+	                                                                <input type="file" file-model="excelFile" accept=".xls" name="..."> </span>
+	                                                            <a href="javascript:;" id="resetFile" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> 移除 </a>
+	                                                        </div>
+	                                                    </div>
+	                                               </div>
+	                                           </div>
+	                                            <div class="col-md-2">
+	                                               <div class="form-group">
+	                                               		<div class="col-md-4">
+	                                               			
+	                                               		</div>
+	                                               		<div class="col-md-8">
+	                                               			<button type="button" class="btn blue" ng-click="uploadExcel('declaration')">导入</button>
+	                                               		</div>
+	                                               </div>
+	                                           </div>
+	                                           
+	                                         <!--   /span -->
+	                                       </div>
+	                                       <!-- /row -->
+                                       </form>
+                                   </div>
+                               </form>
+                              <!--  END FORM -->
+                           </div>
+                      </div>
+					<!-- </div> -->
+	        <!-- </div> -->
+	    </div>
+    </div>
+</div>
+</div>
+<!-- 导入modal END-->
 			
 			<div class="portlet-body">
 				<table
@@ -112,15 +177,10 @@
 			</div>
 		
 		<!-- END EXAMPLE TABLE PORTLET-->
-        <!-- 进项票列表---END -->
+        <!-- 报关单列表---END -->
         
 			
    </div>     
-   </div> 
-   </div> 
-   </div> 
-    
-		</div>
 		</div>
 
 

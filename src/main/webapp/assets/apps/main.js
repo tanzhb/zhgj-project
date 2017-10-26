@@ -3379,15 +3379,21 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		"<li><a>报关单列表</a></li>";					 
 			   }else if('addCustomsForm' == toState.name){//新增清关单/报关单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>"; 
-					 if(toParams.customsFormType == 'clearance'){
+					 if(toParams.customsFormType.indexOf('clearance')>-1){
 						 html += "<li><a>采购订单</a><i class='fa fa-angle-right'></i></li><li><a ui-sref='customsClearanceForm'>清关单列表</a><i class='fa fa-angle-right'></i></li";
 					 } else html += "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li><li><a  ui-sref='customsDeclarationForm'>报关单列表</a><i class='fa fa-angle-right'></i></li>";
 				 		if(toParams.serialNum != undefined){
-				 			if(toParams.customsFormType == 'clearance'){
+				 			if(toParams.customsFormType.indexOf('clearance')>-1&&toParams.customsFormType.indexOf('confirm')>-1){
+								 html += "<li><a>确认清关单</a></li>";
+							 } else if(toParams.customsFormType.indexOf('declaration')>-1&&toParams.customsFormType.indexOf('confirm')>-1){
+								 html += "<li><a>确认报关单</a></li>";
+							 }else if(toParams.customsFormType.indexOf('clearance')>-1&&toParams.customsFormType.indexOf('confirm')<0){
 								 html += "<li><a>修改清关单</a></li>";
-							 } else html += "<li><a>修改报关单</a></li>";
+							 } else if(toParams.customsFormType.indexOf('declaration')>-1&&toParams.customsFormType.indexOf('confirm')<0){
+								 html += "<li><a>修改报关单</a></li>";
+							 }  
 						 } else {
-							 if(toParams.customsFormType == 'clearance'){
+							 if(toParams.customsFormType.indexOf('clearance')>-1){
 								 html += "<li><a>新增清关单</a></li>";
 							 } else html += "<li><a>新增报关单</a></li>";
 						 }
