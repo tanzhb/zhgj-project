@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.congmai.zhgj.web.dao.CompanyCodeMapper" >
+  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.CompanyCode" >
+    <result column="moduleType" property="moduleType" jdbcType="VARCHAR" />
+    <result column="comId" property="comId" jdbcType="VARCHAR" />
+    <result column="fieldCode" property="fieldCode" jdbcType="VARCHAR" />
+    <result column="fieldValue" property="fieldValue" jdbcType="VARCHAR" />
+    <result column="dropValue" property="dropValue" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    moduleType, comId, fieldCode, fieldValue, dropValue, sort
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.CompanyCodeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from companycode
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.CompanyCodeExample" >
+    delete from companycode
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.congmai.zhgj.web.model.CompanyCode" >
+    insert into companycode (moduleType, comId, fieldCode, 
+      fieldValue, dropValue, sort
+      )
+    values (#{moduleType,jdbcType=VARCHAR}, #{comId,jdbcType=VARCHAR}, #{fieldCode,jdbcType=VARCHAR}, 
+      #{fieldValue,jdbcType=VARCHAR}, #{dropValue,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.CompanyCode" >
+    insert into companycode
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="moduleType != null" >
+        moduleType,
+      </if>
+      <if test="comId != null" >
+        comId,
+      </if>
+      <if test="fieldCode != null" >
+        fieldCode,
+      </if>
+      <if test="fieldValue != null" >
+        fieldValue,
+      </if>
+      <if test="dropValue != null" >
+        dropValue,
+      </if>
+      <if test="sort != null" >
+        sort,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="moduleType != null" >
+        #{moduleType,jdbcType=VARCHAR},
+      </if>
+      <if test="comId != null" >
+        #{comId,jdbcType=VARCHAR},
+      </if>
+      <if test="fieldCode != null" >
+        #{fieldCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fieldValue != null" >
+        #{fieldValue,jdbcType=VARCHAR},
+      </if>
+      <if test="dropValue != null" >
+        #{dropValue,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.CompanyCodeExample" resultType="java.lang.Integer" >
+    select count(*) from companycode
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update companycode
+    <set >
+      <if test="record.moduleType != null" >
+        moduleType = #{record.moduleType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.comId != null" >
+        comId = #{record.comId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fieldCode != null" >
+        fieldCode = #{record.fieldCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fieldValue != null" >
+        fieldValue = #{record.fieldValue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dropValue != null" >
+        dropValue = #{record.dropValue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sort != null" >
+        sort = #{record.sort,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update companycode
+    set moduleType = #{record.moduleType,jdbcType=VARCHAR},
+      comId = #{record.comId,jdbcType=VARCHAR},
+      fieldCode = #{record.fieldCode,jdbcType=VARCHAR},
+      fieldValue = #{record.fieldValue,jdbcType=VARCHAR},
+      dropValue = #{record.dropValue,jdbcType=VARCHAR},
+      sort = #{record.sort,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

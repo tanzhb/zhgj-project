@@ -53,6 +53,10 @@
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <!-- <association property="parentMateriel" column="parentMaterielSerial" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByPrimaryKey"/>  -->
+    <association property="typeName" column="type" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
+    <association property="categoryName1" column="category1" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
+    <association property="categoryName2" column="category2" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
+    <association property="categoryName3" column="category3" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
     <collection property="supplyMateriels" column="materielId" select="com.congmai.zhgj.web.dao.SupplyMaterielMapper.selectSupplyMaterielByMaterielId"/> 
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -856,7 +860,7 @@
   </update>
   <select id="selectMaterielByOrderSerial"   parameterType="java.util.Map"   resultType="com.congmai.zhgj.web.model.Materiel">
   select m.materielNum,m.materielName,m.unit , m.specifications, om.amount  as amount ,
-  IFNULL(om.canBillAmount,om.amount)  AS canBillAmount,om.orderUnitPrice  as orderUnitPrice,om.serialNum as serialNum
+  IFNULL(om.canBillAmount,om.amount)  AS canBillAmount,om.orderUnitPrice  as orderUnitPrice,om.serialNum as serialNum,o.rate,o.currency,om.customsCode,om.customsRate
   <if test="invoiceSerial!=null">
   , IFNULL(ibr.billCount,0) as billAmount
   ,ibr.serialNum as invoiceBillingRecordSerial
@@ -866,6 +870,7 @@
   </if>
   from  orderMateriel om
   left join materiel m  on  om.materielSerial=m.serialNum
+  left  join orderInfo o  on  o.serialNum=om.orderSerial
     <if test="invoiceSerial!=null">
    left join invoiceBillingRecord ibr on   ibr.orderMaterielSerial=om.serialNum 
    </if>

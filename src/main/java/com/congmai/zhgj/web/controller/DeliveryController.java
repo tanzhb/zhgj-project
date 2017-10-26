@@ -57,6 +57,7 @@ import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.event.EventExample;
 import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.BaseVO;
@@ -73,6 +74,7 @@ import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.RelationFile;
 import com.congmai.zhgj.web.model.StockInOutCheck;
+import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
@@ -184,7 +186,7 @@ public class DeliveryController {
      * @return
      */
     @RequestMapping(value = "/findAllDeliveryList", method = RequestMethod.GET)
-    public ResponseEntity<Map> findAllDeliveryList(HttpServletRequest request) {
+    public ResponseEntity<Map> findAllDeliveryList(HttpServletRequest request,String customsFormType) {
 
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
@@ -198,6 +200,26 @@ public class DeliveryController {
 		query.setCreator(currenLoginName);
 		query.setSupplyComIds(comIds);
 		List<DeliveryVO> contractList=deliveryService.findAllDeliveryList(query);
+		List<DeliveryVO> now=new ArrayList<DeliveryVO>();
+		if("clearance".equals(customsFormType)){
+			for(DeliveryVO deliveryVO:contractList){
+				OrderInfo o=orderService.selectById(deliveryVO.getOrderSerial());
+				if(StaticConst.getInfo("waimao").equals(o.getTradeType())&&o.getOrderType().indexOf(StaticConst.getInfo("caigou"))>-1){
+					now.add(deliveryVO);
+				}
+				
+			}
+			contractList=now;
+		}else if("declaration".equals(customsFormType)){
+			for(DeliveryVO deliveryVO:contractList){
+				OrderInfo o=orderService.selectById(deliveryVO.getOrderSerial());
+				if(StaticConst.getInfo("waimao").equals(o.getTradeType())&&o.getOrderType().indexOf(StaticConst.getInfo("xiaoshou"))>-1){
+					now.add(deliveryVO);
+				}
+				
+			}
+			contractList=now;
+		}
 
 		//封装datatables数据返回到前台
 		Map pageMap = new HashMap();
@@ -232,21 +254,24 @@ public class DeliveryController {
 		deliveryService.updateOrderWhenDeliveryComlete(map);
 		
 		deliveryService.goDelivery(map);
+		OrderInfo o=orderService.selectById(orderSerial);
+		if("1".equals(o.getContractContent().substring(4, 5))){//验收条款有效生成检验
+			StockInOutCheck stockInOutCheck=new StockInOutCheck();
+			stockInOutCheck.setSerialNum(ApplicationUtils.random32UUID());
+			stockInOutCheck.setDeliverSerial(serialNum);
+			stockInOutCheck.setTakeDeliverSerial("checkout");
+			//stockInOutCheck.setTakeDeliverSerial(delivery.getTakeDeliverSerialNum());
+			stockInOutCheck.setChecker(currenLoginName);
+			stockInOutCheck.setCreator(currenLoginName);
+			stockInOutCheck.setCreateTime(new Date());
+			stockInOutCheck.setUpdater(currenLoginName);
+			stockInOutCheck.setUpdateTime(new Date());
+			stockInOutCheck.setStatus("0");//待检验
+			stockInOutCheck.setCheckDate(new Date());
+			stockInOutCheck.setDelFlg("0");
+			stockInOutCheckService.insert(stockInOutCheck);
+		}
 		
-		StockInOutCheck stockInOutCheck=new StockInOutCheck();
-		stockInOutCheck.setSerialNum(ApplicationUtils.random32UUID());
-		stockInOutCheck.setDeliverSerial(serialNum);
-		stockInOutCheck.setTakeDeliverSerial("checkout");
-		//stockInOutCheck.setTakeDeliverSerial(delivery.getTakeDeliverSerialNum());
-		stockInOutCheck.setChecker(currenLoginName);
-		stockInOutCheck.setCreator(currenLoginName);
-		stockInOutCheck.setCreateTime(new Date());
-		stockInOutCheck.setUpdater(currenLoginName);
-		stockInOutCheck.setUpdateTime(new Date());
-		stockInOutCheck.setStatus("0");//待检验
-		stockInOutCheck.setCheckDate(new Date());
-		stockInOutCheck.setDelFlg("0");
-		stockInOutCheckService.insert(stockInOutCheck);
 		
 		
 		HttpHeaders headers = new HttpHeaders();

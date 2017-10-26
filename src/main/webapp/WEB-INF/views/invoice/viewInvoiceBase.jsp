@@ -304,7 +304,7 @@
                                                 
 												 
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left"      >{{invoice.shouldPayOrReceiptMoney|currency:'￥'}}</p> 
+                                                                        <p class="control-label left"      ><!-- {{invoice.shouldPayOrReceiptMoney|currency:'￥'}} -->{{invoice.orderAmount |currency:'￥'}}</p> 
                                                                     </div>
                                                                       
                                                                 </div>
@@ -327,7 +327,7 @@
                                                     <div class="">
                                                   
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left"       >{{invoice.PayedOrReceiptedMoney|currency:'￥'}}</p> 
+                                                                        <p class="control-label left"       >{{invoice.orderAmount-invoice.unPayOrReceiptMoney|currency:'￥'}}</p> 
                                                                     </div>
                                                                       
                                                                 </div>
@@ -356,7 +356,7 @@
                                                   
 												 
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left"      >{{invoice.billedOrReceiptedMoney|currency:'￥'}}</p> 
+                                                                        <p class="control-label left"      >{{invoice.orderAmount-invoice.unBillOrReceiptMoney|currency:'￥'}}</p> 
                                                                     </div>
                                                                       
                                                                 </div>

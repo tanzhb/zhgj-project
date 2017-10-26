@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.congmai.zhgj.web.dao.CustomsFormMapper" >
+  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.CustomsForm" >
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="customsFormNum" property="customsFormNum" jdbcType="VARCHAR" />
+    <result column="customsFormType" property="customsFormType" jdbcType="VARCHAR" />
+    <result column="deliverSerial" property="deliverSerial" jdbcType="VARCHAR" />
+    <result column="orderSerial" property="orderSerial" jdbcType="VARCHAR" />
+    <result column="deliverAmount" property="deliverAmount" jdbcType="VARCHAR" />
+    <result column="addedTax" property="addedTax" jdbcType="VARCHAR" />
+    <result column="customsAmount" property="customsAmount" jdbcType="VARCHAR" />
+    <result column="shipNumber" property="shipNumber" jdbcType="VARCHAR" />
+    <result column="playArrivalDate" property="playArrivalDate" jdbcType="TIMESTAMP" />
+    <result column="port" property="port" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="agentUnit" property="agentUnit" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    serialNum, customsFormNum, customsFormType, deliverSerial, orderSerial, deliverAmount, 
+    addedTax, customsAmount, shipNumber, playArrivalDate, port, remark, status, agentUnit, 
+    delFlg, creator, createTime, updater, updateTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.CustomsFormExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from customsForm
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from customsForm
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from customsForm
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.CustomsFormExample" >
+    delete from customsForm
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.congmai.zhgj.web.model.CustomsForm" >
+    insert into customsForm (serialNum, customsFormNum, customsFormType, 
+      deliverSerial, orderSerial, deliverAmount, 
+      addedTax, customsAmount, shipNumber, 
+      playArrivalDate, port, remark, 
+      status, agentUnit, delFlg, 
+      creator, createTime, updater, 
+      updateTime)
+    values (#{serialNum,jdbcType=VARCHAR}, #{customsFormNum,jdbcType=VARCHAR}, #{customsFormType,jdbcType=VARCHAR}, 
+      #{deliverSerial,jdbcType=VARCHAR}, #{orderSerial,jdbcType=VARCHAR}, #{deliverAmount,jdbcType=VARCHAR}, 
+      #{addedTax,jdbcType=VARCHAR}, #{customsAmount,jdbcType=VARCHAR}, #{shipNumber,jdbcType=VARCHAR}, 
+      #{playArrivalDate,jdbcType=TIMESTAMP}, #{port,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{agentUnit,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.CustomsForm" >
+    insert into customsForm
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        serialNum,
+      </if>
+      <if test="customsFormNum != null" >
+        customsFormNum,
+      </if>
+      <if test="customsFormType != null" >
+        customsFormType,
+      </if>
+      <if test="deliverSerial != null" >
+        deliverSerial,
+      </if>
+      <if test="orderSerial != null" >
+        orderSerial,
+      </if>
+      <if test="deliverAmount != null" >
+        deliverAmount,
+      </if>
+      <if test="addedTax != null" >
+        addedTax,
+      </if>
+      <if test="customsAmount != null" >
+        customsAmount,
+      </if>
+      <if test="shipNumber != null" >
+        shipNumber,
+      </if>
+      <if test="playArrivalDate != null" >
+        playArrivalDate,
+      </if>
+      <if test="port != null" >
+        port,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="agentUnit != null" >
+        agentUnit,
+      </if>
+      <if test="delFlg != null" >
+        delFlg,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="updater != null" >
+        updater,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="customsFormNum != null" >
+        #{customsFormNum,jdbcType=VARCHAR},
+      </if>
+      <if test="customsFormType != null" >
+        #{customsFormType,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverSerial != null" >
+        #{deliverSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSerial != null" >
+        #{orderSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverAmount != null" >
+        #{deliverAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="addedTax != null" >
+        #{addedTax,jdbcType=VARCHAR},
+      </if>
+      <if test="customsAmount != null" >
+        #{customsAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="shipNumber != null" >
+        #{shipNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="playArrivalDate != null" >
+        #{playArrivalDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="port != null" >
+        #{port,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="agentUnit != null" >
+        #{agentUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.CustomsFormExample" resultType="java.lang.Integer" >
+    select count(*) from customsForm
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update customsForm
+    <set >
+      <if test="record.serialNum != null" >
+        serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customsFormNum != null" >
+        customsFormNum = #{record.customsFormNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customsFormType != null" >
+        customsFormType = #{record.customsFormType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deliverSerial != null" >
+        deliverSerial = #{record.deliverSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderSerial != null" >
+        orderSerial = #{record.orderSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deliverAmount != null" >
+        deliverAmount = #{record.deliverAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addedTax != null" >
+        addedTax = #{record.addedTax,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customsAmount != null" >
+        customsAmount = #{record.customsAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shipNumber != null" >
+        shipNumber = #{record.shipNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.playArrivalDate != null" >
+        playArrivalDate = #{record.playArrivalDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.port != null" >
+        port = #{record.port,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.agentUnit != null" >
+        agentUnit = #{record.agentUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlg != null" >
+        delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creator != null" >
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updater != null" >
+        updater = #{record.updater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update customsForm
+    set serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      customsFormNum = #{record.customsFormNum,jdbcType=VARCHAR},
+      customsFormType = #{record.customsFormType,jdbcType=VARCHAR},
+      deliverSerial = #{record.deliverSerial,jdbcType=VARCHAR},
+      orderSerial = #{record.orderSerial,jdbcType=VARCHAR},
+      deliverAmount = #{record.deliverAmount,jdbcType=VARCHAR},
+      addedTax = #{record.addedTax,jdbcType=VARCHAR},
+      customsAmount = #{record.customsAmount,jdbcType=VARCHAR},
+      shipNumber = #{record.shipNumber,jdbcType=VARCHAR},
+      playArrivalDate = #{record.playArrivalDate,jdbcType=TIMESTAMP},
+      port = #{record.port,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      agentUnit = #{record.agentUnit,jdbcType=VARCHAR},
+      delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      updater = #{record.updater,jdbcType=VARCHAR},
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.CustomsForm" >
+    update customsForm
+    <set >
+      <if test="customsFormNum != null" >
+        customsFormNum = #{customsFormNum,jdbcType=VARCHAR},
+      </if>
+      <if test="customsFormType != null" >
+        customsFormType = #{customsFormType,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverSerial != null" >
+        deliverSerial = #{deliverSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSerial != null" >
+        orderSerial = #{orderSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverAmount != null" >
+        deliverAmount = #{deliverAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="addedTax != null" >
+        addedTax = #{addedTax,jdbcType=VARCHAR},
+      </if>
+      <if test="customsAmount != null" >
+        customsAmount = #{customsAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="shipNumber != null" >
+        shipNumber = #{shipNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="playArrivalDate != null" >
+        playArrivalDate = #{playArrivalDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="port != null" >
+        port = #{port,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="agentUnit != null" >
+        agentUnit = #{agentUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        delFlg = #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        updater = #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.CustomsForm" >
+    update customsForm
+    set customsFormNum = #{customsFormNum,jdbcType=VARCHAR},
+      customsFormType = #{customsFormType,jdbcType=VARCHAR},
+      deliverSerial = #{deliverSerial,jdbcType=VARCHAR},
+      orderSerial = #{orderSerial,jdbcType=VARCHAR},
+      deliverAmount = #{deliverAmount,jdbcType=VARCHAR},
+      addedTax = #{addedTax,jdbcType=VARCHAR},
+      customsAmount = #{customsAmount,jdbcType=VARCHAR},
+      shipNumber = #{shipNumber,jdbcType=VARCHAR},
+      playArrivalDate = #{playArrivalDate,jdbcType=TIMESTAMP},
+      port = #{port,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      agentUnit = #{agentUnit,jdbcType=VARCHAR},
+      delFlg = #{delFlg,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+    <delete id="deleteCustomsForm" parameterType="java.util.List">
+    	update  customsForm   set delFlg=1  where serialNum in
+        <foreach item="idList" collection="list" open="(" close=")" separator=",">
+            #{idList}
+        </foreach>
+    </delete>
+</mapper>

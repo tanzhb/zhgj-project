@@ -35,6 +35,12 @@ public class Materiel {
     private String category1;
     private String category2;
     private String category3;
+    
+    private String typeName;
+    private String categoryName1;
+    private String categoryName2;
+    private String categoryName3;
+    
     private String materielAttribute;
 
     private String mnemonicCode;
@@ -90,7 +96,7 @@ public class Materiel {
 
     private String customsSupervisionConditions;
     
-    private String customsCode;
+    private String customsCode;//海关编码
 
     private String qualityDate;
 
@@ -114,7 +120,7 @@ public class Materiel {
     
     private String  canBillAmount;//可开/可收数量
     
-    private String  orderUnitPrice;//含税单价
+    private String  orderUnitPrice;//不含税单价
     
     private String amount ;//订单数量
     
@@ -128,9 +134,63 @@ public class Materiel {
     
     private String supplyMaterielSerial;
     
+    private String customsRate;//关税率
+    
+    private String customRateMoney;//关税额
+    
+    private String rate;//税率
+    
+    private String rateMoney;//税额
+    
+    private  String materielMoney;//金额(报关单/清关单物料中的金额)
+    
+    
+    
+   
+    
     
 
-    public String getSerialNum() {
+    public String getCustomsRate() {
+		return customsRate;
+	}
+
+	public void setCustomsRate(String customsRate) {
+		this.customsRate = customsRate;
+	}
+
+	public String getCustomRateMoney() {
+		return customRateMoney;
+	}
+
+	public void setCustomRateMoney(String customRateMoney) {
+		this.customRateMoney = customRateMoney;
+	}
+
+	public String getRate() {
+		return rate;
+	}
+
+	public void setRate(String rate) {
+		this.rate = rate;
+	}
+
+	public String getRateMoney() {
+		return rateMoney;
+	}
+
+	public void setRateMoney(String rateMoney) {
+		this.rateMoney = rateMoney;
+	}
+
+	public String getMaterielMoney() {
+		return materielMoney;
+	}
+
+	public void setMaterielMoney(String materielMoney) {
+		this.materielMoney = materielMoney;
+	}
+
+	public String getSerialNum() {
         return serialNum;
     }
 
@@ -610,6 +670,38 @@ public class Materiel {
 
 	public void setSupplyMaterielSerial(String supplyMaterielSerial) {
 		this.supplyMaterielSerial = supplyMaterielSerial;
+	}
+
+	public String getTypeName() {
+		return typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
+
+	public String getCategoryName1() {
+		return categoryName1;
+	}
+
+	public void setCategoryName1(String categoryName1) {
+		this.categoryName1 = categoryName1;
+	}
+
+	public String getCategoryName2() {
+		return categoryName2;
+	}
+
+	public void setCategoryName2(String categoryName2) {
+		this.categoryName2 = categoryName2;
+	}
+
+	public String getCategoryName3() {
+		return categoryName3;
+	}
+
+	public void setCategoryName3(String categoryName3) {
+		this.categoryName3 = categoryName3;
 	}
     
 }

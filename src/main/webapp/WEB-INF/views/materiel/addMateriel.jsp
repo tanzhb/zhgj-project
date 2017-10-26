@@ -124,15 +124,13 @@
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">物料大类<span class="required" aria-required="true"> * </span></label>
 				                                  <div class="">
-				                                      <select class="form-control" name="type" ng-hide="materielInput" ng-model="materiel.type" class="form-control"   >
-				                                              <option value="外购物料">外购物料</option>
-				                                             	<option value="委外加工" >委外加工</option>
-				                                               <option value="生产物料" >生产物料</option>
-				                                               <option value="成品物料" >成品物料</option>
+				                                      <select class="form-control" name="type" ng-hide="materielInput" ng-model="materiel.type" class="form-control"  
+				                                      ng-change="queryCategoryListByLevel('second')" >
+				                                              <option ng-repeat="_category in fristCategoryList" value="{{_category.categoryId}}">{{_category.categoryName}}</option>
 				                                             </select>
 				                                      <div class="form-control-focus"> </div>
 				                                      <span class="help-block" ng-hide="materielInput">请选择物料大类</span>
-				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.type}} </p>
+				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.typeName}} </p>
 				                                  </div>
 				
 				                              </div>
@@ -141,10 +139,13 @@
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">一级分类<span class="required" aria-required="true"> * </span></label>
 				                                  <div class="">
-				                                      <input type="text" name="category" ng-hide="materielInput" ng-model="materiel.category1" class="form-control" >
+				                                      <select class="form-control" name="category" ng-hide="materielInput" ng-model="materiel.category1" class="form-control"  
+				                                      ng-change="queryCategoryListByLevel('third')" >
+				                                              <option ng-repeat="_category in secondCategoryList" value="{{_category.categoryId}}">{{_category.categoryName}}</option>
+				                                             </select>
 				                                  		<div class="form-control-focus"> </div>
 				                                      <span class="help-block" ng-hide="materielInput">请输入物料一级分类</span>
-				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.category1}} </p>
+				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.categoryName1}} </p>
 				                                  </div>
 				
 				                              </div>
@@ -156,10 +157,13 @@
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">二级分类</label>
 				                                  <div class="">
-				                                      <input type="text" name="category" ng-hide="materielInput" ng-model="materiel.category2" class="form-control" >
+				                                      <select class="form-control" name="category" ng-hide="materielInput" ng-model="materiel.category2" class="form-control"  
+				                                      ng-change="queryCategoryListByLevel('fourth')" >
+				                                              <option ng-repeat="_category in thirdCategoryList" value="{{_category.categoryId}}">{{_category.categoryName}}</option>
+				                                             </select>
 				                                  		<div class="form-control-focus"> </div>
 				                                      <span class="help-block" ng-hide="materielInput">请输入物料二级分类</span>
-				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.category2}} </p>
+				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.categoryName2}} </p>
 				                                  </div>
 				
 				                              </div>
@@ -168,10 +172,12 @@
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">三级分类</label>
 				                                  <div class="">
-				                                      <input type="text" name="category" ng-hide="materielInput" ng-model="materiel.category3" class="form-control" >
+				                                      <select class="form-control" name="category" ng-hide="materielInput" ng-model="materiel.category3" class="form-control" >
+				                                              <option ng-repeat="_category in fourthCategoryList" value="{{_category.categoryId}}">{{_category.categoryName}}</option>
+				                                             </select>
 				                                  		<div class="form-control-focus"> </div>
 				                                      <span class="help-block" ng-hide="materielInput">请输入物料三级分类</span>
-				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.category3}} </p>
+				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.categoryName3}} </p>
 				                                  </div>
 				
 				                              </div>
