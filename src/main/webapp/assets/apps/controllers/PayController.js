@@ -111,39 +111,6 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	};
 	
 	
-	var supplyComId=null;
-	//获取采购订单的信息（并给supplyComId赋值）
-	$scope.getSaleOrderInfo  = function(serialNum) {
-		PayService.getSaleOrderInfo(serialNum).then(
-				function(data){
-					if($scope.pay==null){
-						$scope.saleOrder=data.orderInfo;
-						supplyComId=$scope.saleOrder.supplyComId;
-						var orderSerial=data.orderInfo.serialNum;
-						$scope.orderSerial=data.orderInfo.serialNum;
-						$scope.deliveryMaterielE=data.clauList;
-						$scope.clauseSettlementList=data.clauseSettlementDetail;
-					}else{
-						$scope.pay.orderNum=data.orderInfo.orderNum;
-						$scope.pay.orderSerial=data.orderInfo.serialNum;
-						$scope.pay.orderAmount=data.orderInfo.orderAmount;
-						$scope.pay.paiedMoney=data.orderInfo.paiedMoney;
-						$scope.pay.billedMoney=data.orderInfo.billedMoney;
-						$scope.clauseSettlementList=data.clauseSettlementDetail;
-						
-						
-						$scope.pay.supplyComId=data.orderInfo.supplyComId;
-						$scope.pay.deliveryAmount=null;
-						supplyComId=data.orderInfo.supplyComId;
-					}
-				},
-				function(error){
-					$scope.error = error;
-				}
-		);
-
-	};
-	
 	/**
      * 显示编辑、删除操作
      */
@@ -355,6 +322,40 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
        }
         
 	  //********附件  end****************//
+       
+       var supplyComId=null;
+   	//获取采购订单的信息（并给supplyComId赋值）
+   	$scope.getSaleOrderInfo  = function(serialNum) {
+   		PayService.getSaleOrderInfo(serialNum).then(
+   				function(data){
+   					debugger
+   					if($scope.pay==null){
+   						$scope.saleOrder=data.orderInfo;
+   						supplyComId=$scope.saleOrder.supplyComId;
+   						var orderSerial=data.orderInfo.serialNum;
+   						$scope.orderSerial=data.orderInfo.serialNum;
+   						$scope.deliveryMaterielE=data.clauList;
+   						$scope.clauseSettlementList=data.clauseSettlementDetail;
+   					}else{
+   						$scope.pay.orderNum=data.orderInfo.orderNum;
+   						$scope.pay.orderSerial=data.orderInfo.serialNum;
+   						$scope.pay.orderAmount=data.orderInfo.orderAmount;
+   						$scope.pay.paiedMoney=data.orderInfo.paiedMoney;
+   						$scope.pay.billedMoney=data.orderInfo.billedMoney;
+   						$scope.clauseSettlementList=data.clauseSettlementDetail;
+   						
+   						
+   						$scope.pay.supplyComId=data.orderInfo.supplyComId;
+   						$scope.pay.deliveryAmount=null;
+   						supplyComId=data.orderInfo.supplyComId;
+   					}
+   				},
+   				function(error){
+   					$scope.error = error;
+   				}
+   		);
+
+   	};
 
 	//添加付款
 	$scope.saveBasicInfo=function (){

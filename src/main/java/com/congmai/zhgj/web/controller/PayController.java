@@ -52,7 +52,10 @@ import com.alibaba.druid.util.StringUtils;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.UserUtil;
+import com.congmai.zhgj.web.event.EventExample;
+import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
@@ -435,8 +438,6 @@ public class PayController {
 			paymentVoucher = uploadFile(file);
 			record.setPaymentVoucher(paymentVoucher);
 		}
-		// 如果id为空执行保存
-		if (StringUtils.isEmpty(record.getSerialNum())) {
 			// 如果id为空执行保存
 			if (StringUtils.isEmpty(record.getSerialNum())) {
 
@@ -444,6 +445,12 @@ public class PayController {
 				record.setSerialNum(serialNum);
 				record.setCreator(currenLoginName);
 				payService.insertPaymentRecord(record);
+				if(!StringUtils.isEmpty(record.getSupplyComId())){
+					//新增付款后给供应商发送收款消息
+					EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(record,MessageConstants.SHOUKUAN));
+				}
+				
+				
 			} else {
 				// 如果id不为空执行更新
 
@@ -462,7 +469,6 @@ public class PayController {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setLocation(ucBuilder.path("/paymentRecordC")
 					.buildAndExpand(record.getSerialNum()).toUri());
-		}
 		return new ResponseEntity<PaymentRecord>(record, HttpStatus.CREATED);
 
 	}

@@ -188,6 +188,8 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 					||actionName=="outToBuy"
 					||actionName=="inToBuy"){
 					$state.go("takeDelivery");
+				}else if(actionName=="shoukuan"){
+					$state.go("gatheringMoneyRecord");
 				}
 			}
 			
