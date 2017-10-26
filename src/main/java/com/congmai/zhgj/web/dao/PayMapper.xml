@@ -66,7 +66,7 @@
     <select id="selectAllPaymentRecordList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.PaymentRecord">
     SELECT
 	a.serialNum,a.paymentNum,a.playPaymentDate,a.paymentNode,a.nodeNum,a.applyPaymentAmount,b.orderNum,
-	a.supplyComId,a.paymentDate,a.paymentAmount,a.status
+	(SELECT comName FROM company WHERE comId=a.supplyComId) AS supplyComId,a.paymentDate,a.paymentAmount,a.status
 	FROM
 	paymentRecord a
 	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
@@ -81,8 +81,8 @@
      <!--查询收款列表  -->
     <select id="findAllGatheringMoneyRecord" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.PaymentRecord">
 	 SELECT
-	a.serialNum,a.paymentNum,a.playPaymentDate,a.paymentNode,a.nodeNum,a.applyPaymentAmount,b.orderNum,
-	a.buyComId,a.paymentDate,a.paymentAmount,a.status
+	 a.serialNum,a.paymentNum,a.playPaymentDate,a.paymentNode,a.nodeNum,a.applyPaymentAmount,b.orderNum,
+	(SELECT comName FROM company WHERE comId=a.buyComId) AS buyComId,a.paymentDate,a.paymentAmount,a.status
 	FROM
 	paymentRecord a
 	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
