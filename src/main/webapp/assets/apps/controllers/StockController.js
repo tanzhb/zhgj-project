@@ -12,9 +12,10 @@ angular
 						'$location',
 						'$stateParams',
 						'settings',
+						'orderService',
 						'StockService',
 						function($rootScope, $scope, $state, $compile,$http,$location,$stateParams,settings,
-								StockService) {
+								orderService,StockService) {
 							$scope
 									.$on(
 											'$viewContentLoaded',
@@ -27,9 +28,10 @@ angular
 													if($stateParams.stockSerialNum.length>7){//库存编辑页面
 														getStockInfo($stateParams.stockSerialNum);
 													}else if($scope.manageType.indexOf('daiguan')>-1||$scope.manageType.indexOf('jinwai')>-1){
-														$("#serviceParty").val("中航能科（上海）能源科技有限公司");
-														$("#materielOwner").val("中航能科（上海）能源科技有限公司");
+														/*$("#serviceParty").val("中航能科（上海）能源科技有限公司");
+														$("#materielOwner").val("中航能科（上海）能源科技有限公司");*/
 													}
+													initSuppliers();//初始化物权方选择框
 										 		}else if($location.path()=="/stockView"){
 										 			debugger;
 										 			getStockDetailInfo($stateParams.stockSerialNum);//查看库位详情页面
@@ -54,6 +56,10 @@ angular
 										 		}
 												
 												selectMaterielStock();//选择物料表格初始化
+												if($scope.stock==undefined){
+													$scope.stock={};
+													$scope.stock.serviceParty="中航能科（上海）能源科技有限公司";
+												}
 												// set default layout mode
 												$rootScope.settings.layout.pageContentWhite = true;
 												$rootScope.settings.layout.pageBodySolid = false;
@@ -699,7 +705,11 @@ angular
 		 	    								if(data==''||data==null){
 		 	    									return "";
 		 	    								}else{
+		 	    									if(row.position==''||row.position==null){
+		 	    										return '<span title="仓库:'+row.warehouse.warehouseName+'&nbsp;&nbsp;&nbsp;&nbsp;\n库位:&nbsp;&nbsp;暂无">'+data.warehouseName+'</span>';
+		 	    									}else{
 		 	    									return '<span title="仓库:'+row.warehouse.warehouseName+'&nbsp;&nbsp;&nbsp;&nbsp;\n库位:'+row.position.positionName+'">'+data.warehouseName+'</span>';
+		 	    									}
 		 	    								}
 											},"createdCell": function (td, cellData, rowData, row, col) {
 												 $compile(td)($scope);
@@ -1058,7 +1068,25 @@ angular
 						            }
 						        })   							}); 
 							
-							
+							 /**
+							 * 加载物权方下拉框数据
+							 */
+							var initSuppliers = function(){
+								var promise = orderService.initSuppliers();
+						        	promise.then(function(data){
+						        		$scope.suppliers = data.data;
+						        		setTimeout(function () {
+						        			$("#materielOwner").selectpicker({
+						                        showSubtext: true
+						                    });
+						        			$('#materielOwner').selectpicker('refresh');//刷新插件
+						        			
+						                }, 100);
+						        		
+						        	},function(data){
+						        		//调用承诺接口reject();
+						        	});
+							}
 							 function getStockInfo(serialNum){//查看库位
 						    	   if(!handle.isNull(serialNum)){
 						    		   debugger;

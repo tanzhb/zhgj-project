@@ -1734,6 +1734,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 						'assets/global/plugins/bootbox/bootbox.min.js',
 				        'assets/apps/service/StockService.js',
+				        'assets/apps/service/orderService.js',
 						'assets/apps/controllers/StockController.js'
 	                   	                        ]
 	                    });
@@ -1757,6 +1758,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        				        'assets/apps/service/StockService.js',
 	        						'assets/apps/controllers/StockController.js',
 	        						 'assets/apps/scripts/pageHandle.js',
+	        						 'assets/apps/service/orderService.js',
 	        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
 	        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css'
 	        				        ]
@@ -1781,6 +1783,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 		        						'assets/global/plugins/bootbox/bootbox.min.js',
 		        				        'assets/apps/service/StockService.js',
+		        				        'assets/apps/service/orderService.js',
 		        						'assets/apps/controllers/StockController.js'
 		        				        ]
 		        			});

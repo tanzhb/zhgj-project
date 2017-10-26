@@ -662,7 +662,14 @@ angular
 					                            		}
 					                            	}
 												}, {
-													mData : 'money'
+													mData : 'money',
+													mRender:function(data){
+					                            		if(data!=""&&data!=null){
+					                            			return $filter('currency')(data,'￥');
+					                            		}else{
+					                            			return $filter('currency')(0,'￥');
+					                            		}
+					                            	}
 												},{
 													mData : 'status'
 												}
@@ -800,7 +807,14 @@ function loadMaterielOutTable(orderSerial,serialNum){
 	                            		}
 	                            	}
 								}, {
-									mData : 'money'
+									mData : 'money',
+									mRender:function(data){
+	                            		if(data!=""&&data!=null){
+	                            			return $filter('currency')(data,'￥');
+	                            		}else{
+	                            			return $filter('currency')(0,'￥');
+	                            		}
+	                            	}
 								},{
 									mData : 'status'
 								}

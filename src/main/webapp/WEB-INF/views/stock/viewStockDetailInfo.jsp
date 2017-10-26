@@ -36,7 +36,7 @@ margin-right: 20px;
 								           <div class="row"><!-- row START -->
                                                              <div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label col-md-3 bold" for="stockNum"> 库存编号 :</label>
+                                                    <label class="control-label col-md-4 bold" for="stockNum"> 库存编号 :</label>
                                                     <div class="control-label col-md-7">
                                                           <p class="form-control-static" >{{stock.stockNum}}</p> 
                                                     </div>
@@ -44,13 +44,13 @@ margin-right: 20px;
 										</div>
                                                             <div class="col-md-4">
                                                            <!--  <div class="form-group ">
-                                 <label class="control-label col-md-3 bold">贸易类型：</label>
+                                 <label class="control-label col-md-4 bold">贸易类型：</label>
                                  <div class="control-label col-md-7" >
 	                                 <p class="form-control-static"> {{buyOrder.tradeType}} </p>
                                  </div>
                              </div> -->
                                                                 <div class="form-group">
-                                                                <label class="control-label col-md-3 bold" for="materielNum">物料编号 :</label>
+                                                                <label class="control-label col-md-4 bold" for="materielNum">物料编号 :</label>
                                                                     <div class="control-label col-md-7">
                                                                         <p class="form-control-static" >{{stock.materielNum}}</p> 
                                                                     </div>
@@ -58,7 +58,7 @@ margin-right: 20px;
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                <label class="control-label col-md-3 bold" for="materielName">物料名称 :</label>
+                                                                <label class="control-label col-md-4 bold" for="materielName">物料名称 :</label>
                                                                     <div class="control-label col-md-7">
                                                                         <p class="form-control-static" >{{stock.materielName}}</p> 
                                                                     </div>
@@ -68,7 +68,7 @@ margin-right: 20px;
                                                         <div class="row"><!-- row START -->
                                                              <div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label col-md-3 bold" for="specifications"> 规格型号 :</label>
+                                                    <label class="control-label col-md-4 bold" for="specifications"> 规格型号 :</label>
                                                     <div class="control-label col-md-7">
                                                           <p class="form-control-static" >{{stock.specifications}}</p> 
                                                     </div>
@@ -76,7 +76,7 @@ margin-right: 20px;
 										</div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                <label class="control-label col-md-3 bold" for="maxStock">最高库存 :</label>
+                                                                <label class="control-label col-md-4 bold" for="maxStock">最高库存 :</label>
                                                                     <div class="control-label col-md-7">
                                                                         <p class="form-control-static" >{{stock.maxStock}}</p> 
                                                                     </div>
@@ -84,7 +84,7 @@ margin-right: 20px;
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                <label class="control-label col-md-3 bold" for="minStock">最低库存 :</label>
+                                                                <label class="control-label col-md-4 bold" for="minStock">最低库存 :</label>
                                                                     <div class="control-label col-md-7">
                                                                         <p class="form-control-static" >{{stock.minStock}}</p> 
                                                                     </div>
@@ -94,7 +94,7 @@ margin-right: 20px;
                                                         <div class="row"><!-- row START -->
                                                              <div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label col-md-3 bold" for="manageType"> 管理类型 :</label>
+                                                    <label class="control-label col-md-4 bold" for="manageType"> 管理类型 :</label>
                                                     <div class="control-label col-md-7">
                                                           <p class="form-control-static" ng-if="stock.manageType=='1'" >自建库管理</p>
 													<p class="form-control-static" ng-if="stock.manageType=='2'" >代管库管理</p>
@@ -104,7 +104,7 @@ margin-right: 20px;
 										</div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                <label class="control-label col-md-3 bold" for="materielOwner">物权方 :</label>
+                                                                <label class="control-label col-md-4 bold" for="materielOwner">物权方 :</label>
                                                                     <div class="control-label col-md-7">
                                                                         <p class="form-control-static" >{{stock.materielOwner}}</p> 
                                                                     </div>
@@ -112,7 +112,7 @@ margin-right: 20px;
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                <label class="control-label col-md-3 bold" for="serviceParty">服务方 :</label>
+                                                                <label class="control-label col-md-4 bold" for="serviceParty">服务方 :</label>
                                                                     <div class="control-label col-md-7">
                                                                         <p class="form-control-static" >{{stock.serviceParty}}</p> 
                                                                     </div>
@@ -122,7 +122,7 @@ margin-right: 20px;
                                                         <div class="row"><!-- row START -->
                                                              <div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label col-md-3 bold" for="currentAmount"> 库存数量 :</label>
+                                                    <label class="control-label col-md-4 bold" for="currentAmount"> 库存数量 :</label>
                                                     <div class="control-label col-md-7">
                                                          <p class="form-control-static"   ng-if="stock.countInAmountZijian==null||stock.countInAmountDaiguan==null">暂无库存</p>
                                                          <p class="form-control-static"   ng-if="stock.countInAmountZijian!=null&&stock.countOutAmountZijian==null&&stock.manageType=='1'">{{stock.countInAmountZijian}}</p>
@@ -134,7 +134,7 @@ margin-right: 20px;
 										</div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                <label class="control-label col-md-3 bold" for="preSale">预售数量 :</label>
+                                                                <label class="control-label col-md-4 bold" for="preSale">预售数量 :</label>
                                                                     <div class="control-label col-md-7">
                                                                         <p class="form-control-static"   ng-if="stock.preSaleAmount!=null">{{stock.preSaleAmount}}</p> 
                                                                         <p class="form-control-static"   ng-if="stock.preSaleAmount==null">暂无预售</p> 
@@ -143,7 +143,7 @@ margin-right: 20px;
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                <label class="control-label col-md-3 bold" for="onRoad">在途数量 :</label>
+                                                                <label class="control-label col-md-4 bold" for="onRoad">在途数量 :</label>
                                                                     <div class="control-label col-md-7">
                                                                     <p class="form-control-static"   ng-if="stock.onRoadAmount!=null">{{stock.canSaleAmount}}</p> 
                                                                         <p class="form-control-static"   ng-if="stock.onRoadAmount==null">暂无在途</p>
@@ -154,7 +154,7 @@ margin-right: 20px;
                                                         <div class="row"><!-- row START -->
                                                              <div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label col-md-3 bold" for="countInAmount"> 累计入库数量 :</label>
+                                                    <label class="control-label col-md-4 bold" for="countInAmount"> 累计入库数量 :</label>
                                                     <div class="control-label col-md-7">
                                                           <p class="form-control-static"   ng-if="stock.countInAmountDaiguan!=null&&stock.manageType=='2'">{{stock.countInAmountDaiguan}}</p> 
                                                            <p class="form-control-static"   ng-if="stock.countInAmountZijian!=null&&stock.manageType=='1'">{{stock.countInAmountZijian}}</p> 
@@ -164,7 +164,7 @@ margin-right: 20px;
 										</div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                <label class="control-label col-md-3 bold" for="countOutAmount">累计出库数量 :</label>
+                                                                <label class="control-label col-md-4 bold" for="countOutAmount">累计出库数量 :</label>
                                                                     <div class="control-label col-md-7">
                                                            <p class="form-control-static"   ng-if="stock.countOutAmountDaiguan!=null&&stock.manageType=='2'">{{stock.countOutAmountDaiguan}}</p> 
                                                             <p class="form-control-static"   ng-if="stock.countOutAmountZijian!=null&&stock.manageType=='1'">{{stock.countOutAmountZijian}}</p> 
@@ -174,7 +174,7 @@ margin-right: 20px;
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                <label class="control-label col-md-3 bold" for="lastInDate">最后入库日期 :</label>
+                                                                <label class="control-label col-md-4 bold" for="lastInDate">最后入库日期 :</label>
                                                                     <div class="control-label col-md-7">
                                                            <p class="form-control-static"   ng-if="stock.lastInDateDaiguan!=null&&stock.manageType=='2'">{{stock.lastInDateDaiguan}}</p> 
                                                             <p class="form-control-static"   ng-if="stock.lastInDateZijian!=null&&stock.manageType=='1'">{{stock.lastInDateZijian}}</p>
@@ -186,7 +186,7 @@ margin-right: 20px;
                                                         <div class="row"><!-- row START -->
                                                              <div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label col-md-3 bold" for="lastOutDate"> 最后出库日期 :</label>
+                                                    <label class="control-label col-md-4 bold" for="lastOutDate"> 最后出库日期 :</label>
                                                     <div class="control-label col-md-7">
                                                           <p class="form-control-static"   ng-if="stock.lastOutDateDaiguan!=null&&stock.manageType=='2'">{{stock.lastOutDateDaiguan}}</p> 
                                                            <p class="form-control-static"   ng-if="stock.lastOutDateZijian!=null&&stock.manageType=='1'">{{stock.lastOutDateZijian}}</p> 
@@ -196,7 +196,7 @@ margin-right: 20px;
 										</div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                <label class="control-label col-md-3 bold" for="relationBuyNum">关联采购单号 :</label>
+                                                                <label class="control-label col-md-4 bold" for="relationBuyNum">关联采购单号 :</label>
                                                                     <div class="control-label col-md-7">
                                                                         <p class="form-control-static"  ng-if="stock.manageType=='1'">{{stock.relationBuyNumZijian}}</p> 
                                                                          <p class="form-control-static"  ng-if="stock.manageType=='2'">{{stock.relationBuyNumDaiguan}}</p> 
@@ -205,7 +205,7 @@ margin-right: 20px;
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                <label class="control-label col-md-3 bold" for="relationSaleNum">关联销售单号 :</label>
+                                                                <label class="control-label col-md-4 bold" for="relationSaleNum">关联销售单号 :</label>
                                                                     <div class="control-label col-md-7">
                                                                          <p class="form-control-static"  ng-if="stock.manageType=='1'">{{stock.relationSaleNumZijian}}</p> 
                                                                          <p class="form-control-static"  ng-if="stock.manageType=='2'">{{stock.relationSaleNumDaiguan}}</p> 
@@ -216,7 +216,7 @@ margin-right: 20px;
                                                         <div class="row"><!-- row START -->
                                                              <div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label col-md-3 bold" for="belongWarehouseNum">所在仓库 :</label>
+                                                    <label class="control-label col-md-4 bold" for="belongWarehouseNum">所在仓库 :</label>
                                                     <div class="control-label col-md-7">
                                                            <p class="form-control-static"  ng-if="stock.manageType=='1'">{{stock.belongWarehouseNumZijian}}</p> 
                                                            <p class="form-control-static"  ng-if="stock.manageType=='2'">{{stock.belongWarehouseNumDaiguan}}</p> 
@@ -225,7 +225,7 @@ margin-right: 20px;
 										</div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                <label class="control-label col-md-3 bold" for="stockCost">库存成本 :</label>
+                                                                <label class="control-label col-md-4 bold" for="stockCost">库存成本 :</label>
                                                                     <div class="control-label col-md-7">
                                                                        <!--  <p class="form-control-static" >{{stock.stockCost}}</p>  -->
                                                                        <p class="form-control-static" >---</p>
@@ -234,7 +234,7 @@ margin-right: 20px;
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                <label class="control-label col-md-3 bold" for="averrageWhAge">平均库龄 :</label>
+                                                                <label class="control-label col-md-4 bold" for="averrageWhAge">平均库龄 :</label>
                                                                     <div class="control-label col-md-7">
                                                                         <!-- <p class="form-control-static" >{{stock.averrageWhAge}}</p> -->
                                                                          <p class="form-control-static" >---</p> 
@@ -245,7 +245,7 @@ margin-right: 20px;
                                                         <div class="row"><!-- row START -->
                                                              <div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label col-md-3 bold" for="riskGrade"> 风险等级 :</label>
+                                                    <label class="control-label col-md-4 bold" for="riskGrade"> 风险等级 :</label>
                                                     <div class="control-label col-md-7">
                                                           <!-- <p class="form-control-static" >{{stock.riskGrade}}</p>  -->
                                                           <p class="form-control-static" >---</p>
@@ -254,7 +254,7 @@ margin-right: 20px;
 										</div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                <label class="control-label col-md-3 bold" for="remark">备注 :</label>
+                                                                <label class="control-label col-md-4 bold" for="remark">备注 :</label>
                                                                     <div class="control-label col-md-7">
                                                                         <p class="form-control-static" >{{stock.remark}}</p> 
                                                                     </div>
@@ -262,7 +262,7 @@ margin-right: 20px;
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                <label class="control-label col-md-3 bold" for="status">状态 :</label>
+                                                                <label class="control-label col-md-4 bold" for="status">状态 :</label>
                                                                     <div class="control-label col-md-7">
                                                                         <!-- <p class="form-control-static" >{{stock.status}}</p>  -->
                                                                         <p class="form-control-static" >---</p>

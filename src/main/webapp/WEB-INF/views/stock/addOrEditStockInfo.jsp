@@ -181,13 +181,13 @@
                                                          
                                                             <!--/span-->
                                                         </div>
-                                                         <div class="row" >
+                                                         <div class="row"  ng-if="manageType.indexOf('daiguan')>-1||manageType.indexOf('jinwai')>-1">
                                                             <div class="col-md-6" >
                                                              <div class="form-group">
                                                     <label class="control-label bold" for="serviceParty"  ng-if="manageType.indexOf('daiguan')>-1||manageType.indexOf('jinwai')>-1"> <span class="required"> * </span>服务方:</label>
                                                     <div class="  ">
                                                                         <input type="text" class="form-control"   id="serviceParty" name ="serviceParty"  ng-hide="stockAdd"     value=""  ng-if="manageType.indexOf('daiguan')>-1||manageType.indexOf('jinwai')>-1" 
-												ng-model="stock.serviceParty" > 
+												ng-model="stock.serviceParty"   readonly="readonly"> 
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="stockView">{{stock.serviceParty}}</p> 
                                                                     </div>
@@ -197,8 +197,15 @@
                                                             <div class="form-group">
                                                     <label class="control-label bold" for="materielOwner" ng-if="manageType.indexOf('daiguan')>-1||manageType.indexOf('jinwai')>-1"> <span class="required"> * </span>物权方 :</label>
                                                     <div class="  ">
-                                                                        <input type="text"  class="form-control"  id="materielOwner" name ="materielOwner"   ng-hide="stockAdd"   value=""  ng-if="manageType.indexOf('daiguan')>-1||manageType.indexOf('jinwai')>-1" 
-												ng-model="stock.materielOwner" > 
+                                                     <div ng-hide="stockAdd">
+                                                     <select class="form-control"  id="materielOwner"  data-live-search="true"  name="materielOwner" class="form-control"  
+                                 		 ng-model="stock.materielOwner"  data-size="8">
+                                                   <option value=""></option>
+                                                   <option  ng-repeat="supplier in suppliers" value="{{supplier.comName}}" >{{supplier.comName}}</option>
+                                               </select>
+                                               </div>
+                                                                       <!--  <input type="text"  class="form-control"  id="materielOwner" name ="materielOwner"   ng-hide="stockAdd"   value=""  ng-if="manageType.indexOf('daiguan')>-1||manageType.indexOf('jinwai')>-1" 
+												ng-model="stock.materielOwner" >  -->
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="stockView">{{stock.materielOwner}}</p> 
                                                                     </div>
