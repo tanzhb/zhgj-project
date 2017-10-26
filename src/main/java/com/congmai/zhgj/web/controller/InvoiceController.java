@@ -328,23 +328,27 @@ public class InvoiceController {
     	
 		List<Materiel> materiels = materielService.selectMaterielByOrderSerial(orderSerial.substring(0, 32),orderSerial);
 		/*OrderInfo orderInfo=orderService.selectById(orderSerial.substring(0, 32));*/
-		DeliveryTransport dt=deliveryTransportService.getDeliveryTransport(deliverSerial);
+		DeliveryTransport dt=new  DeliveryTransport();
 		BigDecimal deliverAmount=BigDecimal.ZERO;//deliverAmount发货金额
 		BigDecimal addedTax=BigDecimal.ZERO;//addedTax增值税
 		BigDecimal customsAmount=BigDecimal.ZERO;//customsAmount关税额
-		for(Materiel materiel:materiels){
-			materiel.setMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getBillAmount()).setScale(2,BigDecimal.ROUND_HALF_UP )).toString());
-			if(!StringUtils.isEmpty(materiel.getRate())){//	税额
-				materiel.setRateMoney(new BigDecimal(materiel.getRate()).multiply(new BigDecimal(materiel.getOrderUnitPrice())).multiply(new BigDecimal(materiel.getAmount())).divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
-				addedTax=addedTax.add(new BigDecimal(materiel.getRateMoney()));
-			}
-			if(!StringUtils.isEmpty(materiel.getCustomsRate())){//关税额
-				materiel.setCustomRateMoney(new BigDecimal(materiel.getCustomsRate()).multiply(new BigDecimal(materiel.getOrderUnitPrice())).multiply(new BigDecimal(materiel.getAmount())).divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
-				customsAmount=customsAmount.add(new BigDecimal(materiel.getCustomRateMoney()));
-			}
-			materiel.setMaterielMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getAmount())).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
-			deliverAmount=deliverAmount.add(new BigDecimal(materiel.getMaterielMoney()));
+		if(!StringUtils.isEmpty(deliverSerial)){
+			 dt=deliveryTransportService.getDeliveryTransport(deliverSerial);
+			 for(Materiel materiel:materiels){
+					materiel.setMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getBillAmount()).setScale(2,BigDecimal.ROUND_HALF_UP )).toString());
+					if(!StringUtils.isEmpty(materiel.getRate())){//	税额
+						materiel.setRateMoney(new BigDecimal(materiel.getRate()).multiply(new BigDecimal(materiel.getOrderUnitPrice())).multiply(new BigDecimal(materiel.getAmount())).divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
+						addedTax=addedTax.add(new BigDecimal(materiel.getRateMoney()));
+					}
+					if(!StringUtils.isEmpty(materiel.getCustomsRate())){//关税额
+						materiel.setCustomRateMoney(new BigDecimal(materiel.getCustomsRate()).multiply(new BigDecimal(materiel.getOrderUnitPrice())).multiply(new BigDecimal(materiel.getAmount())).divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
+						customsAmount=customsAmount.add(new BigDecimal(materiel.getCustomRateMoney()));
+					}
+					materiel.setMaterielMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getAmount())).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
+					deliverAmount=deliverAmount.add(new BigDecimal(materiel.getMaterielMoney()));
+				}
 		}
+	
 		// 封装datatables数据返回到前台
 		Map<String,Object> pageMap = new HashMap<String,Object>();
 		pageMap.put("draw", 1);
