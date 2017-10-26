@@ -105,6 +105,11 @@ public class MessageConstants {
 	 * 发货
 	 */
 	public static final String DELIVERY = "delivery";
+	
+	/**
+	 * 收款
+	 */
+	public static final String SHOUKUAN = "shoukuan";
 	/*========================发货相关消息End==============================*/
 	
 	/*===========出入库相关消息Start====== ========*/
@@ -229,6 +234,11 @@ public class MessageConstants {
 	 * 发货后给客户信息
 	 */
 	public static final String URL_DELIVERY = "takeDelivery";
+	
+	/**
+	 * 付款后给供应商信息
+	 */
+	public static final String URL_SHOUKUAN= "gatheringMoneyRecord";
 	/*========================发货相关消息End==============================*/
 	
 	/*========================出入库相关消息Start==============================*/
@@ -396,6 +406,10 @@ public class MessageConstants {
 	 * 入库已检验消息(发给供应)
 	 */
 	public static final String TEMP_IN_CHECK_TO_SALE = "104";
+	/**
+	 * 收款消息(发给供应)
+	 */
+	public static final String TEMP_SHOUKUAN = "105";
 	//10
 	/**
 	 *  出库已检验消息(发给采购)
