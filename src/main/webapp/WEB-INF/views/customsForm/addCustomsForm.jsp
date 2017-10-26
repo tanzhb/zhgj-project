@@ -74,13 +74,17 @@
                                             <i class="fa fa-edit"></i> 编辑 </button>
                                             <button  ng-show="customsFormEdit"   ng-if="customsFormType.indexOf('declaration')>-1"  class="btn purple  btn-sm btn-circle " ng-click="editCustomsForm('declaration')">
                                             <i class="fa fa-edit"></i> 编辑 </button>
+                                              <button   ng-hide="customsFormAdd"   ng-if="customsFormType.indexOf('clearance')>-1&&customsFormType.indexOf('confirm')>-1"  class="btn green  btn-sm btn-circle" ng-click="saveCustomsForm('confirmclearance')">
+                              		<i class="fa fa-check"></i> 确认清关 </button>
+                              		<button   ng-hide="customsFormAdd"    ng-if="customsFormType.indexOf('declaration')>-1&&customsFormType.indexOf('confirm')>-1"    class="btn green  btn-sm btn-circle" ng-click="saveCustomsForm('confirmdeclaration')" >
+                              		<i class="fa fa-check"></i> 确认报关 </button>
                                 <button   ng-hide="customsFormAdd"     ng-if="customsFormType.indexOf('clearance')>-1"   class="btn defualt  btn-sm btn-circle" ng-click="cancelEditcustomsForm('clearance')">
                                             <i class="fa fa-undo"></i> 取消 </button>
                                               <button   ng-hide="customsFormAdd"     ng-if="customsFormType.indexOf('declaration')>-1"   class="btn defualt  btn-sm btn-circle" ng-click="cancelEditcustomsForm('declaration')">
                                             <i class="fa fa-undo"></i> 取消 </button>
-                                <button  ng-hide="customsFormAdd"   type="submit"     ng-if="customsFormType.indexOf('clearance')>-1"   class="btn green  btn-sm btn-circle"   ng-click="saveCustomsForm('clearance')">
+                                <button  ng-hide="customsFormAdd"   type="submit"     ng-if="customsFormType.indexOf('clearance')>-1&&customsFormType.indexOf('confirm')<0"   class="btn green  btn-sm btn-circle"   ng-click="saveCustomsForm('clearance')">
                                             <i class="fa fa-save"></i> 保存 </button>
-                                             <button  ng-hide="customsFormAdd"   type="submit"     ng-if="customsFormType.indexOf('declaration')>-1"  class="btn green  btn-sm btn-circle"   ng-click="saveCustomsForm('declaration')">
+                                             <button  ng-hide="customsFormAdd"   type="submit"     ng-if="customsFormType.indexOf('declaration')>-1&&customsFormType.indexOf('confirm')<0"  class="btn green  btn-sm btn-circle"   ng-click="saveCustomsForm('declaration')">
                                             <i class="fa fa-save"></i> 保存 </button>
                             </div>
                         </div>
