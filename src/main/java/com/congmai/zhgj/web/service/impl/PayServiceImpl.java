@@ -17,12 +17,15 @@ import com.congmai.zhgj.web.dao.OrderInfoMapper;
 import com.congmai.zhgj.web.dao.PayMapper;
 import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
+import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.MaterielFile;
 import com.congmai.zhgj.web.model.MaterielFileExample;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.PaymentFile;
 import com.congmai.zhgj.web.model.PaymentPlan;
 import com.congmai.zhgj.web.model.PaymentRecord;
+import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.Vacation;
 import com.congmai.zhgj.web.model.MaterielFileExample.Criteria;
 import com.congmai.zhgj.web.service.PayService;
@@ -185,6 +188,41 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 		// TODO Auto-generated method stub
 		
 		return payMapper.selectPayById(serialNum);
+	}
+
+	
+	/**
+	 * 当支付节点是“合同签订”时，查询日期
+	 * @param serialNum
+	 * @return
+	 */
+	@Override
+	public ContractVO selectDateTypeContract(String serialNum) {
+		// TODO Auto-generated method stub
+		return payMapper.selectDateTypeContract(serialNum);
+	}
+
+	
+	/**
+	 * 当支付节点是“提货前”时，查询日期
+	 * @param serialNum
+	 * @return
+	 */
+	@Override
+	public DeliveryVO selectDateTypeDelivery(String serialNum) {
+		// TODO Auto-generated method stub
+		return payMapper.selectDateTypeDelivery(serialNum);
+	}
+
+	/**
+	 * 当支付节点是“到货后”时，查询日期
+	 * @param serialNum
+	 * @return
+	 */
+	@Override
+	public TakeDeliveryVO selectDateTypeTakeDelivery(String serialNum) {
+		// TODO Auto-generated method stub
+		return payMapper.selectDateTypeTakeDelivery(serialNum);
 	}
 
 	/**

@@ -88,6 +88,11 @@ public class WebSocketProcessor implements MessageProcessor {
 	//已付款（to供应）
 		private static String message105 = "尊敬的${paramer_a}，您好！销售订单号${paramer_b} 即将收款，收款类型为预收款，请及时处理。"+
 	      "<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a>";
+	
+	//已付款（to供应）
+		private static String message106 ="尊敬的${paramer_a}，您好！"+"销售订单号${paramer_b} 即将付款，付款类型为预收款，请贵司在X年X月X日前完成付款，感谢您的配合查看(跳转收款计划单链接)"
+	     +"<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a>";
+				
 
 
 	
@@ -111,6 +116,7 @@ public class WebSocketProcessor implements MessageProcessor {
 		MessageTemplate.register("103", DEFAULT_MSG_TEMPLATE, null, message103);
 		MessageTemplate.register("104", DEFAULT_MSG_TEMPLATE, null, message104);
 		MessageTemplate.register("105", DEFAULT_MSG_TEMPLATE, null, message105);
+		MessageTemplate.register("106", DEFAULT_MSG_TEMPLATE, null, message106);
 	}
 	
 	@Override

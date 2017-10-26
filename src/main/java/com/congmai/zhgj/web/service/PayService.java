@@ -6,10 +6,13 @@ import java.util.Map;
 import com.congmai.zhgj.core.generic.GenericService;
 import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
+import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.MaterielFile;
 import com.congmai.zhgj.web.model.PaymentFile;
 import com.congmai.zhgj.web.model.PaymentPlan;
 import com.congmai.zhgj.web.model.PaymentRecord;
+import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.Vacation;
 
 /**
@@ -53,7 +56,28 @@ public interface PayService extends GenericService<PaymentRecord, String> {
 	 */
 	public PaymentRecord selectPayById(String serialNum);
 	
+	/**
+	 * 当支付节点是“合同签订”时，查询日期
+	 * @param serialNum
+	 * @return
+	 */
+	public ContractVO selectDateTypeContract(String serialNum);
 	
+	
+	/**
+	 * 当支付节点是“提货前”时，查询日期
+	 * @param serialNum
+	 * @return
+	 */
+	public DeliveryVO selectDateTypeDelivery(String serialNum);
+	
+	
+	/**
+	 * 当支付节点是“到货后”时，查询日期
+	 * @param serialNum
+	 * @return
+	 */
+	public TakeDeliveryVO selectDateTypeTakeDelivery(String serialNum);
 
 	/**
 	 * 查询采购合同的结算条款列表
