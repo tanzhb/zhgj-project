@@ -1,15 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!-- <div class="page-bar">
-	<ul class="page-breadcrumb">
-		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
-			class="fa fa-angle-right"></i></li>
-
-		<li><a ui-sref="userContract">基础数据</a><i
-			class="fa fa-angle-right"></i></li>
-		<li><a ui-sref="userContract">合同信息</a></li>
-	</ul>
-</div> -->
 <div class="tabbable-line">
 	<ul class="nav nav-tabs" id="statement_tab">
 		<li><a data-target="#tab_15_2" data-toggle="tab">销售合同</a></li>
@@ -141,11 +131,6 @@
 							<table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_2_1">
 								<thead>
 									<tr>
-										<!-- <th style="text-align: center">
-										<label class="mt-radio mt-radio-outline">
-											<input type="radio" value="1" name="id[]"/> <span></span>
-									     </label>	
-										</th> -->
 										<th>
                                             <label class="mt-radio mt-radio-single mt-radio-outline">
                                                 <input type="radio" class="group-checkable" name="id[]"/>
@@ -240,9 +225,6 @@
 							<table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_2_2">
 								<thead>
 									<tr>
-										<!-- <th style="text-align: center"><label class="mt-radio mt-radio-outline">
-											<input type="radio" value="1" name="id[]"/> <span></span>
-									     </label></th> -->
 									     <th style="text-align: center">
 									     <label class="mt-radio mt-radio-single mt-radio-outline">
                                                 <input type="radio" class="group-checkable" name="id[]"/>
