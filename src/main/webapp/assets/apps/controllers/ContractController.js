@@ -215,6 +215,14 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 	    	 window.location.href=$rootScope.basePath+"/rest/contract/exportBuyContract";
 	    	 handle.unblockUI(); 
 	       }
+		 
+		 $scope.viewBuyOrder = function(serialNum){
+		    	$state.go("viewBuyOrder",{serialNum:serialNum});
+		    }
+		 
+		  $scope.viewSaleOrder = function(serialNum){
+		    	$state.go("viewSaleOrder",{serialNum:serialNum});
+		    }
 		
 		var table;
 		var loadMainTable = function() {
