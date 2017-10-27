@@ -64,6 +64,7 @@ public class ClauseSettlementServiceImpl  implements
 		ClauseSettlementExample ex = new ClauseSettlementExample();
 		Criteria criteria =  ex.createCriteria();
     	criteria.andContractSerialEqualTo(id);
+
 		List<ClauseSettlement> list = clauseSettlementMapper.selectByExample(ex);
 		if(list!=null&&list.size()>0){
 			return list.get(0);

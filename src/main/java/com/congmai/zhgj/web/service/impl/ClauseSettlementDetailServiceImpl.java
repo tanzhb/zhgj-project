@@ -86,7 +86,10 @@ public class ClauseSettlementDetailServiceImpl implements ClauseSettlementDetail
 			
 			ClauseSettlementDetailMapper.updateByExampleSelective(m, ex);
 			
+			int i=0;
 			for(ClauseSettlementDetail b:clauseSettlementDetails){
+				i++;
+				b.setSort(i);
 				ClauseSettlementDetailMapper.insert(b);
 			}
 		}

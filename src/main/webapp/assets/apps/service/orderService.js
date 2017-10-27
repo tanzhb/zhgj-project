@@ -52,7 +52,20 @@ angular.module('MetronicApp').service('orderService',
 			            })  
 			        return deferred.promise;  
 			          
-			    },//保存订单物料
+			    },//保存所有订单物料
+			    saveAllOrderMateriel : function (orderMateriel){
+					var deferred = $q.defer();
+					var params = {};
+					params = JSON.stringify(orderMateriel);
+					$http.post("rest/order/saveAllOrderMateriel", 
+							params//传整个表单数据  
+					).then(function success(result) {
+						deferred.resolve(result);//请求成功
+					}, function error(err) {
+						deferred.reject(err);//请求失败
+					});
+					return deferred.promise;//返回承诺
+				},//保存订单物料
 			    saveOrderMateriel : function (orderMateriel){
 					var deferred = $q.defer();
 					$http.post("rest/order/saveOrderMateriel", 
