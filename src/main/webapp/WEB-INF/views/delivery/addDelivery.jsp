@@ -243,7 +243,7 @@
 													<div class="">
 														<input type="text" name="deliverDate" class="form-control"
 															id="deliverDate" data-date-format="yyyy-mm-dd"
-															ng-show="input" data-date-viewmode="years" size="16"
+															ng-show="input" data-date-viewmode="years" size="16" 
 															ng-model="delivery.deliverDate" readonly="readonly" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
@@ -299,11 +299,10 @@
 														<select class="form-control"
 															id="ordpackageSpecificationserType"
 															name="packageSpecifications"
-															ng-model="delivery.packageSpecifications" ng-show="input">
+															ng-model="delivery.packageSpecifications" ng-show="input"    ng-init="delivery.packageSpecifications='原厂包装'">
 															<option value="">包装规格</option>
-															<option value="规格1">规格1</option>
-															<option value="规格2">规格2</option>
-															<option value="规格3">规格3</option>
+															<option value="原厂包装">原厂包装</option>
+															<option value="标准料箱">标准料箱</option>
 														</select>
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
@@ -540,7 +539,7 @@
 											<!--/span-->
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">收货日期</label>
+													<label class="control-label bold">预计到货日期</label>
 													<div class="">
 														<input type="text" name="takeDeliverDate"
 															id="takeDeliverDate" data-date-format="yyyy-mm-dd"
@@ -675,7 +674,7 @@
 															</p>
 														</td>
 														<td class="form-group"><input type="text"
-															name="deliverCount" id="deliverCount{{$index}}"
+															name="deliverCount" id="deliverCount{{$index}}"  ng-init="deliveryMaterielE[$index].deliverCount=_deliveryMateriel.amount"
 															class="form-control"
 															ng-hide="orderMaterielInput{{$index}}"
 															ng-model="deliveryMaterielE[$index].deliverCount"
@@ -707,7 +706,7 @@
 														<td></td>
 														<td></td>
 														<td></td>
-														<td></td>
+														<td>{{totalOrderCount}}</td>
 														<td>{{totalDeliveryCount}}</td>
 														<td></td>
 														<td></td>

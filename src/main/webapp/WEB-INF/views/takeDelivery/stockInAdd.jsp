@@ -5,6 +5,9 @@
 .left{
 	float: left;
 }
+.form-control {
+    outline: 40px!important;
+}
 
 /* #deliveryMaterielTable thead tr th{
 	text-align: center;
@@ -135,7 +138,8 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="supplyComId"> 入库仓库</label>
                                                     <div class="">
-                                                    	<input type="text" class="form-control" value="{{warehouseCount}}" disabled="disabled">
+                                                    	<input type="hidden" class="form-control" value="{{warehouseCount}}" disabled="disabled">
+                                                    	<input type="text" class="form-control" value="{{WarehouseName}}" disabled="disabled">
                                                       <!--    <p class="control-label left" >{{warehouseCount}}</p> -->
                                                     </div>
                                             </div>
@@ -185,7 +189,7 @@
 										
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="operator">操作员 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="operator">操作员 <!-- <span class="required"> * </span> --></label>
                                                     <div class="">
                                                         <input type="text" class="form-control" id="operator" name="operator" ng-model="record.operator" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
@@ -298,21 +302,22 @@
 											<span ng-if="materiel.acceptCount!=undefined && materiel.stockCount!=undedined">{{materiel.acceptCount-materiel.stockCount}}</span>
 										</td>
 										<td>
-											<div class="col-md-12 form-group">
-                                                <select ng-if="$first" class="bs-select form-control order" data-live-search="true"  ng-init="warehouses[0].serialNum" ng-change="getPositionsAndSelectedAll(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
+											<div class="col-md-12 form-group"><!--  class="bs-select form-control order"  class="bs-select form-control warehouseSerial"  -->
+                                                <select ng-if="$first"  data-live-search="true"   class="form-control input-small" ng-init="warehouses[0].serialNum" ng-change="getPositionsAndSelectedAll(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
 	                                                 <!--  <option value=""></option> -->
-	                                                  <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
+	                                                  <option class="{{materiel.serialNum}}" ng-repeat="warehouse in warehouses"     value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
 	                                            </select>
-	                                            <select ng-if="!$first" class="bs-select form-control warehouseSerial" data-live-search="true"   ng-init="warehouses[0].serialNum" ng-change="getPositions(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
+	                                            <select ng-if="!$first" class="form-control input-small" data-live-search="true"   ng-init="warehouses[0].serialNum" ng-change="getPositions(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
 	                                                 <!--  <option value=""></option> -->
-	                                                  <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
+	                                                  <option  class="{{materiel.serialNum}}"   ng-repeat="warehouse in warehouses"    value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
 	                                            </select>
 	                                            <div class="form-control-focus"></div>
                                             </div>
+                                            
 										</td>
 										<td>
-											<div class="col-md-12">
-                                                <select class="bs-select form-control order" data-live-search="true"  id="positionSerial" ng-change="countPosition()" ng-init="materiel.warehousePositons[0].serialNum"   name="positionSerial" ng-model="materiel.positionSerial"    data-size="8">
+											<div class="col-md-12"><!-- class="bs-select form-control order"  -->
+                                                <select class="form-control input-small"  data-live-search="true"  id="positionSerial" ng-change="countPosition()" ng-init="materiel.warehousePositons[0].serialNum"   name="positionSerial" ng-model="materiel.positionSerial"    data-size="8">
 	                                                   <!-- <option value=""></option> -->
 	                                                   <option  ng-repeat="warehousePositon in materiel.warehousePositons" value="{{warehousePositon.serialNum}}">{{warehousePositon.positionName}}</option>
 	                                             </select>
@@ -369,11 +374,11 @@
 											<div class="col-md-12 form-group">
                                                 <select ng-if="$first" class="bs-select form-control order" data-live-search="true"   ng-init="warehouses[0].serialNum" ng-change="getPositionsAndSelectedAll(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
 	                                                 <!--  <option value=""></option> -->
-	                                                  <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
+	                                                  <option    class="{{materiel.serialNum}}" ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
 	                                            </select>
 	                                            <select ng-if="!$first" class="bs-select form-control warehouseSerial" data-live-search="true"   ng-init="warehouses[0].serialNum" ng-change="getPositions(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
 	                                                 <!--  <option value=""></option> -->
-	                                                  <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
+	                                                  <option   class="{{materiel.serialNum}}" ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
 	                                            </select>
 	                                            <div class="form-control-focus"></div>
                                             </div>

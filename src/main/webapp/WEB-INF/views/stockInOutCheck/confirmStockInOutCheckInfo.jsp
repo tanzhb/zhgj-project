@@ -156,19 +156,19 @@
                                                     <th  rowspan="2" style="text-align: center;vertical-align: middle">单位</th>
                                                     <th    rowspan="2"  style="text-align: center;vertical-align: middle">批次号</th>
                                                      <th   rowspan="2"  style="text-align: center;vertical-align: middle">生产日期</th>
-                                                    <th   colspan="3"  style="text-align: center">发货</th>
-                                                     <th   colspan="3" style="text-align: center"><span ng-if="inOrOut.indexOf('in')>-1" >收货</span><span  ng-if="inOrOut.indexOf('out')>-1">出库</span></th>
+                                                    <th   colspan="3"  style="text-align: center" ng-if="inOrOut.indexOf('out')>-1">发货</th>
+                                                    <!--  <th   colspan="3" style="text-align: center"><span ng-if="inOrOut.indexOf('in')>-1" >收货</span><span  ng-if="inOrOut.indexOf('out')>-1">出库</span></th> -->
                                                     <th  colspan="3" style="text-align: center">检验</th>
                                                     <th    rowspan="2"  style="text-align: center;vertical-align: middle">状态</th>
                                                 </tr>
                                             
                                              <tr >
-                                                 <td style="text-align: center">订单数量</td>
-                                                  <td style="text-align: center">发货数量</td>
-                                                  <td  style="text-align: center">备注</td>
-                                                 <td  style="text-align: center"><span ng-if="inOrOut.indexOf('in')>-1" >实收数量</span><span  ng-if="inOrOut.indexOf('out')>-1">出库数量</span></td>
+                                                 <td style="text-align: center" ng-if="inOrOut.indexOf('out')>-1" >订单数量</td>
+                                                  <td style="text-align: center" ng-if="inOrOut.indexOf('out')>-1">发货数量</td>
+                                                  <td  style="text-align: center" ng-if="inOrOut.indexOf('out')>-1">备注</td>
+                                             <!--     <td  style="text-align: center"><span ng-if="inOrOut.indexOf('in')>-1" >实收数量</span><span  ng-if="inOrOut.indexOf('out')>-1">出库数量</span></td>
                                                   <td  style="text-align: center"><span ng-if="inOrOut.indexOf('in')>-1" >拒收数量</span><span  ng-if="inOrOut.indexOf('out')>-1">未出数量</span></td>
-                                                  <td  style="text-align: center">备注</td>
+                                                  <td  style="text-align: center">备注</td> -->
                                                    <td  style="text-align: center">合格数量</td>
                                                   <td   style="text-align: center">不合格数量</td>
                                                    <td  style="text-align: center">备注</td>
@@ -192,18 +192,18 @@
 										<td>
 											{{materiel.manufactureDate}}
 										</td>
-										<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.amount}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.amount}}</td>
-										<td>
+										<!-- <td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.orderMateriel.amount}}</td> --><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.amount}}</td>
+										<td ng-if="inOrOut.indexOf('out')>-1" >
                                             {{materiel.deliverCount}}
 										</td>
-										<td>
+										<td ng-if="inOrOut.indexOf('out')>-1" >
                                             {{materiel.deliverRemark}}
 										</td>
-										<td ng-if="inOrOut.indexOf('in')>-1"  > {{materiel.acceptCount}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.stockCount}}</td>
+										<!-- <td ng-if="inOrOut.indexOf('in')>-1"  > {{materiel.acceptCount}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.stockCount}}</td>
 										
 										<td ng-if="inOrOut.indexOf('in')>-1"  >{{materiel.refuseCount}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.unstockCount}}</td>
 										
-										<td ng-if="inOrOut.indexOf('in')>-1"  > {{materiel.takeRemark}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.stockRemark}}</td>
+										<td ng-if="inOrOut.indexOf('in')>-1"  > {{materiel.takeRemark}}</td><td ng-if="inOrOut.indexOf('out')>-1"  >{{materiel.stockRemark}}</td> -->
 										<td>{{materiel.qualifiedCount}}</td>
 										<td>{{materiel.unqualifiedCount}}</td>
 										<td>{{materiel.checkRemark}}</td>
