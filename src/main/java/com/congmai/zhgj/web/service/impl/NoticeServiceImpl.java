@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
+import com.congmai.zhgj.core.util.Constants;
 import com.congmai.zhgj.web.dao.NoticeMapper;
 import com.congmai.zhgj.web.dao.NoticeShareMapper;
 import com.congmai.zhgj.web.model.Notice;
@@ -128,6 +129,19 @@ public class NoticeServiceImpl extends GenericServiceImpl<Notice, String> implem
 	@Override
 	public Notice selectByPrimaryKey(String serialNum) {
 		return this.noticeMapper.selectByPrimaryKey(serialNum);
+	}
+
+	@Override
+	public int getUnReadNoticeCount(String userId,String companyType) {
+		Notice notice = new Notice();
+		notice.setUser_id(userId);
+		if(StringUtils.isNotEmpty(companyType)){
+			notice.setStatus(companyType);
+		}else{
+			notice.setStatus("0");
+		}
+		
+		return noticeMapper.countMyUnReadNotice(notice);
 	}
 
 

@@ -31,7 +31,7 @@
 				</div>
 				<ul class="nav nav-tabs" id="notice_tab">
 					<li class="active" ><a data-target="#portlet_tab2_1"  ng-click="myNoticeList()"
-						data-toggle="tab">最新公告</a></li>
+						data-toggle="tab">最新公告<noticeCount/></a></li>
 					<li ><a data-target="#portlet_tab2_2" ng-click="notices()"
 						data-toggle="tab">公告列表</a></li>
 				</ul>

@@ -98,7 +98,7 @@ public class MessageContoller {
     			messageService.deleteBatch(serialNumArray,UserUtil.getUserFromSession().getUserName());
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		logger.warn(e.getMessage(), e);
     		flag = "1";
     	}
     	return flag;
@@ -121,7 +121,7 @@ public class MessageContoller {
     			messageService.readMessage(serialNum,UserUtil.getUserFromSession().getUserName());
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		logger.warn(e.getMessage(), e);
     		flag = "1";
     	}
     	return flag;
@@ -144,7 +144,7 @@ public class MessageContoller {
     			flag = messageService.messageSize(user.getUserId(),MessageConstants.SYSTEM_MESSAGE);
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		logger.warn(e.getMessage(), e);
     	}
     	return String.valueOf(flag);
     }
@@ -163,10 +163,31 @@ public class MessageContoller {
     			flag = messageService.messageSize(user.getUserId(),MessageConstants.BUSSINESS_MESSAGE);
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		logger.warn(e.getMessage(), e);
     	}
     	return String.valueOf(flag);
     }
     
     
+    /**
+     * @Description (新消息个数)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="newMessageCount")
+    @ResponseBody
+    public String newMessageCount(Map<String, Object> map,HttpServletRequest request) {
+    	int flag = 0; //默认失败
+    	try{
+    		User user = UserUtil.getUserFromSession();
+    		if(user != null){
+    			flag = messageService.messageSize(user.getUserId(),null);
+    		}
+    	}catch(Exception e){
+    		logger.warn(e.getMessage(), e);
+    	}
+    	return String.valueOf(flag);
+    }
+    
+
 }
