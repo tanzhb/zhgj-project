@@ -296,7 +296,8 @@ public class DeliveryController {
 		orderInfo = orderService.selectById(serialNum);
 		Map<String, Object> map = new HashMap<String, Object>();
     	map.put("orderInfo", orderInfo);
-    	
+    	Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
     	OrderMaterielExample m =new OrderMaterielExample();
     	//and 条件1
     	com.congmai.zhgj.web.model.OrderMaterielExample.Criteria criteria =  m.createCriteria();
@@ -304,6 +305,8 @@ public class DeliveryController {
     	criteria.andOrderSerialEqualTo(serialNum);
     	List<DeliveryMaterielVO> orderMateriel = deliveryService.selectList(serialNum);
     	map.put("orderMateriel", orderMateriel);
+    	map.put("currenLoginName", currenLoginName);
+    	map.put("deliverNum", "DE"+ApplicationUtils.getFromNumber());
     	return map;
 	}
 	

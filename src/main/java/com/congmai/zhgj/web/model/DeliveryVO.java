@@ -175,6 +175,8 @@ public class DeliveryVO extends BaseVO implements Serializable{
 	
 	private List<String> supplyComIds;
 	
+	private String  buyName;//采购商名称
+	
 /*	// 业务类型
 	private String businessType;
 	
@@ -620,6 +622,14 @@ public class DeliveryVO extends BaseVO implements Serializable{
 
 	public void setTakeWarehouseSerial(String takeWarehouseSerial) {
 		this.takeWarehouseSerial = takeWarehouseSerial;
+	}
+
+	public String getBuyName() {
+		return buyName;
+	}
+
+	public void setBuyName(String buyName) {
+		this.buyName = buyName;
 	}
 
 /*	public String getBusinessType() {
