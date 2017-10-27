@@ -177,7 +177,7 @@
 									</thead>
 									<tbody>
 									<tr ng-repeat="item in orderInfo track by $index">
-											<td><p class="form-control-static">{{item.orderNum}}</p></td>
+											<td><p class="form-control-static"><a href="javascript:;" ng-click="viewSaleOrder(item.serialNum)">{{item.orderNum}}</a></p></td>
 											<td><p class="form-control-static">销售订单</p></td>
 											<td><p class="form-control-static">{{item.orderType}}</p></td>	
 											<td><p class="form-control-static">{{item.orderAmount}}</p></td>
@@ -270,7 +270,7 @@
 									</thead>
 									<tbody>
 									<tr ng-repeat="item in orderInfo1 track by $index">
-											<td><p class="form-control-static">{{item.orderNum}}</p></td>
+											<td><p class="form-control-static"><a href="javascript:;" ng-click="viewBuyOrder(item.serialNum)">{{item.orderNum}}</a></p></td>
 											<td><p class="form-control-static">采购订单</p></td>
 											<td><p class="form-control-static">{{item.orderType}}</p></td>	
 											<td><p class="form-control-static">{{item.orderAmount}}</p></td>
