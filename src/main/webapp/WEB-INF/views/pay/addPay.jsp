@@ -263,15 +263,6 @@
 												</div>
 											</div>
 											<!--/span-->
-											<div class="col-md-4">
-												<div class="form-group">
-													<label class="control-label bold">{{dateType}}</label>
-													<div class="">
-														<p class="form-control-static">{{date}}</p>
-													</div>
-												</div>
-											</div>
-											<!--/span-->
 										</div>
 
 
