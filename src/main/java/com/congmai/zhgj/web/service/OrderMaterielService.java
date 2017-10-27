@@ -29,5 +29,7 @@ public interface OrderMaterielService extends GenericService<OrderMateriel, Stri
 
 	public void deleteOrderMateriels(String ids);
 
+	void betchInsertOrderMateriel(List<OrderMateriel> orderMateriel);
+
 
 }

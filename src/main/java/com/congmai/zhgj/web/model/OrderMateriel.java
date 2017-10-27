@@ -42,7 +42,9 @@ public class OrderMateriel {
     private String serviceRate;
     
     private String redTicket;
-
+    
+    private Integer sort;
+    
     private String delFlg;
 
     private String creator;
@@ -237,6 +239,14 @@ public class OrderMateriel {
 
 	public void setDemandPlanMaterielSerial(String demandPlanMaterielSerial) {
 		this.demandPlanMaterielSerial = demandPlanMaterielSerial;
+	}
+
+	public Integer getSort() {
+		return sort;
+	}
+
+	public void setSort(Integer sort) {
+		this.sort = sort;
 	}
 
     

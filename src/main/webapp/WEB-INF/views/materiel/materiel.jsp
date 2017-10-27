@@ -28,7 +28,7 @@ margin-bottom: 20px;
     	<!-- 普通订单---START -->
       <div class="tab-pane active" id="tab_15_1">
 			<div class="row">
-			     <div class="col-md-4">
+			     <div class="col-md-2">
 			         <div class="portlet light ">
 			             <div class="portlet-title">
 			                 <div class="caption">
@@ -41,7 +41,7 @@ margin-bottom: 20px;
 			             </div>
 			         </div>
 				</div>
-				<div class="col-md-8">
+				<div class="col-md-10">
 					<div class="row">
 						<div class="col-md-12">
 				        <div class="portlet light">

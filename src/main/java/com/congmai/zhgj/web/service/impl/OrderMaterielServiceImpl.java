@@ -6,10 +6,12 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
+import com.congmai.zhgj.web.model.OrderMaterielExample.Criteria;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.dao.OrderMaterielMapper;
 
@@ -75,6 +77,29 @@ public class OrderMaterielServiceImpl implements OrderMaterielService {
 		}
 
 	}
-	
+
+	@Override
+	public void betchInsertOrderMateriel(List<OrderMateriel> orderMateriel) {
+		if(!CollectionUtils.isEmpty(orderMateriel)){
+			//删除之前的附件
+			OrderMateriel m = new OrderMateriel();
+			m.setDelFlg("1");
+			m.setUpdateTime(new Date());
+			m.setUpdater(orderMateriel.get(0).getCreator());
+			
+			OrderMaterielExample ex =new OrderMaterielExample();
+	    	Criteria criteria =  ex.createCriteria();
+	    	criteria.andOrderSerialEqualTo(orderMateriel.get(0).getOrderSerial());
+			
+	    	OrderMaterielMapper.updateByExampleSelective(m, ex);
+			int i = 0;
+			for(OrderMateriel b:orderMateriel){
+				i++;
+				b.setSort(i);
+				OrderMaterielMapper.insert(b);
+			}
+		}
+		
+	}
 
 }

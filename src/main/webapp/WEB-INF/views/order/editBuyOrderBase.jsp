@@ -64,7 +64,7 @@ margin-right: 20px;
 	                                 <div ng-hide="buyOrderInput">
 		                               	<input type="radio"  ng-model="buyOrder.orderType" name="orderType" ng-checked="buyOrder.orderType=='贸易采购'" value="贸易采购"> 贸易采购
 		                       			<input type="radio"  ng-model="buyOrder.orderType" name="orderType" ng-checked="buyOrder.orderType=='委托采购'" value="委托采购"> 委托采购
-		                       			<input type="radio"  ng-model="buyOrder.orderType" name="orderType" ng-checked="buyOrder.orderType=='费用采购'" value="费用采购"> 费用采购
+		                       			<input type="radio"  ng-model="buyOrder.orderType" name="orderType" ng-checked="buyOrder.orderType=='服务采购'" value="服务采购"> 服务采购
 	                                 </div>
 	                                 <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.orderType}} </p>
                                  </div>
@@ -184,7 +184,7 @@ margin-right: 20px;
                      
                      <!--/row-->
                      
-                     <div ng-if="(buyOrder.orderType =='贸易采购'||buyOrder.orderType =='费用采购') && buyOrder.tradeType =='内贸'">
+                     <div ng-if="(buyOrder.orderType =='贸易采购'||buyOrder.orderType =='服务采购') && buyOrder.tradeType =='内贸'">
                      <div class="row">
                          <div class="col-md-4">
                          	<div class="form-group ">
@@ -297,7 +297,7 @@ margin-right: 20px;
                      </div>
                      <!--/row-->
                      </div>
-                     <div ng-if="(buyOrder.orderType =='贸易采购'||buyOrder.orderType =='费用采购') && buyOrder.tradeType =='外贸'">
+                     <div ng-if="(buyOrder.orderType =='贸易采购'||buyOrder.orderType =='服务采购') && buyOrder.tradeType =='外贸'">
                      <div class="row">
                          <div class="col-md-4">
                          	<div class="form-group ">
@@ -849,8 +849,11 @@ margin-right: 20px;
               <div class="tools" style="float:right">
                  <button ng-click="addOrderMateriel()" type="button"  ng-show="noShow" class="btn blue  btn-circle  btn-sm">
                  		<i class="fa fa-edit"></i> 添加物料 </button>
+                 <button type="submit" ng-click="saveAllOrderMateriel()" ng-show="noShow"  class="btn green  btn-circle  btn-sm">
+                 		<i class="fa fa-save"></i> 保存 </button>
                </div>
            </div>
+
           <div class="portlet-body form">
 		     <form id="form_sample_5"   >
 		         <div class="table-scrollable">
@@ -986,8 +989,8 @@ margin-right: 20px;
                                      <td>
                                      	<div style="width:100px">
                                      	<span ng-hide="orderMaterielInput{{$index}}">
-                                      		&nbsp;&nbsp;&nbsp;&nbsp;
-                                       	<a  ng-click="saveOrderMateriel(_orderMateriel,$index)" title="保存"><i class="fa fa-save"></i></a>
+                                      		<!-- &nbsp;&nbsp;&nbsp;&nbsp;
+                                       	<a  ng-click="saveOrderMateriel(_orderMateriel,$index)" title="保存"><i class="fa fa-save"></i></a> -->
                                        	&nbsp;&nbsp;&nbsp;
                                        	<a  ng-click="cancelOrderMateriel(_orderMateriel,$index)" title="取消"><i class="fa fa-undo"></i></a>
                                        </span>
@@ -1134,10 +1137,10 @@ margin-right: 20px;
                                      <th style="width:150px">支付金额</th>
                                      <th style="width:150px">支付方式</th>
                                      <th style="width:150px">开票方式</th>
-                                     <th style="width:150px">开票金额</th>
-                                     <th style="width:150px">未开金额</th>
+                                     <!-- <th style="width:150px">开票金额</th>
+                                     <th style="width:150px">未开金额</th> -->
                                      <th style="width:150px">备注</th>
-                                     <th style="width:100px;"></th>
+                                     <th style="width:80px;"><span style="display:inline-block;width:80px;"></span></th>
                                  </tr>
                              </thead>
                              <tbody>
@@ -1197,7 +1200,7 @@ margin-right: 20px;
                                               </select>
 		                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.billingMethod}} </p>
 		                          </td>
-		                          <td>
+		                          <!-- <td>
                                      		<input type="text" id="billingAmount[$index]" name="billingAmount" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].billingAmount"  
                                      		ng-keyup="clearNoNumPoint(clauseSettlement.CSD[$index],'billingAmount');_arithmeticUnbilledAmount(this)">
 		                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.billingAmount}} </p>
@@ -1206,13 +1209,13 @@ margin-right: 20px;
                                      		<input type="text" id="unbilledAmount[$index]" name="unbilledAmount" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].unbilledAmount" 
                                      		readonly >
 		                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.unbilledAmount}} </p>
-		                          </td>
+		                          </td> -->
 		                          <td>
                                      		<input type="text" id="remark[$index]" name="remark" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].remark"  >
 		                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.remark}} </p>
 		                          </td>
                                      <td ng-show="operation_csd{{$index}}">
-                                     	<a href="javascript:;"  class="btn red btn-sm" ng-hide="clauseSettlementInput" ng-click="deleteCSD($index)">
+                                     	<a href="javascript:;"  class="btn red" ng-hide="clauseSettlementInput" ng-click="deleteCSD($index)">
                                    			<i class="fa fa-close"></i> 
                             				</a>
                                      </td>
