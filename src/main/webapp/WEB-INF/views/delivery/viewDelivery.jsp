@@ -33,9 +33,9 @@
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>发货单号:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<div class="form-control-focus"></div>
 												<span class="help-block">请输入发货单号</span>
 												<p class="form-control-static" ng-show="input">
@@ -46,9 +46,9 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>发货类型:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<div class="form-control-focus"></div>
 												<p class="form-control-static" ng-show="input">
 													{{deliveryDetail.deliverType}}</p>
@@ -58,9 +58,9 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>销售订单号:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<div class="form-control-focus"></div>
 												<input type="text" ng-model="orderSerial" ng-hide="true" />
 												<span class="help-block">请输入销售订单号</span>
@@ -76,9 +76,9 @@
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>供应商:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<p class="form-control-static" ng-show="input" >
 													{{supplyComId}}</p>
 												<div class="form-control-focus"></div>
@@ -90,9 +90,9 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>发货方:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<p class="form-control-static" ng-show="input">
 													{{shipper}}</p>
 												<div class="form-control-focus"></div>
@@ -104,9 +104,9 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>收货方:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<p class="form-control-static" ng-show="input">
 													{{deliveryDetail.receiver}}</p>
 												<div class="form-control-focus"></div>
@@ -121,9 +121,9 @@
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>制单人:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<p class="form-control-static" ng-show="input">
 													{{deliveryDetail.maker}}</p>
 												<div class="form-control-focus"></div>
@@ -133,8 +133,8 @@
 									</div>
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3">备注:</label>
-											<div class="col-md-9">
+											<label class="control-label col-md-5">备注:</label>
+											<div class="col-md-7">
 												<!-- <input type="text" class="form-control"
 													ng-model="delivery.remark" ng-show="input" /> -->
 												<div class="form-control-focus"></div>
@@ -163,9 +163,9 @@
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>发货仓库:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<div class="form-control-focus"></div>
 												<span class="help-block">请选择发货仓库</span>
 												<p class="form-control-static" ng-show="input">
@@ -176,9 +176,9 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>仓库地址:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<!-- <input type="text" name="warehouseAddress"
 													class="form-control" readonly ng-model="warehouseAddress"
 													ng-show="input" /> -->
@@ -192,9 +192,9 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>发货日期:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<!-- <input type="text" name="deliverDate" class="form-control"
 													id="deliverDate" data-date-format="yyyy-mm-dd"
 													ng-show="input" data-date-viewmode="years" size="16"
@@ -212,9 +212,9 @@
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>包装件数:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<!-- <input type="text" class="form-control" name="packageCount"
 													ng-model="delivery.packageCount" ng-show="input" /> -->
 												<div class="form-control-focus"></div>
@@ -228,9 +228,9 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>包装类型:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<div class="form-control-focus"></div>
 												<span class="help-block">请选择包装类型</span>
 												<p class="form-control-static" ng-show="input">
@@ -244,9 +244,9 @@
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>包装规格:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<div class="form-control-focus"></div>
 												<span class="help-block">请选择包装规格</span>
 												<p class="form-control-static" ng-show="input">
@@ -257,9 +257,9 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>物料重量:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<div class="form-control-focus"></div>
 												<span class="help-block">请输入物料重量</span>
 												<p class="form-control-static" ng-show="input">
@@ -271,9 +271,9 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>服务费:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<div class="form-control-focus"></div>
 												<span class="help-block">请输入服务费</span>
 												<p class="form-control-static" ng-show="input">
@@ -286,9 +286,9 @@
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>发货人:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<div class="form-control-focus"></div>
 												<span class="help-block">请输入发货人</span>
 												<p class="form-control-static" ng-show="input">
@@ -299,9 +299,9 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>联系电话:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<div class="form-control-focus"></div>
 												<span class="help-block">请输入联系电话</span>
 												<p class="form-control-static" ng-show="input">
@@ -312,8 +312,8 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3">备注:</label>
-											<div class="col-md-9">
+											<label class="control-label col-md-5">备注:</label>
+											<div class="col-md-7">
 												<div class="form-control-focus"></div>
 												<p class="form-control-static" ng-show="input">
 													{{deliveryDetail.deliverRemark}}</p>
@@ -340,9 +340,9 @@
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>运输方式:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<!-- <input type="text" class="form-control" name="transportType"
 													ng-model="deliveryTransport.transportType" ng-show="input" /> -->
 												<div class="form-control-focus"></div>
@@ -355,9 +355,9 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>运输方:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<!-- <input type="text" class="form-control" name="transport"
 													ng-model="deliveryTransport.transport" ng-show="input" /> -->
 												<div class="form-control-focus"></div>
@@ -370,9 +370,9 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>运单号:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<!-- <input type="text" class="form-control" name="port"
 													ng-model="deliveryTransport.port" ng-show="input" /> -->
 												<div class="form-control-focus"></div>
@@ -387,9 +387,9 @@
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>联系人:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<!-- <input type="text" class="form-control" name="deliveryTransportContact"
 													ng-show="input" ng-model="deliveryTransport.contact" /> -->
 												<div class="form-control-focus"></div>
@@ -402,9 +402,9 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>联系电话:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<!-- <input type="text" class="form-control" name="deliveryTransportContactNum"
 													ng-show="input" ng-model="deliveryTransport.contactNum" /> -->
 												<div class="form-control-focus"></div>
@@ -418,8 +418,8 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3">备注:</label>
-											<div class="col-md-9">
+											<label class="control-label col-md-5">备注:</label>
+											<div class="col-md-7">
 												<!-- <input type="text" class="form-control" name="remark"
 													ng-show="input" ng-model="deliveryTransport.remark" /> -->
 												<div class="form-control-focus"></div>
@@ -446,9 +446,9 @@
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>收货仓库:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<!-- <select class="form-control"
 													id="takeDeliveryWarehouseSerial"
 													name="takeDeliveryWarehouseSerial"
@@ -468,9 +468,9 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>仓库地址:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<!-- <input type="text" name="takeDeliveryWarehouseAddress"
 													class="form-control"
 													ng-model="takeDeliveryWarehouseAddress" readonly
@@ -486,9 +486,9 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>收货日期:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<!-- <input type="text" name="takeDeliverDate"
 													id="takeDeliverDate" data-date-format="yyyy-mm-dd"
 													data-date-viewmode="years" size="16" class="form-control"
@@ -507,9 +507,9 @@
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>收货人:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<!-- <input type="text" name="takeDeliveryReceiver"
 													class="form-control" ng-model="takeDelivery.receiver"
 													ng-show="input" /> -->
@@ -525,9 +525,9 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3"><span
+											<label class="control-label col-md-5"><span
 												class="required" aria-required="true"> * </span>联系电话:</label>
-											<div class="col-md-9">
+											<div class="col-md-7">
 												<!-- <input type="text" name="takeDeliveryContactNum"
 													class="form-control" ng-model="takeDelivery.contactNum"
 													ng-show="input" /> -->
@@ -542,8 +542,8 @@
 									<!--/span-->
 									<div class="col-md-4">
 										<div class="form-group form-md-line-input">
-											<label class="control-label col-md-3">备注:</label>
-											<div class="col-md-9">
+											<label class="control-label col-md-5">备注:</label>
+											<div class="col-md-7">
 												<!-- <input type="text" name="remark" class="form-control"
 													ng-model="takeDelivery.remark" ng-show="input" /> -->
 												<div class="form-control-focus"></div>
@@ -577,18 +577,18 @@
 											<th>发货数量</th>
 											<th>备注</th>
 											
-											<th>出库数量</th>
+											<!-- <th>出库数量</th>
 											<th>未出数量</th>
 											<th>仓库</th>
 											<th>库位</th>
-											<th>备注</th>
-											
-											<th>合格数量</th>
-											<th>不合格数量</th>
-											<th>备注</th>
+											<th>备注</th> -->
 											<th>实收数量</th>
 											<th>拒收数量</th>
 											<th>备注</th>
+											<th>合格数量</th>
+											<th>不合格数量</th>
+											<th>备注</th>
+											
 											<th>状态</th>
 										</tr>
 									</thead>
@@ -611,17 +611,18 @@
 											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.amount}}</p></td>
 											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.deliverCount}}</p></td>
 											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.remark}}</p></td>
-											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.stockCount}}</p></td>
+											<!-- <td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.stockCount}}</p></td>
 											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.unstockCount}}</p></td>
 											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.warehouseName}}</p></td>
 											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.positionName}}</p></td>
-											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.stockRemark}}</p></td>
+											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.stockRemark}}</p></td> -->
+												<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.acceptCount}}</p></td>
+											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.refuseCount}}</p></td>
+											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.takeRemark}}</p></td>
 											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.qualifiedCount}}</p></td>
 											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.unqualifiedCount}}</p></td>
 											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.checkRemark}}</p></td>
-											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.acceptCount}}</p></td>
-											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.refuseCount}}</p></td>
-											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.takeRemark}}</p></td>
+										
 											<td style="white-space: nowrap;"><p class="form-control-static">{{_deliveryMateriel.status}}</p></td>
 										</tr>
 									</tbody>

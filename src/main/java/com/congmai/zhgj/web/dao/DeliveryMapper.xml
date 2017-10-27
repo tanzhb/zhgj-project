@@ -191,13 +191,14 @@
 	a.serialNum,a.deliverNum,a.orderSerial,b.orderNum,COUNT(DISTINCT c.serialNum) AS materielCount,a.packageCount,
 	a.receiver,(SELECT address FROM warehouse WHERE serialNum=a.warehouseSerial) AS deliveryAddress,a.status,
 	(SELECT address FROM warehouse WHERE serialNum=d.warehouseSerial) AS takeAddress,a.deliverDate,
-	e.transportType,a.remark,com.comName AS supplyName
+	e.transportType,a.remark,com.comName AS supplyName,com1.comName AS buyName
 	FROM delivery a 
 	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
 	LEFT JOIN deliveryMateriel c ON a.serialNum=c.deliverSerial
 	LEFT JOIN takeDelivery d ON a.serialNum=d.deliverSerial 
 	LEFT JOIN deliveryTransport e ON e.deliverSerial=a.serialNum
 	LEFT JOIN  company   com  ON  com.comId=a.supplyComId
+	LEFT JOIN  company   com1  ON  com1.comId=a.buyComId
 	WHERE a.delFlg='0' 
 	
 	<if test="supplyComIds== null" >
