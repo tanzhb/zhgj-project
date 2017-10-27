@@ -28,6 +28,15 @@ angular.module('MetronicApp').factory('PayService', ['$rootScope', '$http', '$q'
     		applyAp:applyAp,
     		//加载审批页面信息
     		getAuditInfos:getAuditInfos,
+    		
+    		//付款节点是“合同签订”时查询日期 
+    		selectDateTypeContract:selectDateTypeContract,
+    		
+    		//付款节点是“提货前”时查询日期 
+    		selectDateTypeDelivery:selectDateTypeDelivery,
+    		
+    		//付款节点是“到货后”时查询日期 
+    		selectDateTypeTakeDelivery:selectDateTypeTakeDelivery,
     };
 
     return factory;
@@ -124,6 +133,50 @@ angular.module('MetronicApp').factory('PayService', ['$rootScope', '$http', '$q'
         return deferred.promise;  
           
     };
+    
+  //付款节点是“合同签订”时查询日期 
+    function selectDateTypeContract(serialNum){
+    	var deferred = $q.defer();  
+
+        $.get("rest/pay/selectDateTypeContract", {serialNum:serialNum}).success(function (data) { 
+            // 如果连接成功，延时返回给调用者  
+            deferred.resolve(data);
+        })  
+            .error(function () {  
+                deferred.reject('连接服务器出错！');  
+            })  
+        return deferred.promise;  
+    	
+    };
+    
+  //付款节点是“提货前”时查询日期 
+    function selectDateTypeDelivery(serialNum){
+    	var deferred = $q.defer();  
+
+        $.get("rest/pay/selectDateTypeDelivery", {serialNum:serialNum}).success(function (data) { 
+            // 如果连接成功，延时返回给调用者  
+            deferred.resolve(data);
+        })  
+            .error(function () {  
+                deferred.reject('连接服务器出错！');  
+            })  
+        return deferred.promise;  
+    }
+    
+  //付款节点是“到货后”时查询日期 
+    function selectDateTypeTakeDelivery(serialNum){
+    	var deferred = $q.defer();  
+
+        $.get("rest/pay/selectDateTypeTakeDelivery", {serialNum:serialNum}).success(function (data) { 
+            // 如果连接成功，延时返回给调用者  
+            deferred.resolve(data);
+        })  
+            .error(function () {  
+                deferred.reject('连接服务器出错！');  
+            })  
+        return deferred.promise;  
+    }
+   
     
     //查询采购订单信息
     function getSaleOrderInfo(serialNum){

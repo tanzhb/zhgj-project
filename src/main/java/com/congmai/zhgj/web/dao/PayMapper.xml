@@ -66,7 +66,7 @@
     <select id="selectAllPaymentRecordList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.PaymentRecord">
     SELECT
 	a.serialNum,a.paymentNum,a.playPaymentDate,a.paymentNode,a.nodeNum,a.applyPaymentAmount,b.orderNum,
-	a.supplyComId,a.paymentDate,a.paymentAmount,a.status
+	(SELECT comName FROM company WHERE comId=a.supplyComId) AS supplyComId,a.paymentDate,a.paymentAmount,a.status
 	FROM
 	paymentRecord a
 	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
@@ -81,8 +81,8 @@
      <!--查询收款列表  -->
     <select id="findAllGatheringMoneyRecord" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.PaymentRecord">
 	 SELECT
-	a.serialNum,a.paymentNum,a.playPaymentDate,a.paymentNode,a.nodeNum,a.applyPaymentAmount,b.orderNum,
-	a.buyComId,a.paymentDate,a.paymentAmount,a.status
+	 a.serialNum,a.paymentNum,a.playPaymentDate,a.paymentNode,a.nodeNum,a.applyPaymentAmount,b.orderNum,
+	(SELECT comName FROM company WHERE comId=a.buyComId) AS buyComId,a.paymentDate,a.paymentAmount,a.status
 	FROM
 	paymentRecord a
 	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
@@ -96,7 +96,7 @@
     <!--通过id查询收付款详情  -->
     <select id="selectPayById" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.PaymentRecord">
      SELECT
-	a.serialNum,a.paymentNum,a.paymentType,b.orderNum,b.serialNum AS orderSerial,
+	a.serialNum,a.paymentNum,a.paymentType,b.orderNum,b.serialNum AS orderSerial,a.supplyComId,a.buyComId,
 	b.orderAmount,a.applyPaymentAmount,a.applyCurrency,a.playPaymentDate,a.payType,a.paymentNode,a.nodeNum,
 	a.billStyle,a.isBill,a.applyDate,a.applicant,a.applyDept,a.remark,
     a.payee,a.contact,a.contactNum,a.bank,a.accountName,a.accountNumber,a.status,a.reason,a.processInstanceId,a.userId
@@ -106,6 +106,35 @@
 	WHERE a.serialNum=#{serialNum}
     </select>
     
+    <!--付款节点是“合同签订”时查询日期  -->
+    <select id="selectDateTypeContract" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ContractVO">
+    SELECT
+	b.signDate
+	FROM
+	orderInfo a LEFT JOIN contract b ON a.contractSerial=b.serialNum
+	WHERE
+	a.serialNum=#{serialNum}
+    </select>
+    
+    <!--付款节点是“提货前”时查询日期  -->
+    <select id="selectDateTypeDelivery" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.DeliveryVO">
+    SELECT
+	deliverDate
+	FROM
+	delivery
+	WHERE
+	orderSerial=#{serialNum}
+    </select>
+    
+    <!--付款节点是“到货后”时查询日期  -->
+    <select id="selectDateTypeTakeDelivery" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.TakeDeliveryVO">
+    SELECT
+	b.takeDeliverDate
+	FROM
+	delivery a LEFT JOIN takeDelivery b ON a.serialNum=b.deliverSerial
+	WHERE
+	a.orderSerial=#{serialNum}
+    </select>
     
     <!--删除收付款  -->
     <update id="delPaymentRecord" parameterType="java.util.List">
@@ -195,7 +224,9 @@
 	FROM orderMateriel a 
 	LEFT JOIN invoiceBillingRecord b ON a.serialNum=b.orderMaterielSerial
 	LEFT JOIN materiel c ON a.materielSerial=c.serialNum
-	WHERE a.orderSerial=#{serialNum}
+	LEFT JOIN invoice i ON i.serialNum=b.invoiceSerial
+	WHERE a.orderSerial=#{serialNum} and  i.status='2'
+	
     </select>
     
     <!--查询收付款对象的附件集合  -->

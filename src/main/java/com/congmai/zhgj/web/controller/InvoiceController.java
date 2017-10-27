@@ -43,6 +43,7 @@ import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyFinance;
+import com.congmai.zhgj.web.model.DeliveryTransport;
 import com.congmai.zhgj.web.model.Invoice;
 import com.congmai.zhgj.web.model.InvoiceBillingRecord;
 import com.congmai.zhgj.web.model.Materiel;
@@ -56,11 +57,13 @@ import com.congmai.zhgj.web.service.CompanyFinanceService;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.DeliveryMaterielService;
+import com.congmai.zhgj.web.service.DeliveryTransportService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.InvoiceBillingRecordService;
 import com.congmai.zhgj.web.service.InvoiceService;
 import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.OrderService;
+import com.congmai.zhgj.web.service.PaymentRecordSerive;
 import com.congmai.zhgj.web.service.ProcessBaseService;
 
 
@@ -104,6 +107,10 @@ public class InvoiceController {
 	 protected RuntimeService runtimeService;
 	 @Autowired
 		private CompanyFinanceService companyFinanceService;
+	 @Autowired
+		private PaymentRecordSerive paymentRecordSerive;
+	 @Autowired
+		private DeliveryTransportService  deliveryTransportService;
     
     /**
      * 发票列表展示
@@ -228,6 +235,10 @@ public class InvoiceController {
     	 invoice=invoiceService.getDetailInfo(invoice);//统计数据
     	if(invoice!=null){
     	OrderInfo orderInfo=orderService.selectById(invoice.getOrderSerial());
+    	String payOrReceiptMoney=paymentRecordSerive.selectPaiedMoney(serialNum.substring(0, 32));//获取订单已付
+    	String  billOrReceiptMoney=paymentRecordSerive.selectBilledMoney(serialNum.substring(0, 32));//获取订单已开金额或已收金额
+    	invoice.setUnBillOrReceiptMoney(new BigDecimal(orderInfo.getOrderAmount()).subtract(new BigDecimal(billOrReceiptMoney)).toString() );
+    	invoice.setUnPayOrReceiptMoney(new BigDecimal(orderInfo.getOrderAmount()).subtract(new BigDecimal(payOrReceiptMoney)).toString() );
     		invoice.setRelationBuyOrSaleNum(orderInfo.getOrderNum());
     		invoice.setOrderAmount(orderInfo.getOrderAmount());
     		Company c=companyService.selectOne(invoice.getSupplyComId()==null?invoice.getBuyComId():invoice.getSupplyComId());
@@ -281,18 +292,27 @@ public class InvoiceController {
 	public Map getOrderMaterielInfo( @RequestBody String serialNum) {
 		OrderInfo orderInfo =null;
 		Company company=null;
+		String  payOrReceiptMoney=null;
+		String  billOrReceiptMoney=null;
 		List<CompanyFinance> companyFinanceList=null;
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(serialNum.indexOf("in")>-1){//进项票
 			orderInfo = orderService.selectById(serialNum.substring(0, 32));
+			 payOrReceiptMoney=paymentRecordSerive.selectPaiedMoney(serialNum.substring(0, 32));//获取订单已付
+			 billOrReceiptMoney=paymentRecordSerive.selectBilledMoney(serialNum.substring(0, 32));//获取订单已开金额或已收金额
 		}else if(serialNum.indexOf("out")>-1){//销项票
 			orderInfo = orderService.selectById(serialNum.substring(0, 32));
 			company=companyService.selectById(orderInfo.getBuyComId());
 			//companyFinanceList=companyFinanceService.selectListByComId(company.getComId());
+			 payOrReceiptMoney=paymentRecordSerive.selectPaiedMoney(serialNum.substring(0, 32));//获取订单已付
+			 billOrReceiptMoney=paymentRecordSerive.selectBilledMoney(serialNum.substring(0, 32));//获取订单已开金额或已收金额
 		}else{
 			orderInfo= orderService.selectById(serialNum);
+			 payOrReceiptMoney=paymentRecordSerive.selectPaiedMoney(serialNum);//获取订单已付
+			 billOrReceiptMoney=paymentRecordSerive.selectBilledMoney(serialNum);//获取订单已开金额或已收金额
 		}
-		
+		orderInfo.setUnBillOrReceiptMoney(new BigDecimal(orderInfo.getOrderAmount()).subtract(new BigDecimal(billOrReceiptMoney)).toString() );
+		orderInfo.setUnPayOrReceiptMoney(new BigDecimal(orderInfo.getOrderAmount()).subtract(new BigDecimal(payOrReceiptMoney)).toString() );
 		map.put("orderInfo", orderInfo);
 		map.put("company",company);
 		map.put("companyFinanceList",companyFinanceList);
@@ -304,20 +324,44 @@ public class InvoiceController {
      * 
      */
     @RequestMapping(value = "/getMaterielList")
-    public ResponseEntity<Map> getMaterielList(HttpServletRequest request, String  orderSerial) {
+    public ResponseEntity<Map> getMaterielList(HttpServletRequest request, String  orderSerial,String deliverSerial) {
     	
 		List<Materiel> materiels = materielService.selectMaterielByOrderSerial(orderSerial.substring(0, 32),orderSerial);
-		OrderInfo orderInfo=orderService.selectById(orderSerial.substring(0, 32));
-		for(Materiel materiel:materiels){
-			materiel.setMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getBillAmount()).setScale(2,BigDecimal.ROUND_HALF_UP )).toString());
-			
+		/*OrderInfo orderInfo=orderService.selectById(orderSerial.substring(0, 32));*/
+		DeliveryTransport dt=new  DeliveryTransport();
+		BigDecimal deliverAmount=BigDecimal.ZERO;//deliverAmount发货金额
+		BigDecimal addedTax=BigDecimal.ZERO;//addedTax增值税
+		BigDecimal customsAmount=BigDecimal.ZERO;//customsAmount关税额
+		if(!StringUtils.isEmpty(deliverSerial)){
+			 dt=deliveryTransportService.getDeliveryTransport(deliverSerial);
+			 for(Materiel materiel:materiels){
+					materiel.setMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getBillAmount()).setScale(2,BigDecimal.ROUND_HALF_UP )).toString());
+					if(!StringUtils.isEmpty(materiel.getRate())){//	税额
+						materiel.setRateMoney(new BigDecimal(materiel.getRate()).multiply(new BigDecimal(materiel.getOrderUnitPrice())).multiply(new BigDecimal(materiel.getAmount())).divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
+						addedTax=addedTax.add(new BigDecimal(materiel.getRateMoney()));
+					}
+					if(!StringUtils.isEmpty(materiel.getCustomsRate())){//关税额
+						materiel.setCustomRateMoney(new BigDecimal(materiel.getCustomsRate()).multiply(new BigDecimal(materiel.getOrderUnitPrice())).multiply(new BigDecimal(materiel.getAmount())).divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
+						customsAmount=customsAmount.add(new BigDecimal(materiel.getCustomRateMoney()));
+					}
+					materiel.setMaterielMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getAmount())).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
+					deliverAmount=deliverAmount.add(new BigDecimal(materiel.getMaterielMoney()));
+				}
 		}
+	
 		// 封装datatables数据返回到前台
 		Map<String,Object> pageMap = new HashMap<String,Object>();
 		pageMap.put("draw", 1);
 		pageMap.put("recordsTotal",  materiels==null?0:materiels.size());
 		pageMap.put("recordsFiltered",  materiels==null?0:materiels.size());
 		pageMap.put("data", materiels);
+		pageMap.put("deliverAmount", deliverAmount);
+		pageMap.put("customsAmount", customsAmount);
+		pageMap.put("addedTax", addedTax);//playArrivalDate  shipNumber  port
+		pageMap.put("playArrivalDate", dt.getPlayArrivalDate());
+		pageMap.put("shipNumber", dt.getShipNumber());
+		pageMap.put("port", dt.getPort());
+		
 		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 	}
     @RequestMapping(value = "/saveInvoiceBillingRecordInfo", method = RequestMethod.POST)

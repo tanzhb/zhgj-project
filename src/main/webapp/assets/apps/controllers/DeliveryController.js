@@ -36,7 +36,9 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
     if($stateParams.serialNumEdit){
     	$scope.getDeliveryEditInfo($stateParams.serialNumEdit,$stateParams.taskId, $stateParams.comments);
     }
-    
+    if($scope.delivery.deliverDate==undefined){
+    	$scope.delivery.deliverDate=$filter('date')(new Date(), 'yyyy-MM-dd');
+    }
     
     if ($.validator) {
     	
@@ -224,17 +226,6 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
         })   
 	});
 	
-	var batchNumCheck=function validateOneElement(index) {
-		 //验证id="form1"的表单中id="elementId"的表单元素
-		var batchNumFlag=$("#form_sample_2").validate().element($("#batchNum"+index+""));
-		return batchNumFlag;
-		}
-	
-	var manufactureDateCheck=function validateOneElement(index) {
-		 //验证id="form1"的表单中id="elementId"的表单元素
-		var manufactureDateFlag=$("#form_sample_2").validate().element($("#manufactureDate"+index+""))
-		return manufactureDateFlag;
-		}
 	
 	var deliveryCountCheck=function validateOneElement(index) {
 		 //验证id="form1"的表单中id="elementId"的表单元素
@@ -266,8 +257,6 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		if(!batchNumFlag){return false;}*/
 		var attachFile=$("#batchNumReal"+index).text();
 		
-		var manufactureDateFlag=manufactureDateCheck(index);
-		if(!manufactureDateFlag){return false;}
 		var deliveryCountFlag=deliveryCountCheck(index);
 		if(!deliveryCountFlag){return false;}
 		
@@ -604,7 +593,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 							                            			}else if(data=='WAITING_FOR_APPROVAL'){
 							                            				return '待审批';					                            				
 																	}else if(data=='3'){
-																		return '完成';
+																		return '待收货';
 																	}else if(data=='APPROVAL_FAILED'){
 																		return '审批失败';
 																	}else if(data=='4'){
@@ -637,6 +626,17 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 							                            	"createdCell": function (td, cellData, rowData, row, col) {
 							                            		$compile(td)($scope);
 							                            	}
+							                            },
+							                            {
+							                            	'targets' : 2,
+							                            	'className' : 'dt-body-center',
+							                            	'render' : function(data,
+							                            			type, row, meta) {
+							                            		return '<a data-toggle="modal" ng-click="viewSaleOrder(\''+row.orderSerial+'\')" ">'+data+'</a>';
+							                            	},
+							                            	"createdCell": function (td, cellData, rowData, row, col) {
+							                            		$compile(td)($scope);
+							                            	}
 							                            }
 							                            ]}).on('order.dt',
 							                            		function() {
@@ -656,7 +656,9 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 											        })
 		}
 		
-		
+		  $scope.viewSaleOrder = function(serialNum){
+		    	$state.go("viewSaleOrder",{serialNum:serialNum});
+		    }
 		//销售订单列表
         var table1;
 	    var loadMainTable1 = function() {
@@ -1609,7 +1611,9 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		     function(data){
 	          		    	 
 	          		    	$scope.saleOrder=data.orderInfo;
-	          		    	
+	          		    	$scope.delivery.receiver=data.orderInfo.buyName;//收货方默认销售订单的采购方
+	          		    	$scope.delivery.maker=data.currenLoginName;//制单人默认当前用户
+	          		    	$scope.delivery.deliverNum=data.deliverNum;//随机产生的发货单号
 	          		    	if($scope.delivery!=null){
 	          		    	/*	if($scope.delivery.orderNum!=""&&$scope.delivery.orderNum!=null){*/
 		          		    		$scope.delivery.orderNum1=$scope.saleOrder.orderNum;
@@ -1626,7 +1630,13 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	}
 	          		    	
 	          		    	$scope.materielCount=data.orderMateriel.length;
-	          		    	length=data.orderMateriel.length;
+	          		    /*	length=data.orderMateriel.length;*/
+	          		    	var totalOrderCount=0;
+	          		    	debugger;
+	          		    	for(var i=0;i< $scope.deliveryMaterielE.length;i++){
+	          		    		totalOrderCount+=Number($scope.deliveryMaterielE[i].amount);
+	          		    	}
+	          		    	$scope.totalOrderCount=totalOrderCount;
 	          		    	$scope.totalDeliveryCount="";
 	          		     },
 	          		     function(error){

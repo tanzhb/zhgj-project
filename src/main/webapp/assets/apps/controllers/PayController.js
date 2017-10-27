@@ -111,39 +111,6 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	};
 	
 	
-	var supplyComId=null;
-	//获取采购订单的信息（并给supplyComId赋值）
-	$scope.getSaleOrderInfo  = function(serialNum) {
-		PayService.getSaleOrderInfo(serialNum).then(
-				function(data){
-					if($scope.pay==null){
-						$scope.saleOrder=data.orderInfo;
-						supplyComId=$scope.saleOrder.supplyComId;
-						var orderSerial=data.orderInfo.serialNum;
-						$scope.orderSerial=data.orderInfo.serialNum;
-						$scope.deliveryMaterielE=data.clauList;
-						$scope.clauseSettlementList=data.clauseSettlementDetail;
-					}else{
-						$scope.pay.orderNum=data.orderInfo.orderNum;
-						$scope.pay.orderSerial=data.orderInfo.serialNum;
-						$scope.pay.orderAmount=data.orderInfo.orderAmount;
-						$scope.pay.paiedMoney=data.orderInfo.paiedMoney;
-						$scope.pay.billedMoney=data.orderInfo.billedMoney;
-						$scope.clauseSettlementList=data.clauseSettlementDetail;
-						
-						
-						$scope.pay.supplyComId=data.orderInfo.supplyComId;
-						$scope.pay.deliveryAmount=null;
-						supplyComId=data.orderInfo.supplyComId;
-					}
-				},
-				function(error){
-					$scope.error = error;
-				}
-		);
-
-	};
-	
 	/**
      * 显示编辑、删除操作
      */
@@ -355,6 +322,86 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
        }
         
 	  //********附件  end****************//
+       
+       var supplyComId=null;
+   	//获取采购订单的信息（并给supplyComId赋值）
+   	$scope.getSaleOrderInfo  = function(serialNum) {
+   		PayService.getSaleOrderInfo(serialNum).then(
+   				function(data){
+   					debugger
+   					if($scope.pay==null){
+   						$scope.saleOrder=data.orderInfo;
+   						supplyComId=$scope.saleOrder.supplyComId;
+   						var orderSerial=data.orderInfo.serialNum;
+   						$scope.orderSerial=data.orderInfo.serialNum;
+   						$scope.deliveryMaterielE=data.clauList;
+   						$scope.clauseSettlementList=data.clauseSettlementDetail;
+   					}else{
+   						$scope.pay.orderNum=data.orderInfo.orderNum;
+   						$scope.pay.orderSerial=data.orderInfo.serialNum;
+   						$scope.pay.orderAmount=data.orderInfo.orderAmount;
+   						$scope.pay.paiedMoney=data.orderInfo.paiedMoney;
+   						$scope.pay.billedMoney=data.orderInfo.billedMoney;
+   						$scope.clauseSettlementList=data.clauseSettlementDetail;
+   						
+   						
+   						$scope.pay.supplyComId=data.orderInfo.supplyComId;
+   						$scope.pay.deliveryAmount=null;
+   						supplyComId=data.orderInfo.supplyComId;
+   					}
+   				},
+   				function(error){
+   					$scope.error = error;
+   				}
+   		);
+
+   	};
+   	
+   	//选择日期类型及日起值
+   	$scope.selectDateTpe=function(node){
+		var serialNum;
+		if($scope.pay!=null){
+			serialNum=$scope.pay.orderSerial;
+		}else{
+			serialNum=$scope.orderSerial;
+		}
+		if(node=='合同签订'){
+			PayService.selectDateTypeContract(serialNum).then(
+	   				function(data){
+	   						$scope.dateType='签订日期';
+	   					    $scope.date=data.signDate;
+	   				},
+	   				function(error){
+	   					$scope.error = error;
+	   				}
+	   		);	
+		}else if(node=='提货前'){
+			PayService.selectDateTypeDelivery(serialNum).then(
+	   				function(data){
+	   						$scope.dateType='发货日期';
+	   					    $scope.date=data.deliverDate;
+	   				},
+	   				function(error){
+	   					$scope.error = error;
+	   				}
+	   		);	
+		}else if(node=='到货后'){
+			PayService.selectDateTypeTakeDelivery(serialNum).then(
+	   				function(data){
+	   					debugger
+	   						$scope.dateType='收货日期';
+	   					    $scope.date=data.takeDeliverDate;
+	   				},
+	   				function(error){
+	   					$scope.error = error;
+	   				}
+	   		);	
+		}else if(node==''){
+	   						$scope.dateType='';
+	   					    $scope.date='';
+		}
+		
+	}
 
 	//添加付款
 	$scope.saveBasicInfo=function (){
@@ -458,7 +505,8 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 					});
 		}
 	}
-
+	
+	
 	//跳转到详情页面
 	$scope.jumpToGetPayInfo  = function(serialNum) {
     	$state.go('viewPay',{serialNum:serialNum});
@@ -1273,7 +1321,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 						}
 					});
 			if(ids==''){
-				toastr.warning('请选择一个物料！');return;
+				toastr.warning('请选择一个订单！');return;
 			}
 			/* alert(ids);*/
 

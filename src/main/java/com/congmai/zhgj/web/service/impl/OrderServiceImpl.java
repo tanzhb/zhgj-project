@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.dao.ContractMapper;
+import com.congmai.zhgj.web.dao.InvoiceMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
+import com.congmai.zhgj.web.dao.PayMapper;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderInfoExample;
@@ -34,6 +36,8 @@ public class OrderServiceImpl implements OrderService {
   //合同的dao
   	@Resource
   	private ContractMapper contractMapper;
+  	
+  
     
 	@Override
 	@OperationLog(operateType = "add" ,operationDesc = "订单新增" ,objectSerial= "{serialNum}")
@@ -122,6 +126,8 @@ public class OrderServiceImpl implements OrderService {
 	public void updateContract(ContractVO contract) {
 		contractMapper.updateContract4order(contract);
 	}
+
+	
 
 
 	

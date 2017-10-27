@@ -157,6 +157,19 @@
 													</div>
 												</div>
 											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">节点单据号 <span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="text" class="form-control" name="nodeNum"
+															ng-model="paymentRecord.nodeNum" ng-show="input"/>
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-show="span">{{pay.nodeNum}}</p>
+													</div>
+												</div>
+											</div>
+											<!--/span-->
 										</div>
 
 
@@ -227,10 +240,6 @@
 														    ng-show="input">
 															<option value="">支付类型</option>
 															<option value="{{item.paymentType}}" ng-repeat="item in clauseSettlementList"  ng-bind="item.paymentType"></option>
-															<!-- <option value="预付款">预付款</option>
-															<option value="中期款">中期款</option>
-															<option value="全款">全款</option>
-															<option value="尾款">尾款</option> -->
 														</select>
 														<p class="form-control-static" ng-show="span">{{pay.payType}}</p>
 													</div>
@@ -245,31 +254,11 @@
 														<select class="form-control" id="paymentNode"
 															name="paymentNode"
 															ng-model="paymentRecord.paymentNode"
-														    ng-show="input">
+														    ng-show="input" ng-change="selectDateTpe(paymentRecord.paymentNode)">
 															<option value="">支付节点</option>
 															<option value="{{item.deliveryNode}}" ng-repeat="item in clauseSettlementList"  ng-bind="item.deliveryNode"></option>
-															<!-- <option value="合同签订">合同签订</option>
-															<option value="提货前">提货前</option>
-															<option value="到货后">到货后</option>
-															<option value="验收后">验收后</option>
-															<option value="质保期满">质保期满</option>
-															<option value="销售出库">销售出库</option>
-															<option value="收到委托方付款">收到委托方付款</option> -->
 														</select>
 														<p class="form-control-static" ng-show="span">{{pay.paymentNode}}</p>
-													</div>
-												</div>
-											</div>
-											<!--/span-->
-											<div class="col-md-4">
-												<div class="form-group">
-													<label class="control-label bold">节点单据号 <span
-														class="required" aria-required="true"> * </span></label>
-													<div class="">
-														<input type="text" class="form-control" name="nodeNum"
-															ng-model="paymentRecord.nodeNum" ng-show="input"/>
-														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.nodeNum}}</p>
 													</div>
 												</div>
 											</div>

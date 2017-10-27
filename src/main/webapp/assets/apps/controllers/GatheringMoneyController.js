@@ -151,6 +151,53 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 
 	};
 	
+	
+ 	//选择日期类型及日起值
+   	$scope.selectDateTpe=function(node){
+		var serialNum;
+		if($scope.pay!=null){
+			serialNum=$scope.pay.orderSerial;
+		}else{
+			serialNum=$scope.orderSerial;
+		}
+		if(node=='合同签订'){
+			GatheringMoneyService.selectDateTypeContract(serialNum).then(
+	   				function(data){
+	   						$scope.dateType='签订日期';
+	   					    $scope.date=data.signDate;
+	   				},
+	   				function(error){
+	   					$scope.error = error;
+	   				}
+	   		);	
+		}else if(node=='提货前'){
+			GatheringMoneyService.selectDateTypeDelivery(serialNum).then(
+	   				function(data){
+	   						$scope.dateType='发货日期';
+	   					    $scope.date=data.deliverDate;
+	   				},
+	   				function(error){
+	   					$scope.error = error;
+	   				}
+	   		);	
+		}else if(node=='到货后'){
+			GatheringMoneyService.selectDateTypeTakeDelivery(serialNum).then(
+	   				function(data){
+	   					debugger
+	   						$scope.dateType='收货日期';
+	   					    $scope.date=data.takeDeliverDate;
+	   				},
+	   				function(error){
+	   					$scope.error = error;
+	   				}
+	   		);	
+		}else if(node==''){
+	   						$scope.dateType='';
+	   					    $scope.date='';
+		}
+		
+	}
+	
 	/**
      * 显示编辑、删除操作
      */

@@ -24,6 +24,8 @@ public class ClauseSettlementDetail {
     private String billingAmount;
 
     private String unbilledAmount;
+    
+    private Integer sort;
 
     private String remark;
 
@@ -182,4 +184,13 @@ public class ClauseSettlementDetail {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public Integer getSort() {
+		return sort;
+	}
+
+	public void setSort(Integer sort) {
+		this.sort = sort;
+	}
+    
 }

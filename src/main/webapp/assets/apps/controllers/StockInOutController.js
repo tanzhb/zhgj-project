@@ -9,11 +9,12 @@ angular
 						'$state',
 						'$compile',
 						'$http',
+						'$filter',
 						'$location',
 						'$stateParams',
 						'settings',
 						'StockInOutService',
-						function($rootScope, $scope, $state, $compile,$http,$location,$stateParams,settings,
+						function($rootScope, $scope, $state, $compile,$http,$filter,$location,$stateParams,settings,
 								StockInOutService) {
 							$scope
 									.$on(
@@ -34,6 +35,9 @@ angular
 												if($scope.inOrOut.length>3){
 													getStockInOutCheckInfo($stateParams.inOrOut);
 												}
+												if($scope.stockInOutCheck.checkDate==''){
+										    		$scope.stockInOutCheck.checkDate=$filter('date')(new Date(), 'yyyy-MM-dd');
+										    	}
 										 		}else if($location.path()=="/stockInOutCheckView"){
 										 			debugger;
 										 			$scope.inOrOut=$stateParams.inOrOut;
@@ -667,7 +671,7 @@ angular
 			  							'className' : 'dt-body-center',
 			  							'render' : function(data,
 			  									type, row, meta) {
-				  	  								return '<input type="radio"  ng-click="selectDeliverOrTakeDeliverInfo(\''+data+judgeString+'\',\''+row.takeDelivery.takeDeliverNum+'\',\''+row.orderNum+'\',\''+row.supplyName+'\')"   name="serialNum[]" value="'
+				  	  								return '<input type="radio"  ng-click="selectDeliverOrTakeDeliverInfo(\''+data+judgeString+'\',\''+row.takeDelivery.takeDeliverNum+'\',\''+row.orderNum+'\',\''+row.supplyName+'\',\''+row.buyName+'\')"   name="serialNum[]" value="'
 														+ $('<div/>')
 																.text(
 																		data)
@@ -782,7 +786,7 @@ angular
 		                            	'orderable' : false,
 		                            	'className' : 'dt-body-center',
 		                            	'render' : function(data,type, full, meta) {
-		                            		return '<input type="radio"  ng-click="selectDeliverOrTakeDeliverInfo(\''+data+judgeString+'\',\''+full.deliverNum+'\',\''+full.orderNum+'\',\''+full.supplyName+'\')"   name="serialNum[]" value="'+ $('<div/>').text(data).html()+ '">';
+		                            		return '<input type="radio"  ng-click="selectDeliverOrTakeDeliverInfo(\''+data+judgeString+'\',\''+full.deliverNum+'\',\''+full.orderNum+'\',\''+full.supplyName+'\',\''+full.buyName+'\')"   name="serialNum[]" value="'+ $('<div/>').text(data).html()+ '">';
 		                            	},
 					 	    		"createdCell": function (td, cellData, rowData, row, col) {
 		  								 $compile(td)($scope);
@@ -847,13 +851,14 @@ angular
 					 	                    console.log('排序');
 					 	                })
 					 	            };
-						$scope.selectDeliverOrTakeDeliverInfo=function(serialNum,deliverOrTakeDeliverNum,orderNum,supplyName){
+						$scope.selectDeliverOrTakeDeliverInfo=function(serialNum,deliverOrTakeDeliverNum,orderNum,supplyName,buyName){
 							debugger;
 							$scope.row = {};
 		 	            	$scope.row.serialNum = serialNum;//发货单号流水/收货单号流水
 		 	            	$scope.row.deliverOrTakeDeliverNum=deliverOrTakeDeliverNum;//发货单号/收货单号
 		 	            	$scope.row.orderNum=orderNum;//销售订单号/采购订单号
 		 	            	$scope.row.supplyName=supplyName;//供应商名称
+		 	            	$scope.row.buyName=buyName;//采购商名称
 		 	            	getMaterialInfo();
 						}
 					function getMaterialInfo(){
@@ -1069,6 +1074,7 @@ angular
 			 	            	$scope.stockInOutCheck.takeDeliverNum=$scope.row.deliverOrTakeDeliverNum;
 			 	            	$scope.stockInOutCheck.relationBuyNum=$scope.row.orderNum;
 			 	            	$scope.stockInOutCheck.supplyName=$scope.row.supplyName;
+			 	            	$scope.stockInOutCheck.checkParty=$scope.row.buyName=="null"?"中航能科（上海）能源科技有限公司":$scope.row.buyName;
 			 	            	/*$("#takeDeliverNum").val($scope.row.deliverOrTakeDeliverNum);//收货单号
 			 	            	$("#relationBuyNum").val($scope.row.orderNum);//采购单号
 			 	            	$("#supplyName").val($scope.row.supplyName);*/
@@ -1079,6 +1085,7 @@ angular
 			 	            	$scope.stockInOutCheck.deliverNum=$scope.row.deliverOrTakeDeliverNum;
 			 	            	$scope.stockInOutCheck.relationSaleNum=$scope.row.orderNum;
 			 	            	$scope.stockInOutCheck.supplyName=$scope.row.supplyName;
+			 	            	$scope.stockInOutCheck.checkParty=$scope.row.buyName=="null"?"中航能科（上海）能源科技有限公司":$scope.row.buyName;
 			 	          /* 	$("#deliverNum").val($scope.row.deliverOrTakeDeliverNum);//发货单号
 		 	            	$("#relationSaleNum").val($scope.row.orderNum);//销售单号
 		 	            	$("#supplyName").val($scope.row.supplyName);*/

@@ -52,15 +52,21 @@ import com.alibaba.druid.util.StringUtils;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.UserUtil;
+import com.congmai.zhgj.web.event.EventExample;
+import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.CommentVO;
+import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.PaymentFile;
 import com.congmai.zhgj.web.model.PaymentRecord;
+import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Vacation;
 import com.congmai.zhgj.web.service.ContractService;
@@ -435,8 +441,6 @@ public class PayController {
 			paymentVoucher = uploadFile(file);
 			record.setPaymentVoucher(paymentVoucher);
 		}
-		// 如果id为空执行保存
-		if (StringUtils.isEmpty(record.getSerialNum())) {
 			// 如果id为空执行保存
 			if (StringUtils.isEmpty(record.getSerialNum())) {
 
@@ -444,6 +448,17 @@ public class PayController {
 				record.setSerialNum(serialNum);
 				record.setCreator(currenLoginName);
 				payService.insertPaymentRecord(record);
+				record = payService.selectPayById(record.getSerialNum());
+				if(!StringUtils.isEmpty(record.getSupplyComId())){
+					//新增付款后给供应商发送收款消息
+					EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(record,MessageConstants.SHOUKUAN));
+				}
+				
+				if(!StringUtils.isEmpty(record.getBuyComId())){
+					//新增收款后给采购商发送收款消息
+					EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(record,MessageConstants.FUKUAN));
+				}
+				
 			} else {
 				// 如果id不为空执行更新
 
@@ -462,7 +477,6 @@ public class PayController {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setLocation(ucBuilder.path("/paymentRecordC")
 					.buildAndExpand(record.getSerialNum()).toUri());
-		}
 		return new ResponseEntity<PaymentRecord>(record, HttpStatus.CREATED);
 
 	}
@@ -785,7 +799,44 @@ public class PayController {
 		c.setClauseSettList(clauseSettlementDetail);
 		return new ResponseEntity<PaymentRecord>(c, HttpStatus.OK);
 	}
+	
+	
+	/**
+	 * 当支付节点是“合同签订”时，查询日期
+	 * @param serialNum
+	 * @return
+	 */
+	@RequestMapping(value = "/selectDateTypeContract", method = RequestMethod.GET)
+	public ResponseEntity<ContractVO> selectDateTypeContract(String serialNum){
+		ContractVO c=payService.selectDateTypeContract(serialNum);
+		return new ResponseEntity<ContractVO>(c, HttpStatus.OK);
+	}
+	
+	
+	/**
+	 * 当支付节点是“提货前”时，查询日期
+	 * @param serialNum
+	 * @return
+	 */
+	@RequestMapping(value = "/selectDateTypeDelivery", method = RequestMethod.GET)
+	public ResponseEntity<DeliveryVO> selectDateTypeDelivery(String serialNum){
+		DeliveryVO c=payService.selectDateTypeDelivery(serialNum);
+		return new ResponseEntity<DeliveryVO>(c, HttpStatus.OK);
+	}
+	
+	
+	/**
+	 * 当支付节点是“到货后”时，查询日期
+	 * @param serialNum
+	 * @return
+	 */
+	@RequestMapping(value = "/selectDateTypeTakeDelivery", method = RequestMethod.GET)
+	public ResponseEntity<TakeDeliveryVO> selectDateTypeTakeDelivery(String serialNum){
+		TakeDeliveryVO c=payService.selectDateTypeTakeDelivery(serialNum);
+		return new ResponseEntity<TakeDeliveryVO>(c, HttpStatus.OK);
+	}
 
+	
 	@RequestMapping(value = "/resourceDownload", method = RequestMethod.POST)
 	// 匹配的是href中的download请求
 	public void download(@RequestParam("project_id") Integer projectId,

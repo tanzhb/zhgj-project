@@ -282,9 +282,8 @@
 															name="packageSpecifications"
 															ng-model="delivery.packageSpecifications" ng-show="input">
 															<option value="">包装规格</option>
-															<option value="规格1">规格1</option>
-															<option value="规格2">规格2</option>
-															<option value="规格3">规格3</option>
+															<option value="原厂包装">原厂包装</option>
+															<option value="标准料箱">标准料箱</option>
 														</select>
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
@@ -679,8 +678,8 @@
 												<td></td>
 												<td></td>
 												<td></td>
-												<td></td>
 												<td>{{totalDeliveryCount}}</td>
+												<td></td>
 											</tr>
 											<tr>
 												<td colspan="7"></td>

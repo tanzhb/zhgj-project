@@ -43,7 +43,16 @@
         <div class="portlet bordered">
             <div class="portlet-body">
 				<div class="portlet light ">
-				 	
+				 	<div class="portlet-title">
+                            <div class="row"  align="right">
+         			 	 <button   class="btn blue  btn-sm btn-circle" ng-click="applyTakeDelivery()" >
+                              		提交收货申请 </button>
+         			 	<button   class="btn green  btn-sm btn-circle" ng-click="confirmTakeDelivery()">
+                              		<i class="fa fa-check"></i> 确认收货  </button>
+                      	<button    class="btn defualt  btn-sm btn-circle" ng-click="cancelTakeDelivery()" onclick="return false;">
+                              		<i class="fa fa-mail-reply"></i> 取消 </button>
+         			</div>
+                        </div>
 						<jsp:include page="commonTakeDeliveryEdit.jsp"></jsp:include>
          				
          				<!-- <div class="portlet-title">
@@ -173,14 +182,14 @@
 						</div>
 					  </div>  -->
          			<!-- 物料信息END -->
-         			 <div class="row" align="center">
-         			 	 <!-- <button   class="btn blue  btn-sm btn-circle" ng-click="applyTakeDelivery()" >
-                              		提交收货申请 </button> -->
+         			<!--  <div class="row" align="center">
+         			 	 <button   class="btn blue  btn-sm btn-circle" ng-click="applyTakeDelivery()" >
+                              		提交收货申请 </button>
          			 	<button   class="btn green  btn-sm btn-circle" ng-click="confirmTakeDelivery()">
                               		<i class="fa fa-check"></i> 确认收货  </button>
                       	<button    class="btn defualt  btn-sm btn-circle" ng-click="cancelTakeDelivery()" onclick="return false;">
                               		<i class="fa fa-mail-reply"></i> 取消 </button>
-         			</div>
+         			</div> -->
        			</div> 
     		</div>
 		</div>

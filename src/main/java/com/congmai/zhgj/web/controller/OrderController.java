@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
@@ -68,6 +69,7 @@ import com.congmai.zhgj.web.model.OrderFileExample;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
+import com.congmai.zhgj.web.model.SupplyMateriel;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.ClauseAdvanceService;
 import com.congmai.zhgj.web.service.ClauseAfterSalesService;
@@ -655,6 +657,7 @@ public class OrderController {
     	com.congmai.zhgj.web.model.OrderMaterielExample.Criteria criteria =  m.createCriteria();
     	criteria.andDelFlgEqualTo("0");
     	criteria.andOrderSerialEqualTo(serialNum);
+    	m.setOrderByClause(" sort asc");
     	List<OrderMateriel> orderMateriel = orderMaterielService.selectList(m);
     	map.put("orderMateriel", orderMateriel);
     	
@@ -736,6 +739,42 @@ public class OrderController {
         	}
         	orderMateriel = orderMaterielService.selectById(orderMateriel.getSerialNum());
     	return orderMateriel;
+    }
+    
+    
+    /**
+     * 
+     * @Description 保存所有订单物料
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/saveAllOrderMateriel", method = RequestMethod.POST)
+    @ResponseBody
+    public void saveAllOrderMateriel(@RequestBody String params) {
+    	params = params.replace("\\", "");
+/*		ObjectMapper objectMapper = new ObjectMapper();  
+        JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, OrderMateriel.class);  */
+        List<OrderMateriel> orderMateriel;
+		try {
+			orderMateriel = JSON.parseArray(params, OrderMateriel.class);
+	    	if(!CollectionUtils.isEmpty(orderMateriel)){
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		    	for(OrderMateriel f:orderMateriel){
+		    		f.setSerialNum(ApplicationUtils.random32UUID());
+		    		f.setCreator(currenLoginName);
+	    			f.setUpdater(currenLoginName);
+	    			f.setCreateTime(new Date());
+	    			f.setUpdateTime(new Date());
+		    	}
+		    	//填充File******↑↑↑↑↑↑********
+		    	orderMaterielService.betchInsertOrderMateriel(orderMateriel);
+		    	//数据插入******↑↑↑↑↑↑********
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
     }
     
     /**

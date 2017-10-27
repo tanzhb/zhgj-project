@@ -504,7 +504,7 @@
                                                 
 												 
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left"      >{{invoice.shouldPayOrReceiptMoney|currency:'￥'}}</p> 
+                                                                        <p class="control-label left"      ><!-- {{invoice.shouldPayOrReceiptMoney|currency:'￥'}} -->{{invoice.orderAmount |currency:'￥'}}</p> 
                                                                     </div>
                                                                       
                                                                 </div>
@@ -527,7 +527,7 @@
                                                     <div class="">
                                                   
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left"       >{{invoice.PayedOrReceiptedMoney|currency:'￥'}}</p> 
+                                                                        <p class="control-label left"       >{{invoice.orderAmount-invoice.unPayOrReceiptMoney|currency:'￥'}}</p> 
                                                                     </div>
                                                                       
                                                                 </div>
@@ -556,7 +556,7 @@
                                                   
 												 
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left"      >{{invoice.billedOrReceiptedMoney|currency:'￥'}}</p> 
+                                                                        <p class="control-label left"      >{{invoice.orderAmount-invoice.unBillOrReceiptMoney|currency:'￥'}}</p> 
                                                                     </div>
                                                                       
                                                                 </div>
@@ -590,7 +590,7 @@
                                                                 <div class="form-group">
                                                                 <label class="control-label bold" for="invoiceAmount"><span class="required"> * </span>发票金额 : </label>
                                                                        <div class=" ">
-                                                       <input type="text"  class="form-control "     placeholder=""    id="invoiceAmount" name ="invoiceAmount"  ng-hide="invoiceAdd"   
+                                                       <input type="text"  class="form-control "     placeholder=""    id="invoiceAmount" name ="invoiceAmount"  ng-hide="invoiceAdd"   data-unBillOrReceiptMoney="{{invoice.unBillOrReceiptMoney}}" 
 												ng-model="invoice.invoiceAmount" > 
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="invoiceView">{{invoice.invoiceAmount|currency:'￥'}}</p> 

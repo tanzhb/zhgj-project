@@ -215,6 +215,14 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 	    	 window.location.href=$rootScope.basePath+"/rest/contract/exportBuyContract";
 	    	 handle.unblockUI(); 
 	       }
+		 
+		 $scope.viewBuyOrder = function(serialNum){
+		    	$state.go("viewBuyOrder",{serialNum:serialNum});
+		    }
+		 
+		  $scope.viewSaleOrder = function(serialNum){
+		    	$state.go("viewSaleOrder",{serialNum:serialNum});
+		    }
 		
 		var table;
 		var loadMainTable = function() {
@@ -398,7 +406,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 							                            	'className' : 'dt-body-center',
 							                            	'render' : function(data,
 							                            			type, row, meta) {
-							                            		return data;
+							                            		return '<a data-target="#basicContractInfo" data-toggle="modal" ng-click="getUserContractInfo(\''+row.id+'\')" ">'+data+'</a>';
 							                            	},
 							                            	"createdCell": function (td, cellData, rowData, row, col) {
 							                            		$compile(td)($scope);
@@ -525,19 +533,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 							                            	}
 							                            }
 							                            ],
-							                            'aoColumnDefs': [/* {
-							                            	'targets' : 0,
-							                            	'searchable' : false,
-							                            	'orderable' : false,
-							                            	'className' : 'dt-body-center',
-							                            	'render' : function(data,type, full, meta) {
-							                            		return '<label class="mt-radio mt-radio-outline"><input type="radio" ng-click="getOderInfo1(\''+$('<div/>').text(data).html()+'\')" value="'+ $('<div/>').text(data).html()+ '" name="id[]" /><span></span></label>';
-							                            	},
-							                            	"createdCell": function (td, cellData, rowData, row, col) {
-							                            		$compile(td)($scope);
-							                            	}
-							                            } ,*/
-		                                             {
+							                            'aoColumnDefs': [{
 							                            	'targets' : 0,
 							                            	'searchable' : false,
 							                            	'orderable' : false,
@@ -554,7 +550,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 							                            	'className' : 'dt-body-center',
 							                            	'render' : function(data,
 							                            			type, row, meta) {
-							                            		return data;
+							                            		return '<a data-target="#basicContractInfo" data-toggle="modal" ng-click="getUserContractInfo(\''+row.id+'\')" ">'+data+'</a>';
 							                            	},
 							                            	"createdCell": function (td, cellData, rowData, row, col) {
 							                            		$compile(td)($scope);

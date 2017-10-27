@@ -147,7 +147,45 @@ angular.module('MetronicApp').service('materielService',
 			            deferred.reject(err);//请求失败
 			        });
 			        return deferred.promise;//返回承诺
-				}
+				},
+				//保存物料分类
+				saveCategory : function(category) {
+					var deferred = $q.defer();
+					$http.post("rest/materiel/saveCategory", category
+					).success(function (data) {
+		                // 如果连接成功，延时返回给调用者
+		                deferred.resolve(data);
+		            }).error(function () {
+	                    deferred.reject('连接服务器出错！');
+	                })
+					return deferred.promise;
+				},
+				//删除物料分类
+				deleteCategory : function(category) {
+					var deferred = $q.defer();
+					$http.post("rest/materiel/deleteCategory", category
+					).success(function (data) {
+		                // 如果连接成功，延时返回给调用者
+		                deferred.resolve(data);
+		            }).error(function () {
+	                    deferred.reject('连接服务器出错！');
+	                })
+					return deferred.promise;
+				},
+			    //获取子物料分类
+				queryCategoryListByParent : function(parentId){
+			        var deferred = $q.defer();  
+
+			        $http.get("rest/materiel/queryCategoryListByParent", {params:{parentId:parentId}})
+			        .success(function (data) {  
+			            // 如果连接成功，延时返回给调用者  
+			            deferred.resolve(data);  
+			        })  
+			            .error(function () {  
+			                deferred.reject('连接服务器出错！');  
+			            })  
+			        return deferred.promise;  
+			    }
 				
 				
 			}

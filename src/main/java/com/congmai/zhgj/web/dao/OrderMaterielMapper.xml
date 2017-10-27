@@ -17,6 +17,7 @@
     <result column="discountRate" property="discountRate" jdbcType="VARCHAR" />
     <result column="serviceRate" property="serviceRate" jdbcType="VARCHAR" />
     <result column="redTicket" property="redTicket" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
     <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
@@ -86,7 +87,7 @@
   </sql>
   <sql id="Base_Column_List" >
     serialNum, orderSerial, materielSerial, supplyMaterielSerial, amount, orderUnitPrice, orderRateUnit,
-    money, deliveryDate, lastDeliveryDate, deliveryAddress, customsRate, discountRate, serviceRate, redTicket,
+    money, deliveryDate, lastDeliveryDate, deliveryAddress, customsRate, discountRate, serviceRate, redTicket,sort, 
     delFlg, creator, createTime, updater, updateTime, demandPlanMaterielSerial
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.OrderMaterielExample" >
@@ -123,13 +124,13 @@
     insert into orderMateriel (serialNum, orderSerial, materielSerial, 
       supplyMaterielSerial, amount, orderUnitPrice, orderRateUnit,
       money, deliveryDate, lastDeliveryDate, 
-      deliveryAddress, customsRate, discountRate, serviceRate, redTicket,
+      deliveryAddress, customsRate, discountRate, serviceRate, redTicket,sort, 
       creator, createTime, 
       updater, updateTime, demandPlanMaterielSerial)
     values (#{serialNum,jdbcType=VARCHAR}, #{orderSerial,jdbcType=VARCHAR}, #{materielSerial,jdbcType=VARCHAR}, 
       #{supplyMaterielSerial,jdbcType=VARCHAR}, #{amount,jdbcType=VARCHAR}, #{orderUnitPrice,jdbcType=VARCHAR}, #{orderRateUnit,jdbcType=VARCHAR},
       #{money,jdbcType=VARCHAR}, #{deliveryDate,jdbcType=DATE}, #{lastDeliveryDate,jdbcType=DATE}, 
-      #{deliveryAddress,jdbcType=VARCHAR}, #{customsRate,jdbcType=VARCHAR}, #{discountRate,jdbcType=VARCHAR}, #{serviceRate,jdbcType=VARCHAR},#{redTicket,jdbcType=VARCHAR}, 
+      #{deliveryAddress,jdbcType=VARCHAR}, #{customsRate,jdbcType=VARCHAR}, #{discountRate,jdbcType=VARCHAR}, #{serviceRate,jdbcType=VARCHAR},#{redTicket,jdbcType=VARCHAR},#{sort,jdbcType=INTEGER},  
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{demandPlanMaterielSerial,jdbcType=VARCHAR})
   </insert>
@@ -180,6 +181,9 @@
       </if>
       <if test="redTicket != null" >
         redTicket,
+      </if>
+      <if test="sort != null" >
+        sort,
       </if>
       <if test="delFlg != null" >
         delFlg,
@@ -240,8 +244,11 @@
       <if test="serviceRate != null" >
         #{serviceRate,jdbcType=VARCHAR},
       </if>
-      <if test="redTicket != null" >
+      <if test=" != null" >
         #{redTicket,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=INTEGER},
       </if>
       <if test="delFlg != null" >
         #{delFlg,jdbcType=VARCHAR},
@@ -314,6 +321,9 @@
       <if test="record.redTicket != null" >
         redTicket = #{record.redTicket,jdbcType=VARCHAR},
       </if>
+      <if test="record.sort != null" >
+        sort = #{record.sort,jdbcType=INTEGER},
+      </if>
       <if test="record.delFlg != null" >
         delFlg = #{record.delFlg,jdbcType=VARCHAR},
       </if>
@@ -351,6 +361,7 @@
       discountRate = #{record.discountRate,jdbcType=VARCHAR},
       serviceRate = #{record.serviceRate,jdbcType=VARCHAR},
       redTicket = #{record.redTicket,jdbcType=VARCHAR},
+      sort = #{record.sort,jdbcType=INTEGER},
       delFlg = #{record.delFlg,jdbcType=VARCHAR},
       creator = #{record.creator,jdbcType=VARCHAR},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
@@ -405,6 +416,9 @@
       <if test="redTicket != null" >
         redTicket = #{redTicket,jdbcType=VARCHAR},
       </if>
+      <if test="sort != null" >
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
       <if test="delFlg != null" >
         delFlg = #{delFlg,jdbcType=VARCHAR},
       </if>
@@ -439,6 +453,7 @@
       discountRate = #{discountRate,jdbcType=VARCHAR},
       serviceRate = #{serviceRate,jdbcType=VARCHAR},
       redTicket = #{redTicket,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=INTEGER},
       delFlg = #{delFlg,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP},

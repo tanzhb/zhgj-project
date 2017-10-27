@@ -23,6 +23,7 @@ import com.congmai.zhgj.web.dao.MaterielMapper;
 import com.congmai.zhgj.web.dao.SupplyMaterielMapper;
 import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryTransport;
+import com.congmai.zhgj.web.model.DeliveryTransportExample;
 import com.congmai.zhgj.web.model.DemandPlan;
 import com.congmai.zhgj.web.model.DemandPlanExample;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
@@ -45,6 +46,22 @@ public class DeliveryTransportServiceImpl extends GenericServiceImpl<DeliveryTra
 	public GenericDao<DeliveryTransport, String> getDao() {
 		
 		return this.deliveryTransportMapper;
+	}
+
+	@Override
+	public DeliveryTransport getDeliveryTransport(String  deliverSerial) {
+		// TODO Auto-generated method stub
+		DeliveryTransportExample de=new DeliveryTransportExample();
+		com.congmai.zhgj.web.model.DeliveryTransportExample.Criteria  c=de.createCriteria();
+		c.andDelFlgEqualTo("0");
+		c.andDeliverSerialEqualTo(deliverSerial);
+		List<DeliveryTransport>ds =deliveryTransportMapper.selectByExample(de);
+		DeliveryTransport d=null;
+		if(CollectionUtils.isNotEmpty(ds)){
+			d=ds.get(0);
+		}
+		
+		return  d;
 	}
 
 	
