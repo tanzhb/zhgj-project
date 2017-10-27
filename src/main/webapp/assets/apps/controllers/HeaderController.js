@@ -4,7 +4,6 @@ angular.module('MetronicApp').controller('HeaderController', function($rootScope
         App.initAjax();
         
         $("#hide").val("all");//本页面用,默认列出全部关键字
-        alert(123);
         $scope.getUserInfo();
     });
     
@@ -83,6 +82,10 @@ angular.module('MetronicApp').controller('HeaderController', function($rootScope
 		$('#editPasswordModal').modal('show');// 弹出修改模态框	
 		$('#twoPass').val('');$('#password1').val('');$('#password2').val('');
 	};
+	
+	$scope.psersonCenter=function(){
+		$state.go('userInfo');
+	}
 	
 	$rootScope.savePass = function() {
 		if($('#editPassword').valid()){//表单验证通过则执行添加功能
