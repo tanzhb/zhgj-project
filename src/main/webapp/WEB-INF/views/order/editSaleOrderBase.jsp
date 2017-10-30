@@ -98,13 +98,20 @@ margin-right: 20px;
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>买方：</label>
                                  <div class="">
                                  <div  ng-hide="saleOrderInput">
-                                  	<select class="form-control" id="buyComId"  data-live-search="true"  name="buyComId" class="form-control" 
+                                 	<div class="row">
+                       					<div class="col-md-8">
+                       						<select class="form-control" id="buyComId"  data-live-search="true"  name="buyComId" class="form-control" 
                                   		 ng-model="saleOrder.buyComId"   data-size="8">
                                                   <option value=""></option>
                                                   <option  ng-repeat="customer in customers" value="{{customer.comId}}" >{{customer.comName}}</option>
                                               </select>
+                       					</div>
+                       					<div class="col-md-4">
+                       						<button type="button" ng-click="addCompany()"  class="btn green   btn-sm">
+                         							增加企业 </button>
+                       					</div>
+                       				</div>	
                                               </div>
-                                     <span class="help-block" ng-hide="saleOrderInput">请选择买方</span>
                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.buyName}} </p>
                                  </div>
                                  

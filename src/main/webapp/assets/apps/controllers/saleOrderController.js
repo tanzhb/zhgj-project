@@ -85,6 +85,9 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
             		$scope.opration = '新增';
             		$scope.orderMateriel=[];
             		$scope.saleOrder={};
+            		$rootScope.setNumCode("SO",function(newCode){
+            			$scope.saleOrder.orderNum = newCode;
+            		});
             		$scope.contract={};
             		$scope.clauseSettlement = {};
             		$scope.saleOrder.seller ="中航能科（上海）能源科技有限公司";
@@ -220,42 +223,51 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 // $scope.saleOrder.createTime=null;
 // $scope.saleOrder.updateTime=null;
     		// **********//
-
-    		orderService.save($scope.saleOrder).then(
-       		     function(data){
-       		    	$scope.saleOrder = data;
-       		    	$scope.contract.orderSerial = data.serialNum;
-       		    	if(isNull($scope.contract.contractNum)){
-       		    		$scope.contract.contractNum = $scope.saleOrder.orderNum;
-       		    	}
-	   	    		$scope.contract.comId = $scope.saleOrder.buyComId;
-	   	    		$scope.contract.signDate = $scope.saleOrder.orderDate;
-	   	    		orderService.saveContract($scope.contract).then(
-	   	       		     function(data){
-	   	       		    	toastr.success('数据保存成功！');
-	   	       		    	$scope.contract = data.data;
-	   	       		     },
-	   	       		     function(error){
-	   	       		    	toastr.error('数据保存出错！');
-	   	       		         $scope.error = error;
-	   	       		     }
-	   	       		 );
-       		    	/*$location.search({serialNum:data.serialNum,view:1});*/
-       		    	$scope.saleOrderInput = true;
-       			    $scope.saleOrderShow = true;
-       			    
-	       			 if(!isNull($stateParams.demandPlanSerial)&&!isNull($stateParams.materiels)&&$scope.isInit){
-	         			getDemandPlanMateriels($stateParams.materiels);
-	         			$scope.isInit = false;
-	       			 }
-       		     },
-       		     function(error){
-       		         $scope.error = error;
-       		         toastr.error('数据保存出错！');
-       		     }
-       		 );
-    		
-    		
+    		orderService.checkNum($scope.buyOrder).then(
+         		     function(data){
+         		    	 if(data>0){
+         		    		toastr.error('订单编号重复！');
+         		    	 }else{
+         		    		orderService.save($scope.saleOrder).then(
+         		         		     function(data){
+         		         		    	$scope.saleOrder = data;
+         		         		    	$scope.contract.orderSerial = data.serialNum;
+         		         		    	if(isNull($scope.contract.contractNum)){
+         		         		    		$scope.contract.contractNum = $scope.saleOrder.orderNum;
+         		         		    	}
+         		  	   	    		$scope.contract.comId = $scope.saleOrder.buyComId;
+         		  	   	    		$scope.contract.signDate = $scope.saleOrder.orderDate;
+         		  	   	    		orderService.saveContract($scope.contract).then(
+         		  	   	       		     function(data){
+         		  	   	       		    	toastr.success('数据保存成功！');
+         		  	   	       		    	$scope.contract = data.data;
+         		  	   	       		     },
+         		  	   	       		     function(error){
+         		  	   	       		    	toastr.error('数据保存出错！');
+         		  	   	       		         $scope.error = error;
+         		  	   	       		     }
+         		  	   	       		 );
+         		         		    	/*$location.search({serialNum:data.serialNum,view:1});*/
+         		         		    	$scope.saleOrderInput = true;
+         		         			    $scope.saleOrderShow = true;
+         		         			    
+         		  	       			 if(!isNull($stateParams.demandPlanSerial)&&!isNull($stateParams.materiels)&&$scope.isInit){
+         		  	         			getDemandPlanMateriels($stateParams.materiels);
+         		  	         			$scope.isInit = false;
+         		  	       			 }
+         		         		     },
+         		         		     function(error){
+         		         		         $scope.error = error;
+         		         		         toastr.error('数据保存出错！');
+         		         		     }
+         		         		 );
+         		    	 }
+         		     },
+         		     function(error){
+         		         $scope.error = error;
+         		         toastr.error('数据连接出错！');
+         		     }
+         		 );
     	}
     	
     }; 	
@@ -927,7 +939,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
           		    	$scope.saleOrder=data.orderInfo;
           		    	$scope.orderMateriel=data.orderMateriel;
           		    	$scope.cancelAllOrderMateriel();
-          		    	if($state.current.name=="viewSaleOrder"){//查看页面构造物料查询分页
+          		    	if($state.current.name=="viewSaleOrder"||$state.current.name=="submitSaleApply"){//查看页面构造物料查询分页
           		    		$scope.queryForPage();
           		    	}
           		    	
@@ -2969,6 +2981,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        	},function(data){
 		        		//调用承诺接口reject();
 		        	});
+			}
+			$scope.addCompany = function(){
+				$state.go("companyAdd");
 			}
 			
 			/**

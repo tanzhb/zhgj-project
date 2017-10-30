@@ -907,7 +907,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	            },
             	rules: {orderNum: {required: !0,maxlength: 20},
             		orderType: {required: !0,maxlength: 20},
-            		buyComId: {required: !0,maxlength: 20},
+            		supplyComId: {required: !0,maxlength: 20},
             		serviceModel: {required: !0,maxlength: 20},
             		settlementClause: {required: !0,maxlength: 20},
             		deliveryMode: {required: !0,maxlength: 20},
@@ -952,7 +952,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
           		    	$scope.buyOrder=data.orderInfo;
           		    	$scope.orderMateriel=data.orderMateriel;
           		    	$scope.cancelAllOrderMateriel();
-          		    	if($state.current.name=="viewBuyOrder"){//查看页面构造物料查询分页
+          		    	if($state.current.name=="viewBuyOrder"||$state.current.name=="submitBuyApply"){//查看页面构造物料查询分页
           		    		$scope.queryForPage();
           		    	}
           		    	
@@ -3385,6 +3385,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
         	},function(data){
         		//调用承诺接口reject();
         	});
+	}
+	$scope.addCompany = function(){
+		$state.go("companyAdd");
 	}
 	
 	/**
