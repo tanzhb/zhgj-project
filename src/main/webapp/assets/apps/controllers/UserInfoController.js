@@ -13,7 +13,9 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
 		$scope.span=true;
 		
 		//查询登陆者的信息
-    	$scope.getUserInfo();	
+    	$scope.getUserInfo();
+    	//获取公告与消息数
+    	$scope.getMessageAndNotice();
 	});
 	
 	//根据参数查询对象
@@ -229,6 +231,28 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
             }
         })   
 	});
+	
+	
+	//获取公告与消息数
+	$scope.getMessageAndNotice = function() {
+		UserInfoService.getMessageCount().then(
+    		     function(data){
+    		    	$scope.messageCount=data;
+    		     },
+    		     function(error){
+    		         $scope.error = error;
+    		     }
+    	);
+		
+		UserInfoService.getNoticeCount().then(
+   		     function(data){
+   		    	$scope.noticeCount=data;
+   		     },
+   		     function(error){
+   		         $scope.error = error;
+   		     }
+   	);
+	}
 
 }]);
 

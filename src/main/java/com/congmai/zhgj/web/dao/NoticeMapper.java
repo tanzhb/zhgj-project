@@ -40,4 +40,6 @@ public interface NoticeMapper extends GenericDao<Notice, String>{
     List<Notice> findMyNoticeList(Notice notice);
 
 	int countMyNoticeList(Notice notice);
+	
+	int countMyUnReadNotice(Notice notice);
 }

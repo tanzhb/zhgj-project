@@ -515,4 +515,9 @@
      from notice n LEFT JOIN notice_share ns on n.serial_num = ns.notice_serial and ns.user_id = #{user_id}
 	where n.notice_type like CONCAT('%',#{status},'%') and n.del_flg = 0  and (ns.del_flg = 0 or ns.del_flg is null) and n.status = '1'  
   </select>
+    <select id="countMyUnReadNotice" parameterType="com.congmai.zhgj.web.model.Notice" resultType="java.lang.Integer">
+  	SELECT count(n.serial_num)
+     from notice n LEFT JOIN notice_share ns on n.serial_num = ns.notice_serial and ns.user_id = #{user_id}
+	where n.notice_type like CONCAT('%',#{status},'%') and n.del_flg = 0  and (ns.del_flg = 0 or ns.del_flg is null) and n.status = '1' and (ns.read_flg = 0 or ns.read_flg is null)
+  </select>
 </mapper>

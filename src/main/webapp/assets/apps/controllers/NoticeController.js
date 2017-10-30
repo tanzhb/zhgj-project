@@ -57,6 +57,8 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 		 				$("#portlet_tab2_2").removeClass("active");
 		 				createTable(5,1,true,$scope.params);
 		 		}	
+	 			
+	 			getNoticeCount();
 	    	}
 	    	
 	    	 $("#sample_n2").on("change", "tbody tr .checkboxes",
@@ -1124,5 +1126,17 @@ angular.module('MetronicApp').controller('NoticeController',['$rootScope','$scop
 			  		};
 			        
 		/*******************************************申请JS END*******************************************/
+			  		
+			  		
+	
+	 //最新公告数
+    function getNoticeCount(){
+    	 var promise2 = noticeService.getNoticeCount();
+		 promise2.then(function(data){
+			 $scope.noticeCount = data; 
+		 },function(data){
+			 //调用承诺接口reject();
+		 });
+    };
 
 }]); 
