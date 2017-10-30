@@ -96,7 +96,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		$scope.contract.contractType="采购合同";
             		$scope.buyOrder.orderType="贸易采购";
             		$scope.buyOrder.tradeType="内贸";
-            		/*$scope.buyOrder.currency="人民币";*/
+            		$scope.buyOrder.currency="人民币";
+            		$scope.buyOrder.orderDate = timeStamp2String2(new Date())
             		$scope.clauseSettlement = {};
             		$scope.buyOrder.seller ="中航能科（上海）能源科技有限公司";
             		$scope.buyOrder.rate = 17;
@@ -903,7 +904,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	            	rate:{required:"税率不能为空！"},
 	            	currency:{required:"币种不能为空！"},
 	            	maker:{required:"制单人不能为空！"},
-	            	seller:{required:"买方不能为空！"}
+	            	seller:{required:"买方不能为空！"},
+	            	orderDate:{required:"采购日期不能为空！"}
 	            },
             	rules: {orderNum: {required: !0,maxlength: 20},
             		orderType: {required: !0,maxlength: 20},
@@ -914,7 +916,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		rate: {required: !0,maxlength: 20},
             		maker: {required: !0,maxlength: 20},
 	            	seller:{required: !0,maxlength: 20},
-            		currency: {required: !0,maxlength: 20}
+            		currency: {required: !0,maxlength: 20},
+            		orderDate: {required: !0}
             			},
             		invalidHandler: function(e, t) {
                     i.hide(), r.show(), App.scrollTo(r, -200)
@@ -3376,7 +3379,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
         		$scope.suppliers = data.data;
         		setTimeout(function () {
         			$("#supplyComId").selectpicker({
-                        showSubtext: true
+                        showSubtext: true,
+                        size : 5
                     });
         			$('#supplyComId').selectpicker('refresh');//刷新插件
         			

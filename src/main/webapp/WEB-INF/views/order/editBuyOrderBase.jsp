@@ -266,7 +266,7 @@ margin-right: 20px;
                          </div> -->
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label bold">采购日期：</label>
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>采购日期：</label>
                                  <div class="">
                                  <input type="text" name="orderDate" class="form-control form-control-inline input-medium date-picker" 
                                      data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="buyOrderInput" ng-model="buyOrder.orderDate" repeat-done="renderDone()" >
@@ -392,7 +392,7 @@ margin-right: 20px;
                          </div> -->
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label bold">采购日期：</label>
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>采购日期：</label>
                                  <div class="">
                                  <input type="text" name="orderDate" class="form-control form-control-inline input-medium date-picker" 
                                      data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="buyOrderInput" ng-model="buyOrder.orderDate" repeat-done="renderDone()" >
@@ -560,7 +560,7 @@ margin-right: 20px;
                          <!--/span-->
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label bold">采购日期：</label>
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>采购日期：</label>
                                  <div class="">
                                  <input type="text" name="orderDate" class="form-control form-control-inline input-medium date-picker" 
                                      data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="buyOrderInput" ng-model="buyOrder.orderDate" repeat-done="renderDone()" >
