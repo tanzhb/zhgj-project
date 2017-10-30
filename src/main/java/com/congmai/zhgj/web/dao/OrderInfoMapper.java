@@ -2,7 +2,10 @@ package com.congmai.zhgj.web.dao;
 
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderInfoExample;
+
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface OrderInfoMapper {
@@ -29,6 +32,10 @@ public interface OrderInfoMapper {
     int updateByExample(@Param("record") OrderInfo record, @Param("example") OrderInfoExample example);
 
     int updateByPrimaryKeySelective(OrderInfo record);
+
+	String getNumCode(Map m);
+
+	String checkNum(OrderInfo orderInfo);
 
     /*int updateByPrimaryKey(OrderInfo record);*/
 }

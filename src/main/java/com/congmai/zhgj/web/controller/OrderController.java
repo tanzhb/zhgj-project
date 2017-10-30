@@ -173,6 +173,21 @@ public class OrderController {
     	orderInfo = orderService.selectById(orderInfo.getSerialNum());
 		return orderInfo;
     }
+    
+    
+    /**
+     * 保存订单
+     */
+    @RequestMapping(value = "/checkNum", method = RequestMethod.POST)
+    @ResponseBody
+    public String checkNum(@RequestBody String params) {
+    	OrderInfo orderInfo = json2Order(params);
+    	String flag = "0";
+    	flag = orderService.checkNum(orderInfo);
+		return flag;
+    }
+    
+    
 
     /**
      * 供应商接收订单
@@ -1423,6 +1438,18 @@ public class OrderController {
     	materiel.setSerialNum(serialNum);
     	materiel.setOrderSerial(orderSerial);
     	demandPlanMaterielService.update(materiel);
+    };
+    
+    /**
+     * @Description 生成表单编号
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="getNumCode")
+    @ResponseBody
+    public String getNumCode(String codeType) {
+    	String numCode = orderService.getNumCode(codeType);
+    	return numCode;
     }
     
 }

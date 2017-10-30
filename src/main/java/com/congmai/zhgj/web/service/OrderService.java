@@ -42,6 +42,8 @@ public interface OrderService extends GenericService<OrderInfo, String> {
 	
 	int updateStatus(OrderInfo orderInfo);
 	
+	String getNumCode(String codeType);
 
+	String checkNum(OrderInfo orderInfo);
 
 }

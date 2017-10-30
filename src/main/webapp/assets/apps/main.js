@@ -27,7 +27,7 @@ MetronicApp.config([ '$controllerProvider', function($controllerProvider) {
  ******************************************************************************/
 
 /* Setup global settings */
-MetronicApp.factory('settings', [ '$rootScope', function($rootScope) {
+MetronicApp.factory('settings', [ '$rootScope','$q', function($rootScope,$q) {
 	// supported languages
 	var settings = {
 		layout : {
@@ -44,6 +44,19 @@ MetronicApp.factory('settings', [ '$rootScope', function($rootScope) {
 	
 	$rootScope.settings = settings;
 	$rootScope.basePath = getRootPath();
+	
+	$rootScope.setNumCode = function(codeType,callback){
+		var deferred = $q.defer();
+		$.get(ctx + "/rest/order/getNumCode/" , {codeType:codeType}).success(function (data) {
+		    // 如果连接成功，延时返回给调用者  
+		    deferred.resolve(data);
+		}).error(function () {  
+		    deferred.reject('连接服务器出错！');  
+		})
+		return deferred.promise.then(function(data){
+			callback(data);
+		});
+	}
 
 	return settings;
 } ]);

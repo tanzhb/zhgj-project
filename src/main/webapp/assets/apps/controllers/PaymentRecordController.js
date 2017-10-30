@@ -425,7 +425,7 @@ angular.module('MetronicApp').controller('PaymentRecordController',['$rootScope'
 	                        footer: !0,
 	                        headerOffset: a
 	                    },*/
-	                    order: [[1, "asc"]],//默认排序列及排序方式
+	                    order: [[1, "desc"]],//默认排序列及排序方式
 	                    bRetrieve : true,
 	  					'scrollX': false,
 	  					  buttons: [
@@ -831,7 +831,7 @@ angular.module('MetronicApp').controller('PaymentRecordController',['$rootScope'
 	  		                        footer: !0,
 	  		                        headerOffset: a
 	  		                    },*/
-	  		                    order: [[1, "asc"]],//默认排序列及排序方式
+	  		                    order: [[1, "desc"]],//默认排序列及排序方式
 	  		                    bRetrieve : true,
 	  		  					'scrollX': false,
 	  		  					  buttons: [

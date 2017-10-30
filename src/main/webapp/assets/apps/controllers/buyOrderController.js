@@ -88,6 +88,10 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		$scope.opration = '新增';
             		$scope.orderMateriel=[];
             		$scope.buyOrder={};
+            		$scope.buyOrder.orderNum = '';
+            		$rootScope.setNumCode("PO",function(newCode){
+            			$scope.buyOrder.orderNum = newCode;
+            		});
             		$scope.contract={};
             		$scope.contract.contractType="采购合同";
             		$scope.buyOrder.orderType="贸易采购";
@@ -235,36 +239,48 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 // $scope.buyOrder.createTime=null;
 // $scope.buyOrder.updateTime=null;
     		// **********//
-
-    		orderService.save($scope.buyOrder).then(
-       		     function(data){
-       		    	$scope.buyOrder = data;
-       		    	$scope.contract.orderSerial = data.serialNum;
-       		    	if(isNull($scope.contract.contractNum)){
-       		    		$scope.contract.contractNum = $scope.buyOrder.orderNum;
-       		    	}
-	   	    		
-       		    	$scope.contract.comId = $scope.buyOrder.supplyComId;
-	   	    		$scope.contract.signDate = $scope.buyOrder.orderDate;
-	   	    		orderService.saveContract($scope.contract).then(
-	   	       		     function(data){
-	   	       		    	toastr.success('数据保存成功！');
-	   	       		    	$scope.contract = data.data;
-	   	       		     },
-	   	       		     function(error){
-	   	       		    	toastr.error('数据保存出错！');
-	   	       		         $scope.error = error;
-	   	       		     }
-	   	       		 );
-       		    	/*$location.search({serialNum:data.serialNum,view:1});*/
-       		    	$scope.buyOrderInput = true;
-       			    $scope.buyOrderShow = true;
-       		     },
-       		     function(error){
-       		         $scope.error = error;
-       		         toastr.error('数据保存出错！');
-       		     }
-       		 );
+    		orderService.checkNum($scope.buyOrder).then(
+          		     function(data){
+          		    	 if(data>0){
+          		    		toastr.error('订单编号重复！');
+          		    	 }else{
+          		    		orderService.save($scope.buyOrder).then(
+      		        		     function(data){
+      		        		    	$scope.buyOrder = data;
+      		        		    	$scope.contract.orderSerial = data.serialNum;
+      		        		    	if(isNull($scope.contract.contractNum)){
+      		        		    		$scope.contract.contractNum = $scope.buyOrder.orderNum;
+      		        		    	}
+      		 	   	    		
+      		        		    	$scope.contract.comId = $scope.buyOrder.supplyComId;
+      		 	   	    		$scope.contract.signDate = $scope.buyOrder.orderDate;
+      		 	   	    		orderService.saveContract($scope.contract).then(
+      		 	   	       		     function(data){
+      		 	   	       		    	toastr.success('数据保存成功！');
+      		 	   	       		    	$scope.contract = data.data;
+      		 	   	       		     },
+      		 	   	       		     function(error){
+      		 	   	       		    	toastr.error('数据保存出错！');
+      		 	   	       		         $scope.error = error;
+      		 	   	       		     }
+      		 	   	       		 );
+      		        		    	/*$location.search({serialNum:data.serialNum,view:1});*/
+      		        		    	$scope.buyOrderInput = true;
+      		        			    $scope.buyOrderShow = true;
+      		        		     },
+      		        		     function(error){
+      		        		         $scope.error = error;
+      		        		         toastr.error('数据保存出错！');
+      		        		     }
+      		        		 );
+          		    	 }
+          		     },
+          		     function(error){
+          		         $scope.error = error;
+          		         toastr.error('数据连接出错！');
+          		     }
+          		 );
+    		
     	}
     	
     }; 	
@@ -321,7 +337,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 /*
  * fixedHeader: {//固定表头、表底 header: !0, footer: !0, headerOffset: a },
  */
-                order: [[9, "desc"]],// 默认排序列及排序方式
+                order: [[1, "desc"]],// 默认排序列及排序方式
                 searching: true,// 是否过滤检索
                 ordering:  true,// 是否排序
                 lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
@@ -580,7 +596,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     /*
      * fixedHeader: {//固定表头、表底 header: !0, footer: !0, headerOffset: a },
      */
-                    order: [[1, "asc"]],// 默认排序列及排序方式
+                    order: [[1, "desc"]],// 默认排序列及排序方式
                     searching: true,// 是否过滤检索
                     ordering:  true,// 是否排序
                     lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
@@ -1057,7 +1073,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
      /*
 		 * fixedHeader: {//固定表头、表底 header: !0, footer: !0, headerOffset: a },
 		 */
-                     order: [[1, "asc"]],// 默认排序列及排序方式
+                     order: [[1, "desc"]],// 默认排序列及排序方式
                      searching: true,// 是否过滤检索
                      ordering:  true,// 是否排序
                      lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
