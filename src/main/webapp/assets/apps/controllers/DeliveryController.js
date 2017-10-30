@@ -20,7 +20,8 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		getSupplyComId();
 		//控制输入框和span标签的显示
 		$scope.span =false;
-		$scope.input = true;
+		$scope.inputDeliveryInfo = true;
+		$scope.inputTakeDeliveryInfo = true;
 		
 		
 		$scope.transportType="水路运输";
@@ -36,7 +37,8 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
     if($stateParams.serialNumEdit){
     	$scope.getDeliveryEditInfo($stateParams.serialNumEdit,$stateParams.taskId, $stateParams.comments);
     }
-    if($scope.delivery.deliverDate==undefined){
+    if($scope.delivery==undefined||$scope.delivery.deliverDate==undefined){
+    	$scope.delivery={};
     	$scope.delivery.deliverDate=$filter('date')(new Date(), 'yyyy-MM-dd');
     }
     
@@ -369,9 +371,80 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	};
 	
 	//保存基本信息
-	$scope.saveBasicInfo=function(){
+	$scope.saveDeliveryInfo=function(){
 		if($('#form_sample_1').valid()){
-		var promise = DeliveryService.saveBasicInfo($scope);
+			$scope.deliveryTransport={};
+			$scope.takeDelivery={};
+		var promise = DeliveryService.saveBasicInfo($scope,"deliveryInfo");
+		promise.then(function(data) {
+			if (!handle.isNull(data)) {
+				$(".modal-backdrop").remove();
+				toastr.success("保存成功");
+				handle.unblockUI();
+				$scope.delivery= data;
+				getSupplyComId();
+				$scope.span = true;
+				$scope.inputDeliveryInfo = false;
+				$(".alert-danger").hide();
+			} else {
+				$(".modal-backdrop").remove();
+				handle.unblockUI();
+				toastr.error("保存失败！请联系管理员");
+				console.log(data);
+			}
+			
+		}, function(data) {
+			// 调用承诺接口reject();
+			$(".modal-backdrop").remove();
+			handle.unblockUI();
+			toastr.error("保存失败！请联系管理员");
+			console.log(data);
+		});	
+		}
+	}
+
+	//保存收货信息
+	$scope.saveTakeDeliveryInfo=function(){//saveMasterielInfo()
+		if($scope.delivery.serialNum==null||$scope.delivery.serialNum=='') {// 订单信息为空的处理
+	    		toastr.error('请先保存发货信息！');return
+ 		}
+		if($('#form_sample_2').valid()){
+			$scope.deliveryTransport={};
+		var promise = DeliveryService.saveBasicInfo($scope,"takeDelivery");
+		promise.then(function(data) {
+			if (!handle.isNull(data)) {
+				$(".modal-backdrop").remove();
+				toastr.success("保存成功");
+				handle.unblockUI();
+				$scope.delivery= data;
+				getSupplyComId();
+				$scope.span = true;
+				$scope.inputTakeDeliveryInfo = false;
+				$(".alert-danger").hide();
+			} else {
+				$(".modal-backdrop").remove();
+				handle.unblockUI();
+				toastr.error("保存失败！请联系管理员");
+				console.log(data);
+			}
+			
+		}, function(data) {
+			// 调用承诺接口reject();
+			$(".modal-backdrop").remove();
+			handle.unblockUI();
+			toastr.error("保存失败！请联系管理员");
+			console.log(data);
+		});	
+		}
+	}
+	//保存物料信息
+	$scope.saveMasterielInfo=function(){//saveMasterielInfo()
+		if($scope.delivery.serialNum==null||$scope.delivery.serialNum=='') {// 订单信息为空的处理
+	    		toastr.error('请先保存发货信息！');return
+ 		}
+		if($('#form_sample_1').valid()){
+			$scope.deliveryTransport={};
+		var promise = DeliveryService.saveBasicInfo($scope,"materiel");
 		promise.then(function(data) {
 			if (!handle.isNull(data)) {
 				$(".modal-backdrop").remove();
@@ -398,10 +471,8 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		});	
 		}
 	}
-	
-	
 	//编辑基本信息
-	$scope.editBasicInfo=function(){
+	$scope. editDeliveryInfo=function(){
 		if($('#form_sample_1').valid()){
 		var promise = DeliveryService.editBasicInfo($scope);
 		promise.then(function(data) {
@@ -2036,7 +2107,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
             	makeDate:{required:"制单日期不能为空！"},
             	
             	
-            	deliveryWarehouseSerial:{required:"发货仓库不能为空！"},
+            	/*deliveryWarehouseSerial:{required:"发货仓库不能为空！"},
             	deliverDate:{required:"发货日期不能为空！"},
             	contactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
             	
@@ -2047,7 +2118,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
             	
             	
             	takeDeliveryWarehouseSerial:{required:"收货仓库不能为空！"},
-            	takeDeliveryContactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
+            	takeDeliveryContactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},*/
             	
             	
             	
@@ -2206,7 +2277,196 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
         })   
 	});
 	
-	
+	// 页面加载完成后调用，验证输入框
+	$scope.$watch('$viewContentLoaded', function() {  
+		var e = $("#form_sample_2"),
+        r = $(".alert-danger", e),
+        i = $(".alert-success", e);
+        e.validate({
+            errorElement: "span",
+            errorClass: "help-block help-block-error",
+            focusInvalid: !1,
+            ignore: "",
+            messages: {
+            /*	deliverNum:{required:"发货单号不能为空！",rangelength:jQuery.validator.format("发货单号位数必须在{0}到{1}字符之间！")},
+            	deliverType:{required:"发货类型不能为空！"},
+            	orderSerial:{required:"订单编号不能为空！"},
+            	supplyComId:{required:"供应商不能为空！"},
+            	shipper:{required:"发货方不能为空！"},
+            	receiver:{required:"收货方不能为空！"},
+            	maker:{required:"制单人不能为空！"},
+            	makeDate:{required:"制单日期不能为空！"},*/
+            	
+            	
+            	deliveryWarehouseSerial:{required:"发货仓库不能为空！"},
+            	deliverDate:{required:"发货日期不能为空！"},
+            	contactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
+            	
+            	
+            	transport:{required:"运输方不能为空！"},
+            	shipNumber:{required:"运单号不能为空！"},
+            	deliveryTransportContactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
+            	
+            	
+            	takeDeliveryWarehouseSerial:{required:"收货仓库不能为空！"},
+            	takeDeliveryContactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
+            	
+            	
+            	
+                payment: {
+                    maxlength: jQuery.validator.format("Max {0} items allowed for selection"),
+                    minlength: jQuery.validator.format("At least {0} items must be selected")
+                },
+                "checkboxes1[]": {
+                    required: "Please check some options",
+                    minlength: jQuery.validator.format("At least {0} items must be selected")
+                },
+                "checkboxes2[]": {
+                    required: "Please check some options",
+                    minlength: jQuery.validator.format("At least {0} items must be selected")
+                }
+            },
+            rules: {
+                name: {
+                    minlength: 2,
+                    required: !0
+                },
+                name2: {
+                    minlength: 6,
+                    required: !0
+                },
+                
+             /*   deliverNum:{required:true,
+                },
+                deliverType:{required:true,
+                },
+                orderSerial:{required:true,
+                },
+                supplyComId:{required:true,
+                },
+                shipper:{required:true,
+                },
+                receiver:{required:true,
+                },
+                maker:{required:true,
+                },
+                makeDate:{required:true,
+                },*/
+               
+                
+                
+                deliveryWarehouseSerial:{required:true,
+                },
+                deliverDate:{required:true,
+                },
+                contactNum:{
+                	digits:true,
+                	rangelength:[7,20]
+                },
+                
+                
+                transport:{required:true,
+                },
+                shipNumber:{required:true,
+                },
+                deliveryTransportContactNum:{
+                	digits:true,
+                	rangelength:[7,20]
+                },
+                
+                
+                takeDeliveryWarehouseSerial:{required:true,
+                },
+                takeDeliveryContactNum:{
+                	digits:true,
+                	rangelength:[7,20]
+                },
+                
+                
+                
+                email: {
+                    required: !0,
+                    email: !0
+                },
+                email2: {
+                    required: !0,
+                    email: !0
+                },
+                url: {
+                    required: !0,
+                    url: !0
+                },
+                url2: {
+                    required: !0,
+                    url: !0
+                },
+                number: {
+                    required: !0,
+                    number: !0
+                },
+                number2: {
+                    required: !0,
+                    number: !0
+                },
+                digits: {
+                    required: !0,
+                    digits: !0
+                },
+                creditcard: {
+                    required: !0,
+                    creditcard: !0
+                },
+                delivery: {
+                    required: !0
+                },
+                payment: {
+                    required: !0,
+                    minlength: 2,
+                    maxlength: 4
+                },
+                memo: {
+                    required: !0,
+                    minlength: 10,
+                    maxlength: 40
+                },
+                "checkboxes1[]": {
+                    required: !0,
+                    minlength: 2
+                },
+                "checkboxes2[]": {
+                    required: !0,
+                    minlength: 3
+                },
+                radio1: {
+                    required: !0
+                },
+                radio2: {
+                    required: !0
+                }
+            },
+            invalidHandler: function(e, t) {
+                i.hide(),
+                r.show(),
+                App.scrollTo(r, -200)
+            },
+            errorPlacement: function(e, r) {
+                r.is(":checkbox") ? e.insertAfter(r.closest(".md-checkbox-list, .md-checkbox-inline, .checkbox-list, .checkbox-inline")) : r.is(":radio") ? e.insertAfter(r.closest(".md-radio-list, .md-radio-inline, .radio-list,.radio-inline")) : e.insertAfter(r)
+            },
+            highlight: function(e) {
+                $(e).closest(".form-group").addClass("has-error")
+            },
+            unhighlight: function(e) {
+                $(e).closest(".form-group").removeClass("has-error")
+            },
+            success: function(e) {
+                e.closest(".form-group").removeClass("has-error")
+            },
+            submitHandler: function(e) {
+                i.show(),
+                r.hide()
+            }
+        })   
+	});
 	
 	
 	
@@ -2446,7 +2706,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
   									type, row, meta) {
   								
   								if(data==null){
-  									return row.supplyMateriel.materiel.materielName;
+  									return "";
   								}else{
   									return data.materiel.materielName;
   								}

@@ -205,7 +205,7 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 	}
     
     //保存基本信息
-    function saveBasicInfo($scope){
+    function saveBasicInfo($scope,type){
     	var deferred = $q.defer();
 		$.post("rest/delivery/saveBasicInfo", {
 			orderSerial:$scope.orderSerial==null?$scope.delivery.orderSerial:$scope.orderSerial,
@@ -227,6 +227,7 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 			deliverer:$scope.delivery.deliverer,
 			contactNum:$scope.delivery.contactNum,
 			deliverRemark:$scope.delivery.deliverRemark,
+			serialNum:type=="deliveryInfo"?null:$scope.delivery.serialNum,
 			
 			transportType:$scope.transportType,
 			transport:$scope.deliveryTransport.transport,
@@ -235,13 +236,15 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 			transportRemark:$scope.deliveryTransport.remark,
 			transportContact:$scope.deliveryTransport.contact,
 			transportContactNum:$scope.deliveryTransport.contactNum,
+			deliverSerial:type=="takeDelivery"?$scope.delivery.serialNum:null,
 			
 			takeDeliveryWarehouseSerial:$scope.takeDelivery.warehouseSerial,
 			takeAddress:$scope.takeDeliveryWarehouseAddress,
 			takeDeliverDate:$scope.takeDelivery.takeDeliverDate,
 			takeDeliveryReceiver:$scope.takeDelivery.receiver,
 			takeDeliveryContactNum:$scope.takeDelivery.contactNum,
-			takeDeliveryRemark:$scope.takeDelivery.remark
+			takeDeliveryRemark:$scope.takeDelivery.remark,
+			deliverSerial:type=="takeDelivery"?$scope.delivery.serialNum:null
 		}
 		).then(function success(result) {
 			deferred.resolve(result);//请求成功

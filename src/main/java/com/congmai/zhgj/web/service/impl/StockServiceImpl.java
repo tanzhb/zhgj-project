@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -89,25 +90,32 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 	@Override
 	public List<DeliveryMateriel> getDeliverMaterialListForIn(
 			List<String> takeDeliverSerialList,String buyComId,Stock   stock) {
-		List<DeliveryMateriel>deliverMateriels=null;
-		if(StringUtils.isEmpty(buyComId)){
-			if("1".equals(stock.getManageType())){//自建
-				deliverMateriels=deliveryMaterielMapper.getDetailByRelationTakeDeliverSerialListForZijian(takeDeliverSerialList);
-			}else if("2".equals(stock.getManageType())){
-				deliverMateriels= deliveryMaterielMapper.getDetailByRelationTakeDeliverSerialListForDaiguan(takeDeliverSerialList);
-			}
-			
-		}else{
-			deliverMateriels= deliveryMaterielMapper.getDetailByRelationTakeDeliverSerialList(takeDeliverSerialList);
-			List<DeliveryMateriel>deliverMaterielsTwo=new ArrayList<DeliveryMateriel>();
-			for(DeliveryMateriel deliverMateriel: deliverMateriels){
-				if("zhgj".equals(buyComId)&&StringUtils.isEmpty(deliverMateriel.getBuyComId())){
-					deliverMaterielsTwo.add(deliverMateriel);
-				}else if(buyComId.equals(deliverMateriel.getBuyComId())){
-					deliverMaterielsTwo.add(deliverMateriel);
+		List<DeliveryMateriel>deliverMateriels=new ArrayList<DeliveryMateriel>();
+		if (CollectionUtils.isNotEmpty(takeDeliverSerialList)) {
+			if (StringUtils.isEmpty(buyComId)) {
+				if ("1".equals(stock.getManageType())) {// 自建
+					deliverMateriels = deliveryMaterielMapper
+							.getDetailByRelationTakeDeliverSerialListForZijian(takeDeliverSerialList);
+				} else if ("2".equals(stock.getManageType())) {
+					deliverMateriels = deliveryMaterielMapper
+							.getDetailByRelationTakeDeliverSerialListForDaiguan(takeDeliverSerialList);
 				}
+
+			} else {
+				deliverMateriels = deliveryMaterielMapper
+						.getDetailByRelationTakeDeliverSerialList(takeDeliverSerialList);
+				List<DeliveryMateriel> deliverMaterielsTwo = new ArrayList<DeliveryMateriel>();
+				for (DeliveryMateriel deliverMateriel : deliverMateriels) {
+					if ("zhgj".equals(buyComId)
+							&& StringUtils.isEmpty(deliverMateriel
+									.getBuyComId())) {
+						deliverMaterielsTwo.add(deliverMateriel);
+					} else if (buyComId.equals(deliverMateriel.getBuyComId())) {
+						deliverMaterielsTwo.add(deliverMateriel);
+					}
+				}
+				deliverMateriels = deliverMaterielsTwo;
 			}
-			deliverMateriels=deliverMaterielsTwo;
 		}
 		return deliverMateriels;
 	}
@@ -115,11 +123,15 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 	@Override
 	public List<DeliveryMateriel> getDeliverMaterialListForOut(
 			List<String> deliverSerialList,Stock   stock) {
-		List<DeliveryMateriel> deliveryMateriels=null;
-		if("1".equals(stock.getManageType())){//自建
-			deliveryMateriels= deliveryMaterielMapper.getDetailByRelationDeliverSerialListForZijian(deliverSerialList);
-		}else if("2".equals(stock.getManageType())){//代管
-			deliveryMateriels= deliveryMaterielMapper.getDetailByRelationDeliverSerialListForDaiguan(deliverSerialList);
+		List<DeliveryMateriel> deliveryMateriels=new  ArrayList<DeliveryMateriel>();
+		if (CollectionUtils.isNotEmpty(deliverSerialList)) {
+			if ("1".equals(stock.getManageType())) {// 自建
+				deliveryMateriels = deliveryMaterielMapper
+						.getDetailByRelationDeliverSerialListForZijian(deliverSerialList);
+			} else if ("2".equals(stock.getManageType())) {// 代管
+				deliveryMateriels = deliveryMaterielMapper
+						.getDetailByRelationDeliverSerialListForDaiguan(deliverSerialList);
+			}
 		}
 		/*return deliveryMaterielMapper.getDetailByRelationDeliverSerialList(deliverSerialList);*/
 		return deliveryMateriels;

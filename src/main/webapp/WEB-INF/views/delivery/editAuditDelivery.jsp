@@ -30,7 +30,7 @@
 				<div class="portlet light ">
 					<ul class="nav nav-tabs" >
 						<li class="dropdown pull-right tabdrop" >
-	                       <button type="submit" ng-click="editBasicInfo()" ng-show="input"
+	                       <button type="submit" ng-click="editDeliveryInfo()" ng-show="input"
 								class="btn blue  btn-outline  btn-sm">
 								<i class="fa fa-save"></i> 保存
 							</button>

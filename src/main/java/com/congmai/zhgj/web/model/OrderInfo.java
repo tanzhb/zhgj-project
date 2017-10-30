@@ -38,6 +38,19 @@ public class OrderInfo extends BaseVO {
 	//待签合同
 	public static final String SIGNCONTRACT = "3";
 	
+	public static final String CLEARANCE= "6";//待清关
+	
+	public static final String DECLARATION= "7";//待报关
+	
+	public static final String WAIT_IN_CHECK= "8";//待检验(入库)
+	
+	public static final String WAIT_OUT_CHECK= "9";//待检验(出库)
+	
+    public static final String WAIT_INRECORD= "11";//待入库
+	
+	public static final String WAIT_OUTRECORD= "12";//待出库
+	
+	
 	
 	private String serialNum;
 
