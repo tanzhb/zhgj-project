@@ -161,3 +161,12 @@ MetronicApp.directive('businessmessage', function() {
         replace: true  
     };  
 }); 
+
+MetronicApp.directive('noticecount', function() {  debugger;
+    return {  
+        restrict: 'E',  
+        template: '<span class="badge badge-danger" style="position: relative;top: -4px;"> {{noticeCount}} </span>',
+        scope:true,
+        replace: true  
+    };  
+}); 

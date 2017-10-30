@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.ContractService;
+import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.UserService;
 
 /**
@@ -190,7 +191,7 @@ public class PageController {
      * 新增采购订单
      */
     @RequestMapping("/addBuyOrder")
-    public String addBuyOrder(String serialNum,String view) {
+    public String addBuyOrder(String serialNum,String view,String numCode) {
         return "order/addBuyOrder";
     }
     

@@ -1,7 +1,9 @@
 package com.congmai.zhgj.web.service.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -125,6 +127,20 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public void updateContract(ContractVO contract) {
 		contractMapper.updateContract4order(contract);
+	}
+
+	@Override
+	public String getNumCode(String codeType) {
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("codeType", codeType);
+		map.put("newNo", "");
+		OrderInfoMapper.getNumCode(map);
+		return (String) map.get("newNo");
+	}
+
+	@Override
+	public String checkNum(OrderInfo orderInfo) {
+		return OrderInfoMapper.checkNum(orderInfo);
 	}
 
 	

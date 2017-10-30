@@ -50,4 +50,12 @@ public interface NoticeService extends GenericService<Notice, String> {
 
 	Notice selectByPrimaryKey(String serialNum);
 
+	/**
+	 * 
+	 * @Description (获取未读公告数)
+	 * @param string
+	 * @return
+	 */
+	int getUnReadNoticeCount(String string,String companyType);
+
 }

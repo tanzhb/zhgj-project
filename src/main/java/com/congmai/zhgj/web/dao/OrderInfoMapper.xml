@@ -863,4 +863,25 @@ billStatus,
       updateTime = #{updateTime,jdbcType=TIMESTAMP}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
+    
+    <select id="getNumCode" parameterType="java.util.Map" statementType="CALLABLE"  
+     resultType="String" >  
+      {call generate_No(
+      #{codeType,jdbcType=VARCHAR,mode=IN},
+      #{newNo,jdbcType=VARCHAR,mode=OUT})
+        }
+    </select> 
+    
+    
+    <select id="checkNum" parameterType="com.congmai.zhgj.web.model.OrderInfo" resultType="String" >  
+      select count(*) from orderInfo where 
+      orderNum = #{orderNum,jdbcType=VARCHAR}
+      and delFlg = '0'
+      <if test="serialNum != null" >
+        and serialNum != #{serialNum,jdbcType=VARCHAR}
+      </if>
+      
+    </select> 
+    
+    
 </mapper>

@@ -58,8 +58,8 @@
 
 			</div>
 			<div class="portlet-body">
-				<span class="caption-subject font-green bold uppercase">新消息：</span>&nbsp;&nbsp;5条&nbsp;|&nbsp;
-				<span class="caption-subject font-green bold uppercase">公告：</span>&nbsp;&nbsp;2条&nbsp;|&nbsp;
+				<span class="caption-subject font-green bold uppercase">新消息：</span>&nbsp;&nbsp;<a href="javascript:;" ui-sref="myMessage">{{messageCount}}</a>条&nbsp;|&nbsp;
+				<span class="caption-subject font-green bold uppercase">公告：</span>&nbsp;&nbsp;<a href="javascript:;" ui-sref="myNotice">{{noticeCount}}</a>条&nbsp;|&nbsp;
 				<!-- <span class="caption-subject font-green bold uppercase">任务：</span>&nbsp;&nbsp;4条 -->
 			</div>
 

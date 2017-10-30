@@ -40,6 +40,7 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.Constants;
 import com.congmai.zhgj.core.util.DateUtil;
+import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
@@ -553,5 +554,26 @@ public class NoticeContoller {
 		}
 		return result;
 	}
+	
+    /**
+     * @Description (未读公告数统计)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="newNoticeCount")
+    @ResponseBody
+    public String newNoticeCount(Map<String, Object> map,HttpServletRequest request) {
+    	int flag = 0; //默认失败
+    	try{
+    		User user = UserUtil.getUserFromSession();
+    		String companyType = userCompanyService.getUserComType(user.getUserId().toString());
+    		if(user != null){
+    			flag = noticeService.getUnReadNoticeCount(user.getUserId().toString(),companyType);
+    		}
+    	}catch(Exception e){
+    		logger.warn(e.getMessage(), e);
+    	}
+    	return String.valueOf(flag);
+    }
 	
 }

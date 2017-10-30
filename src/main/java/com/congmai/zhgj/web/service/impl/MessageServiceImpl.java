@@ -15,6 +15,7 @@ import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.web.dao.MessageMapper;
 import com.congmai.zhgj.web.model.Message;
 import com.congmai.zhgj.web.model.MessageExample;
+import com.congmai.zhgj.web.model.MessageExample.Criteria;
 import com.congmai.zhgj.web.service.MessageService;
 @Service
 public class MessageServiceImpl extends GenericServiceImpl<Message, String> implements
@@ -95,7 +96,11 @@ public class MessageServiceImpl extends GenericServiceImpl<Message, String> impl
 	@Override
 	public int messageSize(Integer userId, String messageType) {
 		MessageExample example = new MessageExample();
-		example.createCriteria().andMessageTypeEqualTo(messageType).andReceiverIdEqualTo(userId.toString()).andReadFlgEqualTo("0");
+		Criteria c = example.createCriteria();
+		if(messageType != null){
+			c.andMessageTypeEqualTo(messageType);
+		}
+		c.andReceiverIdEqualTo(userId.toString()).andReadFlgEqualTo("0");
 		return messageMapper.countByExample(example);
 	}
 
