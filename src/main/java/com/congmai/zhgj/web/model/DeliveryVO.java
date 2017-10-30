@@ -177,6 +177,14 @@ public class DeliveryVO extends BaseVO implements Serializable{
 	
 	private String  buyName;//采购商名称
 	
+	  
+	    public static final String WAIT_CHECK = "1"; //待检验
+	    
+	    public static final String WAITRECORD = "2"; //待入库
+	    
+	    public static final String WAIT_OUT = "2"; //待清关
+	   
+	
 /*	// 业务类型
 	private String businessType;
 	

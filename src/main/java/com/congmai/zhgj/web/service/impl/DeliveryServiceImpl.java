@@ -21,6 +21,7 @@ import com.congmai.zhgj.web.dao.DeliveryMapper;
 import com.congmai.zhgj.web.dao.DeliveryTransportMapper;
 import com.congmai.zhgj.web.dao.MaterielMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
+import com.congmai.zhgj.web.dao.StockInOutCheckMapper;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CustomsForm;
@@ -32,6 +33,7 @@ import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.RelationFile;
+import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.service.DeliveryService;
@@ -61,6 +63,9 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 	
 	@Resource
 	private OrderInfoMapper orderInfoMapper;
+	
+	@Resource
+	private StockInOutCheckMapper  stockInOutCheckMapper;
 	
 
 	@Override
@@ -381,11 +386,19 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 	public void goDelivery(Map<String,Object> map) {
 		// TODO Auto-generated method stub
 		deliveryMapper.goDelivery(map);
-		String orderSerial=(String) map.get("orderSerial");
-		OrderInfo o=orderInfoMapper.selectByPrimaryKey(orderSerial);
-		if(StaticConst.getInfo("waimao").equals(o.getTradeType())){//外贸
+		OrderInfo o=(OrderInfo) map.get("orderInfo");
+		String serialNum=(String) map.get("serialNum");//发货流水
+		  String currenLoginName=  (String) map.get("updater");
+		Boolean  createQG= (Boolean) map.get("createQG");
+		if(createQG){//外贸
 			createCustomsClearanceForm(map);//自动生成清关单
+			//更新订单状态待清关
+			OrderInfo orderInfo=new OrderInfo();
+			orderInfo.setSerialNum(o.getSerialNum());
+			orderInfo.setDeliverStatus(orderInfo.CLEARANCE);
+			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 		}
+			
 		
 	}
 	//自动生成清关单

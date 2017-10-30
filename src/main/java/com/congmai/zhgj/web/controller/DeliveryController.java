@@ -57,6 +57,8 @@ import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.web.dao.OrderInfoMapper;
+import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.event.EventExample;
 import com.congmai.zhgj.web.event.SendMessageEvent;
@@ -74,6 +76,7 @@ import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.RelationFile;
 import com.congmai.zhgj.web.model.StockInOutCheck;
+import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.User;
@@ -149,6 +152,13 @@ public class DeliveryController {
 	
 	@Resource
 	private StockInOutCheckService  stockInOutCheckService;
+	
+	@Resource
+	private StockInOutRecordMapper  stockInOutRecordMapper;
+	
+	@Resource
+	private OrderInfoMapper   orderInfoMapper;
+	
 
 	 /**
      * @Description (查询仓库列表)
@@ -250,26 +260,49 @@ public class DeliveryController {
 		DeliveryVO delivery=deliveryService.selectDetailById(serialNum);
 		String orderSerial=delivery.getOrderSerial();
 		map.put("orderSerial", orderSerial);
-		
-		deliveryService.updateOrderWhenDeliveryComlete(map);
-		
-		deliveryService.goDelivery(map);
 		OrderInfo o=orderService.selectById(orderSerial);
-		if("1".equals(o.getContractContent().substring(4, 5))){//验收条款有效生成检验
-			StockInOutCheck stockInOutCheck=new StockInOutCheck();
-			stockInOutCheck.setSerialNum(ApplicationUtils.random32UUID());
-			stockInOutCheck.setDeliverSerial(serialNum);
-			stockInOutCheck.setTakeDeliverSerial("checkout");
-			//stockInOutCheck.setTakeDeliverSerial(delivery.getTakeDeliverSerialNum());
-			stockInOutCheck.setChecker(currenLoginName);
-			stockInOutCheck.setCreator(currenLoginName);
-			stockInOutCheck.setCreateTime(new Date());
-			stockInOutCheck.setUpdater(currenLoginName);
-			stockInOutCheck.setUpdateTime(new Date());
-			stockInOutCheck.setStatus("0");//待检验
-			stockInOutCheck.setCheckDate(new Date());
-			stockInOutCheck.setDelFlg("0");
-			stockInOutCheckService.insert(stockInOutCheck);
+		map.put("orderInfo", o);
+		Boolean createQG=StaticConst.getInfo("waimao").equals(o.getTradeType())&&!StringUtils.isEmpty(o.getSupplyComId());//是否产生清关单
+		deliveryService.updateOrderWhenDeliveryComlete(map);
+		map.put("createQG", createQG);
+		deliveryService.goDelivery(map);
+		if(!createQG){//不产生清关单
+			OrderInfo orderInfo=new OrderInfo();
+			orderInfo.setSerialNum(orderSerial);
+			DeliveryVO d=new  DeliveryVO();
+			d.setSerialNum(delivery.getSerialNum());
+			if("1".equals(o.getContractContent().substring(4, 5))){//验收条款有效生成检验
+				StockInOutCheck stockInOutCheck=new StockInOutCheck();
+				stockInOutCheck.setSerialNum(ApplicationUtils.random32UUID());
+				stockInOutCheck.setDeliverSerial(serialNum);
+				stockInOutCheck.setTakeDeliverSerial("checkout");
+				stockInOutCheck.setChecker(currenLoginName);
+				stockInOutCheck.setCreator(currenLoginName);
+				stockInOutCheck.setCreateTime(new Date());
+				stockInOutCheck.setUpdater(currenLoginName);
+				stockInOutCheck.setUpdateTime(new Date());
+				stockInOutCheck.setStatus("0");//待检验
+				stockInOutCheck.setCheckDate(new Date());
+				stockInOutCheck.setDelFlg("0");
+				stockInOutCheckService.insert(stockInOutCheck);
+				//更新订单状态至出库待检验
+				orderInfo.setDeliverStatus(orderInfo.WAIT_OUT_CHECK);
+			}else{//直接生成出库单
+				StockInOutRecord stockInOutRecord=new StockInOutRecord();
+				stockInOutRecord.setInOutNum("CK"+ApplicationUtils.getFromNumber());
+				stockInOutRecord.setDelFlg("0");
+				stockInOutRecord.setStatus("0");
+				stockInOutRecord.setDeliverSerial(serialNum);
+				stockInOutRecord.setTakeDeliverSerial("");
+				stockInOutRecord.setCreator(currenLoginName);
+				stockInOutRecord.setCreateTime(new Date());
+				stockInOutRecord.setUpdater(currenLoginName);
+				stockInOutRecord.setUpdateTime(new Date());
+				stockInOutRecordMapper.insert(stockInOutRecord);
+				//更新订单状态至待出库
+				orderInfo.setDeliverStatus(orderInfo.WAIT_OUTRECORD);
+			}	
+			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);//更新订单状态
 		}
 		
 		
@@ -511,10 +544,10 @@ public class DeliveryController {
     @ResponseBody
     public ResponseEntity<DeliveryVO>  saveBasicInfo(DeliveryVO delivery,DeliveryTransportVO deliveryTransport,TakeDeliveryVO takeDeliveryVO){
     	//保存基本信息第一部分
-    	delivery.setSerialNum(ApplicationUtils.random32UUID());
     	Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-		
+    	if(StringUtils.isEmpty(delivery.getSerialNum())){
+    	delivery.setSerialNum(ApplicationUtils.random32UUID());
 		User user = UserUtil.getUserFromSession();
     	String comId = null;
 		comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
@@ -525,22 +558,29 @@ public class DeliveryController {
     		Company company=deliveryService.selectCompanyInfo(comId);
        		delivery.setSupplyComId(comId);
     	}
-		
 		delivery.setCreator(currenLoginName);
     	deliveryService.insertBasicInfo(delivery);
+    	}
     	
     	//保存基本信息第二部分
+    	if(!StringUtils.isEmpty(deliveryTransport.getDeliverSerial())){
     	deliveryTransport.setSerialNum(ApplicationUtils.random32UUID());
     	deliveryTransport.setCreator(currenLoginName);
-    	deliveryTransport.setDeliverSerial(delivery.getSerialNum());
+    	if(StringUtils.isEmpty(deliveryTransport.getDeliverSerial())){
+    		deliveryTransport.setDeliverSerial(delivery.getSerialNum());
+    	}
     	deliveryService.insertBasicInfoPartII(deliveryTransport);
-    	
+    	}
     	//保存基本信息第三部分
+    	if(!StringUtils.isEmpty(takeDeliveryVO.getDeliverSerial())){
     	takeDeliveryVO.setSerialNum(ApplicationUtils.random32UUID());
+    	if(StringUtils.isEmpty(takeDeliveryVO.getDeliverSerial())){
+    		takeDeliveryVO.setDeliverSerial(delivery.getSerialNum());
+    	}
     	takeDeliveryVO.setDeliverSerial(delivery.getSerialNum());
     	takeDeliveryVO.setCreator(currenLoginName);
     	deliveryService.insertBasicInfoPartIII(takeDeliveryVO);
-    	
+    	}
     	//保存之后查询
     	delivery=deliveryService.selectDetailById(delivery.getSerialNum());
     	if(StringUtils.isEmpty(delivery.getOrderNum())){

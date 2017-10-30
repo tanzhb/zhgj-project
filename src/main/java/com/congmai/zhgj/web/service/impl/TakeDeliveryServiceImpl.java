@@ -430,9 +430,16 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		clearStockOutInfoFormMateriels(old_delivery.getDeliveryMateriels());//清除之前的出入库物料信息
 		//自动生成报关单
 		OrderInfo o=orderInfoMapper.selectByPrimaryKey(old_delivery.getOrderSerial());
-		if(StaticConst.getInfo("waimao").equals(o.getTradeType())){//外贸
+		OrderInfo orderInfo=new OrderInfo();
+		orderInfo.setSerialNum(o.getSerialNum());
+		if(StaticConst.getInfo("waimao").equals(o.getTradeType())&&StringUtils.isEmpty(o.getSupplyComId())){//外贸
 		createCustomsDeclarationForm(deliverySerial,currenLoginName);
+		//更新订单状态待报关
+		orderInfo.setDeliverStatus(orderInfo.DECLARATION);
+		}else{
+			orderInfo.setDeliverStatus(orderInfo.OUTRECORD);//已出库
 		}
+		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 		//更新入库记录
 		record.setUpdater(currenLoginName);
 		record.setStatus("1");//入库完成
@@ -594,12 +601,34 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		//takeDelivery.setSerialNum(takeDeliveryParams.getTakeDelivery().getSerialNum());
 		DeliveryVO d=deliveryMapper.selectDetailById(takeDelivery.getDeliverSerial());
 		OrderInfo o=orderInfoMapper.selectByPrimaryKey(d.getOrderSerial());
+		OrderInfo orderInfo=new OrderInfo();
+		orderInfo.setSerialNum(d.getOrderSerial());
 		if("1".equals(o.getContractContent().substring(4, 5))){//验收条款有效
 			takeDelivery.setStatus(TakeDelivery.APPLY_COMPLETE); //待检验
 			this.createStockInCheckRecord(takeDelivery,currenLoginName);
+			orderInfo.setDeliverStatus(orderInfo.WAIT_IN_CHECK);//已收货待检验
 		}else{
-			takeDelivery.setStatus(TakeDelivery.APPLY_COMPLETE); //待检验
+			takeDelivery.setStatus(TakeDelivery.APPLY_COMPLETE); //已完成
+			orderInfo.setDeliverStatus(orderInfo.WAIT_INRECORD);//待入库
+			//生成入库单
+			StockInOutRecord stockInOutRecord=new StockInOutRecord();
+			stockInOutRecord.setSerialNum(ApplicationUtils.random32UUID());
+			stockInOutRecord.setTakeDeliverSerial(takeDelivery.getSerialNum());
+			stockInOutRecord.setDeliverSerial("");
+			stockInOutRecord.setInOutNum("RK"+ApplicationUtils.getFromNumber());
+			stockInOutRecord.setDelFlg("0");
+			stockInOutRecord.setStatus("0");
+			stockInOutRecord.setCreator(currenLoginName);
+			stockInOutRecord.setCreateTime(new Date());
+			stockInOutRecord.setUpdater(currenLoginName);
+			stockInOutRecord.setUpdateTime(new Date());
+			stockInOutRecordMapper.insert(stockInOutRecord);
+			
 		}
+
+		//更新订单状态待清关
+		
+		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 		takeDeliveryMapper.updateByPrimaryKeySelective(takeDelivery);
 		
 		//没有审批时，直接收货

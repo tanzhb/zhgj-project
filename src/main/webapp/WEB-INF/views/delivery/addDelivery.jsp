@@ -7,9 +7,10 @@
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
 		<div class="portlet bordered">
 			<div class="portlet-body">
+			<!-- <form action="#" id="form_sample_1" class=""> -->
 				<div class="portlet light ">
 					<ul class="nav nav-tabs">
-						<li class="dropdown pull-right tabdrop">
+						<!-- <li class="dropdown pull-right tabdrop">
 							<button ng-show="input" class="btn green  btn-sm btn-circle"
 								ng-click="saveBasicInfo()">
 								<i class="fa fa-check"></i> 保存
@@ -20,7 +21,7 @@
 								<i class="fa fa-mail-reply"></i> 取消
 							</button>
 
-						</li>
+						</li> -->
 						<li class="active bold"><a data-target="#tab_1_1"
 							data-toggle="tab">发货信息</a></li>
 						<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">收货信息</a>
@@ -28,11 +29,22 @@
 						<!-- <li class="bold"><a data-target="#tab_1_3" data-toggle="tab">运输信息</a></li>-->
 						<li class="bold"><a data-target="#tab_1_4" data-toggle="tab">物料信息</a></li>
 					</ul>
-					<form action="#" id="form_sample_1" class="">
 						<div class="tab-content">
 							<div class="tab-pane fade active in" id="tab_1_1">
+							 <div class="portlet-title" style="min-height: 48px;">
+               <div class="tools" style="float:right">
+                  <button ng-click="saveDeliveryInfo()" type="button"   ng-show="inputDeliveryInfo"   class="btn blue  btn-circle  btn-sm">
+                  		<i class="fa fa-edit"></i> 保存 </button>
+                  		 <button ng-click="editDeliveryInfo()" type="button"   ng-hide="inputDeliveryInfo"   class="btn purple  btn-circle  btn-sm">
+                  		<i class="fa fa-edit"></i> 编辑 </button>
+                  <button type="submit" ng-click="goBack()"  ng-show="inputDeliveryInfo"   class="btn green  btn-circle  btn-sm">
+                 		<i class="fa fa-save"></i>取消</button>
+                </div>
+            </div>
+            	<form action="#" id="form_sample_1" class="">
 								<div class="portlet-body form">
 									<!-- BEGIN FORM-->
+								
 									<div class="form-body">
 										<div class="alert alert-danger display-hide">
 											<button class="close" data-close="alert"></button>
@@ -45,7 +57,7 @@
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<input type="text" name="deliverNum" class="form-control"
-															ng-model="delivery.deliverNum" ng-show="input">
+															ng-model="delivery.deliverNum" ng-show="inputDeliveryInfo">
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
 															{{delivery.deliverNum}}</p>
@@ -62,7 +74,7 @@
 														<select class="form-control" id="deliverType"
 															name="deliverType" ng-model="delivery.deliverType"
 															ng-change="changeTakeDeliveryMode(delivery.deliverType)"
-															ng-show="input" ng-init="delivery.deliverType='贸易发货'">
+															ng-show="inputDeliveryInfo" ng-init="delivery.deliverType='贸易发货'">
 															<option value="贸易发货">贸易发货</option>
 															<option value="其他发货">其他发货</option>
 														</select>
@@ -82,18 +94,18 @@
 														<div class="input-group" data-target="#basicMaterielInfo"
 															data-toggle="modal" ng-click="selectMateriel()"
 															onclick="return false;">
-															<input id="orderSerial" name="orderNum" type="text"
-																ng-show="input" class="form-control"
+															<input id="orderSerial" name="orderSerial" type="text"
+																ng-show="inputDeliveryInfo" class="form-control"
 																ng-model="saleOrder.orderNum" readonly="readonly">
-															<span ng-show="input" class="input-group-btn"
+															<span ng-show="inputDeliveryInfo" class="input-group-btn"
 																style="vertical-align: top;">
 																<button class="btn default" type="button">
 																	<i class="fa fa-search"></i>
 																</button>
 															</span>
 														</div>
-														<input type="text" ng-model="orderSerial"
-															name="orderSerial" ng-hide="true" />
+														<input type="hidden" ng-model="orderSerial"
+															name="orderSerial" ng-hide="span" />
 
 														<p class="form-control-static" ng-show="span">
 															{{delivery.orderNum}}</p>
@@ -103,7 +115,7 @@
 													<label class="control-label bold">关联单据号</label>
 													<div class="">
 														<input type="text" class="form-control"
-															ng-model="delivery.orderSerial" ng-show="input" />
+															ng-model="delivery.orderSerial" ng-show="inputDeliveryInfo" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
 															{{delivery.orderNum}}</p>
@@ -120,7 +132,7 @@
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<input type="text" name="shipper" class="form-control"
-															ng-model="shipper" ng-show="input" />
+															ng-model="shipper" ng-show="inputDeliveryInfo" />
 														<p class="form-control-static" ng-show="span">
 															{{shipper}}</p>
 														<div class="form-control-focus"></div>
@@ -135,7 +147,7 @@
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<input type="text" class="form-control" name="receiver"
-															ng-model="delivery.receiver" ng-show="input" />
+															ng-model="delivery.receiver" ng-show="inputDeliveryInfo" />
 														<p class="form-control-static" ng-show="span">
 															{{delivery.receiver}}</p>
 														<div class="form-control-focus"></div>
@@ -150,7 +162,7 @@
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<input type="text" class="form-control" name="maker"
-															ng-model="delivery.maker" ng-show="input" />
+															ng-model="delivery.maker" ng-show="inputDeliveryInfo" />
 														<p class="form-control-static" ng-show="span">
 															{{delivery.maker}}</p>
 														<div class="form-control-focus"></div>
@@ -166,7 +178,7 @@
 													<label class="control-label bold">备注</label>
 													<div class="">
 														<input type="text" class="form-control"
-															ng-model="delivery.remark" ng-show="input" />
+															ng-model="delivery.remark" ng-show="inputDeliveryInfo" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
 															{{delivery.remark}}</p>
@@ -190,7 +202,7 @@
 														<select class="form-control" id="warehouseSerial"
 															name="deliveryWarehouseSerial"
 															ng-model="delivery.warehouseSerial"
-															ng-change="selectAddress()" ng-show="input">
+															ng-change="selectAddress()" ng-show="inputDeliveryInfo">
 															<option value="">发货仓库</option>
 															<option ng-repeat="item in warehouseList"
 																value="{{item.serialNum}}">{{item.warehouseName}}</option>
@@ -209,7 +221,7 @@
 													<div class="">
 														<input type="text" name="warehouseAddress"
 															class="form-control" ng-model="warehouseAddress"
-															ng-show="input" />
+															ng-show="inputDeliveryInfo" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
 															{{delivery.deliveryAddress}}</p>
@@ -224,7 +236,7 @@
 													<div class="">
 														<input type="text" name="deliverDate" class="form-control"
 															id="deliverDate" data-date-format="yyyy-mm-dd"
-															ng-show="input" data-date-viewmode="years" size="16" 
+															ng-show="inputDeliveryInfo" data-date-viewmode="years" size="16" 
 															ng-model="delivery.deliverDate" readonly="readonly" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
@@ -242,7 +254,7 @@
 													<div class="">
 														<input type="text" class="form-control"
 															name="packageCount" ng-model="delivery.packageCount"
-															ng-show="input" />
+															ng-show="inputDeliveryInfo" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
 															{{delivery.packageCount}}</p>
@@ -257,7 +269,7 @@
 													<div class="">
 														<select class="form-control" id="packageType"
 															name="packageType" ng-model="delivery.packageType"
-															ng-show="input">
+															ng-show="inputDeliveryInfo">
 															<option value="">包装类型</option>
 															<option value="类型1">类型1</option>
 															<option value="类型2">类型2</option>
@@ -280,7 +292,7 @@
 														<select class="form-control"
 															id="ordpackageSpecificationserType"
 															name="packageSpecifications"
-															ng-model="delivery.packageSpecifications" ng-show="input"    ng-init="delivery.packageSpecifications='原厂包装'">
+															ng-model="delivery.packageSpecifications" ng-show="inputDeliveryInfo"    ng-init="delivery.packageSpecifications='原厂包装'">
 															<option value="">包装规格</option>
 															<option value="原厂包装">原厂包装</option>
 															<option value="标准料箱">标准料箱</option>
@@ -296,7 +308,7 @@
 												<div class="form-group">
 													<label class="control-label bold">物料重量</label>
 													<div class="">
-														<input type="text" class="form-control" ng-show="input"
+														<input type="text" class="form-control" ng-show="inputDeliveryInfo"
 															name="materielWeight" ng-model="delivery.materielWeight" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
@@ -312,7 +324,7 @@
 													<div class="">
 														<input type="text" class="form-control"
 															name="serviceMoney" ng-model="delivery.serviceMoney"
-															ng-show="input" />
+															ng-show="inputDeliveryInfo" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
 															{{delivery.serviceMoney}}</p>
@@ -327,7 +339,7 @@
 													<label class="control-label bold">发货人</label>
 													<div class="">
 														<input type="text" class="form-control" name="deliverer"
-															ng-model="delivery.deliverer" ng-show="input" />
+															ng-model="delivery.deliverer" ng-show="inputDeliveryInfo" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
 															{{delivery.deliverer}}</p>
@@ -340,7 +352,7 @@
 													<label class="control-label bold">联系电话</label>
 													<div class="">
 														<input type="text" class="form-control" name="contactNum"
-															ng-model="delivery.contactNum" ng-show="input" />
+															ng-model="delivery.contactNum" ng-show="inputDeliveryInfo" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
 															{{delivery.contactNum}}</p>
@@ -354,7 +366,7 @@
 													<div class="">
 														<input type="text" class="form-control"
 															name="deliverRemark" ng-model="delivery.deliverRemark"
-															ng-show="input" />
+															ng-show="inputDeliveryInfo" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static"></p>
 														<p class="form-control-static" ng-show="span">
@@ -367,12 +379,24 @@
 										<!--/row-->
 									</div>
 								</div>
+								</form>
 
 							</div>
 							<div class="tab-pane fade" id="tab_1_2"></div>
 							<div class="tab-pane fade" id="tab_1_3">
-
+                           <form action="#" id="form_sample_2" class="">
 								<div class="portlet-body form">
+									 <div class="portlet-title" style="min-height: 48px;">
+               <div class="tools" style="float:right">
+                  <button ng-click="saveTakeDeliveryInfo()" type="button"    ng-show="inputTakeDeliveryInfo"  class="btn blue  btn-circle  btn-sm">
+                  		<i class="fa fa-edit"></i> 保存 </button>
+                  		<button ng-click="editTakeDeliveryInfo()" type="button"   ng-hide="inputTakeDeliveryInfo"   class="btn purple  btn-circle  btn-sm">
+                  		<i class="fa fa-edit"></i> 编辑 </button>
+                  <button type="submit" ng-click="goBack()"  ng-show="inputTakeDeliveryInfo"  class="btn green  btn-circle  btn-sm">
+                 		<i class="fa fa-save"></i>取消</button>
+                 		
+                </div>
+            </div>
 									<!-- BEGIN FORM-->
 									<div class="form-body">
 										<div class="alert alert-danger display-hide">
@@ -388,7 +412,7 @@
 													ng-model="deliveryTransport.transportType" ng-show="input" /> -->
 														<select class="form-control" id="transportType"
 															name="transportType" ng-model="transportType"
-															ng-show="input">
+															ng-show="inputTakeDeliveryInfo">
 															<option value="水路运输">水路运输</option>
 															<option value="铁路运输">铁路运输</option>
 															<option value="公路运输">公路运输</option>
@@ -407,7 +431,7 @@
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<input type="text" class="form-control" name="transport"
-															ng-model="deliveryTransport.transport" ng-show="input" />
+															ng-model="deliveryTransport.transport" ng-show="inputTakeDeliveryInfo" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
 															{{deliveryTransport.transport}}</p>
@@ -421,7 +445,7 @@
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<input type="text" class="form-control" name="shipNumber"
-															ng-model="deliveryTransport.shipNumber" ng-show="input" />
+															ng-model="deliveryTransport.shipNumber" ng-show="inputTakeDeliveryInfo" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
 															{{deliveryTransport.shipNumber}}</p>
@@ -436,7 +460,7 @@
 													<label class="control-label bold">联系人</label>
 													<div class="">
 														<input type="text" class="form-control"
-															name="deliveryTransportContact" ng-show="input"
+															name="deliveryTransportContact" ng-show="inputTakeDeliveryInfo"
 															ng-model="deliveryTransport.contact" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
@@ -450,7 +474,7 @@
 													<label class="control-label bold">联系电话</label>
 													<div class="">
 														<input type="text" class="form-control"
-															name="deliveryTransportContactNum" ng-show="input"
+															name="deliveryTransportContactNum" ng-show="inputTakeDeliveryInfo"
 															ng-model="deliveryTransport.contactNum" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
@@ -465,7 +489,7 @@
 													<label class="control-label bold">备注</label>
 													<div class="">
 														<input type="text" class="form-control" name="remark"
-															ng-show="input" ng-model="deliveryTransport.remark" />
+															ng-show=inputTakeDeliveryInfo"  ng-model="deliveryTransport.remark" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
 															{{delivery.transportRemark}}</p>
@@ -490,7 +514,7 @@
 															id="takeDeliveryWarehouseSerial"
 															name="takeDeliveryWarehouseSerial"
 															ng-model="takeDelivery.warehouseSerial"
-															ng-change="selectAddressTakeDelivery()" ng-show="input">
+															ng-change="selectAddressTakeDelivery()" ng-show="inputTakeDeliveryInfo">
 															<option value="">收货仓库</option>
 															<option ng-repeat="item in warehouseList"
 																value="{{item.serialNum}}">{{item.warehouseName}}</option>
@@ -509,7 +533,7 @@
 													<div class="">
 														<input type="text" name="takeDeliveryWarehouseAddress"
 															class="form-control"
-															ng-model="takeDeliveryWarehouseAddress" ng-show="input" />
+															ng-model="takeDeliveryWarehouseAddress" ng-show="inputTakeDeliveryInfo" />
 
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
@@ -525,7 +549,7 @@
 														<input type="text" name="takeDeliverDate"
 															id="takeDeliverDate" data-date-format="yyyy-mm-dd"
 															data-date-viewmode="years" size="16" class="form-control"
-															ng-model="takeDelivery.takeDeliverDate" ng-show="input"
+															ng-model="takeDelivery.takeDeliverDate" ng-show="inputTakeDeliveryInfo"
 															readonly="readonly" />
 
 														<div class="form-control-focus"></div>
@@ -544,7 +568,7 @@
 													<div class="">
 														<input type="text" name="takeDeliveryReceiver"
 															class="form-control" ng-model="takeDelivery.receiver"
-															ng-show="input" />
+															ng-show="inputTakeDeliveryInfo" />
 
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
@@ -560,7 +584,7 @@
 													<div class="">
 														<input type="text" name="takeDeliveryContactNum"
 															class="form-control" ng-model="takeDelivery.contactNum"
-															ng-show="input" />
+															ng-show="inputTakeDeliveryInfo" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
 															{{delivery.takeDeliveryContactNum}}</p>
@@ -574,7 +598,7 @@
 													<label class="control-label bold">备注</label>
 													<div class="">
 														<input type="text" name="remark" class="form-control"
-															ng-model="takeDelivery.remark" ng-show="input" />
+															ng-model="takeDelivery.remark" ng-show="inputTakeDeliveryInfo" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
 															{{delivery.takeDeliveryRemark}}</p>
@@ -585,12 +609,21 @@
 										</div>
 									</div>
 								</div>
+								</form>
 							</div>
-							</form>
+							
 							<div class="tab-pane fade" id="tab_1_4">
+							 <div class="portlet-title" style="min-height: 48px;">
+               <div class="tools" style="float:right">
+                  <button ng-click="saveMasterielInfo()" type="button"   ng-if="otherMode"  class="btn blue  btn-circle  btn-sm">
+                  		<i class="fa fa-edit"></i> 保存 </button>
+                  <button type="submit" ng-click="goBack()"    ng-if="otherMode"  class="btn green  btn-circle  btn-sm">
+                 		<i class="fa fa-save"></i>取消</button>
+                </div>
+            </div>
 								<!-- 物料信息 start-->
 								<div class="portlet-title">
-									<div class="caption">物料信息</div>
+									<!-- <div class="caption">物料信息</div> -->
 									<div class="actions" ng-if="otherMode">
 										<button class="btn blue btn-sm btn-circle"
 											ng-click="addMateriel()" onclick="return false;">
@@ -599,7 +632,7 @@
 									</div>
 								</div>
 								<div class="portlet-body form">
-									<form action="#" id="form_sample_2" class="">
+									<form action="#" id="form_sample_3" class="">
 										<div class="table-scrollable">
 											<table
 												class="table table-striped table-bordered table-advance table-hover">
@@ -889,7 +922,7 @@
 							class="fa fa-plus"></i> 增加
 						</a>
 					</div>
-				</form>
+				<!-- </form> -->
 			</div>
 		</div>
 	</div>
