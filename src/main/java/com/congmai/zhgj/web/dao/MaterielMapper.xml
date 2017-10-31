@@ -157,6 +157,7 @@
     <include refid="Base_Column_List2" />
     from materiel m 
     left join supplyMateriel sm on sm.materielId = m.materielId 
+    left join buyMateriel bm on bm.materielId = m.materielId 
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>

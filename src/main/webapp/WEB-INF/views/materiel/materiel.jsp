@@ -28,11 +28,11 @@ margin-bottom: 20px;
     	<!-- 普通订单---START -->
       <div class="tab-pane active" id="tab_15_1">
 			<div class="row">
-			     <div class="col-md-2">
+			     <div class="col-md-2" id = "allTreeType">
 			         <div class="portlet light ">
 			             <div class="portlet-title">
 			                 <div class="caption">
-			                     <span ng-click="reloadTable()" class="caption-subject font-blue-sharp bold uppercase">全部物料</span>
+			                     <span ng-click="reloadTable()" class="caption-subject font-blue-sharp bold uppercase">物料分类</span>
 			                 </div>
 			             </div>
 			             <div class="portlet-body">
@@ -41,7 +41,7 @@ margin-bottom: 20px;
 			             </div>
 			         </div>
 				</div>
-				<div class="col-md-10">
+				<div class="col-md-10" id="allMaterielList">
 					<div class="row">
 						<div class="col-md-12">
 				        <div class="portlet light">

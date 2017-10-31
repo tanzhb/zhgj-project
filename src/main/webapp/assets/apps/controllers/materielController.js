@@ -486,6 +486,21 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
             	table.ajax.url(tableAjaxUrl+"?parent="+t.selected[0]).load()// 重新加载datatables数据
             })
             
+            $('#tree_1').on("open_node.jstree",function(e,data){
+            	$('#tree_1 a').each(function(){
+            		if($(this).width()>$(this).parent().width()){
+            			var treeClass = $('#allTreeType').attr('class');
+            			$("#allTreeType").removeClass(treeClass)
+            			$("#allTreeType").addClass("col-md-"+(Number(treeClass.substring(7))+1))
+            			
+            			var MaterielListClass = $('#allMaterielList').attr('class');
+            			$("#allMaterielList").removeClass(MaterielListClass)
+            			$("#allMaterielList").addClass("col-md-"+(Number(MaterielListClass.substring(7))-1))
+            			
+            		}
+				})
+            } );
+            
         };
         $scope.reloadTable = function() {
         	table.ajax.url(tableAjaxUrl).load()// 重新加载datatables数据
