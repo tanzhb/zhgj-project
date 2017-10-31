@@ -132,6 +132,13 @@ public class CustomsFormControlller {
     		customsForm.setUpdater(currenLoginName);
     		customsForm.setUpdateTime(new Date());
     		customsFormService.update(customsForm);
+    		if("1".equals(customsForm.getStatus())){//确认清关/报关时
+    			CustomsForm temp=new CustomsForm();
+    			temp.setSerialNum(customsForm.getSerialNum());
+    			temp.setStatus("1");
+    			temp.setCustomsFormType(customsForm.getCustomsFormType());
+    			customsFormService.updateStatus(customsForm);
+    		}
     	}
     	
 		return customsForm;

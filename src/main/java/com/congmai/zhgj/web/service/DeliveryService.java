@@ -235,4 +235,7 @@ public interface DeliveryService extends GenericService<DeliveryMaterielVO, Stri
 	
 	
 	public List<RelationFile> getAttachFileInfo(String relationSerial);
+	
+	public void createCustomsClearanceForm(Map<String,Object> map1);//自动产生清关单
+	
 }
