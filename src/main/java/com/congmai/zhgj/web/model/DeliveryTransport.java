@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class DeliveryTransport {
     private String serialNum;
+    
 
     private String deliverSerial;
 
@@ -36,6 +37,7 @@ public class DeliveryTransport {
     private String contact;
 
     private String contactNum;
+    
 
     public String getSerialNum() {
         return serialNum;
@@ -166,4 +168,9 @@ public class DeliveryTransport {
     public void setContactNum(String contactNum) {
         this.contactNum = contactNum == null ? null : contactNum.trim();
     }
+
+
+
+	
+    
 }

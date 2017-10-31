@@ -32,7 +32,11 @@
 						<div class="tab-content">
 							<div class="tab-pane fade active in" id="tab_1_1">
 							 <div class="portlet-title" style="min-height: 48px;">
-               <div class="tools" style="float:right">
+               <div class="tools" style="float:right"><!-- ng-if="deliveryDetail.status=='0'" -->
+               	<button type="button" ng-click="goDelivery()"   ng-show="inputDeliveryInfo"    ng-if="(delivery.status=='0'||delivery.status==undefined)&&delivery.deliverType=='贸易发货'"
+								class="btn blue  btn-circle  btn-sm">
+								<i class="fa fa-save"></i> 确认发货
+							</button>
                   <button ng-click="saveDeliveryInfo()" type="button"   ng-show="inputDeliveryInfo"   class="btn blue  btn-circle  btn-sm">
                   		<i class="fa fa-edit"></i> 保存 </button>
                   		 <button ng-click="editDeliveryInfo()" type="button"   ng-hide="inputDeliveryInfo"   class="btn purple  btn-circle  btn-sm">
@@ -41,7 +45,7 @@
                  		<i class="fa fa-save"></i>取消</button>
                 </div>
             </div>
-            	<form action="#" id="form_sample_1" class="">
+            	<form action="#" id="form_sample_deliverInfo" class="">
 								<div class="portlet-body form">
 									<!-- BEGIN FORM-->
 								
@@ -53,11 +57,11 @@
 										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">发货单号<span
-														class="required" aria-required="true"> * </span></label>
+													<label class="control-label bold">发货单号<!-- <span
+														class="required" aria-required="true"> * </span> --></label>
 													<div class="">
 														<input type="text" name="deliverNum" class="form-control"
-															ng-model="delivery.deliverNum" ng-show="inputDeliveryInfo">
+															ng-model="delivery.deliverNum" ng-show="inputDeliveryInfo" readonly="readonly">
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
 															{{delivery.deliverNum}}</p>
@@ -74,8 +78,9 @@
 														<select class="form-control" id="deliverType"
 															name="deliverType" ng-model="delivery.deliverType"
 															ng-change="changeTakeDeliveryMode(delivery.deliverType)"
-															ng-show="inputDeliveryInfo" ng-init="delivery.deliverType='贸易发货'">
-															<option value="贸易发货">贸易发货</option>
+															ng-show="inputDeliveryInfo" ><!--ng-init="delivery.deliverType='贸易发货'"  -->
+															<option   value=""></option>
+															<option   value="贸易发货">贸易发货</option>
 															<option value="其他发货">其他发货</option>
 														</select>
 														<div class="form-control-focus"></div>
@@ -206,7 +211,7 @@
 															<option value="">发货仓库</option>
 															<option ng-repeat="item in warehouseList"
 																value="{{item.serialNum}}">{{item.warehouseName}}</option>
-															<option value="无">无</option>
+															<option value=""></option>
 														</select>
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
@@ -292,7 +297,7 @@
 														<select class="form-control"
 															id="ordpackageSpecificationserType"
 															name="packageSpecifications"
-															ng-model="delivery.packageSpecifications" ng-show="inputDeliveryInfo"    ng-init="delivery.packageSpecifications='原厂包装'">
+															ng-model="delivery.packageSpecifications" ng-show="inputDeliveryInfo"    >
 															<option value="">包装规格</option>
 															<option value="原厂包装">原厂包装</option>
 															<option value="标准料箱">标准料箱</option>
@@ -382,10 +387,7 @@
 								</form>
 
 							</div>
-							<div class="tab-pane fade" id="tab_1_2"></div>
 							<div class="tab-pane fade" id="tab_1_3">
-                           <form action="#" id="form_sample_2" class="">
-								<div class="portlet-body form">
 									 <div class="portlet-title" style="min-height: 48px;">
                <div class="tools" style="float:right">
                   <button ng-click="saveTakeDeliveryInfo()" type="button"    ng-show="inputTakeDeliveryInfo"  class="btn blue  btn-circle  btn-sm">
@@ -397,6 +399,8 @@
                  		
                 </div>
             </div>
+            <form id="form_sample_takeDeliveryInfo" class="">
+								<div class="portlet-body form">
 									<!-- BEGIN FORM-->
 									<div class="form-body">
 										<div class="alert alert-danger display-hide">
@@ -430,10 +434,10 @@
 													<label class="control-label bold">运输方<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
-														<input type="text" class="form-control" name="transport"
+														<input type="text" class="form-control" name="transport"  
 															ng-model="deliveryTransport.transport" ng-show="inputTakeDeliveryInfo" />
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">
+														<p class="form-control-static" ng-show="spancontrol">
 															{{deliveryTransport.transport}}</p>
 													</div>
 												</div>
@@ -447,7 +451,7 @@
 														<input type="text" class="form-control" name="shipNumber"
 															ng-model="deliveryTransport.shipNumber" ng-show="inputTakeDeliveryInfo" />
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">
+														<p class="form-control-static" ng-show="spancontrol">
 															{{deliveryTransport.shipNumber}}</p>
 													</div>
 												</div>
@@ -498,12 +502,6 @@
 											</div>
 											<!--/span-->
 										</div>
-									</div>
-								</div>
-
-								<div class="portlet-body form">
-									<!-- BEGIN FORM-->
-									<div class="form-body">
 										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
@@ -511,14 +509,12 @@
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<select class="form-control"
-															id="takeDeliveryWarehouseSerial"
-															name="takeDeliveryWarehouseSerial"
+															name="warehouseSerial"
 															ng-model="takeDelivery.warehouseSerial"
 															ng-change="selectAddressTakeDelivery()" ng-show="inputTakeDeliveryInfo">
-															<option value="">收货仓库</option>
 															<option ng-repeat="item in warehouseList"
 																value="{{item.serialNum}}">{{item.warehouseName}}</option>
-															<option value="无">无</option>
+															<option value=""></option>
 														</select>
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
@@ -598,7 +594,7 @@
 													<label class="control-label bold">备注</label>
 													<div class="">
 														<input type="text" name="remark" class="form-control"
-															ng-model="takeDelivery.remark" ng-show="inputTakeDeliveryInfo" />
+															ng-model="takeDelivery.remark"    ng-show="inputTakeDeliveryInfo"  />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
 															{{delivery.takeDeliveryRemark}}</p>
@@ -607,18 +603,17 @@
 											</div>
 											<!--/span-->
 										</div>
-									</div>
-								</div>
+									</div></div>
 								</form>
 							</div>
 							
 							<div class="tab-pane fade" id="tab_1_4">
 							 <div class="portlet-title" style="min-height: 48px;">
                <div class="tools" style="float:right">
-                  <button ng-click="saveMasterielInfo()" type="button"   ng-if="otherMode"  class="btn blue  btn-circle  btn-sm">
+                 <!--  <button ng-click="saveMasterielInfo()" type="button"   ng-if="otherMode"  class="btn blue  btn-circle  btn-sm">
                   		<i class="fa fa-edit"></i> 保存 </button>
                   <button type="submit" ng-click="goBack()"    ng-if="otherMode"  class="btn green  btn-circle  btn-sm">
-                 		<i class="fa fa-save"></i>取消</button>
+                 		<i class="fa fa-save"></i>取消</button> -->
                 </div>
             </div>
 								<!-- 物料信息 start-->

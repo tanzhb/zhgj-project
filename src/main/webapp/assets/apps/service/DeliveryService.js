@@ -207,6 +207,7 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     //保存基本信息
     function saveBasicInfo($scope,type){
     	var deferred = $q.defer();
+    	debugger;
 		$.post("rest/delivery/saveBasicInfo", {
 			orderSerial:$scope.orderSerial==null?$scope.delivery.orderSerial:$scope.orderSerial,
 			/*orderSerial:$scope.delivery.orderSerial,*/
@@ -227,7 +228,9 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 			deliverer:$scope.delivery.deliverer,
 			contactNum:$scope.delivery.contactNum,
 			deliverRemark:$scope.delivery.deliverRemark,
-			serialNum:type=="deliveryInfo"?null:$scope.delivery.serialNum,
+			serialNum:$scope.delivery.serialNum==undefined?null:$scope.delivery.serialNum,
+					status:$scope.delivery.status==undefined?null:$scope.delivery.status,
+					type:type,
 			
 			transportType:$scope.transportType,
 			transport:$scope.deliveryTransport.transport,
@@ -236,15 +239,17 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 			transportRemark:$scope.deliveryTransport.remark,
 			transportContact:$scope.deliveryTransport.contact,
 			transportContactNum:$scope.deliveryTransport.contactNum,
-			deliverSerial:type=="takeDelivery"?$scope.delivery.serialNum:null,
-			
+			deliverSerial:$scope.delivery.serialNum,
+			deliveryTransportSerialNum:$scope.deliveryTransport.serialNum==undefined?null:$scope.deliveryTransport.serialNum,
+		
 			takeDeliveryWarehouseSerial:$scope.takeDelivery.warehouseSerial,
 			takeAddress:$scope.takeDeliveryWarehouseAddress,
 			takeDeliverDate:$scope.takeDelivery.takeDeliverDate,
 			takeDeliveryReceiver:$scope.takeDelivery.receiver,
 			takeDeliveryContactNum:$scope.takeDelivery.contactNum,
 			takeDeliveryRemark:$scope.takeDelivery.remark,
-			deliverSerial:type=="takeDelivery"?$scope.delivery.serialNum:null
+			deliverSerial:$scope.delivery.serialNum,
+			takeDeliveryVOSerialNum:$scope.takeDelivery.serialNum==undefined?null:$scope.takeDelivery.serialNum
 		}
 		).then(function success(result) {
 			deferred.resolve(result);//请求成功

@@ -177,6 +177,9 @@ public class DeliveryVO extends BaseVO implements Serializable{
 	
 	private String  buyName;//采购商名称
 	
+	 private String  type;//保存类型
+	  
+	
 	  
 	    public static final String WAIT_CHECK = "1"; //待检验
 	    
@@ -645,6 +648,14 @@ public class DeliveryVO extends BaseVO implements Serializable{
 
 	public void setBuyName(String buyName) {
 		this.buyName = buyName;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 /*	public String getBusinessType() {

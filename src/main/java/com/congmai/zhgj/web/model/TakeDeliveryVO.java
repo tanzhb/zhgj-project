@@ -10,6 +10,8 @@ public class TakeDeliveryVO {
 	//收货流水号
 	private String serialNum;
 	
+	private String takeDeliveryVOSerialNum;
+	
 	//发货流水号
 	private String deliverSerial;
 	
@@ -162,6 +164,14 @@ public class TakeDeliveryVO {
 
 	public void setTakeAddress(String takeAddress) {
 		this.takeAddress = takeAddress;
+	}
+
+	public String getTakeDeliveryVOSerialNum() {
+		return takeDeliveryVOSerialNum;
+	}
+
+	public void setTakeDeliveryVOSerialNum(String takeDeliveryVOSerialNum) {
+		this.takeDeliveryVOSerialNum = takeDeliveryVOSerialNum;
 	}
 	
 }
