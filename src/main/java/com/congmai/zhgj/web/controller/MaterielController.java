@@ -184,7 +184,7 @@ public class MaterielController {
     }
     /**
      * 
-     * @Description 保存附件物料供应商
+     * @Description 保存物料供应商
      * @param params
      * @return 
      */
