@@ -57,6 +57,8 @@ import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.web.dao.Delivery2Mapper;
+import com.congmai.zhgj.web.dao.DeliveryMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
 import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
 import com.congmai.zhgj.web.enums.StaticConst;
@@ -66,6 +68,7 @@ import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryTransportVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
@@ -158,6 +161,10 @@ public class DeliveryController {
 	
 	@Resource
 	private OrderInfoMapper   orderInfoMapper;
+	
+	@Resource
+	private Delivery2Mapper   delivery2Mapper;
+	
 	
 
 	 /**
@@ -262,47 +269,58 @@ public class DeliveryController {
 		map.put("orderSerial", orderSerial);
 		OrderInfo o=orderService.selectById(orderSerial);
 		map.put("orderInfo", o);
-		Boolean createQG=StaticConst.getInfo("waimao").equals(o.getTradeType())&&!StringUtils.isEmpty(o.getSupplyComId());//是否产生清关单
+		Boolean createQG=StaticConst.getInfo("waimao").equals(o.getTradeType())&&!StringUtils.isEmpty(o.getSupplyComId());//供应商发货/代发货是否产生清关单
 		deliveryService.updateOrderWhenDeliveryComlete(map);
 		map.put("createQG", createQG);
 		deliveryService.goDelivery(map);
-		if(!createQG){//不产生清关单
+		if(!createQG){//不产生清关单(供应商发货/平台发货)
 			OrderInfo orderInfo=new OrderInfo();
 			orderInfo.setSerialNum(orderSerial);
-			DeliveryVO d=new  DeliveryVO();
-			d.setSerialNum(delivery.getSerialNum());
-			if("1".equals(o.getContractContent().substring(4, 5))){//验收条款有效生成检验
-				StockInOutCheck stockInOutCheck=new StockInOutCheck();
-				stockInOutCheck.setSerialNum(ApplicationUtils.random32UUID());
-				stockInOutCheck.setDeliverSerial(serialNum);
-				stockInOutCheck.setTakeDeliverSerial("checkout");
-				stockInOutCheck.setChecker(currenLoginName);
-				stockInOutCheck.setCreator(currenLoginName);
-				stockInOutCheck.setCreateTime(new Date());
-				stockInOutCheck.setUpdater(currenLoginName);
-				stockInOutCheck.setUpdateTime(new Date());
-				stockInOutCheck.setStatus("0");//待检验
-				stockInOutCheck.setCheckDate(new Date());
-				stockInOutCheck.setDelFlg("0");
-				stockInOutCheckService.insert(stockInOutCheck);
-				//更新订单状态至出库待检验
-				orderInfo.setDeliverStatus(orderInfo.WAIT_OUT_CHECK);
-			}else{//直接生成出库单
-				StockInOutRecord stockInOutRecord=new StockInOutRecord();
-				stockInOutRecord.setInOutNum("CK"+ApplicationUtils.getFromNumber());
-				stockInOutRecord.setDelFlg("0");
-				stockInOutRecord.setStatus("0");
-				stockInOutRecord.setDeliverSerial(serialNum);
-				stockInOutRecord.setTakeDeliverSerial("");
-				stockInOutRecord.setCreator(currenLoginName);
-				stockInOutRecord.setCreateTime(new Date());
-				stockInOutRecord.setUpdater(currenLoginName);
-				stockInOutRecord.setUpdateTime(new Date());
-				stockInOutRecordMapper.insert(stockInOutRecord);
-				//更新订单状态至待出库
-				orderInfo.setDeliverStatus(orderInfo.WAIT_OUTRECORD);
-			}	
+			Delivery delivery1=new  Delivery();
+			delivery1.setSerialNum(delivery.getSerialNum());
+			if("1".equals(o.getContractContent().substring(4, 5))){//有验收条款
+					if(StringUtils.isEmpty(o.getSupplyComId())){//平台发货 产生出库检验单
+						StockInOutCheck stockInOutCheck=new StockInOutCheck();
+						stockInOutCheck.setSerialNum(ApplicationUtils.random32UUID());
+						stockInOutCheck.setDeliverSerial(serialNum);
+						stockInOutCheck.setTakeDeliverSerial("checkout");
+						stockInOutCheck.setChecker(currenLoginName);
+						stockInOutCheck.setCreator(currenLoginName);
+						stockInOutCheck.setCreateTime(new Date());
+						stockInOutCheck.setUpdater(currenLoginName);
+						stockInOutCheck.setUpdateTime(new Date());
+						stockInOutCheck.setStatus("0");//待检验
+						stockInOutCheck.setCheckDate(new Date());
+						stockInOutCheck.setDelFlg("0");
+						stockInOutCheckService.insert(stockInOutCheck);
+						//更新订单状态至出库待检验
+						orderInfo.setDeliverStatus(orderInfo.WAIT_OUT_CHECK);
+						delivery1.setStatus(DeliveryVO.WAIT_CHECK);
+						
+					}
+			}else{//没有验收条款
+				if(StringUtils.isEmpty(o.getSupplyComId())){//平台发货 产生出库单
+					
+					orderInfo.setDeliverStatus(orderInfo.WAIT_OUTRECORD);//待出库
+					StockInOutRecord stockInOutRecord=new StockInOutRecord();
+					stockInOutRecord.setInOutNum("CK"+ApplicationUtils.getFromNumber());
+					stockInOutRecord.setDelFlg("0");
+					stockInOutRecord.setStatus("0");
+					stockInOutRecord.setDeliverSerial(serialNum);
+					stockInOutRecord.setTakeDeliverSerial("");
+					stockInOutRecord.setCreator(currenLoginName);
+					stockInOutRecord.setCreateTime(new Date());
+					stockInOutRecord.setUpdater(currenLoginName);
+					stockInOutRecord.setUpdateTime(new Date());
+					stockInOutRecordMapper.insert(stockInOutRecord);
+					//更新订单状态至待出库
+					orderInfo.setDeliverStatus(orderInfo.WAIT_OUTRECORD);
+					delivery1.setStatus(DeliveryVO.WAITRECORD);
+				}
+				
+			}
 			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);//更新订单状态
+			delivery2Mapper.updateByPrimaryKeySelective(delivery1);//更新发货单状态
 		}
 		
 		

@@ -57,6 +57,8 @@ import com.congmai.zhgj.web.model.TakeDeliveryParams;
 import com.congmai.zhgj.web.model.TakeDeliverySelectExample;
 import com.congmai.zhgj.web.model.TakeDeliverySelectExample.Criteria;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
+import com.congmai.zhgj.web.service.DeliveryService;
+import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.TakeDeliveryService;
 
@@ -103,6 +105,9 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	@Resource
 	private CustomsFormMapper customsFormMapper;
 	
+	@Resource
+    private DeliveryService deliveryService;
+	
 	@Override
 	public GenericDao<TakeDelivery, String> getDao() {
 	
@@ -138,7 +143,23 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			String currenLoginName) {
 		//takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams,currenLoginName);
 		delivery2Mapper.insert(delivery);
-		
+		OrderInfo orderInfonew=orderInfoMapper.selectByPrimaryKey(delivery.getOrderSerial());
+		Boolean createQG=StaticConst.getInfo("waimao").equals(orderInfonew.getTradeType());//是否产生清关单
+		if(createQG){
+			Map<String,Object>map=new HashMap<String,Object>();
+			map.put("serialNum", delivery.getSerialNum());
+			map.put("currenLoginName", currenLoginName);
+			map.put("orderSerial", delivery.getOrderSerial());
+			deliveryService.createCustomsClearanceForm(map);
+			OrderInfo orderInfo=new OrderInfo();
+			orderInfo.setSerialNum(delivery.getOrderSerial());
+			orderInfo.setDeliverStatus(orderInfo.CLEARANCE);
+			Delivery delivery1=new  Delivery();
+			delivery1.setSerialNum(delivery.getSerialNum());
+			delivery1.setStatus(DeliveryVO.WAIT_OUT);//待清关
+			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);//更新订单状态
+			delivery2Mapper.updateByPrimaryKeySelective(delivery1);//更新发货单状态
+		}
 		OrderInfo orderInfo = new OrderInfo();
 		orderInfo.setSerialNum(delivery.getOrderSerial());
 		orderInfo.setDeliverStatus(OrderInfo.DELIVER);//确认发货
@@ -432,14 +453,19 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		OrderInfo o=orderInfoMapper.selectByPrimaryKey(old_delivery.getOrderSerial());
 		OrderInfo orderInfo=new OrderInfo();
 		orderInfo.setSerialNum(o.getSerialNum());
+		Delivery d=new Delivery();
+		d.setSerialNum(old_delivery.getSerialNum());
 		if(StaticConst.getInfo("waimao").equals(o.getTradeType())&&StringUtils.isEmpty(o.getSupplyComId())){//外贸
 		createCustomsDeclarationForm(deliverySerial,currenLoginName);
 		//更新订单状态待报关
 		orderInfo.setDeliverStatus(orderInfo.DECLARATION);
+		d.setStatus(DeliveryVO.DECLARATION);
 		}else{
 			orderInfo.setDeliverStatus(orderInfo.OUTRECORD);//已出库
+			d.setStatus(DeliveryVO.COMPLETE);//发货完成
 		}
 		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+		delivery2Mapper.updateByPrimaryKeySelective(d);
 		//更新入库记录
 		record.setUpdater(currenLoginName);
 		record.setStatus("1");//入库完成
@@ -599,17 +625,21 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		//takeDelivery.set(takeDeliveryParams.getTakeDelivery().getSerialNum());
 		//takeDelivery.setSerialNum(takeDeliveryParams.getTakeDelivery().getSerialNum());
 		//takeDelivery.setSerialNum(takeDeliveryParams.getTakeDelivery().getSerialNum());
-		DeliveryVO d=deliveryMapper.selectDetailById(takeDelivery.getDeliverSerial());
-		OrderInfo o=orderInfoMapper.selectByPrimaryKey(d.getOrderSerial());
+		Delivery delivery=delivery2Mapper.selectByDeliveryPrimaryKey(takeDelivery.getDeliverSerial());
+		OrderInfo o=orderInfoMapper.selectByPrimaryKey(delivery.getOrderSerial());
 		OrderInfo orderInfo=new OrderInfo();
-		orderInfo.setSerialNum(d.getOrderSerial());
+		orderInfo.setSerialNum(delivery.getOrderSerial());
+		Delivery deliverynew=new  Delivery();
+		deliverynew.setSerialNum(takeDelivery.getDeliverSerial());
 		if("1".equals(o.getContractContent().substring(4, 5))){//验收条款有效
 			takeDelivery.setStatus(TakeDelivery.APPLY_COMPLETE); //待检验
 			this.createStockInCheckRecord(takeDelivery,currenLoginName);
 			orderInfo.setDeliverStatus(orderInfo.WAIT_IN_CHECK);//已收货待检验
+			deliverynew.setStatus(DeliveryVO.WAIT_CHECK);
 		}else{
-			takeDelivery.setStatus(TakeDelivery.APPLY_COMPLETE); //已完成
+			takeDelivery.setStatus(TakeDelivery.CHECK_COMPLETE); //已完成
 			orderInfo.setDeliverStatus(orderInfo.WAIT_INRECORD);//待入库
+			deliverynew.setStatus(DeliveryVO.WAIT_IN_RECORD);
 			//生成入库单
 			StockInOutRecord stockInOutRecord=new StockInOutRecord();
 			stockInOutRecord.setSerialNum(ApplicationUtils.random32UUID());
@@ -634,6 +664,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		//没有审批时，直接收货
 		TakeDelivery _takeDelivery = takeDeliveryMapper.selectByPrimaryKey(takeDelivery.getSerialNum());
 		takeDelivery.setDeliverSerial(_takeDelivery.getDeliverSerial());
+		delivery2Mapper.updateByPrimaryKeySelective(deliverynew);
 		
 		
 		
