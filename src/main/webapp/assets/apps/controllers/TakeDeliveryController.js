@@ -29,6 +29,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    		loadOrderTable();//加载订单列表
 	    		setDefualtData();//设置初始值
 	    		$scope.serialNums = [];	
+	    		$rootScope.setNumCode("SE",function(newCode){
+	    			$scope.deliver.deliverNum = newCode;
+	    		});
 	    		if(!isNull($stateParams.serialNum)){
 	    			$(".d_tip").text("编辑代发货信息");
 	    			takeDeliveryInfo($stateParams.serialNum,"edit");

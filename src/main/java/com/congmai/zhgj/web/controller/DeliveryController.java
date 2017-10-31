@@ -304,6 +304,7 @@ public class DeliveryController {
 					orderInfo.setDeliverStatus(orderInfo.WAIT_OUTRECORD);//待出库
 					StockInOutRecord stockInOutRecord=new StockInOutRecord();
 					stockInOutRecord.setInOutNum("CK"+ApplicationUtils.getFromNumber());
+					stockInOutRecord.setSerialNum(ApplicationUtils.random32UUID());
 					stockInOutRecord.setDelFlg("0");
 					stockInOutRecord.setStatus("0");
 					stockInOutRecord.setDeliverSerial(serialNum);
@@ -564,8 +565,14 @@ public class DeliveryController {
     	//保存基本信息第一部分
     	Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		String transportserialNum=delivery.getTransportserialNum();
+    	String takeDeliverSerialNum=delivery.getTakeDeliverSerialNum();
+    	String deliverySerialNum=delivery.getSerialNum();
+    	if("deliveryInfo".equals(delivery.getType())){
     	if(StringUtils.isEmpty(delivery.getSerialNum())){
     	delivery.setSerialNum(ApplicationUtils.random32UUID());
+    	delivery.setStatus("0");
+    	deliverySerialNum=delivery.getSerialNum();
 		User user = UserUtil.getUserFromSession();
     	String comId = null;
 		comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
@@ -578,32 +585,38 @@ public class DeliveryController {
     	}
 		delivery.setCreator(currenLoginName);
     	deliveryService.insertBasicInfo(delivery);
+    	}else{
+    		deliveryService.updateBasicInfo(delivery);
     	}
-    	
+    	}
     	//保存基本信息第二部分
-    	if(!StringUtils.isEmpty(deliveryTransport.getDeliverSerial())){
+    	if("takeDelivery".equals(delivery.getType())){
+    	if(StringUtils.isEmpty(deliveryTransport.getDeliveryTransportSerialNum())){
     	deliveryTransport.setSerialNum(ApplicationUtils.random32UUID());
     	deliveryTransport.setCreator(currenLoginName);
-    	if(StringUtils.isEmpty(deliveryTransport.getDeliverSerial())){
-    		deliveryTransport.setDeliverSerial(delivery.getSerialNum());
-    	}
     	deliveryService.insertBasicInfoPartII(deliveryTransport);
-    	}
+    	}else{
+    		deliveryTransport.setSerialNum(transportserialNum);
+    		deliveryTransport.setUpdater(currenLoginName);
+    		deliveryService.updateBasicInfoPartII(deliveryTransport);
+    	}}
     	//保存基本信息第三部分
-    	if(!StringUtils.isEmpty(takeDeliveryVO.getDeliverSerial())){
+    	if("takeDelivery".equals(delivery.getType())){
+    	if(StringUtils.isEmpty(takeDeliveryVO.getTakeDeliveryVOSerialNum())){
     	takeDeliveryVO.setSerialNum(ApplicationUtils.random32UUID());
-    	if(StringUtils.isEmpty(takeDeliveryVO.getDeliverSerial())){
-    		takeDeliveryVO.setDeliverSerial(delivery.getSerialNum());
-    	}
-    	takeDeliveryVO.setDeliverSerial(delivery.getSerialNum());
     	takeDeliveryVO.setCreator(currenLoginName);
     	deliveryService.insertBasicInfoPartIII(takeDeliveryVO);
-    	}
+    	}else{
+    		takeDeliveryVO.setSerialNum(takeDeliverSerialNum);
+    		takeDeliveryVO.setUpdater(currenLoginName);
+    		deliveryService.updateBasicInfoPartIII(takeDeliveryVO);
+    	}}
     	//保存之后查询
     	delivery=deliveryService.selectDetailById(delivery.getSerialNum());
     	if(StringUtils.isEmpty(delivery.getOrderNum())){
     	delivery=deliveryService.selectDetailById2(delivery.getSerialNum());	
     	}
+    	delivery.setSerialNum(deliverySerialNum);
     	return new ResponseEntity<DeliveryVO>(delivery, HttpStatus.OK);
     }
     
@@ -755,6 +768,10 @@ public class DeliveryController {
 		if(company!=null){
 			delivery.setSupplyComId(company.getComName());
 			delivery.setShipper(company.getComName());
+		}
+		if(!StringUtils.isEmpty(delivery.getWarehouseSerial())){
+			Warehouse w=warehouseService.selectOne(delivery.getWarehouseSerial());
+//			delivery.set
 		}
 		map.put("delivery", delivery);
 

@@ -10,6 +10,7 @@ public class DeliveryTransportVO {
 	//发货运输流水号
 	private String serialNum;
 	
+	private String deliveryTransportSerialNum;
 	//发货流水号
 	private String deliverSerial;
 	
@@ -185,6 +186,14 @@ public class DeliveryTransportVO {
 
 	public void setTransportContactNum(String transportContactNum) {
 		this.transportContactNum = transportContactNum;
+	}
+
+	public String getDeliveryTransportSerialNum() {
+		return deliveryTransportSerialNum;
+	}
+
+	public void setDeliveryTransportSerialNum(String deliveryTransportSerialNum) {
+		this.deliveryTransportSerialNum = deliveryTransportSerialNum;
 	}
 
 }
