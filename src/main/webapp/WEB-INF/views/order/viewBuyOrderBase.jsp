@@ -750,10 +750,10 @@ margin-right: 20px;
 								<th>库存数量</th>
 								<th>采购数量</th>
 								<th>指导单价</th>
+								<th>含税单价</th>
 								<th>不含税单价</th>
 								<th>币种</th>
 								<th>税率</th>
-								<th>含税单价</th>
 								<th>不含税金额</th>
 								<th>税额</th>
 								<th ng-if="buyOrder.tradeType =='外贸'">关税率</th>
@@ -797,6 +797,9 @@ margin-right: 20px;
                                      		<p class="form-control-static" > {{_orderMateriel.materiel.unitPrice}} </p>
 		                          </td>
 		                          <td>  
+                                     		<p class="form-control-static"> {{_orderMateriel.orderRateUnit}} </p>
+		                          </td>
+		                          <td>  
                                      		<p class="form-control-static" > {{_orderMateriel.orderUnitPrice}} </p>
 		                          </td>
 		                          <td>  
@@ -806,19 +809,16 @@ margin-right: 20px;
                                      		<p class="form-control-static" > {{buyOrder.rate}}% </p>
 		                          </td>
 		                          <td>  
-                                     		<p class="form-control-static"> {{_orderMateriel.orderRateUnit}} </p>
+                                     		<p class="form-control-static" > {{format2Thousands(_arithmeticAmount(this))}} </p>
 		                          </td>
 		                          <td>  
-                                     		<p class="form-control-static" > {{_arithmeticAmount(this)}} </p>
-		                          </td>
-		                          <td>  
-                                     		<p class="form-control-static"> {{_arithmeticRateAmount(this)}} </p>
+                                     		<p class="form-control-static"> {{format2Thousands(_arithmeticRateAmount(this))}} </p>
 		                          </td>
 		                          <td ng-if="buyOrder.tradeType =='外贸'">
                                      		<p class="form-control-static" > {{_orderMateriel.customsRate}} </p>
 		                          </td>
 								  <td ng-if="buyOrder.tradeType =='外贸'">
-								  		<p class="form-control-static" > {{_arithmeticCustomsRateAmount(this)}} </p>
+								  		<p class="form-control-static" > {{format2Thousands(_arithmeticCustomsRateAmount(this))}} </p>
 								  </td>
 		                          <td ng-if="buyOrder.settlementClause =='服务费'">
                                      	<p class="form-control-static" > {{_orderMateriel.serviceRate}} </p>
@@ -832,7 +832,7 @@ margin-right: 20px;
                                      	<p class="form-control-static" > {{_orderMateriel.redTicket}} </p>
 								</td>
 		                          <td>  
-                                     		<p class="form-control-static"> {{_arithmeticRateAndAmount(this)}} </p>
+                                     		<p class="form-control-static"> {{format2Thousands(_arithmeticRateAndAmount(this))}} </p>
 		                          </td>
 		                          <td>  
                                      		<p class="form-control-static" > {{_orderMateriel.deliveryDate}} </p>
@@ -858,17 +858,17 @@ margin-right: 20px;
 								<th></th>
 								<th></th>
 								<th></th>
-								<th>{{totalAmount()}}</th>
-								<th>{{totalRateAmount()}}</th>
+								<th>{{format2Thousands(totalAmount())}}</th>
+								<th>{{format2Thousands(totalRateAmount())}}</th>
 								<th ng-if="buyOrder.tradeType =='外贸'"></th>
-								<th ng-if="buyOrder.tradeType =='外贸'">{{totalCustomsRateAmount()}}</th>
+								<th ng-if="buyOrder.tradeType =='外贸'">{{format2Thousands(totalCustomsRateAmount())}}</th>
 								<th ng-if="buyOrder.settlementClause =='服务费'">服务费率</th>
 								<th ng-if="buyOrder.settlementClause =='服务费'">服务费</th>
 								<th ng-if="buyOrder.settlementClause =='折扣折让'">折扣率</th>
 								<th ng-if="buyOrder.settlementClause =='折扣折让'">折后金额</th>
 								<th ng-if="buyOrder.settlementClause =='红票'">红票金额</th>
 								
-								<th>{{totalRateAndAmount()}}</th>
+								<th>{{format2Thousands(totalRateAndAmount())}}</th>
 								<th></th>
 								<th></th>
 								<th></th>
@@ -918,7 +918,7 @@ margin-right: 20px;
                          		<div class="form-group ">
                               	<label class="control-label col-md-5 bold">含税金额：</label>
                                  <div class="control-label col-md-7">
-                                  <p > {{totalRateAndAmount()}} </p>
+                                  <p > {{format2Thousands(totalRateAndAmount())}} </p>
                                   </div>
                               </div>
                          </div>
@@ -926,7 +926,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">不含税金额：</label>
                                  <div class="control-label col-md-7">
-                                 <p > {{totalAmount()}} </p>
+                                 <p > {{format2Thousands(totalAmount())}} </p>
                                  </div>
                              </div>
                          </div>
@@ -935,7 +935,7 @@ margin-right: 20px;
                          		<div class="form-group ">
                               	<label class="control-label col-md-5 bold">税额(含关税)：</label>
                                  <div class="control-label col-md-7">
-                                  <p >{{totalRateAndCustomsAmount()}}</p>
+                                  <p >{{format2Thousands(totalRateAndCustomsAmount())}}</p>
                                   </div>
                               </div>
                          </div>
@@ -957,7 +957,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">订单金额：</label>
                                     <div class="control-label col-md-7">
-                                 <p > {{totalOrderAmount()}} </p>
+                                 <p > {{format2Thousands(totalOrderAmount())}} </p>
                                  </div>
                              </div>
                          </div>
@@ -986,8 +986,8 @@ margin-right: 20px;
                                      <th>支付比率%</th>
                                      <th>支付金额</th>
                                      <th>支付方式</th>
-                                     <th>开票方式</th>
-                                     <th>开票金额</th>
+                                     <!-- <th>开票方式</th>
+                                     <th>开票金额</th> -->
                                      <th>未开金额</th>
                                      <th>备注</th>
                                  </tr>
@@ -1007,7 +1007,7 @@ margin-right: 20px;
 		                                <p class="form-control-static" > {{_CSD.deliveryRate}} </p>
 		                          </td>
 		                          <td>
-		                                <p class="form-control-static" > {{_CSD.deliveryAmount}} </p>
+		                                <p class="form-control-static" > {{format2Thousands(_CSD.deliveryAmount)}} </p>
 		                          </td>
 		                          <td>
 		                                <p class="form-control-static" > {{_CSD.paymentMethod}} </p>
@@ -1015,12 +1015,12 @@ margin-right: 20px;
 		                          <td>
 		                                <p class="form-control-static" > {{_CSD.billingMethod}} </p>
 		                          </td>
-		                          <td>
+		                          <!-- <td>
 		                                <p class="form-control-static" > {{_CSD.billingAmount}} </p>
 		                          </td>
 		                          <td>
 		                                <p class="form-control-static" > {{_CSD.unbilledAmount}} </p>
-		                          </td>
+		                          </td> -->
 		                          <td>
 		                                <p class="form-control-static" > {{_CSD.remark}} </p>
 		                          </td>

@@ -873,12 +873,12 @@ margin-right: 20px;
 								<th>规格型号</th>
 								<th>单位</th>
 								<th>库存数量</th>
-								<th>采购数量</th>
+								<th><span style="display:inline-block;width:100px;">采购数量</span></th>
 								<th>指导单价</th>
-								<th>不含税单价</th>
+								<th><span style="display:inline-block;width:100px;">含税单价</span></th>
+								<th><span style="display:inline-block;width:150px;">不含税单价</span></th>
 								<th>币种</th>
 								<th>税率</th>
-								<th>含税单价</th>
 								<th>不含税金额</th>
 								<th>税额</th>
 								<th ng-if="buyOrder.tradeType =='外贸'">关税率</th>
@@ -893,7 +893,7 @@ margin-right: 20px;
 								<th>交付日期</th>
 								<th>最晚交付日期</th>
 								<th>交付/提货地点</th>
-								<th style="width：100px;">操作</th>
+								<th><span style="display:inline-block;width:80px;">操作</span></th>
                                  </tr>
                              </thead>
                              <tbody>
@@ -918,14 +918,19 @@ margin-right: 20px;
                                      		<p class="form-control-static" > ... </p>
 		                          </td>
 		                          <td>  
-		                          		<input type="text"  name="amount{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].amount" ng-keyup="clearNoNum(orderMateriel[$index],'amount')" >
+		                          		<input style="padding:6px 3px" type="text"  name="amount{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].amount" ng-keyup="clearNoNum(orderMateriel[$index],'amount')" >
                                      		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.amount}} </p>
 		                          </td>
 		                          <td>  
                                      		<p class="form-control-static" > {{_orderMateriel.materiel.unitPrice}} </p>
 		                          </td>
 		                          <td>  
-		                          		<input type="text"  name="orderUnitPrice{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].orderUnitPrice"  
+		                          		<input style="padding:6px 3px" type="text"  name="orderRateUnit{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].orderRateUnit" 
+		                          		 ng-keyup="" ng-change="clearNoNumPoint(orderMateriel[$index],'orderRateUnit');_arithmeticUnitPrice(_orderMateriel)">
+                                     		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.orderRateUnit}} </p>
+		                          </td>
+		                          <td>  
+		                          		<input style="padding:6px 3px" type="text"  name="orderUnitPrice{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].orderUnitPrice"  
 		                          		ng-keyup="" ng-change="clearNoNumPoint(orderMateriel[$index],'orderUnitPrice');_arithmeticRateUnit(_orderMateriel)">
                                      		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.orderUnitPrice}} </p>
 		                          </td>
@@ -936,40 +941,35 @@ margin-right: 20px;
                                      		<p class="form-control-static" > {{buyOrder.rate}}% </p>
 		                          </td>
 		                          <td>  
-		                          		<input type="text"  name="orderRateUnit{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].orderRateUnit" 
-		                          		 ng-keyup="" ng-change="clearNoNumPoint(orderMateriel[$index],'orderRateUnit');_arithmeticUnitPrice(_orderMateriel)">
-                                     		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.orderRateUnit}} </p>
+                                     		<p class="form-control-static" > {{format2Thousands(_arithmeticAmount(this))}} </p>
 		                          </td>
 		                          <td>  
-                                     		<p class="form-control-static" > {{_arithmeticAmount(this)}} </p>
-		                          </td>
-		                          <td>  
-                                     		<p class="form-control-static"> {{_arithmeticRateAmount(this)}} </p>
+                                     		<p class="form-control-static"> {{format2Thousands(_arithmeticRateAmount(this))}} </p>
 		                          </td>
 		                          <td ng-if="buyOrder.tradeType =='外贸'">
-		                          		<input type="text"  name="customsRate{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].customsRate" ng-keyup="clearNoNumPoint(orderMateriel[$index],'customsRate')"  >
+		                          		<input style="padding:6px 3px" type="text"  name="customsRate{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].customsRate" ng-keyup="clearNoNumPoint(orderMateriel[$index],'customsRate')"  >
                                      		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.customsRate}} </p>
 		                          </td>
 								  <td ng-if="buyOrder.tradeType =='外贸'">
-								  		<p class="form-control-static" > {{_arithmeticCustomsRateAmount(this)}} </p>
+								  		<p class="form-control-static" > {{format2Thousands(_arithmeticCustomsRateAmount(this))}} </p>
 								  </td>
 		                          <td ng-if="buyOrder.settlementClause =='服务费'">
-		                          	<input type="text"  name="serviceRate{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].serviceRate"   ng-keyup="clearNoNumPoint(orderMateriel[$index],'serviceRate')" >
+		                          	<input style="padding:6px 3px" type="text"  name="serviceRate{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].serviceRate"   ng-keyup="clearNoNumPoint(orderMateriel[$index],'serviceRate')" >
                                      	<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.serviceRate}} </p>
 		                          </td>
 								<td ng-if="buyOrder.settlementClause =='服务费'">服务费</td>
 								<td ng-if="buyOrder.settlementClause =='折扣折让'">
-									<input type="text"  name="discountRate{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].discountRate" ng-keyup="clearNoNumPoint(orderMateriel[$index],'discountRate')" >
+									<input style="padding:6px 3px" type="text"  name="discountRate{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].discountRate" ng-keyup="clearNoNumPoint(orderMateriel[$index],'discountRate')" >
                                      	<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.discountRate}} </p>
 								</td>
 								<td ng-if="buyOrder.settlementClause =='折扣折让'">折后金额</td>
 								<td ng-if="buyOrder.settlementClause =='红票'">
-									<input type="text"  name="redTicket{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].redTicket" ng-keyup="clearNoNumPoint(orderMateriel[$index],'redTicket')"  >
+									<input style="padding:6px 3px" type="text"  name="redTicket{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].redTicket" ng-keyup="clearNoNumPoint(orderMateriel[$index],'redTicket')"  >
                                      	<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.redTicket}} </p>
 								</td>
 								
 		                          <td>  
-                                     		<p class="form-control-static"> {{_arithmeticRateAndAmount(this)}} </p>
+                                     		<p class="form-control-static"> {{format2Thousands(_arithmeticRateAndAmount(this))}} </p>
 		                          </td>
 		                          <td>  
 		                          		<input type="text"  style="width: 100px!important" name="deliveryDate{{$index}}" class="form-control form-control-inline input-medium date-picker" 
@@ -1023,21 +1023,21 @@ margin-right: 20px;
 								<th></th>
 								<th></th>
 								<th></th>
-								<th>{{totalAmount()}}</th>
-								<th>{{totalRateAmount()}}</th>
+								<th>{{format2Thousands(totalAmount())}}</th>
+								<th>{{format2Thousands(totalRateAmount())}}</th>
 								<th ng-if="buyOrder.tradeType =='外贸'"></th>
-								<th ng-if="buyOrder.tradeType =='外贸'">{{totalCustomsRateAmount()}}</th>
+								<th ng-if="buyOrder.tradeType =='外贸'">{{format2Thousands(totalCustomsRateAmount())}}</th>
 								<th ng-if="buyOrder.settlementClause =='服务费'">服务费率</th>
 								<th ng-if="buyOrder.settlementClause =='服务费'">服务费</th>
 								<th ng-if="buyOrder.settlementClause =='折扣折让'">折扣率</th>
 								<th ng-if="buyOrder.settlementClause =='折扣折让'">折后金额</th>
 								<th ng-if="buyOrder.settlementClause =='红票'">红票金额</th>
 								
-								<th>{{totalRateAndAmount()}}</th>
+								<th>{{format2Thousands(totalRateAndAmount())}}</th>
 								<th></th>
 								<th></th>
 								<th></th>
-								<th style="width：100px;"></th>
+								<th></th>
                                  </tr>
                              </tbody>
                          </table>
@@ -1069,7 +1069,7 @@ margin-right: 20px;
                          		<div class="form-group ">
                               	<label class="control-label bold">含税金额：</label>
                                  <div class="">
-                                  <p class="form-control-static"> {{totalRateAndAmount()}} </p>
+                                  <p class="form-control-static"> {{format2Thousands(totalRateAndAmount())}} </p>
                                   </div>
                               </div>
                          </div>
@@ -1077,7 +1077,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label bold">不含税金额：</label>
                                  <div class="">
-                                 <p class="form-control-static"> {{totalAmount()}} </p>
+                                 <p class="form-control-static"> {{format2Thousands(totalAmount())}} </p>
                                  </div>
                              </div>
                          </div>
@@ -1086,7 +1086,7 @@ margin-right: 20px;
                          		<div class="form-group ">
                               	<label class="control-label bold">税额(含关税)：</label>
                                  <div class="">
-                                  <p class="form-control-static">{{totalRateAndCustomsAmount()}}</p>
+                                  <p class="form-control-static">{{format2Thousands(totalRateAndCustomsAmount())}}</p>
                                   </div>
                               </div>
                          </div>
@@ -1111,7 +1111,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label bold">订单金额：</label>
                                     <div class="">
-                                 <p class="form-control-static"> {{totalOrderAmount()}} </p>
+                                 <p class="form-control-static"> {{format2Thousands(totalOrderAmount())}} </p>
                                  </div>
                              </div>
                          </div>
@@ -1188,7 +1188,7 @@ margin-right: 20px;
 		                          <td>
                                      		<input type="text" id="deliveryAmount[$index]" name="deliveryAmount" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].deliveryAmount"  
                                      		ng-keyup="clearNoNumPoint(clauseSettlement.CSD[$index],'deliveryAmount');_arithmeticRate(this)" >
-		                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.deliveryAmount}} </p>
+		                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{format2Thousands(_CSD.deliveryAmount)}} </p>
 		                          </td>
 		                          <td>
                                      		<select  id="paymentMethod[$index]" name="paymentMethod" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].paymentMethod"  >

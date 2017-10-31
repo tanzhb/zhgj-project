@@ -2872,21 +2872,21 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		       
 		       $scope.arithmeticAmount  = function(scope) {//计算金额
 			       	if(scope.orderUnitPrice&&scope.amount){
-			       		return (scope.orderUnitPrice*scope.amount).toFixed(2);
+			       		return (scope.orderUnitPrice*scope.amount).toFixed(9);
 			       	}else{
 			       		return 0;
 			       	}
 		       };
 		       $scope.arithmeticRateAmount  = function(scope) {//计算税额
 			       	if($scope.saleOrder.rate){
-			       		return ($scope.arithmeticAmount(scope)*$scope.saleOrder.rate/100).toFixed(2);
+			       		return ($scope.arithmeticAmount(scope)*$scope.saleOrder.rate/100).toFixed(9);
 			       	}else{
 			       		return 0;
 			       	}
 		       };
 		       
 		       $scope.arithmeticRateAndAmount  = function(scope) {//计算价税合计
-			       	return Number($scope.arithmeticAmount(scope))+Number($scope.arithmeticRateAmount(scope));
+			       	return (Number($scope.arithmeticAmount(scope))+Number($scope.arithmeticRateAmount(scope))).toFixed(9);
 		       };
 		       
 		       $scope._arithmeticRateUnit  = function(_orderMateriel) {//计算含税销售单价
@@ -2907,21 +2907,21 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		       
 		       $scope._arithmeticAmount  = function(scope) {//计算金额
 			       	if(scope._orderMateriel.orderUnitPrice&&scope._orderMateriel.amount){
-			       		return (scope._orderMateriel.orderUnitPrice*scope._orderMateriel.amount).toFixed(2);
+			       		return (scope._orderMateriel.orderUnitPrice*scope._orderMateriel.amount).toFixed(9);
 			       	}else{
 			       		return 0;
 			       	}
 		       };
 		       $scope._arithmeticRateAmount  = function(scope) {//计算税额
 			       	if($scope.saleOrder.rate){
-			       		return ($scope._arithmeticAmount(scope)*$scope.saleOrder.rate/100).toFixed(2);
+			       		return ($scope._arithmeticAmount(scope)*$scope.saleOrder.rate/100).toFixed(9);
 			       	}else{
 			       		return 0;
 			       	}
 		       };
 		       
 		       $scope._arithmeticRateAndAmount  = function(scope) {//计算价税合计（商品金额+税额）
-			       	return Number($scope._arithmeticAmount(scope))+Number($scope._arithmeticRateAmount(scope));
+			       	return (Number($scope._arithmeticAmount(scope))+Number($scope._arithmeticRateAmount(scope))).toFixed(9);
 		       };
 		       
 		       $scope.clearNoNumPoint = function(obj,attr){
@@ -2940,7 +2940,20 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			    	 obj[attr] = obj[attr].replace(/[^\d]/g,"");
 		    	 }
 
-		       
+		       $scope.format2Thousands = function(formatV){  
+		    	   formatV = Number(formatV).toFixed(2);
+                   var array=new Array();  
+                   array=formatV.split(".");  
+                   var re=/(-?\d+)(\d{3})/;  
+                   while(re.test(array[0])){  
+                       array[0]=array[0].replace(re,"$1,$2")  
+                   }  
+                   var returnV=array[0];  
+                   for(var i=1;i<array.length;i++){  
+                       returnV+="."+array[i];  
+                   }  
+                   return returnV;
+               } 
 		     //更新订单金额数据
 		     $scope.updateOrderAmount = function(obj,attr){
 		    	$scope.submitOrder = {}
