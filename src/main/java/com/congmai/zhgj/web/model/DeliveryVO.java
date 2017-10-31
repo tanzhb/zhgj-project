@@ -191,11 +191,6 @@ public class DeliveryVO extends BaseVO implements Serializable{
 	    public static final String COMPLETE = "8"; //完成发货
 	    
 	    public static final String WAIT_IN_RECORD = "9"; //发货单待入库
-<<<<<<< .mine=======	    
-	    
-	    
-	    
->>>>>>> .theirs	   
 	
 /*	// 业务类型
 	private String businessType;
