@@ -108,6 +108,19 @@ angular.module('MetronicApp').service('materielService',
 	                    deferred.reject('连接服务器出错！');
 	                })
 					return deferred.promise;
+				},//保存物料采购商
+				saveBuyMateriel : function(buyMateriel) {
+					var deferred = $q.defer();
+					var params = {};
+					params = JSON.stringify(buyMateriel);
+					$http.post("rest/materiel/saveBuyMateriel", params
+					).success(function (data) {
+		                // 如果连接成功，延时返回给调用者
+		                deferred.resolve(data);
+		            }).error(function () {
+	                    deferred.reject('连接服务器出错！');
+	                })
+					return deferred.promise;
 				},chooseMateriels : function(ids){//选择的供应物料
 					var deferred = $q.defer();
 					$http.post("rest/materiel/chooseMateriel",
@@ -131,6 +144,15 @@ angular.module('MetronicApp').service('materielService',
 				},getSuppliers : function(ids){//获取供应商
 					var deferred = $q.defer();
 					$http.post("rest/company/getSuppliers"
+			    	).then(function success(result) {
+			            deferred.resolve(result);//请求成功
+			        }, function error(err) {
+			            deferred.reject(err);//请求失败
+			        });
+			        return deferred.promise;//返回承诺
+				},getBuys : function(ids){//获取采购商
+					var deferred = $q.defer();
+					$http.post("rest/company/getCustomers"
 			    	).then(function success(result) {
 			            deferred.resolve(result);//请求成功
 			        }, function error(err) {

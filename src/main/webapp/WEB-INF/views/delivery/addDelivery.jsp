@@ -489,7 +489,7 @@
 													<label class="control-label bold">备注</label>
 													<div class="">
 														<input type="text" class="form-control" name="remark"
-															ng-show=inputTakeDeliveryInfo"  ng-model="deliveryTransport.remark" />
+															ng-show="inputTakeDeliveryInfo"  ng-model="deliveryTransport.remark" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
 															{{delivery.transportRemark}}</p>

@@ -39,10 +39,10 @@
 	              		</li>
 						<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">包装信息</a>
 						</li>
-						<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">附件</a></li>
 						<li class="bold" ng-show="BOMShow"><a data-target="#tab_1_4" data-toggle="tab">下级物料</a></li>
 						<li class="bold"><a data-target="#tab_1_5" data-toggle="tab">供应商</a></li>
-						
+						<li class="bold"><a data-target="#tab_1_6" data-toggle="tab">采购商</a></li>
+						<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">附件</a></li>
 						
 					</ul>
 					<div class="tab-content">
@@ -64,7 +64,7 @@
 				                      <div class="alert alert-danger display-hide">
 				                          <button class="close" data-close="alert"></button> 请先输入正确数据！ </div>
 				                      <div class="row">
-				                          <div class="col-md-6">
+				                          <div class="col-md-4">
 				                              <div class="form-group">
 				                                  <label class="control-label bold">物料编码<span class="required" aria-required="true"> * </span></label>
 				                                  <div class="">
@@ -76,7 +76,7 @@
 				                              </div>
 				                          </div>
 				                          <!--/span-->
-				                          <div class="col-md-6">
+				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">助记码</label>
 				                                  <div class="">
@@ -88,11 +88,7 @@
 				                              </div>
 				                          </div>
 				                          <!--/span-->
-				                      </div>
-				                      <!--/row-->
-				                      <div class="row">
-				                          <!--/span-->
-				                          <div class="col-md-6">
+				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">物料名称<span class="required" aria-required="true"> * </span></label>
 				                                  <div class="">
@@ -104,8 +100,10 @@
 				
 				                              </div>
 				                          </div>
-				                          <!--/span-->
-				                          <div class="col-md-6">
+				                      </div>
+				                      <!--/row-->
+				                      <div class="row">
+				                      	<div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">规格型号<span class="required" aria-required="true"> * </span></label>
 				                                  <div class="">
@@ -117,10 +115,7 @@
 				
 				                              </div>
 				                          </div>
-				                      </div>
-				                      <!--/row-->
-				                      <div class="row">
-				                      	<div class="col-md-6">
+				                      	<div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">物料大类<span class="required" aria-required="true"> * </span></label>
 				                                  <div class="">
@@ -135,7 +130,7 @@
 				
 				                              </div>
 				                          </div>
-				                          <div class="col-md-6">
+				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">一级分类<span class="required" aria-required="true"> * </span></label>
 				                                  <div class="">
@@ -153,7 +148,7 @@
 				                      </div>
 				                      <!--/row-->
 				                      <div class="row">
-				                           <div class="col-md-6">
+				                           <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">二级分类</label>
 				                                  <div class="">
@@ -168,7 +163,7 @@
 				
 				                              </div>
 				                          </div>
-				                           <div class="col-md-6">
+				                           <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">三级分类</label>
 				                                  <div class="">
@@ -183,9 +178,7 @@
 				                              </div>
 				                          </div>
 				                          <!--/span-->
-				                      </div>
-				                      <div class="row">
-				                      	<div class="col-md-6">
+				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">物料属性</label>
 				                                  <div class="">
@@ -193,18 +186,6 @@
 				                                      <div class="form-control-focus"> </div>
 				                                      <span class="help-block" ng-hide="materielInput">请输入物料属性</span>
 				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.materielAttribute}} </p>
-				                                  </div>
-				
-				                              </div>
-				                          </div>
-				                      	<div class="col-md-6">
-				                              <div class="form-group ">
-				                                  <label class="control-label bold">单位</label>
-				                                  <div class="">
-				                                      <input type="text" class="form-control" ng-hide="materielInput" ng-model="materiel.unit" >
-				                                      <div class="form-control-focus"> </div>
-				                                      <span class="help-block" ng-hide="materielInput">请输入单位</span>
-				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.unit}} </p>
 				                                  </div>
 				
 				                              </div>
@@ -229,7 +210,19 @@
 				                      </div> -->
 				                      <!--/row-->
 				                      <div class="row">
-				                          <div class="col-md-6">
+				                      	<div class="col-md-4">
+				                              <div class="form-group ">
+				                                  <label class="control-label bold">单位</label>
+				                                  <div class="">
+				                                      <input type="text" class="form-control" ng-hide="materielInput" ng-model="materiel.unit" >
+				                                      <div class="form-control-focus"> </div>
+				                                      <span class="help-block" ng-hide="materielInput">请输入单位</span>
+				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.unit}} </p>
+				                                  </div>
+				
+				                              </div>
+				                          </div>
+				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">品牌</label>
 				                                  <div class="">
@@ -242,7 +235,7 @@
 				                              </div>
 				                          </div>
 				                          <!--/span-->
-				                          <div class="col-md-6">
+				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">原产国</label>
 				                                  <div class="">
@@ -284,7 +277,7 @@
 				                       
 				                      <!--/row-->
 				                       <div class="row">
-				                          <div class="col-md-6">
+				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">长度</label>
 				                                  <div class="">
@@ -297,7 +290,7 @@
 				                              </div>
 				                          </div>
 				                          <!--/span-->
-				                          <div class="col-md-6">
+				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">币种</label>
 				                                  <div class="">
@@ -308,11 +301,7 @@
 				                                  </div>
 				                              </div>
 				                          </div>
-				                          <!--/span-->
-				                      </div>
-				                      <!--/row-->
-				                      <div class="row">
-				                          <div class="col-md-6">
+				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">宽度</label>
 				                                  <div class="">
@@ -325,7 +314,10 @@
 				                              </div>
 				                          </div>
 				                          <!--/span-->
-				                          <div class="col-md-6">
+				                      </div>
+				                      <!--/row-->
+				                      <div class="row">
+				                      	<div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">单价</label>
 				                                  <div class="">
@@ -336,11 +328,7 @@
 				                                  </div>
 				                              </div>
 				                          </div>
-				                          <!--/span-->
-				                      </div>
-				                      <!--/row-->
-				                      <div class="row">
-				                          <div class="col-md-6">
+				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">高度</label>
 				                                  <div class="">
@@ -352,7 +340,7 @@
 				
 				                              </div>
 				                          </div>
-				                          <div class="col-md-6">
+				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">单件体积</label>
 				                                  <div class="">
@@ -368,7 +356,7 @@
 				                      </div>
 				                      <!--/row-->
 				                      <div class="row">
-				                          <div class="col-md-6">
+				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">单件重量</label>
 				                                  <div class="">
@@ -380,7 +368,7 @@
 				
 				                              </div>
 				                          </div>
-				                          <div class="col-md-6">
+				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">托盘规格</label>
 				                                  <div class="">
@@ -392,9 +380,7 @@
 				
 				                              </div>
 				                          </div>
-			                          </div>
-			                          <div class="row">
-				                          <div class="col-md-6">
+				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">每托数量</label>
 				                                  <div class="">
@@ -406,8 +392,10 @@
 				
 				                              </div>
 				                          </div>
-				                          <!--/span-->
-				                          <div class="col-md-6">
+			                          </div>
+				                      <!--/row-->
+				                      <div class="row">
+				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">备案项号</label>
 				                                  <div class="">
@@ -419,12 +407,7 @@
 				                              </div>
 				                          </div>
 				                          <!--/span-->
-				                      </div>
-				                      <!--/row-->
-				                      <div class="row">
-				                          
-				                          <!--/span-->
-				                          <div class="col-md-6">
+				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">海关监管条件</label>
 				                                  <div class="">
@@ -436,7 +419,7 @@
 				                              </div>
 				                          </div>
 				                          <!--/span-->
-				                          <div class="col-md-6">
+				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">保质期</label>
 				                                  <div class="">
@@ -469,7 +452,7 @@
 				                      </div> -->
 				                      <!--/row-->
 				                      <div class="row">
-				                      		<div class="col-md-6">
+				                      		<div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">海关编码</label>
 				                                  <div class="">
@@ -480,7 +463,7 @@
 				                                  </div>
 				                              </div>
 				                          </div>
-				                      		<div class="col-md-6">
+				                      		<div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">一般交付周期<span class="required" aria-required="true"> * </span></label>
 				                                  <div class="">
@@ -491,9 +474,7 @@
 				                                  </div>
 				                              </div>
 				                          </div>
-				                      </div>
-				                    <div class="row">
-				                          <div class="col-md-6">
+				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">包含下级物料</label>
 				                                  <div class="">
@@ -506,7 +487,10 @@
 				                                  </div>
 				                              </div>
 				                          </div>
-				                      		<div class="col-md-6">
+				                      </div>
+				                      <!--/row-->
+				                      <div class="row">
+				                      	<div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">备注</label>
 				                                  <div class="">
@@ -517,12 +501,7 @@
 				                                  </div>
 				                              </div>
 				                          </div>
-				                          
-				                          <!--/span-->
-				                      </div>
-				                      <!--/row-->
-				                      <div class="row">
-				                          <div class="col-md-6">
+				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">版本</label>
 				                                  <div class="">
@@ -880,7 +859,66 @@
 				          </div>
 				          <!-- 供应商 end-->
 						</div>
-						
+						<div class="tab-pane fade" id="tab_1_6">
+						<!-- 采购商 start-->
+				          <div class="portlet-title" style="min-height: 48px;">
+				               <div class="tools" style="float:right">
+				               	 	<button type="submit" ng-click="saveBuyMateriel()" ng-hide="buyMaterielInfoInput" class="btn green  btn-circle  btn-sm">
+				                  		<i class="fa fa-save"></i> 保存 </button>
+				                  <button ng-click="cancelBuyMateriel()" type="button" ng-hide="buyMaterielInfoInput" class="btn defualt  btn-circle  btn-sm">
+				                  		<i class="fa fa-undo"></i> 取消 </button>
+				                  <button ng-click="editBuyMateriel()" type="button" ng-show="buyMaterielInfoShow" class="btn purple  btn-circle  btn-sm">
+				                  		<i class="fa fa-edit"></i> 编辑 </button>
+				                </div>
+				            </div>
+				           <div class="portlet-body form">
+							     <form id="form_sample_6" >
+							         <div class="table-scrollable">
+				                          <table class="table table-bordered table-hover">
+				                              <thead>
+				                                  <tr>
+				<!--                                       <th>供应商</th> -->
+				                                      <th>采购商名称</th>
+				                                      <th>采购商编号</th>
+				                                      <th style="width:100px;"></th>
+				                                  </tr>
+				                              </thead>
+				                              <tbody>
+				                                  <tr ng-repeat="_buyMateriel in buyMateriel track by $index" ng-mouseover="showOperation('buyMateriel',$index)" ng-mouseleave="hideOperation('buyMateriel',$index)" >
+							                          <td>
+						                                 	<div ng-hide="buyMaterielInfoInput">
+							                                 	<select class="form-control" id="buyComId[$index]" name="buyComId" class="bs-select form-control diySelectCss" data-live-search="true" data-size="8"  ng-model="buyMateriel[$index].buyComId"  >
+					                                              	<option ng-repeat="_buy in buys" value="{{_buy.comId}}" repeat-done="repeatDone()">{{_buy.comName}}</option>
+					                                             </select>
+				                                             </div>
+							                                <p class="form-control-static" ng-show="buyMaterielInfoShow"> {{_buyMateriel.buy.comName}} </p>
+							                          </td>
+				<!-- 			                          <td>
+						                                 	<p class="form-control-static" ng-show="buyMaterielInfoShow"> {{_buyMateriel.buy.comName}} </p>
+							                          </td> -->
+							                           <td>
+				                                      		<input type="text" id="buyMaterielNum[$index]" name="buyMaterielNum" class="form-control" ng-hide="buyMaterielInfoInput" ng-model="buyMateriel[$index].buyMaterielNum"  >
+							                                <p class="form-control-static" ng-show="buyMaterielInfoShow"> {{_buyMateriel.buyMaterielNum}} </p>
+							                          </td>
+				                                      
+				                                      <td ng-show="operation_s{{$index}}">
+				                                      	<a href="javascript:;"  class="btn red btn-sm" ng-hide="buyMaterielInfoInput" ng-click="deleteBuyMateriel($index)">
+				                                    			<i class="fa fa-close"></i> 
+				                             				</a>
+				                                      </td>
+				                                  </tr>
+				                              </tbody>
+				                          </table>
+				                      </div>
+				                      <div class="form-actions right">
+											<a  class="btn blue btn-sm"  ng-hide="buyMaterielInfoInput" ng-click="addBuyMateriel()"   >
+					                              <i class="fa fa-plus"></i> 增加
+					                       	</a> 
+				                  		</div>
+				                  </form>
+				          </div>
+				          <!-- 供应商 end-->
+						</div>
 					</div>
            
           </div>

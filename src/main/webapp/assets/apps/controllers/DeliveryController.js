@@ -478,7 +478,6 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		promise.then(function(data) {
 			if (!handle.isNull(data)) {
 				$(".modal-backdrop").remove();
-				toastr.success("保存成功");
 				handle.unblockUI();
 				$scope.delivery= data;
 				/*$scope.deliveryMateriel[index] = data;

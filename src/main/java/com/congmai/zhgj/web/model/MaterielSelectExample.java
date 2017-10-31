@@ -3398,6 +3398,11 @@ public class MaterielSelectExample {
             addCriterion("sm.supplyComId in", values, "supplyComId");
             return (Criteria) this;
         }
+        
+        public Criteria andBuyComIdIn(List<String> values) {
+            addCriterion("bm.buyComId in", values, "buyComId");
+            return (Criteria) this;
+        }
 
     }
 

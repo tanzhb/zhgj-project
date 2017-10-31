@@ -468,9 +468,22 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                     				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已出库</span>';
 								}else if(row.deliverStatus=="5"){
                     				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已入库</span>';
+								}else if(row.deliverStatus=="6"){
+                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待清关</span>';
+								}else if(row.deliverStatus=="7"){
+                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待报关</span>';
+								}else if(row.deliverStatus=="8"){
+                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待检验</span>';
+								}else if(row.deliverStatus=="9"){
+                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待检验</span>';
+								}else if(row.deliverStatus=="11"){
+                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待入库</span>';
+								}else if(row.deliverStatus=="12"){
+                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待出库</span>';
 								}else{
 									return htm + '<span>未开始</span>';
 								}
+								
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);

@@ -606,6 +606,9 @@ public class OrderController {
         	}
     	}else if(BUYORDER.equals(type)){//查找公司采购订单
     		parm.setBuyComId(comId);
+    		if("delivery".equals(selectFor)){
+    			parm.setStatus("2");
+    		}
     	}
     	
     	if("1".equals(fram)){

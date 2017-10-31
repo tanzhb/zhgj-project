@@ -369,7 +369,7 @@
 								</div>
 
 							</div>
-							<div class="tab-pane fade" id="tab_1_2"></div>
+
 
 							<div class="tab-pane fade" id="tab_1_3">
 								<div class="portlet-body form">
@@ -585,6 +585,7 @@
 									</div>
 								</div>
 							</div>
+						</div>
 					</form>
 					<div class="tab-pane fade" id="tab_1_4">
 						<!-- 物料信息 start-->
@@ -703,7 +704,7 @@
 		</div>
 	</div>
 </div>
-</div>
+
 
 <div id="basicMaterielInfo" class="modal fade bs-modal-lg" tabindex="-1"
 	data-backdrop="static" data-keyboard="false">

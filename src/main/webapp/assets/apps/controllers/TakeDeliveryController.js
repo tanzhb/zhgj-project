@@ -1418,7 +1418,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		                              { mData: 'serviceModel' },
 	  		                              { mData: 'saleApplySerial' },
 	  		                              { mData: 'orderSerial' },
-	  		                              { mData: 'orderDate' },
+	  		                              { mData: 'orderDate' }/*,
 	  		                              { mData: 'processBase',
 	  			                            	mRender:function(data){
 	  			                            		if(data!=""&&data!=null){
@@ -1435,7 +1435,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  			                            			return '<span  class="label label-sm label-info ng-scope">未审批</span>';
 	  			                            		}
 	  			                            	}
-	  			                            } ],
+	  			                            } */],
 	  				  		                 'aoColumnDefs' : [ {
 	  		  		  							'targets' : 0,
 	  		  		  							'searchable' : false,
