@@ -103,6 +103,18 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 			}
 			fd.append('id',$scope.contractVO.id); 
 			fd.append('orderSerial',$scope.contractVO.orderSerial); 
+			fd.append('contractNum',$scope.contractVO.contractNum); 
+	        fd.append('contractType',$scope.contractVO.contractType); 
+	        fd.append('firstParty',$scope.contractVO.firstParty); 
+	        fd.append('firstPartySigner',$scope.contractVO.firstPartySigner); 
+	        fd.append('secondParty',$scope.contractVO.secondParty); 
+	        fd.append('secondPartySigner',$scope.contractVO.secondPartySigner);
+	        fd.append('otherPartyContractNum',$scope.contractVO.otherPartyContractNum);
+	        fd.append('startDate',$scope.contractVO.startDate); 
+	        fd.append('endDate',$scope.contractVO.endDate); 
+	        fd.append('signDate',$scope.contractVO.signDate); 
+	        fd.append('remark',$scope.contractVO.remark);
+	        fd.append('signerAddress',$scope.contractVO.signerAddress);
 	         $http({
 	        	  method:'POST',
 	              url:"rest/contract/signSaleContract",
