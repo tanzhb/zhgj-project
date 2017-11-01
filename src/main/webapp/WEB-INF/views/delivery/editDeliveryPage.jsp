@@ -386,7 +386,6 @@
 								</form>
 
 							</div>
-
 							<div class="tab-pane fade" id="tab_1_3">
 									 <div class="portlet-title" style="min-height: 48px;">
                <div class="tools" style="float:right">
@@ -626,63 +625,7 @@
 										</button>
 									</div>
 								</div>
-<<<<<<< .mine							</div>
-						</div>
-					</form>
-					<div class="tab-pane fade" id="tab_1_4">
-						<!-- 物料信息 start-->
-						<div class="portlet-title">
-							<div class="caption">物料信息</div>
-							<div class="actions" ng-if="otherMode">
-								<button class="btn blue btn-sm btn-circle"
-									ng-click="addMateriel()" onclick="return false;">
-									<i class="fa fa-plus"></i> 添加物料
-								</button>
-							</div>
-						</div>
-						<div class="portlet-body form">
-							<form action="#" id="form_sample_2" class="">
-								<div class="table-scrollable">
-									<table class="table table-bordered table-hover">
-										<thead>
-											<tr>
-												<th>物料编号</th>
-												<th>物料名称</th>
-												<th>规格型号</th>
-												<th>单位</th>
-												<th>附件</th>
-												<th>订单数量</th>
-												<th>发货数量</th>
-												<th>备注</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr
-												ng-repeat="_deliveryMateriel in deliveryMaterielE track by $index"
-												ng-mouseover="showOperation('deliveryMateriel',$index)"
-												ng-mouseleave="hideOperation('deliveryMateriel',$index)"
-												repeat-done="repeatDone1()">
-												<!-- repeat-done="repeatDone()" -->
-												<td>
-													<!--  <span ><a href="javascript:;" ng-click="addMateriel('single',$index)">{{_orderMateriel.materiel.materielNum}}</a></span> -->
-													<p class="form-control-static">
-														{{_deliveryMateriel.materielNum}}</p>
-												</td>
-												<td>
-													<p class="form-control-static">
-														{{_deliveryMateriel.materielName}}</p>
-												</td>
-												<td>
-													<p class="form-control-static">
-														{{_deliveryMateriel.specifications}}</p>
-												</td>
-												<td>
-													<p class="form-control-static">
-														{{_deliveryMateriel.unit}}</p>
-												</td>
-												<td class="form-group">
-													<p id="batchNumReal{{$index}}" ng-hide="true">{{_deliveryMateriel.attachFile}}</p>
-=======								<div class="portlet-body form">
+								<div class="portlet-body form">
 									<form action="#" id="form_sample_3" class="">
 										<div class="table-scrollable">
 											<table
@@ -725,7 +668,7 @@
 														</td>
 														<td class="form-group">
 															<p id="batchNumReal{{$index}}" ng-hide="true"></p>
->>>>>>> .theirs
+
 															<p class="form-control-static" id="batchNum{{$index}}">
 																<a href="javascript:;" class="btn btn-xs green"
 																	id="addBatchNum{{$index}}"
@@ -789,7 +732,6 @@
 		</div>
 	</div>
 </div>
-
 
 <div id="basicMaterielInfo" class="modal fade bs-modal-lg" tabindex="-1"
 	data-backdrop="static" data-keyboard="false">

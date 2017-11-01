@@ -329,6 +329,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					var params = {};
 					params.takeDelivery = {};
 					params.delivery = {};
+					params.takeDelivery.deliverSerial =  $scope.deliver.serialNum;
 					params.takeDelivery.serialNum = $scope.deliver.takeDelivery.serialNum;
 					params.takeDelivery.takeDeliverNum = $scope.takeDeliver.takeDeliverNum;
 					params.takeDelivery.actualDate = $scope.takeDeliver.actualDate;

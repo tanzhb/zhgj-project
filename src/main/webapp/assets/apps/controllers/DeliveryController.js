@@ -507,34 +507,9 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	}
 	//编辑基本信息
 	$scope. editDeliveryInfo=function(){
-		if($('#form_sample_1').valid()){
-		var promise = DeliveryService.editBasicInfo($scope);
-		promise.then(function(data) {
-			if (!handle.isNull(data)) {
-				$(".modal-backdrop").remove();
-				handle.unblockUI();
-				$scope.delivery= data;
-				/*$scope.deliveryMateriel[index] = data;
-				console.log(data.data);*/
-				$scope.isBasicInfoSaved='1';
-				$scope.span = true;
-				$scope.input = false;
-				$(".alert-danger").hide();
-			} else {
-				$(".modal-backdrop").remove();
-				handle.unblockUI();
-				toastr.error("保存失败！请联系管理员");
-				console.log(data);
-			}
-			
-		}, function(data) {
-			// 调用承诺接口reject();
-			$(".modal-backdrop").remove();
-			handle.unblockUI();
-			toastr.error("保存失败！请联系管理员");
-			console.log(data);
-		});	
-		};
+		var data=$scope.delivery;
+		$scope.inputDeliveryInfo=true;
+		$scope.span=false;
 	}
 	$scope. editTakeDeliveryInfo=function(){
 		var data=$scope.delivery;
