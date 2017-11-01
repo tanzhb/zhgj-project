@@ -179,6 +179,11 @@
                       清关单</span>
                     </a>
                 </li>
+                <li>
+                <a ui-sref="customerOrder">
+                        订单</span>
+                    </a>
+                </li>
                 </shiro:hasPermission>
                <!--  <li>
                     <a ui-sref="">

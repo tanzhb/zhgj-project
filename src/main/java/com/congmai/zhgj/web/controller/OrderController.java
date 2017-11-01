@@ -174,6 +174,36 @@ public class OrderController {
 		return orderInfo;
     }
     
+    /**
+     * 客户提交订单
+     */
+    @RequestMapping(value = "/submitOrder", method = RequestMethod.POST)
+    @ResponseBody
+    public OrderInfo submitOrder(@RequestBody String params) {
+    	OrderInfo orderInfo = json2Order(params);
+    	Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		orderInfo.setUpdater(currenLoginName);
+		orderInfo.setUpdateTime(new Date());
+		orderService.submitOrder(orderInfo);
+		return orderInfo;
+    }
+    
+    /**
+     * 接受客户订单
+     */
+    @RequestMapping(value = "/acceptSubmit", method = RequestMethod.POST)
+    @ResponseBody
+    public OrderInfo acceptSubmit(@RequestBody String params) {
+    	OrderInfo orderInfo = json2Order(params);
+    	Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		orderInfo.setUpdater(currenLoginName);
+		orderInfo.setUpdateTime(new Date());
+		orderService.acceptSubmit(orderInfo);
+		return orderInfo;
+    }
+    
     
     /**
      * 保存订单
@@ -232,6 +262,16 @@ public class OrderController {
 		orderInfo.setMakeDate(new Date());
 		orderInfo.setStatus("0");
 		
+		String comId = null;
+    	User user = UserUtil.getUserFromSession();
+    	if(user!=null){
+			comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+			if(comId!=null){
+				orderInfo.setBuyComId(comId);
+				orderInfo.setStatus(OrderInfo.CUSTOMER);
+			}
+		}
+    	
 		orderService.insert(orderInfo);
 	}
 
@@ -599,6 +639,9 @@ public class OrderController {
     		}
     		if("supplyOrder".equals(selectFor)){//供应商订单(状态不为0，本公司销售订单)
         		parm.setStatus("000");
+        	}
+    		if("platformOrder".equals(selectFor)){//平台销售订单(状态不为44，平台销售订单不能包括客户端的初始化订单)
+        		parm.setStatus("111");
         	}
     		//历史销售订单条件
         	if(StringUtils.isNotEmpty(demandPlanSerial)){

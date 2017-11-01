@@ -169,6 +169,9 @@ orderInfo.billStatus, orderInfo.delFlg,
 		 <if test="status=='000'" >
 		 	AND orderInfo.status != 0
 		 </if>
+		 <if test="status=='111'" >
+		 	AND orderInfo.status != 44
+		 </if>
 		 <if test="status!='2'.toString()" >
 		 	AND contract.contractType = '框架合同'
 		 </if>
@@ -211,6 +214,9 @@ orderInfo.billStatus, orderInfo.delFlg,
 		 </if>
 		 <if test="status=='000'" >
 		 	AND orderInfo.status != 0
+		 </if>
+		 <if test="status=='111'" >
+		 	AND orderInfo.status != 44
 		 </if>
 		 <if test="status!='2'.toString()" >
 		 	AND (contract.contractType is null or

@@ -46,4 +46,10 @@ public interface OrderService extends GenericService<OrderInfo, String> {
 
 	String checkNum(OrderInfo orderInfo);
 
+
+	int submitOrder(OrderInfo orderInfo);
+
+
+	int acceptSubmit(OrderInfo orderInfo);
+
 }

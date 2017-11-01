@@ -143,6 +143,19 @@ public class OrderServiceImpl implements OrderService {
 		return OrderInfoMapper.checkNum(orderInfo);
 	}
 
+	@Override
+	@OperationLog(operateType = "update" ,operationDesc = "客户提交" ,objectSerial= "{serialNum}")
+	public int submitOrder(OrderInfo model) {
+		return OrderInfoMapper.updateByPrimaryKeySelective(model);
+		
+	}
+
+	@Override
+	@OperationLog(operateType = "update" ,operationDesc = "接受订单" ,objectSerial= "{serialNum}")
+	public int acceptSubmit(OrderInfo orderInfo) {
+		return OrderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+	}
+
 	
 
 
