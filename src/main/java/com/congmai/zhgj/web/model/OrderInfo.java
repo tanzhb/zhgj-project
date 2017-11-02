@@ -80,6 +80,8 @@ public class OrderInfo extends BaseVO {
     private String demandPlanSerial;
 
     private String saleApplySerial;
+    
+    private String projectNum;
 
     private String settlementClause;
 
@@ -530,6 +532,14 @@ public class OrderInfo extends BaseVO {
 
 	public void setUnBillOrReceiptMoney(String unBillOrReceiptMoney) {
 		this.unBillOrReceiptMoney = unBillOrReceiptMoney;
+	}
+
+	public String getProjectNum() {
+		return projectNum;
+	}
+
+	public void setProjectNum(String projectNum) {
+		this.projectNum = projectNum;
 	}
 	
 

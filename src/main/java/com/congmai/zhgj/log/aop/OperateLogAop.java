@@ -117,8 +117,10 @@ public class OperateLogAop{
                 valueReturn.setMoudleName(log.moudleName());
                 valueReturn.setOperateType(log.operateType());
                 valueReturn.setOperationDesc(log.operationDesc());
-                valueReturn.setOperator(user.getUserName());
-                valueReturn.setCreator(user.getUserId().toString());
+                if(user!=null){
+                	valueReturn.setOperator(user.getUserName());
+                    valueReturn.setCreator(user.getUserId().toString());
+                }
                 valueReturn.setOperationTime(new Date());
                 valueReturn.setOperateResult(SUCCESS);
                 valueReturn.setRequestIp(getRemoteHost(request));

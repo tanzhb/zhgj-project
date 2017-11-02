@@ -428,10 +428,10 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 									}else if(row.processBase.status=="APPROVAL_FAILED"){
 										return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:red">未通过</span>';
 									}else{
-										return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未审批</span>';
+										return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">审批</span>';
 									}
                         		}else{
-                        			return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未审批</span>';
+                        			return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">待审批</span>';
                         		}
 								
 							
@@ -2699,6 +2699,23 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	        	orderService.acceptSubmit($scope.submitOrder).then(
 	          		     function(data){
 	          		    	toastr.info('订单接受成功！');
+	          		     },
+	          		     function(error){
+	          		         $scope.error = error;
+	          		         toastr.error('数据保存出错！');
+	          		     }
+	          		 );
+	        };
+	        
+	        $scope.saleGenerateBuy  = function() {// 分解订单
+	        	if(!isNull($scope.saleOrder.orderSerial)){
+	        		toastr.info('已有对应采购单，不能再次分解！');
+	        		return;
+	        	}
+	        	orderService.saleGenerateBuy($scope.saleOrder.serialNum).then(
+	          		     function(data){
+	          		    	$scope.saleOrder = data
+	          		    	toastr.info('订单分解成功！');
 	          		     },
 	          		     function(error){
 	          		         $scope.error = error;

@@ -28,6 +28,7 @@ margin-bottom: 20px;
     	<!-- 普通订单---START -->
       <div class="tab-pane active" id="tab_15_1">
 			<div class="row">
+				<shiro:hasRole name="admin">
 			     <div class="col-md-2" id = "allTreeType">
 			         <div class="portlet light ">
 			             <div class="portlet-title">
@@ -41,7 +42,8 @@ margin-bottom: 20px;
 			             </div>
 			         </div>
 				</div>
-				<div class="col-md-10" id="allMaterielList">
+				</shiro:hasRole>
+				<div <shiro:hasRole name="admin"> class="col-md-10" </shiro:hasRole> class="col-md-12"  id="allMaterielList">
 					<div class="row">
 						<div class="col-md-12">
 				        <div class="portlet light">

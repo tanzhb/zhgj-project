@@ -5,8 +5,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +27,7 @@ import org.apache.shiro.subject.Subject;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -60,6 +63,7 @@ import com.congmai.zhgj.web.model.ClauseFrameworkExample;
 import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.CommentVO;
+import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.OperateLog;
@@ -78,6 +82,7 @@ import com.congmai.zhgj.web.service.ClauseDeliveryService;
 import com.congmai.zhgj.web.service.ClauseFrameworkService;
 import com.congmai.zhgj.web.service.ClauseSettlementDetailService;
 import com.congmai.zhgj.web.service.ClauseSettlementService;
+import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.DemandPlanMaterielService;
 import com.congmai.zhgj.web.service.IProcessService;
@@ -135,6 +140,8 @@ public class OrderController {
     private OperateLogService operateLogService;
     @Resource
     private DemandPlanMaterielService demandPlanMaterielService;
+    @Resource
+    private CompanyService companyService;
     
     
 	//销售订单
@@ -1498,4 +1505,190 @@ public class OrderController {
     	return numCode;
     }
     
+    
+    private static BeanCopier beanCopier = BeanCopier.create(OrderInfo.class,OrderInfo.class,false);
+    private static BeanCopier beanContractVOCopier = BeanCopier.create(ContractVO.class,ContractVO.class,false);
+    /**
+	 * 
+	 * @Description 销售订单生成采购订单
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "/saleGenerateBuy")
+	@ResponseBody
+	public OrderInfo saleGenerateBuy(String serialNum) {
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		
+		OrderInfo orderInfo = orderService.selectById(serialNum);
+    	
+    	OrderMaterielExample m =new OrderMaterielExample();
+    	//and 条件1
+    	com.congmai.zhgj.web.model.OrderMaterielExample.Criteria criteria =  m.createCriteria();
+    	criteria.andDelFlgEqualTo("0");
+    	criteria.andOrderSerialEqualTo(serialNum);
+    	m.setOrderByClause(" sort asc");
+    	List<OrderMateriel> orderMateriel = orderMaterielService.selectList(m);
+    	
+    	Set<String> supplySet = new HashSet<String>();//存入所有物料供应商，不会重复
+    	if(orderMateriel!=null){//循环供应物料，集合所有的供应商
+    		for(OrderMateriel o:orderMateriel){
+    			if(o.getSupplyMateriel()!=null){
+    				supplySet.add(o.getSupplyMateriel().getSupplyComId());
+    			}
+    		}
+    	}
+    	String numCode = "";//生成的采购单号
+    	if(supplySet.size()>0){
+    		for(String supplyComId : supplySet){//对于某一供应商生成采购订单
+    			String newSerialNum = ApplicationUtils.random32UUID();//生成新的采购订单流水号
+    			String newContractSerialNum = ApplicationUtils.random32UUID();//生成新的采购合同流水号
+    			OrderInfo newOrderInfo = new OrderInfo();//生成新的采购订单
+    			beanCopier.copy(orderInfo, newOrderInfo, null);
+    			newOrderInfo.setSerialNum(newSerialNum);//设置新的流水号
+    			String temp = getNumCode("PO");
+    			newOrderInfo.setOrderNum(temp);
+    			numCode = numCode + temp + " ";
+    			newOrderInfo.setContractSerial(newContractSerialNum);
+    			newOrderInfo.setSupplyComId(supplyComId);//设置新的供应商
+    			newOrderInfo.setOrderSerial(orderInfo.getOrderNum());//设置关联销售订单号
+    			newOrderInfo.setBuyComId(null);//表示买方为平台，即采购订单
+    			newOrderInfo.setOrderType(StaticConst.getInfo("dailiBuy"));//设置为代理采购
+    			newOrderInfo.setTradeType(StaticConst.getInfo("neimao"));//设置为内贸
+    			newOrderInfo.setSeller(StaticConst.getInfo("comName"));
+    			
+    			Company company =  companyService.selectOne(orderInfo.getBuyComId());
+    			if(company!=null){
+    				newOrderInfo.setEntrustParty(company.getComName());
+    			}
+    			
+    			newOrderInfo.setCreator(currenLoginName);
+    			newOrderInfo.setUpdater(currenLoginName);
+    			newOrderInfo.setMaker(currenLoginName);
+    			newOrderInfo.setCreateTime(new Date());
+    			newOrderInfo.setUpdateTime(new Date());
+    			newOrderInfo.setMakeDate(new Date());
+    			newOrderInfo.setStatus("0");
+    			orderService.insert(newOrderInfo);
+    			List<OrderMateriel> newMaterielList = new ArrayList<OrderMateriel>();//生成新的采购订单物料
+    			for(OrderMateriel o:orderMateriel){
+        			if(o.getSupplyMateriel()!=null){
+        				if(supplyComId.equals(o.getSupplyMateriel().getSupplyComId())){
+        					o.setSerialNum(ApplicationUtils.random32UUID());
+        					o.setSupplyMaterielSerial(null);//采购订单物料为标准物料
+        					o.setOrderSerial(newSerialNum);
+        		    		o.setCreator(currenLoginName);
+        	    			o.setUpdater(currenLoginName);
+        	    			o.setCreateTime(new Date());
+        	    			o.setUpdateTime(new Date());
+        					newMaterielList.add(o);
+        				}
+        			}
+        		}
+    			orderMaterielService.betchInsertOrderMateriel(newMaterielList);//插入新的订单物料
+    			
+    			
+    			//获取合同信息
+    	    	ContractVO contract = null;
+    			if(StringUtils.isNotEmpty(orderInfo.getContractSerial())){
+    	    		contract=contractService.selectConbtractById(orderInfo.getContractSerial());
+    	    	}
+    			if(contract!=null){
+    				ContractVO newcontract = new ContractVO();
+    				beanContractVOCopier.copy(contract, newcontract, null);
+    				newcontract.setId(newContractSerialNum);
+    				newcontract.setComId(supplyComId);
+    				newcontract.setContractNum(null);
+    				newcontract.setContractType(StaticConst.getInfo("buyContract"));//设置合同类型为采购合同
+    				newcontract.setCreator(currenLoginName);
+    				newcontract.setUpdater(currenLoginName);
+    				newcontract.setCreateTime(new Date());
+    				newcontract.setUpdateTime(new Date());
+    				
+    				contractService.insertContract(newcontract);
+    			}
+
+    	    	if(contract!=null&&StringUtils.isNotEmpty(contract.getId())){
+    	    		//获取合同条款信息
+    	    		ClauseAfterSales clauseAfterSales = clauseAfterSalesService.selectByContractId(contract.getId());
+    	    		if(clauseAfterSales!=null){
+    	    			clauseAfterSales.setSerialNum(ApplicationUtils.random32UUID());
+    	    			clauseAfterSales.setContractSerial(newContractSerialNum);
+    	        		clauseAfterSales.setCreator(currenLoginName);
+    	        		clauseAfterSales.setUpdater(currenLoginName);
+    	        		clauseAfterSales.setCreateTime(new Date());
+    	        		clauseAfterSales.setUpdateTime(new Date());
+    	        		clauseAfterSalesService.insert(clauseAfterSales);
+    	    		}
+    	    			
+    	    		ClauseAdvance clauseAdvance = clauseAdvanceService.selectByContractId(contract.getId());
+    	    		if(clauseAdvance!=null){
+    	    			clauseAdvance.setSerialNum(ApplicationUtils.random32UUID());
+    	    			clauseAdvance.setContractSerial(newContractSerialNum);
+    	        		clauseAdvance.setCreator(currenLoginName);
+    	        		clauseAdvance.setUpdater(currenLoginName);
+    	        		clauseAdvance.setCreateTime(new Date());
+    	        		clauseAdvance.setUpdateTime(new Date());
+    	        		clauseAdvanceService.insert(clauseAdvance);
+    	    		}
+    	    		ClauseCheckAccept clauseCheckAccept = clauseCheckAcceptService.selectByContractId(contract.getId());
+    	    		if(clauseCheckAccept!=null){
+    	    			clauseCheckAccept.setSerialNum(ApplicationUtils.random32UUID());
+    	    			clauseCheckAccept.setContractSerial(newContractSerialNum);
+    	        		clauseCheckAccept.setCreator(currenLoginName);
+    	        		clauseCheckAccept.setUpdater(currenLoginName);
+    	        		clauseCheckAccept.setCreateTime(new Date());
+    	        		clauseCheckAccept.setUpdateTime(new Date());
+    	        		clauseCheckAcceptService.insert(clauseCheckAccept);
+    	    		}
+    	    		ClauseDelivery clauseDelivery = clauseDeliveryService.selectByContractId(contract.getId());
+    	    		if(clauseDelivery!=null){
+    	    			clauseDelivery.setSerialNum(ApplicationUtils.random32UUID());
+    	    			clauseDelivery.setContractSerial(newContractSerialNum);
+    	        		clauseDelivery.setCreator(currenLoginName);
+    	        		clauseDelivery.setUpdater(currenLoginName);
+    	        		clauseDelivery.setCreateTime(new Date());
+    	        		clauseDelivery.setUpdateTime(new Date());
+
+    	        		clauseDeliveryService.insert(clauseDelivery);
+    	    		}
+    	    		
+    	    		ClauseSettlement clauseSettlement = clauseSettlementService.selectByContractId(contract.getId());
+    	    		if(clauseSettlement!=null){
+    	    			clauseSettlement.setSerialNum(ApplicationUtils.random32UUID());
+    	    			clauseSettlement.setContractSerial(newContractSerialNum);
+    	        		clauseSettlement.setCreator(currenLoginName);
+    	        		clauseSettlement.setUpdater(currenLoginName);
+    	        		clauseSettlement.setCreateTime(new Date());
+    	        		clauseSettlement.setUpdateTime(new Date());
+
+    	        		clauseSettlementService.insert(clauseSettlement);
+    	        		
+    	        		List<ClauseSettlementDetail> clauseSettlementDetail = clauseSettlement.getClauseSettlementDetails();
+        				if(!CollectionUtils.isEmpty(clauseSettlementDetail)){
+        			    	for(ClauseSettlementDetail f:clauseSettlementDetail){
+        			    		f.setSerialNum(ApplicationUtils.random32UUID());
+        			    		f.setClauseSettlementSerial(clauseSettlement.getSerialNum());
+        			    		f.setCreator(currenLoginName);
+        		    			f.setUpdater(currenLoginName);
+        		    			f.setCreateTime(new Date());
+        		    			f.setUpdateTime(new Date());
+        			    	}
+        			    	clauseSettlementDetailService.betchInsertClauseSettlementDetails(clauseSettlementDetail);
+        			    	//数据插入******↑↑↑↑↑↑********
+        		        }
+    	    		}
+    	    	}
+    		}
+    		
+    		
+    		OrderInfo updateOrderInfo = new OrderInfo();//修改销售订单的关联采购订单号
+    		updateOrderInfo.setSerialNum(serialNum);
+    		updateOrderInfo.setOrderSerial(numCode);
+    		orderService.updateOrderRelation(updateOrderInfo);
+    	}
+    	
+    	orderInfo = orderService.selectById(orderInfo.getSerialNum());
+		return orderInfo;
+	}
 }

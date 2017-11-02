@@ -161,7 +161,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label bold">关联销售申请单号：</label>
                                  <div class="">
-                                 <input type="text" name="saleApplySerial" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.saleApplySerial"  >
+                                 <input type="text" readonly name="saleApplySerial" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.saleApplySerial"  >
                                      <div class="form-control-focus"> </div>
                                      <span class="help-block" ng-hide="saleOrderInput">请输入关联销售申请单号</span>
                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.saleApplySerial}} </p>
@@ -173,7 +173,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label bold">关联采购单号：</label>
                                  <div class="">
-                                 <input type="text" name="orderSerial" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.orderSerial"  >
+                                 <input type="text" readonly name="orderSerial" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.orderSerial"  >
                                      <div class="form-control-focus"> </div>
                                      <span class="help-block" ng-hide="saleOrderInput">请输入关联采购单号</span>
                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.orderSerial}} </p>
@@ -493,9 +493,9 @@ margin-right: 20px;
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>服务模式：</label>
                                  <div class="">
                                  		<select class="form-control" id="serviceModel"  ng-hide="saleOrderInput" name="serviceModel"  ng-model="saleOrder.serviceModel" >
-                                           <option value="无">无</option>
-                                          	<option value="仓储服务" >仓储服务</option>
-                                            <option value="仓储+垫资服务" >仓储+垫资服务</option>
+                                           <option value=""></option>
+                                           <option value="普通代理">普通代理</option>
+                                          	<option value="垫资服务" >垫资服务</option>
                                        </select>
                                        <div class="form-control-focus"> </div>
                              			<span class="help-block" ng-hide="saleOrderInput">请选择服务模式</span>
@@ -512,6 +512,7 @@ margin-right: 20px;
                                  <div class="">
                                  		<select class="form-control" id="settlementClause"  ng-hide="saleOrderInput" name="settlementClause"  ng-model="saleOrder.settlementClause" >
                                            <option value=""></option>
+                                           <option value="平进平出">平进平出</option>
                                            <option value="贸易销售" >贸易销售</option>
                                           	<option value="进销差" >进销差</option>
                                             <option value="服务费" >服务费</option>

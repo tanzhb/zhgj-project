@@ -57,6 +57,12 @@ public class OrderServiceImpl implements OrderService {
 	public int updateStatus(OrderInfo model) {
 		return OrderInfoMapper.updateByPrimaryKeySelective(model);
 	}
+	
+	@Override
+	@OperationLog(operateType = "update" ,operationDesc = "分解采购" ,objectSerial= "{serialNum}")
+	public int updateOrderRelation(OrderInfo model) {
+		return OrderInfoMapper.updateByPrimaryKeySelective(model);
+	}
 
 	@Override
 	@OperationLog(operateType = "update" ,operationDesc = "确认订单" ,objectSerial= "{serialNum}")

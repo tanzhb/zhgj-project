@@ -52,4 +52,7 @@ public interface OrderService extends GenericService<OrderInfo, String> {
 
 	int acceptSubmit(OrderInfo orderInfo);
 
+
+	int updateOrderRelation(OrderInfo updateOrderInfo);
+
 }

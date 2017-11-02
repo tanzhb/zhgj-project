@@ -93,10 +93,12 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
             		$scope.customerOrder.seller ="中航能科（上海）能源科技有限公司";
             		
             		$scope.contract.contractType="销售合同";
-            		$scope.customerOrder.orderType="贸易销售";
+            		$scope.customerOrder.orderType="委托销售";
             		$scope.customerOrder.tradeType="内贸";
             		$scope.customerOrder.currency="人民币";
-            		$scope.customerOrder.orderDate = timeStamp2String2(new Date())
+            		$scope.customerOrder.serviceModel = "普通代理";
+            		$scope.customerOrder.settlementClause="平进平出";
+            		$scope.customerOrder.orderDate = timeStamp2String2(new Date());
             		$scope.customerOrder.rate = 17;
                 	//合同内容
                 	$scope.customerOrder.contractContent = '111100';
@@ -415,7 +417,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 								if(row.status==44){
 									return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')">未提交</span>';
 								}else if(row.status==55){
-									return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">待接受</span>';
+									return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">待接收</span>';
 								}else if(row.processBase!=""&&row.processBase!=null){
                         			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
 										return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">审核中</span>';
@@ -496,6 +498,12 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
 						       }
+						}, {
+							'targets' : 6,
+							'render' : function(data,
+									type, row, meta) {
+								return "委托采购"
+							}
 						}, {
 							'targets' : 7,
 							'render' : function(data,
