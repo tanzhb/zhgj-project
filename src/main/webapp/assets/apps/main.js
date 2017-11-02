@@ -2781,6 +2781,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 			        'assets/apps/scripts/FileUploader.js',
 			        'assets/apps/service/UserInfoService.js',
 					'assets/apps/controllers/UserInfoController.js',
+					'assets/apps/service/CompanyInfoService.js',
+					 'assets/apps/service/AccountSecurityService.js',
 					'assets/apps/controllers/app.js',
 					'assets/apps/controllers/uploadPhoto.js'
 					]
@@ -3578,11 +3580,53 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					}else if('dashboard' == toState.name){
 						getTodoTaskLength('dashboard', 'All');
 						getEndTaskLength('dashboard', 'All');
+						showNoticeCount();
+						showBusinessMessageSizeCount();
+						showSystemMessageSizeCount();
 					}
+				
 			});
 			
-			
-			
+	function showNoticeCount(){
+		var deferred = $q.defer();
+		$.get(ctx + "/rest/message/businessMessageSize").success(function (data) {
+	        // 如果连接成功，延时返回给调用者  
+	        deferred.resolve(data);
+	    }).error(function () {  
+	        deferred.reject('连接服务器出错！');  
+	    })
+	    return deferred.promise.then(function(data){
+	    	debugger;
+	    	$rootScope.businessMessageSize = data; 
+	    });
+		
+	}
+	function showBusinessMessageSizeCount(){
+		var deferred = $q.defer();
+		$.get(ctx + "/rest/notice/newNoticeCount").success(function (data) {
+	        // 如果连接成功，延时返回给调用者  
+	        deferred.resolve(data);
+	    }).error(function () {  
+	        deferred.reject('连接服务器出错！');  
+	    })
+	    return deferred.promise.then(function(data){
+	    	debugger;
+	    	$rootScope.noticeCount = data; 
+	    });
+	}
+	function showSystemMessageSizeCount(){
+		var deferred = $q.defer();
+		$.get(ctx + "/rest/message/systemMessageSize").success(function (data) {
+	        // 如果连接成功，延时返回给调用者  
+	        deferred.resolve(data);
+	    }).error(function () {  
+	        deferred.reject('连接服务器出错！');  
+	    })
+	    return deferred.promise.then(function(data){
+	    	$rootScope.systemMessageSize = data; 
+	    });
+		
+	}
 			function getTodoTaskLength(route, workflowType){
 				var deferred = $q.defer();
 				$.get(ctx + "/rest/processAction/getTodoTaskSize/" + workflowType).success(function (data) {

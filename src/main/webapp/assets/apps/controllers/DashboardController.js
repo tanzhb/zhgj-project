@@ -98,7 +98,45 @@ dashModule.controller('DashboardController', function($rootScope, $scope, $state
 		}
 		$scope.ybItems = list;
      });
-	
+	 //公告
+	$http.get(ctx + "/rest/processAction/endTask/" + 'All').success( function(result) {
+		var list = [];
+		if(result != null && result.data != null && result.data.length > 0){
+			for (var i=0;i<result.data.length;i++){
+				var map = {};
+				var title = result.data[i].title;
+				var endTime = result.data[i].endTime;
+				var workflowType = result.data[i].businessType;
+				var workflowName = "";
+				if(workflowType == 'vacation'){
+					workflowName = "请假流程";
+				}else if(workflowType == 'accountPayable'){
+					workflowName = "应付款流程";
+					workflowType="paymentRecordC";
+				}else if(workflowType == 'buyOrder'){
+					workflowName = "采购订单流程";
+				}else if(workflowType == 'saleOrder'){
+					workflowName = "销售订单流程";
+				}else if(workflowType == 'takeDelivery'){
+					workflowName = "收货流程";
+				}else if(workflowType == 'myNotice'){
+					workflowName = "公告流程";
+				}else{
+					workflowName = "未命名";
+				}
+				map['template'] = "<li><div class='col-md-9'>" +
+						"<a ui-sref='"+workflowType+"({tabHref:2})'>" +//tabHref:1将tab指向“已办列表”
+						"<span>"+workflowName+"："+title+"</span></a></div>" +
+						"<div class='col-md-3'><div class='date'>" + timeStamp2String(endTime) + "</div></div></li>";
+				list.push(map);
+			}
+		}else{
+			var map = {};
+			map['template'] = "<div>无已办事项！</div>"
+				list.push(map);
+		}
+		$scope.ybItems = list;
+     });
 
 });
 

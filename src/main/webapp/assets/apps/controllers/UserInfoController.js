@@ -1,5 +1,5 @@
-angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$scope','$http', 'settings', '$q','UserInfoService','$state','$compile','$stateParams','$filter','FileUploader', 
-                                                                function($rootScope,$scope,$http,settings, $q,UserInfoService,$state,$compile,$stateParams,$filter,FileUploader) {
+angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$scope','$http', 'settings', '$q','UserInfoService','CompanyInfoService','AccountSecurityService','$state','$compile','$stateParams','$filter','FileUploader', 
+                                                                function($rootScope,$scope,$http,settings, $q,UserInfoService,CompanyInfoService,AccountSecurityService,$state,$compile,$stateParams,$filter,FileUploader) {
 	$scope.$on('$viewContentLoaded', function() {   
 		// initialize core components
 		handle = new pageHandle();
@@ -16,6 +16,31 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
     	$scope.getUserInfo();
     	//获取公告与消息数
     	$scope.getMessageAndNotice();
+    	//操作日志加载部分end
+    	 handle.datePickersInit("auto bottom");
+         $scope.resetSearchForm();
+         loadMainTable();// 加载采购商对账单列表
+       //操作日志加载部分end
+         //企业信息start
+         $scope.companyAdd=false;
+ 		$scope.companyView=true;
+ 		//查询登陆者的信息
+     	$scope.getCompanyInfo();
+     	//企业信息end
+     	//账户安全
+     	var self = $rootScope;
+		self.changeEmail = {
+			email: '',
+			password: ''
+		};
+		
+		self.changePhone = {
+				phone: '',
+				password: ''
+		};
+		//查询登陆者的信息
+    	/*$scope.getUserInfo();	*/
+    	//账户安全
 	});
 	
 	//根据参数查询对象
@@ -49,15 +74,17 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
 	
 	
 	//修改
-	$scope.edit = function() {
+	$scope.editUserInfo = function() {
 		$scope.input=true;
 		$scope.span=false;
+		$scope.userInfoEdit=true;
+		$scope.userInfoInfoSave=true;
 	};
 	
 	//添加合同
 	$scope.updateUserInfo = function() {
 		
-		if($('#form_sample_1').valid()){//表单验证通过则执行添加功能
+		if($('#form_sample_userInfo').valid()){//表单验证通过则执行添加功能
 		var fd = new FormData();
 		if($("input[type='file']").length){
         var file = document.querySelector('input[type="file"]').files[0];
@@ -81,6 +108,8 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
             	  toastr.success("修改成功！");
    		    	  $scope.input=false;
    				  $scope.span=true;
+   				 $scope.userInfoEdit=false;
+   				 $scope.userInfoInfoSave=false;
    				  getUserInfoA();
    				
    				
@@ -176,7 +205,7 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
 	
 	// 页面加载完成后调用，验证输入框
 	$scope.$watch('$viewContentLoaded', function() {  
-		var e = $("#form_sample_1"),
+		var e = $("#form_sample_userInfo"),
         r = $(".alert-danger", e),
         i = $(".alert-success", e);
         e.validate({
@@ -253,7 +282,459 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
    		     }
    	);
 	}
+	//操作日志
+	 var table;
+	    var loadMainTable = function() {
+	            a = 0;
+	            App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
+	            table = $("#sample_2")
+				.DataTable({
+	                language: {
+	                    aria: {
+	                        sortAscending: ": activate to sort column ascending",
+	                        sortDescending: ": activate to sort column descending"
+	                    },
+	                    emptyTable: "空表",
+	                    info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+	                    infoEmpty: "没有数据",
+	                    // infoFiltered: "(filtered1 from _MAX_ total entries)",
+	                    lengthMenu: "每页显示 _MENU_ 条数据",
+	                    search: "查询:",
+	                    zeroRecords: "抱歉， 没有找到！",
+	                    paginate: {
+	                        "sFirst": "首页",
+	                        "sPrevious": "前一页",
+	                        "sNext": "后一页",
+	                        "sLast": "尾页"
+	                     }
+	                },
+	/*
+	 * fixedHeader: {//固定表头、表底 header: !0, footer: !0, headerOffset: a },
+	 */
+	                searching: true,// 是否过滤检索
+	                order: [[2, "desc"]],// 默认排序列及排序方式
+	                ordering:  true,//是否排序
+	                lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
+	                pageLength: 10,// 每页显示数量
+	                processing: true,// loading等待框
+	// serverSide: true,
+	                ajax: 'rest/operateLog/findOperateLogList?type=user&startTime='+$scope.startTime+"&endTime="+$scope.endTime,// 加载数据中
+	                ajax:{
+	             	   "url": "rest/operateLog/findOperateLogList",
+	             	   "type": "post",
+	             	   "contentType": "application/json",
+	             	   "data": function ( d ) {
+	             		   d.params = JSON.stringify($scope.params);
+	             	    }
+	                },
+	                "aoColumns": [
+	                              { mData: 'operationDesc' },
+	                              { mData: 'requestIp' },
+	                              {
+										mData : 'operationTime',
+	        							mRender : function(
+	        									data) {
+	        								if (data != null) {
+	        									return timeStamp2String(data);
+	        								} else
+	        									return '';
+	        							}
+								}
+	                        ]
 
+	            }).on('operateLog.dt',
+	            function() {
+	                console.log('排序');
+	            })
+
+	            
+
+	        };
+		    function addDate(date, days) {
+				var d = new Date(date);
+				d.setDate(d.getDate() + days);
+				/*var month = d.getMonth() + 1;
+				var day = d.getDate();
+				if (month < 10) {
+					month = "0" + month;
+				}
+				if (day < 10) {
+					day = "0" + day;
+				}
+				var val = d.getFullYear() + "" + month + ""
+						+ day;*/
+				return d;
+			}
+
+	        /**
+	         * 搜索
+	         */
+	        $scope.search=function () {
+	        	$scope.params = {};
+	        	$scope.params.startTime = $scope.startTime;
+	        	$scope.params.endTime = $scope.endTime;
+	        	table.settings()[0].ajax.data.params =  JSON.stringify($scope.params);
+	        	table.ajax.reload();
+	        };  
+	        
+	        /**
+	         * 重置搜索条件
+	         */
+	        $scope.resetSearchForm = function (){
+	        	$scope.startTime  = timeStamp2ShortString(addDate(new Date(),-7));
+	        	$scope.endTime = timeStamp2ShortString(new Date());
+	        	$scope.params = {};
+	        	$scope.params.startTime = $scope.startTime;
+	        	$scope.params.endTime = $scope.endTime;
+	        };
+			//操作日志end
+//企业信息start
+	      //根据参数查询对象
+	    	$scope.getCompanyInfo  = function() {
+	    		CompanyInfoService.getCompanyInfo().then(
+	          		     function(data){
+	          		    	 debugger
+	          		    	 if(data==""){
+	          		    		$scope.company={};
+	          		    		$scope.company.comTypeName="";
+	          		    		return;
+	          		    	 }
+	          		    	/*$scope.company=data;*/
+	          		    	if(data.comType=='1'){
+	          		    		$scope.company.comTypeName='采购商';
+	          		    	}else if(data.comType=='2'){
+	          		    		$scope.company.comTypeName='供应商';
+	          		    	}else if(data.comType=='3'){
+	          		    		$scope.company.comTypeName='承运人';
+	          		    	}else if(data.comType=='4'){
+	          		    		$scope.company.comTypeName='外协仓';
+	          		    	}else if(data.comType=='5'){
+	          		    		$scope.company.comTypeName='境外供应商';
+	          		    	}else if(data.comType=='6'){
+	          		    		$scope.company.comTypeName='装卸公司';
+	          		    	}else if(data.comType=='7'){
+	          		    		$scope.company.comTypeName='银行';
+	          		    	}else{
+	          		    		$scope.company.comTypeName='保险公司';
+	          		    	}
+	          		     },
+	          		     function(error){
+	          		         console.log("error")
+	          		     }
+	          		 );
+	        }; 
+	    	
+	    	
+	    	//修改
+	    	$scope.editComPany= function() {
+	    		$scope.companyAdd=true;
+	    		$scope.companyView=false;
+	    		$scope.companyInfoEdit=true;
+	    		$scope.companyInfoSave=true;
+	    	};
+	    	
+	    	
+	    	//修改企业信息
+	    	$scope.updateCompanyInfo=function(){
+	    		if($('#form_sample_companyInfo').valid()){
+	    		var promise = CompanyInfoService.updateCompanyInfo($scope);
+	    		promise.then(function(data) {
+	    			$scope.company=data;
+	    				/*$scope.getCompanyInfo();*/
+	    			if(data.comType=='1'){
+      		    		$scope.company.comTypeName='采购商';
+      		    	}else if(data.comType=='2'){
+      		    		$scope.company.comTypeName='供应商';
+      		    	}else if(data.comType=='3'){
+      		    		$scope.company.comTypeName='承运人';
+      		    	}else if(data.comType=='4'){
+      		    		$scope.company.comTypeName='外协仓';
+      		    	}else if(data.comType=='5'){
+      		    		$scope.company.comTypeName='境外供应商';
+      		    	}else if(data.comType=='6'){
+      		    		$scope.company.comTypeName='装卸公司';
+      		    	}else if(data.comType=='7'){
+      		    		$scope.company.comTypeName='银行';
+      		    	}else{
+      		    		$scope.company.comTypeName='保险公司';
+      		    	}
+	    				toastr.success("修改成功");
+	    				$scope.companyAdd=false;
+	    				$scope.companyView=true;
+	    				$scope.companyInfoEdit=false;
+	    	    		$scope.companyInfoSave=false;
+	    		}, function() {
+	    			// 调用承诺接口reject();
+	    			$(".modal-backdrop").remove();
+	    			handle.unblockUI();
+	    			toastr.error("保存失败！请联系管理员");
+	    		});	
+	    		}
+	    	}
+	    		
+	    	// 页面加载完成后调用，验证输入框
+	    	$scope.$watch('$viewContentLoaded', function() {  
+	    		var e = $("#form_sample_companyInfo"),
+	            r = $(".alert-danger", e),
+	            i = $(".alert-success", e);
+	            e.validate({
+	                errorElement: "span",
+	                errorClass: "help-block help-block-error",
+	                focusInvalid: !1,
+	                ignore: "",
+	                messages: {
+	                	comNum:{required:"企业编号不能为空！",},
+	                	comName:{required:"企业名称不能为空！",},
+	                	comType:{required:"企业类型不能为空！",},
+	                	comNature:{required:"企业性质不能为空！",},
+	                	
+	                	legalPerson:{required:"企业法人不能为空！",},
+	                	address:{required:"注册地址不能为空！",},
+	                	taxpayeNumber:{required:"纳税人识别号不能为空！",},
+	                	tel:{isPhone:"请输入正确的联系电话！",},
+	                    payment: {
+	                        maxlength: jQuery.validator.format("Max {0} items allowed for selection"),
+	                        minlength: jQuery.validator.format("At least {0} items must be selected")
+	                    },
+	                    "checkboxes1[]": {
+	                        required: "Please check some options",
+	                        minlength: jQuery.validator.format("At least {0} items must be selected")
+	                    },
+	                    "checkboxes2[]": {
+	                        required: "Please check some options",
+	                        minlength: jQuery.validator.format("At least {0} items must be selected")
+	                    }
+	                },
+	                rules: {
+	                	comNum:{required:true,},
+	                	comName:{required:true,},
+	                	comType:{required:true,},
+	                	comNature:{required:true,},
+	                	
+	                	legalPerson:{required:true,},
+	                	address:{required:true,},
+	                	taxpayeNumber:{required:true,},
+	                	tel:{isPhone:true,},
+	                },
+	                invalidHandler: function(e, t) {
+	                    i.hide(),
+	                    r.show(),
+	                    App.scrollTo(r, -200)
+	                },
+	                errorPlacement: function(e, r) {
+	                    r.is(":checkbox") ? e.insertAfter(r.closest(".md-checkbox-list, .md-checkbox-inline, .checkbox-list, .checkbox-inline")) : r.is(":radio") ? e.insertAfter(r.closest(".md-radio-list, .md-radio-inline, .radio-list,.radio-inline")) : e.insertAfter(r)
+	                },
+	                highlight: function(e) {
+	                    $(e).closest(".form-group").addClass("has-error")
+	                },
+	                unhighlight: function(e) {
+	                    $(e).closest(".form-group").removeClass("has-error")
+	                },
+	                success: function(e) {
+	                    e.closest(".form-group").removeClass("has-error")
+	                },
+	                submitHandler: function(e) {
+	                    i.show(),
+	                    r.hide()
+	                }
+	            })   
+	    	});
+	    	//企业信息end
+	    	
+	    	//账户安全start
+	    	// 修改邮箱开始***************************************							
+	    	$scope.editEmail= function() {		
+	    		$('#basicMaterielInfo').modal('show');// 弹出修改模态框	
+	    		$rootScope.changeEmail.email=null;
+	    		$rootScope.changeEmail.password=null;
+	    	};
+	    	
+	    	// 修改手机号码开始***************************************							
+	    	$scope.editPhone= function() {		
+	    		$('#basicMaterielInfoI').modal('show');// 弹出修改模态框	
+	    		$rootScope.changePhone.phone=null;
+	    		$rootScope.changePhone.password=null;
+	    	};
+	    	
+	    	$rootScope.saveEmail = function() {
+	    		if($('#form_sample_email').valid()){
+	    		AccountSecurityService
+	    			.updateEmail($rootScope.changeEmail)
+	    			.then(
+	    					function(data) {
+	    						$('#basicMaterielInfo').modal('hide');// 保存成功后关闭模态框
+	    						toastr.success("修改成功");
+	    						$state.go('accountSecurity',{},{reload:true});
+	    						$(".modal-backdrop").remove();
+	    					},
+	    					function(errResponse) {
+	    						toastr.warning("当前用户密码输入有误！");
+	    						console
+	    								.error('Error while creating User');
+	    					}
+
+	    			);
+	    		}
+	    	};
+	    	
+	    	
+	    	$rootScope.savePhone = function() {
+	    		if($('#form_sample_phone').valid()){
+	    		AccountSecurityService
+	    			.updatePhone($rootScope.changePhone)
+	    			.then(
+	    					function(data) {
+	    						$('#basicMaterielInfoI').modal('hide');// 保存成功后关闭模态框
+	    						toastr.success("修改成功");
+	    						$state.go('accountSecurity',{},{reload:true});
+	    						$(".modal-backdrop").remove();
+	    					},
+	    					function(errResponse) {
+	    						toastr.warning("当前用户密码输入有误！");
+	    						console
+	    								.error('Error while creating User');
+	    					}
+
+	    			);
+	    		}
+	    	};
+	    	
+	    	//根据参数查询对象
+	    	$scope.getUserInfo  = function() {
+	    		AccountSecurityService.getUserInfo().then(
+	          		     function(data){
+	          		    	$scope.userInfo=data;
+	          		     },
+	          		     function(error){
+	          		         console.log("error")
+	          		     }
+	          		 );
+	        }; 
+	    	
+	    	
+	    
+	    	
+	    	// 页面加载完成后调用，验证输入框
+	    	$scope.$watch('$viewContentLoaded', function() {  
+	    		var e = $("#form_sample_email"),
+	            r = $(".alert-danger", e),
+	            i = $(".alert-success", e);
+	            e.validate({
+	                errorElement: "span",
+	                errorClass: "help-block help-block-error",
+	                focusInvalid: !1,
+	                ignore: "",
+	                messages: {
+	                	email:{email:"请填写正确的邮箱！",required:"邮箱不能为空！",},
+	                	password:{required:"密码不能为空！",},
+	                    payment: {
+	                        maxlength: jQuery.validator.format("Max {0} items allowed for selection"),
+	                        minlength: jQuery.validator.format("At least {0} items must be selected")
+	                    },
+	                    "checkboxes1[]": {
+	                        required: "Please check some options",
+	                        minlength: jQuery.validator.format("At least {0} items must be selected")
+	                    },
+	                    "checkboxes2[]": {
+	                        required: "Please check some options",
+	                        minlength: jQuery.validator.format("At least {0} items must be selected")
+	                    }
+	                },
+	                rules: {
+	                	email:{
+	                		required:true,
+	                		email:true,
+	                	},
+	                	password:{required:true,},
+	                },
+	                invalidHandler: function(e, t) {
+	                    i.hide(),
+	                    r.show(),
+	                    App.scrollTo(r, -200)
+	                },
+	                errorPlacement: function(e, r) {
+	                    r.is(":checkbox") ? e.insertAfter(r.closest(".md-checkbox-list, .md-checkbox-inline, .checkbox-list, .checkbox-inline")) : r.is(":radio") ? e.insertAfter(r.closest(".md-radio-list, .md-radio-inline, .radio-list,.radio-inline")) : e.insertAfter(r)
+	                },
+	                highlight: function(e) {
+	                    $(e).closest(".form-group").addClass("has-error")
+	                },
+	                unhighlight: function(e) {
+	                    $(e).closest(".form-group").removeClass("has-error")
+	                },
+	                success: function(e) {
+	                    e.closest(".form-group").removeClass("has-error")
+	                },
+	                submitHandler: function(e) {
+	                    i.show(),
+	                    r.hide()
+	                }
+	            })   
+	    	});
+	    	
+	    	// 手机号码验证
+	    	     $.validator.addMethod("isMobile", function(value, element) {
+	    	          var length = value.length;
+	    	          var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
+	    	        return this.optional(element) || (length == 11 && mobile.test(value));
+	    	     }, "请正确填写您的手机号码");
+	    	
+	    	// 页面加载完成后调用，验证输入框
+	    	$scope.$watch('$viewContentLoaded', function() {  
+	    		var e = $("#form_sample_phone"),
+	            r = $(".alert-danger", e),
+	            i = $(".alert-success", e);
+	            e.validate({
+	                errorElement: "span",
+	                errorClass: "help-block help-block-error",
+	                focusInvalid: !1,
+	                ignore: "",
+	                messages: {
+	                	phone:{isMobile:"请正确填写您的手机号码！",required:"手机号不能为空！",},
+	                	passwordPhone:{required:"密码不能为空！",},
+	                    payment: {
+	                        maxlength: jQuery.validator.format("Max {0} items allowed for selection"),
+	                        minlength: jQuery.validator.format("At least {0} items must be selected")
+	                    },
+	                    "checkboxes1[]": {
+	                        required: "Please check some options",
+	                        minlength: jQuery.validator.format("At least {0} items must be selected")
+	                    },
+	                    "checkboxes2[]": {
+	                        required: "Please check some options",
+	                        minlength: jQuery.validator.format("At least {0} items must be selected")
+	                    }
+	                },
+	                rules: {
+	                	phone:{
+	                		required:true,
+	                		isMobile:true,
+	                	},
+	                	passwordPhone:{required:true,},
+	                },
+	                invalidHandler: function(e, t) {
+	                    i.hide(),
+	                    r.show(),
+	                    App.scrollTo(r, -200)
+	                },
+	                errorPlacement: function(e, r) {
+	                    r.is(":checkbox") ? e.insertAfter(r.closest(".md-checkbox-list, .md-checkbox-inline, .checkbox-list, .checkbox-inline")) : r.is(":radio") ? e.insertAfter(r.closest(".md-radio-list, .md-radio-inline, .radio-list,.radio-inline")) : e.insertAfter(r)
+	                },
+	                highlight: function(e) {
+	                    $(e).closest(".form-group").addClass("has-error")
+	                },
+	                unhighlight: function(e) {
+	                    $(e).closest(".form-group").removeClass("has-error")
+	                },
+	                success: function(e) {
+	                    e.closest(".form-group").removeClass("has-error")
+	                },
+	                submitHandler: function(e) {
+	                    i.show(),
+	                    r.hide()
+	                }
+	            })   
+	    	});
+	    	//账户安全end
 }]);
 
 

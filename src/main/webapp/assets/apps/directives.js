@@ -147,7 +147,7 @@ MetronicApp.directive('ybquantity1', function() {
 MetronicApp.directive('systemmessage', function() {  
     return {  
         restrict: 'E',  
-        template: '<span class="badge badge-danger" style="position: relative;top: -4px;"> {{systemMessageSize}} </span>',
+        template: '<span class="badge badge-danger"  title="系统消息" style="position: relative;top: -4px;"> {{systemMessageSize}} </span>',
         scope:true,
         replace: true  
     };  
@@ -156,7 +156,7 @@ MetronicApp.directive('systemmessage', function() {
 MetronicApp.directive('businessmessage', function() {  
     return {  
         restrict: 'E',  
-        template: '<span class="badge badge-danger" style="position: relative;top: -4px;"> {{businessMessageSize}} </span>',
+        template: '<span class="badge badge-danger"  title="业务消息" style="position: relative;top: -4px;"> {{businessMessageSize}} </span>',
         scope:true,
         replace: true  
     };  

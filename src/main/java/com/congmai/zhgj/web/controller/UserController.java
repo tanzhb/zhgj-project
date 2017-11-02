@@ -280,17 +280,17 @@ public class UserController {
 	
 	
 	@RequestMapping(value = "/updateCompanyInfo", method = RequestMethod.POST)
-	public ResponseEntity<Void> updateCompanyInfo(Company company) {
+	public ResponseEntity<Company> updateCompanyInfo(Company company) {
 		User user=null;
 	    user = UserUtil.getUserFromSession();
 	    user=userService.getUserInfo(user.getUserId());
 	    
 		if (company == null) {
-			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+			return new ResponseEntity<Company>(company,HttpStatus.CONFLICT);
 		}
 		company.setUpdater(String.valueOf(user.getUserId()));
 		userService.updateCompanyInfo(company);
-		return new ResponseEntity<Void>(HttpStatus.OK);
+		return new ResponseEntity<Company>(company,HttpStatus.OK);
 	}
 	
 	
