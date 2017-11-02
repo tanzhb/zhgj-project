@@ -363,15 +363,15 @@ public class MaterielController {
     	User user = UserUtil.getUserFromSession();
     	List<String> comIds = null;
     	Company company = null;
-    	if(!SALEORDER.equals(type)){//客户端新建订单选择物料没限制
-    		if(user!=null){
-    			comIds = userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId()));
-    		}
-        	if(comIds!=null){
-        		company = companyService.selectById(comIds.get(0));
-        	}
+    	/*if(!SALEORDER.equals(type)){//客户端新建订单选择物料没限制
+    		
+    	}*/
+    	if(user!=null){
+			comIds = userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId()));
+		}
+    	if(comIds!=null){
+    		company = companyService.selectById(comIds.get(0));
     	}
-    	
     	
     	if(parent==null||parent.isEmpty()){//查询全部物料
     		//and 条件1

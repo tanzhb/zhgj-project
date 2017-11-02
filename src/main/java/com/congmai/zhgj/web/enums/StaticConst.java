@@ -21,6 +21,8 @@ public enum StaticConst {
 	 * @Field @PRICE_TYPE_SALE : TODO(框架合同)
 	 */
 	CONTRACT_TYPE_FRAM("framContract","框架合同"),
+	
+	CONTRACT_TYPE_BUY("buyContract","采购合同"),
 	/**
 	 * @Field @PRICE_TYPE_BUY : TODO(采购价格)
 	 */
@@ -49,6 +51,8 @@ public enum StaticConst {
 	 * @Field @DAILISALE : TODO(平台名称)
 	 */
 	WAIMAO("waimao","外贸"),
+	
+	NEIMAO("neimao","内贸"),
 	
 	CAIGOU("caigou","采购"),
 	

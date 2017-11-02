@@ -5,7 +5,7 @@
     <ul class="nav nav-tabs">
 			<li class="active"><a data-target="#tab_15_1" data-toggle="tab">销售订单</a>
 			</li>
-			<li><a data-target="" data-toggle="tab">框架合同</a></li>
+			<!-- <li><a data-target="" data-toggle="tab">框架合同</a></li> -->
 	</ul>
     <div class="tab-content">
     	<!-- 普通订单---START -->

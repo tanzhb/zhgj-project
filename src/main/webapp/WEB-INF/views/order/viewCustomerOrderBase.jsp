@@ -121,7 +121,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">关联销售申请单号：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{customerOrder.saleApplySerial}} </p>
+                                     <p  > {{customerOrder.projectNum}} </p>
                                  </div>
                              </div>
                          </div>
@@ -853,7 +853,7 @@ margin-right: 20px;
                                       		<p class="form-control-static"> {{_orderMateriel.orderRateUnit}} </p>
 			                          </td>
 			                          <td>  
-                                      		<p class="form-control-static" > {{_orderMateriel.orderUnitPrice}} </p>
+                                      		<p class="form-control-static" > {{format2Thousands(_orderMateriel.orderUnitPrice)}} </p>
 			                          </td>
 			                          <td>  
                                       		<p class="form-control-static" > {{customerOrder.currency}} </p>

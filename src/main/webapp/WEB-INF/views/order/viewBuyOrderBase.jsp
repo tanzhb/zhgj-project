@@ -800,7 +800,7 @@ margin-right: 20px;
                                      		<p class="form-control-static"> {{_orderMateriel.orderRateUnit}} </p>
 		                          </td>
 		                          <td>  
-                                     		<p class="form-control-static" > {{_orderMateriel.orderUnitPrice}} </p>
+                                     		<p class="form-control-static" > {{format2Thousands(_orderMateriel.orderUnitPrice)}} </p>
 		                          </td>
 		                          <td>  
                                      		<p class="form-control-static" > {{buyOrder.currency}} </p>
