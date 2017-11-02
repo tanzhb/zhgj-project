@@ -30,8 +30,8 @@
 					<div class="portlet light ">
 						<ul class="nav nav-tabs">
 							<li class="dropdown pull-right tabdrop">
-								<button type="button" ng-click="goback()" class="btn default"><i class="fa fa-reply"></i>取消</button>
-					            <button type="button" ng-click="saveUserContract()"  class="btn blue"><i class="fa fa-check"></i> 保存</button>
+								<button type="button" ng-click="goback()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>取消</button>
+					            <button type="button" ng-click="saveUserContract()"   class="btn green  btn-sm btn-circle"   ><i class="fa fa-check"></i> 保存</button>
 							</li>
 							<li class="active bold"><a data-target="#tab_1_1"
 								data-toggle="tab">基本信息</a></li>

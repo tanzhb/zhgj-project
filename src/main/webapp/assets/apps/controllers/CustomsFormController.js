@@ -20,6 +20,9 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
         			getCustomsFormInfo($stateParams.serialNum);
         		}else{
         			 $scope.customsForm={};
+        			 $rootScope.setNumCode($stateParams.customsFormType=='clearance'?"QG":"BG",function(newCode){//
+	    		 			$scope.customsForm.customsFormNum= newCode;//清报关单号
+	    		 		});
         			 
         		}
         		initSuppliers();

@@ -57,7 +57,18 @@ MetronicApp.factory('settings', [ '$rootScope','$q', function($rootScope,$q) {
 			callback(data);
 		});
 	}
-
+	$rootScope.judgeIsExist = function(codeType,num,serialNum,callback){
+		var deferred = $q.defer();
+		$.get(ctx + "/rest/order/judgeIsObjExist/" , {codeType:codeType,num:num,serialNum:serialNum}).success(function (data) {
+		    // 如果连接成功，延时返回给调用者  
+		    deferred.resolve(data);
+		}).error(function () {  
+		    deferred.reject('连接服务器出错！');  
+		})
+		return deferred.promise.then(function(data){
+			callback(data);
+		});
+	}
 	return settings;
 } ]);
 

@@ -12,8 +12,13 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 		loadMainTable();
 		loadMainTable1();
 		loadMainTable2();
-		
-		
+	if($state.current.name="addUserContract"){
+		 $rootScope.setNumCode("CA",function(newCode){//
+ 			$scope.contractVO={};
+ 			$scope.contractVO.contractNum= newCode;//合同编号
+ 		});
+	}
+		//contractVO.contractNum
 		//根据参数查询对象
     if($stateParams.id){
     	$scope.getUserContractInfo($stateParams.id);	

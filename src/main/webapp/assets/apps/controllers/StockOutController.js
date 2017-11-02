@@ -18,6 +18,10 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 	    		if(!isNull($stateParams.serialNum)){
 	    			$(".s_tip").text("编辑出库信息");
 	    			stockOutInfo($stateParams.serialNum);
+	    		}else{
+	    			$rootScope.setNumCode("OU",function(newCode){
+    		 			$scope.record.inOutNum= newCode;//出库单号
+    		 		});
 	    		}
 	    	}else{
 	    			stockOutInfo($stateParams.serialNum);

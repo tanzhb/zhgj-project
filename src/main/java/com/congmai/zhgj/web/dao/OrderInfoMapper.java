@@ -33,7 +33,8 @@ public interface OrderInfoMapper {
 
     int updateByPrimaryKeySelective(OrderInfo record);
 
-	String getNumCode(Map m);
+	String getNumCode2(Map m);
+	String getNumCode1(Map m);
 
 	String checkNum(OrderInfo orderInfo);
 

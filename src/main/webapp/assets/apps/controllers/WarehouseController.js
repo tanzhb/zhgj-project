@@ -28,6 +28,10 @@ angular
 													 $scope.warehousepositions=[{}];
 													 _index = 0; 
 										    		getWarehouseInfo($stateParams.warehouseSerialNum);
+										    		 $rootScope.setNumCode("WH",function(newCode){//
+										    	 			$scope.warehouse={};
+										    	 			$scope.warehouse.warehouseNum= newCode;//仓库编号
+										    	 		});
 										    		 
 										 		}
 												 if($location.path()=="/warehouse"){

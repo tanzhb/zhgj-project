@@ -49,8 +49,16 @@ angular
 							
 							 if($stateParams.buyOrSale.indexOf("buy")>-1){
 								 initSuppliers();
+								 $rootScope.setNumCode("PI",function(newCode){//
+						    			//$scope.company={};
+					        			$scope.priceList.priceNum= newCode;//采购价格编号
+					        		});
 							 }else{
 								 initCustomers(); 
+								 $rootScope.setNumCode("SI",function(newCode){//
+						    			//$scope.company={};
+									 $scope.priceList.priceNum= newCode;//销售价格编号
+					        		});
 							 }
 						/*	 handle.pageRepeater();
 							 selectParentMateriel();//选择物料表格初始化

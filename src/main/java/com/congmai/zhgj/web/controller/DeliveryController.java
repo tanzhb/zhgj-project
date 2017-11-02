@@ -285,6 +285,7 @@ public class DeliveryController {
 						StockInOutCheck stockInOutCheck=new StockInOutCheck();
 						stockInOutCheck.setSerialNum(ApplicationUtils.random32UUID());
 						stockInOutCheck.setDeliverSerial(serialNum);
+						stockInOutCheck.setCheckNum(orderService.getNumCode("QU"));
 						stockInOutCheck.setTakeDeliverSerial("checkout");
 						stockInOutCheck.setChecker(currenLoginName);
 						stockInOutCheck.setCreator(currenLoginName);
@@ -305,7 +306,7 @@ public class DeliveryController {
 					
 					orderInfo.setDeliverStatus(orderInfo.WAIT_OUTRECORD);//待出库
 					StockInOutRecord stockInOutRecord=new StockInOutRecord();
-					stockInOutRecord.setInOutNum("CK"+ApplicationUtils.getFromNumber());
+					stockInOutRecord.setInOutNum(orderService.getNumCode("OU"));
 					stockInOutRecord.setSerialNum(ApplicationUtils.random32UUID());
 					stockInOutRecord.setDelFlg("0");
 					stockInOutRecord.setStatus("0");
@@ -360,7 +361,7 @@ public class DeliveryController {
     	List<DeliveryMaterielVO> orderMateriel = deliveryService.selectList(serialNum);
     	map.put("orderMateriel", orderMateriel);
     	map.put("currenLoginName", currenLoginName);
-    	map.put("deliverNum", "DE"+ApplicationUtils.getFromNumber());
+    	//  	map.put("deliverNum", "DE"+ApplicationUtils.getFromNumber());
     	return map;
 	}
 	

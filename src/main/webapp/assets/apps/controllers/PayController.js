@@ -20,7 +20,12 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		validateFileInit();//file表单初始化
 		
 
-	
+		if($state.current.name=="addPay"){
+			$rootScope.setNumCode("OM",function(newCode){
+				$scope.paymentRecord={};
+	 			$scope.paymentRecord.paymentNum= newCode;//付款单号
+	 		});
+			} 
 		//根据参数查询对象
 		 if($stateParams.serialNum){
 			 $scope.getPayInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);	//在审批页面加载评论

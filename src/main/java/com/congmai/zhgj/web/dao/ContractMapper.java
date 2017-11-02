@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.congmai.zhgj.core.generic.GenericDao;
+import com.congmai.zhgj.web.model.ContractExample;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.OrderInfo;
 
@@ -47,4 +48,8 @@ public interface ContractMapper extends GenericDao<ContractVO, String> {
     
     //签订销售合同 后更新订单
     public void updateOrderAfterSign(Map<String,Object> map);
+    
+    List<ContractVO> selectByExample(ContractExample example);
+    
+    String checkNum(ContractVO contractVO);
 }

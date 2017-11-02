@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -1485,7 +1486,7 @@ public class OrderController {
     		});
     	}
 	}
-    
+   
     private void updateDemandPlanMateriel(String orderSerial,String serialNum){
     	DemandPlanMateriel materiel = new DemandPlanMateriel();
     	materiel.setSerialNum(serialNum);
@@ -1504,7 +1505,19 @@ public class OrderController {
     	String numCode = orderService.getNumCode(codeType);
     	return numCode;
     }
-    
+    /**
+     * @Description 判断是否存在
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="judgeIsObjExist")
+    @ResponseBody
+    public Boolean isObjExist (String codeType,String num,String serialNum) {
+    	
+    	Boolean  falg = orderService.isExist(codeType,num,serialNum);
+    	
+    	return falg;
+    }
     
     private static BeanCopier beanCopier = BeanCopier.create(OrderInfo.class,OrderInfo.class,false);
     private static BeanCopier beanContractVOCopier = BeanCopier.create(ContractVO.class,ContractVO.class,false);

@@ -42,6 +42,9 @@ angular
 												}else{
 													$scope.invoice.paymentStatus='否';
 													$scope.invoice.billWay='0';
+													$rootScope.setNumCode($scope.inOrOut=="in"?"OT":"IT",function(newCode){
+											 			$scope.invoice.invoiceNum= newCode;//进/销项票
+											 		});
 												}
 										 		}else if($location.path()=="/invoiceView"){
 										 			debugger;

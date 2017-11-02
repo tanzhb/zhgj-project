@@ -230,58 +230,50 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
   };
    
     $scope.save  = function() {
-    	if($('#form_sample_1').valid()){
+    	if($('#form_sample_1').valid()){//
     		if($scope.buyOrder.orderDate=='') {// 日期为空的处理
     			$scope.buyOrder.orderDate=null;
     		}
 
-    		// 保存数据处理
-// $scope.buyOrder.parentBuyOrder=null;
-// $scope.buyOrder.createTime=null;
-// $scope.buyOrder.updateTime=null;
-    		// **********//
-    		orderService.checkNum($scope.buyOrder).then(
-          		     function(data){
-          		    	 if(data>0){
-          		    		toastr.error('订单编号重复！');
-          		    	 }else{
-          		    		orderService.save($scope.buyOrder).then(
-      		        		     function(data){
-      		        		    	$scope.buyOrder = data;
-      		        		    	$scope.contract.orderSerial = data.serialNum;
-      		        		    	if(isNull($scope.contract.contractNum)){
-      		        		    		$scope.contract.contractNum = $scope.buyOrder.orderNum;
-      		        		    	}
-      		 	   	    		
-      		        		    	$scope.contract.comId = $scope.buyOrder.supplyComId;
-      		 	   	    		$scope.contract.signDate = $scope.buyOrder.orderDate;
-      		 	   	    		orderService.saveContract($scope.contract).then(
-      		 	   	       		     function(data){
-      		 	   	       		    	toastr.success('数据保存成功！');
-      		 	   	       		    	$scope.contract = data.data;
-      		 	   	       		     },
-      		 	   	       		     function(error){
-      		 	   	       		    	toastr.error('数据保存出错！');
-      		 	   	       		         $scope.error = error;
-      		 	   	       		     }
-      		 	   	       		 );
-      		        		    	/*$location.search({serialNum:data.serialNum,view:1});*/
-      		        		    	$scope.buyOrderInput = true;
-      		        			    $scope.buyOrderShow = true;
-      		        		     },
-      		        		     function(error){
-      		        		         $scope.error = error;
-      		        		         toastr.error('数据保存出错！');
-      		        		     }
-      		        		 );
-          		    	 }
-          		     },
-          		     function(error){
-          		         $scope.error = error;
-          		         toastr.error('数据连接出错！');
-          		     }
-          		 );
+    		$rootScope.judgeIsExist("order",$scope.buyOrder.orderNum, $scope.buyOrder.serialNum,function(result){
+    			var 	isExist = result;
+    		debugger;
+    		if(isExist){
+    			toastr.error('订单编号重复！');
+    			return;
+    		}else{
+    		orderService.save($scope.buyOrder).then(
+	        		     function(data){
+	        		    	$scope.buyOrder = data;
+	        		    	$scope.contract.orderSerial = data.serialNum;
+	        		    	if(isNull($scope.contract.contractNum)){
+	        		    		$scope.contract.contractNum = $scope.buyOrder.orderNum;
+	        		    	}
+	 	   	    		
+	        		    	$scope.contract.comId = $scope.buyOrder.supplyComId;
+	 	   	    		$scope.contract.signDate = $scope.buyOrder.orderDate;
+	 	   	    		orderService.saveContract($scope.contract).then(
+	 	   	       		     function(data){
+	 	   	       		    	toastr.success('数据保存成功！');
+	 	   	       		    	$scope.contract = data.data;
+	 	   	       		     },
+	 	   	       		     function(error){
+	 	   	       		    	toastr.error('数据保存出错！');
+	 	   	       		         $scope.error = error;
+	 	   	       		     }
+	 	   	       		 );
+	        		    	/*$location.search({serialNum:data.serialNum,view:1});*/
+	        		    	$scope.buyOrderInput = true;
+	        			    $scope.buyOrderShow = true;
+	        		     },
+	        		     function(error){
+	        		         $scope.error = error;
+	        		         toastr.error('数据保存出错！');
+	        		     }
+	        		 );
+    		}
     		
+    		});
     	}
     	
     }; 	

@@ -34,6 +34,10 @@ angular
 													$scope.inOrOut=$stateParams.inOrOut;
 												if($scope.inOrOut.length>3){
 													getStockInOutCheckInfo($stateParams.inOrOut);
+												}else{
+													$rootScope.setNumCode("QU",function(newCode){
+								    		 			$scope.stockInOutCheck.checkNum= newCode;//检验单号 
+								    		 		});
 												}
 												if($scope.stockInOutCheck.checkDate==''){
 										    		$scope.stockInOutCheck.checkDate=$filter('date')(new Date(), 'yyyy-MM-dd');

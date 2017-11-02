@@ -240,7 +240,7 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 			transportContact:$scope.deliveryTransport.contact,
 			transportContactNum:$scope.deliveryTransport.contactNum,
 			deliverSerial:$scope.delivery.serialNum,
-			deliveryTransportSerialNum:$scope.deliveryTransport.serialNum==undefined?null:$scope.deliveryTransport.serialNum,
+			deliveryTransportSerialNum:$scope.delivery.transportserialNum==undefined?null:$scope.delivery.transportserialNum,
 		
 			takeDeliveryWarehouseSerial:$scope.takeDelivery.warehouseSerial,
 			takeAddress:$scope.takeDeliveryWarehouseAddress,
@@ -249,7 +249,7 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 			takeDeliveryContactNum:$scope.takeDelivery.contactNum,
 			takeDeliveryRemark:$scope.takeDelivery.remark,
 			deliverSerial:$scope.delivery.serialNum,
-			takeDeliveryVOSerialNum:$scope.takeDelivery.serialNum==undefined?null:$scope.takeDelivery.serialNum
+			takeDeliveryVOSerialNum:$scope.delivery.takeDeliverSerialNum==undefined?null:$scope.delivery.takeDeliverSerialNum
 		}
 		).then(function success(result) {
 			deferred.resolve(result);//请求成功

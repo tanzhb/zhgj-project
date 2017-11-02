@@ -1062,7 +1062,7 @@ public class TakeDeliveryController {
 		Date now = new Date();
 		if(StringUtils.isEmpty(takeDeliveryParams.getTakeDelivery().getSerialNum())){
 			takeDeliveryParams.getTakeDelivery().setSerialNum(takeDeliverySerial);
-			takeDeliveryParams.getTakeDelivery().setTakeDeliverNum("SH"+ApplicationUtils.getFromNumber());
+			//takeDeliveryParams.getTakeDelivery().setTakeDeliverNum("SH"+ApplicationUtils.getFromNumber());
 			takeDeliveryParams.getTakeDelivery().setDeliverSerial(deliverySerial);
 			takeDeliveryParams.getTakeDelivery().setStatus("0");
 			takeDeliveryParams.getTakeDelivery().setCreator(currenLoginName);
