@@ -47,7 +47,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">销售类型：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.orderType}} </p>
+                                     <p  > {{customerOrder.orderType}} </p>
                                  </div>
                              </div>
                          </div>
@@ -55,7 +55,7 @@ margin-right: 20px;
                          	<div class="form-group ">
                                  <label class="control-label col-md-5 bold">贸易类型：</label>
                                  <div class="control-label col-md-7">
-	                                 <p  > {{saleOrder.tradeType}} </p>
+	                                 <p  > {{customerOrder.tradeType}} </p>
                                  </div>
                              </div>
                          </div>
@@ -75,7 +75,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">买方：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.buyName}} </p>
+                                     <p  > {{customerOrder.buyName}} </p>
                                  </div>
                                  
                              </div>
@@ -112,7 +112,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">销售订单号：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.orderNum}} </p>
+                                     <p  > {{customerOrder.orderNum}} </p>
                                  </div>
                                  
                              </div>
@@ -121,7 +121,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">关联销售申请单号：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.saleApplySerial}} </p>
+                                     <p  > {{customerOrder.saleApplySerial}} </p>
                                  </div>
                              </div>
                          </div>
@@ -130,7 +130,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">关联采购单号：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.orderSerial}} </p>
+                                     <p  > {{customerOrder.orderSerial}} </p>
                                  </div>
                              </div>
                          </div>
@@ -139,14 +139,14 @@ margin-right: 20px;
                      <!--/row-->
                      
                      <!--/row-->
-                     <div ng-if="saleOrder.orderType =='贸易销售' && saleOrder.tradeType =='内贸'">
+                     <div ng-if="customerOrder.orderType =='贸易销售' && customerOrder.tradeType =='内贸'">
                      <div class="row">
                      		<!--/span-->
                          <div class="col-md-4">
                          	<div class="form-group ">
                                  <label class="control-label col-md-5 bold">卖方：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.seller}} </p>
+                                     <p  > {{customerOrder.seller}} </p>
                                  </div>
                              </div>
                          </div>
@@ -155,14 +155,14 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">提货方式：</label>
                                  <div class="control-label col-md-7">
-                                 		<select class="form-control" id="deliveryMode"  ng-hide="saleOrderInput" name="deliveryMode"  ng-model="saleOrder.deliveryMode" >
+                                 		<select class="form-control" id="deliveryMode"  ng-hide="customerOrderInput" name="deliveryMode"  ng-model="customerOrder.deliveryMode" >
                                            <option value=""></option>
                                           	<option value="仓库自提" >仓库自提</option>
                                             <option value="物料配送" >物料配送</option>
                                        </select>
                                        <div class="form-control-focus"> </div>
-                             			<span class="help-block" ng-hide="saleOrderInput">请选择提货方式</span>
-                                     <p  > {{saleOrder.deliveryMode}} </p>
+                             			<span class="help-block" ng-hide="customerOrderInput">请选择提货方式</span>
+                                     <p  > {{customerOrder.deliveryMode}} </p>
                                  </div>
                              </div>
                          </div> -->
@@ -170,7 +170,7 @@ margin-right: 20px;
                          	<div class="form-group ">
                                  <label class="control-label col-md-5 bold">币种：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.currency}} </p>
+                                     <p  > {{customerOrder.currency}} </p>
                                  </div>
                              </div>
                          </div>
@@ -178,7 +178,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold" >税率%：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.rate}}% </p>
+                                     <p  > {{customerOrder.rate}}% </p>
                                  </div>
                              </div>
                          </div>
@@ -190,7 +190,7 @@ margin-right: 20px;
                          	<div class="form-group ">
                                  <label class="control-label col-md-5 bold">制单人：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.maker}} </p>
+                                     <p  > {{customerOrder.maker}} </p>
                                  </div>
                              </div>
                          </div>
@@ -198,7 +198,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">制单日期：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.makeDate}} </p>
+                                     <p  > {{customerOrder.makeDate}} </p>
                                  </div>
                                  
                              </div>
@@ -208,7 +208,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">销售日期：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.orderDate}} </p>
+                                     <p  > {{customerOrder.orderDate}} </p>
                                  </div>
                                  
                              </div>
@@ -227,7 +227,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">备注：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.orderRemark}} </p>
+                                     <p  > {{customerOrder.orderRemark}} </p>
                                  </div>
                                  
                              </div>
@@ -236,20 +236,20 @@ margin-right: 20px;
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">状态：</label>
                                  <div class="control-label col-md-7">
-                                     <p ng-if="saleOrder.processBase.status=='PENDING'||saleOrder.processBase.status=='WAITING_FOR_APPROVAL'"  
-                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:#fcb95b"> 审核中 </p>
+                                     <p ng-if="customerOrder.processBase.status=='PENDING'||customerOrder.processBase.status=='WAITING_FOR_APPROVAL'"  
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:#fcb95b"> 审核中 </p>
                                      
-                                     <p ng-if="saleOrder.status==1"   
-                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 待签合同 </p>
+                                     <p ng-if="customerOrder.status==1"   
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 待签合同 </p>
                                      
-                                     <p ng-if="saleOrder.status==2"   
-                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 已确认 </p>
+                                     <p ng-if="customerOrder.status==2"   
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 已确认 </p>
                                                                           
-                                     <p ng-if="saleOrder.processBase.status=='APPROVAL_FAILED'"   
-                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:red"> 未通过 </p>
+                                     <p ng-if="customerOrder.processBase.status=='APPROVAL_FAILED'"   
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:red"> 未通过 </p>
                                      
-                                     <p ng-if="saleOrder.processBase==null&&saleOrder.status==0"   
-                                     ng-click="viewOrderLog(saleOrder.serialNum)" > 未发布 </p>
+                                     <p ng-if="customerOrder.processBase==null&&customerOrder.status==0"   
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" > 未发布 </p>
                                  </div>
                                  
                              </div>
@@ -258,14 +258,14 @@ margin-right: 20px;
                      </div>
                      <!--/row-->
                      </div>
-                     <div ng-if="saleOrder.orderType =='贸易销售' && saleOrder.tradeType =='外贸'">
+                     <div ng-if="customerOrder.orderType =='贸易销售' && customerOrder.tradeType =='外贸'">
                      <div class="row">
                      		<!--/span-->
                          <div class="col-md-4">
                          	<div class="form-group ">
                                  <label class="control-label col-md-5 bold">卖方：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.seller}} </p>
+                                     <p  > {{customerOrder.seller}} </p>
                                  </div>
                              </div>
                          </div>
@@ -274,14 +274,14 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">提货方式：</label>
                                  <div class="control-label col-md-7">
-                                 		<select class="form-control" id="deliveryMode"  ng-hide="saleOrderInput" name="deliveryMode"  ng-model="saleOrder.deliveryMode" >
+                                 		<select class="form-control" id="deliveryMode"  ng-hide="customerOrderInput" name="deliveryMode"  ng-model="customerOrder.deliveryMode" >
                                            <option value=""></option>
                                           	<option value="仓库自提" >仓库自提</option>
                                             <option value="物料配送" >物料配送</option>
                                        </select>
                                        <div class="form-control-focus"> </div>
-                             			<span class="help-block" ng-hide="saleOrderInput">请选择提货方式</span>
-                                     <p  > {{saleOrder.deliveryMode}} </p>
+                             			<span class="help-block" ng-hide="customerOrderInput">请选择提货方式</span>
+                                     <p  > {{customerOrder.deliveryMode}} </p>
                                  </div>
                              </div>
                          </div> -->
@@ -289,7 +289,7 @@ margin-right: 20px;
                          	<div class="form-group ">
                                  <label class="control-label col-md-5 bold">币种：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.currency}} </p>
+                                     <p  > {{customerOrder.currency}} </p>
                                  </div>
                              </div>
                          </div>
@@ -297,7 +297,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold" >退税率%：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.rate}}% </p>
+                                     <p  > {{customerOrder.rate}}% </p>
                                  </div>
                              </div>
                          </div>
@@ -308,7 +308,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">结算汇率：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.exchangeRate}} </p>
+                                     <p  > {{customerOrder.exchangeRate}} </p>
                                  </div>
                              </div>
                          </div>
@@ -316,7 +316,7 @@ margin-right: 20px;
                          	<div class="form-group ">
                                  <label class="control-label col-md-5 bold">制单人：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.maker}} </p>
+                                     <p  > {{customerOrder.maker}} </p>
                                  </div>
                              </div>
                          </div>
@@ -324,7 +324,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">制单日期：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.makeDate}} </p>
+                                     <p  > {{customerOrder.makeDate}} </p>
                                  </div>
                                  
                              </div>
@@ -336,7 +336,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">销售日期：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.orderDate}} </p>
+                                     <p  > {{customerOrder.orderDate}} </p>
                                  </div>
                                  
                              </div>
@@ -353,7 +353,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">备注：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.orderRemark}} </p>
+                                     <p  > {{customerOrder.orderRemark}} </p>
                                  </div>
                                  
                              </div>
@@ -366,20 +366,20 @@ margin-right: 20px;
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">状态：</label>
                                  <div class="control-label col-md-7">
-                                     <p ng-if="saleOrder.processBase.status=='PENDING'||saleOrder.processBase.status=='WAITING_FOR_APPROVAL'"  
-                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:#fcb95b"> 审核中 </p>
+                                     <p ng-if="customerOrder.processBase.status=='PENDING'||customerOrder.processBase.status=='WAITING_FOR_APPROVAL'"  
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:#fcb95b"> 审核中 </p>
                                      
-                                     <p ng-if="saleOrder.status==1"   
-                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 待签合同 </p>
+                                     <p ng-if="customerOrder.status==1"   
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 待签合同 </p>
                                      
-                                     <p ng-if="saleOrder.status==2"   
-                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 已确认 </p>
+                                     <p ng-if="customerOrder.status==2"   
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 已确认 </p>
                                      
-                                     <p ng-if="saleOrder.processBase.status=='APPROVAL_FAILED'"   
-                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:red"> 未通过 </p>
+                                     <p ng-if="customerOrder.processBase.status=='APPROVAL_FAILED'"   
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:red"> 未通过 </p>
                                      
-                                     <p ng-if="saleOrder.processBase==null&&saleOrder.status==0"   
-                                     ng-click="viewOrderLog(saleOrder.serialNum)" > 未发布 </p>
+                                     <p ng-if="customerOrder.processBase==null&&customerOrder.status==0"   
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" > 未发布 </p>
                                  </div>
                                  
                              </div>
@@ -387,14 +387,14 @@ margin-right: 20px;
                      </div>
                      <!--/row-->
                      </div>
-                     <div ng-if="saleOrder.orderType =='委托销售'">
+                     <div ng-if="customerOrder.orderType =='委托销售'">
                      <div class="row">
                      		<!--/span-->
                          <div class="col-md-4">
                          	<div class="form-group ">
                                  <label class="control-label col-md-5 bold">卖方：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.seller}} </p>
+                                     <p  > {{customerOrder.seller}} </p>
                                  </div>
                              </div>
                          </div>
@@ -403,7 +403,7 @@ margin-right: 20px;
                          	<div class="form-group ">
                                  <label class="control-label col-md-5 bold">委托方：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.entrustParty}} </p>
+                                     <p  > {{customerOrder.entrustParty}} </p>
                                  </div>
                              </div>
                          </div>
@@ -412,7 +412,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">服务模式：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.serviceModel}} </p>
+                                     <p  > {{customerOrder.serviceModel}} </p>
                                  </div>
                                  
                              </div>
@@ -423,7 +423,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">结算方式：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.settlementClause}} </p>
+                                     <p  > {{customerOrder.settlementClause}} </p>
                                  </div>
                                  
                              </div>
@@ -433,7 +433,7 @@ margin-right: 20px;
                          	<div class="form-group ">
                                  <label class="control-label col-md-5 bold">币种：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.currency}} </p>
+                                     <p  > {{customerOrder.currency}} </p>
                                  </div>
                              </div>
                          </div>
@@ -441,7 +441,7 @@ margin-right: 20px;
                              <div class="form-group">
                                  <label class="control-label col-md-5 bold" >税率%：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.rate}}% </p>
+                                     <p  > {{customerOrder.rate}}% </p>
                                  </div>
                              </div>
                          </div>
@@ -453,7 +453,7 @@ margin-right: 20px;
                          	<div class="form-group ">
                                  <label class="control-label col-md-5 bold">制单人：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.maker}} </p>
+                                     <p  > {{customerOrder.maker}} </p>
                                  </div>
                              </div>
                          </div>
@@ -461,7 +461,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">制单日期：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.makeDate}} </p>
+                                     <p  > {{customerOrder.makeDate}} </p>
                                  </div>
                                  
                              </div>
@@ -471,7 +471,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">销售日期：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.orderDate}} </p>
+                                     <p  > {{customerOrder.orderDate}} </p>
                                  </div>
                                  
                              </div>
@@ -483,10 +483,10 @@ margin-right: 20px;
                          	<div class="form-group ">
                                  <label class="control-label col-md-5 bold">关联需求计划单号：</label>
                                  <div class="control-label col-md-7">
-                                 <input type="text"  name="demandPlanSerial" class="form-control" ng-hide="saleOrderInput"  ng-model="saleOrder.demandPlanSerial"  >
+                                 <input type="text"  name="demandPlanSerial" class="form-control" ng-hide="customerOrderInput"  ng-model="customerOrder.demandPlanSerial"  >
                                      <div class="form-control-focus"> </div>
-                                     <span class="help-block" ng-hide="saleOrderInput">请选择需求计划单号</span>
-                                     <p  >{{saleOrder.demandPlanSerial}} </p>
+                                     <span class="help-block" ng-hide="customerOrderInput">请选择需求计划单号</span>
+                                     <p  >{{customerOrder.demandPlanSerial}} </p>
                                  </div>
                                  
                              </div>
@@ -506,7 +506,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">备注：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{saleOrder.orderRemark}} </p>
+                                     <p  > {{customerOrder.orderRemark}} </p>
                                  </div>
                                  
                              </div>
@@ -516,20 +516,20 @@ margin-right: 20px;
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">状态：</label>
                                  <div class="control-label col-md-7">
-                                     <p ng-if="saleOrder.processBase.status=='PENDING'||saleOrder.processBase.status=='WAITING_FOR_APPROVAL'"  
-                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:#fcb95b"> 审核中 </p>
+                                     <p ng-if="customerOrder.processBase.status=='PENDING'||customerOrder.processBase.status=='WAITING_FOR_APPROVAL'"  
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:#fcb95b"> 审核中 </p>
                                      
-                                     <p ng-if="saleOrder.status==1"   
-                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 待签合同 </p>
+                                     <p ng-if="customerOrder.status==1"   
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 待签合同 </p>
                                      
-                                     <p ng-if="saleOrder.status==2"   
-                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 已确认 </p>
+                                     <p ng-if="customerOrder.status==2"   
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 已确认 </p>
                                      
-                                     <p ng-if="saleOrder.processBase.status=='APPROVAL_FAILED'"   
-                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:red"> 未通过 </p>
+                                     <p ng-if="customerOrder.processBase.status=='APPROVAL_FAILED'"   
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:red"> 未通过 </p>
                                      
-                                     <p ng-if="saleOrder.processBase==null&&saleOrder.status==0"   
-                                     ng-click="viewOrderLog(saleOrder.serialNum)" > 未发布 </p>
+                                     <p ng-if="customerOrder.processBase==null&&customerOrder.status==0"   
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" > 未发布 </p>
                                  </div>
                                  
                              </div>
@@ -787,7 +787,7 @@ margin-right: 20px;
                               <thead>
                                   <tr>
 									<th>商品编号</th>
-									<th ng-if="saleOrder.tradeType =='外贸'">海关编码</th>
+									<th ng-if="customerOrder.tradeType =='外贸'">海关编码</th>
 									<th>供应商商品编号</th>
 									<th>物料名称</th>
 									<th>规格型号</th>
@@ -799,16 +799,16 @@ margin-right: 20px;
 									<th>含税单价</th>
 									<th>不含税单价</th>
 									<th>币种</th>
-									<th  ng-if="saleOrder.tradeType =='外贸'">退税率</th>
-									<th  ng-if="saleOrder.tradeType !='外贸'">税率</th>
+									<th  ng-if="customerOrder.tradeType =='外贸'">退税率</th>
+									<th  ng-if="customerOrder.tradeType !='外贸'">税率</th>
 									<th>不含税金额</th>
 									<th>税额</th>
 									
-									<th ng-if="saleOrder.settlementClause =='服务费'">服务费率</th>
-									<th ng-if="saleOrder.settlementClause =='服务费'">服务费</th>
-									<th ng-if="saleOrder.settlementClause =='折扣折让'">折扣率</th>
-									<th ng-if="saleOrder.settlementClause =='折扣折让'">折后金额</th>
-									<th ng-if="saleOrder.settlementClause =='红票'">红票金额</th>
+									<th ng-if="customerOrder.settlementClause =='服务费'">服务费率</th>
+									<th ng-if="customerOrder.settlementClause =='服务费'">服务费</th>
+									<th ng-if="customerOrder.settlementClause =='折扣折让'">折扣率</th>
+									<th ng-if="customerOrder.settlementClause =='折扣折让'">折后金额</th>
+									<th ng-if="customerOrder.settlementClause =='红票'">红票金额</th>
 									
 									<th>含税金额</th>
 									<th>交付日期</th>
@@ -822,7 +822,7 @@ margin-right: 20px;
                                             <!-- <span ng-hide="orderMaterielInput{{$index}}"><a href="javascript：;" ng-click="addMateriel('single',$index)">{{_orderMateriel.materiel.materielNum}}</a></span> -->
 			                                <p class="form-control-static" > {{_orderMateriel.materiel.materielNum}} </p>
 			                          </td>
-			                          <td ng-if="saleOrder.tradeType =='外贸'">
+			                          <td ng-if="customerOrder.tradeType =='外贸'">
 			                          		<p class="form-control-static" > {{_orderMateriel.materiel.customsCode}} </p>
 			                          </td>
 			                          <td>
@@ -856,10 +856,10 @@ margin-right: 20px;
                                       		<p class="form-control-static" > {{_orderMateriel.orderUnitPrice}} </p>
 			                          </td>
 			                          <td>  
-                                      		<p class="form-control-static" > {{saleOrder.currency}} </p>
+                                      		<p class="form-control-static" > {{customerOrder.currency}} </p>
 			                          </td>
 			                          <td>  
-                                      		<p class="form-control-static" > {{saleOrder.rate}}% </p>
+                                      		<p class="form-control-static" > {{customerOrder.rate}}% </p>
 			                          </td>
 			                          <td>  
                                       		<p class="form-control-static" > {{format2Thousands(_arithmeticAmount(this))}} </p>
@@ -868,15 +868,15 @@ margin-right: 20px;
                                       		<p class="form-control-static"> {{format2Thousands(_arithmeticRateAmount(this))}} </p>
 			                          </td>
 			                          
-			                          <td ng-if="saleOrder.settlementClause =='服务费'">
+			                          <td ng-if="customerOrder.settlementClause =='服务费'">
                                       	<p class="form-control-static" > {{_orderMateriel.serviceRate}} </p>
 			                          </td>
-									<td ng-if="saleOrder.settlementClause =='服务费'">服务费</td>
-									<td ng-if="saleOrder.settlementClause =='折扣折让'">
+									<td ng-if="customerOrder.settlementClause =='服务费'">服务费</td>
+									<td ng-if="customerOrder.settlementClause =='折扣折让'">
                                       	<p class="form-control-static" > {{_orderMateriel.discountRate}} </p>
 									</td>
-									<td ng-if="saleOrder.settlementClause =='折扣折让'">折后金额</td>
-									<td ng-if="saleOrder.settlementClause =='红票'">
+									<td ng-if="customerOrder.settlementClause =='折扣折让'">折后金额</td>
+									<td ng-if="customerOrder.settlementClause =='红票'">
                                       	<p class="form-control-static" > {{_orderMateriel.redTicket}} </p>
 									</td>
 									
@@ -896,7 +896,7 @@ margin-right: 20px;
                                   </tr>
                                   <tr>
 									<th></th>
-									<th ng-if="saleOrder.tradeType =='外贸'"></th>
+									<th ng-if="customerOrder.tradeType =='外贸'"></th>
 									<th clase="bold">合计：</th>
 									<th clase="bold">{{totalCount()}}</th>
 									<th></th>
@@ -907,18 +907,18 @@ margin-right: 20px;
 									<th></th>
 									<th></th>
 									<th></th>
-									<th  ng-if="saleOrder.tradeType =='外贸'"></th>
-									<th  ng-if="saleOrder.tradeType !='外贸'"></th>
+									<th  ng-if="customerOrder.tradeType =='外贸'"></th>
+									<th  ng-if="customerOrder.tradeType !='外贸'"></th>
 									
 									<th></th>
 									<th>{{format2Thousands(totalAmount())}}</th>
 									<th>{{format2Thousands(totalRateAmount())}}</th>
 									
-									<th ng-if="saleOrder.settlementClause =='服务费'">服务费率</th>
-									<th ng-if="saleOrder.settlementClause =='服务费'">服务费</th>
-									<th ng-if="saleOrder.settlementClause =='折扣折让'">折扣率</th>
-									<th ng-if="saleOrder.settlementClause =='折扣折让'">折后金额</th>
-									<th ng-if="saleOrder.settlementClause =='红票'">红票金额</th>
+									<th ng-if="customerOrder.settlementClause =='服务费'">服务费率</th>
+									<th ng-if="customerOrder.settlementClause =='服务费'">服务费</th>
+									<th ng-if="customerOrder.settlementClause =='折扣折让'">折扣率</th>
+									<th ng-if="customerOrder.settlementClause =='折扣折让'">折后金额</th>
+									<th ng-if="customerOrder.settlementClause =='红票'">红票金额</th>
 									
 									<th>{{totalRateAndAmount()}}</th>
 									<th></th>

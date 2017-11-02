@@ -276,7 +276,7 @@ public class DeliveryController {
 		if(!createQG){//不产生清关单(供应商发货/平台发货)
 			OrderInfo orderInfo=new OrderInfo();
 			orderInfo.setSerialNum(orderSerial);
-			orderInfo.setDeliverStatus(orderInfo.DELIVER);
+			orderInfo.setDeliverStatus(OrderInfo.DELIVER);
 			Delivery delivery1=new  Delivery();
 			delivery1.setSerialNum(delivery.getSerialNum());
 			delivery1.setStatus(DeliveryVO.COMPLETE);

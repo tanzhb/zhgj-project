@@ -46,7 +46,7 @@
 											请先输入正确数据！
 										</div>
 										<div class="row">
-											<div class="col-md-6">
+											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">合同编号<span
 														class="required" aria-required="true"> * </span></label>
@@ -59,7 +59,7 @@
 											</div>
 											<!--/span-->
 
-											<div class="col-md-6">
+											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">合同类型<span
 														class="required" aria-required="true"> * </span></label>
@@ -72,11 +72,7 @@
 													</div>
 												</div>
 											</div>
-										</div>
-										<!--/row-->
-										
-										<div class="row">
-											<div class="col-md-6">
+											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">甲方<span
 														class="required" aria-required="true"> * </span></label>
@@ -87,9 +83,12 @@
 													</div>
 												</div>
 											</div>
-											<!--/span-->
-
-											<div class="col-md-6">
+										</div>
+										<!--/row-->
+										
+										
+										<div class="row">
+											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">甲方签订人<span
 														class="required" aria-required="true"> * </span></label>
@@ -99,11 +98,7 @@
 													</div>
 												</div>
 											</div>
-										</div>
-										<!--/row-->
-										
-										<div class="row">
-											<div class="col-md-6">
+											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">乙方<span
 														class="required" aria-required="true"> * </span></label>
@@ -116,7 +111,7 @@
 											</div>
 											<!--/span-->
 
-											<div class="col-md-6">
+											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">乙方签订人<span
 														class="required" aria-required="true"> * </span></label>
@@ -132,7 +127,7 @@
 										
 										
 										<div class="row">
-											<div class="col-md-6">
+											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">签订日期<span
 														class="required" aria-required="true"> * </span></label>
@@ -145,7 +140,7 @@
 											</div>
 											<!--/span-->
 
-											<div class="col-md-6">
+											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">签订地点<span
 														class="required" aria-required="true"> * </span></label>
@@ -155,12 +150,7 @@
 													</div>
 												</div>
 											</div>
-										</div>
-										<!--/row-->
-										
-										
-										<div class="row">
-											<div class="col-md-6">
+											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">开始日期<span
 														class="required" aria-required="true"> * </span></label>
@@ -171,9 +161,11 @@
 													</div>
 												</div>
 											</div>
-											<!--/span-->
-
-											<div class="col-md-6">
+										</div>
+										<!--/row-->
+										
+										<div class="row">
+											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">结束日期<span
 														class="required" aria-required="true"> * </span></label>
@@ -183,12 +175,7 @@
 													</div>
 												</div>
 											</div>
-										</div>
-										<!--/row-->
-										
-										
-										<div class="row">
-											<div class="col-md-6">
+											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">对方合同号<span
 														class="required" aria-required="true"> * </span></label>
@@ -201,10 +188,9 @@
 											</div>
 											<!--/span-->
 
-											<div class="col-md-6">
+											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">备注<span
-														class="required" aria-required="true"> * </span></label>
+													<label class="control-label bold">备注</label>
 													<div class="">
 														<input type="text" class="form-control"
 									ng-model="contractVO.remark" id="remark" placeholder="备注"/>
@@ -216,7 +202,7 @@
 										
 										
 										<div class="row">
-											<div class="col-md-6">
+											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">电子合同<span
 														class="required" aria-required="true"> * </span></label>
@@ -229,7 +215,7 @@
 											</div>
 											<!--/span-->
 
-											<div class="col-md-6">
+											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">签字合同<span
 														class="required" aria-required="true"> * </span></label>

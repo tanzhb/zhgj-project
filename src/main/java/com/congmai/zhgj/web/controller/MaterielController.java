@@ -33,9 +33,13 @@ import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
+import com.congmai.zhgj.web.enums.ComType;
 import com.congmai.zhgj.web.model.BOMMateriel;
 import com.congmai.zhgj.web.model.BOMMaterielExample;
+import com.congmai.zhgj.web.model.BuyMateriel;
+import com.congmai.zhgj.web.model.BuyMaterielExample;
 import com.congmai.zhgj.web.model.Category;
+import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyCode;
 import com.congmai.zhgj.web.model.JsonTreeData;
 import com.congmai.zhgj.web.model.Materiel;
@@ -47,7 +51,9 @@ import com.congmai.zhgj.web.model.MaterielFileExample;
 import com.congmai.zhgj.web.model.MaterielSelectExample;
 import com.congmai.zhgj.web.model.SupplyMateriel;
 import com.congmai.zhgj.web.model.SupplyMaterielExample;
+import com.congmai.zhgj.web.service.BuyMaterielService;
 import com.congmai.zhgj.web.service.CategoryService;
+import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.MaterielFileService;
 import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.SupplyMaterielService;
@@ -78,10 +84,17 @@ public class MaterielController {
     private SupplyMaterielService supplyMaterielService;
     
     @Resource
+    private BuyMaterielService buyMaterielService;
+    
+    @Resource
     private UserCompanyService userCompanyService;
     
     @Resource
     private CategoryService categoryService;
+    
+    @Resource
+    private CompanyService companyService;
+    
     
     /**
      * 保存物料
@@ -227,6 +240,51 @@ public class MaterielController {
     }
     
     
+    /**
+     * 
+     * @Description 保存物料采购商
+     * @param params
+     * @return 
+     */
+    @RequestMapping(value = "/saveBuyMateriel", method = RequestMethod.POST)
+    @ResponseBody
+    public List<BuyMateriel> saveBuyMateriel(@RequestBody String params) {
+    	params = params.replace("\\", "");
+/*		ObjectMapper objectMapper = new ObjectMapper();  
+        JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, BuyMateriel.class); */ 
+        List<BuyMateriel> buyMateriel = null;
+		try {
+			buyMateriel = JSON.parseArray(params, BuyMateriel.class);
+	    	if(!CollectionUtils.isEmpty(buyMateriel)){
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		    	for(BuyMateriel f:buyMateriel){
+		    		f.setSerialNum(ApplicationUtils.random32UUID());
+		    		f.setCreator(currenLoginName);
+	    			f.setUpdater(currenLoginName);
+	    			f.setCreateTime(new Date());
+	    			f.setUpdateTime(new Date());
+		    	}
+		    	//填充物料供应商******↑↑↑↑↑↑********
+		    	buyMaterielService.betchInsertBuyMateriels(buyMateriel);
+		    	//数据插入******↑↑↑↑↑↑********
+		    	
+		    	BuyMaterielExample m2 =new BuyMaterielExample();
+		    	com.congmai.zhgj.web.model.BuyMaterielExample.Criteria criteria2 =  m2.createCriteria();
+		    	criteria2.andMaterielIdEqualTo(buyMateriel.get(0).getMaterielId());
+		    	criteria2.andDelFlgEqualTo("0");
+		    	buyMateriel = buyMaterielService.selectList(m2);
+		    	//查询数据返回******↑↑↑↑↑↑********
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+    	return buyMateriel;
+    	
+    }
+    
+    
 	/**
 	 * 
 	 * @Description 升级版本
@@ -304,9 +362,16 @@ public class MaterielController {
     	
     	User user = UserUtil.getUserFromSession();
     	List<String> comIds = null;
-    	if(user!=null){
-			comIds = userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId()));
-		}
+    	Company company = null;
+    	if(!SALEORDER.equals(type)){//客户端新建订单选择物料没限制
+    		if(user!=null){
+    			comIds = userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId()));
+    		}
+        	if(comIds!=null){
+        		company = companyService.selectById(comIds.get(0));
+        	}
+    	}
+    	
     	
     	if(parent==null||parent.isEmpty()){//查询全部物料
     		//and 条件1
@@ -324,8 +389,10 @@ public class MaterielController {
         	}
         	//排序字段
         	m.setOrderByClause("updateTime DESC");
-        	if(comIds!=null){
+        	if(company!=null&&ComType.SUPPLIER.getValue().equals(company.getComType())){
         		criteria.andSupplyComIdIn(comIds);
+        	}else if(company!=null&&ComType.BUYER.getValue().equals(company.getComType())){
+        		criteria.andBuyComIdIn(comIds);
         	}
         	materielList = materielService.selectList(m);
     	}else{//根据父节点查询
@@ -366,8 +433,10 @@ public class MaterielController {
         	m.or(criteria2);
         	//排序字段
         	m.setOrderByClause("updateTime DESC");
-        	if(comIds!=null){
+        	if(company!=null&&ComType.SUPPLIER.getValue().equals(company.getComType())){
         		criteria.andSupplyComIdIn(comIds);
+        	}else if(company!=null&&ComType.BUYER.getValue().equals(company.getComType())){
+        		criteria.andBuyComIdIn(comIds);
         	}
         	materielList = materielService.selectList(m);
         	
@@ -570,6 +639,14 @@ public class MaterielController {
     	criteria2.andDelFlgEqualTo("0");
     	List<SupplyMateriel> supplyMateriel = supplyMaterielService.selectList(m2);
     	map.put("supplyMateriel", supplyMateriel);
+    	
+    	
+    	BuyMaterielExample m3 =new BuyMaterielExample();
+    	com.congmai.zhgj.web.model.BuyMaterielExample.Criteria criteria3 =  m3.createCriteria();
+    	criteria3.andMaterielIdEqualTo(materiel.getMaterielId());
+    	criteria3.andDelFlgEqualTo("0");
+    	List<BuyMateriel> buyMateriel = buyMaterielService.selectList(m3);
+    	map.put("buyMateriel", buyMateriel);
     	
     	return map;
 	}

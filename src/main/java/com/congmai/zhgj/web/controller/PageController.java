@@ -171,11 +171,27 @@ public class PageController {
     }
     
     /**
+     * 客户端新增订单
+     */
+    @RequestMapping("/addCustomerOrder")
+    public String addCustomerOrder(String serialNum,String view) {
+        return "order/addCustomerOrder";
+    }
+    
+    /**
      * 销售订单
      */
     @RequestMapping("/saleOrder")
     public String saleOrder() {
         return "order/saleOrder";
+    }
+    
+    /**
+     * 客户端订单
+     */
+    @RequestMapping("/customerOrder")
+    public String customerOrder() {
+        return "order/customerOrder";
     }
     
     /**
@@ -210,6 +226,16 @@ public class PageController {
     public String viewSaleOrder(String serialNum) {
         return "order/viewSaleOrder";
     }
+    
+    /**
+     * 客户端查看订单
+     */
+    @RequestMapping("/viewCustomerOrder")
+    public String viewCustomerOrder(String serialNum) {
+        return "order/viewCustomerOrder";
+    }
+    
+    
     /**
      * 供应商查看订单
      */

@@ -156,6 +156,60 @@
 	contract
 	SET
     signContract = #{signContract},  
+   <if test="contractNum != null" >
+        contractNum = #{contractNum,jdbcType=VARCHAR},
+      </if>
+      <if test="contractType != null" >
+        contractType = #{contractType,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceModel != null" >
+        serviceModel = #{serviceModel,jdbcType=VARCHAR},
+      </if>
+      <if test="settlementClause != null" >
+        settlementClause = #{settlementClause,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null" >
+        startDate = #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null" >
+        endDate = #{endDate,jdbcType=DATE},
+      </if>
+      <if test="signDate != null" >
+        signDate = #{signDate,jdbcType=DATE},
+      </if>
+      <if test="firstParty != null" >
+        firstParty = #{firstParty,jdbcType=VARCHAR},
+      </if>
+      <if test="secondParty != null" >
+        secondParty = #{secondParty,jdbcType=VARCHAR},
+      </if>
+      <if test="firstPartySigner != null" >
+        firstPartySigner = #{firstPartySigner,jdbcType=VARCHAR},
+      </if>
+      <if test="secondPartySigner != null" >
+        secondPartySigner = #{secondPartySigner,jdbcType=VARCHAR},
+      </if>
+      <if test="otherPartyContractNum != null" >
+        otherPartyContractNum = #{otherPartyContractNum,jdbcType=VARCHAR},
+      </if>
+      <if test="signer != null" >
+        signer = #{signer,jdbcType=VARCHAR},
+      </if>
+      <if test="contractNumber != null" >
+        contractNumber = #{contractNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="signerAddress != null" >
+        signerAddress = #{signerAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentMethod != null" >
+        paymentMethod = #{paymentMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentPeriod != null" >
+        paymentPeriod = #{paymentPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
 	updater=#{updater},
 	updateTime=NOW()
 	WHERE

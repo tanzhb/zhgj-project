@@ -173,10 +173,17 @@
                     </a>
                 </li>
                 </shiro:hasPermission>
-                	<shiro:hasPermission name="zhgj:buyOrder:*">
+                <shiro:hasPermission name="zhgj:buyOrder:*">
                 <li>
                     <a ui-sref="customsClearanceForm">
                       清关单</span>
+                    </a>
+                </li>
+                </shiro:hasPermission>
+                <shiro:hasPermission name="zhgj:customerOrder:*">
+                <li>
+                <a ui-sref="customerOrder">
+                        订单</span>
                     </a>
                 </li>
                 </shiro:hasPermission>

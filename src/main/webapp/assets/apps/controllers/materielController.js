@@ -57,10 +57,14 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
    		    	$scope.fileInfoShow = true;
    		    	$scope.supplyMaterielInfoInput = true;
    		    	$scope.supplyMaterielInfoShow = true;
+   		    	$scope.buyMaterielInfoInput = true;
+   		    	$scope.buyMaterielInfoShow = true;
    		    	$scope.opration = '查看';
 		    }
         	$scope.getSuppliers();//加载供应商
         	
+        	$scope.getBuys(); //加载采购商
+
         	validateInit();//加载表单验证控件
 
         	validatePackageInit();//加载包装信息验证控件
@@ -223,6 +227,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     	$scope.BOM = null;
     	$scope.file = null;
     	$scope.supplyMateriel = null;
+    	$scope.buyMateriel = null;
     	if($("#"+serialNum).is(':checked')){//选中时加载
     		$scope.getMaterielInfo(serialNum);
     	}
@@ -237,6 +242,22 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     	materielService.getSuppliers().then(
      		     function(data){
      		    	$scope.suppliers=data.data;
+     		     },
+     		     function(error){
+     		         $scope.error = error;
+     		     }
+     		 );
+    }; 
+    
+    /**
+     * 获取采购商信息
+     */	
+    $scope.getBuys  = function(serialNum) {
+    	//tab内容置为空
+    	$scope.buys = null;
+    	materielService.getBuys().then(
+     		     function(data){
+     		    	$scope.buys=data.data;
      		     },
      		     function(error){
      		         $scope.error = error;
@@ -281,6 +302,10 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
       		    	if(!isNull(data.supplyMateriel)){
  	        			$scope.supplyMateriel = data.supplyMateriel;
  	        			_supplyMaterielIndex = $scope.supplyMateriel.length;
+ 	        		}
+      		    	if(!isNull(data.buyMateriel)){
+ 	        			$scope.buyMateriel = data.buyMateriel;
+ 	        			_buyMaterielIndex = $scope.buyMateriel.length;
  	        		}
       		     },
       		     function(error){
@@ -498,6 +523,21 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
             $("#tree_1").on("select_node.jstree", function(e, t) {
             	table.ajax.url(tableAjaxUrl+"?parent="+t.selected[0]).load()// 重新加载datatables数据
             })
+            
+            $('#tree_1').on("open_node.jstree",function(e,data){
+            	$('#tree_1 a').each(function(){
+            		if($(this).width()>$(this).parent().width()){
+            			var treeClass = $('#allTreeType').attr('class');
+            			$("#allTreeType").removeClass(treeClass)
+            			$("#allTreeType").addClass("col-md-"+(Number(treeClass.substring(7))+1))
+            			
+            			var MaterielListClass = $('#allMaterielList').attr('class');
+            			$("#allMaterielList").removeClass(MaterielListClass)
+            			$("#allMaterielList").addClass("col-md-"+(Number(MaterielListClass.substring(7))-1))
+            			
+            		}
+				})
+            } );
             
         };
         $scope.reloadTable = function() {
@@ -1308,7 +1348,107 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 			                r.hide()
 			            }})
 		        };
-	   	  //********附件  end****************//
+	   	  //********供应商  end****************//
+		      //********采购商 start****************//
+		   		var _buyMaterielIndex = 0;
+		   	    $scope.saveBuyMateriel  = function() {//保存采购商信息
+		   	    	if($scope.materiel.serialNum==null||$scope.materiel.serialNum=='') {//上级物料为空的处理
+		   	    		toastr.error('请先保存基本信息！');return
+		   			}
+		   	    	if($('#form_sample_6').valid()){
+		   	    		materielService.saveBuyMateriel($scope.buyMateriel).then(
+		   	       		     function(data){
+		   	       		    	 $scope.buyMateriel = data;
+		   	       		    	toastr.success('数据保存成功！');
+		   	       		    	$scope.cancelBuyMateriel();
+		   	       		    	
+		   	       		     },
+		   	       		     function(error){
+		   	       		    	toastr.error('数据保存出错！');
+		   	       		         $scope.error = error;
+		   	       		     }
+		   	       		 );
+		   	    	}
+		   	    	
+		   	    }; 	
+		   	    
+		   	    $scope.cancelBuyMateriel  = function() {//取消编辑采购商信息
+		   	    	$scope.buyMaterielInfoInput = true;
+		   		    $scope.buyMaterielInfoShow = true;
+		   	    };
+		   	    
+		   	    $scope.editBuyMateriel  = function() {//进入编辑采购商信息
+		   	    	$scope.buyMaterielInfoInput = false;
+		   		    $scope.buyMaterielInfoShow = false;
+		   	    };
+		   	    /**
+		 	        * 采购商新增一行
+		 	        */
+		   	    $scope.addBuyMateriel = function(){
+		   	    	if($scope.materiel.serialNum==null||$scope.materiel.serialNum=='') {
+		   	    		toastr.error('请先保存基本信息！');return
+		   			}else{
+		   		    	   if($scope.buyMateriel){}else{$scope.buyMateriel =[{}]}
+		   		    	   $scope.buyMateriel[_buyMaterielIndex] = {};
+		   		    	   $scope.buyMateriel[_buyMaterielIndex].materielId = $scope.materiel.materielId;
+		   		    	   _buyMaterielIndex++;
+		   		    	   /*$('.bs-select').selectpicker();*/
+		   		       }
+		   	    };
+		   	    $scope.repeatDone = function(){
+//		   	    	$compile($("select[name='buyComId']"))($scope);
+//		   	    	$("select[name='buyComId']").selectpicker();
+		       };
+		   	    
+		   	    /**
+			        * 采购商删除一行
+			        */
+			       $scope.deleteBuyMateriel = function(index){
+			    	   $scope.buyMateriel.splice(index,1);
+			    	   _buyMaterielIndex--;
+			       };
+			       
+			       
+			      var validateBuyMaterielInit = function() {
+			        	var e = $("#form_sample_6");
+				        r = $(".alert-danger", e),
+				        i = $(".alert-success", e);
+				        e.validate({
+				            errorElement: "span",
+				            errorClass: "help-block help-block-error",
+				            focusInvalid: !1,
+				            ignore: "",
+				            messages: {
+				            },
+			            	rules: {
+			            			
+			            			},
+			            		invalidHandler: function(e, t) {
+			                    i.hide(), r.show(), App.scrollTo(r, -200)
+			                },
+				            invalidHandler: function(e, t) {
+				                i.hide(),
+				                r.show(),
+				                App.scrollTo(r, -200)
+				            },
+				            errorPlacement: function(e, r) {
+				                r.is(":checkbox") ? e.insertAfter(r.closest(".md-checkbox-list, .md-checkbox-inline, .checkbox-list, .checkbox-inline")) : r.is(":radio") ? e.insertAfter(r.closest(".md-radio-list, .md-radio-inline, .radio-list,.radio-inline")) : e.insertAfter(r)
+				            },
+				            highlight: function(e) {
+				                $(e).closest(".form-group").addClass("has-error")
+				            },
+				            unhighlight: function(e) {
+				                $(e).closest(".form-group").removeClass("has-error")
+				            },
+				            success: function(e) {
+				                e.closest(".form-group").removeClass("has-error")
+				            },
+				            submitHandler: function(e) {
+				                i.show(),
+				                r.hide()
+				            }})
+			        };
+		   	  //********采购商  end****************//      
 	      //********物料分类 start****************//
 		        $scope.queryCategoryListByLevel = function(level){
 		        	if(level=="second"){

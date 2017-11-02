@@ -218,8 +218,20 @@ public class OrderServiceImpl implements OrderService {
 		return OrderInfoMapper.checkNum(orderInfo);
 	}
 
+@Override
+	@OperationLog(operateType = "update" ,operationDesc = "客户提交" ,objectSerial= "{serialNum}")
+	public int submitOrder(OrderInfo model) {
+		return OrderInfoMapper.updateByPrimaryKeySelective(model);
+		
+	}
+
 	@Override
-	public Boolean  isExist(String codeType, String num,String serialNum) {
+	@OperationLog(operateType = "update" ,operationDesc = "接受订单" ,objectSerial= "{serialNum}")
+	public int acceptSubmit(OrderInfo orderInfo) {
+		return OrderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+	}
+@Override
+public Boolean  isExist(String codeType, String num,String serialNum) {
 		// TODO Auto-generated method stub
 		Boolean  flag=true;//默认存在
 		if("order".equals(codeType)){//订单
@@ -400,7 +412,6 @@ public class OrderServiceImpl implements OrderService {
 		return flag;
 	}
 
-	
 
 
 	

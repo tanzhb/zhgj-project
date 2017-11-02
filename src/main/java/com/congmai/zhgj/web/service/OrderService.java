@@ -48,4 +48,10 @@ public interface OrderService extends GenericService<OrderInfo, String> {
 	
 	Boolean isExist(String  codeType,String num,String serialNum);//判断编号是否重复
 
+
+	int submitOrder(OrderInfo orderInfo);
+
+
+	int acceptSubmit(OrderInfo orderInfo);
+
 }

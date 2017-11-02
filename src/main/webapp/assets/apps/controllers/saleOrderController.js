@@ -298,7 +298,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     }
     
     var table;
-    var tableAjaxUrl = "rest/order/findOrderList?type=sale";
+    var tableAjaxUrl = "rest/order/findOrderList?type=sale&selectFor=platformOrder";
     var loadMainTable = function() {
             a = 0;
             App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
@@ -412,7 +412,9 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 							'render' : function(data,
 									type, row, meta) {
 								var clickhtm = '<a href="javascript:void(0);" ng-click="viewSaleOrder(\''+row.serialNum+'\')">'+data+'</a></br>'
-								if(row.processBase!=""&&row.processBase!=null){
+								if(row.status==55){
+									return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">待接收</span>';
+								}else if(row.processBase!=""&&row.processBase!=null){
                         			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
 										return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">审核中</span>';
 									}else if(row.processBase.status=="APPROVAL_SUCCESS"){
@@ -426,10 +428,10 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 									}else if(row.processBase.status=="APPROVAL_FAILED"){
 										return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:red">未通过</span>';
 									}else{
-										return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未发布</span>';
+										return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未审批</span>';
 									}
                         		}else{
-                        			return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未发布</span>';
+                        			return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未审批</span>';
                         		}
 								
 							
@@ -454,6 +456,18 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
                     				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已出库</span>';
 								}else if(row.deliverStatus=="5"){
                     				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已入库</span>';
+								}else if(row.deliverStatus=="6"){
+                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待清关</span>';
+								}else if(row.deliverStatus=="7"){
+                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待报关</span>';
+								}else if(row.deliverStatus=="8"){
+                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待检验</span>';
+								}else if(row.deliverStatus=="9"){
+                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待检验</span>';
+								}else if(row.deliverStatus=="11"){
+                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待入库</span>';
+								}else if(row.deliverStatus=="12"){
+                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待出库</span>';
 								}else{
 									return htm + '<span>未开始</span>';
 								}
@@ -801,7 +815,10 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     			showToastr('toast-top-center', 'warning', '请选择一个订单！')
     		}else{
     			var processBase = table.row('.active').data().processBase;
-    			if(processBase != null){
+    			var status = table.row('.active').data().status;
+    			if(status == 55){
+    				showToastr('toast-top-center', 'warning', '未接收订单，不能修改！')
+    			}else if(processBase != null){
     				showToastr('toast-top-center', 'warning', '该订单已发起流程审批，不能修改！')
     			}else $state.go('addSaleOrder',{serialNum:table.row('.active').data().serialNum});
     		}
@@ -2677,27 +2694,11 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	        	$scope.submitOrder = {}
 	        	$scope.submitOrder.serialNum = $scope.saleOrder.serialNum;
 	        	$scope.submitOrder.remark = $scope.saleOrder.remark;
-	        	$scope.submitOrder.status = 1;
-	        	$scope.saleOrder.status = 1;
-	        	orderService.save($scope.submitOrder).then(
+	        	$scope.submitOrder.status = 0;
+	        	$scope.saleOrder.status = 0;
+	        	orderService.acceptSubmit($scope.submitOrder).then(
 	          		     function(data){
-	          		    	$scope.contract.orderSerial = data.serialNum;
-	          		    	if(isNull($scope.contract.contractNum)){
-	          		    		$scope.contract.contractNum = $scope.saleOrder.orderNum;
-	          		    	}
-	    	   	    		$scope.contract.comId = $scope.saleOrder.buyComId;
-	    	   	    		orderService.saveContract($scope.contract).then(
-	    	   	       		     function(data){
-	    	   	       		    	toastr.success('数据保存成功！');
-	    	   	       		    	$scope.contract = data.data;
-	    	   	       		     },
-	    	   	       		     function(error){
-	    	   	       		    	toastr.error('数据保存出错！');
-	    	   	       		         $scope.error = error;
-	    	   	       		     }
-	    	   	       		 );
-	          		    	$scope.cancelOrderStatus();
-//	          		    	$location.search({serialNum:data.serialNum,view:'all'});
+	          		    	toastr.info('订单接受成功！');
 	          		     },
 	          		     function(error){
 	          		         $scope.error = error;
@@ -2860,21 +2861,21 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		       
 		       $scope.arithmeticAmount  = function(scope) {//计算金额
 			       	if(scope.orderUnitPrice&&scope.amount){
-			       		return (scope.orderUnitPrice*scope.amount).toFixed(2);
+			       		return (scope.orderUnitPrice*scope.amount).toFixed(9);
 			       	}else{
 			       		return 0;
 			       	}
 		       };
 		       $scope.arithmeticRateAmount  = function(scope) {//计算税额
 			       	if($scope.saleOrder.rate){
-			       		return ($scope.arithmeticAmount(scope)*$scope.saleOrder.rate/100).toFixed(2);
+			       		return ($scope.arithmeticAmount(scope)*$scope.saleOrder.rate/100).toFixed(9);
 			       	}else{
 			       		return 0;
 			       	}
 		       };
 		       
 		       $scope.arithmeticRateAndAmount  = function(scope) {//计算价税合计
-			       	return Number($scope.arithmeticAmount(scope))+Number($scope.arithmeticRateAmount(scope));
+			       	return (Number($scope.arithmeticAmount(scope))+Number($scope.arithmeticRateAmount(scope))).toFixed(9);
 		       };
 		       
 		       $scope._arithmeticRateUnit  = function(_orderMateriel) {//计算含税销售单价
@@ -2895,21 +2896,21 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		       
 		       $scope._arithmeticAmount  = function(scope) {//计算金额
 			       	if(scope._orderMateriel.orderUnitPrice&&scope._orderMateriel.amount){
-			       		return (scope._orderMateriel.orderUnitPrice*scope._orderMateriel.amount).toFixed(2);
+			       		return (scope._orderMateriel.orderUnitPrice*scope._orderMateriel.amount).toFixed(9);
 			       	}else{
 			       		return 0;
 			       	}
 		       };
 		       $scope._arithmeticRateAmount  = function(scope) {//计算税额
 			       	if($scope.saleOrder.rate){
-			       		return ($scope._arithmeticAmount(scope)*$scope.saleOrder.rate/100).toFixed(2);
+			       		return ($scope._arithmeticAmount(scope)*$scope.saleOrder.rate/100).toFixed(9);
 			       	}else{
 			       		return 0;
 			       	}
 		       };
 		       
 		       $scope._arithmeticRateAndAmount  = function(scope) {//计算价税合计（商品金额+税额）
-			       	return Number($scope._arithmeticAmount(scope))+Number($scope._arithmeticRateAmount(scope));
+			       	return (Number($scope._arithmeticAmount(scope))+Number($scope._arithmeticRateAmount(scope))).toFixed(9);
 		       };
 		       
 		       $scope.clearNoNumPoint = function(obj,attr){
@@ -2928,7 +2929,20 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			    	 obj[attr] = obj[attr].replace(/[^\d]/g,"");
 		    	 }
 
-		       
+		       $scope.format2Thousands = function(formatV){  
+		    	   formatV = Number(formatV).toFixed(2);
+                   var array=new Array();  
+                   array=formatV.split(".");  
+                   var re=/(-?\d+)(\d{3})/;  
+                   while(re.test(array[0])){  
+                       array[0]=array[0].replace(re,"$1,$2")  
+                   }  
+                   var returnV=array[0];  
+                   for(var i=1;i<array.length;i++){  
+                       returnV+="."+array[i];  
+                   }  
+                   return returnV;
+               } 
 		     //更新订单金额数据
 		     $scope.updateOrderAmount = function(obj,attr){
 		    	$scope.submitOrder = {}
@@ -3009,7 +3023,10 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    			showToastr('toast-top-center', 'warning', '请选择一条任务进行流程申请！')
 		    		}else{
 		    			var processBase = table.row('.active').data().processBase;
-		    			if(processBase != null){
+		    			var status = table.row('.active').data().status;
+		    			if(status == 55){
+		    				showToastr('toast-top-center', 'warning', '未接收订单，不能进行流程申请！')
+		    			}else if(processBase != null){
 		    				showToastr('toast-top-center', 'warning', '该订单已发起流程审批，不能再次申请！')
 		    			}else $state.go('submitSaleApply',{serialNum:table.row('.active').data().serialNum});
 		    		}     	

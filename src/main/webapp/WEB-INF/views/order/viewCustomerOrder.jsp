@@ -33,11 +33,12 @@
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet light ">
            		 <div class="portlet-body">
-					<jsp:include  page="viewSaleOrderBase.jsp"/>
+           		 	
+					<jsp:include  page="viewCustomerOrderBase.jsp"/>
 					
 		            <div class="portlet-title">
 			               <div class="tools">
-			               		<button ng-if="saleOrder.status==55" type="button" ng-click="submitPage()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">接受</button>
+			               		<button ng-if="customerOrder.status==44" type="button" ng-click="submitPage()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">提交</button>
 				                <button type="button" ng-click="cancelPage()" class="btn default btn-circle  btn-sm"><i class="fa fa-undo"></i> 取消 </button>
 				            </div>
 					</div>

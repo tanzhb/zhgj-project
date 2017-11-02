@@ -28,11 +28,11 @@ margin-bottom: 20px;
     	<!-- 普通订单---START -->
       <div class="tab-pane active" id="tab_15_1">
 			<div class="row">
-			     <div class="col-md-2">
+			     <div class="col-md-2" id = "allTreeType">
 			         <div class="portlet light ">
 			             <div class="portlet-title">
 			                 <div class="caption">
-			                     <span ng-click="reloadTable()" class="caption-subject font-blue-sharp bold uppercase">全部物料</span>
+			                     <span ng-click="reloadTable()" class="caption-subject font-blue-sharp bold uppercase">物料分类</span>
 			                 </div>
 			             </div>
 			             <div class="portlet-body">
@@ -41,7 +41,7 @@ margin-bottom: 20px;
 			             </div>
 			         </div>
 				</div>
-				<div class="col-md-10">
+				<div class="col-md-10" id="allMaterielList">
 					<div class="row">
 						<div class="col-md-12">
 				        <div class="portlet light">
@@ -151,9 +151,6 @@ margin-bottom: 20px;
 					                            <a href="#" data-target="#tab_2_2" data-toggle="tab"> 使用采购商 </a>
 					                        </li>
 					                        <li class="bold">
-					                            <a href="#" data-target="#tab_2_7"  data-toggle="tab"> 附件 </a>
-					                        </li>
-					                        <li class="bold">
 					                            <a href="#" data-target="#tab_2_3"  data-toggle="tab"> 下级物料 </a>
 					                        </li>
 					                        <li class="bold">
@@ -164,6 +161,9 @@ margin-bottom: 20px;
 					                        </li>
 					                        <li class="bold">
 					                            <a href="#" data-target="#tab_2_6"  data-toggle="tab"> 价格趋势 </a>
+					                        </li>
+					                        <li class="bold">
+					                            <a href="#" data-target="#tab_2_7"  data-toggle="tab"> 附件 </a>
 					                        </li>
 					                    </ul>
 					                    <div class="tab-content">
@@ -561,7 +561,28 @@ margin-bottom: 20px;
 										            </div>
 										    </div>
 					                        <div class="tab-pane fade" id="tab_2_2">
-										            未关联
+										            <div class="portlet-body">
+										                <table class="table table-striped table-bordered table-hover table-checkable order-column" >
+										                    <thead>
+										                        <tr>
+										                            <th> 供应商物料编码 </th>
+										                            <th> 供应商名称 </th>
+										                            
+										                        </tr>
+										                    </thead>
+										                    <tbody>
+								                                  <tr ng-repeat="_buyMateriel in buyMateriel track by $index" >
+											                          <td>
+											                                <p class="form-control-static"> {{_buyMateriel.buyMaterielNum}} </p>
+											                          </td>
+											                          <td>
+											                                <p class="form-control-static"> {{_buyMateriel.buy.comName}} </p>
+											                          </td>
+											                          
+								                                  </tr>
+								                              </tbody>
+										                </table>
+										            </div>
 					                        </div>
 					                        <div class="tab-pane fade" id="tab_2_7">
 										            <div class="portlet-body">

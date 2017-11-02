@@ -329,6 +329,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					var params = {};
 					params.takeDelivery = {};
 					params.delivery = {};
+					params.takeDelivery.deliverSerial =  $scope.deliver.serialNum;
 					params.takeDelivery.serialNum = $scope.deliver.takeDelivery.serialNum;
 					params.takeDelivery.takeDeliverNum = $scope.takeDeliver.takeDeliverNum;
 					params.takeDelivery.actualDate = $scope.takeDeliver.actualDate;
@@ -1421,7 +1422,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		                              { mData: 'serviceModel' },
 	  		                              { mData: 'saleApplySerial' },
 	  		                              { mData: 'orderSerial' },
-	  		                              { mData: 'orderDate' },
+	  		                              { mData: 'orderDate' }/*,
 	  		                              { mData: 'processBase',
 	  			                            	mRender:function(data){
 	  			                            		if(data!=""&&data!=null){
@@ -1438,7 +1439,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  			                            			return '<span  class="label label-sm label-info ng-scope">未审批</span>';
 	  			                            		}
 	  			                            	}
-	  			                            } ],
+	  			                            } */],
 	  				  		                 'aoColumnDefs' : [ {
 	  		  		  							'targets' : 0,
 	  		  		  							'searchable' : false,
