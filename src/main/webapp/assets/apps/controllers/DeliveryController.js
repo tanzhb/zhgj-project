@@ -27,10 +27,11 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		$scope.transportType="水路运输";
 		$scope.serialNums = [];	
 		$scope.orderSerial=null;
-		$scope.deliveryTransport={};
-		$scope.takeDelivery={};
-		$scope.takeDelivery.warehouseSerial=null;
+		
+		/*$scope.takeDelivery.warehouseSerial=null;*/
 		if($location.path()=="/addDelivery"){
+			$scope.deliveryTransport={};
+			$scope.takeDelivery={};
 		$rootScope.setNumCode("SE",function(newCode){
 			$scope.delivery.deliverNum = newCode;
 		});
@@ -1778,8 +1779,20 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	$scope.warehouseAddress=data.delivery.deliveryWarehouseName
 	          		    	$scope.saleOrder={};
 	          		    	$scope.saleOrder.orderNum=data.delivery.orderNum;
-	          		    	$scope.delivery.orderNum1=data.delivery.orderNum;
-	          		    	
+	          		    	/*$scope.delivery.orderNum1=data.delivery.orderNum;*/
+	          		    	$scope.deliveryTransport={};
+	          		    	$scope.deliveryTransport={};
+	          		    	$scope.deliveryTransport.transport=$scope.delivery.transport;
+	          		    	$scope.deliveryTransport.shipNumber=$scope.delivery.shipNumber
+	          		    	$scope.deliveryTransport.contact=$scope.delivery.transportContact;
+	          		    	$scope.deliveryTransport.contactNum=$scope.delivery.transportContactNum;
+	          		    	$scope.deliveryTransport.remark=$scope.delivery.transportRemark;
+	          		    	$scope.takeDelivery.warehouseSerial=$scope.delivery.takeWarehouseSerial;
+	          		    	$scope.takeDeliveryWarehouseAddress=$scope.delivery.takeAddress;
+	          		    	$scope.takeDelivery.takeDeliverDate=$scope.delivery.takeDeliverDate;
+	          		    	$scope.takeDelivery.receiver=$scope.delivery.takeDeliveryReceiver;
+	          		    	$scope.takeDelivery.contactNum=$scope.delivery.takeDeliveryContactNum;
+	          		    	$scope.takeDelivery.remark=$scope.delivery.takeDeliveryRemark;
 	          		    	
 	          		    	if(data.delivery.deliverType=='其他发货'){
 	          		    		$scope.otherMode=true;

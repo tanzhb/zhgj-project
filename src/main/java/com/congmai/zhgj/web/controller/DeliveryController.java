@@ -276,13 +276,16 @@ public class DeliveryController {
 		if(!createQG){//不产生清关单(供应商发货/平台发货)
 			OrderInfo orderInfo=new OrderInfo();
 			orderInfo.setSerialNum(orderSerial);
+			orderInfo.setDeliverStatus(orderInfo.DELIVER);
 			Delivery delivery1=new  Delivery();
 			delivery1.setSerialNum(delivery.getSerialNum());
+			delivery1.setStatus(DeliveryVO.COMPLETE);
 			if("1".equals(o.getContractContent().substring(4, 5))){//有验收条款
 					if(StringUtils.isEmpty(o.getSupplyComId())){//平台发货 产生出库检验单
 						StockInOutCheck stockInOutCheck=new StockInOutCheck();
 						stockInOutCheck.setSerialNum(ApplicationUtils.random32UUID());
 						stockInOutCheck.setDeliverSerial(serialNum);
+						stockInOutCheck.setCheckNum(orderService.getNumCode("QU"));
 						stockInOutCheck.setTakeDeliverSerial("checkout");
 						stockInOutCheck.setChecker(currenLoginName);
 						stockInOutCheck.setCreator(currenLoginName);
@@ -303,7 +306,7 @@ public class DeliveryController {
 					
 					orderInfo.setDeliverStatus(orderInfo.WAIT_OUTRECORD);//待出库
 					StockInOutRecord stockInOutRecord=new StockInOutRecord();
-					stockInOutRecord.setInOutNum("CK"+ApplicationUtils.getFromNumber());
+					stockInOutRecord.setInOutNum(orderService.getNumCode("OU"));
 					stockInOutRecord.setSerialNum(ApplicationUtils.random32UUID());
 					stockInOutRecord.setDelFlg("0");
 					stockInOutRecord.setStatus("0");
@@ -358,7 +361,7 @@ public class DeliveryController {
     	List<DeliveryMaterielVO> orderMateriel = deliveryService.selectList(serialNum);
     	map.put("orderMateriel", orderMateriel);
     	map.put("currenLoginName", currenLoginName);
-    	map.put("deliverNum", "DE"+ApplicationUtils.getFromNumber());
+    	//  	map.put("deliverNum", "DE"+ApplicationUtils.getFromNumber());
     	return map;
 	}
 	

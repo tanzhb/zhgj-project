@@ -16,7 +16,10 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    		getCompanyInfo($stateParams.comId);
 	    		//qualificationFormValid();
 	    		validatorInit();
-	    		
+	    		$rootScope.setNumCode("C",function(newCode){//
+	    			$scope.company={};
+        			$scope.company.comNum= newCode;//企业编码
+        		});
 	    		
 	 		}else{
 	 			//createTable(15,1,true);

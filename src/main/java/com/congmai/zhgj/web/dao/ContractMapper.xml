@@ -188,4 +188,15 @@
 	WHERE
 	serialNum=#{id}
     </update>
+    
+    <select id="checkNum" parameterType="com.congmai.zhgj.web.model.ContractVO" resultType="String" >  
+      select count(*) from contract where 
+      contractNum = #{contractNum,jdbcType=VARCHAR}
+      and delFlg = '0'
+      <if test="serialNum != null" >
+        and serialNum != #{serialNum,jdbcType=VARCHAR}
+      </if>
+      
+    </select> 
+  
 </mapper>

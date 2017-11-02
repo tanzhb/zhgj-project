@@ -27,9 +27,10 @@ angular
 												if($location.path()=="/addOrEditStock"){
 													if($stateParams.stockSerialNum.length>7){//库存编辑页面
 														getStockInfo($stateParams.stockSerialNum);
-													}else if($scope.manageType.indexOf('daiguan')>-1||$scope.manageType.indexOf('jinwai')>-1){
-														/*$("#serviceParty").val("中航能科（上海）能源科技有限公司");
-														$("#materielOwner").val("中航能科（上海）能源科技有限公司");*/
+													}else {
+														 $rootScope.setNumCode("IV",function(newCode){//
+										    		 			$scope.stock.stockNum= newCode;//自建.代管库存编号
+										    		 		});
 													}
 													initSuppliers();//初始化物权方选择框
 										 		}else if($location.path()=="/stockView"){

@@ -17,7 +17,13 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 		$scope.input = true;
 		$scope.inputFile=true;
 		validateFileInit();//file表单初始化
-
+		
+	if($state.current.name=="addGatheringMoney"){
+	$rootScope.setNumCode("IM",function(newCode){
+		$scope.paymentRecord={};
+			$scope.paymentRecord.paymentNum= newCode;//收款单号
+		});
+	} 
 		//根据参数查询对象
 		 if($stateParams.serialNum){
     	$scope.getPayInfo($stateParams.serialNum);	

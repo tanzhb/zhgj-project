@@ -33,6 +33,7 @@ import com.congmai.zhgj.web.model.StockInOutCheckExample.Criteria;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.StockInOutRecordExample;
 import com.congmai.zhgj.web.model.TakeDelivery;
+import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.StockInOutCheckService;
 import com.congmai.zhgj.web.service.StockService;
 
@@ -56,6 +57,8 @@ public class StockInOutCheckServiceImpl extends GenericServiceImpl<StockInOutChe
 	 private DeliveryMapper deliveryMapper;
 	 @Resource
 	 private OrderInfoMapper orderInfoMapper;
+	 @Resource
+	 private OrderService orderService;
 
 	@Override
 	public GenericDao<StockInOutCheck, String> getDao() {
@@ -139,11 +142,12 @@ public class StockInOutCheckServiceImpl extends GenericServiceImpl<StockInOutChe
 		if("checkin".equals(judgeString)){
 			stockInOutRecord.setTakeDeliverSerial(serial);
 			stockInOutRecord.setDeliverSerial("");
+			stockInOutRecord.setInOutNum(orderService.getNumCode("IN"));
 		}else{
 			stockInOutRecord.setDeliverSerial(serial);
 			stockInOutRecord.setTakeDeliverSerial("");
+			stockInOutRecord.setInOutNum(orderService.getNumCode("OU"));
 		}
-		stockInOutRecord.setInOutNum("RK"+ApplicationUtils.getFromNumber());
 		stockInOutRecord.setDelFlg("0");
 		stockInOutRecord.setStatus("0");
 		stockInOutRecord.setCreator(userName);

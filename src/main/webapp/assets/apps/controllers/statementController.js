@@ -32,10 +32,16 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
         		showdatepicker();
         		supply_validateInit();
         		initCustomers();    
+        		$rootScope.setNumCode("CB",function(newCode){
+		 			$scope.statement.statementNum= newCode;//对账单号
+		 		});
         	}else if($state.current.name=="addSupplyStatement"){
         		showdatepicker();
         		buy_validateInit();// 加载表单验证控件
         		initSuppliers();
+        		$rootScope.setNumCode("VB",function(newCode){
+		 			$scope.statement.statementNum= newCode;//对账单号
+		 		});
         	}else if($state.current.name=="viewBuyStatement"){
         		$scope.getStatement($stateParams.serialNum);
         	}else if($state.current.name=="viewSupplyStatement"){

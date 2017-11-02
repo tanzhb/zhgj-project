@@ -16,6 +16,13 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	    			$scope.demandPlanAdd = true;
 	    			$scope.demandPlanView =true;
 	    		}
+	    		if($scope.demandPlan===undefined){
+	    			 $rootScope.setNumCode("PL",function(newCode){//
+	    		 			$scope.demandPlan.demandPlanNum= newCode;//需求计划号
+	    		 		});
+	    		}
+	    		
+	    		
 	    		selectParentMateriel();//加载物料列表
 	    		handle.datePickersInit("bottom");
 	    		initCustomers();

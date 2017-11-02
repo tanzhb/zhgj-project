@@ -50,6 +50,7 @@ import com.congmai.zhgj.web.model.TakeDeliveryParams;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.NoticeService;
+import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.UserCompanyService;
 
 @Controller
@@ -74,6 +75,9 @@ public class NoticeContoller {
 
 	@Autowired
 	private IProcessService processService;
+	
+	@Autowired
+	private OrderService  orderService;
 	
 	
 	@RequestMapping("noticeManage")
@@ -213,7 +217,7 @@ public class NoticeContoller {
         		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
         		if(StringUtils.isEmpty(notice.getSerialNum())){
         			notice.setSerialNum(ApplicationUtils.random32UUID());
-        			notice.setNoticeNum("NO"+ApplicationUtils.getFromNumber());
+        			notice.setNoticeNum(orderService.getNumCode("NO"));
         			notice.setCreateTime(new Date());
         			notice.setCreator(currenLoginName);
         			notice.setUpdateTime(new Date());

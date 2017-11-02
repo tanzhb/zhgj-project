@@ -18,6 +18,10 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 	    		if(!isNull($stateParams.serialNum)){
 	    			$(".s_tip").text("编辑入库信息");
 	    			stockInInfo($stateParams.serialNum);
+	    		}else{
+	    			$rootScope.setNumCode("IN",function(newCode){//
+    		 			$scope.record.inOutNum= newCode;//入库单号 
+    		 		});
 	    		}
 	    		if($scope.record.stockDate==''){
 		    		$scope.record.stockDate=$filter('date')(new Date(), 'yyyy-MM-dd');

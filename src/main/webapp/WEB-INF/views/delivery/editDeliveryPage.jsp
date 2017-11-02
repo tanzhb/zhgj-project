@@ -61,7 +61,7 @@
 														class="required" aria-required="true"> * </span> --></label>
 													<div class="">
 														<input type="text" name="deliverNum" class="form-control"
-															ng-model="delivery.deliverNum" ng-show="inputDeliveryInfo" readonly="readonly">
+															ng-model="delivery.deliverNum" ng-show="inputDeliveryInfo" >
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
 															{{delivery.deliverNum}}</p>

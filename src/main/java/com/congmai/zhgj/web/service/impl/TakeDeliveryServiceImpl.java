@@ -60,6 +60,7 @@ import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
+import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.TakeDeliveryService;
 
 @Service
@@ -107,6 +108,9 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	
 	@Resource
     private DeliveryService deliveryService;
+	
+	@Resource
+    private OrderService  orderService;
 	
 	@Override
 	public GenericDao<TakeDelivery, String> getDao() {
@@ -168,6 +172,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 		
 		deliveryTransportMapper.insert(deliveryTransport);
+		takeDelivery.setTakeDeliverNum(orderService.getNumCode("RE"));
 		takeDeliveryMapper.insert(takeDelivery);
 		for(DeliveryMateriel materiel : deliveryMateriels){
 			deliveryMaterielMapper.insert(materiel);
@@ -294,7 +299,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		List<Stock>  stocks=stockMapper.selectByExample(stockExample);
 		if(CollectionUtils.isEmpty(stocks)){//不存在此物料的库存,就直接新建一条库存
 			Stock stock=new Stock();
-			stock.setStockNum("KC"+ApplicationUtils.getFromNumber());
+			stock.setStockNum(orderService.getNumCode("IV"));
 			stock.setSerialNum(ApplicationUtils.random32UUID());
 			stock.setCurrentAmount(deliveryMateriel.getStockCount());
 			stock.setDelFlg("0");
@@ -645,7 +650,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			stockInOutRecord.setSerialNum(ApplicationUtils.random32UUID());
 			stockInOutRecord.setTakeDeliverSerial(takeDelivery.getSerialNum());
 			stockInOutRecord.setDeliverSerial("");
-			stockInOutRecord.setInOutNum("RK"+ApplicationUtils.getFromNumber());
+			stockInOutRecord.setInOutNum(orderService.getNumCode("IN"));
 			stockInOutRecord.setDelFlg("0");
 			stockInOutRecord.setStatus("0");
 			stockInOutRecord.setCreator(currenLoginName);
@@ -710,7 +715,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		check.setSerialNum(ApplicationUtils.random32UUID());
 		check.setTakeDeliverSerial(takeDelivery.getSerialNum());
 		check.setDeliverSerial("checkin");
-		check.setCheckNum("RK"+ApplicationUtils.getFromNumber());
+		check.setCheckNum(orderService.getNumCode("QU"));
 		check.setStatus("0");
 		check.setDelFlg("0");
 		check.setCreator(currenLoginName);
@@ -752,7 +757,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		check.setSerialNum(ApplicationUtils.random32UUID());
 		check.setDeliverSerial(deliverySerial);
 		check.setTakeDeliverSerial("checkout");
-		check.setCheckNum("CK"+ApplicationUtils.getFromNumber());
+		check.setCheckNum(orderService.getNumCode("QU"));
 		check.setStatus("0");
 		check.setDelFlg("0");
 		check.setCreator(currenLoginName);

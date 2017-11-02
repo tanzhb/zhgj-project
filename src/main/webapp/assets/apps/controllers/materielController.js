@@ -34,6 +34,13 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
         	}else{
         		$scope.opration = '新增';
         		$scope.materiel = {}
+        		$rootScope.setNumCode("DL",function(newCode){//
+        			$scope.materiel.materielNum = newCode;//物料编码
+        		});
+        		$rootScope.setNumCode("PA",function(newCode){//
+        			$scope.materiel.packageNum = newCode;//包装编号
+        		});
+        		
         		
         		//加载物料分类
             	$scope.queryCategoryListByParent('frist','0');
@@ -86,19 +93,29 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     		$scope.materiel.createTime=null;
     		$scope.materiel.updateTime=null;
     		//**********//
-
-    		materielService.save($scope.materiel).then(
-       		     function(data){
-       		    	toastr.success('数据保存成功！');
-       		    	$location.search({serialNum:data.serialNum,view:1});
-       		    	$scope.materielInput = true;
-    		    	$scope.materielShow = true;
-       		     },
-       		     function(error){
-       		         $scope.error = error;
-       		         toastr.error('数据保存出错！');
-       		     }
-       		 );
+    		$rootScope.judgeIsExist("materiel",$scope.materiel.materielNum, $scope.materiel.serialNum,function(result){
+    			var 	isExist = result;
+    		debugger;
+    		if(isExist){
+    			toastr.error('物料编号重复！');
+    			return;
+    		}else{
+    			materielService.save($scope.materiel).then(
+    	       		     function(data){
+    	       		    	toastr.success('数据保存成功！');
+    	       		    	$location.search({serialNum:data.serialNum,view:1});
+    	       		    	$scope.materielInput = true;
+    	    		    	$scope.materielShow = true;
+    	       		     },
+    	       		     function(error){
+    	       		         $scope.error = error;
+    	       		         toastr.error('数据保存出错！');
+    	       		     }
+    	       		 );
+    		}
+    		
+    		});
+    		
     	}
     	
     }; 	
@@ -137,20 +154,41 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     		$scope.materiel.createTime=null;
     		$scope.materiel.updateTime=null;
     		//**********//
-
-    		materielService.save($scope.materiel).then(
+    		$rootScope.judgeIsExist("materielPackage",$scope.materiel.packageNum, $scope.materiel.serialNum,function(result){
+    			var 	isExist = result;
+    		debugger;
+    		if(isExist){
+    			toastr.error('包装编号重复！');
+    			return;
+    		}else{
+    			materielService.save($scope.materiel).then(
+    	       		     function(data){
+    	       		    	toastr.success('数据保存成功！');
+    	       		    	$location.search({serialNum:data.serialNum,view:1});
+    	       		    	$scope.materielInput = true;
+    	    		    	$scope.materielShow = true;
+    	       		     },
+    	       		     function(error){
+    	       		         $scope.error = error;
+    	       		         toastr.error('数据保存出错！');
+    	       		     }
+    	       		 );
+    		}
+    		
+    		});
+    		/*materielService.save($scope.materiel).then(
        		     function(data){
        		    	toastr.success('数据保存成功！');
        		    	$location.search({serialNum:data.serialNum,view:1});
-       		    	/*$scope.materiel=data;
+       		    	$scope.materiel=data;
        		    	$scope.materielPackageInput = true;
-       		    	$scope.materielPackageShow = true;*/
+       		    	$scope.materielPackageShow = true;
        		     },
        		     function(error){
        		    	toastr.error('数据保存出错！');
        		         $scope.error = error;
        		     }
-       		 );
+       		 );*/
     	}
     	
     }; 	
