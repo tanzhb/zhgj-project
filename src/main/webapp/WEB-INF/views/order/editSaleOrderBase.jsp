@@ -1064,7 +1064,7 @@ margin-right: 20px;
 									<th></th>
 									<th>{{totalSupply()}}</th>
 									<th></th>
-									<th></th>
+									<th>{{totalMaterielCount()}}</th>
 									<th></th>
 									<th></th>
 									<th></th>

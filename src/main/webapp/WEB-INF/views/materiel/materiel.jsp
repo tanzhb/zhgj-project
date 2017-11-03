@@ -146,12 +146,16 @@ margin-bottom: 20px;
 					                    	<li class="active bold">
 					                            <a href="#" data-target="#tab_2_0" data-toggle="tab"> 基本信息 </a>
 					                        </li>
+					                        <shiro:hasAnyRoles  name="admin, customer">
 					                        <li class="bold">
 					                            <a href="#" data-target="#tab_2_1" data-toggle="tab"> 供应商 </a>
 					                        </li>
+					                        </shiro:hasAnyRoles>
+					                        <shiro:hasAnyRoles  name="admin, supplier">
 					                        <li class="bold">
 					                            <a href="#" data-target="#tab_2_2" data-toggle="tab"> 使用采购商 </a>
 					                        </li>
+					                        </shiro:hasAnyRoles>
 					                        <li class="bold">
 					                            <a href="#" data-target="#tab_2_3"  data-toggle="tab"> 下级物料 </a>
 					                        </li>

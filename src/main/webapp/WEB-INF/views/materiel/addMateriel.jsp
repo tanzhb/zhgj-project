@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <!-- BEGIN PAGE HEADER-->
 
 <!-- <h3 class="page-title"> 物料信息
@@ -40,8 +41,10 @@
 						<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">包装信息</a>
 						</li>
 						<li class="bold" ng-show="BOMShow"><a data-target="#tab_1_4" data-toggle="tab">下级物料</a></li>
-						<li class="bold"><a data-target="#tab_1_5" data-toggle="tab">供应商</a></li>
-						<li class="bold"><a data-target="#tab_1_6" data-toggle="tab">采购商</a></li>
+						<shiro:hasRole name="admin">
+							<li class="bold"><a data-target="#tab_1_5" data-toggle="tab">供应商</a></li>
+							<li class="bold"><a data-target="#tab_1_6" data-toggle="tab">采购商</a></li>
+						</shiro:hasRole>
 						<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">附件</a></li>
 						
 					</ul>

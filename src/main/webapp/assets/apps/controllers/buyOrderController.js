@@ -222,7 +222,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
    $scope.datepickerInit = function(scope){
 	   $('.date-picker').datepicker({
 			rtl: App.isRTL(),
-			orientation: "left",
+			orientation: "bottom",
 			autoclose: true,
 			dateFormat:"yyyy-mm-dd",
 			language: "zh-CN"
@@ -345,7 +345,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                               { mData: 'supplyName' },
                               { mData: 'materielCount' },
                               { mData: 'orderAmount' },
-                              { mData: 'deliveryMode' },
+                              /*{ mData: 'deliveryMode' },*/
                               { mData: 'orderType' },
                               { mData: 'saleApplySerial' },
                               { mData: 'orderSerial' },
@@ -500,7 +500,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 								 $compile(td)($scope);
 						       }
 						}, {
-							'targets' : 7,
+							'targets' : 6,
 							'render' : function(data,
 									type, row, meta) {
 								if(isNull(row.contract)){
@@ -616,7 +616,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                                   { mData: 'supplyName' },
                                   { mData: 'materielCount' },
                                   { mData: 'orderAmount' },
-                                  { mData: 'deliveryMode' },
+                                  /*{ mData: 'deliveryMode' },*/
                                   { mData: 'orderType' },
                                   { mData: 'saleApplySerial' },
                                   { mData: 'orderSerial' },
@@ -637,7 +637,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     								 $compile(td)($scope);
     						       }
     						}, {
-								'targets' : 7,
+								'targets' : 6,
 								'render' : function(data,
 										type, row, meta) {
 									if(isNull(row.contract)){
@@ -2732,6 +2732,18 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			       	}
 		       };
 		       
+		       $scope.totalMaterielCount  = function(scope) {//订单物料总数量
+		    	   if($scope.orderMateriel){
+		    		    var total = 0 ; 
+			       		for(var i=0;i<$scope.orderMateriel.length;i++){
+			       			total = total + Number($scope.orderMateriel[i].amount);
+			       		}
+			       		return total
+			       	}else{
+			       		return 0;
+			       	}
+		       };
+		       
 		       $scope.totalOrderAmount  = function(scope) {//订单金额（外贸：商品金额+其他金额，内贸：价税合计（商品金额+税额含关税）+ 其他金额）
 		    	   if(isNull($scope.clauseSettlement)||isNull($scope.clauseSettlement.otherAmount)){
 		    		   if(!isNull($scope.buyOrder)&&$scope.buyOrder.tradeType =='外贸'){
@@ -2925,7 +2937,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		     $scope.updateOrderAmount = function(obj,attr){
 		    	$scope.submitOrder = {}
    	        	$scope.submitOrder.serialNum = $scope.buyOrder.serialNum;
-   	        	$scope.submitOrder.materielCount = $scope.totalCount();
+   	        	$scope.submitOrder.materielCount = $scope.totalMaterielCount();
    	        	$scope.submitOrder.materielAmount = $scope.totalAmount();
       	        $scope.submitOrder.rateAmount = $scope.totalRateAndCustomsAmount();
       	        $scope.submitOrder.rateAndAmount = $scope.totalRateAndAmount();

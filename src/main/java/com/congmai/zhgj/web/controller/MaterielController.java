@@ -339,6 +339,43 @@ public class MaterielController {
 		materiel.setStatus("1");
 		
 		materielService.insert(materiel);
+		
+		Company company = getCompany();
+    	if(company!=null&&ComType.SUPPLIER.getValue().equals(company.getComType())){
+    		SupplyMateriel sm = new SupplyMateriel();
+    		sm.setSerialNum(ApplicationUtils.random32UUID());
+    		sm.setMaterielId(materiel.getMaterielId());
+    		sm.setSupplyComId(company.getComId());
+    		sm.setCreator(currenLoginName);
+    		sm.setUpdater(currenLoginName);
+    		sm.setCreateTime(new Date());
+    		sm.setUpdateTime(new Date());
+    		supplyMaterielService.insert(sm);
+    	}else if(company!=null&&ComType.BUYER.getValue().equals(company.getComType())){
+    		BuyMateriel bm = new BuyMateriel();
+    		bm.setSerialNum(ApplicationUtils.random32UUID());
+    		bm.setMaterielId(materiel.getMaterielId());
+    		bm.setBuyComId(company.getComId());
+    		bm.setCreator(currenLoginName);
+    		bm.setUpdater(currenLoginName);
+    		bm.setCreateTime(new Date());
+    		bm.setUpdateTime(new Date());
+    		buyMaterielService.insert(bm);
+    	}
+		
+	}
+
+	private Company getCompany() {
+		User user = UserUtil.getUserFromSession();
+    	List<String> comIds = null;
+    	Company company = null;
+    	if(user!=null){
+			comIds = userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId()));
+		}
+    	if(comIds!=null){
+    		company = companyService.selectById(comIds.get(0));
+    	}
+		return company;
 	}
 
 	//销售订单
@@ -363,9 +400,6 @@ public class MaterielController {
     	User user = UserUtil.getUserFromSession();
     	List<String> comIds = null;
     	Company company = null;
-    	/*if(!SALEORDER.equals(type)){//客户端新建订单选择物料没限制
-    		
-    	}*/
     	if(user!=null){
 			comIds = userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId()));
 		}

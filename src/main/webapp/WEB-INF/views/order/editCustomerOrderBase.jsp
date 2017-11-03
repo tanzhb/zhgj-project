@@ -169,17 +169,17 @@ margin-right: 20px;
                              </div>
                          </div>
                          <!--/span-->
-                         <div class="col-md-4">
+                         <!-- <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label bold">关联采购单号：</label>
                                  <div class="">
                                  <input type="text" name="orderSerial" readonly class="form-control" ng-hide="customerOrderInput" ng-model="customerOrder.orderSerial"  >
                                      <div class="form-control-focus"> </div>
-                                     <!-- <span class="help-block" ng-hide="customerOrderInput">请输入关联采购单号</span> -->
+                                     <span class="help-block" ng-hide="customerOrderInput">请输入关联采购单号</span>
                                      <p class="form-control-static" ng-show="customerOrderShow"> {{customerOrder.orderSerial}} </p>
                                  </div>
                              </div>
-                         </div>
+                         </div> -->
                          <!--/span-->
                      </div>
                      <!--/row-->
@@ -1062,7 +1062,7 @@ margin-right: 20px;
 									<th></th>
 									<th>{{totalSupply()}}</th>
 									<th></th>
-									<th></th>
+									<th>{{totalMaterielCount()}}</th>
 									<th></th>
 									<th></th>
 									<th></th>

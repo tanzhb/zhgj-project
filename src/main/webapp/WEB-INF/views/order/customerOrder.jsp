@@ -3,9 +3,9 @@
 
 <div class="tabbable-line">
     <ul class="nav nav-tabs">
-			<li class="active"><a data-target="#tab_15_1" data-toggle="tab">销售订单</a>
+			<li class="active"><a data-target="#tab_15_1" data-toggle="tab">采购订单</a>
 			</li>
-			<!-- <li><a data-target="" data-toggle="tab">框架合同</a></li> -->
+			<li><a data-target="" data-toggle="tab">收货计划</a></li> 
 	</ul>
     <div class="tab-content">
     	<!-- 普通订单---START -->
@@ -54,9 +54,9 @@
 		                                </th>
 			                            <th> 采购订单号 </th>
 			                            <th> 买方 </th>
-			                            <th> 采购商品 </th>
+			                            <th> 采购数量 </th>
 			                            <th> 金额 </th>
-			                            <th> 配送 </th>
+			                            <!-- <th> 配送 </th> -->
 			                            <th> 采购类型 </th>
 			                            <th> 关联合同 </th>
 			                            <th> 关联采购单 </th>
@@ -152,9 +152,9 @@
                                 </th>
 	                            <th> 采购订单号 </th>
 	                            <th> 买方 </th>
-	                            <th> 采购商品 </th>
+	                            <th> 采购数量 </th>
 	                            <th> 金额 </th>
-	                            <th> 配送 </th>
+	                            <!-- <th> 配送 </th> -->
 	                            <th> 采购类型 </th>
 	                            <th> 关联合同 </th>
 	                            <th> 关联采购单 </th>

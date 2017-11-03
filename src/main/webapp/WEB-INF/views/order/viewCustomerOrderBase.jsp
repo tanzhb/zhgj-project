@@ -42,7 +42,7 @@ margin-right: 20px;
                  <div class="form-body">
                      <div class="alert alert-danger display-hide">
                          <button class="close" data-close="alert"></button> 请先输入正确数据！ </div>
-                     <div class="row">
+                     <!-- <div class="row">
                      	<div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">销售类型：</label>
@@ -68,8 +68,8 @@ margin-right: 20px;
                              </div>
                          		
                          </div>
-                         <!--/span-->
-                     </div>
+                         /span
+                     </div> -->
                      <div class="row">
                          <div class="col-md-4">
                              <div class="form-group ">
@@ -110,7 +110,7 @@ margin-right: 20px;
                      <div class="row">
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">销售订单号：</label>
+                                 <label class="control-label col-md-5 bold">采购订单号：</label>
                                  <div class="control-label col-md-7">
                                      <p  > {{customerOrder.orderNum}} </p>
                                  </div>
@@ -119,21 +119,21 @@ margin-right: 20px;
                          </div>
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">关联销售申请单号：</label>
+                                 <label class="control-label col-md-5 bold">关联项目号：</label>
                                  <div class="control-label col-md-7">
                                      <p  > {{customerOrder.projectNum}} </p>
                                  </div>
                              </div>
                          </div>
                          <!--/span-->
-                         <div class="col-md-4">
+                         <!-- <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">关联采购单号：</label>
                                  <div class="control-label col-md-7">
                                      <p  > {{customerOrder.orderSerial}} </p>
                                  </div>
                              </div>
-                         </div>
+                         </div> -->
                          <!--/span-->
                      </div>
                      <!--/row-->
@@ -794,7 +794,7 @@ margin-right: 20px;
 									<th>单位</th>
 									<th>供应商</th>
 									<th>库存数量</th>
-									<th>销售数量</th>
+									<th>采购数量</th>
 									<th>指导单价</th>
 									<th>含税单价</th>
 									<th>不含税单价</th>
@@ -903,7 +903,7 @@ margin-right: 20px;
 									<th></th>
 									<th>{{totalSupply()}}</th>
 									<th></th>
-									<th></th>
+									<th>{{totalMaterielCount()}}</th>
 									<th></th>
 									<th></th>
 									<th></th>
