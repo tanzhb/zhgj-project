@@ -29,7 +29,7 @@
 				            <div class="portlet-title">
 							<div class="caption">
 								<i class="fa fa-globe font-green"></i>
-								<span class="caption-subject font-green bold uppercase">客户对账单</span>
+								<span class="caption-subject font-green bold uppercase"><shiro:hasRole name="admin">客户</shiro:hasRole>对账单</span>
 							</div>
 							<div class="actions">
 								<div class="btn-group btn-group-devided" data-toggle="buttons">
