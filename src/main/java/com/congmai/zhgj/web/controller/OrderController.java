@@ -1570,6 +1570,15 @@ public class OrderController {
     			newOrderInfo.setTradeType(StaticConst.getInfo("neimao"));//设置为内贸
     			newOrderInfo.setSeller(StaticConst.getInfo("comName"));
     			
+    			if(supplySet.size()>1){
+    				newOrderInfo.setMaterielCount(null);
+    				newOrderInfo.setMaterielAmount(null);
+    				newOrderInfo.setRateAmount(null);
+    				newOrderInfo.setRateAndAmount(null);
+    				newOrderInfo.setOtherAmount(null);
+    				newOrderInfo.setOrderAmount(null);
+    			}
+    			
     			Company company =  companyService.selectOne(orderInfo.getBuyComId());
     			if(company!=null){
     				newOrderInfo.setEntrustParty(company.getComName());
@@ -1584,6 +1593,7 @@ public class OrderController {
     			newOrderInfo.setStatus("0");
     			orderService.insert(newOrderInfo);
     			List<OrderMateriel> newMaterielList = new ArrayList<OrderMateriel>();//生成新的采购订单物料
+    			Double materielCount = 0D;
     			for(OrderMateriel o:orderMateriel){
         			if(o.getSupplyMateriel()!=null){
         				if(supplyComId.equals(o.getSupplyMateriel().getSupplyComId())){
@@ -1595,12 +1605,18 @@ public class OrderController {
         	    			o.setCreateTime(new Date());
         	    			o.setUpdateTime(new Date());
         					newMaterielList.add(o);
+        					
+        					materielCount = materielCount + Double.parseDouble(o.getAmount());
         				}
         			}
         		}
     			orderMaterielService.betchInsertOrderMateriel(newMaterielList);//插入新的订单物料
-    			
-    			
+    			if(supplySet.size()>1){
+	    			OrderInfo updateOrderMaterielCount = new OrderInfo();//修改销售订单的关联采购订单号
+	    			updateOrderMaterielCount.setSerialNum(newSerialNum);
+	    			updateOrderMaterielCount.setMaterielCount(materielCount.toString());
+	        		orderService.updateStatus(updateOrderMaterielCount);
+    			}
     			//获取合同信息
     	    	ContractVO contract = null;
     			if(StringUtils.isNotEmpty(orderInfo.getContractSerial())){
@@ -1611,7 +1627,7 @@ public class OrderController {
     				beanContractVOCopier.copy(contract, newcontract, null);
     				newcontract.setId(newContractSerialNum);
     				newcontract.setComId(supplyComId);
-    				newcontract.setContractNum(null);
+    				newcontract.setContractNum(getNumCode("CA"));
     				newcontract.setContractType(StaticConst.getInfo("buyContract"));//设置合同类型为采购合同
     				newcontract.setCreator(currenLoginName);
     				newcontract.setUpdater(currenLoginName);
@@ -1675,6 +1691,13 @@ public class OrderController {
     	        		clauseSettlement.setCreateTime(new Date());
     	        		clauseSettlement.setUpdateTime(new Date());
 
+    	        		if(supplySet.size()>1){
+    	        			clauseSettlement.setMaterielAmount(null);
+    	        			clauseSettlement.setRateAmount(null);
+    	        			clauseSettlement.setRateAndAmount(null);
+    	        			clauseSettlement.setOtherAmount(null);
+    	        			clauseSettlement.setOrderAmount(null);
+            			}
     	        		clauseSettlementService.insert(clauseSettlement);
     	        		
     	        		List<ClauseSettlementDetail> clauseSettlementDetail = clauseSettlement.getClauseSettlementDetails();

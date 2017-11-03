@@ -1781,14 +1781,14 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	$scope.saleOrder.orderNum=data.delivery.orderNum;
 	          		    	/*$scope.delivery.orderNum1=data.delivery.orderNum;*/
 	          		    	$scope.deliveryTransport={};
-	          		    	$scope.deliveryTransport={};
+	          		    	$scope.takeDelivery={};
 	          		    	$scope.deliveryTransport.transport=$scope.delivery.transport;
 	          		    	$scope.deliveryTransport.shipNumber=$scope.delivery.shipNumber
 	          		    	$scope.deliveryTransport.contact=$scope.delivery.transportContact;
 	          		    	$scope.deliveryTransport.contactNum=$scope.delivery.transportContactNum;
 	          		    	$scope.deliveryTransport.remark=$scope.delivery.transportRemark;
 	          		    	$scope.takeDelivery.warehouseSerial=$scope.delivery.takeWarehouseSerial;
-	          		    	$scope.takeDeliveryWarehouseAddress=$scope.delivery.takeAddress;
+	          		    	$scope.takeDelivery.warehouseAddress=$scope.delivery.takeAddress;
 	          		    	$scope.takeDelivery.takeDeliverDate=$scope.delivery.takeDeliverDate;
 	          		    	$scope.takeDelivery.receiver=$scope.delivery.takeDeliveryReceiver;
 	          		    	$scope.takeDelivery.contactNum=$scope.delivery.takeDeliveryContactNum;

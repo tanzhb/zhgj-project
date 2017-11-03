@@ -904,7 +904,7 @@
 							                                <p class="form-control-static" ng-show="buyMaterielInfoShow"> {{_buyMateriel.buyMaterielNum}} </p>
 							                          </td>
 				                                      
-				                                      <td ng-show="operation_s{{$index}}">
+				                                      <td ng-show="operation_buy{{$index}}">
 				                                      	<a href="javascript:;"  class="btn red btn-sm" ng-hide="buyMaterielInfoInput" ng-click="deleteBuyMateriel($index)">
 				                                    			<i class="fa fa-close"></i> 
 				                             				</a>

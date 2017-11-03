@@ -983,7 +983,7 @@ margin-right: 20px;
 			                          <td>  
 		                          		<input style="padding:6px 3px" type="text"  name="orderUnitPrice{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].orderUnitPrice"  
 		                          		ng-keyup="" ng-change="clearNoNumPoint(orderMateriel[$index],'orderUnitPrice');_arithmeticRateUnit(_orderMateriel)">
-                                     		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.orderUnitPrice}} </p>
+                                     		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{format2Thousands(_orderMateriel.orderUnitPrice)}} </p>
 			                          </td>
 			                          <td>  
 	                                     		<p class="form-control-static" > {{saleOrder.currency}} </p>

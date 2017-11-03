@@ -975,6 +975,9 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
  	    	  if(type=='supplyMateriel'){
 	    		   call =  "operation_s"+index;
 	    	   }
+ 	    	 if(type=='buyMateriel'){
+	    		   call =  "operation_buy"+index;
+	    	   }
  	    	   $scope[call] = true;
  	       };
  	       

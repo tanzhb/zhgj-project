@@ -22,7 +22,9 @@ margin-bottom: 20px;
     <ul class="nav nav-tabs">
 		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">物料列表</a>
 			</li>
+		<shiro:hasRole name="admin">
 		<li class=""><a data-target="#tab_15_2" data-toggle="tab" ng-click="queryCategoryListByParent('frist','0')">物料分类</a></li>
+		</shiro:hasRole>
 	</ul>
     <div class="tab-content">
     	<!-- 普通订单---START -->
