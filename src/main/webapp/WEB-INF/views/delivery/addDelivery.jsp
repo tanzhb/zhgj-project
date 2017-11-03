@@ -33,7 +33,7 @@
 							<div class="tab-pane fade active in" id="tab_1_1">
 							 <div class="portlet-title" style="min-height: 48px;">
                <div class="tools" style="float:right"><!-- ng-if="deliveryDetail.status=='0'" -->
-               	<button type="button" ng-click="goDelivery()"   ng-show="inputDeliveryInfo"    ng-if="(delivery.status=='0'||delivery.status==undefined)&&delivery.deliverType=='贸易发货'"
+               	<button type="button" ng-click="goDelivery()"     ng-if="(delivery.status=='0'||delivery.status==undefined)&&delivery.deliverType=='贸易发货'"
 								class="btn blue  btn-circle  btn-sm">
 								<i class="fa fa-save"></i> 确认发货
 							</button>
@@ -101,7 +101,7 @@
 															onclick="return false;">
 															<input id="orderSerial" name="orderSerial" type="text"
 																ng-show="inputDeliveryInfo" class="form-control"
-																ng-model="saleOrder.orderNum" readonly="readonly">
+																ng-model="saleOrder.orderNum" >
 															<span ng-show="inputDeliveryInfo" class="input-group-btn"
 																style="vertical-align: top;">
 																<button class="btn default" type="button">

@@ -86,10 +86,10 @@
 													<label class="control-label bold">甲方<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
-														<!-- <input type="text" id="firstParty" name="firstParty"
+														<input type="text" id="firstParty" name="firstParty"
 															class="form-control" ng-model="contractVO.firstParty" />
-														<div class="form-control-focus"></div> -->
-														<p class="form-control-static" >{{contractVO.firstParty}}</p>
+														<div class="form-control-focus"></div>
+														<!-- <p class="form-control-static" >{{contractVO.firstParty}}</p> -->
 													</div>
 												</div>
 											</div>
@@ -99,8 +99,8 @@
 										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">甲方签订人<span
-														class="required" aria-required="true"> * </span></label>
+													<label class="control-label bold">甲方签订人<!-- <span
+														class="required" aria-required="true"> * </span> --></label>
 													<div class="">
 														<input type="text" class="form-control"
 															placeholder="甲方签订人"
@@ -115,10 +115,10 @@
 													<label class="control-label bold">乙方<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
-														<!-- <input type="text" class="form-control" placeholder="乙方"
+														<input type="text" class="form-control" 
 															ng-model="contractVO.secondParty" name="secondParty" />
-														<div class="form-control-focus"></div> -->
-													<p class="form-control-static" >{{contractVO.secondParty}}</p>
+														<div class="form-control-focus"></div>
+													<!-- <p class="form-control-static"   >{{contractVO.secondParty}}</p> -->
 													</div>
 												</div>
 											</div>
@@ -126,8 +126,8 @@
 
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">乙方签订人<span
-														class="required" aria-required="true"> * </span></label>
+													<label class="control-label bold">乙方签订人<!-- <span
+														class="required" aria-required="true"> * </span> --></label>
 													<div class="">
 														<input type="text" class="form-control"
 															placeholder="乙方签订人"
@@ -161,8 +161,8 @@
 
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">签订地点<span
-														class="required" aria-required="true"> * </span></label>
+													<label class="control-label bold">签订地点<!-- <span
+														class="required" aria-required="true"> * </span> --></label>
 													<div class="">
 														<input type="text" class="form-control"
 															name="signerAddress" placeholder="签订地点"
@@ -173,8 +173,8 @@
 											</div>
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">开始日期<span
-														class="required" aria-required="true"> * </span></label>
+													<label class="control-label bold">开始日期<!-- <span
+														class="required" aria-required="true"> * </span> --></label>
 													<div class="">
 														<input type="text" class="form-control date-picker"
 															ng-model="contractVO.startDate" placeholder="开始日期"
@@ -191,8 +191,8 @@
 										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">结束日期<span
-														class="required" aria-required="true"> * </span></label>
+													<label class="control-label bold">结束日期<!-- <span
+														class="required" aria-required="true"> * </span> --></label>
 													<div class="">
 														<input type="text" class="form-control"
 															ng-model="contractVO.endDate" id="endDate"

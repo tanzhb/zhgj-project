@@ -163,7 +163,7 @@
 	LEFT JOIN warehouse d ON a.warehouseSerial=d.serialNum AND d.delFlg='0'
 	LEFT JOIN takeDelivery c ON c.deliverSerial=a.serialNum
 	LEFT JOIN warehouse e ON c.warehouseSerial=e.serialNum AND e.delFlg='0'
-	LEFT JOIN orderInfo f ON a.orderSerial=f.serialNum AND f.delFlg='0'
+	LEFT JOIN orderInfo f ON a.orderSerial=f.serialNum 
 	WHERE a.serialNum=#{id}
     </select>
     

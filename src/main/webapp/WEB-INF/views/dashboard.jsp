@@ -35,7 +35,7 @@
 		</div> -->
 	</div>
 	<div class="row"  >
-		<div class="col-md-8 col-sm-7"  >
+		<div class="col-md-6 col-sm-7"  >
 			<!-- BEGIN PORTLET-->
 			<div class="portlet light ">
 				<div class="portlet-title tabbable-line">
@@ -49,11 +49,11 @@
 						<li><a href="#tab_1_2" data-toggle="tab"> 已办 <ybQuantity/></a></li>
 					</ul>
 				</div>
-				<div class="portlet-body" style="height:300px">
+				<div class="portlet-body" style="height:640px">
 					<!--BEGIN TABS-->
 					<div class="tab-content">
 						<div class="tab-pane active" id="tab_1_1">
-							<div class="scroller" style="height: 129px;" data-always-visible="1" data-rail-visible="0">
+							<div class="scroller" style="height: 610px;" data-always-visible="1" data-rail-visible="0">
 								<ul class="feeds">										
 									<div ng-repeat="dbItem in dbItems">
 								         <div compile="dbItem.template"></div>         
@@ -64,7 +64,7 @@
 								
 						</div>
 						<div class="tab-pane" id="tab_1_2">
-							<div class="scroller" style="height: 129px;" data-always-visible="1" data-rail-visible="0">
+							<div class="scroller" style="height: 610px;" data-always-visible="1" data-rail-visible="0">
 								<ul class="feeds">									
 									 <div ng-repeat="ybItem in ybItems">
 								         <div compile="ybItem.template"></div>         
@@ -78,7 +78,7 @@
 			</div>
 			<!-- END PORTLET-->
 		</div>
-		<div class="col-md-4 col-sm-5">
+		<div class="col-md-6 col-sm-5">
 			<div class="portlet light ">
 				<div class="portlet-title">
 					<div class="caption caption-md">
@@ -87,14 +87,93 @@
 							</span> <span class="caption-helper"><noticeCount/></span><!-- 显示公告条数 -->
 					</div>
 				</div>
-				<div class="portlet-body" style="height:300px">
-					
+				<div class="portlet-body" style="height:238px">
+					<div class="row"
+							ng-if="noticeList == null || noticeList.length == 0"
+							align="center">暂无公告</div>
+						<div class="row"
+							ng-repeat="notice in noticeList track by notice.serialNum">
+							<div class="col-md-12">
+								<ul class="media-list">
+									<li class="media" style="border-bottom: 1px #F2F2F2 solid;">
+										<a class="pull-left" href="javascript:;"> <img
+											class="todo-userpic" src="assets/pages/img/avatars/team1.jpg"
+											width="27px" height="27px">
+									</a>
+										<div class="media-body todo-comment">
+											<p class="todo-comment-p">
+												<font ng-if="notice.readFlg==null">未读</font> <font
+													ng-if="notice.readFlg==1">已读</font>
+											</p>
+											<p class="todo-comment-head">
+												<span class="todo-comment-username">{{notice.updater}}</span>
+												&nbsp; <span class="todo-comment-date">{{notice.relaseDate}}</span>
+											</p>
+											<p class="todo-text-color">
+												<font style="font-weight: bolder;">{{notice.noticeTitle}}:
+												</font> {{delHtmlTag(notice.context)}} &nbsp;
+												<a href="javascript:;"
+													ng-click="myNoticeView(notice.serialNum)">查看详情</a>&nbsp;&nbsp;
+												<a
+													href="javascript:;"
+													ng-click="deleteMyNotice(notice.serialNum)">点击删除</a> <br>
+											</p>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
 				</div>
 			</div>
 		</div>
+		<div  class="col-md-6 col-sm-5"   style="margin-top: -10px;float:right">
+			<div class="portlet light " >
+					<div class="portlet-title">
+					<div class="caption caption-md">
+						<i class="icon-bar-chart font-dark hide"></i> <span
+							class="caption-subject font-dark bold uppercase">业务消息
+							</span> <span class="caption-helper"><businessMessage/></span><!-- 显示公告条数 -->
+					</div>
+				</div>
+				<div class="portlet-body" style="height:300px">
+						<div class="row"
+							ng-if="messageList == null || messageList.length == 0"
+							align="center">暂无消息</div>
+						<div class="row ">
+							<div class="todo-tasks-container" style="padding: 0px 20px;border:0px solid #ebf0f5;">
+								<ul class="todo-tasks-content">
+									<li class="todo-tasks-item" style="padding: 20px 0 0 0;" ng-repeat="message in messageList track by message.serialNum">
+										<h4 class="todo-inline" style="font-size: 15px;font-weight: 500;">
+											<p><i class="glyphicon glyphicon-envelope"></i>&nbsp;&nbsp;{{delHtmlTag(message.context)}}&nbsp;<a ng-click="messageView(message.serialNum,message.objectSerial,message.actionName)" >查看</a></p>
+										</h4>
+										<p class="todo-inline todo-float-r">
+											<font ng-if="message.readFlg=='1'">已读</font>
+											<font ng-if="message.readFlg=='0'">未读</font>
+										</p>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="portlet-body dataTables_wrapper" id="businessMessage">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-5 col-sm-5">
+										<div class="dataTables_info" id="businessMessage_info" role="status"></div>
+									</div>
+									<div class="col-md-7 col-sm-7">
+										<div class="dataTables_paginate paging_bootstrap_full_number">
+											<ul id="businessMessage_paginator"></ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+				</div>
+			</div>
+			</div>
 	</div>
-	<div class="row">
-		<div class="col-sm-12">
+	<!-- <div class="row"> -->
+	<!-- 	<div >
 			<div class="portlet light ">
 				<div class="portlet-title tabbable-line">
 					<div class="caption">
@@ -104,11 +183,11 @@
 					<ul class="nav nav-tabs" id="test">
 						<li class="active"><a href="#tab_1_sys" class="active"
 							data-toggle="tab"> 系统消息<systemMessage/></a></li>
-						<li><a href="#tab_1_bus" data-toggle="tab">业务消息 <businessMessage/></a></li>
+						<li  class="active"><a  class="active" href="#tab_1_bus" data-toggle="tab">业务消息 <businessMessage/></a></li>
 					</ul>
 				</div>
 				<div class="portlet-body" style="height:300px">
-					<!--BEGIN TABS-->
+					BEGIN TABS
 					<div class="tab-content">
 						<div class="tab-pane active" id="tab_1_sys">
 							<div class="scroller" style="height: 129px;" data-always-visible="1" data-rail-visible="0">
@@ -131,9 +210,9 @@
 							</div>
 						</div>
 					</div>
-					<!--END TABS-->
+					END TABS
 				</div>
 			</div>
 			
-		</div>
-	</div>
+		</div> -->
+	<!-- </div> -->

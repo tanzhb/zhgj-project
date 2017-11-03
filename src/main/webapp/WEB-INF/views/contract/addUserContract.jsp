@@ -90,8 +90,8 @@
 										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">甲方签订人<span
-														class="required" aria-required="true"> * </span></label>
+													<label class="control-label bold">甲方签订人<!-- <span
+														class="required" aria-required="true"> * </span> --></label>
 													<div class="">
 														<input type="text" class="form-control" placeholder="甲方签订人"
 								                        ng-model="contractVO.firstPartySigner" name="firstPartySigner"/>
@@ -113,8 +113,8 @@
 
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">乙方签订人<span
-														class="required" aria-required="true"> * </span></label>
+													<label class="control-label bold">乙方签订人<!-- <span
+														class="required" aria-required="true"> * </span> --></label>
 													<div class="">
 														<input type="text" class="form-control" placeholder="乙方签订人"
 								ng-model="contractVO.secondPartySigner" name="secondPartySigner"/>
@@ -142,8 +142,8 @@
 
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">签订地点<span
-														class="required" aria-required="true"> * </span></label>
+													<label class="control-label bold">签订地点<!-- <span
+														class="required" aria-required="true"> * </span> --></label>
 													<div class="">
 														<input type="text" class="form-control" name="signerAddress" placeholder="签订地点"
 								 ng-model="contractVO.signerAddress"/>
@@ -152,8 +152,8 @@
 											</div>
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">开始日期<span
-														class="required" aria-required="true"> * </span></label>
+													<label class="control-label bold">开始日期<!-- <span
+														class="required" aria-required="true"> * </span> --></label>
 													<div class="">
 														<input type="text" class="form-control date-picker"
 									 ng-model="contractVO.startDate" placeholder="开始日期" id="startDate"data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" name="startDate"/>
@@ -167,8 +167,8 @@
 										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">结束日期<span
-														class="required" aria-required="true"> * </span></label>
+													<label class="control-label bold">结束日期<!-- <span
+														class="required" aria-required="true"> * </span> --></label>
 													<div class="">
 														<input type="text" class="form-control"
 									 ng-model="contractVO.endDate" id="endDate" placeholder="结束日期" data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" name="endDate"/>

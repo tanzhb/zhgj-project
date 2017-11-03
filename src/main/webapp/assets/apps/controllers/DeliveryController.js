@@ -147,25 +147,30 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	
 	//确认发货
 	$scope.goDelivery=function (){
-		if($('#form_sample_deliverInfo').valid()){
-			$scope.delivery.status="1";
-		$scope.saveDeliveryInfo($scope.delivery.status);//先保存
-		debugger;
-		/*var promise = DeliveryService.goDelivery($scope.delivery.serialNum);
-		promise.then(function(data) {
+		if($scope.inputDeliveryInfo==true){
+			if($('#form_sample_deliverInfo').valid()){
+				$scope.delivery.status="1";
+			$scope.saveDeliveryInfo($scope.delivery.status);//先保存
+			}
+		}else{
+		 	/*$scope.confirmDelivery($scope.delivery.serialNum);*/
+	   		var promise = DeliveryService.goDelivery($scope.delivery.serialNum);
+			promise.then(function(data) {
+					toastr.success("发货成功");
+					$scope.delivery.status="1";
+			}, function(data) {
+				// 调用承诺接口reject();
 				$(".modal-backdrop").remove();
-				toastr.success("发货成功");
-				$state.go('delivery',{},{reload:true});
 				handle.unblockUI();
-		}, function(data) {
-			// 调用承诺接口reject();
-			$(".modal-backdrop").remove();
-			handle.unblockUI();
-			toastr.error("发货失败！请联系管理员");
-			console.log(data);
-		});*/
+				toastr.error("发货失败！请联系管理员");
+				console.log(data);
+			});
 		}
-	}
+		
+		
+		
+		}
+	
 	
 	
 	var getSupplyComId=function (){
@@ -267,7 +272,11 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		delete deliveryMateriel.supplyMateriel;
 		delete deliveryMateriel.supply;
 		if($scope.delivery==null||$.trim($scope.delivery.serialNum)==""){
-			toastr.error("请先保存基本信息！");	
+			toastr.error("请先保存发货信息！");	
+			return;
+		}
+		if($scope.inputDeliveryInfo==true){
+			toastr.error("请先保存发货信息！");	
 			return;
 		}
 		/*var batchNumFlag=batchNumCheck(index);
@@ -442,6 +451,9 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		if($scope.delivery.serialNum==null||$scope.delivery.serialNum=='') {// 订单信息为空的处理
 	    		toastr.error('请先保存发货信息！');return
  		}
+		if($scope.inputDeliveryInfo==true){
+			toastr.error('请先保存发货信息！');return
+		}
 		if($('#form_sample_takeDeliveryInfo').valid()){
 			/*$scope.deliveryTransport={};*/
 		var promise = DeliveryService.saveBasicInfo($scope,"takeDelivery");
@@ -669,7 +681,8 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 							                            { mData: 'takeAddress' },
 							                            { mData: 'remark'},
 							                            { mData: 'status',
-							                            	mRender:function(data){
+
+					                            	mRender:function(data){
 							                            		if(data!=""&&data!=null){
 							                            			if(data=='0'){
 							                            				return '待发货';
@@ -683,6 +696,18 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 																		return '审批失败';
 																	}else if(data=='4'){
 																		return '已收货';
+																	}else if(data=='1'){
+																		return '待检验';
+																	}else if(data=='2'){
+																		return '待出库';
+																	}else if(data=='6'){
+																		return '待清关';
+																	}else if(data=='7'){
+																		return '待报关';
+																	}else if(data=='8'){
+																		return '完成发货';
+																	}else if(data=='9'){
+																		return '待入库';
 																	}else{
 																		return '';
 																	}
@@ -2064,20 +2089,45 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	   	$scope.backDbList = function() {
 	   		$state.go('delivery',{tabHref:1});//返回待办列表
 	   	};
-		
+	   	$scope.confirmDelivery=function(serialNum){
+	   		debugger;
+	   		var promise = DeliveryService.goDelivery(serialNum);
+			promise.then(function(data) {
+					$(".modal-backdrop").remove();
+					toastr.success("发货成功");
+					$state.go('delivery',{},{reload:true});
+					handle.unblockUI();
+			}, function(data) {
+				// 调用承诺接口reject();
+				$(".modal-backdrop").remove();
+				handle.unblockUI();
+				toastr.error("发货失败！请联系管理员");
+				console.log(data);
+			});
+	   		
+	   	}
 	   	
 		//修改
 		$scope.jumpToEdit = function() {		
 			if(table.rows('.active').data().length != 1){
 				showToastr('toast-top-center', 'warning', '请选择一条数据进行修改！')
 			}else{
-				$state.go('editDeliveryPage',{serialNumEdit:table.row('.active').data().serialNum});
-			/*	if(table.row('.active').data().status != '0'){
-					showToastr('toast-top-center', 'warning', '该条数据已经发货流程审批，不能进行修改！')
-				}else $state.go('editDeliveryPage',{serialNumEdit:table.row('.active').data().serialNum});*/
+				if(table.row('.active').data().status== '0'){
+					$state.go('editDeliveryPage',{serialNumEdit:table.row('.active').data().serialNum});
+				}else showToastr('toast-top-center', 'warning', '该条数据已经发货，不能进行修改！')
 			} 
 		};
-		
+		//修改
+		$scope.jumpToConfirm = function() {		
+			if(table.rows('.active').data().length != 1){
+				showToastr('toast-top-center', 'warning', '请选择一条数据进行修改！')
+			}else{
+				
+				if(table.row('.active').data().status == '0'){
+					$state.go('viewDelivery',{serialNum:table.row('.active').data().serialNum});
+				}else showToastr('toast-top-center', 'warning', '已确认发货')
+			} 
+		};
 			
 			//复选框全选
 			$('#example-select-all').on(

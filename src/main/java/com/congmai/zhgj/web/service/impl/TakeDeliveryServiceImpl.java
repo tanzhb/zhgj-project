@@ -669,6 +669,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		//没有审批时，直接收货
 		TakeDelivery _takeDelivery = takeDeliveryMapper.selectByPrimaryKey(takeDelivery.getSerialNum());
 		takeDelivery.setDeliverSerial(_takeDelivery.getDeliverSerial());
+		
 		delivery2Mapper.updateByPrimaryKeySelective(deliverynew);
 		
 		

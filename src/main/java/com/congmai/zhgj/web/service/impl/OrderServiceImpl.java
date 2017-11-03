@@ -210,12 +210,12 @@ public class OrderServiceImpl implements OrderService {
 		Map<String,Object> map = new HashMap<String, Object>();
 		map.put("codeType", codeType);
 		map.put("newNo", "");
-		if(codeType.length()==1){//1位前缀
+		/*if(codeType.length()==1){//1位前缀
 			OrderInfoMapper.getNumCode1(map);
 		}else if(codeType.length()==2){//2位前缀
 			OrderInfoMapper.getNumCode2(map);
-		}
-		
+		}*/
+		OrderInfoMapper.getNumCode(map);
 		return (String) map.get("newNo");
 	}
 

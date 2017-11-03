@@ -11,13 +11,12 @@
 					<div class="portlet-title">
 						<div class="caption">基本信息</div>
 						<div class="tools" id="noprintdiv">
-						
-						<!-- 	<button type="button" ng-click="goDelivery(deliveryDetail.serialNum)" ng-if="deliveryDetail.status=='0'"
-								class="btn blue  btn-outline  btn-sm">
+							<button type="button" ng-click="confirmDelivery(deliveryDetail.serialNum)"  ng-if="deliveryDetail.status=='0'"
+								class="btn blue  btn-circle  btn-sm">
 								<i class="fa fa-save"></i> 确认发货
-							</button> -->
+							</button>
 							<button ng-click="goBack()" type="button"
-								ng-hide="saleOrderInput" class="btn red  btn-outline  btn-sm">
+								ng-hide="saleOrderInput" class="btn red  btn-circle  btn-sm">
 								<i class="fa fa-undo"></i> 取消
 							</button>
 						</div>

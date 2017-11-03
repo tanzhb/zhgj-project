@@ -188,7 +188,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                             'assets/global/plugins/morris/morris.min.js',
                             'assets/global/plugins/morris/raphael-min.js',
                             'assets/global/plugins/jquery.sparkline.min.js',
-
+                            'assets/apps/service/NoticeService.js',
                             'assets/pages/scripts/dashboard.min.js',
                             'assets/apps/controllers/DashboardController.js',
                         ]
@@ -1149,8 +1149,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         
         .state('saleOrderSign', {
-        	params:{data:null},
-            url: "/saleOrderSign:id",
+            url: "/saleOrderSign?:id&:comId&:type",
             templateUrl: "rest/contract/saleOrderSign",
             data: {pageTitle: '合同签订'},
             controller: "ContractController",
@@ -2336,7 +2335,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	    })   
 	       // 销项票发起申请
         .state('submitInvoiceApply', {
-            url: "/submitInvoiceApply?:inOrOut&:invoiceType",
+            url: "/submitInvoiceApply",
             templateUrl: "rest/page/submitInvoiceApply",
             data: {pageTitle: '销项票申请'},
             controller: "InvoiceController",

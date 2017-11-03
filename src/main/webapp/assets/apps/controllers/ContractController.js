@@ -12,11 +12,25 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 		loadMainTable();
 		loadMainTable1();
 		loadMainTable2();
+		debugger;
 	if($state.current.name=="addUserContract"){
 		 $rootScope.setNumCode("CA",function(newCode){//
  			$scope.contractVO={};
  			$scope.contractVO.contractNum= newCode;//合同编号
  		});
+	}
+	if($state.current.name=="saleOrderSign"){//签订合同
+		if($stateParams.type="buy"){
+			$scope.contractVO={};
+			$scope.contractVO.firstParty="中航能科（上海）能源科技有限公司";
+				$scope.contractVO.secondParty=$stateParams.comId;
+		}else if($stateParams.type="sale"){
+			$scope.contractVO={};
+			$scope.contractVO.firstParty=$stateParams.comId;
+			$scope.contractVO.secondParty="中航能科（上海）能源科技有限公司";
+		}
+		
+			
 	}
 		//contractVO.contractNum
 		//根据参数查询对象
@@ -160,6 +174,17 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 					
 					var myJsDate2=$filter('date')($scope.contractVO.signDate,'yyyy-MM-dd');
 					$scope.contractVO.signDate=myJsDate2;
+					if($state.current.name=="saleOrderSign"){//签订合同
+						if($stateParams.type="buy"){
+							$scope.contractVO.firstParty="中航能科（上海）能源科技有限公司";
+								$scope.contractVO.secondParty=$stateParams.comId;
+						}else if($stateParams.type="sale"){
+							$scope.contractVO.firstParty=$stateParams.comId;
+							$scope.contractVO.secondParty="中航能科（上海）能源科技有限公司";
+						}
+						
+							
+					}
       		     },
       		     function(error){
       		         console.log("error")
@@ -466,11 +491,12 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 				toastr.warning('只能选择一个合同！');return;
 			}
 			var status = table1.row('.active').data().status;
+			var comId = table1.row('.active').data().comId;
 			if(status!='3'&&status!='1'){
 				toastr.warning('只能签订状态为‘待签订’的合同！');return;
 			}
 			
-			$state.go('saleOrderSign',{id:ids});
+			$state.go('saleOrderSign',{id:ids,comId:comId,type:'sale'});
 			/*alert(ids);*/
 		};
 		
@@ -611,11 +637,12 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 				toastr.warning('只能选择一个合同！');return;
 			}
 			var status = table2.row('.active').data().status;
+			var comId= table2.row('.active').data().comId;
 			if(status!='3'&&status!='1'){
 				toastr.warning('只能签订状态为‘待签订’的合同！');return;
 			}
 			
-			$state.go('saleOrderSign',{id:ids});
+			$state.go('saleOrderSign',{id:ids,comId:comId,type:"buy"});
 		};
 		
 		
@@ -845,13 +872,13 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
             	otherPartyContractNum:{required:"对方合同号不能为空！"},
             	firstParty:{required:"合同甲方不能为空！"},
             	secondParty:{required:"合同乙方不能为空！"},
-            	startDate:{required:"开始日期不能为空！"},
+            	/*startDate:{required:"开始日期不能为空！"},
             	
             	firstPartySigner:{required:"甲方签订人不能为空！"},
             	secondPartySigner:{required:"乙方签订人不能为空！"},
             	signerAddress:{required:"签订地址不能为空！"},
             	
-            	endDate:{required:"结束日期不能为空！"},
+            	endDate:{required:"结束日期不能为空！"},*/
             	signDate:{required:"签订日期不能为空！"},
             	signer:{required:"签订人不能为空！"},
             	files:{required:"电子合同不能为空！"},
@@ -902,20 +929,20 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
                 },
                 
                 
-                firstPartySigner:{required:true,
+                /*  firstPartySigner:{required:true,
                 },
                 
                 secondPartySigner:{required:true,
                 },
                 
-                signerAddress:{required:true,
+              signerAddress:{required:true,
                 },
                 
                 
                 startDate:{required:true,
                 },
                 endDate:{required:true,
-                },
+                },*/
                 signDate:{required:true,
                 },
                 signer:{required:true,

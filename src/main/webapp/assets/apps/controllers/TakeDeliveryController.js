@@ -254,6 +254,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    		 	if($location.path()=="/toTakeDelivery"){
 	    		 		$scope.takeDeliver.actualDate = timeStamp2ShortString(new Date());
 	    		 		$scope.takeDeliver.taker = $scope.user.userName;
+	    		 		$rootScope.setNumCode("RE",function(newCode){
+	    		 			$scope.takeDeliver.takeDeliverNum = newCode;
+	    				});
 	    		 	}
 	        	}
 	        	if(!isNull(taskId)){
