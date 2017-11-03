@@ -19,19 +19,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
  			$scope.contractVO.contractNum= newCode;//合同编号
  		});
 	}
-	if($state.current.name=="saleOrderSign"){//签订合同
-		if($stateParams.type="buy"){
-			$scope.contractVO={};
-			$scope.contractVO.firstParty="中航能科（上海）能源科技有限公司";
-				$scope.contractVO.secondParty=$stateParams.comId;
-		}else if($stateParams.type="sale"){
-			$scope.contractVO={};
-			$scope.contractVO.firstParty=$stateParams.comId;
-			$scope.contractVO.secondParty="中航能科（上海）能源科技有限公司";
-		}
-		
-			
-	}
+
 		//contractVO.contractNum
 		//根据参数查询对象
     if($stateParams.id){
@@ -129,8 +117,8 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 	        fd.append('secondParty',$scope.contractVO.secondParty); 
 	        fd.append('secondPartySigner',$scope.contractVO.secondPartySigner);
 	        fd.append('otherPartyContractNum',$scope.contractVO.otherPartyContractNum);
-	        fd.append('startDate',$scope.contractVO.startDate); 
-	        fd.append('endDate',$scope.contractVO.endDate); 
+	        if($scope.contractVO.startDate)fd.append('startDate',$scope.contractVO.startDate); 
+	        if($scope.contractVO.endDate)fd.append('endDate',$scope.contractVO.endDate); 
 	        fd.append('signDate',$scope.contractVO.signDate); 
 	        fd.append('remark',$scope.contractVO.remark);
 	        fd.append('signerAddress',$scope.contractVO.signerAddress);
@@ -175,10 +163,10 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 					var myJsDate2=$filter('date')($scope.contractVO.signDate,'yyyy-MM-dd');
 					$scope.contractVO.signDate=myJsDate2;
 					if($state.current.name=="saleOrderSign"){//签订合同
-						if($stateParams.type="buy"){
+						if($stateParams.type=="buy"){
 							$scope.contractVO.firstParty="中航能科（上海）能源科技有限公司";
 								$scope.contractVO.secondParty=$stateParams.comId;
-						}else if($stateParams.type="sale"){
+						}else if($stateParams.type=="sale"){
 							$scope.contractVO.firstParty=$stateParams.comId;
 							$scope.contractVO.secondParty="中航能科（上海）能源科技有限公司";
 						}

@@ -1149,6 +1149,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         
         .state('saleOrderSign', {
+        	params:{data:null},
             url: "/saleOrderSign?:id&:comId&:type",
             templateUrl: "rest/contract/saleOrderSign",
             data: {pageTitle: '合同签订'},
