@@ -184,11 +184,13 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before a LINK element with this ID. Dynamic CSS files must be loaded between core and theme css files
                         files: [
+                            'assets/apps/css/todo.min.css',
                             'assets/global/plugins/morris/morris.css',
                             'assets/global/plugins/morris/morris.min.js',
                             'assets/global/plugins/morris/raphael-min.js',
                             'assets/global/plugins/jquery.sparkline.min.js',
                             'assets/apps/service/NoticeService.js',
+                            'assets/apps/service/MessageService.js',
                             'assets/pages/scripts/dashboard.min.js',
                             'assets/apps/controllers/DashboardController.js',
                         ]

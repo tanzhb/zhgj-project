@@ -1,10 +1,12 @@
 var dashModule  = angular.module('MetronicApp');
 
 
-dashModule.controller('DashboardController', function($rootScope, $scope, $state, $http, $timeout,$q) {
+dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', '$http', '$timeout','$q','messageService','noticeService', function($rootScope, $scope, $state, $http, $timeout,$q,messageService,noticeService) {
     $scope.$on('$viewContentLoaded', function() {   
         // initialize core components
         App.initAjax();
+        createTableMessage(5,1,true,null);
+        createTable(5,1,true,null)
     });
 
     // set sidebar closed and body solid layout mode
@@ -12,6 +14,68 @@ dashModule.controller('DashboardController', function($rootScope, $scope, $state
     $rootScope.settings.layout.pageBodySolid = false;
     $rootScope.settings.layout.pageSidebarClosed = false;
     
+    $scope.delHtmlTag = function(str){
+		str = str.replace("马上处理","").replace("查看","");
+		return delHtmlTag(str);
+	}
+    
+    $scope.messageView = function(serialNum,objSerial,actionName){
+		readMessage(serialNum);
+		if(actionName=="applyBuyOrder"||actionName=="refuseBuyOrder"){
+			$state.go("buyOrder",{tabHref:'1'});
+		}else if(actionName=="confirmBuyOrder"){
+			$state.go("supplyOrder");
+		}else if(actionName=="beConfirmBuyOrder"||actionName=="agreeBuyOrder"){
+			$state.go("buyOrder");
+		}else if(actionName=="takeDelivery"
+			||actionName=="outCheckToSale"
+			||actionName=="inCheckToSale"
+			||actionName=="outToSale"
+			||actionName=="inToSale"){
+			$state.go("delivery");
+		}else if(actionName=="delivery"
+			||actionName=="outCheckToBuy"
+			||actionName=="inCheckToBuy"
+			||actionName=="outToBuy"
+			||actionName=="inToBuy"){
+			$state.go("takeDelivery");
+		}else if(actionName=="shoukuan"){
+			$state.go("gatheringMoneyRecord");
+		}
+	}
+	
+	var readMessage = function(serialNum){
+		var promise = messageService.readMessage(serialNum);
+		promise.then(function(data){
+			
+		},function(data){
+			//调用承诺接口reject();
+		});
+	}
+	
+	$scope.deleteMyNotice = function(serialNum){
+    	handle.confirm("确定删除吗？",function(){
+    		handle.blockUI();
+    		var promise = noticeService.deleteMyNotice(serialNum);
+    		promise.then(function(data){
+    			toastr.success("删除成功");
+    			handle.unblockUI();
+    			createTable(5,1,true,null); // 重新加载datatables数据
+    		},function(data){
+    			//调用承诺接口reject();
+    		});
+    		
+    	});
+	}
+	
+	$scope.myNoticeView = function(serialNum){
+		var promise = noticeService.readMyNotice(serialNum);
+		promise.then(function(data){
+		},function(data){
+			//调用承诺接口reject();
+		});
+		$state.go("noticeView",{serialNum:serialNum});
+	}
 
     //待办列表 	
 	$http.get(ctx + "/rest/processAction/todoTask/" + 'All').success( function(result) {
@@ -99,7 +163,7 @@ dashModule.controller('DashboardController', function($rootScope, $scope, $state
 		$scope.ybItems = list;
      });
 	 //公告
-	$http.post(ctx + "/rest/notice/myNoticeList").success( function(result) {
+/*	$http.post(ctx + "/rest/notice/myNoticeList").success( function(result) {
 		var promise =createTable(5,1,true,null);
 		promise.then(function(data){
 			$scope.noticeList = data.data.result;
@@ -108,7 +172,7 @@ dashModule.controller('DashboardController', function($rootScope, $scope, $state
            //调用承诺接口reject();
      });
 		
-     });
+     });*/
 	   function createTable(pageSize,pageIndex,init,params){
 		   var deferred = $q.defer();
 			var notice = {};
@@ -123,14 +187,14 @@ dashModule.controller('DashboardController', function($rootScope, $scope, $state
 			$http.post("rest/notice/myNoticeList",   
 					notice,postCfg
 	    	).then(function success(result) {
-	            deferred.resolve(result);//请求成功
+	    		$scope.noticeList = result.data.result;//请求成功
 	        }, function error(err) {
 	            deferred.reject(err);//请求失败
 	        });
 			return deferred.promise;//返回承诺
 		    }
 	  
-	 //业务消息
+/*	 //业务消息
 	$http.post(ctx + "/rest/message/businessMessageList").success( function(result) {
 		var promise =createTableMessage(5,1,true,null);
 		promise.then(function(data){
@@ -140,7 +204,8 @@ dashModule.controller('DashboardController', function($rootScope, $scope, $state
            //调用承诺接口reject();
      });
 		
-     });
+     });*/
+	   
 	 function createTableMessage(pageSize,pageIndex,init,params){
 			var deferred = $q.defer();
 			var message = {};
@@ -149,13 +214,13 @@ dashModule.controller('DashboardController', function($rootScope, $scope, $state
 			$http.post("rest/message/businessMessageList",   
 					message
 	    	).then(function success(result) {
-	            deferred.resolve(result);//请求成功
+	    		$scope.messageList = result.data.result;//请求成功
 	        }, function error(err) {
 	            deferred.reject(err);//请求失败
 	        });
 			return deferred.promise;//返回承诺
 		    }
-});
+}]);
 
 function todo() {
 	window.location.href=ctx + "/rest/page/addVacation";

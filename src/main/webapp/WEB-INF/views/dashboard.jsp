@@ -136,7 +136,27 @@
 					</div>
 				</div>
 				<div class="portlet-body" style="height:300px">
-						<div class="row"
+						<div ng-if="messageList==null||messageList.length==0" class="row todo-container">
+							<div class="todo-tasks-container" align="center" style="padding: 0px 20px;border:0px solid #ebf0f5;">
+									暂无消息
+							</div>
+						</div>
+						<div class="row todo-container">
+							<div class="todo-tasks-container" style="padding: 0px 20px;border:0px solid #ebf0f5;">
+								<ul class="todo-tasks-content">
+									<li class="todo-tasks-item" style="padding: 0px 0 0 0;" ng-repeat="message in messageList track by message.serialNum">
+										<h4 class="todo-inline" style="font-size: 15px;font-weight: 500;">
+											<p><i class="glyphicon glyphicon-envelope"></i>&nbsp;&nbsp;{{delHtmlTag(message.context)}}&nbsp;<a ng-click="messageView(message.serialNum,message.objectSerial,message.actionName)" >查看</a>
+											<font ng-if="message.readFlg=='1'" style="color: gray;">已读</font>
+											<font ng-if="message.readFlg=='0'" style="color: #f36a5a;">未读</font>
+											</p>
+										</h4>
+										
+									</li>
+								</ul>
+							</div>
+						</div>
+<!-- 						<div class="row"
 							ng-if="messageList == null || messageList.length == 0"
 							align="center">暂无消息</div>
 						<div class="row ">
@@ -153,7 +173,7 @@
 									</li>
 								</ul>
 							</div>
-						</div>
+						</div> -->
 						<div class="portlet-body dataTables_wrapper" id="businessMessage">
 							<div class="row">
 								<div class="col-md-12">
