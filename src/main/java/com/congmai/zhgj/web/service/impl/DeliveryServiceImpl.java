@@ -309,11 +309,11 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 	 * @param username
 	 * @return
 	 */
-	@Override
-	public List<DeliveryVO> findAllDeliveryList(String username) {
-		// TODO Auto-generated method stub
-		return deliveryMapper.findAllDeliveryList(username);
-	}
+//	@Override
+//	public List<DeliveryVO> findAllDeliveryList(String username) {
+//		// TODO Auto-generated method stub
+//		return deliveryMapper.findAllDeliveryList(username);
+//	}
 	
 
 	/**

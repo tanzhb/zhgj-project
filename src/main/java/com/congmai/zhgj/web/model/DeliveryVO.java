@@ -29,6 +29,9 @@ public class DeliveryVO extends BaseVO implements Serializable{
 	//供应商
 	private String supplyComId;
 	
+	//供应商
+	private String buyComId;
+	
 	//发货方
 	private String shipper;
 	
@@ -180,7 +183,7 @@ public class DeliveryVO extends BaseVO implements Serializable{
 	 private String  type;//保存类型
 	  
 	
-	  
+	  //0：待发货；3：待收货；4：已收货；5：部分收货'
 	    public static final String WAIT_CHECK = "1"; //待检验
 	    
 
@@ -656,6 +659,14 @@ public class DeliveryVO extends BaseVO implements Serializable{
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public String getBuyComId() {
+		return buyComId;
+	}
+
+	public void setBuyComId(String buyComId) {
+		this.buyComId = buyComId;
 	}
 
 /*	public String getBusinessType() {

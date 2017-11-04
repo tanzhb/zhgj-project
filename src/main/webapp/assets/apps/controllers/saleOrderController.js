@@ -1,6 +1,6 @@
 /* Setup general page controller */
 angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '$scope', 'settings','orderService','$filter',
-    '$state',"$stateParams",'$compile','$location','materielService','FileUploader','commonService', function($rootScope, $scope, settings,orderService,$filter,$state,$stateParams,$compile,$location,materielService,FileUploader,commonService) {
+    '$state',"$stateParams",'$compile','$location','materielService','FileUploader','DeliveryService','commonService', function($rootScope, $scope, settings,orderService,$filter,$state,$stateParams,$compile,$location,materielService,FileUploader,DeliveryService,commonService) {
     $scope.$on('$viewContentLoaded', function() {   
     	// initialize core components
     	App.initAjax();
@@ -12,6 +12,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
         if($state.current.name=="saleOrder"){
         	loadMainTable();// 加载订单列表(普通订单)
         	loadMainFramTable();// 框架订单列表
+        	loadDeliveryTable();// 发货计划列表
         	
         	//***************************************流程处理相关start
         	var dbtable;//待办table
@@ -3704,4 +3705,208 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    	 }
 		    	 
 		    	/** *************订单物料明细可检索化  end*************** */
+		    	 
+		    	/** *************发货计划列表  end*************** */ 
+		    	 var deliveryTable;
+		 		var loadDeliveryTable = function() {
+		 			
+		 			var a = 0;
+		 			App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile")&& (a = $(".page-header").outerHeight(!0)): 
+		 				$(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0): $("body").hasClass("page-header-fixed")&& (a = 64);
+
+		 				 deliveryTable = $("#sample_deliveryTable").DataTable(
+		 						{
+		 							language : {
+		 								aria : {
+		 									sortAscending : ": activate to sort column ascending",
+		 									sortDescending : ": activate to sort column descending"
+		 								},
+		 								emptyTable : "空表",
+		 								info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+		 								infoEmpty : "没有数据",
+		 								infoFiltered : "(从 _MAX_ 条数据中检索)",
+		 								lengthMenu : "每页显示 _MENU_ 条数据",
+		 								search : "查询:",
+		 								zeroRecords : "抱歉， 没有找到！&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
+		 								paginate : {
+		 									"sFirst" : "首页",
+		 									"sPrevious" : "前一页",
+		 									"sNext" : "后一页",
+		 									"sLast" : "尾页"
+		 								}
+		 							},
+		 							order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+		 							bRetrieve : true,
+		 							"bScrollCollapse": true,
+		 							lengthMenu : [
+		 							              [ 5, 10, 15,15, 30, -1 ],
+		 							              [ 5, 10, 15, 15,30, "All" ] ],
+		 							              pageLength : 10,// 每页显示数量
+		 							              processing : true,// loading等待框
+		 							              ajax:"rest/delivery/findAllDeliveryList",//加载数据中user表数据
+		 							              "aoColumns": [
+		 							                            { mData: 'serialNum',
+		 						                            	mRender : function(
+		 																data,
+		 																type,
+		 																row,
+		 																meta) {
+		 						                            		return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+		 															"<input type='checkbox' class='checkboxes' value='1' />" +
+		 															"<span></span></label>";
+		 														}
+		 						                            },
+		 							                            { mData: 'deliverNum' },
+		 							                            { mData: 'orderNum' },
+		 							                            { mData: 'materielCount' },
+		 							                            { mData: 'packageCount' },
+		 							                            { mData: 'receiver'},
+		 							                            { mData: 'deliveryAddress'},
+		 							                            { mData: 'deliverDate'},
+		 							                            { mData: 'transportType'},
+		 							                            { mData: 'takeAddress' },
+		 							                            { mData: 'remark'},
+		 							                            { mData: 'status',
+
+		 					                            	mRender:function(data){
+		 							                            		if(data!=""&&data!=null){
+		 							                            			if(data=='0'){
+		 							                            				return '待发货';
+		 							                            			}else if(data=='PENDING'){
+		 							                            				return '审批中';
+		 							                            			}else if(data=='WAITING_FOR_APPROVAL'){
+		 							                            				return '待审批';					                            				
+		 																	}else if(data=='3'){
+		 																		return '待收货';
+		 																	}else if(data=='APPROVAL_FAILED'){
+		 																		return '审批失败';
+		 																	}else if(data=='4'){
+		 																		return '已收货';
+		 																	}else if(data=='1'){
+		 																		return '待检验';
+		 																	}else if(data=='2'){
+		 																		return '待出库';
+		 																	}else if(data=='6'){
+		 																		return '待清关';
+		 																	}else if(data=='7'){
+		 																		return '待报关';
+		 																	}else if(data=='8'){
+		 																		return '完成发货';
+		 																	}else if(data=='9'){
+		 																		return '待入库';
+		 																	}else{
+		 																		return '';
+		 																	}
+		 							                            		}else{
+		 							                            			return "";
+		 							                            		}
+		 							                            	}
+		 							                            }
+		 							                            ],
+		 							                            'aoColumnDefs': [ {
+		 							                            	'targets' : 0,
+		 							                            	'searchable' : false,
+		 							                            	'orderable' : false,
+		 							                            	'className' : 'dt-body-center',
+		 							                            	'render' : function(data,type, full, meta) {
+		 							                            		return '<label class="mt-checkbox mt-checkbox-outline"><input type="checkbox" class="checkbox" value="'+ $('<div/>').text(data).html()+ '" name="id[]" /><span></span></label>';
+		 							                            	}
+		 							                            } ,
+		 							                            {
+		 							                            	'targets' : 1,
+		 							                            	'className' : 'dt-body-center',
+		 							                            	'render' : function(data,
+		 							                            			type, row, meta) {
+		 							                            		return '<a data-toggle="modal" ng-click="jumpToGetDeliveryInfo(\''+row.serialNum+'\')" ">'+data+'</a>';
+		 							                            	},
+		 							                            	"createdCell": function (td, cellData, rowData, row, col) {
+		 							                            		$compile(td)($scope);
+		 							                            	}
+		 							                            },
+		 							                            {
+		 							                            	'targets' : 2,
+		 							                            	'className' : 'dt-body-center',
+		 							                            	'render' : function(data,
+		 							                            			type, row, meta) {
+		 							                            		return '<a data-toggle="modal" ng-click="viewSaleOrder(\''+row.orderSerial+'\')" ">'+data+'</a>';
+		 							                            	},
+		 							                            	"createdCell": function (td, cellData, rowData, row, col) {
+		 							                            		$compile(td)($scope);
+		 							                            	}
+		 							                            }
+		 							                            ]}).on('order.dt',
+		 							                            		function() {
+		 							                            	console.log('排序');
+		 							                            })
+		 							                            
+		 						                            $("#sample_deliveryTable").find(".group-checkable").change(function() {
+		 										            var e = jQuery(this).attr("data-set"),
+		 										            t = jQuery(this).is(":checked");
+		 										            jQuery(e).each(function() {
+		 										                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+		 										            })
+		 											        }),
+		 											        $("#sample_deliveryTable").on("change", "tbody tr .checkboxes",
+		 											        function() {
+		 											            $(this).parents("tr").toggleClass("active")
+		 											        })
+		 		}
+		 		
+		 		//修改
+				$scope.jumpToEdit = function() {		
+					if(deliveryTable.rows('.active').data().length != 1){
+						showToastr('toast-top-center', 'warning', '请选择一条数据进行修改！')
+					}else{
+						if(deliveryTable.row('.active').data().status== '0'){
+							$state.go('editDeliveryPage',{serialNumEdit:deliveryTable.row('.active').data().serialNum});
+						}else showToastr('toast-top-center', 'warning', '该条数据已经发货，不能进行修改！')
+					} 
+				};
+		        //跳转到查看详情页面
+		        $scope.jumpToGetDeliveryInfo  = function(serialNum) {
+		        	$state.go('viewDelivery',{serialNum:serialNum,oprateType:"forSaleOrder"});
+		        }; 
+				// 删除
+		        $scope.del = function() {
+		    		if(deliveryTable.rows('.active').data().length == 0){
+		    			showToastr('toast-top-center', 'warning', '未勾选要删除数据！')
+		    		} else {
+		    			var ap = deliveryTable.rows('.active').data();
+		    			var ids = '';
+		    			for(i=0;i<ap.length;i++){
+		    				if(ap[i].status != '0'){
+		    					showToastr('toast-top-center', 'warning', '所选数据已经发货，不能删除！');
+		    					return;
+		    				}
+		    				
+		    				if(ids == ''){
+		    					ids = ap[i].serialNum;
+		    				}else ids = ids +','+ ap[i].serialNum;
+		    				
+		    			}
+		    			
+		    			$('#delDeliveryModal').modal('show');// 打开确认删除模态框
+
+		    			$scope.confirmDel = function() {										
+		    				DeliveryService.deleteDeliveryS(ids).then(
+		    						function(data) {
+		    							$('#delUsersModal').modal('hide');// 删除成功后关闭模态框
+		    							$(".modal-backdrop").remove();
+		    							toastr.success("删除成功！");
+		    							$state.go('delivery',{},{reload:true}); // 重新加载datatables数据
+		    						},
+		    						function(errResponse) {
+		    							/*console.error('Error while deleting Users');*/
+		    						}
+
+		    				);
+		    			}
+		    		}								
+		    	};
+		    	 $scope.exportContract = function(){
+			    	 handle.blockUI("正在导出数据，请稍后"); 
+			    	 window.location.href=$rootScope.basePath+"/rest/delivery/exportDelivery";
+			    	 handle.unblockUI(); 
+			       }
+		    	 
 }]);

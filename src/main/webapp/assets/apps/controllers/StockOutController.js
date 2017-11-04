@@ -203,32 +203,38 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					params.stockOutMateriels = [];
 					params.record.takeDeliverSerial = '';
 					var param
-					for(var i=0;i < $scope.takeDeliveryMateriels.length;i++){
-						param = {};
-						param.stockCount = $scope.takeDeliveryMateriels[i].stockCount;
-						if(isNull($scope.takeDeliveryMateriels[i].supplyMaterielSerial)){ //贸易出库
-							param.serialNum = $scope.takeDeliveryMateriels[i].serialNum;
-							param.unstockCount = $scope.takeDeliveryMateriels[i].deliverCount-$scope.takeDeliveryMateriels[i].stockCount;
-							param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].orderMaterielSerial;
-						}else{//其他出库
-							//param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].serialNum;
-							param.deliverSerial = params.record.takeDeliverSerial;
-							param.unstockCount = 0;
-							params.record.deliverSerial = '';
-							param.supplyMaterielSerial = $scope.takeDeliveryMateriels[i].supplyMaterielSerial;
+					if($scope.takeDeliveryMateriels){
+						for(var i=0;i < $scope.takeDeliveryMateriels.length;i++){
+							param = {};
+							param.stockCount = $scope.takeDeliveryMateriels[i].stockCount;
+							if(isNull($scope.takeDeliveryMateriels[i].supplyMaterielSerial)){ //贸易出库
+								param.serialNum = $scope.takeDeliveryMateriels[i].serialNum;
+								param.unstockCount = $scope.takeDeliveryMateriels[i].deliverCount-$scope.takeDeliveryMateriels[i].stockCount;
+								param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].orderMaterielSerial;
+							}else{//其他出库
+								//param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].serialNum;
+								param.deliverSerial = params.record.takeDeliverSerial;
+								param.unstockCount = 0;
+								params.record.deliverSerial = '';
+								param.supplyMaterielSerial = $scope.takeDeliveryMateriels[i].supplyMaterielSerial;
+							}
+							/*if(isNull($scope.takeDeliveryMateriels[i].supplyMaterielSerial)){
+								param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].orderMaterielSerial;
+							}else{
+								//param.orderMaterielSerial = '';
+								params.record.deliverSerial = '';
+								param.supplyMaterielSerial = $scope.takeDeliveryMateriels[i].supplyMaterielSerial;
+							}*/
+							param.warehouseSerial = $scope.takeDeliveryMateriels[i].warehouseSerial;
+							param.positionSerial = $scope.takeDeliveryMateriels[i].positionSerial;
+							param.stockRemark = $scope.takeDeliveryMateriels[i].stockRemark;
+							params.deliveryMateriels.push(param);
 						}
-						/*if(isNull($scope.takeDeliveryMateriels[i].supplyMaterielSerial)){
-							param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].orderMaterielSerial;
-						}else{
-							//param.orderMaterielSerial = '';
-							params.record.deliverSerial = '';
-							param.supplyMaterielSerial = $scope.takeDeliveryMateriels[i].supplyMaterielSerial;
-						}*/
-						param.warehouseSerial = $scope.takeDeliveryMateriels[i].warehouseSerial;
-						param.positionSerial = $scope.takeDeliveryMateriels[i].positionSerial;
-						param.stockRemark = $scope.takeDeliveryMateriels[i].stockRemark;
-						params.deliveryMateriels.push(param);
+					}else{
+						toastr.warning("出库物料不能为空!");
+						return
 					}
+					
 					var arraySerialNums=$scope.arraySerialNums;
 					var deliveryMaterielSerialNums =$scope.deliveryMaterielSerialNums;
 					for(var i=0;i < deliveryMaterielSerialNums.length;i++){

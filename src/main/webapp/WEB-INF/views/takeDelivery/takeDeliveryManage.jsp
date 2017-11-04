@@ -20,7 +20,7 @@
 <!-- BEGIN MAIN CONTENT -->
 <div class="tabbable-line">
 	<ul class="nav nav-tabs" id="delivery_tab">
-		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">收货计划</a>
+		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">收货通知</a>
 		</li>
 		<li><a data-target="#tab_15_2" data-toggle="tab">入库记录</a></li>
 	</ul>
@@ -51,10 +51,10 @@
 											<div class="actions">
 												<div class="btn-group btn-group-devided"
 													data-toggle="buttons" id="buttons">
-													<label class="btn btn-transparent green btn-circle btn-sm"
+													<!-- <label class="btn btn-transparent green btn-circle btn-sm"
 														ui-sref="takeDeliveryAdd"> <i class="fa fa-plus"></i>
 														代发货
-													</label> <label class="btn btn-transparent blue btn-circle btn-sm"
+													</label> --> <label class="btn btn-transparent blue btn-circle btn-sm"
 														ng-click="takeDelivery()"> <i class="fa fa-gift"></i>
 														收货
 													</label> <label class="btn btn-transparent red btn-circle btn-sm"

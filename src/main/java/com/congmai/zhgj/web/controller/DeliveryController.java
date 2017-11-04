@@ -582,8 +582,13 @@ public class DeliveryController {
     	if(StringUtils.isEmpty(comId)){
     		delivery.setSupplyComId(null);
     		delivery.setShipper(null);
+    		OrderInfo o = orderService.selectById(delivery.getOrderSerial());
+    		if(o!=null){
+    			delivery.setBuyComId(o.getBuyComId());
+    		}
+    		
     	}else{
-    		Company company=deliveryService.selectCompanyInfo(comId);
+//    		Company company=deliveryService.selectCompanyInfo(comId);
        		delivery.setSupplyComId(comId);
     	}
 		delivery.setCreator(currenLoginName);

@@ -33,10 +33,10 @@
 							<div class="tab-pane fade active in" id="tab_1_1">
 							 <div class="portlet-title" style="min-height: 48px;">
                <div class="tools" style="float:right"><!-- ng-if="deliveryDetail.status=='0'" -->
-               	<button type="button" ng-click="goDelivery()"     ng-if="(delivery.status=='0'||delivery.status==undefined)&&delivery.deliverType=='贸易发货'"
+               	<!-- <button type="button" ng-click="goDelivery()"     ng-if="(delivery.status=='0'||delivery.status==undefined)&&delivery.deliverType=='贸易发货'"
 								class="btn blue  btn-circle  btn-sm">
 								<i class="fa fa-save"></i> 确认发货
-							</button>
+							</button> -->
                   <button ng-click="saveDeliveryInfo()" type="button"   ng-show="inputDeliveryInfo"   class="btn blue  btn-circle  btn-sm">
                   		<i class="fa fa-edit"></i> 保存 </button>
                   		 <button ng-click="editDeliveryInfo()" type="button"   ng-hide="inputDeliveryInfo"   class="btn purple  btn-circle  btn-sm">

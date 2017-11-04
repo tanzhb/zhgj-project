@@ -436,6 +436,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 							'assets/apps/service/materielService.js',
                             'assets/apps/service/orderService.js',
                             'assets/apps/controllers/saleOrderController.js',
+                            'assets/apps/service/DeliveryService.js',
                             'assets/apps/service/CommonService.js',
                           //流程申请
 							'assets/global/css/dialog.css',
@@ -671,6 +672,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 							'assets/apps/scripts/angular-file-upload.min.js',
 							'assets/apps/service/materielService.js',
                             'assets/apps/service/orderService.js',
+                            'assets/apps/service/TakeDeliveryService.js',
                             'assets/apps/controllers/buyOrderController.js',
                           //流程申请
 							'assets/global/css/dialog.css',
@@ -728,6 +730,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 							'assets/apps/scripts/angular-file-upload.min.js',
 							'assets/apps/service/materielService.js',
                             'assets/apps/service/orderService.js',
+                            'assets/apps/service/DeliveryService.js',
                             'assets/apps/controllers/supplyOrderController.js',
                           
                         ]
@@ -1396,7 +1399,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    		}]
 		    	}
 		    }) .state('takeDeliveryView', {
-		    	url: "/takeDeliveryView?:serialNum",
+		    	url: "/takeDeliveryView?:serialNum&:oprateType",
 		    	templateUrl: "rest/takeDelivery/takeDeliveryView",
 		    	data: {pageTitle: '查看收货详情'},
 		    	reload:true, 
@@ -2003,7 +2006,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    })  
 		    
 		    .state('addDelivery', {
-            url: "/addDelivery",
+            url: "/addDelivery:oprateType",
             templateUrl: "rest/delivery/addDelivery",
             data: {pageTitle: '新增发货'},
             controller: "DeliveryController",
@@ -2069,7 +2072,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         
         .state('viewDelivery', {
         	params:{data:null},
-            url: "/viewDelivery:serialNum",
+            url: "/viewDelivery:serialNum&:oprateType",
             templateUrl: "rest/delivery/viewDelivery",
             data: {pageTitle: '查看发货'},
             controller: "DeliveryController",
@@ -3256,18 +3259,36 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		"<li><a>收货列表</a></li>";					 
 			   }else if('takeDeliveryAdd' == toState.name){//新增代发货
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a ui-sref='takeDelivery'>收货列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" +  
 				 		"<li><a>新建代发货</a></li>";
 			   }else if('takeDeliveryView' == toState.name){//查看收货
-					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a ui-sref='takeDelivery'>收货列表</a><i class='fa fa-angle-right'></i></li>" + 
-				 		"<li><a>查看收货</a></li>";
-			   }else if('addDelivery' == toState.name){//发货列表
-					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a ui-sref='delivery'>发货</a><i class='fa fa-angle-right'></i></li>" + 
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>";
+					 if(toParams.oprateType == "forBuyOrder"){
+						 html += "<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
+					 		"<li><a ui-sref='saleOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+					 		"<li><a>查看收货</a></li>";
+					 }else if(toParams.oprateType == "forCustomerOrder"){
+						 html += "<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
+					 		"<li><a ui-sref='customerOrder'>订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+					 		"<li><a>查看收货</a></li>";
+					 }else{
+						 html += "<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+					 		"<li><a ui-sref='takeDelivery'>收货列表</a><i class='fa fa-angle-right'></i></li>" + 
+					 		"<li><a>查看收货</a></li>";
+					 }
+				 		
+			   }else if('addDelivery' == toState.name){//新建发货
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>";
+					 if(toParams.oprateType == "forSaleOrder"){
+						 html += "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+					 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+					 		"<li><a>新增发货</a></li>";
+					 }else if(toParams.oprateType == "forSupplyOrder"){
+						 html += "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+					 		"<li><a ui-sref='supplyOrder'>订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+					 		"<li><a>新增发货</a></li>";
+					 }else html += 
 				 		"<li><a>新增发货</a></li>";
 			   }else if('editDeliveryPage' == toState.name){//发货列表
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
@@ -3280,10 +3301,19 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		"<li><a ui-sref='delivery'>发货</a><i class='fa fa-angle-right'></i></li>" + 
 				 		"<li><a>发货列表</a></li>";
 			   }else if('viewDelivery' == toState.name){//发货列表
-					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" ;
+					 if(toParams.oprateType == "forSaleOrder"){
+						 html += "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+					 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+					 		"<li><a>新增发货</a></li>";
+					 }else if(toParams.oprateType == "forSupplyOrder"){
+						 html += "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+					 		"<li><a ui-sref='supplyOrder'>订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+					 		"<li><a>新增发货</a></li>";
+					 }else html += "<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a ui-sref='delivery'>发货</a><i class='fa fa-angle-right'></i></li>" + 
 				 		"<li><a>发货详情</a></li>";
+					 
 			   }else if('toTakeDelivery' == toState.name){//收货申请
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +

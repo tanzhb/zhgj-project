@@ -33,6 +33,7 @@
 		<shiro:hasPermission name="zhgj:buyFrameOrder">
 			<li><a data-target="" data-toggle="tab">框架合同</a></li>
 		</shiro:hasPermission>
+		<li><a data-target="#tab_15_3" data-toggle="tab">收货计划</a></li>
 	</ul>
     <div class="tab-content">
     	<!-- 普通订单---START -->
@@ -284,6 +285,67 @@
  </div>
  		</div>
         <!-- 框架订单---end -->
+        <!-- 收货计划---START -->
+        <div class="tab-pane" id="tab_15_3">
+        	<div class="row">
+				<div class="col-md-12">
+					<!-- BEGIN EXAMPLE TABLE PORTLET-->
+					<div class="portlet light">
+						<div class="portlet-title">
+							<div class="caption"></div>
+							<div class="actions">
+								<div class="btn-group btn-group-devided"
+									data-toggle="buttons" id="buttons">
+									<label class="btn btn-transparent green btn-circle btn-sm"
+										ui-sref="takeDeliveryAdd"> <i class="fa fa-plus"></i>
+										代发货
+									</label> <!-- <label class="btn btn-transparent blue btn-circle btn-sm"
+										ng-click="takeDelivery()"> <i class="fa fa-gift"></i>
+										收货
+									</label> --> <label class="btn btn-transparent red btn-circle btn-sm"
+										ng-click="takeDeliveryDelete()"> <i
+										class="fa fa-minus"></i> 删除
+									</label> <label
+										class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
+										ng-click="exportTakeDelivery()"> <i
+										class="fa fa-file-excel-o"></i> 导出
+									</label>
+								</div>
+							</div>
+						</div>
+						<table
+							class="table table-striped table-bordered table-hover table-checkable order-column"
+							id="takeDeliveryTable">
+							<thead>
+								<tr>
+									<th style="text-align: center"><label
+										class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+											<input type="checkbox" class="group-checkable"
+											data-set="#takeDeliveryTable .checkboxes" /> <span></span>
+									</label></th>
+									<th>收货单编号</th>
+									<th>发货单编号</th>
+									<th>订单编号</th>
+									<th>发货方</th>
+									<th>物料</th>
+									<th>包装数量</th>
+									<th>使用包装</th>
+									<th>发货地点</th>
+									<th>发货日期</th>
+									<th>运输方式</th>
+									<th>收货/提货点</th>
+									<th>备注</th>
+									<th>状态</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+        </div>
+        <!-- 收货计划---end -->
  </div>
  </div>
  <!-- 删除订单modal 开始 -->

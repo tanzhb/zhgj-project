@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <!-- <div class="page-bar">
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
@@ -11,9 +12,13 @@
 </div> -->
 <div class="tabbable-line">
 	<ul class="nav nav-tabs" id="delivery_tab">
-		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">发货计划</a>
+		<shiro:hasPermission name="zhgj:deliveryPlan:*">
+		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">发货通知</a>
 		</li>
+		</shiro:hasPermission>
+		<shiro:hasPermission name="	zhgj:stockOutRecord:*">
 		<li><a data-target="#tab_15_2" data-toggle="tab">出库记录</a></li>
+		</shiro:hasPermission>
 	</ul>
 	<div class="tab-content">
 		<div class="tab-pane active" id="tab_15_1">
@@ -38,16 +43,16 @@
 									class="caption-subject font-green bold uppercase">发货列表</span>
 							</div>
 							<div class="actions" ng-controller='MyCtrl'>
-									<label class="btn btn-transparent green btn-circle btn-sm"
+									<!-- <label class="btn btn-transparent green btn-circle btn-sm"
 									ng-click="jumpToUrl('addDelivery')"> <i
 									class="fa fa-plus"></i> 添加
-								</label> <label class="btn btn-transparent yellow btn-circle btn-sm"
+								</label> --> <label class="btn btn-transparent yellow btn-circle btn-sm"
 									ng-click="jumpToConfirm()"> <i class="glyphicon glyphicon-play"></i>确认发货
-								</label><label class="btn btn-transparent purple btn-circle btn-sm"
+								</label><!-- <label class="btn btn-transparent purple btn-circle btn-sm"
 									ng-click="jumpToEdit()"> <i class="fa fa-edit"></i> 修改
 								</label> <label class="btn btn-transparent red btn-circle btn-sm"
 									ng-click="del()"> <i class="fa fa-minus"></i> 删除
-								</label>
+								</label> -->
 								<label
 									class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
 									ng-click="exportContract()"> <i

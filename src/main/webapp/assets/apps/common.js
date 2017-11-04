@@ -137,6 +137,9 @@ function timeStamp2ShortString (time){
      if(month < 10){
     	 month = '0' + month;
      }
+     if(date < 10){
+    	 date = '0' + date;
+     }
      return year + "-" + month + "-" + date;
 };
 //+---------------------------------------------------
@@ -165,13 +168,14 @@ function timeStamp2String2 (time){
      var year = datetime.getFullYear();
      var month = datetime.getMonth() + 1;
      var date = datetime.getDate();
-     var hour = datetime.getHours();
-     var minute = datetime.getMinutes();
-     var second = datetime.getSeconds();
-     var mseconds = datetime.getMilliseconds();
+     if(month < 10){
+    	 month = '0' + month;
+     }
+     if(date < 10){
+    	 date = '0' + date;
+     }
      return year + "-" + month + "-" + date;
 };
-
 
 
 //初始化toastr开始

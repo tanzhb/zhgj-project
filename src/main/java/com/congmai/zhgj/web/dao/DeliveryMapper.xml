@@ -17,9 +17,9 @@
     <!--添加基本信息  -->
     <insert id="insertBasicInfo" parameterType="com.congmai.zhgj.web.model.DeliveryVO">
     INSERT INTO delivery
-    (serialNum,orderSerial,deliverNum,deliverType,supplyComId,shipper,receiver,maker,approval,approvalDate,warehouseSerial,deliverAddress,remark,deliverDate,
+    (serialNum,orderSerial,deliverNum,deliverType,supplyComId,buyComId,shipper,receiver,maker,approval,approvalDate,warehouseSerial,deliverAddress,remark,deliverDate,
     materielCount,packageCount,packageType,packageSpecifications,materielWeight,serviceMoney,deliverer,contactNum,deliverRemark,creator,createTime,updater,updateTime,status) VALUES
-    (#{serialNum},#{orderSerial},#{deliverNum},#{deliverType},#{supplyComId},#{shipper},#{receiver},#{maker},#{approval},#{approvalDate},#{warehouseSerial},#{deliveryAddress},#{remark},#{deliverDate},#{materielCount},
+    (#{serialNum},#{orderSerial},#{deliverNum},#{deliverType},#{supplyComId},#{buyComId},#{shipper},#{receiver},#{maker},#{approval},#{approvalDate},#{warehouseSerial},#{deliveryAddress},#{remark},#{deliverDate},#{materielCount},
     #{packageCount},#{packageType},#{packageSpecifications},#{materielWeight},#{serviceMoney},#{deliverer},#{contactNum},#{deliverRemark},#{creator},NOW(),#{creator},NOW(),'0')
     </insert>
     
@@ -28,6 +28,9 @@
     UPDATE delivery SET
     orderSerial=#{orderSerial},
     deliverNum=#{deliverNum},
+    <if test="buyComId != null" >
+    buyComId=#{buyComId},
+    </if>
     warehouseSerial=#{warehouseSerial},
     deliverAddress=#{deliveryAddress},
     status=#{status},

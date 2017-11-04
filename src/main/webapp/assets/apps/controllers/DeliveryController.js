@@ -29,7 +29,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		$scope.orderSerial=null;
 		
 		/*$scope.takeDelivery.warehouseSerial=null;*/
-		if($location.path()=="/addDelivery"){
+		if($state.current.name=="addDelivery"){
 			$scope.deliveryTransport={};
 			$scope.takeDelivery={};
 		$rootScope.setNumCode("SE",function(newCode){
@@ -575,7 +575,16 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	
 	//返回按钮
 	$scope.goBack=function(){
-		$state.go('delivery');
+		if($stateParams.oprateType == "forSaleOrder"){
+			$state.go('saleOrder');
+		}else if($stateParams.oprateType == "forSupplyOrder"){
+			$state.go('supplyOrder');
+		}else if($state.current.name=="editDeliveryPage"){
+			$state.go('saleOrder');
+		}else{
+			$state.go('delivery');
+		}
+		
 	}
 	
 	//打印

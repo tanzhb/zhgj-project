@@ -1,6 +1,6 @@
 /* Setup general page controller */
-angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$scope', 'settings','orderService','$filter',
-    '$state',"$stateParams",'$compile','$location','materielService','FileUploader', function($rootScope, $scope, settings,orderService,$filter,$state,$stateParams,$compile,$location,materielService,FileUploader) {
+angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$scope', 'settings','orderService','takeDeliveryService','$filter',
+    '$state',"$stateParams",'$compile','$location','materielService','FileUploader', function($rootScope, $scope, settings,orderService,takeDeliveryService,$filter,$state,$stateParams,$compile,$location,materielService,FileUploader) {
     $scope.$on('$viewContentLoaded', function() {   
     	// initialize core components
     	App.initAjax();
@@ -12,7 +12,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
         if($state.current.name=="buyOrder"){
         	loadMainTable();// 加载订单列表(普通订单)
         	loadMainFramTable();// 框架订单列表
-        	
+        	loadTakeDelieryTable();// 收货计划列表
         	//***************************************流程处理相关start
         	var dbtable;//待办table
 			var endTaskTable;//已办table
@@ -449,7 +449,11 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 									type, row, meta) {
 								var htm = (data==null?'':data)+'</br>'
                     			if(row.deliverStatus=="0"){
-                    				return htm + '<span >未开始</span>';
+                    				if(row.status==2){
+										return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">待发货</span>';
+									}else{
+										return htm + '<span >未开始</span>';
+									}
 								}else if(row.deliverStatus=="1"){
                     				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已发货</span>';
 								}else if(row.deliverStatus=="2"){
@@ -3585,8 +3589,221 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	 
 	/** *************订单物料明细可检索化  end*************** */
           
-          
-          
+	 /***选择收货列表初始化START***/
+     var TakeDelieryTable;
+     var loadTakeDelieryTable = function() {
+              a = 0;
+              App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
+              TakeDelieryTable = $("#takeDeliveryTable").DataTable({
+                  language: {
+                      aria: {
+                          sortAscending: ": activate to sort column ascending",
+                          sortDescending: ": activate to sort column descending"
+                      },
+                      emptyTable: "空表",
+                      info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                      infoEmpty: "没有数据",
+                      //infoFiltered: "(filtered1 from _MAX_ total entries)",
+                      lengthMenu: "每页显示 _MENU_ 条数据",
+                      search: "查询:",
+                      zeroRecords: "抱歉， 没有找到！",
+                      paginate: {
+                          "sFirst": "首页",
+                          "sPrevious": "前一页",
+                          "sNext": "后一页",
+                          "sLast": "尾页"
+                       }
+                  },
+  /*                fixedHeader: {//固定表头、表底
+                      header: !0,
+                      footer: !0,
+                      headerOffset: a
+                  },*/
+                  order: [[1, "desc"]],//默认排序列及排序方式
+                  bRetrieve : true,
+					'scrollX': false,
+					  buttons: [
+				                {
+				                	 extend: "print",
+					                 className: "btn dark btn-outline"
+				                }
+				            ],
+                  searching: true,//是否过滤检索
+                  ordering:  true,//是否排序
+                  lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
+                  pageLength: 10,//每页显示数量
+                  processing: true,//loading等待框
+                  bRetrieve : true,
+//                  serverSide: true,
+                 // ajax: "rest/takeDelivery/takeDeliveryList",//加载数据中
+                  ajax :{ "url":$rootScope.basePath
+						+ "/rest/takeDelivery/takeDeliveryList",// 加载数据中user表数据    
+						"contentType": "application/json",
+					    "type": "POST",
+					    "data": function ( d ) {
+					      return JSON.stringify( d );
+					    }},
+                  "aoColumns": [
+                                { mData: 'takeDelivery.serialNum' },
+                                { mData: 'takeDelivery.takeDeliverNum' },
+                                { mData: 'deliverNum' },
+                                { mData: 'orderNum' },
+                                { mData: 'shipper' },
+                                { mData: 'materielCount' },
+                                { mData: 'packageCount' },
+                                { mData: 'packageType' },
+                                { mData: 'warehouse' },
+                                { mData: 'deliverDate' },
+                                { mData: 'deliveryTransport.transportType' },
+                                { mData: 'takeDelivery.warehouse.address' },
+                                { mData: 'takeDelivery.remark' },
+                                { mData: 'status' }
+                          ],
+                 'aoColumnDefs' : [ {
+  							'targets' : 0,
+  							'searchable' : false,
+  							'orderable' : false,
+  							'className' : 'dt-body-center',
+  							'render' : function(data,
+  									type, row, meta) {
+	  	  								/*return '<input  type="checkbox" id='+data+'   name="serialNum" value="'
+											+ $('<div/>')
+													.text(
+															data)
+													.html()
+											+ '">';*/
+	  	  							return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
+                                   '<input type="checkbox"  name="serialNum" class="checkboxes"  id="'+data+'" value="'+data+'" data-set="#takeDeliveryTable .checkboxes" />'+
+                                   '<span></span>'+
+                               '</label>';
+	
+  							},
+  							"createdCell": function (td, cellData, rowData, row, col) {
+  								 $compile(td)($scope);
+  						       }
+  						},{
+  							'targets' : 1,
+  							'render' : function(data,
+  									type, row, meta) {
+  										if(data==null){
+  											data="未收货";
+  										}debugger;
+	  	  								return '<a href="javascript:void(0);" ng-click="takeDeliveryView(\''+row.takeDelivery.serialNum+'\')">'+data+'</a>';
+	
+  							},
+  							"createdCell": function (td, cellData, rowData, row, col) {
+  								 $compile(td)($scope);
+  						       }
+  						},{
+  							'targets' : 3,
+  							'render' : function(data,
+  									type, row, meta) {
+  									if(!isNull(data)){
+  										return data;
+  									}
+	  								return row.docNum;
+	
+  							}
+  						},{
+  							'targets' : 8,
+  							'render' : function(data,
+  									type, row, meta) {
+  									if(data!=null){
+										return data.address;
+									}
+	  								return '';
+	
+  							}
+  						},{
+  							'targets' : 10,
+  							'render' : function(data,
+  									type, row, meta) {
+  									if(data!=undefined){
+										return data;
+									}
+	  								return '';
+	
+  							}
+  						},{
+  							'targets' : 11,
+  							'render' : function(data,
+  									type, row, meta) {
+  									if(data!=undefined){
+										return data;
+									}
+	  								return '';
+	
+  							}
+  						},{
+  							'targets' : 12,
+  							'render' : function(data,
+  									type, row, meta) {
+  										if(data!=undefined){
+  											return data;
+  										}
+	  	  								return '';
+	
+  							}
+  						},{
+  							'targets' : 13,
+  							'searchable' : false,
+  							'orderable' : false,
+  							'className' : 'dt-body-center',
+  							'render' : function(data,
+  									type, row, meta) {
+  									if(data=="PENDING"||data=="WAITING_FOR_APPROVAL"){
+  										return '<span  class="label label-sm label-warning ng-scope">审核中</span>';
+  									}else if(data=="1"){
+  										return '<span  class="label label-sm label-info ng-scope">待检验</span>';
+  									}else if(data=="APPROVAL_FAILED"){
+  										return '<span  class="label label-sm label-danger ng-scope">未通过</span>';
+  									}else if(data=="2"){
+  										return '<span  class="label label-sm label-warning ng-scope">已取消</span>';
+  									}else if(data=="3"){
+  										return '<span  class="label label-sm label-warning ng-scope">待入库</span>';
+  									}else if(data=="4"){
+  										return '<span  class="label label-sm label-success ng-scope">已完成</span>';
+  									}else{
+  										return '<span  class="label label-sm label-danger ng-scope">待收货</span>';
+  									}
+  							}
+  						}]
+
+              }).on('order.dt',
+              function() {
+                  console.log('排序');
+              }).on('page.dt', 
+              function () {
+            	  console.log('翻页');
+	          }).on('draw.dt',function() {
+	        	//  checkedIdHandler();
+	          });
+              
+              $("#takeDeliveryTable").find(".group-checkable").change(function() {
+		            var e = jQuery(this).attr("data-set"),
+		            t = jQuery(this).is(":checked");
+		            jQuery(e).each(function() {
+		                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+		            })
+		        }),
+		        $("#takeDeliveryTable").on("change", "tbody tr .checkboxes",
+		        function() {
+		            $(this).parents("tr").toggleClass("active")
+		        });
+          };
+          /***收货列表初始化END***/  
+	        /**
+	        * 导出收货计划
+	        */
+	       $scope.exportTakeDelivery = function(){
+		    	 window.location.href=$rootScope.basePath+"/rest/takeDelivery/exportTakeDelivery";
+		   }
+	       /**
+	         * 查看收货详情
+	         */
+	        $scope.takeDeliveryView = function(serialNum){
+	        	$state.go("takeDeliveryView",{serialNum:serialNum,oprateType:'forBuyOrder'});
+	        }
           
 }]);
 

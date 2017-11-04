@@ -168,7 +168,7 @@ public interface DeliveryService extends GenericService<DeliveryMaterielVO, Stri
 	 * @param username
 	 * @return
 	 */
-	public List<DeliveryVO> findAllDeliveryList(String username);
+//	public List<DeliveryVO> findAllDeliveryList(String username);
 	
 	/**
 	 * 查询发货列表(加入数据权限)

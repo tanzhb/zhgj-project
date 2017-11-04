@@ -164,7 +164,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 			
 			var setDefualtData = function(type){
 				
-				$scope.deliver.makeDate = timeStamp2ShortString(new Date());
+				/*$scope.deliver.makeDate = timeStamp2ShortString(new Date());*/
 				$scope.deliver.deliverDate = timeStamp2ShortString(new Date());
 			}
 		
@@ -309,7 +309,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					promise.then(function(data) {
 						if(data.data == "1"){
 							toastr.success("代发货成功！");
-							$state.go("takeDelivery");
+							$state.go("buyOrder");
 						}else{
 							toastr.error("代发货失败！请联系管理员");
 						}
@@ -383,7 +383,12 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 			}; 
 			
 			$scope.cancelTakeDelivery = function(){
-				$state.go("takeDelivery");
+				if($location.path()=="/takeDeliveryAdd"){
+					$state.go("buyOrder");
+				}else{
+					$state.go("takeDelivery");
+				}
+				
 			}
 			
 			$scope.getWarehouseName = function(type){
