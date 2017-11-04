@@ -1,6 +1,7 @@
 <%@ page language="java" import="java.util.*"
 	contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>]
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <head>
 <meta http-equiv="Content-Type"
 	content="multipart/form-data; charset=utf-8" />
@@ -20,9 +21,13 @@
 <!-- BEGIN MAIN CONTENT -->
 <div class="tabbable-line">
 	<ul class="nav nav-tabs" id="delivery_tab">
+		<shiro:hasPermission name="zhgj:takeDeliveryPlan:*">
 		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">收货通知</a>
 		</li>
+		</shiro:hasPermission>
+		<shiro:hasPermission name="zhgj:stockInRecord:*">
 		<li><a data-target="#tab_15_2" data-toggle="tab">入库记录</a></li>
+		</shiro:hasPermission>
 	</ul>
 	<div class="tab-content">
 		<div class="tab-pane active" id="tab_15_1">
@@ -219,23 +224,33 @@
 		                                    </div> -->
 							<div class="actions">
 								<div class="btn-group btn-group-devided" data-toggle="buttons">
+									<shiro:hasPermission name="stockInRecord:stockIn">
 									<label class="btn btn-transparent yellow btn-circle btn-sm"
 										ng-click="stockIn()"> <i class="fa fa-arrow-down"></i> 入库
-									</label> <label class="btn btn-transparent green btn-circle btn-sm"
+									</label>
+									</shiro:hasPermission>
+									<shiro:hasPermission name="stockInRecord:add">
+									 <label class="btn btn-transparent green btn-circle btn-sm"
 										ui-sref="stockInAdd"> <i class="fa fa-plus"></i> 添加
 									</label> 
-									<!-- <label class="btn btn-transparent purple btn-circle btn-sm"
+									</shiro:hasPermission>
+									<!--<shiro:hasPermission name="stockInRecord:edit"> <label class="btn btn-transparent purple btn-circle btn-sm"
 										ng-click="stockInEdit()"> <i class="fa fa-edit"></i>
 										修改
-									</label> -->
+									</label></shiro:hasPermission> -->
+									<shiro:hasPermission name="stockInRecord:import">
 									<label class="btn btn-transparent red btn-circle btn-sm"
 										ng-click="stockInDelete()"> <i class="fa fa-minus"></i>
 										删除
-									</label> <label
+									</label>
+									</shiro:hasPermission>
+									<shiro:hasPermission name="stockInRecord:export">
+									 <label
 										class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
 										ng-click="exportStockIn()"> <i
 										class="fa fa-file-excel-o"></i> 导出
 									</label>
+									</shiro:hasPermission>
 								</div>
 							</div>
 						</div>
