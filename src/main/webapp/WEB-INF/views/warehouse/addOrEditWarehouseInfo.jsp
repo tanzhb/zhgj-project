@@ -137,8 +137,8 @@
                                                     <div class=" ">
                                                                         <!-- <input type="text"  class="form-control" placeholder=""  id="owner" name ="owner"   ng-hide="warehouseAdd" 
 												ng-model="warehouse.owner" >  -->
-												<div  -ng-hide="warehouseView"><!--ng-show="warehouseAdd"   -->
-												 <select class="form-control" data-live-search="true" data-size=""   id="owner" name ="owner"     ng-model="warehouse.owner"    ng-if="warehouse.owner==''">
+												<div  ng-hide="warehouseView"><!--ng-show="warehouseAdd"   -->
+												 <select class="form-control" data-live-search="true" data-size=""   id="owner" name ="owner"     ng-model="warehouse.owner"    ng-if="warehouseowner1==''">
                                                        <!--  <option  ng-repeat="op in supplyCom " value="{{op.comId}}"  > {{op.comName}}</option> -->
                                                        <option value="">无</option>
                                                    <option  ng-repeat="com in coms" value="{{com.comId}}" >{{com.comName}}</option><!--  disabled="disabled" -->
@@ -147,7 +147,7 @@
                                                         <option  ng-repeat="op in supplyCom " value="{{op.comId}}"  > {{op.comName}}</option>
                                                        <option   selected  value="">{{warehouse.ownerName}}</option>
                                                     </select> -->
-                                                    <input type="text"  class="form-control" placeholder=""  id="owner" name ="owner"  readonly="readonly"  ng-if="warehouse.owner!=''"
+                                                    <input type="text"  class="form-control" placeholder=""  id="owner" name ="owner"  readonly="readonly"     ng-if="warehouseowner1!=''"
 												ng-model="warehouse.ownerName" >
                                                     </div>
 												<div class="form-control-focus"> </div>

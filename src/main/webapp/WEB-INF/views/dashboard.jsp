@@ -87,11 +87,11 @@
 							</span> <span class="caption-helper"><noticeCount/></span><!-- 显示公告条数 -->
 					</div>
 				</div>
-				<div class="portlet-body" style="height:238px">
-					<div class="row"
+				<div class="scroller" style="height:238px">
+					<div
 							ng-if="noticeList == null || noticeList.length == 0"
 							align="center">暂无公告</div>
-						<div class="row"
+						<div  
 							ng-repeat="notice in noticeList track by notice.serialNum">
 							<div class="col-md-12">
 								<ul class="media-list">
@@ -149,6 +149,7 @@
 											<p><i class="glyphicon glyphicon-envelope"></i>&nbsp;&nbsp;{{delHtmlTag(message.context)}}&nbsp;<a ng-click="messageView(message.serialNum,message.objectSerial,message.actionName)" >查看</a>
 											<font ng-if="message.readFlg=='1'" style="color: gray;">已读</font>
 											<font ng-if="message.readFlg=='0'" style="color: #f36a5a;">未读</font>
+											<font class="date">{{message.createTime | date:'yyyy-MM-dd  HH:mm:ss'}}</font>
 											</p>
 										</h4>
 										
