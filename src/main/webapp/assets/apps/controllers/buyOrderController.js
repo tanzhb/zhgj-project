@@ -450,7 +450,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 								var htm = (data==null?'':data)+'</br>'
                     			if(row.deliverStatus=="0"){
                     				if(row.status==2){
-										return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">待发货</span>';
+										return htm + '<span >待发货</span>';
 									}else{
 										return htm + '<span >未开始</span>';
 									}
@@ -2740,7 +2740,10 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    	   if($scope.orderMateriel){
 		    		    var total = 0 ; 
 			       		for(var i=0;i<$scope.orderMateriel.length;i++){
-			       			total = total + Number($scope.orderMateriel[i].amount);
+			       			if(!isNull($scope.orderMateriel[i].amount)){
+			       				total = total + Number($scope.orderMateriel[i].amount);
+			       			}
+			       			
 			       		}
 			       		return total
 			       	}else{

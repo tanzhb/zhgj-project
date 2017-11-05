@@ -110,6 +110,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
             		//加载客户
                 	initCustomers();
                 	initWarehouse();
+                	getComId();
             	}
             	
             	$scope.noShow = true;
@@ -450,7 +451,11 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 									type, row, meta) {
 								var htm = (data==null?'':data)+'</br>'
                     			if(row.deliverStatus=="0"){
-                    				return htm + '<span >未开始</span>';
+                    				if(row.status==2){
+										return htm + '<span >待发货</span>';
+									}else{
+										return htm + '<span >未开始</span>';
+									}
 								}else if(row.deliverStatus=="1"){
                     				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已发货</span>';
 								}else if(row.deliverStatus=="2"){
@@ -1159,7 +1164,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
      							'render' : function(data,
      									type, row, meta) {
      								if(data.length>0){
-     									var select='<select class="form-control" id="select'+row.serialNum+'" ng-model="model'+row.serialNum+'" ng-init="model'+row.serialNum+'=\''+data[0].serialNum+'\'" ng-change="changeSelectValue(\'select'+row.serialNum+'\',\''+row.serialNum+'\')">'
+     									var select='<select class="form-control" style="width:200px" id="select'+row.serialNum+'" ng-model="model'+row.serialNum+'" ng-init="model'+row.serialNum+'=\''+data[0].serialNum+'\'" ng-change="changeSelectValue(\'select'+row.serialNum+'\',\''+row.serialNum+'\')">'
  	 									for(var i=0;i<data.length;i++){
  	 										if(data[i].supply){
  	 											select = select + '<option value="'+data[i].serialNum+'">'+data[i].supply.comName+'</option>';
@@ -2811,7 +2816,10 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    	   if($scope.orderMateriel){
 		    		    var total = 0 ; 
 			       		for(var i=0;i<$scope.orderMateriel.length;i++){
-			       			total = total + Number($scope.orderMateriel[i].amount);
+			       			if(!isNull($scope.orderMateriel[i].amount)){
+			       				total = total + Number($scope.orderMateriel[i].amount);
+			       			}
+			       			
 			       		}
 			       		return total
 			       	}else{
@@ -3035,6 +3043,19 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			},function(data){
 				//调用承诺接口reject();
 			});
+			}
+			
+			var getComId=function (){
+				var promise = orderService.getComId();
+				promise.then(function(data) {
+					if(data.comName!=null){
+						$scope.customerOrder.entrustParty=data.comName;
+					}else{
+						
+					}
+				}, function(data) {
+				});
+				
 			}
     	 
 			//********审批流程start****************//

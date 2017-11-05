@@ -407,12 +407,12 @@ margin-right: 20px;
                          </div>
                          <div class="col-md-4">
                               <div class="form-group ">
-                                 <label class="control-label bold">客户合同号：</label>
+                                 <label class="control-label bold">销售合同号：</label>
                                   <div class="">
-                                  <input type="text" name="contractNumber" class="form-control" ng-hide="saleOrderInput" ng-model="contract.contractNumber"  >
+                                  <input type="text" name="contractNum" class="form-control" ng-hide="saleOrderInput" ng-model="contract.contractNum"  >
                                       <div class="form-control-focus"> </div>
-                                      <span class="help-block" ng-hide="saleOrderInput">请输入客户合同号</span>
-                                      <p class="form-control-static" ng-show="saleOrderShow"> {{contract.contractNumber}} </p>
+                                      <span class="help-block" ng-hide="saleOrderInput">请输入合同号</span>
+                                      <p class="form-control-static" ng-show="saleOrderShow"> {{contract.contractNum}} </p>
                                   </div>
                               </div>
                           </div>
@@ -603,12 +603,12 @@ margin-right: 20px;
                          </div>
                          <div class="col-md-4">
                               <div class="form-group ">
-                                 <label class="control-label bold">客户合同号：</label>
+                                 <label class="control-label bold">销售合同号：</label>
                                   <div class="">
-                                  <input type="text" name="contractNumber" class="form-control" ng-hide="saleOrderInput" ng-model="contract.contractNumber"  >
+                                  <input type="text" name="contractNum" class="form-control" ng-hide="saleOrderInput" ng-model="contract.contractNum"  >
                                       <div class="form-control-focus"> </div>
-                                      <span class="help-block" ng-hide="saleOrderInput">请输入客户合同号</span>
-                                      <p class="form-control-static" ng-show="saleOrderShow"> {{contract.contractNumber}} </p>
+                                      <span class="help-block" ng-hide="saleOrderInput">请输入合同号</span>
+                                      <p class="form-control-static" ng-show="saleOrderShow"> {{contract.contractNum}} </p>
                                   </div>
                               </div>
                           </div>
@@ -804,12 +804,12 @@ margin-right: 20px;
                           /span
                           <div class="col-md-4">
                               <div class="form-group ">
-                                 <label class="control-label bold">客户合同号：</label>
+                                 <label class="control-label bold">销售合同号：</label>
                                   <div class="">
-                                  <input type="text" name="contractNumber" class="form-control" ng-hide="contractInput" ng-model="contract.contractNumber"  >
+                                  <input type="text" name="contractNum" class="form-control" ng-hide="saleOrderInput" ng-model="contract.contractNum"  >
                                       <div class="form-control-focus"> </div>
-                                      <span class="help-block" ng-hide="contractInput">请输入客户合同号</span>
-                                      <p class="form-control-static" ng-show="contractShow"> {{contract.contractNumber}} </p>
+                                      <span class="help-block" ng-hide="saleOrderInput">请输入合同号</span>
+                                      <p class="form-control-static" ng-show="saleOrderShow"> {{contract.contractNum}} </p>
                                   </div>
                               </div>
                           </div>
@@ -1187,7 +1187,7 @@ margin-right: 20px;
                                  <tr>
                                      <th style="width:150px">支付类型</th>
                                      <th style="width:150px">支付节点</th>
-                                     <th style="width:70px">账期</th>
+                                     <th style="width:70px">账期（天）</th>
                                      <th style="width:50px">支付比率%</th>
                                      <th style="width:150px">支付金额</th>
                                      <th style="width:150px">支付方式</th>

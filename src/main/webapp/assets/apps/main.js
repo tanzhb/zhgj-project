@@ -88,10 +88,10 @@ MetronicApp.controller('AppController', [ '$scope', '$rootScope','$compile',
 				if(!webSocket){
 					if ('WebSocket' in window) {
 						webSocket = 
-							new WebSocket('ws://'+getWSPath_web()+'rest/webSocketServer');
+							new WebSocket('ws://'+location.host+location.pathname+'/rest/webSocketServer');
 					} else if ('MozWebSocket' in window) {
 						webSocket = 
-							new WebSocket('ws://'+getWSPath_web()+'rest/webSocketServer');
+							new WebSocket('ws://'+location.host+location.pathname+'rest/webSocketServer');
 					}
 				}
 				webSocket.onerror = function(event) {
@@ -3678,6 +3678,7 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 			}
 
 			function getEndTaskLength(route, workflowType){
+				return;
 				var deferred = $q.defer();
 				$.get(ctx + "/rest/processAction/getEndTaskSize/" + workflowType).success(function (data) {
 				    // 如果连接成功，延时返回给调用者  
