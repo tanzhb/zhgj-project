@@ -29,15 +29,18 @@ angular
 													 $scope.warehousepositions=[{}];
 													 _index = 0; 
 													 $scope.warehouseSerialNum=$stateParams.warehouseSerialNum;
+													 if($stateParams.warehouseSerialNum!=undefined){
 										    		getWarehouseInfo($stateParams.warehouseSerialNum);
+													 }
 										    		 if($scope.warehouseSerialNum==undefined){
 										    		 $rootScope.setNumCode("WH",function(newCode){//
 										    	 			$scope.warehouse={};
 										    	 			$scope.warehouse.warehouseNum= newCode;//仓库编号
-										    	 			 getComId();
+										    	 			 
 										    	 		});
 										    		 }
 										    		 initAllComs();
+										    		/* getComId();*/
 										    		
 										 		}
 												 if($location.path()=="/warehouse"){
@@ -246,7 +249,7 @@ angular
 			 * 加载所有公司数据
 			 */
 			var initAllComs = function(){
-				var promise = orderService.initSuppliers();
+				var promise = orderService.initAllComs();
 		        	promise.then(function(data){
 		        		debugger;
 		        		$scope.coms = data.data;
@@ -257,7 +260,7 @@ angular
 		        			$('#owner').selectpicker('refresh');//刷新插件
 		        			
 		                }, 100);
-		        		
+		        		 getComId();
 		        	},function(data){
 		        		//调用承诺接口reject();
 		        	});
@@ -267,12 +270,16 @@ angular
 				var promise = orderService.getComId();
 				promise.then(function(data) {
 					debugger;
-					
+					 if( $scope.warehouse==undefined){
+						 $scope.warehouse={};
+					 }
 						 if(data.comName!=null){
 								$scope.warehouse.owner=data.comId;
+								$scope.warehouseowner1=data.comId;
 								$scope.warehouse.ownerName=data.comName;
 							}else{
 								$scope.warehouse.owner="";
+								$scope.warehouseowner1="";
 							}
 					 
 					
