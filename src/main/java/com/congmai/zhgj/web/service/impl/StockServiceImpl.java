@@ -19,7 +19,6 @@ import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.Stock;
 import com.congmai.zhgj.web.model.StockExample;
 import com.congmai.zhgj.web.model.StockExample.Criteria;
-import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.service.StockService;
 
 /**
@@ -106,8 +105,7 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 						.getDetailByRelationTakeDeliverSerialList(takeDeliverSerialList);
 				List<DeliveryMateriel> deliverMaterielsTwo = new ArrayList<DeliveryMateriel>();
 				for (DeliveryMateriel deliverMateriel : deliverMateriels) {
-					if ("zhgj".equals(buyComId)
-							&& StringUtils.isEmpty(deliverMateriel
+					if (StringUtils.isEmpty(deliverMateriel
 									.getBuyComId())) {
 						deliverMaterielsTwo.add(deliverMateriel);
 					} else if (buyComId.equals(deliverMateriel.getBuyComId())) {
@@ -142,7 +140,7 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 		StockExample example=new StockExample();
 		Criteria criteria=example.createCriteria();
     	criteria.andDelFlgEqualTo("0");
-    	criteria.andManageTypeEqualTo("1");
+    	/*criteria.andManageTypeEqualTo("1");*/
     	criteria.andMaterielSerialEqualTo(materielSerial);
 		return stockMapper.selectByExample(example);
 	}

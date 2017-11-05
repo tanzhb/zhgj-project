@@ -475,6 +475,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/materielService.js',
 	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/DeliveryService.js',
 				'assets/apps/controllers/saleOrderController.js',
 	        	'assets/apps/service/CommonService.js'
                       ]
@@ -592,6 +593,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/materielService.js',
 	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/DeliveryService.js',
 				'assets/apps/controllers/saleOrderController.js',
 	        	'assets/apps/service/CommonService.js',
                       ]
@@ -620,6 +622,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/materielService.js',
 	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/DeliveryService.js',
 				'assets/apps/controllers/saleOrderController.js',
 	        	'assets/apps/service/CommonService.js'
                       ]
@@ -648,6 +651,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/materielService.js',
 	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/DeliveryService.js',
 				'assets/apps/controllers/saleOrderController.js',
 	        	'assets/apps/service/CommonService.js'
                       ]
@@ -674,7 +678,6 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 							'assets/apps/scripts/angular-file-upload.min.js',
 							'assets/apps/service/materielService.js',
                             'assets/apps/service/orderService.js',
-                            'assets/apps/service/TakeDeliveryService.js',
                             'assets/apps/controllers/buyOrderController.js',
                           //流程申请
 							'assets/global/css/dialog.css',
@@ -813,6 +816,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/service/materielService.js',
 	        	'assets/apps/service/orderService.js',
 	        	'assets/apps/service/CommonService.js',
+	        	'assets/apps/service/DeliveryService.js',
 				'assets/apps/controllers/saleOrderController.js'
                       ]
                     });
@@ -840,6 +844,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/materielService.js',
 	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/DeliveryService.js',
 				'assets/apps/controllers/supplyOrderController.js'
                       ]
                     });

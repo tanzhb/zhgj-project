@@ -214,7 +214,7 @@
                 <shiro:hasPermission name="zhgj:takeDelivery">
                 <li>
                     <a ui-sref="takeDelivery">
-                       收货</span>
+                       入库</span>
                     </a>
                 </li>
                 </shiro:hasPermission>
@@ -228,7 +228,7 @@
                 <shiro:hasPermission name="zhgj:delivery">
                 <li>
                     <a ui-sref="delivery">
-                    发货</span>
+                    出库</span>
                     </a>
                 </li>
                 </shiro:hasPermission>

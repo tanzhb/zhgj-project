@@ -60,10 +60,10 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
        		    	$scope.opration = '查看';
     		    }
             	
-            	validateInit();// 加载表单验证控件
+//            	validateInit();// 加载表单验证控件
             	
-/*            	validateContractInit();// 加载合同表单验证控件
-*/            	
+//            	validateContractInit();// 加载合同表单验证控件
+            	
             	validateClauseAdvanceInit();// 加载垫资条款表单验证
             	validateClauseDeliveryInit();// 加载交付条款表单验证
             	validateClauseCheckAcceptInit();// 加载验收条款表单验证
@@ -485,6 +485,9 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
           		     function(data){//加载页面对象
           		    	$scope.buyOrder=data.orderInfo;
           		    	$scope.orderMateriel=data.orderMateriel;
+          		    	if($state.current.name=="viewSupplyOrder"){//查看页面构造物料查询分页
+          		    		$scope.queryForPage();
+          		    	}
           		    	$scope.contract=data.contract;
           		    	$scope.clauseAfterSales=data.clauseAfterSales;
           		    	$scope.clauseAdvance=data.clauseAdvance;
@@ -2303,7 +2306,61 @@ var e = $("#form_clauseSettlement"),
 			       	}
 		       };
 		     //********订单物料合计，结算条款end****************//
-		       
+		       /** *************订单物料明细可检索化  start*************** */
+		  	 $scope.pageIndex = 1; //记录当前页
+		  	 $scope.pageSize = '10'; //每页的记录数
+		  	 $scope.totalPage = '1'; //记录总页数
+		  	 $scope.dispalyOrderMateriel = [];//页面显示结果
+		  	 $scope.filterOrderMateriel = [];//查询筛选结果
+		  	 
+		  	 $scope.createFilterList = function(){
+		  		 $scope.filterOrderMateriel = [];
+		  		if($scope.orderMateriel.length>0&&$scope.queryStr&&!isNull($scope.queryStr)){
+		  			for(var i = 0;i < $scope.orderMateriel.length;i++){// data.data为选择的标准物料
+		  				if(($scope.orderMateriel)[i].materiel.materielNum.indexOf($scope.queryStr)>=0){
+		  					$scope.filterOrderMateriel.push(angular.copy(($scope.orderMateriel)[i]));
+		  				}else if(($scope.orderMateriel)[i].materiel.materielName.indexOf($scope.queryStr)>=0){
+		  					$scope.filterOrderMateriel.push(angular.copy(($scope.orderMateriel)[i]));
+		  				}else if(($scope.orderMateriel)[i].materiel.specifications.indexOf($scope.queryStr)>=0){
+		  					$scope.filterOrderMateriel.push(angular.copy(($scope.orderMateriel)[i]));
+		  				}
+		  			}
+		  		}else{
+		  			$scope.filterOrderMateriel = angular.copy($scope.orderMateriel);
+		  		}
+		  		
+		  	 };
+		  	 
+		  	 $scope.createDispalyList = function(){
+		  		 $scope.dispalyOrderMateriel = $scope.filterOrderMateriel.slice(
+		  				 ($scope.pageIndex-1)*$scope.pageSize,
+		  				 $scope.pageIndex*$scope.pageSize);
+		  		 
+		  		 $scope.totalPage = Math.ceil($scope.filterOrderMateriel.length/$scope.pageSize);
+		  	 };
+		  	 
+		  	 $scope.queryForPage = function(){
+		  		 $scope.createFilterList();
+		  		 $scope.pageIndex = 1; //设置为第一页
+		  		 $scope.createDispalyList();
+		  	 };
+		  	 
+		  	 $scope.link2ThisPage = function(index){
+		  		 $scope.pageIndex = index;
+		  		 $scope.createDispalyList();
+		  	 }
+		  	 
+		  	 $scope.link2PreviousPage = function(){
+		  		 $scope.pageIndex--;
+		  		 $scope.createDispalyList();
+		  	 }
+		  	 
+		  	 $scope.link2NextPage = function(){
+		  		 $scope.pageIndex++;
+		  		 $scope.createDispalyList();
+		  	 }
+		  	 
+		  	/** *************订单物料明细可检索化  end*************** */  
 		     //********审批流程start****************//
 		       $scope.submitBuyApply  = function() {// 进入申请审批页面
 		        	if(table.rows('.active').data().length != 1){

@@ -192,8 +192,7 @@
 											</div>
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">对方合同号<span
-														class="required" aria-required="true"> * </span></label>
+													<label class="control-label bold">对方合同号</label>
 													<div class="">
 														<input type="text" class="form-control"
 															ng-model="contractVO.otherPartyContractNum"

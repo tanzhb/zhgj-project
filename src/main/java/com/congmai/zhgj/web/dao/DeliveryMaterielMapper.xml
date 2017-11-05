@@ -777,7 +777,7 @@
     	dm.warehouseSerial as warehouseSerial,dm.positionSerial as  positionSerial
     from stockInOutRecord s
     left join takeDelivery td on td.serialNum = s.takeDeliverSerial
-    LEFT JOIN delivery d ON d.takeDeliverSerial = td.serialNum
+        LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
     left join deliveryMateriel dm on td.serialNum = dm.deliverSerial
     left join orderInfo o on o.serialNum = d.orderSerial
      where dm.delFlg=0 and s.delFlg=0 and o.buyComId is null and s.takeDeliverSerial in 

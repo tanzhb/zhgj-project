@@ -857,7 +857,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
             	contractNum:{required:"合同编号不能为空！",rangelength:jQuery.validator.format("合同编号位数必须在{0}到{1}字符之间！")
             		/*remote:jQuery.validator.format("用户名已经被注册")*/},
             	contractType:{required:"合同类型不能为空！"},
-            	otherPartyContractNum:{required:"对方合同号不能为空！"},
+            	/*otherPartyContractNum:{required:"对方合同号不能为空！"},*/
             	firstParty:{required:"合同甲方不能为空！"},
             	secondParty:{required:"合同乙方不能为空！"},
             	/*startDate:{required:"开始日期不能为空！"},
@@ -907,8 +907,8 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
                 contractType:{required:true,
                 },
                 
-                otherPartyContractNum:{required:true,
-                },
+                /*otherPartyContractNum:{required:true,
+                },*/
                 
                 firstParty:{required:true,
                 },

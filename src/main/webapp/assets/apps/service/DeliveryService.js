@@ -58,7 +58,7 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     		saveFile:saveFile,
     		
     		
-    		getAttachFileInfo:getAttachFileInfo,
+    		getAttachFileInfo:getAttachFileInfo
     };
 
     return factory;

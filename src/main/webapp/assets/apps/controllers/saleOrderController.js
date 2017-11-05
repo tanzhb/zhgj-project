@@ -445,7 +445,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 							'render' : function(data,
 									type, row, meta) {
 								var htm = (data==null?'':data)+'</br>'
-                    			if(row.deliverStatus=="0"){
+                    			if(row.deliverStatus=="0"||row.deliverStatus==null){
                     				if(row.status==2){
 										return htm + '<span >待发货</span>';
 									}else{

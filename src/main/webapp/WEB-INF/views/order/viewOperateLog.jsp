@@ -7,7 +7,7 @@
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"
 						aria-hidden="true"></button>
-					<h4 class="modal-title">变更记录</h4>
+					<h4 class="modal-title">业务日志</h4>
 					
 				</div>
 				<div class="modal-body">
