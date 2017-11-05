@@ -824,15 +824,15 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	                ajax:"rest/order/findOrderList?type=sale&selectFor=delivery",//加载数据中
 	                "aoColumns": [
 	                              { mData: 'serialNum' },
-	                              { mData: 'orderNum' },
-	                              { mData: 'buyName'},
-	                              { mData: 'orderNum' },
-	                              { mData: 'orderNum' },
-	                              { mData: 'deliveryMode' },
-	                              { mData: 'serviceModel' },
-	                              { mData: 'orderNum' },
-	                              { mData: 'orderNum' },
-	                              { mData: 'orderDate' }
+                              { mData: 'orderNum' },
+                              { mData: 'buyName' },
+                              { mData: 'materielCount' },
+                              { mData: 'orderAmount' },
+                              /*{ mData: 'deliveryMode' },*/
+                              { mData: 'orderType' },
+                              /*{ mData: 'saleApplySerial' },*/
+                              { mData: 'orderSerial' },
+                              { mData: 'orderDate' }
 
 	                        ],
 	               'aoColumnDefs' : [ {
@@ -847,6 +847,21 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 																data)
 														.html()
 												+ '">';
+								},
+								"createdCell": function (td, cellData, rowData, row, col) {
+									 $compile(td)($scope);
+							       }
+							},{
+								'targets' : 2,
+								'searchable' : false,
+								'orderable' : false,
+								'render' : function(data,
+										type, full, meta) {
+									if(isNull(data)){
+										return '中航能科（上海）能源科技有限公司'
+									}else{
+										return data;
+									}
 								},
 								"createdCell": function (td, cellData, rowData, row, col) {
 									 $compile(td)($scope);
@@ -1735,7 +1750,12 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		     function(data){
 	          		    	 
 	          		    	$scope.saleOrder=data.orderInfo;
-	          		    	$scope.delivery.receiver=data.orderInfo.buyName;//收货方默认销售订单的采购方
+	          		    	if(isNull(data.orderInfo.buyName)){
+	          		    		$scope.delivery.receiver = '中航能科（上海）能源科技有限公司'
+	          		    	}else{
+	          		    		$scope.delivery.receiver=data.orderInfo.buyName;//收货方默认销售订单的采购方
+	          		    	}
+	          		    	
 	          		    	$scope.delivery.maker=data.currenLoginName;//制单人默认当前用户
 	          		    	/*$scope.delivery.deliverNum=data.deliverNum;//随机产生的发货单号
 */	          		    	if($scope.delivery!=null){

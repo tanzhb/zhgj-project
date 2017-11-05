@@ -594,7 +594,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 	EXISTS (select om.serialNum from
 	orderMateriel om  
 	LEFT JOIN orderInfo o ON  o.serialNum=om.orderSerial
-	where om.materielSerial= #{serialNum,jdbcType=VARCHAR} and dm.orderMaterielSerial=om.serialNum  and  o.buyComId is  NULL)
+	where om.materielSerial= #{serialNum,jdbcType=VARCHAR} and dm.orderMaterielSerial=om.serialNum  and  o.buyComId is not NULL)
     </select>
      <!--代管库存获取累计出库数量 -->
     <select id="countOutAmountForDaiguan" parameterType="java.lang.String"   resultType="java.lang.String">
@@ -602,7 +602,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 	EXISTS (select om.serialNum from
 	orderMateriel om  
 	LEFT JOIN orderInfo o ON  o.serialNum=om.orderSerial
-	where om.materielSerial= #{serialNum,jdbcType=VARCHAR} and dm.orderMaterielSerial=om.serialNum  and  o.buyComId is  NULL)
+	where om.materielSerial= #{serialNum,jdbcType=VARCHAR} and dm.orderMaterielSerial=om.serialNum  and  o.buyComId is not NULL)
     </select>
      <!--自建库存获取累计入库数量   -->
      <select id="countInAmountForZijian"  parameterType="java.lang.String"   resultType="java.lang.String">
@@ -720,7 +720,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 	om.orderSerial = d.orderSerial
 	LEFT JOIN orderInfo o ON  o.serialNum=om.orderSerial
 	WHERE
-	om.materielSerial = #{materielSerial,jdbcType=VARCHAR} and o.buyComId is   NULL 
+	om.materielSerial = #{materielSerial,jdbcType=VARCHAR} and o.buyComId is NOT  NULL 
      </select>
      <!--获取代管库存相关的发货流水  -->
      <select id="getRelationDeliverSerialForDaiguan"  parameterType="com.congmai.zhgj.web.model.Stock" resultType="java.lang.String">
@@ -753,7 +753,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 	om.orderSerial = d.orderSerial
 		LEFT JOIN orderInfo o ON  o.serialNum=om.orderSerial
 	WHERE
-	om.materielSerial = #{materielSerial,jdbcType=VARCHAR} and o.buyComId is NOT NULL )temp  where  temp.serialNum= td.deliverSerial
+	om.materielSerial = #{materielSerial,jdbcType=VARCHAR} and o.buyComId is NULL )temp  where  temp.serialNum= td.deliverSerial
      )
      </select>
 </mapper>

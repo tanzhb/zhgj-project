@@ -143,6 +143,7 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 		Criteria criteria=example.createCriteria();
     	criteria.andDelFlgEqualTo("0");
     	criteria.andManageTypeEqualTo("1");
+    	criteria.andMaterielSerialEqualTo(materielSerial);
 		return stockMapper.selectByExample(example);
 	}
 
@@ -168,6 +169,14 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 	public String getCountOutAmountForDaiguan(String serialNum) {
 		// TODO Auto-generated method stub
 		return stockInOutRecordMapper.countOutAmountForDaiguan(serialNum);
+	}
+
+	@Override
+	public List<Stock> selectStockListByComId(String manageType, String comId) {
+		Stock s = new Stock();
+		s.setManageType(manageType);
+		s.setComId(comId);
+		return stockMapper.selectStockListByComId(s);
 	}
    
 	

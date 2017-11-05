@@ -33,6 +33,8 @@ public interface StockMapper extends GenericDao<Stock,String>{
     int updateByPrimaryKey(Stock record);
     
     int deleteStock(List<String>serialNums);//批量删除库存信息
+
+	List<Stock> selectStockListByComId(Stock s);
     
    
     

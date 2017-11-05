@@ -24,6 +24,8 @@ public class Stock {
 	private String manageType;// 管理类型
 
 	private String materielOwner;// 物权方
+	
+	private String comId;// 用于查询该公司的物料库存
 
 	private String serviceParty;// 服务方
 
@@ -401,6 +403,14 @@ public class Stock {
 
 	public void setRiskGrade(String riskGrade) {
 		this.riskGrade = riskGrade;
+	}
+
+	public String getComId() {
+		return comId;
+	}
+
+	public void setComId(String comId) {
+		this.comId = comId;
 	}
 
 }

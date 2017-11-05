@@ -750,15 +750,15 @@
 					<thead>
 						<tr>
 							<th style="text-align: center"></th>
-							<th>销售订单号</th>
-							<th>采购方</th>
-							<th>销售商品</th>
-							<th>金额</th>
-							<th>配送</th>
-							<th>服务模式</th>
-							<th>关联销售合同</th>
-							<th>关联采购单</th>
-							<th>下单日期</th>
+							<th> 销售订单号 </th>
+                            <th> 买方 </th>
+                            <th> 销售数量 </th>
+                            <th> 金额 </th>
+                            <!-- <th> 配送 </th> -->
+                            <th> 销售类型 </th>
+                            <!-- <th> 关联销售合同 </th> -->
+                            <th> 关联采购单 </th>
+                            <th> 下单日期 </th>
 						</tr>
 					</thead>
 					<tbody>

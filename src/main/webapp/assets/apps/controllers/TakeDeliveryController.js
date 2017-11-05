@@ -444,11 +444,13 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 						showToastr('toast-top-center', 'warning', '该收货单已经申请流程审批，不能进行再次收货！');
 					}else if(table.row('.active').data().status == 4){
 						showToastr('toast-top-center', 'warning', '该收货单已经收货完成！');
-					}else if(table.row('.active').data().status > 2 || table.row('.active').data().status == 1){
+					}/*else if(table.row('.active').data().status > 2 || table.row('.active').data().status == 1){
 						showToastr('toast-top-center', 'warning', '该收货单已经进入检验入库流程，不能进行再次收货！');
-					}else{
+					}*/else if(table.row('.active').data().status == 8){
 						var serialNum = $('#takeDeliveryTable input[name="serialNum"]:checked').val();
 						$state.go("toTakeDelivery",{serialNum:serialNum});
+					}else{
+						showToastr('toast-top-center', 'warning', '该收货单未进入可收货状态！');
 					}
 				}
 			}
@@ -826,17 +828,25 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    									type, row, meta) {
 	    									if(data=="PENDING"||data=="WAITING_FOR_APPROVAL"){
 	    										return '<span  class="label label-sm label-warning ng-scope">审核中</span>';
-	    									}else if(data=="1"){
-	    										return '<span  class="label label-sm label-info ng-scope">待检验</span>';
 	    									}else if(data=="APPROVAL_FAILED"){
 	    										return '<span  class="label label-sm label-danger ng-scope">未通过</span>';
-	    									}else if(data=="2"){
-	    										return '<span  class="label label-sm label-warning ng-scope">已取消</span>';
 	    									}else if(data=="3"){
 	    										return '<span  class="label label-sm label-warning ng-scope">待入库</span>';
 	    									}else if(data=="4"){
 	    										return '<span  class="label label-sm label-success ng-scope">已完成</span>';
-	    									}else{
+	    									}else if(data=='1'){
+	    										return '<span  class="label label-sm label-info ng-scope">待检验</span>';
+											}else if(data=='2'){
+												return '<span  class="label label-sm label-info ng-scope">待出库</span>';
+											}else if(data=='6'){
+												return '<span  class="label label-sm label-info ng-scope">待清关</span>';
+											}else if(data=='7'){
+												return '<span  class="label label-sm label-info ng-scope">待报关</span>';
+											}else if(data=='8'){
+												return '<span  class="label label-sm label-info ng-scope">待收货</span>';
+											}else if(data=='9'){
+												return '<span  class="label label-sm label-info ng-scope">待入库</span>';
+											}else{
 	    										return '<span  class="label label-sm label-danger ng-scope">待收货</span>';
 	    									}
 	    							}

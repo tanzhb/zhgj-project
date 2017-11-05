@@ -33,6 +33,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
+import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.enums.ComType;
@@ -46,6 +47,7 @@ import com.congmai.zhgj.web.model.PriceListExample;
 import com.congmai.zhgj.web.model.Stock;
 import com.congmai.zhgj.web.model.StockExample;
 import com.congmai.zhgj.web.model.StockInOutRecord;
+import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.StockExample.Criteria;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.LadderPriceService;
@@ -53,6 +55,7 @@ import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.PriceListService;
 import com.congmai.zhgj.web.service.StockService;
+import com.congmai.zhgj.web.service.UserCompanyService;
 
 
 /**
@@ -74,6 +77,9 @@ public class StockController {
     private CompanyService  companyService;
     @Resource
     private OrderService  orderService;
+    @Resource
+    private UserCompanyService  userCompanyService;
+    
     /**
      * 库存信息列表展示
      * 
@@ -136,7 +142,13 @@ public class StockController {
   
     @RequestMapping(value = "/getStockList", method = RequestMethod.GET)//获取库存信息列表
     public ResponseEntity<Map> getStockList(HttpServletRequest request,String manageType) {
-		List<Stock> stocks = stockService.selectStockList(manageType);
+    	String comId = null;
+    	User user = UserUtil.getUserFromSession();
+    	if(user!=null){
+			comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+		}
+    	
+    	List<Stock> stocks = stockService.selectStockListByComId(manageType,comId);
 		if(stocks.size()!=0){
 		for(Stock stock:stocks){
 			Materiel m=materielService.selectById(stock.getMaterielSerial());
