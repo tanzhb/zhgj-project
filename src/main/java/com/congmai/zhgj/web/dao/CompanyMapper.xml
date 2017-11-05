@@ -314,4 +314,30 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectListByRole" resultMap="BaseResultMap2" parameterType="com.congmai.zhgj.web.model.SupplyBuyVO" >
+    select
+       comId, comNum, comType, abbreviation, comName, registeredCapital, legalPerson, address, 
+    taxpayeNumber, tel, contact, businessNature, comNature, businessType, classification, remark,
+    status, c.delFlg, c.creator, c.createTime, c.updater, c.updateTime, corporatePresence, openingBank, 
+    accountNumber, billRemark
+    from   	supply_buy s 
+     <if test="supplyId=='notnull'">    
+     	   left  join  company  c  on s.supply_id = c.comId
+    </if>
+    <if test="buyId=='notnull'">    
+     	  left  join  company  c  on s.buy_id = c.comId
+    </if>
+   		where c.delFlg = 0  and  s.create_id=#{createId,jdbcType=VARCHAR}
+   		<if test="buyId=='notnull'">    
+     	and s.buy_id is not null
+    </if>
+    <if test="supplyId=='notnull'">    
+     	and s.supply_id is not null
+    </if>
+   	order by  c.updateTime DESC
+   	<if test="pageSize!=-1">    
+     	limit #{pageIndex},#{pageSize}
+    </if>
+  
+  </select>
 </mapper>

@@ -6,6 +6,7 @@ import java.util.Map;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyExample;
+import com.congmai.zhgj.web.model.SupplyBuyVO;
 
 public interface CompanyMapper extends GenericDao<Company,String>{
 	
@@ -22,5 +23,6 @@ public interface CompanyMapper extends GenericDao<Company,String>{
 	List<Company> selectByExample(CompanyExample example);
 	
 	 int countByExample(CompanyExample example);
-	
+
+		public List<Company> selectListByRole(SupplyBuyVO  VO);
 }

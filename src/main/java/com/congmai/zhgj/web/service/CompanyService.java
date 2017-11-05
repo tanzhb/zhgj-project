@@ -6,6 +6,7 @@ import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericService;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyExample;
+import com.congmai.zhgj.web.model.SupplyBuyVO;
 
 public interface CompanyService extends GenericService<Company, String>{
 
@@ -70,5 +71,9 @@ public interface CompanyService extends GenericService<Company, String>{
 	 * @return
 	 */
 	List<Company> selectAll();
+	
+	void insertSupplyBuy(SupplyBuyVO vo);
+	
+	List<SupplyBuyVO>getSupplyBuy(SupplyBuyVO vo);
 	
 }

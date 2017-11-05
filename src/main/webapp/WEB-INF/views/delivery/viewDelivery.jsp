@@ -11,7 +11,7 @@
 					<div class="portlet-title">
 						<div class="caption">基本信息</div>
 						<div class="tools" id="noprintdiv">
-							<button type="button" ng-click="confirmDelivery(deliveryDetail.serialNum)"  ng-if="deliveryDetail.status=='0'"
+							<button type="button" ng-hide="confirmDeliverybtn" ng-click="confirmDelivery(deliveryDetail.serialNum)"  ng-if="deliveryDetail.status=='0'"
 								class="btn blue  btn-circle  btn-sm">
 								<i class="fa fa-save"></i> 确认发货
 							</button>

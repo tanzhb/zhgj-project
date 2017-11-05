@@ -370,7 +370,7 @@
     </select>
     
     <select id="selectCompanyInfo" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.Company">
-    SELECT comName FROM company WHERE comId=#{comId}
+    SELECT comName,comId FROM company WHERE comId=#{comId}
     </select>
     
     

@@ -20,6 +20,7 @@ import com.congmai.zhgj.web.dao.CompanyContactMapper;
 import com.congmai.zhgj.web.dao.CompanyFinanceMapper;
 import com.congmai.zhgj.web.dao.CompanyMapper;
 import com.congmai.zhgj.web.dao.CompanyQualificationMapper;
+import com.congmai.zhgj.web.dao.SupplyBuyVOMapper;
 import com.congmai.zhgj.web.enums.ComType;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyContact;
@@ -29,6 +30,8 @@ import com.congmai.zhgj.web.model.CompanyFinance;
 import com.congmai.zhgj.web.model.CompanyFinanceExample;
 import com.congmai.zhgj.web.model.CompanyQualification;
 import com.congmai.zhgj.web.model.CompanyQualificationExample;
+import com.congmai.zhgj.web.model.SupplyBuyVO;
+import com.congmai.zhgj.web.model.SupplyBuyVOExample;
 import com.congmai.zhgj.web.service.CompanyService;
 
 @Service
@@ -42,6 +45,8 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 	private CompanyFinanceMapper companyFinanceMapper;
 	@Resource
 	private CompanyQualificationMapper companyQualificationMapper;
+	@Resource
+	private SupplyBuyVOMapper supplyBuyVOMapper;
 	
 	@Override
 	public GenericDao<Company, String> getDao() {
@@ -54,8 +59,40 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 	public Page<Company> selectByPage(Company company) {
 		List<Company> list =  null;
 		Integer count = 0;
-		if(company != null){
+		if(company != null&&company.getComId()==null){//平台登录时
 			list = companyMapper.selectList(company);
+			if(CollectionUtils.isNotEmpty(list)){
+				for(Company vo:list){
+					if(StringUtils.isNotEmpty(vo.getComType())){
+						vo.setComTypeName(ComType.getInfo(vo.getComType()));
+					}
+				}
+			}
+			count = companyMapper.countList(company);
+		}
+		if(company != null&&"1".equals(company.getComType())){//采购商登录时
+			 SupplyBuyVO svo=new SupplyBuyVO();
+			 svo.setCreateId(company.getComId());
+			 svo.setSupplyId("notnull");
+			 svo.setPageIndex(company.getPageIndex());
+			 svo.setPageSize(company.getPageSize());
+			list = companyMapper.selectListByRole(svo);
+			if(CollectionUtils.isNotEmpty(list)){
+				for(Company vo:list){
+					if(StringUtils.isNotEmpty(vo.getComType())){
+						vo.setComTypeName(ComType.getInfo(vo.getComType()));
+					}
+				}
+			}
+			count = companyMapper.countList(company);
+		}
+		if(company != null&&"2".equals(company.getComType())){//供应商登录时
+			 SupplyBuyVO svo=new SupplyBuyVO();
+			 svo.setCreateId(company.getComId());
+			 svo.setBuyId("notnull");
+			 svo.setPageIndex(company.getPageIndex());
+			 svo.setPageSize(company.getPageSize());
+			list = companyMapper.selectListByRole(svo);
 			if(CollectionUtils.isNotEmpty(list)){
 				for(Company vo:list){
 					if(StringUtils.isNotEmpty(vo.getComType())){
@@ -181,6 +218,28 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 		Company company = new Company();
 		company.setPageSize(-1);
 		return companyMapper.selectList(company);
+	}
+
+
+	@Override
+	public void insertSupplyBuy(SupplyBuyVO vo) {
+		supplyBuyVOMapper.insert(vo);
+		
+	}
+
+
+	@Override
+	public List<SupplyBuyVO> getSupplyBuy(SupplyBuyVO vo) {
+		SupplyBuyVOExample se=new  SupplyBuyVOExample ();
+		SupplyBuyVOExample.Criteria  c=se.createCriteria();
+		c.andDelFlgEqualTo("0");
+		c.andCreateIdEqualTo(vo.getCreateId());
+		if(StringUtils.isEmpty(vo.getBuyId())){//供应商查询采购商
+			c.andBuyIdIsNotNull().andSupplyIdIsNull();
+		}else{//供应商查询采购商
+			c.andBuyIdIsNull().andSupplyIdIsNotNull();
+		}
+		return supplyBuyVOMapper.selectByExample(se);
 	}
 
 

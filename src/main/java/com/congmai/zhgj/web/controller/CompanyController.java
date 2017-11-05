@@ -52,6 +52,7 @@ import com.congmai.zhgj.web.model.CompanyExample.Criteria;
 import com.congmai.zhgj.web.model.CompanyFinance;
 import com.congmai.zhgj.web.model.CompanyQualification;
 import com.congmai.zhgj.web.model.DataTablesParams;
+import com.congmai.zhgj.web.model.SupplyBuyVO;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.CompanyAddressService;
 import com.congmai.zhgj.web.service.CompanyContactService;
@@ -145,11 +146,19 @@ public class CompanyController {
 		 company.setPageSize(-1);
 		 //获取session中的user
 		User user = UserUtil.getUserFromSession();
-		
+		String comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
 		Page<Company> companys = new Page<Company>();
 		if(user !=null){
-			
 			company.setComIds(userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId())));//获取用户的企业ID
+			company.setComId(comId);
+			if(!StringUtils.isEmpty(comId)){
+				Company com=companyService.selectById(comId);
+				if("1".equals(com.getComType())){
+					company.setComType("1");
+				}else if("2".equals(com.getComType())){
+					company.setComType("2");
+				}
+			}
 			companys = companyService.selectByPage(company);
 	    	//List<Company> companys = companyService.selectByPage(company).getResult();
 			// 封装datatables数据返回到前台
@@ -221,6 +230,10 @@ public class CompanyController {
     @ResponseBody
     public Company saveCompany(Map<String, Object> map,@RequestBody Company company,HttpServletRequest request) {
     	String flag ="0"; //默认失败
+    	Subject currentUser = SecurityUtils.getSubject();
+    	User user = UserUtil.getUserFromSession();
+    	String comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+    	String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
 
         	try{
         		String isExist = checkComNumIsExist(company.getComId(),company.getComNum());
@@ -228,15 +241,28 @@ public class CompanyController {
         			company.setComNum("isExist");
         			return company;
         		}
-        		Subject currentUser = SecurityUtils.getSubject();
-        		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
         		if(StringUtils.isEmpty(company.getComId())){
-        			company.setComId(UUID.randomUUID().toString().replace("-",""));
+        			String newComId=UUID.randomUUID().toString().replace("-","");
+        			company.setComId(newComId);
         			company.setCreateTime(new Date());
         			company.setCreator(currenLoginName);
         			company.setUpdateTime(new Date());
         			company.setUpdater(currenLoginName);
         			companyService.insert(company);
+        			//生成业务关系
+        			SupplyBuyVO vo=new SupplyBuyVO();
+        			vo.setSerialNum(UUID.randomUUID().toString().replace("-",""));
+        			vo.setCreateId(comId);
+        			vo.setDelFlg("0");
+        			if(!StringUtils.isEmpty(comId)){
+        				Company com=companyService.selectOne(comId);
+        				if("1".equals(com.getComType())){//采购商
+        					vo.setSupplyId(newComId);
+        				}else if("2".equals(com.getComType())){//供应商
+        					vo.setBuyId(newComId);
+        				}
+        			}
+        			companyService.insertSupplyBuy(vo);
         		}else{
         			company.setUpdateTime(new Date());
         			company.setUpdater(currenLoginName);

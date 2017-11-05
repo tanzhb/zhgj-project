@@ -199,21 +199,22 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 	                            	mRender:function(data,
 	    									type, row, meta){
 	                            		if(data!=""&&data!=null){
+	                            			/*var htm = (data==null?'':data)+'</br>'*/
 	                            			if(data==1){
     											return '<span  class="label label-sm label-info ng-scope">待确认</span>';
     										}else if(data==3){
     											return '<span  class="label label-sm label-info ng-scope">待签合同</span>';
     										}else if(data==2){
     											if(row.deliverStatus=="1"){
-    			                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已发货</span>';
+    			                    				return '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已发货</span>';
     											}else if(row.deliverStatus=="2"){
-    			                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已收货</span>';
+    			                    				return '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已收货</span>';
     											}else if(row.deliverStatus=="3"){
-    			                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已检验</span>';
+    			                    				return '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已检验</span>';
     											}else if(row.deliverStatus=="4"){
-    			                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已出库</span>';
+    			                    				return '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已出库</span>';
     											}else if(row.deliverStatus=="5"){
-    			                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已入库</span>';
+    			                    				return '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已入库</span>';
     											}else{
     												return '<span  class="label label-sm label-success ng-scope">已确认</span>';
     											}
@@ -2090,7 +2091,10 @@ var e = $("#form_clauseSettlement"),
 		    	   if($scope.orderMateriel){
 		    		    var total = 0 ; 
 			       		for(var i=0;i<$scope.orderMateriel.length;i++){
-			       			total = total + Number($scope.orderMateriel[i].amount);
+			       			if(!isNull($scope.orderMateriel[i].amount)){
+			       				total = total + Number($scope.orderMateriel[i].amount);
+			       			}
+			       			
 			       		}
 			       		return total
 			       	}else{

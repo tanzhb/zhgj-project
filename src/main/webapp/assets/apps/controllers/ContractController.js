@@ -411,10 +411,10 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 							                            			}else if(data=='3'||data=='1'){
 							                            				return '待签订';
 							                            			}else{
-							                            				return '';
+							                            				return '已签订';
 							                            			}
 							                            		}else{
-							                            			return "";
+							                            			return '待审批';
 							                            		}
 							                            	}
 							                            }
@@ -556,10 +556,10 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 							                            			}else if(data=='3'||data=='1'){
 							                            				return '待签订';
 							                            			}else{
-							                            				return '';
+							                            				return '已签订';
 							                            			}
 							                            		}else{
-							                            			return "";
+							                            			return '待审批';
 							                            		}
 							                            	}
 							                            }

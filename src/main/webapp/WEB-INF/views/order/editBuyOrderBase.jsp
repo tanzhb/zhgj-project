@@ -405,12 +405,12 @@ margin-right: 20px;
                          </div>
                          <div class="col-md-4">
                              <div class="form-group ">
-                                <label class="control-label bold">供应商合同号：</label>
+                                <label class="control-label bold">采购合同号：</label>
                                  <div class="">
-                                 <input type="text" name="contractNumber" class="form-control" ng-hide="buyOrderInput" ng-model="contract.contractNumber"  >
+                                 <input type="text" name="contractNum" class="form-control" ng-hide="buyOrderInput" ng-model="contract.contractNum"  >
                                      <div class="form-control-focus"> </div>
                                      <span class="help-block" ng-hide="buyOrderInput">请输入合同号</span>
-                                     <p class="form-control-static" ng-show="buyOrderShow"> {{contract.contractNumber}} </p>
+                                     <p class="form-control-static" ng-show="buyOrderShow"> {{contract.contractNum}} </p>
                                  </div>
                              </div>
                          </div>
@@ -574,12 +574,12 @@ margin-right: 20px;
                          </div>
                          <div class="col-md-4">
                              <div class="form-group ">
-                                <label class="control-label bold">供应商合同号：</label>
+                                <label class="control-label bold">采购合同号：</label>
                                  <div class="">
-                                 <input type="text" name="contractNumber" class="form-control" ng-hide="buyOrderInput" ng-model="contract.contractNumber"  >
+                                 <input type="text" name="contractNum" class="form-control" ng-hide="buyOrderInput" ng-model="contract.contractNum"  >
                                      <div class="form-control-focus"> </div>
                                      <span class="help-block" ng-hide="buyOrderInput">请输入合同号</span>
-                                     <p class="form-control-static" ng-show="buyOrderShow"> {{contract.contractNumber}} </p>
+                                     <p class="form-control-static" ng-show="buyOrderShow"> {{contract.contractNum}} </p>
                                  </div>
                              </div>
                          </div>
@@ -761,12 +761,12 @@ margin-right: 20px;
                          /span
                          <div class="col-md-4">
                              <div class="form-group ">
-                                <label class="control-label bold">供应商合同号：</label>
+                                <label class="control-label bold">采购合同号：</label>
                                  <div class="">
-                                 <input type="text" name="contractNumber" class="form-control" ng-hide="contractInput" ng-model="contract.contractNumber"  >
+                                 <input type="text" name="contractNum" class="form-control" ng-hide="buyOrderInput" ng-model="contract.contractNum"  >
                                      <div class="form-control-focus"> </div>
-                                     <span class="help-block" ng-hide="contractInput">请输入合同号</span>
-                                     <p class="form-control-static" ng-show="contractShow"> {{contract.contractNumber}} </p>
+                                     <span class="help-block" ng-hide="buyOrderInput">请输入合同号</span>
+                                     <p class="form-control-static" ng-show="buyOrderShow"> {{contract.contractNum}} </p>
                                  </div>
                              </div>
                          </div>

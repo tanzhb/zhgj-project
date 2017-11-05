@@ -34,9 +34,11 @@ angular
 										    		 $rootScope.setNumCode("WH",function(newCode){//
 										    	 			$scope.warehouse={};
 										    	 			$scope.warehouse.warehouseNum= newCode;//仓库编号
+										    	 			 getComId();
 										    	 		});
 										    		 }
 										    		 initAllComs();
+										    		
 										 		}
 												 if($location.path()=="/warehouse"){
 											        	loadWarehouseTable();//加载仓库列表
@@ -259,6 +261,24 @@ angular
 		        	},function(data){
 		        		//调用承诺接口reject();
 		        	});
+			}
+			
+			var getComId=function (){
+				var promise = orderService.getComId();
+				promise.then(function(data) {
+					debugger;
+					
+						 if(data.comName!=null){
+								$scope.warehouse.owner=data.comId;
+								$scope.warehouse.ownerName=data.comName;
+							}else{
+								$scope.warehouse.owner="";
+							}
+					 
+					
+				}, function(data) {
+				});
+				
 			}
 							// 添加仓库开始***************************************
 						$scope.addWarehouse = function() {
