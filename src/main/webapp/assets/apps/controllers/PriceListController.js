@@ -1419,7 +1419,7 @@ function loadPriceListSaleTable(){
 				var initSuppliers = function(){
 					var promise = orderService.initSuppliers();
 			        	promise.then(function(data){
-			        		$scope.suppliers = data.data;
+			        		$scope.coms = data.data;
 			        		setTimeout(function () {
 			        			$("#supplyComId").selectpicker({
 			                        showSubtext: true

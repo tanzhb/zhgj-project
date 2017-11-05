@@ -40,6 +40,9 @@ public class Warehouse {
     private String updater;
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
+    
+    private String ownerName;//仓库所有者名称
+    
 
     public String getSerialNum() {
         return serialNum;
@@ -184,4 +187,13 @@ public class Warehouse {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public String getOwnerName() {
+		return ownerName;
+	}
+
+	public void setOwnerName(String ownerName) {
+		this.ownerName = ownerName;
+	}
+    
 }

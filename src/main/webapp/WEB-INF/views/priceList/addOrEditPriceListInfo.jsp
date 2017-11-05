@@ -182,7 +182,7 @@
                                                              <div class="form-group">
                                                     <label class="control-label bold" for="admin"> <span class="required"> * </span>供应商 :</label>
                                                     <div class="">
-                                                    <div   ng-show="priceListAdd">
+                                                    <div   ng-show="priceListAdd"  >
                                                      <select class="form-control" data-live-search="true" data-size=""   id="supplyComId" name ="supplyComId"     ng-model="priceList.supplyComId">
                                                        <!--  <option  ng-repeat="op in supplyCom " value="{{op.comId}}"  > {{op.comName}}</option> -->
                                                        <option value=""></option>

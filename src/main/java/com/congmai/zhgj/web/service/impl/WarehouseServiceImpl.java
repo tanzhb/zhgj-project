@@ -48,6 +48,7 @@ public class WarehouseServiceImpl extends GenericServiceImpl<Warehouse, Long> im
 	@Override
 	public List<Warehouse> selectWarehouseList(WarehouseExample we) {
 		// TODO Auto-generated method stub
+		
 		return  warehouseMapper.selectByExample(we);
 	}
 	

@@ -135,10 +135,17 @@
                                                             <div class="form-group ">
                                                     <label class="control-label bold" for="owner"> <span class="required"> * </span>仓库所有者 :</label>
                                                     <div class=" ">
-                                                                        <input type="text"  class="form-control" placeholder=""  id="owner" name ="owner"   ng-hide="warehouseAdd" 
-												ng-model="warehouse.owner" > 
+                                                                        <!-- <input type="text"  class="form-control" placeholder=""  id="owner" name ="owner"   ng-hide="warehouseAdd" 
+												ng-model="warehouse.owner" >  -->
+												<div  -ng-hide="warehouseView"><!--ng-show="warehouseAdd"   -->
+												 <select class="form-control" data-live-search="true" data-size=""   id="owner" name ="owner"     ng-model="warehouse.owner"   >
+                                                       <!--  <option  ng-repeat="op in supplyCom " value="{{op.comId}}"  > {{op.comName}}</option> -->
+                                                       <option value="">无</option>
+                                                   <option  ng-repeat="com in coms" value="{{com.comId}}" >{{com.comName}}</option>
+                                                    </select>
+                                                    </div>
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="warehouseView">{{warehouse.owner}}</p> 
+                                                                        <p class="control-label left" ng-show="warehouseView">{{warehouse.ownerName}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>

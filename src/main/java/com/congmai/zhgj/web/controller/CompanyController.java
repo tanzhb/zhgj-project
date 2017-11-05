@@ -677,7 +677,17 @@ public class CompanyController {
     	map.put("orderNum", orderNum);
     	return map;
     }
-
+    /**
+     * @Description (获取所有公司)
+     * @param request
+     * @return
+     */
+    @RequestMapping("getAllComs")
+    @ResponseBody
+    public List<Company> getAllComs(HttpServletRequest request) {
+    	
+    	return companyService.selectAll();
+    }
 
 }
 

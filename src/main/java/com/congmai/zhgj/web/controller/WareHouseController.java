@@ -30,14 +30,19 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
+import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.JsonTreeData;
 import com.congmai.zhgj.web.model.LadderPrice;
+import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.WarehouseExample;
 import com.congmai.zhgj.web.model.WarehouseExample.Criteria;
 import com.congmai.zhgj.web.model.Warehouseposition;
+import com.congmai.zhgj.web.service.CompanyService;
+import com.congmai.zhgj.web.service.UserCompanyService;
 import com.congmai.zhgj.web.service.WarehouseService;
 import com.congmai.zhgj.web.service.WarehousepositionService;
 
@@ -57,6 +62,10 @@ public class WareHouseController {
     private WarehouseService  warehouseService;
     @Resource
     private WarehousepositionService  warehousepositionService;
+    @Resource
+    private CompanyService  companyService;
+    @Resource
+    private UserCompanyService   userCompanyService;
     
     
     /**
@@ -109,6 +118,10 @@ public class WareHouseController {
     	}catch(Exception e){
     		System.out.println(e.getMessage());
     	}
+    	Company com =companyService.selectOne(warehouse.getOwner());
+    	if(com!=null){
+    		warehouse.setOwnerName(com.getComName());
+    	}
 		return new ResponseEntity<Warehouse>(warehouse, HttpStatus.OK);
     }
   
@@ -120,13 +133,31 @@ public class WareHouseController {
      */
     @RequestMapping(value = "/getWarehouseList", method = RequestMethod.GET)
     public ResponseEntity<Map> getWarehouseList(HttpServletRequest request) {
-		List<Warehouse> warehouses = warehouseService.selectList();
+    	Subject currentUser = SecurityUtils.getSubject();
+    	User user = UserUtil.getUserFromSession();
+    	String comId = null;
+		comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+		WarehouseExample  we=new WarehouseExample ();
+		com.congmai.zhgj.web.model.WarehouseExample.Criteria c=we.createCriteria();
+		if(comId!=null){
+		 c.andOwnerEqualTo(comId);
+		 c.andDelFlgEqualTo("0");
+		}else{
+			 c.andDelFlgEqualTo("0");
+		}
+		List<Warehouse> warehouses = warehouseService.selectWarehouseList(we);
 		// 封装datatables数据返回到前台
 		Map pageMap = new HashMap();
 		pageMap.put("draw", 1);
 		pageMap.put("recordsTotal", warehouses==null?0:warehouses.size());
 		pageMap.put("recordsFiltered", warehouses==null?0:warehouses.size());
 		pageMap.put("data", warehouses);
+		for(Warehouse w:warehouses){
+			Company com =companyService.selectOne(w.getOwner());
+	    	if(com!=null){
+	    		w.setOwnerName(com.getComName());
+	    	}
+		}
 		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 	}
     /**
@@ -138,6 +169,10 @@ public class WareHouseController {
     public ResponseEntity<Map> viewWarehouseDetail(@RequestBody String  serialNum) {
     	Map<String,Object> map = new HashMap<String,Object>();
     	Warehouse warehouse=warehouseService.selectOne(serialNum);
+    	Company com =companyService.selectOne(warehouse.getOwner());
+    	if(com!=null){
+    		warehouse.setOwnerName(com.getComName());
+    	}
     	map.put("warehouse", warehouse);
     	List<Warehouseposition>warehousepositionList=warehousepositionService.selectList(serialNum);
     	map.put("warehousepositions", warehousepositionList);

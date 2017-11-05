@@ -328,6 +328,16 @@ angular.module('MetronicApp').service('orderService',
 				                deferred.reject('连接服务器出错！');  
 				            })  
 				        return deferred.promise;  
-				    }
+				    },
+				    initAllComs : function (){//所有公司
+						  var deferred = $q.defer();
+							$http.get("rest/company/getAllComs")
+							.then(function success(result) {
+								deferred.resolve(result);//请求成功
+							}, function error(err) {
+								deferred.reject(err);//请求失败
+							});
+							return deferred.promise;//返回承诺  
+					  }
 			}
 		} ]);

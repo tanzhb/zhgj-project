@@ -13,8 +13,9 @@ angular
 						'$stateParams',
 						'settings',
 						'WarehouseService',
+						'orderService',
 						function($rootScope, $scope, $state, $compile,$http,$location,$stateParams,settings,
-								WarehouseService) {
+								WarehouseService,orderService) {
 							$scope
 									.$on(
 											'$viewContentLoaded',
@@ -27,12 +28,15 @@ angular
 													console.log($rootScope.warehouseSerialNum);*/
 													 $scope.warehousepositions=[{}];
 													 _index = 0; 
+													 $scope.warehouseSerialNum=$stateParams.warehouseSerialNum;
 										    		getWarehouseInfo($stateParams.warehouseSerialNum);
+										    		 if($scope.warehouseSerialNum==undefined){
 										    		 $rootScope.setNumCode("WH",function(newCode){//
 										    	 			$scope.warehouse={};
 										    	 			$scope.warehouse.warehouseNum= newCode;//仓库编号
 										    	 		});
-										    		 
+										    		 }
+										    		 initAllComs();
 										 		}
 												 if($location.path()=="/warehouse"){
 											        	loadWarehouseTable();//加载仓库列表
@@ -147,7 +151,7 @@ angular
 													}, {
 														mData : 'warehouseCategory'
 													}, {
-														mData : 'owner'
+														mData : 'ownerName'
 													} ],
 												'aoColumnDefs' : [ {
 													'targets' : 0,
@@ -235,6 +239,27 @@ angular
 							// 添加checkbox功能
 							// ***************************************
 */							}
+			
+			  /**
+			 * 加载所有公司数据
+			 */
+			var initAllComs = function(){
+				var promise = orderService.initSuppliers();
+		        	promise.then(function(data){
+		        		debugger;
+		        		$scope.coms = data.data;
+		        		setTimeout(function () {
+		        			$("#owner").selectpicker({
+		                        showSubtext: true
+		                    });
+		        			$('#owner').selectpicker('refresh');//刷新插件
+		        			
+		                }, 100);
+		        		
+		        	},function(data){
+		        		//调用承诺接口reject();
+		        	});
+			}
 							// 添加仓库开始***************************************
 						$scope.addWarehouse = function() {
 							$scope.warehouseAdd=true;

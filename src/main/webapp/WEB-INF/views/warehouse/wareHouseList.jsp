@@ -516,7 +516,7 @@
                                                <div class="form-group">
                                                    <label class="control-label col-md-5">仓库所有者：</label>
                                                    <div class="col-md-7">
-                                                       <p class="form-control-static">{{warehouse.owner}}</p>
+                                                       <p class="form-control-static">{{warehouse.ownerName}}</p>
                                                    </div>
                                                </div>
                                            </div>

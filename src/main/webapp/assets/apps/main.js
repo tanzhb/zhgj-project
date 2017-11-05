@@ -1801,6 +1801,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                                 	'assets/global/plugins/datatables/datatables.all.min.js',
                                 	'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
                                 	  'assets/apps/service/WarehouseService.js',
+                                	  'assets/apps/service/orderService.js',
+                                	  'assets/apps/service/DeliveryService.js',
           	                        'assets/apps/controllers/WarehouseController.js',
                                 	  'assets/global/plugins/bootbox/bootbox.min.js'
         				      
@@ -1828,6 +1830,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
     				        'assets/pages/scripts/form-repeater.js',
     				        'assets/apps/controllers/WarehouseController.js',
     				        'assets/apps/service/WarehouseService.js',
+    				        'assets/apps/service/orderService.js',
+    				        'assets/apps/service/DeliveryService.js',
     				        'assets/apps/scripts/pageHandle.js'  
                         ]
                     });
