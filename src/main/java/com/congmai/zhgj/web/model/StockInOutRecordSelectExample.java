@@ -16,8 +16,19 @@ public class StockInOutRecordSelectExample {
     
     private int pageSize;
     
+    private String comId;//用于查询该公司的物料出入库记录
+    
+    
+    
+    public String getComId() {
+		return comId;
+	}
 
-    public StockInOutRecordSelectExample() {
+	public void setComId(String comId) {
+		this.comId = comId;
+	}
+
+	public StockInOutRecordSelectExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 

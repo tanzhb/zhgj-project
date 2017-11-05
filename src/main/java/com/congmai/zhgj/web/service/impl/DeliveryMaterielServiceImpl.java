@@ -16,6 +16,7 @@ import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.DateUtil;
+import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.web.dao.DeliveryMaterielMapper;
 import com.congmai.zhgj.web.dao.DemandPlanMapper;
 import com.congmai.zhgj.web.dao.DemandPlanMaterielMapper;
@@ -33,11 +34,13 @@ import com.congmai.zhgj.web.model.MaterielExample;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.StockInOutRecordExample;
 import com.congmai.zhgj.web.model.StockInOutRecordSelectExample;
+import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.StockInOutRecordSelectExample.Criteria;
 import com.congmai.zhgj.web.model.SupplyMateriel;
 import com.congmai.zhgj.web.model.SupplyMaterielExample;
 import com.congmai.zhgj.web.service.DeliveryMaterielService;
 import com.congmai.zhgj.web.service.DemandPlanService;
+import com.congmai.zhgj.web.service.UserCompanyService;
 import com.sun.org.apache.regexp.internal.recompile;
 
 @Service
@@ -46,6 +49,8 @@ public class DeliveryMaterielServiceImpl extends GenericServiceImpl<DeliveryMate
 
 	@Resource
 	private DeliveryMaterielMapper deliveryMaterielMapper;
+	@Resource
+	private UserCompanyService userCompanyService;
 	
 	@Override
 	public GenericDao<DeliveryMateriel, String> getDao() {
@@ -74,6 +79,14 @@ public class DeliveryMaterielServiceImpl extends GenericServiceImpl<DeliveryMate
 		StockInOutRecordSelectExample example = new StockInOutRecordSelectExample();
 		example.setPageIndex(0);
 		example.setPageSize(-1);
+		
+		String comId = null;
+    	User user = UserUtil.getUserFromSession();
+    	if(user!=null){
+			comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+		}
+    	example.setComId(comId);
+    	
 		Page<DeliveryMateriel> page = new Page<DeliveryMateriel>();
 		Criteria c = example.createCriteria();
 		c.andDelFlgEqualTo("0");

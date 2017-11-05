@@ -1715,6 +1715,31 @@ public class OrderController {
         		        }
     	    		}
     	    	}
+    	    	if(supplySet.size()==1){
+    	    		//获取订单附件
+        	    	OrderFileExample om =new OrderFileExample();
+        	    	com.congmai.zhgj.web.model.OrderFileExample.Criteria criteria2 =  om.createCriteria();
+        	    	criteria2.andOrderSerialEqualTo(serialNum);
+        	    	criteria2.andDelFlgEqualTo("0");
+        	    	List<OrderFile> file = orderFileService.selectList(om);
+        	    	
+        	    	if(!CollectionUtils.isEmpty(file)){
+        	    		for(OrderFile f:file){
+        		    		f.setSerialNum(ApplicationUtils.random32UUID());
+        		    		f.setOrderSerial(newSerialNum);
+        		    		f.setUploader(currenLoginName);
+        		    		f.setCreator(currenLoginName);
+        	    			f.setUpdater(currenLoginName);
+        	    			f.setUploadDate(new Date());
+        	    			f.setCreateTime(new Date());
+        	    			f.setUpdateTime(new Date());
+        		    	}
+        		    	//填充File******↑↑↑↑↑↑********
+        		    	orderFileService.betchInsertOrderFiles(file);
+        	    	}
+        	    	
+    			}
+    	    	
     		}
     		
     		

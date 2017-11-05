@@ -664,9 +664,22 @@
     left join deliveryMateriel dm on td.serialNum = dm.deliverSerial and dm.stockInOutRecordSerial is null and dm.delFlg = 0
     left join deliveryMateriel dm2 on s.serialNum = dm2.stockInOutRecordSerial and dm2.deliverSerial = '' and dm2.delFlg = 0
     left join orderInfo o on o.serialNum = d.orderSerial
+    
+    <if test="comId != null" >
+    left join orderMateriel om ON om.serialNum = IFNULL(dm.orderMaterielSerial,dm2.orderMaterielSerial)
+    left join materiel m on om.materielSerial = m.serialNum
+	LEFT JOIN buyMateriel bm on m.materielId = bm.materielId
+	LEFT JOIN supplyMateriel sm on m.materielId = sm.materielId
+	</if>
+	
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
+    
+    <if test="comId != null" >
+        AND (sm.supplyComId = #{comId,jdbcType=VARCHAR} or bm.buyComId = #{comId,jdbcType=VARCHAR})
+      </if>
+      
     <if test="orderByClause != null" >
       order by ${orderByClause}
     </if> 
@@ -715,7 +728,7 @@
    left join delivery d on d.serialNum = s.deliverSerial
     left join deliveryMateriel dm on d.serialNum = dm.deliverSerial
     left join orderInfo o on o.serialNum = d.orderSerial
-    where  dm.delFlg=0 and s.delFlg=0  and o.buyComId is  null and  s.deliverSerial in 
+    where  dm.delFlg=0 and s.delFlg=0  and o.buyComId is not null and  s.deliverSerial in 
         <foreach item="idList" collection="list" open="(" close=")" separator=",">
             #{idList}
         </foreach>
@@ -767,7 +780,7 @@
     LEFT JOIN delivery d ON d.takeDeliverSerial = td.serialNum
     left join deliveryMateriel dm on td.serialNum = dm.deliverSerial
     left join orderInfo o on o.serialNum = d.orderSerial
-     where dm.delFlg=0 and s.delFlg=0 and o.buyComId is not  null and s.takeDeliverSerial in 
+     where dm.delFlg=0 and s.delFlg=0 and o.buyComId is null and s.takeDeliverSerial in 
         <foreach item="idList" collection="list" open="(" close=")" separator=",">
             #{idList}
         </foreach>

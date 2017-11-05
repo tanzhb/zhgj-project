@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8" %>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <!-- <meta http-equiv="cache-control" content="no-cache">   -->
 
  <!-- BEGIN PAGE HEADER-->
@@ -43,16 +44,26 @@
 				</div>
 				<div class="actions">
 				<div class="btn-group btn-group-devided" data-toggle="buttons">
+					<shiro:hasPermission name="stock:add">
 						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addStock('zijian')">
 	                                              <i class="fa fa-plus"></i> 添加</label>
+	                </shiro:hasPermission>
+	                <shiro:hasPermission name="stock:edit">
 						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditStockPage('zijian')">
 	                                              <i class="fa fa-edit"></i> 修改</label>
+	                </shiro:hasPermission>
+	                <shiro:hasPermission name="stock:edit">
 						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delStock('zijian')" >
 	                                              <i class="fa fa-minus"></i> 删除</label>
+	                </shiro:hasPermission>
+	                <shiro:hasPermission name="stock:import">
 						<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
 	                                              <i class="fa fa-upload"></i> 导入</label>
+	                 </shiro:hasPermission>
+	                <shiro:hasPermission name="stock:export">                             
 						<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportStock('zijian')">
 	                                              <i class="fa fa-file-excel-o"></i> 导出</label>
+	                 </shiro:hasPermission>
 	                 </div>
 				</div>
 			</div>
@@ -100,7 +111,7 @@
                             <th> 物料编号</th>
                             <th>物料名称</th>
                             <th>规格型号</th>
-                            <th>所在仓库 </th>
+                            <th>所在仓库数 </th>
                             <th> 库存 </th>
                             <th>平均库龄 </th>
                             <th> 预售 </th>
@@ -132,16 +143,26 @@
 				</div>
 				<div class="actions">
 				<div class="btn-group btn-group-devided" data-toggle="buttons">
+				<shiro:hasPermission name="stock:add">
 						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addStock('daiguan')">
 	                                              <i class="fa fa-plus"></i> 添加</label>
+				</shiro:hasPermission>	 
+				<shiro:hasPermission name="stock:edit">                                             
 						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditStockPage('daiguan')">
 	                                              <i class="fa fa-edit"></i> 修改</label>
+				</shiro:hasPermission>	 
+				<shiro:hasPermission name="stock:edit">  	                                              
 						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delStock('daiguan')" >
 	                                              <i class="fa fa-minus"></i> 删除</label>
+				</shiro:hasPermission>	 
+				<shiro:hasPermission name="stock:import">  	                                              
 						<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
 	                                              <i class="fa fa-upload"></i> 导入</label>
+				</shiro:hasPermission>	 
+				<shiro:hasPermission name="stock:export">  	                                              
 						<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportStock('daiguan')">
 	                                              <i class="fa fa-file-excel-o"></i> 导出</label>
+				</shiro:hasPermission>	                                              
 	                 </div>
 				</div>
 			</div>
@@ -187,7 +208,7 @@
                             <th> 物料编号</th>
                             <th>物料名称</th>
                             <th>规格型号</th>
-                            <th>所在仓库 </th>
+                            <th>所在仓库数 </th>
                             <th> 库存 </th>
                             <th>平均库龄 </th>
                             <th> 预售 </th>
