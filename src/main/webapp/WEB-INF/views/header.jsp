@@ -11,10 +11,6 @@
 	max-height: 250px;
 	overflow: auto;
 }
-.badge badge-danger{
-margin-top: -10px;
-}
-
 </style>
 <div class="page-header-inner ">
 	<!-- BEGIN LOGO -->
@@ -58,26 +54,6 @@ margin-top: -10px;
 		<!-- BEGIN TOP NAVIGATION MENU -->
 		<div class="top-menu">
 			<ul class="nav navbar-nav pull-right">
-				<!-- <form class="search-form search-form-expanded">
-			        <div class="typeahead__container" style="top:15px;right:100px;margin:0 auto;width:300px;">
-			            <div class="typeahead__field">
-			
-			                <span class="typeahead__query">
-			                    <input class="js-typeahead"
-			                           name="q"
-			                           type="search"
-			                           autofocus
-			                           autocomplete="off">
-			                </span>
-			                <span class="typeahead__button">
-			                    <button type="submit">
-			                        <span class="typeahead__search-icon"></span>
-			                    </button>
-			                </span>
-			
-			            </div>
-			        </div>
-			    </form> -->
 			    
 			    <li class="dropdown dropdown-user"><a href="#"
 					class="dropdown-toggle" dropdown-menu-hover data-toggle="dropdown"
@@ -96,11 +72,8 @@ margin-top: -10px;
 				
 				<form class="search-form search-form-expanded"
 					action="page_general_search_3.html" method="GET">
-						
-						
-						
-						 
 						<div class="input-group">
+						
 							<input type="text" class="form-control typeahead"
 								placeholder="Search..." name="query" id="searchInput"> 
 								<span
@@ -109,70 +82,29 @@ margin-top: -10px;
 							</a>
 							</span>
 						</div>
+					
 				</form>
-				 <div class="top-menu">
-                       <!--  <ul class="nav navbar-nav pull-right">
-                            <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
-                                <a    ui-sref="myNotice"  class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"  title="公告"
-                                  >
-                                    <i class="icon-bell"></i>
-                                    <span > <noticeCount/></span>
-                                </a>
-                            </li>
-                            <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
-                                <a ui-sref="myMessage" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"    title="业务消息" >
-                                    <i class="icon-envelope-open"></i>
-                                    <span > <businessMessage/> </span>
-                                </a>
-                            </li>
-                        </ul> -->
-                        <input type = "hidden" id = "hide"/>
-				<li class="dropdown dropdown-user"  style="float:right;margin-top: 10px;"> <a href="#"
-					class="dropdown-toggle" dropdown-menu-hover data-toggle="dropdown"
-					data-close-others="true"> <img alt="" class="img-circle" id="avatar"
-						src="assets/pages/media/users/avatar3.jpg" /> <span
-						class="username username-hide-on-mobile" id="usernameOfUserInfo"> 
-						<shiro:principal />
-						<!-- ng-src="uploadAttachFiles/{{userInfo.avatar}}" -->
-					</span> <i class="fa fa-angle-down"></i>
-				</a>
-					<ul class="dropdown-menu dropdown-menu-default">
-					    <li><a href="#" ng-click="psersonCenter()"> <i
-								class="glyphicon glyphicon-user"></i> 个人中心
-						</a></li>
-						<li><a href="#" ng-click="editPassword()"> <i
-								class="glyphicon glyphicon-edit"></i> 修改密码
-						</a></li>
-						<li class="divider"></li>
-						<li><a href="#" ng-click="toggleFullScreen()"> <i
-								class="glyphicon glyphicon-fullscreen"></i> 全 屏
-						</a></li>
-						<li><a href="#" ng-click="setMainStyle()"><i
-								class="icon-settings"></i> 页面风格设置</a></li>
-						<li><a href="rest/user/logout"> <i
-								class="glyphicon glyphicon-off"></i> 退 出
-						</a></li>
-					</ul></li>
-					 <ul class="nav navbar-nav pull-right">
-                            <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
-                                <a    ui-sref="myNotice"  class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"  title="公告"
-                                  >
-                                    <i class="icon-bell"></i>
-                                    <span class="badge badge-danger" style="position: relative;top: -10px;"> {{noticeCount}} </span>
-                                    <!-- <noticeCount/> -->
-                                </a>
-                            </li>
-                            <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
-                                <a ui-sref="myMessage" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"    title="业务消息" >
-                                    <i class="icon-envelope-open"></i>
-                                    <span class="badge badge-danger"  title="业务消息" style="position: relative;top: -10px;"> {{businessMessageSize}} </span>
-                                  <!--  <businessMessage/>  -->
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
 				<!-- 全文检索下拉框隐藏下拉选择值 -->
-			<%-- 	<input type = "hidden" id = "hide"/>
+				<input type = "hidden" id = "hide"/>
+				
+				<li class="dropdown dropdown-extended dropdown-notification"
+					id="header_notification_bar"><a  ui-sref="myNotice" 
+					class="dropdown-toggle" dropdown-menu-hover data-toggle="dropdown"
+					data-close-others="true"> <i class="icon-bell"></i> <span
+						class="badge badge-danger"> {{noticeCount}} </span>
+				</a>
+					</li>
+				<!-- END NOTIFICATION DROPDOWN -->
+				<!-- BEGIN INBOX DROPDOWN -->
+				<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
+				<li class="dropdown dropdown-extended dropdown-inbox"
+					id="header_inbox_bar"><a ui-sref="myMessage" class="dropdown-toggle"
+					dropdown-menu-hover data-toggle="dropdown" data-close-others="true">
+						<i class="icon-envelope-open"></i> <span
+						class="badge badge-danger"> {{businessMessageSize}} </span>
+				</a>
+					</li>
+					
 				<li class="dropdown dropdown-user"><a href="#"
 					class="dropdown-toggle" dropdown-menu-hover data-toggle="dropdown"
 					data-close-others="true"> <img alt="" class="img-circle" id="avatar"
@@ -198,10 +130,9 @@ margin-top: -10px;
 						<li><a href="rest/user/logout"> <i
 								class="glyphicon glyphicon-off"></i> 退 出
 						</a></li>
-					</ul></li> --%>
+					</ul></li>
 			</ul>
 		</div>
-		
 		<!-- END TOP NAVIGATION MENU -->
 	</div>
 	<!-- END PAGE TOP -->
