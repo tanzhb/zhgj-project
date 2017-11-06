@@ -17,7 +17,7 @@
 	                <span class="title">首页</span>
 	            </a>
 	        </li>
-        <li class="nav-item">
+    <!--     <li class="nav-item">
             <a href="javascript:;" class="nav-link nav-toggle">
                 <i class="icon-user"></i>
                 <span class="title">个人中心</span>
@@ -60,7 +60,7 @@
                     </a>
                 </li>
             </ul>
-        </li>
+        </li> -->
         
         <shiro:hasPermission name="zhgj:baseData">
         <li class="nav-item">

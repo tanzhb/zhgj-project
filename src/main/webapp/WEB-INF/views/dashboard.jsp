@@ -84,7 +84,7 @@
 					<div class="caption caption-md">
 						<i class="icon-bar-chart font-dark hide"></i> <span
 							class="caption-subject font-dark bold uppercase">公告
-							</span> <span class="caption-helper"><noticeCount/></span><!-- 显示公告条数 -->
+							</span> <span class="caption-helper"><span class="badge badge-danger" style="position: relative;top: -10px;"> {{noticeCount}} </span></span><!-- 显示公告条数 -->
 					</div>
 				</div>
 				<div class="scroller" style="height:238px">
@@ -135,7 +135,7 @@
 							</span> <span class="caption-helper"><businessMessage/></span><!-- 显示公告条数 -->
 					</div>
 				</div>
-				<div class="portlet-body" style="height:300px">
+				<div  class="scroller" style="height:300px"><!-- class="portlet-body"  -->
 						<div ng-if="messageList==null||messageList.length==0" class="row todo-container">
 							<div class="todo-tasks-container" align="center" style="padding: 0px 20px;border:0px solid #ebf0f5;">
 									暂无消息
