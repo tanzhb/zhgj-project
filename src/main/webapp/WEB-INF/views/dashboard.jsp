@@ -132,7 +132,7 @@
 					<div class="caption caption-md">
 						<i class="icon-bar-chart font-dark hide"></i> <span
 							class="caption-subject font-dark bold uppercase">业务消息
-							</span> <span class="caption-helper"><businessMessage/></span><!-- 显示公告条数 -->
+							</span> <span class="caption-helper"><span class="badge badge-danger" style="position: relative;top: -10px;"> {{businessMessageSize}} </span></span><!-- 显示公告条数 -->
 					</div>
 				</div>
 				<div  class="scroller" style="height:300px"><!-- class="portlet-body"  -->
