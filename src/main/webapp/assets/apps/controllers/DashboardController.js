@@ -124,6 +124,7 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
  
     
     //已办列表
+	$scope.findEndTask  = function(serialNum){
 	$http.get(ctx + "/rest/processAction/endTask/" + 'All').success( function(result) {
 		var list = [];
 		if(result != null && result.data != null && result.data.length > 0){
@@ -162,6 +163,8 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 		}
 		$scope.ybItems = list;
      });
+	
+	}
 	 //公告
 /*	$http.post(ctx + "/rest/notice/myNoticeList").success( function(result) {
 		var promise =createTable(5,1,true,null);

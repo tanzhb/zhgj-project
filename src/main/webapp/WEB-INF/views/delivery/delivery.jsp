@@ -215,24 +215,33 @@
 		                                    </div> -->
 							<div class="actions">
 								<div class="btn-group btn-group-devided" data-toggle="buttons">
+								<shiro:hasPermission name="	stockOutRecord:add">
 									<label class="btn btn-transparent yellow btn-circle btn-sm"
 										ng-click="stockOut()"> <i class="fa fa-arrow-up"></i> 出库
 									</label>
+								</shiro:hasPermission>
+								<%-- <shiro:hasPermission name="	stockOutRecord:add">
 									<label class="btn btn-transparent green btn-circle btn-sm"
 										ui-sref="stockOutAdd"> <i class="fa fa-plus"></i> 添加
 									</label> 
+								</shiro:hasPermission> --%>
 									<!-- <label class="btn btn-transparent purple btn-circle btn-sm"
 										ng-click="stockOutEdit()"> <i class="fa fa-edit"></i>
 										修改
 									</label>  -->
+								<shiro:hasPermission name="	stockOutRecord:delete">
 									<label class="btn btn-transparent red btn-circle btn-sm"
 										ng-click="stockOutDelete()"> <i class="fa fa-minus"></i>
 										删除
-									</label> <label
+									</label>
+								</shiro:hasPermission>
+								<shiro:hasPermission name="	stockOutRecord:export">
+								 <label
 										class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
 										ng-click="exportStockOut()"> <i
 										class="fa fa-file-excel-o"></i> 导出
 									</label>
+									</shiro:hasPermission>
 								</div>
 							</div>
 						</div>
