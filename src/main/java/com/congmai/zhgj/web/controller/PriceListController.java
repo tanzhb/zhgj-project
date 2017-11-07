@@ -181,7 +181,7 @@ public class PriceListController {
 		}
 		List<PriceList> priceLists = priceListService.selectPriceList(buyOrSale,comIds);
 		if (priceLists==null||priceLists.size()==0) {
-			return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);//判断是否为空,为空返回NO_CONTENT
+//			return new ResponseEntity<Map>(HttpStatus.NO_CONTENT);//判断是否为空,为空返回NO_CONTENT
 		}else{
 		for(PriceList priceList:priceLists){
 			if(StringUtils.isEmpty(priceList.getBuyComId())){

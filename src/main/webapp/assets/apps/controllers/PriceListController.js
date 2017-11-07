@@ -1184,13 +1184,13 @@ function loadPriceListSaleTable(){
 					               { mData: 'materielName' },
 					               { mData: 'specifications' },
 					               { mData: 'unit' },
-					               { mData: 'parentMateriel' },
-					               { mData: 'type' },
-					               { mData: 'productionPlace' },
+					               /*{ mData: 'parentMateriel' },*/
+					               { mData: 'typeName' },
+					               { mData: 'originCountry' },
 					               { mData: 'brand' },
-					               { mData: 'brand' },
+					               /*{ mData: 'brand' },*/
 					               { mData: 'versionNO' },
-					               { mData: 'status' }
+					               /*{ mData: 'status' }*/
 					               ],
 					               'aoColumnDefs' : [ {
 					            	   'targets' : 0,
@@ -1220,7 +1220,7 @@ function loadPriceListSaleTable(){
 					            		   return bomIcon + data;
 					            	   }
 
-					               },{
+					               }/*,{
 					            	   'targets' : 5,
 
 					            	   'render' : function(data,
@@ -1231,7 +1231,7 @@ function loadPriceListSaleTable(){
 					            			   return  data.materielName
 					            		   }
 					            	   }
-					               } ]
+					               }*/ ]
 
 				 }).on('order.dt',
 						 function() {
