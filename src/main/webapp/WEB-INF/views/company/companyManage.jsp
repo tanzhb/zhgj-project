@@ -19,14 +19,21 @@
 </div> -->
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
+<div class="tabbable-line">
+	<ul class="nav nav-tabs" id="statement_tab">
+		<li   id="buy"  ng-hide="isNotBuy"><a  ng-click="showCompany('buy')">采购商</a></li>
+		<li  id="supply"  ng-hide="isNotSupply"><a ng-click="showCompany('supply')">供应商</a></li>
+		<li   id="other"  ng-hide="isNotOther"><a  ng-click="showCompany('other')">其他 </a>
+		</li>
+	</ul>
 <div class="row">
 	<div class="col-md-12">
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
 		<div class="portlet light">
 			<div class="portlet-title">
 				<div class="caption">
-					<i class="fa fa-globe font-green"></i>
-					<span class="caption-subject font-green bold uppercase">企业信息列表</span>
+					<!-- <i class="fa fa-globe font-green"></i>
+					<span class="caption-subject font-green bold uppercase">企业信息列表</span> -->
 				</div>
 				<!--  <div class="actions">
                                         <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#basic">
@@ -126,6 +133,7 @@
 		<!-- END EXAMPLE TABLE PORTLET-->
 	</div>
 </div>
+</div>
 
 <!-- 企业其他信息展示Start -->
 <div class="row">
@@ -140,6 +148,10 @@
 					</li>
 					<li><a class="bold" data-target="#tab_1_3" data-toggle="tab">财务信息</a></li>
 					<li><a class="bold" data-target="#tab_1_4" data-toggle="tab">联系方式</a></li>
+					<li  ng-hide="isNotBuy" ng-if="type=='buy'"><a class="bold" data-target="#tab_1_5" data-toggle="tab">供应商</a></li>
+					<li  ng-hide="isNotSupply"  ng-if="type=='supply'"><a class="bold" data-target="#tab_1_6" data-toggle="tab">采购商</a></li>
+					<li><a class="bold" data-target="#tab_1_7" data-toggle="tab">企业管理员</a></li>
+					
 				</ul>
 				<div class="tab-content">
 				<div class="tab-pane fade active in" id="tab_1_1">
@@ -333,6 +345,142 @@
 										</table>
 									</div>
 								</div>
+							</div>
+							<!-- END SAMPLE TABLE PORTLET-->
+						</div>
+					</div>
+					<div class="tab-pane fade" id="tab_1_5">
+						<div class="" id="tab2_supply">
+
+							<!-- START SAMPLE TABLE PORTLET-->
+							<div class="portlet light">
+								<div class="portlet-body">
+									<div class="table-scrollable">
+										<table
+											class="table table-striped table-bordered table-advance table-hover">
+											<thead>
+												<tr>
+													<th>企业编码</th>
+													<th>企业名称</th>
+													<th>合作分类</th>
+													<th>企业性质</th>
+													<th>经营类型</th>
+													<th>营业性质</th>
+													<th>企业法人</th>
+													<th>注册地址</th>
+													<th>状态</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr ng-repeat="buyCom in buyComs">
+													<td>{{buyCom.comNum}}</td>
+													<td>{{buyCom.comName}}</td>
+													<td>{{buyCom.comTypeName}}</td>
+													<td>{{buyCom.comNature}}</td>
+													<td>{{buyCom.businessType}}</td>
+													<td>{{buyCom.businessNature}}</td>
+													<td>{{buyCom.legalPerson}}</td>
+													<td>{{buyCom.address}}</td>
+													<td>{{buyCom.status}}</td>
+												</tr>
+												<tr ng-if="buyComs==undefined||buyComs.length==0">
+													<td colspan="9"  align="center">暂无数据</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								
+							</div>
+							<!-- END SAMPLE TABLE PORTLET-->
+						</div>
+					</div>
+					<div class="tab-pane fade" id="tab_1_6">
+						<div class="" id="tab2_buy">
+
+							<!-- START SAMPLE TABLE PORTLET-->
+							<div class="portlet light">
+								<div class="portlet-body">
+									<div class="table-scrollable">
+										<table
+											class="table table-striped table-bordered table-advance table-hover">
+											<thead>
+												<tr>
+													<th>企业编码</th>
+													<th>企业名称</th>
+													<th>合作分类</th>
+													<th>企业性质</th>
+													<th>经营类型</th>
+													<th>营业性质</th>
+													<th>企业法人</th>
+													<th>注册地址</th>
+													<th>状态</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr ng-repeat="suppy in supplies">
+													<td>{{supply.comNum}}</td>
+													<td>{{supply.comName}}</td>
+													<td>{{supply.comTypeName}}</td>
+													<td>{{supply.comNature}}</td>
+													<td>{{supply.businessType}}</td>
+													<td>{{supply.businessNature}}</td>
+													<td>{{supply.legalPerson}}</td>
+													<td>{{supply.address}}</td>
+													<td>{{supply.status}}</td>
+												</tr>
+												<tr ng-if="supplies==undefined||supplies.length==0">
+													<td colspan="9"  align="center">暂无数据</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								
+							</div>
+							<!-- END SAMPLE TABLE PORTLET-->
+						</div>
+					</div>
+					<div class="tab-pane fade" id="tab_1_7">
+						<div class="" id="tab2_user">
+
+							<!-- START SAMPLE TABLE PORTLET-->
+							<div class="portlet light">
+								<div class="portlet-body">
+									<div class="table-scrollable">
+										<table
+											class="table table-striped table-bordered table-advance table-hover">
+											<thead>
+												<tr>
+													<th>姓名</th>
+													<th>职位</th>
+													<th>部门/公司</th>
+													<th>管理职责</th>
+													<th>电话</th>
+													<th>微信</th>
+													<th>邮箱</th>
+													<th>备注</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr ng-repeat="companyContact in comManagers">
+													<td>{{companyContact.contactName}}</td>
+													<td>{{companyContact.contactTitle}}</td>
+													<td>{{companyContact.department}}</td>
+													<td>{{companyContact.responsibility}}</td>
+													<td>{{companyContact.contactTel}}</td>
+													<td>{{companyContact.wechat}}</td>
+													<td>{{companyContact.contactEmail}}</td>
+													<td>{{companyContact.remark}}</td>
+												</tr>
+												<tr ng-if="companyContacts==undefined||companyContacts.length==0">
+													<td colspan="8"  align="center">暂无数据</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								
 							</div>
 							<!-- END SAMPLE TABLE PORTLET-->
 						</div>

@@ -60,7 +60,7 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 		List<Company> list =  null;
 		Integer count = 0;
 		if(company != null&&company.getComId()==null){//平台登录时
-			list = companyMapper.selectList(company);
+			/*list = companyMapper.selectList(company);
 			if(CollectionUtils.isNotEmpty(list)){
 				for(Company vo:list){
 					if(StringUtils.isNotEmpty(vo.getComType())){
@@ -68,7 +68,15 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 					}
 				}
 			}
-			count = companyMapper.countList(company);
+			count = companyMapper.countList(company);*/
+			CompanyExample ce=new CompanyExample();
+			com.congmai.zhgj.web.model.CompanyExample.Criteria c=ce.createCriteria();
+			c.andDelFlgEqualTo("0");
+			if("other".equals(company.getComType())){
+				c.andComTypeNotEqualTo("1").andComTypeNotEqualTo("2");
+			}else{c.andComTypeEqualTo(company.getComType()=="buy"?"1":"2");}
+			list=companyMapper.selectByExample(ce);
+			count=list.size();
 		}
 		if(company != null&&"1".equals(company.getComType())){//采购商登录时
 			 SupplyBuyVO svo=new SupplyBuyVO();

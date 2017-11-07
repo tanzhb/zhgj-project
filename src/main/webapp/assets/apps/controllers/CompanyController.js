@@ -2,7 +2,7 @@
  * 
  */
 
-angular.module('MetronicApp').controller('CompanyController',['$rootScope','$scope','$state','$http','companyService','$location','$compile','$stateParams','FileUploader',function($rootScope,$scope,$state,$http,companyService,$location,$compile,$stateParams,FileUploader) {
+angular.module('MetronicApp').controller('CompanyController',['$rootScope','$scope','$state','$http','companyService','orderService','$location','$compile','$stateParams','FileUploader',function($rootScope,$scope,$state,$http,companyService,orderService,$location,$compile,$stateParams,FileUploader) {
 	 $scope.$on('$viewContentLoaded', function() {   
 	    	// initialize core components
 		 	
@@ -23,7 +23,8 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    		
 	 		}else{
 	 			//createTable(15,1,true);
-	 			loadTable();
+	 			loadCompanyTable($stateParams.type);
+	 			//loadTable($stateParams.type);
 	 		//	 $("#comViewPage").html($compile($("#comViewContent").html())($scope));
 	 			$("#sample_3_tools > li > a.tool-action").on("click",
 	 			        function(){
@@ -39,7 +40,49 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        console.log("------------->"+$scope.company);
 	    	
 	 });
-	 
+	  /**
+		 * 加载所有公司数据
+		 */
+		var loadCompanyTable = function(type){
+			var promise = orderService.getComId();
+	        	promise.then(function(data){
+	        		debugger;
+	        		if(data==""){//平台人员
+	        			if($stateParams.type==null||$stateParams.type=="buy"){
+	        				$("#buy").addClass("active");
+	        				$("#supply").removeClass("active");
+			 				$("#other").removeClass("active");
+			 				$scope.type="buy";
+	        			}else if($stateParams.type=="supply"){
+	        				$("#supply").addClass("active");
+	        				$("#buy").removeClass("active");
+			 				$("#other").removeClass("active");
+			 				$scope.type="supply";
+	        			}else if($stateParams.type=="other"){
+	        				$("#other").addClass("active");
+	        				$("#supply").removeClass("active");
+	        				$("#buy").removeClass("active");
+	        			}
+	        			loadTable($stateParams.type);
+	        		}else if(data.comType=="1"){//采购商
+	        			$("#buy").addClass("active");
+	        			$scope.isNotSupply=true;
+	        			$scope.isNotOther=true;
+	        			$scope.type="buy";
+	        			loadTable("");
+	        		}else if(data.comType=="2"){//供应商
+	        			$("#supply").addClass("active");
+	        			$scope.isNotBuy=true;
+	        			$scope.isNotOther=true;
+	        			$scope.type="supply";
+	        			loadTable("");
+	        		}
+	        		
+	        	},function(data){
+	        		//调用承诺接口reject();
+	        	});
+		}
+		
 	 var validatorInit= function(){
 		 
 		 if ($.validator) {
@@ -145,9 +188,13 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		  	}
       }
 		
-	 var table;
+	 var table,tableUrl;
 	 /** 加载列表 Start**/
-	 var loadTable = function(){
+	 var loadTable = function(type){
+		 if(type==null){
+			 type="buy";
+		 }
+		 tableUrl="rest/company/companyList?params="+type;
 		 var a = 0;
 			App.getViewPort().width < App
 					.getResponsiveBreakpoint("md") ? $(
@@ -211,15 +258,14 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 								pageLength : 10,// 每页显示数量
 								processing : true,// loading等待框
 								//serverSide: true,
-								//ajax : $rootScope.basePath
-										//+ "/rest/company/companyList",// 加载数据中user表数据    
-								ajax :{ "url":$rootScope.basePath
+								ajax : tableUrl,// 加载数据中user表数据    
+							/*	ajax :{ "url":$rootScope.basePath
 										+ "/rest/company/companyList",// 加载数据中user表数据    
 										"contentType": "application/json",
 									    "type": "POST",
 									    "data": function ( d ) {
 									      return JSON.stringify( d );
-									    }},
+									    }},*/
 								"aoColumns" : [
 
 								{
@@ -728,7 +774,9 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        	}
 	        	
 	        }; 
-
+$scope.showCompany=function(judgeString){
+	 $state.go('company',{type:judgeString},{reload:true}); 
+}
 	        /**
 	         * 编辑（列表）
 	         */
@@ -1424,10 +1472,16 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		    		   $scope.companyContacts = $scope.companyInfo[$scope.companyInfo.length-1].companyContacts;
 			    	   $scope.companyFinances = $scope.companyInfo[$scope.companyInfo.length-1].companyFinances;
 			    	   $scope.company = $scope.companyInfo[$scope.companyInfo.length-1].company;
+			    	   $scope.buyComs=$scope.companyInfo[$scope.companyInfo.length-1].buyComs;
+		    		   $scope.supplies=$scope.companyInfo[$scope.companyInfo.length-1].supplies;
+		    		   $scope.comManagers=$scope.companyInfo[$scope.companyInfo.length-1].comManagers;
 		    	   }else{
 		    		   $scope.companyQualifications = [];
 		    		   $scope.companyContacts = [];
 		    		   $scope.companyFinances = [];
+		    		   $scope.buyComs=[];
+		    		   $scope.supplies=[];
+		    		   $scope.comManagers=[];
 		    		   $scope.company = {};
 		    	   }
 	    	   }else{//选中事件
@@ -1512,6 +1566,9 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		 	        		$scope.companyContacts = data.data.companyContacts;
 		 	        		$scope.companyFinances = data.data.companyFinances;
 		 	        		$scope.companyAddresses = data.data.companyAddresses;
+		 	        		$scope.comManagers = data.data.comManagers;
+		 	        		$scope.supplies = data.data.supplies;
+		 	        		$scope.buyComs = data.data.buyComs;
 		 	        		
 		 	        		data.data.comId = comId; //将企业id也放入数组，一边取消操作
 		 	        		if($scope.companyInfo!=undefined){

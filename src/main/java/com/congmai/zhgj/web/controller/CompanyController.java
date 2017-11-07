@@ -115,8 +115,9 @@ public class CompanyController {
      * @param request
      * @return
      */
-    @RequestMapping(value="companyList",method=RequestMethod.POST)
-    public ResponseEntity<Map<String,Object>> companyList(Map<String, Object> map,HttpServletRequest request,@RequestBody String params,Company company) {
+    @RequestMapping(value="companyList",method=RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<Map<String,Object>> companyList(Map<String, Object> map,HttpServletRequest request,String params,Company company) {
     	//远程分页代码
     	/*try {
     		params = URLDecoder.decode(params, "UTF-8");
@@ -158,6 +159,14 @@ public class CompanyController {
 				}else if("2".equals(com.getComType())){
 					company.setComType("2");
 				}
+			}else{
+				if("buy".equals(params)){
+					company.setComType("buy");
+				}else if("supply".equals(params)){
+					company.setComType("supply");
+				}else if("other".equals(params)){
+					company.setComType("other");
+				}
 			}
 			companys = companyService.selectByPage(company);
 	    	//List<Company> companys = companyService.selectByPage(company).getResult();
@@ -188,6 +197,16 @@ public class CompanyController {
      	map.put("companyQualifications", companyQualificationService.selectListByComId(comId));
     	map.put("companyContacts", companyContactService.selectListByComId(comId));
     	map.put("companyAddresses", companyAddressService.selectListByComId(comId));
+    	map.put("comManagers", null);
+    	company.setPageIndex(0);
+		 company.setPageSize(-1);
+		 if("1".equals(company.getComType())){
+				map.put("buyComs", companyService.selectByPage(company).getResult());
+				map.put("supplies",null);
+		 }else if("2".equals(company.getComType())){
+			 map.put("supplies", companyService.selectByPage(company).getResult());
+				map.put("buyComs",null);
+		 }
     	return map;
     }
     

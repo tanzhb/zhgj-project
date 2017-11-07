@@ -1234,6 +1234,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             }
         })       
         .state('company', {
+        	params:{"type":null},
         	url: "/company",
         	templateUrl: "rest/company/companyManage",
         	data: {pageTitle: '企业信息'},
@@ -1250,6 +1251,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         				        'assets/global/plugins/bootbox/bootbox.min.js',
         				        'assets/apps/scripts/angular-file-upload.min.js',
         				        'assets/apps/controllers/CompanyController.js',
+        				        'assets/apps/service/orderService.js',
         				        'assets/apps/service/CompanyService.js'
         				        ]
         			});
@@ -1270,6 +1272,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        				files: [                             
 	        				        'assets/apps/controllers/CompanyController.js',
 	        				        'assets/apps/service/CompanyService.js',
+	        				        'assets/apps/service/orderService.js',
 	        				        'assets/apps/scripts/angular-file-upload-shim.min.js',
 	        				        'assets/apps/scripts/angular-file-upload.min.js',
 	        				        'assets/apps/scripts/FileUploader.js'
@@ -3667,6 +3670,7 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 		
 	}
 			function getTodoTaskLength(route, workflowType){
+				debugger;
 				var deferred = $q.defer();
 				$.get(ctx + "/rest/processAction/getTodoTaskSize/" + workflowType).success(function (data) {
 			        // 如果连接成功，延时返回给调用者  
@@ -3676,6 +3680,7 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 			    })
 			    return deferred.promise.then(function(data){
 			    	if(workflowType=='salePrice'){
+			    		debugger;
 			    		$rootScope.dbsLength1 = data; 
 			    	}else{
 			    		$rootScope.dbsLength = data; 
