@@ -140,6 +140,7 @@ MetronicApp.directive('ybquantity1', function() {
     return {  
         restrict: 'E',  
         /*template: '<span class="badge badge-danger" style="position: relative;top: -4px;"> {{ybsLength1}} </span>',*/
+        template: '',
         scope:true,
         replace: true  
     };  
@@ -167,6 +168,24 @@ MetronicApp.directive('noticecount', function() {  debugger;
     return {  
         restrict: 'E',  
         template: '<span class="badge badge-danger" style="position: relative;top: -4px;"> {{noticeCount}} </span>',
+        scope:true,
+        replace: true  
+    };  
+}); 
+
+MetronicApp.directive('noticecount1', function() {  debugger;//header里面专用公告标签
+return {  
+    restrict: 'E',  
+    template: '<span class="badge badge-danger" style="position: relative;top: -10px;"> {{noticeCount}} </span>',
+    scope:true,
+    replace: true  
+};  
+}); 
+
+MetronicApp.directive('businessmessage1', function() {  //header里面专用业务消息标签
+    return {  
+        restrict: 'E',  
+        template: '<span class="badge badge-danger"  title="业务消息" style="position: relative;top: -10px;"> {{businessMessageSize}} </span>',
         scope:true,
         replace: true  
     };  

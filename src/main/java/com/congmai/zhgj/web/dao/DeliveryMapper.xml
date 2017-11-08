@@ -191,7 +191,7 @@
     <!--查询发货列表  -->
    <select id="findAllDeliveryList" parameterType="com.congmai.zhgj.web.model.DeliveryVO" resultType="com.congmai.zhgj.web.model.DeliveryVO">
    SELECT
-	a.serialNum,a.deliverNum,a.orderSerial,b.orderNum,COUNT(DISTINCT c.serialNum) AS materielCount,a.packageCount,
+	a.serialNum,a.deliverNum,a.orderSerial,b.orderNum,COUNT(DISTINCT c.serialNum) AS materielCount, SUM(c.deliverCount) AS materielTotalCount,a.packageCount,
 	a.receiver,(SELECT address FROM warehouse WHERE serialNum=a.warehouseSerial) AS deliveryAddress,a.status,
 	(SELECT address FROM warehouse WHERE serialNum=d.warehouseSerial) AS takeAddress,a.deliverDate,
 	e.transportType,a.remark,com.comName AS supplyName,com1.comName AS buyName

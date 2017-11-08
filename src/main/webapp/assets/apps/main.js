@@ -3589,7 +3589,8 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 			   var template = angular.element(html);
 			   var mobileDialogElement = $compile(template)($rootScope);
 			   angular.element("#dashboard").append(mobileDialogElement);
-			   
+			  /* showNoticeCount();
+				showBusinessMessageSizeCount();*/
 			})
 			
 			
@@ -3622,11 +3623,11 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					}else if('dashboard' == toState.name){
 						getTodoTaskLength('dashboard', 'All');
 						getEndTaskLength('dashboard', 'All');
-						showNoticeCount();
-						showBusinessMessageSizeCount();
+						
 						showSystemMessageSizeCount();
 					}
-				
+					showNoticeCount();
+					showBusinessMessageSizeCount();
 			});
 			
 	function showNoticeCount(){

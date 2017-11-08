@@ -22,7 +22,7 @@
 <div class="tabbable-line">
 	<ul class="nav nav-tabs" id="delivery_tab">
 		<shiro:hasPermission name="zhgj:takeDeliveryPlan:*">
-		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">收货通知</a>
+		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">入库计划</a>
 		</li>
 		</shiro:hasPermission>
 		<shiro:hasPermission name="zhgj:stockInRecord:*">

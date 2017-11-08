@@ -686,7 +686,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 						                            },
 							                            { mData: 'deliverNum' },
 							                            { mData: 'orderNum' },
-							                            { mData: 'materielCount' },
+							                            { mData: 'materielTotalCount' },/*materielCount 发货物料条目数*/
 							                            { mData: 'packageCount' },
 							                            { mData: 'receiver'},
 							                            { mData: 'deliveryAddress'},

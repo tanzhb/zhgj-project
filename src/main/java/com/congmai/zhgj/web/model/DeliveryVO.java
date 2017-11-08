@@ -62,7 +62,7 @@ public class DeliveryVO extends BaseVO implements Serializable{
 	private String warehouseSerial;
 	
 	
-	//物料数量
+	//物料条目数量
 	private String materielCount;
 	
 	//发货日期
@@ -181,6 +181,9 @@ public class DeliveryVO extends BaseVO implements Serializable{
 	private String  buyName;//采购商名称
 	
 	 private String  type;//保存类型
+	 
+	//发货数量合计
+		private String materielTotalCount;
 	  
 	
 	  //0：待发货；3：待收货；4：已收货；5：部分收货'
@@ -667,6 +670,14 @@ public class DeliveryVO extends BaseVO implements Serializable{
 
 	public void setBuyComId(String buyComId) {
 		this.buyComId = buyComId;
+	}
+
+	public String getMaterielTotalCount() {
+		return materielTotalCount;
+	}
+
+	public void setMaterielTotalCount(String materielTotalCount) {
+		this.materielTotalCount = materielTotalCount;
 	}
 
 /*	public String getBusinessType() {

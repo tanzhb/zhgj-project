@@ -90,8 +90,9 @@
 				<li class="dropdown dropdown-extended dropdown-notification"
 					id="header_notification_bar"><a  ui-sref="myNotice" 
 					class="dropdown-toggle" dropdown-menu-hover data-toggle="dropdown"
-					data-close-others="true"> <i class="icon-bell"></i> <span
-						class="badge badge-danger"> {{noticeCount}} </span>
+					data-close-others="true"> <i class="icon-bell"></i> <!-- <span
+						class="badge badge-danger"> {{noticeCount}} </span> -->
+						<noticeCount1/>
 				</a>
 					</li>
 				<!-- END NOTIFICATION DROPDOWN -->
@@ -100,8 +101,9 @@
 				<li class="dropdown dropdown-extended dropdown-inbox"
 					id="header_inbox_bar"><a ui-sref="myMessage" class="dropdown-toggle"
 					dropdown-menu-hover data-toggle="dropdown" data-close-others="true">
-						<i class="icon-envelope-open"></i> <span
-						class="badge badge-danger"> {{businessMessageSize}} </span>
+						<i class="icon-envelope-open"></i> <!-- <span
+						class="badge badge-danger"> {{businessMessageSize}} </span> -->
+						<businessMessage1/>
 				</a>
 					</li>
 					
