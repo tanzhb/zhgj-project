@@ -598,10 +598,11 @@ public class DeliveryController {
     	}
     	}
     	//保存基本信息第二部分
-    	if("takeDelivery".equals(delivery.getType())){
+    	if("deliveryInfo".equals(delivery.getType())){
     	if(StringUtils.isEmpty(deliveryTransport.getDeliveryTransportSerialNum())){
     	deliveryTransport.setSerialNum(ApplicationUtils.random32UUID());
     	deliveryTransport.setCreator(currenLoginName);
+    	deliveryTransport.setDeliverSerial(deliverySerialNum);
     	deliveryService.insertBasicInfoPartII(deliveryTransport);
     	}else{
     		deliveryTransport.setSerialNum(transportserialNum);
@@ -609,10 +610,11 @@ public class DeliveryController {
     		deliveryService.updateBasicInfoPartII(deliveryTransport);
     	}}
     	//保存基本信息第三部分
-    	if("takeDelivery".equals(delivery.getType())){
+    	if("deliveryInfo".equals(delivery.getType())){
     	if(StringUtils.isEmpty(takeDeliveryVO.getTakeDeliveryVOSerialNum())){
     	takeDeliveryVO.setSerialNum(ApplicationUtils.random32UUID());
     	takeDeliveryVO.setCreator(currenLoginName);
+    	takeDeliveryVO.setDeliverSerial(deliverySerialNum);
     	deliveryService.insertBasicInfoPartIII(takeDeliveryVO);
     	}else{
     		takeDeliveryVO.setSerialNum(takeDeliverSerialNum);

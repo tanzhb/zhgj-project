@@ -3766,6 +3766,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
   										return '<span  class="label label-sm label-warning ng-scope">待入库</span>';
   									}else if(data=="4"){
   										return '<span  class="label label-sm label-success ng-scope">已完成</span>';
+  									}else if(data=="0"){
+  										return '<span  class="label label-sm label-success ng-scope">待发货</span>';
   									}else{
   										return '<span  class="label label-sm label-danger ng-scope">待收货</span>';
   									}
