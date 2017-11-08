@@ -248,7 +248,6 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 			takeDeliveryReceiver:$scope.takeDelivery.receiver,
 			takeDeliveryContactNum:$scope.takeDelivery.contactNum,
 			takeDeliveryRemark:$scope.takeDelivery.remark,
-			deliverSerial:$scope.delivery.serialNum,
 			takeDeliveryVOSerialNum:$scope.delivery.takeDeliverSerialNum==undefined?null:$scope.delivery.takeDeliverSerialNum
 		}
 		).then(function success(result) {
