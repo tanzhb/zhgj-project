@@ -313,7 +313,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 							.saveTakeDelivery(params);
 					promise.then(function(data) {
 						if(data.data == "1"){
-							toastr.success("代发货成功！");
+							if(number==0){
+								toastr.success("保存代发货成功！");
+							}else{toastr.success("代发货成功！");}
 							$state.go("buyOrder");
 						}else{
 							toastr.error("代发货失败！请联系管理员");
