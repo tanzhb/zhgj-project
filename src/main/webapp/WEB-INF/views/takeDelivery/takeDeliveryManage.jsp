@@ -224,7 +224,7 @@
 		                                    </div> -->
 							<div class="actions">
 								<div class="btn-group btn-group-devided" data-toggle="buttons">
-									<shiro:hasPermission name="stockInRecord:stockIn">
+									<shiro:hasPermission name="stockInRecord:add">
 									<label class="btn btn-transparent yellow btn-circle btn-sm"
 										ng-click="stockIn()"> <i class="fa fa-arrow-down"></i> 入库
 									</label>

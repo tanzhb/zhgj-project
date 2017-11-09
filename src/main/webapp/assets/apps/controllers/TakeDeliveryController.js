@@ -276,10 +276,15 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        /**
 	         * 确认发货
 	         */
-			$scope.saveTakeDelivery = function() {
+			$scope.saveTakeDelivery = function(number) {
 				if($('#takeDeliveryForm').valid()){
 					handle.blockUI();
 					var params = {};
+					if(number==0){//保存代发货
+						$scope.deliver.status=0;
+					}else{
+						$scope.deliver.status=1;
+					}
 					params.delivery = $scope.deliver;
 					params.deliveryTransport = $scope.deliverTransport;
 					params.takeDelivery = $scope.takeDeliver;
@@ -308,7 +313,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 							.saveTakeDelivery(params);
 					promise.then(function(data) {
 						if(data.data == "1"){
-							toastr.success("代发货成功！");
+							if(number==0){
+								toastr.success("保存代发货成功！");
+							}else{toastr.success("代发货成功！");}
 							$state.go("buyOrder");
 						}else{
 							toastr.error("代发货失败！请联系管理员");

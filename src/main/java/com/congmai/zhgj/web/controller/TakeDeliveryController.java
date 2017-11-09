@@ -1082,7 +1082,7 @@ public class TakeDeliveryController {
 			takeDeliveryParams.getDelivery().setUpdater(currenLoginName);
 			takeDeliveryParams.getDelivery().setUpdateTime(now);
 			takeDeliveryParams.getDelivery().setDelFlg("0");
-			takeDeliveryParams.getDelivery().setStatus("3"); //已发货
+			//takeDeliveryParams.getDelivery().setStatus("3"); //已发货
 		}
 		
 		if(takeDeliveryParams.getDeliveryTransport()!=null){

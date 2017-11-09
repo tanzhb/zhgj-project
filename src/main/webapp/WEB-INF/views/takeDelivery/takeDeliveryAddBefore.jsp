@@ -49,9 +49,7 @@
 				 <ul class="nav nav-tabs" >
 					<li class="dropdown pull-right tabdrop" >
                        <button   ng-hide="companyAdd" class="btn green  btn-sm btn-circle" ng-click="saveTakeDelivery()">
-                              <i class="fa fa-check"></i> 代发货 </button>
-                              <button   ng-hide="companyAdd" class="btn green  btn-sm btn-circle" ng-click="saveTakeDelivery(0)">
-                              <i class="fa fa-check"></i> 保存 </button>
+                              <i class="fa fa-check"></i> 确认发货 </button>
                        <button   ng-hide="companyAdd" class="btn defualt  btn-sm btn-circle" ng-click="cancelTakeDelivery()" onclick="return false;">
                               <i class="fa fa-mail-reply"></i> 取消 </button>
                                 
@@ -85,12 +83,12 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="deliverType">发货类型<span class="required"> * </span></label>
                                                     <div class="">
-                                                        <select class="form-control"  id="deliverType" ng-init="deliver.deliverType='代发货'"  disabled="disabled"     name="deliverType" ng-model="deliver.deliverType" ng-hide="deliverAdd"  data-size="8">
-	                                                        <option  value="代发货" selected="selected" >代发货</option>
+                                                        <select class="form-control"  id="deliverType" ng-init="deliver.deliverType='贸易发货'" ng-change="changeTakeDeliveryMode(deliver.deliverType)"  name="deliverType" ng-model="deliver.deliverType" ng-hide="deliverAdd"  data-size="8">
+	                                                        <option  value="贸易发货" selected="selected" >贸易发货</option>
 	                                                      <!--   <option  value="其他发货" selected="selected" >其他发货</option> -->
 	                                                    </select>
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">代发货</p>
+                                                         <p class="control-label left" ng-show="deliverView">{{takeDeliver.takeDeliverNum}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -124,7 +122,7 @@
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="shipper">供应商 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="shipper">发货方 <span class="required"> * </span></label>
                                                     <div class="">
                                                      	<input ng-if="!otherMode" type="text" class="form-control" name="shipper" ng-model="deliver.shipper"  value="{{deliver.shipper}}" >
                                                        <!--  <input type="text" class="form-control" id="shipper"  name="shipper" ng-model="deliver.shipper" ng-hide="deliverAdd" >
@@ -142,7 +140,7 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="receiver">采购商 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="receiver">收货方 <span class="required"> * </span></label>
                                                     <div class="">
                                                      	<input ng-if="!otherMode" type="text" class="form-control" name="receiver" ng-model="deliver.receiver"  value="{{deliver.receiver}}" >
                                                         <!-- <input type="text" class="form-control" id="receiver"  name="receiver" ng-model="deliver.receiver" ng-hide="deliverAdd" >
@@ -159,15 +157,11 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="handWay">交付方式</label>
-                                                    <div class=""><!-- 包装类型暂时先做为交付方式 -->
-                                                        <select class="form-control" id="packageType"   ng-model="deliver.packageType" ng-hide="deliverAdd"   ng-init="deliver.packageType='配送'">
-	                                                    	<option value=""></option>
-	                                                    	<option value="配送">配送</option>
-	                                                    	<option value="自提">自提</option>
-	                                                    </select>
+                                                    <label class="control-label bold" for="maker">制单人 <span class="required"> * </span></label>
+                                                    <div class="">
+                                                        <input type="text" class="form-control" id="maker" name="maker" ng-model="deliver.maker" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.packageType}}</p>
+                                                         <p class="control-label left" ng-show="deliverView">{{deliver.maker}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -182,27 +176,6 @@
                                                         <input type="text" class="form-control" ng-model="deliver.remark" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.remark}}</p>
-                                                    </div>
-                                            </div>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold" for="maker">制单人 <span class="required"> * </span></label>
-                                                    <div class="">
-                                                        <input type="text" class="form-control" id="maker" name="maker" ng-model="deliver.maker" ng-hide="deliverAdd" >
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.maker}}</p>
-                                                    </div>
-                                            </div>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold" for="createTime">制单日期 </label>
-                                                    <div class="">
-                                 <input type="text" class="form-control date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="createTime"  ng-model="deliver.createTime" ng-hide="deliverAdd" readonly="readonly">
-                                                      <!--   <input type="text" class="form-control" id="maker" name="maker" ng-model="deliver.createTime" ng-hide="deliverAdd" > -->
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.createTime}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -229,7 +202,7 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" > 发货地址<span class="required"> * </span></label>
+                                                    <label class="control-label bold" > 发货地址</label>
                                                     <div class="">
                                                         <input type="text" class="form-control" id="deliverAddress"  name="deliverAddress" ng-model="deliver.deliverAddress" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div> 
@@ -241,7 +214,7 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="deliverDate"><span ng-if="deliver.packageType=='配送'">配送</span><span ng-if="deliver.packageType=='自提'">自提</span>日期 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="deliverDate">发货日期 <span class="required"> * </span></label>
                                                     <div class="">
                                                         <input type="text" class="form-control  date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="deliverDate"  name="deliverDate" ng-model="deliver.deliverDate" ng-hide="deliverAdd" readonly="readonly">
                                                         <div class="form-control-focus"> </div>
@@ -251,50 +224,9 @@
 										</div>
 										<!--/span-->
 									</div>
-									<div class="row">
-										<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold" for="warehouseSerial">收货仓库 <span class="required"> * </span></label>
-                                                    <div class="">
-                                                    	<select class="bs-select form-control order" data-live-search="true"  id="warehouseSerial"  name="warehouseSerial" ng-model="takeDeliver.warehouseSerial" ng-change="getWarehouseName()" ng-hide="deliverAdd"  data-size="8">
-	                                                        <option value=""></option>
-	                                                        <option value="无">无</option>
-	                                                        <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
-	                                                    </select>
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{takeDeliver.warehouseSerial}}</p>
-                                                    </div>
-                                            </div>
-										</div>
-						
-										<!--/span-->
-										<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold" >收货地址<span class="required"> * </span></label>
-                                                    <div class="">
-                                                       <input type="text" class="form-control" id="takeDeliverAddress"  name="takeDeliverAddress" ng-model="takeDeliver.takeDeliverAddress" ng-hide="deliverAdd" >
-                                                        <div class="form-control-focus"> </div>
-                                                       <!--  <input type="text" class="form-control" value="{{takeDeliver.warehouseName}}" disabled="disabled"> -->
-                                                        <!--  <p class="control-label left">{{takeDeliver.warehouseName}}</p> -->
-                                                    </div>
-                                            </div>
-										</div>
-										<!--/span-->
-										<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold" for="takeDeliverDate">预计到货日期 </label>
-                                                    <div class="">
-                                                        <input type="text" class="form-control date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="takeDeliverDate"  ng-model="takeDeliver.takeDeliverDate" ng-hide="deliverAdd" readonly="readonly">
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{takeDeliver.takeDeliverDate}}</p>
-                                                    </div>
-                                            </div>
-										</div>
-										<!--/span-->
-									</div>
 									<!--/row-->
-									<!-- <div class="row">
-										<div class="col-md-4">
+									<div class="row">
+										<!-- <div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="materielCount">物料数</label>
                                                     <div class="">
@@ -304,9 +236,9 @@
                                                          <p class="control-label left" >{{deliver.materielCount}}</p>
                                                     </div>
                                             </div>
-										</div>
+										</div> -->
 						
-										/span
+										<!--/span-->
 										
 										<div class="col-md-4">
 											<div class="form-group">
@@ -318,13 +250,13 @@
 	                                                    	<option value="供应商包装">供应商包装</option>
 	                                                    	<option value="其他类型">其他类型</option>
 	                                                    </select>
-                                                        <input type="text" class="form-control" id="packageType"  name="packageType" ng-model="deliver.packageType" ng-hide="deliverAdd" >
+                                                        <!-- <input type="text" class="form-control" id="packageType"  name="packageType" ng-model="deliver.packageType" ng-hide="deliverAdd" > -->
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.packageType}}</p>
                                                     </div>
                                             </div>
 										</div>
-										/span
+										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="packageSpecifications">包装规格 </label>
@@ -335,7 +267,7 @@
                                                     </div>
                                             </div>
 										</div>
-										/span
+										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="packageCount">包装件数 </label>
@@ -346,14 +278,14 @@
                                                     </div>
                                             </div>
 										</div>
-										/span
+										<!--/span-->
 										
 									</div>
-									/row
+									<!--/row-->
 									<div class="row">
 										
 						
-										/span
+										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="materielWeight">物料重量 </label>
@@ -364,7 +296,7 @@
                                                     </div>
                                             </div>
 										</div>
-										/span
+										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="serviceMoney">费用</label>
@@ -375,7 +307,7 @@
                                                     </div>
                                             </div>
 										</div>
-										/span
+										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="deliverer">联系人 </label>
@@ -386,9 +318,9 @@
                                                     </div>
                                             </div>
 										</div>
-										/span
+										<!--/span-->
 									</div>
-									/row
+									<!--/row-->
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
@@ -400,7 +332,7 @@
                                                     </div>
                                             </div>
 										</div>
-										/span
+										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" >备注</label>
@@ -411,9 +343,9 @@
                                                     </div>
                                             </div>
 										</div>
-										/span
+										<!--/span-->
 									</div>
-									/row -->
+									<!--/row-->
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
@@ -494,7 +426,7 @@
 										</div>
 										<!--/span-->
 									</div>
-									<!-- <div class="row">
+									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="warehouseSerial">收货仓库 <span class="required"> * </span></label>
@@ -510,19 +442,19 @@
                                             </div>
 										</div>
 						
-										/span
+										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" >收货地址</label>
                                                     <div class="">
                                                        <input type="text" class="form-control" id="takeDeliverAddress"  name="takeDeliverAddress" ng-model="takeDeliver.takeDeliverAddress" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
-                                                        <input type="text" class="form-control" value="{{takeDeliver.warehouseName}}" disabled="disabled">
-                                                         <p class="control-label left">{{takeDeliver.warehouseName}}</p>
+                                                       <!--  <input type="text" class="form-control" value="{{takeDeliver.warehouseName}}" disabled="disabled"> -->
+                                                        <!--  <p class="control-label left">{{takeDeliver.warehouseName}}</p> -->
                                                     </div>
                                             </div>
 										</div>
-										/span
+										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="takeDeliverDate">预计到货日期 </label>
@@ -533,10 +465,10 @@
                                                     </div>
                                             </div>
 										</div>
-										/span
-									</div> -->
+										<!--/span-->
+									</div>
 									<!--/row-->
-								<!-- 	<div class="row">
+									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="tdReceiver">联系人 </label>
@@ -548,7 +480,7 @@
                                             </div>
 										</div>
 						
-										/span
+										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="tdContactNum">联系电话 </label>
@@ -559,7 +491,7 @@
                                                     </div>
                                             </div>
 										</div>
-										/span
+										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" >备注</label>
@@ -570,8 +502,8 @@
                                                     </div>
                                             </div>
 										</div>
-										/span
-									</div> -->
+										<!--/span-->
+									</div>
 									<!--/row-->
 								</div>
          				</div>

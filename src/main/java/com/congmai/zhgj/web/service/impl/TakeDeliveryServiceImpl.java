@@ -147,29 +147,32 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			String currenLoginName) {
 		//takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams,currenLoginName);
 		delivery2Mapper.insert(delivery);
-		OrderInfo orderInfonew=orderInfoMapper.selectByPrimaryKey(delivery.getOrderSerial());
-		Boolean createQG=StaticConst.getInfo("waimao").equals(orderInfonew.getTradeType());//是否产生清关单
-		if(createQG){
-			Map<String,Object>map=new HashMap<String,Object>();
-			map.put("serialNum", delivery.getSerialNum());
-			map.put("currenLoginName", currenLoginName);
-			map.put("orderSerial", delivery.getOrderSerial());
-			deliveryService.createCustomsClearanceForm(map);
-			OrderInfo orderInfo=new OrderInfo();
+		if("1".equals(delivery.getStatus())){//平台确定代发货
+			OrderInfo orderInfonew=orderInfoMapper.selectByPrimaryKey(delivery.getOrderSerial());
+			Boolean createQG=StaticConst.getInfo("waimao").equals(orderInfonew.getTradeType());//是否产生清关单
+			if(createQG){
+				Map<String,Object>map=new HashMap<String,Object>();
+				map.put("serialNum", delivery.getSerialNum());
+				map.put("currenLoginName", currenLoginName);
+				map.put("orderSerial", delivery.getOrderSerial());
+				deliveryService.createCustomsClearanceForm(map);
+				OrderInfo orderInfo=new OrderInfo();
+				orderInfo.setSerialNum(delivery.getOrderSerial());
+				orderInfo.setDeliverStatus(orderInfo.CLEARANCE);
+				Delivery delivery1=new  Delivery();
+				delivery1.setSerialNum(delivery.getSerialNum());
+				delivery1.setStatus(DeliveryVO.WAIT_OUT);//待清关
+				orderInfoMapper.updateByPrimaryKeySelective(orderInfo);//更新订单状态
+				delivery2Mapper.updateByPrimaryKeySelective(delivery1);//更新发货单状态
+			}
+			OrderInfo orderInfo = new OrderInfo();
 			orderInfo.setSerialNum(delivery.getOrderSerial());
-			orderInfo.setDeliverStatus(orderInfo.CLEARANCE);
-			Delivery delivery1=new  Delivery();
-			delivery1.setSerialNum(delivery.getSerialNum());
-			delivery1.setStatus(DeliveryVO.WAIT_OUT);//待清关
-			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);//更新订单状态
-			delivery2Mapper.updateByPrimaryKeySelective(delivery1);//更新发货单状态
+			orderInfo.setDeliverStatus(OrderInfo.DELIVER);//确认发货
+			orderInfo.setUpdateTime(new Date());
+			orderInfo.setUpdater(currenLoginName);
+			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 		}
-		OrderInfo orderInfo = new OrderInfo();
-		orderInfo.setSerialNum(delivery.getOrderSerial());
-		orderInfo.setDeliverStatus(OrderInfo.DELIVER);//确认发货
-		orderInfo.setUpdateTime(new Date());
-		orderInfo.setUpdater(currenLoginName);
-		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+		
 		
 		deliveryTransportMapper.insert(deliveryTransport);
 		takeDelivery.setTakeDeliverNum(orderService.getNumCode("RE"));
@@ -232,6 +235,31 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		
 		for(DeliveryMateriel materiel : deliveryMateriels){
 				deliveryMaterielMapper.insert(materiel);
+		}
+		if("1".equals(delivery.getStatus())){//平台确定代发货
+			OrderInfo orderInfonew=orderInfoMapper.selectByPrimaryKey(delivery.getOrderSerial());
+			Boolean createQG=StaticConst.getInfo("waimao").equals(orderInfonew.getTradeType());//是否产生清关单
+			if(createQG){
+				Map<String,Object>map=new HashMap<String,Object>();
+				map.put("serialNum", delivery.getSerialNum());
+				map.put("currenLoginName", currenLoginName);
+				map.put("orderSerial", delivery.getOrderSerial());
+				deliveryService.createCustomsClearanceForm(map);
+				OrderInfo orderInfo=new OrderInfo();
+				orderInfo.setSerialNum(delivery.getOrderSerial());
+				orderInfo.setDeliverStatus(orderInfo.CLEARANCE);
+				Delivery delivery1=new  Delivery();
+				delivery1.setSerialNum(delivery.getSerialNum());
+				delivery1.setStatus(DeliveryVO.WAIT_OUT);//待清关
+				orderInfoMapper.updateByPrimaryKeySelective(orderInfo);//更新订单状态
+				delivery2Mapper.updateByPrimaryKeySelective(delivery1);//更新发货单状态
+			}
+			OrderInfo orderInfo = new OrderInfo();
+			orderInfo.setSerialNum(delivery.getOrderSerial());
+			orderInfo.setDeliverStatus(OrderInfo.DELIVER);//确认发货
+			orderInfo.setUpdateTime(new Date());
+			orderInfo.setUpdater(currenLoginName);
+			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 		}
 	}
 
