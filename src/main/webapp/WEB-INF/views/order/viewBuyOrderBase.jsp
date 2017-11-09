@@ -744,7 +744,6 @@ margin-right: 20px;
 								<th>物料名称</th>
 								<th>规格型号</th>
 								<th>单位</th>
-								<th>库存数量</th>
 								<th>采购数量</th>
 								<th>指导单价</th>
 								<th>含税单价</th>
@@ -783,9 +782,6 @@ margin-right: 20px;
 		                          </td>
 		                          <td>
                                      		<p class="form-control-static" > {{_orderMateriel.materiel.unit}} </p>
-		                          </td>
-		                          <td>
-                                     		<p class="form-control-static" > ... </p>
 		                          </td>
 		                          <td>  
                                      		<p class="form-control-static" > {{_orderMateriel.amount}} </p>
@@ -847,7 +843,6 @@ margin-right: 20px;
 								<th ng-if="buyOrder.tradeType =='外贸'"></th>
 								<th>合计</th>
 								<th>{{totalCount()}}</th>
-								<th></th>
 								<th></th>
 								<th>{{totalMaterielCount()}}</th>
 								<th></th>

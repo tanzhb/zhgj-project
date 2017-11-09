@@ -790,7 +790,6 @@ margin-right: 20px;
 									<th>规格型号</th>
 									<th>单位</th>
 									<th>供应商</th>
-									<th>库存数量</th>
 									<th>采购数量</th>
 									<th>指导单价</th>
 									<th>含税单价</th>
@@ -836,9 +835,6 @@ margin-right: 20px;
 			                          </td>
 			                          <td>
 			                                <p class="form-control-static" > {{_orderMateriel.supplyMateriel.supply.comName}} </p>
-			                          </td>
-			                          <td>
-                                      		<p class="form-control-static" > ... </p>
 			                          </td>
 			                          <td>  
                                       		<p class="form-control-static" > {{_orderMateriel.amount}} </p>
@@ -899,7 +895,6 @@ margin-right: 20px;
 									<th></th>
 									<th></th>
 									<th>{{totalSupply()}}</th>
-									<th></th>
 									<th>{{totalMaterielCount()}}</th>
 									<th></th>
 									<th></th>

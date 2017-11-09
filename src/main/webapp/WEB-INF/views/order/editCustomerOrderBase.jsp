@@ -915,7 +915,6 @@ margin-right: 20px;
 									<th>规格型号</th>
 									<th>单位</th>
 									<th>供应商</th>
-									<th>库存数量</th>
 									<th><span style="display:inline-block;width:100px;">采购数量</span></th>
 									<th>指导单价</th>
 									<th><span style="display:inline-block;width:100px;">含税单价</span></th>
@@ -962,9 +961,6 @@ margin-right: 20px;
 			                          </td>
 			                          <td>
 			                                <p class="form-control-static" > {{_orderMateriel.supplyMateriel.supply.comName}} </p>
-			                          </td>
-			                          <td>
-                                      		<p class="form-control-static" > ... </p>
 			                          </td>
 			                          <td>  
 			                          		<input style="padding:6px 3px" type="text"  name="amount{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].amount" ng-keyup="clearNoNum(orderMateriel[$index],'amount')"  >
@@ -1061,7 +1057,6 @@ margin-right: 20px;
 									<th></th>
 									<th></th>
 									<th>{{totalSupply()}}</th>
-									<th></th>
 									<th>{{totalMaterielCount()}}</th>
 									<th></th>
 									<th></th>
