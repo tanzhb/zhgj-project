@@ -305,6 +305,7 @@ public Boolean  isExist(String codeType, String num,String serialNum) {
 			MaterielExample me=new MaterielExample();
 			com.congmai.zhgj.web.model.MaterielExample.Criteria c=me.createCriteria();
 			c.andDelFlgEqualTo("0");
+			c.andIsLatestVersionEqualTo("1");
 			if("materiel".equals(codeType)){
 				c.andMaterielNumEqualTo(num);
 			}
