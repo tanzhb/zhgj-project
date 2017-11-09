@@ -94,7 +94,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		});
             		$scope.contract={};
             		$scope.contract.contractType="采购合同";
-            		$scope.buyOrder.orderType="贸易采购";
+            		$scope.buyOrder.orderType="自主采购";
             		$scope.buyOrder.tradeType="内贸";
             		$scope.buyOrder.currency="人民币";
             		$scope.buyOrder.orderDate = timeStamp2String2(new Date())

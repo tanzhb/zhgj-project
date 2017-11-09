@@ -62,7 +62,7 @@ margin-right: 20px;
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>采购类型：</label>
                                  <div class="">
 	                                 <div ng-hide="buyOrderInput">
-		                               	<input type="radio"  ng-model="buyOrder.orderType" name="orderType" ng-checked="buyOrder.orderType=='贸易采购'" value="贸易采购"> 贸易采购
+		                               	<input type="radio"  ng-model="buyOrder.orderType" name="orderType" ng-checked="buyOrder.orderType=='自主采购'" value="自主采购"> 自主采购
 		                       			<input type="radio"  ng-model="buyOrder.orderType" name="orderType" ng-checked="buyOrder.orderType=='委托采购'" value="委托采购"> 委托采购
 		                       			<input type="radio"  ng-model="buyOrder.orderType" name="orderType" ng-checked="buyOrder.orderType=='服务采购'" value="服务采购"> 服务采购
 	                                 </div>
@@ -191,7 +191,7 @@ margin-right: 20px;
                      
                      <!--/row-->
                      
-                     <div ng-if="(buyOrder.orderType =='贸易采购'||buyOrder.orderType =='服务采购') && buyOrder.tradeType =='内贸'">
+                     <div ng-if="(buyOrder.orderType =='自主采购'||buyOrder.orderType =='服务采购') && buyOrder.tradeType =='内贸'">
                      <div class="row">
                          <div class="col-md-4">
                          	<div class="form-group ">
@@ -304,7 +304,7 @@ margin-right: 20px;
                      </div>
                      <!--/row-->
                      </div>
-                     <div ng-if="(buyOrder.orderType =='贸易采购'||buyOrder.orderType =='服务采购') && buyOrder.tradeType =='外贸'">
+                     <div ng-if="(buyOrder.orderType =='自主采购'||buyOrder.orderType =='服务采购') && buyOrder.tradeType =='外贸'">
                      <div class="row">
                          <div class="col-md-4">
                          	<div class="form-group ">
@@ -484,7 +484,7 @@ margin-right: 20px;
                                  		<select class="form-control" id="settlementClause"  ng-hide="buyOrderInput" name="settlementClause"  ng-model="buyOrder.settlementClause" >
                                            <option value=""></option>
                                            <option value="平进平出">平进平出</option>
-                                           <option value="贸易销售" >贸易销售</option>
+                                           <option value="自主销售" >自主销售</option>
                                           	<option value="进销差" >进销差</option>
                                             <option value="服务费" >服务费</option>
                                             <option value="折扣折让" >折扣折让</option>

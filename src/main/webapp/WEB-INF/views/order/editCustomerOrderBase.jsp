@@ -58,7 +58,7 @@ margin-right: 20px;
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>销售类型：</label>
                                  <div class="">
                                  	<div ng-hide="customerOrderInput">
-		                               	<input type="radio"  ng-model="customerOrder.orderType" name="saleType" ng-checked="customerOrder.orderType=='贸易销售'" value="贸易销售"> 贸易销售
+		                               	<input type="radio"  ng-model="customerOrder.orderType" name="saleType" ng-checked="customerOrder.orderType=='自主销售'" value="自主销售"> 自主销售
 		                       			<input type="radio"  ng-model="customerOrder.orderType" name="saleType" ng-checked="customerOrder.orderType=='委托销售'" value="委托销售"> 委托销售
 	                                 </div>
                                      <p class="form-control-static" ng-show="customerOrderShow"> {{customerOrder.orderType}} </p>
@@ -185,7 +185,7 @@ margin-right: 20px;
                      <!--/row-->
                      
                      <!--/row-->
-                     <div ng-if="customerOrder.orderType =='贸易销售' && customerOrder.tradeType =='内贸'">
+                     <div ng-if="customerOrder.orderType =='自主销售' && customerOrder.tradeType =='内贸'">
                      <div class="row">
                      		<!--/span-->
                          <div class="col-md-4">
@@ -316,7 +316,7 @@ margin-right: 20px;
                      </div>
                      <!--/row-->
                      </div>
-                     <div ng-if="customerOrder.orderType =='贸易销售' && customerOrder.tradeType =='外贸'">
+                     <div ng-if="customerOrder.orderType =='自主销售' && customerOrder.tradeType =='外贸'">
                      <div class="row">
                      		<!--/span-->
                          <div class="col-md-4">
@@ -511,7 +511,7 @@ margin-right: 20px;
                                  <div class="">
                                  		<select class="form-control" id="settlementClause"  ng-hide="customerOrderInput" name="settlementClause"  ng-model="customerOrder.settlementClause" >
                                            <option value="平进平出">平进平出</option>
-                                           <option value="贸易销售" >贸易销售</option>
+                                           <option value="自主销售" >自主销售</option>
                                           	<option value="进销差" >进销差</option>
                                             <option value="服务费" >服务费</option>
                                             <option value="折扣折让" >折扣折让</option>

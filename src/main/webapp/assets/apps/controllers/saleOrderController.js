@@ -94,7 +94,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
             		$scope.saleOrder.seller ="中航能科（上海）能源科技有限公司";
             		
             		$scope.contract.contractType="销售合同";
-            		$scope.saleOrder.orderType="贸易销售";
+            		$scope.saleOrder.orderType="自主销售";
             		$scope.saleOrder.tradeType="内贸";
             		$scope.saleOrder.currency="人民币";
             		$scope.saleOrder.orderDate = timeStamp2String2(new Date())

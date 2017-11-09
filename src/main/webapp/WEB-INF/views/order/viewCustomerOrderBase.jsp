@@ -139,7 +139,7 @@ margin-right: 20px;
                      <!--/row-->
                      
                      <!--/row-->
-                     <div ng-if="customerOrder.orderType =='贸易销售' && customerOrder.tradeType =='内贸'">
+                     <div ng-if="customerOrder.orderType =='自主销售' && customerOrder.tradeType =='内贸'">
                      <div class="row">
                      		<!--/span-->
                          <div class="col-md-4">
@@ -258,7 +258,7 @@ margin-right: 20px;
                      </div>
                      <!--/row-->
                      </div>
-                     <div ng-if="customerOrder.orderType =='贸易销售' && customerOrder.tradeType =='外贸'">
+                     <div ng-if="customerOrder.orderType =='自主销售' && customerOrder.tradeType =='外贸'">
                      <div class="row">
                      		<!--/span-->
                          <div class="col-md-4">
