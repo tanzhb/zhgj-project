@@ -4,7 +4,7 @@
 	                    <thead>
 	                        <tr>
 	                          	<th> 销售订单号 </th>
-	                            <th> 买方 </th>
+	                            <th> 采购商 </th>
 	                            <th> 销售商品 </th>
 	                            <th> 金额 </th>
 	                            <th> 配送 </th>

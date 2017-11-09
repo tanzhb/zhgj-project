@@ -354,7 +354,7 @@ public class SolrSearchController {
                 Object orderNum = solrDocument.get("orderNum");//采购/销售订单号               
                 Object orderType = solrDocument.get("orderType");//采购/销售类型
                 Object tradeType = solrDocument.get("tradeType");//贸易类型
-                Object seller = solrDocument.get("seller");//买方/卖方                
+                Object seller = solrDocument.get("seller");//采购商/供应商                
                 Object currency = solrDocument.get("currency");//币种
                 Object rate = solrDocument.get("rate");//税率（%）
                 Object maker = solrDocument.get("maker");//制单人

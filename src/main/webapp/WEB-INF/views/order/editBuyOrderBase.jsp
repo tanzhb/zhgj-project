@@ -98,7 +98,7 @@ margin-right: 20px;
                      <div class="row">
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>卖方：</label>
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>供应商：</label>
                                  <div class="">
                                  	<div  ng-hide="buyOrderInput">
                                  		<div class="row">
@@ -195,11 +195,11 @@ margin-right: 20px;
                      <div class="row">
                          <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>买方：</label>
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>采购商：</label>
                                     <div class="">
                                   <input type="text" name="seller" class="form-control" ng-hide="buyOrderInput" ng-model="buyOrder.seller" value="" >
                                      <div class="form-control-focus"> </div>
-                                     <span class="help-block" ng-hide="buyOrderInput">请输入买方</span>
+                                     <span class="help-block" ng-hide="buyOrderInput">请输入采购商</span>
                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.seller}} </p>
                                  </div>
                              </div>
@@ -308,11 +308,11 @@ margin-right: 20px;
                      <div class="row">
                          <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>买方：</label>
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>采购商：</label>
                                  <div class="">
                                   <input type="text" name="seller" class="form-control" ng-hide="buyOrderInput" ng-model="buyOrder.seller" value="" >
                                      <div class="form-control-focus"> </div>
-                                     <span class="help-block" ng-hide="buyOrderInput">请输入买方</span>
+                                     <span class="help-block" ng-hide="buyOrderInput">请输入采购商</span>
                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.seller}} </p>
                                  </div>
                              </div>
@@ -437,11 +437,11 @@ margin-right: 20px;
                      <div class="row">
                      	<div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>买方：</label>
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>采购商：</label>
                                  <div class="">
                                   <input type="text" name="seller" class="form-control" ng-hide="buyOrderInput" ng-model="buyOrder.seller" value="" >
                                      <div class="form-control-focus"> </div>
-                                     <span class="help-block" ng-hide="buyOrderInput">请输入买方</span>
+                                     <span class="help-block" ng-hide="buyOrderInput">请输入采购商</span>
                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.seller}} </p>
                                  </div>
                              </div>
@@ -1340,8 +1340,8 @@ margin-right: 20px;
                                  <div class="">
                                  		<select class="form-control" id="deliveryMode"  ng-hide="clauseDeliveryInput" name="deliveryMode"  ng-model="clauseDelivery.deliveryMode" >
                                            <option value=""></option>
-                                          	<option value="买方自提" >买方自提</option>
-                                            <option value="卖方配送" >卖方配送</option>
+                                          	<option value="采购商自提" >采购商自提</option>
+                                            <option value="供应商配送" >供应商配送</option>
                                        </select>
                                        <div class="form-control-focus"> </div>
                              			<span class="help-block" ng-hide="clauseDeliveryInput">请选择送货方式</span>

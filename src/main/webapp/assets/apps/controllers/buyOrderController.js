@@ -906,14 +906,14 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	            messages: {
 	            	orderNum:{required:"采购订单号不能为空！"},
 	            	orderType:{required:"采购类型不能为空！"},
-	            	supplyComId:{required:"卖方不能为空！"},
+	            	supplyComId:{required:"供应商不能为空！"},
 	            	serviceModel:{required:"服务模式不能为空！"},
 	            	settlementClause:{required:"结算条款不能为空！"},
 	            	deliveryMode:{required:"提货方式不能为空！"},
 	            	rate:{required:"税率不能为空！"},
 	            	currency:{required:"币种不能为空！"},
 	            	maker:{required:"制单人不能为空！"},
-	            	seller:{required:"买方不能为空！"},
+	            	seller:{required:"采购商不能为空！"},
 	            	orderDate:{required:"采购日期不能为空！"}
 	            },
             	rules: {orderNum: {required: !0,maxlength: 20},
