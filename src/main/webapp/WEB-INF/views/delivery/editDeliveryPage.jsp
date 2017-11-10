@@ -239,10 +239,10 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="createTime">制单日期 </label>
                                                     <div class="">
-                                 <input type="text" class="form-control date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="createTime"  ng-model="deliver.createTime" ng-show="inputDeliveryInfo" readonly="readonly">
+                                 <input type="text" class="form-control date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="approvalDate"  ng-model="deliver.approvalDate" ng-show="inputDeliveryInfo" readonly="readonly">
                                                       <!--   <input type="text" class="form-control" id="maker" name="maker" ng-model="deliver.createTime" ng-hide="deliverAdd" > -->
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.createTime}}</p>
+                                                         <p class="control-label left" ng-show="deliverView">{{deliver.approvalDate}}</p>
                                                     </div>
                                             </div>
 										</div>

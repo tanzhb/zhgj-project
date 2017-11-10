@@ -1,6 +1,6 @@
 /* Setup general page controller */
 angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$scope', 'settings','orderService','$filter',
-    '$state',"$stateParams",'$compile','$location','materielService','FileUploader', function($rootScope, $scope, settings,orderService,$filter,$state,$stateParams,$compile,$location,materielService,FileUploader) {
+    '$state',"$stateParams",'$compile','$location','materielService','takeDeliveryService','FileUploader', function($rootScope, $scope, settings,orderService,$filter,$state,$stateParams,$compile,$location,materielService,takeDeliveryService,FileUploader) {
     $scope.$on('$viewContentLoaded', function() {   
     	// initialize core components
     	App.initAjax();
@@ -1623,6 +1623,71 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	        	}
 	        	
 	        };  
+	    	//修改代发货
+			$scope.takeDeliveryEdit = function() {		
+				if(TakeDelieryTable.rows('.active').data().length != 1){
+					showToastr('toast-top-center', 'warning', '请选择一条数据进行修改！')
+				}else{
+					
+					if(TakeDelieryTable.row('.active').data().status == '0'){
+						$state.go('takeDeliveryView',{serialNum:TakeDelieryTable.row('.active').data().serialNum,oprateType:"forBuyOrder"});
+					}else showToastr('toast-top-center', 'warning', '已确认发货');
+				} 
+			};
+			   /**
+	         * 批量删除收货计划
+	         */
+	        $scope.takeDeliveryDelete = function () {
+	        	var id_count = $('#takeDeliveryTable input[name="serialNum"]:checked').length;
+				if(id_count==0){
+					toastr.warning("请选择您要删除的记录");
+					return;
+				}
+	        	handle.confirm("确定删除吗？",function(){
+	        		var ids = '';
+					// Iterate over all checkboxes in the table
+	        		$('#takeDeliveryTable input[name="serialNum"]').each(
+							function() {
+								// If checkbox exist in DOM
+								if ($.contains(document, this)) {
+									// If checkbox is checked
+									if (this.checked) {
+										// 将选中数据id放入ids中
+										if (ids == '') {
+											ids = this.value;
+										} else
+											ids = ids + ','
+													+ this.value;
+									}
+								}
+							});
+	        		handle.blockUI();
+	        		var promise = takeDeliveryService.deleteTakeDelivery(ids);
+	        		promise.then(function(data){
+	        			toastr.success("删除成功");
+	        			handle.unblockUI();
+	        			//createTable(5,1,true,$scope.params);
+	        			TakeDelieryTable.ajax.reload(); // 重新加载datatables数据
+	        			/*$state.go('company',{},{reload:true}); */
+	        		},function(data){
+	        			//调用承诺接口reject();
+	        		});
+	        		
+	        	});
+	        	
+	        };
+	        
+	    	//确认代发货
+			$scope.jumpToConfirm = function() {		
+				if(TakeDelieryTable.rows('.active').data().length != 1){
+					showToastr('toast-top-center', 'warning', '请选择一条数据进行确认！')
+				}else{
+					
+					if(TakeDelieryTable.row('.active').data().status == '0'){
+						$state.go('takeDeliveryView',{serialNum:TakeDelieryTable.row('.active').data().serialNum,oprateType:"forBuyOrder"});
+					}else showToastr('toast-top-center', 'warning', '已确认代发货')
+				} 
+			};
 	        
 	        /**
 			 * 删除

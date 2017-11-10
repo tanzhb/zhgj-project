@@ -76,6 +76,13 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 				c.andComTypeNotEqualTo("1").andComTypeNotEqualTo("2");
 			}else{c.andComTypeEqualTo(company.getComType()=="buy"?"1":"2");}
 			list=companyMapper.selectByExample(ce);
+			if(CollectionUtils.isNotEmpty(list)){
+				for(Company vo:list){
+					if(StringUtils.isNotEmpty(vo.getComType())){
+						vo.setComTypeName(ComType.getInfo(vo.getComType()));
+					}
+				}
+			}
 			count=list.size();
 		}
 		if(company != null&&"1".equals(company.getComType())){//采购商登录时

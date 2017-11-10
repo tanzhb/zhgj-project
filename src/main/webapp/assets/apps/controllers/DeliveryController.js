@@ -525,6 +525,14 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 				debugger;
 				$scope.delivery= data;
 				$scope.delivery.serialNum=data.serialNum;
+				$scope.deliver={};
+  		    	$scope.deliver.deliverer=$scope.delivery.deliverer;
+  		    	$scope.deliver.remark =$scope.delivery.remark;  
+  		    	$scope.deliver.maker  =$scope.delivery.maker;
+  		    	$scope.deliver.approvalDate =$scope.delivery.approvalDate;  
+  		    	$scope.deliver.deliverDate  =$scope.delivery.deliverDate;
+  		    	$scope.deliver.packageType=$scope.delivery.packageType;
+  		    	$scope.takeDeliveryWarehouseAddress=$scope.delivery.takeAddress;
 				if(status!=undefined){
 					var promise = DeliveryService.goDelivery($scope.delivery.serialNum);
 					promise.then(function(data) {
@@ -1958,9 +1966,18 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	$scope.warehouseAddress=data.delivery.deliveryWarehouseName
 	          		    	$scope.saleOrder={};
 	          		    	$scope.saleOrder.orderNum=data.delivery.orderNum;
+	          		    	$scope.deliver={};
 	          		    	/*$scope.delivery.orderNum1=data.delivery.orderNum;*/
 	          		    	$scope.deliveryTransport={};
 	          		    	$scope.takeDelivery={};
+	          		    	$scope.deliver.deliverer=$scope.delivery.deliverer;
+	          		    	$scope.deliver.remark =$scope.delivery.remark;  
+	          		    	$scope.deliver.maker  =$scope.delivery.maker;
+	          		    	$scope.deliver.approvalDate =$scope.delivery.approvalDate;  
+	          		    	$scope.deliver.deliverDate  =$scope.delivery.deliverDate;
+	          		    	$scope.deliver.packageType=$scope.delivery.packageType;
+	          		    	$scope.takeDeliveryWarehouseAddress=$scope.delivery.takeAddress;
+	          		    	
 	          		    	$scope.deliveryTransport.transport=$scope.delivery.transport;
 	          		    	$scope.deliveryTransport.shipNumber=$scope.delivery.shipNumber
 	          		    	$scope.deliveryTransport.contact=$scope.delivery.transportContact;

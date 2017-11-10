@@ -21,8 +21,8 @@
 <!-- BEGIN MAIN CONTENT -->
 <div class="tabbable-line">
 	<ul class="nav nav-tabs" id="statement_tab">
-		<li   id="buy"  ng-hide="isNotBuy"><a  ng-click="showCompany('buy')">采购商</a></li>
-		<li  id="supply"  ng-hide="isNotSupply"><a ng-click="showCompany('supply')">供应商</a></li>
+		<li   id="buy"  ng-hide="isNotSupply"><a  ng-click="showCompany('buy')">采购商</a></li>
+		<li  id="supply"  ng-hide="isNotBuy"><a ng-click="showCompany('supply')">供应商</a></li>
 		<li   id="other"  ng-hide="isNotOther"><a  ng-click="showCompany('other')">其他 </a>
 		</li>
 	</ul>
