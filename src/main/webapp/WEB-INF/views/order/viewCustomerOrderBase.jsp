@@ -73,7 +73,7 @@ margin-right: 20px;
                      <div class="row">
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">买方：</label>
+                                 <label class="control-label col-md-5 bold">采购商：</label>
                                  <div class="control-label col-md-7">
                                      <p  > {{customerOrder.buyName}} </p>
                                  </div>
@@ -139,12 +139,12 @@ margin-right: 20px;
                      <!--/row-->
                      
                      <!--/row-->
-                     <div ng-if="customerOrder.orderType =='贸易销售' && customerOrder.tradeType =='内贸'">
+                     <div ng-if="customerOrder.orderType =='自主销售' && customerOrder.tradeType =='内贸'">
                      <div class="row">
                      		<!--/span-->
                          <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">卖方：</label>
+                                 <label class="control-label col-md-5 bold">供应商：</label>
                                  <div class="control-label col-md-7">
                                      <p  > {{customerOrder.seller}} </p>
                                  </div>
@@ -258,12 +258,12 @@ margin-right: 20px;
                      </div>
                      <!--/row-->
                      </div>
-                     <div ng-if="customerOrder.orderType =='贸易销售' && customerOrder.tradeType =='外贸'">
+                     <div ng-if="customerOrder.orderType =='自主销售' && customerOrder.tradeType =='外贸'">
                      <div class="row">
                      		<!--/span-->
                          <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">卖方：</label>
+                                 <label class="control-label col-md-5 bold">供应商：</label>
                                  <div class="control-label col-md-7">
                                      <p  > {{customerOrder.seller}} </p>
                                  </div>
@@ -392,7 +392,7 @@ margin-right: 20px;
                      		<!--/span-->
                          <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">卖方：</label>
+                                 <label class="control-label col-md-5 bold">供应商：</label>
                                  <div class="control-label col-md-7">
                                      <p  > {{customerOrder.seller}} </p>
                                  </div>
@@ -401,7 +401,7 @@ margin-right: 20px;
                          <!--/span-->
                          <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">买方：</label>
+                                 <label class="control-label col-md-5 bold">采购商：</label>
                                  <div class="control-label col-md-7">
                                      <p  > {{customerOrder.entrustParty}} </p>
                                  </div>
@@ -790,7 +790,6 @@ margin-right: 20px;
 									<th>规格型号</th>
 									<th>单位</th>
 									<th>供应商</th>
-									<th>库存数量</th>
 									<th>采购数量</th>
 									<th>指导单价</th>
 									<th>含税单价</th>
@@ -836,9 +835,6 @@ margin-right: 20px;
 			                          </td>
 			                          <td>
 			                                <p class="form-control-static" > {{_orderMateriel.supplyMateriel.supply.comName}} </p>
-			                          </td>
-			                          <td>
-                                      		<p class="form-control-static" > ... </p>
 			                          </td>
 			                          <td>  
                                       		<p class="form-control-static" > {{_orderMateriel.amount}} </p>
@@ -899,7 +895,6 @@ margin-right: 20px;
 									<th></th>
 									<th></th>
 									<th>{{totalSupply()}}</th>
-									<th></th>
 									<th>{{totalMaterielCount()}}</th>
 									<th></th>
 									<th></th>

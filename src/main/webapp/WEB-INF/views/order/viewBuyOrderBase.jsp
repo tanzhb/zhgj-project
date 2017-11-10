@@ -76,7 +76,7 @@ margin-right: 20px;
                      <div class="row">
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">卖方：</label>
+                                 <label class="control-label col-md-5 bold">供应商：</label>
                                  <div class="control-label col-md-7">
                                      <p  > {{buyOrder.supplyName}} </p>
                                  </div>
@@ -141,11 +141,11 @@ margin-right: 20px;
                      </div>
                      <!--/row-->
                      
-                     <div ng-if="(buyOrder.orderType =='贸易采购'||buyOrder.orderType =='服务采购') && buyOrder.tradeType =='内贸'">
+                     <div ng-if="(buyOrder.orderType =='自主采购'||buyOrder.orderType =='服务采购') && buyOrder.tradeType =='内贸'">
                      <div class="row">
                          <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">买方：</label>
+                                 <label class="control-label col-md-5 bold">采购商：</label>
                                     <div class="control-label col-md-7">
                                      <p  > {{buyOrder.seller}} </p>
                                  </div>
@@ -248,11 +248,11 @@ margin-right: 20px;
                      </div>
                      <!--/row-->
                      </div>
-                     <div ng-if="(buyOrder.orderType =='贸易采购'||buyOrder.orderType =='服务采购') && buyOrder.tradeType =='外贸'">
+                     <div ng-if="(buyOrder.orderType =='自主采购'||buyOrder.orderType =='服务采购') && buyOrder.tradeType =='外贸'">
                      <div class="row">
                          <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">买方：</label>
+                                 <label class="control-label col-md-5 bold">采购商：</label>
                                  <div class="control-label col-md-7">
                                      <p  > {{buyOrder.seller}} </p>
                                  </div>
@@ -370,7 +370,7 @@ margin-right: 20px;
                      <div class="row">
                      	<div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">买方：</label>
+                                 <label class="control-label col-md-5 bold">采购商：</label>
                                  <div class="control-label col-md-7">
                                      <p  > {{buyOrder.seller}} </p>
                                  </div>
@@ -744,7 +744,6 @@ margin-right: 20px;
 								<th>物料名称</th>
 								<th>规格型号</th>
 								<th>单位</th>
-								<th>库存数量</th>
 								<th>采购数量</th>
 								<th>指导单价</th>
 								<th>含税单价</th>
@@ -783,9 +782,6 @@ margin-right: 20px;
 		                          </td>
 		                          <td>
                                      		<p class="form-control-static" > {{_orderMateriel.materiel.unit}} </p>
-		                          </td>
-		                          <td>
-                                     		<p class="form-control-static" > ... </p>
 		                          </td>
 		                          <td>  
                                      		<p class="form-control-static" > {{_orderMateriel.amount}} </p>
@@ -847,7 +843,6 @@ margin-right: 20px;
 								<th ng-if="buyOrder.tradeType =='外贸'"></th>
 								<th>合计</th>
 								<th>{{totalCount()}}</th>
-								<th></th>
 								<th></th>
 								<th>{{totalMaterielCount()}}</th>
 								<th></th>

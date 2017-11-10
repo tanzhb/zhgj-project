@@ -58,7 +58,7 @@ margin-right: 20px;
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>销售类型：</label>
                                  <div class="">
                                  	<div ng-hide="customerOrderInput">
-		                               	<input type="radio"  ng-model="customerOrder.orderType" name="saleType" ng-checked="customerOrder.orderType=='贸易销售'" value="贸易销售"> 贸易销售
+		                               	<input type="radio"  ng-model="customerOrder.orderType" name="saleType" ng-checked="customerOrder.orderType=='自主销售'" value="自主销售"> 自主销售
 		                       			<input type="radio"  ng-model="customerOrder.orderType" name="saleType" ng-checked="customerOrder.orderType=='委托销售'" value="委托销售"> 委托销售
 	                                 </div>
                                      <p class="form-control-static" ng-show="customerOrderShow"> {{customerOrder.orderType}} </p>
@@ -95,7 +95,7 @@ margin-right: 20px;
                      <div class="row">
                          <!-- <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>买方：</label>
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>采购商：</label>
                                  <div class="">
                                  <div  ng-hide="customerOrderInput">
                                  	<div class="row">
@@ -185,16 +185,16 @@ margin-right: 20px;
                      <!--/row-->
                      
                      <!--/row-->
-                     <div ng-if="customerOrder.orderType =='贸易销售' && customerOrder.tradeType =='内贸'">
+                     <div ng-if="customerOrder.orderType =='自主销售' && customerOrder.tradeType =='内贸'">
                      <div class="row">
                      		<!--/span-->
                          <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>卖方：</label>
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>供应商：</label>
                                  <div class="">
                                  <input type="text" name="seller" class="form-control" ng-hide="customerOrderInput" ng-model="customerOrder.seller" value="" >
                                      <div class="form-control-focus"> </div>
-                                     <span class="help-block" ng-hide="customerOrderInput">请输入卖方</span>
+                                     <span class="help-block" ng-hide="customerOrderInput">请输入供应商</span>
                                      <p class="form-control-static" ng-show="customerOrderShow"> {{customerOrder.seller}} </p>
                                  </div>
                              </div>
@@ -316,16 +316,16 @@ margin-right: 20px;
                      </div>
                      <!--/row-->
                      </div>
-                     <div ng-if="customerOrder.orderType =='贸易销售' && customerOrder.tradeType =='外贸'">
+                     <div ng-if="customerOrder.orderType =='自主销售' && customerOrder.tradeType =='外贸'">
                      <div class="row">
                      		<!--/span-->
                          <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>卖方：</label>
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>供应商：</label>
                                  <div class="">
                                  <input type="text" name="seller" class="form-control" ng-hide="customerOrderInput" ng-model="customerOrder.seller" value="" >
                                      <div class="form-control-focus"> </div>
-                                     <span class="help-block" ng-hide="customerOrderInput">请输入卖方</span>
+                                     <span class="help-block" ng-hide="customerOrderInput">请输入供应商</span>
                                      <p class="form-control-static" ng-show="customerOrderShow"> {{customerOrder.seller}} </p>
                                  </div>
                              </div>
@@ -466,11 +466,11 @@ margin-right: 20px;
                      		<!--/span-->
                          <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>卖方：</label>
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>供应商：</label>
                                  <div class="">
                                  <input type="text" name="seller" class="form-control" ng-hide="customerOrderInput" ng-model="customerOrder.seller" value="" >
                                      <div class="form-control-focus"> </div>
-                                     <span class="help-block" ng-hide="customerOrderInput">请输入卖方</span>
+                                     <span class="help-block" ng-hide="customerOrderInput">请输入供应商</span>
                                      <p class="form-control-static" ng-show="customerOrderShow"> {{customerOrder.seller}} </p>
                                  </div>
                              </div>
@@ -478,11 +478,11 @@ margin-right: 20px;
                          <!--/span-->
                          <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label bold">买方：</label>
+                                 <label class="control-label bold">采购商：</label>
                                  <div class="">
                                  <input type="text" readonly name="entrustParty" class="form-control" ng-hide="customerOrderInput" ng-model="customerOrder.entrustParty"  >
                                      <div class="form-control-focus"> </div>
-                                     <span class="help-block" ng-hide="customerOrderInput">请输入买方</span>
+                                     <span class="help-block" ng-hide="customerOrderInput">请输入采购商</span>
                                      <p class="form-control-static" ng-show="customerOrderShow"> {{customerOrder.entrustParty}} </p>
                                  </div>
                              </div>
@@ -511,7 +511,7 @@ margin-right: 20px;
                                  <div class="">
                                  		<select class="form-control" id="settlementClause"  ng-hide="customerOrderInput" name="settlementClause"  ng-model="customerOrder.settlementClause" >
                                            <option value="平进平出">平进平出</option>
-                                           <option value="贸易销售" >贸易销售</option>
+                                           <option value="自主销售" >自主销售</option>
                                           	<option value="进销差" >进销差</option>
                                             <option value="服务费" >服务费</option>
                                             <option value="折扣折让" >折扣折让</option>
@@ -915,7 +915,6 @@ margin-right: 20px;
 									<th>规格型号</th>
 									<th>单位</th>
 									<th>供应商</th>
-									<th>库存数量</th>
 									<th><span style="display:inline-block;width:100px;">采购数量</span></th>
 									<th>指导单价</th>
 									<th><span style="display:inline-block;width:100px;">含税单价</span></th>
@@ -962,9 +961,6 @@ margin-right: 20px;
 			                          </td>
 			                          <td>
 			                                <p class="form-control-static" > {{_orderMateriel.supplyMateriel.supply.comName}} </p>
-			                          </td>
-			                          <td>
-                                      		<p class="form-control-static" > ... </p>
 			                          </td>
 			                          <td>  
 			                          		<input style="padding:6px 3px" type="text"  name="amount{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].amount" ng-keyup="clearNoNum(orderMateriel[$index],'amount')"  >
@@ -1061,7 +1057,6 @@ margin-right: 20px;
 									<th></th>
 									<th></th>
 									<th>{{totalSupply()}}</th>
-									<th></th>
 									<th>{{totalMaterielCount()}}</th>
 									<th></th>
 									<th></th>
@@ -1386,8 +1381,8 @@ margin-right: 20px;
                                  <div class="">
                                  		<select class="form-control" id="deliveryMode"  ng-hide="clauseDeliveryInput" name="deliveryMode"  ng-model="clauseDelivery.deliveryMode" >
                                            <option value=""></option>
-                                          	<option value="买方自提" >买方自提</option>
-                                            <option value="卖方配送" >卖方配送</option>
+                                          	<option value="采购商自提" >采购商自提</option>
+                                            <option value="供应商配送" >供应商配送</option>
                                        </select>
                                        <div class="form-control-focus"> </div>
                              			<span class="help-block" ng-hide="clauseDeliveryInput">请选择送货方式</span>

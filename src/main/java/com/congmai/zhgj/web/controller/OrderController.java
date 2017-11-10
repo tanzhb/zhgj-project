@@ -1565,7 +1565,7 @@ public class OrderController {
     			newOrderInfo.setContractSerial(newContractSerialNum);
     			newOrderInfo.setSupplyComId(supplyComId);//设置新的供应商
     			newOrderInfo.setOrderSerial(orderInfo.getOrderNum());//设置关联销售订单号
-    			newOrderInfo.setBuyComId(null);//表示买方为平台，即采购订单
+    			newOrderInfo.setBuyComId(null);//表示采购商为平台，即采购订单
     			newOrderInfo.setOrderType(StaticConst.getInfo("dailiBuy"));//设置为代理采购
     			newOrderInfo.setTradeType(StaticConst.getInfo("neimao"));//设置为内贸
     			newOrderInfo.setSeller(StaticConst.getInfo("comName"));

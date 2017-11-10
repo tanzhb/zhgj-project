@@ -94,7 +94,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
             		$scope.saleOrder.seller ="中航能科（上海）能源科技有限公司";
             		
             		$scope.contract.contractType="销售合同";
-            		$scope.saleOrder.orderType="贸易销售";
+            		$scope.saleOrder.orderType="自主销售";
             		$scope.saleOrder.tradeType="内贸";
             		$scope.saleOrder.currency="人民币";
             		$scope.saleOrder.orderDate = timeStamp2String2(new Date())
@@ -904,7 +904,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 	            messages: {
 	            	orderNum:{required:"销售订单号不能为空！"},
 	            	orderType:{required:"销售类型不能为空！"},
-	            	buyComId:{required:"买方不能为空！"},
+	            	buyComId:{required:"采购商不能为空！"},
 	            	serviceModel:{required:"服务模式不能为空！"},
 	            	settlementClause:{required:"结算条款不能为空！"},
 	            	deliveryMode:{required:"提货方式不能为空！"},
@@ -912,7 +912,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 	            	tuirate:{required:"退税率不能为空！"},
 	            	currency:{required:"币种不能为空！"},
 	            	maker:{required:"制单人不能为空！"},
-	            	seller:{required:"卖方不能为空！"},
+	            	seller:{required:"供应商不能为空！"},
 	            	orderDate:{required:"销售日期不能为空！"}
 	            },
             	rules: {orderNum: {required: !0,maxlength: 20},
