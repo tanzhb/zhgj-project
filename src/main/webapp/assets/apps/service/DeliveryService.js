@@ -16,6 +16,9 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     		//保存订单物料
     		saveDeliveryMateriel:saveDeliveryMateriel,
     		
+    		//保存全部订单物料
+    		saveAllDeliveryMateriel:saveAllDeliveryMateriel,
+    		
     		//编辑订单物料
     		editDeliveryMateriel:editDeliveryMateriel,
     		
@@ -169,7 +172,7 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     }
     
     
-  //保存订单物料
+  //保存订单物料   saveAllDeliveryMateriel
     function saveDeliveryMateriel (deliveryMateriel){
     	
 		var deferred = $q.defer();
@@ -189,7 +192,20 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 		});
 		return deferred.promise;//返回承诺
 	}
-    
+ function saveAllDeliveryMateriel (deliveryMateriel){
+    	
+		var deferred = $q.defer();
+		var params = {};
+		params = JSON.stringify(deliveryMateriel);
+		$http.post("rest/delivery/saveAllDeliveryMateriel", 
+				params//传整个表单数据  
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
     
     //编辑订单物料
     function editDeliveryMateriel (params){

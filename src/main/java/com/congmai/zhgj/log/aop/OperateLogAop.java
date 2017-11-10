@@ -221,7 +221,7 @@ public class OperateLogAop{
         Object[] os = joinPoint.getArgs();
         logger.debug("Args:");
         for (int i = 0; i < os.length; i++) {
-            logger.debug("\t==>参数[" + i + "]:\t" + os[i].toString());
+           /* logger.debug("\t==>参数[" + i + "]:\t" + os[i].toString());*/
         }
         logger.debug("Signature:\t" + joinPoint.getSignature());
         logger.debug("SourceLocation:\t" + joinPoint.getSourceLocation());

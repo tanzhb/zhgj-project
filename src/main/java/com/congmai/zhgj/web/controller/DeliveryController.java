@@ -30,6 +30,10 @@ import org.activiti.engine.task.Task;
 import org.apache.commons.io.FileUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.JavaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpHeaders;
@@ -60,6 +64,7 @@ import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.dao.Delivery2Mapper;
 import com.congmai.zhgj.web.dao.DeliveryMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
+import com.congmai.zhgj.web.dao.RelationFileMapper;
 import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.event.EventExample;
@@ -67,6 +72,7 @@ import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.CompanyQualification;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
@@ -78,12 +84,14 @@ import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.RelationFile;
+import com.congmai.zhgj.web.model.RelationFileExample;
 import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
+import com.congmai.zhgj.web.model.OrderMaterielExample.Criteria;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.IProcessService;
@@ -164,6 +172,10 @@ public class DeliveryController {
 	
 	@Resource
 	private Delivery2Mapper   delivery2Mapper;
+	
+	@Resource
+	private RelationFileMapper   relationFileMapper;
+	
 	
 	
 
@@ -398,11 +410,11 @@ public class DeliveryController {
 	}
 	
     
-    /**
-     * @Description (保存订单物料信息)
+  /*  *//**
+     * @Description (保存订单物料信息单个保存)
      * @param request
      * @return
-     */
+     *//*
     @RequestMapping(value="saveDeliveryMateriel",method=RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<DeliveryMaterielVO> saveDeliveryMateriel(Map<String, Object> map,DeliveryMaterielVO deliveryMateriel,HttpServletRequest request) {
@@ -462,8 +474,109 @@ public class DeliveryController {
         	}
         	
     	return new ResponseEntity<DeliveryMaterielVO>(deliveryMateriel, HttpStatus.CREATED);
-    }
+    }*/
     
+	/**
+     * @Description (保存订单物料信息)
+     * @param request
+     * @return
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonParseException 
+     */
+   @RequestMapping(value="saveAllDeliveryMateriel",method=RequestMethod.POST)
+   @ResponseBody
+   public Map<String,Object> saveDeliveryMateriel(@RequestBody  String params) throws JsonParseException, JsonMappingException, IOException {
+	   
+	   params = params.replace("\\", "");
+	   List<DeliveryMaterielVO> deliveryMateriels;
+	   /*ObjectMapper objectMapper = new ObjectMapper();  
+       JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, DeliveryMaterielVO.class);  
+       deliveryMateriels = objectMapper.readValue(params, javaType);*/
+	  deliveryMateriels = JSON.parseArray(params, DeliveryMaterielVO.class);
+	   try{
+   		Subject currentUser = SecurityUtils.getSubject();
+   		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+   		RelationFile  rf=new RelationFile();
+   		rf.setDelFlg("1");
+   		rf.setUpdateTime(new Date());
+   		rf.setUpdater(currenLoginName);
+   		for(DeliveryMaterielVO deliveryMateriel:deliveryMateriels){
+   		if(StringUtils.isEmpty(deliveryMateriel.getSerialNum())){
+   			deliveryMateriel.setSerialNum(ApplicationUtils.random32UUID());
+   			deliveryMateriel.setCreator(currenLoginName);
+   			deliveryMateriel.setUpdater(currenLoginName);
+   			deliveryMateriel.setOrderMaterielSerial(deliveryMateriel.getOrderMaterielSerialNum());
+   			deliveryService.insertDeliveryMateriel(deliveryMateriel);
+   			insertRelationFile(deliveryMateriel,currenLoginName);//保存附件
+   		}else{//修改发货物料
+   			deliveryMateriel.setUpdateTime(new Date());
+   			deliveryMateriel.setUpdater(currenLoginName);
+   			deliveryService.updateDeliveryMateriel(deliveryMateriel);
+   			//先删除原来的附件
+   			RelationFileExample rfe=new RelationFileExample();
+   			com.congmai.zhgj.web.model.RelationFileExample.Criteria c=rfe.createCriteria();
+   			c.andRelationSerialEqualTo(deliveryMateriel.getSerialNum());
+   			relationFileMapper.updateByExampleSelective(rf, rfe);
+   			insertRelationFile(deliveryMateriel,currenLoginName);//保存附件
+   		}
+   		
+   		}
+   	}catch(Exception e){
+   		System.out.println(e.getMessage());
+   		
+   	}
+	   
+	   Map<String,Object>map=new HashMap<String,Object>();
+	   String  serialNum=deliveryMateriels.get(0).getDeliverSerial();
+   	deliveryMateriels = deliveryService.selectListForDetail(serialNum);
+	if(deliveryMateriels.size()>0){
+		String materielNum=deliveryMateriels.get(0).getMaterielNum();
+		if(StringUtils.isEmpty(materielNum)){
+		deliveryMateriels = deliveryService.selectListForDetail2(serialNum);	
+		}	
+	}
+	   map.put("deliveryMateriels", deliveryMateriels);
+	   
+	   return map;
+   }
+   
+   public  void  insertRelationFile(DeliveryMaterielVO deliveryMateriel,String currenLoginName ){
+	 //附件
+	   		List<RelationFile> files=new ArrayList<RelationFile>();
+	   		//如果附件不为空时执行添加操作
+	   		if(!StringUtils.isEmpty(deliveryMateriel.getAttachFile())){
+	   			String attachFile[]=deliveryMateriel.getAttachFile().split("&");
+	   			for(String detail:attachFile){
+	   				RelationFile item=new RelationFile();
+	   				String attachFileDetail[]=detail.split(",");
+	   				String file=attachFileDetail[0];
+	   				
+	   				//描述不为空时添加描述
+	   				String describe=null;
+	   				if(attachFileDetail.length>1){
+	   					if(attachFileDetail[1]!=null){
+	          				 describe=attachFileDetail[1];	
+	          				}	
+	   				}
+	   				
+	   				
+	   				item.setSerialNum(ApplicationUtils.random32UUID());
+	   				item.setRelationSerial(deliveryMateriel.getSerialNum());
+	   				item.setFileType("delivery");
+	   				item.setFileDescribe(describe);
+	   				item.setFile(file);
+	   				item.setUploader(currenLoginName);
+	   				item.setCreator(currenLoginName);
+	   				item.setUpdater(currenLoginName);
+	   				files.add(item);
+	   			}
+	   			
+	   			//批量添加附件
+	   			deliveryService.insertAttachFiles(files);
+	   		}
+	   
+   }
     
     /**
      * @Description (编辑订单物料信息)
