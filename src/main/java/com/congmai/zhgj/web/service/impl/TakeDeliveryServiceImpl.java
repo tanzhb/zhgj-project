@@ -173,7 +173,11 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 		}
 		
-		
+		if(deliveryTransport==null){
+			deliveryTransport=new DeliveryTransport();
+			deliveryTransport.setSerialNum(ApplicationUtils.random32UUID());
+			deliveryTransport.setDeliverSerial(delivery.getSerialNum());
+		}
 		deliveryTransportMapper.insert(deliveryTransport);
 		takeDelivery.setTakeDeliverNum(orderService.getNumCode("RE"));
 		takeDeliveryMapper.insert(takeDelivery);

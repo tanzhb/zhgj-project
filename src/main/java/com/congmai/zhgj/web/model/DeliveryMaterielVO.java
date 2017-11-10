@@ -7,7 +7,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class DeliveryMaterielVO {
+public class DeliveryMaterielVO  {
+
 	//发货物料流水号
 	private String serialNum;
 	

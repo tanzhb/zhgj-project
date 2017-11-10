@@ -248,7 +248,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
             		required:true,
             	},
                 deliverCount:{
-                	required:true,
+                	required:!0,
                 	digits:true,
                 	deliverNumCheck:true
                 },
@@ -296,7 +296,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	/**
 	 * 保存销售订单物料信息
 	 */
-	$scope.saveOrderMateriel = function(deliveryMateriel,index) {
+	/*$scope.saveOrderMateriel = function(deliveryMateriel,index) {
 		delete deliveryMateriel.materiel;
 		delete deliveryMateriel.supplyMateriel;
 		delete deliveryMateriel.supply;
@@ -308,8 +308,8 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			toastr.error("请先保存发货信息！");	
 			return;
 		}
-		/*var batchNumFlag=batchNumCheck(index);
-		if(!batchNumFlag){return false;}*/
+		var batchNumFlag=batchNumCheck(index);
+		if(!batchNumFlag){return false;}
 		var attachFile=$("#batchNumReal"+index).text();
 		
 		var deliveryCountFlag=deliveryCountCheck(index);
@@ -342,8 +342,90 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			toastr.error("保存失败！请联系管理员");
 			console.log(data);
 		});
-	};
+	};*/
 	
+	$scope.editAllOrderMateriel = function() {//编辑发货物料
+		for(var i=0;i < $scope.deliveryMaterielE.length;i++){
+			$scope["orderMaterielInput"+i] = false;
+			$scope["orderMaterielShow"+i] = false;
+		}
+		$scope.saveMateriel=false;
+		$scope.editMateriel=false;
+	}
+	$scope.saveAllOrderMateriel = function() {
+		/*delete deliveryMateriel.materiel;
+		delete deliveryMateriel.supplyMateriel;
+		delete deliveryMateriel.supply;*/
+		if($scope.delivery==null||$.trim($scope.delivery.serialNum)==""){
+			toastr.error("请先保存发货信息！");	
+			return;
+		}
+		if($scope.inputDeliveryInfo==true){
+			toastr.error("请先保存发货信息！");	
+			return;
+		}
+		handle.blockUI();
+	/*	var params = {};
+		params.deliveryMateriels = [];
+		var param;
+		for(var i=0;i < $scope.deliveryMaterielE.length;i++){
+			param = {};
+			var deliveryMateriel=$scope.deliveryMaterielE[i];
+			var attachFile=$("#batchNumReal"+i).text();
+			param.deliverSerial=$scope.delivery.serialNum;
+			param.attachFile = attachFile;
+			param.manufactureDate=deliveryMateriel.manufactureDate;
+			param.deliverCount=deliveryMateriel.deliverCoun;
+			param.remark=deliveryMateriel.remark;
+			param.deliverSerial=deliveryMateriel.deliverSerial;
+			param.orderMaterielSerial=deliveryMateriel.orderMaterielSerialNum;//传整个表单数据  
+			param.supplyMaterielSerial=deliveryMateriel.supplyMaterielSerial;
+			params.deliveryMateriels.push(param);
+		}*/
+		for (var i=0;i < $scope.deliveryMaterielE.length;i++){
+			var deliveryMateriel=$scope.deliveryMaterielE[i];
+			deliveryMateriel.deliverSerial=$scope.delivery.serialNum;
+			var attachFile=$("#batchNumReal"+i).text();
+			deliveryMateriel.attachFile=attachFile;
+			/*deliveryMateriel.manufactureDate:deliveryMateriel.manufactureDate,
+			deliveryMaterieldeliverCount:deliveryMateriel.deliverCount,
+			deliveryMaterielremark:deliveryMateriel.remark,
+			deliveryMaterieldeliverSerial:deliveryMateriel.deliverSerial,
+			deliveryMaterielorderMaterielSerial:deliveryMateriel.orderMaterielSerialNum,//传整个表单数据  
+			deliveryMateriel.supplyMaterielSerial:deliveryMateriel.supplyMaterielSerial,*/
+			
+		}
+		var promise = DeliveryService.saveAllDeliveryMateriel($scope.deliveryMaterielE);
+		promise.then(function(data) {
+			if (!handle.isNull(data)) {
+				$(".modal-backdrop").remove();
+				toastr.success("保存成功");
+				handle.unblockUI();
+				$scope.deliveryMaterielE= data.data.deliveryMateriels;
+			$scope.editMateriel=true;
+			$scope.saveMateriel=true;
+				for(var i=0;i<$scope.deliveryMaterielE.length;i++){
+					$scope["orderMaterielInput"+i] = true;
+					$scope["orderMaterielShow"+i] = true;
+					
+				}
+				
+				$(".alert-danger").hide();
+			} else {
+				$(".modal-backdrop").remove();
+				handle.unblockUI();
+				toastr.error("保存失败！请联系管理员");
+				console.log(data);
+			}
+			
+		}, function(data) {
+			// 调用承诺接口reject();
+			$(".modal-backdrop").remove();
+			handle.unblockUI();
+			toastr.error("保存失败！请联系管理员");
+			console.log(data);
+		});
+	};
 	
 	
 	
@@ -367,7 +449,12 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		$scope.materielCount=null;
 		$scope.orderMaterielInput=true;
 	}
-	
+    $scope.editOrderMaterielOne=function(_deliveryMateriel,index) {//点击修改物料按钮(行内单条)
+    	$scope["orderMaterielInput"+index] = false;
+		$scope["orderMaterielShow"+index] = false
+		$scope.saveMateriel=false;
+		$scope.editMateriel=false;
+    }
 	
 	/**
 	 * 编辑销售订单物料信息
@@ -2258,15 +2345,16 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
             	receiver:{required:"收货方不能为空！"},
             	maker:{required:"制单人不能为空！"},
             	makeDate:{required:"制单日期不能为空！"},
-            	
+            	takeDeliveryWarehouseAddress:{required:"收货地址不能为空！"},
+            	warehouseAddress:{required:"发货地址不能为空！"},
             	
             	deliveryWarehouseSerial:{required:"发货仓库不能为空！"},
-            	deliverDate:{required:"发货日期不能为空！"},
+            	/*deliverDate:{required:"发货日期不能为空！"},*/
             	contactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
             	
             	
-            	transport:{required:"运输方不能为空！"},
-            	shipNumber:{required:"运单号不能为空！"},
+            	/*transport:{required:"运输方不能为空！"},
+            	shipNumber:{required:"运单号不能为空！"},*/
             	deliveryTransportContactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
             	
             	
@@ -2316,16 +2404,20 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
                 },
                 deliveryWarehouseSerial:{required:true,
                 },
-                deliverDate:{required:true,
+             /*   deliverDate:{required:true,
+                },*/
+                warehouseAddress:{required:true,
+                },
+                takeDeliveryWarehouseAddress:{required:true,
                 },
                 contactNum:{
                 	digits:true,
                 	rangelength:[7,20]
                 },
-                transport:{required:true,
+              /*  transport:{required:true,
                 },
                 shipNumber:{required:true,
-                },
+                },*/
                 deliveryTransportContactNum:{
                 	digits:true,
                 	rangelength:[7,20]

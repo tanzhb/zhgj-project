@@ -459,8 +459,15 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					}
 				}
 			}
-			
-	        
+			/**
+	         * 修改收货计划号
+	         */
+			 $scope.takeDeliveryEdit = function () {
+		        	var id_count = $('#takeDeliveryTable input[name="serialNum"]:checked').length;
+					if(id_count==0){
+						toastr.warning("请选择您要修改的记录");
+						return;
+					}
 	        /**
 	         * 批量删除收货计划
 	         */
@@ -990,9 +997,11 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						            	deliverer:{required:"联系人不能为空！"},
 	  						            	dContactNum:{required:"联系电话不能为空！"},
 	  						            	transportType:{required:"运输方式不能为空！"},
-	  						            	transport:{required:"运输方不能为空！"},
+	  						            	/*transport:{required:"运输方不能为空！"},*/
 	  						            	port:{required:"港口不能为空！"},
-	  						            	shipNumber:{required:"运单号不能为空！"},
+	  						            	deliverAddress:{required:"发货地址不能为空！"},
+	  						            	takeDeliverAddress:{required:"收货地址不能为空！"},
+	  						            	/*shipNumber:{required:"运单号不能为空！"},*/
 	  						            	playArrivalDate:{required:"预计到港日期不能为空！"},
 	  						            	playWarehouseDate:{required:"预计到库日期不能为空！"},
 	  						            	dtContact:{required:"联系人不能为空！"},
@@ -1075,15 +1084,21 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						                transportType: {
 	  						                	required: !0
 	  						                },
-	  						                transport: {
+	  						               /* transport: {
 	  						                	required: !0
-	  						                },
+	  						                },*/
 	  						                port: {
 	  						                	required: !0
 	  						                },
-	  						                shipNumber: {
+	  						              deliverAddress:{
 	  						                	required: !0
 	  						                },
+	  						            	takeDeliverAddress:{
+	  						                	required: !0
+	  						                },
+	  						             /*   shipNumber: {
+	  						                	required: !0
+	  						                },*/
 	  						                playArrivalDate: {
 	  						                	required: !0
 	  						                },
