@@ -1116,6 +1116,11 @@ public class TakeDeliverySelectExample {
         	addCriterion("d.buyComId is null");
             return (Criteria) this;
         }
+        
+        public Criteria andDeliverTypeEqualTo(String value) {
+            addCriterion("d.deliverType =", value, "deliverType");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

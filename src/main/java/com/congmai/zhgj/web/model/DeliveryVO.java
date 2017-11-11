@@ -48,9 +48,9 @@ public class DeliveryVO extends BaseVO implements Serializable{
 	//基本信息备注
 	private String remark;
 	
-	//订单状态
+/*	//订单状态
 	private String status;
-	
+	*/
 	//审批人
 	private String approval;
 	
@@ -290,14 +290,14 @@ public class DeliveryVO extends BaseVO implements Serializable{
 		this.remark = remark;
 	}
 
-	public String getStatus() {
+/*	public String getStatus() {
 		return status;
 	}
 
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
+*/
 	public String getApproval() {
 		return approval;
 	}

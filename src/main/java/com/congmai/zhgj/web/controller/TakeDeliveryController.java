@@ -158,7 +158,7 @@ public class TakeDeliveryController {
      * @return
      */
     @RequestMapping(value="takeDeliveryList",method=RequestMethod.POST)
-    public ResponseEntity<Map<String,Object>> takeDeliveryList(Map<String, Object> map,HttpServletRequest request,@RequestBody String params,Delivery takeDelivery,String status) {
+    public ResponseEntity<Map<String,Object>> takeDeliveryList(Map<String, Object> map,HttpServletRequest request,@RequestBody String params,Delivery takeDelivery,String status,String noInit) {
     	//远程分页代码
     	/*try {
     		params = URLDecoder.decode(params, "UTF-8");
@@ -186,7 +186,9 @@ public class TakeDeliveryController {
     	if(StringUtils.isNotBlank(status)){
     		takeDelivery.setStatus(status);
     	}
-    	
+    	if("1".equals(noInit)){//不查询初始化状态的发货
+    		takeDelivery.setStatus("noInit");
+		}
     	User user = UserUtil.getUserFromSession();
 		String comId = null;
 		if(user !=null){

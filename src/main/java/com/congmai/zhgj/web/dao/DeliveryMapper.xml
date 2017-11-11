@@ -207,6 +207,9 @@
 	<if test="supplyComIds== null" >
        AND a.creator=#{creator}
     </if>
+    <if test="status == 'noInit'" >
+       AND a.status != 0
+    </if>
 	
 	<if test="supplyComIds != null" >
         and a.supplyComId in

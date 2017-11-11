@@ -61,11 +61,14 @@ import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.dao.Delivery2Mapper;
 import com.congmai.zhgj.web.dao.DeliveryMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
 import com.congmai.zhgj.web.dao.RelationFileMapper;
+import com.congmai.zhgj.web.dao.StockInOutCheckMapper;
 import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
+import com.congmai.zhgj.web.dao.TakeDeliveryMapper;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.event.EventExample;
 import com.congmai.zhgj.web.event.SendMessageEvent;
@@ -176,8 +179,11 @@ public class DeliveryController {
 	@Resource
 	private RelationFileMapper   relationFileMapper;
 	
+	@Resource
+	private StockInOutCheckMapper stockInOutCheckMapper;
 	
-	
+	@Resource
+	private TakeDeliveryMapper takeDeliveryMapper;
 
 	 /**
      * @Description (查询仓库列表)
@@ -215,7 +221,7 @@ public class DeliveryController {
      * @return
      */
     @RequestMapping(value = "/findAllDeliveryList", method = RequestMethod.GET)
-    public ResponseEntity<Map> findAllDeliveryList(HttpServletRequest request,String customsFormType) {
+    public ResponseEntity<Map> findAllDeliveryList(HttpServletRequest request,String customsFormType,String noInit) {
 
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
@@ -228,6 +234,9 @@ public class DeliveryController {
 		DeliveryVO query = new DeliveryVO();
 		query.setCreator(currenLoginName);
 		query.setSupplyComIds(comIds);
+		if("1".equals(noInit)){//不查询初始化状态的发货
+			query.setStatus("noInit");
+		}
 		List<DeliveryVO> contractList=deliveryService.findAllDeliveryList(query);
 		List<DeliveryVO> now=new ArrayList<DeliveryVO>();
 		if("clearance".equals(customsFormType)){
@@ -266,9 +275,10 @@ public class DeliveryController {
 	 * @param request（http 请求对象）
 	 * @param ucBuilder
 	 * @return 操作结果
+	 * @throws Exception 
 	 */
 	@RequestMapping(value = "/goDelivery", method = RequestMethod.GET)
-	public ResponseEntity<Void> goDelivery(String serialNum, HttpServletRequest request,UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<Void> goDelivery(String serialNum, HttpServletRequest request,UriComponentsBuilder ucBuilder) throws Exception {
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
 
@@ -277,11 +287,14 @@ public class DeliveryController {
 		map.put("updater", currenLoginName);
 		
 		DeliveryVO delivery=deliveryService.selectDetailById(serialNum);
+		TakeDelivery takeDelivery = new TakeDelivery();
+		takeDelivery = takeDeliveryMapper.selectTakeDeliveryByDeliveryId(serialNum);
+		
 		String orderSerial=delivery.getOrderSerial();
 		map.put("orderSerial", orderSerial);
 		OrderInfo o=orderService.selectById(orderSerial);
 		map.put("orderInfo", o);
-		Boolean createQG=StaticConst.getInfo("waimao").equals(o.getTradeType())&&!StringUtils.isEmpty(o.getSupplyComId());//供应商发货/代发货是否产生清关单
+		Boolean createQG=StaticConst.getInfo("waimao").equals(o.getTradeType())&&!StringUtils.isEmpty(o.getSupplyComId());//供应商发货/平台发货是否产生清关单
 		deliveryService.updateOrderWhenDeliveryComlete(map);
 		map.put("createQG", createQG);
 		deliveryService.goDelivery(map);
@@ -294,6 +307,7 @@ public class DeliveryController {
 			delivery1.setStatus(DeliveryVO.COMPLETE);
 			if("1".equals(o.getContractContent().substring(4, 5))){//有验收条款
 					if(StringUtils.isEmpty(o.getSupplyComId())){//平台发货 产生出库检验单
+						//平台发货-->  需要检验 --> 生成出库检验单
 						StockInOutCheck stockInOutCheck=new StockInOutCheck();
 						stockInOutCheck.setSerialNum(ApplicationUtils.random32UUID());
 						stockInOutCheck.setDeliverSerial(serialNum);
@@ -312,9 +326,20 @@ public class DeliveryController {
 						orderInfo.setDeliverStatus(orderInfo.WAIT_OUT_CHECK);
 						delivery1.setStatus(DeliveryVO.WAIT_CHECK);
 						
+					}else{
+						//供应商发货--> 不走清关 --> 不需收货 --> 需要检验 --> 生成入库检验单
+						
+						if(takeDelivery!=null){
+							takeDelivery.setStatus(TakeDelivery.APPLY_COMPLETE); //待检验
+							this.createStockInCheckRecord(takeDelivery,currenLoginName);
+							orderInfo.setDeliverStatus(orderInfo.WAIT_IN_CHECK);//已收货待检验
+							delivery1.setStatus(DeliveryVO.WAIT_CHECK);
+						}
+						
 					}
 			}else{//没有验收条款
 				if(StringUtils.isEmpty(o.getSupplyComId())){//平台发货 产生出库单
+					//平台发货-->  不需要检验 --> 生成出库单
 					
 					orderInfo.setDeliverStatus(orderInfo.WAIT_OUTRECORD);//待出库
 					StockInOutRecord stockInOutRecord=new StockInOutRecord();
@@ -332,11 +357,30 @@ public class DeliveryController {
 					//更新订单状态至待出库
 					orderInfo.setDeliverStatus(orderInfo.WAIT_OUTRECORD);
 					delivery1.setStatus(DeliveryVO.WAITRECORD);
+				}else{//供应商发货--> 不走清关 --> 不需收货 --> 不需要检验 --> 生成入库单
+					takeDelivery.setStatus(TakeDelivery.CHECK_COMPLETE); //已完成
+					orderInfo.setDeliverStatus(orderInfo.WAIT_INRECORD);//待入库
+					delivery1.setStatus(DeliveryVO.WAIT_IN_RECORD);
+					//生成入库单
+					StockInOutRecord stockInOutRecord=new StockInOutRecord();
+					stockInOutRecord.setSerialNum(ApplicationUtils.random32UUID());
+					stockInOutRecord.setTakeDeliverSerial(takeDelivery.getSerialNum());
+					stockInOutRecord.setDeliverSerial("");
+					stockInOutRecord.setInOutNum(orderService.getNumCode("IN"));
+					stockInOutRecord.setDelFlg("0");
+					stockInOutRecord.setStatus("0");
+					stockInOutRecord.setCreator(currenLoginName);
+					stockInOutRecord.setCreateTime(new Date());
+					stockInOutRecord.setUpdater(currenLoginName);
+					stockInOutRecord.setUpdateTime(new Date());
+					stockInOutRecordMapper.insert(stockInOutRecord);
+					
 				}
 				
 			}
 			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);//更新订单状态
 			delivery2Mapper.updateByPrimaryKeySelective(delivery1);//更新发货单状态
+			takeDeliveryMapper.updateByPrimaryKeySelective(takeDelivery);//更新收货单状态
 		}
 		
 		
@@ -351,6 +395,46 @@ public class DeliveryController {
 	}
     
     
+	/**
+	 * 生成入库检验单
+	 */
+	public void createStockInCheckRecord(TakeDelivery takeDelivery,
+			String currenLoginName) throws Exception {
+		StockInOutCheck check = new StockInOutCheck();
+		check.setSerialNum(ApplicationUtils.random32UUID());
+		check.setTakeDeliverSerial(takeDelivery.getSerialNum());
+		check.setDeliverSerial("checkin");
+		check.setCheckNum(orderService.getNumCode("QU"));
+		check.setStatus("0");
+		check.setDelFlg("0");
+		check.setCreator(currenLoginName);
+		check.setCreateTime(new Date());
+		check.setUpdater(currenLoginName);
+		check.setUpdateTime(new Date());
+		stockInOutCheckMapper.insert(check);
+		
+		/*//更改订单 
+		OrderInfo orderInfo = new OrderInfo();
+		Delivery delivery = delivery2Mapper.selectByPrimaryKey(takeDelivery.getDeliverSerial());
+		if(delivery!=null){
+			orderInfo.setSerialNum(delivery.getOrderSerial());
+			orderInfo.setDeliverStatus(OrderInfo.TAKEDELIVER);//待检验
+			orderInfo.setUpdateTime(new Date());
+			orderInfo.setUpdater(currenLoginName);
+			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+			
+			//更新发货状态
+			Delivery _delivery = new Delivery();
+			_delivery.setSerialNum(delivery.getSerialNum());
+			_delivery.setStatus("4");//状态:已收货
+			_delivery.setUpdateTime(new Date());
+			_delivery.setUpdater(currenLoginName);
+			delivery2Mapper.updateByPrimaryKeySelective(_delivery);
+		}else{
+			throw new Exception("没有找到发货单,发货id"+takeDelivery.getDeliverSerial());
+		}*/
+		
+	}
     /**
 	 * 
 	 * @Description 获取销售订单信息

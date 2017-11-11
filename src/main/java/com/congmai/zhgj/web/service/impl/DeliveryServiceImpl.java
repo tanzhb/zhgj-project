@@ -390,7 +390,7 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		String serialNum=(String) map.get("serialNum");//发货流水
 		  String currenLoginName=  (String) map.get("updater");
 		Boolean  createQG= (Boolean) map.get("createQG");
-		if(createQG){//外贸
+		if(createQG){//外贸 (供应商外贸发货)
 			createCustomsClearanceForm(map);//自动生成清关单
 			//更新订单状态待清关
 			OrderInfo orderInfo=new OrderInfo();
