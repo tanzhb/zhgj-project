@@ -33,10 +33,10 @@
 							<div class="tab-pane fade active in" id="tab_1_1">
 							 <div class="portlet-title" style="min-height: 48px;">
                <div class="tools" style="float:right"><!-- ng-if="deliveryDetail.status=='0'" -->
-               	<!-- <button type="button" ng-click="goDelivery()"     ng-if="(delivery.status=='0'||delivery.status==undefined)&&delivery.deliverType=='贸易发货'"
+               	<button type="button" ng-click="goDelivery()"     ng-if="(delivery.status=='0'||delivery.status==undefined)&&delivery.deliverType=='贸易发货'"
 								class="btn blue  btn-circle  btn-sm">
 								<i class="fa fa-save"></i> 确认发货
-							</button> -->
+							</button>
                   <button ng-click="saveDeliveryInfo()" type="button"   ng-show="inputDeliveryInfo"   class="btn blue  btn-circle  btn-sm">
                   		<i class="fa fa-edit"></i> 保存 </button>
                   		 <button ng-click="editDeliveryInfo()" type="button"   ng-hide="inputDeliveryInfo"   class="btn purple  btn-circle  btn-sm">
@@ -171,7 +171,7 @@
 	                                                    	<option value="自提">自提</option>
 	                                                    </select>
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.packageType}}</p>
+                                                         <p class="control-label left" ng-show="span">{{deliver.packageType}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -185,7 +185,7 @@
                                                     <div class="">
                                                         <input type="text" class="form-control" id="deliverer"  ng-model="totalDeliveryCount" ng-show="inputDeliveryInfo"  readonly="readonly">
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{totalDeliveryCount}}</p>
+                                                         <p class="control-label left" ng-show="span">{{totalDeliveryCount}}</p>
                                                     </div>
                                             </div>
                                             </div>
@@ -195,7 +195,7 @@
                                                     <div class="">
                                                         <input type="text" class="form-control" id="deliverer"  ng-model="deliver.deliverer" ng-show="inputDeliveryInfo" >
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.deliverer}}</p>
+                                                         <p class="control-label left" ng-show="span">{{deliver.deliverer}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -221,7 +221,7 @@
                                                     <div class="">
                                                         <input type="text" class="form-control" ng-model="deliver.remark" ng-show="inputDeliveryInfo" >
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.remark}}</p>
+                                                         <p class="control-label left" ng-show="span">{{deliver.remark}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -231,7 +231,7 @@
                                                     <div class="">
                                                         <input type="text" class="form-control" id="maker" name="maker" ng-model="deliver.maker" ng-show="inputDeliveryInfo" >
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.maker}}</p>
+                                                         <p class="control-label left" ng-show="span">{{deliver.maker}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -242,7 +242,7 @@
                                  <input type="text" class="form-control date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="approvalDate"  ng-model="deliver.approvalDate" ng-show="inputDeliveryInfo" readonly="readonly">
                                                       <!--   <input type="text" class="form-control" id="maker" name="maker" ng-model="deliver.createTime" ng-hide="deliverAdd" > -->
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.approvalDate}}</p>
+                                                         <p class="control-label left" ng-show="span">{{deliver.approvalDate}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -298,7 +298,7 @@
                                                     <div class="">
                                                         <input type="text" class="form-control  date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="deliverDate"  name="deliverDate" ng-model="deliver.deliverDate" ng-show="inputDeliveryInfo" readonly="readonly">
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.deliverDate}}</p>
+                                                         <p class="control-label left" ng-show="span">{{deliver.deliverDate}}</p>
                                                     </div>
                                             </div>
 										</div>

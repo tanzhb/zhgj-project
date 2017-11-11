@@ -216,13 +216,17 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        		$scope.orderMateriels = data.data.deliveryMateriels;
 	        		if($state.current.name=="takeDeliveryView"){//查看页面构造物料查询分页
       		    		$scope.queryForPage();
+      		    		$scope.materielCount=$scope.orderMateriels.length;//物料条目数
       		    	}
+	        		var totalOrderCount=0, totalDeliveryCount=0;
 	        		for(var i in data.data.deliveryMateriels){
 	        			if(data.data.deliveryMateriels[i].orderMateriel!=null){
 	        				$scope.orderMateriels[i].materiel = data.data.deliveryMateriels[i].orderMateriel.materiel;
 		        			$scope.orderMateriels[i].amount = data.data.deliveryMateriels[i].orderMateriel.amount;
 		        			$scope.orderMateriels[i].serialNum = data.data.deliveryMateriels[i].serialNum;
 		        			$scope.orderMateriels[i].orderMaterielSerial = data.data.deliveryMateriels[i].orderMateriel.serialNum;
+		        			totalOrderCount=totalOrderCount+Number( data.data.deliveryMateriels[i].orderMateriel.amount);
+		        			totalDeliveryCount=totalDeliveryCount+Number( data.data.deliveryMateriels[i].deliverCount);
 	        			}else{
 	        				//$scope.orderMateriels[i].orderMateriel = {};
 	        				data.data.deliveryMateriels[i].supplyMateriel.supplySerialNum = data.data.deliveryMateriels[i].supplyMateriel.serialNum; //供应物料流水保存到新属性中
@@ -235,6 +239,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        			
 	        			
 	        		}
+	        		$scope.totalDeliveryCount=totalDeliveryCount;//发货总数
+	        		$scope.totalOrderCount=totalOrderCount;//订单总数
 	        		$scope.takeDeliver = data.data.takeDelivery;
 	        		if($scope.takeDeliver.warehouse != null){
 	        			$scope.takeDeliver.warehouseSerial = $scope.takeDeliver.warehouse.serialNum;

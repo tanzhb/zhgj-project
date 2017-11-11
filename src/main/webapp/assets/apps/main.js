@@ -2179,7 +2179,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         
         .state('editDeliveryPage', {
         	params:{data:null},
-            url: "/editDeliveryPage:serialNumEdit",
+            url: "/editDeliveryPage:serialNumEdit&:oprateType",
             templateUrl: "rest/delivery/editDeliveryPage",
             data: {pageTitle: '编辑发货'},
             controller: "DeliveryController",
@@ -3309,21 +3309,20 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					 }else html += 
 				 		"<li><a>新增发货</a></li>";
 			   }else if('editDeliveryPage' == toState.name){//发货列表
-					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a ui-sref='delivery'>发货</a><i class='fa fa-angle-right'></i></li>" + 
-				 		"<li><a>编辑发货</a></li>";
+				   html += "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+			 		"<li><a>编辑发货</a></li>";
 			   }else if('delivery' == toState.name){//发货列表
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a ui-sref='delivery'>发货</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 
 				 		"<li><a>发货列表</a></li>";
 			   }else if('viewDelivery' == toState.name){//发货列表
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" ;
 					 if(toParams.oprateType == "forSaleOrder"){
 						 html += "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
 					 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 
-					 		"<li><a>新增发货</a></li>";
+					 		"<li><a>查看发货</a></li>";
 					 }else if(toParams.oprateType == "forSupplyOrder"){
 						 html += "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
 					 		"<li><a ui-sref='supplyOrder'>订单列表</a><i class='fa fa-angle-right'></i></li>" + 

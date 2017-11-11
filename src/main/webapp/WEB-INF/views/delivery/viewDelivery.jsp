@@ -22,10 +22,10 @@
 							<div class="tab-pane fade active in" id="tab_1_1">
 							 <div class="portlet-title" style="min-height: 48px;">
                <div class="tools" style="float:right"><!-- ng-if="deliveryDetail.status=='0'" -->
-               	<!-- <button type="button" ng-click="goDelivery()"     ng-if="(delivery.status=='0'||delivery.status==undefined)&&delivery.deliverType=='贸易发货'"
+               	<button type="button" ng-click="goDelivery('view')"     ng-if="(delivery.status=='0'||delivery.status==undefined)&&delivery.deliverType=='贸易发货'"
 								class="btn blue  btn-circle  btn-sm">
 								<i class="fa fa-save"></i> 确认发货
-							</button> -->
+							</button>
                 
                 </div>
             </div>
@@ -121,7 +121,7 @@
 														<input type="text" name="shipper" class="form-control"
 															ng-model="shipper" ng-hide="inputDeliveryInfo" />
 														<p class="form-control-static" ng-hide="span">
-															{{supplyComId}}</p>
+															{{shipper}}</p>
 														<div class="form-control-focus"></div>
 													</div>
 
@@ -841,22 +841,14 @@
 								</form>
 							</div> -->
 							
-							<div class="tab-pane fade" id="tab_1_4">
+							<!-- <div class="tab-pane fade" id="tab_1_4">
 							 <div class="portlet-title" style="min-height: 48px;">
                <div class="tools" style="float:right">
-                 <!--  <button ng-click="saveMasterielInfo()" type="button"   ng-if="otherMode"  class="btn blue  btn-circle  btn-sm">
-                  		<i class="fa fa-edit"></i> 保存 </button>
-                  <button type="submit" ng-click="goBack()"    ng-if="otherMode"  class="btn green  btn-circle  btn-sm">
-                 		<i class="fa fa-save"></i>取消</button> -->
-                 		<button ng-click="saveAllOrderMateriel()" type="button"   ng-hide="saveMateriel" class="btn blue  btn-circle  btn-sm">
-                  		<i class="fa fa-save"></i> 保存 </button>
-                  		<button ng-click="editAllOrderMateriel()" type="button"   ng-show="editMateriel" class="btn purple  btn-circle  btn-sm">
-                  		<i class="fa fa-edit"></i> 编辑 </button>
                 </div>
             </div>
-								<!-- 物料信息 start-->
+								物料信息 start
 								<div class="portlet-title">
-									<!-- <div class="caption">物料信息</div> -->
+									<div class="caption">物料信息</div>
 									<div class="actions" ng-if="otherMode">
 										<button class="btn blue btn-sm btn-circle"
 											ng-click="addMateriel()" onclick="return false;">
@@ -889,7 +881,7 @@
 														ng-mouseleave="hideOperation('deliveryMateriel',$index)"
 														repeat-done="repeatDone()">
 														<td>
-															<!--  <span ><a href="javascript:;" ng-click="addMateriel('single',$index)">{{_orderMateriel.materiel.materielNum}}</a></span> -->
+															 <span ><a href="javascript:;" ng-click="addMateriel('single',$index)">{{_orderMateriel.materiel.materielNum}}</a></span>
 															<p class="form-control-static">
 																{{_deliveryMateriel.materielNum}}</p>
 														</td>
@@ -908,40 +900,22 @@
 														<td class="form-group">
 															<p id="batchNumReal{{$index}}" ng-hide="true"></p>
 
-															<p class="form-control-static" id="batchNum{{$index}}">
-																<a href="javascript:;" class="btn btn-xs green"
-																	id="addBatchNum{{$index}}"
-																	ng-click="addAttachFile($index)"
-																	onclick="return false;"> <i class="fa fa-plus"></i>添加
-																</a>
-															</p>
+															
 														</td>
 														<td>
 															<p class="form-control-static">{{_deliveryMateriel.amount}}
 															</p>
 														</td>
-														<td class="form-group"><input type="text"
-															name="deliverCount" id="deliverCount{{$index}}"  ng-init="deliveryMaterielE[$index].deliverCount=_deliveryMateriel.amount"
-															class="form-control"
-															ng-hide="orderMaterielInput{{$index}}"
-															ng-model="deliveryMaterielE[$index].deliverCount"
-															data-ordercount="{{_deliveryMateriel.amount}}"
-															/><!-- ng-blur="getTotalDeliveryCount()"  -->
+														<td class="form-group">
 															<div class="form-control-focus"></div>
 															<p class="form-control-static"
-																ng-show="orderMaterielShow{{$index}}">
+																>
 																{{_deliveryMateriel.deliverCount}}</p></td>
-														<td><input type="text" name="deliverRemark{{$index}}"
-															class="form-control"
-															ng-hide="orderMaterielInput{{$index}}"
-															ng-model="deliveryMaterielE[$index].remark">
+														<td>
 															<p class="form-control-static"
-																ng-show="orderMaterielShow{{$index}}">
+																>
 																{{_deliveryMateriel.remark}}</p></td>
-														<td><span ng-show="orderMaterielInput{{$index}}">
-																&nbsp;&nbsp;&nbsp;&nbsp; <a
-																ng-click="editOrderMaterielOne(_deliveryMateriel,$index)"><i
-																	class="fa fa-edit"></i></a></span></td>
+														<td></td>
 													</tr>
 
 												</tbody>
@@ -963,8 +937,148 @@
 										</div>
 									</form>
 								</div>
-								<!-- 供应商 end-->
-							</div>
+								供应商 end
+							</div> -->
+							<div class="tab-pane fade" id="tab_1_4">
+		<div class="portlet-body">
+			<div class="row">
+				<div class="col-md-6 col-sm-6">
+					<div class="dataTables_length" id="sample_5_length">
+						<label>每页显示 <select name="sample_5_length"
+							aria-controls="sample_5" ng-model="pageSize" ng-change="createDispalyList()"
+							class="form-control input-sm input-xsmall input-inline">
+							<option value="5">5</option>
+							<option value="10">10</option>
+							<option value="15">15</option>
+							<option value="30">30</option>
+							<option value="99999">All</option>
+							</select> 条数据
+						</label>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-6">
+					<div id="sample_5_filter" style="text-align: right;">
+						<label>查询:<input type="search" ng-model="queryStr"  ng-change="queryForPage()"
+							class="form-control input-sm input-small input-inline"
+							placeholder="" aria-controls="sample_5"></label>
+					</div>
+				</div>
+			</div>
+			<div class="table-scrollable">
+				<table id="deliveryMaterielTable"
+					class="table table-striped table-bordered table-advance table-hover">
+					<thead>
+						<tr>
+							<th rowspan="2">物料编号</th>
+							<th rowspan="2">物料名称</th>
+							<th rowspan="2">规格型号</th>
+							<th rowspan="2">单位</th>
+							<!-- <th rowspan="2">生产日期</th> -->
+							<th colspan="4" style="text-align: center;">发货</th>
+							<!-- <th colspan="4" style="text-align: center;">收货</th> -->
+						<!-- 	<th colspan="3" style="text-align: center;">检验</th>
+							<th colspan="5" style="text-align: center;">入库</th> -->
+							<th rowspan="2">状态</th>
+						</tr>
+						<tr>
+							<th>订单数量</th>
+							<th>发货数量</th>
+							<th>附件</th>
+							<th>备注</th>
+							<!-- <th>实收数量</th>
+							<th>拒收数量</th>
+							<th>附件</th>
+							<th>备注</th> -->
+							<!-- <th>合格数量</th>
+							<th>不合格数量</th>
+							<th>备注</th>
+							<th>入库数量</th>
+							<th>未入数量</th>
+							<th>仓库</th>
+							<th>库位</th>
+							<th>备注</th> -->
+						</tr>
+					</thead>
+					<tbody>
+						<tr
+							ng-repeat="materiel in dispalyDeliveryMateriel  track by $index">
+							<td>{{materiel.materielNum}}</td>
+							<td>{{materiel.materielName}}</td>
+							<td>{{materiel.specifications}}</td>
+							<td>{{materiel.unit}}</td>
+							<!-- <td>{{materiel.manufactureDate}}</td> -->
+							<td>{{materiel.amount}}</td>
+							<td>{{materiel.deliverCount}}</td>
+							<td>
+								<a href="javascript:;" ng-click="downloadFile1(item.file)" ng-repeat="item in materiel.files">{{item.file|limitTo:30:item.file.indexOf('_')+1}}&nbsp;</a>
+							</td>
+							<td>{{materiel.remark}}</td>
+						<!-- 	<td>{{materiel.acceptCount}}</td>
+							<td>{{materiel.refuseCount}}</td>
+							<td>
+								<a href="javascript:;" ng-click="downloadFile1(item.file)" ng-repeat="item in materiel.files">{{item.file|limitTo:30:item.file.indexOf('_')+1}}&nbsp;</a>
+							</td>
+							<td>{{materiel.takeRemark}}</td> -->
+							<!-- <td>{{materiel.stockInQualifiedCount}}</td>
+							<td>{{materiel.stockInUnqualifiedCount}}</td>
+							<td>{{materiel.stockInCheckRemark}}</td>
+							<td>{{materiel.stockInCount}}</td>
+							<td>{{materiel.unstockInCount}}</td>
+							<td>{{materiel.stockInWarehouse.warehouseName}}</td>
+							<td>{{materiel.stockInPosition.positionName}}</td>
+							<td>{{materiel.stockInRemark}}</td> -->
+							<td></td>
+						</tr>
+						<tr
+							ng-if="dispalyDeliveryMateriel==0">
+							<td colspan="13" align="center">没有符合条件的物料信息</td>
+						</tr>
+					</tbody>
+					<tfoot>
+													<tr>
+														<td>合计</td>
+														<td></td>
+														<td></td>
+														<td> {{materielCount}}</td>
+														<td>{{totalOrderCount}}</td>
+														<td>{{totalDeliveryCount}}</td>
+														<td></td>
+														<td></td>
+														<td></td>
+													</tr>
+												</tfoot>
+				</table>
+			</div>
+			
+			<div class="row">
+				<div class="col-md-5 col-sm-5">
+					<div class="dataTables_info" id="sample_5_info" role="status"
+						aria-live="polite">从 {{(pageIndex-1)*pageSize+1>filterDeliveryMateriel.length?filterDeliveryMateriel.length:(pageIndex-1)*pageSize+1}}
+						到 {{pageIndex*pageSize>filterDeliveryMateriel.length?filterDeliveryMateriel.length:pageIndex*pageSize}} /共 {{filterDeliveryMateriel.length}} 条数据（从{{deliver.deliveryMateriels.length}}条数据中筛选）</div>
+				</div>
+				<div class="col-md-7 col-sm-7">
+					<div  style="text-align: right;" id="sample_5_paginate">
+						<ul class="pagination" style="visibility: visible;">
+							<li class="prev" ng-if="pageIndex>1"><a href="#" ng-click="link2PreviousPage()" title="前一页"><i
+									class="fa fa-angle-left"></i></a></li>
+							<li class="prev disabled" ng-if="1>=pageIndex"><a href="#" title="前一页"><i
+									class="fa fa-angle-left"></i></a></li>
+							<li ng-if="pageIndex-2>0"><a href="#" ng-click="link2ThisPage(pageIndex-2)">{{pageIndex-2}}</a></li>
+							<li ng-if="pageIndex-1>0"><a href="#" ng-click="link2ThisPage(pageIndex-1)">{{pageIndex-1}}</a></li>
+							<li class="active"><a href="#">{{pageIndex}}</a></li>
+							<li ng-if="totalPage>pageIndex"><a href="#" ng-click="link2ThisPage(pageIndex+1)">{{pageIndex+1}}</a></li>
+							<li ng-if="totalPage>pageIndex+1"><a href="#" ng-click="link2ThisPage(pageIndex+2)">{{pageIndex+2}}</a></li>
+							<li class="next disabled" ng-if="pageIndex>=totalPage"><a href="#" ><i
+									class="fa fa-angle-right"></i></a></li>
+							<li class="next" ng-if="totalPage>pageIndex"><a href="#" ng-click="link2NextPage()" title="后一页"><i
+									class="fa fa-angle-right"></i></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	</div>
 						</div>
 				</div>
 			</div>

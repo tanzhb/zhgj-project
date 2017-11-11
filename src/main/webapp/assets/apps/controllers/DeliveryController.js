@@ -175,8 +175,9 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
   };
 	
 	//确认发货
-	$scope.goDelivery=function (){
-		if($scope.inputDeliveryInfo==true){
+	$scope.goDelivery=function (judgeString){
+			debugger;
+		if($scope.inputDeliveryInfo==true&&judgeString==undefined){
 			if($('#form_sample_deliverInfo').valid()){
 				$scope.delivery.status="1";
 			$scope.saveDeliveryInfo($scope.delivery.status);//先保存
@@ -185,7 +186,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		 	/*$scope.confirmDelivery($scope.delivery.serialNum);*/
 	   		var promise = DeliveryService.goDelivery($scope.delivery.serialNum);
 			promise.then(function(data) {
-					toastr.success("发货成功");
+					toastr.success("确认发货成功");
 					$scope.delivery.status="1";
 			}, function(data) {
 				// 调用承诺接口reject();
@@ -2063,16 +2064,22 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			          		     function(data){
 			          		    	 debugger;
 			          		    	$scope.deliveryDetail=data.delivery;
+			          		    	$scope.delivery.serialNum=serialNum;
 			          		    	if($scope.deliveryDetail.supplyComId!=null){
 			          		    		$scope.supplyComId=$scope.deliveryDetail.supplyComId;
 			          		    		$scope.shipper=$scope.deliveryDetail.shipper;
 			          		    	}
 			          		    	$scope.input=true;
-			          		    	$scope.deliveryDetailMateriel=data.deliveryMateriels;
-			          		    	for(var i=0;i<$scope.deliveryDetailMateriel.length;i++){
-			          		    		if($scope.deliveryDetailMateriel[i].status=='0'){$scope.deliveryDetailMateriel[i].status='待发货'};
-			          		    		if($scope.deliveryDetailMateriel[i].status=='1'){$scope.deliveryDetailMateriel[i].status='已发货'}
+			          		    	$scope.deliveryMaterielE=data.deliveryMateriels;
+			          		     var totalOrderCount=0,totalDeliveryCount=0;
+			          		    	for(var i=0;i<$scope.deliveryMaterielE.length;i++){
+			          		    		if($scope.deliveryMaterielE[i].status=='0'){$scope.deliveryMaterielE[i].status='待发货'};
+			          		    		if($scope.deliveryMaterielE[i].status=='1'){$scope.deliveryMaterielE[i].status='已发货'}
+			          		    	totalOrderCount=totalOrderCount+Number($scope.deliveryMaterielE[i].amount);
+			          		    	totalDeliveryCount=totalDeliveryCount+Number($scope.deliveryMaterielE[i].deliverCount);
 			          		    	}
+			          		    	$scope.totalOrderCount=totalOrderCount;
+			          		    	$scope.totalDeliveryCount=totalDeliveryCount;
 			          		    	$("#serialNum").val(serialNum);//赋值给隐藏input，通过和不通过时调用
 			    					$("#taskId").val(ids);//赋值给隐藏input，通过和不通过时调用
 			    					
@@ -2080,6 +2087,8 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			    						$("#comment_audit").html( "无评论");
 			    					}else{ $("#comment_audit").html(comments);
 			          		     }
+			    					$scope.materielCount=$scope.deliveryMaterielE.length;
+			    					$scope.queryForPage();
 			          		     },
 			          		     function(error){
 			          		         $scope.error = error;
@@ -2291,7 +2300,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		//修改
 		$scope.jumpToConfirm = function() {		
 			if(table.rows('.active').data().length != 1){
-				showToastr('toast-top-center', 'warning', '请选择一条数据进行修改！')
+				showToastr('toast-top-center', 'warning', '请选择一条数据进行确认发货！')
 			}else{
 				
 				if(table.row('.active').data().status == '0'){
@@ -2987,6 +2996,61 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			// ***************************************
 	
 	/*********************************************出库jsEND***************************************************/
+		 	 /** *************订单物料明细可检索化  start*************** */
+		  	 $scope.pageIndex = 1; //记录当前页
+		  	 $scope.pageSize = '10'; //每页的记录数
+		  	 $scope.totalPage = '1'; //记录总页数
+		  	 $scope.dispalyDeliveryMateriel = [];//页面显示结果
+		  	 $scope.filterDeliveryMateriel = [];//查询筛选结果
+		  	 
+		  	 $scope.createFilterList = function(){
+		  		 $scope.filterDeliveryMateriel = [];
+		  		if($scope.deliveryMaterielE.length>0&&$scope.queryStr&&!isNull($scope.queryStr)){
+		  			for(var i = 0;i < $scope.deliveryMaterielE.length;i++){// data.data为选择的标准物料
+		  				if(($scope.deliveryMaterielE)[i].materielNum.indexOf($scope.queryStr)>=0){
+		  					$scope.filterDeliveryMateriel.push(angular.copy(($scope.deliveryMaterielE)[i]));
+		  				}else if(($scope.deliveryMaterielE)[i].materielName.indexOf($scope.queryStr)>=0){
+		  					$scope.filterDeliveryMateriel.push(angular.copy(($scope.deliveryMaterielE)[i]));
+		  				}else if(($scope.deliveryMaterielE)[i].specifications.indexOf($scope.queryStr)>=0){
+		  					$scope.filterDeliveryMateriel.push(angular.copy(($scope.deliveryMaterielE)[i]));
+		  				}
+		  			}
+		  		}else{
+		  			$scope.filterDeliveryMateriel = angular.copy($scope.deliveryMaterielE);
+		  		}
+		  		
+		  	 };
+		  	 
+		  	 $scope.createDispalyList = function(){
+		  		 $scope.dispalyDeliveryMateriel = $scope.filterDeliveryMateriel.slice(
+		  				 ($scope.pageIndex-1)*$scope.pageSize,
+		  				 $scope.pageIndex*$scope.pageSize);
+		  		 
+		  		 $scope.totalPage = Math.ceil($scope.filterDeliveryMateriel.length/$scope.pageSize);
+		  	 };
+		  	 
+		  	 $scope.queryForPage = function(){
+		  		 $scope.createFilterList();
+		  		 $scope.pageIndex = 1; //设置为第一页
+		  		 $scope.createDispalyList();
+		  	 };
+		  	 
+		  	 $scope.link2ThisPage = function(index){
+		  		 $scope.pageIndex = index;
+		  		 $scope.createDispalyList();
+		  	 }
+		  	 
+		  	 $scope.link2PreviousPage = function(){
+		  		 $scope.pageIndex--;
+		  		 $scope.createDispalyList();
+		  	 }
+		  	 
+		  	 $scope.link2NextPage = function(){
+		  		 $scope.pageIndex++;
+		  		 $scope.createDispalyList();
+		  	 }
+		  	 
+		  	/** *************订单物料明细可检索化  end*************** */
 
 }]);
 

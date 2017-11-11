@@ -3866,14 +3866,14 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 						showToastr('toast-top-center', 'warning', '请选择一条数据进行修改！')
 					}else{
 						if(deliveryTable.row('.active').data().status== '0'){
-							$state.go('editDeliveryPage',{serialNumEdit:deliveryTable.row('.active').data().serialNum});
+							$state.go('editDeliveryPage',{serialNumEdit:deliveryTable.row('.active').data().serialNum,oprateType:"forSaleOrder"});
 						}else showToastr('toast-top-center', 'warning', '该条数据已经发货，不能进行修改！')
 					} 
 				};
 				//确认
 				$scope.jumpToConfirm = function() {		
 					if(deliveryTable.rows('.active').data().length != 1){
-						showToastr('toast-top-center', 'warning', '请选择一条数据进行修改！')
+						showToastr('toast-top-center', 'warning', '请选择一条数据进行确认发货！')
 					}else{
 						
 						if(deliveryTable.row('.active').data().status == '0'){
@@ -3912,7 +3912,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    							$('#delUsersModal').modal('hide');// 删除成功后关闭模态框
 		    							$(".modal-backdrop").remove();
 		    							toastr.success("删除成功！");
-		    							$state.go('delivery',{},{reload:true}); // 重新加载datatables数据
+		    							$state.go('saleOrder',{},{reload:true}); // 重新加载datatables数据
 		    						},
 		    						function(errResponse) {
 		    							/*console.error('Error while deleting Users');*/
