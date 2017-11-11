@@ -38,7 +38,7 @@
 				<div class="tabbable-custom">
 					<ul class="nav nav-tabs" id="takeDelivery_tab">
 						<li class="active"><a data-target="#tab_25_1"
-							data-toggle="tab">收货计划</a></li>
+							data-toggle="tab">入库计划</a></li>
 						<li><a data-target="#tab_25_2" data-toggle="tab"
 							ng-click="toDaiban()">待办<dbQuantity/></a></li>
 						<li><a data-target="#tab_25_3" data-toggle="tab"
@@ -83,7 +83,7 @@
 															<input type="checkbox" class="group-checkable"
 															data-set="#takeDeliveryTable .checkboxes" /> <span></span>
 													</label></th>
-													<th>收货单编号</th>
+													<!-- <th>收货单编号</th> -->
 													<th>发货单编号</th>
 													<th>订单编号</th>
 													<th>发货方</th>

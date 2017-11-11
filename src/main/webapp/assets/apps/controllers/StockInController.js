@@ -536,14 +536,14 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 		                    processing: true,//loading等待框
 		                    bRetrieve : true,
 //		                    serverSide: true,
-		                   // ajax: "rest/takeDelivery/takeDeliveryList",//加载数据中
-		                    ajax :{ "url":$rootScope.basePath
+		                   ajax: "rest/takeDelivery/takeDeliveryList?status=3",//加载数据中
+		                   /* ajax :{ "url":$rootScope.basePath
 		  						+ "/rest/takeDelivery/takeDeliveryList?status=3",// 加载数据中收货列表的数据    
 		  						"contentType": "application/json",
 		  					    "type": "POST",
 		  					    "data": function ( d ) {
 		  					      return JSON.stringify( d );
-		  					    }},
+		  					    }},*/
 		                    "aoColumns": [
 		                                  { mData: 'takeDelivery.serialNum' },
 		                                  { mData: 'takeDelivery.takeDeliverNum' },

@@ -647,7 +647,7 @@ angular
 					 	    		 ajaxUrl={ "url":$rootScope.basePath
 												+ "/rest/takeDelivery/takeDeliveryList",  
 												"contentType": "application/json",
-											    "type": "POST",
+											    "type": "GET",
 											    "data": function ( d ) {
 											      return JSON.stringify( d );
 											    }};

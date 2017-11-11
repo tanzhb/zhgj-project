@@ -3705,17 +3705,17 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
                   processing: true,//loading等待框
                   bRetrieve : true,
 //                  serverSide: true,
-                 // ajax: "rest/takeDelivery/takeDeliveryList",//加载数据中
-                  ajax :{ "url":$rootScope.basePath
+                 ajax: "rest/takeDelivery/takeDeliveryList",//加载数据中
+                  /*ajax :{ "url":$rootScope.basePath
 						+ "/rest/takeDelivery/takeDeliveryList",// 加载数据中user表数据    
 						"contentType": "application/json",
 					    "type": "POST",
 					    "data": function ( d ) {
 					      return JSON.stringify( d );
-					    }},
+					    }},*/
                   "aoColumns": [
                                 { mData: 'takeDelivery.serialNum' },
-                                { mData: 'takeDelivery.takeDeliverNum' },
+                              /*  { mData: 'takeDelivery.takeDeliverNum' },*/
                                 { mData: 'deliverNum' },
                                 { mData: 'orderNum' },
                                 { mData: 'shipper' },
@@ -3765,7 +3765,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
   								 $compile(td)($scope);
   						       }
   						},{
-  							'targets' : 3,
+  							'targets' : 2,
   							'render' : function(data,
   									type, row, meta) {
   									if(!isNull(data)){
@@ -3775,11 +3775,21 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	
   							}
   						},{
-  							'targets' : 8,
+  							'targets' :7,
   							'render' : function(data,
   									type, row, meta) {
   									if(data!=null){
 										return data.address;
+									}
+	  								return '';
+	
+  							}
+  						},{
+  							'targets' : 9,
+  							'render' : function(data,
+  									type, row, meta) {
+  									if(data!=undefined){
+										return data;
 									}
 	  								return '';
 	
@@ -3798,16 +3808,6 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
   							'targets' : 11,
   							'render' : function(data,
   									type, row, meta) {
-  									if(data!=undefined){
-										return data;
-									}
-	  								return '';
-	
-  							}
-  						},{
-  							'targets' : 12,
-  							'render' : function(data,
-  									type, row, meta) {
   										if(data!=undefined){
   											return data;
   										}
@@ -3815,7 +3815,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	
   							}
   						},{
-  							'targets' : 13,
+  							'targets' : 12,
   							'searchable' : false,
   							'orderable' : false,
   							'className' : 'dt-body-center',

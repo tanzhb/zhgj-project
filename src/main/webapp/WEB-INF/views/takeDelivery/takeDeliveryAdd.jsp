@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"  %>
+\<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"  %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!-- BEGIN PAGE HEADER-->
 <style>
@@ -496,13 +496,15 @@
 															readonly="" id="manufactureDate{{$index}}"
 															ng-model="materiel.manufactureDate" placeholder="">
 															<span class="help-block"></span></td> -->
-														<td><span class="help-block"></span>{{materiel.amount}}</td>
+														<td><span class="help-block"></span>{{materiel.amount}}</td><!-- ng-init="orderMateriels[$index].deliverCount=materiel.amount" -->
 														<td class="form-group"><input type="text"
 															class="form-control" id="deliverCount{{$index}}"
-															name="deliverCount" data-ordercount="{{materiel.amount}}"   ng-init="orderMateriels[$index].deliverCount=materiel.amount"
+															name="deliverCount" data-ordercount="{{materiel.amount}}"   
 															ng-model="orderMateriels[$index].deliverCount"
-															ng-model="materiel.deliverCount" ng-hide="deliverAdd">
-															<div class="form-control-focus"></div></td>
+															ng-hide="deliverAdd">
+															<div class="form-control-focus"></div><p class="form-control-static"
+																ng-show="deliverAdd">
+																{{materiel.deliverCount}}</p></td>
 														<td class="form-group">
 															 <p id="batchNumReal{{$index}}" ng-hide="true"> </p>
 															<p class="form-control-static" id="batchNum{{$index}}">

@@ -47,6 +47,7 @@ import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.web.dao.Delivery2Mapper;
+import com.congmai.zhgj.web.dao.TakeDeliveryMapper;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.event.EventExample;
 import com.congmai.zhgj.web.event.SendMessageEvent;
@@ -145,6 +146,12 @@ public class TakeDeliveryController {
 	@Autowired
 	private Delivery2Mapper delivery2Mapper;  
 	
+	@Autowired
+	private TakeDeliveryMapper takeDeliveryMapper;  
+	
+	@Autowired
+	private DeliveryService  deliveryService;
+	
 	
 	@RequestMapping("takeDeliveryManage")
 	public String takeDeliveryManage() {
@@ -157,13 +164,13 @@ public class TakeDeliveryController {
      * @param request
      * @return
      */
-    @RequestMapping(value="takeDeliveryList",method=RequestMethod.POST)
+    @RequestMapping(value="takeDeliveryList")
     public ResponseEntity<Map<String,Object>> takeDeliveryList(Map<String, Object> map,HttpServletRequest request,@RequestBody String params,Delivery takeDelivery,String status,String noInit) {
     	//远程分页代码
     	/*try {
     		params = URLDecoder.decode(params, "UTF-8");
 		} catch (UnsupportedEncodingException e1) {
-			// TODO Auto-generated catch block
+			// TODO Auto-generated catch blockr
 			e1.printStackTrace();
 		}
     	 ObjectMapper objectMapper = new ObjectMapper();
@@ -1227,7 +1234,13 @@ public class TakeDeliveryController {
     	String flag = "0"; //默认失败
     	try{
     		if(StringUtils.isNotEmpty(serialNum)){
-    			
+    			Delivery  delivery=takeDeliveryMapper.selectByPrimaryDeliveryKey(serialNum);
+    			delivery.setStatus("1");
+    			TakeDelivery takeDelivery = new TakeDelivery();
+    			takeDelivery = takeDeliveryMapper.selectTakeDeliveryByDeliveryId(serialNum);
+    			Subject currentUser = SecurityUtils.getSubject();
+        		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+    			takeDeliveryService.confirmDelivery(delivery, takeDelivery, currenLoginName);
     			
     		}
     	}catch(Exception e){

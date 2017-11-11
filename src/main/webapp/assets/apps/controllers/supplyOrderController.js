@@ -2957,11 +2957,21 @@ var e = $("#form_clauseSettlement"),
 			showToastr('toast-top-center', 'warning', '请选择一条数据进行修改！')
 		}else{
 			if(deliveryTable.row('.active').data().status== '0'){
-				$state.go('editDeliveryPage',{serialNumEdit:deliveryTable.row('.active').data().serialNum});
+				$state.go('editDeliveryPage',{serialNumEdit:deliveryTable.row('.active').data().serialNum,oprateType:"forSupplyOrder"});
 			}else showToastr('toast-top-center', 'warning', '该条数据已经发货，不能进行修改！')
 		} 
 	};
-	
+	//确认
+	$scope.jumpToConfirm = function() {		
+		if(deliveryTable.rows('.active').data().length != 1){
+			showToastr('toast-top-center', 'warning', '请选择一条数据进行确认发货！')
+		}else{
+			
+			if(deliveryTable.row('.active').data().status == '0'){
+				$state.go('viewDelivery',{serialNum:deliveryTable.row('.active').data().serialNum,oprateType:"forSupplyOrder"});
+			}else showToastr('toast-top-center', 'warning', '已确认发货')
+		} 
+	};
 	//跳转到查看详情页面
     $scope.jumpToGetDeliveryInfo  = function(serialNum) {
     	$state.go('viewDelivery',{serialNum:serialNum,oprateType:"forSupplyOrder"});

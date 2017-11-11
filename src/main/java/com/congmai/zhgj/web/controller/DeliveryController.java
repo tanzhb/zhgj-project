@@ -35,6 +35,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -64,6 +65,7 @@ import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.dao.Delivery2Mapper;
 import com.congmai.zhgj.web.dao.DeliveryMapper;
+import com.congmai.zhgj.web.dao.DeliveryMaterielMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
 import com.congmai.zhgj.web.dao.RelationFileMapper;
 import com.congmai.zhgj.web.dao.StockInOutCheckMapper;
@@ -78,6 +80,8 @@ import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyQualification;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.Delivery;
+import com.congmai.zhgj.web.model.DeliveryMateriel;
+import com.congmai.zhgj.web.model.DeliveryMaterielExample;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryTransportVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
@@ -101,6 +105,7 @@ import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.StockInOutCheckService;
+import com.congmai.zhgj.web.service.TakeDeliveryService;
 import com.congmai.zhgj.web.service.UserCompanyService;
 import com.congmai.zhgj.web.service.WarehouseService;
 
@@ -185,6 +190,13 @@ public class DeliveryController {
 	@Resource
 	private TakeDeliveryMapper takeDeliveryMapper;
 
+	@Resource
+	private TakeDeliveryService  takeDeliveryService;
+	
+	@Resource
+	private DeliveryMaterielMapper deliveryMaterielMapper;
+
+	
 	 /**
      * @Description (查询仓库列表)
      * @param request
@@ -325,7 +337,7 @@ public class DeliveryController {
 						//更新订单状态至出库待检验
 						orderInfo.setDeliverStatus(orderInfo.WAIT_OUT_CHECK);
 						delivery1.setStatus(DeliveryVO.WAIT_CHECK);
-						
+						takeDelivery.setStatus(TakeDelivery.APPLY_COMPLETE);
 					}else{
 						//供应商发货--> 不走清关 --> 不需收货 --> 需要检验 --> 生成入库检验单
 						
@@ -357,6 +369,7 @@ public class DeliveryController {
 					//更新订单状态至待出库
 					orderInfo.setDeliverStatus(orderInfo.WAIT_OUTRECORD);
 					delivery1.setStatus(DeliveryVO.WAITRECORD);
+					takeDelivery.setStatus(TakeDelivery.COMPLETE);
 				}else{//供应商发货--> 不走清关 --> 不需收货 --> 不需要检验 --> 生成入库单
 					takeDelivery.setStatus(TakeDelivery.CHECK_COMPLETE); //已完成
 					orderInfo.setDeliverStatus(orderInfo.WAIT_INRECORD);//待入库
@@ -560,6 +573,9 @@ public class DeliveryController {
     	return new ResponseEntity<DeliveryMaterielVO>(deliveryMateriel, HttpStatus.CREATED);
     }*/
     
+	
+    private static BeanCopier beanCopier = BeanCopier.create(DeliveryMaterielVO.class,DeliveryMateriel.class,false);
+    
 	/**
      * @Description (保存订单物料信息)
      * @param request
@@ -585,27 +601,48 @@ public class DeliveryController {
    		rf.setDelFlg("1");
    		rf.setUpdateTime(new Date());
    		rf.setUpdater(currenLoginName);
-   		for(DeliveryMaterielVO deliveryMateriel:deliveryMateriels){
-   		if(StringUtils.isEmpty(deliveryMateriel.getSerialNum())){
-   			deliveryMateriel.setSerialNum(ApplicationUtils.random32UUID());
-   			deliveryMateriel.setCreator(currenLoginName);
-   			deliveryMateriel.setUpdater(currenLoginName);
-   			deliveryMateriel.setOrderMaterielSerial(deliveryMateriel.getOrderMaterielSerialNum());
-   			deliveryService.insertDeliveryMateriel(deliveryMateriel);
-   			insertRelationFile(deliveryMateriel,currenLoginName);//保存附件
-   		}else{//修改发货物料
-   			deliveryMateriel.setUpdateTime(new Date());
-   			deliveryMateriel.setUpdater(currenLoginName);
-   			deliveryService.updateDeliveryMateriel(deliveryMateriel);
-   			//先删除原来的附件
-   			RelationFileExample rfe=new RelationFileExample();
-   			com.congmai.zhgj.web.model.RelationFileExample.Criteria c=rfe.createCriteria();
-   			c.andRelationSerialEqualTo(deliveryMateriel.getSerialNum());
-   			relationFileMapper.updateByExampleSelective(rf, rfe);
-   			insertRelationFile(deliveryMateriel,currenLoginName);//保存附件
-   		}
    		
-   		}
+   		if(deliveryMateriels!=null&&deliveryMateriels.size()>0){
+   			TakeDelivery takeDelivery = new TakeDelivery();
+   			takeDelivery = takeDeliveryMapper.selectTakeDeliveryByDeliveryId(deliveryMateriels.get(0).getDeliverSerial());
+   			DeliveryMaterielExample example = new 	DeliveryMaterielExample();
+   			com.congmai.zhgj.web.model.DeliveryMaterielExample.Criteria cc = example.createCriteria();
+   			cc.andDeliverSerialEqualTo(takeDelivery.getSerialNum()) ;
+   			deliveryMaterielMapper.deleteByExample(example);
+   			
+   			
+   	   		for(DeliveryMaterielVO deliveryMateriel:deliveryMateriels){
+   	   		if(StringUtils.isEmpty(deliveryMateriel.getSerialNum())){
+   	   			deliveryMateriel.setSerialNum(ApplicationUtils.random32UUID());
+   	   			deliveryMateriel.setCreator(currenLoginName);
+   	   			deliveryMateriel.setUpdater(currenLoginName);
+   	   			deliveryMateriel.setOrderMaterielSerial(deliveryMateriel.getOrderMaterielSerialNum());
+   	   			deliveryService.insertDeliveryMateriel(deliveryMateriel);
+   	   			insertRelationFile(deliveryMateriel,currenLoginName);//保存附件
+   	   			
+   	   		}else{//修改发货物料
+   	   			deliveryMateriel.setUpdateTime(new Date());
+   	   			deliveryMateriel.setUpdater(currenLoginName);
+   	   			deliveryService.updateDeliveryMateriel(deliveryMateriel);
+   	   			//先删除原来的附件
+   	   			RelationFileExample rfe=new RelationFileExample();
+   	   			com.congmai.zhgj.web.model.RelationFileExample.Criteria c=rfe.createCriteria();
+   	   			c.andRelationSerialEqualTo(deliveryMateriel.getSerialNum());
+   	   			relationFileMapper.updateByExampleSelective(rf, rfe);
+   	   			insertRelationFile(deliveryMateriel,currenLoginName);//保存附件
+   	   		}
+   	   		
+   			DeliveryMateriel materiel = new DeliveryMateriel();
+   			beanCopier.copy(deliveryMateriel, materiel, null);
+   			materiel.setSerialNum(ApplicationUtils.random32UUID());
+   			materiel.setDeliverSerial(takeDelivery.getSerialNum());
+   			materiel.setDelFlg("0");
+   			materiel.setAcceptCount(deliveryMateriel.getDeliverCount());
+   			deliveryMaterielMapper.insert(materiel);
+   	   		}
+   		}      
+   		
+   		
    	}catch(Exception e){
    		System.out.println(e.getMessage());
    		

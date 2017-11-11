@@ -12,6 +12,7 @@ import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.stereotype.Service;
 
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
@@ -39,6 +40,7 @@ import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryExample;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryMaterielExample;
+import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryTransport;
 import com.congmai.zhgj.web.model.DeliveryTransportExample;
 import com.congmai.zhgj.web.model.DeliveryVO;
@@ -125,7 +127,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		example.setPageSize(-1);
 		Criteria c =  example.createCriteria();
 		c.andDelFlgEqualTo("0");
-		if(StringUtils.isNotBlank(takeDelivery.getStatus())){
+		if(StringUtils.isNotBlank(takeDelivery.getStatus())&&!"noInit".equals(takeDelivery.getStatus())){
 			c.andStatusEqualTo(takeDelivery.getStatus());
 		}
 		if("noInit".equals(takeDelivery.getStatus())){
@@ -159,7 +161,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		
 		return page;
 	}
-
+    private static BeanCopier beanCopier = BeanCopier.create(DeliveryMateriel.class,DeliveryMateriel.class,false);
 	@Override
 	@OperationLog(operateType = "add" ,operationDesc = "代发货" ,objectSerial= "{serialNum}")
 	public void insertTakeDelivery(Delivery delivery,TakeDelivery takeDelivery,DeliveryTransport deliveryTransport,List<DeliveryMateriel> deliveryMateriels,
@@ -176,9 +178,17 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		takeDeliveryMapper.insert(takeDelivery);
 		for(DeliveryMateriel materiel : deliveryMateriels){
 			deliveryMaterielMapper.insert(materiel);
+			
+			DeliveryMateriel tmateriel = new DeliveryMateriel();
+   			beanCopier.copy(materiel, tmateriel, null);
+   			tmateriel.setSerialNum(ApplicationUtils.random32UUID());
+   			tmateriel.setDeliverSerial(takeDelivery.getSerialNum());
+   			tmateriel.setDelFlg("0");
+   			tmateriel.setAcceptCount(materiel.getDeliverCount());
+   			deliveryMaterielMapper.insert(tmateriel);
 		}
 		
-		confirmTakeDelivery(delivery, takeDelivery, currenLoginName);//确认发货操作
+		confirmDelivery(delivery, takeDelivery, currenLoginName);//确认发货操作
 		
 		
 	}
@@ -220,9 +230,11 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		d_example.createCriteria().andSerialNumEqualTo(delivery.getSerialNum());
 		delivery2Mapper.updateByExampleSelective(delivery,d_example);
 		
-		DeliveryTransportExample dt_example = new DeliveryTransportExample();
-		dt_example.createCriteria().andSerialNumEqualTo(deliveryTransport.getSerialNum());
-		deliveryTransportMapper.updateByExampleSelective(deliveryTransport,dt_example);
+		if(deliveryTransport!=null){
+			DeliveryTransportExample dt_example = new DeliveryTransportExample();
+			dt_example.createCriteria().andSerialNumEqualTo(deliveryTransport.getSerialNum());
+			deliveryTransportMapper.updateByExampleSelective(deliveryTransport,dt_example);
+		}
 		
 		TakeDeliveryExample td_example = new TakeDeliveryExample();
 		td_example.createCriteria().andSerialNumEqualTo(takeDelivery.getSerialNum());
@@ -234,13 +246,25 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		dmExample.createCriteria().andDeliverSerialEqualTo(delivery.getSerialNum());
 		deliveryMaterielMapper.updateByExampleSelective(dm,dmExample);
 		
+		DeliveryMaterielExample example = new 	DeliveryMaterielExample();
+			com.congmai.zhgj.web.model.DeliveryMaterielExample.Criteria cc = example.createCriteria();
+			cc.andDeliverSerialEqualTo(takeDelivery.getSerialNum()) ;
+			deliveryMaterielMapper.deleteByExample(example);
 		for(DeliveryMateriel materiel : deliveryMateriels){
 				deliveryMaterielMapper.insert(materiel);
+				
+				DeliveryMateriel tmateriel = new DeliveryMateriel();
+	   			beanCopier.copy(materiel, tmateriel, null);
+	   			tmateriel.setSerialNum(ApplicationUtils.random32UUID());
+	   			tmateriel.setDeliverSerial(takeDelivery.getSerialNum());
+	   			tmateriel.setDelFlg("0");
+	   			tmateriel.setAcceptCount(materiel.getDeliverCount());
+	   			deliveryMaterielMapper.insert(tmateriel);
 		}
-		confirmTakeDelivery(delivery, takeDelivery, currenLoginName);//确认发货操作
+		confirmDelivery(delivery, takeDelivery, currenLoginName);//确认发货操作
 	}
-
-	private void confirmTakeDelivery(Delivery delivery,
+	@Override
+	public  void  confirmDelivery(Delivery delivery,
 			TakeDelivery takeDelivery, String currenLoginName) {
 		if("1".equals(delivery.getStatus())){//平台确定代发货
 			OrderInfo orderInfonew=orderInfoMapper.selectByPrimaryKey(delivery.getOrderSerial());

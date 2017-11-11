@@ -79,7 +79,8 @@ public interface TakeDeliveryService extends GenericService<TakeDelivery, String
 			String string);
 
 	
-	
+	void confirmDelivery(Delivery delivery,
+			TakeDelivery takeDelivery, String currenLoginName);
 		
 
 }

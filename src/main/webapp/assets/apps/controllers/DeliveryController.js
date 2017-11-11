@@ -36,6 +36,12 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		$rootScope.setNumCode("SE",function(newCode){
 			$scope.delivery.deliverNum = newCode;
 		});
+		$scope.delivery={};
+    	$scope.delivery.deliverDate=$filter('date')(new Date(), 'yyyy-MM-dd');
+    	$scope.delivery.packageSpecifications="原厂包装";
+    	$scope.delivery.deliverType="贸易发货";
+    	$scope.delivery.approvalDate=$filter('date')(new Date(), 'yyyy-MM-dd');
+    	getCurrentUser();
 		
 		}
 		//根据参数查询对象
@@ -53,14 +59,9 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
     	//$scope.getDeliveryInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);	
     	$scope.getDeliveryEditInfo($stateParams.serialNumEdit,$stateParams.taskId, $stateParams.comments);
     }
-    if($scope.delivery==undefined||$scope.delivery.deliverDate==undefined){
-    	$scope.delivery={};
-    	$scope.delivery.deliverDate=$filter('date')(new Date(), 'yyyy-MM-dd');
-    	$scope.delivery.packageSpecifications="原厂包装";
-    	$scope.delivery.deliverType="贸易发货";
-    	$scope.deliver.approvalDate=$filter('date')(new Date(), 'yyyy-MM-dd');
-    	getCurrentUser();
-    }
+/*    if($scope.delivery==undefined||$scope.delivery.deliverDate==undefined){
+    	
+    }*/
     
     if ($.validator) {
     	
@@ -2833,8 +2834,8 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
                   processing: true,//loading等待框
                   bRetrieve : true,
 //                  serverSide: true,
-                 // ajax: "rest/takeDelivery/takeDeliveryList",//加载数据中
-                  ajax :{ "url":$rootScope.basePath
+                 //ajax: "rest/takeDelivery/takeDeliveryList",//加载数据中
+                 ajax :{ "url":$rootScope.basePath
 						+ "/rest/takeDelivery/stockOutList",// 加载数据中user表数据    
 						"contentType": "application/json",
 					    "type": "POST",
