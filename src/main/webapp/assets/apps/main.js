@@ -3284,7 +3284,7 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>";
 					 if(toParams.oprateType == "forBuyOrder"){
 						 html += "<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
-					 		"<li><a ui-sref='saleOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+					 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" + 
 					 		"<li><a>查看收货</a></li>";
 					 }else if(toParams.oprateType == "forCustomerOrder"){
 						 html += "<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
