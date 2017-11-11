@@ -2717,4 +2717,4 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 				
 				
 
-			 }}]); 
+			 }]); 
