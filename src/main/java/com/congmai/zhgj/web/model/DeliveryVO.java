@@ -56,7 +56,7 @@ public class DeliveryVO extends BaseVO implements Serializable{
 	
 	//审批日期
 	@DateTimeFormat(pattern="yyyy-MM-dd")
-	private Date approvalDate;
+	private Date approvalDate;//暂时作为制单日期
 	
 	//发货仓库流水号
 	private String warehouseSerial;

@@ -299,7 +299,9 @@
 									<label class="btn btn-transparent green btn-circle btn-sm"
 										ui-sref="takeDeliveryAdd"> <i class="fa fa-plus"></i>
 										代发货
-									</label> <label class="btn btn-transparent purple btn-circle btn-sm"
+									</label><label class="btn btn-transparent yellow btn-circle btn-sm"
+									ng-click="jumpToConfirm()"> <i class="glyphicon glyphicon-play"></i>确认代发货
+								</label> <label class="btn btn-transparent purple btn-circle btn-sm"
 										ng-click="takeDeliveryEdit()"> <i class="fa fa-edit"></i>
 										修改
 									</label> <label class="btn btn-transparent red btn-circle btn-sm"

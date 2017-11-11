@@ -459,15 +459,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					}
 				}
 			}
-			/**
-	         * 修改收货计划号
-	         */
-			 $scope.takeDeliveryEdit = function () {
-		        	var id_count = $('#takeDeliveryTable input[name="serialNum"]:checked').length;
-					if(id_count==0){
-						toastr.warning("请选择您要修改的记录");
-						return;
-					}
+			
 	        /**
 	         * 批量删除收货计划
 	         */
