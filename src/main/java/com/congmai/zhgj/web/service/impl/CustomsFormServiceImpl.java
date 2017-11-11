@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.druid.util.StringUtils;
@@ -15,6 +17,9 @@ import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.dao.CustomsFormMapper;
 import com.congmai.zhgj.web.dao.Delivery2Mapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
+import com.congmai.zhgj.web.dao.StockInOutCheckMapper;
+import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
+import com.congmai.zhgj.web.dao.TakeDeliveryMapper;
 import com.congmai.zhgj.web.model.CustomsForm;
 import com.congmai.zhgj.web.model.CustomsFormExample;
 import com.congmai.zhgj.web.model.CustomsFormExample.Criteria;
@@ -25,6 +30,7 @@ import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.service.CustomsFormService;
+import com.congmai.zhgj.web.service.OrderService;
 
 /**
  * 
@@ -45,8 +51,16 @@ public class CustomsFormServiceImpl extends GenericServiceImpl<CustomsForm, Stri
 	
 	@Resource
 	private  OrderInfoMapper  orderInfoMapper;
-
 	
+	@Resource
+	private  TakeDeliveryMapper takeDeliveryMapper;
+
+	@Resource
+	private StockInOutCheckMapper stockInOutCheckMapper;
+	@Resource
+	private StockInOutRecordMapper stockInOutRecordMapper;
+	@Resource
+	private OrderService orderService;
 	@Override
 	public GenericDao<CustomsForm, String> getDao() {
 		// TODO Auto-generated method stub
@@ -73,10 +87,70 @@ public class CustomsFormServiceImpl extends GenericServiceImpl<CustomsForm, Stri
 	}
 	@OperationLog(operateType = "update" ,operationDesc = "确认清关" ,objectSerial= "{serialNum}")
    public void  confirmClearance(CustomsForm customsForm){
-		Delivery d=new Delivery();
+		/*Delivery d=new Delivery();
 		d.setSerialNum(customsForm.getDeliverSerial());
 		d.setStatus(TakeDelivery.WAITING);//待收货
-		delivery2Mapper.updateByPrimaryKeySelective(d);
+		delivery2Mapper.updateByPrimaryKeySelective(d);*/
+		
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		
+		Delivery delivery=delivery2Mapper.selectByDeliveryPrimaryKey(customsForm.getDeliverSerial());
+		OrderInfo o=orderInfoMapper.selectByPrimaryKey(delivery.getOrderSerial());
+		OrderInfo orderInfo=new OrderInfo();
+		orderInfo.setSerialNum(delivery.getOrderSerial());
+		TakeDelivery takeDelivery = new TakeDelivery();
+		takeDelivery = takeDeliveryMapper.selectTakeDeliveryByDeliveryId(customsForm.getDeliverSerial());
+		Delivery deliverynew =new  Delivery();
+		deliverynew.setSerialNum(takeDelivery.getDeliverSerial());
+		if("1".equals(o.getContractContent().substring(4, 5))){//验收条款有效
+			takeDelivery.setStatus(TakeDelivery.APPLY_COMPLETE); //待检验
+			this.createStockInCheckRecord(takeDelivery,currenLoginName);
+			orderInfo.setDeliverStatus(orderInfo.WAIT_IN_CHECK);//已收货待检验
+			deliverynew.setStatus(DeliveryVO.WAIT_CHECK);
+		}else{
+			takeDelivery.setStatus(TakeDelivery.CHECK_COMPLETE); //已完成
+			orderInfo.setDeliverStatus(orderInfo.WAIT_INRECORD);//待入库
+			deliverynew.setStatus(DeliveryVO.WAIT_IN_RECORD);
+			//生成入库单
+			StockInOutRecord stockInOutRecord=new StockInOutRecord();
+			stockInOutRecord.setSerialNum(ApplicationUtils.random32UUID());
+			stockInOutRecord.setTakeDeliverSerial(takeDelivery.getSerialNum());
+			stockInOutRecord.setDeliverSerial("");
+			stockInOutRecord.setInOutNum(orderService.getNumCode("IN"));
+			stockInOutRecord.setDelFlg("0");
+			stockInOutRecord.setStatus("0");
+			stockInOutRecord.setCreator(currenLoginName);
+			stockInOutRecord.setCreateTime(new Date());
+			stockInOutRecord.setUpdater(currenLoginName);
+			stockInOutRecord.setUpdateTime(new Date());
+			stockInOutRecordMapper.insert(stockInOutRecord);
+			
+		}
+		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+		takeDeliveryMapper.updateByPrimaryKeySelective(takeDelivery);
+		delivery2Mapper.updateByPrimaryKeySelective(deliverynew);
+		
+	}
+	
+	
+	/**
+	 * 生成入库检验单
+	 */
+	public void createStockInCheckRecord(TakeDelivery takeDelivery,
+			String currenLoginName){
+		StockInOutCheck check = new StockInOutCheck();
+		check.setSerialNum(ApplicationUtils.random32UUID());
+		check.setTakeDeliverSerial(takeDelivery.getSerialNum());
+		check.setDeliverSerial("checkin");
+		check.setCheckNum(orderService.getNumCode("QU"));
+		check.setStatus("0");
+		check.setDelFlg("0");
+		check.setCreator(currenLoginName);
+		check.setCreateTime(new Date());
+		check.setUpdater(currenLoginName);
+		check.setUpdateTime(new Date());
+		stockInOutCheckMapper.insert(check);
 		
 	}
 	@Override

@@ -722,7 +722,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 //	                    serverSide: true,
 	                   // ajax: "rest/takeDelivery/takeDeliveryList",//加载数据中
 	                    ajax :{ "url":$rootScope.basePath
-	  						+ "/rest/takeDelivery/takeDeliveryList",// 加载数据中user表数据    
+	  						+ "/rest/takeDelivery/takeDeliveryList?noInit=1",// 加载数据中user表数据    
 	  						"contentType": "application/json",
 	  					    "type": "POST",
 	  					    "data": function ( d ) {

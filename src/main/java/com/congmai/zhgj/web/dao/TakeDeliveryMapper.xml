@@ -692,4 +692,13 @@
     left join deliveryMateriel dm2 on td.serialNum = dm2.deliverSerial and dm.orderMaterielSerial=dm2.orderMaterielSerial and dm.delFlg = "0"
     where td.serialNum = #{serialNum,jdbcType=VARCHAR} 
   </select>
+  
+  <select id="selectTakeDeliveryByDeliveryId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from takeDelivery
+    where deliverSerial = #{serialNum,jdbcType=VARCHAR} 
+  </select>
+  
+  
 </mapper>

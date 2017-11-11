@@ -125,15 +125,34 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		example.setPageSize(-1);
 		Criteria c =  example.createCriteria();
 		c.andDelFlgEqualTo("0");
+		if(StringUtils.isNotBlank(takeDelivery.getStatus())){
+			c.andStatusEqualTo(takeDelivery.getStatus());
+		}
+		if("noInit".equals(takeDelivery.getStatus())){
+			c.andStatusNotEqualTo("0");//状态不为初始
+		}
 		
 		if(StringUtils.isNotEmpty(takeDelivery.getBuyComId())){ //根据用户所在企业筛选收货单
 			c.andDeliverBuyComIdEqualTo(takeDelivery.getBuyComId());
 		}else{
 			c.andDeliverBuyComIdIsNull();
+			if("noInit".equals(takeDelivery.getStatus())){//不看查询初始状态的收货（或者说入库计划）
+				c.andStatusNotEqualTo("0");//状态不为初始
+			}else{
+				//平台可查状态为初始的代发货
+				c.andStatusNotEqualTo("0");//状态不为初始
+				Criteria c2 = example.or();
+				c2.andStatusEqualTo("0");//状态为初始，只能是代发货
+				c2.andDeliverTypeEqualTo("代发货");
+				if(StringUtils.isNotBlank(takeDelivery.getStatus())){
+					c2.andStatusEqualTo(takeDelivery.getStatus());
+				}
+				c2.andDelFlgEqualTo("0");
+				c2.andDeliverBuyComIdIsNull();
+			}
+			
 		}
-		if(StringUtils.isNotBlank(takeDelivery.getStatus())){
-			c.andStatusEqualTo(takeDelivery.getStatus());
-		}
+
 		Page<Delivery> page = new Page<Delivery>();
 		page.setResult(takeDeliveryMapper.selectListByExample(example));
 		page.setTotalCount(takeDeliveryMapper.countListByExample(example));
@@ -757,7 +776,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		check.setUpdateTime(new Date());
 		stockInOutCheckMapper.insert(check);
 		
-		//更改订单 
+		/*//更改订单 
 		OrderInfo orderInfo = new OrderInfo();
 		Delivery delivery = delivery2Mapper.selectByPrimaryKey(takeDelivery.getDeliverSerial());
 		if(delivery!=null){
@@ -776,7 +795,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			delivery2Mapper.updateByPrimaryKeySelective(_delivery);
 		}else{
 			throw new Exception("没有找到发货单,发货id"+takeDelivery.getDeliverSerial());
-		}
+		}*/
 		
 	}
 

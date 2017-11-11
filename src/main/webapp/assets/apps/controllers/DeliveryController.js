@@ -791,7 +791,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 							              [ 5, 10, 15, 15,30, "All" ] ],
 							              pageLength : 10,// 每页显示数量
 							              processing : true,// loading等待框
-							              ajax:"rest/delivery/findAllDeliveryList",//加载数据中user表数据
+							              ajax:"rest/delivery/findAllDeliveryList?noInit=1",//加载数据中user表数据
 							              "aoColumns": [
 							                            { mData: 'serialNum',
 						                            	mRender : function(
