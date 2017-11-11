@@ -47,8 +47,8 @@
                             <div class="row"  align="right">
          			 	 <!-- <button   class="btn blue  btn-sm btn-circle" ng-click="applyTakeDelivery()" >
                               		提交收货申请 </button> -->
-         			 	<button   class="btn green  btn-sm btn-circle" ng-click="confirmTakeDelivery()">
-                              		<i class="fa fa-check"></i> 确认收货  </button>
+         			 	<!-- <button   class="btn green  btn-sm btn-circle" ng-click="confirmTakeDelivery()">
+                              		<i class="fa fa-check"></i> 确认收货  </button> -->
                       	<button    class="btn defualt  btn-sm btn-circle" ng-click="cancelTakeDelivery()" onclick="return false;">
                               		<i class="fa fa-mail-reply"></i> 取消 </button>
          			</div>
