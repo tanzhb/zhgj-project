@@ -46,6 +46,7 @@ import com.congmai.zhgj.core.util.Constants;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.UserUtil;
+import com.congmai.zhgj.web.dao.Delivery2Mapper;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.event.EventExample;
 import com.congmai.zhgj.web.event.SendMessageEvent;
@@ -53,6 +54,7 @@ import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.Delivery;
+import com.congmai.zhgj.web.model.DeliveryExample;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryMaterielExample;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
@@ -138,7 +140,10 @@ public class TakeDeliveryController {
 	private UserCompanyService userCompanyService;
 	
 	@Autowired
-	private StockService stockService;
+	private StockService stockService;  
+	
+	@Autowired
+	private Delivery2Mapper delivery2Mapper;  
 	
 	
 	@RequestMapping("takeDeliveryManage")
@@ -299,7 +304,7 @@ public class TakeDeliveryController {
      */
     @RequestMapping(value="saveTakeDelivery",method=RequestMethod.POST)
     @ResponseBody
-    public String saveTakeDelivery(Map<String, Object> map,@RequestBody String params,HttpServletRequest request) {
+    public Map<String, Object>  saveTakeDelivery(Map<String, Object> map,@RequestBody String params,HttpServletRequest request) {
     	String flag ="0"; //默认失败
 
     	 ObjectMapper objectMapper = new ObjectMapper();
@@ -327,7 +332,12 @@ public class TakeDeliveryController {
         		logger.warn(e.getMessage(), e);
         		return null;
         	}
-    	return flag;
+        	Map<String, Object>map1 =new HashMap<String, Object>();
+        	//deliver.warehouseSerial
+        	map1.put("delivery", takeDeliveryParams.getDelivery());
+        	map1.put("takeDelivery", takeDeliveryParams.getTakeDelivery());
+        	map1.put("deliveryTransport", takeDeliveryParams.getDeliveryTransport());
+    	return map1;
     }
     
     /**
@@ -1071,6 +1081,7 @@ public class TakeDeliveryController {
 		takeDeliveryParams.getTakeDelivery().setUpdater(currenLoginName);
 		takeDeliveryParams.getTakeDelivery().setUpdateTime(now);
 		takeDeliveryParams.getTakeDelivery().setDelFlg("0");
+		takeDeliveryParams.getTakeDelivery().setTakeDeliverAddress(warehouseService.selectOne(takeDeliveryParams.getTakeDelivery().getWarehouseSerial()).getWarehouseName());
 
 		if(takeDeliveryParams.getDelivery()!=null){
 			if(StringUtils.isEmpty(takeDeliveryParams.getDelivery().getSerialNum())){
@@ -1082,6 +1093,7 @@ public class TakeDeliveryController {
 			takeDeliveryParams.getDelivery().setUpdater(currenLoginName);
 			takeDeliveryParams.getDelivery().setUpdateTime(now);
 			takeDeliveryParams.getDelivery().setDelFlg("0");
+			takeDeliveryParams.getDelivery().setWarehouseName(warehouseService.selectOne(takeDeliveryParams.getDelivery().getWarehouseSerial()).getWarehouseName());
 			//takeDeliveryParams.getDelivery().setStatus("3"); //已发货
 		}
 		
@@ -1095,6 +1107,7 @@ public class TakeDeliveryController {
 			takeDeliveryParams.getDeliveryTransport().setUpdater(currenLoginName);
 			takeDeliveryParams.getDeliveryTransport().setUpdateTime(now);
 			takeDeliveryParams.getDeliveryTransport().setDelFlg("0");
+			
 		}
 		
 		for(DeliveryMateriel materiel : takeDeliveryParams.getDeliveryMateriels()){
@@ -1201,6 +1214,25 @@ public class TakeDeliveryController {
 		}
 		return takeDeliveryParams;
 	}
-    
+	 /* *//**
+     * @Description (确认代发货)
+     * @param request
+     * @return
+     */
+  @RequestMapping(value="/confirmDelivery",method=RequestMethod.POST)
+  @ResponseBody
+  public String confirmDelivery(Map<String, Object> map,@RequestBody String serialNum,HttpServletRequest request) {
+    	String flag = "0"; //默认失败
+    	try{
+    		if(StringUtils.isNotEmpty(serialNum)){
+    			
+    			
+    		}
+    	}catch(Exception e){
+    		logger.warn(e.getMessage(), e);
+    		flag = "1";
+    	}
+    	return flag;
+ }
 
 }

@@ -133,7 +133,7 @@ angular.module('MetronicApp').service('takeDeliveryService',['$http','$q',functi
 
 
 	/**
-	 * 批量删除
+	 * 批量删除confirmDelivery
 	 */
 	this.deleteTakeDelivery = function(serialNums){
 		var deferred = $q.defer();
@@ -146,7 +146,20 @@ angular.module('MetronicApp').service('takeDeliveryService',['$http','$q',functi
 		});
 		return deferred.promise;//返回承诺
 	}
-
+	/**
+	 * 确认代发货confirmDelivery
+	 */
+	this.confirmDelivery = function(serialNum){
+		var deferred = $q.defer();
+		$http.post("rest/takeDelivery/confirmDelivery",  
+		   serialNum//传整个表单数据  
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
 	
 	this.uploadExcel = function(params){
 		var deferred = $q.defer();

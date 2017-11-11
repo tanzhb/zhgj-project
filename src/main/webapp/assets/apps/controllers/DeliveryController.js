@@ -1,5 +1,5 @@
-angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$scope','$http', 'settings', '$q','DeliveryService','$state','$compile','$stateParams','$filter','$location','FileUploader',
-                                                                function($rootScope,$scope,$http,settings, $q,DeliveryService,$state,$compile,$stateParams,$filter,$location,FileUploader) {
+angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$scope','$http', 'settings', '$q','DeliveryService','commonService','$state','$compile','$stateParams','$filter','$location','FileUploader',
+                                                                function($rootScope,$scope,$http,settings, $q,DeliveryService,commonService,$state,$compile,$stateParams,$filter,$location,FileUploader) {
 	$scope.$on('$viewContentLoaded', function() {   
 		// initialize core components
 		handle = new pageHandle();
@@ -28,6 +28,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		$scope.serialNums = [];	
 		$scope.orderSerial=null;
 		
+		
 		/*$scope.takeDelivery.warehouseSerial=null;*/
 		if($state.current.name=="addDelivery"){
 			$scope.deliveryTransport={};
@@ -35,6 +36,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		$rootScope.setNumCode("SE",function(newCode){
 			$scope.delivery.deliverNum = newCode;
 		});
+		
 		}
 		//根据参数查询对象
     if($stateParams.serialNum){
@@ -56,6 +58,8 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
     	$scope.delivery.deliverDate=$filter('date')(new Date(), 'yyyy-MM-dd');
     	$scope.delivery.packageSpecifications="原厂包装";
     	$scope.delivery.deliverType="贸易发货";
+    	$scope.deliver.approvalDate=$filter('date')(new Date(), 'yyyy-MM-dd');
+    	getCurrentUser();
     }
     
     if ($.validator) {
@@ -129,6 +133,23 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
     	})
     	
    };
+   
+   /**
+	 * 加载当前用户信息
+	 */
+	var getCurrentUser = function(){
+		var promise = commonService.getCurrentUser();
+		promise.then(function(data){
+			debugger;
+			$scope.user = data.data;
+			if($location.path()=="/addDeliveryforSaleOrder"){
+				$scope.deliver.maker= data.data.userName;
+			}
+			
+		},function(data){
+			//调用承诺接口reject();
+		});
+	}
    /**
 	 * 加载供应商数据
 	 */
@@ -1894,14 +1915,14 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	}
 	          		    	
 	          		    	$scope.materielCount=data.orderMateriel.length;
-	          		    /*	length=data.orderMateriel.length;*/
 	          		    	var totalOrderCount=0;
-	          		    	debugger;
 	          		    	for(var i=0;i< $scope.deliveryMaterielE.length;i++){
 	          		    		totalOrderCount+=Number($scope.deliveryMaterielE[i].amount);
 	          		    	}
 	          		    	$scope.totalOrderCount=totalOrderCount;
 	          		    	$scope.totalDeliveryCount=totalOrderCount;
+	          		    	
+	          		    	//重新加载发货仓库和收货仓库
 	          		    	
 	          		     },
 	          		     function(error){

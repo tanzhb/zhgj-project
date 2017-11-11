@@ -78,6 +78,8 @@ public class Delivery {
     
     private String takeDeliverSerial;
     
+    private String warehouseName;//发货仓库名称
+    
     
     //冗余字段
     
@@ -495,5 +497,13 @@ public class Delivery {
 		this.buyName = buyName;
 	}
 
+	public String getWarehouseName() {
+		return warehouseName;
+	}
+
+	public void setWarehouseName(String warehouseName) {
+		this.warehouseName = warehouseName;
+	}
+	
     
 }

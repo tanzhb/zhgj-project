@@ -1630,7 +1630,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 				}else{
 					
 					if(TakeDelieryTable.row('.active').data().status == '0'){
-						$state.go('takeDeliveryView',{serialNum:TakeDelieryTable.row('.active').data().serialNum,oprateType:"forBuyOrder"});
+						//$state.go("takeDeliveryView",{serialNum:serialNum,oprateType:'forBuyOrder'});
+						$state.go('takeDeliveryAdd',{serialNum:TakeDelieryTable.row('.active').data().takeDelivery.serialNum,oprateType:"forBuyOrder",type:'edit'});
 					}else showToastr('toast-top-center', 'warning', '已确认发货');
 				} 
 			};
@@ -1684,7 +1685,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 				}else{
 					
 					if(TakeDelieryTable.row('.active').data().status == '0'){
-						$state.go('takeDeliveryView',{serialNum:TakeDelieryTable.row('.active').data().serialNum,oprateType:"forBuyOrder"});
+						$state.go('takeDeliveryView',{serialNum:TakeDelieryTable.row('.active').data().takeDelivery.serialNum,oprateType:"forBuyOrder"});
+						//$state.go('takeDeliveryView',{serialNum:TakeDelieryTable.row('.active').data().serialNum,oprateType:"forBuyOrder"});
 					}else showToastr('toast-top-center', 'warning', '已确认代发货')
 				} 
 			};

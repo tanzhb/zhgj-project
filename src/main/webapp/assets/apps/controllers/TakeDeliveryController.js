@@ -157,6 +157,18 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 			var promise = takeDeliveryService.initWarehouse();
 			promise.then(function(data){
 				$scope.warehouses = data.data;
+				setTimeout(function () {
+	       			$("#dWarehouseSerial").selectpicker({
+	                       showSubtext: true
+	                   });
+	       			$('#dWarehouseSerial').selectpicker('refresh');//刷新插件
+	       			
+	       			$("#warehouseSerial").selectpicker({
+	                    showSubtext: true
+	                });
+	    			$('#warehouseSerial').selectpicker('refresh');//刷新插件
+	       			
+	               }, 100);
 			},function(data){
 				//调用承诺接口reject();
 			});
@@ -200,14 +212,14 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		        	$scope.deliver.warehouseSerial = data.data.warehouse.serialNum;
 		        	$scope.deliver.warehouseName = data.data.warehouse.address;
 	        	}
-	        	if($scope.deliver.takeDelivery.warehouse==null){
+	        	/*if($scope.deliver.takeDelivery.warehouse==null){
 	        		$scope.deliver.takeDelivery.warehouse={};
 	        		$scope.deliver.takeDelivery.warehouse.warehouseName='无';
 	        	}
 	        	if($scope.deliver.warehouse==null){
 	        		$scope.deliver.warehouse={};
 	        		$scope.deliver.warehouse.warehouseName='无';
-	        	}
+	        	}*/
 	        	if(isNull($scope.deliver.receiver)){
 	        		$scope.deliver.receiver = "中航能科（上海）能源科技有限公司";
 	        	}
@@ -278,9 +290,15 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        	});
 	        }
 	        
-
+	      //编辑代发货信息
+	    	$scope. editDeliveryInfo=function(){
+	    		$scope.deliverAdd=false;
+				$scope.deliverView=false;
+	    		
+	    	}
+	    	
 	        /**
-	         * 确认发货
+	         * 确认代发货
 	         */
 			$scope.saveTakeDelivery = function(number) {
 				if($('#takeDeliveryForm').valid()){
@@ -318,14 +336,28 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					var promise = takeDeliveryService
 							.saveTakeDelivery(params);
 					promise.then(function(data) {
-						if(data.data == "1"){
+						if(number==0){
+							toastr.success("保存代发货成功！");
+							$scope.deliverTransport=data.data.deliveryTransport;
+							$scope.takeDeliver=data.data.takeDelivery ;
+							$scope.deliver=data.data.delivery;
+							$scope.deliverAdd=true;
+							$scope.deliverView=true;
+						}else{toastr.success("代发货成功！");
+						$state.go("buyOrder");
+						}
+						/*if(data.data == "1"){
 							if(number==0){
 								toastr.success("保存代发货成功！");
-							}else{toastr.success("代发货成功！");}
+								$scope.deliverAdd=true;
+								$scope.deliverView=true;
+							}else{toastr.success("代发货成功！");
 							$state.go("buyOrder");
+							}
+							
 						}else{
 							toastr.error("代发货失败！请联系管理员");
-						}
+						}*/
 						handle.unblockUI();
 					}, function(data) {
 						// 调用承诺接口reject();
@@ -335,7 +367,17 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					});
 				}
 			}; 
-			
+			//确认代发货.
+			$scope.confirmDelivery= function() {
+				var promise = takeDeliveryService.confirmDelivery($scope.deliver.serialNum);
+        		promise.then(function(data){
+        			if(data=="0"){
+        				toastr.success("确认代发货成功！");
+        			}
+        		},function(data){
+        			//调用承诺接口reject();
+        		});
+			}
 			/**
 			 * 确认收货
 			 */
