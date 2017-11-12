@@ -520,6 +520,34 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 				}
 			}
 			
+			/**
+			 * 入库计划中做入库操作
+			 */
+			$scope.takeDeliveryStockIn = function(){
+				var id_count = $('#takeDeliveryTable input[name="serialNum"]:checked').length;
+				if(id_count==0){
+					toastr.warning("请选择您要入库的记录");
+				}else if(id_count>1){
+					toastr.warning("只能选择一条数据进行收货");
+				}else{
+					var row = table.row(".active").data();
+					if(table.row('.active').data().status != 3){
+						showToastr('toast-top-center', 'warning', '未处于待入库操作状态！');
+					}else{
+						//查找入库记录单流水
+						var promise = takeDeliveryService
+						.findStockInSerialNum(row.takeDelivery.serialNum);
+						promise.then(function(data) {
+							$state.go("stockIn",{serialNum:data.serialNum});
+						}, function(data) {
+							toastr.error("操作失败！请联系管理员");
+						});
+						
+					}
+				}
+			}
+			
+			
 	        /**
 	         * 批量删除收货计划
 	         */

@@ -81,6 +81,10 @@ public interface TakeDeliveryService extends GenericService<TakeDelivery, String
 	
 	void confirmDelivery(Delivery delivery,
 			TakeDelivery takeDelivery, String currenLoginName);
+
+	StockInOutRecord findStockInSerialNum(String serialNum);
+
+	StockInOutRecord findStockOutSerialNum(String serialNum);
 		
 
 }

@@ -3327,8 +3327,8 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 			 		"<li><a>编辑发货</a></li>";
 			   }else if('delivery' == toState.name){//发货列表
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+					 "<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
+					   "<li><a ui-sref='delivery'>出库计划</a><i class='fa fa-angle-right'></i></li>" +  
 				 		"<li><a>发货列表</a></li>";
 			   }else if('viewDelivery' == toState.name){//发货列表
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" ;
@@ -3377,17 +3377,17 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 			   }else if('stockOutAdd' == toState.name){//新增
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				   "<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
-				   "<li><a ui-sref='delivery'>发货计划</a><i class='fa fa-angle-right'></i></li>" + 
+				   "<li><a ui-sref='delivery'>出库计划</a><i class='fa fa-angle-right'></i></li>" + 
 				   "<li><a>新增出库单</a></li>";
 			   }else if('stockOut' == toState.name){//出库
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				   "<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
-				   "<li><a ui-sref='delivery'>发货计划</a><i class='fa fa-angle-right'></i></li>" + 
+				   "<li><a ui-sref='delivery'>出库计划</a><i class='fa fa-angle-right'></i></li>" + 
 				   "<li><a>出库</a></li>";
 			   }else if('stockOutView' == toState.name){//查看出库单
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				   "<li><a>仓储</a><i class='fa fa-angle-right'></i></li>" +
-				   "<li><a ui-sref='delivery'>发货计划</a><i class='fa fa-angle-right'></i></li>" + 
+				   "<li><a ui-sref='delivery'>出库计划</a><i class='fa fa-angle-right'></i></li>" + 
 				   "<li><a>查看出库</a></li>";
 			   }else if('stockInOutCheck' == toState.name){//出入库检验
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +

@@ -61,7 +61,8 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     		saveFile:saveFile,
     		
     		
-    		getAttachFileInfo:getAttachFileInfo
+    		getAttachFileInfo:getAttachFileInfo,
+    		findStockOutSerialNum:findStockOutSerialNum
     };
 
     return factory;
@@ -519,5 +520,20 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 		return deferred.promise;//返回承诺
 	}
     
+
+	/**
+	 * 查找发货对应的出库记录
+	 */
+	function findStockOutSerialNum(serialNum){
+		var deferred = $q.defer();
+		$http.post("rest/takeDelivery/findStockOutSerialNum",  
+		   serialNum//传发货流水号
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
 }]);
 

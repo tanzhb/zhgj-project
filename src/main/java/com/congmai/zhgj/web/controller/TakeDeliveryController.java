@@ -597,6 +597,29 @@ public class TakeDeliveryController {
     	return takeDeliveryService.selectStockInOutRecordByPrimayKey(serialNum,"in");
     }
     
+    
+    /**
+     * @Description (收货流水查找入库记录流水号)
+     * @param serialNum
+     * @return
+     */
+    @RequestMapping(value="findStockInSerialNum",method=RequestMethod.POST)
+    @ResponseBody
+    public StockInOutRecord findStockInSerialNum(@RequestBody String serialNum) {
+    	return takeDeliveryService.findStockInSerialNum(serialNum);
+    }
+    
+    /**
+     * @Description (发货流水查找出库记录流水号)
+     * @param serialNum
+     * @return
+     */
+    @RequestMapping(value="findStockOutSerialNum",method=RequestMethod.POST)
+    @ResponseBody
+    public StockInOutRecord findStockOutSerialNum(@RequestBody String serialNum) {
+    	return takeDeliveryService.findStockOutSerialNum(serialNum);
+    }
+    
     /**
      * @Description (出库查看)
      * @param request

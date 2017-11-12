@@ -822,7 +822,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 																row,
 																meta) {
 						                            		return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
-															"<input type='checkbox' class='checkboxes' value='1' />" +
+															"<input type='checkbox' name='serialNum' class='checkboxes' value='1' />" +
 															"<span></span></label>";
 														}
 						                            },
@@ -925,6 +925,34 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		  $scope.viewSaleOrder = function(serialNum){
 		    	$state.go("viewSaleOrder",{serialNum:serialNum});
 		    }
+		  
+		  
+		  /**
+			 * 出库库计划中做入库操作
+			 */
+			$scope.deliveryStockOut = function(){
+				var id_count = $('#sample_2 input[name="serialNum"]:checked').length;
+				if(id_count==0){
+					toastr.warning("请选择您要出库的记录");
+				}else if(id_count>1){
+					toastr.warning("只能选择一条数据进行收货");
+				}else{
+					var row = table.row(".active").data();
+					if(table.row('.active').data().status != 2){
+						showToastr('toast-top-center', 'warning', '未处于待出库操作状态！');
+					}else{
+						//查找入库记录单流水
+						var promise = DeliveryService
+						.findStockOutSerialNum(row.serialNum);
+						promise.then(function(data) {
+							$state.go("stockOut",{serialNum:data.data.serialNum});
+						}, function(data) {
+							toastr.error("操作失败！请联系管理员");
+						});
+						
+					}
+				}
+			}
 		//销售订单列表
         var table1;
 	    var loadMainTable1 = function() {

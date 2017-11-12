@@ -901,6 +901,35 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		//delivery2Mapper.updateByPrimaryKeySelective(delivery);
 	}
 
+	@Override
+	public StockInOutRecord findStockInSerialNum(String serialNum) {
+		StockInOutRecordExample example = new StockInOutRecordExample();
+		com.congmai.zhgj.web.model.StockInOutRecordExample.Criteria c =  example.createCriteria();
+		c.andDelFlgEqualTo("0");
+		c.andTakeDeliverSerialEqualTo(serialNum);
+		List<StockInOutRecord> list = stockInOutRecordMapper.selectByExample(example);
+		if(!CollectionUtils.isEmpty(list)){
+			return list.get(0);
+		}else{
+			return null;
+		}
+		
+	}
+
+	@Override
+	public StockInOutRecord findStockOutSerialNum(String serialNum) {
+		StockInOutRecordExample example = new StockInOutRecordExample();
+		com.congmai.zhgj.web.model.StockInOutRecordExample.Criteria c =  example.createCriteria();
+		c.andDelFlgEqualTo("0");
+		c.andDeliverSerialEqualTo(serialNum);
+		List<StockInOutRecord> list = stockInOutRecordMapper.selectByExample(example);
+		if(!CollectionUtils.isEmpty(list)){
+			return list.get(0);
+		}else{
+			return null;
+		}
+	}
+
 	
 
 

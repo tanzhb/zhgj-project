@@ -65,7 +65,13 @@
 													</label>  --><!-- <label class="btn btn-transparent red btn-circle btn-sm"
 														ng-click="takeDeliveryDelete()"> <i
 														class="fa fa-minus"></i> 删除
-													</label> --> <label
+													</label> --> 
+													<shiro:hasPermission name="stockInRecord:add">
+													<label class="btn btn-transparent yellow btn-circle btn-sm"
+														ng-click="takeDeliveryStockIn()"> <i class="fa fa-arrow-down"></i> 入库
+													</label>
+													</shiro:hasPermission>
+													<label
 														class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
 														ng-click="exportTakeDelivery()"> <i
 														class="fa fa-file-excel-o"></i> 导出
@@ -224,11 +230,11 @@
 		                                    </div> -->
 							<div class="actions">
 								<div class="btn-group btn-group-devided" data-toggle="buttons">
-									<shiro:hasPermission name="stockInRecord:add">
+									<%-- <shiro:hasPermission name="stockInRecord:add">
 									<label class="btn btn-transparent yellow btn-circle btn-sm"
 										ng-click="stockIn()"> <i class="fa fa-arrow-down"></i> 入库
 									</label>
-									</shiro:hasPermission>
+									</shiro:hasPermission> --%>
 									<shiro:hasPermission name="stockInRecord:add">
 									 <label class="btn btn-transparent green btn-circle btn-sm"
 										ui-sref="stockInAdd"> <i class="fa fa-plus"></i> 添加
