@@ -271,13 +271,6 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     	materielService.getMaterielInfo(serialNum).then(
       		     function(data){
       		    	$scope.materiel=data.materiel;
-      		    	if($state.current.name=="addMateriel"&&$scope.materiel.isBOM=="1"){
-      		    		
-      		    		diyFormiCheck();//初始化checkbox控件
-      		    		
-      	        		$('#isBOMcheck').iCheck('check'); 
-      	        		$scope.BOMShow=true;
-      	        	}
       		    	
       		    	//加载物料分类
       	        	$scope.queryCategoryListByParent('frist','0');
@@ -307,6 +300,15 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
  	        			$scope.buyMateriel = data.buyMateriel;
  	        			_buyMaterielIndex = $scope.buyMateriel.length;
  	        		}
+      		    	
+      		    	if($state.current.name=="addMateriel"){
+      		    		diyFormiCheck();//初始化checkbox控件
+      	        		if($scope.materiel.isBOM=="1"){
+      	        			$scope.BOMShow=true;
+      	        			$('#isBOMcheck').parent().addClass('checked');
+      	        			$('#isBOMcheck').iCheck('check'); 
+      	        		}
+      	        	}
       		     },
       		     function(error){
       		         $scope.error = error;
@@ -784,13 +786,11 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
                                   { mData: 'materielName' },
                                   { mData: 'specifications' },
                                   { mData: 'unit' },
-                                  { mData: 'parentMateriel' },
-                                  { mData: 'type' },
-                                  { mData: 'productionPlace' },
-                                  { mData: 'brand' },
-                                  { mData: 'brand' },
-                                  { mData: 'versionNO' },
-                                  { mData: 'status' }
+                                  /*{ mData: 'parentMateriel' },*/
+                                  { mData: 'typeName' },
+                                  { mData: 'originCountry' },
+                                  { mData: 'brand' }
+                                
                             ],
                    'aoColumnDefs' : [ {
     							'targets' : 0,
@@ -820,17 +820,6 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     								return bomIcon + data;
     							}
 
-    						},{
-    							'targets' : 5,
-    							
-    							'render' : function(data,
-    									type, full, meta) {
-    								if(data==null){
-    									return  ''
-    								}else{
-    									return  data.materielName
-    								}
-    							}
     						} ]
 
                 }).on('order.dt',
