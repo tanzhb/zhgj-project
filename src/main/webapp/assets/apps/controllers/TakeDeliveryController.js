@@ -538,7 +538,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 						var promise = takeDeliveryService
 						.findStockInSerialNum(row.takeDelivery.serialNum);
 						promise.then(function(data) {
-							$state.go("stockIn",{serialNum:data.serialNum});
+							$state.go("stockIn",{serialNum:data.data.serialNum});
 						}, function(data) {
 							toastr.error("操作失败！请联系管理员");
 						});
