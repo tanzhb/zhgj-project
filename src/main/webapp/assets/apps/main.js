@@ -102,12 +102,14 @@ MetronicApp.controller('AppController', [ '$scope', '$rootScope','$compile',
 					//webSocket.send('Hello Server!');
 				};
 				webSocket.onmessage = function(event) {
-					var obj = eval('(' + event.data+ ')'); 
-					
-					//showToastr('toast-bottom-right','success',obj.context);
-					var html = $compile('<div style="min-height:120px;" >' + obj.context + '</div>')($scope);
-					toastr8(obj.messageType,obj.context);
-					$("#messageDiv").html(html);
+					try{
+						var obj = eval('(' + event.data+ ')'); 
+						
+						//showToastr('toast-bottom-right','success',obj.context);
+						var html = $compile('<div style="min-height:120px;" >' + obj.context + '</div>')($scope);
+						toastr8(obj.messageType,obj.context);
+						$("#messageDiv").html(html);
+					}catch(e){}
 				};
 			}
 		} ]);
