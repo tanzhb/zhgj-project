@@ -195,6 +195,9 @@ public class TakeDeliveryController {
     	}
     	if("1".equals(noInit)){//不查询初始化状态的发货
     		takeDelivery.setStatus("noInit");
+		}else if("1buy".equals(noInit)){
+			//takeDelivery.setDeliverType("采购商提货");
+			takeDelivery.setStatus("noInit");
 		}
     	User user = UserUtil.getUserFromSession();
 		String comId = null;
@@ -203,6 +206,7 @@ public class TakeDeliveryController {
 		}
 		takeDelivery.setBuyComId(comId);
     	Page<Delivery> takeDeliverys = takeDeliveryService.selectByPage(takeDelivery);
+    	
     	
     	
     	//List<Company> companys = companyService.selectByPage(company).getResult();
@@ -1247,7 +1251,7 @@ public class TakeDeliveryController {
 		return takeDeliveryParams;
 	}
 	 /* *//**
-     * @Description (确认代发货)
+     * @Description (确认代发货/采购商确认提货)
      * @param request
      * @return
      */

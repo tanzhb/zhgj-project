@@ -192,11 +192,25 @@
 									</label> <label class="btn btn-transparent red btn-circle btn-sm"
 										ng-click="takeDeliveryDelete()"> <i
 										class="fa fa-minus"></i> 删除
-									</label> --> <label
+									</label> --> 
+									<!-- <div class="actions" ng-controller='MyCtrl'> --><!--  ng-click="jumpToUrl('addDeliveryforSaleOrder')"-->
+									<label class="btn btn-transparent green btn-circle btn-sm"
+										ng-click="addDelivery()"> <i
+										class="fa fa-plus"></i> 新增提货
+									</label>  
+									<label class="btn btn-transparent yellow btn-circle btn-sm"
+										ng-click="editDelivery()"> <i
+										class="fa fa-edit"></i> 修改提货
+									</label>  
+										<label class="btn btn-transparent yellow btn-circle btn-sm"
+									ng-click="jumpToConfirm()"> <i class="glyphicon glyphicon-play"></i>确认提货
+								</label>
+							<label
 										class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
 										ng-click="exportTakeDelivery()"> <i
 										class="fa fa-file-excel-o"></i> 导出
 									</label>
+									<!-- </div> -->
 								</div>
 							</div>
 						</div>
@@ -260,5 +274,15 @@
 	</div>
 <!-- 删除订单modal 结束 -->
 <!-- 导入订单modal 开始 -->
+	<script type="text/javascript">
+							function MyCtrl($scope, $location,$stateParams) {
+								$scope.jumpToUrl = function(path) {
+	debugger;
+	$stateParams.oprateType="forCustomerOrder";						
+	$location.path(path);
+									
+								};
+							}
+						</script>
 <jsp:include  page="importOrder.jsp"/>
 <jsp:include  page="viewOperateLog.jsp"/>

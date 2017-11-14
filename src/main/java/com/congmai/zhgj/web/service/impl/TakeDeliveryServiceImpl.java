@@ -136,6 +136,12 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		
 		if(StringUtils.isNotEmpty(takeDelivery.getBuyComId())){ //根据用户所在企业筛选收货单
 			c.andDeliverBuyComIdEqualTo(takeDelivery.getBuyComId());
+			c.andStatusNotEqualTo("0");//状态不为初始
+		Criteria c2 = example.or();
+		c2.andStatusEqualTo("0");//状态为初始
+		c2.andDeliverBuyComIdEqualTo(takeDelivery.getBuyComId());
+		c2.andDeliverTypeEqualTo("采购商提货");
+	
 		}else{
 			c.andDeliverBuyComIdIsNull();
 			if("noInit".equals(takeDelivery.getStatus())){//不看查询初始状态的收货（或者说入库计划）
@@ -271,17 +277,16 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			Boolean createQG=StaticConst.getInfo("waimao").equals(orderInfonew.getTradeType());//是否产生清关单
 			OrderInfo orderInfo=new OrderInfo();
 			Delivery delivery1=new  Delivery();
+			delivery1.setSerialNum(delivery.getSerialNum());
+			orderInfo.setSerialNum(delivery.getOrderSerial());
 			if(createQG){
 				Map<String,Object>map=new HashMap<String,Object>();
 				map.put("serialNum", delivery.getSerialNum());
 				map.put("currenLoginName", currenLoginName);
 				map.put("orderSerial", delivery.getOrderSerial());
 				deliveryService.createCustomsClearanceForm(map);
-				
-				orderInfo.setSerialNum(delivery.getOrderSerial());
 				orderInfo.setDeliverStatus(orderInfo.CLEARANCE);
 				
-				delivery1.setSerialNum(delivery.getSerialNum());
 				delivery1.setStatus(DeliveryVO.WAIT_OUT);//待清关
 				orderInfoMapper.updateByPrimaryKeySelective(orderInfo);//更新订单状态
 				delivery2Mapper.updateByPrimaryKeySelective(delivery1);//更新发货单状态

@@ -177,7 +177,20 @@ public class PageController {
     public String addCustomerOrder(String serialNum,String view) {
         return "order/addCustomerOrder";
     }
-    
+    /**
+     * 客户端新增提货订单
+     */
+    @RequestMapping("/addCustomerDeliveryOrder")
+    public String addCustomerDeliveryOrder(String serialNum,String view) {
+    	return "takeDelivery/customerDeliveryOrderAdd";
+    }
+    /**
+     * 客户端查看提货订单
+     */
+    @RequestMapping("/viewCustomerDeliveryOrder")
+    public String viewCustomerDeliveryOrder(String serialNum,String view) {
+    	return "takeDelivery/viewCustomerDeliveryoOrder";
+    }
     /**
      * 销售订单
      */

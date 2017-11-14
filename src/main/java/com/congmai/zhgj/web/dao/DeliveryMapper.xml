@@ -204,13 +204,22 @@
 	LEFT JOIN  company   com1  ON  com1.comId=a.buyComId
 	WHERE a.delFlg='0' 
 	
-	<if test="supplyComIds== null" >
+	<!-- <if test="supplyComIds== null" >
        AND a.creator=#{creator}
-    </if>
+    </if> -->
     <if test="status == 'noInit'" >
        AND a.status != 0
     </if>
-	
+	  <if test="buyComId != null" >
+       AND a.buyComId= #{buyComId} 
+    </if>
+    <if test="supplyComId != null" >
+       AND((a.supplyComId= #{supplyComId}  and a.deliverType='代发货' and   a.status != 0) or (a.supplyComId= #{supplyComId}  and a.deliverType!='代发货' ))
+      
+    </if>
+     <if test="deliverType == 'mhq'" ><!-- 供应商查看销售订单发货列表发货计划 -->
+       AND( a.supplyComId is null  and a.buyComId is not null and  a.status != 0 ) or (a.status= 0 and a.deliverType!='采购商提货'  )
+    </if>
 	<if test="supplyComIds != null" >
         and a.supplyComId in
          <foreach item="item" index="index" collection="supplyComIds" open="(" separator="," close=")">  

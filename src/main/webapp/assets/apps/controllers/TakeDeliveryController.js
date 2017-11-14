@@ -2,8 +2,8 @@
  * 
  */
 
-angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope','$scope','$state','$http','takeDeliveryService','orderService','$location','$compile','$stateParams','commonService','FileUploader',
-                                                                   function($rootScope,$scope,$state,$http,takeDeliveryService,orderService,$location,$compile,$stateParams,commonService,FileUploader) {
+angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope','$scope','$state','$http','$filter','takeDeliveryService','orderService','$location','$compile','$stateParams','commonService','FileUploader',
+                                                                   function($rootScope,$scope,$state,$http,$filter,takeDeliveryService,orderService,$location,$compile,$stateParams,commonService,FileUploader) {
 	 $scope.$on('$viewContentLoaded', function() {   
 	    	// initialize core components
 		    handle = new pageHandle();
@@ -31,6 +31,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    		$scope.serialNums = [];	
 	    		$rootScope.setNumCode("SE",function(newCode){
 	    			$scope.deliver.deliverNum = newCode;
+	    			$scope.deliver.approvalDate=$filter('date')(new Date(), 'yyyy-MM-dd');
 	    		});
 	    		if(!isNull($stateParams.serialNum)){
 	    			$(".d_tip").text("编辑代发货信息");
@@ -158,15 +159,15 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 			promise.then(function(data){
 				$scope.warehouses = data.data;
 				setTimeout(function () {
-	       			$("#dWarehouseSerial").selectpicker({
-	                       showSubtext: true
+	       			$("#dWarehouseSerialnum").selectpicker({
+	                       showSubtext: false
 	                   });
-	       			$('#dWarehouseSerial').selectpicker('refresh');//刷新插件
+	       			//$('#dWarehouseSerialnum').selectpicker('refresh');//刷新插件
 	       			
-	       			$("#warehouseSerial").selectpicker({
-	                    showSubtext: true
+	       			$("#warehouseSerialnum").selectpicker({
+	                    showSubtext: false
 	                });
-	    			$('#warehouseSerial').selectpicker('refresh');//刷新插件
+	    			//$('#warehouseSerialnum').selectpicker('refresh');//刷新插件
 	       			
 	               }, 100);
 			},function(data){
@@ -1240,9 +1241,29 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						                $(e).closest(".form-group").addClass("has-error")
 	  						            },
 	  						            unhighlight: function(e) {
+	  						            	/*if($(e).className.indexOf("bs-select1 form-control order")>-1){
+	  						            		if($scope.deliver.warehouseSerial==undefined){
+	  						            			return;
+	  						            		}
+	  						            	}
+	  						            	if($(e).className.indexOf("bs-select2 form-control order")>-1){
+	  						            		if($scope.takeDeliver.warehouseSerial==undefined){
+	  						            			return;
+	  						            		}
+	  						            	}*/
 	  						                $(e).closest(".form-group").removeClass("has-error")
 	  						            },
 	  						            success: function(e) {
+	  						            	/*if($(e).className.indexOf("bs-select1 form-control order")>-1){
+	  						            		if($scope.deliver.warehouseSerial==undefined){
+	  						            			return;
+	  						            		}
+	  						            	}
+	  						            	if($(e).className.indexOf("bs-select2 form-control order")>-1){
+	  						            		if($scope.takeDeliver.warehouseSerial==undefined){
+	  						            			return;
+	  						            		}
+	  						            	}*/
 	  						                e.closest(".form-group").removeClass("has-error")
 	  						            },
 	  						            submitHandler: function(e) {
@@ -1360,7 +1381,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		    									type, row, meta) {
 	  		    								
 	  		    								if(data==null){
-	  		    									return row.supplyMateriel.materiel.materielName;
+	  		    									//return row.supplyMateriel.materiel.materielName;
+	  		    									return "";
 	  		    								}else{
 	  		    									return data.materiel.materielName;
 	  		    								}
