@@ -54,6 +54,10 @@ public class Stock {
 	private String onRoadAmount;// 在途数量
 
 	private String canSaleAmount;// 可售数量
+	
+	private String materielOwnerName;// 物权方名称
+	
+	
 
 	public String getBelongWarehouseNumZijian() {
 		return belongWarehouseNumZijian;
@@ -413,4 +417,12 @@ public class Stock {
 		this.comId = comId;
 	}
 
+	public String getMaterielOwnerName() {
+		return materielOwnerName;
+	}
+
+	public void setMaterielOwnerName(String materielOwnerName) {
+		this.materielOwnerName = materielOwnerName;
+	}
+	
 }

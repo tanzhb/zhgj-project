@@ -1954,6 +1954,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        				        'assets/global/plugins/datatables/datatables.all.min.js',
 	        				        'assets/apps/service/StockService.js',
 	        						'assets/apps/controllers/StockController.js',
+	        						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 	        						 'assets/apps/scripts/pageHandle.js',
 	        						 'assets/apps/service/orderService.js',
 	        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',

@@ -106,7 +106,7 @@ margin-right: 20px;
                                                                 <div class="form-group">
                                                                 <label class="control-label col-md-4 bold" for="materielOwner">物权方 :</label>
                                                                     <div class="control-label col-md-7">
-                                                                        <p class="form-control-static" >{{stock.materielOwner}}</p> 
+                                                                        <p class="form-control-static" >{{stock.materielOwnerName}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>

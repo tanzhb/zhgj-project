@@ -22,7 +22,7 @@
 							<div class="tab-pane fade active in" id="tab_1_1">
 							 <div class="portlet-title" style="min-height: 48px;">
                <div class="tools" style="float:right"><!-- ng-if="deliveryDetail.status=='0'" -->
-               	<button type="button" ng-click="goDelivery('view')"     ng-if="delivery.status=='0'||delivery.status==undefined"
+               	<button type="button" ng-click="goDelivery('view')"     ng-if="deliveryDetail.status=='0'||deliveryDetail.status==undefined"
 								class="btn blue  btn-circle  btn-sm">
 								<i class="fa fa-save"></i> 确认发货
 							</button>
@@ -47,7 +47,8 @@
 															ng-model="delivery.deliverNum" ng-hide="inputDeliveryInfo" >
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-hide="span">
-															{{deliveryDetail.deliverNum}}</p>
+															{{deliveryDetail.deliverNum}}
+															</p>
 													</div>
 												</div>
 											</div>
@@ -105,7 +106,7 @@
 															ng-model="delivery.orderSerial" ng-hide="inputDeliveryInfo" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-hide="span">
-															{{deliveryDetail..orderNum}}</p>
+															{{deliveryDetail.orderNum}}</p>
 													</div>
 												</div>
 											</div>
@@ -535,7 +536,7 @@
 															ng-model="deliveryTransport.contact" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-hide="span">
-															{{deliveryDetail.deliverer}}</p>
+															{{deliveryDetail.transportContact}}</p>
 													</div>
 												</div>
 											</div>
@@ -549,7 +550,7 @@
 															ng-model="deliveryTransport.contactNum" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-hide="span">
-															{{deliveryDetail.contactNum}}</p>
+															{{deliveryDetail.transportContactNum}}</p>
 													</div>
 
 												</div>
@@ -563,7 +564,7 @@
 															ng-hide="inputDeliveryInfo"  ng-model="deliveryTransport.remark" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-hide="span">
-															{{deliveryDetail.remark}}</p>
+															{{deliveryDetail.transportRemark}}</p>
 													</div>
 												</div>
 											</div>

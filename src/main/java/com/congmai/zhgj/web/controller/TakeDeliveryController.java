@@ -1,5 +1,6 @@
 package com.congmai.zhgj.web.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -59,6 +60,7 @@ import com.congmai.zhgj.web.model.DeliveryExample;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryMaterielExample;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
+import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderInfoExample;
 import com.congmai.zhgj.web.model.OrderMateriel;
@@ -596,9 +598,21 @@ public class TakeDeliveryController {
      */
     @RequestMapping("getStockInInfo")
     @ResponseBody
-    public StockInOutRecord getStockInInfo(HttpServletRequest request,String serialNum) {
-    	
-    	return takeDeliveryService.selectStockInOutRecordByPrimayKey(serialNum,"in");
+    public Map<String,Object> getStockInInfo(HttpServletRequest request,String serialNum) {
+    	Map<String,Object>map=new HashMap<String,Object>();
+    	StockInOutRecord stockInOutRecord= takeDeliveryService.selectStockInOutRecordByPrimayKey(serialNum,"in");
+    	Delivery deliver=takeDeliveryService.selectByTakeDeliveryPrimaryKey(stockInOutRecord.getTakeDeliverSerial());
+    	List<DeliveryMateriel> deliveryMateriels =deliver.getDeliveryMateriels();//获取发货数量
+    	BigDecimal totalDeliveryCount=BigDecimal.ZERO;
+    	if(CollectionUtils.isNotEmpty(deliveryMateriels)){
+    		for(DeliveryMateriel dm:deliveryMateriels){
+    			totalDeliveryCount=totalDeliveryCount.add(new BigDecimal(dm.getDeliverCount()));
+    		}
+    	}
+    	map.put("stockInOutRecord", stockInOutRecord);
+    	map.put("deliver", deliver);
+    	map.put("totalDeliveryCount", totalDeliveryCount);
+    	return map;
     }
     
     
@@ -631,9 +645,25 @@ public class TakeDeliveryController {
      */
     @RequestMapping("getStockOutInfo")
     @ResponseBody
-    public StockInOutRecord getStockOutInfo(HttpServletRequest request,String serialNum) {
-    	
-    	return takeDeliveryService.selectStockInOutRecordByPrimayKey(serialNum,"out");
+    public Map<String,Object> getStockOutInfo(HttpServletRequest request,String serialNum) {
+    	Map<String,Object>map=new HashMap<String,Object>();
+    	StockInOutRecord stockInOutRecord= takeDeliveryService.selectStockInOutRecordByPrimayKey(serialNum,"out");
+    	DeliveryVO delivery=deliveryService.selectDetailById(stockInOutRecord.getDeliverSerial());
+		if(StringUtils.isEmpty(delivery.getOrderNum())){
+			delivery=deliveryService.selectDetailById2(delivery.getSerialNum());	
+		}
+		List<DeliveryMaterielVO> deliveryMateriels =deliveryService.selectList(delivery.getSerialNum());//获取发货数量
+    	BigDecimal totalDeliveryCount=BigDecimal.ZERO;
+    	if(CollectionUtils.isNotEmpty(deliveryMateriels)){
+    		for(DeliveryMaterielVO dm:deliveryMateriels){
+    			totalDeliveryCount=totalDeliveryCount.add(new BigDecimal(dm.getDeliverCount()));
+    		}
+    	}
+    	map.put("stockInOutRecord", stockInOutRecord);
+    	map.put("totalDeliveryCount", totalDeliveryCount);
+    	map.put("stockInOutRecord", stockInOutRecord);
+    	map.put("deliver", delivery);
+    	return map;
     }
     
     

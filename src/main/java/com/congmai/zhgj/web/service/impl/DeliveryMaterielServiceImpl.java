@@ -93,7 +93,7 @@ public class DeliveryMaterielServiceImpl extends GenericServiceImpl<DeliveryMate
 		if("in".equals(type)){
 			
 			c.andDeliverSerialEqualTo("");
-			c.andInOutFlagEqualTo("1");//入库
+			//c.andInOutFlagEqualTo("1");//入库
 			Criteria c2 = example.or();
 			if(StringUtils.isEmpty(record.getBuyComId())){
 				c.andBuyComIdIsNull();
@@ -103,7 +103,7 @@ public class DeliveryMaterielServiceImpl extends GenericServiceImpl<DeliveryMate
 				c2.andBuyComIdEqualTo(record.getBuyComId());
 			}
 			c2.andDeliverSerialEqualTo(""); 
-			c2.andInOutFlagIsNull();//出库;
+			//c2.andInOutFlagIsNull();//出库;
 			c2.andDelFlgEqualTo("0");
 			page.setResult(deliveryMaterielMapper.selectListByExampleForStockIn(example));
 			page.setTotalCount(deliveryMaterielMapper.countListByExampleForStockIn(example));

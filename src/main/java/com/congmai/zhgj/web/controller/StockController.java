@@ -37,6 +37,7 @@ import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.enums.ComType;
+import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.LadderPrice;
@@ -185,6 +186,13 @@ public class StockController {
 			stock.setMaterielName(m.getMaterielName());
 			stock.setMaterielNum(m.getMaterielNum());
 			stock.setSpecifications(m.getSpecifications());
+			if(!StringUtils.isEmpty(stock.getMaterielOwner())){
+				Company com=companyService.selectOne(stock.getMaterielOwner());
+			stock.setMaterielOwnerName(com==null?"":com.getComName());
+			}else{
+				stock.setMaterielOwnerName(StaticConst.getInfo("comName"));
+			}
+			stock.setServiceParty(StaticConst.getInfo("comName"));
 			map.put("stock", stock);
     }
     	
@@ -200,6 +208,13 @@ public class StockController {
 			stock.setMaterielName(m.getMaterielName());
 			stock.setMaterielNum(m.getMaterielNum());
 			stock.setSpecifications(m.getSpecifications());
+			if(!StringUtils.isEmpty(stock.getMaterielOwner())){
+				Company com=companyService.selectOne(stock.getMaterielOwner());
+				stock.setMaterielOwnerName(com==null?"":com.getComName());
+				}else{
+					stock.setMaterielOwnerName(StaticConst.getInfo("comName"));
+				}
+			stock.setServiceParty(StaticConst.getInfo("comName"));
 			map.put("stock", stock);
     }
     	//List<Company>comList=companyService.selectList();

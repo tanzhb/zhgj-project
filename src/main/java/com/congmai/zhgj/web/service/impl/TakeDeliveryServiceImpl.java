@@ -399,11 +399,13 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			stock.setMaterielSerial(orderMateriel.getMateriel().getSerialNum());
 			if (isStockZijian) {
 				stock.setManageType("1");// 自建库存
-				stock.setMaterielOwner(StaticConst.getInfo("comName"));
+				stock.setMaterielOwner("");//StaticConst.getInfo("comName")
+				stock.setServiceParty("");//默认中航国际
 			}else{
 				stock.setManageType("2");// 代管库存
-				stock.setMaterielOwner("");
-				stock.setServiceParty(StaticConst.getInfo("comName"));
+				stock.setMaterielOwner(orderInfo.getBuyComId());
+				stock.setServiceParty("");
+				//stock.setServiceParty(StaticConst.getInfo("comName"));
 			}
 			stockMapper.insert(stock);
 			

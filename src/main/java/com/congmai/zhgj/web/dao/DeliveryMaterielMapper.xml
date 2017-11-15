@@ -625,7 +625,7 @@
       updateTime = #{updateTime,jdbcType=TIMESTAMP}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
-  <!-- ���� -->
+  <!-- 查找出库记录 -->
   <select id="selectListByExample" resultMap="BaseResultMap2" parameterType="com.congmai.zhgj.web.model.StockInOutRecordSelectExample" >
     select
    		IFNULL(dm.serialNum,dm2.serialNum) as serialNum,
@@ -648,7 +648,7 @@
     </if>
   </select>
   
-  <!-- ����ѯ -->
+  <!-- 查找入库记录 -->
   <select id="selectListByExampleForStockIn" resultMap="BaseResultMap2" parameterType="com.congmai.zhgj.web.model.StockInOutRecordSelectExample" >
     select
     	IFNULL(dm.serialNum,dm2.serialNum) as serialNum,
@@ -684,7 +684,7 @@
       order by ${orderByClause}
     </if> 
   </select>
-  <!-- ����ͳ�� -->
+  <!-- 统计入库单数 -->
    <select id="countListByExample" parameterType="com.congmai.zhgj.web.model.StockInOutRecordSelectExample" resultType="java.lang.Integer" >
     select
    		count(s.serialNum) 
@@ -695,7 +695,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  	<!-- ���ͳ�� -->
+  	<!-- 统计入库记录数 -->
    <select id="countListByExampleForStockIn" parameterType="com.congmai.zhgj.web.model.StockInOutRecordSelectExample" resultType="java.lang.Integer" >
     select
    		count(s.serialNum) 

@@ -1381,8 +1381,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		    									type, row, meta) {
 	  		    								
 	  		    								if(data==null){
-	  		    									//return row.supplyMateriel.materiel.materielName;
-	  		    									return "";
+	  		    									return row.supplyMateriel.materiel.materielName;
 	  		    								}else{
 	  		    									return data.materiel.materielName;
 	  		    								}
@@ -1393,6 +1392,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		    							'render' : function(data,
 	  		    									type, row, meta) {
 	  		    								if(data==null){
+	  		    								return row.supplyMateriel.materiel.specifications;
 	  		    									return row.supplyMateriel.materiel.specifications;
 	  		    								}else{
 	  		    									return data.materiel.specifications;

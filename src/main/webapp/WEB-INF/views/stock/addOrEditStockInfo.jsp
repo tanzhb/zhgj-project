@@ -201,13 +201,13 @@
                                                      <select class="form-control"  id="materielOwner"  data-live-search="true"  name="materielOwner" class="form-control"  
                                  		 ng-model="stock.materielOwner"  data-size="8">
                                                    <option value=""></option>
-                                                   <option  ng-repeat="supplier in suppliers" value="{{supplier.comName}}" >{{supplier.comName}}</option>
+                                                   <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}" >{{supplier.comName}}</option>
                                                </select>
                                                </div>
                                                                        <!--  <input type="text"  class="form-control"  id="materielOwner" name ="materielOwner"   ng-hide="stockAdd"   value=""  ng-if="manageType.indexOf('daiguan')>-1||manageType.indexOf('jinwai')>-1" 
 												ng-model="stock.materielOwner" >  -->
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="stockView">{{stock.materielOwner}}</p> 
+                                                                        <p class="control-label left" ng-show="stockView">{{stock.materielOwnerName}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>

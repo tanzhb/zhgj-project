@@ -62,10 +62,12 @@
                               		<i class="fa fa-mail-reply"></i> 取消 </button>
                             </div>
                         </div>
+                       
                         <div class="portlet-body form">
 								<div class="form-body">
 									<div class="alert alert-danger display-hide">
                                                 <button class="close" data-close="alert"></button>请先输入正确数据！</div>
+                                                 <jsp:include  page="stockInOutDeliveryInfo.jsp" />
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">

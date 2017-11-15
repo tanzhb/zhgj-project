@@ -318,7 +318,14 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 			var stockInInfo = function(serialNum){
 				var promise = takeDeliveryService.getStockInInfo(serialNum);
         		promise.then(function(data){
-        			$scope.record = data.data; 
+        			$scope.record = data.data.stockInOutRecord; 
+        			$scope.deliver = data.data.deliver; 
+        			$scope.totalDeliveryCount=data.data.totalDeliveryCount; //发货数量
+        			if($scope.deliver.deliverType!='其他发货'){
+        				$scope.otherMode=false
+        			}else{
+        				$scope.otherMode=true;
+        			}
         			if(data.data.delivery!=null&&data.data.delivery.takeDelivery!=null){  //当贸易入库时
         				$scope.record.takeDeliverNum = data.data.delivery.takeDelivery.takeDeliverNum;
             			$scope.record.shipperOrReceiver = data.data.delivery.shipper;

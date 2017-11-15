@@ -29,6 +29,7 @@ angular
 														getStockInfo($stateParams.stockSerialNum);
 													}else {
 														 $rootScope.setNumCode("IV",function(newCode){//
+															 $scope.stock={};
 										    		 			$scope.stock.stockNum= newCode;//自建.代管库存编号
 										    		 		});
 													}
