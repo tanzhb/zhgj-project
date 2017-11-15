@@ -85,7 +85,7 @@
 	                                                        </span>
                                                          </div>
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="priceListView">{{stock.materielNum}}</p> 
+                                                                        <p class="control-label left" ng-show="stockView">{{stock.materielNum}}</p> 
                                                                          <input type="hidden"  id="materielSerial" ng-model="stock.materielSerial"  /><!--  存放物料流水号-->
                                                                     </div>
                                                                 </div>
@@ -186,7 +186,7 @@
                                                              <div class="form-group">
                                                     <label class="control-label bold" for="serviceParty"  ng-if="manageType.indexOf('daiguan')>-1||manageType.indexOf('jinwai')>-1"> <span class="required"> * </span>服务方:</label>
                                                     <div class="  ">
-                                                                        <input type="text" class="form-control"   id="serviceParty" name ="serviceParty"  ng-hide="stockAdd"     value=""  ng-if="manageType.indexOf('daiguan')>-1||manageType.indexOf('jinwai')>-1" 
+                                                                        <input type="text" class="form-control"   id="serviceParty"     name ="serviceParty"  ng-hide="stockAdd"     value=""  ng-if="manageType.indexOf('daiguan')>-1||manageType.indexOf('jinwai')>-1" 
 												ng-model="stock.serviceParty"   readonly="readonly"> 
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="stockView">{{stock.serviceParty}}</p> 

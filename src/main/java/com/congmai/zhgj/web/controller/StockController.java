@@ -139,6 +139,12 @@ public class StockController {
 		stock.setMaterielName(m.getMaterielName());
 		stock.setMaterielNum(m.getMaterielNum());
 		stock.setSpecifications(m.getSpecifications());
+		stock.setServiceParty(StaticConst.getInfo("comName"));
+		if(StringUtils.isEmpty(stock.getMaterielOwner())){
+			stock.setMaterielOwnerName(StaticConst.getInfo("comName"));
+		}else{
+			stock.setMaterielOwnerName(companyService.selectById(stock.getMaterielOwner()).getComName());
+		}
 		return new ResponseEntity<Stock>(stock, HttpStatus.OK);
     }
   

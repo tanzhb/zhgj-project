@@ -1001,7 +1001,7 @@
 					</thead>
 					<tbody>
 						<tr
-							ng-repeat="materiel in dispalyDeliveryMateriel  track by $index">
+							ng-repeat="materiel in dispalyOrderMateriel  track by $index">
 							<td>{{materiel.orderMateriel.materiel.materielNum}}</td>
 							<td>{{materiel.orderMateriel.materiel.materielName}}</td>
 							<td>{{materiel.orderMateriel.materiel.specifications}}</td>

@@ -78,7 +78,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
         		}
 			}else if($state.current.name=="viewCustomerDeliveryOrder"){//查看提货
         		if($stateParams.serialNum!=undefined){
-        			takeDeliveryInfo($stateParams.serialNum);
+        			takeDeliveryInfo($stateParams.serialNum,"edit");
         		}
 			}else{
         		$scope.datepickerInit();
@@ -4024,7 +4024,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 					}else{
 						if(TakeDelieryTable.row('.active').data().status == '0'){
 							/*$state.go("addCustomerDeliveryOrder",{serialNum:serialNum,oprateType:'forCustomerOrder'});*/
-							$state.go('addCustomerDeliveryOrder',{serialNum:TakeDelieryTable.row('.active').data().serialNum,oprateType:"forCustomerOrder"});
+							$state.go('addCustomerDeliveryOrder',{serialNum:TakeDelieryTable.row('.active').data().takeDelivery.serialNum,oprateType:"forCustomerOrder"});
 						}else showToastr('toast-top-center', 'warning', '已确认提货不能修改')
 					}
 				}
@@ -4080,6 +4080,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			        	if(type=="edit"){
 			        		$scope.deliverTransport = data.data.deliveryTransport;
 			        		$scope.orderMateriels = data.data.deliveryMateriels;
+			        		$scope.orderMateriel = data.data.deliveryMateriels;
 			        		if($state.current.name=="viewCustomerDeliveryOrder"){//查看页面构造物料查询分页
 		      		    		$scope.queryForPage();
 		      		    		$scope.materielCount=$scope.orderMateriels.length;//物料条目数
@@ -4145,7 +4146,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 							toastr.warning("只能选择一条数据进行确认提货");
 						}else{
 							if(TakeDelieryTable.row('.active').data().status == '0'){
-								$state.go('viewCustomerDeliveryOrder',{serialNum:TakeDelieryTable.row('.active').data().serialNum,oprateType:"forCustomerOrder"});
+								$state.go('viewCustomerDeliveryOrder',{serialNum:TakeDelieryTable.row('.active').data().takeDelivery.serialNum,oprateType:"forCustomerOrder"});
 							}else showToastr('toast-top-center', 'warning', '已确认提货')
 						}
 					};
