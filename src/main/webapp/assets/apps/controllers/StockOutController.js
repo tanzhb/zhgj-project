@@ -253,7 +253,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 						param = {};
 						var arrays=serialNums[i].split(",");
 						param.stockOutSerial = $scope.record.serialNum;//出库单流水
-						param.stockInMaterielSerial=arrays[0];//入库物料流水
+						param.stockInBatchSerial=arrays[0];//入库物料流水
 						param.stockOutMaterielSerial=arrays[2];//出库物料流水(发货物料流水)
 						param.outCount=arrays[1];//出库数量
 						param.stockInSerial=arrays[3];//入库单流水
@@ -514,7 +514,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 	 	    	   }else{
 	 	    		  $scope.totalCount=0;
 	 	    	   }
-	 	    	  tableUrl="rest/stock/stockInList?serialNum="+materielSerialNum+"&orderSerial="+orderSerial;
+	 	    	  tableUrl="rest/stock/stockInBatchList?serialNum="+materielSerialNum+"&orderSerial="+orderSerial;
 	 	    	   
 	 	                a = 0;
 	 	                App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
@@ -558,7 +558,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 	 	                    ajax: tableUrl,//加载数据中 
 	 	                    "aoColumns": [
 	 	                                 { mData: 'serialNum' },
-	 	                                 { mData: 'stockInOutRecord.inOutNum' },
+	 	                                 { mData: 'batchNum' },
 	 	                                 { mData: 'stockInOutRecord.stockDate' },
 	 	                                 { mData: 'warehouse' },
 	 	                                 { mData: 'position' },
@@ -615,9 +615,9 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 										'render' : function(data,
 												type, row, meta) {
 											if(row.warehouse==''||row.warehouse==null){
-												return '<input  type="text"  class="form-control"   style="border:none" readonly="readonly"   name="'+row.stockInOutRecord.inOutNum+','+"noWarehouse"+'"  id="stockOutCount'+row.serialNum+'" ng-model="stockValue'+row.serialNum+'"  ng-init="stockValue'+row.serialNum+'=\''+0+'\'"  ng-blur="judgeNumber(\''+row.stockCount+'\',\''+stockOutCount+'\',\''+row.serialNum+'\')" />';
+												return '<input  type="text"  class="form-control"   style="border:none" readonly="readonly"   name="'+row.batchNum+','+"noWarehouse"+'"  id="stockOutCount'+row.serialNum+'" ng-model="stockValue'+row.serialNum+'"  ng-init="stockValue'+row.serialNum+'=\''+0+'\'"  ng-blur="judgeNumber(\''+row.stockCount+'\',\''+stockOutCount+'\',\''+row.serialNum+'\')" />';
 											}else{
-												return '<input  type="text"    class="form-control"  style="border:none" readonly="readonly"   name="'+row.stockInOutRecord.inOutNum+','+row.warehouse.serialNum+'"  id="stockOutCount'+row.serialNum+'" ng-model="stockValue'+row.serialNum+'"  ng-init="stockValue'+row.serialNum+'=\''+0+'\'"  ng-blur="judgeNumber(\''+row.stockCount+'\',\''+stockOutCount+'\',\''+row.serialNum+'\')" />';
+												return '<input  type="text"    class="form-control"  style="border:none" readonly="readonly"   name="'+row.batchNum+','+row.warehouse.serialNum+'"  id="stockOutCount'+row.serialNum+'" ng-model="stockValue'+row.serialNum+'"  ng-init="stockValue'+row.serialNum+'=\''+0+'\'"  ng-blur="judgeNumber(\''+row.stockCount+'\',\''+stockOutCount+'\',\''+row.serialNum+'\')" />';
 											}
 												
 										},"createdCell": function (td, cellData, rowData, row, col) {
@@ -876,7 +876,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 							 var serialNum=$(checkboxs[i]).val();
 							  var value=$("#stockOutCount"+serialNum).val();//出库数量
 							  count=count+Number(value);
-							  var rukuSerialNum=$("#"+serialNum).attr("name");//入库单流水
+							  var rukuSerialNum=$("#"+serialNum).attr("name");//入库单流水(入库批次)
 							  var  inOutNum=$("#stockOutCount"+serialNum).attr("name");//入库批次号
 							  var nameArrays=inOutNum.split(",");
 							  var addvalue=serialNum+","+value+","+$scope.deliveryMaterielSerialNum+","+rukuSerialNum+","+nameArrays[0]+","+nameArrays[1];//拼接checkbox选中流水和之前设定的出库数值以及发货物料流水和入库单流水以及入库批次号
@@ -891,12 +891,12 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 						 var warehouseSerialNums=new Array();
 						 for(var i=0;i<serialNums.length;i++){
 							 var arrayValue=serialNums[i].split(",");
-							 inOutNums=inOutNums+arrayValue[4];
+							 inOutNums=inOutNums+arrayValue[4]+'('+ arrayValue[1] +')';
 							  if(arrayValue[5]!='noWarehouse'){
 								  warehouseSerialNums.push(arrayValue[5]);
 							  }
 							 if(i!=serialNums.length-1){
-								 inOutNums= inOutNums+",";
+								 inOutNums= inOutNums+";";
 							 }
 						 }
 						 var warehouseArrays=$scope["warehouse"+$scope.deliveryMaterielSerialNum];

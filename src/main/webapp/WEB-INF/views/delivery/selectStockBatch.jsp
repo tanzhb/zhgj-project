@@ -22,7 +22,7 @@
 			                         <span></span>
 			                          </label>
 	                            </th>
-	                            <th> 入库批次号 </th>
+	                            <th> 批次号 </th>
 	                            <th> 入库日期 </th>
 	                            <th> 仓库 </th>
 	                            <th> 库位 </th>

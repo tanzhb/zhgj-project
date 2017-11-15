@@ -1,7 +1,9 @@
 package com.congmai.zhgj.web.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -19,6 +21,7 @@ import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.Stock;
 import com.congmai.zhgj.web.model.StockExample;
 import com.congmai.zhgj.web.model.StockExample.Criteria;
+import com.congmai.zhgj.web.model.StockInBatch;
 import com.congmai.zhgj.web.service.StockService;
 
 /**
@@ -175,6 +178,20 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 		s.setManageType(manageType);
 		s.setComId(comId);
 		return stockMapper.selectStockListByComId(s);
+	}
+
+	@Override
+	public List<DeliveryMateriel> getStockInBatchList(String serialNum) {
+		return deliveryMaterielMapper.getStockInBatchList(serialNum);
+	}
+
+	@Override
+	public List<DeliveryMateriel> getStockInBatchListByMaterielOwn(
+			String serialNum, String orderSerial) {
+		Map m = new HashMap<String, String>();
+		m.put("serialNum", serialNum);
+		m.put("orderSerial", orderSerial);
+		return deliveryMaterielMapper.getStockInBatchListByMaterielOwn(m);
 	}
    
 	

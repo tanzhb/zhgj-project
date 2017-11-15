@@ -810,4 +810,126 @@
       unqualifiedCount = #{unqualifiedCount}
     where serialNum = #{serialNum}
   </update>
+  
+	 <select id="getStockInBatchList"  resultMap="BaseResultMap2" parameterType="java.lang.String"> 
+		  SELECT
+		sib.serialNum AS serialNum,
+		sib.stockInCount AS stockCount,
+		sib.batchNum,
+		s.serialNum AS s_serialNum,
+		s.deliverSerial,
+		s.takeDeliverSerial,
+		s.inOutNum,
+		s.inOutType,
+		s.stockDate,
+		s.operator,
+		s.contactNum,
+		s. STATUS,
+		s.remark,
+		s.delFlg,
+		s.creator,
+		s.createTime,
+		s.updater,
+		s.updateTime,
+		d.supplyComId,
+		d.deliverNum,
+		dm.orderMaterielSerial,
+		o.orderNum,
+		o.buyComId,
+		sib.warehouseSerial AS warehouseSerial,
+		sib.positionSerial AS positionSerial
+		FROM
+			stockInbatch sib
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
+		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
+		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial
+		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
+		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
+		AND (
+			(
+				stock.manageType = '1'
+				AND o.orderType != '委托采购'
+			)
+			OR (
+				stock.manageType = '2'
+				AND o.orderType = '委托采购'
+				AND stock.materielOwner = (
+					SELECT
+						orderInfo.buyComId
+					FROM
+						orderInfo
+					WHERE
+						orderInfo.serialNum = o.orderSerial
+				)
+			)
+		)
+		
+		WHERE stock.serialNum = #{serialNum};
+		</select>
+		
+		<select id="getStockInBatchListByMaterielOwn"  resultMap="BaseResultMap2" parameterType="map"> 
+		  SELECT
+		sib.serialNum AS serialNum,
+		sib.stockInCount AS stockCount,
+		sib.batchNum,
+		s.serialNum AS s_serialNum,
+		s.deliverSerial,
+		s.takeDeliverSerial,
+		s.inOutNum,
+		s.inOutType,
+		s.stockDate,
+		s.operator,
+		s.contactNum,
+		s. STATUS,
+		s.remark,
+		s.delFlg,
+		s.creator,
+		s.createTime,
+		s.updater,
+		s.updateTime,
+		d.supplyComId,
+		d.deliverNum,
+		dm.orderMaterielSerial,
+		o.orderNum,
+		o.buyComId,
+		sib.warehouseSerial AS warehouseSerial,
+		sib.positionSerial AS positionSerial
+		FROM
+			stockInbatch sib
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
+		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
+		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial
+		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
+		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
+		AND (
+			(
+				stock.manageType = '1'
+				AND o.orderType != '委托采购'
+			)
+			OR (
+				stock.manageType = '2'
+				AND o.orderType = '委托采购'
+				AND stock.materielOwner = (
+					SELECT
+						orderInfo.buyComId
+					FROM
+						orderInfo
+					WHERE
+						orderInfo.serialNum = o.orderSerial
+				)
+			)
+		)
+		
+		WHERE stock.materielSerial = #{serialNum} and (stock.manageType = '1' 
+					or stock.materielOwner = (SELECT
+						orderInfo.buyComId
+					FROM
+						orderInfo
+					WHERE
+						orderInfo.serialNum = #{orderSerial}));
+		</select>
 </mapper>
