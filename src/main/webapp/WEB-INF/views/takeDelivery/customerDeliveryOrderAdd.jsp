@@ -49,7 +49,7 @@
 				 <ul class="nav nav-tabs" >
 					<li class="dropdown pull-right tabdrop" >
                        <button   ng-hide="deliverAdd" class="btn green  btn-sm btn-circle" ng-click="saveTakeDelivery()"   ng-if="delivery.status=='0'||delivery.status==undefined">
-                              <i class="fa fa-check"></i> 代发货 </button>
+                              <i class="fa fa-check"></i> 确认提货 </button>
                               <button   ng-hide="deliverAdd" class="btn green  btn-sm btn-circle" ng-click="saveTakeDelivery(0)">
                               <i class="fa fa-check"></i> 保存 </button>
                               <button ng-click="editDeliveryInfo()" type="button"   ng-show="deliverView"   class="btn purple  btn-circle  btn-sm">
@@ -87,12 +87,12 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="deliverType">发货类型<span  ng-hide="deliverAdd"  class="required"> * </span></label>
                                                     <div class="">
-                                                        <select class="form-control"  id="deliverType" ng-init="deliver.deliverType='代发货'"  disabled="disabled"     name="deliverType" ng-model="deliver.deliverType" ng-hide="deliverAdd"  data-size="8">
-	                                                        <option  value="代发货" selected="selected" >代发货</option>
+                                                        <select class="form-control"  id="deliverType" ng-init="deliver.deliverType='采购商提货'"  disabled="disabled"     name="deliverType" ng-model="deliver.deliverType" ng-hide="deliverAdd"  data-size="8">
+	                                                        <option  value="采购商提货" selected="selected" >采购商提货</option>
 	                                                      <!--   <option  value="其他发货" selected="selected" >其他发货</option> -->
 	                                                    </select>
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">代发货</p>
+                                                         <p class="control-label left" ng-show="deliverView">贸易发货</p>
                                                     </div>
                                             </div>
 										</div>
@@ -133,7 +133,7 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="shipper">供应商 <span  ng-hide="deliverAdd"  class="required"> * </span></label>
                                                     <div class="">
-                                                     	<input ng-if="!otherMode" type="text" class="form-control" name="shipper" ng-model="deliver.shipper"    ng-hide="deliverAdd" value="{{deliver.shipper}}" >
+                                                     	<input ng-if="!otherMode" type="text" class="form-control" name="shipper" ng-model="deliver.shipper"    ng-hide="deliverAdd" value="{{deliver.shipper}}"  readonly="readonly" >
                                                        <!--  <input type="text" class="form-control" id="shipper"  name="shipper" ng-model="deliver.shipper" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.shipper}}</p> -->
@@ -151,7 +151,7 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="receiver">采购商 <span  ng-hide="deliverAdd"  class="required"> * </span></label>
                                                     <div class="">
-                                                     	<input ng-if="!otherMode" type="text" class="form-control" name="receiver" ng-model="deliver.receiver"  value="{{deliver.receiver}}"   ng-hide="deliverAdd" >
+                                                     	<input ng-if="!otherMode" type="text" class="form-control" name="receiver" ng-model="deliver.receiver"  value="{{deliver.receiver}}"   ng-hide="deliverAdd"   readonly="readonly" >
                                                         <!-- <input type="text" class="form-control" id="receiver"  name="receiver" ng-model="deliver.receiver" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.receiver}}</p> -->
@@ -187,9 +187,9 @@
 									<div class="form-group">
                                                     <label class="control-label bold" for="">发货数量 </label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="deliverer"  ng-model="totalDeliveryCount" ng-hide="deliverAdd" readonly="readonly">
+                                                        <input type="text" class="form-control" id="deliverer"  ng-model="totalDeliverCount" ng-hide="deliverAdd" readonly="readonly">
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{totalDeliveryCount}}</p>
+                                                         <p class="control-label left" ng-show="deliverView">{{totalDeliverCount}}</p>
                                                     </div>
                                             </div>
                                             </div>

@@ -143,6 +143,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		promise.then(function(data){
 			debugger;
 			$scope.user = data.data;
+			console.log($stateParams.oprateType);
 			if($location.path()=="/addDeliveryforSaleOrder"){
 				$scope.deliver.maker= data.data.userName;
 			}
@@ -2114,6 +2115,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			          		     function(data){
 			          		    	 debugger;
 			          		    	$scope.deliveryDetail=data.delivery;
+			          		    	$scope.delivery={};
 			          		    	$scope.delivery.serialNum=serialNum;
 			          		    	if($scope.deliveryDetail.supplyComId!=null){
 			          		    		$scope.supplyComId=$scope.deliveryDetail.supplyComId;
@@ -2324,7 +2326,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	   		var promise = DeliveryService.goDelivery(serialNum);
 			promise.then(function(data) {
 					$(".modal-backdrop").remove();
-					toastr.success("发货成功");
+					toastr.success("确认发货成功");
 					$state.go('delivery',{},{reload:true});
 					handle.unblockUI();
 			}, function(data) {

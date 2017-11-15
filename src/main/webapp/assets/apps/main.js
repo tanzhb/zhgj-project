@@ -506,6 +506,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                             'assets/apps/service/orderService.js',
                             'assets/apps/controllers/customerOrderController.js',
                             'assets/apps/service/CommonService.js',
+                            'assets/apps/service/TakeDeliveryService.js',
                           //流程申请
 							'assets/global/css/dialog.css',
 							'assets/global/css/easyui.css',
@@ -542,7 +543,65 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/service/materielService.js',
 	        	'assets/apps/service/orderService.js',
 				'assets/apps/controllers/customerOrderController.js',
-	        	'assets/apps/service/CommonService.js'
+	        	'assets/apps/service/CommonService.js',
+	        	 'assets/apps/service/TakeDeliveryService.js'
+                      ]
+                    });
+                }]
+            }
+        })
+         // 新增(客户端)提货订单
+        .state('addCustomerDeliveryOrder', {
+            url: "/addCustomerDeliveryOrder?:serialNum",
+            templateUrl: "rest/page/addCustomerDeliveryOrder",
+            data: {pageTitle: '新增提货订单'},
+            controller: "customerOrderController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+	        	'assets/apps/service/orderService.js',
+				'assets/apps/controllers/customerOrderController.js',
+	        	'assets/apps/service/CommonService.js',
+	        	 'assets/apps/service/TakeDeliveryService.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        
+        // 新增(客户端)提货订单
+        .state('viewCustomerDeliveryOrder', {
+            url: "/viewCustomerDeliveryOrder?:serialNum",
+            templateUrl: "rest/page/viewCustomerDeliveryOrder",
+            data: {pageTitle: '查看提货订单'},
+            controller: "customerOrderController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+	        	'assets/apps/service/orderService.js',
+				'assets/apps/controllers/customerOrderController.js',
+	        	'assets/apps/service/CommonService.js',
+	        	 'assets/apps/service/TakeDeliveryService.js'
                       ]
                     });
                 }]
@@ -569,7 +628,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/service/materielService.js',
 	        	'assets/apps/service/orderService.js',
 	        	'assets/apps/service/CommonService.js',
-				'assets/apps/controllers/customerOrderController.js'
+				'assets/apps/controllers/customerOrderController.js',
+				 'assets/apps/service/TakeDeliveryService.js'
                       ]
                     });
                 }]
@@ -1416,7 +1476,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    			});
 		    		}]
 		    	}
-		    }) .state('takeDeliveryView', {
+		    }) 
+		    .state('takeDeliveryView', {
 		    	url: "/takeDeliveryView?:serialNum&:oprateType",
 		    	templateUrl: "rest/takeDelivery/takeDeliveryView",
 		    	data: {pageTitle: '查看收货详情'},
@@ -1441,7 +1502,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    			});
 		    		}]
 		    	}	        
-		    }) .state('toTakeDelivery', {
+		    }) 
+		    .state('toTakeDelivery', {
 		    	url: "/toTakeDelivery?:serialNum",
 		    	templateUrl: "rest/takeDelivery/takeDelivery",
 		    	data: {pageTitle: '收货'},
@@ -3133,11 +3195,17 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		if(toParams.serialNum != undefined){
 							 html += "<li><a>修改订单</a></li>";
 						 } else html += "<li><a>新增订单</a></li>";
-			   }else if('viewSaleOrder' == toState.name){//查看销售订单
+			   }else if('addCustomerDeliveryOrder' == toState.name){//新增（客户端）提货订单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 
-				 		"<li><a>查看销售订单</a></li>";
+				 		"<li><a>订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='customerOrder'>订单列表</a><i class='fa fa-angle-right'></i></li>";
+				 		if(toParams.serialNum != undefined){
+							 html += "<li><a>修改提货单</a></li>";
+						 } else html += "<li><a>新增提货单</a></li>";
+			   }else if('viewCustomerDeliveryOrder' == toState.name){//查看销售订单
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a>订单</a><i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a ui-sref='customerOrder'>订单列表</a><i class='fa fa-angle-right'></i></li><li><a>查看提货单</a></li>";
 			   }else if('viewCustomerOrder' == toState.name){//查看（客户端）订单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>订单</a><i class='fa fa-angle-right'></i></li>" +
@@ -3312,6 +3380,7 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					 }
 				 		
 			   }else if('addDelivery' == toState.name){//新建发货
+				   debugger;
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>";
 					 if(toParams.oprateType == "forSaleOrder"){
 						 html += "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
@@ -3321,6 +3390,10 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 						 html += "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
 					 		"<li><a ui-sref='supplyOrder'>订单列表</a><i class='fa fa-angle-right'></i></li>" + 
 					 		"<li><a>新增发货</a></li>";
+					 }else if(toParams.oprateType == "forCustomerOrder"){
+						 html += "<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
+					 		"<li><a ui-sref='customerOrder'>订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+					 		"<li><a>新增提货</a></li>";
 					 }else html += 
 				 		"<li><a>新增发货</a></li>";
 			   }else if('editDeliveryPage' == toState.name){//发货列表

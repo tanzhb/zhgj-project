@@ -99,6 +99,7 @@ import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.OrderMaterielExample.Criteria;
+import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.IProcessService;
@@ -195,6 +196,9 @@ public class DeliveryController {
 	
 	@Resource
 	private DeliveryMaterielMapper deliveryMaterielMapper;
+	
+	@Resource
+	private CompanyService  companyservice;
 
 	
 	 /**
@@ -244,8 +248,22 @@ public class DeliveryController {
 			comIds = userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId()));
 		}
 		DeliveryVO query = new DeliveryVO();
-		query.setCreator(currenLoginName);
-		query.setSupplyComIds(comIds);
+		//query.setCreator(currenLoginName);
+		String	comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));//查询当前登录人所属企业类型
+	//采购商和供应商查看
+		if(comId!=null){
+			Company com =companyservice.selectById(comId);
+			if("1".equals(com.getComType())){//采购商
+				query.setBuyComId(comId );
+			}else{//供应商
+				query.setSupplyComId(comId);
+				query.setSupplyComIds(comIds);
+			}
+		}else{//平台查看
+			if(StringUtils.isEmpty(noInit)){//平台销售订单发货列表
+				query.setDeliverType("mhq");//贸易发货其他发货
+			}
+		}
 		if("1".equals(noInit)){//不查询初始化状态的发货
 			query.setStatus("noInit");
 		}
@@ -849,6 +867,7 @@ public class DeliveryController {
     	takeDeliveryVO.setSerialNum(ApplicationUtils.random32UUID());
     	takeDeliveryVO.setCreator(currenLoginName);
     	takeDeliveryVO.setDeliverSerial(deliverySerialNum);
+    	takeDeliveryVO.setTakeDeliverNum(orderService.getNumCode("RE"));
     	deliveryService.insertBasicInfoPartIII(takeDeliveryVO);
     	}else{
     		takeDeliveryVO.setSerialNum(takeDeliverSerialNum);

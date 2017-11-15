@@ -1121,6 +1121,11 @@ public class TakeDeliverySelectExample {
             addCriterion("d.deliverType =", value, "deliverType");
             return (Criteria) this;
         }
+        
+        public Criteria andDeliverTypeNotEqualTo(String value) {
+            addCriterion("d.deliverType <>", value, "deliverType");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
