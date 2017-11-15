@@ -102,12 +102,14 @@ MetronicApp.controller('AppController', [ '$scope', '$rootScope','$compile',
 					//webSocket.send('Hello Server!');
 				};
 				webSocket.onmessage = function(event) {
-					var obj = eval('(' + event.data+ ')'); 
-					
-					//showToastr('toast-bottom-right','success',obj.context);
-					var html = $compile('<div style="min-height:120px;" >' + obj.context + '</div>')($scope);
-					toastr8(obj.messageType,obj.context);
-					$("#messageDiv").html(html);
+					try{
+						var obj = eval('(' + event.data+ ')'); 
+						
+						//showToastr('toast-bottom-right','success',obj.context);
+						var html = $compile('<div style="min-height:120px;" >' + obj.context + '</div>')($scope);
+						toastr8(obj.messageType,obj.context);
+						$("#messageDiv").html(html);
+					}catch(e){}
 				};
 			}
 		} ]);
@@ -3731,7 +3733,6 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 	        deferred.reject('连接服务器出错！');  
 	    })
 	    return deferred.promise.then(function(data){
-	    	debugger;
 	    	$rootScope.businessMessageSize = data; 
 	    });
 		
@@ -3745,7 +3746,6 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 	        deferred.reject('连接服务器出错！');  
 	    })
 	    return deferred.promise.then(function(data){
-	    	debugger;
 	    	$rootScope.noticeCount = data; 
 	    });
 	}
@@ -3763,7 +3763,6 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 		
 	}
 			function getTodoTaskLength(route, workflowType){
-				debugger;
 				var deferred = $q.defer();
 				$.get(ctx + "/rest/processAction/getTodoTaskSize/" + workflowType).success(function (data) {
 			        // 如果连接成功，延时返回给调用者  
@@ -3773,7 +3772,6 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 			    })
 			    return deferred.promise.then(function(data){
 			    	if(workflowType=='salePrice'){
-			    		debugger;
 			    		$rootScope.dbsLength1 = data; 
 			    	}else{
 			    		$rootScope.dbsLength = data; 

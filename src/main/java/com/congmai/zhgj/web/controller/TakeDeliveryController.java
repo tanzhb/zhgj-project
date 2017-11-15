@@ -854,6 +854,7 @@ public class TakeDeliveryController {
     		DeliveryMaterielExample example = new DeliveryMaterielExample();
         	example.createCriteria().andDelFlgEqualTo("0").andDeliverSerialEqualTo(deliverySerial);
         	 List<DeliveryMateriel> deliveryMateriels=deliveryMaterielService.selectByExample(example);
+        	 if(!CollectionUtils.isEmpty(deliveryMateriels)){
         	 //先判断该订单是普通采购还是代采购
         	 OrderMateriel orderMateriel =deliveryMateriels.get(0).getOrderMateriel();
      		OrderInfo orderInfo=orderService.selectById(orderMateriel.getOrderSerial());
@@ -875,6 +876,7 @@ public class TakeDeliveryController {
         			d.setCurrentStockAmount(Integer.parseInt(countInAmountDaiguan==null?"0":countInAmountDaiguan)-Integer.parseInt(countOutAmountDaiguan==null?"0":countOutAmountDaiguan)+"");
         		}
         		 
+        	 }
         	 }
         	return deliveryMateriels;
     	}else if(StringUtils.isNotBlank(stockSerial)){

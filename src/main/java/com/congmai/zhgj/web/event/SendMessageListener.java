@@ -1043,7 +1043,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				OrderInfo order = orderService.selectById(delivery.getOrderSerial());
 				Integer count = 0;
 				for(DeliveryMateriel dm : params.getDeliveryMateriels()){
-					count += Integer.parseInt(dm.getStockInCount());
+					count += Integer.parseInt(dm.getStockCount());
 				}
 				List<User> users = null;
 				if(StringUtils.isEmpty(order.getBuyComId())){ //发给采购
@@ -1114,7 +1114,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				OrderInfo order = orderService.selectById(delivery.getOrderSerial());
 				Integer count = 0;
 				for(DeliveryMateriel dm : params.getDeliveryMateriels()){
-					count += Integer.parseInt(dm.getStockInCount());
+					count += Integer.parseInt(dm.getStockCount());
 				}
 				List<User> users = null;
 				if(StringUtils.isEmpty(order.getSupplyComId())){ //发给销售

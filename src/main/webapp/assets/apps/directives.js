@@ -164,7 +164,7 @@ MetronicApp.directive('businessmessage', function() {
     };  
 }); 
 
-MetronicApp.directive('noticecount', function() {  debugger;
+MetronicApp.directive('noticecount', function() {  
     return {  
         restrict: 'E',  
         template: '<span class="badge badge-danger" style="position: relative;top: -4px;"> {{noticeCount}} </span>',
@@ -173,7 +173,7 @@ MetronicApp.directive('noticecount', function() {  debugger;
     };  
 }); 
 
-MetronicApp.directive('noticecount1', function() {  debugger;//header里面专用公告标签
+MetronicApp.directive('noticecount1', function() {  //header里面专用公告标签
 return {  
     restrict: 'E',  
     template: '<span class="badge badge-danger" style="position: relative;top: -10px;"> {{noticeCount}} </span>',

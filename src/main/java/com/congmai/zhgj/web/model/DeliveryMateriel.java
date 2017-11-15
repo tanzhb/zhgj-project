@@ -81,6 +81,7 @@ public class DeliveryMateriel {
     private  String  stockInRemark;
     private Warehouse stockInWarehouse;
     private Warehouseposition stockInPosition;
+    private List<StockInBatch> stockInBatchs;//关联出库批次信息
     private List<StockOutBatch> stockOutMateriels;//关联出库批次信息
     private String  inOutNums;//关联出库批次号
     private String sumStockOutCount;//出库数量
@@ -526,6 +527,14 @@ public class DeliveryMateriel {
 
 	public void setDeliveryAttachFile(String deliveryAttachFile) {
 		this.deliveryAttachFile = deliveryAttachFile;
+	}
+
+	public List<StockInBatch> getStockInBatchs() {
+		return stockInBatchs;
+	}
+
+	public void setStockInBatchs(List<StockInBatch> stockInBatchs) {
+		this.stockInBatchs = stockInBatchs;
 	}
 
 	

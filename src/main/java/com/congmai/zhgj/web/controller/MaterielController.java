@@ -650,38 +650,39 @@ public class MaterielController {
 		materiel = materielService.selectById(serialNum);
 		Map<String, Object> map = new HashMap<String, Object>();
     	map.put("materiel", materiel);
-    	//查询bom
-    	if("1".equals(materiel.getIsBOM())){//如果是bom物料
-	    	BOMMaterielExample m =new BOMMaterielExample();
-	    	com.congmai.zhgj.web.model.BOMMaterielExample.Criteria criteria =  m.createCriteria();
-	    	criteria.andBomMaterielSerialEqualTo(serialNum);
-	    	List<BOMMateriel> BOM = BOMMaterielService.selectList(m);
-	    	map.put("BOM", BOM);
+    	if(materiel!=null){
+	    	//查询bom
+	    	if("1".equals(materiel.getIsBOM())){//如果是bom物料
+		    	BOMMaterielExample m =new BOMMaterielExample();
+		    	com.congmai.zhgj.web.model.BOMMaterielExample.Criteria criteria =  m.createCriteria();
+		    	criteria.andBomMaterielSerialEqualTo(serialNum);
+		    	List<BOMMateriel> BOM = BOMMaterielService.selectList(m);
+		    	map.put("BOM", BOM);
+	    	}
+	    	
+	    	MaterielFileExample m =new MaterielFileExample();
+	    	com.congmai.zhgj.web.model.MaterielFileExample.Criteria criteria =  m.createCriteria();
+	    	criteria.andMaterielIdEqualTo(materiel.getMaterielId());
+	    	criteria.andDelFlgEqualTo("0");
+	    	List<MaterielFile> file = materielFileService.selectList(m);
+	    	map.put("file", file);
+	    	
+	    	
+	    	SupplyMaterielExample m2 =new SupplyMaterielExample();
+	    	com.congmai.zhgj.web.model.SupplyMaterielExample.Criteria criteria2 =  m2.createCriteria();
+	    	criteria2.andMaterielIdEqualTo(materiel.getMaterielId());
+	    	criteria2.andDelFlgEqualTo("0");
+	    	List<SupplyMateriel> supplyMateriel = supplyMaterielService.selectList(m2);
+	    	map.put("supplyMateriel", supplyMateriel);
+	    	
+	    	
+	    	BuyMaterielExample m3 =new BuyMaterielExample();
+	    	com.congmai.zhgj.web.model.BuyMaterielExample.Criteria criteria3 =  m3.createCriteria();
+	    	criteria3.andMaterielIdEqualTo(materiel.getMaterielId());
+	    	criteria3.andDelFlgEqualTo("0");
+	    	List<BuyMateriel> buyMateriel = buyMaterielService.selectList(m3);
+	    	map.put("buyMateriel", buyMateriel);
     	}
-    	
-    	MaterielFileExample m =new MaterielFileExample();
-    	com.congmai.zhgj.web.model.MaterielFileExample.Criteria criteria =  m.createCriteria();
-    	criteria.andMaterielIdEqualTo(materiel.getMaterielId());
-    	criteria.andDelFlgEqualTo("0");
-    	List<MaterielFile> file = materielFileService.selectList(m);
-    	map.put("file", file);
-    	
-    	
-    	SupplyMaterielExample m2 =new SupplyMaterielExample();
-    	com.congmai.zhgj.web.model.SupplyMaterielExample.Criteria criteria2 =  m2.createCriteria();
-    	criteria2.andMaterielIdEqualTo(materiel.getMaterielId());
-    	criteria2.andDelFlgEqualTo("0");
-    	List<SupplyMateriel> supplyMateriel = supplyMaterielService.selectList(m2);
-    	map.put("supplyMateriel", supplyMateriel);
-    	
-    	
-    	BuyMaterielExample m3 =new BuyMaterielExample();
-    	com.congmai.zhgj.web.model.BuyMaterielExample.Criteria criteria3 =  m3.createCriteria();
-    	criteria3.andMaterielIdEqualTo(materiel.getMaterielId());
-    	criteria3.andDelFlgEqualTo("0");
-    	List<BuyMateriel> buyMateriel = buyMaterielService.selectList(m3);
-    	map.put("buyMateriel", buyMateriel);
-    	
     	return map;
 	}
     
