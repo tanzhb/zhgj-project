@@ -3802,7 +3802,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		                                    { mData: 'deliverNum' },
 		                                    { mData: 'orderNum' },
 		                                    { mData: 'shipper' },
-		                                    { mData: 'materielCount' },
+		                                    //{ mData: 'materielCount' },物料条目数
+					                          { mData: 'materielTotalCount' },//物料总数
 		                                    { mData: 'packageCount' },
 		                                    { mData: 'packageType' },
 		                                    { mData: 'warehouse' },

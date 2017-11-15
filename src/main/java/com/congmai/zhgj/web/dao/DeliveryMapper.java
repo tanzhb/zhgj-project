@@ -113,4 +113,6 @@ public interface DeliveryMapper extends GenericDao<DeliveryMaterielVO, String> {
     
     
     public List<RelationFile> getAttachFileInfo(String relationSerial);
+    
+    public String selectTotalCountByDeliverSerial(String deliverSerial);
 }

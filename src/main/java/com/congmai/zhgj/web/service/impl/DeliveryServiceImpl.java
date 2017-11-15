@@ -489,4 +489,11 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		// TODO Auto-generated method stub
 		 return deliveryMapper.getAttachFileInfo(relationSerial);
 	}
+
+
+	@Override
+	public String getDeliveryTotalCount(String serialNum) {
+		// TODO Auto-generated method stub
+		return deliveryMapper.selectTotalCountByDeliverSerial(serialNum);
+	}
 }

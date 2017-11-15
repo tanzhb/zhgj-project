@@ -208,9 +208,12 @@ public class TakeDeliveryController {
 		}
 		takeDelivery.setBuyComId(comId);
     	Page<Delivery> takeDeliverys = takeDeliveryService.selectByPage(takeDelivery);
-    	
-    	
-    	
+    	if(CollectionUtils.isNotEmpty(takeDeliverys.getResult())){
+    		List<Delivery>list=takeDeliverys.getResult();
+    		for(Delivery d:list){
+    			d.setMaterielTotalCount(deliveryService.getDeliveryTotalCount(d.getSerialNum()));
+    		}
+    	}
     	//List<Company> companys = companyService.selectByPage(company).getResult();
 		// 封装datatables数据返回到前台
 		Map<String,Object> pageMap = new HashMap<String,Object>();

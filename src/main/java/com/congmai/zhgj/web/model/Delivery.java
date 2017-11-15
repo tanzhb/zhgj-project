@@ -80,6 +80,8 @@ public class Delivery {
     
     private String warehouseName;//发货仓库名称
     
+  //发货数量合计
+  		private String materielTotalCount;
     
     //冗余字段
     
@@ -503,6 +505,14 @@ public class Delivery {
 
 	public void setWarehouseName(String warehouseName) {
 		this.warehouseName = warehouseName;
+	}
+
+	public String getMaterielTotalCount() {
+		return materielTotalCount;
+	}
+
+	public void setMaterielTotalCount(String materielTotalCount) {
+		this.materielTotalCount = materielTotalCount;
 	}
 	
     

@@ -707,7 +707,8 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 									                    { mData: 'serialNum'},
 							                            { mData: 'deliverNum' },
 							                            { mData: 'orderNum' },
-							                            { mData: 'materielCount' },
+							                            //{ mData: 'materielCount' },物料条目数
+								                          { mData: 'materielTotalCount' },//物料总数
 							                            { mData: 'packageCount' },
 							                            { mData: 'receiver'},
 							                            { mData: 'deliveryAddress'},
