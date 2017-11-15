@@ -382,10 +382,15 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	private void createStock(DeliveryMateriel deliveryMateriel,StockExample stockExample,String currenLoginName) {//生成自建库存
 		OrderMateriel orderMateriel=orderMaterielMapper.selectByPrimaryKey(deliveryMateriel.getOrderMaterielSerial());//获取订单物料信息
 		OrderInfo orderInfo=orderInfoMapper.selectByPrimaryKey(orderMateriel.getOrderSerial());
+		OrderInfo saleOrderInfo=orderInfoMapper.selectByOrderNum(orderInfo.getOrderSerial());
 		com.congmai.zhgj.web.model.StockExample.Criteria criteria=stockExample.createCriteria();
+		
 		Boolean isStockZijian=true;//默认是自建库存
 		if(StaticConst.getInfo("dailiBuy").equals(orderInfo.getOrderType())||StaticConst.getInfo("dailiSale").equals(orderInfo.getOrderType())){//代理销售/代理采购
-			criteria.andMaterielSerialEqualTo(orderMateriel.getMaterielSerial()).andManageTypeEqualTo("2").andDelFlgEqualTo("0");//代管库存
+			criteria.andMaterielSerialEqualTo(orderMateriel.getMaterielSerial()).andManageTypeEqualTo("2").andDelFlgEqualTo("0");
+			if(saleOrderInfo!=null){
+				criteria.andMaterielOwnerEqualTo(saleOrderInfo.getBuyComId());//代管库存有唯一的物权方
+			}
 			isStockZijian=false;
 		}else{
 			criteria.andMaterielSerialEqualTo(orderMateriel.getMaterielSerial()).andManageTypeEqualTo("1").andDelFlgEqualTo("0");//自建库存
@@ -409,7 +414,9 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 				stock.setServiceParty("");//默认中航国际
 			}else{
 				stock.setManageType("2");// 代管库存
-				stock.setMaterielOwner(orderInfo.getBuyComId());
+				if(saleOrderInfo!=null){
+					stock.setMaterielOwner(saleOrderInfo.getBuyComId());
+				}
 				stock.setServiceParty("");
 				//stock.setServiceParty(StaticConst.getInfo("comName"));
 			}

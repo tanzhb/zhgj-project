@@ -324,23 +324,23 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
         			}else{
         				$scope.otherMode=true;
         			}
-        			if(data.data.delivery!=null){
-        				$scope.record.deliverNum = data.data.delivery.deliverNum;
-            			$scope.record.shipperOrReceiver = data.data.delivery.receiver;
-    					//$scope.shipperOrReceiverName = data.data.delivery.shipperName;
+        			if(data.data.deliver!=null){
+        				$scope.record.deliverNum = data.data.deliver.deliverNum;
+            			$scope.record.shipperOrReceiver = data.data.deliver.receiver;
+    					//$scope.shipperOrReceiverName = data.data.deliver.shipperName;
             			//$scope.deliver.materielCount = data.orderMateriel.length;
             			if(!isNull($stateParams.serialNum)&&($location.path()=="/stockOutAdd"||$location.path()=="/stockOut")){//出库编辑或入库时时
-            				$scope.deliverSerial = data.data.delivery.serialNum;
-            				$scope.getTakeDeliverMateriel(data.data.delivery);
+            				$scope.deliverSerial = data.data.deliver.serialNum;
+            				$scope.getTakeDeliverMateriel(data.data.deliver);
             				$scope.record.inOutType = '贸易';
             			}else{
-            				$scope.getTakeDeliverMateriel(data.data.delivery);
+            				$scope.getTakeDeliverMateriel(data.data.deliver);
             				$scope.queryForPage();
             			}
         			}else{
         				if(!isNull($stateParams.serialNum)&&($location.path()=="/stockOutView")){//出库编辑或出库时
         					//var de$scope.record.serialNum;
-            				$scope.getTakeDeliverMateriel(data.data.delivery);
+            				$scope.getTakeDeliverMateriel(data.data.deliver);
             				//$scope.createFilterList();
             			}
         			}

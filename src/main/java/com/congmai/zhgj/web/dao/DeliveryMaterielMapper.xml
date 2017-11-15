@@ -861,7 +861,8 @@
 					FROM
 						orderInfo
 					WHERE
-						orderInfo.serialNum = o.orderSerial
+						orderInfo.orderNum = o.orderSerial and orderInfo.delFlg = 0
+						limit 1
 				)
 			)
 		)
@@ -919,7 +920,8 @@
 					FROM
 						orderInfo
 					WHERE
-						orderInfo.serialNum = o.orderSerial
+						orderInfo.orderNum = o.orderSerial and orderInfo.delFlg = 0
+						limit 1
 				)
 			)
 		)

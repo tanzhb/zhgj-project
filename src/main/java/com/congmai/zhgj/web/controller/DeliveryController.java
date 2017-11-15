@@ -243,10 +243,10 @@ public class DeliveryController {
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
 		//List<DeliveryVO> contractList=deliveryService.findAllDeliveryList(currenLoginName);
 		User user = UserUtil.getUserFromSession();
-    	List<String> comIds = new ArrayList<String>();
-    	if(user!=null){
-			comIds = userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId()));
-		}
+//    	List<String> comIds = new ArrayList<String>();
+//    	if(user!=null){
+//			comIds = userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId()));
+//		}
 		DeliveryVO query = new DeliveryVO();
 		//query.setCreator(currenLoginName);
 		String	comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));//查询当前登录人所属企业类型
@@ -257,7 +257,7 @@ public class DeliveryController {
 				query.setBuyComId(comId );
 			}else{//供应商
 				query.setSupplyComId(comId);
-				query.setSupplyComIds(comIds);
+//				query.setSupplyComIds(comIds);
 			}
 		}else{//平台查看
 			if(StringUtils.isEmpty(noInit)){//平台销售订单发货列表

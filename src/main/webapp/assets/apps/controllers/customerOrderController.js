@@ -10,7 +10,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
     	$rootScope.settings.layout.pageContentWhite = true;
         $rootScope.settings.layout.pageBodySolid = false;
         $rootScope.settings.layout.pageSidebarClosed = false;
-    	loadOrderTable();//加载订单列表
+    	
         if($state.current.name=="customerOrder"){
         	loadMainTable();// 加载订单列表(普通订单)
 //        	loadMainFramTable();// 框架订单列表
@@ -65,6 +65,8 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 			}
 			//***************************************流程处理相关end
         	}else if($state.current.name=="addCustomerDeliveryOrder"){//新增修改提货
+        		loadOrderTable();//加载订单列表
+        		
         		getCurrentUser();
         		initWarehouse();
         		$rootScope.setNumCode("SE",function(newCode){
@@ -4528,7 +4530,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		  			}, "发货数量不能超过订单数量");
 		  			
 	  		  	  var order_table;//加载采购订单(客户端)
-	  		      var tableAjaxUrl = "rest/order/findOrderList?type=buy&selectFor=delivery";
+	  		      var _tableAjaxUrl = "rest/order/findOrderList?type=buy&selectFor=delivery";
 	  		      var loadOrderTable = function() {
 	  		              a = 0;
 	  		              App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
@@ -4562,7 +4564,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	  		                  pageLength: 5,// 每页显示数量
 	  		                  processing: true,// loading等待框
 	  		  // serverSide: true,
-	  		                  ajax: tableAjaxUrl,// 加载数据中
+	  		                  ajax: _tableAjaxUrl,// 加载数据中
 	  		                  "aoColumns": [
 	  		                              { mData: 'serialNum'},
 	  		                              { mData: 'orderNum' },
