@@ -31,6 +31,7 @@ angular
 														 $rootScope.setNumCode("IV",function(newCode){//
 															 $scope.stock={};
 										    		 			$scope.stock.stockNum= newCode;//自建.代管库存编号
+										    		 			$scope.stock.serviceParty= "中航能科";//自建.代管库存编号
 										    		 		});
 													}
 													initSuppliers();//初始化物权方选择框
@@ -771,6 +772,15 @@ angular
 								$scope.saveStock= function() {
 									debugger;
 									if($('#stockForm').valid()&&judgeData()){//表单验证通过则执行添加功能
+										if($scope.manageType.indexOf('zijian')>-1){
+											$scope.stock.manageType='1';
+												$scope.stock.materielOwner='';
+										}else if($scope.manageType.indexOf('jinwai')>-1){
+											$scope.stock.manageType='2';
+										}else if($scope.manageType.indexOf('jinwai')>-1){
+											$scope.stock.manageType='3';
+										}
+										$scope.stock.serviceParty='';
 										$scope.stock.materielSerial=$("#materielSerial").val();
 										StockService
 										.saveStock($scope.stock)
