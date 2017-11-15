@@ -29,6 +29,7 @@ import com.congmai.zhgj.web.dao.DeliveryTransportMapper;
 import com.congmai.zhgj.web.dao.MaterielMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
 import com.congmai.zhgj.web.dao.OrderMaterielMapper;
+import com.congmai.zhgj.web.dao.StockInBatchMapper;
 import com.congmai.zhgj.web.dao.StockInOutCheckMapper;
 import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
 import com.congmai.zhgj.web.dao.StockMapper;
@@ -49,6 +50,7 @@ import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.Stock;
 import com.congmai.zhgj.web.model.StockExample;
+import com.congmai.zhgj.web.model.StockInBatch;
 import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.StockInOutRecordExample;
@@ -63,6 +65,7 @@ import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
+import com.congmai.zhgj.web.service.StockInBatchService;
 import com.congmai.zhgj.web.service.TakeDeliveryService;
 
 @Service
@@ -98,6 +101,9 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	
 	@Resource
 	private StockOutBatchMapper stockOutBatchMapper;
+	
+	@Resource
+	private StockInBatchMapper stockInBatchMapper;
 	
 	@Resource
 	private MaterielMapper materielMapper;
@@ -484,7 +490,6 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			StockInOutRecordExample example = new StockInOutRecordExample();
 			example.createCriteria().andSerialNumEqualTo(record.getSerialNum());
 			stockInOutRecordMapper.updateByExampleSelective(record, example);
-			
 		
 			//入库完成状态处理
 			stockInEndHandle(old_delivery.getOrderSerial(),takeDeliverySerial,currenLoginName);		
@@ -515,6 +520,19 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			DeliveryMaterielExample example2 = new DeliveryMaterielExample();
 			example2.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
 			deliveryMaterielMapper.updateByExampleSelective(materiel, example2);
+			
+			if(!CollectionUtils.isEmpty(materiel.getStockInBatchs())){
+				for(StockInBatch s : materiel.getStockInBatchs()){
+					s.setStockInMaterielSerial(materiel.getSerialNum());
+					s.setSerialNum(ApplicationUtils.random32UUID());
+					s.setUpdater(currenLoginName);
+					s.setUpdateTime(new Date());
+					s.setCreator(currenLoginName);
+					s.setCreateTime(new Date());
+					stockInBatchMapper.insert(s);
+				}
+			}
+			
 			createStock(materiel,new StockExample(),currenLoginName);
 		}
 		

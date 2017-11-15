@@ -42,7 +42,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 	 
 
 	 	
-	 	var countWarehouseAndPosition = function() {debugger;
+	 	var countWarehouseAndPosition = function() {
 	 		if($scope.takeDeliveryMateriels != undefined){
 	    		var w_arr = [];
 	    		var p_arr = [];
@@ -219,6 +219,13 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 					var param;
 					for(var i=0;i < $scope.takeDeliveryMateriels.length;i++){
 						param = {};
+						if(isNull($scope.takeDeliveryMateriels[i].stockInBatchs)){
+							toastr.warning("生产批次未填写！");
+							handle.unblockUI();
+		     				return false;
+						}else{
+							param.stockInBatchs = $scope.takeDeliveryMateriels[i].stockInBatchs;
+						}
 					param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].orderMaterielSerial;//生成库存使用到
 //						param.batchNum = $scope.takeDeliveryMateriels[i].batchNum;
 //						param.manufactureDate = $scope.takeDeliveryMateriels[i].manufactureDate;
@@ -1075,6 +1082,97 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 							 }
 							 
 							/** *************入库物料明细可检索化  end*************** */
+							 
+	 /** *************入库物料批次操作  start*************** */
+	 var stockInBatchMateriel;//当前入库物料
+							 
+	/**
+	  * 显示填入批次窗口
+	  * materiel 入库物料
+	  * 
+	  */
+	$scope.showStockBatch=function(materiel){
+		$('#stockBatchInfo').modal('show');//显示批次弹框
+		$scope.stockInBatchs = angular.copy(materiel.stockInBatchs)//暂存入库批次
+		stockInBatchMateriel = materiel;
+  	}
+							 
+							 
+	$scope.addStockBatch=function(){
+		if($scope.stockInBatchs){
+		}else{
+			$scope.stockInBatchs =[]
+		}
+	   $scope.stockInBatchs[$scope.stockInBatchs.length] = {};
+	}	
+	 $scope.deleteStockBatch = function(index){
+    	   $scope.stockInBatchs.splice(index,1);
+       };
+       
+       
+       $scope.totalCount = function(){
+    	   if($scope.stockInBatchs){
+   		    var total = 0 ; 
+	       		for(var i=0;i<$scope.stockInBatchs.length;i++){
+	       			if(!isNull($scope.stockInBatchs[i].stockInCount)){
+	       				total = total + Number($scope.stockInBatchs[i].stockInCount);
+	       			}
+	       			
+	       		}
+	       		return total
+	       	}else{
+	       		return 0;
+	       	}
+       }
+       
+       $scope.confirmSave = function(){
+    	   if(isNull($scope.stockInBatchs)){
+    		   toastr.warning("批次信息不能为空！");
+				return false;
+    	   }else{
+    		   for(var i=0;i<$scope.stockInBatchs.length;i++){
+        		   if(isNull($scope.stockInBatchs[i].batchNum)){
+         				toastr.warning("批次号不能为空！");
+         				return false;
+         			}
+        		   if(isNull($scope.stockInBatchs[i].warehouseSerial)){
+         				toastr.warning("仓库不能为空！");
+         				return false;
+         			}
+        		   if(isNull($scope.stockInBatchs[i].positionSerial)){
+         				toastr.warning("库位不能为空！");
+         				return false;
+         			}
+        		   if(isNull($scope.stockInBatchs[i].stockInCount)){
+          				toastr.warning("入库数量不能为空！");
+          				return false;
+          			}
+          		} 
+    	   }
+    	   
+    	   
+    	   if($scope.totalCount()!=stockInBatchMateriel.stockCount){
+    		   toastr.warning("入库数量不正确！");
+ 				return false;
+    	   }
+    	   
+    	   stockInBatchMateriel.stockInBatchs = $scope.stockInBatchs;
+    	   $('#stockBatchInfo').modal('hide');//显示批次弹框
+       }
+       
+       $scope.clearNoNumPoint = function(obj,attr){
+	    	 //先把非数字的都替换掉，除了数字和.
+	    	 obj[attr] = obj[attr].replace(/[^\d.]/g,"");
+	    	 //必须保证第一个为数字而不是.
+	    	 obj[attr] = obj[attr].replace(/^\./g,"");
+	    	 //保证只有出现一个.而没有多个.
+	    	 obj[attr] = obj[attr].replace(/\.{2,}/g,"");
+	    	 //保证.只出现一次，而不能出现两次以上
+	    	 obj[attr] = obj[attr].replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+  	 }
+							 
+	 /** *************入库物料批次操作  end*************** */
+							
 	       
 
 }]); 

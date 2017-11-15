@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.congmai.zhgj.web.dao.StockInbatchMapper" >
-  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.StockInbatch" >
+<mapper namespace="com.congmai.zhgj.web.dao.StockInBatchMapper" >
+  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.StockInBatch" >
     <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
     <result column="stockInMaterielSerial" property="stockInMaterielSerial" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
@@ -77,7 +77,7 @@
     serialNum, stockInMaterielSerial, remark, delFlg, creator, createTime, updater, updateTime, 
     warehouseSerial, positionSerial, stockInCount, batchNum
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.StockInbatchExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.StockInBatchExample" >
     select
     <if test="distinct" >
       distinct
@@ -101,25 +101,25 @@
     delete from stockInbatch
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.StockInbatchExample" >
+  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.StockInBatchExample" >
     delete from stockInbatch
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.congmai.zhgj.web.model.StockInbatch" >
+  <insert id="insert" parameterType="com.congmai.zhgj.web.model.StockInBatch" >
     insert into stockInbatch (serialNum, stockInMaterielSerial, 
-      remark, delFlg, creator, 
+      remark, creator, 
       createTime, updater, updateTime, 
       warehouseSerial, positionSerial, stockInCount, 
       batchNum)
     values (#{serialNum,jdbcType=VARCHAR}, #{stockInMaterielSerial,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{warehouseSerial,jdbcType=VARCHAR}, #{positionSerial,jdbcType=VARCHAR}, #{stockInCount,jdbcType=VARCHAR}, 
       #{batchNum,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.StockInbatch" >
+  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.StockInBatch" >
     insert into stockInbatch
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
@@ -198,7 +198,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.StockInbatchExample" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.StockInBatchExample" resultType="java.lang.Integer" >
     select count(*) from stockInbatch
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
@@ -266,7 +266,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.StockInbatch" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.StockInBatch" >
     update stockInbatch
     <set >
       <if test="stockInMaterielSerial != null" >
@@ -305,7 +305,7 @@
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.StockInbatch" >
+  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.StockInBatch" >
     update stockInbatch
     set stockInMaterielSerial = #{stockInMaterielSerial,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},

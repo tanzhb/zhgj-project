@@ -2,7 +2,7 @@ package com.congmai.zhgj.web.model;
 
 import java.util.Date;
 
-public class StockInbatch {
+public class StockInBatch {
     private String serialNum;
 
     private String stockInMaterielSerial;

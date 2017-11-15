@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class StockInbatchExample {
+public class StockInBatchExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public StockInbatchExample() {
+    public StockInBatchExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 

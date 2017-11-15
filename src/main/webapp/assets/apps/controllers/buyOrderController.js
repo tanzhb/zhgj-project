@@ -237,7 +237,6 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 
     		$rootScope.judgeIsExist("order",$scope.buyOrder.orderNum, $scope.buyOrder.serialNum,function(result){
     			var 	isExist = result;
-    		debugger;
     		if(isExist){
     			toastr.error('订单编号重复！');
     			return;
@@ -3757,7 +3756,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
   									type, row, meta) {
   										if(data==null){
   											data="未收货";
-  										}debugger;
+  										}
 	  	  								return '<a href="javascript:void(0);" ng-click="takeDeliveryView(\''+row.takeDelivery.serialNum+'\')">'+data+'</a>';
 	
   							},

@@ -239,7 +239,7 @@
 										<th  rowspan="2">发货数量</th>
 										<!-- <th colspan="3"  style="text-align: center;">收货</th>
 										<th colspan="3"  style="text-align: center;">检验</th> -->
-										<th colspan="5"  style="text-align: center;">入库</th>
+										<th colspan="4"  style="text-align: center;">入库</th>
 										<th rowspan="2">状态</th>
 									</tr>
 									<tr>
@@ -249,10 +249,11 @@
 										<th>合格数量</th>
 										<th>不合格数量</th>
 										<th>备注</th> -->
+										<th>生产批次</th>
 										<th>入库数量</th>
 										<th>未入数量</th>
-										<th>仓库</th>
-										<th>库区</th>
+										<!-- <th>仓库</th>
+										<th>库区</th> -->
 										<th>备注</th> 
 									</tr>
 								</thead>
@@ -270,16 +271,26 @@
 										<td>{{materiel.stockInQualifiedCount}}</td>
 										<td>{{materiel.stockInUnqualifiedCount}}</td>
 										<td>{{materiel.stockInCheckRemark}}</td> -->
+										<td >
+												<span ng-repeat="stockInBatch in materiel.stockInBatchs track by $index">
+												<span ng-if="!$first">;</span> {{stockInBatch.batchNum}}({{stockInBatch.stockInCount}})
+												</span>
+                                                <button ng-if="materiel.stockInBatchs==null" class="btn blue btn-sm btn-circle"
+													ng-click="showStockBatch(materiel)" onclick="return false;"  data-toggle="modal" >
+													<i class="fa fa-plus"></i>添加
+												</button>
+												<button ng-if="materiel.stockInBatchs!=null" class="btn blue btn-sm btn-circle"
+													ng-click="showStockBatch(materiel)" onclick="return false;"  data-toggle="modal" >
+													<i class="fa fa-edit"></i>修改
+												</button>
+										</td>
 										<td>
-											<div class="col-md-12 form-group">
-                                                 <input type="text" class="form-control input-small" id="stockCount{{$index}}" name="stockCount" data-acceptcount="{{materiel.acceptCount}}"  ng-model="materiel.stockCount" ng-hide="deliverAdd" >
-                                                 <div class="form-control-focus"> </div>
-                                            </div>
+											{{materiel.stockCount}}
 										</td>
 										<td>
 											<span ng-if="materiel.acceptCount!=undefined && materiel.stockCount!=undedined">{{materiel.acceptCount-materiel.stockCount}}</span>
 										</td>
-										<td>
+										<!-- <td>
 											<div class="col-md-12 form-group">
                                                 <select ng-if="$first" class="form-control input-small"  data-live-search="true"  id="warehouseSerial" ng-init="warehouses[0].serialNum" ng-change="getPositionsAndSelectedAll(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
 	                                                 <option value=""></option>
@@ -300,7 +311,7 @@
 	                                             </select>
 	                                             <div class="form-control-focus"> </div>
                                             </div>
-										</td>
+										</td> -->
 										<td>
 											<div class="col-md-12 form-group">
                                                  <input type="text" class="form-control input-small" id="stockRemark{{$index}}" name="stockRemark" data-delivercount="{{materiel.stockRemark}}"  ng-model="materiel.stockRemark"  >
@@ -341,3 +352,4 @@
 </div>
 <!-- END MAIN CONTENT -->
 <jsp:include page="selectTakeDelivery.jsp"></jsp:include>
+<jsp:include page="addStockBatch.jsp"></jsp:include>
