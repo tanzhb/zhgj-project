@@ -47,6 +47,7 @@ import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.PriceListExample;
 import com.congmai.zhgj.web.model.Stock;
 import com.congmai.zhgj.web.model.StockExample;
+import com.congmai.zhgj.web.model.StockInBatch;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.StockExample.Criteria;
@@ -297,6 +298,7 @@ public class StockController {
 	         return map;
 	    }
 	    
+	    
 	    /**
 		  * @Description (获取入库记录)
 		  * @param request
@@ -307,10 +309,10 @@ public class StockController {
 			 Stock stock=stockService.selectById(serialNum);
 			 List<String>takeDeliverSerialList=new  ArrayList<String>();
 			 List<DeliveryMateriel>stockInList=new  ArrayList<DeliveryMateriel>();
-			 if(StringUtils.isEmpty(orderSerial)){
+			 if(StringUtils.isEmpty(orderSerial)){//查询入库记录
 				 takeDeliverSerialList=stockService.getRelationTakeDeliverSerialList(stock);
 				 stockInList=stockService.getDeliverMaterialListForIn(takeDeliverSerialList,null,stock);
-			 }else{
+			 }else{//出库选择入库记录
 				 List<Stock> stockList=stockService.selectStockListByMaterielSerial(serialNum);
 				for(Stock stock1:stockList){
 					List<String>takeDeliverSerial=stockService.getRelationTakeDeliverSerialList(stock1);
@@ -327,6 +329,31 @@ public class StockController {
 			 pageMap.put("recordsTotal", stockInList==null?0:stockInList.size());
 			 pageMap.put("recordsFiltered", stockInList==null?0:stockInList.size());
 			 pageMap.put("data", stockInList);
+			 return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
+		 }
+	    
+	    /**
+		  * @Description (获取入库批次)
+		  * @param request
+		  * @return
+		  */
+		 @RequestMapping(value="stockInBatchList",method=RequestMethod.GET)
+		 public ResponseEntity<Map<String,Object>> stockInBatchList(String serialNum,String orderSerial) {
+			 //借用DeliveryMateriel bean
+			 List<DeliveryMateriel> stockInBatchList=new  ArrayList<DeliveryMateriel>();
+			 if(StringUtils.isEmpty(orderSerial)){//查询入库批次记录
+				 stockInBatchList=stockService.getStockInBatchList(serialNum);
+			 }else{//出库选择入库批次记录(根据物权方及基本物料)
+				 stockInBatchList=stockService.getStockInBatchListByMaterielOwn(serialNum,orderSerial);
+			 }
+			
+				 
+			 // 封装datatables数据返回到前台
+			 Map<String,Object> pageMap = new HashMap<String,Object>();
+			 pageMap.put("draw", 1);
+			 pageMap.put("recordsTotal", stockInBatchList==null?0:stockInBatchList.size());
+			 pageMap.put("recordsFiltered", stockInBatchList==null?0:stockInBatchList.size());
+			 pageMap.put("data", stockInBatchList);
 			 return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
 		 }
 		  /**

@@ -611,7 +611,7 @@ angular
 				 if(stockZkTable!=undefined){
 					 stockZkTable.destroy();
 		 	    	 }
-				 tableAjaxUrl="rest/stock/stockInList?serialNum="+serialNum
+				 tableAjaxUrl="rest/stock/stockInBatchList?serialNum="+serialNum
 				
 			
 				 stockZkTable = $("#"+tableid)
@@ -654,7 +654,7 @@ angular
 									// serverSide: true,
 								     ajax :tableAjaxUrl,
 			  		                    "aoColumns": [
-			  		                                   { mData: 'stockInOutRecord.inOutNum' },
+			  		                                   { mData: 'batchNum' },
 	  		                                           { mData: 'stockInOutRecord.inOutType' },
 	  		                                          { mData: 'stockInOutRecord.inOutNum' },
 	  		                                          { mData: 'stockInOutRecord.shipperOrReceiverName' },
@@ -914,17 +914,15 @@ angular
 					 	                    ajax: "rest/materiel/findMaterielList",//加载数据中
 					 	                    "aoColumns": [
 					 	                                  { mData: 'serialNum' },
-					 	                                  { mData: 'materielNum' },
-					 	                                  { mData: 'materielName' },
-					 	                                  { mData: 'specifications' },
-					 	                                  { mData: 'unit' },
-					 	                                  { mData: 'parentMateriel' },
-					 	                                  { mData: 'type' },
-					 	                                  { mData: 'productionPlace' },
-					 	                                  { mData: 'brand' },
-					 	                                  { mData: 'brand' },
-					 	                                  { mData: 'versionNO' },
-					 	                                  { mData: 'status' }
+							                              { mData: 'materielNum' },
+							                              { mData: 'materielName' },
+							                              { mData: 'specifications' },
+							                              { mData: 'unit' },
+							                              { mData: 'typeName' },
+							                              { mData: 'originCountry' },
+							                              { mData: 'brand' },
+							                              /*{ mData: null },*/
+							                              { mData: 'versionNO' }
 					 	                            ],
 					 	                   'aoColumnDefs' : [ {
 					 	    							'targets' : 0,
@@ -954,18 +952,7 @@ angular
 					 	    								return bomIcon + data;
 					 	    							}
 
-					 	    						},{
-					 	    							'targets' : 5,
-					 	    							
-					 	    							'render' : function(data,
-					 	    									type, full, meta) {
-					 	    								if(data==null){
-					 	    									return  ''
-					 	    								}else{
-					 	    									return  data.materielName
-					 	    								}
-					 	    							}
-					 	    						} ]
+					 	    						}]
 
 					 	                }).on('order.dt',
 					 	                function() {

@@ -8,6 +8,7 @@ import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.PriceListExample;
 import com.congmai.zhgj.web.model.Stock;
 import com.congmai.zhgj.web.model.StockExample;
+import com.congmai.zhgj.web.model.StockInBatch;
 
 public interface StockService extends GenericService<Stock, String>{
 
@@ -25,6 +26,9 @@ public interface StockService extends GenericService<Stock, String>{
 	String  getCountInAmountForDaiguan(String serialNum);//代管库存根据基本物料流水查入库总数
 	String  getCountOutAmountForDaiguan(String serialNum);//代管库存根据基本物料流水查出库总数
 	List<Stock> selectStockListByComId(String manageType, String comId);
+	List<DeliveryMateriel> getStockInBatchList(String serialNum);
+	List<DeliveryMateriel> getStockInBatchListByMaterielOwn(String serialNum,
+			String orderSerial);
 
 	
 	

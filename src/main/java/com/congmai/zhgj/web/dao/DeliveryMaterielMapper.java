@@ -7,6 +7,7 @@ import com.congmai.zhgj.web.model.StockInOutRecordExample;
 import com.congmai.zhgj.web.model.StockInOutRecordSelectExample;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -60,6 +61,10 @@ public interface DeliveryMaterielMapper extends GenericDao<DeliveryMateriel, Str
    List<DeliveryMateriel> getDetailByRelationTakeDeliverSerialListForDaiguan(List<String>serialNums);//获取入库明细代管
    
    List<DeliveryMateriel> getDetailByRelationTakeDeliverSerialList(List<String>serialNums);//获取入库明细
+
+List<DeliveryMateriel> getStockInBatchList(String serialNum);
+
+List<DeliveryMateriel> getStockInBatchListByMaterielOwn(Map m);
    
    
    

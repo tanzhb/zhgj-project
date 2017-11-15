@@ -20,6 +20,8 @@ public class StockOutBatch {
     private String stockOutMaterielSerial;//发货物料流水
 
     private String stockInMaterielSerial;
+    
+    private String stockInBatchSerial;
 
     private String outCount;
 
@@ -130,4 +132,13 @@ public class StockOutBatch {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public String getStockInBatchSerial() {
+		return stockInBatchSerial;
+	}
+
+	public void setStockInBatchSerial(String stockInBatchSerial) {
+		this.stockInBatchSerial = stockInBatchSerial;
+	}
+    
 }

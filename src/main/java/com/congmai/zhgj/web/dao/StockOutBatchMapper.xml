@@ -7,6 +7,7 @@
     <result column="stockInSerial" property="stockInSerial" jdbcType="VARCHAR" />
     <result column="stockOutMaterielSerial" property="stockOutMaterielSerial" jdbcType="VARCHAR" />
     <result column="stockInMaterielSerial" property="stockInMaterielSerial" jdbcType="VARCHAR" />
+    <result column="stockInBatchSerial" property="stockInBatchSerial" jdbcType="VARCHAR" />
     <result column="outCount" property="outCount" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
@@ -74,7 +75,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    serialNum, stockOutSerial, stockInSerial, stockOutMaterielSerial, stockInMaterielSerial, 
+    serialNum, stockOutSerial, stockInSerial, stockOutMaterielSerial, stockInMaterielSerial, stockInBatchSerial,
     outCount, remark, delFlg, creator, createTime, updater, updateTime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.StockOutBatchExample" >
@@ -109,12 +110,12 @@
   </delete>
   <insert id="insert" parameterType="com.congmai.zhgj.web.model.StockOutBatch" >
     insert into stockOutBatch (serialNum, stockOutSerial, stockInSerial, 
-      stockOutMaterielSerial, stockInMaterielSerial, 
+      stockOutMaterielSerial, stockInMaterielSerial,stockInBatchSerial, 
       outCount, remark, delFlg, 
       creator, createTime, updater, 
       updateTime)
     values (#{serialNum,jdbcType=VARCHAR}, #{stockOutSerial,jdbcType=VARCHAR}, #{stockInSerial,jdbcType=VARCHAR}, 
-      #{stockOutMaterielSerial,jdbcType=VARCHAR}, #{stockInMaterielSerial,jdbcType=VARCHAR}, 
+      #{stockOutMaterielSerial,jdbcType=VARCHAR}, #{stockInMaterielSerial,jdbcType=VARCHAR}, #{stockInBatchSerial,jdbcType=VARCHAR}, 
       #{outCount,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
       #{updateTime,jdbcType=TIMESTAMP})
@@ -136,6 +137,9 @@
       </if>
       <if test="stockInMaterielSerial != null" >
         stockInMaterielSerial,
+      </if>
+      <if test="stockInBatchSerial != null" >
+        stockInBatchSerial,
       </if>
       <if test="outCount != null" >
         outCount,
@@ -174,6 +178,9 @@
       </if>
       <if test="stockInMaterielSerial != null" >
         #{stockInMaterielSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="stockInBatchSerial != null" >
+        #{stockInBatchSerial,jdbcType=VARCHAR},
       </if>
       <if test="outCount != null" >
         #{outCount,jdbcType=VARCHAR},
@@ -222,6 +229,9 @@
       <if test="record.stockInMaterielSerial != null" >
         stockInMaterielSerial = #{record.stockInMaterielSerial,jdbcType=VARCHAR},
       </if>
+      <if test="record.stockInBatchSerial != null" >
+        stockInBatchSerial = #{record.stockInBatchSerial,jdbcType=VARCHAR},
+      </if>
       <if test="record.outCount != null" >
         outCount = #{record.outCount,jdbcType=VARCHAR},
       </if>
@@ -255,6 +265,7 @@
       stockInSerial = #{record.stockInSerial,jdbcType=VARCHAR},
       stockOutMaterielSerial = #{record.stockOutMaterielSerial,jdbcType=VARCHAR},
       stockInMaterielSerial = #{record.stockInMaterielSerial,jdbcType=VARCHAR},
+      stockInBatchSerial = #{record.stockInBatchSerial,jdbcType=VARCHAR},
       outCount = #{record.outCount,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       delFlg = #{record.delFlg,jdbcType=VARCHAR},
@@ -280,6 +291,9 @@
       </if>
       <if test="stockInMaterielSerial != null" >
         stockInMaterielSerial = #{stockInMaterielSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="stockInBatchSerial != null" >
+        stockInBatchSerial = #{stockInBatchSerial,jdbcType=VARCHAR},
       </if>
       <if test="outCount != null" >
         outCount = #{outCount,jdbcType=VARCHAR},
@@ -311,6 +325,7 @@
       stockInSerial = #{stockInSerial,jdbcType=VARCHAR},
       stockOutMaterielSerial = #{stockOutMaterielSerial,jdbcType=VARCHAR},
       stockInMaterielSerial = #{stockInMaterielSerial,jdbcType=VARCHAR},
+      stockInBatchSerial = #{stockInBatchSerial,jdbcType=VARCHAR},
       outCount = #{outCount,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       delFlg = #{delFlg,jdbcType=VARCHAR},
@@ -334,10 +349,14 @@
     where  stockOutMaterielSerial=#{serialNum,jdbcType=VARCHAR} and stockOutBatch.delFlg=0
   </select>
   <select id="selectSumBySerialNum"    parameterType="java.lang.String"  resultType="java.lang.String">
-   select
+   <!-- select
    SUM(IFNULL(stockOutBatch.outCount,0)) as sumStockOutCount
     from stockOutBatch 
     left join   stockInOutRecord srd on srd.serialNum= stockOutBatch.stockInSerial
-    where  stockInMaterielSerial=#{serialNum,jdbcType=VARCHAR} and stockOutBatch.delFlg=0
+    where  stockInMaterielSerial=#{serialNum,jdbcType=VARCHAR} and stockOutBatch.delFlg=0 -->
+    select
+    SUM(IFNULL(outCount,0)) as sumStockOutCount
+    from stockOutBatch
+    where  stockInBatchSerial=#{serialNum,jdbcType=VARCHAR} and stockOutBatch.delFlg=0
   </select>
 </mapper>
