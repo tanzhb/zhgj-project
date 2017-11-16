@@ -109,7 +109,7 @@
 										
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                <label class="control-label bold" for=""> <span class="required"> * </span>关联发货单号 :</label>
+                                                                <label class="control-label bold" for=""> <span class="required"> * </span><span   ng-if="customsFormType.indexOf('clearance')>-1" >关联收货计划单号 :</span> <span  ng-if="customsFormType.indexOf('declaration')>-1">关联发货计划单号 :</span></label>
                                                                     <div class="">
                                                                      <div class="input-group" data-toggle="modal" data-target="#takeDeliveryInfo" onclick="return false;">
 	                                                        <input id="deliverNum"   name="deliverNum" type="text" class="form-control" ng-model="customsForm.deliverNum" readonly="readonly"  ng-hide="customsFormAdd"  >
@@ -126,7 +126,7 @@
                                                             </div>
                                                               <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                <label class="control-label bold" for=""> <!-- <span class="required"> * </span> -->关联采购单号 :</label>
+                                                                <label class="control-label bold" for="">  <span   ng-if="customsFormType.indexOf('clearance')>-1" >关联采购单号 :</span> <span  ng-if="customsFormType.indexOf('declaration')>-1">关联销售单号 :</span></label>
                                                                     <div class="">
                                                                        <input type="text" class="form-control" placeholder=""  id="buyOrderNum" name ="buyOrderNum"  ng-hide="customsFormAdd"   readonly="readonly"
 												ng-model="customsForm.buyOrderNum" > 
