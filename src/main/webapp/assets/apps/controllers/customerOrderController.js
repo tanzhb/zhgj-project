@@ -1,6 +1,6 @@
 /* Setup general page controller */
 angular.module('MetronicApp').controller('customerOrderController', ['$rootScope', '$scope', 'settings','orderService','$filter',
-    '$state',"$stateParams",'$compile','$location','materielService','FileUploader','commonService','takeDeliveryService', function($rootScope, $scope, settings,orderService,$filter,$state,$stateParams,$compile,$location,materielService,FileUploader,commonService,takeDeliveryService) {
+    '$state',"$stateParams",'$compile','$location','materielService','FileUploader','commonService','takeDeliveryService','DeliveryService', function($rootScope, $scope, settings,orderService,$filter,$state,$stateParams,$compile,$location,materielService,FileUploader,commonService,takeDeliveryService,deliveryService) {
     $scope.$on('$viewContentLoaded', function() {   
     	// initialize core components
     	App.initAjax();
@@ -4030,8 +4030,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 				 * 去确认提货
 				 */
 			 	$scope.confirmDelivery=function(){
-			   		debugger;
-			   		var promise = takeDeliveryService.confirmDelivery($scope.deliver.serialNum);
+			 		
+			   		  var promise = deliveryService.goDelivery($scope.deliver.serialNum);
+			   		//var promise = takeDeliveryService.confirmDelivery($scope.deliver.serialNum);
 					promise.then(function(data) {
 							$(".modal-backdrop").remove();
 							toastr.success("确认提货成功");

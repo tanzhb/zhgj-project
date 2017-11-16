@@ -507,6 +507,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                             'assets/apps/controllers/customerOrderController.js',
                             'assets/apps/service/CommonService.js',
                             'assets/apps/service/TakeDeliveryService.js',
+                            'assets/apps/service/DeliveryService.js',
                           //流程申请
 							'assets/global/css/dialog.css',
 							'assets/global/css/easyui.css',
@@ -544,7 +545,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/orderService.js',
 				'assets/apps/controllers/customerOrderController.js',
 	        	'assets/apps/service/CommonService.js',
-	        	 'assets/apps/service/TakeDeliveryService.js'
+	        	 'assets/apps/service/TakeDeliveryService.js',
+	        	 'assets/apps/service/DeliveryService.js'
                       ]
                     });
                 }]
@@ -572,7 +574,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/orderService.js',
 				'assets/apps/controllers/customerOrderController.js',
 	        	'assets/apps/service/CommonService.js',
-	        	 'assets/apps/service/TakeDeliveryService.js'
+	        	 'assets/apps/service/TakeDeliveryService.js',
+	        	 'assets/apps/service/DeliveryService.js'
                       ]
                     });
                 }]
@@ -601,7 +604,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/orderService.js',
 				'assets/apps/controllers/customerOrderController.js',
 	        	'assets/apps/service/CommonService.js',
-	        	 'assets/apps/service/TakeDeliveryService.js'
+	        	 'assets/apps/service/TakeDeliveryService.js',
+	        	 'assets/apps/service/DeliveryService.js'
                       ]
                     });
                 }]
@@ -629,7 +633,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/orderService.js',
 	        	'assets/apps/service/CommonService.js',
 				'assets/apps/controllers/customerOrderController.js',
-				 'assets/apps/service/TakeDeliveryService.js'
+				 'assets/apps/service/TakeDeliveryService.js',
+				 'assets/apps/service/DeliveryService.js'
                       ]
                     });
                 }]
