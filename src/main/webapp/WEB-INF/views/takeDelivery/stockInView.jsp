@@ -246,7 +246,7 @@
 										<th  rowspan="2">发货数量</th>
 										<!-- <th colspan="3"  style="text-align: center;">收货</th>
 										<th colspan="3"  style="text-align: center;">检验</th> -->
-										<th colspan="5"  style="text-align: center;">入库</th>
+										<th colspan="3"  style="text-align: center;">入库</th>
 										<th rowspan="2">状态</th>
 									</tr>
 									<tr>
@@ -258,8 +258,8 @@
 										<th>备注</th> -->
 										<th>入库数量</th>
 										<th>未入数量</th>
-										<th>仓库</th>
-										<th>库位</th>
+										<!-- <th>仓库</th>
+										<th>库位</th> -->
 										<th>备注</th>
 									</tr>
 								</thead>
@@ -283,12 +283,12 @@
 										<td>
 											{{materiel.unstockInCount}}
 										</td>
-										<td>
+										<!-- <td>
 											{{materiel.stockInWarehouse.warehouseName}}
 										</td>
 										<td>
 											{{materiel.stockInPosition.positionName}}
-										</td>
+										</td> -->
 										<td>
 											{{materiel.stockInRemark}}
 										</td> 

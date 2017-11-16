@@ -3742,7 +3742,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 									"sLast" : "尾页"
 		 								}
 		 							},
-		 							order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+		 							order : [ [ 1, "desc" ] ],// 默认排序列及排序方式
 		 							bRetrieve : true,
 		 							"bScrollCollapse": true,
 		 							lengthMenu : [

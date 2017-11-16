@@ -643,7 +643,7 @@ angular
 										headerOffset : a
 									},*/
 									// select: true,行多选
-									order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+									order : [ [ 3, "desc" ] ],// 默认排序列及排序方式
 									bRetrieve : true,
 									// searching: true,//是否过滤检索
 									// ordering: true,//是否排序

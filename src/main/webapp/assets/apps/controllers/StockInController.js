@@ -333,28 +333,28 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
         			}else{
         				$scope.otherMode=true;
         			}
-        			if(data.data.delivery!=null&&data.data.delivery.takeDelivery!=null){  //当贸易入库时
-        				$scope.record.takeDeliverNum = data.data.delivery.takeDelivery.takeDeliverNum;
-            			$scope.record.shipperOrReceiver = data.data.delivery.shipper;
-    					//$scope.shipperOrReceiverName = data.data.delivery.shipperName;
+        			if(data.data.deliver!=null&&data.data.deliver.takeDelivery!=null){  //当贸易入库时
+        				$scope.record.takeDeliverNum = data.data.deliver.takeDelivery.takeDeliverNum;
+            			$scope.record.shipperOrReceiver = data.data.deliver.shipper;
+    					//$scope.shipperOrReceiverName = data.data.deliver.shipperName;
             			//$scope.deliver.materielCount = data.orderMateriel.length;
             			if(!isNull($stateParams.serialNum)&&($location.path()=="/stockInAdd"||$location.path()=="/stockIn")){//入库编辑或入库时时
-            				$scope.deliverSerial = data.data.delivery.serialNum;
-            				$scope.getTakeDeliverMateriel(data.data.delivery);
+            				$scope.deliverSerial = data.data.deliver.serialNum;
+            				$scope.getTakeDeliverMateriel(data.data.deliver);
             				$scope.record.inOutType = '贸易';
-            				/*if(data.data.delivery.orderSerial!=null){
-            					$scope.record.orderNum = data.data.delivery.orderNum; //关联订单号
+            				/*if(data.data.deliver.orderSerial!=null){
+            					$scope.record.orderNum = data.data.deliver.orderNum; //关联订单号
             				}*/
             			
             			}else{
-            				$scope.getTakeDeliverMateriel(data.data.delivery);
+            				$scope.getTakeDeliverMateriel(data.data.deliver);
             				$scope.queryForPage();
             			}
             			
         			}else{ //其他类型入库时
         				if(!isNull($stateParams.serialNum)&&($location.path()=="/stockInView")){//入库编辑或入库时时
         					//var de$scope.record.serialNum;
-            				$scope.getTakeDeliverMateriel(data.data.delivery);
+            				$scope.getTakeDeliverMateriel(data.data.deliver);
             			}
         			}
         			

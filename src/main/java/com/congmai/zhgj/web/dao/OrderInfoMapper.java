@@ -40,5 +40,7 @@ public interface OrderInfoMapper {
 	
 	String getNumCode(Map m);
 
+	OrderInfo selectByOrderNum(String orderSerial);
+
     /*int updateByPrimaryKey(OrderInfo record);*/
 }

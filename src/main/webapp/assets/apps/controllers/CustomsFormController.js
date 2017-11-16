@@ -494,7 +494,7 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 										headerOffset : a
 									},*/
 									// select: true,行多选
-									order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+									order : [ [ 1, "desc" ] ],// 默认排序列及排序方式
 									bRetrieve : true,
 									//"sScrollX": "100%",
 								//	"sScrollXInner": "110%",
