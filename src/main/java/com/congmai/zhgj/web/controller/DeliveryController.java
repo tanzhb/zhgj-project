@@ -207,7 +207,7 @@ public class DeliveryController {
      * @return
      */
     @RequestMapping(value = "/getWarehouseList", method = RequestMethod.GET)
-    public ResponseEntity<List<Warehouse>>  getWarehouseList(HttpServletRequest request) {
+    public ResponseEntity<List<Warehouse>>  getWarehouseList(HttpServletRequest request,String  comId) {
 		List<Warehouse> warehouses = warehouseService.selectList();
 		return new ResponseEntity<List<Warehouse>>(warehouses, HttpStatus.OK);
 	}
