@@ -267,7 +267,7 @@
 															name="deliveryWarehouseSerial"
 															ng-model="delivery.warehouseSerial"
 															ng-change="selectAddress()" ng-show="inputDeliveryInfo">
-															<option ng-repeat="item in warehouseList"
+															<option ng-repeat="item in warehouseListf"
 																value="{{item.serialNum}}">{{item.warehouseName}}</option>
 															<option value=""></option>
 														</select>
@@ -318,7 +318,7 @@
 															name="warehouseSerial"
 															ng-model="takeDelivery.warehouseSerial"
 															ng-change="selectAddressTakeDelivery()" ng-show="inputDeliveryInfo">
-															<option ng-repeat="item in warehouseList"
+															<option ng-repeat="item in warehouseLists"
 																value="{{item.serialNum}}">{{item.warehouseName}}</option>
 															<option value=""></option>
 														</select>

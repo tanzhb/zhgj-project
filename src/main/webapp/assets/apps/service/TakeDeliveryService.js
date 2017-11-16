@@ -73,14 +73,28 @@ angular.module('MetronicApp').service('takeDeliveryService',['$http','$q',functi
 	/**
 	 * 初始化仓库
 	 */
-	this.initWarehouse = function (comId){
+	this.initWarehouse = function (judgeString,comId){
 		var deferred = $q.defer();
-		$http.get("rest/takeDelivery/initWarehouse")
+		/*$http.get("rest/takeDelivery/initWarehouse")
 		.then(function success(result) {
 			deferred.resolve(result);//请求成功
 		}, function error(err) {
 			deferred.reject(err);//请求失败
-		});
+		});*/
+		 $http({    
+	            method: "POST",    
+	            url: "rest/delivery/getWarehouseList",    
+	            params: {  
+	            	judgeString: judgeString,  
+	            	comId:comId,
+	            }  
+	        }).success(function (data) {
+	            // 如果连接成功，延时返回给调用者
+	            deferred.resolve(data);
+	        }).error(function () {
+	            deferred.reject('连接服务器出错！');
+	        })
+	   		
 		return deferred.promise;//返回承诺
 	}
 	

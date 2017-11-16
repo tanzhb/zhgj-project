@@ -358,9 +358,9 @@ public class InvoiceController {
 		pageMap.put("deliverAmount", deliverAmount);
 		pageMap.put("customsAmount", customsAmount);
 		pageMap.put("addedTax", addedTax);//playArrivalDate  shipNumber  port
-		pageMap.put("playArrivalDate", dt.getPlayArrivalDate());
-		pageMap.put("shipNumber", dt.getShipNumber());
-		pageMap.put("port", dt.getPort());
+		pageMap.put("playArrivalDate",  dt==null?"":dt.getPlayArrivalDate());
+		pageMap.put("shipNumber", dt==null?"":dt.getShipNumber());
+		pageMap.put("port", dt==null?"":dt.getPort());
 		
 		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 	}
