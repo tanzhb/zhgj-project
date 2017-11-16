@@ -98,6 +98,7 @@ import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
+import com.congmai.zhgj.web.model.WarehouseExample;
 import com.congmai.zhgj.web.model.OrderMaterielExample.Criteria;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.ContractService;
@@ -206,19 +207,34 @@ public class DeliveryController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/getWarehouseList", method = RequestMethod.GET)
-    public ResponseEntity<List<Warehouse>>  getWarehouseList(HttpServletRequest request,String  judgeString) {
+    @RequestMapping(value = "/getWarehouseList", method = RequestMethod.POST)
+    public ResponseEntity<List<Warehouse>>  getWarehouseList(HttpServletRequest request, String  judgeString,String  comId) {
+    	WarehouseExample we=new WarehouseExample();
+    		com.congmai.zhgj.web.model.WarehouseExample.Criteria  c=	we.createCriteria();
+    		c.andDelFlgEqualTo("0");
+    		User user = UserUtil.getUserFromSession();
+    		String	comId1 = userCompanyService.getUserComId(String.valueOf(user.getUserId()));//查询当前登录人所属企业类型
+    		if("pt".equals(judgeString)){
+    			if(StringUtils.isEmpty(comId)){
+    				if(StringUtils.isEmpty(comId1)){
+    					c.andOwnerEqualTo("pingtai");
+    				}else{
+    					c.andOwnerEqualTo(comId1);
+    				}
+    			}else{
+    				c.andOwnerEqualTo(comId);
+    			}
+    		}else if("pts".equals(judgeString)){//
+    			if(StringUtils.isEmpty(comId)){
+    				c.andOwnerEqualTo("pingtai");
+    			}else{
+    				c.andOwnerEqualTo(comId);
+    			}
+    		}else if("buys".equals(judgeString)){//采购商收货仓库列表
+    			c.andOwnerEqualTo(comId1);
+    		}
+    	List<Warehouse> warehouses = warehouseService.selectWarehouseList(we);
     	
-    	User user = UserUtil.getUserFromSession();
-    	String	comIds = userCompanyService.getUserComId(String.valueOf(user.getUserId()));//查询当前登录人所属企业类型
-    	Company com =companyservice.selectById(comIds);
-    	List<Warehouse> warehouses=null;
-    	if(com==null||"1".equals(com.getComType())){//平台/采购商发货选择平台仓库
-    		warehouses = warehouseService.selectList();
-    	}else{//
-    		
-    	}
-		//List<Warehouse> warehouses = warehouseService.selectList();
 		return new ResponseEntity<List<Warehouse>>(warehouses, HttpStatus.OK);
 	}
     

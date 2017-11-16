@@ -97,7 +97,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
     	}
     
     //查询仓库列表
-    initWarehouses();
+    initWarehouses('pt',null,"out");//先加载平台发货仓库列表
 		//$scope.getWarehouseList();
 		if($state.current.name=="delivery"){
 			var type = handle.getCookie("d_type");
@@ -153,25 +153,29 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		});
 	}
    /**
-	 * 加载供应商数据
+	 * 加载仓库数据
 	 */
-	var initWarehouses = function(){
-		var promise = DeliveryService.getWarehouseList();
+	var initWarehouses = function(judgeString,comId,index){
+		var promise = DeliveryService.getWarehouseList(judgeString,comId);
        	promise.then(function(data){
-		     $scope.warehouseList=data;
+       		if(index=="out"){
+       		 $scope.warehouseListf=data;
+       		setTimeout(function () {
+       		  	$("#deliverWarehouse").selectpicker({
+                showSubtext: true
+            });
+			$('#deliverWarehouse').selectpicker('refresh');//刷新插件
+               }, 100);
+       		 
+       		}else{
+       		 $scope.warehouseLists=data;
        		setTimeout(function () {
        			$("#takeDeliverWarehouse").selectpicker({
                        showSubtext: true
                    });
        			$('#takeDeliverWarehouse').selectpicker('refresh');//刷新插件
-       			
-       			$("#deliverWarehouse").selectpicker({
-                    showSubtext: true
-                });
-    			$('#deliverWarehouse').selectpicker('refresh');//刷新插件
-       			
                }, 100);
-       		
+       		}
        	},function(data){
        		//调用承诺接口reject();
        	});
@@ -391,7 +395,6 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			return;
 		}
 		
-		if($('#form_sample_2').valid()){
 		handle.blockUI();
 	/*	var params = {};
 		params.deliveryMateriels = [];
@@ -452,7 +455,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			handle.unblockUI();
 			toastr.error("保存失败！请联系管理员");
 			console.log(data);
-		});}
+		});
 	};
 	
 	
@@ -1931,6 +1934,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	}else{
 	          		    		$scope.delivery.receiver=data.orderInfo.buyName;//收货方默认销售订单的采购方
 	          		    	}
+	          		    	 initWarehouses('pts',data.orderInfo.buyComId,"in");
 	          		    	
 	          		    	$scope.delivery.maker=data.currenLoginName;//制单人默认当前用户
 	          		    	/*$scope.delivery.deliverNum=data.deliverNum;//随机产生的发货单号

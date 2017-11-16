@@ -119,7 +119,8 @@
 	select serialNum from stockInOutRecord WHERE deliverSerial in (select serialNum from delivery WHERE orderSerial = #{serialNum,jdbcType=VARCHAR})<!-- 出库记录日志   -->
 	UNION
 	select serialNum from stockInOutRecord WHERE takeDeliverSerial in (select serialNum from takeDelivery WHERE deliverSerial in (select serialNum from delivery WHERE orderSerial = #{serialNum,jdbcType=VARCHAR}))<!-- 入库记录日志   -->
-    
+     UNION
+      select serialNum from customsform WHERE orderSerial = #{serialNum,jdbcType=VARCHAR}<!--清关报关日志   -->
     )
   </select>
   

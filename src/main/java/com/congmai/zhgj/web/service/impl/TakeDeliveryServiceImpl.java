@@ -657,6 +657,8 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			}
 			CustomsForm customsForm=new  CustomsForm();
 			customsForm.setStatus("0");
+			customsForm.setDelFlg("0");
+			customsForm.setCustomsFormNum(orderService.getNumCode("BG"));
     		customsForm.setSerialNum(ApplicationUtils.random32UUID());
     		customsForm.setCustomsFormType("declaration");
     		customsForm.setCreator(currenLoginName);

@@ -68,7 +68,8 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
         		loadOrderTable();//加载订单列表
         		
         		getCurrentUser();
-        		initWarehouse();
+        		//initWarehouse();
+        		initWarehouses( "pts",null,"out");
         		$rootScope.setNumCode("SE",function(newCode){
 	    			$scope.deliver.deliverNum = newCode;
 	    			$scope.deliver.approvalDate=$filter('date')(new Date(), 'yyyy-MM-dd');
@@ -3075,6 +3076,37 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 				//调用承诺接口reject();
 			});
 			}
+			/**
+			 * 加载仓库数据提货
+			 */
+			  /**
+			 * 加载仓库数据
+			 */
+			var initWarehouses = function(judgeString,comId,index){
+				var promise = deliveryService.getWarehouseList(judgeString,comId);
+		       	promise.then(function(data){
+		       		if(index=="out"){
+		       		 $scope.warehouseListf=data;
+		       		setTimeout(function () {
+		       		  	$("#dWarehouseSerialnum").selectpicker({
+		                showSubtext: true
+		            });
+					$('#dWarehouseSerialnum').selectpicker('refresh');//刷新插件
+		               }, 100);
+		       		 
+		       		}else{
+		       		 $scope.warehouseLists=data;
+		       		setTimeout(function () {
+		       			$("#warehouseSerialnum").selectpicker({
+		                       showSubtext: true
+		                   });
+		       			$('#warehouseSerialnum').selectpicker('refresh');//刷新插件
+		               }, 100);
+		       		}
+		       	},function(data){
+		       		//调用承诺接口reject();
+		       	});
+			}
 			
 			var getComId=function (){
 				var promise = orderService.getComId();
@@ -4239,7 +4271,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 							var order = order_table.row('.active').data();
 							$scope.deliver.supplyComId = order.supplyComId;
 							$scope.deliver.buyComId = order.buyComId;
-							
+							initWarehouses( "buys",null,"in");
 							
 							$scope.deliver.shipper = "中航能科（上海）能源科技有限公司";
 							$scope.deliver.receiver=order.buyName;

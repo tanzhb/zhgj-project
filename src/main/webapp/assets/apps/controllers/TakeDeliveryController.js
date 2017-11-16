@@ -22,7 +22,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    		
 	    		//initOrders();
 	    		initSuppliers(); //加载供应商
-	    		initWarehouse(); //加载仓库
+	    		//initWarehouse(); //加载仓库
 	    		initCustomers(); //加载客户
 	    		getCurrentUser(); //加载当前用户信息
 	    		validatorInit();//验证初始化
@@ -154,22 +154,29 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 			/**
 			 * 加载仓库数据
 			 */
-			var initWarehouse = function(){
-			var promise = takeDeliveryService.initWarehouse();
+			var initWarehouse = function(judgeString,comId,index){
+			var promise = takeDeliveryService.initWarehouse(judgeString,comId);
 			promise.then(function(data){
-				$scope.warehouses = data.data;
-				setTimeout(function () {
-	       			$("#dWarehouseSerialnum").selectpicker({
-	                       showSubtext: false
-	                   });
-	       			//$('#dWarehouseSerialnum').selectpicker('refresh');//刷新插件
-	       			
-	       			$("#warehouseSerialnum").selectpicker({
-	                    showSubtext: false
-	                });
-	    			//$('#warehouseSerialnum').selectpicker('refresh');//刷新插件
-	       			
-	               }, 100);
+//				$scope.warehouses = data.data;
+				if(index=="out"){
+					$scope.warehouselistf = data;
+					setTimeout(function () {
+		       			$("#dWarehouseSerialnum").selectpicker({
+		                       showSubtext: false
+		                   });
+		       		$('#dWarehouseSerialnum').selectpicker('refresh');//刷新插件
+		       			            }, 100);
+				}else{
+					$scope.warehouselists = data;
+					setTimeout(function () {
+						$("#warehouseSerialnum").selectpicker({
+		                    showSubtext: false
+		                });
+		    			$('#warehouseSerialnum').selectpicker('refresh');
+		       			            }, 100);
+					
+				}
+				
 			},function(data){
 				//调用承诺接口reject();
 			});
@@ -1620,7 +1627,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 						//$scope.deliver.receiver =  order.buyComId;
 						$scope.deliver.receiver =  order.buyName;
 					}
-					
+					initWarehouse("pt",$scope.deliver.supplyComId,"out");
+					initWarehouse("pt",$scope.deliver.buyComId,"in");
 					
 					$scope.deliver.supplyName = order.supplyName;
 					$scope.deliver.shipper = order.supplyName;

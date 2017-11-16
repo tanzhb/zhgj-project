@@ -218,7 +218,7 @@
       
     </if>
      <if test="deliverType == 'mhq'" ><!-- 供应商查看销售订单发货列表发货计划 -->
-       AND( a.supplyComId is null  and a.buyComId is not null and  a.status != 0 ) or (a.status= 0 and a.deliverType!='采购商提货'  )
+       AND(( a.supplyComId is null  and a.buyComId is not null and  a.status != 0 ) or (a.status= 0 and a.deliverType!='采购商提货'  ))
     </if>
 <!-- 	<if test="supplyComIds != null" >
         and a.supplyComId in

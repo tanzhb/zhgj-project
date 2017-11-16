@@ -37,6 +37,7 @@ import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.service.DeliveryService;
+import com.congmai.zhgj.web.service.OrderService;
 
 /**
  * 
@@ -66,6 +67,9 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 	
 	@Resource
 	private StockInOutCheckMapper  stockInOutCheckMapper;
+	
+	@Resource
+	private OrderService  orderService;
 	
 
 	@Override
@@ -437,6 +441,8 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		}
 		CustomsForm customsForm=new  CustomsForm();
 		customsForm.setStatus("0");
+		customsForm.setDelFlg("0");
+		customsForm.setCustomsFormNum(orderService.getNumCode("QG"));
 		customsForm.setSerialNum(ApplicationUtils.random32UUID());
 		customsForm.setCustomsFormType("clearance");
 		customsForm.setCreator(currenLoginName);

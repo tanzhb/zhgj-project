@@ -261,7 +261,7 @@
                                                     <div  ng-hide="deliverAdd" >
                                                     	<select class="bs-select1 form-control order" data-live-search="true"  id="dWarehouseSerialnum"  name="dWarehouseSerial" ng-model="deliver.warehouseSerial"  ng-change="getWarehouseName('deliver')" ng-hide="deliverAdd"  data-size="">
 	                                                        <option value=""></option>
-	                                                        <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
+	                                                        <option  ng-repeat="warehouse in warehouseListf" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
 	                                                    </select>
 	                                                    </div>
                                                         <div class="form-control-focus"> </div>
@@ -303,7 +303,7 @@
                                                     <div  ng-hide="deliverAdd" >
                                                     	<select class="bs-select2 form-control order"  data-live-search="true"  id="warehouseSerialnum"  name="warehouseSerial" ng-model="takeDeliver.warehouseSerial" ng-change="getWarehouseName()" ng-hide="deliverAdd"  data-size="">
 	                                                        <option value=""></option>
-	                                                        <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
+	                                                        <option  ng-repeat="warehouse in warehouseLists" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
 	                                                    </select>
 	                                                    </div>
                                                          <p class="control-label left" ng-show="deliverView">{{takeDeliver.takeDeliverAddress}}</p>
