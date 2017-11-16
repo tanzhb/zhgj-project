@@ -327,7 +327,7 @@ public class DeliveryController {
 		Boolean createQG=StaticConst.getInfo("waimao").equals(o.getTradeType())&&!StringUtils.isEmpty(o.getSupplyComId());//供应商发货/平台发货是否产生清关单
 		deliveryService.updateOrderWhenDeliveryComlete(map);
 		map.put("createQG", createQG);
-		deliveryService.goDelivery(map);
+		deliveryService.goDelivery(map);//外贸供应商发货
 		if(!createQG){//不产生清关单(供应商发货/平台发货)
 			OrderInfo orderInfo=new OrderInfo();
 			orderInfo.setSerialNum(orderSerial);
@@ -387,7 +387,7 @@ public class DeliveryController {
 					//更新订单状态至待出库
 					orderInfo.setDeliverStatus(orderInfo.WAIT_OUTRECORD);
 					delivery1.setStatus(DeliveryVO.WAITRECORD);
-					takeDelivery.setStatus(TakeDelivery.COMPLETE);
+					takeDelivery.setStatus(TakeDelivery.CHECK_COMPLETE);
 				}else{//供应商发货--> 不走清关 --> 不需收货 --> 不需要检验 --> 生成入库单
 					takeDelivery.setStatus(TakeDelivery.CHECK_COMPLETE); //已完成
 					orderInfo.setDeliverStatus(orderInfo.WAIT_INRECORD);//待入库

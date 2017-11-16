@@ -166,7 +166,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
         			$scope.takeDeliveryMateriels = data.data;
         			var deliveryMaterielSerialNums=new Array();
     				for(var i in data.data){
-    					if(data.data[i].supplyMateriel!=null){
+    					if(isNull($scope.takeDeliveryMateriels[i].orderMateriel)){
         					$scope.takeDeliveryMateriels[i].orderMateriel = data.data[i].supplyMateriel;
         					delete $scope.takeDeliveryMateriels[i].supplyMateriel;
     					}
@@ -207,7 +207,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 						for(var i=0;i < $scope.takeDeliveryMateriels.length;i++){
 							param = {};
 							param.stockCount = $scope.takeDeliveryMateriels[i].stockCount;
-							if(isNull($scope.takeDeliveryMateriels[i].supplyMaterielSerial)){ //贸易出库
+							if(!isNull($scope.takeDeliveryMateriels[i].orderMateriel)){ //贸易出库
 								param.serialNum = $scope.takeDeliveryMateriels[i].serialNum;
 								param.unstockCount = $scope.takeDeliveryMateriels[i].deliverCount-$scope.takeDeliveryMateriels[i].stockCount;
 								param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].orderMaterielSerial;
