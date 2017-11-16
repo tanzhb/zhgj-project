@@ -141,6 +141,7 @@
 												 <select class="form-control" data-live-search="true" data-size=""   id="owner" name ="owner"     ng-model="warehouse.owner"    ng-if="warehouseowner1==''">
                                                        <!--  <option  ng-repeat="op in supplyCom " value="{{op.comId}}"  > {{op.comName}}</option> -->
                                                        <option value="">无</option>
+                                                         <option value="pingtai">中航能科（上海）能源科技有限公司</option>
                                                    <option  ng-repeat="com in coms" value="{{com.comId}}" >{{com.comName}}</option><!--  disabled="disabled" -->
                                                     </select>
                                                      <!-- <select class="form-control" data-live-search="true" data-size=""   id="owner" name ="owner"    ng-model="warehouse.owner"  ng-if="warehouse.owner!=''">
@@ -151,7 +152,7 @@
 												ng-model="warehouse.ownerName" >
                                                     </div>
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="warehouseView">{{warehouse.ownerName}}</p> 
+                                                                        <p class="control-label left" ng-show="warehouseView">{{warehouse.ownerName==null?"中航能科（上海）能源科技有限公司":warehouse.ownerName}}</p> 
                                                                     </div>
                                                                 </div>
                                                             </div>

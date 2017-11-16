@@ -176,6 +176,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
        		//调用承诺接口reject();
        	});
 	}
+	
    //编辑页面的ng-repeat完成
    $scope.repeatDone1 = function(){
 	   $('.date-picker').datepicker({
@@ -263,6 +264,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
             	batchNum:{required:"批次号不能为空！"},
             	manufactureDate:{required:"生产日期不能为空！"},
             	deliverCount:{required:"发货数量不能为空！",digits:"只能是正整数！"},
+            	deliverCount1:{required:"发货数量不能为空！",digits:"只能是正整数！"},
             },
             rules: {
             	batchNum:{
@@ -388,6 +390,8 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			toastr.error("请先保存发货信息！");	
 			return;
 		}
+		
+		if($('#form_sample_2').valid()){
 		handle.blockUI();
 	/*	var params = {};
 		params.deliveryMateriels = [];
@@ -448,7 +452,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			handle.unblockUI();
 			toastr.error("保存失败！请联系管理员");
 			console.log(data);
-		});
+		});}
 	};
 	
 	
@@ -2799,10 +2803,9 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	}
     
 	jQuery.validator.addMethod("deliverNumCheck", function (value, element) {
-			//console.log(----------------");
-			//console.log($(element));
-		    return this.optional(element) || Number(element.dataset.ordercount)-value >= 0;
+		    return element.dataset.ordercount=="otherMode"?false : this.optional(element) || Number(element.dataset.ordercount)-value >= 0;
 		}, "发货数量不能超过订单数量");
+
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         // 获取已激活的标签页的名称
         var activeTab = $(e.target).text(); 

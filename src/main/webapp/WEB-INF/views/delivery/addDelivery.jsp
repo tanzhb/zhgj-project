@@ -939,13 +939,20 @@
 															<p class="form-control-static">{{_deliveryMateriel.amount}}
 															</p>
 														</td>
-														<td class="form-group"><input type="text"
+														<td class="form-group"><input type="text"  ng-if="!otherMode"
 															name="deliverCount" id="deliverCount{{$index}}"  ng-init="deliveryMaterielE[$index].deliverCount=_deliveryMateriel.amount"
 															class="form-control"
 															ng-hide="orderMaterielInput{{$index}}"
 															ng-model="deliveryMaterielE[$index].deliverCount"
 															data-ordercount="{{_deliveryMateriel.amount}}"
-															/><!-- ng-blur="getTotalDeliveryCount()"  -->
+															/>
+															<input type="text"  ng-if="otherMode"
+															name="deliverCount" id="deliverCount{{$index}}"  
+															class="form-control"
+															ng-hide="orderMaterielInput{{$index}}"
+															ng-model="deliveryMaterielE[$index].deliverCount"   data-ordercount="otherMode"
+															 
+															/><!-- ng-blur="getTotalDeliveryCount()"  --><!--  ng-blur="judgeNumber($index)" -->
 															<div class="form-control-focus"></div>
 															<p class="form-control-static"
 																ng-show="orderMaterielShow{{$index}}">

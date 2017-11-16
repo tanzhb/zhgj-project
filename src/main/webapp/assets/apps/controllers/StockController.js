@@ -31,7 +31,7 @@ angular
 														 $rootScope.setNumCode("IV",function(newCode){//
 															 $scope.stock={};
 										    		 			$scope.stock.stockNum= newCode;//自建.代管库存编号
-										    		 			$scope.stock.serviceParty= "中航能科";//自建.代管库存编号
+										    		 			$scope.stock.serviceParty= "中航能科（上海）能源科技有限公司";//自建.代管库存编号
 										    		 		});
 													}
 													initSuppliers();//初始化物权方选择框

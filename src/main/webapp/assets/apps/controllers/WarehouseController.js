@@ -278,6 +278,7 @@ angular
 								$scope.warehouseowner1=data.comId;
 								$scope.warehouse.ownerName=data.comName;
 							}else{
+								//$scope.warehouse.owner="pingtai";
 								$scope.warehouse.owner="";
 								$scope.warehouseowner1="";
 							}

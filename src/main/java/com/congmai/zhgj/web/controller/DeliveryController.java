@@ -207,8 +207,18 @@ public class DeliveryController {
      * @return
      */
     @RequestMapping(value = "/getWarehouseList", method = RequestMethod.GET)
-    public ResponseEntity<List<Warehouse>>  getWarehouseList(HttpServletRequest request,String  comId) {
-		List<Warehouse> warehouses = warehouseService.selectList();
+    public ResponseEntity<List<Warehouse>>  getWarehouseList(HttpServletRequest request,String  judgeString) {
+    	
+    	User user = UserUtil.getUserFromSession();
+    	String	comIds = userCompanyService.getUserComId(String.valueOf(user.getUserId()));//查询当前登录人所属企业类型
+    	Company com =companyservice.selectById(comIds);
+    	List<Warehouse> warehouses=null;
+    	if(com==null||"1".equals(com.getComType())){//平台/采购商发货选择平台仓库
+    		warehouses = warehouseService.selectList();
+    	}else{//
+    		
+    	}
+		//List<Warehouse> warehouses = warehouseService.selectList();
 		return new ResponseEntity<List<Warehouse>>(warehouses, HttpStatus.OK);
 	}
     
