@@ -116,7 +116,7 @@
 										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">供应商<!-- <span
+													<label class="control-label bold">发货方<!-- <span
 														class="required" aria-required="true"> * </span> --></label>
 													<div class="">
 														<input type="text" name="shipper" class="form-control"
@@ -131,7 +131,7 @@
 											<!--/span-->
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">采购商<!-- <span
+													<label class="control-label bold">收货方<!-- <span
 														class="required" aria-required="true"> * </span> --></label>
 													<div class="">
 														<input type="text" class="form-control" name="receiver"

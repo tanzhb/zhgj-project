@@ -1,7 +1,10 @@
 package com.congmai.zhgj.web.controller;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -222,6 +225,23 @@ public class StockController {
 					stock.setMaterielOwnerName(StaticConst.getInfo("comName"));
 				}
 			stock.setServiceParty(StaticConst.getInfo("comName"));
+			if(stock.getLastOutDateDaiguan()!=null&&stock.getLastOutDateZijian()!=null){
+				Date date1=new Date();
+				Date date2=new Date();
+				try {
+					date1 = new SimpleDateFormat("yyyy-MM-dd").parse(stock.getLastOutDateDaiguan());
+					 date2=new SimpleDateFormat("yyyy-MM-dd").parse(stock.getLastOutDateZijian());
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if(date1.getTime()>=date2.getTime()){
+					stock.setLastOutDateZijian(null);
+				}else{
+					stock.setLastOutDateDaiguan(null);
+				}
+				
+			}
 			map.put("stock", stock);
     }
     	//List<Company>comList=companyService.selectList();

@@ -124,11 +124,13 @@ margin-right: 20px;
 											<div class="form-group">
                                                     <label class="control-label col-md-4 bold" for="currentAmount"> 库存数量 :</label>
                                                     <div class="control-label col-md-7">
-                                                         <p class="form-control-static"   ng-if="stock.countInAmountZijian==null||stock.countInAmountDaiguan==null">暂无库存</p>
+                                                <p class="form-control-static"   ng-if="stock.manageType=='1'">{{stock.countInAmountZijian-stock.countOutAmountZijian}}</p>
+                                                 <p class="form-control-static"   ng-if="stock.manageType=='2'">{{stock.countInAmountDaiguan-stock.countOutAmountDaiguan}}</p>
+                                                        <!--  <p class="form-control-static"   ng-if="stock.countInAmountZijian==null||stock.countInAmountDaiguan==null">暂无库存</p>
                                                          <p class="form-control-static"   ng-if="stock.countInAmountZijian!=null&&stock.countOutAmountZijian==null&&stock.manageType=='1'">{{stock.countInAmountZijian}}</p>
                                                          <p class="form-control-static"   ng-if="stock.countInAmountZijian!=null&&stock.countOutAmountZijian!=null&&stock.manageType=='1'">{{stock.countInAmountZijian-stock.countOutAmountZijian}}</p>
                                                          <p class="form-control-static"   ng-if="stock.countInAmountDaiguan!=null&&stock.countOutAmountDaiguan==null&&stock.manageType=='2'">{{stock.countInAmountDaiguan}}</p>
-                                                         <p class="form-control-static"   ng-if="stock.countInAmountDaiguan!=null&&stock.countOutAmountDaiguan!=null&&stock.manageType=='2'">{{stock.countInAmountDaiguan-stock.countOutAmountDaiguan}}</p>
+                                                         <p class="form-control-static"   ng-if="stock.countInAmountDaiguan!=null&&stock.countOutAmountDaiguan!=null&&stock.manageType=='2'">{{stock.countInAmountDaiguan-stock.countOutAmountDaiguan}}</p> -->
                                                     </div>
                                             </div>
 										</div>
@@ -188,8 +190,8 @@ margin-right: 20px;
 											<div class="form-group">
                                                     <label class="control-label col-md-4 bold" for="lastOutDate"> 最后出库日期 :</label>
                                                     <div class="control-label col-md-7">
-                                                          <p class="form-control-static"   ng-if="stock.lastOutDateDaiguan!=null&&stock.manageType=='2'">{{stock.lastOutDateDaiguan}}</p> 
-                                                           <p class="form-control-static"   ng-if="stock.lastOutDateZijian!=null&&stock.manageType=='1'">{{stock.lastOutDateZijian}}</p> 
+                                                          <p class="form-control-static"   ng-if="stock.lastOutDateDaiguan!=null">{{stock.lastOutDateDaiguan}}</p> 
+                                                           <p class="form-control-static"   ng-if="stock.lastOutDateZijian!=null">{{stock.lastOutDateZijian}}</p> 
                                                           <p class="form-control-static"   ng-if="stock.lastOutDateDaiguan==null&&stock.lastOutDateZijian==null">暂无出库日期</p>
                                                     </div>
                                             </div>

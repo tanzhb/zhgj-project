@@ -134,7 +134,7 @@
 										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">供应商<span   ng-hide="span"
+													<label class="control-label bold">发货方<span   ng-hide="span"
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<input type="text" name="shipper" class="form-control"
@@ -149,7 +149,7 @@
 											<!--/span-->
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">采购商<span  ng-hide="span"
+													<label class="control-label bold">收货方<span  ng-hide="span"
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<input type="text" class="form-control" name="receiver"
@@ -259,8 +259,8 @@
 										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">发货仓库<span  ng-hide="span"
-														class="required" aria-required="true"> * </span></label>
+													<label class="control-label bold">发货仓库<!-- <span  ng-hide="span"
+														class="required" aria-required="true"> * </span> --></label>
 													<div class="">
 													<div  ng-hide="span">
 														<select class="form-control"  id="deliverWarehouse"  data-live-search="true" data-size="" 
@@ -296,7 +296,8 @@
 											<!--/span-->
 											<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="deliverDate"><span ng-if="deliver.packageType=='配送'">发货</span><span ng-if="deliver.packageType=='自提'">提货</span>日期 </label>
+                                                    <label class="control-label bold" for="deliverDate"><span ng-if="deliver.packageType=='配送'">发货</span><span ng-if="deliver.packageType=='自提'">提货</span>日期 <span ng-hide="span"
+														class="required" aria-required="true"> * </span></label>
                                                     <div class="">
                                                         <input type="text" class="form-control  date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="deliverDate"  name="deliverDate" ng-model="deliver.deliverDate" ng-show="inputDeliveryInfo" readonly="readonly">
                                                         <div class="form-control-focus"> </div>
@@ -310,8 +311,8 @@
 										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">收货仓库<span  ng-hide="span"
-														class="required" aria-required="true"> * </span></label>
+													<label class="control-label bold">收货仓库<!-- <span  ng-hide="span"
+														class="required" aria-required="true"> * </span> --></label>
 													<div class="">
 													<div  ng-hide="span">
 														<select class="form-control"  data-live-search="true" data-size=""   id="takeDeliverWarehouse"
