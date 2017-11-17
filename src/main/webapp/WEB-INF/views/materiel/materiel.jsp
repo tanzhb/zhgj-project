@@ -155,7 +155,7 @@ margin-bottom: 20px;
 					                        </shiro:hasAnyRoles>
 					                        <shiro:hasAnyRoles  name="admin, supplier">
 					                        <li class="bold">
-					                            <a href="#" data-target="#tab_2_2" data-toggle="tab"> 使用采购商 </a>
+					                            <a href="#" data-target="#tab_2_2" data-toggle="tab"> 采购商 </a>
 					                        </li>
 					                        </shiro:hasAnyRoles>
 					                        <li class="bold">
@@ -529,39 +529,59 @@ margin-bottom: 20px;
 										                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_1">
 										                    <thead>
 										                        <tr>
-										                            <th> 供应商物料编码 </th>
-										                            <th> 供应商名称 </th>
-										                            <th> 规格型号 </th>
-										                            <th> 包装单位 </th>
-										                            <th> 长 </th>
-										                            <th> 宽 </th>
-										                            <th> 高 </th>
-										                            <th> 包装体积 </th>
-										                            <th> 包装单位换算 </th>
+										                            <th style="width:150px">供应商</th>
+							                                      	<th>供应商物料编号</th>
+																	<th>物料名称</th>
+																	<th>规格型号</th>
+																	<th>单位</th>
+																	<th>物料大类</th>
+																	<th>一级分类</th>
+																	<th>二级分类</th>
+																	<th>指导单价</th>
+																	<th>采购配额</th>
+																	<th>最小起订量</th>
+																	<th>备注</th>
 										                        </tr>
 										                    </thead>
 										                    <tbody>
 								                                  <tr ng-repeat="_supplyMateriel in supplyMateriel track by $index" >
 											                          <td>
-											                                <p class="form-control-static"> {{_supplyMateriel.supplyMaterielNum}} </p>
+										                                <p class="form-control-static" > {{_supplyMateriel.supply.comName}} </p>
 											                          </td>
+											                           <td>
+											                                <p class="form-control-static" > {{_supplyMateriel.supplyMaterielNum}} </p>
+											                          </td>
+											                          
 											                          <td>
-											                                <p class="form-control-static"> {{_supplyMateriel.supply.comName}} </p>
-											                          </td>
-											                          <td>
-											                          </td>
-											                          <td>
-											                          </td>
-											                          <td>
-											                          </td>
-											                          <td>
-											                          </td>
-											                          <td>
-											                          </td>
-											                          <td>
-											                          </td>
-											                          <td>
-											                          </td>
+									                                      <p class="form-control-static" > {{_supplyMateriel.materielName}} </p>
+								                                      </td>
+								                                      <td>
+									                                      <p class="form-control-static" > {{_supplyMateriel.specifications}} </p>
+								                                      </td>
+								                                      <td>
+									                                      <p class="form-control-static" > {{_supplyMateriel.unit}} </p>
+								                                      </td>
+								                                      <td>
+								                                      		<p class="form-control-static" > {{_supplyMateriel.typeName}} </p>
+								                                      </td>
+								                                      <td>
+									                                      <p class="form-control-static" > {{_supplyMateriel.categoryName1}} </p>
+								                                      </td>
+								                                      <td>
+									                                      <p class="form-control-static" > {{_supplyMateriel.categoryName2}} </p>
+								                                      </td>
+								                                      <td>
+									                                      <p class="form-control-static" > {{_supplyMateriel.unitPriceGuide}} </p>
+								                                      </td>
+								                                      <td>
+									                                      <p class="form-control-static" > {{_supplyMateriel.purchaseQuota}} </p>
+								                                      </td>
+								                                      <td>
+									                                      <p class="form-control-static" > {{_supplyMateriel.moq}} </p>
+								                                      </td>
+								                                      <td>
+									                                      <p class="form-control-static" > {{_supplyMateriel.remark}} </p>
+								                                      </td>
 											                          
 								                                  </tr>
 								                              </tbody>
@@ -573,20 +593,59 @@ margin-bottom: 20px;
 										                <table class="table table-striped table-bordered table-hover table-checkable order-column" >
 										                    <thead>
 										                        <tr>
-										                            <th> 供应商物料编码 </th>
-										                            <th> 供应商名称 </th>
+										                           <th style="width:200px">采购商</th>
+							                                      <th>采购商物料编号</th>
+							                                      <th>物料名称</th>
+																	<th>规格型号</th>
+																	<th>单位</th>
+																	<th>物料大类</th>
+																	<th>一级分类</th>
+																	<th>二级分类</th>
+																	<th>指导单价</th>
+																	<th>采购配额</th>
+																	<th>最小起订量</th>
+																	<th>备注</th>
 										                            
 										                        </tr>
 										                    </thead>
 										                    <tbody>
 								                                  <tr ng-repeat="_buyMateriel in buyMateriel track by $index" >
 											                          <td>
-											                                <p class="form-control-static"> {{_buyMateriel.buyMaterielNum}} </p>
+											                                <p class="form-control-static" > {{_buyMateriel.buy.comName}} </p>
 											                          </td>
-											                          <td>
-											                                <p class="form-control-static"> {{_buyMateriel.buy.comName}} </p>
+											                           <td>
+											                                <p class="form-control-static" > {{_buyMateriel.buyMaterielNum}} </p>
 											                          </td>
-											                          
+								                                      <td>
+									                                      <p class="form-control-static" > {{_buyMateriel.materielName}} </p>
+								                                      </td>
+								                                      <td>
+									                                      <p class="form-control-static" > {{_buyMateriel.specifications}} </p>
+								                                      </td>
+								                                      <td>
+									                                      <p class="form-control-static" > {{_buyMateriel.unit}} </p>
+								                                      </td>
+								                                      <td>
+								                                      		<p class="form-control-static" > {{_buyMateriel.typeName}} </p>
+								                                      </td>
+								                                      <td>
+									                                      <p class="form-control-static" > {{_buyMateriel.categoryName1}} </p>
+								                                      </td>
+								                                      <td>
+									                                      <p class="form-control-static" > {{_buyMateriel.categoryName2}} </p>
+								                                      </td>
+								                                      <td>
+									                                      <p class="form-control-static" > {{_buyMateriel.unitPriceGuide}} </p>
+								                                      </td>
+								                                      <td>
+									                                      <p class="form-control-static" > {{_buyMateriel.purchaseQuota}} </p>
+								                                      </td>
+								                                      <td>
+									                                      <p class="form-control-static" > {{_buyMateriel.moq}} </p>
+								                                      </td>
+								                                      <td>
+									                                      <p class="form-control-static" > {{_buyMateriel.remark}} </p>
+								                                      </td>
 								                                  </tr>
 								                              </tbody>
 										                </table>

@@ -19,9 +19,23 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="materielName" property="materielName" jdbcType="VARCHAR" />
+    <result column="specifications" property="specifications" jdbcType="VARCHAR" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="category1" property="category1" jdbcType="VARCHAR" />
+    <result column="category2" property="category2" jdbcType="VARCHAR" />
+    <result column="category3" property="category3" jdbcType="VARCHAR" />
+    <result column="unitPriceGuide" property="unitPriceGuide" jdbcType="VARCHAR" />
+    <result column="purchaseQuota" property="purchaseQuota" jdbcType="VARCHAR" />
+    <result column="moq" property="moq" jdbcType="VARCHAR" />
     <association property="buy" column="buyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectByPrimaryKey"/>
     <association property="materiel" column="materielId" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByMaterielId"/> 
-    
+    <association property="typeName" column="type" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
+    <association property="categoryName1" column="category1" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
+    <association property="categoryName2" column="category2" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
+    <association property="categoryName3" column="category3" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
   </resultMap>
   
   
@@ -43,7 +57,22 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="materielName" property="materielName" jdbcType="VARCHAR" />
+    <result column="specifications" property="specifications" jdbcType="VARCHAR" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="category1" property="category1" jdbcType="VARCHAR" />
+    <result column="category2" property="category2" jdbcType="VARCHAR" />
+    <result column="category3" property="category3" jdbcType="VARCHAR" />
+    <result column="unitPriceGuide" property="unitPriceGuide" jdbcType="VARCHAR" />
+    <result column="purchaseQuota" property="purchaseQuota" jdbcType="VARCHAR" />
+    <result column="moq" property="moq" jdbcType="VARCHAR" />
     <association property="buy" column="buyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectByPrimaryKey"/>
+    <association property="typeName" column="type" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
+    <association property="categoryName1" column="category1" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
+    <association property="categoryName2" column="category2" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
+    <association property="categoryName3" column="category3" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -106,7 +135,8 @@
   <sql id="Base_Column_List" >
     serialNum, materielId, buyComId, buyMaterielNum, packageNum, packageSpecifications, 
     packageUnit, packagewidth, packageheight, packagelength, packagevolume, packageUnitConversion, 
-    delFlg, creator, createTime, updater, updateTime
+    delFlg, creator, createTime, updater, updateTime, remark, materielName, specifications, 
+    unit, type, category1, category2, category3, unitPriceGuide, purchaseQuota, moq
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.BuyMaterielExample" >
     select
@@ -122,7 +152,7 @@
       order by ${orderByClause}
     </if>
   </select>
-  
+    
   
   <select id="selectBuyMaterielByMaterielId" resultMap="BuyMaterielMap" parameterType="java.lang.String" >
     select
@@ -156,13 +186,21 @@
       packageUnit, packagewidth, packageheight, 
       packagelength, packagevolume, packageUnitConversion, 
       creator, createTime, 
-      updater, updateTime)
+      updater, updateTime, remark, 
+      materielName, specifications, unit, 
+      type, category1, category2, 
+      category3, unitPriceGuide, purchaseQuota, 
+      moq,sort)
     values (#{serialNum,jdbcType=VARCHAR}, #{materielId,jdbcType=VARCHAR}, #{buyComId,jdbcType=VARCHAR}, 
       #{buyMaterielNum,jdbcType=VARCHAR}, #{packageNum,jdbcType=VARCHAR}, #{packageSpecifications,jdbcType=VARCHAR}, 
       #{packageUnit,jdbcType=VARCHAR}, #{packagewidth,jdbcType=VARCHAR}, #{packageheight,jdbcType=VARCHAR}, 
       #{packagelength,jdbcType=VARCHAR}, #{packagevolume,jdbcType=VARCHAR}, #{packageUnitConversion,jdbcType=VARCHAR}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
+      #{materielName,jdbcType=VARCHAR}, #{specifications,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{category1,jdbcType=VARCHAR}, #{category2,jdbcType=VARCHAR}, 
+      #{category3,jdbcType=VARCHAR}, #{unitPriceGuide,jdbcType=VARCHAR}, #{purchaseQuota,jdbcType=VARCHAR}, 
+      #{moq,jdbcType=VARCHAR},#{sort,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.BuyMateriel" >
     insert into buyMateriel
@@ -218,6 +256,39 @@
       <if test="updateTime != null" >
         updateTime,
       </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="materielName != null" >
+        materielName,
+      </if>
+      <if test="specifications != null" >
+        specifications,
+      </if>
+      <if test="unit != null" >
+        unit,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="category1 != null" >
+        category1,
+      </if>
+      <if test="category2 != null" >
+        category2,
+      </if>
+      <if test="category3 != null" >
+        category3,
+      </if>
+      <if test="unitPriceGuide != null" >
+        unitPriceGuide,
+      </if>
+      <if test="purchaseQuota != null" >
+        purchaseQuota,
+      </if>
+      <if test="moq != null" >
+        moq,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
@@ -270,6 +341,39 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="materielName != null" >
+        #{materielName,jdbcType=VARCHAR},
+      </if>
+      <if test="specifications != null" >
+        #{specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null" >
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="category1 != null" >
+        #{category1,jdbcType=VARCHAR},
+      </if>
+      <if test="category2 != null" >
+        #{category2,jdbcType=VARCHAR},
+      </if>
+      <if test="category3 != null" >
+        #{category3,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPriceGuide != null" >
+        #{unitPriceGuide,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseQuota != null" >
+        #{purchaseQuota,jdbcType=VARCHAR},
+      </if>
+      <if test="moq != null" >
+        #{moq,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -333,6 +437,39 @@
       <if test="record.updateTime != null" >
         updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materielName != null" >
+        materielName = #{record.materielName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.specifications != null" >
+        specifications = #{record.specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unit != null" >
+        unit = #{record.unit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null" >
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.category1 != null" >
+        category1 = #{record.category1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.category2 != null" >
+        category2 = #{record.category2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.category3 != null" >
+        category3 = #{record.category3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unitPriceGuide != null" >
+        unitPriceGuide = #{record.unitPriceGuide,jdbcType=VARCHAR},
+      </if>
+      <if test="record.purchaseQuota != null" >
+        purchaseQuota = #{record.purchaseQuota,jdbcType=VARCHAR},
+      </if>
+      <if test="record.moq != null" >
+        moq = #{record.moq,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -356,7 +493,18 @@
       creator = #{record.creator,jdbcType=VARCHAR},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
       updater = #{record.updater,jdbcType=VARCHAR},
-      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      materielName = #{record.materielName,jdbcType=VARCHAR},
+      specifications = #{record.specifications,jdbcType=VARCHAR},
+      unit = #{record.unit,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR},
+      category1 = #{record.category1,jdbcType=VARCHAR},
+      category2 = #{record.category2,jdbcType=VARCHAR},
+      category3 = #{record.category3,jdbcType=VARCHAR},
+      unitPriceGuide = #{record.unitPriceGuide,jdbcType=VARCHAR},
+      purchaseQuota = #{record.purchaseQuota,jdbcType=VARCHAR},
+      moq = #{record.moq,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -412,6 +560,39 @@
       <if test="updateTime != null" >
         updateTime = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="materielName != null" >
+        materielName = #{materielName,jdbcType=VARCHAR},
+      </if>
+      <if test="specifications != null" >
+        specifications = #{specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null" >
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="category1 != null" >
+        category1 = #{category1,jdbcType=VARCHAR},
+      </if>
+      <if test="category2 != null" >
+        category2 = #{category2,jdbcType=VARCHAR},
+      </if>
+      <if test="category3 != null" >
+        category3 = #{category3,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPriceGuide != null" >
+        unitPriceGuide = #{unitPriceGuide,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseQuota != null" >
+        purchaseQuota = #{purchaseQuota,jdbcType=VARCHAR},
+      </if>
+      <if test="moq != null" >
+        moq = #{moq,jdbcType=VARCHAR},
+      </if>
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
@@ -432,7 +613,18 @@
       creator = #{creator,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP},
       updater = #{updater,jdbcType=VARCHAR},
-      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      materielName = #{materielName,jdbcType=VARCHAR},
+      specifications = #{specifications,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      category1 = #{category1,jdbcType=VARCHAR},
+      category2 = #{category2,jdbcType=VARCHAR},
+      category3 = #{category3,jdbcType=VARCHAR},
+      unitPriceGuide = #{unitPriceGuide,jdbcType=VARCHAR},
+      purchaseQuota = #{purchaseQuota,jdbcType=VARCHAR},
+      moq = #{moq,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
 </mapper>
