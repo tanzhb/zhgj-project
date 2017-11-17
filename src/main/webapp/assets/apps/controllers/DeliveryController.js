@@ -37,10 +37,10 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			$scope.delivery.deliverNum = newCode;
 		});
 		$scope.delivery={};
-    	$scope.delivery.deliverDate=$filter('date')(new Date(), 'yyyy-MM-dd');
-    	$scope.delivery.packageSpecifications="原厂包装";
+    	$scope.deliver.deliverDate=$filter('date')(new Date(), 'yyyy-MM-dd');
+    	/*$scope.delivery.packageSpecifications="原厂包装";*/
     	$scope.delivery.deliverType="贸易发货";
-    	$scope.delivery.approvalDate=$filter('date')(new Date(), 'yyyy-MM-dd');
+    	$scope.deliver.approvalDate=$filter('date')(new Date(), 'yyyy-MM-dd');
     	getCurrentUser();
 		
 		}
@@ -144,7 +144,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			debugger;
 			$scope.user = data.data;
 			console.log($stateParams.oprateType);
-			if($location.path()=="/addDeliveryforSaleOrder"){
+			if($location.path()=="/addDeliveryforSaleOrder"||$location.path()=="/addDeliveryforSupplyOrder"){
 				$scope.deliver.maker= data.data.userName;
 			}
 			
@@ -2435,8 +2435,8 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
             	takeDeliveryWarehouseAddress:{required:"收货地址不能为空！"},
             	warehouseAddress:{required:"发货地址不能为空！"},
             	
-            	deliveryWarehouseSerial:{required:"发货仓库不能为空！"},
-            	/*deliverDate:{required:"发货日期不能为空！"},*/
+            	/*deliveryWarehouseSerial:{required:"发货仓库不能为空！"},*/
+            	deliverDate:{required:"发货日期不能为空！"},
             	contactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
             	
             	
@@ -2445,7 +2445,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
             	deliveryTransportContactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
             	
             	
-            	warehouseSerial:{required:"收货仓库不能为空！"},
+            /*	warehouseSerial:{required:"收货仓库不能为空！"},*/
             	takeDeliveryContactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
             	
             	
@@ -2489,10 +2489,10 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
                 },
                 makeDate:{required:true,
                 },
-                deliveryWarehouseSerial:{required:true,
-                },
-             /*   deliverDate:{required:true,
+               /* deliveryWarehouseSerial:{required:true,
                 },*/
+                deliverDate:{required:true,
+                },
                 warehouseAddress:{required:true,
                 },
                 takeDeliveryWarehouseAddress:{required:true,
@@ -2509,8 +2509,8 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
                 	digits:true,
                 	rangelength:[7,20]
                 },
-                warehouseSerial:{required:true,
-                },
+              /*  warehouseSerial:{required:true,
+                },*/
                 takeDeliveryContactNum:{
                 	digits:true,
                 	rangelength:[7,20]

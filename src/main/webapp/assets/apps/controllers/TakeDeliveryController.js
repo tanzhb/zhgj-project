@@ -1075,7 +1075,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						            	makeDate:{required:"制单日期不能为空！"},
 	  						            	approval:{required:"审批人不能为空！"},
 	  						            	approvalDate:{required:"审批日期不能为空！"},
-	  						            	dWarehouseSerial:{required:"发货仓库不能为空！"},
+	  						            	/*dWarehouseSerial:{required:"发货仓库不能为空！"},*/
 	  						            	deliverDate:{required:"发货日期不能为空！"},
 	  						            	materielCount:{required:"物料数不能为空！"},
 	  						            	packageCount:{required:"包装件数不能为空！",digits:"包装件数必须为数字！"},
@@ -1095,7 +1095,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						            	playWarehouseDate:{required:"预计到库日期不能为空！"},
 	  						            	dtContact:{required:"联系人不能为空！"},
 	  						            	dtContactNum:{required:"联系电话不能为空！"},
-	  						            	warehouseSerial:{required:"收货仓库不能为空！"},
+	  						            	/*warehouseSerial:{required:"收货仓库不能为空！"},*/
 	  						            	takeDeliverDate:{required:"收货日期不能为空！"},
 	  						            	tdReceiver:{required:"联系人不能为空！"},
 	  						            	tdContactNum:{required:"联系电话不能为空！"},
@@ -1137,9 +1137,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						                approvalDate: {
 	  						                	required: !0
 	  						                },
-	  						                dWarehouseSerial: {
+	  						               /* dWarehouseSerial: {
 	  						                	required: !0
-	  						                },
+	  						                },*/
 	  						                deliverDate: {
 	  						                	required: !0
 	  						                },
@@ -1201,9 +1201,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						                	//required: !0,
 	  						                	isPhone: !0
 	  						                },
-	  						                warehouseSerial: {
+	  						               /* warehouseSerial: {
 	  						                	required: !0
-	  						                },
+	  						                },*/
 	  						                takeDeliverDate: {
 	  						                	required: !0
 	  						                },

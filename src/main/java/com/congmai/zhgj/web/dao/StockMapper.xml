@@ -16,20 +16,34 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
-    <association property="belongWarehouseNumZijian" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getBelongWarehouseNumForZijian"></association><!--自建库存所在仓库数-->
-    <association property="relationBuyNumZijian" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countBuyNumForZijian"></association><!--  自建库存关联采购单数-->
-    <association property="relationSaleNumZijian" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countSaleNumForZijian"></association><!--  自建库存关联销售单数-->
-    <association property="lastInDateZijian" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getLastInDateForZijian"></association><!-- 自建库存 最后入库日期-->
-    <association property="lastOutDateZijian" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getLastOutDateForZijian"></association><!--  自建库存最后出库日期-->
-    <association property="belongWarehouseNumDaiguan" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getBelongWarehouseNumForDaiguan"></association><!--  代管库存所在仓库数-->
-    <association property="relationBuyNumDaiguan" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countBuyNumForDaiguan"></association><!--  代管库存关联采购单数-->
-    <association property="relationSaleNumDaiguan" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countSaleNumForDaiguan"></association><!--  代管库存关联销售单数-->
-    <association property="lastInDateDaiguan" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getLastInDateForDaiguan"></association><!-- 代管库存 最后入库日期-->
-    <association property="lastOutDateDaiguan" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getLastOutDateForDaiguan"></association><!-- 代管库存 最后出库日期-->
-    <association property="countInAmountZijian" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countInAmountForZijian"></association> <!--  自建库存累计入库数量-->
-    <association property="countOutAmountZijian" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countOutAmountForZijian"></association> <!--  自建库存累计出库数量-->
-     <association property="countInAmountDaiguan" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countInAmountForDaiguan"></association> <!-- 代管库存 累计入库数量-->
-    <association property="countOutAmountDaiguan" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countOutAmountForDaiguan"></association> <!--代管库存  累计出库数量-->
+   <!--  <association property="belongWarehouseNumZijian" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getBelongWarehouseNumForZijian"></association>自建库存所在仓库数
+    <association property="relationBuyNumZijian" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countBuyNumForZijian"></association> 自建库存关联采购单数
+    <association property="relationSaleNumZijian" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countSaleNumForZijian"></association> 自建库存关联销售单数
+    <association property="lastInDateZijian" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getLastInDateForZijian"></association>自建库存 最后入库日期
+    <association property="lastOutDateZijian" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getLastOutDateForZijian"></association> 自建库存最后出库日期
+    <association property="belongWarehouseNumDaiguan" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getBelongWarehouseNumForDaiguan"></association> 代管库存所在仓库数
+    <association property="relationBuyNumDaiguan" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countBuyNumForDaiguan"></association> 代管库存关联采购单数
+    <association property="relationSaleNumDaiguan" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countSaleNumForDaiguan"></association> 代管库存关联销售单数
+    <association property="lastInDateDaiguan" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getLastInDateForDaiguan"></association>代管库存 最后入库日期
+    <association property="lastOutDateDaiguan" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getLastOutDateForDaiguan"></association>代管库存 最后出库日期
+    <association property="countInAmountZijian" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countInAmountForZijian"></association>  自建库存累计入库数量
+    <association property="countOutAmountZijian" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countOutAmountForZijian"></association>  自建库存累计出库数量
+     <association property="countInAmountDaiguan" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countInAmountForDaiguan"></association> 代管库存 累计入库数量
+    <association property="countOutAmountDaiguan" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countOutAmountForDaiguan"></association> 代管库存  累计出库数量 -->
+    <association property="belongWarehouseNumZijian" column="serialNum" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getBelongWarehouseNumForZijian"></association><!--自建库存所在仓库数-->
+    <association property="relationBuyNumZijian" column="serialNum" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countBuyNumForZijian"></association><!--  自建库存关联采购单数-->
+    <association property="relationSaleNumZijian" column="serialNum" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countSaleNumForZijian"></association><!--  自建库存关联销售单数-->
+    <association property="lastInDateZijian" column="serialNum" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getLastInDateForZijian"></association><!-- 自建库存 最后入库日期-->
+    <association property="lastOutDateZijian" column="serialNum" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getLastOutDateForZijian"></association><!--  自建库存最后出库日期-->
+    <association property="belongWarehouseNumDaiguan" column="serialNum" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getBelongWarehouseNumForDaiguan"></association><!--  代管库存所在仓库数-->
+    <association property="relationBuyNumDaiguan" column="serialNum" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countBuyNumForDaiguan"></association><!--  代管库存关联采购单数-->
+    <association property="relationSaleNumDaiguan" column="serialNum" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countSaleNumForDaiguan"></association><!--  代管库存关联销售单数-->
+    <association property="lastInDateDaiguan" column="serialNum" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getLastInDateForDaiguan"></association><!-- 代管库存 最后入库日期-->
+    <association property="lastOutDateDaiguan" column="serialNum" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getLastOutDateForDaiguan"></association><!-- 代管库存 最后出库日期-->
+    <association property="countInAmountZijian" column="serialNum" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countInAmountForZijian"></association> <!--  自建库存累计入库数量-->
+    <association property="countOutAmountZijian" column="serialNum" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countOutAmountForZijian"></association> <!--  自建库存累计出库数量-->
+     <association property="countInAmountDaiguan" column="serialNum" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countInAmountForDaiguan"></association> <!-- 代管库存 累计入库数量-->
+    <association property="countOutAmountDaiguan" column="serialNum" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countOutAmountForDaiguan"></association> <!--代管库存  累计出库数量-->
      <!-- <association property="preSaleAmount" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countBuyNum"></association> --><!--  预售数量-->
      <!-- <association property="onRoadAmount" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countBuyNum"></association> --><!--  在途数量-->
   </resultMap>
