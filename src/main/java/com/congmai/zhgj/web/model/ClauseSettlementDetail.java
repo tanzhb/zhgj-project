@@ -41,6 +41,22 @@ public class ClauseSettlementDetail {
 
     private Date updateTime;
 
+    //合同签订
+  	public static final String HTQD = "合同签订";
+  	//提货前
+  	public static final String THQ = "提货前";
+  	//到货后
+  	public static final String DHH = "到货后";
+  	//验收后
+  	public static final String YSH = "验收后";
+  	//质保期满
+  	public static final String ZBQM = "质保期满";
+  	//销售出库
+  	public static final String XSCK = "销售出库";
+  	//收到委托方付款后
+  	public static final String SDWTFFKH = "收到委托方付款后";
+  
+    
     public String getSerialNum() {
         return serialNum;
     }

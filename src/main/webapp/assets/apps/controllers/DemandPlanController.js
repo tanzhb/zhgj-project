@@ -1240,11 +1240,17 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 								var htm = (data==null?'':data)+'</br>'
 
                     			if(row.payStatus=="0"){
-                    				return htm + '<span >未付款</span>';
+                    				return htm + '<span style="color:green">付款中</span>';
 								}else if(row.payStatus=="1"){
                     				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">已付款</span>';
 								}else if(row.payStatus=="2"){
                     				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">已收款</span>';
+								}else if(row.payStatus=="3"){
+                    				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">开票中</span>';
+								}else if(row.payStatus=="4"){
+                    				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">已开票</span>';
+								}else if(row.payStatus=="5"){
+                    				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">已收票</span>';
 								}else{
 									return htm + '<span >未付款</span>';
 								}
