@@ -67,15 +67,18 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
         	}else if($state.current.name=="addCustomerDeliveryOrder"){//新增修改提货
         		loadOrderTable();//加载订单列表
         		
-        		getCurrentUser();
-        		//initWarehouse();
-        		initWarehouses( "pts",null,"out");
-        		$rootScope.setNumCode("SE",function(newCode){
-	    			$scope.deliver.deliverNum = newCode;
-	    			$scope.deliver.approvalDate=$filter('date')(new Date(), 'yyyy-MM-dd');
-	    		});
+        	
         		if($stateParams.serialNum!=undefined){
         			takeDeliveryInfo($stateParams.serialNum,"edit");
+        		}else{
+        			getCurrentUser();
+            		//initWarehouse();
+            		initWarehouses( "pts",null,"out");
+            		$rootScope.setNumCode("SE",function(newCode){
+    	    			$scope.deliver.deliverNum = newCode;
+    	    			$scope.deliver.approvalDate=$filter('date')(new Date(), 'yyyy-MM-dd');
+    	    			$scope.deliver.deliverDate=$filter('date')(new Date(), 'yyyy-MM-dd');
+    	    		});
         		}
 			}else if($state.current.name=="viewCustomerDeliveryOrder"){//查看提货
         		if($stateParams.serialNum!=undefined){
@@ -510,6 +513,8 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
                     				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待入库</span>';
 								}else if(row.deliverStatus=="12"){
                     				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待出库</span>';
+								}else if(row.deliverStatus=="13"){
+                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已报关</span>';
 								}else{
 									return htm + '<span>未开始</span>';
 								}
@@ -3953,6 +3958,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		      										return '<span  class="label label-sm label-success ng-scope">已完成</span>';
 		      									}else if(data=="0"){
 		      										return '<span  class="label label-sm label-success ng-scope">待提货</span>';
+		      									}else if(data=="5"){
+		      										return '<span  class="label label-sm label-success ng-scope">已报关</span>';
 		      									}else{
 		      										return '<span  class="label label-sm label-danger ng-scope">待收货</span>';
 		      									}
@@ -4118,7 +4125,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		      		    		$scope.queryForPage();
 		      		    		$scope.materielCount=$scope.orderMateriels.length;//物料条目数
 		      		    	}
-			        		
+			        		 initWarehouses('pts',$scope.deliver.buyComId,"in");
+			        		 initWarehouses( "pts",null,"out");
 			        		
 			        		$scope.takeDeliver = data.data.takeDelivery;
 			        		if($scope.takeDeliver.warehouse != null){
@@ -4353,8 +4361,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	  						            	makeDate:{required:"制单日期不能为空！"},
 	  						            	approval:{required:"审批人不能为空！"},
 	  						            	approvalDate:{required:"审批日期不能为空！"},
-	  						            	dWarehouseSerial:{required:"发货仓库不能为空！"},
-	  						            	/*deliverDate:{required:"发货日期不能为空！"},*/
+	  						            	/*dWarehouseSerial:{required:"发货仓库不能为空！"},*/
+	  						            	deliverDate:{required:"发货日期不能为空！"},
 	  						            	materielCount:{required:"物料数不能为空！"},
 	  						            	packageCount:{required:"包装件数不能为空！",digits:"包装件数必须为数字！"},
 	  						            	packageType:{required:"包装类型不能为空！"},
@@ -4373,7 +4381,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	  						            	playWarehouseDate:{required:"预计到库日期不能为空！"},
 	  						            	dtContact:{required:"联系人不能为空！"},
 	  						            	dtContactNum:{required:"联系电话不能为空！"},
-	  						            	warehouseSerial:{required:"收货仓库不能为空！"},
+	  						            	/*warehouseSerial:{required:"收货仓库不能为空！"},*/
 	  						            	takeDeliverDate:{required:"收货日期不能为空！"},
 	  						            	tdReceiver:{required:"联系人不能为空！"},
 	  						            	tdContactNum:{required:"联系电话不能为空！"},
@@ -4415,12 +4423,12 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	  						                approvalDate: {
 	  						                	required: !0
 	  						                },
-	  						                dWarehouseSerial: {
-	  						                	required: !0
-	  						                },
-	  						              /*  deliverDate: {
+	  						             /*   dWarehouseSerial: {
 	  						                	required: !0
 	  						                },*/
+	  						                deliverDate: {
+	  						                	required: !0
+	  						                },
 	  						                materielCount: {
 	  						                	required: !0
 	  						                },
@@ -4479,9 +4487,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	  						                	//required: !0,
 	  						                	isPhone: !0
 	  						                },
-	  						                warehouseSerial: {
+	  						               /* warehouseSerial: {
 	  						                	required: !0
-	  						                },
+	  						                },*/
 	  						                takeDeliverDate: {
 	  						                	required: !0
 	  						                },

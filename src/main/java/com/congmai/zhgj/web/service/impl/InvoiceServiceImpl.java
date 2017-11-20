@@ -113,6 +113,32 @@ public class InvoiceServiceImpl extends GenericServiceImpl<Invoice, String> impl
 		o.setSerialNum(out.getOrderSerial());
 		orderInfoMapper.updateByPrimaryKeySelective(o);
 	}
+
+	@Override
+	public void insertInvoce(Invoice invoice) {
+		// TODO Auto-generated method stub
+		if(invoice.getInvoiceNum().indexOf("IT")>-1){
+			insertInvoiceForIn(invoice);//进项票
+		}else{
+			insertInvoiceForOut(invoice);//销项票
+		}
+		
+	}
+	
+	@OperationLog(operateType = "add" ,operationDesc = "收票" ,objectSerial= "{serialNum}")
+	public void insertInvoiceForIn(Invoice in) {//进项票新增
+		// TODO Auto-generated method stub
+		invoiceMapper.insert(in);
+		
+		
+	}
+	@OperationLog(operateType = "add" ,operationDesc = "开票" ,objectSerial= "{serialNum}")
+	public void insertInvoiceForOut(Invoice in) {//销项票新增
+		// TODO Auto-generated method stub
+		invoiceMapper.insert(in);
+		
+		
+	}
 	}
 	
 	

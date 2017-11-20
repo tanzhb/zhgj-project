@@ -55,6 +55,7 @@ public class TakeDelivery extends BaseVO implements Serializable{
     public static final String CANCEL = "2"; //已取消
     public static final String CHECK_COMPLETE = "3"; //待入库/待出库
     public static final String COMPLETE = "4"; //已完成
+    public static final String COMPLETE_Declaration = "5"; //已报关
     
 /*    private String processInstanceId;
     

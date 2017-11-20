@@ -256,7 +256,7 @@
 														</div>
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-hide="span">
-															{{deliveryDetail.deliveryAddress}}</p>
+															{{deliveryDetail.deliveryWarehouseName}}</p>
 													</div>
 												</div>
 											</div>
@@ -270,7 +270,7 @@
 															ng-hide="inputDeliveryInfo" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-hide="span">
-															{{deliveryDetail.deliveryWarehouseName}}</p>
+															{{deliveryDetail.deliveryAddress}}</p>
 													</div>
 												</div>
 											</div>

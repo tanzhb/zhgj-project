@@ -73,7 +73,7 @@ margin-right: 20px;
                      <div class="row">
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">采购商：</label>
+                                 <label class="control-label col-md-5 bold">收货方：</label>
                                  <div class="control-label col-md-7">
                                      <p  > {{customerOrder.buyName}} </p>
                                  </div>
@@ -144,7 +144,7 @@ margin-right: 20px;
                      		<!--/span-->
                          <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">供应商：</label>
+                                 <label class="control-label col-md-5 bold">发货方：</label>
                                  <div class="control-label col-md-7">
                                      <p  > {{customerOrder.seller}} </p>
                                  </div>
@@ -263,7 +263,7 @@ margin-right: 20px;
                      		<!--/span-->
                          <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">供应商：</label>
+                                 <label class="control-label col-md-5 bold">发货方：</label>
                                  <div class="control-label col-md-7">
                                      <p  > {{customerOrder.seller}} </p>
                                  </div>
@@ -392,7 +392,7 @@ margin-right: 20px;
                      		<!--/span-->
                          <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">供应商：</label>
+                                 <label class="control-label col-md-5 bold">发货方：</label>
                                  <div class="control-label col-md-7">
                                      <p  > {{customerOrder.seller}} </p>
                                  </div>
@@ -401,7 +401,7 @@ margin-right: 20px;
                          <!--/span-->
                          <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">采购商：</label>
+                                 <label class="control-label col-md-5 bold">收货方：</label>
                                  <div class="control-label col-md-7">
                                      <p  > {{customerOrder.entrustParty}} </p>
                                  </div>

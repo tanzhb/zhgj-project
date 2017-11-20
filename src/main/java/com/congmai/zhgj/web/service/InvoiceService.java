@@ -13,5 +13,7 @@ public interface InvoiceService extends GenericService<Invoice, String>{
 	void confirmInvoiceIn(Invoice in,OrderInfo o);//进项票确认
 	void confirmInvoiceOut(Invoice out,OrderInfo o);//销项票确认
 	
+	void insertInvoce(Invoice invoice);//新增发票
+	
 	
 }

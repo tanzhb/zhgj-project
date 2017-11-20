@@ -238,7 +238,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
       		    		$scope.queryForPage();
       		    		$scope.materielCount=$scope.orderMateriels.length;//物料条目数
       		    	}
-	        		
+	        		initWarehouse("pt",$scope.deliver.supplyComId,"out");
+					initWarehouse("pt",$scope.deliver.buyComId,"in");
 	        		
 	        		$scope.takeDeliver = data.data.takeDelivery;
 	        		if($scope.takeDeliver.warehouse != null){
@@ -939,7 +940,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    										return '<span  class="label label-sm label-warning ng-scope">待入库</span>';
 	    									}else if(data=="4"){
 	    										return '<span  class="label label-sm label-success ng-scope">已完成</span>';
-	    									}else{
+	    									}else if(data=="5"){
+	      										return '<span  class="label label-sm label-success ng-scope">已报关</span>';
+	      									}else{
 	    										return '<span  class="label label-sm label-danger ng-scope">待收货</span>';
 	    									}
 	    							}

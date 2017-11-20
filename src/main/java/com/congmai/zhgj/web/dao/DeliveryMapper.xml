@@ -154,7 +154,7 @@
     <!--查询详情  -->
     <select id="selectDetailById" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.DeliveryVO">
     SELECT
-	a.serialNum,a.deliverNum,a.deliverType,f.orderNum,a.supplyComId,a.shipper,a.receiver,a.maker,a.makeDate,a.approval,a.approvalDate,a.warehouseSerial,a.orderSerial,c.warehouseSerial AS takeWarehouseSerial,
+	a.serialNum,a.deliverNum,a.deliverType,f.orderNum,a.supplyComId,a.buyComId,a.shipper,a.receiver,a.maker,a.makeDate,a.approval,a.approvalDate,a.warehouseSerial,a.orderSerial,c.warehouseSerial AS takeWarehouseSerial,
 	a.remark,d.warehouseName deliveryWarehouseName,a.deliverAddress deliveryAddress,a.deliverDate,a.materielCount,a.packageCount,a.packageType,a.packageSpecifications,
 	a.materielWeight,a.serviceMoney,a.deliverer,a.contactNum,a.deliverRemark,a.status,
 	b.serialNum AS transportserialNum,b.transportType,b.transport,b.port,b.shipNumber,b.playArrivalDate,b.playWarehouseDate,
@@ -173,7 +173,7 @@
     <!--查询详情  -->
     <select id="selectDetailById2" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.DeliveryVO">
     SELECT
-	a.serialNum,a.deliverNum,a.deliverType,a.orderSerial AS orderNum,a.supplyComId,a.shipper,a.receiver,a.maker,a.makeDate,a.approval,a.approvalDate,a.warehouseSerial,a.orderSerial,c.warehouseSerial AS takeWarehouseSerial,
+	a.serialNum,a.deliverNum,a.deliverType,a.orderSerial AS orderNum,a.supplyComId,a.buyComId,a.shipper,a.receiver,a.maker,a.makeDate,a.approval,a.approvalDate,a.warehouseSerial,a.orderSerial,c.warehouseSerial AS takeWarehouseSerial,
 	a.remark,d.warehouseName deliveryWarehouseName,a.deliverAddress deliveryAddress,a.deliverDate,a.materielCount,a.packageCount,a.packageType,a.packageSpecifications,
 	a.materielWeight,a.serviceMoney,a.deliverer,a.contactNum,a.deliverRemark,a.status,
 	b.serialNum AS transportserialNum,b.transportType,b.transport,b.port,b.shipNumber,b.playArrivalDate,b.playWarehouseDate,

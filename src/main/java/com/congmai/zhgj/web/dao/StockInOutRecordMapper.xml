@@ -1016,7 +1016,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 	om.orderSerial = d.orderSerial
 	LEFT JOIN orderInfo o ON  o.serialNum=om.orderSerial
 	WHERE
-	om.materielSerial = #{materielSerial,jdbcType=VARCHAR} and o.buyComId is NOT  NULL 
+	om.materielSerial = #{materielSerial,jdbcType=VARCHAR} and o.buyComId=#{materielOwner,jdbcType=VARCHAR} 
      </select>
       <!--获取自建库存相关的收货流水  -->
      <select id="getRelationTakeDeliverSerialForZijian"  parameterType="com.congmai.zhgj.web.model.Stock" resultType="java.lang.String">
@@ -1039,7 +1039,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 	om.orderSerial = d.orderSerial
 		LEFT JOIN orderInfo o ON  o.serialNum=om.orderSerial
 	WHERE
-	om.materielSerial = #{materielSerial,jdbcType=VARCHAR} and o.buyComId is NULL )temp  where  temp.serialNum= td.deliverSerial
+	om.materielSerial = #{materielSerial,jdbcType=VARCHAR} and o.buyComId=#{materielOwner,jdbcType=VARCHAR})temp  where  temp.serialNum= td.deliverSerial
      )
      </select>
 </mapper>

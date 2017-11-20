@@ -72,9 +72,9 @@ public class CustomsFormServiceImpl extends GenericServiceImpl<CustomsForm, Stri
 	public int updateStatus(CustomsForm customsForm) {
 		// TODO Auto-generated method stub
 		if("clearance".equals(customsForm.getCustomsFormType())){
-			confirmDeclaration(customsForm);
-		}else{
 			confirmClearance(customsForm);
+		}else{
+			confirmDeclaration(customsForm);
 		}
 		return customsFormMapper.updateByPrimaryKey(customsForm);
 	}
@@ -84,6 +84,17 @@ public class CustomsFormServiceImpl extends GenericServiceImpl<CustomsForm, Stri
 		d.setSerialNum(customsForm.getDeliverSerial());
 		d.setStatus(DeliveryVO.COMPLETE);//发货完成
 		delivery2Mapper.updateByPrimaryKeySelective(d);
+		Delivery delivery=delivery2Mapper.selectByDeliveryPrimaryKey(customsForm.getDeliverSerial());
+		OrderInfo o=orderInfoMapper.selectByPrimaryKey(delivery.getOrderSerial());
+		OrderInfo orderInfo=new OrderInfo();
+		orderInfo.setSerialNum(delivery.getOrderSerial());
+		orderInfo.setDeliverStatus(OrderInfo.COMPLETE);
+		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+		TakeDelivery takeDelivery = new TakeDelivery();
+		TakeDelivery takeDelivery1 = takeDeliveryMapper.selectTakeDeliveryByDeliveryId(customsForm.getDeliverSerial());
+		takeDelivery.setSerialNum(takeDelivery1.getSerialNum());
+		takeDelivery.setStatus(TakeDelivery.COMPLETE_Declaration);//已报关
+		takeDeliveryMapper.updateByPrimaryKeySelective(takeDelivery);
 	}
 	@OperationLog(operateType = "update" ,operationDesc = "确认清关" ,objectSerial= "{serialNum}")
    public void  confirmClearance(CustomsForm customsForm){

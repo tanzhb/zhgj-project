@@ -50,6 +50,7 @@ public class OrderInfo extends BaseVO {
 	
 	public static final String WAIT_OUTRECORD= "12";//待出库
 	
+	public static final String COMPLETE= "13";//已报关/收货完成
 	
 	public static final String CUSTOMER= "44";//客户端初始状态
 	

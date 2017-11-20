@@ -256,7 +256,7 @@
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="dWarehouseSerial">发货仓库 <span  ng-hide="deliverAdd"  class="required"> * </span></label>
+                                                    <label class="control-label bold" for="dWarehouseSerial">发货仓库<!--  <span  ng-hide="deliverAdd"  class="required"> * </span> --></label>
                                                     <div class="">
                                                     <div  ng-hide="deliverAdd" >
                                                     	<select class="bs-select1 form-control order" data-live-search="true"  id="dWarehouseSerialnum"  name="dWarehouseSerial" ng-model="deliver.warehouseSerial"  ng-change="getWarehouseName('deliver')" ng-hide="deliverAdd"  data-size="">
@@ -285,7 +285,7 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="deliverDate"><span ng-if="deliver.packageType=='配送'">发货</span><span ng-if="deliver.packageType=='自提'">提货</span>日期 </label>
+                                                    <label class="control-label bold" for="deliverDate"><span ng-if="deliver.packageType=='配送'">发货</span><span ng-if="deliver.packageType=='自提'">提货</span>日期 <span  ng-hide="deliverAdd"  class="required"> * </span></label>
                                                     <div class="">
                                                         <input type="text" class="form-control  date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="deliverDate"  name="deliverDate" ng-model="deliver.deliverDate" ng-hide="deliverAdd" readonly="readonly">
                                                         <div class="form-control-focus"> </div>
@@ -298,7 +298,7 @@
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="warehouseSerial">收货仓库 <span  ng-hide="deliverAdd"  class="required"> * </span></label>
+                                                    <label class="control-label bold" for="warehouseSerial">收货仓库 <!-- <span  ng-hide="deliverAdd"  class="required"> * </span> --></label>
                                                     <div class="">
                                                     <div  ng-hide="deliverAdd" >
                                                     	<select class="bs-select2 form-control order"  data-live-search="true"  id="warehouseSerialnum"  name="warehouseSerial" ng-model="takeDeliver.warehouseSerial" ng-change="getWarehouseName()" ng-hide="deliverAdd"  data-size="">

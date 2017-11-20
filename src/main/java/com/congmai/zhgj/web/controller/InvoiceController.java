@@ -153,7 +153,7 @@ public class InvoiceController {
     		if(StringUtils.isEmpty(invoice.getSerialNum())){
     			invoice.setSerialNum(ApplicationUtils.random32UUID());
     			invoice.setStatus("0");//待确认
-    			invoiceService.insert(invoice);
+    			invoiceService.insertInvoce(invoice);
     		}else{
     			invoiceService.update(invoice);
     			if("2".equals(invoice.getStatus())){

@@ -473,6 +473,8 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
                     				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待入库</span>';
 								}else if(row.deliverStatus=="12"){
                     				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待出库</span>';
+								}else if(row.deliverStatus=="13"){
+                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已报关</span>';
 								}else{
 									return htm + '<span>未开始</span>';
 								}

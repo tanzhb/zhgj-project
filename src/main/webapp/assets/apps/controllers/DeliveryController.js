@@ -2038,6 +2038,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	$scope.deliver.deliverDate  =$scope.delivery.deliverDate;
 	          		    	$scope.deliver.packageType=$scope.delivery.packageType;
 	          		    	$scope.takeDeliveryWarehouseAddress=$scope.delivery.takeAddress;
+	          		    	$scope.warehouseAddress=$scope.delivery.deliveryAddress;
 	          		    	
 	          		    	$scope.deliveryTransport.transport=$scope.delivery.transport;
 	          		    	$scope.deliveryTransport.shipNumber=$scope.delivery.shipNumber
@@ -2050,7 +2051,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	$scope.takeDelivery.receiver=$scope.delivery.takeDeliveryReceiver;
 	          		    	$scope.takeDelivery.contactNum=$scope.delivery.takeDeliveryContactNum;
 	          		    	$scope.takeDelivery.remark=$scope.delivery.takeDeliveryRemark;
-	          		    	
+	          		    	 initWarehouses('pts',$scope.delivery.buyComId,"in");
 	          		    	if(data.delivery.deliverType=='其他发货'){
 	          		    		$scope.otherMode=true;
 	          		    	}else{
