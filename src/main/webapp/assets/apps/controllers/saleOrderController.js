@@ -1620,6 +1620,11 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 			}
 			
 			$scope.setAllDeliveryDate = function(orderMateriel,index){
+				if(!isNull($scope.orderMateriel[index].lastDeliveryDate)&&$scope.orderMateriel[index].deliveryDate>$scope.orderMateriel[index].lastDeliveryDate){
+		    		toastr.warning('交付日期不能大于最晚交付日期  ！');
+		    		$scope.orderMateriel[index].deliveryDate=null;
+		    		return;
+		    	}
 				if(index==0&&$scope.changeFlag){
 					for(var i=1;i<$scope.orderMateriel.length;i++){
 						 if($scope["orderMaterielInput"+i] != true/*&&isNull($scope.orderMateriel[i].deliveryAddress)*/){
@@ -1630,6 +1635,11 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 			}
 			
 			$scope.setAllLastDeliveryDate = function(orderMateriel,index){
+				if(!isNull($scope.orderMateriel[index].deliveryDate)&&$scope.orderMateriel[index].deliveryDate>$scope.orderMateriel[index].lastDeliveryDate){
+		    		toastr.warning('最晚交付日期不能小于交付日期  ！');
+		    		$scope.orderMateriel[index].lastDeliveryDate=null;
+		    		return;
+		    	}
 				if(index==0&&$scope.changeFlag){ 
 					for(var i=1;i<$scope.orderMateriel.length;i++){
 						 if($scope["orderMaterielInput"+i] != true/*&&isNull($scope.orderMateriel[i].deliveryAddress)*/){
@@ -3887,7 +3897,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        	$state.go('viewDelivery',{serialNum:serialNum,oprateType:"forSaleOrder"});
 		        }; 
 				// 删除
-		        $scope.del = function() {
+		        $scope.deliveryDel = function() {
 		    		if(deliveryTable.rows('.active').data().length == 0){
 		    			showToastr('toast-top-center', 'warning', '未勾选要删除数据！')
 		    		} else {

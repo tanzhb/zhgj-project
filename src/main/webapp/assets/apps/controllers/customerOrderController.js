@@ -1660,6 +1660,11 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 			}
 			
 			$scope.setAllDeliveryDate = function(orderMateriel,index){
+				if(!isNull($scope.orderMateriel[index].lastDeliveryDate)&&$scope.orderMateriel[index].deliveryDate>$scope.orderMateriel[index].lastDeliveryDate){
+		    		toastr.warning('交付日期不能大于最晚交付日期  ！');
+		    		$scope.orderMateriel[index].deliveryDate=null;
+		    		return;
+		    	}
 				if(index==0&&$scope.changeFlag){
 					for(var i=1;i<$scope.orderMateriel.length;i++){
 						 if($scope["orderMaterielInput"+i] != true/*&&isNull($scope.orderMateriel[i].deliveryAddress)*/){
@@ -1670,6 +1675,11 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 			}
 			
 			$scope.setAllLastDeliveryDate = function(orderMateriel,index){
+				if(!isNull($scope.orderMateriel[index].deliveryDate)&&$scope.orderMateriel[index].deliveryDate>$scope.orderMateriel[index].lastDeliveryDate){
+		    		toastr.warning('最晚交付日期不能小于交付日期  ！');
+		    		$scope.orderMateriel[index].lastDeliveryDate=null;
+		    		return;
+		    	}
 				if(index==0&&$scope.changeFlag){ 
 					for(var i=1;i<$scope.orderMateriel.length;i++){
 						 if($scope["orderMaterielInput"+i] != true/*&&isNull($scope.orderMateriel[i].deliveryAddress)*/){
