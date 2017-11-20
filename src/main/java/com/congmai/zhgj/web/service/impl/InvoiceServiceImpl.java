@@ -98,7 +98,7 @@ public class InvoiceServiceImpl extends GenericServiceImpl<Invoice, String> impl
 	@OperationLog(operateType = "add" ,operationDesc = "收票" ,objectSerial= "{serialNum}")
 	public void confirmInvoiceIn(Invoice in,OrderInfo o) {//进项票确认
 		// TODO Auto-generated method stub
-		o.setBillStatus(OrderInfo.RECIVEBILL);
+		o.setPayStatus(OrderInfo.RECIVEBILL);
 		o.setSerialNum(in.getOrderSerial());
 		orderInfoMapper.updateByPrimaryKeySelective(o);
 		
@@ -109,10 +109,11 @@ public class InvoiceServiceImpl extends GenericServiceImpl<Invoice, String> impl
 	@OperationLog(operateType = "add" ,operationDesc = "开票" ,objectSerial= "{serialNum}")
 	public void confirmInvoiceOut(Invoice out,OrderInfo o) {//销项票确认
 		// TODO Auto-generated method stub
-		o.setBillStatus(OrderInfo.BILL);
+		o.setPayStatus(OrderInfo.BILL);
 		o.setSerialNum(out.getOrderSerial());
 		orderInfoMapper.updateByPrimaryKeySelective(o);
-	}
+		}
+	
 
 	@Override
 	public void insertInvoce(Invoice invoice) {

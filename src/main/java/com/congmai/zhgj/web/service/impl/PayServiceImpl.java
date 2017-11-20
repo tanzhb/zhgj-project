@@ -88,9 +88,14 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 	 * @param contractVO
 	 */
  @Override
+ @OperationLog(operateType = "add" ,operationDesc = "新增付款" ,objectSerial= "{serialNum}")
 	public void insertPaymentRecord(PaymentRecord record) {
-		// TODO Auto-generated method stub
 	 payMapper.insertPaymentRecord(record);
+	 OrderInfo orderInfo = new OrderInfo();
+		orderInfo.setSerialNum(record.getOrderSerial());
+		orderInfo.setPayStatus(OrderInfo.PAYING);//付款中
+		orderInfo.setUpdateTime(new Date());
+		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 	}
 
  
@@ -310,7 +315,7 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 	}
 
 	@Override
-	@OperationLog(operateType = "add" ,operationDesc = "付款" ,objectSerial= "{serialNum}")
+	@OperationLog(operateType = "update" ,operationDesc = "确认付款" ,objectSerial= "{serialNum}")
 	public void updateOrderStatus(PaymentRecord paymentRecord) {
 		OrderInfo orderInfo = new OrderInfo();
 		orderInfo.setSerialNum(paymentRecord.getOrderSerial());

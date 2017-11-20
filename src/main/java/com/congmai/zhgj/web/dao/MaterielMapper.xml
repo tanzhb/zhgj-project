@@ -173,6 +173,85 @@
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </select>
   
+    
+  <select id="selectDifferentMaterielByOrderSerial" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT 
+		m.serialNum,
+		m.materielId,
+		m.materielNum,
+		(CASE WHEN o.buyComId is null and sm.serialNum is not null THEN sm.materielName 
+		     WHEN o.supplyComId is null and bm.serialNum is not null THEN bm.materielName 
+		ELSE m.materielName END ) as materielName,
+		(CASE WHEN o.buyComId is null and sm.serialNum is not null THEN sm.specifications 
+		     WHEN o.supplyComId is null and bm.serialNum is not null THEN bm.specifications 
+		ELSE m.specifications END ) as specifications,
+		(CASE WHEN o.buyComId is null and sm.serialNum is not null THEN sm.unit 
+		     WHEN o.supplyComId is null and bm.serialNum is not null THEN bm.unit 
+		ELSE m.unit END ) as unit,
+		m.parentMaterielSerial,
+		(CASE WHEN o.buyComId is null and sm.serialNum is not null THEN sm.type 
+		     WHEN o.supplyComId is null and bm.serialNum is not null THEN bm.type 
+		ELSE m.type END ) as type,
+		m.productionPlace,
+		m.brand,
+		(CASE WHEN o.buyComId is null and sm.serialNum is not null THEN sm.category1 
+		     WHEN o.supplyComId is null and bm.serialNum is not null THEN bm.category1 
+		ELSE m.category1 END ) as category1,
+		(CASE WHEN o.buyComId is null and sm.serialNum is not null THEN sm.category2 
+		     WHEN o.supplyComId is null and bm.serialNum is not null THEN bm.category2 
+		ELSE m.category2 END ) as category2,
+		(CASE WHEN o.buyComId is null and sm.serialNum is not null THEN sm.category3 
+		     WHEN o.supplyComId is null and bm.serialNum is not null THEN bm.category3 
+		ELSE m.category3 END ) as category3,
+		m.materielAttribute,
+		m.mnemonicCode,
+		m.isBOM,
+		m.stockUnit,
+		m.originCountry,
+		m.width,
+		m.height,
+		m.length,
+		m.currency,
+		m.unitPrice,
+		m.deliveryCycle,
+		m.filingItemNo,
+		m.volume,
+		m.weight,
+		m.palletSpecification,
+		m.manufactureDate,
+		m.remark,
+		m.customsSupervisionConditions,
+		m.customsCode,
+		m.qualityDate,
+		m.packageNum,
+		m.packageSpecifications,
+		m.packageUnit,
+		m.packagewidth,
+		m.packageheight,
+		m.packagelength,
+		m.packagevolume,
+		m.packageUnitConversion,
+		m.palletWeight,
+		m.versionNO,
+		m.isLatestVersion,
+		m.`status`,
+		m.delFlg,
+		m.creator,
+		m.createTime,
+		m.updater,
+		m.updateTime
+		
+	from orderMateriel om
+	LEFT JOIN orderInfo o on o.serialNum = om.orderSerial
+	LEFT JOIN materiel m on m.serialNum = om.materielSerial
+	LEFT JOIN buyMateriel bm on bm.materielId =  m.materielId and bm.delFlg = 0 and o.buyComId = bm.buyComId
+	LEFT JOIN supplyMateriel sm on sm.materielId =  m.materielId and sm.delFlg = 0 and o.supplyComId = sm.supplyComId
+	
+	WHERE om.serialNum = #{serialNum,jdbcType=VARCHAR}
+	limit 1
+  </select>
+  
+  
   
     <select id="selectByMaterielId" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 

@@ -821,8 +821,19 @@
 				                              <thead>
 				                                  <tr>
 				<!--                                       <th>供应商</th> -->
-				                                      <th>供应商名称</th>
+				                                      <th>供应商</th>
 				                                      <th>供应商物料编号</th>
+														<th>物料名称</th>
+														<th>规格型号</th>
+														<th>单位</th>
+														<th>物料大类</th>
+														<th>一级分类</th>
+														<th>二级分类</th>
+														<th>指导单价</th>
+														<th>采购配额</th>
+														<th>最小起订量</th>
+														<th>备注</th>
+				                                      
 				                                      <th style="width:100px;"></th>
 				                                  </tr>
 				                              </thead>
@@ -843,7 +854,60 @@
 				                                      		<input type="text" id="supplyMaterielNum[$index]" name="supplyMaterielNum" class="form-control" ng-hide="supplyMaterielInfoInput" ng-model="supplyMateriel[$index].supplyMaterielNum"  >
 							                                <p class="form-control-static" ng-show="supplyMaterielInfoShow"> {{_supplyMateriel.supplyMaterielNum}} </p>
 							                          </td>
-				                                      
+							                          
+							                          <td>
+					                                      <input type="text"  id="supplymaterielName[$index]" name="supplymaterielName" class="form-control" ng-hide="supplyMaterielInfoInput" ng-model="supplyMateriel[$index].materielName" >
+					                                      <p class="form-control-static" ng-show="supplyMaterielInfoShow"> {{_supplyMateriel.materielName}} </p>
+				                                      </td>
+				                                      <td>
+					                                      <input type="text"  id="supplyspecifications[$index]" name="supplyspecifications" class="form-control" ng-hide="supplyMaterielInfoInput" ng-model="supplyMateriel[$index].specifications" >
+					                                      <p class="form-control-static" ng-show="supplyMaterielInfoShow"> {{_supplyMateriel.specifications}} </p>
+				                                      </td>
+				                                      <td>
+					                                      <input type="text"  id="supplyunit[$index]" name="supplyunit" class="form-control" ng-hide="supplyMaterielInfoInput" ng-model="supplyMateriel[$index].unit" >
+					                                      <p class="form-control-static" ng-show="supplyMaterielInfoShow"> {{_supplyMateriel.unit}} </p>
+				                                      </td>
+				                                      <td>
+					                                      <select class="form-control" id="supplytype[$index]" name="supplytype" ng-hide="supplyMaterielInfoInput" ng-model="supplyMateriel[$index].type" class="form-control"  
+				                                      		ng-change="supplyqueryCategoryListByLevel('second',$index)" >
+				                                              <option ng-repeat="_category in _supplyMateriel.supplyfristCategoryList" value="{{_category.categoryId}}">{{_category.categoryName}}</option>
+				                                             </select>
+				                                      		<p class="form-control-static" ng-show="supplyMaterielInfoShow"> {{_supplyMateriel.typeName}} </p>
+				                                      </td>
+				                                      <td>
+					                                       <select class="form-control" id="supplycategory1[$index]" name="supplycategory1" ng-hide="supplyMaterielInfoInput" ng-model="supplyMateriel[$index].category1" class="form-control"  
+					                                      ng-change="supplyqueryCategoryListByLevel('third',$index)" repeat-done="renderSupplyCategory(supplyMateriel[$index])">
+					                                              <option ng-repeat="_category in _supplyMateriel.supplysecondCategoryList" value="{{_category.categoryId}}">{{_category.categoryName}}</option>
+					                                             </select>
+					                                      <p class="form-control-static" ng-show="supplyMaterielInfoShow"> {{_supplyMateriel.categoryName1}} </p>
+				                                      </td>
+				                                      <td>
+					                                       <select class="form-control" id="supplycategory2[$index]" name="supplycategory2" ng-hide="supplyMaterielInfoInput" ng-model="supplyMateriel[$index].category2" class="form-control"  
+					                                      ng-change="supplyqueryCategoryListByLevel('fourth',$index)" >
+					                                              <option ng-repeat="_category in _supplyMateriel.supplythirdCategoryList" value="{{_category.categoryId}}">{{_category.categoryName}}</option>
+					                                             </select>
+					                                      <p class="form-control-static" ng-show="supplyMaterielInfoShow"> {{_supplyMateriel.categoryName2}} </p>
+				                                      </td>
+				                                      <td>
+					                                      <input type="text"  id="supplyunitPriceGuide[$index]" name="supplyunitPriceGuide" class="form-control" ng-hide="supplyMaterielInfoInput" ng-model="supplyMateriel[$index].unitPriceGuide" 
+					                                      ng-keyup="clearNoNumPoint(supplyMateriel[$index],'unitPriceGuide')">
+					                                      <p class="form-control-static" ng-show="supplyMaterielInfoShow"> {{_supplyMateriel.unitPriceGuide}} </p>
+				                                      </td>
+				                                      <td>
+					                                      <input type="text"  id="supplypurchaseQuota[$index]" name="supplypurchaseQuota" class="form-control" ng-hide="supplyMaterielInfoInput" ng-model="supplyMateriel[$index].purchaseQuota" 
+					                                      ng-keyup="clearNoNumPoint(supplyMateriel[$index],'purchaseQuota')">
+					                                      <p class="form-control-static" ng-show="supplyMaterielInfoShow"> {{_supplyMateriel.purchaseQuota}} </p>
+				                                      </td>
+				                                      <td>
+					                                      <input type="text"  id="supplymoq[$index]" name="supplymoq" class="form-control" ng-hide="supplyMaterielInfoInput" ng-model="supplyMateriel[$index].moq" 
+					                                      ng-keyup="clearNoNumPoint(supplyMateriel[$index],'moq')">
+					                                      <p class="form-control-static" ng-show="supplyMaterielInfoShow"> {{_supplyMateriel.moq}} </p>
+				                                      </td>
+				                                      <td>
+					                                      <input type="text"  id="supplyremark[$index]" name="supplyremark" class="form-control" ng-hide="supplyMaterielInfoInput" ng-model="supplyMateriel[$index].remark" >
+					                                      <p class="form-control-static" ng-show="supplyMaterielInfoShow"> {{_supplyMateriel.remark}} </p>
+				                                      </td>
+							                          
 				                                      <td ng-show="operation_s{{$index}}">
 				                                      	<a href="javascript:;"  class="btn red btn-sm" ng-hide="supplyMaterielInfoInput" ng-click="deleteSupplyMateriel($index)">
 				                                    			<i class="fa fa-close"></i> 
@@ -880,9 +944,18 @@
 				                          <table class="table table-bordered table-hover">
 				                              <thead>
 				                                  <tr>
-				<!--                                       <th>供应商</th> -->
-				                                      <th>采购商名称</th>
-				                                      <th>采购商编号</th>
+				                                      <th>采购商</th>
+				                                      <th>采购商物料编号</th>
+				                                      <th>物料名称</th>
+														<th>规格型号</th>
+														<th>单位</th>
+														<th>物料大类</th>
+														<th>一级分类</th>
+														<th>二级分类</th>
+														<th>指导单价</th>
+														<th>采购配额</th>
+														<th>最小起订量</th>
+														<th>备注</th>
 				                                      <th style="width:100px;"></th>
 				                                  </tr>
 				                              </thead>
@@ -896,6 +969,7 @@
 				                                             </div>
 							                                <p class="form-control-static" ng-show="buyMaterielInfoShow"> {{_buyMateriel.buy.comName}} </p>
 							                          </td>
+							                          
 				<!-- 			                          <td>
 						                                 	<p class="form-control-static" ng-show="buyMaterielInfoShow"> {{_buyMateriel.buy.comName}} </p>
 							                          </td> -->
@@ -903,7 +977,58 @@
 				                                      		<input type="text" id="buyMaterielNum[$index]" name="buyMaterielNum" class="form-control" ng-hide="buyMaterielInfoInput" ng-model="buyMateriel[$index].buyMaterielNum"  >
 							                                <p class="form-control-static" ng-show="buyMaterielInfoShow"> {{_buyMateriel.buyMaterielNum}} </p>
 							                          </td>
-				                                      
+				                                      <td>
+					                                      <input type="text"  id="buymaterielName[$index]" name="buymaterielName" class="form-control" ng-hide="buyMaterielInfoInput" ng-model="buyMateriel[$index].materielName" >
+					                                      <p class="form-control-static" ng-show="buyMaterielInfoShow"> {{_buyMateriel.materielName}} </p>
+				                                      </td>
+				                                      <td>
+					                                      <input type="text"  id="buyspecifications[$index]" name="buyspecifications" class="form-control" ng-hide="buyMaterielInfoInput" ng-model="buyMateriel[$index].specifications" >
+					                                      <p class="form-control-static" ng-show="buyMaterielInfoShow"> {{_buyMateriel.specifications}} </p>
+				                                      </td>
+				                                      <td>
+					                                      <input type="text"  id="buyunit[$index]" name="buyunit" class="form-control" ng-hide="buyMaterielInfoInput" ng-model="buyMateriel[$index].unit" >
+					                                      <p class="form-control-static" ng-show="buyMaterielInfoShow"> {{_buyMateriel.unit}} </p>
+				                                      </td>
+				                                      <td>
+					                                      <select class="form-control" id="buytype[$index]" name="buytype" ng-hide="buyMaterielInfoInput" ng-model="buyMateriel[$index].type" class="form-control"  
+				                                      		ng-change="buyqueryCategoryListByLevel('second',$index)" repeat-done="renderBuyCategory(buyMateriel[$index])">
+				                                              <option ng-repeat="_category in _buyMateriel.buyfristCategoryList" value="{{_category.categoryId}}">{{_category.categoryName}}</option>
+				                                             </select>
+				                                      		<p class="form-control-static" ng-show="buyMaterielInfoShow"> {{_buyMateriel.typeName}} </p>
+				                                      </td>
+				                                      <td>
+					                                       <select class="form-control" id="buycategory1[$index]" name="buycategory1" ng-hide="buyMaterielInfoInput" ng-model="buyMateriel[$index].category1" class="form-control"  
+					                                      ng-change="buyqueryCategoryListByLevel('third',$index)" >
+					                                              <option ng-repeat="_category in _buyMateriel.buysecondCategoryList" value="{{_category.categoryId}}">{{_category.categoryName}}</option>
+					                                             </select>
+					                                      <p class="form-control-static" ng-show="buyMaterielInfoShow"> {{_buyMateriel.categoryName1}} </p>
+				                                      </td>
+				                                      <td>
+					                                       <select class="form-control" id="buycategory2[$index]" name="buycategory2" ng-hide="buyMaterielInfoInput" ng-model="buyMateriel[$index].category2" class="form-control"  
+					                                      ng-change="buyqueryCategoryListByLevel('fourth',$index)" >
+					                                              <option ng-repeat="_category in _buyMateriel.buythirdCategoryList" value="{{_category.categoryId}}">{{_category.categoryName}}</option>
+					                                             </select>
+					                                      <p class="form-control-static" ng-show="buyMaterielInfoShow"> {{_buyMateriel.categoryName2}} </p>
+				                                      </td>
+				                                      <td>
+					                                      <input type="text"  id="buyunitPriceGuide[$index]" name="buyunitPriceGuide" class="form-control" ng-hide="buyMaterielInfoInput" ng-model="buyMateriel[$index].unitPriceGuide" 
+					                                      ng-keyup="clearNoNumPoint(buyMateriel[$index],'unitPriceGuide')">
+					                                      <p class="form-control-static" ng-show="buyMaterielInfoShow"> {{_buyMateriel.unitPriceGuide}} </p>
+				                                      </td>
+				                                      <td>
+					                                      <input type="text"  id="buypurchaseQuota[$index]" name="buypurchaseQuota" class="form-control" ng-hide="buyMaterielInfoInput" ng-model="buyMateriel[$index].purchaseQuota" 
+															ng-keyup="clearNoNumPoint(buyMateriel[$index],'purchaseQuota')">
+					                                      <p class="form-control-static" ng-show="buyMaterielInfoShow"> {{_buyMateriel.purchaseQuota}} </p>
+				                                      </td>
+				                                      <td>
+					                                      <input type="text"  id="buymoq[$index]" name="buymoq" class="form-control" ng-hide="buyMaterielInfoInput" ng-model="buyMateriel[$index].moq" 
+					                                      ng-keyup="clearNoNumPoint(buyMateriel[$index],'moq')">
+					                                      <p class="form-control-static" ng-show="buyMaterielInfoShow"> {{_buyMateriel.moq}} </p>
+				                                      </td>
+				                                      <td>
+					                                      <input type="text"  id="buyremark[$index]" name="buyremark" class="form-control" ng-hide="buyMaterielInfoInput" ng-model="buyMateriel[$index].remark" >
+					                                      <p class="form-control-static" ng-show="buyMaterielInfoShow"> {{_buyMateriel.remark}} </p>
+				                                      </td>
 				                                      <td ng-show="operation_buy{{$index}}">
 				                                      	<a href="javascript:;"  class="btn red btn-sm" ng-hide="buyMaterielInfoInput" ng-click="deleteBuyMateriel($index)">
 				                                    			<i class="fa fa-close"></i> 

@@ -22,14 +22,21 @@ public class OrderInfo extends BaseVO {
 	public static final String OUTRECORD = "4";
 	//已入库
 	public static final String INRECORD = "5";
+	//付款中
+	/*
+	 * 付款中
+	 */
+	public static final String PAYING = "0";
 	//已付款
 	public static final String PAY = "1";
 	//已收款
 	public static final String RECIVE = "2";
+	//开票中
+	public static final String BILLING = "3";
 	//已开票
-	public static final String BILL = "1";
+	public static final String BILL = "4";
 	//已收票
-	public static final String RECIVEBILL = "2";
+	public static final String RECIVEBILL = "5";
 	
 	//待确认
 	public static final String TOBECONFIRMED = "1";

@@ -213,12 +213,15 @@ public class MaterielController {
 	    	if(!CollectionUtils.isEmpty(supplyMateriel)){
 	    		Subject currentUser = SecurityUtils.getSubject();
 	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-		    	for(SupplyMateriel f:supplyMateriel){
+		    	int i = 0;
+	    		for(SupplyMateriel f:supplyMateriel){
 		    		f.setSerialNum(ApplicationUtils.random32UUID());
 		    		f.setCreator(currenLoginName);
 	    			f.setUpdater(currenLoginName);
 	    			f.setCreateTime(new Date());
 	    			f.setUpdateTime(new Date());
+	    			i++;
+					f.setSort(i);
 		    	}
 		    	//填充物料供应商******↑↑↑↑↑↑********
 		    	supplyMaterielService.betchInsertSupplyMateriels(supplyMateriel);
@@ -228,6 +231,7 @@ public class MaterielController {
 		    	com.congmai.zhgj.web.model.SupplyMaterielExample.Criteria criteria2 =  m2.createCriteria();
 		    	criteria2.andMaterielIdEqualTo(supplyMateriel.get(0).getMaterielId());
 		    	criteria2.andDelFlgEqualTo("0");
+		    	m2.setOrderByClause(" sort asc");
 		    	supplyMateriel = supplyMaterielService.selectList(m2);
 		    	//查询数据返回******↑↑↑↑↑↑********
 	        }
@@ -258,12 +262,15 @@ public class MaterielController {
 	    	if(!CollectionUtils.isEmpty(buyMateriel)){
 	    		Subject currentUser = SecurityUtils.getSubject();
 	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-		    	for(BuyMateriel f:buyMateriel){
+	    		int i = 0;
+	    		for(BuyMateriel f:buyMateriel){
 		    		f.setSerialNum(ApplicationUtils.random32UUID());
 		    		f.setCreator(currenLoginName);
 	    			f.setUpdater(currenLoginName);
 	    			f.setCreateTime(new Date());
 	    			f.setUpdateTime(new Date());
+	    			i++;
+					f.setSort(i);
 		    	}
 		    	//填充物料供应商******↑↑↑↑↑↑********
 		    	buyMaterielService.betchInsertBuyMateriels(buyMateriel);
@@ -273,6 +280,7 @@ public class MaterielController {
 		    	com.congmai.zhgj.web.model.BuyMaterielExample.Criteria criteria2 =  m2.createCriteria();
 		    	criteria2.andMaterielIdEqualTo(buyMateriel.get(0).getMaterielId());
 		    	criteria2.andDelFlgEqualTo("0");
+		    	m2.setOrderByClause(" sort asc");
 		    	buyMateriel = buyMaterielService.selectList(m2);
 		    	//查询数据返回******↑↑↑↑↑↑********
 	        }

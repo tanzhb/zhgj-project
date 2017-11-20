@@ -492,11 +492,17 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 								var htm = (data==null?'':data)+'</br>'
 
                     			if(row.payStatus=="0"){
-                    				return htm + '<span >未付款</span>';
+                    				return htm + '<span style="color:green">付款中</span>';
 								}else if(row.payStatus=="1"){
                     				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">已付款</span>';
 								}else if(row.payStatus=="2"){
                     				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">已收款</span>';
+								}else if(row.payStatus=="3"){
+                    				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">开票中</span>';
+								}else if(row.payStatus=="4"){
+                    				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">已开票</span>';
+								}else if(row.payStatus=="5"){
+                    				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">已收票</span>';
 								}else{
 									return htm + '<span >未付款</span>';
 								}
@@ -1582,6 +1588,11 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 			}
 			
 			$scope.setAllDeliveryDate = function(orderMateriel,index){
+				if(!isNull($scope.orderMateriel[index].lastDeliveryDate)&&$scope.orderMateriel[index].deliveryDate>$scope.orderMateriel[index].lastDeliveryDate){
+		    		toastr.warning('交付日期不能大于最晚交付日期  ！');
+		    		$scope.orderMateriel[index].deliveryDate=null;
+		    		return;
+		    	}
 				if(index==0&&$scope.changeFlag){
 					for(var i=1;i<$scope.orderMateriel.length;i++){
 						 if($scope["orderMaterielInput"+i] != true/*&&isNull($scope.orderMateriel[i].deliveryAddress)*/){
@@ -1592,6 +1603,11 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 			}
 			
 			$scope.setAllLastDeliveryDate = function(orderMateriel,index){
+				if(!isNull($scope.orderMateriel[index].deliveryDate)&&$scope.orderMateriel[index].deliveryDate>$scope.orderMateriel[index].lastDeliveryDate){
+		    		toastr.warning('最晚交付日期不能小于交付日期  ！');
+		    		$scope.orderMateriel[index].lastDeliveryDate=null;
+		    		return;
+		    	}
 				if(index==0&&$scope.changeFlag){ 
 					for(var i=1;i<$scope.orderMateriel.length;i++){
 						 if($scope["orderMaterielInput"+i] != true/*&&isNull($scope.orderMateriel[i].deliveryAddress)*/){

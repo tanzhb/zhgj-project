@@ -429,7 +429,7 @@ public class PayController {
 	 */
 	@RequestMapping(value = "/savePaymentRecord", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<PaymentRecord> saveUserContract(
+	public ResponseEntity<PaymentRecord> savePaymentRecord(
 			@Valid PaymentRecord record, HttpServletRequest request,
 			UriComponentsBuilder ucBuilder, MultipartFile file) {
 		Subject currentUser = SecurityUtils.getSubject();
@@ -449,7 +449,7 @@ public class PayController {
 				record.setCreator(currenLoginName);
 				payService.insertPaymentRecord(record);
 				record = payService.selectPayById(record.getSerialNum());
-				if(!StringUtils.isEmpty(record.getSupplyComId())){
+				/*if(!StringUtils.isEmpty(record.getSupplyComId())){
 					//新增付款后给供应商发送收款消息
 					EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(record,MessageConstants.SHOUKUAN));
 				}
@@ -457,7 +457,7 @@ public class PayController {
 				if(!StringUtils.isEmpty(record.getBuyComId())){
 					//新增收款后给采购商发送收款消息
 					EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(record,MessageConstants.FUKUAN));
-				}
+				}*/
 				
 			} else {
 				// 如果id不为空执行更新
