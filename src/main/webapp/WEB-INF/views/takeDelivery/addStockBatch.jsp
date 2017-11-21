@@ -15,7 +15,7 @@
 	                        <tr>
 	                            <th style="width:100px"> 批次号 </th>
 	                            <th> 仓库 </th>
-	                            <th> 库位 </th>
+	                            <th> 库区 </th>
 	                            <th style="width:80px"> 入库数量 </th>
 	                            <th style="width:80px">操作</th>
 	                        </tr>

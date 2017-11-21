@@ -1152,8 +1152,9 @@ public class TakeDeliveryController {
 		takeDeliveryParams.getTakeDelivery().setUpdater(currenLoginName);
 		takeDeliveryParams.getTakeDelivery().setUpdateTime(now);
 		takeDeliveryParams.getTakeDelivery().setDelFlg("0");
-		takeDeliveryParams.getTakeDelivery().setTakeDeliverAddress(warehouseService.selectOne(takeDeliveryParams.getTakeDelivery().getWarehouseSerial()).getWarehouseName());
-
+		if(takeDeliveryParams.getTakeDelivery().getWarehouseSerial()!=null&&warehouseService.selectOne(takeDeliveryParams.getTakeDelivery().getWarehouseSerial())!=null){
+			takeDeliveryParams.getTakeDelivery().setTakeDeliverAddress(warehouseService.selectOne(takeDeliveryParams.getTakeDelivery().getWarehouseSerial()).getWarehouseName());
+		}
 		if(takeDeliveryParams.getDelivery()!=null){
 			if(StringUtils.isEmpty(takeDeliveryParams.getDelivery().getSerialNum())){
 				takeDeliveryParams.getDelivery().setSerialNum(deliverySerial);
@@ -1164,7 +1165,9 @@ public class TakeDeliveryController {
 			takeDeliveryParams.getDelivery().setUpdater(currenLoginName);
 			takeDeliveryParams.getDelivery().setUpdateTime(now);
 			takeDeliveryParams.getDelivery().setDelFlg("0");
-			takeDeliveryParams.getDelivery().setWarehouseName(warehouseService.selectOne(takeDeliveryParams.getDelivery().getWarehouseSerial()).getWarehouseName());
+			if(takeDeliveryParams.getDelivery().getWarehouseSerial()!=null&&warehouseService.selectOne(takeDeliveryParams.getDelivery().getWarehouseSerial())!=null){
+				takeDeliveryParams.getDelivery().setWarehouseName(warehouseService.selectOne(takeDeliveryParams.getDelivery().getWarehouseSerial()).getWarehouseName());
+			}
 			//takeDeliveryParams.getDelivery().setStatus("3"); //已发货
 		}
 		
