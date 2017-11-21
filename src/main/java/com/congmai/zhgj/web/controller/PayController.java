@@ -596,9 +596,9 @@ public class PayController {
 				.selectAllPaymentRecordList(currenLoginName);
 		for (PaymentRecord paymentRecord : paymentRecordlist) {
 			if ("1".equals(paymentRecord.getBillStyle())) {
-				paymentRecord.setBillStyle("先票后款");
+				paymentRecord.setBillStyle(PaymentRecord.XPHK);
 			} else {
-				paymentRecord.setBillStyle("先款后票");
+				paymentRecord.setBillStyle(PaymentRecord.XKHP);
 			}
 
 			if ("0".equals(paymentRecord.getStatus())) {
@@ -625,9 +625,9 @@ public class PayController {
 				.findAllGatheringMoneyRecord(currenLoginName);
 		for (PaymentRecord paymentRecord : paymentRecordlist) {
 			if ("1".equals(paymentRecord.getBillStyle())) {
-				paymentRecord.setBillStyle("先票后款");
+				paymentRecord.setBillStyle(PaymentRecord.XPHK);
 			} else {
-				paymentRecord.setBillStyle("先款后票");
+				paymentRecord.setBillStyle(PaymentRecord.XKHP);
 			}
 
 			if ("0".equals(paymentRecord.getStatus())) {

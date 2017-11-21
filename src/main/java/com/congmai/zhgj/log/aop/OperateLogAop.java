@@ -140,7 +140,7 @@ public class OperateLogAop{
                 
                 
                 
-                valueReturn.setSerialNum(tag.get());
+                valueReturn.setSerialNum(ApplicationUtils.random32UUID());
                 //保存操作日志
                 operateLogService.insert(valueReturn);
             }else{

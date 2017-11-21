@@ -197,7 +197,9 @@
 	reason=#{reason},
 	processInstanceId=#{processInstanceId},
 	userId=#{userId},
+	<if test="status != null" >
 	status=#{status},
+	</if>
 	updateTime=NOW()
 	WHERE
 	serialNum=#{serialNum}

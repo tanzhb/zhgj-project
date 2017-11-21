@@ -45,14 +45,18 @@ public class ClauseSettlementDetail {
   	public static final String HTQD = "合同签订";
   	//提货前
   	public static final String THQ = "提货前";
-  	//到货后
-  	public static final String DHH = "到货后";
+  	//发货后
+  	public static final String FHH = "发货后";
+  	//收货后
+  	public static final String SHH = "收货后";
   	//验收后
   	public static final String YSH = "验收后";
   	//质保期满
   	public static final String ZBQM = "质保期满";
-  	//销售出库
-  	public static final String XSCK = "销售出库";
+  	//入库后
+  	public static final String RCK = "入库后";
+  	//出库后
+  	public static final String CKH = "出库后";
   	//收到委托方付款后
   	public static final String SDWTFFKH = "收到委托方付款后";
   
