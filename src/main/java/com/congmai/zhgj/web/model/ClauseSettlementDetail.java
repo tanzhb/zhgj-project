@@ -54,7 +54,7 @@ public class ClauseSettlementDetail {
   	//质保期满
   	public static final String ZBQM = "质保期满";
   	//入库后
-  	public static final String RCK = "入库后";
+  	public static final String RKH = "入库后";
   	//出库后
   	public static final String CKH = "出库后";
   	//收到委托方付款后

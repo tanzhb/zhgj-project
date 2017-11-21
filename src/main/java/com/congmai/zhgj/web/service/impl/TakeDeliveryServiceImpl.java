@@ -36,6 +36,7 @@ import com.congmai.zhgj.web.dao.StockMapper;
 import com.congmai.zhgj.web.dao.StockOutBatchMapper;
 import com.congmai.zhgj.web.dao.TakeDeliveryMapper;
 import com.congmai.zhgj.web.enums.StaticConst;
+import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.CustomsForm;
 import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryExample;
@@ -61,6 +62,7 @@ import com.congmai.zhgj.web.model.TakeDeliveryParams;
 import com.congmai.zhgj.web.model.TakeDeliverySelectExample;
 import com.congmai.zhgj.web.model.TakeDeliverySelectExample.Criteria;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
+import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
@@ -119,6 +121,8 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	
 	@Resource
     private OrderService  orderService;
+	@Resource
+	private ContractService contractService;
 	
 	@Override
 	public GenericDao<TakeDelivery, String> getDao() {
@@ -327,6 +331,11 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);//更新订单状态
 			delivery2Mapper.updateByPrimaryKeySelective(delivery1);//更新发货单状态
 			takeDeliveryMapper.updateByPrimaryKeySelective(takeDelivery);//更新收货单状态
+			
+			//按结算条款中的签订合同节点生成付款
+			String orderString = delivery.getOrderSerial();
+			String nodeString = ClauseSettlementDetail.FHH;
+			contractService.findPaymentNode(orderString, nodeString);
 		}
 	}
 
@@ -507,6 +516,11 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		
 			//入库完成状态处理
 			stockInEndHandle(old_delivery.getOrderSerial(),takeDeliverySerial,currenLoginName);		
+			
+			//按结算条款中的签订合同节点生成付款
+			String orderString = old_delivery.getOrderSerial();
+			String nodeString = ClauseSettlementDetail.RKH;
+			contractService.findPaymentNode(orderString, nodeString);	
 				
 		}else{
 			//获取更新前的发货id
@@ -619,7 +633,10 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 					}
 				}
 		
-		
+		//按结算条款中的签订合同节点生成付款
+		String orderString = old_delivery.getOrderSerial();
+		String nodeString = ClauseSettlementDetail.CKH;
+		contractService.findPaymentNode(orderString, nodeString);	
 	}
 	
 	//自动生成报关单
