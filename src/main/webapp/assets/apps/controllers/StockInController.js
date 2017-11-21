@@ -10,7 +10,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 	    	handle.datePickersInit();
 	    	if($location.path()=="/stockInAdd"||$location.path()=="/stockIn"){
 	    		$scope.serialNums =[];
-	    		initWarehouse();
+	    		initWarehouse('pt',null);
 	    		handle.validatorInit();
 	    		//initTakeDelviery();
 	    		initSuppliers();
@@ -98,10 +98,10 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 			/**
 			 * 加载仓库数据
 			 */
-			var initWarehouse = function(){
-			var promise = takeDeliveryService.initWarehouse();
+			var initWarehouse = function(judgeString,comId){
+			var promise = takeDeliveryService.initWarehouse(judgeString,comId);
 			promise.then(function(data){
-				$scope.warehouses = data.data;
+				$scope.warehouses = data;
 			},function(data){
 				//调用承诺接口reject();
 			});
