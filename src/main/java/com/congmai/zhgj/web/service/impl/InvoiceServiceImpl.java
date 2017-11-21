@@ -118,7 +118,7 @@ public class InvoiceServiceImpl extends GenericServiceImpl<Invoice, String> impl
 	@Override
 	public void insertInvoce(Invoice invoice) {
 		// TODO Auto-generated method stub
-		if(invoice.getInvoiceNum().indexOf("IT")>-1){
+		if(invoice.getInvoiceNum().indexOf("OT")>-1){
 			insertInvoiceForIn(invoice);//进项票
 		}else{
 			insertInvoiceForOut(invoice);//销项票
@@ -137,7 +137,6 @@ public class InvoiceServiceImpl extends GenericServiceImpl<Invoice, String> impl
 	public void insertInvoiceForOut(Invoice in) {//销项票新增
 		// TODO Auto-generated method stub
 		invoiceMapper.insert(in);
-		
 		
 	}
 	}

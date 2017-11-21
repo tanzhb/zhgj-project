@@ -290,6 +290,8 @@ angular
 						 	    									statusIcon = '<span class="label label-sm label-success"  >待收票</span> '
 						 	    								}else if(row.status==2){
 						 	    									statusIcon = '<span class="label label-sm label-success">已收票</span> '
+						 	    								}else if(row.status==1){
+						 	    									statusIcon = '<span class="label label-sm label-success">已申请收票</span> '
 						 	    								}
 						 	    								return statusIcon ;
 															}
@@ -466,13 +468,17 @@ angular
 				    											return '<span  class="label label-sm label-success ng-scope">已审批</span>';
 				    										}else if(row.status==2){
 				    											return '<span  class="label label-sm label-success ng-scope">已开票</span>';
+				    										}else if(row.status==3){
+				    											return '<span  class="label label-sm label-success ng-scope">已申请开票</span>';
 				    										}
 				    									}else if(data.status=="APPROVAL_FAILED"){
 				    										return '<span  class="label label-sm label-danger ng-scope">未通过</span>';
 				    									}else{
 				    										return '<span  class="label label-sm label-info ng-scope">未审批</span>';
 				    									}
-				                            		}else{
+				                            		}else if(row.status==3){
+		    											return '<span  class="label label-sm label-success ng-scope">已申请开票</span>';
+		    										}else{
 				                            			return '<span  class="label label-sm label-success ng-scope">待开票</span>';
 				                            		}
 				                            	}
@@ -1011,8 +1017,14 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 									debugger;
 									if($('#invoiceForm').valid()){//表单验证通过则执行添加功能
 										debugger;
-									 if(judgeString!=undefined){
-											$scope.invoice.status=2;
+									 if(judgeString==undefined){
+										 $scope.invoice.status=0;
+										}else if(judgeString.indexOf("confirm")>-1){
+											 $scope.invoice.status=2;
+										}else if(judgeString.indexOf("applyIn")>-1){//进项票申请收票
+											 $scope.invoice.status=2;
+										}else if(judgeString.indexOf("applyOut")>-1){//销项票申请开票
+											 $scope.invoice.status=3;
 										}
 										InvoiceService.saveInvoice($scope.invoice).then(
 															function(data) {debugger;
@@ -1021,8 +1033,12 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 																toastr.success("保存发票数据成功！");
 															}else if(judgeString=='confirmIn'){
 																toastr.success("确认收票成功！");
-															}else{
+															}else if(judgeString=='confirmOut'){
 																toastr.success("确认开票成功！");
+															}else if(judgeString=='applyIn'){
+																toastr.success("申请收票成功！");
+															}else if(judgeString=='applyOut'){
+																toastr.success("申请开票成功！");
 															}
 															$scope.showInvoiceInfo(data.serialNum,"out");
 																

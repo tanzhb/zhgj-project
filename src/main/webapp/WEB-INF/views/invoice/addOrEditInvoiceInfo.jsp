@@ -49,6 +49,10 @@
                                             <i class="fa fa-undo"></i> 取消 </button>
                                 <button  ng-hide="invoiceAdd"   type="submit"   class="btn green  btn-sm btn-circle"   ng-click="saveInvoice()"  ng-if="inOrOut.indexOf('confirm')<0">
                                             <i class="fa fa-save"></i> 保存 </button>
+                                            <!--  <button   ng-hide="invoiceAdd"  class="btn green  btn-sm btn-circle" ng-click="saveInvoice('applyIn')" ng-if="inOrOut.indexOf('in')>-1">
+                              		<i class="fa fa-check"></i> 申请收票 </button> -->
+                              		 <button   ng-hide="invoiceAdd"  class="btn green  btn-sm btn-circle" ng-click="saveInvoice('applyOut')" ng-if="inOrOut.indexOf('out')>-1&&(invoice.status==undefined||invoice.status==0)">
+                              		<i class="fa fa-check"></i> 申请开票  </button>
                                             <button   ng-hide="invoiceEdit"  class="btn green  btn-sm btn-circle" ng-click="saveInvoice('confirmIn')" ng-if="inOrOut.indexOf('in')>-1&&inOrOut.indexOf('confirm')>-1">
                               		<i class="fa fa-check"></i> 确认收票 </button>
                               		<button   ng-hide="invoiceEdit"  class="btn green  btn-sm btn-circle" ng-click="saveInvoice('confirmOut')" ng-if="inOrOut.indexOf('out')>-1&&inOrOut.indexOf('confirm')>-1">
