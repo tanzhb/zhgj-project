@@ -60,6 +60,8 @@ public class DeliveryMateriel {
     
     private OrderMateriel orderMateriel;
     
+    private Materiel materiel;
+    
     private SupplyMateriel supplyMateriel;
     
     private Warehouse warehouse;
@@ -535,6 +537,14 @@ public class DeliveryMateriel {
 
 	public void setStockInBatchs(List<StockInBatch> stockInBatchs) {
 		this.stockInBatchs = stockInBatchs;
+	}
+
+	public Materiel getMateriel() {
+		return materiel;
+	}
+
+	public void setMateriel(Materiel materiel) {
+		this.materiel = materiel;
 	}
 
 	

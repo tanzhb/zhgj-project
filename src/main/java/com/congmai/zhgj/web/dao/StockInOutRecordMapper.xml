@@ -810,7 +810,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 				
 		)
 		
-		WHERE stock.serialNum = #{serialNum,jdbcType=VARCHAR}
+		WHERE stock.materielSerial = #{serialNum,jdbcType=VARCHAR}
     </select>
      <!--代管库存获取累计出库数量 -->
     <select id="countOutAmountForDaiguan" parameterType="java.lang.String"   resultType="java.lang.String">
@@ -843,7 +843,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 				)
 		)
 		
-		WHERE stock.serialNum = #{serialNum,jdbcType=VARCHAR}
+		WHERE stock.materielSerial = #{serialNum,jdbcType=VARCHAR}
     </select>
      <!--自建库存获取累计入库数量   -->
      <select id="countInAmountForZijian"  parameterType="java.lang.String"   resultType="java.lang.String">
@@ -882,7 +882,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 				AND o.orderType != '委托采购'
 		)
 		
-		WHERE stock.serialNum =  #{serialNum,jdbcType=VARCHAR}
+		WHERE stock.materielSerial =  #{serialNum,jdbcType=VARCHAR}
      </select>
      <!--代管库存获取累计入库数量   -->
      <select id="countInAmountForDaiguan"  parameterType="java.lang.String"   resultType="java.lang.String">
@@ -930,7 +930,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 				)
 		)
 		
-		WHERE stock.serialNum =  #{serialNum,jdbcType=VARCHAR}
+		WHERE stock.materielSerial =  #{serialNum,jdbcType=VARCHAR}
      </select>
      <!-- 自建库存获取库存出库记录-->
      <select id="getStockOutRecordForZijian"  parameterType="java.lang.String"  resultMap="BaseResultMap" >

@@ -294,6 +294,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 				orderInfo.setDeliverStatus(orderInfo.CLEARANCE);
 				
 				delivery1.setStatus(DeliveryVO.WAIT_OUT);//待清关
+				takeDelivery.setStatus(TakeDelivery.WAIT_Cearance);//收货单更新为待清关
 				orderInfoMapper.updateByPrimaryKeySelective(orderInfo);//更新订单状态
 				delivery2Mapper.updateByPrimaryKeySelective(delivery1);//更新发货单状态
 			}else{
@@ -576,17 +577,22 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		orderInfo.setSerialNum(o.getSerialNum());
 		Delivery d=new Delivery();
 		d.setSerialNum(old_delivery.getSerialNum());
+		TakeDelivery td=new TakeDelivery();
+		td.setSerialNum(old_delivery.getTakeDeliverSerial());
 		if(StaticConst.getInfo("waimao").equals(o.getTradeType())&&StringUtils.isEmpty(o.getSupplyComId())){//外贸
 		createCustomsDeclarationForm(deliverySerial,currenLoginName);
 		//更新订单状态待报关
 		orderInfo.setDeliverStatus(orderInfo.DECLARATION);
 		d.setStatus(DeliveryVO.DECLARATION);
+		td.setStatus(TakeDelivery.WAIT_Declaration);
 		}else{
 			orderInfo.setDeliverStatus(orderInfo.OUTRECORD);//已出库
 			d.setStatus(DeliveryVO.COMPLETE);//发货完成
+			td.setStatus(TakeDelivery.COMPLETE);
 		}
 		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 		delivery2Mapper.updateByPrimaryKeySelective(d);
+		takeDeliveryMapper.updateByPrimaryKeySelective(td);
 		//更新入库记录
 		record.setUpdater(currenLoginName);
 		record.setStatus("1");//入库完成
@@ -920,12 +926,12 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	private void stockOutEndHandle(String orderSerial,String deliverySerial,String currenLoginName){
 		
 		//更新订单状态
-		OrderInfo orderInfo = new OrderInfo();
+	/*	OrderInfo orderInfo = new OrderInfo();
 		orderInfo.setSerialNum(orderSerial);
 		orderInfo.setDeliverStatus(OrderInfo.OUTRECORD);//入库完成/待收票
 		orderInfo.setUpdateTime(new Date());
 		orderInfo.setUpdater(currenLoginName);
-		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);*/
 		//更新发货状态
 		//Delivery delivery = new Delivery();
 		//delivery.setSerialNum(deliverySerial);

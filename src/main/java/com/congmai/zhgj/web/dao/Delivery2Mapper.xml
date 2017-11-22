@@ -210,7 +210,7 @@
     select
     d.serialNum, d.deliverNum,d.deliverType, d.orderSerial, d.supplyComId,d.buyComId, d.shipper, d.receiver, d.makeDate, d.maker, 
     d.remark, d.status, d.approval, d.approvalDate, d.warehouseSerial as warehouseSerial, d.materielCount, d.deliverDate, 
-    d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, 
+    d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, td.serialNum  as takeDeliverSerial,
     d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.serialNum as dmSerialNum,dm.batchNum,
     dm.manufactureDate,dm.deliverCount,dm.deliverRemark,
     dm.acceptCount,dm.refuseCount,dm.takeRemark,dm.qualifiedCount,dm.unqualifiedCount,dm.checkRemark,dm.warehouseSerial,

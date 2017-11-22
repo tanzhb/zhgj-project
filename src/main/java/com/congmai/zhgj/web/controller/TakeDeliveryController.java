@@ -869,15 +869,21 @@ public class TakeDeliveryController {
      		}
         	 for(DeliveryMateriel d:deliveryMateriels){
         		 String materielSerial=d.getOrderMateriel().getMaterielSerial();//基本物料流水
-        		if(isStockZijian){
+        		 String countInAmountZijian=stockService.getCountInAmountForZijian(materielSerial);
+     			String countOutAmountZijian=stockService.getCountOutAmountForZijian(materielSerial);
+     			String countInAmountDaiguan=stockService.getCountInAmountForDaiguan(materielSerial);
+    			String countOutAmountDaiguan=stockService.getCountOutAmountForDaiguan(materielSerial);
+    			d.setCurrentStockAmount(Integer.parseInt(countInAmountZijian==null?"0":countInAmountZijian)-Integer.parseInt(countOutAmountZijian==null?"0":countOutAmountZijian)+
+    					Integer.parseInt(countInAmountDaiguan==null?"0":countInAmountDaiguan)-Integer.parseInt(countOutAmountDaiguan==null?"0":countOutAmountDaiguan)+"");
+        	/*	if(isStockZijian){
         			String countInAmountZijian=stockService.getCountInAmountForZijian(materielSerial);
         			String countOutAmountZijian=stockService.getCountOutAmountForZijian(materielSerial);
         			d.setCurrentStockAmount(Integer.parseInt(countInAmountZijian==null?"0":countInAmountZijian)-Integer.parseInt(countOutAmountZijian==null?"0":countOutAmountZijian)+"");
         		}else{
         			String countInAmountDaiguan=stockService.getCountInAmountForDaiguan(materielSerial);
-        			String countOutAmountDaiguan=stockService.getCountOutAmountForDaiguan(materielSerial);
+        			String countOutAmountZijian=stockService.getCountOutAmountForZijian(materielSerial);
         			d.setCurrentStockAmount(Integer.parseInt(countInAmountDaiguan==null?"0":countInAmountDaiguan)-Integer.parseInt(countOutAmountDaiguan==null?"0":countOutAmountDaiguan)+"");
-        		}
+        		}*/
         		 
         	 }
         	 }
