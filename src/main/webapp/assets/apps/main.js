@@ -2433,7 +2433,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	    })   
 	       // 销项票发起申请
         .state('submitInvoiceApply', {
-            url: "/submitInvoiceApply",
+            url: "/submitInvoiceApply:inOrOut",
             templateUrl: "rest/page/submitInvoiceApply",
             data: {pageTitle: '销项票申请'},
             controller: "InvoiceController",
