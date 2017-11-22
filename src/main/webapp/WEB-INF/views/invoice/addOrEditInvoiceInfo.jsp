@@ -38,7 +38,14 @@
         <div class="portlet bordered">
             <div class="portlet-body">
 				<div class="portlet light ">
-                        <div class="portlet-title">
+				<ul class="nav nav-tabs">
+					
+						<li class="active bold"><a data-target="#tab_1_1"
+							data-toggle="tab">发票信息</a></li>
+						<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">物料信息</a></li>
+						<!-- <li class="bold"><a data-target="#tab_1_3" data-toggle="tab">附件</a></li> -->
+					</ul>
+                       <%--  <div class="portlet-title">
                             <div class="caption"><span ng-if="inOrOut.indexOf('in')>-1" >进项票信息</span><span  ng-if="inOrOut.indexOf('out')>-1">销项票信息</span></div>    
                             <div class="actions">
                                 <button  ng-show="invoiceView"    class="btn purple  btn-sm btn-circle " ng-click="editInvoice()"  ng-if="inOrOut.indexOf('confirm')<0">
@@ -60,9 +67,32 @@
                               		<button    ng-if="inOrOut.indexOf('confirm')>-1"   class="btn red  btn-sm btn-circle" ui-sref="invoice">
                                             <i class="fa fa-undo"></i> 取消 </button>
                             </div>
-                        </div>
+                        </div> --%>
                          <div class="tab-content">
 				<div class="tab-pane fade active in" id="tab_1_1"> 
+				 <div class="portlet-title" style="min-height: 48px;">
+               <div class="tools" style="float:right"><!-- ng-if="deliveryDetail.status=='0'" -->
+               	 <button  ng-show="invoiceView"    class="btn purple  btn-sm btn-circle " ng-click="editInvoice()"  ng-if="inOrOut.indexOf('confirm')<0">
+                                            <i class="fa fa-edit"></i> 编辑 </button>
+                                <button   ng-hide="invoiceEdit"    ng-if="inOrOut.length>3&&inOrOut.indexOf('confirm')<0"   class="btn purple  btn-sm btn-circle " ng-click="cancelEditInvoice()" >
+                                            <i class="fa fa-undo"></i> 取消 </button>
+                                            <button   ng-hide="invoiceEdit"    ng-if="inOrOut.length<=3"   class="btn red  btn-sm btn-circle" ui-sref="invoice">
+                                            <i class="fa fa-undo"></i> 取消 </button>
+                                <button  ng-hide="invoiceAdd"   type="submit"   class="btn green  btn-sm btn-circle"   ng-click="saveInvoice()"  ng-if="inOrOut.indexOf('confirm')<0">
+                                            <i class="fa fa-save"></i> 保存 </button>
+                                            <!--  <button   ng-hide="invoiceAdd"  class="btn green  btn-sm btn-circle" ng-click="saveInvoice('applyIn')" ng-if="inOrOut.indexOf('in')>-1">
+                              		<i class="fa fa-check"></i> 申请收票 </button> -->
+                              		 <button   ng-hide="invoiceAdd"  class="btn green  btn-sm btn-circle" ng-click="saveInvoice('applyOut')" ng-if="inOrOut.indexOf('out')>-1&&(invoice.status==undefined||invoice.status==0)">
+                              		<i class="fa fa-check"></i> 申请开票  </button>
+                                            <button   ng-hide="invoiceEdit"  class="btn green  btn-sm btn-circle" ng-click="saveInvoice('confirmIn')" ng-if="inOrOut.indexOf('in')>-1&&inOrOut.indexOf('confirm')>-1">
+                              		<i class="fa fa-check"></i> 确认收票 </button>
+                              		<button   ng-hide="invoiceEdit"  class="btn green  btn-sm btn-circle" ng-click="saveInvoice('confirmOut')" ng-if="inOrOut.indexOf('out')>-1&&inOrOut.indexOf('confirm')>-1">
+                              		<i class="fa fa-check"></i> 确认开票 </button>
+                              		<button    ng-if="inOrOut.indexOf('confirm')>-1"   class="btn red  btn-sm btn-circle" ui-sref="invoice">
+                                            <i class="fa fa-undo"></i> 取消 </button>
+                
+                </div>
+            </div>
                         <div class="portlet-body form">
 								<div class="form-body">
 									<div class="alert alert-danger display-hide">

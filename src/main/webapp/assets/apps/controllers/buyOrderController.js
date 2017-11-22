@@ -3857,8 +3857,10 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
   										return '<span  class="label label-sm label-success ng-scope">已报关</span>';
   									}else if(data=="6"){
   										return '<span  class="label label-sm label-success ng-scope">待报关</span>';
-  									}else{
-  										return '<span  class="label label-sm label-danger ng-scope">待收货</span>';
+  									}else if(data=="7"){
+  										return '<span  class="label label-sm label-success ng-scope">待清关</span>';
+  									}else if(data=="8"){
+  										return '<span  class="label label-sm label-success ng-scope">已清关</span>';
   									}
   							}
   						}]
