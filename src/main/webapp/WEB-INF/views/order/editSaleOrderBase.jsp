@@ -1113,7 +1113,7 @@ margin-right: 20px;
                           		<div class="form-group ">
 	                              	<label class="control-label bold">含税金额：</label>
 	                                 <div class="">
-	                                  <p class="form-control-static"> {{format2Thousands(totalRateAndAmount())}} </p>
+	                                  <p class="form-control-static"> {{getCurrencySymbol()}}{{format2Thousands(totalRateAndAmount())}} </p>
 	                                  </div>
                                </div>
                           </div>
@@ -1121,7 +1121,7 @@ margin-right: 20px;
                               <div class="form-group ">
                                   <label class="control-label bold">不含税金额：</label>
                                   <div class="">
-                                  <p class="form-control-static"> {{format2Thousands(totalAmount())}} </p>
+                                  <p class="form-control-static"> {{getCurrencySymbol()}}{{format2Thousands(totalAmount())}} </p>
                                   </div>
                               </div>
                           </div>
@@ -1130,7 +1130,7 @@ margin-right: 20px;
                           		<div class="form-group ">
 	                              	<label class="control-label bold">税额：</label>
 	                                 <div class="">
-	                                  <p class="form-control-static">{{format2Thousands(totalRateAmount())}}</p>
+	                                  <p class="form-control-static">{{getCurrencySymbol()}}{{format2Thousands(totalRateAmount())}}</p>
 	                                  </div>
                                </div>
                           </div>
@@ -1147,7 +1147,7 @@ margin-right: 20px;
                                   		<input type="text" name="otherAmount" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.otherAmount" ng-keyup="clearNoNumPoint(clauseSettlement,'otherAmount')" >
                                       <div class="form-control-focus"> </div>
                                       <span class="help-block" ng-hide="clauseSettlementInput">请输入其他费用</span>
-                                      <p class="form-control-static" ng-show="clauseSettlementShow"> {{clauseSettlement.otherAmount}} </p>
+                                      <p class="form-control-static" ng-show="clauseSettlementShow"> {{getCurrencySymbol()}}{{clauseSettlement.otherAmount}} </p>
                                		</div>
                               </div>
                           </div>
@@ -1155,7 +1155,7 @@ margin-right: 20px;
                               <div class="form-group ">
                                   <label class="control-label bold">订单金额：</label>
                                      <div class="">
-                                  <p class="form-control-static"> {{format2Thousands(totalOrderAmount())}} </p>
+                                  <p class="form-control-static"> {{getCurrencySymbol()}}{{format2Thousands(totalOrderAmount())}} </p>
                                   </div>
                               </div>
                           </div>
@@ -1305,55 +1305,97 @@ margin-right: 20px;
                           <button class="close" data-close="alert"></button> 请先输入正确数据！ </div>
                       <!--/row-->
                       <div class="row">
-                          <div class="col-md-4">
-                              <div class="form-group ">
-                                  <label class="control-label bold">验收方：</label>
-                                  <div class="">
-                                  		<input type="text" name="checkParty" class="form-control" ng-hide="clauseCheckAcceptInput" ng-model="clauseCheckAccept.checkParty"  >
-                                      <div class="form-control-focus"> </div>
-                                      <span class="help-block" ng-hide="clauseCheckAcceptInput">请输入验收方</span>
-                                      <p class="form-control-static" ng-show="clauseCheckAcceptShow"> {{clauseCheckAccept.checkParty}} </p>
-                               		</div>
-                              </div>
-                          </div>
-                          <!--/span-->
-                          <div class="col-md-4">
-                              <div class="form-group ">
-                                  <label class="control-label bold">验收标准：</label>
-                                  <div class="">
-                                  		<input type="text" name="acceptStandard" class="form-control" ng-hide="clauseCheckAcceptInput" ng-model="clauseCheckAccept.acceptStandard"  >
-                                      <div class="form-control-focus"> </div>
-                                      <span class="help-block" ng-hide="clauseCheckAcceptInput">请输入验收标准</span>
-                                      <p class="form-control-static" ng-show="clauseCheckAcceptShow"> {{clauseCheckAccept.acceptStandard}} </p>
-                               		</div>
-                              </div>
-                          </div>
-                          <div class="col-md-4">
-                              <div class="form-group ">
-                                  <label class="control-label bold">补充说明：</label>
-                                  <div class="">
-                                  		<input type="text" name="clauseCheckAcceptRemark" class="form-control" ng-hide="clauseCheckAcceptInput" ng-model="clauseCheckAccept.remark"  >
-                                      <div class="form-control-focus"> </div>
-                                      <span class="help-block" ng-hide="clauseCheckAcceptInput">请输入补充说明</span>
-                                      <p class="form-control-static" ng-show="clauseCheckAcceptShow"> {{clauseCheckAccept.remark}} </p>
-                               		</div>
-                              </div>
-                          </div>
-                          <!--/span-->
-                          <!--/span-->
-                          <!-- <div class="col-md-4">
-                              <div class="form-group ">
-                                  <label class="control-label bold">规格型号：</label>
-                                  <div class="">
-                                  		<input type="text" name="specifications" class="form-control" ng-hide="clauseCheckAcceptInput" ng-model="clauseCheckAccept.specifications"  >
-                                      <div class="form-control-focus"> </div>
-                                      <span class="help-block" ng-hide="clauseCheckAcceptInput">请输入规格型号</span>
-                                      <p class="form-control-static" ng-show="clauseCheckAcceptShow">{{clauseCheckAccept.specifications}} </p>
-                               		</div>
-                              </div>
-                          </div> -->
-                          <!--/span-->
-                      </div>
+                     	<div class="col-md-4">
+                         	<div class="form-group ">
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>检验类型：</label>
+                                 <div class="">
+                                 		<select class="form-control" id="checkType"  ng-hide="clauseCheckAcceptInput" name="checkType"  ng-model="clauseCheckAccept.checkType" >
+                                          	<option value=""></option>
+                                            <option value="免检">免检</option>
+                                            <option value="巡检" >巡检</option>
+                                            <option value="抽检" >抽检</option>
+                                            <option value="全检" >全检</option>
+                                       </select>
+                                     <div class="form-control-focus"> </div>
+                                     <span class="help-block" ng-hide="clauseCheckAcceptInput">请选择检验类型</span>
+                                     <p class="form-control-static" ng-show="clauseCheckAcceptShow"> {{clauseCheckAccept.checkType}} </p>
+                                 </div>
+                             </div>
+                         </div>
+                     	<div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>检验方：</label>
+                                 <div class="">
+                                 		<input type="text" name="checkParty" class="form-control" ng-hide="clauseCheckAcceptInput" ng-model="clauseCheckAccept.checkParty"  >
+                                     <div class="form-control-focus"> </div>
+                                     <span class="help-block" ng-hide="clauseCheckAcceptInput">请输入检验方</span>
+                                     <p class="form-control-static" ng-show="clauseCheckAcceptShow"> {{clauseCheckAccept.checkParty}} </p>
+                              		</div>
+                             </div>
+                         </div>
+                         <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label bold">预约检验日期：</label>
+                                 <div class="">
+                                 <input type="text" name="playCheckDate" class="form-control form-control-inline input-medium date-picker" 
+                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="clauseCheckAcceptInput" ng-model="clauseCheckAccept.playCheckDate" repeat-done="renderDone()" >
+                                     <div class="form-control-focus"> </div>
+                                     <span class="help-block" ng-hide="clauseCheckAcceptInput">请选择预约检验日期</span>
+                                     <p class="form-control-static" ng-show="clauseCheckAcceptShow"> {{clauseCheckAccept.playCheckDate}} </p>
+                                 </div>
+                                 
+                             </div>
+                         </div>
+                         
+                     </div>
+                     <div class="row">
+                         <!--/span-->
+                         <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label bold">验收标准：</label>
+                                 <div class="">
+                                 		<input type="text" name="acceptStandard" class="form-control" ng-hide="clauseCheckAcceptInput" ng-model="clauseCheckAccept.acceptStandard"  >
+                                     <div class="form-control-focus"> </div>
+                                     <span class="help-block" ng-hide="clauseCheckAcceptInput">请输入验收标准</span>
+                                     <p class="form-control-static" ng-show="clauseCheckAcceptShow"> {{clauseCheckAccept.acceptStandard}} </p>
+                              		</div>
+                             </div>
+                         </div>
+                         <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label bold">技术文件：</label>
+                                 <div class="">
+                                 		<input type="text" name="technicalFile" class="form-control" ng-hide="clauseCheckAcceptInput" ng-model="clauseCheckAccept.technicalFile"  >
+                                     <div class="form-control-focus"> </div>
+                                     <span class="help-block" ng-hide="clauseCheckAcceptInput">请输入技术文件</span>
+                                     <p class="form-control-static" ng-show="clauseCheckAcceptShow"> {{clauseCheckAccept.technicalFile}} </p>
+                              		</div>
+                             </div>
+                         </div>
+                         <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label bold">备注：</label>
+                                 <div class="">
+                                 		<input type="text" name="remark" class="form-control" ng-hide="clauseCheckAcceptInput" ng-model="clauseCheckAccept.remark"  >
+                                     <div class="form-control-focus"> </div>
+                                     <span class="help-block" ng-hide="clauseCheckAcceptInput">请输入备注</span>
+                                     <p class="form-control-static" ng-show="clauseCheckAcceptShow"> {{clauseCheckAccept.remark}} </p>
+                              		</div>
+                             </div>
+                         </div>
+                         <!--/span-->
+                         <!-- <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label bold">补充说明：</label>
+                                 <div class="">
+                                 		<input type="text" name="clauseCheckAcceptRemark" class="form-control" ng-hide="clauseCheckAcceptInput" ng-model="clauseCheckAccept.remark"  >
+                                     <div class="form-control-focus"> </div>
+                                     <span class="help-block" ng-hide="clauseCheckAcceptInput">请输入补充说明</span>
+                                     <p class="form-control-static" ng-show="clauseCheckAcceptShow"> {{clauseCheckAccept.remark}} </p>
+                              		</div>
+                             </div>
+                         </div> -->
+                     </div>
                       <!--/row-->
                   </div>
 				</form>

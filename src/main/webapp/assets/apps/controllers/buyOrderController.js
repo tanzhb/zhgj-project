@@ -214,9 +214,11 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
    $scope.renderDone = function(){
    	var date3= $scope.buyOrder.orderDate;
    	var date4= $scope.buyOrder.makeDate;
+   	var date5= $scope.clauseCheckAccept.playCheckDate
    	$scope.datepickerInit();
    	$scope.buyOrder.orderDate = date3;
    	$scope.buyOrder.makeDate = date4;
+   	$scope.clauseCheckAccept.playCheckDate = date5;
   };
    
    $scope.datepickerInit = function(scope){
@@ -1940,6 +1942,24 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 			       }
 /** ***************合同信息end******************** */
 /** ***************结算条款start******************** */
+ //获取货币符号
+$scope.getCurrencySymbol = function(){
+	if(isNull($scope.buyOrder.currency)){
+		return '';
+	}else{
+		if($scope.buyOrder.currency=='人民币'){
+			return '￥';
+		}else if($scope.buyOrder.currency=='美元'){
+			return '$';
+		}else if($scope.buyOrder.currency=='欧元'){
+			return '€';
+		}else if($scope.buyOrder.currency=='英镑'){
+			return '￡';
+		}else{
+			return '';
+		}
+	} 
+}
 var validateClauseSettlementInit = function() {// 结算条款表单验证
 var e = $("#form_clauseSettlement"),
    r = $(".alert-danger", e),
@@ -2367,8 +2387,18 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
    	   	            errorClass: "help-block help-block-error",
    	   	            focusInvalid: !1,
    	   	            ignore: "",
-   	   	            messages: {},
-   	   	        	rules: {},
+		   	   	      messages: {
+			     
+		   	   	    	  checkType:{required:"检验类型不能为空！"},
+		   	   	    	  checkParty:{required:"检验方不能为空！"}
+			            },
+		          	rules: {
+		          			checkType:{required:true},
+		          			checkParty:{required:true}
+		          			},
+		          		invalidHandler: function(e, t) {
+		                  i.hide(), r.show(), App.scrollTo(r, -200)
+		              },
    	   	        		invalidHandler: function(e, t) {
    	   	                i.hide(), r.show(), App.scrollTo(r, -200)
    	   	            },
@@ -3241,7 +3271,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        								}
 		        								
 		        							}
-		        						},
+		        						}/*,
 		        						{
 		        							text : "转办",
 		        							className : "btn default"
@@ -3253,7 +3283,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        						{
 		        							text : "跳转",
 		        							className : "btn default"
-		        						} ],
+		        						}*/ ],
 		        				dom : "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
 		        				order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
 
@@ -3900,7 +3930,6 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	        $scope.takeDeliveryView = function(serialNum){
 	        	$state.go("takeDeliveryView",{serialNum:serialNum,oprateType:'forBuyOrder'});
 	        }
-          
 }]);
 
 

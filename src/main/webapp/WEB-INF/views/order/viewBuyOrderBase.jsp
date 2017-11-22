@@ -808,7 +808,7 @@ margin-right: 20px;
                                      		<p class="form-control-static"> {{format2Thousands(_arithmeticRateAmount(this))}} </p>
 		                          </td>
 		                          <td ng-if="buyOrder.tradeType =='外贸'">
-                                     		<p class="form-control-static" > {{_orderMateriel.customsRate}} </p>
+                                     		<p class="form-control-static" > {{_orderMateriel.customsRate}}% </p>
 		                          </td>
 								  <td ng-if="buyOrder.tradeType =='外贸'">
 								  		<p class="form-control-static" > {{format2Thousands(_arithmeticCustomsRateAmount(this))}} </p>
@@ -910,7 +910,7 @@ margin-right: 20px;
                          		<div class="form-group ">
                               	<label class="control-label col-md-5 bold">含税金额：</label>
                                  <div class="control-label col-md-7">
-                                  <p > {{format2Thousands(totalRateAndAmount())}} </p>
+                                  <p > {{getCurrencySymbol()}}{{format2Thousands(totalRateAndAmount())}} </p>
                                   </div>
                               </div>
                          </div>
@@ -918,7 +918,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">不含税金额：</label>
                                  <div class="control-label col-md-7">
-                                 <p > {{format2Thousands(totalAmount())}} </p>
+                                 <p > {{getCurrencySymbol()}}{{format2Thousands(totalAmount())}} </p>
                                  </div>
                              </div>
                          </div>
@@ -927,7 +927,7 @@ margin-right: 20px;
                          		<div class="form-group ">
                               	<label class="control-label col-md-5 bold">税额(含关税)：</label>
                                  <div class="control-label col-md-7">
-                                  <p >{{format2Thousands(totalRateAndCustomsAmount())}}</p>
+                                  <p >{{getCurrencySymbol()}}{{format2Thousands(totalRateAndCustomsAmount())}}</p>
                                   </div>
                               </div>
                          </div>
@@ -941,7 +941,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">其他费用：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{clauseSettlement.otherAmount}} </p>
+                                     <p  > {{getCurrencySymbol()}}{{clauseSettlement.otherAmount}} </p>
                               		</div>
                              </div>
                          </div>
@@ -949,7 +949,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">订单金额：</label>
                                     <div class="control-label col-md-7">
-                                 <p > {{format2Thousands(totalOrderAmount())}} </p>
+                                 <p > {{getCurrencySymbol()}}{{format2Thousands(totalOrderAmount())}} </p>
                                  </div>
                              </div>
                          </div>
@@ -1033,45 +1033,70 @@ margin-right: 20px;
                      <div class="alert alert-danger display-hide">
                          <button class="close" data-close="alert"></button> 请先输入正确数据！ </div>
                      <!--/row-->
+                     
                      <div class="row">
-                         <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">验收方：</label>
+                     	<div class="col-md-4">
+                         	<div class="form-group ">
+                                 <label class="control-label col-md-5 bold">检验类型：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{clauseCheckAccept.checkParty}} </p>
+                                     <p > {{clauseCheckAccept.checkType}} </p>
+                                 </div>
+                             </div>
+                         </div>
+                     	<div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label col-md-5 bold">检验方：</label>
+                                 <div class="control-label col-md-7">
+                                     <p > {{clauseCheckAccept.checkParty}} </p>
                               		</div>
                              </div>
                          </div>
+                         <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label col-md-5 bold">预约检验日期：</label>
+                                 <div class="control-label col-md-7">
+                                     <p > {{clauseCheckAccept.playCheckDate}} </p>
+                                 </div>
+                                 
+                             </div>
+                         </div>
+                         
+                     </div>
+                     <div class="row">
                          <!--/span-->
                          <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">验收标准：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{clauseCheckAccept.acceptStandard}} </p>
+                                     <p > {{clauseCheckAccept.acceptStandard}} </p>
+                              		</div>
+                             </div>
+                         </div>
+                         <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label col-md-5 bold">技术文件：</label>
+                                 <div class="control-label col-md-7">
+                                     <p > {{clauseCheckAccept.technicalFile}} </p>
+                              		</div>
+                             </div>
+                         </div>
+                         <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label col-md-5 bold">备注：</label>
+                                 <div class="control-label col-md-7">
+                                     <p > {{clauseCheckAccept.remark}} </p>
                               		</div>
                              </div>
                          </div>
                          <!--/span-->
-                         <div class="col-md-4">
+                         <!-- <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">补充说明：</label>
                                  <div class="control-label col-md-7">
-                                     <p  > {{clauseCheckAccept.remark}} </p>
-                              		</div>
-                             </div>
-                         </div>
-                         <!-- <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">规格型号：</label>
-                                 <div class="control-label col-md-7">
-                                 		<input type="text" name="specifications" class="form-control" ng-hide="clauseCheckAcceptInput" ng-model="clauseCheckAccept.specifications"  >
-                                     <div class="form-control-focus"> </div>
-                                     <span class="help-block" ng-hide="clauseCheckAcceptInput">请输入规格型号</span>
-                                     <p  >{{clauseCheckAccept.specifications}} </p>
+                                     <p > {{clauseCheckAccept.remark}} </p>
                               		</div>
                              </div>
                          </div> -->
-                         <!--/span-->
                      </div>
                      <!--/row-->
                  </div>

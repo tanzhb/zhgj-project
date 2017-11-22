@@ -7,6 +7,9 @@
     <result column="checkParty" property="checkParty" jdbcType="VARCHAR" />
     <result column="acceptStandard" property="acceptStandard" jdbcType="VARCHAR" />
     <result column="specifications" property="specifications" jdbcType="VARCHAR" />
+    <result column="checkType" property="checkType" jdbcType="VARCHAR" />
+    <result column="technicalFile" property="technicalFile" jdbcType="VARCHAR" />
+    <result column="playCheckDate" property="playCheckDate" jdbcType="DATE" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
@@ -74,8 +77,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    serialNum, contractSerial, checkParty, acceptStandard, specifications, remark, status, 
-    delFlg, creator, createTime, updater, updateTime
+    serialNum, contractSerial, checkParty, acceptStandard, specifications, checkType, 
+    technicalFile, playCheckDate, remark, status, delFlg, creator, createTime, updater, 
+    updateTime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.ClauseCheckAcceptExample" >
     select
@@ -109,12 +113,14 @@
   </delete>
   <insert id="insert" parameterType="com.congmai.zhgj.web.model.ClauseCheckAccept" >
     insert into clauseCheckAccept (serialNum, contractSerial, checkParty, 
-      acceptStandard, specifications, remark, 
+      acceptStandard, specifications, checkType, 
+      technicalFile, playCheckDate, remark, 
       status, delFlg, creator, 
       createTime, updater, updateTime
       )
     values (#{serialNum,jdbcType=VARCHAR}, #{contractSerial,jdbcType=VARCHAR}, #{checkParty,jdbcType=VARCHAR}, 
-      #{acceptStandard,jdbcType=VARCHAR}, #{specifications,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{acceptStandard,jdbcType=VARCHAR}, #{specifications,jdbcType=VARCHAR}, #{checkType,jdbcType=VARCHAR}, 
+      #{technicalFile,jdbcType=VARCHAR}, #{playCheckDate,jdbcType=DATE}, #{remark,jdbcType=VARCHAR}, 
       #{status,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
       )
@@ -136,6 +142,15 @@
       </if>
       <if test="specifications != null" >
         specifications,
+      </if>
+      <if test="checkType != null" >
+        checkType,
+      </if>
+      <if test="technicalFile != null" >
+        technicalFile,
+      </if>
+      <if test="playCheckDate != null" >
+        playCheckDate,
       </if>
       <if test="remark != null" >
         remark,
@@ -174,6 +189,15 @@
       </if>
       <if test="specifications != null" >
         #{specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="checkType != null" >
+        #{checkType,jdbcType=VARCHAR},
+      </if>
+      <if test="technicalFile != null" >
+        #{technicalFile,jdbcType=VARCHAR},
+      </if>
+      <if test="playCheckDate != null" >
+        #{playCheckDate,jdbcType=DATE},
       </if>
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
@@ -222,6 +246,15 @@
       <if test="record.specifications != null" >
         specifications = #{record.specifications,jdbcType=VARCHAR},
       </if>
+      <if test="record.checkType != null" >
+        checkType = #{record.checkType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.technicalFile != null" >
+        technicalFile = #{record.technicalFile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.playCheckDate != null" >
+        playCheckDate = #{record.playCheckDate,jdbcType=DATE},
+      </if>
       <if test="record.remark != null" >
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
@@ -255,6 +288,9 @@
       checkParty = #{record.checkParty,jdbcType=VARCHAR},
       acceptStandard = #{record.acceptStandard,jdbcType=VARCHAR},
       specifications = #{record.specifications,jdbcType=VARCHAR},
+      checkType = #{record.checkType,jdbcType=VARCHAR},
+      technicalFile = #{record.technicalFile,jdbcType=VARCHAR},
+      playCheckDate = #{record.playCheckDate,jdbcType=DATE},
       remark = #{record.remark,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
       delFlg = #{record.delFlg,jdbcType=VARCHAR},
@@ -280,6 +316,15 @@
       </if>
       <if test="specifications != null" >
         specifications = #{specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="checkType != null" >
+        checkType = #{checkType,jdbcType=VARCHAR},
+      </if>
+      <if test="technicalFile != null" >
+        technicalFile = #{technicalFile,jdbcType=VARCHAR},
+      </if>
+      <if test="playCheckDate != null" >
+        playCheckDate = #{playCheckDate,jdbcType=DATE},
       </if>
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
@@ -311,6 +356,9 @@
       checkParty = #{checkParty,jdbcType=VARCHAR},
       acceptStandard = #{acceptStandard,jdbcType=VARCHAR},
       specifications = #{specifications,jdbcType=VARCHAR},
+      checkType = #{checkType,jdbcType=VARCHAR},
+      technicalFile = #{technicalFile,jdbcType=VARCHAR},
+      playCheckDate = #{playCheckDate,jdbcType=DATE},
       remark = #{remark,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
       delFlg = #{delFlg,jdbcType=VARCHAR},
