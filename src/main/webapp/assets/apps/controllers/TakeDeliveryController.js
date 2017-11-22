@@ -2022,7 +2022,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  				        			   claimTask(taskId, 'sample_2');
 	  				        		   }								
 	  				        	   }
-	  				           },
+	  				           }/*,
 	  				           {
 	  				        	   text : "转办",
 	  				        	   className : "btn default"
@@ -2034,7 +2034,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  				           {
 	  				        	   text : "跳转",
 	  				        	   className : "btn default"
-	  				           } ],
+	  				           }*/ ],
 	  				           order: [[2, "desc"]],// 默认排序列及排序方式
 	  				           searching: true,// 是否过滤检索
 	  				           ordering:  true,// 是否排序

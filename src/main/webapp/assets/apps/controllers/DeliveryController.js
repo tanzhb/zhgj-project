@@ -1616,7 +1616,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 												claimTask(t.row('.active').data().taskId, 'dbTable');
 										}						
 									}
-								},
+								}/*,
 								{
 									text : "转办",
 									className : "btn default"
@@ -1628,7 +1628,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 								{
 									text : "跳转",
 									className : "btn default"
-								} ],
+								}*/ ],
 						dom : "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
 						order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
 
