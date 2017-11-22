@@ -127,7 +127,7 @@ angular
 							};
 							
 							// 构建datatables开始***************************************
-							var  ;
+							var tableAjaxUrl ;
 							 var table ;
 									
 			function loadInvoiceInTable(){
