@@ -32,5 +32,5 @@ public interface WarehousepositionMapper  extends GenericDao<Warehouseposition, 
     int updateByPrimaryKey(Warehouseposition record);
     int deleteWarehouseposition(List<String>serialNums);
     int insertWarehouseposition(List<Warehouseposition> list);
-    int deleteByWarehouseSerial(Warehouseposition record);//根据仓库流水删除对应的库位信息
+    int deleteByWarehouseSerial(Warehouseposition record);//根据仓库流水删除对应的库区信息
 }

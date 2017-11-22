@@ -16,6 +16,7 @@
 	                            <th style="width:100px"> 批次号 </th>
 	                            <th> 仓库 </th>
 	                            <th> 库区 </th>
+	                            <th style="width:80px"> 库位 </th>
 	                            <th style="width:80px"> 入库数量 </th>
 	                            <th style="width:80px">操作</th>
 	                        </tr>
@@ -45,6 +46,9 @@
                                   </select>
                                   <div class="form-control-focus"> </div>
 							</td>
+							<td>
+		                    	<input type="text" class="form-control" id="positionName"  name="positionName" ng-model="stockInBatch.positionName">
+		                    </td>
 							 <td>
 		                    	<input type="text" class="form-control" id="stockInCount"  name="stockInCount" ng-model="stockInBatch.stockInCount" ng-keyup="clearNoNumPoint(stockInBatchs[$index],'stockInCount')">
 		                    </td>
@@ -56,7 +60,7 @@
 	                    
 	                    </tr>
 	                    </tbody>
-	                    <tfoot><tr><td colspan="3" style="text-align:right">合计：</td><td colspan="2">{{totalCount()}}</td></tr></tfoot>
+	                    <tfoot><tr><td colspan="4" style="text-align:right">合计：</td><td colspan="2">{{totalCount()}}</td></tr></tfoot>
 	                </table>
 	            </div>
 	            <div class="modal-footer">

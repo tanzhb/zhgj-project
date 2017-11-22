@@ -130,7 +130,7 @@
 										<th>入库数量</th>
 										<th>未入数量</th>
 										<th>仓库</th>
-										<th>库位</th>
+										<th>库区</th>
 										<th>备注</th>
 									</tr>
 								</thead>

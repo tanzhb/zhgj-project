@@ -618,7 +618,7 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 					function loadMaterielTable(orderSerial,deliverSerial){
 						var a = 0;
 						debugger;
-						tableAjaxUrl= "rest/invoice/getMaterielList?orderSerial="+orderSerial+"&deliverSerial="+deliverSerial
+						tableAjaxUrl= "rest/invoice/getMaterielList?orderSerial="+orderSerial+"&deliverSerial="+deliverSerial;
 						 if(materielTable!=undefined){
 							 materielTable.destroy();
 						/*	 materielTable.ajax.reload();*/
@@ -672,12 +672,12 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 									pageLength : 10,// 每页显示数量
 									processing : true,// loading等待框
 									// serverSide: true,
-									//ajax : tableAjaxUrl,// 加载数据中发票表数据
-									 ajax :{ "url":tableAjaxUrl,// 加载数据中公告列表的数据    
+									ajax : tableAjaxUrl,// 加载数据中发票表数据
+									 /*ajax :{ "url":tableAjaxUrl,// 加载数据中公告列表的数据    
 					  						"contentType": "application/json",
 					  						 "data": function ( d ) {
 						  					      return JSON.stringify( d );
-						  					    }},
+						  					    }},*/
 									"aoColumns" : [
 									             /*  	{
 									               	mData : 'serialNum'

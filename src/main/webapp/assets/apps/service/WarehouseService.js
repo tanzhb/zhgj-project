@@ -15,7 +15,7 @@ angular.module('MetronicApp').factory('WarehouseService', ['$rootScope', '$http'
     };
 
     return factory;
-    //查询所有仓库位置
+    //查询所有仓库区置
     function getAllWarehousepositions() {
         var deferred = $q.defer();
         $http.get(REST_SERVICE_URI)

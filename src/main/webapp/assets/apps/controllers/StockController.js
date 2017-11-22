@@ -37,7 +37,7 @@ angular
 													initSuppliers();//初始化物权方选择框
 										 		}else if($location.path()=="/stockView"){
 										 			debugger;
-										 			getStockDetailInfo($stateParams.stockSerialNum);//查看库位详情页面
+										 			getStockDetailInfo($stateParams.stockSerialNum);//查看库区详情页面
 										 			loadZkTable($stateParams.stockSerialNum,"sample_inm");//在库数量
 										 			loadStockInTable($stateParams.stockSerialNum,"sample_stockinview");//入库记录
 										 			loadStockOutTable($stateParams.stockSerialNum,"sample_stockoutview");//出库记录
@@ -709,9 +709,9 @@ angular
 		 	    									return "";
 		 	    								}else{
 		 	    									if(row.position==''||row.position==null){
-		 	    										return '<span title="仓库:'+row.warehouse.warehouseName+'&nbsp;&nbsp;&nbsp;&nbsp;\n库位:&nbsp;&nbsp;暂无">'+data.warehouseName+'</span>';
+		 	    										return '<span title="仓库:'+row.warehouse.warehouseName+'&nbsp;&nbsp;&nbsp;&nbsp;\n库区:&nbsp;&nbsp;暂无">'+data.warehouseName+'</span>';
 		 	    									}else{
-		 	    									return '<span title="仓库:'+row.warehouse.warehouseName+'&nbsp;&nbsp;&nbsp;&nbsp;\n库位:'+row.position.positionName+'">'+data.warehouseName+'</span>';
+		 	    									return '<span title="仓库:'+row.warehouse.warehouseName+'&nbsp;&nbsp;&nbsp;&nbsp;\n库区:'+row.position.positionName+'">'+data.warehouseName+'</span>';
 		 	    									}
 		 	    								}
 											},"createdCell": function (td, cellData, rowData, row, col) {
@@ -1086,7 +1086,7 @@ angular
 						        		//调用承诺接口reject();
 						        	});
 							}
-							 function getStockInfo(serialNum){//查看库位
+							 function getStockInfo(serialNum){//查看库区
 						    	   if(!handle.isNull(serialNum)){
 						    		   debugger;
 						    			 var promise =StockService .selectBySerialNum(serialNum);
@@ -1099,7 +1099,7 @@ angular
 						 	            });
 						    		 }
 						       }
-							 function getStockDetailInfo(serialNum){//查看库位详情
+							 function getStockDetailInfo(serialNum){//查看库区详情
 						    	   if(!handle.isNull(serialNum)){
 						    		   debugger;
 						    			 var promise =StockService .selectDetailBySerialNum(serialNum);

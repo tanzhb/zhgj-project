@@ -43,7 +43,7 @@ import com.congmai.zhgj.web.service.WarehousepositionService;
 
 /**
  * @ClassName WareHousepositionController
- * @Description TODO   仓库库位控制器
+ * @Description TODO   仓库库区控制器
  * @author zhaichao
  * @Date 2017年8月2日 下午3:31:35
  * @version 1.0.0
@@ -57,7 +57,7 @@ public class WareHousepositionController {
     
     
     /**
-     * 查询仓库库位信息列表
+     * 查询仓库库区信息列表
      * 
      * @param session
      * @return
@@ -95,7 +95,7 @@ public class WareHousepositionController {
   
     /**
 	 * 
-	 * @Description 删除仓库位置信息
+	 * @Description 删除仓库区置信息
 	 * @param ids
 	 * @return
 	 */

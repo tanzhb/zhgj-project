@@ -486,7 +486,7 @@ angular
 				        	$scope["warehousepositionEdit"+index] = false
 				        }
 				        /**
-						 * 撤销库位编辑
+						 * 撤销库区编辑
 						 */
 				        $scope.cancelWarehouseposition=function (warehouseposition,index) {
 				        	debugger;
@@ -750,7 +750,7 @@ angular
 						        }
 						        
 						        /**
-							        * 仓库库位加一行
+							        * 仓库库区加一行
 							        */
 							       $scope.addRepeat = function(){
 							    	   if(handle.isNull($scope.warehouse)||handle.isNull($scope.warehouse.serialNum)){
@@ -767,7 +767,7 @@ angular
 							       };
 							       
 							       /**
-							        * 仓库库位删除一行
+							        * 仓库库区删除一行
 							        */
 							       $scope.deleteRepeat = function(){
 							    	   $scope.warehousepositions.splice(_index,1);

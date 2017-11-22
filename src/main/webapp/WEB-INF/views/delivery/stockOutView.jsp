@@ -118,7 +118,7 @@
 										<!--/span-->
 										<!-- <div class="col-md-4">
 											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="shipper"> 出库库位：</label>
+                                                    <label class="col-md-4 control-label" for="shipper"> 出库库区：</label>
                                                     <div class="col-md-8">
                                                          <p class="control-label left" >{{record.positionCount}}</p>
                                                     </div>
@@ -252,7 +252,7 @@
 										<th>出库数量</th>
 										<th>未出数量</th>
 										<!-- <th>仓库</th>
-										<th>库位</th> -->
+										<th>库区</th> -->
 										<th>出库批次</th> 
 										<th>备注</th> 
 									</tr>
@@ -300,7 +300,7 @@
 										<th>单位</th>
 										<th>出库数量</th>
 										<!-- <th>仓库</th>
-										<th>库位</th> -->
+										<th>库区</th> -->
 										<th>出库批次</th> 
 										<th>备注</th> 
 										<th>状态</th>

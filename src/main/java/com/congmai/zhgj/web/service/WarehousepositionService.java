@@ -10,7 +10,7 @@ import com.congmai.zhgj.web.model.Warehouseposition;
 /**
  * 
  * @ClassName WarehouseService
- * @Description  仓库库位 业务 接口
+ * @Description  仓库库区 业务 接口
  * @author zhaichao
  * @Date 2017年7月28日 下午4:55:25
  * @version 1.0.0
@@ -18,7 +18,7 @@ import com.congmai.zhgj.web.model.Warehouseposition;
 public interface WarehousepositionService extends GenericService<Warehouseposition, String> {
    /**
 	 * 
-	 * @Description (根据仓库流水查仓库库位信息)
+	 * @Description (根据仓库流水查仓库库区信息)
 	 * @param company
 	 * @return
 	 */
