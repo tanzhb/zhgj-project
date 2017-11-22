@@ -26,6 +26,8 @@ public class StockInBatch {
     private String stockInCount;
 
     private String batchNum;
+    
+    private String positionName;
 
     public String getSerialNum() {
         return serialNum;
@@ -122,4 +124,13 @@ public class StockInBatch {
     public void setBatchNum(String batchNum) {
         this.batchNum = batchNum == null ? null : batchNum.trim();
     }
+
+	public String getPositionName() {
+		return positionName;
+	}
+
+	public void setPositionName(String positionName) {
+		this.positionName = positionName;
+	}
+    
 }

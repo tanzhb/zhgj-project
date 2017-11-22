@@ -608,8 +608,8 @@
 						<tr>
 							<!-- <th style="text-align: center"><input name="select_all"
 								value="1" id="example-select-all" type="checkbox" /></th> -->
-					<th> 库位编码</th>
-                     <th> 库位名称</th>
+					<th> 库区编码</th>
+                     <th> 库区名称</th>
                       <th> 存储属性</th>
                       <th> 最大行数</th>
                       <th> 最大列数</th>

@@ -108,7 +108,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 			}
 			
 			/**
-			 * 加载库位数据
+			 * 加载库区数据
 			 */
 			 $scope.getPositions = function(materiel){
 				 if($scope["warehouseName"+materiel.serialNum]==undefined){
@@ -148,7 +148,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 			 }
 			 
 			 /**
-			  * 计算库位
+			  * 计算库区
 			  */
 			 $scope.countPosition = function(){
 				 countWarehouseAndPosition();
@@ -419,7 +419,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 					            	contactNum:{required:"联系方式不能为空！"},
 					            	stockCount:{required:"入库数量不能为空！",digits:"发货数量必须为数字！"},
 					            	warehouseSerial:{required:"仓库不能为空！"}
-					            	//positionSerial:{required:"库位不能为空！"}
+					            	//positionSerial:{required:"库区不能为空！"}
 					            },
 					            rules: {
 					            	inOutNum: {
@@ -734,7 +734,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 				     */
 				    $scope.setDefualtNum = function(scope){
 				    	//if(isNull($scope.deliver.serialNum)){
-			  				scope.materiel.stockCount = scope.materiel.acceptCount;
+			  				scope.materiel.stockCount = 0;
 			  			//}
 				    }
 				    
@@ -1154,7 +1154,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
          				return false;
          			}
         		   if(isNull($scope.stockInBatchs[i].positionSerial)){
-         				toastr.warning("库位不能为空！");
+         				toastr.warning("库区不能为空！");
          				return false;
          			}
         		   if(isNull($scope.stockInBatchs[i].stockInCount)){
@@ -1165,11 +1165,11 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
     	   }
     	   
     	   
-    	   if($scope.totalCount()!=stockInBatchMateriel.stockCount){
-    		   toastr.warning("入库数量不正确！");
+    	   if($scope.totalCount()>stockInBatchMateriel.acceptCount){
+    		   toastr.warning("入库数量不能大于发货数量！");
  				return false;
     	   }
-    	   
+    	   stockInBatchMateriel.stockCount = $scope.totalCount()
     	   stockInBatchMateriel.stockInBatchs = $scope.stockInBatchs;
     	   $('#stockBatchInfo').modal('hide');//显示批次弹框
        }

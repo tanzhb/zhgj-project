@@ -313,7 +313,7 @@ public class WareHouseController {
     }
     
     /**
-     * @Description (保存库位信息)
+     * @Description (保存库区信息)
      * @param request
      * @return
      */

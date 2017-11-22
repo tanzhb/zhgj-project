@@ -95,7 +95,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 			}
 			
 			/**
-			 * 加载库位数据
+			 * 加载库区数据
 			 */
 			 $scope.getPositions = function(materiel){
 				var promise = takeDeliveryService.getPositions(materiel.warehouseSerial);
@@ -121,7 +121,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 				 }
 			 }
 			 /**
-			  * 计算库位
+			  * 计算库区
 			  */
 			 $scope.countPosition = function(){
 				 countWarehouseAndPosition();
@@ -387,7 +387,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					            	contactNum:{required:"联系方式不能为空！"},
 					            	stockCount:{required:"出库数量不能为空！",digits:"发货数量必须为数字！"},
 					            	warehouseSerial:{required:"仓库不能为空！"}
-					            	//positionSerial:{required:"库位不能为空！"}
+					            	//positionSerial:{required:"库区不能为空！"}
 					            },
 					            rules: {
 					            	inOutNum: {

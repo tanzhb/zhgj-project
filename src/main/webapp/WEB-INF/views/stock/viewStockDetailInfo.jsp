@@ -323,7 +323,7 @@ margin-right: 20px;
                             <th>入库日期</th>
                             <th>入库数量</th>
                             <th>仓库 </th>
-                             <th>库位 </th>
+                             <th>库区 </th>
                             <th>备注</th>
 						</tr>
 						
@@ -351,7 +351,7 @@ margin-right: 20px;
                             <th style="text-align: center">出库日期</th>
                             <th style="text-align: center">出库数量</th>
                             <th style="text-align: center">仓库 </th>
-                            <th style="text-align: center">库位</th>
+                            <th style="text-align: center">库区</th>
                             <th style="text-align: center">备注</th>
 						</tr>
 						

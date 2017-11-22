@@ -127,12 +127,12 @@ angular
 							};
 							
 							// 构建datatables开始***************************************
-							var tableAjaxUrl ;
+							var  ;
 							 var table ;
 									
 			function loadInvoiceInTable(){
 							var a = 0,judgeString='in';
-							tableAjaxUrl= "rest/invoice/getInvoiceList?inOrOut="+judgeString
+							tableAjaxUrl= "rest/invoice/getInvoiceList?inOrOut="+judgeString;
 							App.getViewPort().width < App
 									.getResponsiveBreakpoint("md") ? $(
 									".page-header").hasClass(
@@ -356,7 +356,7 @@ angular
 			
 			function loadInvoiceOutTable(){
 				var a = 0,judgeString='out';
-				tableAjaxUrl= "rest/invoice/getInvoiceList?inOrOut="+judgeString
+				tableAjaxUrl= "rest/invoice/getInvoiceList?inOrOut="+judgeString;
 				App.getViewPort().width < App
 						.getResponsiveBreakpoint("md") ? $(
 						".page-header").hasClass(
@@ -590,7 +590,7 @@ angular
 				 if(materielInTable!=undefined){
 					 materielInTable.destroy();
 		 	    	 }
-				tableAjaxUrl= "rest/invoice/getMaterielList?orderSerial="+orderSerial
+				tableAjaxUrl= "rest/invoice/getMaterielList?orderSerial="+orderSerial;
 				App.getViewPort().width < App
 						.getResponsiveBreakpoint("md") ? $(
 						".page-header").hasClass(
@@ -737,7 +737,7 @@ function loadMaterielOutTable(orderSerial,serialNum){
 	 if(materielOutTable!=undefined){
 		 materielOutTable.destroy();
 	    	 }
-	tableAjaxUrl= "rest/invoice/getMaterielList?orderSerial="+orderSerial
+	tableAjaxUrl= "rest/invoice/getMaterielList?orderSerial="+orderSerial;
 	App.getViewPort().width < App
 			.getResponsiveBreakpoint("md") ? $(
 			".page-header").hasClass(

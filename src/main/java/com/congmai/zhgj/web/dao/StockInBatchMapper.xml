@@ -12,6 +12,7 @@
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="warehouseSerial" property="warehouseSerial" jdbcType="VARCHAR" />
     <result column="positionSerial" property="positionSerial" jdbcType="VARCHAR" />
+    <result column="positionName" property="positionName" jdbcType="VARCHAR" />
     <result column="stockInCount" property="stockInCount" jdbcType="VARCHAR" />
     <result column="batchNum" property="batchNum" jdbcType="VARCHAR" />
   </resultMap>
@@ -75,7 +76,7 @@
   </sql>
   <sql id="Base_Column_List" >
     serialNum, stockInMaterielSerial, remark, delFlg, creator, createTime, updater, updateTime, 
-    warehouseSerial, positionSerial, stockInCount, batchNum
+    warehouseSerial, positionSerial,positionName, stockInCount, batchNum
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.StockInBatchExample" >
     select
@@ -111,12 +112,12 @@
     insert into stockInbatch (serialNum, stockInMaterielSerial, 
       remark, creator, 
       createTime, updater, updateTime, 
-      warehouseSerial, positionSerial, stockInCount, 
+      warehouseSerial, positionSerial,positionName, stockInCount, 
       batchNum)
     values (#{serialNum,jdbcType=VARCHAR}, #{stockInMaterielSerial,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{warehouseSerial,jdbcType=VARCHAR}, #{positionSerial,jdbcType=VARCHAR}, #{stockInCount,jdbcType=VARCHAR}, 
+      #{warehouseSerial,jdbcType=VARCHAR}, #{positionSerial,jdbcType=VARCHAR},#{positionName,jdbcType=VARCHAR},#{stockInCount,jdbcType=VARCHAR}, 
       #{batchNum,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.StockInBatch" >
@@ -151,6 +152,9 @@
       </if>
       <if test="positionSerial != null" >
         positionSerial,
+      </if>
+      <if test="positionName != null" >
+        positionName,
       </if>
       <if test="stockInCount != null" >
         stockInCount,
@@ -189,6 +193,9 @@
       </if>
       <if test="positionSerial != null" >
         #{positionSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="positionName != null" >
+        #{positionName,jdbcType=VARCHAR},
       </if>
       <if test="stockInCount != null" >
         #{stockInCount,jdbcType=VARCHAR},
@@ -237,6 +244,9 @@
       <if test="record.positionSerial != null" >
         positionSerial = #{record.positionSerial,jdbcType=VARCHAR},
       </if>
+      <if test="record.positionName != null" >
+        positionName = #{record.positionName,jdbcType=VARCHAR},
+      </if>
       <if test="record.stockInCount != null" >
         stockInCount = #{record.stockInCount,jdbcType=VARCHAR},
       </if>
@@ -260,6 +270,7 @@
       updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       warehouseSerial = #{record.warehouseSerial,jdbcType=VARCHAR},
       positionSerial = #{record.positionSerial,jdbcType=VARCHAR},
+      positionName = #{record.positionName,jdbcType=VARCHAR},
       stockInCount = #{record.stockInCount,jdbcType=VARCHAR},
       batchNum = #{record.batchNum,jdbcType=VARCHAR}
     <if test="_parameter != null" >
@@ -296,6 +307,9 @@
       <if test="positionSerial != null" >
         positionSerial = #{positionSerial,jdbcType=VARCHAR},
       </if>
+      <if test="positionName != null" >
+        positionName = #{positionName,jdbcType=VARCHAR},
+      </if>
       <if test="stockInCount != null" >
         stockInCount = #{stockInCount,jdbcType=VARCHAR},
       </if>
@@ -316,6 +330,7 @@
       updateTime = #{updateTime,jdbcType=TIMESTAMP},
       warehouseSerial = #{warehouseSerial,jdbcType=VARCHAR},
       positionSerial = #{positionSerial,jdbcType=VARCHAR},
+      positionName = #{positionName,jdbcType=VARCHAR},
       stockInCount = #{stockInCount,jdbcType=VARCHAR},
       batchNum = #{batchNum,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}

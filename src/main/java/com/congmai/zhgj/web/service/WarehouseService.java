@@ -25,7 +25,7 @@ public interface WarehouseService extends GenericService<Warehouse, Long> {
 	Warehouse  selectOne(String id);
 	 /**
      * 
-     * @Description 删除一条库位信息
+     * @Description 删除一条库区信息
      * @param ids
      * @return
      */

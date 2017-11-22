@@ -136,7 +136,7 @@
 										<!--/span-->
 										<!-- <div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="shipper"> 入库库位</label>
+                                                    <label class="control-label bold" for="shipper"> 入库库区</label>
                                                     <div class="">
                                                     		<input type="text" class="form-control" value="{{positionCount}}" disabled="disabled">
                                                          <p class="control-label left" >{{positionCount}}</p>

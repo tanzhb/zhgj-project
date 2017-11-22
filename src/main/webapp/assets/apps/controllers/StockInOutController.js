@@ -1198,7 +1198,7 @@ angular
 						 	            });
 						    		 }
 						       }
-							 function getStockDetailInfo(serialNum){//查看库位详情
+							 function getStockDetailInfo(serialNum){//查看库区详情
 						    	   if(!handle.isNull(serialNum)){
 						    		   debugger;
 						    			 var promise =StockService .selectDetailBySerialNum(serialNum);
