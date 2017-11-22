@@ -2,12 +2,23 @@ package com.congmai.zhgj.web.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class ClauseCheckAccept {
     private String serialNum;
 
     private String contractSerial;
 
     private String checkParty;
+    
+    private String checkType;
+    
+    private String technicalFile;
+    
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date playCheckDate;
 
     private String acceptStandard;
 
@@ -122,4 +133,29 @@ public class ClauseCheckAccept {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public String getCheckType() {
+		return checkType;
+	}
+
+	public void setCheckType(String checkType) {
+		this.checkType = checkType;
+	}
+
+	public String getTechnicalFile() {
+		return technicalFile;
+	}
+
+	public void setTechnicalFile(String technicalFile) {
+		this.technicalFile = technicalFile;
+	}
+	@JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
+	public Date getPlayCheckDate() {
+		return playCheckDate;
+	}
+
+	public void setPlayCheckDate(Date playCheckDate) {
+		this.playCheckDate = playCheckDate;
+	}
+    
 }
