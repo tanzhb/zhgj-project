@@ -1207,12 +1207,14 @@ margin-right: 20px;
                                       		<select  id="deliveryNode[$index]" name="deliveryNode" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].deliveryNode"  >
 			                                	<option value=""></option>
                                              	<option value="合同签订" >合同签订</option>
-                                               <option value="提货前" >提货前</option>
-                                               <option value="到货后" >到货后</option>
-                                               <option value="验收后" >验收后</option>
-                                               <option value="质保期满" >质保期满</option>
-                                               <option value="销售出库" >销售出库</option>
-                                               <option value="收到委托方付款后" >收到委托方付款后</option>
+                                              <option value="提货前" >提货前</option>
+                                              <option value="发货后" >发货后</option>
+                                              <option value="收货后" >收货后</option>
+                                              <option value="验收后" >验收后</option>
+                                              <option value="入库后" >入库后</option>
+                                              <option value="出库后" >出库后</option>
+                                              <option value="质保期满" >质保期满</option>
+                                              <option value="收到委托方付款后" >收到委托方付款后</option>
                                                </select>
 			                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.deliveryNode}} </p>
 			                          </td>

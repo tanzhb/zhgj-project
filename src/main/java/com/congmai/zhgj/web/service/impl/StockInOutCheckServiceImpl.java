@@ -21,6 +21,7 @@ import com.congmai.zhgj.web.dao.StockMapper;
 import com.congmai.zhgj.web.dao.TakeDeliveryMapper;
 import com.congmai.zhgj.web.event.EventExample;
 import com.congmai.zhgj.web.event.SendMessageEvent;
+import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryVO;
@@ -33,6 +34,7 @@ import com.congmai.zhgj.web.model.StockInOutCheckExample.Criteria;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.StockInOutRecordExample;
 import com.congmai.zhgj.web.model.TakeDelivery;
+import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.StockInOutCheckService;
 import com.congmai.zhgj.web.service.StockService;
@@ -59,6 +61,8 @@ public class StockInOutCheckServiceImpl extends GenericServiceImpl<StockInOutChe
 	 private OrderInfoMapper orderInfoMapper;
 	 @Resource
 	 private OrderService orderService;
+	 @Resource
+	 private ContractService contractService;
 
 	@Override
 	public GenericDao<StockInOutCheck, String> getDao() {
@@ -115,6 +119,11 @@ public class StockInOutCheckServiceImpl extends GenericServiceImpl<StockInOutChe
 			//入库检验消息  to 供应
 			//EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutCheck,MessageConstants.IN_CHECK_TO_SALE));
 			
+			//按结算条款中的签订合同节点生成付款
+			String orderString = d.getOrderSerial();
+			String nodeString = ClauseSettlementDetail.YSH;
+			contractService.findPaymentNode(orderString, nodeString);
+			
 		}else if(serialNum1.indexOf("checkout")>-1){
 			createStockInOutRecord("checkout",stockInOutCheck.getDeliverSerial(),userName);//产生出库记录
 			//String orderSerial=td.getDeliverSerial();
@@ -128,6 +137,10 @@ public class StockInOutCheckServiceImpl extends GenericServiceImpl<StockInOutChe
 			o.setDeliverStatus(OrderInfo.CHECK);
 			orderInfoMapper.updateByPrimaryKeySelective(o);
 			
+			//按结算条款中的签订合同节点生成付款
+			String orderString = d.getOrderSerial();
+			String nodeString = ClauseSettlementDetail.YSH;
+			contractService.findPaymentNode(orderString, nodeString);
 			//出库检验消息  to 采购
 			//EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutCheck,MessageConstants.OUT_CHECK_TO_BUY));
 			//出库检验消息  to 供应

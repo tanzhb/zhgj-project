@@ -23,6 +23,7 @@ import com.congmai.zhgj.web.dao.MaterielMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
 import com.congmai.zhgj.web.dao.StockInOutCheckMapper;
 import com.congmai.zhgj.web.enums.StaticConst;
+import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CustomsForm;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
@@ -36,6 +37,7 @@ import com.congmai.zhgj.web.model.RelationFile;
 import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.Warehouse;
+import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.OrderService;
 
@@ -70,7 +72,8 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 	
 	@Resource
 	private OrderService  orderService;
-	
+	@Resource 
+	private ContractService contractService;
 
 	@Override
 	public GenericDao<DeliveryMaterielVO, String> getDao() {
@@ -464,6 +467,13 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 	public void updateOrderWhenDeliveryComlete(Map<String,Object> map) {
 		// TODO Auto-generated method stub
 		deliveryMapper.updateOrderWhenDeliveryComlete(map);
+		
+		//按结算条款中的签订合同节点生成付款
+		String orderString = (String) map.get("orderSerial");
+		String nodeString = ClauseSettlementDetail.FHH;
+		contractService.findPaymentNode(orderString, nodeString);
+		
+		
 	}
 
 

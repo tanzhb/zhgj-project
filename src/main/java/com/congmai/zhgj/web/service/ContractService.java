@@ -83,4 +83,11 @@ public interface ContractService extends GenericService<ContractVO, String> {
 	 * @param contractVO
 	 */
 	public void updateOrderAfterSign(Map<String,Object> map);
+	
+	/**
+	 * @Description 查找付款节点生成付款记录更新订单状态
+	 * @param orderString
+	 * @param nodeString
+	 */
+	public void findPaymentNode(String orderString, String nodeString);
 }

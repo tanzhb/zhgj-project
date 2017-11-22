@@ -489,7 +489,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 								var htm = (data==null?'':data)+'</br>'
 
                     			if(row.payStatus=="0"){
-                    				return htm + '<span style="color:green">付款中</span>';
+                    				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">付款中</span>';
 								}else if(row.payStatus=="1"){
                     				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">已付款</span>';
 								}else if(row.payStatus=="2"){

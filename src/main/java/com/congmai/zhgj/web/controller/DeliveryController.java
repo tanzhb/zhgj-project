@@ -1092,7 +1092,7 @@ public class DeliveryController {
    	
    	/**
 	 * 
-	 * @Description 启动应付款流程审批
+	 * @Description 启动发货流程审批
 	 * @param entity
 	 * @return
 	 * @throws Exception
