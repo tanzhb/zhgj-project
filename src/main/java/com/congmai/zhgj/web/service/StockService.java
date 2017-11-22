@@ -23,8 +23,8 @@ public interface StockService extends GenericService<Stock, String>{
 	 
 	String  getCountInAmountForZijian(String serialNum);//自建库存根据基本物料流水查入库总数
 	String  getCountOutAmountForZijian(String serialNum);//自建库存根据基本物料流水查出库总数
-	String  getCountInAmountForDaiguan(String serialNum);//代管库存根据基本物料流水查入库总数
-	String  getCountOutAmountForDaiguan(String serialNum);//代管库存根据基本物料流水查出库总数
+	String  getCountInAmountForDaiguan(String serialNum, String comId);//代管库存根据基本物料流水查入库总数
+	String  getCountOutAmountForDaiguan(String serialNum, String comId);//代管库存根据基本物料流水查出库总数
 	List<Stock> selectStockListByComId(String manageType, String comId);
 	List<DeliveryMateriel> getStockInBatchList(String serialNum);
 	List<DeliveryMateriel> getStockInBatchListByMaterielOwn(String serialNum,

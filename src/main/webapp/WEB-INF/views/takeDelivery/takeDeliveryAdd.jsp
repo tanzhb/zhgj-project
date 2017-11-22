@@ -498,10 +498,15 @@
 															<span class="help-block"></span></td> -->
 														<td><span class="help-block"></span>{{materiel.amount}}</td><!-- ng-init="orderMateriels[$index].deliverCount=materiel.amount" -->
 														<td class="form-group"><input type="text"
-															class="form-control" id="deliverCount{{$index}}"
+															class="form-control" id="deliverCount{{$index}}"     ng-if="type!='edit'"
 															name="deliverCount" data-ordercount="{{materiel.amount}}"   
 															ng-model="orderMateriels[$index].deliverCount"
-															ng-hide="deliverAdd">
+															ng-hide="deliverAdd"/>
+															<input type="text"
+															class="form-control" id="deliverCount{{$index}}"     ng-if="type=='edit'"
+															name="deliverCount" data-ordercount="{{materiel.amount}}"   
+															ng-model="orderMateriels[$index].deliverCount"
+															ng-hide="deliverAdd"/>
 															<div class="form-control-focus"></div><p class="form-control-static"
 																ng-show="deliverAdd">
 																{{materiel.deliverCount}}</p></td>

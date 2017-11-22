@@ -29,10 +29,12 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    		loadOrderTable();//加载订单列表
 	    		setDefualtData();//设置初始值
 	    		$scope.serialNums = [];	
-	    		$rootScope.setNumCode("SE",function(newCode){
-	    			$scope.deliver.deliverNum = newCode;
-	    			$scope.deliver.approvalDate=$filter('date')(new Date(), 'yyyy-MM-dd');
-	    		});
+	    		if(isNull($stateParams.serialNum)){
+	    			$rootScope.setNumCode("SE",function(newCode){
+		    			$scope.deliver.deliverNum = newCode;
+		    			$scope.deliver.approvalDate=$filter('date')(new Date(), 'yyyy-MM-dd');
+		    		});
+	    		}
 	    		if(!isNull($stateParams.serialNum)){
 	    			$(".d_tip").text("编辑代发货信息");
 	    			takeDeliveryInfo($stateParams.serialNum,"edit");
@@ -1654,6 +1656,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		$scope.calcTotalNum = function(){
 	  			if(!isNull($scope.orderMateriels)){
 	  				$scope.totalDeliverCount = 0;
+	  				$scope.totalDeliveryCount = 0;
 	  				$scope.totalAmount = 0;
 	  				$scope.materielCount = $scope.orderMateriels.length;
 	  				$scope.deliver.materielCount = $scope.orderMateriels.length;
@@ -1661,6 +1664,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  					$scope.totalDeliverCount += handle.formatNumber($scope.orderMateriels[i].deliverCount);
 	  					$scope.totalAmount += handle.formatNumber($scope.orderMateriels[i].amount);
 	  				}
+	  				$scope.totalDeliveryCount=	$scope.totalDeliverCount;
 	  			}
 	  		}
 	  		

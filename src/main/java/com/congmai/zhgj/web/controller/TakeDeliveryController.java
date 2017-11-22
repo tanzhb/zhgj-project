@@ -871,8 +871,8 @@ public class TakeDeliveryController {
         		 String materielSerial=d.getOrderMateriel().getMaterielSerial();//基本物料流水
         		 String countInAmountZijian=stockService.getCountInAmountForZijian(materielSerial);
      			String countOutAmountZijian=stockService.getCountOutAmountForZijian(materielSerial);
-     			String countInAmountDaiguan=stockService.getCountInAmountForDaiguan(materielSerial);
-    			String countOutAmountDaiguan=stockService.getCountOutAmountForDaiguan(materielSerial);
+     			String countInAmountDaiguan=stockService.getCountInAmountForDaiguan(materielSerial,orderInfo.getBuyComId());
+    			String countOutAmountDaiguan=stockService.getCountOutAmountForDaiguan(materielSerial,orderInfo.getBuyComId());
     			d.setCurrentStockAmount(Integer.parseInt(countInAmountZijian==null?"0":countInAmountZijian)-Integer.parseInt(countOutAmountZijian==null?"0":countOutAmountZijian)+
     					Integer.parseInt(countInAmountDaiguan==null?"0":countInAmountDaiguan)-Integer.parseInt(countOutAmountDaiguan==null?"0":countOutAmountDaiguan)+"");
         	/*	if(isStockZijian){

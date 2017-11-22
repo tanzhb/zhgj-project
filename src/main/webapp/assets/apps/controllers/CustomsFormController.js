@@ -1020,13 +1020,15 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 	function doSomthing(){
 	 // 页面加载完成后调用，验证输入框
 	 $scope.$watch('$viewContentLoaded', function() {  
-		  var customsFormNum,agentUnit;
+		  var customsFormNum,agentUnit,rule;
 		 if($scope.customsFormType.indexOf("clearance")>-1){
 			 customsFormNum= {required:"清关单号不能为空！"};
 			 agentUnit={required:"代理清关单位不能为空！"} ;
+			 rule={required:false};
 		 }else{
 			 customsFormNum= {required:"报关单号不能为空！"};
 			 agentUnit={required:"代理报关单位不能为空！"} ;
+			 rule={required:true};
 		 }
 		 var e = $("#customsForm"),
 		 r = $(".alert-danger", e),
@@ -1043,7 +1045,7 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 			 },
 			 rules: {
 				 customsFormNum:{required:true},
-				 agentUnit:{required:true},
+				 agentUnit:rule,
 				 deliverNum:{required:true}
 				
 			 },

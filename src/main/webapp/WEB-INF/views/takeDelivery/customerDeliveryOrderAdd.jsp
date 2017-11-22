@@ -499,15 +499,22 @@
 														<td><span class="help-block"></span>{{materiel.amount}}</td><!-- ng-init="orderMateriels[$index].deliverCount=materiel.amount" -->
 														<td class="form-group"><input type="text"
 															class="form-control" id="deliverCount{{$index}}"
-															name="deliverCount" data-ordercount="{{materiel.amount}}"   
+															name="deliverCount" data-ordercount="{{materiel.amount}}"    ng-init="orderMateriels[$index].deliverCount=materiel.amount"  
+															 ng-if="deliver.serialNum==null||deliver.serialNum==undefined"
 															ng-model="orderMateriels[$index].deliverCount"
-															ng-hide="deliverAdd">
+															ng-hide="deliverAdd"/>
+															<input type="text"
+															class="form-control" id="deliverCount{{$index}}"
+															name="deliverCount" data-ordercount="{{materiel.amount}}"   
+															 ng-if="!(deliver.serialNum==null||deliver.serialNum==undefined)"
+															ng-model="orderMateriels[$index].deliverCount"
+															ng-hide="deliverAdd"/>
 															<div class="form-control-focus"></div><p class="form-control-static"
 																ng-show="deliverAdd">
 																{{materiel.deliverCount}}</p></td>
 														<td class="form-group">
 															 <p id="batchNumReal{{$index}}" ng-hide="true"> </p>
-															<p class="form-control-static" id="batchNum{{$index}}">
+															<p class="form-control-static" id="batchNum{{$index}}">  
 															<a href="javascript:;" class="btn btn-xs green" id="addBatchNum{{$index}}"
 															ng-click="addAttachFile($index)" onclick="return false;"> <i
 																class="fa fa-plus"></i>添加
@@ -593,7 +600,7 @@
 															name="manufactureDate" placeholder=""> <span
 															class="help-block"></span></td>
 														<!-- <td><span class="help-block"></span>{{materiel.amount}}</td> -->
-														<td class="form-group"><input type="text"
+														<td class="form-group"><input type="text"   
 															class="form-control" id="deliverCount{{$index}}"
 															ng-model="materiel.deliverCount" ng-hide="deliverAdd">
 															<div class="form-control-focus"></div></td>

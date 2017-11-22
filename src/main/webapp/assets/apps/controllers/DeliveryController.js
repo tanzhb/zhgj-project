@@ -205,6 +205,10 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	//确认发货
 	$scope.goDelivery=function (judgeString){
 			debugger;
+			if($scope.saveMateriel==undefined||$scope.saveMateriel==false){
+				toastr.warning("请先保存物料");
+				return;
+			}
 		if($scope.inputDeliveryInfo==true&&judgeString==undefined){
 			if($('#form_sample_deliverInfo').valid()){
 				$scope.delivery.status="1";
@@ -215,7 +219,12 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	   		var promise = DeliveryService.goDelivery($scope.delivery.serialNum);
 			promise.then(function(data) {
 					toastr.success("确认发货成功");
-					$scope.delivery.status="1";
+					if(judgeString=='add'){
+						$scope.delivery.status=1;
+					}else {
+						$scope.deliveryDetail.status=1;
+					}
+					
 			}, function(data) {
 				// 调用承诺接口reject();
 				$(".modal-backdrop").remove();
@@ -2028,6 +2037,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	$scope.saleOrder={};
 	          		    	$scope.saleOrder.orderNum=data.delivery.orderNum;
 	          		    	$scope.deliver={};
+	          		    	$scope.flag=true;
 	          		    	/*$scope.delivery.orderNum1=data.delivery.orderNum;*/
 	          		    	$scope.deliveryTransport={};
 	          		    	$scope.takeDelivery={};
@@ -2126,12 +2136,14 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			          		    	 debugger;
 			          		    	$scope.deliveryDetail=data.delivery;
 			          		    	$scope.delivery={};
+			          		    	$scope.flag=false;
 			          		    	$scope.delivery.serialNum=serialNum;
 			          		    	if($scope.deliveryDetail.supplyComId!=null){
 			          		    		$scope.supplyComId=$scope.deliveryDetail.supplyComId;
 			          		    		$scope.shipper=$scope.deliveryDetail.shipper;
 			          		    	}
 			          		    	$scope.input=true;
+			          		    	$scope.saveMateriel=true;
 			          		    	$scope.deliveryMaterielE=data.deliveryMateriels;
 			          		     var totalOrderCount=0,totalDeliveryCount=0;
 			          		    	for(var i=0;i<$scope.deliveryMaterielE.length;i++){

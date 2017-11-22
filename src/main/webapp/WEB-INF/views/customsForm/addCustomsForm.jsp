@@ -215,7 +215,7 @@
                                                          <div class="row">
                                                             <div class="col-md-4">
                                                             <div class="form-group">
-                                                    <label class="control-label bold" for=""> <span class="required"> * </span><span   ng-if="customsFormType.indexOf('clearance')>-1" >代理清关单位 :</span> <span  ng-if="customsFormType.indexOf('declaration')>-1">代理报关单位 :</span></label>
+                                                    <label class="control-label bold" for=""> <span   ng-if="customsFormType.indexOf('clearance')>-1" >代理清关单位 :</span> <span  ng-if="customsFormType.indexOf('declaration')>-1"><span class="required"> * </span>代理报关单位 :</span></label>
                                                      <div class="">
                                                      <div ng-hide="customsFormAdd">
                                                      <select class="form-control" id="agentUnit"  data-live-search="true"  name="agentUnit" class="form-control"  

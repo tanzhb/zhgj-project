@@ -33,7 +33,7 @@
 							<div class="tab-pane fade active in" id="tab_1_1">
 							 <div class="portlet-title" style="min-height: 48px;">
                <div class="tools" style="float:right"><!-- ng-if="deliveryDetail.status=='0'" -->
-               	<button type="button" ng-click="goDelivery()"     ng-if="(delivery.status=='0'||delivery.status==undefined)&&delivery.deliverType=='贸易发货'"
+               	<button type="button" ng-click="goDelivery('add')"     ng-if="(delivery.status=='0'||delivery.status==undefined)&&delivery.deliverType=='贸易发货'"
 								class="btn blue  btn-circle  btn-sm">
 								<i class="fa fa-save"></i> 确认发货
 							</button>
@@ -517,8 +517,8 @@
 											<!--/span-->
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">运输方<span
-														class="required" aria-required="true"> * </span></label>
+													<label class="control-label bold">运输方<!-- <span
+														class="required" aria-required="true"> * </span> --></label>
 													<div class="">
 														<input type="text" class="form-control" name="transport"  
 															ng-model="deliveryTransport.transport" ng-show="inputDeliveryInfo" />
@@ -531,8 +531,8 @@
 											<!--/span-->
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">运单号 <span
-														class="required" aria-required="true"> * </span></label>
+													<label class="control-label bold">运单号<!--  <span
+														class="required" aria-required="true"> * </span> --></label>
 													<div class="">
 														<input type="text" class="form-control" name="shipNumber"
 															ng-model="deliveryTransport.shipNumber" ng-show="inputDeliveryInfo" />
@@ -940,7 +940,7 @@
 															</p>
 														</td>
 														<td class="form-group"><input type="text"
-															name="deliverCount" id="deliverCount{{$index}}"  ng-init="deliveryMaterielE[$index].deliverCount=_deliveryMateriel.amount"
+															name="deliverCount" id="deliverCount{{$index}}"   
 															class="form-control"
 															ng-hide="orderMaterielInput{{$index}}"
 															ng-model="deliveryMaterielE[$index].deliverCount"

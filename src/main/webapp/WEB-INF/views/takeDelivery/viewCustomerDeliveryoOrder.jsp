@@ -121,7 +121,8 @@
 														<input type="text" name="shipper" class="form-control"
 															ng-model="shipper" ng-show="inputDeliveryInfo" />
 														<p class="form-control-static" ng-hide="span">
-															{{deliver.supplyName}}</p>
+															{{deliver.supplyName==null?"中航能科（上海）能源科技有限公司":deliver.supplyName}}</p>
+															
 														<div class="form-control-focus"></div>
 													</div>
 

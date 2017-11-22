@@ -832,9 +832,9 @@
 														<td><span class="help-block"></span>{{materiel.amount}}</td>
 														<td class="form-group"><input type="text"
 															class="form-control" id="deliverCount{{$index}}"
-															name="deliverCount" data-ordercount="{{materiel.amount}}"   ng-init="orderMateriels[$index].deliverCount=materiel.amount"
+															name="deliverCount" data-ordercount="{{materiel.amount}}"   
 															ng-model="orderMateriels[$index].deliverCount"
-															ng-model="materiel.deliverCount" ng-hide="deliverAdd">
+															ng-hide="deliverAdd"><!--  ng-model="materiel.deliverCount" -->
 															<div class="form-control-focus"></div></td>
 														<td class="form-group">
 															 <p id="batchNumReal{{$index}}" ng-hide="true"> </p>

@@ -260,27 +260,32 @@ angular
 		        			$('#owner').selectpicker('refresh');//刷新插件
 		        			
 		                }, 100);
-		        		 getComId();
+		        		
+		        		getComId();
 		        	},function(data){
 		        		//调用承诺接口reject();
 		        	});
 			}
 			
-			var getComId=function (){
+			var getComId=function (judgestring){
 				var promise = orderService.getComId();
 				promise.then(function(data) {
 					debugger;
 					 if( $scope.warehouse==undefined){
 						 $scope.warehouse={};
 					 }
+			
 						 if(data.comName!=null){
 								$scope.warehouse.owner=data.comId;
 								$scope.warehouseowner1=data.comId;
 								$scope.warehouse.ownerName=data.comName;
 							}else{
 								//$scope.warehouse.owner="pingtai";
-								$scope.warehouse.owner="";
+								$scope.warehouse.owner="pingtai";
 								$scope.warehouseowner1="";
+								if($scope.owner!=undefined){
+									$scope.warehouse.owner=$scope.owner;
+								}
 							}
 					 
 					
@@ -599,22 +604,22 @@ angular
 						                focusInvalid: false, // do not focus the last invalid input
 						                ignore: "",  // validate all fields including form hidden input
 						                messages:  {
-						                	positionNum:{required:"仓库区位编码不能为空！"},
+						                	positionNum:{required:"仓库区位编码不能为空！"}/*,
 						                	positionName:{required:"仓库区位名称不能为空！"},
 						                	storageAttribute:{required:"存储属性不能为空！"},
 						                	maxRows:{required:"最大行数不能为空！"},
 						                	maxCols:{required:"最大列数不能为空！"},
 						                	maxLayers:{required:"最大层数不能为空！"},
-						                	/*storageType:{required:"存储类型不能为空！"},
-						                	storageMode:{required:"存储方式不能为空！"},*/
+						                	storageType:{required:"存储类型不能为空！"},
+						                	storageMode:{required:"存储方式不能为空！"},
 						                	defaultLWH:{required:"默认长宽高不能为空！"},
 						                	defaultVolume:{required:"默认容积不能为空！"},
-						                	defaultBearing:{required:"默认承重不能为空！"}
+						                	defaultBearing:{required:"默认承重不能为空！"}*/
 							            },
 						                rules: {
 						                	positionNum: {
 												required: !0
-											},
+											}/*,
 											positionName: {
 												required: !0
 											},
@@ -630,12 +635,12 @@ angular
 											maxLayers: {
 												required: !0
 											},
-											/*storageType: {
+											storageType: {
 												required: !0
 											},
 											storageMode: {
 												required: !0
-											},*/
+											},
 											storageAttribute: {
 												required: !0
 											},
@@ -647,7 +652,7 @@ angular
 											},
 											defaultBearing: {
 												required: !0
-											}
+											}*/
 						                },
 
 						                invalidHandler: function (event, validator) { //display error alert on form submit              
@@ -696,6 +701,7 @@ angular
 						 	        		  debugger;
 						 	        		  if(judgeString!='noWarehouseInfo'){
 						 	        			 $scope.warehouse = data.warehouse;
+						 	        			$scope.owner=$scope.warehouse.owner;
 						 	        		  }
 						 	        		$scope.warehousepositions = data.warehousepositions;
 						 	        		_index=data.warehousepositions.length-1;

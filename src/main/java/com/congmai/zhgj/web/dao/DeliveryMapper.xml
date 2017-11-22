@@ -408,6 +408,6 @@
 	FROM
 	deliveryMateriel a
 	LEFT JOIN delivery f ON a.deliverSerial=f.serialNum
-	WHERE a.deliverSerial=#{serialNum}
+	WHERE a.deliverSerial=#{serialNum} and a.delFlg=0
     </select>
     </mapper>

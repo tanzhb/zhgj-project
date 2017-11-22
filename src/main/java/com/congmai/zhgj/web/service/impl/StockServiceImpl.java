@@ -161,15 +161,31 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 	}
 
 	@Override
-	public String getCountInAmountForDaiguan(String serialNum) {
+	public String getCountInAmountForDaiguan(String serialNum, String comId) {
 		// TODO Auto-generated method stub
-		return stockInOutRecordMapper.countInAmountForDaiguan(serialNum);
+		StockExample se=new StockExample();
+		com.congmai.zhgj.web.model.StockExample.Criteria c=se.createCriteria();
+		c.andDelFlgEqualTo("0").andMaterielOwnerEqualTo(comId).andMaterielSerialEqualTo(serialNum);
+		List<Stock>s=stockMapper.selectByExample(se);
+		if(CollectionUtils.isEmpty(s)){
+			return "0";
+		}else{
+			return stockInOutRecordMapper.countInAmountForDaiguan(s.get(0).getSerialNum());
+		}
 	}
 
 	@Override
-	public String getCountOutAmountForDaiguan(String serialNum) {
+	public String getCountOutAmountForDaiguan(String serialNum, String comId) {
 		// TODO Auto-generated method stub
-		return stockInOutRecordMapper.countOutAmountForDaiguan(serialNum);
+		StockExample se=new StockExample();
+		com.congmai.zhgj.web.model.StockExample.Criteria c=se.createCriteria();
+		c.andDelFlgEqualTo("0").andMaterielOwnerEqualTo(comId).andMaterielSerialEqualTo(serialNum);
+		List<Stock>s=stockMapper.selectByExample(se);
+		if(CollectionUtils.isEmpty(s)){
+			return "0";
+		}else{
+			return stockInOutRecordMapper.countOutAmountForDaiguan(s.get(0).getSerialNum());
+		}
 	}
 
 	@Override
