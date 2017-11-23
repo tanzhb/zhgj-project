@@ -11,11 +11,11 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a ui-sref="supplyOrder">销售订单</a>
+            <a ui-sref="buyOrder">采购订单</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a>查看</a>
+            <a>{{opration}}</a>
         </li>
     </ul>
     <div class="page-toolbar">
@@ -39,17 +39,9 @@
 				            </div>
 					</div> -->
            		 <div class="portlet-body">
-					<jsp:include  page="viewBuyOrderBase.jsp"/>
-					
-		            <div class="portlet-title">
-			               <div class="tools">
-			               		<button type="button" ng-if = "buyOrder.status==66" ng-click="editOrder()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">修改</button>
-			               		<button type="button" ng-if = "buyOrder.status==66" ng-click="supplyConfirmed()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">确认</button>
-				                <button type="button" ng-click="cancelPage()" class="btn default btn-circle  btn-sm"><i class="fa fa-undo"></i> 取消 </button>
-				            </div>
-					</div>
+					<jsp:include  page="editSupplyOrderBase.jsp"/>
       			</div>
 			</div>
 	</div>
 </div>
-
+<jsp:include  page="selectBasicMateriel.jsp"/> <!-- 选择基本物料 -->

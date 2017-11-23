@@ -224,6 +224,14 @@ public class PageController {
         return "order/addBuyOrder";
     }
     
+    
+    /**
+     * 修改平台采购订单
+     */
+    @RequestMapping("/addSupplyOrder")
+    public String addSupplyOrder(String serialNum,String view,String numCode) {
+        return "order/addSupplyOrder";
+    }
     /**
      * 查看采购订单
      */

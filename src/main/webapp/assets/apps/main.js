@@ -811,6 +811,34 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
+        
+        // 供应商修改平台采购订单
+        .state('addSupplyOrder', {
+            url: "/addSupplyOrder?:serialNum&:view",
+            templateUrl: "rest/page/addSupplyOrder",
+            data: {pageTitle: '新增采购订单'},
+            controller: "supplyOrderController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/DeliveryService.js',
+				'assets/apps/controllers/supplyOrderController.js'
+                      ]
+                    });
+                }]
+            }
+        })
         // 新增采购订单
         .state('addBuyOrder', {
             url: "/addBuyOrder?:serialNum&:view",
@@ -3251,6 +3279,13 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		if(toParams.serialNum != undefined){
 							 html += "<li><a>修改采购订单</a></li>";
 						 } else html += "<li><a>新增采购订单</a></li>";
+			   }else if('addSupplyOrder' == toState.name){//供应商修改平台采购订单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='supplyOrder'>订单列表</a><i class='fa fa-angle-right'></i></li>";
+				 		if(toParams.serialNum != undefined){
+							 html += "<li><a>修改订单</a></li>";
+						 } else html += "<li><a>新增订单</a></li>";
 			   }else if('viewBuyOrder' == toState.name){//查看采购订单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
