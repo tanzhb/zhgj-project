@@ -3107,7 +3107,14 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         }]);
 
 
-
+//禁止模板缓存  
+MetronicApp.run(function($rootScope, $templateCache) {  
+    $rootScope.$on('$routeChangeStart', function(event, next, current) {  
+        if (typeof(current) !== 'undefined'){  
+            $templateCache.remove(current.templateUrl);  
+        }  
+    });  
+}); 
 //js获取项目根路径，如： http://localhost:8083/uimcardprj
 function getRootPath(){
     //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
@@ -3129,6 +3136,8 @@ MetronicApp.run([ "$rootScope", "settings", "$state",
 			$rootScope.$settings = settings; // state to be accessed from
 												// view
 		} ]);
+
+
 
 MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$http', '$q', function ($rootScope, $window, $location, $log, $compile, $http, $q) {
 	//路由转换成功后
