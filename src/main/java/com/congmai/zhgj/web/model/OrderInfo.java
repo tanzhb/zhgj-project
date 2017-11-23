@@ -63,6 +63,11 @@ public class OrderInfo extends BaseVO {
 	
 	public static final String CUSTOMER_SUBMIT= "55";//客户端提交，待接收状态
 	
+	
+	public static final String WAIT_SUPPLY_CONFIRMED= "66";//平台提交待供应商确认
+	
+	public static final String WAIT_PT_CONFIRMED= "77";//供应商确认后，待平台确认
+	
 	private String serialNum;
 
     private String contractSerial;

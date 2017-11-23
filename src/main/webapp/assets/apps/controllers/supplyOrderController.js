@@ -131,14 +131,19 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
     	$state.go("viewSupplyOrder",{serialNum:serialNum});
     }
     
-    $scope.recive = function(serialNum){
+    $scope.supplyConfirmed = function(serialNum){
     	$scope.submitOrder = {}
-    	$scope.submitOrder.serialNum = serialNum;	
-    	$scope.submitOrder.status = 3;
+    	if(isNull(serialNum)){
+    		$scope.submitOrder.serialNum = $scope.buyOrder.serialNum;	
+    	}else{
+    		$scope.submitOrder.serialNum = serialNum;	
+    	}
+    	
+    	$scope.submitOrder.status = 77;
 
-    	orderService.recive($scope.submitOrder).then(
+    	orderService.supplyConfirmed($scope.submitOrder).then(
       		     function(data){
-      		    	toastr.success('数据保存成功！');
+      		    	toastr.success('订单确认成功！');
       		    	$state.go('supplyOrder',{},{reload:true});
       		     },
       		     function(error){
@@ -203,7 +208,9 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 	                            		if(data!=""&&data!=null){
 	                            			/*var htm = (data==null?'':data)+'</br>'*/
 	                            			if(data==1){
-    											return '<span  class="label label-sm label-info ng-scope">待确认</span>';
+    											return '<span  class="label label-sm label-info ng-scope">待审批</span>';
+    										}else if(data==2){
+    											return '<span  class="label label-sm label-info ng-scope">已签合同</span>';
     										}else if(data==3){
     											return '<span  class="label label-sm label-info ng-scope">待签合同</span>';
     										}else if(data==2){
@@ -218,9 +225,13 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
     											}else if(row.deliverStatus=="5"){
     			                    				return '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已入库</span>';
     											}else{
-    												return '<span  class="label label-sm label-success ng-scope">已确认</span>';
+    												return '';
     											}
-    										}else{
+    										}else if(data=="66"){
+			                    				return '<span style="color:green" >待确认</span>';
+											}else if(data=="77"){
+			                    				return '<span style="color:green" >已确认</span>';
+											}else{
     											return '';
     										}
 	                            		}else{
@@ -266,8 +277,8 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 							'targets' : 10,
 							'render' : function(data,
 									type, row, meta) {
-								if(data==1){
-									return '<a href="javascript:void(0);" ng-click="recive(\''+row.serialNum+'\')">确认</a>';
+								if(data==66){
+									return '<a href="javascript:void(0);" ng-click="supplyConfirmed(\''+row.serialNum+'\')">确认</a>';
 								}else{
 									return "";
 								}

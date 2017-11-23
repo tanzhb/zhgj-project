@@ -418,28 +418,34 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 							'render' : function(data,
 									type, row, meta) {
 								var clickhtm = '<a href="javascript:void(0);" ng-click="viewBuyOrder(\''+row.serialNum+'\')">'+data+'</a></br>'
-								if(row.processBase!=""&&row.processBase!=null){
-                        			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
-										return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">审核中</span>';
-									}else if(row.processBase.status=="APPROVAL_SUCCESS"){
-										if(row.status==1){
-											return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:#fcb95b">待确认</span>';
-										}else if(row.status==2){
-											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已确认</span>';
-										}else if(row.status==3){
-											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">待签合同</span>';
+								if(row.status==0){
+									return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  >未开始</span>';
+								}else if(row.status==1){
+									return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:#fcb95b">待审批</span>';
+								}else if(row.status==2){
+									return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已签合同</span>';
+								}else if(row.status==3){
+									return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">待签合同</span>';
+								}else if(row.status=="66"){
+                    				return clickhtm + '<span style="color:green" ng-click="viewOrderLog(\''+row.serialNum+'\')">已提交</span>';
+								}else if(row.status=="77"){
+                    				return clickhtm + '<span style="color:green" ng-click="viewOrderLog(\''+row.serialNum+'\')">待确认</span>';
+								}else{
+									if(row.processBase!=""&&row.processBase!=null){
+	                        			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
+											return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">审核中</span>';
+										}else if(row.processBase.status=="APPROVAL_SUCCESS"){
+											
+										}else if(row.processBase.status=="APPROVAL_FAILED"){
+											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:red">未通过</span>';
 										}else{
-											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已确认</span>';
+											return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未发布</span>';
 										}
-									}else if(row.processBase.status=="APPROVAL_FAILED"){
-										return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:red">未通过</span>';
-									}else{
-										return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未发布</span>';
-									}
-                        		}else{
-                        			return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未发布</span>';
-                        		}
-								
+	                        		}else{
+	                        			return clickhtm + '';
+	                        		}
+									
+								}
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
@@ -3097,6 +3103,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    			var processBase = table.row('.active').data().processBase;
 		    			if(processBase != null){
 		    				showToastr('toast-top-center', 'warning', '该订单已发起流程审批，不能再次申请！')
+		    			}else if(table.row('.active').data().status!=1){
+		    				showToastr('toast-top-center', 'warning', '该订单未确认，不能进入审批流程！')
 		    			}else $state.go('submitBuyApply',{serialNum:table.row('.active').data().serialNum});
 		    		}     	
 		        };
@@ -3929,6 +3937,39 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	         */
 	        $scope.takeDeliveryView = function(serialNum){
 	        	$state.go("takeDeliveryView",{serialNum:serialNum,oprateType:'forBuyOrder'});
+	        }
+	        
+	        
+	        $scope.pingTaiSubmit  = function() {// 平台提交给供应商
+	        	$scope.submitOrder = {}
+	        	$scope.submitOrder.serialNum = $scope.buyOrder.serialNum;
+	        	$scope.submitOrder.status = 66;
+	        	$scope.buyOrder.status = 66;
+	        	orderService.pingTaiSubmit($scope.submitOrder).then(
+	          		     function(data){
+	          		    	toastr.info('订单提交成功！');
+	          		     },
+	          		     function(error){
+	          		         $scope.error = error;
+	          		         toastr.error('数据保存出错！');
+	          		     }
+	          		 );
+	        };
+	        
+	        $scope.pingTaiConfirmed = function(serialNum){
+	        	$scope.submitOrder = {}
+	        	$scope.submitOrder.serialNum = $scope.buyOrder.serialNum;
+	        	$scope.submitOrder.status = 1;
+	        	$scope.buyOrder.status = 1;
+	        	orderService.recive($scope.submitOrder).then(
+	          		     function(data){
+	          		    	toastr.success('订单确认成功！！');
+	          		     },
+	          		     function(error){
+	          		         $scope.error = error;
+	          		         toastr.error('数据保存出错！');
+	          		     }
+	          		 );
 	        }
 }]);
 

@@ -214,6 +214,38 @@ public class OrderController {
     
     
     /**
+     * 供应商提交订单
+     */
+    @RequestMapping(value = "/supplyConfirmed", method = RequestMethod.POST)
+    @ResponseBody
+    public OrderInfo supplyConfirmed(@RequestBody String params) {
+    	OrderInfo orderInfo = json2Order(params);
+    	Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		orderInfo.setUpdater(currenLoginName);
+		orderInfo.setUpdateTime(new Date());
+		orderService.supplyConfirmed(orderInfo);
+		return orderInfo;
+    }
+    
+    
+    /**
+     * 平台提交订单
+     */
+    @RequestMapping(value = "/pingTaiSubmit", method = RequestMethod.POST)
+    @ResponseBody
+    public OrderInfo pingTaiSubmit(@RequestBody String params) {
+    	OrderInfo orderInfo = json2Order(params);
+    	Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		orderInfo.setUpdater(currenLoginName);
+		orderInfo.setUpdateTime(new Date());
+		orderService.pingTaiSubmit(orderInfo);
+		return orderInfo;
+    }
+    
+    
+    /**
      * 保存订单
      */
     @RequestMapping(value = "/checkNum", method = RequestMethod.POST)
@@ -228,7 +260,7 @@ public class OrderController {
     
 
     /**
-     * 供应商接收订单
+     * 平台接收订单
      */
     @RequestMapping(value = "/reciveOrder", method = RequestMethod.POST)
     @ResponseBody
@@ -496,7 +528,11 @@ public class OrderController {
     		if(BaseVO.APPROVAL_SUCCESS.equals(order.getStatus())){//订单完成，需更新状态为1(订单待接收)
     			OrderInfo oi = new OrderInfo();
     			oi.setSerialNum(order.getSerialNum());
-    			oi.setStatus("1");
+    			if(oi.getSupplyComId()==null){
+    				oi.setStatus("3");
+    			}else{
+    				oi.setStatus("1");
+    			}
     			this.orderService.updateStatus(oi);
     		}
     		

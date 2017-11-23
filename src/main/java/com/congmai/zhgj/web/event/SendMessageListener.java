@@ -359,7 +359,12 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				}else{
 					throw new Exception("没有找到消息接受者！");
 				}
-				properties.put("paramer_b", userCompanyService.getCompany(user.getUserId().toString()).getComName());
+				try {
+					properties.put("paramer_b", userCompanyService.getCompany(user.getUserId().toString()).getComName());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
 				properties.put("paramer_c", order.getOrderNum());
 				properties.put("paramer_d", MessageConstants.URL_BE_CONFIRM_BUY_ORDER);
 				properties.put("paramer_e", messageVO.getSerialNum());

@@ -135,7 +135,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	@OperationLog(operateType = "update" ,operationDesc = "确认订单" ,objectSerial= "{serialNum}")
+	@OperationLog(operateType = "update" ,operationDesc = "平台确认订单" ,objectSerial= "{serialNum}")
 	public void reciveOrder(OrderInfo orderInfo) {
 		OrderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 	}
@@ -419,6 +419,17 @@ public Boolean  isExist(String codeType, String num,String serialNum) {
 		return flag;
 	}
 
+@Override
+@OperationLog(operateType = "update" ,operationDesc = "供应商确认订单" ,objectSerial= "{serialNum}")
+public int supplyConfirmed(OrderInfo orderInfo) {
+	return OrderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+}
+
+@Override
+@OperationLog(operateType = "update" ,operationDesc = "平台提交订单" ,objectSerial= "{serialNum}")
+public int pingTaiSubmit(OrderInfo orderInfo) {
+	return OrderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+}
 
 
 	

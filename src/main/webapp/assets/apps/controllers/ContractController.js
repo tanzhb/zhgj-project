@@ -281,7 +281,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 									"sLast" : "尾页"
 								}
 							},
-							order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+							order : [ [ 1, "desc" ] ],// 默认排序列及排序方式
 							bRetrieve : true,
 							"bScrollCollapse": true,
 							// searching: true,//是否过滤检索
@@ -368,7 +368,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 									"sLast" : "尾页"
 								}
 							},
-							order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+							order : [ [ 1, "desc" ] ],// 默认排序列及排序方式
 							bRetrieve : true,
 							"bScrollCollapse": true,
 							// searching: true,//是否过滤检索
@@ -512,7 +512,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 									"sLast" : "尾页"
 								}
 							},
-							order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+							order : [ [ 1, "desc" ] ],// 默认排序列及排序方式
 							bRetrieve : true,
 							"bScrollCollapse": true,
 							// searching: true,//是否过滤检索

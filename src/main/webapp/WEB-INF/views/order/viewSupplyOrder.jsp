@@ -43,6 +43,7 @@
 					
 		            <div class="portlet-title">
 			               <div class="tools">
+			               		<button type="button" ng-if = "buyOrder.status==66" ng-click="supplyConfirmed()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">确认</button>
 				                <button type="button" ng-click="cancelPage()" class="btn default btn-circle  btn-sm"><i class="fa fa-undo"></i> 取消 </button>
 				            </div>
 					</div>
