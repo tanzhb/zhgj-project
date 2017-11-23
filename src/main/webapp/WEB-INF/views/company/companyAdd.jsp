@@ -835,7 +835,7 @@
                  <div class="row">
                      <div class="col-md-12">
                          <div class="form-group">
-                                 <label class="col-md-4 control-label" for="address">地址：</label>
+                                 <label class="col-md-4 control-label" for="address"><span class="required"> * </span>地址：</label>
                                  <div class="col-md-6">
                                      <input type="text" class="form-control"  name="address" ng-model="companyAddress.address"  >
                                      <div class="form-control-focus"> </div>
@@ -847,7 +847,7 @@
                  <div class="row">
                      <div class="col-md-12">
                          <div class="form-group">
-                                 <label class="col-md-4 control-label" for="zipCode">邮编：</label>
+                                 <label class="col-md-4 control-label" for="zipCode"><!-- <span class="required"> * </span> -->邮编：</label>
                                  <div class="col-md-6">
                                      <input type="text" class="form-control" id="zipCode" name="zipCode" ng-model="companyAddress.zipCode"  >
                                      <div class="form-control-focus"> </div>
@@ -859,7 +859,7 @@
                  <div class="row">
                      <div class="col-md-12">
                          <div class="form-group">
-                                 <label class="col-md-4 control-label" for="contactTel">联系电话：</label>
+                                 <label class="col-md-4 control-label" for="contactTel"><span class="required"> * </span>联系电话：</label>
                                  <div class="col-md-6">
                                      <input type="text" class="form-control" name="contactTel" ng-model="companyAddress.contactTel"  >
                                      <div class="form-control-focus"> </div>
@@ -871,7 +871,7 @@
                  <div class="row">
                      <div class="col-md-12">
                          <div class="form-group">
-                                 <label class="col-md-4 control-label" for="mobileNum">手机：</label>
+                                 <label class="col-md-4 control-label" for="mobileNum"><span class="required"> * </span>手机：</label>
                                  <div class="col-md-6">
                                      <input type="text" class="form-control" id="mobileNum" name="mobileNum" ng-model="companyAddress.mobileNum"  >
                                      <div class="form-control-focus"> </div>

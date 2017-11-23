@@ -794,8 +794,10 @@ SELECT td.serialNum FROM takeDelivery td, (
 	orderMateriel om  
 	LEFT JOIN orderInfo o ON  o.serialNum=om.orderSerial
 	where om.materielSerial= #{serialNum,jdbcType=VARCHAR} and dm.orderMaterielSerial=om.serialNum  and  o.buyComId is not NULL) -->
+	SELECT SUM(a.outCount ) from (
 	SELECT
-		SUM(sob.outCount) 
+			DISTINCT sob.serialNum,
+sob.outCount
 		FROM
 			stockoutbatch sob
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial
@@ -810,7 +812,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 				
 		)
 		
-		WHERE stock.serialNum  = #{serialNum,jdbcType=VARCHAR}
+		WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR})a
     </select>
      <!--代管库存获取累计出库数量 -->
     <select id="countOutAmountForDaiguan" parameterType="java.lang.String"   resultType="java.lang.String">
@@ -819,8 +821,10 @@ SELECT td.serialNum FROM takeDelivery td, (
 	orderMateriel om  
 	LEFT JOIN orderInfo o ON  o.serialNum=om.orderSerial
 	where om.materielSerial= #{serialNum,jdbcType=VARCHAR} and dm.orderMaterielSerial=om.serialNum  and  o.buyComId is not NULL) -->
+	SELECT SUM(a.outCount ) from (
 	  SELECT
-		SUM(sob.outCount) 
+	  	DISTINCT sob.serialNum,
+sob.outCount
 		FROM
 			stockoutbatch sob
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial
@@ -843,7 +847,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 				)
 		)
 		
-		WHERE stock.serialNum  = #{serialNum,jdbcType=VARCHAR}
+		WHERE stock.serialNum  = #{serialNum,jdbcType=VARCHAR})a
     </select>
      <!--自建库存获取累计入库数量   -->
      <select id="countInAmountForZijian"  parameterType="java.lang.String"   resultType="java.lang.String">
@@ -866,8 +870,10 @@ SELECT td.serialNum FROM takeDelivery td, (
 	)
 	)temp where temp.serialNum=dm.deliverSerial
 	) -->
-	  SELECT
-		SUM(sib.stockInCount)
+	SELECT SUM(a.stockInCount ) from (SELECT
+		DISTINCT sib.serialNum,
+sib.stockInCount
+
 		FROM
 			stockInbatch sib
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
@@ -882,7 +888,8 @@ SELECT td.serialNum FROM takeDelivery td, (
 				AND o.orderType != '委托采购'
 		)
 		
-		WHERE stock.materielSerial  =  #{serialNum,jdbcType=VARCHAR}
+		WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR})a
+	  
      </select>
      <!--代管库存获取累计入库数量   -->
      <select id="countInAmountForDaiguan"  parameterType="java.lang.String"   resultType="java.lang.String">
@@ -905,8 +912,10 @@ SELECT td.serialNum FROM takeDelivery td, (
 	)
 	)temp where temp.serialNum=dm.deliverSerial
 	) -->
+		SELECT SUM(a.stockInCount ) from (
 		  SELECT
-		SUM(sib.stockInCount)
+		DISTINCT sib.serialNum,
+sib.stockInCount
 		FROM
 			stockInbatch sib
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
@@ -930,7 +939,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 				)
 		)
 		
-		WHERE stock.serialNum  =  #{serialNum,jdbcType=VARCHAR}
+		WHERE stock.serialNum  =  #{serialNum,jdbcType=VARCHAR})a
      </select>
      <!-- 自建库存获取库存出库记录-->
      <select id="getStockOutRecordForZijian"  parameterType="java.lang.String"  resultMap="BaseResultMap" >

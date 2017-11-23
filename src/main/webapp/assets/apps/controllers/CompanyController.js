@@ -572,6 +572,60 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 				}
 			})   
 		}); 
+		
+		// 页面加载完成后调用，验证输入框
+		$scope.$watch('$viewContentLoaded', function() {  
+			var e = $("#companyAddressForm"),
+			r = $(".alert-danger", e),
+			i = $(".alert-success", e);
+			e.validate({
+				errorElement: "span",
+				errorClass: "help-block help-block-error",
+				focusInvalid: !1,
+				ignore: "",
+				messages: {
+					address:{required:"地址不能为空！"},
+					/*zipCode:{required:"邮编不能为空！"},*/
+					contactTel:{required:"联系电话不能为空！"},
+					mobileNum:{email:"手机不能为空！"}
+				},
+				rules: {
+					address: {
+						required: !0
+					},
+				/*	zipCode: {
+						required: !0
+					},*/
+					contactTel: {
+						required: !0
+					},
+					mobileNum: {
+						required: !0
+					}
+				},
+				invalidHandler: function(e, t) {
+					i.hide(),
+					r.show(),
+					App.scrollTo(r, -200)
+				},
+				errorPlacement: function(e, r) {
+					r.is(":checkbox") ? e.insertAfter(r.closest(".md-checkbox-list, .md-checkbox-inline, .checkbox-list, .checkbox-inline")) : r.is(":radio") ? e.insertAfter(r.closest(".md-radio-list, .md-radio-inline, .radio-list,.radio-inline")) : e.insertAfter(r)
+				},
+				highlight: function(e) {
+					$(e).closest(".form-group").addClass("has-error")
+				},
+				unhighlight: function(e) {
+					$(e).closest(".form-group").removeClass("has-error")
+				},
+				success: function(e) {
+					e.closest(".form-group").removeClass("has-error")
+				},
+				submitHandler: function(e) {
+					i.show(),
+					r.hide()
+				}
+			})   
+		}); 
 		// 页面加载完成后调用，验证输入框
 		$scope.$watch('$viewContentLoaded', function() {  
 			 

@@ -1020,10 +1020,10 @@ function loadPriceListSaleTable(){
 					$(element).removeData();
 					if(/^[-\+]?\d+(\.\d+)?$/.test(value)==false||value==NaN||(Number(value)*100+"").indexOf(".")>-1){
 						toastr.warning("只能包含小数点和数字,且只能有两位小数");
-						$("#inclusivePrice").focus();
+						/*$("#inclusivePrice").focus();*/
 						}
 					return this.optional(element) || Number($(element).data("unitprice")) == NaN?false:(Number($(element).data("unitprice"))-value<= 0);
-				}, "单价不能超过含税价格");
+				}, "不含税单价不能超过含税价格");
 			 jQuery.validator.addMethod("toppriceNumCheck", function (value, element) {//最低价最高价判断
 	    			debugger;
 					$(element).removeData();
@@ -1034,7 +1034,7 @@ function loadPriceListSaleTable(){
 					$(element).removeData();
 					if(/^[-\+]?\d+(\.\d+)?$/.test(value)==false||value==NaN||(Number(value)*100+"").indexOf(".")>-1){
 						toastr.warning("只能包含小数点和数字,且只能有两位小数");
-						$("#inclusivePrice").focus();
+						/*$("#inclusivePrice").focus();*/
 						}
 					return this.optional(element) || Number($(element).data("ladderprice")) == NaN?false:(Number($(element).data("ladderprice"))-value<= 0);
 				}, "梯度单价不能超过梯度含税价格");
@@ -1062,7 +1062,16 @@ function loadPriceListSaleTable(){
 					 $scope.ladderprices[_index] = {};
 				 }
 			 };
-
+			   $scope.clearNoNumPoint = function(obj,attr){
+			    	 //先把非数字的都替换掉，除了数字和.
+			    	 obj[attr] = obj[attr].replace(/[^\d.]/g,"");
+			    	 //必须保证第一个为数字而不是.
+			    	 obj[attr] = obj[attr].replace(/^\./g,"");
+			    	 //保证只有出现一个.而没有多个.
+			    	 obj[attr] = obj[attr].replace(/\.{2,}/g,"");
+			    	 //保证.只出现一次，而不能出现两次以上
+			    	 obj[attr] = obj[attr].replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+		    	 }
 			 /**
 			  * 阶梯价格删除一行
 			  */
@@ -1419,7 +1428,7 @@ function loadPriceListSaleTable(){
 				var initSuppliers = function(){
 					var promise = orderService.initSuppliers();
 			        	promise.then(function(data){
-			        		$scope.coms = data.data;
+			        		$scope.suppliers = data.data;
 			        		setTimeout(function () {
 			        			$("#supplyComId").selectpicker({
 			                        showSubtext: true

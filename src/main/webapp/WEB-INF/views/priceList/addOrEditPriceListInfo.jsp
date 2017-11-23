@@ -226,25 +226,25 @@
                                                             <!--/span-->
                                                         </div>
                                                          <div class="row">
-                                                            <div class="col-md-6">
-                                                             <div class="form-group">
-                                                    <label class="control-label bold" for="priceList"> <span class="required"> * </span>单价 :</label>
+                                                          <div class="col-md-6">
+                                                           <div class="form-group">
+                                                    <label class="control-label bold" for="inclusiveprice"> <span class="required"> * </span>含税价格 :</label>
                                                     <div class="">
-                                                                        <input type="text"  class="form-control" placeholder=""  id="unitPrice" name ="unitPrice"  ng-show="priceListAdd" 
-												ng-model="priceList.unitPrice">
+                                                                        <input type="text"   class="form-control" placeholder=""  id="inclusivePrice"    data-unitprice="{{priceList.unitPrice}}"   name ="inclusivePrice"  ng-show="priceListAdd" 
+												ng-model="priceList.inclusivePrice"   ng-keyup="clearNoNumPoint(priceList,'inclusivePrice')">
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.unitPrice |currency:'￥'}}</p>
+                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.inclusivePrice |currency:'￥'}}</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                           <div class="col-md-6">
-                                                           <div class="form-group">
-                                                    <label class="control-label bold" for="inclusiveprice"> <!-- <span class="required"> * </span> -->含税价格 :</label>
+                                                            <div class="col-md-6">
+                                                             <div class="form-group">
+                                                    <label class="control-label bold" for="priceList"> <span class="required"> * </span>不含税单价 :</label>
                                                     <div class="">
-                                                                        <input type="text"   class="form-control" placeholder=""  id="inclusivePrice"    data-unitprice="{{priceList.unitPrice}}"   name ="inclusivePrice"  ng-show="priceListAdd" 
-												ng-model="priceList.inclusivePrice" >
+                                                                        <input type="text"  class="form-control" placeholder=""  id="unitPrice" name ="unitPrice"  ng-show="priceListAdd" 
+												ng-model="priceList.unitPrice"   ng-keyup="clearNoNumPoint(priceList,'unitPrice')">
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.inclusivePrice |currency:'￥'}}</p>
+                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.unitPrice |currency:'￥'}}</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -254,8 +254,8 @@
                                                            <div class="form-group">
                                                    <label class="control-label bold" for="topprice"> 最高限价 :</label>
                                                     <div class="">
-                                                                           <input type="text"  class="form-control" placeholder=""  id="topPrice" name ="topPrice"   onkeyup="isNumberWithTwo(this)"   ng-show="priceListAdd" 
-												ng-model="priceList.topPrice"/>
+                                                                           <input type="text"  class="form-control" placeholder=""  id="topPrice" name ="topPrice"    ng-show="priceListAdd" 
+												ng-model="priceList.topPrice"  ng-keyup="clearNoNumPoint(priceList,'topPrice')"/>
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="priceListView">{{priceList.topPrice |currency:'￥'}}</p>
                                                                     </div>
@@ -265,8 +265,8 @@
                                                            <div class="form-group">
                                                     <label class="control-label bold" for="floorprice"> 最低限价 :</label>
                                                     <div class="">
-                                                                        <input type="text"   class="form-control" placeholder=""  id="floorPrice" name ="floorPrice"  ng-show="priceListAdd"   onkeyup="isNumberWithTwo(this)"  data-topprice="{{priceList.topPrice}}"  
-												ng-model="priceList.floorPrice" />
+                                                                        <input type="text"   class="form-control" placeholder=""  id="floorPrice" name ="floorPrice"  ng-show="priceListAdd"    data-topprice="{{priceList.topPrice}}"  
+												ng-model="priceList.floorPrice"   ng-keyup="clearNoNumPoint(priceList,'floorPrice')" />
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="priceListView">{{priceList.floorPrice |currency:'￥'}}</p>
                                                                     </div>
@@ -358,7 +358,7 @@
 											<div class="form-group">
 											<div class="col-md-5"> 含税价格 :</div>
 												<div class="col-md-7 input-icon right">
-													<input  ng-hide="ladderpriceAdd" type="text" ng-model="ladderprice.inclusivePrice" name="inclusivePrice"   id="inclusivePrice"
+													<input  ng-hide="ladderpriceAdd" type="text" ng-model="ladderprice.inclusivePrice"   id="inclusivePrice"
 														class="form-control" placeholder="">
 														<div class="form-control-focus"> </div>
 														<label   ng-show="ladderpriceView"  class="c_edit" >{{ladderprice.inclusivePrice |currency:'￥'}}</label>

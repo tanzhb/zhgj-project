@@ -348,6 +348,10 @@ public class InvoiceController {
 					materiel.setMaterielMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getAmount())).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
 					deliverAmount=deliverAmount.add(new BigDecimal(materiel.getMaterielMoney()));
 				}
+		}else{
+			for(Materiel materiel:materiels){
+				materiel.setMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getBillAmount()).setScale(2,BigDecimal.ROUND_HALF_UP )).toString());
+			}
 		}
 	
 		// 封装datatables数据返回到前台

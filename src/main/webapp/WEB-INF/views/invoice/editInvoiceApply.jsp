@@ -39,7 +39,7 @@
 				            </div>
 					</div> -->
            		 <div class="portlet-body">
-					<jsp:include  page="editInvoiceBase.jsp"/>
+					<jsp:include  page="addOrEditInvoiceInfo.jsp"/>
       			</div>
       			   <div class="row">
 						<div class="col-md-12">

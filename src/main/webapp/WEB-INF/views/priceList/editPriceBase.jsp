@@ -186,18 +186,7 @@
                                                             <!--/span-->
                                                         </div>
                                                          <div class="row">
-                                                            <div class="col-md-6">
-                                                             <div class="form-group">
-                                                    <label class="control-label bold" for="priceList"> <span class="required"> * </span>单价 :</label>
-                                                    <div class="">
-                                                                        <input type="text"  class="form-control" placeholder=""  id="unitPrice" name ="unitPrice"  ng-show="priceListAdd" 
-												ng-model="priceList.unitPrice">
-												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.unitPrice |currency:'￥'}}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                           <div class="col-md-6">
+                                                          <div class="col-md-6">
                                                            <div class="form-group">
                                                     <label class="control-label bold" for="inclusiveprice"> <!-- <span class="required"> * </span> -->含税价格 :</label>
                                                     <div class="">
@@ -205,6 +194,17 @@
 												ng-model="priceList.inclusivePrice" >
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="priceListView">{{priceList.inclusivePrice |currency:'￥'}}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                             <div class="form-group">
+                                                    <label class="control-label bold" for="priceList"> <span class="required"> * </span>不含税单价 :</label>
+                                                    <div class="">
+                                                                        <input type="text"  class="form-control" placeholder=""  id="unitPrice" name ="unitPrice"  ng-show="priceListAdd" 
+												ng-model="priceList.unitPrice">
+												<div class="form-control-focus"> </div>
+                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.unitPrice |currency:'￥'}}</p>
                                                                     </div>
                                                                 </div>
                                                             </div>

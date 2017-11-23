@@ -39,8 +39,8 @@
 				            </div>
 					</div> -->
            		 <div class="portlet-body">
-					<jsp:include  page="viewInvoiceBase.jsp"/>
-					
+					<%-- <jsp:include  page="viewInvoiceBase.jsp"/> --%>
+					<jsp:include  page="viewInvoiceInfo.jsp"/>
 					<!-- //申请原因 -->
 					<div class="portlet-body form">
 					     <form >

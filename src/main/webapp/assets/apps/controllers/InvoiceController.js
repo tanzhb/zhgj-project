@@ -671,14 +671,14 @@ angular
 					                            		}
 					                            	}
 												}, {
-													mData : 'money',
+													mData : 'money'/*,
 													mRender:function(data){
 					                            		if(data!=""&&data!=null){
 					                            			return $filter('currency')(data,'￥');
 					                            		}else{
 					                            			return $filter('currency')(0,'￥');
 					                            		}
-					                            	}
+					                            	}*/
 												},{
 													mData : 'status'
 												}
@@ -700,7 +700,11 @@ angular
 												'targets' : 8,
 												'render' : function(data,
 														type, row, meta) {
-													return '<span id="money'+row.serialNum+'">'+$filter('currency')(data,'￥')+'</span>';
+													if(data==null){
+														return '<span id="money'+row.serialNum+'">'+$filter('currency')(0,'￥')+'</span>';
+													}else{
+														return '<span id="money'+row.serialNum+'">'+$filter('currency')(data,'￥')+'</span>';
+													}
 													//return data;
 												},"createdCell": function (td, cellData, rowData, row, col) {
 													 $compile(td)($scope);
@@ -714,7 +718,7 @@ angular
 													if(serialNum.indexOf("view")>-1){
 														return "";
 													}else{
-													return '<a   id="save'+row.serialNum+'" ng-click="saveBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.invoiceBillingRecordSerial+'\',\''+row.billAmount+'\',\''+row.orderUnitPrice+'\',\''+row.money+'\')">  <i class="fa fa-save" title="保存"></i> </a>&nbsp;<a   style="display:none"  id="edit'+row.serialNum+'"  ng-click="editBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\')"><i class="fa fa-edit" title="编辑"></i></a>'
+													return '<a   id="save'+row.serialNum+'" ng-click="saveBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.invoiceBillingRecordSerial+'\',\''+row.canBillAmount+'\',\''+row.orderUnitPrice+'\',\''+row.money+'\')">  <i class="fa fa-save" title="保存"></i> </a>&nbsp;<a   style="display:none"  id="edit'+row.serialNum+'"  ng-click="editBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\')"><i class="fa fa-edit" title="编辑"></i></a>'
 													+ '&nbsp;<a  id="cancel'+row.serialNum+'" ng-click="cancelEditBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.billAmount+'\')"><i class="fa fa-undo"  title="取消"></i></a>';
 													}//return data;
 												},"createdCell": function (td, cellData, rowData, row, col) {
@@ -816,14 +820,14 @@ function loadMaterielOutTable(orderSerial,serialNum){
 	                            		}
 	                            	}
 								}, {
-									mData : 'money',
+									mData : 'money'/*,
 									mRender:function(data){
 	                            		if(data!=""&&data!=null){
 	                            			return $filter('currency')(data,'￥');
 	                            		}else{
 	                            			return $filter('currency')(0,'￥');
 	                            		}
-	                            	}
+	                            	}*/
 								},{
 									mData : 'status'
 								}
@@ -847,7 +851,11 @@ function loadMaterielOutTable(orderSerial,serialNum){
 								'targets' : 8,
 								'render' : function(data,
 										type, row, meta) {
-									return '<span id="money'+row.serialNum+'">'+$filter('currency')(data,'￥')+'</span>';
+									if(data==null){
+										return '<span id="money'+row.serialNum+'">'+$filter('currency')(0,'￥')+'</span>';
+									}else{
+										return '<span id="money'+row.serialNum+'">'+$filter('currency')(data,'￥')+'</span>';
+									}
 									//return data;
 								},"createdCell": function (td, cellData, rowData, row, col) {
 									 $compile(td)($scope);
@@ -859,7 +867,7 @@ function loadMaterielOutTable(orderSerial,serialNum){
 									if(serialNum.indexOf("view")>-1){
 										return "";
 									}else{
-									return '<a   id="save'+row.serialNum+'" ng-click="saveBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.invoiceBillingRecordSerial+'\',\''+row.billAmount+'\',\''+row.orderUnitPrice+'\',\''+row.money+'\')">  <i class="fa fa-save" title="保存"></i> </a>&nbsp;<a   style="display:none"  id="edit'+row.serialNum+'"  ng-click="editBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\')"><i class="fa fa-edit" title="编辑"></i></a>'
+									return '<a   id="save'+row.serialNum+'" ng-click="saveBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.invoiceBillingRecordSerial+'\',\''+row.canBillAmount+'\',\''+row.orderUnitPrice+'\',\''+row.money+'\')">  <i class="fa fa-save" title="保存"></i> </a>&nbsp;<a   style="display:none"  id="edit'+row.serialNum+'"  ng-click="editBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\')"><i class="fa fa-edit" title="编辑"></i></a>'
 									+ '&nbsp;<a  id="cancel'+row.serialNum+'" ng-click="cancelEditBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.billAmount+'\')"><i class="fa fa-undo"  title="取消"></i></a>';
 									}
 									
@@ -921,7 +929,7 @@ $scope.confirmInvoice=function(judgeString){//进项票/销项票确认
 	}
 }
 
-$scope.saveBillingRecord=function (serialNum,judgeString,invoiceBillingRecordSerial,billAmount,orderUnitPrice,money){
+$scope.saveBillingRecord=function (serialNum,judgeString,invoiceBillingRecordSerial,canBillAmount,orderUnitPrice,money){
 	if($scope.invoice.serialNum==undefined&&judgeString=='in'){
 		 toastr.warning("请先保存进项票信息！");
 		 return;
@@ -930,7 +938,11 @@ $scope.saveBillingRecord=function (serialNum,judgeString,invoiceBillingRecordSer
 		 toastr.warning("请先保存销项票信息！");
 		 return;
 	}
-	if(Number($("#"+serialNum).val())>billAmount){
+	if(Number($("#"+serialNum).val())>canBillAmount&&judgeString=='in'){
+		toastr.warning("收票数量不能大于可收数量！");
+		 return;
+	}
+	if(Number($("#"+serialNum).val())>canBillAmount&&judgeString=='out'){
 		toastr.warning("开票数量不能大于可开数量！");
 		 return;
 	}
@@ -949,10 +961,10 @@ $scope.saveBillingRecord=function (serialNum,judgeString,invoiceBillingRecordSer
 				$("#edit"+serialNum).css("display","inline-block");
 				$("#cancel"+serialNum).css("display","none");
 				var nowMoney=Number($("#"+serialNum).val())*Number(orderUnitPrice);
-				var billOrReceiptMoney =Number($scope.invoice.billOrReceiptMoney);
-				$scope.invoice.billOrReceiptMoney=billOrReceiptMoney-Number(money)+nowMoney;
-				$scope.invoice.capitalMoney=convertCurrency(billOrReceiptMoney-Number(money)+nowMoney);
-				$("#money"+serialNum).html(nowMoney);
+				var billOrReceiptMoney =Number($scope.invoice.orderAmount-$scope.invoice.unBillOrReceiptMoney);
+				$scope.invoice.billOrReceiptMoney=billOrReceiptMoney-Number(money=='null'?0:money)+nowMoney;
+				$scope.invoice.capitalMoney=convertCurrency(billOrReceiptMoney-Number(money=='null'?0:money)+nowMoney);
+				$("#money"+serialNum).html($filter('currency')(nowMoney,'￥'));
 				
     			
 			},
@@ -1028,8 +1040,10 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 										}
 										InvoiceService.saveInvoice($scope.invoice).then(
 															function(data) {debugger;
+															$scope.invoice.serialNum=data.serialNum;
 															if(judgeString==undefined){
 																$scope.invoiceView = true;
+																$scope.invoiceAdd = true;
 																toastr.success("保存发票数据成功！");
 															}else if(judgeString=='confirmIn'){
 																toastr.success("确认收票成功！");
@@ -1040,7 +1054,7 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 															}else if(judgeString=='applyOut'){
 																toastr.success("申请开票成功！");
 															}
-															$scope.showInvoiceInfo(data.serialNum,"out");
+															//$scope.showInvoiceInfo(data.serialNum,"out");
 																
 															/*$scope.invoice = data;
 															 $scope.invoice.receiptDate=timeStamp2ShortString(data.receiptDate);

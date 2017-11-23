@@ -227,8 +227,8 @@
 										<th>订单数量</th>
 										<th>发货数量</th>
 										<th>备注</th>
-										<th><span class="required" style="color: red"> * </span>出库数量</th>
 										<th><span class="required" style="color: red"> * </span>出库批次</th>
+										<th><!-- <span class="required" style="color: red"> * </span> -->出库数量</th>
 										<th>当前库存</th>
 										<th>未出数量</th>
 										<!-- <th>仓库</th>
@@ -247,17 +247,17 @@
 										<td>{{materiel.orderMateriel.amount}}</td>
 										<td>{{materiel.deliverCount}}</td>
 										<td>{{materiel.deliverRemark}}</td>
-										<td class="form-group">
-                                                 <input type="text" class="form-control input-small" id="stockCountinline{{materiel.serialNum}}" name="stockCount" data-delivercount="{{materiel.deliverCount}}"   data-currentstock="{{materiel.currentStockAmount}}"    ng-change="deleteOrdinaryData(materiel.serialNum)"    ng-model="materiel.stockCount" ng-hide="deliverAdd" >
-                                                 
-                                                 <div class="form-control-focus"> </div>
-										</td>
 										<td >
 										<span id="{{materiel.serialNum}}"></span>
                                                 <button class="btn blue btn-sm btn-circle"
-								ng-click="showStockBatch($index,materiel.orderMateriel.materielSerial,materiel.orderMateriel.orderSerial,materiel.serialNum)" onclick="return false;"  data-toggle="modal" >
+								ng-click="showStockBatch($index,materiel.orderMateriel.materielSerial,materiel.orderMateriel.orderSerial,materiel.serialNum,materiel.deliverCount)" onclick="return false;"  data-toggle="modal" >
 								<i class="fa fa-plus"></i>选择批次
 							</button>
+										</td>
+										<td class="form-group">
+                                                 <input type="text"    style="border:none;"  readonly="readonly"       class="form-control input-small" id="stockCountinline{{materiel.serialNum}}" name="stockCount" data-delivercount="{{materiel.deliverCount}}"   data-currentstock="{{materiel.currentStockAmount}}"    ng-change="deleteOrdinaryData(materiel.serialNum)"    ng-model="materiel.stockCount" ng-hide="deliverAdd" >
+                                                 
+                                                 <div class="form-control-focus"> </div>
 										</td>
 										<td>
 											{{materiel.currentStockAmount}}

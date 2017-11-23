@@ -206,9 +206,11 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					if($scope.takeDeliveryMateriels){
 						for(var i=0;i < $scope.takeDeliveryMateriels.length;i++){
 							param = {};
-							param.stockCount = $scope.takeDeliveryMateriels[i].stockCount;
+							//param.stockCount = $scope.takeDeliveryMateriels[i].stockCount;
+							param.stockCount=$scope['totalCount'+$scope.takeDeliveryMateriels[i].serialNum];
 							if(!isNull($scope.takeDeliveryMateriels[i].orderMateriel)){ //贸易出库
 								param.serialNum = $scope.takeDeliveryMateriels[i].serialNum;
+								$scope.takeDeliveryMateriels[i].stockCount=$scope['totalCount'+$scope.takeDeliveryMateriels[i].serialNum];
 								param.unstockCount = $scope.takeDeliveryMateriels[i].deliverCount-$scope.takeDeliveryMateriels[i].stockCount;
 								param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].orderMaterielSerial;
 							}else{//其他出库
@@ -471,9 +473,10 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 	  				   
 	  			}
 	  		}
-	  		$scope.showStockBatch=function(index,materielSerialNum,orderSerial,deliveryMaterielSerialNum){//选择批次  materielSerialNum为基本物料流水 orderSerial 订单流水 deliveryMaterielSerialNum 发货物料流水
+	  		$scope.showStockBatch=function(index,materielSerialNum,orderSerial,deliveryMaterielSerialNum,deliverCount){//选择批次  materielSerialNum为基本物料流水 orderSerial 订单流水 deliveryMaterielSerialNum 发货物料流水
 	  			
-	  			var stockOutCount=Number($("#stockCountinline"+deliveryMaterielSerialNum).val());//获取出库数量
+	  			//var stockOutCount=Number($("#stockCountinline"+deliveryMaterielSerialNum).val());//获取出库数量
+	  			var stockOutCount=deliverCount;
 	  			debugger;
 	  			if(stockOutCount==0||stockOutCount==NaN){
 	  				toastr.warning("请先输入正确的出库数量");
@@ -838,7 +841,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 							 toastr.warning("各批次总出库数量不得大于总出库数量！");
 							 $("#stockOutCount"+serialNum).val(0); 
 						 }else if(count<stockOutCount){
-							 toastr.info("还需出库"+(stockOutCount-count));
+							// toastr.info("还需出库"+(stockOutCount-count));
 						 }
 					 }
 					$scope.deleteOrdinaryData=function(deliveryMaterielSerialNum){
