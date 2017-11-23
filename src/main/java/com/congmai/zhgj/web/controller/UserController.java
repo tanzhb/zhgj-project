@@ -153,19 +153,25 @@ public class UserController {
 		request=  ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		if(request!=null){
 			OperateLog valueReturn =  new OperateLog();
-			User user = UserUtil.getUserFromSession();
-	        valueReturn.setOperateType("logout");
-	        valueReturn.setOperationDesc("登出");
-	        valueReturn.setOperator(user.getUserName());
-	        valueReturn.setCreator(user.getUserId().toString());
-	        valueReturn.setOperationTime(new Date());
-	        valueReturn.setOperateResult(SUCCESS);
-	        valueReturn.setRequestIp(OperateLogAop.getRemoteHost(request));
-	        valueReturn.setRequestUrl(request.getRequestURI());
-	        valueReturn.setServerIp(request.getLocalAddr());
-	        valueReturn.setSerialNum(ApplicationUtils.random32UUID());
-	        //保存操作日志
-	        operateLogService.insert(valueReturn);
+			try {
+				User user = UserUtil.getUserFromSession();
+		        valueReturn.setOperateType("logout");
+		        valueReturn.setOperationDesc("登出");
+		        valueReturn.setOperator(user.getUserName());
+		        valueReturn.setCreator(user.getUserId().toString());
+		        valueReturn.setOperationTime(new Date());
+		        valueReturn.setOperateResult(SUCCESS);
+		        valueReturn.setRequestIp(OperateLogAop.getRemoteHost(request));
+		        valueReturn.setRequestUrl(request.getRequestURI());
+		        valueReturn.setServerIp(request.getLocalAddr());
+		        valueReturn.setSerialNum(ApplicationUtils.random32UUID());
+		        //保存操作日志
+		        operateLogService.insert(valueReturn);
+			} catch (Exception e) {
+				System.out.println("Session已失效！");
+				e.printStackTrace();
+			}
+			
 		}
 		
             
@@ -255,11 +261,17 @@ public class UserController {
 	@ResponseBody
 	public ResponseEntity<User> getUserInfo(){
 		User user=null;
-	    user = UserUtil.getUserFromSession();
-	    user=userService.getUserInfo(user.getUserId());
+		try {
+			user = UserUtil.getUserFromSession();
+		    user=userService.getUserInfo(user.getUserId());
+		    
+		    Company company=userService.getUserCompanyInfo(user.getUserId());
+		    user.setCompany(company);
+		} catch (Exception e) {
+			System.out.println("Session已失效！");
+			e.printStackTrace();
+		}
 	    
-	    Company company=userService.getUserCompanyInfo(user.getUserId());
-	    user.setCompany(company);
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 	

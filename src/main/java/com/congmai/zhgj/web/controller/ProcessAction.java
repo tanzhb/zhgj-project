@@ -191,7 +191,15 @@ public class ProcessAction {
 	@RequestMapping(value = "/todoTask/{businessType}", method = {RequestMethod.GET})
 	@ResponseBody
 	public ResponseEntity<Map<String,Object>> todoTask(@PathVariable("businessType") String businessType, Map<String, Object> mp,HttpServletRequest request) throws Exception{
-		String userId = UserUtil.getUserFromSession().getUserId().toString();
+		String userId = null;
+		try {
+			userId = UserUtil.getUserFromSession().getUserId().toString();
+		} catch (Exception e) {
+			System.out.println("Session已失效！");
+			e.printStackTrace();
+		}
+		
+		
 		User user = this.userService.selectById(new Integer(userId));
 		List<BaseVO> taskList = this.processService.findTodoTask(user);
 		List<Object> jsonList=new ArrayList<Object>(); 
@@ -250,22 +258,28 @@ public class ProcessAction {
 	@RequestMapping(value = "/getTodoTaskSize/{businessType}", method = {RequestMethod.GET})
 	@ResponseBody
 	public String getTodoTaskSize(@PathVariable("businessType") String businessType) throws Exception{
-		String userId = UserUtil.getUserFromSession().getUserId().toString();
-		User user = this.userService.selectById(new Integer(userId));
-		List<BaseVO> taskList = this.processService.findTodoTask(user);
-		
 		int taskListSize = 0;
-		if(taskList != null && taskList.size() > 0){
-			if("All".equals(businessType)){//首页显示所有待办流程
-				taskListSize = taskList.size();
-			}else{//根据流程不同加以统计
-				for(BaseVO base : taskList){
-					if(businessType.equals(base.getBusinessType())){
-						taskListSize ++;
+		try {
+			String userId = UserUtil.getUserFromSession().getUserId().toString();
+			User user = this.userService.selectById(new Integer(userId));
+			List<BaseVO> taskList = this.processService.findTodoTask(user);
+			
+			if(taskList != null && taskList.size() > 0){
+				if("All".equals(businessType)){//首页显示所有待办流程
+					taskListSize = taskList.size();
+				}else{//根据流程不同加以统计
+					for(BaseVO base : taskList){
+						if(businessType.equals(base.getBusinessType())){
+							taskListSize ++;
+						}
 					}
 				}
 			}
+		} catch (Exception e) {
+			System.out.println("Session已失效！");
+			e.printStackTrace();
 		}
+		
 		
 //		Thread.sleep(10000);
 		return String.valueOf(taskListSize);

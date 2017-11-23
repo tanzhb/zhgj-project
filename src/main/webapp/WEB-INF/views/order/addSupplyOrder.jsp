@@ -15,7 +15,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a>查看</a>
+            <a>{{opration}}</a>
         </li>
     </ul>
     <div class="page-toolbar">
@@ -39,18 +39,9 @@
 				            </div>
 					</div> -->
            		 <div class="portlet-body">
-					<jsp:include  page="viewBuyOrderBase.jsp"/>
-					
-		            <div class="portlet-title">
-			               <div class="tools">
-			               		<button type="button" ng-if = "buyOrder.status==0" ng-click="pingTaiSubmit()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">提交</button>
-			               		<button type="button" ng-if = "buyOrder.status==77" ng-click="pingTaiSubmit()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">重新提交</button>
-			               		<button type="button" ng-if = "buyOrder.status==77" ng-click="pingTaiConfirmed()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">确认</button>
-				                <button type="button" ng-click="cancelPage()" class="btn default btn-circle  btn-sm"><i class="fa fa-undo"></i> 取消 </button>
-				            </div>
-					</div>
+					<jsp:include  page="editSupplyOrderBase.jsp"/>
       			</div>
 			</div>
 	</div>
 </div>
-
+<jsp:include  page="selectBasicMateriel.jsp"/> <!-- 选择基本物料 -->

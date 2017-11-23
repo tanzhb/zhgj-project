@@ -57,4 +57,10 @@ public interface OrderService extends GenericService<OrderInfo, String> {
 
 	int updateOrderRelation(OrderInfo updateOrderInfo);
 
+
+	int supplyConfirmed(OrderInfo orderInfo);
+
+
+	int pingTaiSubmit(OrderInfo orderInfo);
+
 }
