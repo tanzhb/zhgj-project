@@ -42,10 +42,9 @@
 				</div>
 				<div class="actions">
 				<div class="btn-group btn-group-devided" data-toggle="buttons">
-				<shiro:hasPermission name="incomeBill:confirm">
+				
 				<label class="btn btn-transparent green btn-circle btn-sm" ng-click="confirmInvoice('in')">
 	                                              <i class="fa fa-plus"></i> 确认</label>
-				 </shiro:hasPermission> 
 				<shiro:hasPermission name="incomeBill:add">
 						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addInvoice('in')">
 	                                              <i class="fa fa-plus"></i> 添加</label>
@@ -192,14 +191,14 @@
 				</div> -->
 				<div class="actions">
 				<div class="btn-group btn-group-devided" data-toggle="buttons">
-				<shiro:hasPermission name="ticket:confirm">
+		
 				<label class="btn btn-transparent green btn-circle btn-sm" ng-click="confirmInvoice('out')">
 	                                              <i class="fa fa-plus"></i> 确认</label>
-				 </shiro:hasPermission> 
-				 <shiro:hasPermission name="ticket:apply">
+	
+				 
 				 <label class="btn btn-transparent yellow btn-circle btn-sm"
 										ng-click="submitInvoiceApply('out')"> <i class="glyphicon glyphicon-play"></i> 申请</label>
-										</shiro:hasPermission>
+										
 				 <shiro:hasPermission name="ticket:add">
 						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addInvoice('out')">
 	                                              <i class="fa fa-plus"></i> 添加</label>

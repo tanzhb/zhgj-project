@@ -92,13 +92,19 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		$rootScope.setNumCode("PO",function(newCode){
             			$scope.buyOrder.orderNum = newCode;
             		});
+            		
             		$scope.contract={};
+            		$rootScope.setNumCode("CA",function(newCode){//
+             			$scope.contract={};
+             			$scope.contract.contractNum= newCode;//合同编号
+             		});
             		$scope.contract.contractType="采购合同";
             		$scope.buyOrder.orderType="自主采购";
             		$scope.buyOrder.tradeType="内贸";
             		$scope.buyOrder.currency="人民币";
             		$scope.buyOrder.orderDate = timeStamp2String2(new Date())
             		$scope.clauseSettlement = {};
+            		$scope.clauseSettlement.otherAmount = 0;
             		$scope.buyOrder.seller ="中航能科（上海）能源科技有限公司";
             		$scope.buyOrder.rate = 17;
             		dateSelectSetting();//日期选择限制
@@ -247,9 +253,9 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	        		     function(data){
 	        		    	$scope.buyOrder = data;
 	        		    	$scope.contract.orderSerial = data.serialNum;
-	        		    	if(isNull($scope.contract.contractNum)){
+	        		    	/*if(isNull($scope.contract.contractNum)){
 	        		    		$scope.contract.contractNum = $scope.buyOrder.orderNum;
-	        		    	}
+	        		    	}*/
 	 	   	    		
 	        		    	$scope.contract.comId = $scope.buyOrder.supplyComId;
 	 	   	    		$scope.contract.signDate = $scope.buyOrder.orderDate;
@@ -301,6 +307,10 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     $scope.viewBuyOrder = function(serialNum){
     	$state.go("viewBuyOrder",{serialNum:serialNum});
     }
+    $scope.goContract = function(serialNum){
+    	$state.go("userContract",{});
+    }
+    
     
     var table;
     var tableAjaxUrl = "rest/order/findOrderList?type=buy";
@@ -350,55 +360,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                               { mData: 'orderType' },
                               { mData: 'saleApplySerial' },
                               { mData: 'orderSerial' },
-                              { mData: 'orderDate' }/*,
-                              { mData: 'processBase',
-	                            	mRender:function(data,
-	    									type, row, meta){
-	                            		if(data!=""&&data!=null){
-	                            			if(data.status=="PENDING"||data.status=="WAITING_FOR_APPROVAL"){
-	    										return '<span  class="label label-sm label-warning ng-scope">审核中</span>';
-	    									}else if(data.status=="APPROVAL_SUCCESS"){
-	    										if(row.status==1){
-	    											return '<span  class="label label-sm label-success ng-scope">待接收</span>';
-	    										}else if(row.status==2){
-	    											return '<span  class="label label-sm label-success ng-scope">已接收</span>';
-	    										}else if(row.status==3){
-	    											return '<span  class="label label-sm label-success ng-scope">待收货</span>';
-	    										}else if(row.status==4){
-	    											return '<span  class="label label-sm label-success ng-scope">部分收货</span>';
-	    										}else if(row.status==5){
-	    											return '<span  class="label label-sm label-success ng-scope">待检验</span>';
-	    										}else if(row.status==6){
-	    											return '<span  class="label label-sm label-success ng-scope">待入库</span>';
-	    										}else if(row.status==7){
-	    											return '<span  class="label label-sm label-success ng-scope">部分入库</span>';
-	    										}else if(row.status==8){
-	    											return '<span  class="label label-sm label-success ng-scope">待收票</span>';
-	    										}else if(row.status==9){
-	    											return '<span  class="label label-sm label-success ng-scope">部分开票</span>';
-	    										}else if(row.status==10){
-	    											return '<span  class="label label-sm label-success ng-scope">待付款</span>';
-	    										}else if(row.status==11){
-	    											return '<span  class="label label-sm label-success ng-scope">部分付款</span>';
-	    										}else if(row.status==12){
-	    											return '<span  class="label label-sm label-success ng-scope">已完成</span>';
-	    										}else if(row.status==13){
-	    											return '<span  class="label label-sm label-success ng-scope">已取消</span>';
-	    										}else{
-	    											return '<span  class="label label-sm label-success ng-scope">待接收</span>';
-	    										}
-	    										
-	    									}else if(data.status=="APPROVAL_FAILED"){
-	    										return '<span  class="label label-sm label-danger ng-scope">未通过</span>';
-	    									}else{
-	    										return '<span  class="label label-sm label-info ng-scope">未审批</span>';
-	    									}
-	                            		}else{
-	                            			return '<span  class="label label-sm label-info ng-scope">未审批</span>';
-	                            		}
-	                            	}
-	                            }*/
-
+                              { mData: 'orderDate' }
                         ],
                'aoColumnDefs' : [ {
 							'targets' : 0,
@@ -454,8 +416,18 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 							'targets' : 2,
 							'render' : function(data,
 									type, row, meta) {
-								var htm = (data==null?'':data)+'</br>'
-                    			if(row.deliverStatus=="0"){
+								var htm = (data==null?'':data);
+								return htm;
+							},
+							"createdCell": function (td, cellData, rowData, row, col) {
+								 $compile(td)($scope);
+						       }
+						}, {
+							'targets' : 3,
+							'render' : function(data,
+									type, row, meta) {
+								var htm = (isNull(data)?'0':data)+'</br>'
+                    			if(row.deliverStatus==null||row.deliverStatus=="0"){
                     				if(row.status==2){
 										return htm + '<span >待发货</span>';
 									}else{
@@ -488,16 +460,16 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 								}else{
 									return htm + '<span>未开始</span>';
 								}
-								
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
 						       }
+							
 						},{
 							'targets' : 4,
 							'render' : function(data,
 									type, row, meta) {
-								var htm = (data==null?'':data)+'</br>'
+								var htm = (isNull(data)?'0':data)+'</br>'
 
                     			if(row.payStatus=="0"){
                     				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">付款中</span>';
@@ -519,14 +491,39 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 								 $compile(td)($scope);
 						       }
 						}, {
+							'targets' : 5,
+							'render' : function(data,
+									type, row, meta) {
+								return data +'</br>' + row.tradeType;
+							}
+						}, {
 							'targets' : 6,
 							'render' : function(data,
 									type, row, meta) {
 								if(isNull(row.contract)){
 									return ""
 								}else{
-									return row.contract.contractNum
+									return '<a href="javascript:void(0);" ng-click="goContract()">'+row.contract.contractNum+'</a></br>' 
 								}
+							},
+							"createdCell": function (td, cellData, rowData, row, col) {
+								 $compile(td)($scope);
+						       }
+						}, {
+							'targets' : 7,
+							'render' : function(data,
+									type, row, meta) {
+								if(isNull(data)){
+									return "--"
+								}else{
+									return data
+								}
+							}
+						}, {
+							'targets' : 8,
+							'render' : function(data,
+									type, row, meta) {
+								return data +'</br>' + row.maker;
 							}
 						} ]
 
@@ -997,6 +994,9 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
           		    		}
           		    	}else{
           		    		$scope.clauseSettlement = {}
+          		    	}
+          		    	if(isNull($scope.clauseSettlement.otherAmount)){
+          		    		$scope.clauseSettlement.otherAmount = 0;
           		    	}
           		    	
           		    	if($scope.buyOrder.status==1){//已提交的不能做提交

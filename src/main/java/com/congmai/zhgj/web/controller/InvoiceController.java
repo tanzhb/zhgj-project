@@ -158,15 +158,11 @@ public class InvoiceController {
     		}else{
     			invoiceService.update(invoice);
     			if("2".equals(invoice.getStatus())){
-    				OrderInfo orderInfo=new OrderInfo();
     				if(StringUtils.isEmpty(invoice.getSupplyComId())){
-    					invoiceService.confirmInvoiceOut(invoice,orderInfo);
-    					//orderInfo.setBillStatus(OrderInfo.BILL);
+    					invoiceService.confirmInvoiceOut(invoice);
     				}else{
-    					invoiceService.confirmInvoiceIn(invoice,orderInfo);
-    					//orderInfo.setBillStatus(OrderInfo.RECIVEBILL);
+    					invoiceService.confirmInvoiceIn(invoice);
     				}
-    				//orderService.updateStatus(orderInfo);
     			}
     		}
     		

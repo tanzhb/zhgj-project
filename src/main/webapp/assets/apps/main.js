@@ -71,7 +71,7 @@ MetronicApp.factory('settings', [ '$rootScope','$q', function($rootScope,$q) {
 	}
 	return settings;
 } ]);
-
+var webSocket;
 /* Setup App Main Controller */
 MetronicApp.controller('AppController', [ '$scope', '$rootScope','$compile',
 		function($scope, $rootScope, $compile) {
@@ -83,7 +83,6 @@ MetronicApp.controller('AppController', [ '$scope', '$rootScope','$compile',
 				WebSocketInit();
 			});
 			
-			var webSocket;
 			function WebSocketInit(){
 				if(!webSocket){
 					if ('WebSocket' in window) {

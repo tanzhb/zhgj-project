@@ -249,6 +249,6 @@ public class ContractServiceImpl extends GenericServiceImpl<ContractVO, String> 
 		oi.setSerialNum(record.getOrderSerial());
 		oi.setPayStatus(OrderInfo.PAYING);//付款中
 		oi.setUpdateTime(new Date());
-		orderService.updateStatus(orderInfo);
+		orderService.updateStatus(oi);
 	}
 }
