@@ -406,7 +406,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 											return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未发布</span>';
 										}
 	                        		}else{
-	                        			return clickhtm + '';
+	                        			return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未审批</span>';
 	                        		}
 									return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:#fcb95b">待审批</span>';
 								}else if(row.status==2){

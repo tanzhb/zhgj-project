@@ -423,23 +423,28 @@
 				<div class="row" style="line-height: 60px;">
 					<div class="col-md-6">
 						<div class="form-group">
-							<label class="control-label col-md-5">电子合同</label> <label
+							<label class="control-label col-md-5">电子合同</label> 
+							<!-- <label
 								class="control-label col-md-7"> <a
 								title="{{contractVO.electronicContract}}"
 								ng-click="download(contractVO.electronicContract)">
 									{{contractVO.electronicContract|limitTo:10}}... </a>
-							</label>
-
+							</label> -->
+							<label ng-if="contractVO.electronicContract==null||contractVO.electronicContract==''" class="c_edit" >未上传附件</label>
+						    <label ng-if="contractVO.electronicContract!=null&&contractVO.electronicContract!=''" class="c_edit" ><a href="javascript:;" ng-click="download(contractVO.electronicContract)">{{contractVO.electronicContract.substring(contractVO.electronicContract.indexOf("_")+1)}}</a></label>
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label class="control-label col-md-5">签字合同</label> <label
+							<label class="control-label col-md-5">签字合同</label> 
+							<!-- <label
 								class="control-label col-md-7"> <a
 								title="{{contractVO.signContract}}"
 								ng-click="download(contractVO.signContract)">
 									{{contractVO.signContract|limitTo:10}}... </a>
-							</label>
+							</label> -->
+							<label ng-if="contractVO.signContract==null||contractVO.signContract==''" class="c_edit" >未上传附件</label>
+						    <label ng-if="contractVO.signContract!=null&&contractVO.signContract!=''" class="c_edit" ><a href="javascript:;" ng-click="download(contractVO.signContract)">{{contractVO.signContract.substring(contractVO.signContract.indexOf("_")+1)}}</a></label>
 
 						</div>
 					</div>
