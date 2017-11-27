@@ -102,7 +102,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		$scope.buyOrder.orderType="自主采购";
             		$scope.buyOrder.tradeType="内贸";
             		$scope.buyOrder.currency="人民币";
-            		$scope.buyOrder.orderDate = timeStamp2String2(new Date())
+            		$scope.buyOrder.orderDate = timeStamp2String2(new Date());
+            		$scope.contract.signDate = timeStamp2String2(new Date());
             		$scope.clauseSettlement = {};
             		$scope.clauseSettlement.otherAmount = 0;
             		$scope.buyOrder.seller ="中航能科（上海）能源科技有限公司";
@@ -220,11 +221,20 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
    $scope.renderDone = function(){
    	var date3= $scope.buyOrder.orderDate;
    	var date4= $scope.buyOrder.makeDate;
-   	var date5= $scope.clauseCheckAccept.playCheckDate
+/*   	var date5 = null;
+   	var date6 = null
+   	if(!isNull($scope.clauseCheckAccept.playCheckDate)){
+   		date5= $scope.clauseCheckAccept.playCheckDate
+   	}
+   	if(!isNull($scope.contract.signDate)){
+   		date6= $scope.contract.signDate
+   	}*/
+   	
    	$scope.datepickerInit();
    	$scope.buyOrder.orderDate = date3;
    	$scope.buyOrder.makeDate = date4;
-   	$scope.clauseCheckAccept.playCheckDate = date5;
+/*   	$scope.clauseCheckAccept.playCheckDate = date5;
+   	$scope.contract.signDate = date6*/
   };
    
    $scope.datepickerInit = function(scope){
@@ -258,7 +268,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	        		    	}*/
 	 	   	    		
 	        		    	$scope.contract.comId = $scope.buyOrder.supplyComId;
-	 	   	    		$scope.contract.signDate = $scope.buyOrder.orderDate;
+//	 	   	    		$scope.contract.signDate = $scope.buyOrder.orderDate;
 	 	   	    		orderService.saveContract($scope.contract).then(
 	 	   	       		     function(data){
 	 	   	       		    	toastr.success('数据保存成功！');
@@ -310,7 +320,9 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     $scope.goContract = function(serialNum){
     	$state.go("userContract",{});
     }
-    
+    $scope.viewGraphTrace = function(processInstanceId){
+    	graphTrace(processInstanceId,ctx);
+    }
     
     var table;
     var tableAjaxUrl = "rest/order/findOrderList?type=buy";
@@ -383,6 +395,19 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 								if(row.status==0){
 									return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  >未开始</span>';
 								}else if(row.status==1){
+									if(row.processBase!=""&&row.processBase!=null){
+	                        			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
+											return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">审核中</span>';
+										}else if(row.processBase.status=="APPROVAL_SUCCESS"){
+											
+										}else if(row.processBase.status=="APPROVAL_FAILED"){
+											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:red">未通过</span>';
+										}else{
+											return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未发布</span>';
+										}
+	                        		}else{
+	                        			return clickhtm + '';
+	                        		}
 									return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:#fcb95b">待审批</span>';
 								}else if(row.status==2){
 									return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已签合同</span>';
@@ -3157,6 +3182,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    			}else{
 		    				$("#tab_1_"+i+"Id").removeClass("active");
 		    				$scope["tab_1_"+i+"Hide"] = true
+		    				if($state.current.name=="viewBuyOrder"||$state.current.name=="submitBuyApply"){//查看不展示
+		    					$scope["tab_1_"+i+"label"] = true
+	          		    	}
 		    			}
 		    		}
 		    	}

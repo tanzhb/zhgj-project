@@ -100,10 +100,10 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
    
    $scope.renderDone = function(){
    	var date3= $scope.buyOrder.orderDate;
-   	var date5= $scope.clauseCheckAccept.playCheckDate
+   /*	var date5= $scope.clauseCheckAccept.playCheckDate*/
    	$scope.datepickerInit();
    	$scope.buyOrder.orderDate = date3;
-   	$scope.clauseCheckAccept.playCheckDate = date5;
+/*   	$scope.clauseCheckAccept.playCheckDate = date5;*/
   };
    
    $scope.datepickerInit = function(scope){
@@ -137,7 +137,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 	        		    	}
 	 	   	    		
 	        		    	$scope.contract.comId = $scope.buyOrder.supplyComId;
-	 	   	    		$scope.contract.signDate = $scope.buyOrder.orderDate;
+	 	   	    		/*$scope.contract.signDate = $scope.buyOrder.orderDate;*/
 	 	   	    		orderService.saveContract($scope.contract).then(
 	 	   	       		     function(data){
 	 	   	       		    	toastr.success('数据保存成功！');
@@ -187,6 +187,9 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
     	$state.go("viewSupplyOrder",{serialNum:serialNum});
     }
     
+    $scope.viewGraphTrace = function(processInstanceId){
+    	graphTrace(processInstanceId,ctx);
+    }
     $scope.supplyConfirmed = function(serialNum){
     	$scope.submitOrder = {}
     	if(isNull(serialNum)){
@@ -337,6 +340,20 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 						if(row.status==0){
 							return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  >未开始</span>';
 						}else if(row.status==1){
+
+							if(row.processBase!=""&&row.processBase!=null){
+                    			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
+									return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">审核中</span>';
+								}else if(row.processBase.status=="APPROVAL_SUCCESS"){
+									
+								}else if(row.processBase.status=="APPROVAL_FAILED"){
+									return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:red">未通过</span>';
+								}else{
+									return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未发布</span>';
+								}
+                    		}else{
+                    			return clickhtm + '';
+                    		}
 							return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:#fcb95b">待审批</span>';
 						}else if(row.status==2){
 							return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已签合同</span>';
@@ -3086,6 +3103,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    			}else{
 		    				$("#tab_1_"+i+"Id").removeClass("active");
 		    				$scope["tab_1_"+i+"Hide"] = true
+		    				if($state.current.name=="viewSupplyOrder"){//查看不展示
+		    					$scope["tab_1_"+i+"label"] = true
+	          		    	}
 		    			}
 		    		}
 		    	}

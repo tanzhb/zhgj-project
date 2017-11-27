@@ -237,6 +237,8 @@
 	contractNum=#{contractNum},
 	contractType=#{contractType},
 	contractNumber=#{contractNumber},
+	electronicContract = #{electronicContract},
+	signDate = #{signDate},
 	updater=#{updater},
 	updateTime=NOW()
 	WHERE

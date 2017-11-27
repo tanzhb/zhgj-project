@@ -225,11 +225,11 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
    $scope.renderDone = function(){
 	   var date3= $scope.buyOrder.orderDate;
 	   	var date4= $scope.buyOrder.makeDate;
-	   	var date5= $scope.clauseCheckAccept.playCheckDate
+	   	/*var date5= $scope.clauseCheckAccept.playCheckDate*/
 	   	$scope.datepickerInit();
 	   	$scope.buyOrder.orderDate = date3;
 	   	$scope.buyOrder.makeDate = date4;
-	   	$scope.clauseCheckAccept.playCheckDate = date5;
+	   	/*$scope.clauseCheckAccept.playCheckDate = date5;*/
 	  };
 	  
    $scope.datepickerInit = function(scope){
@@ -278,7 +278,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
          		         		    		$scope.contract.contractNum = $scope.customerOrder.orderNum;
          		         		    	}
          		  	   	    		$scope.contract.comId = $scope.customerOrder.buyComId;
-         		  	   	    		$scope.contract.signDate = $scope.customerOrder.orderDate;
+//         		  	   	    		$scope.contract.signDate = $scope.customerOrder.orderDate;
          		  	   	    		orderService.saveContract($scope.contract).then(
          		  	   	       		     function(data){
          		  	   	       		    	toastr.success('数据保存成功！');
@@ -336,7 +336,9 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
     $scope.viewCustomerOrder = function(serialNum){
     	$state.go("viewCustomerOrder",{serialNum:serialNum});
     }
-    
+    $scope.viewGraphTrace = function(processInstanceId){
+    	graphTrace(processInstanceId,ctx);
+    }
     var table;
     var tableAjaxUrl = "rest/order/findOrderList?type=buy";
     var loadMainTable = function() {
@@ -3214,6 +3216,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    			}else{
 		    				$("#tab_1_"+i+"Id").removeClass("active");
 		    				$scope["tab_1_"+i+"Hide"] = true
+		    				if($state.current.name=="viewCustomerOrder"||$state.current.name=="submitSaleApply"){//查看不展示
+		    					$scope["tab_1_"+i+"label"] = true
+	          		    	}
 		    			}
 		    		}
 		    	}

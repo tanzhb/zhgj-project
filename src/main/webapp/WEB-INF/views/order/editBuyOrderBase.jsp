@@ -288,6 +288,45 @@ margin-right: 20px;
                                  </div>
                              </div>
                          </div>
+                         <div class="col-md-4">
+                             <div class="form-group ">
+                                <label class="control-label bold">电子合同：</label>
+                                 <div class="">
+                                 		<div ng-hide="buyOrderInput"   ng-if="contract.electronicContract==null||contract.electronicContract==''"  class="fileinput fileinput-new" data-provides="fileinput">
+                                            <span class="btn blue btn-circle btn-file">
+                                                <span class="fileinput-new">上传附件</span>
+                                                <span class="fileinput-exists">更改</span>
+                                                <input type="file" name="electronicContract" nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="contract.electronicContract" ng-click="uploadFile('electronicContract')" > </span>
+                                            <span class="fileinput-filename">{{contract.electronicContract.substring(contract.electronicContract.indexOf("_")+1)}}</span> &nbsp;
+                                            <a href="javascript：;" class="close fileinput-exists" ng-click="removefile('electronicContract')" data-dismiss="fileinput"> </a>
+                                        </div>
+                                        <div ng-hide="buyOrderInput"   ng-if="contract.electronicContract!=null&&contract.electronicContract!=''"  class="fileinput fileinput-exists" data-provides="fileinput">
+                                            <span class="btn blue btn-circle btn-file">
+                                                <span class="fileinput-new">上传附件</span>
+                                                <span class="fileinput-exists">更改</span>
+                                                <input type="file" name="electronicContract" nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="contract.electronicContract" ng-click="uploadFile('electronicContract')" > </span>
+                                            <span class="fileinput-filename">{{contract.electronicContract.substring(contract.electronicContract.indexOf("_")+1)}}</span> &nbsp;
+                                            <a href="javascript：;" class="close fileinput-exists"  ng-click="removefile('electronicContract')" data-dismiss="fileinput"> </a>
+                                        </div>
+                                      	<p class="form-control-static"  id="noFileFlag" ng-show="buyOrderShow" ng-if="contract.electronicContract==null||contract.electronicContract==''" class="c_edit" >未上传附件</p>
+                                      	<p class="form-control-static"  ng-show="buyOrderShow" ng-if="contract.electronicContract!=null&&contract.electronicContract!=''" class="c_edit" ><a href="javascript：;" ng-click="downloadFile(contract.electronicContract)">{{contract.electronicContract.substring(contract.electronicContract.indexOf("_")+1)}}</a></p>
+                                 </div>
+                             </div>
+                         </div>
+                    </div>
+					<div class="row">
+                         <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label bold">合同签订日期：</label>
+                                 <div class="">
+                                 		<input type="text" class="form-control form-control-inline input-medium date-picker" 
+                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-model="contract.signDate" ng-hide="buyOrderInput"  id="signDate" name="signDate"/>
+									<div class="form-control-focus"> </div>
+									<span class="help-block" ng-hide="buyOrderInput">请选择签订日期</span>
+                                     <p class="form-control-static" ng-show="buyOrderShow"> {{contract.signDate}} </p>
+                                 </div>
+                             </div>
+                         </div>
                           <div class="col-md-4">
                              <div class="form-group ">
                                 <label class="control-label bold">备注：</label>
@@ -416,6 +455,43 @@ margin-right: 20px;
                          </div>
                      </div>
                      <div class="row">
+                     	<div class="col-md-4">
+                             <div class="form-group ">
+                                <label class="control-label bold">电子合同：</label>
+                                 <div class="">
+                                 		<div ng-hide="buyOrderInput"   ng-if="contract.electronicContract==null||contract.electronicContract==''"  class="fileinput fileinput-new" data-provides="fileinput">
+                                            <span class="btn blue btn-circle btn-file">
+                                                <span class="fileinput-new">上传附件</span>
+                                                <span class="fileinput-exists">更改</span>
+                                                <input type="file" name="electronicContract" nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="contract.electronicContract" ng-click="uploadFile('electronicContract')" > </span>
+                                            <span class="fileinput-filename">{{contract.electronicContract.substring(contract.electronicContract.indexOf("_")+1)}}</span> &nbsp;
+                                            <a href="javascript：;" class="close fileinput-exists" ng-click="removefile('electronicContract')" data-dismiss="fileinput"> </a>
+                                        </div>
+                                        <div ng-hide="buyOrderInput"   ng-if="contract.electronicContract!=null&&contract.electronicContract!=''"  class="fileinput fileinput-exists" data-provides="fileinput">
+                                            <span class="btn blue btn-circle btn-file">
+                                                <span class="fileinput-new">上传附件</span>
+                                                <span class="fileinput-exists">更改</span>
+                                                <input type="file" name="electronicContract" nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="contract.electronicContract" ng-click="uploadFile('electronicContract')" > </span>
+                                            <span class="fileinput-filename">{{contract.electronicContract.substring(contract.electronicContract.indexOf("_")+1)}}</span> &nbsp;
+                                            <a href="javascript：;" class="close fileinput-exists"  ng-click="removefile('electronicContract')" data-dismiss="fileinput"> </a>
+                                        </div>
+                                      	<p class="form-control-static"  id="noFileFlag" ng-show="buyOrderShow" ng-if="contract.electronicContract==null||contract.electronicContract==''" class="c_edit" >未上传附件</p>
+                                      	<p class="form-control-static"  ng-show="buyOrderShow" ng-if="contract.electronicContract!=null&&contract.electronicContract!=''" class="c_edit" ><a href="javascript：;" ng-click="downloadFile(contract.electronicContract)">{{contract.electronicContract.substring(contract.electronicContract.indexOf("_")+1)}}</a></p>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label bold">合同签订日期：</label>
+                                 <div class="">
+                                 		<input type="text" class="form-control form-control-inline input-medium date-picker" 
+                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-model="contract.signDate" ng-hide="buyOrderInput"  id="signDate" name="signDate"/>
+									<div class="form-control-focus"> </div>
+									<span class="help-block" ng-hide="buyOrderInput">请选择签订日期</span>
+                                     <p class="form-control-static" ng-show="buyOrderShow"> {{contract.signDate}} </p>
+                                 </div>
+                             </div>
+                         </div>
                          <!--/span-->
                          <div class="col-md-4">
                              <div class="form-group ">
@@ -580,6 +656,45 @@ margin-right: 20px;
                                      <div class="form-control-focus"> </div>
                                      <span class="help-block" ng-hide="buyOrderInput">请输入合同号</span>
                                      <p class="form-control-static" ng-show="buyOrderShow"> {{contract.contractNum}} </p>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="col-md-4">
+                             <div class="form-group ">
+                                <label class="control-label bold">电子合同：</label>
+                                 <div class="">
+                                 		<div ng-hide="buyOrderInput"   ng-if="contract.electronicContract==null||contract.electronicContract==''"  class="fileinput fileinput-new" data-provides="fileinput">
+                                            <span class="btn blue btn-circle btn-file">
+                                                <span class="fileinput-new">上传附件</span>
+                                                <span class="fileinput-exists">更改</span>
+                                                <input type="file" name="electronicContract" nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="contract.electronicContract" ng-click="uploadFile('electronicContract')" > </span>
+                                            <span class="fileinput-filename">{{contract.electronicContract.substring(contract.electronicContract.indexOf("_")+1)}}</span> &nbsp;
+                                            <a href="javascript：;" class="close fileinput-exists" ng-click="removefile('electronicContract')" data-dismiss="fileinput"> </a>
+                                        </div>
+                                        <div ng-hide="buyOrderInput"   ng-if="contract.electronicContract!=null&&contract.electronicContract!=''"  class="fileinput fileinput-exists" data-provides="fileinput">
+                                            <span class="btn blue btn-circle btn-file">
+                                                <span class="fileinput-new">上传附件</span>
+                                                <span class="fileinput-exists">更改</span>
+                                                <input type="file" name="electronicContract" nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="contract.electronicContract" ng-click="uploadFile('electronicContract')" > </span>
+                                            <span class="fileinput-filename">{{contract.electronicContract.substring(contract.electronicContract.indexOf("_")+1)}}</span> &nbsp;
+                                            <a href="javascript：;" class="close fileinput-exists"  ng-click="removefile('electronicContract')" data-dismiss="fileinput"> </a>
+                                        </div>
+                                      	<p class="form-control-static"  id="noFileFlag" ng-show="buyOrderShow" ng-if="contract.electronicContract==null||contract.electronicContract==''" class="c_edit" >未上传附件</p>
+                                      	<p class="form-control-static"  ng-show="buyOrderShow" ng-if="contract.electronicContract!=null&&contract.electronicContract!=''" class="c_edit" ><a href="javascript：;" ng-click="downloadFile(contract.electronicContract)">{{contract.electronicContract.substring(contract.electronicContract.indexOf("_")+1)}}</a></p>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                     <div class="row">
+                         <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label bold">合同签订日期：</label>
+                                 <div class="">
+                                 		<input type="text" class="form-control form-control-inline input-medium date-picker" 
+                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-model="contract.signDate" ng-hide="buyOrderInput"  id="signDate" name="signDate"/>
+									<div class="form-control-focus"> </div>
+									<span class="help-block" ng-hide="buyOrderInput">请选择签订日期</span>
+                                     <p class="form-control-static" ng-show="buyOrderShow"> {{contract.signDate}} </p>
                                  </div>
                              </div>
                          </div>
@@ -1290,7 +1405,7 @@ margin-right: 20px;
                                  <label class="control-label bold">预约检验日期：</label>
                                  <div class="">
                                  <input type="text" name="playCheckDate" class="form-control form-control-inline input-medium date-picker" 
-                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="clauseCheckAcceptInput" ng-model="clauseCheckAccept.playCheckDate" repeat-done="renderDone()" >
+                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="clauseCheckAcceptInput" ng-model="clauseCheckAccept.playCheckDate" >
                                      <div class="form-control-focus"> </div>
                                      <span class="help-block" ng-hide="clauseCheckAcceptInput">请选择预约检验日期</span>
                                      <p class="form-control-static" ng-show="clauseCheckAcceptShow"> {{clauseCheckAccept.playCheckDate}} </p>
