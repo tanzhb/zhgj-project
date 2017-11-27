@@ -20,7 +20,7 @@
 	<div class="col-md-12">
 	        <div class="portlet light">
 	            <div class="portlet-body">
-	                <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_2">
+	                <table class="table table-striped table-bordered table-hover table-checkable order-column" style="text-align: center" id="sample_2">
 	                    <thead>
 	                        <tr>
 	                            <th>
@@ -38,7 +38,7 @@
 	                            <th> 关联销售合同 </th>
 	                            <th> 关联采购单 </th>
 	                            <th> 下单日期 </th>
-	                            <th> 状态 </th>
+	                            <!-- <th> 状态 </th> -->
 	                            <th> 操作 </th>
 	                        </tr>
 	                    </thead>
@@ -276,3 +276,4 @@
          <!-- 发货计划---end -->
  </div>
  </div>
+<jsp:include  page="viewOperateLog.jsp"/>

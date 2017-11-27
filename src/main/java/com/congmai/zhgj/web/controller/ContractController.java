@@ -318,11 +318,30 @@ public class ContractController {
 	 * @return
 	 */
 	public String uploadFile(MultipartFile file){
-		String filePath = env.getProperty("upload_path");
+		/*String filePath = env.getProperty("upload_path");
 		String randomName=UUID.randomUUID().toString().toUpperCase().replaceAll("-", ""); 
 		String fileName = fileUp(file, filePath,randomName);
-		System.out.println(fileName);
-		return fileName;
+		System.out.println(fileName);*/
+		
+		String filename = "";
+		try {
+			String path = env.getProperty("upload_path");
+			String fileName = file.getOriginalFilename();
+			/*String prefix = "." + fileName.substring(fileName.lastIndexOf(".") + 1);*/
+			filename = ApplicationUtils.random32UUID() +"_"+ fileName;
+			File dst = null;
+			File uploadDir = new File(path); // 创建上传目录
+			if (!uploadDir.exists()) {
+				uploadDir.mkdirs(); // 如果不存在则创建upload目录
+			}
+			dst = new File(uploadDir,filename); // 创建一个指向upload目录下的文件对象，文件名随机生成
+			file.transferTo(dst); // 创建文件并将上传文件复制过去
+			System.out.println("上传文件----------"+filename);
+		} catch (Exception e) {
+			System.out.println("文件上传失败----------"+filename+"-------Exception:"+e.getMessage());
+			filename="";
+		}
+		return filename;
 	}
 
 

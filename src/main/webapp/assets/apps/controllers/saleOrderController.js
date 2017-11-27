@@ -91,6 +91,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
             		});
             		$scope.contract={};
             		$scope.clauseSettlement = {};
+            		$scope.clauseSettlement.otherAmount = 0;
             		$scope.saleOrder.seller ="中航能科（上海）能源科技有限公司";
             		
             		$scope.contract.contractType="销售合同";
@@ -200,11 +201,11 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
    $scope.renderDone = function(){
 	   var date3= $scope.buyOrder.orderDate;
 	   	var date4= $scope.buyOrder.makeDate;
-	   	var date5= $scope.clauseCheckAccept.playCheckDate
+	   /*	var date5= $scope.clauseCheckAccept.playCheckDate*/
 	   	$scope.datepickerInit();
 	   	$scope.buyOrder.orderDate = date3;
 	   	$scope.buyOrder.makeDate = date4;
-	   	$scope.clauseCheckAccept.playCheckDate = date5;
+	   	/*$scope.clauseCheckAccept.playCheckDate = date5;*/
 	  };
 	  
    $scope.datepickerInit = function(scope){
@@ -241,7 +242,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
          		         		    		$scope.contract.contractNum = $scope.saleOrder.orderNum;
          		         		    	}
          		  	   	    		$scope.contract.comId = $scope.saleOrder.buyComId;
-         		  	   	    		$scope.contract.signDate = $scope.saleOrder.orderDate;
+//         		  	   	    		$scope.contract.signDate = $scope.saleOrder.orderDate;
          		  	   	    		orderService.saveContract($scope.contract).then(
          		  	   	       		     function(data){
          		  	   	       		    	toastr.success('数据保存成功！');
@@ -300,6 +301,12 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     	$state.go("viewSaleOrder",{serialNum:serialNum});
     }
     
+    $scope.goContract = function(serialNum){
+    	$state.go("userContract",{});
+    }
+    $scope.viewGraphTrace = function(processInstanceId){
+    	graphTrace(processInstanceId,ctx);
+    }
     var table;
     var tableAjaxUrl = "rest/order/findOrderList?type=sale&selectFor=platformOrder";
     var loadMainTable = function() {
@@ -446,7 +453,17 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 							'targets' : 2,
 							'render' : function(data,
 									type, row, meta) {
-								var htm = (data==null?'':data)+'</br>'
+								var htm = (data==null?'':data);
+								return htm;
+							},
+							"createdCell": function (td, cellData, rowData, row, col) {
+								 $compile(td)($scope);
+						       }
+						},{
+							'targets' : 3,
+							'render' : function(data,
+									type, row, meta) {
+								var htm = (isNull(data)?'0':data)+'</br>'
                     			if(row.deliverStatus=="0"||row.deliverStatus==null){
                     				if(row.status==2){
 										return htm + '<span >待发货</span>';
@@ -488,7 +505,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 							'targets' : 4,
 							'render' : function(data,
 									type, row, meta) {
-								var htm = (data==null?'':data)+'</br>'
+								var htm = (isNull(data)?'0':data)+'</br>'
 
                     			if(row.payStatus=="0"){
                     				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">付款中</span>';
@@ -510,14 +527,39 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 								 $compile(td)($scope);
 						       }
 						}, {
+							'targets' : 5,
+							'render' : function(data,
+									type, row, meta) {
+								return data +'</br>' + row.tradeType;
+							}
+						}, {
 							'targets' : 6,
 							'render' : function(data,
 									type, row, meta) {
 								if(isNull(row.contract)){
 									return ""
 								}else{
-									return row.contract.contractNum
+									return '<a href="javascript:void(0);" ng-click="goContract()">'+row.contract.contractNum+'</a>' 
 								}
+							},
+							"createdCell": function (td, cellData, rowData, row, col) {
+								 $compile(td)($scope);
+						       }
+						}, {
+							'targets' : 7,
+							'render' : function(data,
+									type, row, meta) {
+								if(isNull(data)){
+									return "--"
+								}else{
+									return data
+								}
+							}
+						}, {
+							'targets' : 8,
+							'render' : function(data,
+									type, row, meta) {
+								return data +'</br>' + row.maker;
 							}
 						} ]
 
@@ -994,7 +1036,9 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
           		    	}else{
           		    		$scope.clauseSettlement = {}
           		    	}
-          		    	
+          		    	if(isNull($scope.clauseSettlement.otherAmount)){
+          		    		$scope.clauseSettlement.otherAmount = 0;
+          		    	}
           		    	if($scope.saleOrder.status==1){//已提交的不能做提交
 //          		    		$scope.cancelOrderStatus();
           		    	}
@@ -3161,6 +3205,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    			}else{
 		    				$("#tab_1_"+i+"Id").removeClass("active");
 		    				$scope["tab_1_"+i+"Hide"] = true
+		    				if($state.current.name=="viewSaleOrder"||$state.current.name=="submitSaleApply"){//查看不展示
+		    					$scope["tab_1_"+i+"label"] = true
+	          		    	}
 		    			}
 		    		}
 		    	}

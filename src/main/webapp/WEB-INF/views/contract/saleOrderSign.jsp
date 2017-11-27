@@ -238,12 +238,14 @@
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<div class="input-icon right">
-															<input type="text" class="form-control"
+															<!-- <input type="text" class="form-control"
 																ng-model="contractVO.electronicContract" readonly
 																ng-hide="true"> <a
 																title="{{contractVO.electronicContract}}"
 																ng-click="download(contractVO.electronicContract)">
-																{{contractVO.electronicContract}} </a>
+																{{contractVO.electronicContract}} </a> -->
+															<label ng-if="contractVO.electronicContract==null||contractVO.electronicContract==''" class="c_edit" >未上传附件</label>
+						                                     <label ng-if="contractVO.electronicContract!=null&&contractVO.electronicContract!=''" class="c_edit" ><a href="javascript:;" ng-click="download(contractVO.electronicContract)">{{contractVO.electronicContract.substring(contractVO.electronicContract.indexOf("_")+1)}}</a></label>
 														</div>
 													</div>
 												</div>

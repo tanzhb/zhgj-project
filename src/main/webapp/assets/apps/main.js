@@ -71,7 +71,7 @@ MetronicApp.factory('settings', [ '$rootScope','$q', function($rootScope,$q) {
 	}
 	return settings;
 } ]);
-
+var webSocket;
 /* Setup App Main Controller */
 MetronicApp.controller('AppController', [ '$scope', '$rootScope','$compile',
 		function($scope, $rootScope, $compile) {
@@ -83,7 +83,6 @@ MetronicApp.controller('AppController', [ '$scope', '$rootScope','$compile',
 				WebSocketInit();
 			});
 			
-			var webSocket;
 			function WebSocketInit(){
 				if(!webSocket){
 					if ('WebSocket' in window) {
@@ -634,7 +633,17 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/CommonService.js',
 				'assets/apps/controllers/customerOrderController.js',
 				 'assets/apps/service/TakeDeliveryService.js',
-				 'assets/apps/service/DeliveryService.js'
+				 'assets/apps/service/DeliveryService.js',
+				 
+				//流程申请
+					'assets/global/css/dialog.css',
+					'assets/global/css/easyui.css',
+					'assets/global/css/datagrid.css',
+					'assets/global/css/jquery.qtip.min.css',
+		         
+					'assets/global/plugins/jquery.easyui.min.js',
+					'assets/global/plugins/jquery.qtip.min.js',
+					'assets/global/plugins/jquery.outerhtml.js'
                       ]
                     });
                 }]
@@ -887,7 +896,17 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/service/materielService.js',
 				 'assets/apps/service/TakeDeliveryService.js',
 	        	'assets/apps/service/orderService.js',
-				'assets/apps/controllers/buyOrderController.js'
+				'assets/apps/controllers/buyOrderController.js',
+	        	
+	        	//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
                       ]
                     });
                 }]
@@ -915,7 +934,17 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/orderService.js',
 	        	'assets/apps/service/CommonService.js',
 	        	'assets/apps/service/DeliveryService.js',
-				'assets/apps/controllers/saleOrderController.js'
+				'assets/apps/controllers/saleOrderController.js',
+	        	
+	        	//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
                       ]
                     });
                 }]
@@ -943,7 +972,16 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/service/materielService.js',
 	        	'assets/apps/service/orderService.js',
 	        	'assets/apps/service/DeliveryService.js',
-				'assets/apps/controllers/supplyOrderController.js'
+				'assets/apps/controllers/supplyOrderController.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
                       ]
                     });
                 }]
@@ -3107,7 +3145,14 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         }]);
 
 
-
+//禁止模板缓存  
+MetronicApp.run(function($rootScope, $templateCache) {  
+    $rootScope.$on('$routeChangeStart', function(event, next, current) {  
+        if (typeof(current) !== 'undefined'){  
+            $templateCache.remove(current.templateUrl);  
+        }  
+    });  
+}); 
 //js获取项目根路径，如： http://localhost:8083/uimcardprj
 function getRootPath(){
     //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
@@ -3129,6 +3174,8 @@ MetronicApp.run([ "$rootScope", "settings", "$state",
 			$rootScope.$settings = settings; // state to be accessed from
 												// view
 		} ]);
+
+
 
 MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$http', '$q', function ($rootScope, $window, $location, $log, $compile, $http, $q) {
 	//路由转换成功后
