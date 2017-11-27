@@ -42,6 +42,7 @@
     <association column="warehouseSerial" property="warehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>
     <association column="stockInPositionSerial" property="stockInPosition" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectPositionByPositionSerial" ></association>
     <association column="positionSerial" property="position" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectPositionByPositionSerial" ></association>
+    <association column="serialNum" property="stockInBatchs" select="com.congmai.zhgj.web.dao.StockOutBatchMapper.selectStockInBatchBySerialNum" ></association><!--  根据发货物料取出批次相关入库批次详情-->
     <association column="serialNum" property="stockOutMateriels" select="com.congmai.zhgj.web.dao.StockOutBatchMapper.selectStockOutBatchBySerialNum" ></association><!--  根据发货物料取出批次相关出库批次详情-->
      <association column="serialNum" property="inOutNums" select="com.congmai.zhgj.web.dao.StockOutBatchMapper.selectInOutNumsBySerialNum" ></association>
   </resultMap>

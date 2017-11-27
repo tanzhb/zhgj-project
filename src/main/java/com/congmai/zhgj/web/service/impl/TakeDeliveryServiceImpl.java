@@ -509,12 +509,11 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			
 			//更新入库记录
 			record.setUpdater(currenLoginName);
-			record.setStatus("1");//入库完成
 			record.setUpdateTime(new Date());
 			StockInOutRecordExample example = new StockInOutRecordExample();
 			example.createCriteria().andSerialNumEqualTo(record.getSerialNum());
 			stockInOutRecordMapper.updateByExampleSelective(record, example);
-		
+		if("1".equals(record.getStatus())){
 			//入库完成状态处理
 			stockInEndHandle(old_delivery.getOrderSerial(),takeDeliverySerial,currenLoginName);		
 			
@@ -522,7 +521,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			String orderString = old_delivery.getOrderSerial();
 			String nodeString = ClauseSettlementDetail.RKH;
 			contractService.findPaymentNode(orderString, nodeString);	
-				
+		}	
 		}else{
 			//获取更新前的发货id
 			StockInOutRecord stockInOutRecord = stockInOutRecordMapper.selectByPrimaryKey(record.getSerialNum());
@@ -561,8 +560,9 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 					stockInBatchMapper.insert(s);
 				}
 			}
-			
+			if("1".equals(record.getStatus())){
 			createStock(materiel,new StockExample(),currenLoginName);
+			}
 		}
 		
 		

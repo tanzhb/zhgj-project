@@ -82,44 +82,59 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="inOutType">出库类型 <span class="required"> * </span></label>
 	                                                 <div class="">
-	                                                 	<select class="form-control" id="inOutType" name="inOutType" ng-init="record.inOutType='贸易'"  ng-model="record.inOutType"   data-size="8">
-			                                                   <option value="贸易" selected="selected" >贸易</option>
+	                                                 	<select class="form-control" id="inOutType" name="inOutType" ng-init="record.inOutType='销售'"  ng-model="record.inOutType"   data-size="8">
+			                                                  <option value="销售">销售</option>
+			                                                    <option value="备品备件">备品备件</option>
+			                                                     <option value="退货">退货</option>
+			                                                      <option value="生产">生产</option>
 			                                             </select> 
                                                      </div>
                                                      <div class="form-control-focus"> </div>
                                             </div>
 										</div>
 										<!--/span-->
-										
 										<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="stockDate">出库日期 <span class="required"> * </span></label>
+                                                    <div class="">
+                                                       <input type="text" class="form-control  date-picker" size="16"  data-date-format="yyyy-mm-dd" data-date-viewmode="years"
+                                                         id="stockDate"  name="stockDate" ng-model="record.stockDate" ng-hide="deliverAdd" readonly="readonly">
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="deliverView">{{record.stockDate}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<!-- <div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="deliverSerial">发货单号 <span class="required"> * </span></label>
                                                      <input id="deliverSerial"   name="deliverSerial" type="text" class="form-control" ng-model="record.deliverNum" disabled="disabled">
                                                      <div class="form-control-focus"> </div>
                                             </div>
-										</div>
+										</div> -->
 										<!--/span-->
 										
 									</div>
 									<!--/row-->
 									<div class="row">
-										<div class="col-md-4">
+										<!-- <div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="orderSerial"> 采购订单号</label>
                                                     <div class="">
                                                     		<input type="text" class="form-control" value="{{record.orderNum}}" disabled="disabled">
-                                                         <!-- <p class="control-label left" >{{record.orderNum}}</p> -->
+                                                         <p class="control-label left" >{{record.orderNum}}</p>
                                                     </div>
                                             </div>
-										</div>
+										</div> -->
 										<!--/span-->
 										
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="supplyComId"> 出库仓库</label>
                                                     <div class="">
-                                                    	<input type="text" class="form-control" value="{{warehouseCount}}" disabled="disabled">
-                                                      <!--    <p class="control-label left" >{{warehouseCount}}</p> -->
+                                                    	<!-- <input type="text" class="form-control"   ng-model="record.outWarehouseName"  disabled="disabled"> -->
+                                                    	<input type="text" class="form-control"   ng-if="record.takeDeliverSerial!=''"  value="{{deliver.takeDelivery.warehouse.warehouseName}}" disabled="disabled">
+                                                    		<input type="text" class="form-control"     value="{{deliver.deliveryWarehouseName}}" disabled="disabled">
+                                                      <p class="control-label left"   ng-show="deliverView">{{record.outWarehouseName}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -136,31 +151,68 @@
 										/span -->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="stockDate">出库日期 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="stockDate">出库数量 </label>
                                                     <div class="">
-                                                       <input type="text" class="form-control  date-picker" size="16"  data-date-format="yyyy-mm-dd" data-date-viewmode="years"
-                                                         id="stockDate"  name="stockDate" ng-model="record.stockDate" ng-hide="deliverAdd" readonly="readonly">
+                                                       <input type="text" class="form-control"   ng-model="record.outCount"  disabled="disabled">
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{record.stockDate}}</p>
+                                                         <p class="control-label left" ng-show="deliverView">{{record.outCount}}</p>
                                                     </div>
                                             </div>
 										</div>
+										<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">包装类型</label>
+													<div class="">
+														<select class="form-control" id="packageType"
+															name="packageType" ng-model="delivery.packageType"
+															ng-hide="deliverAdd"><!--ng-init="delivery.deliverType='贸易发货'"  -->
+															<option   value=""></option>
+															<option   value="原厂包装">原厂包装</option>
+															<option value="供应商包装">供应商包装</option>
+															<option value="其他类型">其他类型</option>
+														</select>
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-show="deliverView">
+															{{record.packageType}}</p>
+													</div>
+												</div>
+											</div>
 										<!--/span-->
 									</div>
 									<!--/row-->
 									<div class="row">
 										
-										<div class="col-md-4">
+										<!-- <div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="operator">收货方 <span class="required"> * </span></label>
                                                     <div class="">
                                                        <input type="text" class="form-control" value="{{record.shipperOrReceiver}}" disabled="disabled">
                                                     </div>
                                             </div>
-										</div>
+										</div> -->
 										<!--/span-->
-										
 										<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="packageSpecifications">包装规格</label>
+                                                    <div class="">
+                                                         <input type="text" class="form-control" id="packageSpecifications"  name="packageSpecifications" ng-model="record.packageSpecifications" ng-hide="deliverAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="deliverView">{{record.packageSpecifications}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="remark">包装件数</label>
+                                                    <div class="">
+                                                         <input type="text" class="form-control" id="packageCount"  name="packageCount" ng-model="record.packageCount"   ng-hide="deliverAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="deliverView">{{record.packageCount}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+										
 											<div class="form-group">
                                                     <label class="control-label bold" for="operator">操作员 <span class="required"> * </span></label>
                                                     <div class="">
@@ -172,7 +224,12 @@
 										</div>
 						
 										<!--/span-->
-										<div class="col-md-4">
+										
+										<!--/span-->
+									</div>
+									<!--/row-->
+									<div class="row">
+									<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="contactNum">联系方式 </label>
                                                     <div class="">
@@ -182,10 +239,6 @@
                                                     </div>
                                             </div>
 										</div>
-										<!--/span-->
-									</div>
-									<!--/row-->
-									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="remark">备注</label>

@@ -90,18 +90,18 @@
 															data-set="#takeDeliveryTable .checkboxes" /> <span></span>
 													</label></th>
 													<!-- <th>收货单编号</th> -->
-													<th>发货单编号</th>
-													<th>订单编号</th>
-													<th>发货方</th>
-													<th>物料</th>
+													<th>入库计划号</th>
+													<th>入库类型</th>
+													<th>关联采购单号</th>
+													<th>供应商</th>
 													<th>包装数量</th>
-													<th>使用包装</th>
-													<th>发货地点</th>
+													<th>物料数量</th>
 													<th>发货日期</th>
 													<th>运输方式</th>
-													<th>收货/提货点</th>
+													<th>发货/提货地址</th>
 													<th>备注</th>
 													<th>状态</th>
+													<th>操作</th>
 												</tr>
 											</thead>
 											<tbody>

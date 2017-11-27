@@ -569,7 +569,212 @@
 											</div>
 											<!--/span-->
 										</div>
+									<!-- 	<div class="row" ng-if="oprateType==null||oprateType==''">
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="inOutNum"> 入库单号：</label>
+                                                    <div class="col-md-8">
+                                                         <p class="control-label left" >{{stockInOutRecord.inOutNum}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										/span
 										
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="inOutType">入库类型 ：</label>
+	                                                 <div class="col-md-8">
+			                                              <p class="control-label left" >{{stockInOutRecord.inOutType}}</p>
+                                                     </div>
+                                            </div>
+										</div>
+										/span
+										
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input" ng-if="record.inOutType=='贸易'">
+                                                    <label class="col-md-4 control-label" for="takeDeliverSerial"> 收货单号：</label>
+                                                    <div class="col-md-8">
+                                                         <p class="control-label left" >{{record.delivery.takeDelivery.takeDeliverNum}}</p>
+                                                    </div>
+                                            </div>
+											<div class="form-group form-md-line-input" ng-if="record.inOutType!='贸易'">
+                                                    <label class="col-md-4 control-label" for="docNum"> 关联单据号：</label>
+                                                    <div class="col-md-8">
+                                                         <p class="control-label left" >{{record.docNum}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+										<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="inOutType">入库日期  ：</label>
+	                                                 <div class="col-md-8">
+			                                              <p class="control-label left" >{{stockInOutRecord.stockDate}}</p>
+                                                     </div>
+                                            </div>
+											
+										</div>
+										/span
+										
+									</div> -->
+									<!--/row-->
+									<div class="row"    ng-if="oprateType==undefined">
+									
+										
+										<div class="col-md-4">
+										<div class="form-group">
+													<label class="control-label bold">入库单号</label>
+													<div class="">
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-hide="span">
+															{{stockInOutRecord.inOutNum}}</p>
+													</div>
+
+												</div>
+                                            
+										</div>
+										<div class="col-md-4">
+										<div class="form-group">
+													<label class="control-label bold">入库类型</label>
+													<div class="">
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-hide="span">
+															{{stockInOutRecord.inOutType}}</p>
+													</div>
+
+												</div>
+                                            
+										</div>
+										<div class="col-md-4">
+										<div class="form-group">
+													<label class="control-label bold">入库日期</label>
+													<div class="">
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-hide="span">
+															{{stockInOutRecord.stockDate}}</p>
+													</div>
+
+												</div>
+                                            
+										</div>
+										
+										
+									</div>
+									<!--/row-->
+									<div class="row"   ng-if="oprateType==undefined">
+										<div class="col-md-4">
+										<div class="form-group">
+													<label class="control-label bold">入库仓库</label>
+													<div class="">
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-hide="span">
+															{{stockInOutRecord.inWarehouseName}}</p>
+													</div>
+
+												</div>
+                                            
+										</div>
+							<div class="col-md-4">
+							<div class="form-group">
+													<label class="control-label bold">入库数量</label>
+													<div class="">
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-hide="span">
+															{{stockInOutRecord.inCount}}</p>
+													</div>
+												</div>
+										</div>
+										<div class="col-md-4">
+										
+                                            <div class="form-group">
+													<label class="control-label bold">包装类型</label>
+													<div class="">
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-hide="span">
+															{{stockInOutRecord.packageType}}</p>
+													</div>
+												</div>
+											</div>
+										
+						
+										<!--/span-->
+									
+										<!--/span-->
+									</div>
+									<!--/row-->
+									<div class="row"   ng-if="oprateType==undefined">
+									<div class="col-md-4">
+									
+                                                  <div class="form-group">
+													<label class="control-label bold">包装规格</label>
+													<div class="">
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-hide="span">
+															{{stockInOutRecord.packageSpecifications}}</p>
+													</div>
+												</div>
+                                            
+										</div>
+										<div class="col-md-4">
+										
+											<div class="form-group">
+													<label class="control-label bold">包装件数</label>
+													<div class="">
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-hide="span">
+															{{stockInOutRecord.packageCount}}</p>
+													</div>
+												</div>
+										</div>
+										<div class="col-md-4">
+										
+                                            <div class="form-group">
+													<label class="control-label bold">操作员</label>
+													<div class="">
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-hide="span">
+															{{stockInOutRecord.operator}}</p>
+													</div>
+												</div>
+										</div>
+										<div class="col-md-4">
+											
+                                            <div class="form-group">
+													<label class="control-label bold">联系方式</label>
+													<div class="">
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-hide="span">
+															{{stockInOutRecord.contactNum}}</p>
+													</div>
+												</div>
+										</div>
+										<div class="col-md-4">
+										
+											   <div class="form-group">
+													<label class="control-label bold">备注</label>
+													<div class="">
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-hide="span">
+															{{stockInOutRecord.remark}}</p>
+													</div>
+												</div>
+										</div>
+										<!--/span-->
+										<div class="col-md-4">
+										<div class="form-group">
+													<label class="control-label bold">状态</label>
+													<div class="">
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" >
+														<span ng-if="stockInOutRecord.status==0"  class="label label-sm label-warning ng-scope">待入库</span>
+														<span ng-if="stockInOutRecord.status==1" class="label label-sm label-success ng-scope">已入库</span>
+															</p>
+															
+													</div>
+												</div>
+											
+										</div>
+										<!--/span-->
+									</div>
 										<!-- <div class="row">
 											<div class="col-md-4">
 												<div class="form-group">

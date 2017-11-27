@@ -184,6 +184,11 @@ public class DeliveryVO extends BaseVO implements Serializable{
 	 
 	//发货数量合计
 		private String materielTotalCount;
+		private String inOutSerial;// 出入库计划列表出入库计划流水
+		private String inOutNum;// 出入库计划列表出入库计划单号
+		private String inOutType;// 出入库计划列表出入库类型
+		private String inOutRemark;// 出入库计划列表备注
+		private String inOutPackageCount;// 出入库计划列表包装数量
 	  
 	
 	  //0：待发货；3：待收货；4：已收货；5：部分收货'
@@ -678,6 +683,46 @@ public class DeliveryVO extends BaseVO implements Serializable{
 
 	public void setMaterielTotalCount(String materielTotalCount) {
 		this.materielTotalCount = materielTotalCount;
+	}
+
+	public String getInOutSerial() {
+		return inOutSerial;
+	}
+
+	public void setInOutSerial(String inOutSerial) {
+		this.inOutSerial = inOutSerial;
+	}
+
+	public String getInOutNum() {
+		return inOutNum;
+	}
+
+	public void setInOutNum(String inOutNum) {
+		this.inOutNum = inOutNum;
+	}
+
+	public String getInOutType() {
+		return inOutType;
+	}
+
+	public void setInOutType(String inOutType) {
+		this.inOutType = inOutType;
+	}
+
+	public String getInOutRemark() {
+		return inOutRemark;
+	}
+
+	public void setInOutRemark(String inOutRemark) {
+		this.inOutRemark = inOutRemark;
+	}
+
+	public String getInOutPackageCount() {
+		return inOutPackageCount;
+	}
+
+	public void setInOutPackageCount(String inOutPackageCount) {
+		this.inOutPackageCount = inOutPackageCount;
 	}
 
 /*	public String getBusinessType() {

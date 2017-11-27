@@ -3776,13 +3776,11 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
                                 { mData: 'shipper' },
                                 //{ mData: 'materielCount' },物料条目数
 		                          { mData: 'materielTotalCount' },//物料总数
-                                { mData: 'packageCount' },
                                 { mData: 'packageType' },
-                                { mData: 'warehouse' },
+                                { mData: 'deliverAddress' },
                                 { mData: 'deliverDate' },
-                                { mData: 'deliveryTransport.transportType' },
-                                { mData: 'takeDelivery.warehouse.address' },
-                                { mData: 'takeDelivery.remark' },
+                                { mData: 'deliveryTransport' },
+                                { mData: 'status' },
                                 { mData: 'status' }
                           ],
                  'aoColumnDefs' : [ {
@@ -3831,47 +3829,17 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	
   							}
   						},{
-  							'targets' :7,
+  							'targets' :8,
   							'render' : function(data,
   									type, row, meta) {
-  									if(data!=null){
-										return data.address;
+  								if(!isNull(data)){
+										return data.transportType;
 									}
 	  								return '';
 	
   							}
   						},{
   							'targets' : 9,
-  							'render' : function(data,
-  									type, row, meta) {
-  									if(data!=undefined){
-										return data;
-									}
-	  								return '';
-	
-  							}
-  						},{
-  							'targets' : 10,
-  							'render' : function(data,
-  									type, row, meta) {
-  									if(data!=undefined){
-										return data;
-									}
-	  								return '';
-	
-  							}
-  						},{
-  							'targets' : 11,
-  							'render' : function(data,
-  									type, row, meta) {
-  										if(data!=undefined){
-  											return data;
-  										}
-	  	  								return '';
-	
-  							}
-  						},{
-  							'targets' : 12,
   							'searchable' : false,
   							'orderable' : false,
   							'className' : 'dt-body-center',
@@ -3900,6 +3868,13 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
   									}else if(data=="8"){
   										return '<span  class="label label-sm label-success ng-scope">已清关</span>';
   									}
+  							}
+  						},{
+  							'targets' :10,
+  							'render' : function(data,
+  									type, row, meta) {
+	  								return '';
+	
   							}
   						}]
 

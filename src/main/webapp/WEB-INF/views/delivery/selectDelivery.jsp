@@ -16,7 +16,7 @@
 		                        <th style="text-align: center"></th>
 		                        <th style="white-space: nowrap;">发货单编号</th>
 								<th style="white-space: nowrap;">关联销售单号</th>
-								<th style="white-space: nowrap;">物料</th>
+								<th style="white-space: nowrap;">发货数量</th>
 								<th style="white-space: nowrap;">包装数量</th>
 								<th style="white-space: nowrap;">收货方</th>
 								<th style="white-space: nowrap;">发货地点</th>

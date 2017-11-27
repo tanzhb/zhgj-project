@@ -81,6 +81,8 @@
 	     <result column="unstockCount" property="unstockCount" jdbcType="VARCHAR" />
 	     <result column="stockRemark" property="stockRemark" jdbcType="VARCHAR" />
 	     <result column="dmRemark" property="remark" jdbcType="VARCHAR" />
+	     <association column="dmSerialNum" property="stockInBatchs" select="com.congmai.zhgj.web.dao.StockOutBatchMapper.selectStockInBatchBySerialNum" ></association><!--  根据发货物料取出批次相关入库批次详情-->
+    <association column="dmSerialNum" property="stockOutMateriels" select="com.congmai.zhgj.web.dao.StockOutBatchMapper.selectStockOutBatchBySerialNum" ></association><!--  根据发货物料取出批次相关出库批次详情-->
 	     <association column="dmWarehouseSerial" property="warehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>
 	     <association column="orderMaterielSerial" property="orderMateriel" select="com.congmai.zhgj.web.dao.OrderMaterielMapper.selectByPrimaryKey" ></association>
 	     <association column="dmSerialNum" property="inOutNums" select="com.congmai.zhgj.web.dao.StockOutBatchMapper.selectInOutNumsBySerialNum" ></association><!-- 取出批次号-->

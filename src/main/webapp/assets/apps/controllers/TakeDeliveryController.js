@@ -9,6 +9,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		    handle = new pageHandle();
 	    	App.initAjax();
 	    	handle.datePickersInit("auto bottom");
+	    	$scope.oprateType=$stateParams.oprateType;
 	    	if($location.path()=="/takeDeliveryAdd"){
 	    		
 	    		//handle.pageRepeater();
@@ -208,7 +209,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	         * 查看收货详情
 	         */
 	        $scope.takeDeliveryView = function(serialNum){
-	        	$state.go("takeDeliveryView",{serialNum:serialNum});
+	        	$state.go("takeDeliveryView",{serialNum:serialNum,oprateType:$stateParams.oprateType});
 	        }
 	        
 	        /**
@@ -218,6 +219,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        	var promise = takeDeliveryService.getTakeDeliveryInfo(serialNum);
 	        	promise.then(function(data){
 	        	$scope.deliver = data.data;
+	        	$scope.stockInOutRecord=data.data.stockInOutRecord;
 	        	if(data.data.warehouse != null){
 		        	$scope.deliver.warehouseSerial = data.data.warehouse.serialNum;
 		        	$scope.deliver.warehouseName = data.data.warehouse.address;
@@ -824,18 +826,18 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	                    "aoColumns": [
 	                                  { mData: 'takeDelivery.serialNum' },
 	                                 /* { mData: 'takeDelivery.takeDeliverNum' },*/
-	                                  { mData: 'deliverNum' },
+	                                  { mData: 'inOutNum' },
+	                                  { mData: 'inOutType'},
 	                                  { mData: 'orderNum' },
 	                                  { mData: 'shipper' },
+	                                  { mData: 'inOutPackageCount' },
 	                                  //{ mData: 'materielCount' },物料条目数
 			                          { mData: 'materielTotalCount' },//物料总数
-	                                  { mData: 'packageCount' },
-	                                  { mData: 'packageType' },
-	                                  { mData: 'warehouse' },
 	                                  { mData: 'deliverDate' },
-	                                  { mData: 'deliveryTransport.transportType' },
-	                                  { mData: 'takeDelivery.warehouse.address' },
-	                                  { mData: 'takeDelivery.remark' },
+	                                  { mData: 'packageType' },
+	                                 { mData: 'deliverAddress' },
+	                                 { mData: 'inOutRemark' },
+	                                  { mData: 'status' },
 	                                  { mData: 'status' }
 	                            ],
 	                   'aoColumnDefs' : [ {
@@ -864,17 +866,18 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    							'targets' : 1,
 	    							'render' : function(data,
 	    									type, row, meta) {
-	    										if(data==null){
+	    										/*if(data==null){
 	    											data="未收货";
 	    										}debugger;
-	  	  	  								return '<a href="javascript:void(0);" ng-click="takeDeliveryView(\''+row.takeDelivery.serialNum+'\')">'+data+'</a>';
-	  	
+	  	  	  								return '<a href="javascript:void(0);" ng-click="takeDeliveryView(\''+row.takeDelivery.serialNum+'\')">'+data+'</a>';*/
+	    								/*return '<a href="javascript:void(0);" ng-click="stockInView(\''+row.inOutSerial+'\')">'+data+'</a>';*/
+	    								return '<a href="javascript:void(0);" ng-click="takeDeliveryView(\''+row.takeDelivery.serialNum+'\')">'+data+'</a>';
 	    							},
 	    							"createdCell": function (td, cellData, rowData, row, col) {
 	    								 $compile(td)($scope);
 	    						       }
 	    						},{
-	    							'targets' : 2,
+	    							'targets' : 3,
 	    							'render' : function(data,
 	    									type, row, meta) {
 	    									if(!isNull(data)){
@@ -884,47 +887,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  	
 	    							}
 	    						},{
-	    							'targets' : 7,
-	    							'render' : function(data,
-	    									type, row, meta) {
-	    									if(data!=null){
-	  										return data.address;
-	  									}
-	  	  								return '';
-	  	
-	    							}
-	    						},{
-	    							'targets' : 9,
-	    							'render' : function(data,
-	    									type, row, meta) {
-	    									if(data!=undefined){
-	  										return data;
-	  									}
-	  	  								return '';
-	  	
-	    							}
-	    						},{
-	    							'targets' : 10,
-	    							'render' : function(data,
-	    									type, row, meta) {
-	    									if(data!=undefined){
-	  										return data;
-	  									}
-	  	  								return '';
-	  	
-	    							}
-	    						},{
 	    							'targets' : 11,
-	    							'render' : function(data,
-	    									type, row, meta) {
-	    										if(data!=undefined){
-	    											return data;
-	    										}
-	  	  	  								return '';
-	  	
-	    							}
-	    						},{
-	    							'targets' : 12,
 	    							'searchable' : false,
 	    							'orderable' : false,
 	    							'className' : 'dt-body-center',
@@ -951,6 +914,14 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	      									}else if(data=="8"){
 	      										return '<span  class="label label-sm label-success ng-scope">已清关</span>';
 	      									}
+	    							}
+	    						},{
+	    							'targets' : 12,
+	    							'render' : function(data,
+	    									type, row, meta) {
+	    									
+	  	  								return '';
+	  	
 	    							}
 	    						}]
 
@@ -1398,8 +1369,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		    									type, row, meta) {
 	  		    								
 	  		    								if(data==null){
-	  		    									return row.supplyMateriel.materiel.materielName;
-	  		    								}else{
+	  		    									return "";
+	  		    								}else if(data.materiel!=null){
 	  		    									return data.materiel.materielName;
 	  		    								}
 	  		    								
@@ -1409,8 +1380,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		    							'render' : function(data,
 	  		    									type, row, meta) {
 	  		    								if(data==null){
-	  		    								return row.supplyMateriel.materiel.specifications;
-	  		    									return row.supplyMateriel.materiel.specifications;
+	  		    									return "";
+	  		    									
 	  		    								}else{
 	  		    									return data.materiel.specifications;
 	  		    								}

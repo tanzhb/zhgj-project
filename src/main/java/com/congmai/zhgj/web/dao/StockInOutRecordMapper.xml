@@ -2,55 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.congmai.zhgj.web.dao.StockInOutRecordMapper" >
   <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.StockInOutRecord" >
-    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+<id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
     <result column="deliverSerial" property="deliverSerial" jdbcType="VARCHAR" />
     <result column="takeDeliverSerial" property="takeDeliverSerial" jdbcType="VARCHAR" />
-     <result column="docNum" property="docNum" jdbcType="VARCHAR" />
-    <result column="inOutNum" property="inOutNum" jdbcType="VARCHAR" />
-    <result column="stockDate" property="stockDate" jdbcType="DATE" />
-    <result column="operator" property="operator" jdbcType="VARCHAR" />
-    <result column="contactNum" property="contactNum" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="VARCHAR" />
-    <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
-    <result column="creator" property="creator" jdbcType="VARCHAR" />
-    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="updater" property="updater" jdbcType="VARCHAR" />
-    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
-    <result column="shipperOrReceiver" property="shipperOrReceiver" jdbcType="VARCHAR" />
-    <result column="inOutFlag" property="inOutFlag" jdbcType="VARCHAR" />
-  </resultMap>
-  <!-- 入库查询 -->
-  <resultMap id="BaseResultMap2" type="com.congmai.zhgj.web.model.StockInOutRecord" >
-    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
-    <result column="deliverSerial" property="deliverSerial" jdbcType="VARCHAR" />
-    <result column="takeDeliverSerial" property="takeDeliverSerial" jdbcType="VARCHAR" />
-     <result column="docNum" property="docNum" jdbcType="VARCHAR" />
-    <result column="inOutNum" property="inOutNum" jdbcType="VARCHAR" />
-    <result column="stockDate" property="stockDate" jdbcType="DATE" />
-    <result column="operator" property="operator" jdbcType="VARCHAR" />
-    <result column="contactNum" property="contactNum" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="VARCHAR" />
-    <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
-    <result column="creator" property="creator" jdbcType="VARCHAR" />
-    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="updater" property="updater" jdbcType="VARCHAR" />
-    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
-     <result column="inOutType" property="inOutType" jdbcType="VARCHAR" />
-    <result column="shipperOrReceiver" property="shipperOrReceiver" jdbcType="VARCHAR" />
-    <result column="inOutFlag" property="inOutFlag" jdbcType="VARCHAR" />
-    <association column="shipperOrReceiver" property="shipperOrReceiverName" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"  />
-    <association property="delivery" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.TakeDeliveryMapper.selectByTakeDeliveryPrimaryKeyForStockIn"></association>
-  	<association property="warehouseCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countWarehouseByDeliverSerial" ></association>
-    <association property="positionCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countPositionByDeliverSerial" ></association>
-  </resultMap>
-  <!-- 出库查询 -->
-  <resultMap id="BaseResultMap3" type="com.congmai.zhgj.web.model.StockInOutRecord" >
-    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
-    <result column="deliverSerial" property="deliverSerial" jdbcType="VARCHAR" />
-    <result column="takeDeliverSerial" property="takeDeliverSerial" jdbcType="VARCHAR" />
-     <result column="docNum" property="docNum" jdbcType="VARCHAR" />
+    <result column="docNum" property="docNum" jdbcType="VARCHAR" />
     <result column="inOutNum" property="inOutNum" jdbcType="VARCHAR" />
     <result column="stockDate" property="stockDate" jdbcType="DATE" />
     <result column="operator" property="operator" jdbcType="VARCHAR" />
@@ -63,7 +18,63 @@
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="inOutType" property="inOutType" jdbcType="VARCHAR" />
+    <result column="shipperOrReceiver" property="shipperOrReceiver" jdbcType="VARCHAR" />
     <result column="inOutFlag" property="inOutFlag" jdbcType="VARCHAR" />
+    <result column="packageType" property="packageType" jdbcType="VARCHAR" />
+    <result column="packageSpecifications" property="packageSpecifications" jdbcType="VARCHAR" />
+    <result column="packageCount" property="packageCount" jdbcType="VARCHAR" />
+  </resultMap>
+  <!-- 入库查询 -->
+  <resultMap id="BaseResultMap2" type="com.congmai.zhgj.web.model.StockInOutRecord" >
+ <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="deliverSerial" property="deliverSerial" jdbcType="VARCHAR" />
+    <result column="takeDeliverSerial" property="takeDeliverSerial" jdbcType="VARCHAR" />
+    <result column="docNum" property="docNum" jdbcType="VARCHAR" />
+    <result column="inOutNum" property="inOutNum" jdbcType="VARCHAR" />
+    <result column="stockDate" property="stockDate" jdbcType="DATE" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="contactNum" property="contactNum" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="inOutType" property="inOutType" jdbcType="VARCHAR" />
+    <result column="shipperOrReceiver" property="shipperOrReceiver" jdbcType="VARCHAR" />
+    <result column="inOutFlag" property="inOutFlag" jdbcType="VARCHAR" />
+    <result column="packageType" property="packageType" jdbcType="VARCHAR" />
+    <result column="packageSpecifications" property="packageSpecifications" jdbcType="VARCHAR" />
+    <result column="packageCount" property="packageCount" jdbcType="VARCHAR" />
+    <association column="shipperOrReceiver" property="shipperOrReceiverName" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"  />
+    <association property="delivery" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.TakeDeliveryMapper.selectByTakeDeliveryPrimaryKeyForStockIn"></association>
+  	<association property="warehouseCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countWarehouseByDeliverSerial" ></association>
+    <association property="positionCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countPositionByDeliverSerial" ></association>
+  </resultMap>
+  <!-- 出库查询 -->
+  <resultMap id="BaseResultMap3" type="com.congmai.zhgj.web.model.StockInOutRecord" >
+   <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="deliverSerial" property="deliverSerial" jdbcType="VARCHAR" />
+    <result column="takeDeliverSerial" property="takeDeliverSerial" jdbcType="VARCHAR" />
+    <result column="docNum" property="docNum" jdbcType="VARCHAR" />
+    <result column="inOutNum" property="inOutNum" jdbcType="VARCHAR" />
+    <result column="stockDate" property="stockDate" jdbcType="DATE" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="contactNum" property="contactNum" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="inOutType" property="inOutType" jdbcType="VARCHAR" />
+    <result column="shipperOrReceiver" property="shipperOrReceiver" jdbcType="VARCHAR" />
+    <result column="inOutFlag" property="inOutFlag" jdbcType="VARCHAR" />
+    <result column="packageType" property="packageType" jdbcType="VARCHAR" />
+    <result column="packageSpecifications" property="packageSpecifications" jdbcType="VARCHAR" />
+    <result column="packageCount" property="packageCount" jdbcType="VARCHAR" />
     <result column="shipperOrReceiver" property="shipperOrReceiver" jdbcType="VARCHAR" />
     <association column="shipperOrReceiver" property="shipperOrReceiverName" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"  />
     <association property="delivery" column="deliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectByDeliveryPrimaryKey"></association>
@@ -129,9 +140,9 @@
     </where>
   </sql>
     <sql id="Base_Column_List" >
-   	serialNum, deliverSerial, takeDeliverSerial, docNum, inOutNum, stockDate, operator, 
+   	 serialNum, deliverSerial, takeDeliverSerial, docNum, inOutNum, stockDate, operator, 
     contactNum, status, remark, delFlg, creator, createTime, updater, updateTime, inOutType, 
-    shipperOrReceiver,inOutFlag
+    shipperOrReceiver, inOutFlag, packageType, packageSpecifications, packageCount
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.StockInOutRecordExample" >
     select
@@ -181,14 +192,16 @@
       operator, contactNum, status, 
       remark, delFlg, creator, 
       createTime, updater, updateTime, 
-      inOutType, shipperOrReceiver, inOutFlag
+      inOutType, shipperOrReceiver, inOutFlag, 
+      packageType, packageSpecifications, packageCount
       )
     values (#{serialNum,jdbcType=VARCHAR}, #{deliverSerial,jdbcType=VARCHAR}, #{takeDeliverSerial,jdbcType=VARCHAR}, 
       #{docNum,jdbcType=VARCHAR}, #{inOutNum,jdbcType=VARCHAR}, #{stockDate,jdbcType=DATE}, 
       #{operator,jdbcType=VARCHAR}, #{contactNum,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{inOutType,jdbcType=VARCHAR}, #{shipperOrReceiver,jdbcType=VARCHAR}, #{inOutFlag,jdbcType=VARCHAR}
+      #{inOutType,jdbcType=VARCHAR}, #{shipperOrReceiver,jdbcType=VARCHAR}, #{inOutFlag,jdbcType=VARCHAR}, #{packageType,jdbcType=VARCHAR}, #{packageSpecifications,jdbcType=VARCHAR},
+       #{packageCount,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.StockInOutRecord" >
@@ -248,6 +261,15 @@
       <if test="inOutFlag != null" >
         inOutFlag,
       </if>
+      <if test="packageType != null" >
+        packageType,
+      </if>
+      <if test="packageSpecifications != null" >
+        packageSpecifications,
+      </if>
+      <if test="packageCount != null" >
+        packageCount,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
@@ -303,6 +325,15 @@
       </if>
       <if test="inOutFlag != null" >
         #{inOutFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="packageType != null" >
+        #{packageType,jdbcType=VARCHAR},
+      </if>
+      <if test="packageSpecifications != null" >
+        #{packageSpecifications,jdbcType=VARCHAR},
+      </if>
+      <if test="packageCount != null" >
+        #{packageCount,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -369,6 +400,15 @@
       <if test="record.inOutFlag != null" >
         inOutFlag = #{record.inOutFlag,jdbcType=VARCHAR},
       </if>
+      <if test="record.packageType != null" >
+        packageType = #{record.packageType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.packageSpecifications != null" >
+        packageSpecifications = #{record.packageSpecifications,jdbcType=VARCHAR},
+      </if>
+      <if test="record.packageCount != null" >
+        packageCount = #{record.packageCount,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -376,7 +416,7 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update stockInOutRecord
-    set serialNum = #{record.serialNum,jdbcType=VARCHAR},
+   set serialNum = #{record.serialNum,jdbcType=VARCHAR},
       deliverSerial = #{record.deliverSerial,jdbcType=VARCHAR},
       takeDeliverSerial = #{record.takeDeliverSerial,jdbcType=VARCHAR},
       docNum = #{record.docNum,jdbcType=VARCHAR},
@@ -393,14 +433,17 @@
       updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       inOutType = #{record.inOutType,jdbcType=VARCHAR},
       shipperOrReceiver = #{record.shipperOrReceiver,jdbcType=VARCHAR},
-      inOutFlag = #{record.inOutFlag,jdbcType=VARCHAR}
+      inOutFlag = #{record.inOutFlag,jdbcType=VARCHAR},
+      packageType = #{record.packageType,jdbcType=VARCHAR},
+      packageSpecifications = #{record.packageSpecifications,jdbcType=VARCHAR},
+      packageCount = #{record.packageCount,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.StockInOutRecord" >
     update stockInOutRecord
-    <set >
+  <set >
       <if test="deliverSerial != null" >
         deliverSerial = #{deliverSerial,jdbcType=VARCHAR},
       </if>
@@ -452,36 +495,18 @@
       <if test="inOutFlag != null" >
         inOutFlag = #{inOutFlag,jdbcType=VARCHAR},
       </if>
+      <if test="packageType != null" >
+        packageType = #{packageType,jdbcType=VARCHAR},
+      </if>
+      <if test="packageSpecifications != null" >
+        packageSpecifications = #{packageSpecifications,jdbcType=VARCHAR},
+      </if>
+      <if test="packageCount != null" >
+        packageCount = #{packageCount,jdbcType=VARCHAR},
+      </if>
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.StockInOutRecord" >
-    update stockInOutRecord
-    set deliverSerial = #{deliverSerial,jdbcType=VARCHAR},
-      takeDeliverSerial = #{takeDeliverSerial,jdbcType=VARCHAR},
-      docNum = #{docNum,jdbcType=VARCHAR},
-      inOutNum = #{inOutNum,jdbcType=VARCHAR},
-      stockDate = #{stockDate,jdbcType=DATE},
-      operator = #{operator,jdbcType=VARCHAR},
-      contactNum = #{contactNum,jdbcType=VARCHAR},
-      status = #{status,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR},
-      delFlg = #{delFlg,jdbcType=VARCHAR},
-      creator = #{creator,jdbcType=VARCHAR},
-      createTime = #{createTime,jdbcType=TIMESTAMP},
-      updater = #{updater,jdbcType=VARCHAR},
-      updateTime = #{updateTime,jdbcType=TIMESTAMP},
-      inOutType = #{inOutType,jdbcType=VARCHAR},
-      shipperOrReceiver = #{shipperOrReceiver,jdbcType=VARCHAR},
-      inOutFlag = #{inOutFlag,jdbcType=VARCHAR}
-    where serialNum = #{serialNum,jdbcType=VARCHAR}
-  </update>
-  <update id="deleteStockInOutRecord" parameterType="java.util.List">
-    	update  stockInOutRecord   set delFlg=1  where serialNum in
-        <foreach item="idList" collection="list" open="(" close=")" separator=",">
-            #{idList}
-        </foreach>
-    </update>
     <!--自建库存获取库存所在仓库数  -->
     <select id="getBelongWarehouseNumForZijian"  parameterType="java.lang.String"   resultType="java.lang.String">
 	<!-- select COUNT(DISTINCT warehouseSerial ) from deliveryMateriel where

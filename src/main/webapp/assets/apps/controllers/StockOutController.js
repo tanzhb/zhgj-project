@@ -387,7 +387,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					            	stockDate:{required:"出库日期不能为空！"},
 					            	operator:{required:"操作员不能为空！"},
 					            	contactNum:{required:"联系方式不能为空！"},
-					            	stockCount:{required:"出库数量不能为空！",digits:"发货数量必须为数字！"},
+					            	/*stockCount:{required:"出库数量不能为空！",digits:"发货数量必须为数字！"},*/
 					            	warehouseSerial:{required:"仓库不能为空！"}
 					            	//positionSerial:{required:"库区不能为空！"}
 					            },
@@ -410,12 +410,12 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					                /*positionSerial: {
 					                	required: !0
 					                },*/
-					                stockCount: {
+					              /*  stockCount: {
 					                	required: !0,
 					                	digits:!0,
-					                	StockOutNumCheck:!0/*,
+					                	StockOutNumCheck:!0,
 					                	StockOutNumCheck1:!0,//出库数量必须小等于当前库存数量
-*/					                },
+					                },*/
 					                contactNum: {
 					                	required: !0,
 					                	isPhone: !0

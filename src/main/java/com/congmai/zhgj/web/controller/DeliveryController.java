@@ -362,7 +362,7 @@ public class DeliveryController {
 			delivery1.setSerialNum(delivery.getSerialNum());
 			delivery1.setStatus(DeliveryVO.COMPLETE);
 			if("1".equals(o.getContractContent().substring(4, 5))){//有验收条款
-					if(StringUtils.isEmpty(o.getSupplyComId())){//平台发货 产生出库检验单
+					if(StringUtils.isEmpty(o.getSupplyComId())){//平台发货 产生检验单
 						//平台发货-->  需要检验 --> 生成出库检验单
 						StockInOutCheck stockInOutCheck=new StockInOutCheck();
 						stockInOutCheck.setSerialNum(ApplicationUtils.random32UUID());

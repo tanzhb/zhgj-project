@@ -809,7 +809,7 @@
 											</div>
 
 										</div>
-										<div class="row"     ng-if="inOrOut.indexOf('confirm')>-1">
+										<div class="row"     ng-show="inOrOut.indexOf('confirm')>-1">
 											<!-- row START -->
 											<div class="col-md-4">
 												<div class="form-group">

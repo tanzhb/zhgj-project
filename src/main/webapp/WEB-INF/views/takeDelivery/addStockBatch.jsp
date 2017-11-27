@@ -30,13 +30,13 @@
 		                    
 		                    
 		                    <td>
-                                <select ng-if="$first" class="form-control"  data-live-search="true"  id="warehouseSerial" ng-init="warehouses[0].serialNum" ng-change="getPositionsAndSelectedAll(stockInBatch)"  name="warehouseSerial" ng-model="stockInBatch.warehouseSerial"  data-size="8">
+                                <select ng-if="$first" class="form-control"  data-live-search="true"  id="warehouseSerial" ng-init="warehouses[0].serialNum" ng-change="getPositionsAndSelectedAll(stockInBatch,$index)"  name="warehouseSerial" ng-model="stockInBatch.warehouseSerial"  data-size="8">
                                      <option value=""></option>
-                                      <option   class="{{stockInBatch.serialNum}}" ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
+                                      <option   class="{{warehouse.serialNum}}" ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
                                 </select>
-                                   <select ng-if="!$first" class="form-control" data-live-search="true"  id="warehouseSerial" ng-init="warehouses[0].serialNum" ng-change="getPositions(stockInBatch)"  name="warehouseSerial" ng-model="stockInBatch.warehouseSerial"  data-size="8">
+                                   <select ng-if="!$first" class="form-control" data-live-search="true"  id="warehouseSerial" ng-init="warehouses[0].serialNum" ng-change="getPositions(stockInBatch,$index)"  name="warehouseSerial" ng-model="stockInBatch.warehouseSerial"  data-size="8">
                                      <option value=""></option>
-                                      <option  class="{{stockInBatch.serialNum}}" ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
+                                      <option  class="{{warehouse.serialNum}}" ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
                                 </select>
 							</td>
 							<td>

@@ -362,23 +362,23 @@
 												id="sample_deliveryTable">
 												<thead>
 													<tr>
+													
 														<th style="text-align: center;"><label
 															class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-																<input type="checkbox" class="group-checkable"
-																id="example-select-all" /> <span></span>
+															 <input type="checkbox" class="group-checkable" data-set="#sample_deliveryTable .checkboxes" />
+																 <span></span>
 														</label></th>
 	
-														<th style="white-space: nowrap;">发货单编号</th>
+														<th style="white-space: nowrap;">发货计划号</th>
 														<th style="white-space: nowrap;">关联销售单号</th>
-														<th style="white-space: nowrap;">物料</th>
-														<th style="white-space: nowrap;">包装数量</th>
 														<th style="white-space: nowrap;">收货方</th>
-														<th style="white-space: nowrap;">发货地点</th>
-														<th style="white-space: nowrap;">发货日期</th>
+														<th style="white-space: nowrap;">发货数量</th>
+														<th style="white-space: nowrap;">交付方式</th>
+														<th style="white-space: nowrap;">发货/提货地址</th>
+														<th style="white-space: nowrap;">发货/提货日期</th>
 														<th style="white-space: nowrap;">运输方式</th>
-														<th style="white-space: nowrap;">收货地点</th>
-														<th style="white-space: nowrap;">备注</th>
 														<th style="white-space: nowrap;">状态</th>
+														<th style="white-space: nowrap;">操作</th>
 														<!-- <th style="white-space: nowrap;"></th> -->
 													</tr>
 												</thead>

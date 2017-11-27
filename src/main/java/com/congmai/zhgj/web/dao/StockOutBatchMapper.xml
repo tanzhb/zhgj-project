@@ -78,6 +78,11 @@
     serialNum, stockOutSerial, stockInSerial, stockOutMaterielSerial, stockInMaterielSerial, stockInBatchSerial,
     outCount, remark, delFlg, creator, createTime, updater, updateTime
   </sql>
+  
+  <sql id="Base_Column_List_in" ><!--  入库批次字段-->
+    serialNum, stockInMaterielSerial, remark, delFlg, creator, createTime,
+    updater, updateTime, warehouseSerial, positionSerial, positionName, stockInCount, batchNum
+  </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.StockOutBatchExample" >
     select
     <if test="distinct" >
@@ -358,5 +363,11 @@
     SUM(IFNULL(outCount,0)) as sumStockOutCount
     from stockOutBatch
     where  stockInBatchSerial=#{serialNum,jdbcType=VARCHAR} and stockOutBatch.delFlg=0
+  </select>
+  <select id="selectStockInBatchBySerialNum"    parameterType="java.lang.String"  resultType="com.congmai.zhgj.web.model.StockInBatch">
+   select
+    <include refid="Base_Column_List_in" />
+    from stockInBatch
+    where  stockInMaterielSerial=#{serialNum,jdbcType=VARCHAR} and delFlg=0
   </select>
 </mapper>

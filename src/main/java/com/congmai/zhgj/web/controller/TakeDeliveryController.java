@@ -310,7 +310,8 @@ public class TakeDeliveryController {
     			deliveryMaterielVO.setDeliveryFiles(deliveryFiles);
     		}
     	}
-    	
+    	StockInOutRecord sr=takeDeliveryService.findStockInSerialNum(serialNum);//根据收货流水查入库单记录
+    	delivery.setStockInOutRecord(sr);
     	return delivery;
     }
     
@@ -462,7 +463,7 @@ public class TakeDeliveryController {
         			//入库消息  to 供应
         			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.IN_TO_SALE));
         		}else{
-        			/*takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);*/
+        		/*	takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);*/
         			takeDeliveryService.insertStockInData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName,"in");
         		}
         		flag = "1";
@@ -902,7 +903,8 @@ public class TakeDeliveryController {
     	if(StringUtils.isNotBlank(deliverySerialNum)){
     		DeliveryMaterielExample example = new DeliveryMaterielExample();
     		example.createCriteria().andDelFlgEqualTo("0").andDeliverSerialEqualTo(deliverySerialNum);
-    		return deliveryMaterielService.selectByExampleForStockIn(example);
+    		List<DeliveryMateriel>list=deliveryMaterielService.selectByExampleForStockIn(example);
+    		return list;
     	}else if(StringUtils.isNotBlank(stockSerialNum)){
     		DeliveryMaterielExample example = new DeliveryMaterielExample();
     		example.createCriteria().andDelFlgEqualTo("0").andStockInOutRecordSerialEqualTo(stockSerialNum);

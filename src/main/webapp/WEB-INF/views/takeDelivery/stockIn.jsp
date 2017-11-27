@@ -58,6 +58,8 @@
                                             <i class="fa fa-save"></i> 保存 </button> -->
                                  <button   class="btn green  btn-sm btn-circle" ng-click="saveStockIn()">
                               		<i class="fa fa-check"></i> 确认入库 </button>
+                              		 <button   class="btn green  btn-sm btn-circle" ng-click="saveStockIn('save')">
+                              		<i class="fa fa-save"></i>保存 </button>
                       			 <button    class="btn defualt  btn-sm btn-circle" ng-click="cancelStockIn()" onclick="return false;">
                               		<i class="fa fa-mail-reply"></i> 取消 </button>
                             </div>
@@ -83,67 +85,20 @@
 										
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="inOutType">入库类型 </label>
+                                                    <label class="control-label bold" for="inOutType">入库类型<span class="required"> * </span> </label>
 	                                                 <div class="">
-	                                                 	<select class="form-control"  name="inOutType" ng-model="record.inOutType" ng-init="record.inOutType='贸易'"   data-size="8">
-			                                                   <option value="贸易">贸易</option>
+	                                                 	<select class="form-control"  name="inOutType" ng-model="record.inOutType"  data-size="8">
+	                                                 	<option value="">无</option>
+			                                                   <option value="采购">采购</option>
+			                                                    <option value="备品备件">备品备件</option>
+			                                                     <option value="退货">退货</option>
+			                                                      <option value="生产">生产</option>
 			                                             </select>
                                                      </div>
                                                      <div class="form-control-focus"> </div>
                                             </div>
 										</div>
 										<!--/span-->
-										
-										<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold" for="takeDeliverSerial">收货单号 </label>
-	                                                 <div class="">
-	                                                        <input id="takeDeliverSerial"   name="takeDeliverSerial" type="text" class="form-control" ng-model="record.takeDeliverNum" disabled="disabled">
-	                                                      <!--   <span class="input-group-btn" style="vertical-align: top;">
-	                                                            <button class="btn default" type="button">
-	                                                                <i class="fa fa-search"></i>
-	                                                            </button>
-	                                                        </span> -->
-                                                     </div>
-                                            </div>
-										</div>
-										<!--/span-->
-										
-									</div>
-									<!--/row-->
-									<div class="row">
-										<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold" for="orderSerial"> 采购订单号</label>
-                                                    <div class="">
-                                                    		<input type="text" class="form-control" value="{{record.delivery.orderNum}}" disabled="disabled">
-                                                         <!-- <p class="control-label left" >{{record.orderNum}}</p> -->
-                                                    </div>
-                                            </div>
-										</div>
-										<!--/span-->
-										<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold" for="supplyComId"> 入库仓库</label>
-                                                    <div class="">
-                                                    	<input type="hidden" class="form-control" value="{{warehouseCount}}" disabled="disabled">
-                                                    	<input type="text" class="form-control" value="{{WarehouseName}}" disabled="disabled">
-                                                      <!--    <p class="control-label left" >{{warehouseCount}}</p> -->
-                                                    </div>
-                                            </div>
-										</div>
-						
-										<!--/span-->
-										<!-- <div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold" for="shipper"> 入库库区</label>
-                                                    <div class="">
-                                                    		<input type="text" class="form-control" value="{{positionCount}}" disabled="disabled">
-                                                         <p class="control-label left" >{{positionCount}}</p>
-                                                    </div>
-                                            </div>
-										</div>
-										/span -->
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="stockDate">入库日期 <span class="required"> * </span></label>
@@ -155,18 +110,116 @@
                                                     </div>
                                             </div>
 										</div>
+										<!-- <div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="takeDeliverSerial">收货单号 </label>
+	                                                 <div class="">
+	                                                        <input id="takeDeliverSerial"   name="takeDeliverSerial" type="text" class="form-control" ng-model="record.takeDeliverNum" disabled="disabled">
+	                                                        <span class="input-group-btn" style="vertical-align: top;">
+	                                                            <button class="btn default" type="button">
+	                                                                <i class="fa fa-search"></i>
+	                                                            </button>
+	                                                        </span>
+                                                     </div>
+                                            </div>
+										</div> -->
+										<!--/span-->
+										
+									</div>
+									<!--/row-->
+									<div class="row">
+										<!-- <div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="orderSerial"> 采购订单号</label>
+                                                    <div class="">
+                                                    		<input type="text" class="form-control" value="{{record.delivery.orderNum}}" disabled="disabled">
+                                                         <p class="control-label left" >{{record.orderNum}}</p>
+                                                    </div>
+                                            </div>
+										</div> -->
+										<!--/span-->
+										<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="supplyComId"> 入库仓库</label>
+                                                    <div class="">
+                                                    	<input type="hidden" class="form-control" value="{{warehouseCount}}" disabled="disabled">
+                                                    	<input type="hidden" class="form-control" value="{{WarehouseName}}" disabled="disabled">
+                                                    	<input type="text" class="form-control"      value="{{deliver.takeDelivery.takeDeliverAddress}}" disabled="disabled">
+                                                         <p class="control-label left"   ng-show="deliverView">{{record.inWarehouseName}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+						<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="supplyComId"> 入库数量</label>
+                                                    <div class="">
+                                                    	<input type="text" class="form-control"   ng-model="record.inCount"  disabled="disabled">
+                                                       <p class="control-label left"   ng-show="deliverView">{{record.inCount}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">包装类型</label>
+													<div class="">
+														<select class="form-control" id="packageType"
+															name="packageType" ng-model="record.packageType"
+															ng-hide="deliverAdd"><!--ng-init="delivery.deliverType='贸易发货'"  -->
+															<option   value=""></option>
+															<option   value="原厂包装">原厂包装</option>
+															<option value="供应商包装">供应商包装</option>
+															<option value="其他类型">其他类型</option>
+														</select>
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-show="deliverView">
+															{{record.packageType}}</p>
+													</div>
+												</div>
+											</div>
+										<!--/span-->
+										<!-- <div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="shipper"> 入库库区</label>
+                                                    <div class="">
+                                                    		<input type="text" class="form-control" value="{{positionCount}}" disabled="disabled">
+                                                         <p class="control-label left" >{{positionCount}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										/span -->
+										
 										<!--/span-->
 									</div>
 									<!--/row-->
 									<div class="row">
+									<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="packageSpecifications">包装规格</label>
+                                                    <div class="">
+                                                         <input type="text" class="form-control" id="packageSpecifications"  name="packageSpecifications" ng-model="record.packageSpecifications" ng-hide="deliverAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="deliverView">{{record.packageSpecifications}}</p>
+                                                    </div>
+                                            </div>
+										</div>
 										<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="remark">包装件数</label>
+                                                    <div class="">
+                                                         <input type="text" class="form-control" id="packageCount"  name="packageCount" ng-model="record.packageCount"   ng-hide="deliverAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="deliverView">{{record.packageCount}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+									<!-- 	<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="operator">发货方 <span class="required"> * </span></label>
                                                     <div class="">
                                                        <input type="text" class="form-control" value="{{record.shipperOrReceiver}}" disabled="disabled">
                                                     </div>
                                             </div>
-										</div>
+										</div> -->
 										<!--/span-->
 										
 										<div class="col-md-4">
@@ -175,26 +228,26 @@
                                                     <div class="">
                                                         <input type="text" class="form-control" id="operator" name="operator" ng-model="record.operator" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{deliver.maker}}</p>
+                                                         <p class="control-label left" ng-show="deliverView">{{record.operator}}</p>
                                                     </div>
                                             </div>
 										</div>
 						
 										<!--/span-->
+										<!--/span-->
+									</div>
+									<!--/row-->
+									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="contactNum">联系方式 </label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="contactNum"  ng-model="record.contactNum" ng-hide="deliverAdd" >
+                                                        <input type="text" class="form-control" id="contactNum" name="contactNum"   ng-model="record.contactNum" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{record.contactNum}}</p>
                                                     </div>
                                             </div>
 										</div>
-										<!--/span-->
-									</div>
-									<!--/row-->
-									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="remark">备注</label>
@@ -277,12 +330,12 @@
 												<span ng-repeat="stockInBatch in materiel.stockInBatchs track by $index">
 												<span ng-if="!$first">;</span> {{stockInBatch.batchNum}}({{stockInBatch.stockInCount}})
 												</span>
-                                                <button ng-if="materiel.stockInBatchs==null" class="btn blue btn-sm btn-circle"
-													ng-click="showStockBatch(materiel)" onclick="return false;"  data-toggle="modal" >
+                                                <button ng-if="materiel.stockInBatchs.length==0" class="btn blue btn-sm btn-circle"
+													ng-click="showStockBatch(materiel,$index)" onclick="return false;"  data-toggle="modal" >
 													<i class="fa fa-plus"></i>添加
 												</button>
-												<button ng-if="materiel.stockInBatchs!=null" class="btn blue btn-sm btn-circle"
-													ng-click="showStockBatch(materiel)" onclick="return false;"  data-toggle="modal" >
+												<button ng-if="materiel.stockInBatchs.length!=0" class="btn blue btn-sm btn-circle"
+													ng-click="showStockBatch(materiel,$index)" onclick="return false;"  data-toggle="modal" >
 													<i class="fa fa-edit"></i>修改
 												</button>
 										</td>

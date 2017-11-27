@@ -70,15 +70,23 @@
 										
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="inOutType">入库类型 ：</label>
+                                                    <label class="col-md-4 control-label" for="inOutType">出库类型 ：</label>
 	                                                 <div class="col-md-8">
 			                                              <p class="control-label left" >{{record.inOutType}}</p>
                                                      </div>
                                             </div>
 										</div>
+										<div class="col-md-4">
+											<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="stockDate"> 出库日期：</label>
+                                                    <div class="col-md-8">
+                                                         <p class="control-label left" >{{record.stockDate}}</p>
+                                                    </div>
+                                            </div>
+										</div>
 										<!--/span-->
 										
-										<div class="col-md-4" >
+										<!-- <div class="col-md-4" >
 											<div class="form-group form-md-line-input"  ng-if="record.inOutType=='贸易'">
                                                     <label class="col-md-4 control-label" for="takeDeliverSerial"> 发货单号：</label>
                                                     <div class="col-md-8">
@@ -91,12 +99,12 @@
                                                          <p class="control-label left" >{{record.docNum}}</p>
                                                     </div>
                                             </div>
-										</div>
+										</div> -->
 										<!--/span-->
 									</div>
 									<!--/row-->
 									<div class="row">
-										<div class="col-md-4"  ng-if="record.inOutType=='贸易'">
+										<!-- <div class="col-md-4"  ng-if="record.inOutType=='贸易'">
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="orderSerial"> 采购订单号：</label>
                                                     <div class="col-md-8">
@@ -104,7 +112,7 @@
                                                     </div>
                                             </div>
                                             
-										</div>
+										</div> -->
 										<!--/span-->
 										
 										<div class="col-md-4">
@@ -115,6 +123,22 @@
                                                     </div>
                                             </div>
 										</div>
+										<div class="col-md-4">
+										<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="supplyComId">出库数量：</label>
+                                                    <div class="col-md-8">
+                                                         <p class="control-label left" >{{record.outCount}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+										<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="supplyComId">包装类型：</label>
+                                                    <div class="col-md-8">
+                                                         <p class="control-label left" >{{record.packageType}}</p>
+                                                    </div>
+                                            </div>
+											</div>
 										<!--/span-->
 										<!-- <div class="col-md-4">
 											<div class="form-group form-md-line-input">
@@ -125,28 +149,46 @@
                                             </div>
 										</div>
 										/span -->
-										<div class="col-md-4">
-											<div class="form-group form-md-line-input">
-                                                    <label class="col-md-4 control-label" for="stockDate"> 出库日期：</label>
-                                                    <div class="col-md-8">
-                                                         <p class="control-label left" >{{record.stockDate}}</p>
-                                                    </div>
-                                            </div>
-										</div>
+										
 										<!--/span-->
 									</div>
 									<!--/row-->
 									<div class="row">
-										<div class="col-md-4">
+										<!-- <div class="col-md-4">
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="operator">收货方：</label>
                                                     <div class="col-md-8">
                                                        <p class="control-label left" >{{record.shipperOrReceiver}}</p>
                                                     </div>
                                             </div>
-										</div>
+										</div> -->
 										<!--/span-->
 										<div class="col-md-4">
+										<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="supplyComId">包装规格：</label>
+                                                    <div class="col-md-8">
+                                                         <p class="control-label left" >{{record.packageSpecifications}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+										<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="supplyComId">包装件数：</label>
+                                                    <div class="col-md-8">
+                                                         <p class="control-label left" >{{record.packageCount}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+										<div class="form-group form-md-line-input">
+                                                    <label class="col-md-4 control-label" for="supplyComId">操作员：</label>
+                                                    <div class="col-md-8">
+                                                         <p class="control-label left" >{{deliver.operator}}</p>
+                                                    </div>
+                                            </div>
+											
+										</div>
+									<!-- 	<div class="col-md-4">
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="operator"> 操作员：</label>
                                                     <div class="col-md-8">
@@ -155,7 +197,7 @@
                                             </div>
 										</div>
 						
-										<!--/span-->
+										/span
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
                                                     <label class="col-md-4 control-label" for="contactNum"> 联系方式：</label>
@@ -163,12 +205,23 @@
                                                          <p class="control-label left" >{{record.contactNum}}</p>
                                                     </div>
                                             </div>
-										</div>
+										</div> -->
 										<!--/span-->
 									</div>
 									<!--/row-->
 									
 									<div class="row">
+									<div class="col-md-4">
+									<div class="form-group form-md-line-input">
+												<label class="col-md-4 control-label" for="approval">
+													联系方式 ：</label>
+												<div class="col-md-8">
+													<p class="control-label left">
+														{{record.contactNum}}
+													</p>
+												</div>
+											</div>
+										</div>
 										<div class="col-md-4">
 											<div class="form-group form-md-line-input">
 												<label class="col-md-4 control-label" for="approval">

@@ -843,17 +843,17 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 															"<span></span></label>";
 														}
 						                            },
-							                            { mData: 'deliverNum' },
+							                            { mData: 'inOutNum' },
+							                            { mData: 'inOutType'},
 							                            { mData: 'orderNum' },
 							                            //{ mData: 'materielCount' },物料条目数
-								                          { mData: 'materielTotalCount' },//物料总数
-							                            { mData: 'packageCount' },
 							                            { mData: 'receiver'},
-							                            { mData: 'deliveryAddress'},
+							                            { mData: 'inOutPackageCount'},
+							                            { mData: 'materielTotalCount' },//物料总数
 							                            { mData: 'deliverDate'},
 							                            { mData: 'transportType'},
 							                            { mData: 'takeAddress' },
-							                            { mData: 'remark'},
+							                            { mData: 'inOutRemark' },
 							                            { mData: 'status',
 
 					                            	mRender:function(data){
@@ -889,7 +889,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 							                            			return "";
 							                            		}
 							                            	}
-							                            }
+							                            } , { mData: 'status' },//操作
 							                            ],
 							                            'aoColumnDefs': [ {
 							                            	'targets' : 0,
@@ -905,14 +905,16 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 							                            	'className' : 'dt-body-center',
 							                            	'render' : function(data,
 							                            			type, row, meta) {
-							                            		return '<a data-toggle="modal" ng-click="jumpToGetDeliveryInfo(\''+row.serialNum+'\')" ">'+data+'</a>';
+							                            		/*return '<a data-toggle="modal" ng-click="jumpToGetDeliveryInfo(\''+row.serialNum+'\')" ">'+data+'</a>';*/
+							                            		return '<a data-toggle="modal" ng-click="stockInView(\''+row.inOutSerial+'\')" ">'+data+'</a>';
+							                            		
 							                            	},
 							                            	"createdCell": function (td, cellData, rowData, row, col) {
 							                            		$compile(td)($scope);
 							                            	}
 							                            },
 							                            {
-							                            	'targets' : 2,
+							                            	'targets' : 3,
 							                            	'className' : 'dt-body-center',
 							                            	'render' : function(data,
 							                            			type, row, meta) {
@@ -921,7 +923,17 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 							                            	"createdCell": function (td, cellData, rowData, row, col) {
 							                            		$compile(td)($scope);
 							                            	}
-							                            }
+							                            },
+							                            {
+							    							'targets' : 12,
+							    							'render' : function(data,
+							    									type, row, meta) {
+							    									
+							  	  								return '';
+							  	
+							    							}
+							    						}
+							                            
 							                            ]}).on('order.dt',
 							                            		function() {
 							                            	console.log('排序');

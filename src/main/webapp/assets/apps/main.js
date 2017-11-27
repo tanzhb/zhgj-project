@@ -1511,7 +1511,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    	}
 		    }) 
 		    .state('takeDeliveryView', {
-		    	url: "/takeDeliveryView?:serialNum&:oprateType",
+		    	url: "/takeDeliveryView?:serialNum&:oprateType&:inOutSerial",
 		    	templateUrl: "rest/takeDelivery/takeDeliveryView",
 		    	data: {pageTitle: '查看收货详情'},
 		    	reload:true, 

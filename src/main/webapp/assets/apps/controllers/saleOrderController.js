@@ -3811,14 +3811,12 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 							                            { mData: 'deliverNum' },
 		 							                            { mData: 'orderNum' },
 		 							                           //{ mData: 'materielCount' },物料条目数
+		 							                           { mData: 'receiver'},
 		 								                          { mData: 'materielTotalCount' },//物料总数
-		 							                            { mData: 'packageCount' },
-		 							                            { mData: 'receiver'},
+		 							                            { mData: 'packageType' },
 		 							                            { mData: 'deliveryAddress'},
 		 							                            { mData: 'deliverDate'},
 		 							                            { mData: 'transportType'},
-		 							                            { mData: 'takeAddress' },
-		 							                            { mData: 'remark'},
 		 							                            { mData: 'status',
 
 		 					                            	mRender:function(data){
@@ -3854,7 +3852,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 							                            			return "";
 		 							                            		}
 		 							                            	}
-		 							                            }
+		 							                            }, { mData: 'status' }
 		 							                            ],
 		 							                            'aoColumnDefs': [ {
 		 							                            	'targets' : 0,
@@ -3882,6 +3880,17 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 							                            	'render' : function(data,
 		 							                            			type, row, meta) {
 		 							                            		return '<a data-toggle="modal" ng-click="viewSaleOrder(\''+row.orderSerial+'\')" ">'+data+'</a>';
+		 							                            	},
+		 							                            	"createdCell": function (td, cellData, rowData, row, col) {
+		 							                            		$compile(td)($scope);
+		 							                            	}
+		 							                            },
+		 							                           {
+		 							                            	'targets' : 10,
+		 							                            	'className' : 'dt-body-center',
+		 							                            	'render' : function(data,
+		 							                            			type, row, meta) {
+		 							                            		return '';
 		 							                            	},
 		 							                            	"createdCell": function (td, cellData, rowData, row, col) {
 		 							                            		$compile(td)($scope);
