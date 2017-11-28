@@ -1645,9 +1645,23 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 			 * 撤销所有物料编辑
 			 */
 	        $scope.cancelAllOrderMateriel=function () {
+	        	$scope.orderMaterielInput = true;
+	        	$scope.orderMaterielShow = true;
 	        	for(var i=0;i<$scope.orderMateriel.length;i++){
 	        		$scope["orderMaterielInput"+i] = true;
 					$scope["orderMaterielShow"+i] = true;
+	        	}
+	        }; 
+	        
+	        /**
+			 * 打开所有物料编辑
+			 */
+	        $scope.editAllOrderMateriel=function () {
+	        	$scope.orderMaterielInput = false;
+	        	$scope.orderMaterielShow = false;
+	        	for(var i=0;i<$scope.orderMateriel.length;i++){
+	        		$scope["orderMaterielInput"+i] = false;
+					$scope["orderMaterielShow"+i] = false;
 	        	}
 	        }; 
 	        
@@ -1975,7 +1989,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 /** ***************结算条款start******************** */
  //获取货币符号
    $scope.getCurrencySymbol = function(){
-   	if(isNull($scope.customerOrder.currency)){
+   	if(isNull($scope.customerOrder)||isNull($scope.customerOrder.currency)){
    		return '';
    	}else{
    		if($scope.customerOrder.currency=='人民币'){

@@ -1017,7 +1017,9 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
           		    	$scope.saleOrder=data.orderInfo;
           		    	$scope.orderMateriel=data.orderMateriel;
           		    	$scope.cancelAllOrderMateriel();
-          		    	if($state.current.name=="viewSaleOrder"||$state.current.name=="submitSaleApply"){//查看页面构造物料查询分页
+          		    	if($state.current.name=="viewSaleOrder"
+          		    		||$state.current.name=="submitSaleApply"
+          		    			||$state.current.name=="approvalSaleApply"){//查看页面构造物料查询分页
           		    		$scope.queryForPage();
           		    	}
           		    	
@@ -1658,9 +1660,23 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 			 * 撤销所有物料编辑
 			 */
 	        $scope.cancelAllOrderMateriel=function () {
+	        	$scope.orderMaterielInput = true;
+	        	$scope.orderMaterielShow = true;
 	        	for(var i=0;i<$scope.orderMateriel.length;i++){
 	        		$scope["orderMaterielInput"+i] = true;
 					$scope["orderMaterielShow"+i] = true;
+	        	}
+	        }; 
+	        
+	        /**
+			 * 打开所有物料编辑
+			 */
+	        $scope.editAllOrderMateriel=function () {
+	        	$scope.orderMaterielInput = false;
+	        	$scope.orderMaterielShow = false;
+	        	for(var i=0;i<$scope.orderMateriel.length;i++){
+	        		$scope["orderMaterielInput"+i] = false;
+					$scope["orderMaterielShow"+i] = false;
 	        	}
 	        }; 
 	        
@@ -1988,7 +2004,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 /** ***************结算条款start******************** */
  //获取货币符号
    $scope.getCurrencySymbol = function(){
-   	if(isNull($scope.saleOrder.currency)){
+   	if(isNull($scope.saleOrder)||isNull($scope.saleOrder.currency)){
    		return '';
    	}else{
    		if($scope.saleOrder.currency=='人民币'){
@@ -3205,7 +3221,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    			}else{
 		    				$("#tab_1_"+i+"Id").removeClass("active");
 		    				$scope["tab_1_"+i+"Hide"] = true
-		    				if($state.current.name=="viewSaleOrder"||$state.current.name=="submitSaleApply"){//查看不展示
+		    				if($state.current.name=="viewSaleOrder"
+	          		    		||$state.current.name=="submitSaleApply"
+	          		    			||$state.current.name=="approvalSaleApply"){//查看不展示
 		    					$scope["tab_1_"+i+"label"] = true
 	          		    	}
 		    			}
