@@ -55,7 +55,9 @@ MetronicApp.factory('settings', [ '$rootScope','$q', function($rootScope,$q) {
 		})
 		return deferred.promise.then(function(data){
 			callback(data);
-		});
+		},function(error){
+	         toastr.error('连接服务器出错！');
+	     });
 	}
 	$rootScope.judgeIsExist = function(codeType,num,serialNum,callback){
 		var deferred = $q.defer();
@@ -67,7 +69,9 @@ MetronicApp.factory('settings', [ '$rootScope','$q', function($rootScope,$q) {
 		})
 		return deferred.promise.then(function(data){
 			callback(data);
-		});
+		},function(error){
+	         toastr.error('连接服务器出错,请登录重试！');
+	     });
 	}
 	return settings;
 } ]);
@@ -3879,7 +3883,9 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 	    	}else{
 	    		$rootScope.businessMessageSize = data; 
 	    	}
-	    });
+	    },function(error){
+	         toastr.error('连接服务器出错,请登录重试！');
+	     });
 		
 	}
 	function showBusinessMessageSizeCount(){
@@ -3897,7 +3903,9 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 	    		$rootScope.noticeCount = data; 
 	    	}
 	    	
-	    });
+	    },function(error){
+	         toastr.error('连接服务器出错,请登录重试！');
+	     });
 	}
 	function showSystemMessageSizeCount(){
 		var deferred = $q.defer();
@@ -3909,7 +3917,9 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 	    })
 	    return deferred.promise.then(function(data){
 	    	$rootScope.systemMessageSize = data; 
-	    });
+	    },function(error){
+	         toastr.error('连接服务器出错,请登录重试！');
+	     });
 		
 	}
 			function getTodoTaskLength(route, workflowType){
@@ -3927,7 +3937,9 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 			    		$rootScope.dbsLength = data; 
 			    	}
 			    	 //调用承诺接口resolove()
-			    });
+			    },function(error){
+			         toastr.error('连接服务器出错,请登录重试！');
+			     });
 			}
 
 			function getEndTaskLength(route, workflowType){
@@ -3946,7 +3958,9 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 			    		$rootScope.ybsLength = data;
 			    	}
 					
-				});
+				},function(error){
+			         toastr.error('连接服务器出错,请登录重试！');
+			     });
 			}
 			
 }]); 
