@@ -1,4 +1,19 @@
-﻿
+﻿var app = angular.module('app', [
+    //'ngAnimate',
+    //'ngCookies',
+    //'ngResource',
+    //'ngSanitize',
+    //'ngTouch',
+    //'ngStorage',
+    //'ui.router',
+    //'ui.bootstrap',
+    //'ui.load',
+    //'ui.jq',
+    //'ui.validate',
+    //'oc.lazyLoad',
+    //'pascalprecht.translate'    
+]);
+
 app.controller("addPhotoCtrl", ["$http", function ($http) {
 
     var self = this;
