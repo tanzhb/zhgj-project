@@ -458,6 +458,7 @@
 	                                        <thead>
 	                                            <tr>
 	                                                <th> 审批人 </th>
+	                                                <th> 岗位 </th>
 	                                                <th> 审批时间 </th>
 	                                                <th> 审批意见</th>
 	                                            </tr>

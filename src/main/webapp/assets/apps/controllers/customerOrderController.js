@@ -951,7 +951,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 	            	currency:{required:"币种不能为空！"},
 	            	maker:{required:"制单人不能为空！"},
 	            	seller:{required:"供应商不能为空！"},
-	            	orderDate:{required:"销售日期不能为空！"}
+	            	orderDate:{required:"下单日期不能为空！"}
 	            },
             	rules: {orderNum: {required: !0,maxlength: 20},
             		orderType: {required: !0,maxlength: 20},
@@ -1081,7 +1081,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
     					$("#processInstanceId").val(processInstanceId);//赋值给隐藏input，通过和不通过时调用
     					
     					if(comments == ""||comments == null){
-    						$("#comment_audit").html( "<tr><td colspan='3' align='center'>无内容</td></tr>");
+    						$("#comment_audit").html( "<tr><td colspan='4' align='center'>无内容</td></tr>");
     					}else $("#comment_audit").html(comments);
     					
     					//初始化合同内容
@@ -3311,6 +3311,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        												var comments = ""//添加评论
 			        												for (var i=0;i<result.commentList.length;i++){
 			        													comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+			        													+ (result.commentList[i].position==null?'':result.commentList[i].position) + "</td><td>"
 			        													+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
 			        												}
 			        												if(result.actionType == 'audit'){//审批流程
@@ -3607,6 +3608,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        				var comments = ""//添加评论
 		        				for (var i=0;i<result.commentList.length;i++){
 		        					comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+		        					+ (result.commentList[i].position==null?'':result.commentList[i].position) + "</td><td>"
 		        					+ timeStamp2String2(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
 		        				}
 		        				

@@ -333,12 +333,12 @@ margin-right: 20px;
                          </div> -->
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>采购日期：</label>
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>下单日期：</label>
                                  <div class="">
                                  <input type="text" name="orderDate" class="form-control form-control-inline input-medium date-picker" 
                                      data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="buyOrderInput" ng-model="buyOrder.orderDate" repeat-done="renderDone()" >
                                      <div class="form-control-focus"> </div>
-                                     <span class="help-block" ng-hide="buyOrderInput">请选择采购日期</span>
+                                     <span class="help-block" ng-hide="buyOrderInput">请选择下单日期</span>
                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.orderDate}} </p>
                                  </div>
                                  
@@ -498,12 +498,12 @@ margin-right: 20px;
                          </div> -->
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>采购日期：</label>
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>下单日期：</label>
                                  <div class="">
                                  <input type="text" name="orderDate" class="form-control form-control-inline input-medium date-picker" 
                                      data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="buyOrderInput" ng-model="buyOrder.orderDate" repeat-done="renderDone()" >
                                      <div class="form-control-focus"> </div>
-                                     <span class="help-block" ng-hide="buyOrderInput">请选择采购日期</span>
+                                     <span class="help-block" ng-hide="buyOrderInput">请选择下单日期</span>
                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.orderDate}} </p>
                                  </div>
                                  
@@ -703,12 +703,12 @@ margin-right: 20px;
                          <!--/span-->
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>采购日期：</label>
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>下单日期：</label>
                                  <div class="">
                                  <input type="text" name="orderDate" class="form-control form-control-inline input-medium date-picker" 
                                      data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="buyOrderInput" ng-model="buyOrder.orderDate" repeat-done="renderDone()" >
                                      <div class="form-control-focus"> </div>
-                                     <span class="help-block" ng-hide="buyOrderInput">请选择采购日期</span>
+                                     <span class="help-block" ng-hide="buyOrderInput">请选择下单日期</span>
                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.orderDate}} </p>
                                  </div>
                                  

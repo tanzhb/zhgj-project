@@ -10,10 +10,12 @@
 		<result column="group_id" property="groupId" jdbcType="INTEGER" />
 		<result column="locked" property="locked" jdbcType="INTEGER" />
 		<result column="user_salt" property="userSalt" jdbcType="VARCHAR" />
+		<result column="position" property="position" jdbcType="VARCHAR" />
+		
 	</resultMap>
 
 	<sql id="Base_Column_List">
-        user_id, user_name, user_pwd, reg_date, group_id, locked, user_salt
+        user_id, user_name, user_pwd, reg_date, group_id, locked, user_salt,position
     </sql>
     <sql id="Example_Where_Clause">
         <where>

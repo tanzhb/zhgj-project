@@ -467,6 +467,7 @@ function handleTask(assign, taskId, processInstanceId){
 				var comments = ""//添加评论
 				for (var i=0;i<result.commentList.length;i++){
 					comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+					+ (result.commentList[i].position==null?'':result.commentList[i].position) + "</td><td>"
 					+ timeStamp2String2(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
 				}
 				

@@ -73,7 +73,7 @@ angular
 															 $scope.processInstanceId=$stateParams.processInstanceId;
 															var comments =$stateParams.comments;
 															 if(comments == ""||comments == null){
-										    						$("#comment_audit").html( "<tr><td colspan='3' align='center'>无内容</td></tr>");
+										    						$("#comment_audit").html( "<tr><td colspan='4' align='center'>无内容</td></tr>");
 										    					}else{ $("#comment_audit").html(comments);}
 															 if($location.path()=="/editInvoiceApply"){
 																 getInvoiceInfo($stateParams.inOrOut);
@@ -1755,7 +1755,8 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 																				function(result) {													
 							        												var comments = ""//添加评论
 								        												for (var i=0;i<result.commentList.length;i++){
-								        													comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+								        													comments += "<tr><td>" + result.commentList[i].userName + "</td><td>"
+								        													+ (result.commentList[i].position==null?'':result.commentList[i].position) + "</td><td>"
 								        													+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
 								        												}
 								        												if(result.actionType == 'audit'){//审批流程

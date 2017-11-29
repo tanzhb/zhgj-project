@@ -13,6 +13,9 @@ public class CommentVO implements Serializable {
 	// 评论人
 	private String userName;
 	
+	// 职位
+	private String position;
+	
 	// 评论内容
 	private String content;
 	
@@ -49,6 +52,14 @@ public class CommentVO implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getPosition() {
+		return position;
+	}
+
+	public void setPosition(String position) {
+		this.position = position;
 	}
 	
 	
