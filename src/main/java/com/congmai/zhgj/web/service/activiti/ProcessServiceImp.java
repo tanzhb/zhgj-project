@@ -297,6 +297,7 @@ public class ProcessServiceImp implements IProcessService{
 			vo.setContent(comment.getFullMessage());
 			vo.setTime(comment.getTime());
 			vo.setUserName(user.getUserName());
+			vo.setPosition(user.getPosition());
 			commnetList.add(vo);
 		}
     	return commnetList;

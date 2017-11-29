@@ -278,12 +278,12 @@ margin-right: 20px;
                          <!--/span-->
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>采购日期：</label>
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>下单日期：</label>
                                  <div class="">
                                  <input type="text" name="orderDate" class="form-control form-control-inline input-medium date-picker" 
                                      data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="customerOrderInput" ng-model="customerOrder.orderDate"  repeat-done="renderDone()">
                                      <div class="form-control-focus"> </div>
-                                     <span class="help-block" ng-hide="customerOrderInput">请选择采购日期</span>
+                                     <span class="help-block" ng-hide="customerOrderInput">请选择下单日期</span>
                                      <p class="form-control-static" ng-show="customerOrderShow"> {{customerOrder.orderDate}} </p>
                                  </div>
                                  
@@ -433,12 +433,12 @@ margin-right: 20px;
                          </div>
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>采购日期：</label>
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>下单日期：</label>
                                  <div class="">
                                  <input type="text" name="orderDate" class="form-control form-control-inline input-medium date-picker" 
                                      data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="customerOrderInput" ng-model="customerOrder.orderDate"  repeat-done="renderDone()">
                                      <div class="form-control-focus"> </div>
-                                     <span class="help-block" ng-hide="customerOrderInput">请选择采购日期</span>
+                                     <span class="help-block" ng-hide="customerOrderInput">请选择下单日期</span>
                                      <p class="form-control-static" ng-show="customerOrderShow"> {{customerOrder.orderDate}} </p>
                                  </div>
                                  
@@ -664,12 +664,12 @@ margin-right: 20px;
                          <!--/span-->
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>采购日期：</label>
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>下单日期：</label>
                                  <div class="">
                                  <input type="text" name="orderDate" class="form-control form-control-inline input-medium date-picker" 
                                      data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="customerOrderInput" ng-model="customerOrder.orderDate"  repeat-done="renderDone()">
                                      <div class="form-control-focus"> </div>
-                                     <span class="help-block" ng-hide="customerOrderInput">请选择采购日期</span>
+                                     <span class="help-block" ng-hide="customerOrderInput">请选择下单日期</span>
                                      <p class="form-control-static" ng-show="customerOrderShow"> {{customerOrder.orderDate}} </p>
                                  </div>
                                  
@@ -1011,10 +1011,14 @@ margin-right: 20px;
 			<!-- 订单物料 start-->
           <div class="portlet-title" style="min-height: 48px;">
                <div class="tools" style="float:right">
-                  <button ng-click="addOrderMateriel()" type="button"  class="btn blue  btn-circle  btn-sm">
-                  		<i class="fa fa-edit"></i> 添加物料 </button>
-                  <button type="submit" ng-click="saveAllOrderMateriel()" ng-show="noShow"  class="btn green  btn-circle  btn-sm">
+                  <button ng-click="addOrderMateriel()" type="button"  ng-hide="orderMaterielInput" class="btn blue  btn-circle  btn-sm">
+                 		<i class="fa fa-edit"></i> 添加物料 </button>
+                 <button type="submit" ng-click="saveAllOrderMateriel()" ng-hide="orderMaterielInput"  class="btn green  btn-circle  btn-sm">
                  		<i class="fa fa-save"></i> 保存 </button>
+                 <button ng-click="cancelAllOrderMateriel()" type="button" ng-hide="orderMaterielInput" class="btn defualt  btn-circle  btn-sm">
+                 		<i class="fa fa-undo"></i> 取消 </button>
+                 <button ng-click="editAllOrderMateriel()" type="button" ng-show="orderMaterielShow" class="btn purple  btn-circle  btn-sm">
+                 		<i class="fa fa-edit"></i> 编辑 </button>
                 </div>
             </div>
            <div class="portlet-body form">

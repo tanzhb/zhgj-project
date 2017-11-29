@@ -235,7 +235,7 @@
 																ng-hide="true"> <a
 																title="{{contractVO.electronicContract}}"
 																ng-click="download(contractVO.electronicContract)">
-																{{contractVO.electronicContract}} </a> <i class="fa fa-edit"
+																{{contractVO.electronicContract.substring(contractVO.electronicContract.indexOf("_")+1)}} </a> <i class="fa fa-edit"
 																style="margin-top: 0px;"
 																ng-click="editElectronicContract($event)"></i>
 
@@ -261,7 +261,7 @@
 																ng-hide="true"> <a
 																title="{{contractVO.signContract}}"
 																ng-click="download(contractVO.signContract)">
-																{{contractVO.signContract}} </a> <i class="fa fa-edit"
+																{{contractVO.signContract.substring(contractVO.signContract.indexOf("_")+1)}} </a> <i class="fa fa-edit"
 																style="margin-top: 0px;"
 																ng-click="editSignContract($event)"></i>
 														</div>

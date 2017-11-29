@@ -95,7 +95,6 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		
             		$scope.contract={};
             		$rootScope.setNumCode("CA",function(newCode){//
-             			$scope.contract={};
              			$scope.contract.contractNum= newCode;//合同编号
              		});
             		$scope.contract.contractType="采购合同";
@@ -951,7 +950,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	            	currency:{required:"币种不能为空！"},
 	            	maker:{required:"制单人不能为空！"},
 	            	seller:{required:"采购商不能为空！"},
-	            	orderDate:{required:"采购日期不能为空！"}
+	            	orderDate:{required:"下单日期不能为空！"}
 	            },
             	rules: {orderNum: {required: !0,maxlength: 20},
             		orderType: {required: !0,maxlength: 20},
@@ -1001,7 +1000,9 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
           		    	$scope.buyOrder=data.orderInfo;
           		    	$scope.orderMateriel=data.orderMateriel;
           		    	$scope.cancelAllOrderMateriel();
-          		    	if($state.current.name=="viewBuyOrder"||$state.current.name=="submitBuyApply"){//查看页面构造物料查询分页
+          		    	if($state.current.name=="viewBuyOrder"
+          		    		||$state.current.name=="submitBuyApply"
+          		    			||$state.current.name=="approvalBuyApply"){//查看页面构造物料查询分页
           		    		$scope.queryForPage();
           		    	}
           		    	
@@ -1079,7 +1080,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     					$("#processInstanceId").val(processInstanceId);//赋值给隐藏input，通过和不通过时调用
     					
     					if(comments == ""||comments == null){
-    						$("#comment_audit").html( "<tr><td colspan='3' align='center'>无内容</td></tr>");
+    						$("#comment_audit").html( "<tr><td colspan='4' align='center'>无内容</td></tr>");
     					}else $("#comment_audit").html(comments);
     					
     					//初始化合同内容
@@ -1605,12 +1606,25 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 			 * 撤销所有物料编辑
 			 */
 	        $scope.cancelAllOrderMateriel=function () {
+	        	$scope.orderMaterielInput = true;
+	        	$scope.orderMaterielShow = true;
 	        	for(var i=0;i<$scope.orderMateriel.length;i++){
 	        		$scope["orderMaterielInput"+i] = true;
 					$scope["orderMaterielShow"+i] = true;
 	        	}
 	        }; 
 	        
+	        /**
+			 * 打开所有物料编辑
+			 */
+	        $scope.editAllOrderMateriel=function () {
+	        	$scope.orderMaterielInput = false;
+	        	$scope.orderMaterielShow = false;
+	        	for(var i=0;i<$scope.orderMateriel.length;i++){
+	        		$scope["orderMaterielInput"+i] = false;
+					$scope["orderMaterielShow"+i] = false;
+	        	}
+	        }; 
 	        //选择第一个，设置后面的数据
 			$scope.setAllDeliveryAddress = function(orderMateriel){
 				 for(var i=1;i<$scope.orderMateriel.length;i++){
@@ -1975,7 +1989,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 /** ***************结算条款start******************** */
  //获取货币符号
 $scope.getCurrencySymbol = function(){
-	if(isNull($scope.buyOrder.currency)){
+	if(isNull($scope.buyOrder)||isNull($scope.buyOrder.currency)){
 		return '';
 	}else{
 		if($scope.buyOrder.currency=='人民币'){
@@ -3182,7 +3196,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    			}else{
 		    				$("#tab_1_"+i+"Id").removeClass("active");
 		    				$scope["tab_1_"+i+"Hide"] = true
-		    				if($state.current.name=="viewBuyOrder"||$state.current.name=="submitBuyApply"){//查看不展示
+		    				if($state.current.name=="viewBuyOrder"
+	          		    		||$state.current.name=="submitBuyApply"
+	          		    			||$state.current.name=="approvalBuyApply"){//查看不展示
 		    					$scope["tab_1_"+i+"label"] = true
 	          		    	}
 		    			}
@@ -3263,7 +3279,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 															function(result) {													
 		        												var comments = ""//添加评论
 			        												for (var i=0;i<result.commentList.length;i++){
-			        													comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+			        													comments += "<tr><td>" + result.commentList[i].userName  + "</td><td>" 
+			        													+ (result.commentList[i].position==null?'':result.commentList[i].position) + "</td><td>"  
 			        													+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
 			        												}
 			        												if(result.actionType == 'audit'){//审批流程

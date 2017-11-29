@@ -55,7 +55,9 @@ MetronicApp.factory('settings', [ '$rootScope','$q', function($rootScope,$q) {
 		})
 		return deferred.promise.then(function(data){
 			callback(data);
-		});
+		},function(error){
+	         toastr.error('连接服务器出错！');
+	     });
 	}
 	$rootScope.judgeIsExist = function(codeType,num,serialNum,callback){
 		var deferred = $q.defer();
@@ -67,7 +69,9 @@ MetronicApp.factory('settings', [ '$rootScope','$q', function($rootScope,$q) {
 		})
 		return deferred.promise.then(function(data){
 			callback(data);
-		});
+		},function(error){
+	         toastr.error('连接服务器出错,请登录重试！');
+	     });
 	}
 	return settings;
 } ]);
@@ -672,6 +676,15 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/DeliveryService.js',
 				'assets/apps/controllers/saleOrderController.js',
 	        	'assets/apps/service/CommonService.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
                       ]
                     });
                 }]
@@ -700,7 +713,16 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/orderService.js',
 	        	'assets/apps/service/DeliveryService.js',
 				'assets/apps/controllers/saleOrderController.js',
-	        	'assets/apps/service/CommonService.js'
+	        	'assets/apps/service/CommonService.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
                       ]
                     });
                 }]
@@ -729,7 +751,16 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/orderService.js',
 	        	'assets/apps/service/DeliveryService.js',
 				'assets/apps/controllers/saleOrderController.js',
-	        	'assets/apps/service/CommonService.js'
+	        	'assets/apps/service/CommonService.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
                       ]
                     });
                 }]
@@ -1009,7 +1040,16 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/service/materielService.js',
 				 'assets/apps/service/TakeDeliveryService.js',
 	        	'assets/apps/service/orderService.js',
-				'assets/apps/controllers/buyOrderController.js'
+				'assets/apps/controllers/buyOrderController.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
                       ]
                     });
                 }]
@@ -1037,7 +1077,16 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/service/materielService.js',
 				 'assets/apps/service/TakeDeliveryService.js',
 	        	'assets/apps/service/orderService.js',
-				'assets/apps/controllers/buyOrderController.js'
+				'assets/apps/controllers/buyOrderController.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
                       ]
                     });
                 }]
@@ -1065,7 +1114,16 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/service/materielService.js',
 				 'assets/apps/service/TakeDeliveryService.js',
 	        	'assets/apps/service/orderService.js',
-				'assets/apps/controllers/buyOrderController.js'
+				'assets/apps/controllers/buyOrderController.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
                       ]
                     });
                 }]
@@ -3820,8 +3878,14 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 	        deferred.reject('连接服务器出错！');  
 	    })
 	    return deferred.promise.then(function(data){
-	    	$rootScope.businessMessageSize = data; 
-	    });
+	    	if(data.length>20){
+	    		window.location = ctx + "/rest/page/login";
+	    	}else{
+	    		$rootScope.businessMessageSize = data; 
+	    	}
+	    },function(error){
+	         toastr.error('连接服务器出错,请登录重试！');
+	     });
 		
 	}
 	function showBusinessMessageSizeCount(){
@@ -3833,8 +3897,15 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 	        deferred.reject('连接服务器出错！');  
 	    })
 	    return deferred.promise.then(function(data){
-	    	$rootScope.noticeCount = data; 
-	    });
+	    	if(data.length>20){
+	    		window.location = ctx + "/rest/page/login";
+	    	}else{
+	    		$rootScope.noticeCount = data; 
+	    	}
+	    	
+	    },function(error){
+	         toastr.error('连接服务器出错,请登录重试！');
+	     });
 	}
 	function showSystemMessageSizeCount(){
 		var deferred = $q.defer();
@@ -3846,7 +3917,9 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 	    })
 	    return deferred.promise.then(function(data){
 	    	$rootScope.systemMessageSize = data; 
-	    });
+	    },function(error){
+	         toastr.error('连接服务器出错,请登录重试！');
+	     });
 		
 	}
 			function getTodoTaskLength(route, workflowType){
@@ -3864,7 +3937,9 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 			    		$rootScope.dbsLength = data; 
 			    	}
 			    	 //调用承诺接口resolove()
-			    });
+			    },function(error){
+			         toastr.error('连接服务器出错,请登录重试！');
+			     });
 			}
 
 			function getEndTaskLength(route, workflowType){
@@ -3883,7 +3958,9 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 			    		$rootScope.ybsLength = data;
 			    	}
 					
-				});
+				},function(error){
+			         toastr.error('连接服务器出错,请登录重试！');
+			     });
 			}
 			
 }]); 

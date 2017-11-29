@@ -97,6 +97,8 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
         fd.append('telephone',$scope.userInfo.telephone); 
         fd.append('QQNum',$scope.userInfo.qqnum); 
         fd.append('fax',$scope.userInfo.fax); 
+        fd.append('cellPhone',$scope.userInfo.cellPhone); 
+        fd.append('email',$scope.userInfo.email); 
          $http({
         	  method:'POST',
               url:"rest/user/updateUserInfo",
@@ -198,6 +200,13 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
             return this.optional(element) || (phone.test(value));
            }, "请填写正确的固定电话");//可以自定义默认提示信息
         
+        jQuery.validator.addMethod("cellPhone", function(value, element) {
+            var length = value.length;
+            var phone = /^1[123456789]\d{9}/;
+            return this.optional(element) || (phone.test(value));
+           }, "请填写正确的手机号码");//可以自定义默认提示信息
+        
+        
         jQuery.validator.addMethod("isQq", function(value, element) {  
         	var qq=/^[1-9]\d{4,12}$/;
             return this.optional(element) ||(qq.test(value));       
@@ -218,6 +227,8 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
             	telephone:{isTel:"请填写正确的固定电话！",},
             	qqNum:{isQq:"请填写正确的QQ号码！",},
             	fax:{isTel:"请填写正确的传真号码！",},
+            	cellPhone:{required:"手机不能为空！",cellPhone:"请填写正确的手机号码！",},
+            	email:{required:"邮箱不能为空！",email:"请填写正确的邮箱地址！",},
                 payment: {
                     maxlength: jQuery.validator.format("Max {0} items allowed for selection"),
                     minlength: jQuery.validator.format("At least {0} items must be selected")
@@ -232,10 +243,13 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
                 }
             },
             rules: {
-                userName:{required:true,},
-                telephone:{isTel:true,},
-                qqNum:{isQq:true,},
-                fax:{isTel:true,},
+                userName:{required:true},
+                telephone:{isTel:true},
+                qqNum:{isQq:true},
+                fax:{isTel:true},
+                cellPhone:{required:true,cellPhone:true},
+                email:{required:true,email:true}
+                
             },
             invalidHandler: function(e, t) {
                 i.hide(),
@@ -394,8 +408,8 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
 	    		CompanyInfoService.getCompanyInfo().then(
 	          		     function(data){
 	          		    	 debugger
+	          		    	$scope.company={};
 	          		    	 if(data==""){
-	          		    		$scope.company={};
 	          		    		$scope.company.comTypeName="";
 	          		    		return;
 	          		    	 }

@@ -206,7 +206,7 @@ margin-right: 20px;
                          <!--/span-->
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">销售日期：</label>
+                                 <label class="control-label col-md-5 bold">下单日期：</label>
                                  <div class="control-label col-md-7">
                                      <p  > {{customerOrder.orderDate}} </p>
                                  </div>
@@ -352,7 +352,7 @@ margin-right: 20px;
                      <div class="row">
                         <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">销售日期：</label>
+                                 <label class="control-label col-md-5 bold">下单日期：</label>
                                  <div class="control-label col-md-7">
                                      <p  > {{customerOrder.orderDate}} </p>
                                  </div>
@@ -504,7 +504,7 @@ margin-right: 20px;
                          <!--/span-->
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">销售日期：</label>
+                                 <label class="control-label col-md-5 bold">下单日期：</label>
                                  <div class="control-label col-md-7">
                                      <p  > {{customerOrder.orderDate}} </p>
                                  </div>
