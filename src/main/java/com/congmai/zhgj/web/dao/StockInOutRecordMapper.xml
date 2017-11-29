@@ -23,6 +23,7 @@
     <result column="packageType" property="packageType" jdbcType="VARCHAR" />
     <result column="packageSpecifications" property="packageSpecifications" jdbcType="VARCHAR" />
     <result column="packageCount" property="packageCount" jdbcType="VARCHAR" />
+    <result column="materielCount" property="materielCount" jdbcType="VARCHAR" />
   </resultMap>
   <!-- 入库查询 -->
   <resultMap id="BaseResultMap2" type="com.congmai.zhgj.web.model.StockInOutRecord" >
@@ -47,6 +48,7 @@
     <result column="packageType" property="packageType" jdbcType="VARCHAR" />
     <result column="packageSpecifications" property="packageSpecifications" jdbcType="VARCHAR" />
     <result column="packageCount" property="packageCount" jdbcType="VARCHAR" />
+    <result column="materielCount" property="materielCount" jdbcType="VARCHAR" />
     <association column="shipperOrReceiver" property="shipperOrReceiverName" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"  />
     <association property="delivery" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.TakeDeliveryMapper.selectByTakeDeliveryPrimaryKeyForStockIn"></association>
   	<association property="warehouseCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countWarehouseByDeliverSerial" ></association>
@@ -76,6 +78,7 @@
     <result column="packageSpecifications" property="packageSpecifications" jdbcType="VARCHAR" />
     <result column="packageCount" property="packageCount" jdbcType="VARCHAR" />
     <result column="shipperOrReceiver" property="shipperOrReceiver" jdbcType="VARCHAR" />
+    <result column="materielCount" property="materielCount" jdbcType="VARCHAR" />
     <association column="shipperOrReceiver" property="shipperOrReceiverName" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"  />
     <association property="delivery" column="deliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectByDeliveryPrimaryKey"></association>
   	<association property="warehouseCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countWarehouseByDeliverSerial" ></association>
@@ -142,7 +145,7 @@
     <sql id="Base_Column_List" >
    	 serialNum, deliverSerial, takeDeliverSerial, docNum, inOutNum, stockDate, operator, 
     contactNum, status, remark, delFlg, creator, createTime, updater, updateTime, inOutType, 
-    shipperOrReceiver, inOutFlag, packageType, packageSpecifications, packageCount
+    shipperOrReceiver, inOutFlag, packageType, packageSpecifications, packageCount,materielCount
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.StockInOutRecordExample" >
     select
@@ -193,7 +196,7 @@
       remark, delFlg, creator, 
       createTime, updater, updateTime, 
       inOutType, shipperOrReceiver, inOutFlag, 
-      packageType, packageSpecifications, packageCount
+      packageType, packageSpecifications, packageCount,materielCount
       )
     values (#{serialNum,jdbcType=VARCHAR}, #{deliverSerial,jdbcType=VARCHAR}, #{takeDeliverSerial,jdbcType=VARCHAR}, 
       #{docNum,jdbcType=VARCHAR}, #{inOutNum,jdbcType=VARCHAR}, #{stockDate,jdbcType=DATE}, 
@@ -201,7 +204,7 @@
       #{remark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{inOutType,jdbcType=VARCHAR}, #{shipperOrReceiver,jdbcType=VARCHAR}, #{inOutFlag,jdbcType=VARCHAR}, #{packageType,jdbcType=VARCHAR}, #{packageSpecifications,jdbcType=VARCHAR},
-       #{packageCount,jdbcType=VARCHAR}
+       #{packageCount,jdbcType=VARCHAR},#{materielCount,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.StockInOutRecord" >
@@ -335,6 +338,9 @@
       <if test="packageCount != null" >
         #{packageCount,jdbcType=VARCHAR},
       </if>
+      <if test="materielCount != null" >
+        #{materielCount,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.congmai.zhgj.web.model.StockInOutRecordExample" resultType="java.lang.Integer" >
@@ -409,6 +415,9 @@
       <if test="record.packageCount != null" >
         packageCount = #{record.packageCount,jdbcType=VARCHAR},
       </if>
+       <if test="record.materielCount != null" >
+        materielCount = #{record.materielCount,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -436,7 +445,8 @@
       inOutFlag = #{record.inOutFlag,jdbcType=VARCHAR},
       packageType = #{record.packageType,jdbcType=VARCHAR},
       packageSpecifications = #{record.packageSpecifications,jdbcType=VARCHAR},
-      packageCount = #{record.packageCount,jdbcType=VARCHAR}
+      packageCount = #{record.packageCount,jdbcType=VARCHAR},
+      materielCount= #{record.materielCount,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -503,6 +513,9 @@
       </if>
       <if test="packageCount != null" >
         packageCount = #{packageCount,jdbcType=VARCHAR},
+      </if>
+       <if test="materielCount != null" >
+       materielCount= #{record.materielCount,jdbcType=VARCHAR}
       </if>
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}

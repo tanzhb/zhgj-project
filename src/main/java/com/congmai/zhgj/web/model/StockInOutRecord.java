@@ -82,6 +82,8 @@ public class StockInOutRecord {
 	    private String inWarehouseName;
 	    
 	    private String outWarehouseName;
+	    
+	    private String materielCount;//出入库数量
 
 
 		public int getPageSize() {
@@ -354,6 +356,14 @@ public class StockInOutRecord {
 
 		public void setOutWarehouseName(String outWarehouseName) {
 			this.outWarehouseName = outWarehouseName;
+		}
+
+		public String getMaterielCount() {
+			return materielCount;
+		}
+
+		public void setMaterielCount(String materielCount) {
+			this.materielCount = materielCount;
 		}
 
 	

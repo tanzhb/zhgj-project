@@ -10,6 +10,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    	App.initAjax();
 	    	handle.datePickersInit("auto bottom");
 	    	$scope.oprateType=$stateParams.oprateType;
+	    	$scope.type=$stateParams.type;
 	    	if($location.path()=="/takeDeliveryAdd"){
 	    		
 	    		//handle.pageRepeater();
@@ -251,6 +252,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		        		$scope.takeDeliver.warehouseName = $scope.takeDeliver.warehouse.address;
 	        		}
 	        		var totalOrderCount=0, totalDeliveryCount=0;
+	        		var  totalQualifiedCount=0,totalStockInCount=0,totalUnstockInCount=0;
 	        		for(var i in data.data.deliveryMateriels){
 	        			if(data.data.deliveryMateriels[i].orderMateriel!=null){
 	        				$scope.orderMateriels[i].materiel = data.data.deliveryMateriels[i].orderMateriel.materiel;
@@ -259,6 +261,11 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		        			$scope.orderMateriels[i].orderMaterielSerial = data.data.deliveryMateriels[i].orderMateriel.serialNum;
 		        			totalOrderCount=totalOrderCount+Number( data.data.deliveryMateriels[i].orderMateriel.amount);
 		        			totalDeliveryCount=totalDeliveryCount+Number( data.data.deliveryMateriels[i].deliverCount);
+		        			if($scope.oprateType==undefined){//入库计划详情物料tab展示合格总数,入库总数,未入总数
+		        				totalQualifiedCount=totalQualifiedCount+Number( data.data.deliveryMateriels[i].stockInQualifiedCount);
+		        				totalStockInCount=totalStockInCount+Number( data.data.deliveryMateriels[i].stockInCount);
+		        				totalUnstockInCount=totalUnstockInCount+Number( data.data.deliveryMateriels[i].unstockInCount);
+			        		}
 	        			}else{
 	        				//$scope.orderMateriels[i].orderMateriel = {};
 	        				if(data.data.deliveryMateriels[i].supplyMateriel!=null){
@@ -276,7 +283,11 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        		}
 	        		$scope.totalDeliveryCount=totalDeliveryCount;//发货总数
 	        		$scope.totalOrderCount=totalOrderCount;//订单总数
-	        		
+	        		if($scope.oprateType==undefined){//入库计划详情物料tab展示合格总数,入库总数,未入总数
+	        			$scope.totalQualifiedCount=totalQualifiedCount;//合格总数
+		        		$scope.totalStockInCount=totalStockInCount;//入库总数
+		        		$scope.totalUnstockInCount=totalUnstockInCount;//未入总数
+	        		}
 	        		/*var playWarehouseDate= $scope.deliverTransport.playWarehouseDate;
 	    		    if(!isNull(playWarehouseDate)){
 	    		    	$("#playWarehouseDate").datepicker('setDate',playWarehouseDate);
@@ -505,7 +516,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					toastr.warning("只能选择一条数据进行修改");
 				}else{
 					var serialNum = $('#takeDeliveryTable input[name="serialNum"]:checked').val();
-					$state.go("takeDeliveryAdd",{serialNum:serialNum});
+					$state.go("takeDeliveryAdd",{serialNum:serialNum,type:'edit'});
 				}
 			}
 			

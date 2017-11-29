@@ -667,7 +667,7 @@
 													<div class="">
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-hide="span">
-															{{stockInOutRecord.inWarehouseName}}</p>
+															{{deliver.takeDelivery.takeDeliverAddress}}</p>
 													</div>
 
 												</div>
@@ -679,7 +679,7 @@
 													<div class="">
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-hide="span">
-															{{stockInOutRecord.inCount}}</p>
+															{{stockInOutRecord.materielCount}}</p>
 													</div>
 												</div>
 										</div>
@@ -1144,7 +1144,7 @@
 								</div>
 								供应商 end
 							</div> -->
-							<div class="tab-pane fade" id="tab_1_4">
+							<div class="tab-pane fade" id="tab_1_4"  ng-if="oprateType!=undefined"><!--  采购订单列表收货计划物料列表-->
 		<div class="portlet-body">
 			<div class="row">
 				<div class="col-md-6 col-sm-6">
@@ -1187,6 +1187,7 @@
 						</tr>
 						<tr>
 							<th>订单数量</th>
+							<th>未发数量</th>
 							<th>发货数量</th>
 							<th>附件</th>
 							<th>备注</th>
@@ -1213,6 +1214,7 @@
 							<td>{{materiel.orderMateriel.materiel.unit}}</td>
 							<!-- <td>{{materiel.manufactureDate}}</td> -->
 							<td>{{materiel.orderMateriel.amount}}</td>
+							<td>{{materiel.orderMateriel.amount-materiel.deliverCount}}</td>
 							<td>{{materiel.deliverCount}}</td>
 							<td>
 								<a href="javascript:;" ng-click="downloadFile1(item.file)" ng-repeat="item in materiel.deliveryFiles">{{item.file|limitTo:30:item.file.indexOf('_')+1}}&nbsp;</a>
@@ -1246,7 +1248,143 @@
 														<td></td>
 														<td> {{materielCount}}</td>
 														<td>{{totalOrderCount}}</td>
+														<td>{{totalOrderCount-totalDeliveryCount}}</td>
 														<td>{{totalDeliveryCount}}</td>
+														<td></td>
+														<td></td>
+														<td></td>
+													</tr>
+												</tfoot>
+				</table>
+			</div>
+			
+			<div class="row">
+				<div class="col-md-5 col-sm-5">
+					<div class="dataTables_info" id="sample_5_info" role="status"
+						aria-live="polite">从 {{(pageIndex-1)*pageSize+1>filterDeliveryMateriel.length?filterDeliveryMateriel.length:(pageIndex-1)*pageSize+1}}
+						到 {{pageIndex*pageSize>filterDeliveryMateriel.length?filterDeliveryMateriel.length:pageIndex*pageSize}} /共 {{filterDeliveryMateriel.length}} 条数据（从{{deliver.deliveryMateriels.length}}条数据中筛选）</div>
+				</div>
+				<div class="col-md-7 col-sm-7">
+					<div  style="text-align: right;" id="sample_5_paginate">
+						<ul class="pagination" style="visibility: visible;">
+							<li class="prev" ng-if="pageIndex>1"><a href="#" ng-click="link2PreviousPage()" title="前一页"><i
+									class="fa fa-angle-left"></i></a></li>
+							<li class="prev disabled" ng-if="1>=pageIndex"><a href="#" title="前一页"><i
+									class="fa fa-angle-left"></i></a></li>
+							<li ng-if="pageIndex-2>0"><a href="#" ng-click="link2ThisPage(pageIndex-2)">{{pageIndex-2}}</a></li>
+							<li ng-if="pageIndex-1>0"><a href="#" ng-click="link2ThisPage(pageIndex-1)">{{pageIndex-1}}</a></li>
+							<li class="active"><a href="#">{{pageIndex}}</a></li>
+							<li ng-if="totalPage>pageIndex"><a href="#" ng-click="link2ThisPage(pageIndex+1)">{{pageIndex+1}}</a></li>
+							<li ng-if="totalPage>pageIndex+1"><a href="#" ng-click="link2ThisPage(pageIndex+2)">{{pageIndex+2}}</a></li>
+							<li class="next disabled" ng-if="pageIndex>=totalPage"><a href="#" ><i
+									class="fa fa-angle-right"></i></a></li>
+							<li class="next" ng-if="totalPage>pageIndex"><a href="#" ng-click="link2NextPage()" title="后一页"><i
+									class="fa fa-angle-right"></i></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+	<div class="tab-pane fade" id="tab_1_4"  ng-if="oprateType==undefined"><!--  入库计划列表收货计划物料列表-->
+		<div class="portlet-body">
+			<div class="row">
+				<div class="col-md-6 col-sm-6">
+					<div class="dataTables_length" id="sample_5_length">
+						<label>每页显示 <select name="sample_5_length"
+							aria-controls="sample_5" ng-model="pageSize" ng-change="createDispalyList()"
+							class="form-control input-sm input-xsmall input-inline">
+							<option value="5">5</option>
+							<option value="10">10</option>
+							<option value="15">15</option>
+							<option value="30">30</option>
+							<option value="99999">All</option>
+							</select> 条数据
+						</label>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-6">
+					<div id="sample_5_filter" style="text-align: right;">
+						<label>查询:<input type="search" ng-model="queryStr"  ng-change="queryForPage()"
+							class="form-control input-sm input-small input-inline"
+							placeholder="" aria-controls="sample_5"></label>
+					</div>
+				</div>
+			</div>
+			<div class="table-scrollable">
+				<table id="deliveryMaterielTable"
+					class="table table-striped table-bordered table-advance table-hover">
+					<thead>
+						<tr>
+							<th rowspan="2">物料编号</th>
+							<th rowspan="2">物料名称</th>
+							<th rowspan="2">规格型号</th>
+							<th rowspan="2">单位</th>
+							<th rowspan="2">订单数量</th>
+							<th rowspan="2">发货数量</th>
+							<th rowspan="2">合格数量</th>
+							<th rowspan="2">生产批次</th>
+							<th rowspan="2">入库数量</th>
+							<th rowspan="2">未入数量</th>
+							<th rowspan="2">备注</th>
+							<th rowspan="2">附件</th>
+							<th rowspan="2">状态</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr
+							ng-repeat="materiel in dispalyDeliveryMateriel  track by $index">
+							<td>{{materiel.orderMateriel.materiel.materielNum}}</td>
+							<td>{{materiel.orderMateriel.materiel.materielName}}</td>
+							<td>{{materiel.orderMateriel.materiel.specifications}}</td>
+							<td>{{materiel.orderMateriel.materiel.unit}}</td>
+							<td>{{materiel.orderMateriel.amount}}</td>
+							<td>{{materiel.deliverCount}}</td>
+							<td>{{materiel.stockInQualifiedCount==null?"无入库检验":materiel.stockInQualifiedCount}}</td>
+							<td>{{materiel.inOutNums}}<span ng-repeat="stockInBatch in materiel.stockInBatchs track by $index">
+												<span ng-if="!$first">;</span> {{stockInBatch.batchNum}}({{stockInBatch.stockInCount}})
+												</span></td>
+							<td>{{materiel.stockInCount}}</td>
+							<td>{{materiel.unstockInCount}}</td>
+							<td>{{materiel.stockInRemark}}</td>
+							<td>
+								<a href="javascript:;" ng-click="downloadFile1(item.file)" ng-repeat="item in materiel.deliveryFiles">{{item.file|limitTo:30:item.file.indexOf('_')+1}}&nbsp;</a>
+							</td>
+							<td><span ng-if="stockInOutRecord.status==0"  class="label label-sm label-warning ng-scope">待入库</span>
+														<span ng-if="stockInOutRecord.status==1" class="label label-sm label-success ng-scope">已入库</span></td>
+						<!-- 	<td>{{materiel.acceptCount}}</td>
+							<td>{{materiel.refuseCount}}</td>
+							<td>
+								<a href="javascript:;" ng-click="downloadFile1(item.file)" ng-repeat="item in materiel.files">{{item.file|limitTo:30:item.file.indexOf('_')+1}}&nbsp;</a>
+							</td>
+							<td>{{materiel.takeRemark}}</td> -->
+							<!-- <td>{{materiel.stockInQualifiedCount}}</td>
+							<td>{{materiel.stockInUnqualifiedCount}}</td>
+							<td>{{materiel.stockInCheckRemark}}</td>
+							<td>{{materiel.stockInCount}}</td>
+							<td>{{materiel.unstockInCount}}</td>
+							<td>{{materiel.stockInWarehouse.warehouseName}}</td>
+							<td>{{materiel.stockInPosition.positionName}}</td>
+							<td>{{materiel.stockInRemark}}</td> -->
+						</tr>
+						<tr
+							ng-if="dispalyDeliveryMateriel==0">
+							<td colspan="13" align="center">没有符合条件的物料信息</td>
+						</tr>
+					</tbody>
+					<tfoot>
+													<tr>
+														<td>合计</td>
+														<td></td>
+														<td></td>
+														<td> {{materielCount}}</td>
+														<td>{{totalOrderCount}}</td>
+														<td>{{totalDeliveryCount}}</td>
+														<td>{{totalQualifiedCount}}</td>
+														<td></td>
+														<td>{{totalStockInCount}}</td>
+														<td>{{totalUnstockInCount}}</td>
 														<td></td>
 														<td></td>
 														<td></td>

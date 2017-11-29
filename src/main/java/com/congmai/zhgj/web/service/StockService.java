@@ -9,6 +9,7 @@ import com.congmai.zhgj.web.model.PriceListExample;
 import com.congmai.zhgj.web.model.Stock;
 import com.congmai.zhgj.web.model.StockExample;
 import com.congmai.zhgj.web.model.StockInBatch;
+import com.congmai.zhgj.web.model.StockOutBatch;
 
 public interface StockService extends GenericService<Stock, String>{
 
@@ -29,6 +30,7 @@ public interface StockService extends GenericService<Stock, String>{
 	List<DeliveryMateriel> getStockInBatchList(String serialNum);
 	List<DeliveryMateriel> getStockInBatchListByMaterielOwn(String serialNum,
 			String orderSerial);
+	List<StockOutBatch> getStockOutBatchListByDmSerialNum(String serialNum);//通过发货物料查关连出库批次
 
 	
 	

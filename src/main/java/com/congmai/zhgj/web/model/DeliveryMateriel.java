@@ -90,6 +90,7 @@ public class DeliveryMateriel {
     private String attachFile;
     private String currentStockAmount;//当前库存总数(基本物料)
 	private List<RelationFile> files;
+	private String outCount="0";//入库批次出库数量(针对出库批次弹框)
 	
 	private String deliveryAttachFile;
 	private List<RelationFile> deliveryFiles;
@@ -545,6 +546,14 @@ public class DeliveryMateriel {
 
 	public void setMateriel(Materiel materiel) {
 		this.materiel = materiel;
+	}
+
+	public String getOutCount() {
+		return outCount;
+	}
+
+	public void setOutCount(String outCount) {
+		this.outCount = outCount;
 	}
 
 	

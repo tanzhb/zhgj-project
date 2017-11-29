@@ -461,6 +461,7 @@
 													</tr>
 													<tr>
 														<th>订单数量</th>
+														<th>未发数量</th>
 														<th>发货数量<span class="required2"> * </span></th>
 														<th>附件</th>
 														<th style="min-width: 120px;">备注</th>
@@ -497,6 +498,7 @@
 															ng-model="materiel.manufactureDate" placeholder="">
 															<span class="help-block"></span></td> -->
 														<td><span class="help-block"></span>{{materiel.amount}}</td><!-- ng-init="orderMateriels[$index].deliverCount=materiel.amount" -->
+														<td><span class="help-block"></span>{{materiel.amount-orderMateriels[$index].deliverCount}}</td>
 														<td class="form-group"><input type="text"
 															class="form-control" id="deliverCount{{$index}}"
 															name="deliverCount" data-ordercount="{{materiel.amount}}"    ng-init="orderMateriels[$index].deliverCount=materiel.amount"  
@@ -532,6 +534,7 @@
 														<td>{{calcTotalNum()}}{{materielCount}}</td>
 														<td></td>
 														<td>{{totalAmount}}</td>
+														<td>{{totalAmount-totalDeliverCount}}</td>
 														<td>{{totalDeliverCount}}</td>
 														<td></td>
 														<td></td>

@@ -48,6 +48,7 @@ import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.web.dao.Delivery2Mapper;
+import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
 import com.congmai.zhgj.web.dao.TakeDeliveryMapper;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.event.EventExample;
@@ -153,8 +154,8 @@ public class TakeDeliveryController {
 	
 	@Autowired
 	private DeliveryService  deliveryService;
-	
-	
+	@Autowired
+	private StockInOutRecordMapper stockInOutRecordMapper;  
 	@RequestMapping("takeDeliveryManage")
 	public String takeDeliveryManage() {
 		
@@ -457,11 +458,12 @@ public class TakeDeliveryController {
         		if(StringUtils.isNotEmpty(takeDeliveryParams.getRecord().getSerialNum())){
         			/*takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);*/
         			takeDeliveryService.updateStockInData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName,"in");
-        			
+        			if("1".equals(takeDeliveryParams.getRecord())){
         			//入库消息  to 采购
         			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.IN_TO_BUY));
         			//入库消息  to 供应
         			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.IN_TO_SALE));
+        			}
         		}else{
         		/*	takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);*/
         			takeDeliveryService.insertStockInData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName,"in");
@@ -493,11 +495,12 @@ public class TakeDeliveryController {
         		if(StringUtils.isNotEmpty(takeDeliveryParams.getRecord().getSerialNum())){//确认出库
         			//takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);
         			takeDeliveryService.updateStockOutData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),takeDeliveryParams.getStockOutMateriels(),currenLoginName,"out");
-        			
+        			if("1".equals(takeDeliveryParams.getRecord().getStatus())){
         			//出库消息  to 采购
         			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.OUT_TO_BUY));
         			//出库消息  to 供应
         			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.OUT_TO_SALE));
+        			}
         		}else{
         			//takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);
         			takeDeliveryService.insertStockInData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName,"out");
@@ -665,7 +668,6 @@ public class TakeDeliveryController {
     	}
     	map.put("stockInOutRecord", stockInOutRecord);
     	map.put("totalDeliveryCount", totalDeliveryCount);
-    	map.put("stockInOutRecord", stockInOutRecord);
     	map.put("deliver", delivery);
     	return map;
     }
@@ -890,8 +892,9 @@ public class TakeDeliveryController {
         	 }
         	return deliveryMateriels;
     	}else if(StringUtils.isNotBlank(stockSerial)){
+    		StockInOutRecord sr=stockInOutRecordMapper.selectByPrimaryKey(stockSerial);
     		DeliveryMaterielExample example = new DeliveryMaterielExample();
-        	example.createCriteria().andDelFlgEqualTo("0").andStockInOutRecordSerialEqualTo(stockSerial);
+        	example.createCriteria().andDelFlgEqualTo("0").andDeliverSerialEqualTo(org.springframework.util.StringUtils.isEmpty(sr.getTakeDeliverSerial())?sr.getDeliverSerial():sr.getTakeDeliverSerial());
         	return deliveryMaterielService.selectByExample(example);
     	}
     	return null;

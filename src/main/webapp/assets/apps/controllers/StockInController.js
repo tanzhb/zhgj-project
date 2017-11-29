@@ -195,6 +195,29 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
     				}
         			$scope.deliveryMaterielSerialNums=deliveryMaterielSerialNums;//把所有发货物料流水存到该数组
         			countWarehouseAndPosition();
+        			var totalOrderCount=0, totalDeliveryCount=0;
+	        		var  totalQualifiedCount=0,totalStockInCount=0;
+	        		for(var i in $scope.takeDeliveryMateriels ){
+	        			if($scope.takeDeliveryMateriels[i].orderMateriel!=null){
+	        			/*	$scope.orderMateriels[i].materiel = $scope.takeDeliveryMateriels[i].orderMateriel.materiel;
+		        			$scope.orderMateriels[i].amount = $scope.takeDeliveryMateriels[i].orderMateriel.amount;
+		        			$scope.orderMateriels[i].serialNum = $scope.takeDeliveryMateriels[i].serialNum;
+		        			$scope.orderMateriels[i].orderMaterielSerial = $scope.takeDeliveryMateriels[i].orderMateriel.serialNum;*/
+		        			totalOrderCount=totalOrderCount+Number( $scope.takeDeliveryMateriels[i].orderMateriel.amount);
+		        			totalDeliveryCount=totalDeliveryCount+Number( $scope.takeDeliveryMateriels[i].deliverCount);
+		        			if($scope.oprateType==undefined){//出库计划详情物料tab展示合格总数,出库总数,未出总数
+		        				totalQualifiedCount=totalQualifiedCount+Number($scope.takeDeliveryMateriels[i].stockInQualifiedCount);
+		        				totalStockInCount=totalStockInCount+Number( $scope.takeDeliveryMateriels[i].stockCount);
+			        		}
+	        			}
+	        		}
+	        		$scope.totalDeliveryCount=totalDeliveryCount;//发货总数
+	        		$scope.totalOrderCount=totalOrderCount;//订单总数
+	        		if($scope.oprateType==undefined){//出库计划详情物料tab展示合格总数,出库总数,未出总数
+	        			$scope.totalQualifiedCount=totalQualifiedCount;//合格总数
+		        		$scope.totalStockInCount=totalStockInCount;//入库总数
+		        		$scope.totalUnstockInCount=totalDeliveryCount-totalStockInCount;//未入总数
+	        		}
         			//$scope.deliver.materielCount = data.orderMateriel.length;
         			if($location.path()=="/stockInAdd"&&!isNull($scope.record)&&!isNull($scope.record.serialNum)){ //入库编辑时
         				for(var i in data.data){
@@ -1180,8 +1203,8 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
     		   toastr.warning("入库数量不能大于发货数量！");
  				return false;
     	   }
+    	   stockInBatchMateriel.stockInCount = $scope.totalCount();
     	   stockInBatchMateriel.stockCount = $scope.totalCount();
-    	 
     	   stockInBatchMateriel.stockInBatchs = $scope.stockInBatchs;
     	  var  warehouseNames=new Array();
     	   for(var i=0;i<$scope.stockInBatchs.length;i++){
@@ -1190,16 +1213,17 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
     	   $scope.warehouseNames=warehouseNames;
     	   unique(warehouseNames,"warehouseName");
     	  
-    	   if($scope.record.inCount==undefined){
-    		   $scope.record.inCount=0;
+    	   if($scope.record.materielCount==undefined){
+    		   $scope.record.materielCount=0;
     	   }
-    	   var beforedata= $scope["materiel"+index];//之前的入库总数
+    	   var beforedata=  $scope.record.materielCount;//之前的入库总数
     	   if(beforedata==undefined){
-    		   $scope.record.inCount+=stockInBatchMateriel.stockCount;
+    		   $scope.record.materielCount+=stockInBatchMateriel.stockInCount;
     	   }else{
-    		   $scope.record.inCount= $scope.record.inCount-$scope["materiel"+index]+stockInBatchMateriel.stockCount;
+    		   $scope.record.materielCount= $scope.record.materielCount-beforedata+Number(stockInBatchMateriel.stockInCount);
     	   }
-    	   $scope["materiel"+index]=stockInBatchMateriel.stockCount ;
+    	   $scope.totalStockInCount=$scope.record.materielCount;
+    	   $scope.totalUnstockInCount=$scope.totalDeliveryCount-$scope.totalStockInCount;
     	   $('#stockBatchInfo').modal('hide');//显示批次弹框
        }
        

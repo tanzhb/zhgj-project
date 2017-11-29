@@ -133,6 +133,7 @@
 	     <association column="stockInPositionSerial" property="stockInPosition" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectPositionByPositionSerial" ></association>
 	     <association column="orderMaterielSerial" property="orderMateriel" select="com.congmai.zhgj.web.dao.OrderMaterielMapper.selectByPrimaryKey" ></association>
 	     <association column="supplyMaterielSerial" property="supplyMateriel" select="com.congmai.zhgj.web.dao.SupplyMaterielMapper.selectByPrimaryKey" ></association>
+	       <association column="dmSerialNum" property="stockInBatchs" select="com.congmai.zhgj.web.dao.StockOutBatchMapper.selectStockInBatchBySerialNum" ></association><!--  根据发货物料取出批次相关入库批次详情-->
     </collection>
   </resultMap>
   <!--入库计划列表  -->
@@ -390,7 +391,7 @@
     from takeDelivery td
     left join delivery  d on d.serialNum = td.deliverSerial
     left join deliveryTransport dt on d.serialNum = dt.deliverSerial  and dt.delFlg = "0"
-    left join deliveryMateriel dm on d.serialNum = dm.deliverSerial and dm.delFlg = "0"
+    left join deliveryMateriel dm on td.serialNum = dm.deliverSerial and dm.delFlg = "0"
     left join deliveryMateriel dm2 on td.serialNum = dm2.deliverSerial and dm.orderMaterielSerial=dm2.orderMaterielSerial and dm.delFlg = "0"
     where td.serialNum = #{serialNum,jdbcType=VARCHAR} 
   </select>

@@ -68,7 +68,7 @@
 														<p class="form-control-static"   ng-if="record.takeDeliverSerial!=''" >
 															{{deliver.supplyName}}</p>
 															<p class="form-control-static"   ng-if="record.deliverSerial!=''" >
-															{{deliver.shipper}}</p>
+															{{deliver.shipper==null?"中航能科（上海）能源科技有限公司":deliver.shipper}}</p>
 														<div class="form-control-focus"></div>
 													</div>
 
@@ -82,7 +82,7 @@
 													<div class="">
 														<p class="form-control-static"   ng-if="record.takeDeliverSerial!=''" >
 															{{deliver.shipper}}</p>
-															<p class="form-control-static"   ng-if="record.takeDeliverSerial!=''" >
+															<p class="form-control-static"   ng-if="record.deliverSerial!=''" >
 															{{deliver.receiver}}</p>
 														<div class="form-control-focus"></div>
 													</div>
@@ -172,11 +172,11 @@
 													<label class="control-label bold">发货仓库<!-- <span
 														class="required" aria-required="true"> * </span> --></label>
 													<div class="">
-														<div class="form-control-focus"></div>{{deliveryDetail.deliveryAddress}}
+														<div class="form-control-focus"></div>
 														<p class="form-control-static"  ng-if="record.takeDeliverSerial!=''"  >
 														{{deliver.warehouse.warehouseName}}</p>
 														<p class="form-control-static"  ng-if="record.deliverSerial!=''"  >
-														{{deliver.deliveryAddress}}</p>
+														{{deliver.deliveryWarehouseName}}</p>
 													</div>
 												</div>
 											</div>
@@ -189,7 +189,7 @@
 														<p class="form-control-static"   ng-if="record.takeDeliverSerial!=''">
 															{{deliver.deliverAddress}}</p>
 															<p class="form-control-static"  ng-if="record.deliverSerial!=''"  >
-														{{deliver.deliveryWarehouseName}}</p>
+														{{deliver.deliveryAddress}}</p>
 													</div>
 												</div>
 											</div>

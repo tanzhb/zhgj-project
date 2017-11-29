@@ -17,11 +17,14 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.dao.DeliveryMaterielMapper;
 import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
 import com.congmai.zhgj.web.dao.StockMapper;
+import com.congmai.zhgj.web.dao.StockOutBatchMapper;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.Stock;
 import com.congmai.zhgj.web.model.StockExample;
+import com.congmai.zhgj.web.model.StockOutBatchExample;
 import com.congmai.zhgj.web.model.StockExample.Criteria;
 import com.congmai.zhgj.web.model.StockInBatch;
+import com.congmai.zhgj.web.model.StockOutBatch;
 import com.congmai.zhgj.web.service.StockService;
 
 /**
@@ -41,6 +44,9 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 	 
 	 @Resource
 	    private DeliveryMaterielMapper deliveryMaterielMapper;
+	 
+	 @Resource
+	    private StockOutBatchMapper stockOutBatchMapper;
 
 	@Override
 	public GenericDao<Stock, String> getDao() {
@@ -208,6 +214,16 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 		m.put("serialNum", serialNum);
 		m.put("orderSerial", orderSerial);
 		return deliveryMaterielMapper.getStockInBatchListByMaterielOwn(m);
+	}
+
+	@Override
+	public List<StockOutBatch> getStockOutBatchListByDmSerialNum(
+			String serialNum) {
+		StockOutBatchExample se =new StockOutBatchExample();
+		 com.congmai.zhgj.web.model.StockOutBatchExample.Criteria c=se.createCriteria();
+		 c.andStockOutMaterielSerialEqualTo(serialNum);
+		 List<StockOutBatch>list=stockOutBatchMapper.selectByExample(se);
+		return list;
 	}
    
 	

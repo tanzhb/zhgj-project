@@ -52,10 +52,12 @@ import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.Stock;
 import com.congmai.zhgj.web.model.StockExample;
 import com.congmai.zhgj.web.model.StockInBatch;
+import com.congmai.zhgj.web.model.StockInBatchExample;
 import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.StockInOutRecordExample;
 import com.congmai.zhgj.web.model.StockOutBatch;
+import com.congmai.zhgj.web.model.StockOutBatchExample;
 import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.model.TakeDeliveryExample;
 import com.congmai.zhgj.web.model.TakeDeliveryParams;
@@ -550,6 +552,11 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			deliveryMaterielMapper.updateByExampleSelective(materiel, example2);
 			
 			if(!CollectionUtils.isEmpty(materiel.getStockInBatchs())){
+				//先删除原来的入库批次信息
+				StockInBatchExample se=new StockInBatchExample();
+				com.congmai.zhgj.web.model.StockInBatchExample.Criteria c=se.createCriteria();
+				c.andStockInMaterielSerialEqualTo(materiel.getSerialNum());
+				stockInBatchMapper.deleteByExample(se);
 				for(StockInBatch s : materiel.getStockInBatchs()){
 					s.setStockInMaterielSerial(materiel.getSerialNum());
 					s.setSerialNum(ApplicationUtils.random32UUID());
@@ -585,6 +592,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		String deliverySerial = stockInOutRecord.getDeliverSerial();
 		old_delivery = delivery2Mapper.selectByDeliveryPrimaryKey(deliverySerial);
 		clearStockOutInfoFormMateriels(old_delivery.getDeliveryMateriels());//清除之前的出入库物料信息
+		if("1".equals(record.getStatus())){
 		//自动生成报关单
 		OrderInfo o=orderInfoMapper.selectByPrimaryKey(old_delivery.getOrderSerial());
 		OrderInfo orderInfo=new OrderInfo();
@@ -607,16 +615,20 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 		delivery2Mapper.updateByPrimaryKeySelective(d);
 		takeDeliveryMapper.updateByPrimaryKeySelective(td);
+		//按结算条款中的签订合同节点生成付款
+		String orderString = old_delivery.getOrderSerial();
+		String nodeString = ClauseSettlementDetail.CKH;
+		contractService.findPaymentNode(orderString, nodeString);	
+		}
 		//更新入库记录
 		record.setUpdater(currenLoginName);
-		record.setStatus("1");//入库完成
 		record.setUpdateTime(new Date());
 		StockInOutRecordExample example = new StockInOutRecordExample();
 		example.createCriteria().andSerialNumEqualTo(record.getSerialNum());
 		stockInOutRecordMapper.updateByExampleSelective(record, example);
 		
 		//出库完成状态处理
-		stockOutEndHandle(old_delivery.getOrderSerial(),deliverySerial,currenLoginName);
+		//stockOutEndHandle(old_delivery.getOrderSerial(),deliverySerial,currenLoginName);
 		
 		List<DeliveryMateriel> materiels = deliveryMateriels; //这里是出入库的物料信息
 		for(DeliveryMateriel materiel : materiels){
@@ -627,6 +639,10 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		}
 		//保存出库来源批次
 				List<StockOutBatch> stockOutMaterielsNew = stockOutMateriels; //这里是入库的物料信息
+				StockOutBatchExample  se=new  StockOutBatchExample();
+				com.congmai.zhgj.web.model.StockOutBatchExample.Criteria c=se.createCriteria();
+				c.andStockOutSerialEqualTo(stockOutMateriels.get(0).getStockOutSerial());
+				stockOutBatchMapper.deleteByExample(se);//删除原来出库单关联的出库批次 
 				for (StockOutBatch stockOutBatch : stockOutMaterielsNew) {
 					if (StringUtils.isEmpty(stockOutBatch.getSerialNum())) {
 						stockOutBatch.setSerialNum(ApplicationUtils.random32UUID());
@@ -639,10 +655,6 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 					}
 				}
 		
-		//按结算条款中的签订合同节点生成付款
-		String orderString = old_delivery.getOrderSerial();
-		String nodeString = ClauseSettlementDetail.CKH;
-		contractService.findPaymentNode(orderString, nodeString);	
 	}
 	
 	//自动生成报关单

@@ -43,19 +43,31 @@
         <div class="portlet bordered">
             <div class="portlet-body">
 				<div class="portlet light ">
-				 	
+				 		<ul class="nav nav-tabs">
+					
+						<li class="active bold"><a data-target="#tab_1_1"
+							data-toggle="tab">出库信息</a></li>
+						<!-- <li class="bold"><a data-target="#tab_1_3" data-toggle="tab">收货信息</a>
+						</li> -->
+						<!-- <li class="bold"><a data-target="#tab_1_3" data-toggle="tab">运输信息</a></li>-->
+						<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">物料信息</a></li>
+					</ul>
 					<!-- 基本信息START -->
+					<div class="tab-content">
+							<div class="tab-pane fade active in" id="tab_1_1">
                         <div class="portlet-title">
-                            <div class="caption">出库信息</div>
-                            <div class="actions">
+                            <div class="caption"></div>
+                            <div class="actions" style="float:right">
                               <!--   <button   ng-show="deliverView" class="btn blue  btn-outline  btn-sm " ng-click="editdeliver()">
                                             <i class="fa fa-edit"></i> 编辑 </button>
                                 <button   ng-show="deliverEdit" class="btn red  btn-outline  btn-sm " ng-click="canceldeliver('deliver')">
                                             <i class="fa fa-undo"></i> 取消 </button>
                                 <button   ng-hide="deliverAdd" class="btn blue  btn-outline  btn-sm " ng-click="savedeliver()">
                                             <i class="fa fa-save"></i> 保存 </button> -->
-                                 <button   class="btn green  btn-sm btn-circle" ng-click="saveStockIn()">
+                                 <button   class="btn green  btn-sm btn-circle" ng-click="saveStockOut()">
                               		<i class="fa fa-check"></i> 确认出库 </button>
+                              		 <button   class="btn green  btn-sm btn-circle" ng-click="saveStockOut('save')">
+                              		<i class="fa fa-save"></i>保存 </button>
                       			 <button    class="btn defualt  btn-sm btn-circle" ng-click="cancelStockIn()" onclick="return false;">
                               		<i class="fa fa-mail-reply"></i> 取消 </button>
                             </div>
@@ -131,10 +143,8 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="supplyComId"> 出库仓库</label>
                                                     <div class="">
-                                                    	<!-- <input type="text" class="form-control"   ng-model="record.outWarehouseName"  disabled="disabled"> -->
-                                                    	<input type="text" class="form-control"   ng-if="record.takeDeliverSerial!=''"  value="{{deliver.takeDelivery.warehouse.warehouseName}}" disabled="disabled">
-                                                    		<input type="text" class="form-control"     value="{{deliver.deliveryWarehouseName}}" disabled="disabled">
-                                                      <p class="control-label left"   ng-show="deliverView">{{record.outWarehouseName}}</p>
+                                                    		<input type="text" class="form-control"     value="{{deliver.deliveryAddress}}" disabled="disabled">
+                                                      <p class="control-label left"   ng-show="deliverView">{{deliver.deliveryAddress}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -153,9 +163,9 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="stockDate">出库数量 </label>
                                                     <div class="">
-                                                       <input type="text" class="form-control"   ng-model="record.outCount"  disabled="disabled">
+                                                       <input type="text" class="form-control"   ng-model="record.materielCount"  disabled="disabled">
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{record.outCount}}</p>
+                                                         <p class="control-label left" ng-show="deliverView">{{record.materielCount}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -164,7 +174,7 @@
 													<label class="control-label bold">包装类型</label>
 													<div class="">
 														<select class="form-control" id="packageType"
-															name="packageType" ng-model="delivery.packageType"
+															name="packageType" ng-model="record.packageType"
 															ng-hide="deliverAdd"><!--ng-init="delivery.deliverType='贸易发货'"  -->
 															<option   value=""></option>
 															<option   value="原厂包装">原厂包装</option>
@@ -214,9 +224,9 @@
 										<div class="col-md-4">
 										
 											<div class="form-group">
-                                                    <label class="control-label bold" for="operator">操作员 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="operator">操作员<!--  <span class="required"> * </span> --></label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="operator" name="operator" ng-model="record.operator" ng-hide="deliverAdd" >
+                                                        <input type="text" class="form-control" id="operator" ng-model="record.operator" ng-hide="deliverAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{deliver.maker}}</p>
                                                     </div>
@@ -249,13 +259,122 @@
                                                     </div>
                                             </div>
 										</div>
+											<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="remark">状态</label>
+                                                    <div class="">
+                                                         <p class="control-label left" ><span ng-if="record.status==0"  class="label label-sm label-warning ng-scope">待出库</span>
+											<span ng-if="record.status==1" class="label label-sm label-success ng-scope">已出库</span></p>
+                                                    </div>
+                                            </div>
+										</div>
 										<!--/span-->
 									</div>
 								</div>
          				</div>
+         					</div>
+         						<div class="tab-pane fade" id="tab_1_2"  >
+         						      <div class="portlet-body">
+						<div class="table-scrollable">
+							<table id="deliveryMaterielTable"
+								class="table table-striped table-bordered table-advance table-hover">
+								<thead>
+									<tr>
+										<th  rowspan="2">物料编号</th>
+										<th  rowspan="2">物料名称</th>
+										<th  rowspan="2">规格型号</th>
+										<th  rowspan="2">单位</th>
+										<th  rowspan="2">订单数量</th>
+										<th rowspan="2">发货数量</th>
+										<th  rowspan="2">生产批次</th>
+										<th  rowspan="2">出库数量</th>
+										<th rowspan="2">未出数量</th>
+										<th rowspan="2">当前库存</th>
+										<th rowspan="2">备注</th>
+										<th rowspan="2">附件</th>
+										<th rowspan="2">状态</th>
+									</tr>
+								</thead>
+								<tbody data-repeater-list="group-a"> 
+									<tr data-repeater-item ng-repeat="materiel in takeDeliveryMateriels track by $index" >
+										<td>{{materiel.orderMateriel.materiel.materielNum}}</td>
+										<td>{{materiel.orderMateriel.materiel.materielName}}</td>
+										<td>{{materiel.orderMateriel.materiel.specifications}}</td>
+										<td>{{materiel.orderMateriel.materiel.unit}}</td>
+										<td>{{materiel.orderMateriel.amount}}</td>
+										<td>{{materiel.deliverCount}}</td>
+										<!-- <td>{{materiel.orderMateriel.amount}}</td>
+										<td>{{materiel.deliverRemark}}</td> -->
+										<td >
+										<!-- <span id="{{materiel.serialNum}}"  ng-repeat="stockOutBatch in materiel.stockOutMateriels track by $index"  ng-if="materiel.stockOutMateriels.length!=0">
+										<span ng-if="!$first">;</span> {{stockOutBatch.batchNum}}({{stockOutBatch.outCount}})
+										</span> -->
+										<!-- <span id="{{materiel.serialNum}}"   ng-if="materiel.stockOutMateriels.length==0"  ></span> -->
+											<span id="{{materiel.serialNum}}"    >{{materiel.inOutNums}}</span>
+                                                <button class="btn blue btn-sm btn-circle"  ng-if="materiel.stockOutMateriels .length==0" 
+								ng-click="showStockBatch($index,materiel,'add')" onclick="return false;"  data-toggle="modal" >
+								<i class="fa fa-plus"></i>选择批次
+							</button>
+							<button class="btn blue btn-sm btn-circle"  ng-if="materiel.stockOutMateriels.length!=0" 
+								ng-click="showStockBatch($index,materiel,'edit')" onclick="return false;"  data-toggle="modal" >
+								<i class="fa fa-plus"></i>修改批次
+							</button>
+										</td>
+										<td>{{materiel.stockCount}}</td>
+										<td>
+											<span ng-if="materiel.deliverCount!=undefined && materiel.stockCount!=undedined">{{materiel.deliverCount-materiel.stockCount}}</span>
+										</td>
+										<!-- <td class="form-group">
+                                                 <input type="text"    style="border:none;"  readonly="readonly"       class="form-control input-small" id="stockCountinline{{materiel.serialNum}}" name="stockCount" data-delivercount="{{materiel.deliverCount}}"   data-currentstock="{{materiel.currentStockAmount}}"    ng-change="deleteOrdinaryData(materiel.serialNum)"    ng-model="materiel.stockCount" ng-hide="deliverAdd" >
+                                                 
+                                                 <div class="form-control-focus"> </div>
+										</td> -->
+										<td>
+											{{materiel.currentStockAmount}}
+										</td>
+										
+										<td class="form-group">
+                                                 <input type="text" class="form-control input-small"   ng-model="materiel.stockRemark"  >
+                                                 <div class="form-control-focus"> </div>
+										</td> 
+										<td class="form-group">
+                                                 <div class="form-control-focus"> </div>
+										</td> 
+										<td >
+                                               <span ng-if="record.status==0"  class="label label-sm label-warning ng-scope">待出库</span>
+											<span ng-if="record.status==1" class="label label-sm label-success ng-scope">已出库</span>
+										</td> 
+									</tr>
+									<tr ng-if="takeDeliveryMateriels==undefined||takeDeliveryMateriels.length==0">
+											<td colspan="12" align="center">暂无数据</td>
+									</tr>
+								</tbody>
+								<tfoot>
+													<tr>
+														<td>合计</td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td>{{totalOrderCount}}</td>
+														<td>{{totalDeliveryCount}}</td>
+														<td></td>
+														<td>{{totalStockOutCount}}</td>
+														<td>{{totalUnstockOutCount}}</td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+													</tr>
+												</tfoot>
+							</table>
+						</div>
+					 </div>
+         						</div>
+         					
+         				</div>
          			<!-- 基本信息END -->
          			<!-- 物料信息START -->
-                        <div class="portlet-title">
+                      <!--   <div class="portlet-title">
                             <div class="caption">物料信息</div>
                             <div class="actions">
                             </div>
@@ -281,11 +400,11 @@
 										<th>发货数量</th>
 										<th>备注</th>
 										<th><span class="required" style="color: red"> * </span>出库批次</th>
-										<th><!-- <span class="required" style="color: red"> * </span> -->出库数量</th>
+										<th><span class="required" style="color: red"> * </span>出库数量</th>
 										<th>当前库存</th>
 										<th>未出数量</th>
-										<!-- <th>仓库</th>
-										<th>库区</th> -->
+										<th>仓库</th>
+										<th>库区</th>
 										<th>备注</th> 
 									</tr>
 								</thead>
@@ -318,7 +437,7 @@
 										<td>
 											<span ng-if="materiel.deliverCount!=undefined && materiel.stockCount!=undedined">{{materiel.deliverCount-materiel.stockCount}}</span>
 										</td>
-										<!-- <td class="form-group">
+										<td class="form-group">
                                                 <select class="bs-select form-control order" data-live-search="true"  id="warehouseSerial" ng-init="warehouses[0].serialNum" ng-change="getPositions(materiel)"  name="warehouseSerial" ng-model="materiel.warehouseSerial"  data-size="8">
 	                                                  <option value=""></option>
 	                                                  <option  ng-repeat="warehouse in warehouses" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
@@ -331,7 +450,7 @@
 	                                                   <option  ng-repeat="warehousePositon in materiel.warehousePositons" value="{{warehousePositon.serialNum}}">{{warehousePositon.positionName}}</option>
 	                                             </select>
 	                                             <div class="form-control-focus"> </div>
-										</td> -->
+										</td>
 										<td class="form-group">
                                                  <input type="text" class="form-control input-small" id="stockRemark{{$index}}" name="stockRemark" data-delivercount="{{materiel.stockRemark}}"  ng-model="materiel.stockRemark"  >
                                                  <div class="form-control-focus"> </div>
@@ -343,7 +462,7 @@
 								</tbody>
 							</table>
 						</div>
-					 </div>
+					 </div> -->
          			<!-- 物料信息END -->
          			<!-- <div class="row">
          				<div class="col-md-5"></div>
