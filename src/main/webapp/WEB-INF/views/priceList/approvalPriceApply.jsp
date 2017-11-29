@@ -76,9 +76,12 @@
 	                                </div>
 	                            </div>
 							</p>
-							
+	                      </div>
+		            </div>
+		            <div class="row">
+						<div class="col-md-12">
 							<p>
-								<div class="form-group form-md-line-input">
+								<div class="form-group">
 									<label class="col-md-3 control-label" for="form_control_1">我的意见</label>
 									<div class="col-md-8">
 										<textarea class="form-control"   
@@ -89,7 +92,10 @@
 								<input type="hidden" name="taskId" id="taskId" value="{{taskId}}" />
 								<input type="hidden" name="processInstanceId" id="processInstanceId" value="{{processInstanceId}}" />
 							</p>
-
+	                      </div>
+		            </div>
+		            <div class="row">
+						<div class="col-md-12">
 							<div class="modal-footer">
 								<button type="button"  ng-if="buyOrSale.indexOf('buy')>-1"  ng-click="pricePass('buy')" class="btn blue btn-circle  btn-sm">通过</button>
 								<button type="button"  ng-if="buyOrSale.indexOf('buy')>-1"  ng-click="priceUnPass('buy')" class="btn red btn-circle  btn-sm">不通过</button>

@@ -53,7 +53,7 @@
 				<!-- 意见START -->
 				<div class="portlet-body">
 					<div class="row">
-						<div class="form-group form-md-line-input">
+						<div class="form-group">
 							<label class="col-md-1 control-label" for="form_control_1">我的意见:</label>
 							<div class="col-md-11">
 								<textarea class="form-control" ng-model="content" id="content"
