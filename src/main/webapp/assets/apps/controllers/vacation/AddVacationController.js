@@ -69,6 +69,9 @@ angular
 							        	else $('#modifyVacationModal').modal('hide');
 							        	table.ajax.reload();
 							        	showToastr('toast-bottom-right', 'success', data);
+							        },
+							        error : function(data) {
+							        	toastr.error('连接服务器出错,请登录重试！');
 							        }
 							     });
 							}
