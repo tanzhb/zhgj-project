@@ -93,10 +93,10 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
 		
 		fd.append('userId', $scope.userInfo.userId); 
 		fd.append('displayName',$scope.userInfo.displayName); 
-        fd.append('sex',$("input[name='sex']:checked").val()); 
-        fd.append('telephone',$scope.userInfo.telephone); 
-        fd.append('QQNum',$scope.userInfo.qqnum); 
-        fd.append('fax',$scope.userInfo.fax); 
+		if($("input[name='sex']:checked").val())fd.append('sex',$("input[name='sex']:checked").val()); 
+        if($scope.userInfo.telephone)fd.append('telephone',$scope.userInfo.telephone); 
+        if($scope.userInfo.qqnum)fd.append('QQNum',$scope.userInfo.qqnum); 
+        if($scope.userInfo.fax)fd.append('fax',$scope.userInfo.fax); 
         fd.append('cellPhone',$scope.userInfo.cellPhone); 
         fd.append('email',$scope.userInfo.email); 
          $http({

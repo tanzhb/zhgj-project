@@ -896,7 +896,8 @@ margin-right: 20px;
                                       		<p class="form-control-static" > {{_orderMateriel.materiel.unitPrice}} </p>
 			                          </td>
 			                          <td>  
-                                      		<p class="form-control-static"> {{_orderMateriel.orderRateUnit}} </p>
+                                    		<p class="form-control-static" ng-if="_orderMateriel.materiel.unitPrice!=_orderMateriel.orderRateUnit" style="color:red"> {{_orderMateriel.orderRateUnit}} </p>
+                                     		<p class="form-control-static" ng-if="_orderMateriel.materiel.unitPrice==_orderMateriel.orderRateUnit"> {{_orderMateriel.orderRateUnit}} </p>
 			                          </td>
 			                          <td>  
                                       		<p class="form-control-static" > {{format2Thousands(_orderMateriel.orderUnitPrice)}} </p>

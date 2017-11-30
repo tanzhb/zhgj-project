@@ -2991,7 +2991,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                     return $ocLazyLoad.load({
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
-                        files: [                             
+                        files: [     
+					'assets/apps/controllers/app.js',
+					'assets/apps/controllers/uploadPhoto.js',
 					'assets/global/plugins/datatables/datatables.min.css',
 					'assets/apps/css/special.css',
 					'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
@@ -3003,9 +3005,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 			        'assets/apps/service/UserInfoService.js',
 					'assets/apps/controllers/UserInfoController.js',
 					'assets/apps/service/CompanyInfoService.js',
-					 'assets/apps/service/AccountSecurityService.js',
-					'assets/apps/controllers/app.js',
-					'assets/apps/controllers/uploadPhoto.js'
+					 'assets/apps/service/AccountSecurityService.js'
 					]
                     });
                 }]
