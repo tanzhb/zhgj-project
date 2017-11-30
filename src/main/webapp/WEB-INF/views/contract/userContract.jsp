@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <div class="tabbable-line">
-	<ul class="nav nav-tabs" id="statement_tab">
+	<ul class="nav nav-tabs" id="contract_tab">
 		<li><a data-target="#tab_15_2" data-toggle="tab">销售合同</a></li>
 		<li><a data-target="#tab_15_3" data-toggle="tab">采购合同</a></li>
 		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">其他合同</a>
@@ -31,9 +31,10 @@
 							<div class="actions" ng-controller='MyCtrl'>
 								<label class="btn btn-transparent green btn-circle btn-sm"
 									ng-click="jumpToUrl('addUserContract')"><i
-									class="fa fa-plus"></i> 添加</label> <label
+									class="fa fa-plus"></i> 添加</label> 
+								<label
 									class="btn btn-transparent purple btn-circle btn-sm"
-									ng-click="jumpToEdit()"> <i class="fa fa-edit"></i>修改
+									ng-click="jumpToEdit(1)"> <i class="fa fa-edit"></i>修改
 								</label> <label class="btn btn-transparent red btn-circle btn-sm"
 									ng-click="del()"> <i class="fa fa-minus"></i> 删除
 								</label> <label
@@ -119,6 +120,9 @@
 									class="btn btn-transparent green btn-outline btn-circle btn-sm"
 									data-toggle="modal" ng-click="saleOrderSign()"><i
 									class="fa fa-pencil"></i>签订</label>
+							<label
+									class="btn btn-transparent purple btn-circle btn-sm"
+									ng-click="jumpToEdit(2)"> <i class="fa fa-edit"></i>修改</label>
 								<label
 									class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
 									ng-click="exportSaleContract()"> <i
@@ -213,6 +217,9 @@
 									class="btn btn-transparent green btn-outline btn-circle btn-sm"
 									data-toggle="modal" ng-click="buyOrderSign()"><i
 									class="fa fa-pencil"></i>签订</label>
+									<label
+									class="btn btn-transparent purple btn-circle btn-sm"
+									ng-click="jumpToEdit(3)"> <i class="fa fa-edit"></i>修改</label>
 								<label
 									class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
 									ng-click="exportBuyContract()"> <i

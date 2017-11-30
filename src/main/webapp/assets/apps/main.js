@@ -1259,7 +1259,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         	}
         })
 	    .state('userContract', {
-	            url: "/userContract",
+	            url: "/userContract:tabHref",
 	            templateUrl:"rest/page/userContract",
 	            data: {pageTitle: '合同管理'},
 	            controller: "ContractController",

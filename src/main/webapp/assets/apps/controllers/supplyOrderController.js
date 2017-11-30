@@ -1296,6 +1296,52 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
   	   	       		     function(data){
   	   	       		    	toastr.success('数据保存成功！');
   	   	       		    	$scope.cancelAllOrderMateriel();
+	   	       		    		//保存结算条款
+		  	   	       		if(isNull($scope.clauseSettlement)){// 结算条款为空的处理
+			  	   	    		return
+			  	   			}
+			  	   	    	if($('#form_clauseSettlement').valid()){
+			  	   	    		$scope.clauseSettlement.contractSerial = $scope.contract.id;
+			  	   	    		$scope.clauseSettlementDetail = $scope.clauseSettlement.CSD;
+			  	   	    		$scope.clauseSettlement.materielAmount = $scope.totalAmount();
+			  	   	  	        $scope.clauseSettlement.rateAmount = $scope.totalRateAndCustomsAmount();
+			  	   	  	        $scope.clauseSettlement.rateAndAmount = $scope.totalRateAndAmount();
+			  	   	  	        $scope.clauseSettlement.orderAmount = $scope.totalOrderAmount();
+			  	   	    		delete $scope.clauseSettlement.CSD;
+			  	   	    		orderService.saveClauseSettlement($scope.clauseSettlement).then(//保存结算条款
+			  	   	       		     function(data){
+			  	   	       		    	$scope.clauseSettlement = data.data;
+			  	   	       		    	if(!isNull(data.data)){
+			  	   	       		    		if(!isNull($scope.clauseSettlementDetail)){
+			  	   	       		    			for(var i=0;i<$scope.clauseSettlementDetail.length;i++){
+			  	   	          		    			$scope.clauseSettlementDetail[i].clauseSettlementSerial = data.data.serialNum;
+			  	   	          		    		}
+			  	   	          		    		orderService.saveClauseSettlementDetail($scope.clauseSettlementDetail).then(//保存结算条款明细
+			  	   	          		        		     function(data){
+			  	   	          		        		    	$scope.cancelClauseSettlement();
+			  	   	          		        		    	$scope.clauseSettlement.CSD = data.data;
+			  	   	          		        		     },
+			  	   	          		        		     function(error){
+			  	   	          		        		    	toastr.error('数据保存出错！');
+			  	   	          		        		         $scope.error = error;
+			  	   	          		        		     }
+			  	   	          		        		 );
+			  	   	       		    		}else{
+			  	   	          		    		$scope.cancelClauseSettlement()
+			  	   	       		    		}
+			  	   	       		    	//更新订单金额数据
+			  	   		        		$scope.updateOrderAmount();	
+			  	   	       		    	}else{
+			  	   	      		    		$scope.clauseSettlement = {}
+			  	   	      		    		$scope.cancelClauseSettlement()
+			  	   	      		    	}
+			  	   	       		     },
+			  	   	       		     function(error){
+			  	   	       		    	toastr.error('数据保存出错！');
+			  	   	       		         $scope.error = error;
+			  	   	       		     }
+			  	   	       		 );
+			  	   	    	}
   	   	       		     },
   	   	       		     function(error){
   	   	       		    	toastr.error('数据保存出错！');
@@ -2705,7 +2751,25 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    		   }
 			       	}
 		       };
-		       
+		       $scope.arithmeticAllDeliveryAmount  = function() {//计算所有节点支付金额
+			    	 //计算各节点金额
+			    	   if(!isNull($scope.clauseSettlement)&&!isNull($scope.clauseSettlement.CSD)){
+			    		   	for(var i=0;i<$scope.clauseSettlement.CSD.length;i++){
+				    		   $scope.arithmeticDeliveryAmount($scope.clauseSettlement.CSD[i])
+				       		}
+			    	   }
+			      };
+			       $scope.arithmeticDeliveryAmount  = function(CSD) {//计算支付金额
+			          	if($scope._totalRate()>100){
+			          		CSD.deliveryRate = CSD.deliveryRate - $scope._totalRate() + 100
+			          	}
+			          	if(CSD.deliveryRate){
+			          		CSD.deliveryAmount =  ($scope.totalOrderAmount()*CSD.deliveryRate/100).toFixed(2);
+			          	}
+	/*		       	scope._CSD.billingAmount = (Number($scope._totaldeliveryAmount()) - Number($scope._totalbillingAmount()) + Number(scope._CSD.billingAmount)).toFixed(2);
+			      		scope._CSD.unbilledAmount = 0 ;*/
+			      };
+			       
 		       $scope.totalAmount  = function(scope) {//商品金额
 		    	   if($scope.orderMateriel){
 		    		    var total = 0 ; 

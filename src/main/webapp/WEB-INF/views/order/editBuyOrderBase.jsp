@@ -1254,9 +1254,9 @@ margin-right: 20px;
                                  <tr>
                                      <th style="width:150px">支付类型</th>
                                      <th style="width:150px">支付节点</th>
-                                     <th style="width:70px">账期</th>
+                                     <th style="width:70px">账期（天）</th>
                                      <th style="width:50px">支付比率%</th>
-                                     <th style="width:150px">支付金额</th>
+                                     <th style="width:150px">支付金额{{arithmeticAllDeliveryAmount()}}</th>
                                      <th style="width:150px">支付方式</th>
                                      <th style="width:150px">开票方式</th>
                                      <!-- <th style="width:150px">开票金额</th>

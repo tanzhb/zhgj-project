@@ -56,9 +56,7 @@
 													<label class="control-label bold">合同编号<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
-														<input type="text" id="contractNum" name="contractNum"
-															class="form-control" ng-model="contractVO.contractNum" />
-														<div class="form-control-focus"></div>
+														{{contractVO.contractNum}}
 													</div>
 												</div>
 											</div>
@@ -69,13 +67,7 @@
 													<label class="control-label bold">合同类型<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
-														<select class="form-control"
-															ng-model="contractVO.contractType" id="contractType"
-															name="contractType">
-															<option value="">合同类型</option>
-															<option value="服务合同">服务合同</option>
-															<option value="其他合同">其他合同</option>
-														</select>
+														{{contractVO.contractType}}
 													</div>
 												</div>
 											</div>
