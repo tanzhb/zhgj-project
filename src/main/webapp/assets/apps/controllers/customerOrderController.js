@@ -1561,12 +1561,12 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 			  	   	    		return
 			  	   			}
 			  	   	    	if($('#form_clauseSettlement').valid()){
-			  	   	    		$scope.clauseSettlement.contractSerial = $scope.contract.id;
-			  	   	    		$scope.clauseSettlementDetail = $scope.clauseSettlement.CSD;
-			  	   	    		$scope.clauseSettlement.materielAmount = $scope.totalAmount();
-			  	   	  	        $scope.clauseSettlement.rateAmount = $scope.totalRateAndCustomsAmount();
-			  	   	  	        $scope.clauseSettlement.rateAndAmount = $scope.totalRateAndAmount();
-			  	   	  	        $scope.clauseSettlement.orderAmount = $scope.totalOrderAmount();
+				  	   	    	$scope.clauseSettlement.contractSerial = $scope.contract.id;
+				  	    		$scope.clauseSettlementDetail = $scope.clauseSettlement.CSD;
+				  		        $scope.clauseSettlement.materielAmount = $scope.totalAmount();
+				  	  	        $scope.clauseSettlement.rateAmount = $scope.totalRateAmount();
+				  	  	        $scope.clauseSettlement.rateAndAmount = $scope.totalRateAndAmount();
+				  	  	        $scope.clauseSettlement.orderAmount = $scope.totalOrderAmount();
 			  	   	    		delete $scope.clauseSettlement.CSD;
 			  	   	    		orderService.saveClauseSettlement($scope.clauseSettlement).then(//保存结算条款
 			  	   	       		     function(data){
@@ -2955,20 +2955,22 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			       	}
 		       };
 		       
-		       $scope.totalOrderAmount  = function(scope) {//订单金额（外贸：商品金额+其他金额，内贸：价税合计（商品金额+税额）+ 其他金额）
+		       $scope.totalOrderAmount  = function(scope) {//订单金额（价税合计（商品金额+税额）+ 其他金额）
 		    	   if(isNull($scope.clauseSettlement)||isNull($scope.clauseSettlement.otherAmount)){
-		    		   if(!isNull($scope.customerOrder)&&$scope.customerOrder.tradeType =='外贸'){
+		    		   /*if(!isNull($scope.saleOrder)&&$scope.saleOrder.tradeType =='外贸'){
 		    			   return Number($scope.totalAmount());
 		    		   }else{
 		    			   return Number($scope.totalAmount()) + Number($scope.totalRateAmount());
-		    		   }
+		    		   }*/
+		    		   return Number($scope.totalAmount()) + Number($scope.totalRateAmount());
 			       		
 			       	}else{
-			       	   if(!isNull($scope.customerOrder)&&$scope.customerOrder.tradeType =='外贸'){
+			       	   /*if(!isNull($scope.saleOrder)&&$scope.saleOrder.tradeType =='外贸'){
 		    			   return Number($scope.totalAmount()) + Number($scope.clauseSettlement.otherAmount)
 		    		   }else{
 		    			   return Number($scope.totalAmount()) + Number($scope.totalRateAmount()) + Number($scope.clauseSettlement.otherAmount);
-		    		   }
+		    		   }*/
+			       		return Number($scope.totalAmount()) + Number($scope.totalRateAmount()) + Number($scope.clauseSettlement.otherAmount);
 			       	}
 		       };
 		       $scope.arithmeticAllDeliveryAmount  = function() {//计算所有节点支付金额
