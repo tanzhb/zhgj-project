@@ -302,7 +302,7 @@
 							<!-- </form> -->
          				</div>
 
-  <div class="portlet-title"><!-- 使用采购商 START -->
+<!--   <div class="portlet-title">使用采购商 START
                             <div class="caption">使用采购商</div>
                             <div class="actions">
                             </div>
@@ -330,7 +330,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                </div><!-- 使用采购商 END-->
+                                </div>使用采购商 END -->
 				
                     <div class="portlet-title"><!-- 价格日志START-->
                             <div class="caption">价格日志</div>

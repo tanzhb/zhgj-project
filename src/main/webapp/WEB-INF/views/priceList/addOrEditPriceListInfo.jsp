@@ -497,8 +497,8 @@
                                     </div>
                                 </div>使用采购商 END -->
                                 
-                  	<div id="tab_1_6"  ng-if="buyOrSale.indexOf('buy')>-1">
-						<!-- 采购商 start-->
+              <!--     	<div id="tab_1_6"  ng-if="buyOrSale.indexOf('buy')>-1">
+						采购商 start
 				          <div class="portlet-title" style="min-height: 48px;">
 				          <div class="caption">采购商</div>
 				               <div class="tools" style="float:right">
@@ -528,7 +528,7 @@
 						                                 	<div ng-show="buyComInfoInput">
 							                                 	<select class="form-control" id="buyComId[$index]" name="buyComId"    ng-change="changeValue('buy',$index)"  class="bs-select form-control diySelectCss" data-live-search="true" data-size="8"  ng-model="priceComs[$index].comSerial"  >
 					                                              	<option ng-repeat="_buy in customers" value="{{_buy.comId}}" repeat-done="repeatDone()"   >{{_buy.comName}}</option>
-					                                             </select><!-- suppliers -->
+					                                             </select>suppliers
 				                                             </div>
 							                                <p class="form-control-static" ng-show="buyComsInfoShow"> {{buyCom.comName}} </p>
 							                          </td>
@@ -556,10 +556,10 @@
 				                  		</div>
 				                  </form>
 				          </div>
-				          <!-- 采购商 end-->
+				          采购商 end
 						</div>              
 				<div id="tab_1_6"  ng-if="buyOrSale.indexOf('sale')>-1">
-						<!-- 供应商 start-->
+						供应商 start
 				          <div class="portlet-title" style="min-height: 48px;">
 				          <div class="caption">供应商</div>
 				               <div class="tools" style="float:right">
@@ -573,7 +573,7 @@
 				            </div>
 				           <div class="portlet-body form">
 							     <form id="form_sample_6" >
-							         <div ><!--  class="table-scrollable"-->
+							         <div > class="table-scrollable"
 				                          <table class="table table-bordered table-hover">
 				                              <thead>
 				                                  <tr>
@@ -616,8 +616,8 @@
 				                  		</div>
 				                  </form>
 				          </div>
-				          <!-- 供应商 end-->
-						</div>    
+				          供应商 end
+						</div>     -->
                     <div class="portlet-title"><!-- 价格日志START-->
                             <div class="caption">价格日志</div>
                             <div class="actions">
