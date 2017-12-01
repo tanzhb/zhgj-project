@@ -263,7 +263,7 @@ public class DeliveryController {
      * @return
      */
     @RequestMapping(value = "/findAllDeliveryList", method = RequestMethod.GET)
-    public ResponseEntity<Map> findAllDeliveryList(HttpServletRequest request,String customsFormType,String noInit) {
+    public ResponseEntity<Map<String,Object>> findAllDeliveryList(HttpServletRequest request,String customsFormType,String noInit) {
 
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
@@ -316,12 +316,12 @@ public class DeliveryController {
 		}
 
 		//封装datatables数据返回到前台
-		Map pageMap = new HashMap();
+		Map<String,Object> pageMap = new HashMap<String,Object>();
 		pageMap.put("draw", 1);
 		pageMap.put("recordsTotal",contractList==null?0:contractList.size());
 		pageMap.put("recordsFiltered",contractList==null?0:contractList.size());
 		pageMap.put("data", contractList);
-		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+		return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
 	}
     
 

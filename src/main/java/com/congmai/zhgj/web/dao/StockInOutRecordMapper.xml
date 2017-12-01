@@ -541,6 +541,7 @@
 		AND (
 				stock.manageType = '1'
 				AND   o.orderType != '委托采购'
+				AND s.status=1
 		)
 		
 		WHERE stock.serialNum = #{serialNum};
@@ -567,6 +568,7 @@
 		AND (
 				stock.manageType = '2'
 				AND o.orderType = '委托采购'
+				AND s.status=1
 				AND stock.materielOwner = (
 					SELECT
 						orderInfo.buyComId
@@ -599,6 +601,7 @@
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 				stock.manageType = '1'
+				AND s.status=1
 				AND  o.orderType != '委托采购'
 		)
 		
@@ -626,6 +629,7 @@ SELECT
 		AND (
 				stock.manageType = '2'
 				AND o.orderType = '委托采购'
+				AND s.status=1
 				AND stock.materielOwner = (
 					SELECT
 						orderInfo.buyComId
@@ -657,6 +661,7 @@ SELECT
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 			stock.manageType = '1'
+			AND s.status=1
 				AND  o.orderType != '委托采购'
 		)
 		
@@ -683,6 +688,7 @@ SELECT
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 			stock.manageType = '2'
+			AND s.status=1
 				AND o.orderType = '委托采购'
 		)
 		
@@ -713,6 +719,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 		stock.manageType = '1'
+		AND s.status=1
 				AND  o.orderType != '委托采购'
 		)
 		
@@ -744,6 +751,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 		AND (
 			stock.manageType = '2'
 				AND o.orderType = '委托采购'
+				AND s.status=1
 				AND stock.materielOwner = (
 					SELECT
 						orderInfo.buyComId
@@ -781,6 +789,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 			stock.manageType = '1'
+			AND s.status=1
 				AND  o.orderType != '委托采购'
 		
 		)
@@ -812,6 +821,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 		AND (
 			stock.manageType = '2'
 				AND o.orderType = '委托采购'
+				AND s.status=1
 				AND stock.materielOwner = (
 					SELECT
 						orderInfo.buyComId
@@ -847,6 +857,7 @@ sob.outCount
 		AND (
 			stock.manageType = '1'
 				AND  o.orderType != '委托采购'
+				AND s.status=1
 				
 		)
 		
@@ -874,6 +885,7 @@ sob.outCount
 		AND (
 			stock.manageType = '2'
 				AND o.orderType = '委托采购'
+				AND s.status=1
 				AND stock.materielOwner = (
 					SELECT
 						orderInfo.buyComId
@@ -924,6 +936,7 @@ sib.stockInCount
 		AND (
 			stock.manageType = '1'
 				AND o.orderType != '委托采购'
+				AND s.status=1
 		)
 		
 		WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR})a
@@ -965,6 +978,7 @@ sib.stockInCount
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 			stock.manageType = '2'
+			AND s.status=1
 				AND o.orderType = '委托采购'
 				AND stock.materielOwner = (
 					SELECT

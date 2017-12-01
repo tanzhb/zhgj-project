@@ -238,10 +238,24 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        	}
 	        	if(type=="edit"){
 	        		$scope.deliverTransport = data.data.deliveryTransport;
-	        		$scope.orderMateriels = data.data.deliveryMateriels;
 	        		if($state.current.name=="takeDeliveryView"){//查看页面构造物料查询分页
+      		    		var array=new Array();
+      					for (var i=0;i <data.data.deliveryMateriels.length;i++){
+      						if(data.data.deliveryMateriels[i].deliverCount!=0){
+      							/*delete   data.data.deliveryMateriels[i];*/
+      							array.push(data.data.deliveryMateriels[i]);
+      						}
+      					}
+      					$scope.orderMateriels=array; 
+      					$scope.deliver.deliveryMateriels=array;
+      					$scope.queryForPage();
+      					data.data.deliveryMateriels=array;
+      					$scope.materielCount=array.length;
+      		    		//$scope.materielCount=$scope.orderMateriels.length;//物料条目数
+      		    	}else{
+      		    		$scope.materielCount=data.data.deliveryMateriels.length;
+      		    		$scope.orderMateriels=data.data.deliveryMateriels; 
       		    		$scope.queryForPage();
-      		    		$scope.materielCount=$scope.orderMateriels.length;//物料条目数
       		    	}
 	        		initWarehouse("pt",$scope.deliver.supplyComId,"out");
 					initWarehouse("pt",$scope.deliver.buyComId,"in");
@@ -251,6 +265,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        			$scope.takeDeliver.warehouseSerial = $scope.takeDeliver.warehouse.serialNum;
 		        		$scope.takeDeliver.warehouseName = $scope.takeDeliver.warehouse.address;
 	        		}
+	        		//$scope.orderMateriels = data.data.deliveryMateriels;
 	        		var totalOrderCount=0, totalDeliveryCount=0;
 	        		var  totalQualifiedCount=0,totalStockInCount=0,totalUnstockInCount=0;
 	        		for(var i in data.data.deliveryMateriels){

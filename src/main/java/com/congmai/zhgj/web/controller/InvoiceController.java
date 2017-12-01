@@ -323,7 +323,7 @@ public class InvoiceController {
     @RequestMapping(value = "/getMaterielList")
     public ResponseEntity<Map> getMaterielList(HttpServletRequest request, String  orderSerial,String deliverSerial) {
     	
-		List<Materiel> materiels = materielService.selectMaterielByOrderSerial(orderSerial.substring(0, 32),orderSerial);
+		List<Materiel> materiels = materielService.selectMaterielByOrderSerial(orderSerial.substring(0, 32),orderSerial,deliverSerial);
 		/*OrderInfo orderInfo=orderService.selectById(orderSerial.substring(0, 32));*/
 		DeliveryTransport dt=new  DeliveryTransport();
 		BigDecimal deliverAmount=BigDecimal.ZERO;//deliverAmount发货金额
@@ -334,14 +334,14 @@ public class InvoiceController {
 			 for(Materiel materiel:materiels){
 					materiel.setMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getBillAmount()).setScale(2,BigDecimal.ROUND_HALF_UP )).toString());
 					if(!StringUtils.isEmpty(materiel.getRate())){//	税额
-						materiel.setRateMoney(new BigDecimal(materiel.getRate()).multiply(new BigDecimal(materiel.getOrderUnitPrice())).multiply(new BigDecimal(materiel.getAmount())).divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
+						materiel.setRateMoney(new BigDecimal(materiel.getRate()).multiply(new BigDecimal(materiel.getOrderUnitPrice())).multiply(new BigDecimal(materiel.getDeliverCount())).divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
 						addedTax=addedTax.add(new BigDecimal(materiel.getRateMoney()));
 					}
 					if(!StringUtils.isEmpty(materiel.getCustomsRate())){//关税额
-						materiel.setCustomRateMoney(new BigDecimal(materiel.getCustomsRate()).multiply(new BigDecimal(materiel.getOrderUnitPrice())).multiply(new BigDecimal(materiel.getAmount())).divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
+						materiel.setCustomRateMoney(new BigDecimal(materiel.getCustomsRate()).multiply(new BigDecimal(materiel.getOrderUnitPrice())).multiply(new BigDecimal(materiel.getDeliverCount())).divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
 						customsAmount=customsAmount.add(new BigDecimal(materiel.getCustomRateMoney()));
 					}
-					materiel.setMaterielMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getAmount())).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
+					materiel.setMaterielMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getDeliverCount())).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
 					deliverAmount=deliverAmount.add(new BigDecimal(materiel.getMaterielMoney()));
 				}
 		}else{

@@ -207,7 +207,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 		        			totalDeliveryCount=totalDeliveryCount+Number( $scope.takeDeliveryMateriels[i].deliverCount);
 		        			if($scope.oprateType==undefined){//出库计划详情物料tab展示合格总数,出库总数,未出总数
 		        				totalQualifiedCount=totalQualifiedCount+Number($scope.takeDeliveryMateriels[i].stockInQualifiedCount);
-		        				totalStockInCount=totalStockInCount+Number( $scope.takeDeliveryMateriels[i].stockCount);
+		        				totalStockInCount=totalStockInCount+Number( $scope.takeDeliveryMateriels[i].stockInCount);
 			        		}
 	        			}
 	        		}
@@ -265,10 +265,10 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 //						param.takeRemark = $scope.takeDeliveryMateriels[i].takeRemark;
 						
 						
-						param.stockCount = $scope.takeDeliveryMateriels[i].stockCount;
+						param.stockCount = $scope.takeDeliveryMateriels[i].stockInCount;
 						if(!isNull($scope.takeDeliveryMateriels[i].acceptCount)){
 							param.serialNum = $scope.takeDeliveryMateriels[i].serialNum;
-							param.unstockCount = $scope.takeDeliveryMateriels[i].acceptCount-$scope.takeDeliveryMateriels[i].stockCount;
+							param.unstockCount = $scope.takeDeliveryMateriels[i].acceptCount-$scope.takeDeliveryMateriels[i].stockInCount;
 							
 						}else{//
 							debugger;

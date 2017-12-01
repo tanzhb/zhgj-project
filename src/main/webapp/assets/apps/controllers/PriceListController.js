@@ -29,7 +29,9 @@ angular
 							 if($stateParams.buyOrSale.length<=4){
 								 debugger;
 								 $scope.ladderprices=[{}];
-								 _index = 0; 
+								 $scope.priceComs=[{}];
+								 _index = 0; //阶梯价格
+								 _index_com = 0; //采购商/供应商
 								// $scope.priceList.isLadderPrice="0";
 								 getPriceListInfo($stateParams.buyOrSale);
 								 $scope.isChecked=false;
@@ -45,16 +47,19 @@ angular
 								 $scope.ladderpriceAdd=true;
 								 $scope.ladderpriceView=true;
 								 $scope.ladderpriceEdit=false;//隐藏取消
+								 $scope.buyComsInfoShow=true;
 							 }
 							
 							 if($stateParams.buyOrSale.indexOf("buy")>-1){
 								 initSuppliers();
+								 initCustomersForCom();
 								 $rootScope.setNumCode("PI",function(newCode){//
 						    			//$scope.company={};
 					        			$scope.priceList.priceNum= newCode;//采购价格编号
 					        		});
 							 }else{
 								 initCustomers(); 
+								 initSuppliersForCom();
 								 $rootScope.setNumCode("SI",function(newCode){//
 						    			//$scope.company={};
 									 $scope.priceList.priceNum= newCode;//销售价格编号
@@ -97,8 +102,10 @@ angular
 						 if($location.path()=="/editPriceApply"){
 							 if($stateParams.buyOrSale.indexOf("buy")>-1){
 								 initSuppliers();
+								 initCustomersForCom();
 							 }else{
 								 initCustomers(); 
+								 initSuppliersForCom();
 							 }
 							 $scope.priceListView =false;
 							 $scope.priceListAdd =true ;
@@ -1062,6 +1069,102 @@ function loadPriceListSaleTable(){
 					 $scope.ladderprices[_index] = {};
 				 }
 			 };
+			 $scope. changeValue=function(judgeString,index){//选中企业为编号赋值
+				 var  comSerials=new Array();
+				 if($scope.comSerials==undefined){
+					 $scope.comSerials=comSerials;
+				 }else{
+					 comSerials= $scope.comSerials;
+					 for(var  i=0;i<comSerials.length;i++){
+						 if(comSerials[i]==$scope.priceComs[index].comSerial){
+							 toastr.warning("该采购商已经存在,请重新选择!");
+							 return;
+						 }
+					 }
+				 }
+				 if(judgeString=='buy'){
+					 for( var i in $scope.customers){
+						 if($scope.customers[i].comId==$scope.priceComs[index].comSerial){
+							 $scope.priceComs[index].comNum=$scope.customers[i].comNum;
+							 $scope.priceComs[index].comName=$scope.customers[i].comName;
+							 comSerials.push($scope.priceComs[index].comSerial);
+							 $scope.comSerials=comSerials;
+							/* $scope.copycustomers=angular.copy($scope.customers);
+							 delete  $scope.copycustomers[i];
+							 $scope.customers= $scope.copycustomers;*/
+							 break;
+						 }
+					 }
+				}else if(judgeString=='supply'){
+						 for( var i in $scope.suppliers){
+							 if($scope.suppliers[i].comId==$scope.priceComs[index].comSerial){
+								 $scope.priceComs[index].comNum=$scope.suppliers[i].comNum;
+								 $scope.priceComs[index].comName=$scope.suppliers[i].comName;
+								 comSerials.push($scope.priceComs[index].comSerial);
+								 $scope.comSerials=comSerials;
+								/* $scope.copysuppliers=angular.copy($scope.suppliers);
+								 delete  $scope.copysuppliers[i];
+								 delete  $scope.suppliers[i];
+								 $scope.suppliers= $scope.copysuppliers;*/
+								
+								 break;
+							 }
+					 }
+					 
+				 }
+			 }
+			 
+			 $scope.editPriceCom=function(){//编辑采供应商
+				 $scope.buyComInfoInput=true;
+				 $scope.buyComsInfoShow=false;
+				 $scope.buyComsInfoShowBtn=true;
+			 }
+			 $scope.cancelPriceCom=function(){//取消编辑采供应商
+				 $scope.buyComInfoInput=false;
+				 $scope.buyComsInfoShow=true;
+				 $scope.buyComsInfoShowBtn=false;
+			 }
+			 $scope. savePriceCom=function(){//保存采供应商
+				 if(handle.isNull($scope.priceList)||handle.isNull($scope.priceList.serialNum)){
+					 toastr.warning("您的价格信息还未保存！");
+					 return;
+				 }else{
+					 for(var i=0;i<$scope.priceComs.length;i++){
+						 $scope.priceComs[i].priceSerial = $scope.priceList.serialNum;//附上价格流水号
+					 }
+					 handle.blockUI();
+					 var promise = priceListService.savePriceComs($scope.priceComs);
+					 promise.then(function(data){
+						 if(!handle.isNull(data)){
+							 toastr.success("保存成功");
+							 debugger;
+							 handle.unblockUI();
+							 $scope.priceComs = data.data;
+							 $scope.buyComsInfoShowBtn =false;
+							 $scope.buyComsInfoShow =true;
+							 $scope.buyComInfoInput =false;
+						 }else{
+							 toastr.error("保存失败！");
+							 handle.unblockUI();
+						 }
+					 },function(data){
+						 handle.unblockUI();
+						 toastr.error("保存失败！");
+						 console.log(data);
+					 });
+				 }
+			 }
+			 
+			 //采购商/供应商加一行
+			 $scope.addRepeatForCom = function(){
+				 if(handle.isNull($scope.priceList)||handle.isNull($scope.priceList.serialNum)){
+					 toastr.warning("您的价格信息还未保存");
+					 return;
+				 }else{
+					 _index_com++;
+					 $scope.priceComs[_index_com] = {};
+				 }
+			 };
 			   $scope.clearNoNumPoint = function(obj,attr){
 			    	 //先把非数字的都替换掉，除了数字和.
 			    	 obj[attr] = obj[attr].replace(/[^\d.]/g,"");
@@ -1071,6 +1174,10 @@ function loadPriceListSaleTable(){
 			    	 obj[attr] = obj[attr].replace(/\.{2,}/g,"");
 			    	 //保证.只出现一次，而不能出现两次以上
 			    	 obj[attr] = obj[attr].replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+			    	 if(attr=='inclusivePrice'&&$scope.priceList.rate!=undefined){
+	                       var inclusivePrice=$scope.priceList.inclusivePrice;
+			    		 $scope.priceList.unitPrice=inclusivePrice*(1-$scope.priceList.rate/100);
+			    	 }
 		    	 }
 			 /**
 			  * 阶梯价格删除一行
@@ -1078,6 +1185,12 @@ function loadPriceListSaleTable(){
 			 $scope.deleteRepeat = function(){
 				 $scope.ladderprices.splice(_index,1);
 				 _index--;
+			 };
+			 /**采购商/供应商删除一行
+			  */
+			 $scope.deleteRepeatForCom = function(){
+				 $scope.priceComs.splice(_index_com,1);
+				 _index_com--;
 			 };
 
 			 /**
@@ -1358,8 +1471,9 @@ function loadPriceListSaleTable(){
 							 $scope.priceList = data.priceList;
 							 $scope.ladderprices=data.ladderPrices;
 							 _index=data.ladderPrices.length-1;
+							 _index_com=data.priceComs.length-1;
 							 $scope.priceLists=data.priceLists;
-							 $scope.buyComs=data.buyList;
+							 $scope.priceComs=data.priceComs;
 							 if($scope.priceList.isLadderPrice=='1'){
 								 $('#isLadderPriceCheck').iCheck('check'); 
 								 $scope.isChecked=true;
@@ -1441,7 +1555,28 @@ function loadPriceListSaleTable(){
 			        		//调用承诺接口reject();
 			        	});
 				}
-				
+				 /**
+				 * 加载供应商数据
+				 */
+				var initSuppliersForCom = function(){
+					var promise = orderService.initSuppliers();
+			        	promise.then(function(data){
+			        		$scope.suppliers = data.data;
+			        	},function(data){
+			        		//调用承诺接口reject();
+			        	});
+				}
+				 /**
+				 * 加载采购商(客户)数据
+				 */
+				var initCustomersForCom = function(){
+					var promise = orderService.initCustomers();
+			        	promise.then(function(data){
+			        		$scope.customers = data.data;
+			        	},function(data){
+			        		//调用承诺接口reject();
+			        	});
+				}
 				 /**
 				 * 加载采购商(客户)数据
 				 */

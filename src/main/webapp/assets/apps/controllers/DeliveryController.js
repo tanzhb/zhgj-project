@@ -403,8 +403,6 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			toastr.error("请先保存发货信息！");	
 			return;
 		}
-		
-		handle.blockUI();
 	/*	var params = {};
 		params.deliveryMateriels = [];
 		var param;
@@ -424,6 +422,10 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		}*/
 		for (var i=0;i < $scope.deliveryMaterielE.length;i++){
 			var deliveryMateriel=$scope.deliveryMaterielE[i];
+			if(isNull(deliveryMateriel.deliverCount)){
+				toastr.error("发货数量不能为空！");	
+				return;
+			}
 			deliveryMateriel.deliverSerial=$scope.delivery.serialNum;
 			var attachFile=$("#batchNumReal"+i).text();
 			deliveryMateriel.attachFile=attachFile;
@@ -435,13 +437,22 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			deliveryMateriel.supplyMaterielSerial:deliveryMateriel.supplyMaterielSerial,*/
 			
 		}
+		handle.blockUI();
 		var promise = DeliveryService.saveAllDeliveryMateriel($scope.deliveryMaterielE);
 		promise.then(function(data) {
 			if (!handle.isNull(data)) {
 				$(".modal-backdrop").remove();
 				toastr.success("保存成功");
 				handle.unblockUI();
-				$scope.deliveryMaterielE= data.data.deliveryMateriels;
+				var array=new Array();
+				for (var i=0;i < data.data.deliveryMateriels.length;i++){
+					if(data.data.deliveryMateriels[i].deliverCount!=0){
+						/*delete   data.data.deliveryMateriels[i];*/
+						array.push(data.data.deliveryMateriels[i]);
+					}
+				}
+				$scope.deliveryMaterielE=array; 
+				$scope.materielCount=array.length;
 			$scope.editMateriel=true;
 			$scope.saveMateriel=true;
 				for(var i=0;i<$scope.deliveryMaterielE.length;i++){
@@ -2084,10 +2095,17 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    		$scope.supplyComId=$scope.delivery.supplyComId;
 	          		    		$scope.shipper=$scope.delivery.shipper;
 	          		    	}
+	          		  /*	var array=new Array();
+	    				for (var i=0;i < data.data.deliveryMateriels.length;i++){
+	    					if(data.data.deliveryMateriels[i].deliverCount!=0){
+	    						delete   data.data.deliveryMateriels[i];
+	    						array.push(data.data.deliveryMateriels[i]);
+	    					}
+	    				}
+	    				$scope.deliveryMaterielE=array; 
+	    				$scope.materielCount=array.length;*/
 	          		    	$scope.deliveryMaterielE=data.deliveryMateriels;
 	          		    	$scope.input=true;
-	          		    	
-	          		    	
 	          		    	if(data.deliveryMateriels.length>0){
 	          		    		$scope.orderMaterielInput=false;	
 	          		    	}
@@ -2157,7 +2175,16 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			          		    	}
 			          		    	$scope.input=true;
 			          		    	$scope.saveMateriel=true;
-			          		    	$scope.deliveryMaterielE=data.deliveryMateriels;
+			          		    	var array=new Array();
+				    				for (var i=0;i < data.deliveryMateriels.length;i++){
+				    					if(data.deliveryMateriels[i].deliverCount!=0){
+				    						/*delete   data.data.deliveryMateriels[i];*/
+				    						array.push(data.deliveryMateriels[i]);
+				    					}
+				    				}
+				    				$scope.deliveryMaterielE=array; 
+				    				$scope.materielCount=array.length;
+			          		    	//$scope.deliveryMaterielE=data.deliveryMateriels;
 			          		     var totalOrderCount=0,totalDeliveryCount=0;
 			          		    	for(var i=0;i<$scope.deliveryMaterielE.length;i++){
 			          		    		if($scope.deliveryMaterielE[i].status=='0'){$scope.deliveryMaterielE[i].status='待发货'};
@@ -2174,6 +2201,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			    						$("#comment_audit").html( "无评论");
 			    					}else{ $("#comment_audit").html(comments);
 			          		     }
+			    					
 			    					$scope.materielCount=$scope.deliveryMaterielE.length;
 			    					$scope.queryForPage();
 			          		     },

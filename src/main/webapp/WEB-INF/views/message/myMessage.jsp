@@ -53,8 +53,8 @@
 											<p><i class="glyphicon glyphicon-envelope"></i>&nbsp;&nbsp;{{delHtmlTag(message.context)}}&nbsp;<a ng-click="messageView(message.serialNum,message.objectSerial,message.actionName)" >查看</a></p>
 										</h4>
 										<p class="todo-inline todo-float-r">
-											<font ng-if="message.readFlg=='1'">已读</font>
-											<font ng-if="message.readFlg=='0'">未读</font>
+											<font ng-if="message.readFlg=='1'"  >已读</font>
+											<font ng-if="message.readFlg=='0'"  style="color: #f36a5a;">未读</font>
 										</p>
 									</li>
 								</ul>
@@ -89,8 +89,8 @@
 											<p><i class="glyphicon glyphicon-envelope"></i>&nbsp;&nbsp;{{delHtmlTag(message.context)}}&nbsp;<a ng-click="messageView(message.serialNum,message.objectSerial,message.actionName)" >查看</a></p>
 										</h4>
 										<p class="todo-inline todo-float-r">
-											<font ng-if="message.readFlg=='1'">已读</font>
-											<font ng-if="message.readFlg=='0'">未读</font>
+											<font ng-if="message.readFlg=='1'"  >已读</font>
+											<font ng-if="message.readFlg=='0'" style="color: #f36a5a;">未读</font>
 										</p>
 									</li>
 								</ul>

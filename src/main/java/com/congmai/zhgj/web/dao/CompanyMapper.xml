@@ -126,7 +126,7 @@
   
   <select id="selectCompanyByComType" resultMap="BaseResultMap" parameterType="java.util.Map" >
     select
-    	comId,comName
+    	comId,comName,comNum
     from company
    		where delFlg = 0 and comType= #{comType}
    		<if test="searchKey!=null and searchKey!=''">

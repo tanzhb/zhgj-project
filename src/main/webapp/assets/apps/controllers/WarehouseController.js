@@ -410,6 +410,10 @@ angular
 				 			    		 return;
 				 			    	}else{
 				 			    		 debugger;
+				 			    		if(isNull($("#positionNum"+index).val())){
+				 			    			toastr.warning("仓库区位编码不能为空！");
+					 			    		 return;
+										}
 				 			    		 var warehouseposition={};
 				 			    		warehouseposition.warehouseSerial=$scope.warehouse.serialNum;
 				 			    		warehouseposition.serialNum=$("#serialNum"+index).val();

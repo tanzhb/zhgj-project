@@ -136,7 +136,7 @@
 														<input type="text" class="form-control" name="receiver"
 															ng-model="delivery.receiver" ng-show="inputDeliveryInfo" />
 														<p class="form-control-static" ng-hide="span">
-															{{deliver.shipper}}</p>
+															{{deliver.receiver}}</p>
 														<div class="form-control-focus"></div>
 													</div>
 
@@ -1179,7 +1179,7 @@
 							<th rowspan="2">规格型号</th>
 							<th rowspan="2">单位</th>
 							<!-- <th rowspan="2">生产日期</th> -->
-							<th colspan="4" style="text-align: center;">发货</th>
+							<th colspan="5" style="text-align: center;">发货</th>
 							<!-- <th colspan="4" style="text-align: center;">收货</th> -->
 						<!-- 	<th colspan="3" style="text-align: center;">检验</th>
 							<th colspan="5" style="text-align: center;">入库</th> -->

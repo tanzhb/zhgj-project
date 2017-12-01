@@ -102,7 +102,7 @@
 									</a>
 										<div class="media-body todo-comment">
 											<p class="todo-comment-p">
-												<font ng-if="notice.readFlg==null">未读</font> <font
+												<font ng-if="notice.readFlg==null"  style="color: #f36a5a;">未读</font> <font
 													ng-if="notice.readFlg==1">已读</font>
 											</p>
 											<p class="todo-comment-head">

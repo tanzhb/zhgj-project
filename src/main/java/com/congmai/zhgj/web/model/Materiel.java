@@ -124,6 +124,8 @@ public class Materiel {
     
     private String amount ;//订单数量
     
+    private String deliverCount ;//发货数量
+    
     private String  billAmount;//开票数量/收票数量
     
     private String  money;//当前开票金额
@@ -702,6 +704,14 @@ public class Materiel {
 
 	public void setCategoryName3(String categoryName3) {
 		this.categoryName3 = categoryName3;
+	}
+
+	public String getDeliverCount() {
+		return deliverCount;
+	}
+
+	public void setDeliverCount(String deliverCount) {
+		this.deliverCount = deliverCount;
 	}
     
 }

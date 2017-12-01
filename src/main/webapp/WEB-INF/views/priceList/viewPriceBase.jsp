@@ -84,7 +84,7 @@
                                                          <div class="row">
                                                             <div class="col-md-6">
                                                             <div class="form-group">
-                                                    <label class="control-label bold" for="priceType"> <span class="required"> * </span>价格类型 :</label>
+                                                    <label class="control-label bold" for="priceType"> 价格类型 :</label>
                                                     <div class="">
                                                                            <p class="control-label left"  ng-if="buyOrSale.indexOf('buy')>-1" >采购价格</p>
                                                                         <p class="control-label left"   ng-if="buyOrSale.indexOf('sale')>-1" >  销售价格</p>
@@ -116,7 +116,7 @@
                                                          <div class="row">
                                                             <div class="col-md-6">
                                                             <div class="form-group ">
-                                                    <label class="control-label bold" for="currency"> <span class="required"> * </span>币种 :</label>
+                                                    <label class="control-label bold" for="currency"> 币种 :</label>
                                                     <div class="">
                                                                          <div class="form-control-focus"> </div>
                                                                         <p class="control-label left" >{{priceList.currency}}</p> 
@@ -126,7 +126,7 @@
                                                             <!--/span-->
                                                             <div class="col-md-6">
                                                               <div class="form-group">
-                                                    <label class="control-label bold" for="rate"> <span class="required"> * </span>税率 :</label>
+                                                    <label class="control-label bold" for="rate"> 税率(%) :</label>
                                                     <div class="">
                                                                          <div class="form-control-focus"></div>
                                                                         <!--   <span class="help-block">请输入百分比数</span> -->
@@ -148,7 +148,7 @@
                                                             </div>
                                                             <div class="col-md-6">
                                                              <div class="form-group">
-                                                    <label class="control-label bold" for="priceList"> <span class="required"> * </span>不含税单价 :</label>
+                                                    <label class="control-label bold" for="priceList"><!--  <span class="required"> * </span> -->不含税单价 :</label>
                                                     <div class="">
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" >{{priceList.unitPrice |currency:'￥'}}</p>
@@ -190,7 +190,7 @@
                                                             </div>
                                                            <div class="col-md-6"  ng-if="priceList.isLadderPrice=='1'">
                                                            <div class="form-group">
-                                                    <label class="control-label bold" for="ladderType"><span class="required"> * </span> 阶梯类型 :</label>
+                                                    <label class="control-label bold" for="ladderType"> 阶梯类型 :</label>
                                                     <div class="">
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left"  ng-if="priceList.ladderType=='oneStagePrice'" >单笔阶梯单价 </p>

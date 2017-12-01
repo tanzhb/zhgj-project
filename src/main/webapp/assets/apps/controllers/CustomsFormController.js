@@ -693,7 +693,7 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 													},{
 														mData : 'unit'
 													}, {
-														mData : 'amount'
+														mData : 'deliverCount'//amount
 													},{
 														mData : 'orderUnitPrice',
 														mRender:function(data){

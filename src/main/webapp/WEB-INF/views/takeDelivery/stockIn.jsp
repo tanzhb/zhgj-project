@@ -343,10 +343,10 @@
 												</button>
 										</td>
 										<td>
-										{{materiel.stockCount}}
+										{{materiel.stockInCount==null?0:materiel.stockInCount}}
 										</td>
 										<td>
-											<span ng-if="materiel.acceptCount!=undefined && materiel.stockCount!=undedined">{{materiel.acceptCount-materiel.stockCount}}</span>
+											<span ng-if="materiel.acceptCount!=undefined && materiel.stockCount!=undedined">{{materiel.acceptCount-materiel.stockInCount}}</span>
 										</td>
 										<!-- <td>
 											<div class="col-md-12 form-group">

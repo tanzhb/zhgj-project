@@ -948,11 +948,17 @@
   <if test="invoiceSerial==null">
   , 0 as billAmount
   </if>
+   <if test="deliverySerial!=null">
+  , dm.deliverCount as deliverCount
+  </if>
   from  orderMateriel om
   left join materiel m  on  om.materielSerial=m.serialNum
   left  join orderInfo o  on  o.serialNum=om.orderSerial
     <if test="invoiceSerial!=null">
    left join invoiceBillingRecord ibr on   ibr.orderMaterielSerial=om.serialNum 
+   </if>
+    <if test="deliverySerial!=null">
+   left join deliveryMateriel dm  on   dm.orderMaterielSerial=om.serialNum and dm.deliverSerial=#{deliverySerial,jdbcType=VARCHAR} 
    </if>
   where  om.orderSerial=#{orderSerial,jdbcType=VARCHAR} 
   <if test="invoiceSerial!=null">

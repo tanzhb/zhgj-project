@@ -1696,7 +1696,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 					if(TakeDelieryTable.row('.active').data().status == '0'){
 						//$state.go("takeDeliveryView",{serialNum:serialNum,oprateType:'forBuyOrder'});
 						$state.go('takeDeliveryAdd',{serialNum:TakeDelieryTable.row('.active').data().takeDelivery.serialNum,oprateType:"forBuyOrder",type:'edit'});
-					}else showToastr('toast-top-center', 'warning', '已确认发货');
+					}else showToastr('toast-top-center', 'warning', '已确认发货不能修改');
 				} 
 			};
 			   /**
@@ -1704,10 +1704,11 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	         */
 	        $scope.takeDeliveryDelete = function () {
 	        	var id_count = $('#takeDeliveryTable input[name="serialNum"]:checked').length;
-				if(id_count==0){
-					toastr.warning("请选择您要删除的记录");
+				if(id_count!=1){
+					toastr.warning("只能选择一条记录");
 					return;
 				}
+				if(TakeDelieryTable.row('.active').data().status == '0'){
 	        	handle.confirm("确定删除吗？",function(){
 	        		var ids = '';
 					// Iterate over all checkboxes in the table
@@ -1739,7 +1740,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	        		});
 	        		
 	        	});
-	        	
+				}else showToastr('toast-top-center', 'warning', '已确认发货不能删除');
 	        };
 	        
 	    	//确认代发货

@@ -146,12 +146,13 @@ public class MaterielServiceImpl implements MaterielService {
 	}
 
 	@Override
-	public List<Materiel> selectMaterielByOrderSerial(String orderSerial,String orderSerial1) {
+	public List<Materiel> selectMaterielByOrderSerial(String orderSerial,String orderSerial1,String deliverSerial) {
 		List<Materiel>materiels=null;
 		if(StringUtils.isNotEmpty(orderSerial)){
 			Map<String,String> map=new HashMap<String,String>();
 			map.put("orderSerial", orderSerial);
 			map.put("invoiceSerial", (orderSerial1==null||orderSerial1.length()<66)?null:orderSerial1.substring(34, 66));
+			map.put("deliverySerial", deliverSerial);
 			materiels= MaterielMapper.selectMaterielByOrderSerial(map);
 			if(materiels!=null&&materiels.size()>0){
 				for(Materiel materiel:materiels){

@@ -3597,7 +3597,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 							              [ 5, 10, 15,15, 30, -1 ],
 							              [ 5, 10, 15, 15,30, "All" ] ],
 							              pageLength : 10,// 每页显示数量
-							              processing : true,// loading等待框
+							              processing : false,// loading等待框
 							              ajax:"rest/delivery/findAllDeliveryList",//加载数据中user表数据
 							              "aoColumns": [
 							                            { mData: 'serialNum',
@@ -3614,14 +3614,15 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 							                            { mData: 'deliverNum' },
 							                            { mData: 'orderNum' },
 							                            //{ mData: 'materielCount' },物料条目数
-								                          { mData: 'materielTotalCount' },//物料总数
-							                            { mData: 'packageCount' },
 							                            { mData: 'receiver'},
+								                          { mData: 'materielTotalCount' },//物料总数
+							                          /*  { mData: 'packageCount' },*/
+								                          { mData: 'packageType' },
 							                            { mData: 'deliveryAddress'},
 							                            { mData: 'deliverDate'},
 							                            { mData: 'transportType'},
-							                            { mData: 'takeAddress' },
-							                            { mData: 'remark'},
+							                            /*{ mData: 'takeAddress' },*/
+							                           /* { mData: 'remark'},*/
 							                            { mData: 'status',
 
 					                            	mRender:function(data){
@@ -3657,7 +3658,43 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 							                            			return "";
 							                            		}
 							                            	}
-							                            }
+							                            }, { mData: 'status',
+
+							                            	mRender:function(data){
+							                            		return "";
+									                            	/*	if(data!=""&&data!=null){
+									                            			if(data=='0'){
+									                            				return '待发货';
+									                            			}else if(data=='PENDING'){
+									                            				return '审批中';
+									                            			}else if(data=='WAITING_FOR_APPROVAL'){
+									                            				return '待审批';					                            				
+																			}else if(data=='3'){
+																				return '待收货';
+																			}else if(data=='APPROVAL_FAILED'){
+																				return '审批失败';
+																			}else if(data=='4'){
+																				return '已收货';
+																			}else if(data=='1'){
+																				return '待检验';
+																			}else if(data=='2'){
+																				return '待出库';
+																			}else if(data=='6'){
+																				return '待清关';
+																			}else if(data=='7'){
+																				return '待报关';
+																			}else if(data=='8'){
+																				return '完成发货';
+																			}else if(data=='9'){
+																				return '待入库';
+																			}else{
+																				return '';
+																			}
+									                            		}else{
+									                            			return "";
+									                            		}*/
+									                            	}
+									                            }
 							                            ],
 							                            'aoColumnDefs': [ {
 							                            	'targets' : 0,
