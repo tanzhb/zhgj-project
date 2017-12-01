@@ -261,7 +261,7 @@ margin-right: 20px;
                                      ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 待签合同 </p>
                                      
                                      <p ng-if="saleOrder.status==2"   
-                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 已确认 </p>
+                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 已签合同 </p>
                                                                           
                                      <p ng-if="saleOrder.processBase.status=='APPROVAL_FAILED'"   
                                      ng-click="viewGraphTrace(saleOrder.processBase.processInstanceId)" style="color:red"> 未通过 </p>
@@ -408,7 +408,7 @@ margin-right: 20px;
                                      ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 待签合同 </p>
                                      
                                      <p ng-if="saleOrder.status==2"   
-                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 已确认 </p>
+                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 已签合同 </p>
                                      
                                      <p ng-if="saleOrder.processBase.status=='APPROVAL_FAILED'"   
                                      ng-click="viewOrderLog(saleOrder.serialNum)" style="color:red"> 未通过 </p>
@@ -576,7 +576,7 @@ margin-right: 20px;
                                      ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 待签合同 </p>
                                      
                                      <p ng-if="saleOrder.status==2"   
-                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 已确认 </p>
+                                     ng-click="viewOrderLog(saleOrder.serialNum)" style="color:green"> 已签合同 </p>
                                      
                                      <p ng-if="saleOrder.processBase.status=='APPROVAL_FAILED'"   
                                      ng-click="viewOrderLog(saleOrder.serialNum)" style="color:red"> 未通过 </p>
