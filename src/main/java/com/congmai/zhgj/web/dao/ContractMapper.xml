@@ -13,26 +13,28 @@
     <!--查询合同列表  -->
    <select id="queryContractList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ContractVO">
     SELECT 
-    serialNum AS Id,
-	contractNum,
-	firstParty,
-	secondParty,
-	contractType,
-	serviceModel,
-	signDate,
-	signer,
-	startDate,
-	endDate,
-	versionNO,
-	status
+    a.serialNum AS Id,
+	a.contractNum,
+	a.firstParty,
+	a.secondParty,
+	a.contractType,
+	a.serviceModel,
+	a.signDate,
+	a.signer,
+	a.startDate,
+	a.endDate,
+	a.versionNO,
+	a.status
 	FROM
-	contract
+	contract a
+	LEFT JOIN orderInfo b ON a.serialNum=b.contractSerial
 	WHERE
-	delFlg='0'
-	AND 
-	creator=#{userId}
-	AND
-	comId IS NULL
+	a.delFlg='0'
+<!-- 	AND 
+	creator=#{userId} -->
+	<!-- AND
+	comId IS NULL -->
+	and b.serialNum IS NULL
     </select>
     
     <!--查询销售合同列表  -->

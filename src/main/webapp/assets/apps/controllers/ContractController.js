@@ -12,6 +12,12 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 		loadMainTable();
 		loadMainTable1();
 		loadMainTable2();
+		
+		if($stateParams.tabHref == '1'){//首页待办列表传过来的参数
+			$('#contract_tab a[data-target="#tab_15_2"]').tab('show');
+ 		 }else if($stateParams.tabHref == '2'){
+ 			$('#contract_tab a[data-target="#tab_15_3"]').tab('show');
+ 		 }
 		debugger;
 	if($state.current.name=="addUserContract"){
 		 $rootScope.setNumCode("CA",function(newCode){//
@@ -29,24 +35,58 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 	
 	
 	//修改
-	$scope.jumpToEdit = function() {
+	$scope.jumpToEdit = function(tab) {
 		var ids = '';
-		// Iterate over all checkboxes in the table
-		table.$('input[type="checkbox"]').each(
-				function() {
-					// If checkbox exist in DOM
-					if ($.contains(document, this)) {
-						// If checkbox is checked
-						if (this.checked) {
-							// 将选中数据id放入ids中
-							if (ids == '') {
-								ids = this.value;
-							} else{
-								ids = "more"
+		if(tab==1){
+			table.$('input[type="checkbox"]').each(
+					function() {
+						// If checkbox exist in DOM
+						if ($.contains(document, this)) {
+							// If checkbox is checked
+							if (this.checked) {
+								// 将选中数据id放入ids中
+								if (ids == '') {
+									ids = this.value;
+								} else{
+									ids = "more"
+								}
 							}
 						}
-					}
-				});
+					});
+		}else if(tab==2){
+			table1.$('input[type="radio"]').each(
+					function() {
+						// If checkbox exist in DOM
+						if ($.contains(document, this)) {
+							// If checkbox is checked
+							if (this.checked) {
+								// 将选中数据id放入ids中
+								if (ids == '') {
+									ids = this.value;
+								} else{
+									ids = "more"
+								}
+							}
+						}
+					});
+		}else if(tab==3){
+			table2.$('input[type="radio"]').each(
+					function() {
+						// If checkbox exist in DOM
+						if ($.contains(document, this)) {
+							// If checkbox is checked
+							if (this.checked) {
+								// 将选中数据id放入ids中
+								if (ids == '') {
+									ids = this.value;
+								} else{
+									ids = "more"
+								}
+							}
+						}
+					});
+		}
+		
 		if(ids==''){
 			toastr.warning('请选择一个合同！');return;
 		}else if(ids=='more'){
@@ -70,9 +110,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
         fd.append("files", file);
 		}
 		
-		if($("input[id='id']").length){
-		fd.append('id', $("#id").val()); 
-		}
+		fd.append('id',$scope.contractVO.id); 
 		fd.append('contractNum',$scope.contractVO.contractNum); 
         fd.append('contractType',$scope.contractVO.contractType); 
         fd.append('firstParty',$scope.contractVO.firstParty); 
@@ -80,8 +118,8 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
         fd.append('secondParty',$scope.contractVO.secondParty); 
         fd.append('secondPartySigner',$scope.contractVO.secondPartySigner);
         fd.append('otherPartyContractNum',$scope.contractVO.otherPartyContractNum);
-        fd.append('startDate',$scope.contractVO.startDate); 
-        fd.append('endDate',$scope.contractVO.endDate); 
+        if($scope.contractVO.startDate)fd.append('startDate',$scope.contractVO.startDate); 
+        if($scope.contractVO.endDate)fd.append('endDate',$scope.contractVO.endDate); 
         fd.append('signDate',$scope.contractVO.signDate); 
         fd.append('remark',$scope.contractVO.remark);
         fd.append('signerAddress',$scope.contractVO.signerAddress);
@@ -95,7 +133,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
                        {
                        //上传成功的操作
             	  toastr.success("保存合同数据成功！");
-				  $state.go('userContract');
+            	  $scope.goback();
                        });
 		}
 	};
@@ -132,7 +170,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 	                       {
 	                       //上传成功的操作
 	            	  toastr.success("签订合同数据成功！");
-					  $state.go('userContract');
+	            	  $scope.goback();
 	                       });
 			}
 		};
@@ -140,7 +178,18 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 	
 	//返回按钮
 	$scope.goback=function(){
-		$state.go('userContract');
+		if(isNull($scope.contractVO)||isNull($scope.contractVO.contractType)){
+			$state.go('userContract');
+		}else{
+			if($scope.contractVO.contractType == '采购合同'){
+				$state.go('userContract',{tabHref:2});
+			}else if($scope.contractVO.contractType == '销售合同'){
+				$state.go('userContract',{tabHref:1});
+			}else{
+				$state.go('userContract');
+			}
+		}
+		
 	}
 	
 	//打印

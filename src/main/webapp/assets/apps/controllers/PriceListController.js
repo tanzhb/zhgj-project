@@ -1959,6 +1959,9 @@ function loadPriceListSaleTable(){
 		    	        success : function(data) {
 		    	        	showToastr('toast-bottom-right', 'success', data);
 		    	        	$scope.cancelPage();
+		    	        },
+		    	        error : function(data) {
+		    	        	toastr.error('连接服务器出错,请登录重试！');
 		    	        }
 		    	     });
 		    	}

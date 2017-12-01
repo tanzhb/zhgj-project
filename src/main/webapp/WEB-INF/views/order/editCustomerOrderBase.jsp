@@ -1091,7 +1091,8 @@ margin-right: 20px;
 			                          <td>  
 			                          		<input style="padding:6px 3px" type="text"  name="orderRateUnit{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].orderRateUnit" 
 			                          		 ng-keyup="" ng-change="clearNoNumPoint(orderMateriel[$index],'orderRateUnit');_arithmeticUnitPrice(_orderMateriel)">
-	                                     		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.orderRateUnit}} </p>
+	                                     		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}" ng-if="_orderMateriel.materiel.unitPrice!=_orderMateriel.orderRateUnit" style="color:red"> {{_orderMateriel.orderRateUnit}} </p>
+                                     			<p class="form-control-static" ng-show="orderMaterielShow{{$index}}" ng-if="_orderMateriel.materiel.unitPrice==_orderMateriel.orderRateUnit"> {{_orderMateriel.orderRateUnit}} </p>
 			                          </td>
 			                          <td>  
 		                          		<input style="padding:6px 3px" type="text"  name="orderUnitPrice{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].orderUnitPrice"  
@@ -1301,7 +1302,7 @@ margin-right: 20px;
                                      <th style="width:150px">支付节点</th>
                                      <th style="width:70px">账期（天）</th>
                                      <th style="width:50px">支付比率%</th>
-                                     <th style="width:150px">支付金额</th>
+                                     <th style="width:150px">支付金额{{arithmeticAllDeliveryAmount()}}</th>
                                      <th style="width:150px">支付方式</th>
                                      <th style="width:150px">开票方式</th>
 <!--                                      <th style="width:150px">开票金额</th>

@@ -189,24 +189,24 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     	$scope.changeFlag = false;
     	var date1= scope._orderMateriel.deliveryDate;
     	var date2= scope._orderMateriel.lastDeliveryDate;
-    	/*var date3= scope.buyOrder.orderDate;*/
+    	/*var date3= scope.saleOrder.orderDate;*/
     	$scope.datepickerInit();
     	if(scope._orderMateriel){
     		scope._orderMateriel.deliveryDate = date1;
     		scope._orderMateriel.lastDeliveryDate = date2;
     	}
     	$scope.changeFlag = true;
-    	/*scope.buyOrder.orderDate = date3;*/
+    	/*scope.saleOrder.orderDate = date3;*/
    };
    
    
    $scope.renderDone = function(){
-	   var date3= $scope.buyOrder.orderDate;
-	   	var date4= $scope.buyOrder.makeDate;
+	   var date3= $scope.saleOrder.orderDate;
+	   	var date4= $scope.saleOrder.makeDate;
 	   /*	var date5= $scope.clauseCheckAccept.playCheckDate*/
 	   	$scope.datepickerInit();
-	   	$scope.buyOrder.orderDate = date3;
-	   	$scope.buyOrder.makeDate = date4;
+	   	$scope.saleOrder.orderDate = date3;
+	   	$scope.saleOrder.makeDate = date4;
 	   	/*$scope.clauseCheckAccept.playCheckDate = date5;*/
 	  };
 	  
@@ -231,7 +231,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 // $scope.saleOrder.createTime=null;
 // $scope.saleOrder.updateTime=null;
     		// **********//
-    		orderService.checkNum($scope.buyOrder).then(
+    		orderService.checkNum($scope.saleOrder).then(
          		     function(data){
          		    	 if(data>0){
          		    		toastr.error('订单编号重复！');
@@ -433,7 +433,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 										if(row.status==1){
 											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">待签合同</span>';
 										}else if(row.status==2){
-											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已确认</span>';
+											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已签合同</span>';
 										}else{
 											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已确认</span>';
 										}
@@ -1573,6 +1573,53 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
  	   	       		     function(data){
  	   	       		    	toastr.success('数据保存成功！');
  	   	       		    	$scope.cancelAllOrderMateriel();
+	   	       		    		//保存结算条款
+		  	   	       		if(isNull($scope.clauseSettlement)){// 结算条款为空的处理
+			  	   	    		return
+			  	   			}
+		  	   	       		//更新订单金额数据
+  	   		        		$scope.updateOrderAmount();	
+			  	   	    	if($('#form_clauseSettlement').valid()){
+				  	   	    	$scope.clauseSettlement.contractSerial = $scope.contract.id;
+				  	    		$scope.clauseSettlementDetail = $scope.clauseSettlement.CSD;
+				  		        $scope.clauseSettlement.materielAmount = $scope.totalAmount();
+				  	  	        $scope.clauseSettlement.rateAmount = $scope.totalRateAmount();
+				  	  	        $scope.clauseSettlement.rateAndAmount = $scope.totalRateAndAmount();
+				  	  	        $scope.clauseSettlement.orderAmount = $scope.totalOrderAmount();
+			  	   	    		delete $scope.clauseSettlement.CSD;
+			  	   	    		orderService.saveClauseSettlement($scope.clauseSettlement).then(//保存结算条款
+			  	   	       		     function(data){
+			  	   	       		    	$scope.clauseSettlement = data.data;
+			  	   	       		    	if(!isNull(data.data)){
+			  	   	       		    		if(!isNull($scope.clauseSettlementDetail)){
+			  	   	       		    			for(var i=0;i<$scope.clauseSettlementDetail.length;i++){
+			  	   	          		    			$scope.clauseSettlementDetail[i].clauseSettlementSerial = data.data.serialNum;
+			  	   	          		    		}
+			  	   	          		    		orderService.saveClauseSettlementDetail($scope.clauseSettlementDetail).then(//保存结算条款明细
+			  	   	          		        		     function(data){
+			  	   	          		        		    	$scope.cancelClauseSettlement();
+			  	   	          		        		    	$scope.clauseSettlement.CSD = data.data;
+			  	   	          		        		     },
+			  	   	          		        		     function(error){
+			  	   	          		        		    	toastr.error('数据保存出错！');
+			  	   	          		        		         $scope.error = error;
+			  	   	          		        		     }
+			  	   	          		        		 );
+			  	   	       		    		}else{
+			  	   	          		    		$scope.cancelClauseSettlement()
+			  	   	       		    		}
+			  	   	       		    	
+			  	   	       		    	}else{
+			  	   	      		    		$scope.clauseSettlement = {}
+			  	   	      		    		$scope.cancelClauseSettlement()
+			  	   	      		    	}
+			  	   	       		     },
+			  	   	       		     function(error){
+			  	   	       		    	toastr.error('数据保存出错！');
+			  	   	       		         $scope.error = error;
+			  	   	       		     }
+			  	   	       		 );
+			  	   	    	}
  	   	       		     },
  	   	       		     function(error){
  	   	       		    	toastr.error('数据保存出错！');
@@ -2943,23 +2990,43 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			       		return 0;
 			       	}
 		       };
-		       $scope.totalOrderAmount  = function(scope) {//订单金额（外贸：商品金额+其他金额，内贸：价税合计（商品金额+税额）+ 其他金额）
+		       $scope.totalOrderAmount  = function(scope) {//订单金额（价税合计（商品金额+税额）+ 其他金额）
 		    	   if(isNull($scope.clauseSettlement)||isNull($scope.clauseSettlement.otherAmount)){
-		    		   if(!isNull($scope.saleOrder)&&$scope.saleOrder.tradeType =='外贸'){
+		    		   /*if(!isNull($scope.saleOrder)&&$scope.saleOrder.tradeType =='外贸'){
 		    			   return Number($scope.totalAmount());
 		    		   }else{
 		    			   return Number($scope.totalAmount()) + Number($scope.totalRateAmount());
-		    		   }
+		    		   }*/
+		    		   return Number($scope.totalAmount()) + Number($scope.totalRateAmount());
 			       		
 			       	}else{
-			       	   if(!isNull($scope.saleOrder)&&$scope.saleOrder.tradeType =='外贸'){
+			       	   /*if(!isNull($scope.saleOrder)&&$scope.saleOrder.tradeType =='外贸'){
 		    			   return Number($scope.totalAmount()) + Number($scope.clauseSettlement.otherAmount)
 		    		   }else{
 		    			   return Number($scope.totalAmount()) + Number($scope.totalRateAmount()) + Number($scope.clauseSettlement.otherAmount);
-		    		   }
+		    		   }*/
+			       		return Number($scope.totalAmount()) + Number($scope.totalRateAmount()) + Number($scope.clauseSettlement.otherAmount);
 			       	}
 		       };
-		       
+		       $scope.arithmeticAllDeliveryAmount  = function() {//计算所有节点支付金额
+			    	 //计算各节点金额
+			    	   if(!isNull($scope.clauseSettlement)&&!isNull($scope.clauseSettlement.CSD)){
+			    		   	for(var i=0;i<$scope.clauseSettlement.CSD.length;i++){
+				    		   $scope.arithmeticDeliveryAmount($scope.clauseSettlement.CSD[i])
+				       		}
+			    	   }
+			      };
+			       $scope.arithmeticDeliveryAmount  = function(CSD) {//计算支付金额
+			          	if($scope._totalRate()>100){
+			          		CSD.deliveryRate = CSD.deliveryRate - $scope._totalRate() + 100
+			          	}
+			          	if(CSD.deliveryRate){
+			          		CSD.deliveryAmount =  ($scope.totalOrderAmount()*CSD.deliveryRate/100).toFixed(2);
+			          	}
+	/*		       	scope._CSD.billingAmount = (Number($scope._totaldeliveryAmount()) - Number($scope._totalbillingAmount()) + Number(scope._CSD.billingAmount)).toFixed(2);
+			      		scope._CSD.unbilledAmount = 0 ;*/
+			      };
+			       
 		       $scope.totalAmount  = function(scope) {//商品金额
 		    	   if($scope.orderMateriel){
 		    		    var total = 0 ; 
@@ -3095,7 +3162,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
    	        	$scope.submitOrder.materielAmount = $scope.totalAmount();
       	        $scope.submitOrder.rateAmount = $scope.totalRateAmount();
       	        $scope.submitOrder.rateAndAmount = $scope.totalRateAndAmount();
-      	        $scope.submitOrder.otherAmount = $scope.clauseSettlement.otherAmount;
+      	        if(!isNull($scope.clauseSettlement)&&!isNull($scope.clauseSettlement.otherAmount)){
+    	        	$scope.submitOrder.otherAmount = $scope.clauseSettlement.otherAmount;
+    	        }
       	        $scope.submitOrder.orderAmount = $scope.totalOrderAmount();
 	    	    orderService.save($scope.submitOrder).then(
           		     function(data){
@@ -3646,6 +3715,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    	        success : function(data) {
 		    	        	showToastr('toast-bottom-right', 'success', data);
 		    	        	$scope.cancelPage();
+		    	        },
+		    	        error : function(data) {
+		    	        	toastr.error('连接服务器出错,请登录重试！');
 		    	        }
 		    	     });
 		    	}
