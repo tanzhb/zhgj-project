@@ -1577,6 +1577,8 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 		  	   	       		if(isNull($scope.clauseSettlement)){// 结算条款为空的处理
 			  	   	    		return
 			  	   			}
+		  	   	       		//更新订单金额数据
+  	   		        		$scope.updateOrderAmount();	
 			  	   	    	if($('#form_clauseSettlement').valid()){
 				  	   	    	$scope.clauseSettlement.contractSerial = $scope.contract.id;
 				  	    		$scope.clauseSettlementDetail = $scope.clauseSettlement.CSD;
@@ -1606,8 +1608,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 			  	   	       		    		}else{
 			  	   	          		    		$scope.cancelClauseSettlement()
 			  	   	       		    		}
-			  	   	       		    	//更新订单金额数据
-			  	   		        		$scope.updateOrderAmount();	
+			  	   	       		    	
 			  	   	       		    	}else{
 			  	   	      		    		$scope.clauseSettlement = {}
 			  	   	      		    		$scope.cancelClauseSettlement()
@@ -3161,7 +3162,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
    	        	$scope.submitOrder.materielAmount = $scope.totalAmount();
       	        $scope.submitOrder.rateAmount = $scope.totalRateAmount();
       	        $scope.submitOrder.rateAndAmount = $scope.totalRateAndAmount();
-      	        $scope.submitOrder.otherAmount = $scope.clauseSettlement.otherAmount;
+      	        if(!isNull($scope.clauseSettlement)&&!isNull($scope.clauseSettlement.otherAmount)){
+    	        	$scope.submitOrder.otherAmount = $scope.clauseSettlement.otherAmount;
+    	        }
       	        $scope.submitOrder.orderAmount = $scope.totalOrderAmount();
 	    	    orderService.save($scope.submitOrder).then(
           		     function(data){
