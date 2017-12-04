@@ -198,7 +198,17 @@ public class PaymentRecord extends BaseVO implements Serializable{
     
     private String accountNumber;
     
+    private String billType;
+    
 
+
+	public String getBillType() {
+		return billType;
+	}
+
+	public void setBillType(String billType) {
+		this.billType = billType;
+	}
 
 	public String getSerialNum() {
         return serialNum;

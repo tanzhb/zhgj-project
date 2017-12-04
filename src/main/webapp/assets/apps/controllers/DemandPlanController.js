@@ -589,38 +589,49 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	         */
 			$scope.saveDemandPlan = function() {
 				if($('#demandPlanForm').valid()){
-					handle.blockUI();
-					$scope.demandPlan.createTime = null;
-					$scope.demandPlan.updateTime = null;
-					var promise = demandPlanService
-							.saveDemandPlan($scope.demandPlan);
-					promise.then(function(data) {
-						if (!handle.isNull(data.data)) {
-							$(".modal-backdrop").remove();
-							toastr.success("保存成功");
-							handle.unblockUI();
-							//$scope.demandPlan = data.data;
-							viewDemandPlan(data.data.serialNum);
-							console.log(data.data);	
-							$scope.demandPlanView = true;
-							$scope.demandPlanAdd = true;
-							$scope.demandPlanEdit = false;
-							$(".alert-danger").hide();
-							$location.search({"serialNum":data.data.serialNum,view:"1"});
-						} else {
-							$(".modal-backdrop").remove();
-							handle.unblockUI();
-							toastr.error("保存失败！请联系管理员");
-							console.log(data);
-						}
+					 $rootScope.judgeIsExist("demandPlan",$scope.demandPlan.demandPlanNum, $scope.demandPlan.serialNum,function(result){
+			    			var 	isExist = result;
+			    		debugger;
+			    		if(isExist){
+			    			toastr.error('需求计划编号重复！');
+			    			return;
+			    		}else{
+			    			handle.blockUI();
+							$scope.demandPlan.createTime = null;
+							$scope.demandPlan.updateTime = null;
+							var promise = demandPlanService
+									.saveDemandPlan($scope.demandPlan);
+							promise.then(function(data) {
+								if (!handle.isNull(data.data)) {
+									$(".modal-backdrop").remove();
+									toastr.success("保存成功");
+									handle.unblockUI();
+									//$scope.demandPlan = data.data;
+									viewDemandPlan(data.data.serialNum);
+									console.log(data.data);	
+									$scope.demandPlanView = true;
+									$scope.demandPlanAdd = true;
+									$scope.demandPlanEdit = false;
+									$(".alert-danger").hide();
+									$location.search({"serialNum":data.data.serialNum,view:"1"});
+								} else {
+									$(".modal-backdrop").remove();
+									handle.unblockUI();
+									toastr.error("保存失败！请联系管理员");
+									console.log(data);
+								}
 
-					}, function(data) {
-						// 调用承诺接口reject();
-						$(".modal-backdrop").remove();
-						handle.unblockUI();
-						toastr.error("保存失败！请联系管理员");
-						console.log(data);
-					});
+							}, function(data) {
+								// 调用承诺接口reject();
+								$(".modal-backdrop").remove();
+								handle.unblockUI();
+								toastr.error("保存失败！请联系管理员");
+								console.log(data);
+							});
+			    		}
+			    		
+			    		});
+				
 				}
 			}; 
 			

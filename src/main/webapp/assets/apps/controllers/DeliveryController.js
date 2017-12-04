@@ -567,57 +567,69 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		if($('#form_sample_deliverInfo').valid()){
 			/*$scope.deliveryTransport={};
 			$scope.takeDelivery={};*/
-		var promise = DeliveryService.saveBasicInfo($scope,"deliveryInfo");
-		promise.then(function(data) {
-			if (!handle.isNull(data)) {
-				$(".modal-backdrop").remove();
-				toastr.success("保存成功");
-				handle.unblockUI();
-				debugger;
-				$scope.delivery= data;
-				$scope.delivery.serialNum=data.serialNum;
-				$scope.deliver={};
-  		    	$scope.deliver.deliverer=$scope.delivery.deliverer;
-  		    	$scope.deliver.remark =$scope.delivery.remark;  
-  		    	$scope.deliver.maker  =$scope.delivery.maker;
-  		    	$scope.deliver.approvalDate =$scope.delivery.approvalDate;  
-  		    	$scope.deliver.deliverDate  =$scope.delivery.deliverDate;
-  		    	$scope.deliver.packageType=$scope.delivery.packageType;
-  		    	$scope.takeDeliveryWarehouseAddress=$scope.delivery.takeAddress;
-				if(status!=undefined){
-					var promise = DeliveryService.goDelivery($scope.delivery.serialNum);
-					promise.then(function(data) {
-							$(".modal-backdrop").remove();
-							toastr.success("确认发货成功");
-							$scope.delivery.status=status;
-						/*	$state.go('delivery',{},{reload:true});*/
-							handle.unblockUI();
-					}, function(data) {
-						// 调用承诺接口reject();
-						$(".modal-backdrop").remove();
-						handle.unblockUI();
-						toastr.error("发货失败！请联系管理员");
-						console.log(data);
-					});
-				}
-				getSupplyComId();
-				$scope.span = true;
-				$scope.inputDeliveryInfo = false;
-				$(".alert-danger").hide();
-			} else {
-				$(".modal-backdrop").remove();
-				handle.unblockUI();
-				toastr.error("保存失败！请联系管理员");
-				console.log(data);
-			}
-			
-		}, function(data) {
-			// 调用承诺接口reject();
-			$(".modal-backdrop").remove();
-			handle.unblockUI();
-			toastr.error("保存失败！请联系管理员");
-			console.log(data);
-		});	
+			 $rootScope.judgeIsExist("deliver",$scope.delivery.deliverNum, $scope.delivery.serialNum,function(result){
+	    			var 	isExist = result;
+	    		debugger;
+	    		if(isExist){
+	    			toastr.error('发货单号重复！');
+	    			return;
+	    		}else{
+	    			handle.blockUI();
+	    			var promise = DeliveryService.saveBasicInfo($scope,"deliveryInfo");
+	    			promise.then(function(data) {
+	    				if (!handle.isNull(data)) {
+	    					$(".modal-backdrop").remove();
+	    					toastr.success("保存成功");
+	    					handle.unblockUI();
+	    					debugger;
+	    					$scope.delivery= data;
+	    					$scope.delivery.serialNum=data.serialNum;
+	    					$scope.deliver={};
+	    	  		    	$scope.deliver.deliverer=$scope.delivery.deliverer;
+	    	  		    	$scope.deliver.remark =$scope.delivery.remark;  
+	    	  		    	$scope.deliver.maker  =$scope.delivery.maker;
+	    	  		    	$scope.deliver.approvalDate =$scope.delivery.approvalDate;  
+	    	  		    	$scope.deliver.deliverDate  =$scope.delivery.deliverDate;
+	    	  		    	$scope.deliver.packageType=$scope.delivery.packageType;
+	    	  		    	$scope.takeDeliveryWarehouseAddress=$scope.delivery.takeAddress;
+	    					if(status!=undefined){
+	    						var promise = DeliveryService.goDelivery($scope.delivery.serialNum);
+	    						promise.then(function(data) {
+	    								$(".modal-backdrop").remove();
+	    								toastr.success("确认发货成功");
+	    								$scope.delivery.status=status;
+	    							/*	$state.go('delivery',{},{reload:true});*/
+	    								handle.unblockUI();
+	    						}, function(data) {
+	    							// 调用承诺接口reject();
+	    							$(".modal-backdrop").remove();
+	    							handle.unblockUI();
+	    							toastr.error("发货失败！请联系管理员");
+	    							console.log(data);
+	    						});
+	    					}
+	    					getSupplyComId();
+	    					$scope.span = true;
+	    					$scope.inputDeliveryInfo = false;
+	    					$(".alert-danger").hide();
+	    				} else {
+	    					$(".modal-backdrop").remove();
+	    					handle.unblockUI();
+	    					toastr.error("保存失败！请联系管理员");
+	    					console.log(data);
+	    				}
+	    				
+	    			}, function(data) {
+	    				// 调用承诺接口reject();
+	    				$(".modal-backdrop").remove();
+	    				handle.unblockUI();
+	    				toastr.error("保存失败！请联系管理员");
+	    				console.log(data);
+	    			});	
+	    		}
+	    		
+	    		});
+	
 		}
 	}
 

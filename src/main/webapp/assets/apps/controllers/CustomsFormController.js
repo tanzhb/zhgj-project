@@ -990,31 +990,48 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 			$scope.customsForm.status='1';
 		}
 		if($('#customsForm').valid()){
-		customsFormService.saveCustomsForm($scope.customsForm)
-		 .then(
-				 function(data) {
-					 debugger;
-					 if(judgeString=="clearance"){
-						 toastr.success("保存清关单成功！");
-					 }else  if(judgeString=="declaration"){
-						 toastr.success("保存报关单成功！");
-					 }else  if(judgeString.indexOf("clearance")>-1&&judgeString.indexOf('confirm')>-1){
-						 toastr.success("确认清关成功！");
-					 }else  if(judgeString=="declaration"&&judgeString.indexOf('confirm')>-1){
-						 toastr.success("确认报关成功！");
+			 $rootScope.judgeIsExist("customsForm",$scope.customsForm.customsFormNum, $scope.customsForm.serialNum,function(result){
+	    			var 	isExist = result;
+	    		debugger;
+	    		if(isExist){
+	    			 if(judgeString.indexOf("clearance")>-1){
+	    				 toastr.error('清关单号重复！');
+					 }else  if(judgeString.indexOf("declaration")>-1){
+						 toastr.error('报关单号重复！');
 					 }
-					 $scope.customsForm =data;
-					 $scope.customsFormEdit =true;
-					 $scope.customsFormView =true;
-					 $scope.customsFormAdd =true;
-					 $(".alert-danger").hide();
-				 },
-				 function(errResponse) {
-					 toastr.warning("保存错误！");
-					 console
-					 .error('Error while creating User');
-				 }
-		 );
+	    			return;
+	    		}else{
+	    			handle.blockUI();
+	    			customsFormService.saveCustomsForm($scope.customsForm)
+	    			 .then(
+	    					 function(data) {
+	    						 debugger;
+	    						 if(judgeString=="clearance"){
+	    							 toastr.success("保存清关单成功！");
+	    						 }else  if(judgeString=="declaration"){
+	    							 toastr.success("保存报关单成功！");
+	    						 }else  if(judgeString.indexOf("clearance")>-1&&judgeString.indexOf('confirm')>-1){
+	    							 toastr.success("确认清关成功！");
+	    						 }else  if(judgeString=="declaration"&&judgeString.indexOf('confirm')>-1){
+	    							 toastr.success("确认报关成功！");
+	    						 }
+	    						 handle.unblockUI();
+	    						 $scope.customsForm =data;
+	    						 $scope.customsFormEdit =true;
+	    						 $scope.customsFormView =true;
+	    						 $scope.customsFormAdd =true;
+	    						 $(".alert-danger").hide();
+	    					 },
+	    					 function(errResponse) {
+	    						 toastr.warning("保存错误！");
+	    						 console
+	    						 .error('Error while creating User');
+	    					 }
+	    			 );
+	    		}
+	    		
+	    		});
+	
 		}
 	 }
 	function doSomthing(){

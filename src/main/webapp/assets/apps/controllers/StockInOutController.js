@@ -500,8 +500,19 @@ angular
 									debugger;
 									$scope.stockInOutCheck.deliverSerial=$("#deliverSerial").val();
 									$scope.stockInOutCheck.takeDeliverSerial=$("#takeDeliverSerial").val();
-									if($('#stockInOutCheckForm').valid()){//表单验证通过则执行添加功能
-										 judgeIsExist ();
+									if($('#stockInOutCheckForm').valid()){
+										 $rootScope.judgeIsExist("check",$scope.stockInOutCheck.checkNum, $scope.stockInOutCheck.serialNum,function(result){
+								    			var 	isExist = result;
+								    		debugger;
+								    		if(isExist){
+								    			 toastr.error('检验单号重复！');
+								    			return;
+								    		}else{
+								    			handle.blockUI();
+								    			 judgeIsExist ();
+								    		}
+								    		});//表单验证通过则执行添加功能
+									
 									}
 							};	
 							// 添加检验结束***************************************
@@ -612,6 +623,7 @@ angular
 											        			$scope.stockInOutCheckAdd = true;
 											        			$scope.stockInOutCheckEdit = true;
 											        			$(".alert-danger").hide();
+											        			handle.unblockUI();
 											        			if(judgeString=='checkin'){toastr.success("确认入库检验成功！");
 																}else{toastr.success("确认出库检验成功！");
 															}

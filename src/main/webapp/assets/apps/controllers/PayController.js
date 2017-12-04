@@ -409,60 +409,135 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	}
 
 	//添加付款
-	$scope.saveBasicInfo=function (){
+	$scope.saveBasicInfo=function (judgeString){
 		if($('#form_sample_1').valid()){
-			var fd = new FormData();
-			debugger
-			fd.append('paymentNum',$scope.paymentRecord.paymentNum); 
-			fd.append('paymentType',$scope.paymentRecord.paymentType);
-			fd.append('orderSerial',$scope.orderSerial); 
-			fd.append('applyPaymentAmount',$scope.paymentRecord.applyPaymentAmount);
-			fd.append('applyCurrency',$scope.paymentRecord.applyCurrency);
-			fd.append('playPaymentDate',$scope.paymentRecord.playPaymentDate);
-			fd.append('payType',$scope.paymentRecord.payType);
-			fd.append('paymentNode',$scope.paymentRecord.paymentNode);
-			fd.append('nodeNum',$scope.paymentRecord.nodeNum);
-			fd.append('billStyle',"先款后票"); 
-			fd.append('supplyComId',supplyComId);
-			fd.append('isBill',$("input[name='isBill']:checked").val());
-			fd.append('applyDate',$scope.paymentRecord.applyDate);
-			fd.append('applicant',$scope.paymentRecord.applicant);
-			fd.append('applyDept',$scope.paymentRecord.applyDept);
-			fd.append('remark',$scope.paymentRecord.remark);
-			
-			fd.append('payee',$scope.paymentRecord.payee);
-			fd.append('contact',$scope.paymentRecord.contact);
-			fd.append('contactNum',$scope.paymentRecord.contactNum);
-			fd.append('bank',$scope.paymentRecord.bank);
-			fd.append('accountName',$scope.paymentRecord.accountName);
-			fd.append('accountNumber',$scope.paymentRecord.accountNumber);
-			
-			
-			$http({
-				method:'POST',
-				url:"rest/pay/savePaymentRecord",
-				data: fd,
-				headers: {'Content-Type':undefined}
-			})   
-			.success( function ( data )
-					{
-				//上传成功的操作
-				toastr.success("保存应付款数据成功！");
-				handle.unblockUI();
-				$scope.pay= data;
-				$scope.span = true;
-				$scope.input = false;
-				$scope.applyPaymentAmountChn=convertCurrency($scope.pay.applyPaymentAmount);
-				$(".alert-danger").hide();
-					});
+			 $rootScope.judgeIsExist("payOrReceive",$scope.paymentRecord.paymentNum, $scope.paymentRecord.serialNum,function(result){
+	    			var 	isExist = result;
+	    		debugger;
+	    		if(isExist){
+	    			if(judgeString=='receive'){
+	    				 toastr.error('收款单号重复！');
+	    			}else if(judgeString=='pay'){
+	    				 toastr.error('付款单号重复！');
+	    			}
+	    			return;
+	    		}else{
+	    			var fd = new FormData();
+	    			handle.blockUI();
+	    			fd.append('paymentNum',$scope.paymentRecord.paymentNum); 
+	    			fd.append('paymentType',$scope.paymentRecord.paymentType);
+	    			fd.append('orderSerial',$scope.orderSerial); 
+	    			fd.append('applyPaymentAmount',$scope.paymentRecord.applyPaymentAmount);
+	    			fd.append('applyCurrency',$scope.paymentRecord.applyCurrency);
+	    			fd.append('playPaymentDate',$scope.paymentRecord.playPaymentDate);
+	    			fd.append('payType',$scope.paymentRecord.payType);
+	    			fd.append('paymentNode',$scope.paymentRecord.paymentNode);
+	    			fd.append('nodeNum',$scope.paymentRecord.nodeNum);
+	    			fd.append('billStyle',"先款后票"); 
+	    			fd.append('supplyComId',supplyComId);
+	    			fd.append('isBill',$("input[name='isBill']:checked").val());
+	    			fd.append('applyDate',$scope.paymentRecord.applyDate);
+	    			fd.append('applicant',$scope.paymentRecord.applicant);
+	    			fd.append('applyDept',$scope.paymentRecord.applyDept);
+	    			fd.append('remark',$scope.paymentRecord.remark);
+	    			
+	    			fd.append('payee',$scope.paymentRecord.payee);
+	    			fd.append('contact',$scope.paymentRecord.contact);
+	    			fd.append('contactNum',$scope.paymentRecord.contactNum);
+	    			fd.append('bank',$scope.paymentRecord.bank);
+	    			fd.append('accountName',$scope.paymentRecord.accountName);
+	    			fd.append('accountNumber',$scope.paymentRecord.accountNumber);
+	    			
+	    			
+	    			$http({
+	    				method:'POST',
+	    				url:"rest/pay/savePaymentRecord",
+	    				data: fd,
+	    				headers: {'Content-Type':undefined}
+	    			})   
+	    			.success( function ( data )
+	    					{
+	    				//上传成功的操作
+	    				toastr.success("保存应付款数据成功！");
+	    				handle.unblockUI();
+	    				$scope.pay= data;
+	    				$scope.span = true;
+	    				$scope.input = false;
+	    				$scope.applyPaymentAmountChn=convertCurrency($scope.pay.applyPaymentAmount);
+	    				$(".alert-danger").hide();
+	    					});
+	    		}
+	    		
+	    		});
+		
 		}
 	}
 	
 	
 	//更新付款
-	$scope.editBasicInfo=function (){
+	$scope.editBasicInfo=function (judgeString){
 		if($('#form_sample_1').valid()){
-			var fd = new FormData();
+			 $rootScope.judgeIsExist("payOrReceive",$scope.pay.paymentNum, $scope.pay.serialNum,function(result){
+	    			var 	isExist = result;
+	    		debugger;
+	    		if(isExist){
+	    			if(judgeString=='receive'){
+	    				 toastr.error('收款单号重复！');
+	    			}else if(judgeString=='pay'){
+	    				 toastr.error('付款单号重复！');
+	    			}
+	    			return;
+	    		}else{
+	    			var fd = new FormData();
+	    			fd.append('serialNum',$scope.pay.serialNum);
+	    			fd.append('paymentType',$scope.pay.paymentType);
+	    			fd.append('paymentNum',$scope.pay.paymentNum); 
+	    			fd.append('orderSerial',$scope.pay.orderSerial); 
+	    			if(supplyComId!=null){
+	    				fd.append('supplyComId',supplyComId);
+	    			}else{
+	    				fd.append('supplyComId',$scope.pay.supplyComId);
+	    			}
+	    			fd.append('applyPaymentAmount',$scope.pay.applyPaymentAmount); 
+	    			fd.append('applyCurrency',$scope.pay.applyCurrency);
+	    			fd.append('playPaymentDate',$scope.pay.playPaymentDate);
+	    			fd.append('payType',$scope.pay.payType);
+	    			fd.append('paymentNode',$scope.pay.paymentNode);
+	    			fd.append('nodeNum',$scope.pay.nodeNum);
+	    			fd.append('billStyle',"先款后票"); 
+	    			fd.append('isBill',$("input[name='isBill']:checked").val());
+	    			fd.append('applyDate',$scope.pay.applyDate);
+	    			fd.append('applicant',$scope.pay.applicant);
+	    			fd.append('applyDept',$scope.pay.applyDept);
+	    			fd.append('remark',$scope.pay.remark);
+	    			
+	    			fd.append('payee',$scope.pay.payee);
+	    			fd.append('contact',$scope.pay.contact);
+	    			fd.append('contactNum',$scope.pay.contactNum);
+	    			fd.append('bank',$scope.pay.bank);
+	    			fd.append('accountName',$scope.pay.accountName);
+	    			fd.append('accountNumber',$scope.pay.accountNumber);
+	    			$http({
+	    				method:'POST',
+	    				url:"rest/pay/savePaymentRecord",
+	    				data: fd,
+	    				headers: {'Content-Type':undefined}
+	    			})   
+	    			.success( function ( data )
+	    					{
+	    				//上传成功的操作
+	    				toastr.success("保存应付款数据成功！");
+	    				handle.unblockUI();
+	    				$scope.pay= data;
+	    				$scope.span = true;
+	    				$scope.input = false;
+	    				$scope.applyPaymentAmountChn=convertCurrency($scope.pay.applyPaymentAmount);
+	    				$(".alert-danger").hide();
+	    					});
+	    		}
+	    		
+	    		});
+		/*	var fd = new FormData();
 			fd.append('serialNum',$scope.pay.serialNum);
 			fd.append('paymentType',$scope.pay.paymentType);
 			fd.append('paymentNum',$scope.pay.paymentNum); 
@@ -507,7 +582,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 				$scope.input = false;
 				$scope.applyPaymentAmountChn=convertCurrency($scope.pay.applyPaymentAmount);
 				$(".alert-danger").hide();
-					});
+					});*/
 		}
 	}
 	

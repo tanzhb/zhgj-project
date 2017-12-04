@@ -1026,53 +1026,68 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 						}	
 						
 								$scope.saveInvoice= function(judgeString) {
-									debugger;
 									if($('#invoiceForm').valid()){//表单验证通过则执行添加功能
-										debugger;
-									 if(judgeString==undefined){
-										 $scope.invoice.status=0;
-										}else if(judgeString.indexOf("confirm")>-1){
-											 $scope.invoice.status=2;
-										}else if(judgeString.indexOf("applyIn")>-1){//进项票申请收票
-											 $scope.invoice.status=2;
-										}else if(judgeString.indexOf("applyOut")>-1){//销项票申请开票
-											 $scope.invoice.status=3;
-										}
-										InvoiceService.saveInvoice($scope.invoice).then(
-															function(data) {debugger;
-															$scope.invoice.serialNum=data.serialNum;
-															if(judgeString==undefined){
-																$scope.invoiceView = true;
-																$scope.invoiceAdd = true;
-																toastr.success("保存发票数据成功！");
-															}else if(judgeString=='confirmIn'){
-																toastr.success("确认收票成功！");
-															}else if(judgeString=='confirmOut'){
-																toastr.success("确认开票成功！");
-															}else if(judgeString=='applyIn'){
-																toastr.success("申请收票成功！");
-															}else if(judgeString=='applyOut'){
-																toastr.success("申请开票成功！");
-															}
-															//$scope.showInvoiceInfo(data.serialNum,"out");
-																
-															/*$scope.invoice = data;
-															 $scope.invoice.receiptDate=timeStamp2ShortString(data.receiptDate);
-									 	        			 $scope.invoice.billingDate=timeStamp2ShortString(data.billingDate);
-									 	        			 $scope.invoice.submitDate=timeStamp2ShortString(data.submitDate);
-									 	        			 $scope.invoice.approvalDate=timeStamp2ShortString(data.approvalDate);
-									 	        			 $scope.invoice.capitalMoney=convertCurrency(data.billOrReceiptMoney);
-										        			$scope.invoiceAdd = true;
-										        			$scope.invoiceEdit = true;*/
-											        			$(".alert-danger").hide();
-											        			
-															},
-															function(errResponse) {
-																toastr.warning("保存失败！");
-																console
-																		.error('Error while creating User');
-															}
-													);
+										 $rootScope.judgeIsExist("invoice",$scope.invoice.invoiceNum, $scope.invoice.serialNum,function(result){
+								    			var 	isExist = result;
+								    		debugger;
+								    		if(isExist){
+								    			if(	$scope.inOrOut.indexOf('in')>-1){
+								    				 toastr.error('进项发票编号重复！');
+								    			}else if($scope.inOrOut.indexOf('out')>-1){
+								    				 toastr.error('销项发票编号重复！');
+								    			}
+								    			return;
+								    		}else{
+								    			handle.blockUI();
+								    			 if(judgeString==undefined){
+													 $scope.invoice.status=0;
+													}else if(judgeString.indexOf("confirm")>-1){
+														 $scope.invoice.status=2;
+													}else if(judgeString.indexOf("applyIn")>-1){//进项票申请收票
+														 $scope.invoice.status=2;
+													}else if(judgeString.indexOf("applyOut")>-1){//销项票申请开票
+														 $scope.invoice.status=3;
+													}
+													InvoiceService.saveInvoice($scope.invoice).then(
+																		function(data) {debugger;
+																		$scope.invoice.serialNum=data.serialNum;
+																		if(judgeString==undefined){
+																			$scope.invoiceView = true;
+																			$scope.invoiceAdd = true;
+																			toastr.success("保存发票数据成功！");
+																		}else if(judgeString=='confirmIn'){
+																			toastr.success("确认收票成功！");
+																		}else if(judgeString=='confirmOut'){
+																			toastr.success("确认开票成功！");
+																		}else if(judgeString=='applyIn'){
+																			toastr.success("申请收票成功！");
+																		}else if(judgeString=='applyOut'){
+																			toastr.success("申请开票成功！");
+																		}
+																		handle.unblockUI();
+																		//$scope.showInvoiceInfo(data.serialNum,"out");
+																			
+																		/*$scope.invoice = data;
+																		 $scope.invoice.receiptDate=timeStamp2ShortString(data.receiptDate);
+												 	        			 $scope.invoice.billingDate=timeStamp2ShortString(data.billingDate);
+												 	        			 $scope.invoice.submitDate=timeStamp2ShortString(data.submitDate);
+												 	        			 $scope.invoice.approvalDate=timeStamp2ShortString(data.approvalDate);
+												 	        			 $scope.invoice.capitalMoney=convertCurrency(data.billOrReceiptMoney);
+													        			$scope.invoiceAdd = true;
+													        			$scope.invoiceEdit = true;*/
+														        			$(".alert-danger").hide();
+														        			
+																		},
+																		function(errResponse) {
+																			toastr.warning("保存失败！");
+																			console
+																					.error('Error while creating User');
+																		}
+																);
+								    		}
+								    		
+								    		});
+								
 												}
 									}
 							// 添加发票结束***************************************
@@ -1400,7 +1415,7 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 		 	    		
 							// 页面加载完成后调用，验证输入框
 							$scope.$watch('$viewContentLoaded', function() { 
-								var  comName,relationBuyOrSaleNum,relationReceiveOrPayNum,receiptDate,approver,approvalDate,invoiceNum;
+								var  comName,relationBuyOrSaleNum,relationReceiveOrPayNum,receiptDate,approver,approvalDate,invoiceNum,billingDate,invoiceAmount,invoiceNO;
 								if($scope.inOrOut!=undefined&&$scope.inOrOut.indexOf("in")>-1){
 									invoiceNum={required:"进项发票单号不能为空！"};
 									comName={required:"开票方不能为空！"};
@@ -1413,6 +1428,16 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 									//receiptDate={required:true};
 									receiptDate={};
 								}
+								if($scope.inOrOut!=undefined&&$scope.inOrOut.indexOf('confirm')>-1){
+									billingDate={required:true};
+									invoiceAmount={required:true,digits:true};
+									invoiceNO={required:true};
+								}else{
+									billingDate={};
+									invoiceAmount={};
+									invoiceNO={};
+								}
+								
 								var e = $("#invoiceForm"),
 						        r = $(".alert-danger", e),
 						        i = $(".alert-success", e);
@@ -1450,10 +1475,10 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 						            	relationBuyOrSaleNum:{required:true},
 						            	relationReceiveOrPayNum:{required:true},
 						            	receiptDate:receiptDate,
-						            	invoiceAmount:{required:true,digits:true},
+						            	invoiceAmount:invoiceAmount,
 						            	invoiceType:{required:true},
-						            	billingDate:{required:true},
-						            	invoiceNO:{required:true},
+						            	billingDate:billingDate,
+						            	invoiceNO:invoiceNO,
 						            	 tel: {required:true,digits:true, rangelength:[7,20] }
 						            	/*submitter:{required:true},
 						            	submitDate:{required:true},*/

@@ -235,80 +235,90 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 	         */
 			$scope.saveStockIn = function(judgeString) {
 				if($('#stockInForm').valid()){
-					handle.blockUI();
-					var params = {};
-							if(judgeString=='save'){
-								$scope.record.status='0';	
-							}else{
-								$scope.record.status='1';
+					 $rootScope.judgeIsExist("record",$scope.record.inOutNum, $scope.record.serialNum,function(result){
+			    			var 	isExist = result;
+			    		debugger;
+			    		if(isExist){
+			    			 toastr.error('入库单号重复！');
+			    			return;
+			    		}else{
+			    			handle.blockUI();
+							var params = {};
+									if(judgeString=='save'){
+										$scope.record.status='0';	
+									}else{
+										$scope.record.status='1';
+									}
+							params.record = $scope.record;
+							params.record.deliverSerial = "";
+							params.deliveryMateriels = [];
+							var param;
+							for(var i=0;i < $scope.takeDeliveryMateriels.length;i++){
+								param = {};
+								if(isNull($scope.takeDeliveryMateriels[i].stockInBatchs)){
+									toastr.warning("生产批次未填写！");
+									handle.unblockUI();
+				     				return false;
+								}else{
+									param.stockInBatchs = $scope.takeDeliveryMateriels[i].stockInBatchs;
+								}
+							param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].orderMaterielSerial;//生成库存使用到
+//								param.batchNum = $scope.takeDeliveryMateriels[i].batchNum;
+//								param.manufactureDate = $scope.takeDeliveryMateriels[i].manufactureDate;
+//								param.deliverCount = $scope.takeDeliveryMateriels[i].deliverCount;
+//								param.deliverRemark = $scope.takeDeliveryMateriels[i].deliverRemark;
+//								param.acceptCount = $scope.takeDeliveryMateriels[i].acceptCount;
+//								param.refuseCount = $scope.takeDeliveryMateriels[i].deliverCount-$scope.takeDeliveryMateriels[i].acceptCount;
+//								param.takeRemark = $scope.takeDeliveryMateriels[i].takeRemark;
+								
+								
+								param.stockCount = $scope.takeDeliveryMateriels[i].stockInCount;
+								if(!isNull($scope.takeDeliveryMateriels[i].acceptCount)){
+									param.serialNum = $scope.takeDeliveryMateriels[i].serialNum;
+									param.unstockCount = $scope.takeDeliveryMateriels[i].acceptCount-$scope.takeDeliveryMateriels[i].stockInCount;
+									
+								}else{//
+									debugger;
+									param.deliverSerial = params.record.takeDeliverSerial;
+									param.unstockCount = 0;
+									if(isNull($scope.takeDeliveryMateriels[i].supplyMaterielSerial)){
+										//param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].serialNum;
+										param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].serialNum;
+									}else{
+										//param.orderMaterielSerial = '';
+										params.record.takeDeliverSerial = '';
+										param.supplyMaterielSerial = $scope.takeDeliveryMateriels[i].supplyMaterielSerial;
+									}
+								}
+								param.warehouseSerial = $scope.takeDeliveryMateriels[i].warehouseSerial;
+								param.positionSerial = $scope.takeDeliveryMateriels[i].positionSerial;
+								param.stockRemark = $scope.takeDeliveryMateriels[i].stockRemark;
+								params.deliveryMateriels.push(param);
 							}
-					params.record = $scope.record;
-					params.record.deliverSerial = "";
-					params.deliveryMateriels = [];
-					var param;
-					for(var i=0;i < $scope.takeDeliveryMateriels.length;i++){
-						param = {};
-						if(isNull($scope.takeDeliveryMateriels[i].stockInBatchs)){
-							toastr.warning("生产批次未填写！");
-							handle.unblockUI();
-		     				return false;
-						}else{
-							param.stockInBatchs = $scope.takeDeliveryMateriels[i].stockInBatchs;
-						}
-					param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].orderMaterielSerial;//生成库存使用到
-//						param.batchNum = $scope.takeDeliveryMateriels[i].batchNum;
-//						param.manufactureDate = $scope.takeDeliveryMateriels[i].manufactureDate;
-//						param.deliverCount = $scope.takeDeliveryMateriels[i].deliverCount;
-//						param.deliverRemark = $scope.takeDeliveryMateriels[i].deliverRemark;
-//						param.acceptCount = $scope.takeDeliveryMateriels[i].acceptCount;
-//						param.refuseCount = $scope.takeDeliveryMateriels[i].deliverCount-$scope.takeDeliveryMateriels[i].acceptCount;
-//						param.takeRemark = $scope.takeDeliveryMateriels[i].takeRemark;
-						
-						
-						param.stockCount = $scope.takeDeliveryMateriels[i].stockInCount;
-						if(!isNull($scope.takeDeliveryMateriels[i].acceptCount)){
-							param.serialNum = $scope.takeDeliveryMateriels[i].serialNum;
-							param.unstockCount = $scope.takeDeliveryMateriels[i].acceptCount-$scope.takeDeliveryMateriels[i].stockInCount;
 							
-						}else{//
-							debugger;
-							param.deliverSerial = params.record.takeDeliverSerial;
-							param.unstockCount = 0;
-							if(isNull($scope.takeDeliveryMateriels[i].supplyMaterielSerial)){
-								//param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].serialNum;
-								param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].serialNum;
-							}else{
-								//param.orderMaterielSerial = '';
-								params.record.takeDeliverSerial = '';
-								param.supplyMaterielSerial = $scope.takeDeliveryMateriels[i].supplyMaterielSerial;
-							}
-						}
-						param.warehouseSerial = $scope.takeDeliveryMateriels[i].warehouseSerial;
-						param.positionSerial = $scope.takeDeliveryMateriels[i].positionSerial;
-						param.stockRemark = $scope.takeDeliveryMateriels[i].stockRemark;
-						params.deliveryMateriels.push(param);
-					}
-					
-					var promise = takeDeliveryService
-							.saveStockInData(params);
-					promise.then(function(data) {
-						if(data.data == "1"){
-							if(judgeString=='save'){
-								toastr.success("保存成功！");
-							}else{
-								toastr.success("入库成功！");
-							}
-							$state.go("takeDelivery");
-						}else{
-							toastr.error("入库失败！请联系管理员");
-						}
-						handle.unblockUI();
-					}, function(data) {
-						// 调用承诺接口reject();
-						handle.unblockUI();
-						toastr.error("入库失败！请联系管理员");
-						console.log(data);
-					});
+							var promise = takeDeliveryService
+									.saveStockInData(params);
+							promise.then(function(data) {
+								if(data.data == "1"){
+									if(judgeString=='save'){
+										toastr.success("保存成功！");
+									}else{
+										toastr.success("入库成功！");
+									}
+									$state.go("takeDelivery");
+								}else{
+									toastr.error("入库失败！请联系管理员");
+								}
+								handle.unblockUI();
+							}, function(data) {
+								// 调用承诺接口reject();
+								handle.unblockUI();
+								toastr.error("入库失败！请联系管理员");
+								console.log(data);
+							});
+			    		}
+			    		
+			    		});
 				}
 			}; 
 			

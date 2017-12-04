@@ -112,7 +112,7 @@
                                                                 <label class="control-label bold" for=""> <span class="required"> * </span><span   ng-if="customsFormType.indexOf('clearance')>-1" >关联收货计划单号 :</span> <span  ng-if="customsFormType.indexOf('declaration')>-1">关联发货计划单号 :</span></label>
                                                                     <div class="">
                                                                      <div class="input-group" data-toggle="modal" data-target="#takeDeliveryInfo" onclick="return false;">
-	                                                        <input id="deliverNum"   name="deliverNum" type="text" class="form-control" ng-model="customsForm.deliverNum" readonly="readonly"  ng-hide="customsFormAdd"  >
+	                                                        <input id="deliverNum"   name="deliverNum" type="text" class="form-control" ng-model="customsForm.deliverNum"  ng-hide="customsFormAdd"  ><!--  readonly="readonly" -->
 	                                                        <span class="input-group-btn" style="vertical-align: top;" ng-hide="customsFormView">
 	                                                            <button class="btn default" type="button">
 	                                                                <i class="fa fa-search"></i>

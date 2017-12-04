@@ -127,7 +127,7 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 			statementService.getOrderAndPaymentRecords(supplyComId,buyComId,statementDate).then(
          		     function(data){//加载页面对象
          		    	 if(data.data.isExist==true){
-         		    		 toastr.warning("对账单已存在");
+         		    		// toastr.warning("对账单已存在");
          		    		$scope.orderList=[];
              		    	$scope.paymentList=[];
              		    	$scope.alreadyPaymentList=[];
@@ -194,22 +194,36 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 	//供应商对账单
     $scope.saveSupplyStatement  = function() {
     	if($('#form_sample_1').valid()){
-    		$scope.statement.paymentAmount = $scope.statement.nowAlreadyPay;
-    		$scope.statement.totalAmount = $scope.statement.nowAlreadyPay;
-    		$scope.statement.deliveryAmount = $scope.statement.nowAlreadyPay;
-    		statementService.save($scope.statement).then(
-       		     function(data){
-       		    	toastr.success('数据保存成功！');
-       		    	$state.go("supplyStatement");
-       		    	//$location.search({serialNum:data.serialNum,view:1});
-       		    	//$scope.statementInput = true;
-       			    //$scope.statementShow = true;
-       		     },
-       		     function(error){
-       		         $scope.error = error;
-       		         toastr.error('数据保存出错！');
-       		     }
-       		 );
+			 $rootScope.judgeIsExist("statement",$scope.statement.statementNum, $scope.statement.serialNum,function(result){
+	    			var 	isExist = result;
+	    		debugger;
+	    		if(isExist){
+	    			 toastr.error('对账单号重复！');
+	    			return;
+	    		}else{
+	    			handle.blockUI();
+	    			$scope.statement.paymentAmount = $scope.statement.nowAlreadyPay;
+	        		$scope.statement.totalAmount = $scope.statement.nowAlreadyPay;
+	        		$scope.statement.deliveryAmount = $scope.statement.nowAlreadyPay;
+	        		statementService.save($scope.statement).then(
+	           		     function(data){
+	           		    	toastr.success('数据保存成功！');
+	           		    	handle.unblockUI();
+	           		    	$state.go("supplyStatement");
+	           		    	//$location.search({serialNum:data.serialNum,view:1});
+	           		    	//$scope.statementInput = true;
+	           			    //$scope.statementShow = true;
+	           		     },
+	           		     function(error){
+	           		         $scope.error = error;
+	           		         toastr.error('数据保存出错！');
+	           		     }
+	           		 );
+	    		}
+	    		
+	    		});
+
+    	
     	}
     }; 	
     
@@ -226,22 +240,35 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
     //采购商对账单
     $scope.saveBuyStatement  = function() {
     	if($('#form_sample_2').valid()){
-    		$scope.statement.paymentAmount = $scope.statement.nowAlreadyPay;
-    		$scope.statement.totalAmount = $scope.statement.nowAlreadyPay;
-    		$scope.statement.deliveryAmount = $scope.statement.nowAlreadyPay;
-    		statementService.save($scope.statement).then(
-    				function(data){
-    					toastr.success('数据保存成功！');
-    					$state.go("buyStatement");
-    					//$location.search({serialNum:data.serialNum,view:1});
-    					//$scope.statementInput = true;
-    					//$scope.statementShow = true;
-    				},
-    				function(error){
-    					$scope.error = error;
-    					toastr.error('数据保存出错！');
-    				}
-    		);
+    		 $rootScope.judgeIsExist("statement",$scope.statement.statementNum, $scope.statement.serialNum,function(result){
+	    			var 	isExist = result;
+	    		debugger;
+	    		if(isExist){
+	    			 toastr.error('对账单号重复！');
+	    			return;
+	    		}else{
+	    			handle.blockUI();
+	    			$scope.statement.paymentAmount = $scope.statement.nowAlreadyPay;
+	        		$scope.statement.totalAmount = $scope.statement.nowAlreadyPay;
+	        		$scope.statement.deliveryAmount = $scope.statement.nowAlreadyPay;
+	        		statementService.save($scope.statement).then(
+	        				function(data){
+	        					toastr.success('数据保存成功！');
+	        					handle.unblockUI();
+	        					$state.go("buyStatement");
+	        					//$location.search({serialNum:data.serialNum,view:1});
+	        					//$scope.statementInput = true;
+	        					//$scope.statementShow = true;
+	        				},
+	        				function(error){
+	        					$scope.error = error;
+	        					toastr.error('数据保存出错！');
+	        				}
+	        		);
+	    		}
+	    		
+	    		});
+    	
     	}
     }; 	
     

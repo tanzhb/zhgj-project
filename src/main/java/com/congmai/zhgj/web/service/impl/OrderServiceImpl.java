@@ -26,6 +26,7 @@ import com.congmai.zhgj.web.dao.PaymentRecordMapper;
 import com.congmai.zhgj.web.dao.PriceListMapper;
 import com.congmai.zhgj.web.dao.StatementMapper;
 import com.congmai.zhgj.web.dao.StockInOutCheckMapper;
+import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
 import com.congmai.zhgj.web.dao.StockMapper;
 import com.congmai.zhgj.web.dao.WarehouseMapper;
 import com.congmai.zhgj.web.model.Company;
@@ -55,6 +56,8 @@ import com.congmai.zhgj.web.model.Stock;
 import com.congmai.zhgj.web.model.StockExample;
 import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.StockInOutCheckExample;
+import com.congmai.zhgj.web.model.StockInOutRecord;
+import com.congmai.zhgj.web.model.StockInOutRecordExample;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.OrderInfoExample.Criteria;
 import com.congmai.zhgj.web.model.Warehouse;
@@ -105,6 +108,9 @@ public class OrderServiceImpl implements OrderService {
   	
   	@Resource
   	private CustomsFormMapper     customsFormMapper;
+  	
+  	@Resource
+  	private 	StockInOutRecordMapper     stockInOutRecordMapper;
   	
   	
   	
@@ -411,6 +417,18 @@ public Boolean  isExist(String codeType, String num,String serialNum) {
 				c.andComIdNotEqualTo(serialNum);
 			}
 			List<Company>list=companyMapper.selectByExample(ce);
+			if(CollectionUtils.isEmpty(list)){
+				flag=false;
+			}
+		}else if("record".equals(codeType)){//出入库计划
+			StockInOutRecordExample soe=new StockInOutRecordExample();
+			com.congmai.zhgj.web.model.StockInOutRecordExample.Criteria c=soe.createCriteria();
+			c.andDelFlgEqualTo("0");
+			c.andInOutNumEqualTo(num);
+			if(!StringUtils.isEmpty(serialNum)){
+				c.andSerialNumNotEqualTo(serialNum);
+			}
+			List<StockInOutRecord>list=stockInOutRecordMapper.selectByExample(soe);
 			if(CollectionUtils.isEmpty(list)){
 				flag=false;
 			}

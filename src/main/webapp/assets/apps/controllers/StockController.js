@@ -772,36 +772,49 @@ angular
 								$scope.saveStock= function() {
 									debugger;
 									if($('#stockForm').valid()&&judgeData()){//表单验证通过则执行添加功能
-										if($scope.manageType.indexOf('zijian')>-1){
-											$scope.stock.manageType='1';
-												$scope.stock.materielOwner='';
-										}else if($scope.manageType.indexOf('jinwai')>-1){
-											$scope.stock.manageType='2';
-										}else if($scope.manageType.indexOf('jinwai')>-1){
-											$scope.stock.manageType='3';
-										}
-										$scope.stock.serviceParty='';
-										$scope.stock.materielSerial=$("#materielSerial").val();
-										StockService
-										.saveStock($scope.stock)
-										.then(
-												function(data) {debugger;
-													$('#addStockModal').modal(
-															'hide');// 保存成功后关闭模态框
-													toastr.success("保存库存数据成功！");
-													// $state.go('warehouse',{},{reload:true});  // 重新加载datatables数据
-													$scope.stock = data;
-								        			$scope.stockView = true;
-								        			$scope.stockAdd = true;
-								        			$scope.stockEdit = false;
-								        			$(".alert-danger").hide();
-												},
-												function(errResponse) {
-													toastr.warning("保存失败！");
-													console
-															.error('Error while creating User');
+										 $rootScope.judgeIsExist("stock",$scope.stock.stockNum, $scope.stock.serialNum,function(result){
+								    			var 	isExist = result;
+								    		debugger;
+								    		if(isExist){
+								    			 toastr.error('库存编号重复！');
+								    			return;
+								    		}else{
+								    			handle.blockUI();
+								    			if($scope.manageType.indexOf('zijian')>-1){
+													$scope.stock.manageType='1';
+														$scope.stock.materielOwner='';
+												}else if($scope.manageType.indexOf('jinwai')>-1){
+													$scope.stock.manageType='2';
+												}else if($scope.manageType.indexOf('jinwai')>-1){
+													$scope.stock.manageType='3';
 												}
-										);
+												$scope.stock.serviceParty='';
+												$scope.stock.materielSerial=$("#materielSerial").val();
+												StockService
+												.saveStock($scope.stock)
+												.then(
+														function(data) {debugger;
+															$('#addStockModal').modal(
+																	'hide');// 保存成功后关闭模态框
+															toastr.success("保存库存数据成功！");
+															handle.unblockUI();
+															// $state.go('warehouse',{},{reload:true});  // 重新加载datatables数据
+															$scope.stock = data;
+										        			$scope.stockView = true;
+										        			$scope.stockAdd = true;
+										        			$scope.stockEdit = false;
+										        			$(".alert-danger").hide();
+														},
+														function(errResponse) {
+															toastr.warning("保存失败！");
+															console
+																	.error('Error while creating User');
+														}
+												);
+								    		}
+								    		
+								    		});
+									
 									}
 							};	
 							// 添加库存结束***************************************
