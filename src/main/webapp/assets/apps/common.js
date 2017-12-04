@@ -654,7 +654,31 @@ function getWSPath_web1() {
     
     return pathName;
 }
+//为空判断
+var diySortFlag = function(str) {
+	if (str == "" || str == undefined)
+		return 999;
+	if(str.indexOf("待")>-1){
+		return 1;
+	}else if(str.indexOf("中")>-1){
+		return 2;
+	}else if(str.indexOf("未")>-1){
+		return 3;
+	}else if(str.indexOf("已")>-1){
+		return 4;
+	}else {
+		return 999;
+	}
+}
 
+//返回小的
+var returnMin = function(d1,d2) {
+	if(d1>d2){
+		return d2
+	}else{
+		return d1
+	}
+}
 
 $(function(){
 	var rootPath=getWSPath_web1();

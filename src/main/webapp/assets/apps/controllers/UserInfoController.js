@@ -50,7 +50,7 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
       		    	$scope.userInfo=data;
       		     },
       		     function(error){
-      		         console.log("error")
+      		         toastr.error('连接服务器出错,请登录重试！');
       		     }
       		 );
     }; 
@@ -67,7 +67,7 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
       		    	$("#usernameOfUserInfo").html($scope.userInfo.displayName);
       		     },
       		     function(error){
-      		         console.log("error")
+      		         toastr.error('连接服务器出错,请登录重试！');
       		     }
       		 );
     }; 
@@ -313,7 +313,7 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
 	                    infoEmpty: "没有数据",
 	                    // infoFiltered: "(filtered1 from _MAX_ total entries)",
 	                    lengthMenu: "每页显示 _MENU_ 条数据",
-	                    search: "查询:",
+	                    search: "查询:",processing:"加载中...",
 	                    zeroRecords: "抱歉， 没有找到！",
 	                    paginate: {
 	                        "sFirst": "首页",
@@ -433,7 +433,7 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
 	          		    	}
 	          		     },
 	          		     function(error){
-	          		         console.log("error")
+	          		         toastr.error('连接服务器出错,请登录重试！');
 	          		     }
 	          		 );
 	        }; 
@@ -620,7 +620,7 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
 	          		    	$scope.userInfo=data;
 	          		     },
 	          		     function(error){
-	          		         console.log("error")
+	          		         toastr.error('连接服务器出错,请登录重试！');
 	          		     }
 	          		 );
 	        }; 

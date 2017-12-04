@@ -37,7 +37,7 @@ angular.module('MetronicApp').controller('PurchaseForecastController', ['$rootSc
 					$scope.contractVO.signDate=myJsDate2;
       		     },
       		     function(error){
-      		         console.log("error")
+      		         toastr.error('连接服务器出错,请登录重试！');
       		     }
       		 );
 
