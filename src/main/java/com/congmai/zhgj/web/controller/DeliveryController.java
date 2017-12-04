@@ -59,6 +59,7 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.MessageConstants;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
@@ -358,6 +359,16 @@ public class DeliveryController {
 			OrderInfo orderInfo=new OrderInfo();
 			orderInfo.setSerialNum(orderSerial);
 			orderInfo.setDeliverStatus(OrderInfo.DELIVER);
+			//设置订单发货数量，用于更新
+			orderInfo.setDeliveryCount(o.getDeliveryCount());
+			List<DeliveryMaterielVO> deliveryMateriels=null;
+			deliveryMateriels = deliveryService.selectListForDetail(delivery.getSerialNum());
+			if(deliveryMateriels!=null&&deliveryMateriels.size()>0){
+				for(DeliveryMaterielVO deliveryMaterielVO:deliveryMateriels){
+					orderInfo.setDeliveryCount(StringUtil.sum(orderInfo.getDeliveryCount(),deliveryMaterielVO.getDeliverCount()));
+				}
+			}
+			
 			Delivery delivery1=new  Delivery();
 			delivery1.setSerialNum(delivery.getSerialNum());
 			delivery1.setStatus(DeliveryVO.COMPLETE);
@@ -1066,7 +1077,7 @@ public class DeliveryController {
 
 		List<DeliveryMaterielVO> deliveryMateriels=null;
 		deliveryMateriels = deliveryService.selectListForDetail(serialNum);
-		if(deliveryMateriels.size()>0){
+		if(deliveryMateriels!=null&&deliveryMateriels.size()>0){
 			String materielNum=deliveryMateriels.get(0).getMaterielNum();
 			if(StringUtils.isEmpty(materielNum)){
 			deliveryMateriels = deliveryService.selectListForDetail2(serialNum);	

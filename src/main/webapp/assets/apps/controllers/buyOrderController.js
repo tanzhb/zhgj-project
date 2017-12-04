@@ -343,7 +343,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                     infoEmpty: "没有数据",
                     // infoFiltered: "(filtered1 from _MAX_ total entries)",
                     lengthMenu: "每页显示 _MENU_ 条数据",
-                    search: "查询:",
+                    search: "查询:",processing:"加载中...",
                     zeroRecords: "抱歉， 没有找到！",
                     paginate: {
                         "sFirst": "首页",
@@ -454,6 +454,11 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 							'render' : function(data,
 									type, row, meta) {
 								var htm = (isNull(data)?'0':data)+'</br>'
+								if(isNull(row.deliveryCount)||row.deliveryCount==0){
+									htm = (isNull(data)?'0':data)+'（已发 0）</br>'
+								}else{
+									htm = (isNull(data)?'0':data)+'（已发 '+row.deliveryCount+'）</br>'
+								}
                     			if(row.deliverStatus==null||row.deliverStatus=="0"){
                     				if(row.status==2){
 										return htm + '<span >待发货</span>';
@@ -497,7 +502,12 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 							'render' : function(data,
 									type, row, meta) {
 								var htm = (isNull(data)?'0':data)+'</br>'
-
+								if(isNull(row.payAmount)||row.payAmount==0){
+									htm = (isNull(data)?'0':data)+'（已付 0）</br>'
+								}else{
+									htm = (isNull(data)?'0':data)+'（已付 '+row.payAmount+'）</br>'
+								}
+								
                     			if(row.payStatus=="0"){
                     				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">付款中</span>';
 								}else if(row.payStatus=="1"){
@@ -633,7 +643,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                         infoEmpty: "没有数据",
                         // infoFiltered: "(filtered1 from _MAX_ total entries)",
                         lengthMenu: "每页显示 _MENU_ 条数据",
-                        search: "查询:",
+                        search: "查询:",processing:"加载中...",
                         zeroRecords: "抱歉， 没有找到！",
                         paginate: {
                             "sFirst": "首页",
@@ -1117,7 +1127,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                          // infoFiltered: "(filtered1 from _MAX_ total
 							// entries)",
                          lengthMenu: "每页显示 _MENU_ 条数据",
-                         search: "查询:",
+                         search: "查询:",processing:"加载中...",
                          zeroRecords: "抱歉， 没有找到！",
                          paginate: {
                              "sFirst": "首页",
@@ -3726,7 +3736,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
                         // infoFiltered: "(filtered1 from _MAX_ total
 							// entries)",
                         lengthMenu: "每页显示 _MENU_ 条数据",
-                        search: "查询:",
+                        search: "查询:",processing:"加载中...",
                         zeroRecords: "抱歉， 没有找到！",
                         paginate: {
                             "sFirst": "首页",
@@ -3846,7 +3856,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
                       infoEmpty: "没有数据",
                       //infoFiltered: "(filtered1 from _MAX_ total entries)",
                       lengthMenu: "每页显示 _MENU_ 条数据",
-                      search: "查询:",
+                      search: "查询:",processing:"加载中...",
                       zeroRecords: "抱歉， 没有找到！",
                       paginate: {
                           "sFirst": "首页",

@@ -12,6 +12,7 @@ import org.springframework.util.CollectionUtils;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
 import com.congmai.zhgj.web.dao.PayMapper;
@@ -176,6 +177,9 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 		if(paymentRecord!=null){
 			OrderInfo orderInfo = new OrderInfo();
 			orderInfo.setSerialNum(paymentRecord.getOrderSerial());
+			//设置订单付款金额，用于更新
+			OrderInfo o=orderInfoMapper.selectByPrimaryKey(paymentRecord.getOrderSerial());
+			orderInfo.setPayAmount(StringUtil.sum(o.getPayAmount(),paymentRecord.getApplyPaymentAmount()));
 			orderInfo.setPayStatus(OrderInfo.RECIVE);//已收款
 			orderInfo.setUpdateTime(new Date());
 			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
@@ -319,6 +323,9 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 	public void updateOrderStatus(PaymentRecord paymentRecord) {
 		OrderInfo orderInfo = new OrderInfo();
 		orderInfo.setSerialNum(paymentRecord.getOrderSerial());
+		//设置订单付款金额，用于更新
+		OrderInfo o=orderInfoMapper.selectByPrimaryKey(paymentRecord.getOrderSerial());
+		orderInfo.setPayAmount(StringUtil.sum(o.getPayAmount(),paymentRecord.getApplyPaymentAmount()));
 		orderInfo.setPayStatus(OrderInfo.PAY);//已付款
 		orderInfo.setUpdateTime(new Date());
 		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);

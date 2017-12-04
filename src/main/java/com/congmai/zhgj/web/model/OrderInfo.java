@@ -164,7 +164,11 @@ public class OrderInfo extends BaseVO {
     private String unPayOrReceiptMoney;//未付/未收金额(发票里面用);
     
     private  String unBillOrReceiptMoney;//未开票/收票金额(发票里面用);
+    
+    private String deliveryCount;//发货数量
 
+    private String payAmount;//付款金额
+    
     public String getSerialNum() {
         return serialNum;
     }
@@ -553,6 +557,22 @@ public class OrderInfo extends BaseVO {
 
 	public void setProjectNum(String projectNum) {
 		this.projectNum = projectNum;
+	}
+
+	public String getDeliveryCount() {
+		return deliveryCount;
+	}
+
+	public void setDeliveryCount(String deliveryCount) {
+		this.deliveryCount = deliveryCount;
+	}
+
+	public String getPayAmount() {
+		return payAmount;
+	}
+
+	public void setPayAmount(String payAmount) {
+		this.payAmount = payAmount;
 	}
 	
 

@@ -19,6 +19,7 @@ import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.core.util.Constants;
 import com.congmai.zhgj.web.dao.CustomsFormMapper;
@@ -291,6 +292,16 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			Delivery delivery1=new  Delivery();
 			delivery1.setSerialNum(delivery.getSerialNum());
 			orderInfo.setSerialNum(delivery.getOrderSerial());
+			//设置订单发货数量，用于更新
+			OrderInfo o=orderService.selectById(delivery.getOrderSerial());
+			orderInfo.setDeliveryCount(o.getDeliveryCount());
+			List<DeliveryMaterielVO> deliveryMateriels=null;
+			deliveryMateriels = deliveryService.selectListForDetail(delivery.getSerialNum());
+			if(deliveryMateriels!=null&&deliveryMateriels.size()>0){
+				for(DeliveryMaterielVO deliveryMaterielVO:deliveryMateriels){
+					orderInfo.setDeliveryCount(StringUtil.sum(orderInfo.getDeliveryCount(),deliveryMaterielVO.getDeliverCount()));
+				}
+			}
 			if(createQG){
 				Map<String,Object>map=new HashMap<String,Object>();
 				map.put("serialNum", delivery.getSerialNum());

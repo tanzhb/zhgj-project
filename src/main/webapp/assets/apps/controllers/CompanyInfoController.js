@@ -41,7 +41,7 @@ angular.module('MetronicApp').controller('CompanyInfoController', ['$rootScope',
       		    	}
       		     },
       		     function(error){
-      		         console.log("error")
+      		         toastr.error('连接服务器出错,请登录重试！');
       		     }
       		 );
     }; 

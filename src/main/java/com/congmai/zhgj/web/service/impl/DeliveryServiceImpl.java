@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.dao.CustomsFormMapper;
 import com.congmai.zhgj.web.dao.DeliveryMapper;
@@ -402,6 +403,15 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 			//更新订单状态待清关
 			OrderInfo orderInfo=new OrderInfo();
 			orderInfo.setSerialNum(o.getSerialNum());
+			//设置订单发货数量，用于更新
+			orderInfo.setDeliveryCount(o.getDeliveryCount());
+			List<DeliveryMaterielVO> deliveryMateriels=null;
+			deliveryMateriels = deliveryMapper.selectListForDetail(serialNum);
+			if(deliveryMateriels!=null&&deliveryMateriels.size()>0){
+				for(DeliveryMaterielVO deliveryMaterielVO:deliveryMateriels){
+					orderInfo.setDeliveryCount(StringUtil.sum(orderInfo.getDeliveryCount(),deliveryMaterielVO.getDeliverCount()));
+				}
+			}
 			orderInfo.setDeliverStatus(orderInfo.CLEARANCE);
 			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 		}
