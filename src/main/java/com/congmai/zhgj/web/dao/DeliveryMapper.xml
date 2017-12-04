@@ -116,7 +116,7 @@
 	FROM
 	orderMateriel a
 	LEFT JOIN materiel b ON a.materielSerial=b.serialNum
-	WHERE orderSerial=#{serialNum}
+	WHERE a.orderSerial=#{serialNum} and a.delFlg=0
     </select>
     
     <!--查询详情物料集合  -->

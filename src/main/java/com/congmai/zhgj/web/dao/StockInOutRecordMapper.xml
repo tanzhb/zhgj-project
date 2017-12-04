@@ -534,14 +534,14 @@
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
-		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 				stock.manageType = '1'
 				AND   o.orderType != '委托采购'
-				AND s.status=1
+				
 		)
 		
 		WHERE stock.serialNum = #{serialNum};
@@ -561,14 +561,13 @@
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
-		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 				stock.manageType = '2'
 				AND o.orderType = '委托采购'
-				AND s.status=1
 				AND stock.materielOwner = (
 					SELECT
 						orderInfo.buyComId
@@ -595,13 +594,12 @@
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
-		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 				stock.manageType = '1'
-				AND s.status=1
 				AND  o.orderType != '委托采购'
 		)
 		
@@ -622,14 +620,13 @@ SELECT
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
-		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 				stock.manageType = '2'
 				AND o.orderType = '委托采购'
-				AND s.status=1
 				AND stock.materielOwner = (
 					SELECT
 						orderInfo.buyComId
@@ -655,13 +652,12 @@ SELECT
 			stockoutbatch sob
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial
 		LEFT JOIN delivery d ON d.serialNum = dm.deliverSerial
-		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial
+		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 			stock.manageType = '1'
-			AND s.status=1
 				AND  o.orderType != '委托采购'
 		)
 		
@@ -682,13 +678,12 @@ SELECT
 			stockoutbatch sob
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial
 		LEFT JOIN delivery d ON d.serialNum = dm.deliverSerial
-		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial
+		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial  AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 			stock.manageType = '2'
-			AND s.status=1
 				AND o.orderType = '委托采购'
 		)
 		
@@ -713,13 +708,12 @@ SELECT td.serialNum FROM takeDelivery td, (
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
-		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 		stock.manageType = '1'
-		AND s.status=1
 				AND  o.orderType != '委托采购'
 		)
 		
@@ -744,14 +738,13 @@ SELECT td.serialNum FROM takeDelivery td, (
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
-		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial  AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 			stock.manageType = '2'
 				AND o.orderType = '委托采购'
-				AND s.status=1
 				AND stock.materielOwner = (
 					SELECT
 						orderInfo.buyComId
@@ -783,13 +776,12 @@ SELECT td.serialNum FROM takeDelivery td, (
 			stockoutbatch sob
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial
 		LEFT JOIN delivery d ON d.serialNum = dm.deliverSerial
-		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial
+		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 			stock.manageType = '1'
-			AND s.status=1
 				AND  o.orderType != '委托采购'
 		
 		)
@@ -814,14 +806,13 @@ SELECT td.serialNum FROM takeDelivery td, (
 			stockoutbatch sob
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial
 		LEFT JOIN delivery d ON d.serialNum = dm.deliverSerial
-		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial
+		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 			stock.manageType = '2'
 				AND o.orderType = '委托采购'
-				AND s.status=1
 				AND stock.materielOwner = (
 					SELECT
 						orderInfo.buyComId
@@ -850,14 +841,13 @@ sob.outCount
 			stockoutbatch sob
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial
 		LEFT JOIN delivery d ON d.serialNum = dm.deliverSerial
-		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial
+		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 			stock.manageType = '1'
 				AND  o.orderType != '委托采购'
-				AND s.status=1
 				
 		)
 		
@@ -878,14 +868,13 @@ sob.outCount
 			stockoutbatch sob
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial
 		LEFT JOIN delivery d ON d.serialNum = dm.deliverSerial
-		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial
+		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 			stock.manageType = '2'
 				AND o.orderType = '委托采购'
-				AND s.status=1
 				AND stock.materielOwner = (
 					SELECT
 						orderInfo.buyComId
@@ -929,14 +918,13 @@ sib.stockInCount
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
-		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 			stock.manageType = '1'
 				AND o.orderType != '委托采购'
-				AND s.status=1
 		)
 		
 		WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR})a
@@ -972,13 +960,12 @@ sib.stockInCount
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
-		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial  AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 			stock.manageType = '2'
-			AND s.status=1
 				AND o.orderType = '委托采购'
 				AND stock.materielOwner = (
 					SELECT

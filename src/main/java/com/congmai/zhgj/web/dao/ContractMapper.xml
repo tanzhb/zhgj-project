@@ -251,8 +251,8 @@
       select count(*) from contract where 
       contractNum = #{contractNum,jdbcType=VARCHAR}
       and delFlg = '0'
-      <if test="serialNum != null" >
-        and serialNum != #{serialNum,jdbcType=VARCHAR}
+      <if test="id != null" >
+        and id != #{id,jdbcType=VARCHAR}
       </if>
       
     </select> 

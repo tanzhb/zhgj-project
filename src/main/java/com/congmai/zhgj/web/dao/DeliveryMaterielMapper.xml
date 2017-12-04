@@ -644,6 +644,12 @@
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
+    <if test="_parameter == null" >
+      where s.status=1
+    </if>
+      <if test="_parameter != null" >
+      and  s.status=1
+    </if>
     <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
@@ -676,7 +682,12 @@
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
-    
+    <if test="_parameter == null" >
+      where s.status=1
+    </if>
+      <if test="_parameter != null" >
+      and  s.status=1
+    </if>
     <if test="comId != null" >
         AND (sm.supplyComId = #{comId,jdbcType=VARCHAR} or bm.buyComId = #{comId,jdbcType=VARCHAR})
       </if>
@@ -695,6 +706,12 @@
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
+    <if test="_parameter == null" >
+      where s.status=1
+    </if>
+      <if test="_parameter != null" >
+      and  s.status=1
+    </if>
   </select>
   	<!-- 统计入库记录数 -->
    <select id="countListByExampleForStockIn" parameterType="com.congmai.zhgj.web.model.StockInOutRecordSelectExample" resultType="java.lang.Integer" >
@@ -707,6 +724,12 @@
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
+    <if test="_parameter == null" >
+      where s.status=1
+    </if>
+      <if test="_parameter != null" >
+      and  s.status=1
+    </if>
   </select>
   
   <!-- 根据出入库流水号查找发货物料信息 -->
@@ -715,7 +738,8 @@
    		dm.serialNum 
     from deliveryMateriel dm 
     left join stockInOutRecord s 
-    on dm.deliverSerial = s.serialNum and dm.delFlg = '0'
+    on dm.deliverSerial = s.serialNum 
+    where  dm.delFlg = '0' and s.tatus=1
   </select>
   <!-- 自建库存获取出库记录中出库明细   -->     
   <select id="getDetailByRelationDeliverSerialListForZijian"  resultMap="BaseResultMap2" parameterType="java.util.List" >
@@ -729,7 +753,7 @@
    left join delivery d on d.serialNum = s.deliverSerial
     left join deliveryMateriel dm on d.serialNum = dm.deliverSerial
     left join orderInfo o on o.serialNum = d.orderSerial
-    where  dm.delFlg=0 and s.delFlg=0  and o.buyComId is not null and  s.deliverSerial in 
+    where  dm.delFlg=0 and s.delFlg=0  and s.status=1 and o.buyComId is not null and  s.deliverSerial in 
         <foreach item="idList" collection="list" open="(" close=")" separator=",">
             #{idList}
         </foreach>
@@ -747,7 +771,7 @@
    left join delivery d on d.serialNum = s.deliverSerial
     left join deliveryMateriel dm on d.serialNum = dm.deliverSerial
     left join orderInfo o on o.serialNum = d.orderSerial
-    where  dm.delFlg=0 and s.delFlg=0 and o.buyComId is not  null and  s.status=1 and   s.deliverSerial in 
+    where  dm.delFlg=0 and s.delFlg=0 and s.status=1 and o.buyComId is not  null and  s.status=1 and   s.deliverSerial in 
         <foreach item="idList" collection="list" open="(" close=")" separator=",">
             #{idList}
         </foreach>
@@ -764,7 +788,7 @@
     LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
     left join deliveryMateriel dm on td.serialNum = dm.deliverSerial
     left join orderInfo o on o.serialNum = d.orderSerial
-     where dm.delFlg=0 and s.delFlg=0 and o.buyComId is  null and s.status=1 and  s.takeDeliverSerial in 
+     where dm.delFlg=0 and s.delFlg=0 and s.status=1  and o.buyComId is  null and s.status=1 and  s.takeDeliverSerial in 
         <foreach item="idList" collection="list" open="(" close=")" separator=",">
             #{idList}
         </foreach>
@@ -844,7 +868,7 @@
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
-		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial and s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
@@ -903,7 +927,7 @@
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
-		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial and s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial

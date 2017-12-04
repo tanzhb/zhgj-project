@@ -99,42 +99,54 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 	//添加合同
 	$scope.saveUserContract = function() {
 		if($('#form_sample_1').valid()){//表单验证通过则执行添加功能
-		var fd = new FormData();
-		if($("input[name='files']").length){
-			var files = document.querySelector('input[name="files"]').files[0];
-			fd.append("files", files);
-		}
-        
-		if($("input[name='file']").length){
-        var file = document.querySelector('input[name="file"]').files[0];
-        fd.append("files", file);
-		}
-		
-		fd.append('id',$scope.contractVO.id); 
-		fd.append('contractNum',$scope.contractVO.contractNum); 
-        fd.append('contractType',$scope.contractVO.contractType); 
-        fd.append('firstParty',$scope.contractVO.firstParty); 
-        fd.append('firstPartySigner',$scope.contractVO.firstPartySigner); 
-        fd.append('secondParty',$scope.contractVO.secondParty); 
-        fd.append('secondPartySigner',$scope.contractVO.secondPartySigner);
-        fd.append('otherPartyContractNum',$scope.contractVO.otherPartyContractNum);
-        if($scope.contractVO.startDate)fd.append('startDate',$scope.contractVO.startDate); 
-        if($scope.contractVO.endDate)fd.append('endDate',$scope.contractVO.endDate); 
-        fd.append('signDate',$scope.contractVO.signDate); 
-        fd.append('remark',$scope.contractVO.remark);
-        fd.append('signerAddress',$scope.contractVO.signerAddress);
-         $http({
-        	  method:'POST',
-              url:"rest/contract/saveUserContract",
-              data: fd,
-              headers: {'Content-Type':undefined}
-               })   
-              .success( function ( response )
-                       {
-                       //上传成功的操作
-            	  toastr.success("保存合同数据成功！");
-            	  $scope.goback();
-                       });
+			
+			 $rootScope.judgeIsExist("contract",$scope.contractVO.contractNum, $scope.contractVO.id,function(result){
+	    			var 	isExist = result;
+	    		debugger;
+	    		if(isExist){
+	    			toastr.error('合同编号重复！');
+	    			return;
+	    		}else{
+	    			var fd = new FormData();
+	    			if($("input[name='files']").length){
+	    				var files = document.querySelector('input[name="files"]').files[0];
+	    				fd.append("files", files);
+	    			}
+	    	        
+	    			if($("input[name='file']").length){
+	    	        var file = document.querySelector('input[name="file"]').files[0];
+	    	        fd.append("files", file);
+	    			}
+	    			
+	    			fd.append('id',$scope.contractVO.id); 
+	    			fd.append('contractNum',$scope.contractVO.contractNum); 
+	    	        fd.append('contractType',$scope.contractVO.contractType); 
+	    	        fd.append('firstParty',$scope.contractVO.firstParty); 
+	    	        fd.append('firstPartySigner',$scope.contractVO.firstPartySigner); 
+	    	        fd.append('secondParty',$scope.contractVO.secondParty); 
+	    	        fd.append('secondPartySigner',$scope.contractVO.secondPartySigner);
+	    	        fd.append('otherPartyContractNum',$scope.contractVO.otherPartyContractNum);
+	    	        if($scope.contractVO.startDate)fd.append('startDate',$scope.contractVO.startDate); 
+	    	        if($scope.contractVO.endDate)fd.append('endDate',$scope.contractVO.endDate); 
+	    	        fd.append('signDate',$scope.contractVO.signDate); 
+	    	        fd.append('remark',$scope.contractVO.remark);
+	    	        fd.append('signerAddress',$scope.contractVO.signerAddress);
+	    	         $http({
+	    	        	  method:'POST',
+	    	              url:"rest/contract/saveUserContract",
+	    	              data: fd,
+	    	              headers: {'Content-Type':undefined}
+	    	               })   
+	    	              .success( function ( response )
+	    	                       {
+	    	                       //上传成功的操作
+	    	            	  toastr.success("保存合同数据成功！");
+	    	            	  $scope.goback();
+	    	                       });
+	    		}
+	    		
+	    		});
+	
 		}
 	};
 	
