@@ -338,7 +338,7 @@ public Boolean  isExist(String codeType, String num,String serialNum) {
 				c.setId(serialNum);
 			}
 			String count=contractMapper.checkNum(c);
-			if(!"0".equals(count)){
+			if("0".equals(count)){
 				flag=false;
 			}
 		}else if("demandPlan".equals(codeType)){//需求计划

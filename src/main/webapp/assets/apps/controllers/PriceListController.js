@@ -847,25 +847,37 @@ function loadPriceListSaleTable(){
 					 }else{
 						 $scope.priceList.priceType='salePrice';
 					 }
-					 priceListService.savePriceList($scope.priceList)
-					 .then(
-							 function(data) {
-								 debugger;
-								 toastr.success("保存价格数据成功！");
-								 data.priceEffectiveDate=timeStamp2ShortString(data.priceEffectiveDate);
-								 data.priceExpirationDate=timeStamp2ShortString(data.priceExpirationDate);
-								 $scope.priceList =data;
-								 $scope.priceListView =true;
-								 $scope.priceListAdd =false;
-								 $scope.priceListEdit =true;
-								 $(".alert-danger").hide();
-							 },
-							 function(errResponse) {
-								 toastr.warning("保存错误！");
-								 console
-								 .error('Error while creating User');
-							 }
-					 );
+					 
+					 $rootScope.judgeIsExist("price",$scope.priceList.priceNum, $scope.priceList.serialNum,function(result){
+			    			var 	isExist = result;
+			    		debugger;
+			    		if(isExist){
+			    			toastr.error('价格编号重复！');
+			    			return;
+			    		}else{
+			    			 priceListService.savePriceList($scope.priceList)
+							 .then(
+									 function(data) {
+										 debugger;
+										 toastr.success("保存价格数据成功！");
+										 data.priceEffectiveDate=timeStamp2ShortString(data.priceEffectiveDate);
+										 data.priceExpirationDate=timeStamp2ShortString(data.priceExpirationDate);
+										 $scope.priceList =data;
+										 $scope.priceListView =true;
+										 $scope.priceListAdd =false;
+										 $scope.priceListEdit =true;
+										 $(".alert-danger").hide();
+									 },
+									 function(errResponse) {
+										 toastr.warning("保存错误！");
+										 console
+										 .error('Error while creating User');
+									 }
+							 );
+			    		}
+			    		
+			    		});
+					
 				 }
 			 };	
 			 // 删除价格开始***************************************							
