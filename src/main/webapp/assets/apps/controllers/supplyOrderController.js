@@ -260,7 +260,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 /*
  * fixedHeader: {//固定表头、表底 header: !0, footer: !0, headerOffset: a },
  */
-                order: [[1, "desc"]],// 默认排序列及排序方式
+                order: [[10, "asc"],[1, "desc"]],// 默认排序列及排序方式
                 searching: true,// 是否过滤检索
                 ordering:  true,// 是否排序
                 lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
@@ -316,7 +316,8 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 	                            			return '';
 	                            		}
 	                            	}
-	                            },*/{ mData: 'status'}
+	                            },*/{ mData: 'status'},
+	                            { bVisible: false }
                               
                         ],
                'aoColumnDefs' : [ {
@@ -519,6 +520,18 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 					"createdCell": function (td, cellData, rowData, row, col) {
 						 $compile(td)($scope);
 				       }
+				}, {
+					'targets' : 10,
+					'render' : function(data,
+							type, row, meta) {
+						var renderRow = meta.settings.aoData[meta.row];
+						return returnMin(
+									returnMin(
+											diySortFlag(renderRow.anCells[1].textContent),diySortFlag(renderRow.anCells[3].textContent)
+											),
+									diySortFlag(renderRow.anCells[4].textContent)
+									)
+					}
 				} ]
 
             }).on('order.dt',
