@@ -964,5 +964,8 @@
   <if test="invoiceSerial!=null">
    and  ibr.invoiceSerial=#{invoiceSerial,jdbcType=VARCHAR} 
    </if>
+    <if test="deliverySerial!=null">
+ and dm.deliverCount is not null
+  </if>
   </select>
 </mapper>
