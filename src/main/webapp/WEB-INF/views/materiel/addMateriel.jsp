@@ -46,7 +46,9 @@
 							<li class="bold"><a data-target="#tab_1_6" data-toggle="tab">采购商</a></li>
 						</shiro:hasRole>
 						<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">附件</a></li>
-						
+						<li class="dropdown pull-right tabdrop">
+							<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
+						</li>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane fade active in" id="tab_1_1">

@@ -43,6 +43,9 @@
 				<div class="portlet light ">
                         <div class="portlet-title">
                             <div class="caption"><span ng-if="manageType.indexOf('zijian')>-1">自建</span><span ng-if="manageType.indexOf('daiguan')>-1">代管</span><span ng-if="manageType.indexOf('jinwai')>-1">境外</span>库存信息</div>
+                            <div class="actions" >
+                                <button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
+                            </div>
                             <div class="actions">
                                 <button  ng-show="stockView"    class="btn purple  btn-sm btn-circle  " ng-click="editStock()">
                                             <i class="fa fa-edit"></i> 编辑 </button>

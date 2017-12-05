@@ -50,9 +50,9 @@
 					<li class="dropdown pull-right tabdrop" >
                        <button   ng-hide="companyAdd" class="btn green  btn-sm btn-circle" ng-click="saveTakeDelivery()">
                               <i class="fa fa-check"></i> 确认发货 </button>
-                       <button   ng-hide="companyAdd" class="btn defualt  btn-sm btn-circle" ng-click="cancelTakeDelivery()" onclick="return false;">
-                              <i class="fa fa-mail-reply"></i> 取消 </button>
-                                
+                       <!-- <button   ng-hide="companyAdd" class="btn defualt  btn-sm btn-circle" ng-click="cancelTakeDelivery()" onclick="return false;">
+                              <i class="fa fa-mail-reply"></i> 取消 </button> -->
+                                <button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
 					</li>
 					<li class="active bold">
                   	<a data-target="#tab_1_1" data-toggle="tab">发货信息</a>

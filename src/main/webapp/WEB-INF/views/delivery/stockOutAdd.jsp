@@ -47,6 +47,9 @@
 					<!-- 基本信息START -->
                         <div class="portlet-title">
                             <div class="caption">出库信息</div>
+                            <div class="actions" >
+                                <button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
+                            </div>
                             <div class="actions">
                               <!--   <button   ng-show="deliverView" class="btn blue  btn-outline  btn-sm " ng-click="editdeliver()">
                                             <i class="fa fa-edit"></i> 编辑 </button>
@@ -56,8 +59,9 @@
                                             <i class="fa fa-save"></i> 保存 </button> -->
                                  <button   class="btn green  btn-sm btn-circle" ng-click="saveStockIn()">
                               		<i class="fa fa-check"></i> 确认出库 </button>
-                      			 <button    class="btn defualt  btn-sm btn-circle" ng-click="cancelStockIn()" onclick="return false;">
-                              		<i class="fa fa-mail-reply"></i> 取消 </button>
+                      			 <!-- <button    class="btn defualt  btn-sm btn-circle" ng-click="cancelStockIn()" onclick="return false;">
+                              		<i class="fa fa-mail-reply"></i> 取消 </button> -->
+                              	
                             </div>
                         </div>
                         <div class="portlet-body form">

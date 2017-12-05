@@ -18,7 +18,7 @@
 							<button
 								class="btn defualt  btn-sm btn-circle" ng-click="goBack()"
 								onclick="return false;">
-								<i class="fa fa-mail-reply"></i> 取消
+								<i class="fa fa-mail-reply"></i> 返回
 							</button>
 						</li>
 						

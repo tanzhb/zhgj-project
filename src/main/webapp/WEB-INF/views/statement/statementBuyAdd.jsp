@@ -38,6 +38,9 @@
 					<!-- 基本信息START -->
                         <div class="portlet-title">
                             <div class="caption">基本信息</div>
+                            <div class="actions" >
+                                <button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
+                            </div>
                             <div class="actions">
                               <!--   <button   ng-show="statementView" class="btn blue  btn-outline  btn-sm " ng-click="editstatement()">
                                             <i class="fa fa-edit"></i> 编辑 </button>

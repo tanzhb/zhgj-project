@@ -6,6 +6,9 @@
 	<div class="tab-pane fade active in" id="tab_1_1">
 	<div class="portlet-title" style="min-height: 30px;">
               <div class="tools" style="float:right" id="noprintdiv">
+              				<div class="actions" >
+                                <button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
+                            </div>
                         	<button  ng-show="priceListView"   class="btn purple  btn-sm btn-circle " ng-click="editPriceList()">
                                             <i class="fa fa-edit"></i> 编辑 </button>
                                 <button   ng-hide="priceListEdit"   class="btn defualt  btn-sm btn-circle" ng-click="cancelEditPriceList()">
