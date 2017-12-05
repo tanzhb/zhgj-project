@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +40,7 @@ import com.congmai.zhgj.web.model.BOMMaterielExample;
 import com.congmai.zhgj.web.model.BuyMateriel;
 import com.congmai.zhgj.web.model.BuyMaterielExample;
 import com.congmai.zhgj.web.model.Category;
+import com.congmai.zhgj.web.model.CategoryExample;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyCode;
 import com.congmai.zhgj.web.model.JsonTreeData;
@@ -690,6 +692,25 @@ public class MaterielController {
 	    	criteria3.andDelFlgEqualTo("0");
 	    	List<BuyMateriel> buyMateriel = buyMaterielService.selectList(m3);
 	    	map.put("buyMateriel", buyMateriel);
+	    	
+	    	//转换物料功能分类
+	    	if(materiel.getMaterielAttribute()!=null){
+	    		String[] attributes = materiel.getMaterielAttribute().split(",");
+	    		CategoryExample ex = new CategoryExample();
+	    		com.congmai.zhgj.web.model.CategoryExample.Criteria criteria1 =  ex.createCriteria();
+	    		criteria1.andCategoryIdIn(Arrays.asList(attributes));
+	        	List<Category> list = categoryService.selectList(ex);
+	        	if(list!=null){
+	        		for (int i = 0; i < list.size(); i++) {
+	        			if(i==0){
+	        				materiel.setMaterielAttributeName(list.get(i).getCategoryName());
+	        			}else{
+	        				materiel.setMaterielAttributeName(materiel.getMaterielAttributeName()+','+list.get(i).getCategoryName());
+	        			}
+					}
+	        	}
+	    	}
+	    	
     	}
     	return map;
 	}

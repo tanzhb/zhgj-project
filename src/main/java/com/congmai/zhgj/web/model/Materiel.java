@@ -42,6 +42,8 @@ public class Materiel {
     private String categoryName3;
     
     private String materielAttribute;
+    
+    private String materielAttributeName;
 
     private String mnemonicCode;
 
@@ -712,6 +714,14 @@ public class Materiel {
 
 	public void setDeliverCount(String deliverCount) {
 		this.deliverCount = deliverCount;
+	}
+
+	public String getMaterielAttributeName() {
+		return materielAttributeName;
+	}
+
+	public void setMaterielAttributeName(String materielAttributeName) {
+		this.materielAttributeName = materielAttributeName;
 	}
     
 }

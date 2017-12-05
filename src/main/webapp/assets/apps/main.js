@@ -416,7 +416,13 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        'assets/apps/scripts/angular-file-upload.min.js',
 	        	'assets/apps/service/materielService.js',
 	        	'assets/apps/directive/CompanyDirective.js',
-				'assets/apps/controllers/materielController.js'/*,
+				'assets/apps/controllers/materielController.js',
+				
+				'assets/global/plugins/bootstrap-multiselect/css/bootstrap-multiselect.css',
+				'assets/global/plugins/bootstrap-multiselect/js/bootstrap-multiselect.js',
+				'assets/pages/scripts/components-bootstrap-multiselect.min.js'
+				
+				/*,
 				'assets/pages/scripts/jquery.jqprint-0.3.js'*/
                       ]
                     });
