@@ -70,6 +70,11 @@
 												修改
 											</label>
 										</shiro:hasPermission>
+										<shiro:hasPermission name="normalOrder:add">
+											<label class="btn btn-transparent purple btn-circle btn-sm"
+												ng-click="copyOrder()"> <i class="fa fa-plus"></i> 复制
+											</label>
+										</shiro:hasPermission>
 										<shiro:hasPermission name="normalOrder:delete">
 											<label class="btn btn-transparent red btn-circle btn-sm"
 												ng-click="deleteSaleOrder()"> <i class="fa fa-minus"></i>

@@ -69,6 +69,18 @@ angular.module('MetronicApp').service('orderService',
 	                })
 					return deferred.promise;
 				},
+				//复制订单
+				copyOrder : function(serialNum) {
+					var deferred = $q.defer();
+					$http.get("rest/order/copyOrderInfo", {params:{serialNum:serialNum}}
+					).success(function (data) {
+		                // 如果连接成功，延时返回给调用者
+		                deferred.resolve(data);
+		            }).error(function () {
+	                    deferred.reject('连接服务器出错！');
+	                })
+					return deferred.promise;
+				},
 				//检查编号
 				checkNum : function(orderInfo) {
 					var deferred = $q.defer();
@@ -366,7 +378,7 @@ angular.module('MetronicApp').service('orderService',
 				            })  
 				        return deferred.promise;  
 				    },
-	  initAllComs : function (){//所有公司
+				    initAllComs : function (){//所有公司
 						  var deferred = $q.defer();
 							$http.get("rest/company/getAllComs")
 							.then(function success(result) {
