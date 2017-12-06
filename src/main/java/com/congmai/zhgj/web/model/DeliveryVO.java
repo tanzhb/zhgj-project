@@ -205,6 +205,11 @@ public class DeliveryVO extends BaseVO implements Serializable{
 	    public static final String COMPLETE = "8"; //完成发货
 	    
 	    public static final String WAIT_IN_RECORD = "9"; //发货单待入库
+	    
+	    private  Boolean  isDel;
+	    
+	    private  Boolean  flag;
+	    private  List<DeliveryMaterielVO> deliveryMateriels;
 	
 /*	// 业务类型
 	private String businessType;
@@ -723,6 +728,30 @@ public class DeliveryVO extends BaseVO implements Serializable{
 
 	public void setInOutPackageCount(String inOutPackageCount) {
 		this.inOutPackageCount = inOutPackageCount;
+	}
+
+	public Boolean getIsDel() {
+		return isDel;
+	}
+
+	public Boolean getFlag() {
+		return flag;
+	}
+
+	public void setIsDel(Boolean isDel) {
+		this.isDel = isDel;
+	}
+
+	public void setFlag(Boolean flag) {
+		this.flag = flag;
+	}
+
+	public List<DeliveryMaterielVO> getDeliveryMateriels() {
+		return deliveryMateriels;
+	}
+
+	public void setDeliveryMateriels(List<DeliveryMaterielVO> deliveryMateriels) {
+		this.deliveryMateriels = deliveryMateriels;
 	}
 
 /*	public String getBusinessType() {

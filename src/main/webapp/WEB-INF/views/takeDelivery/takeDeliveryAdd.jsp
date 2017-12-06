@@ -498,9 +498,9 @@
 															ng-model="materiel.manufactureDate" placeholder="">
 															<span class="help-block"></span></td> -->
 														<td><span class="help-block"></span>{{materiel.amount}}</td><!-- ng-init="orderMateriels[$index].deliverCount=materiel.amount" -->
-														<td><span class="help-block"></span>{{materiel.amount-orderMateriels[$index].deliverCount}}</td>
+														<td><span class="help-block"></span>{{materiel.amount-materiel.orderMateriel.deliveredCount}}</td>
 														<td class="form-group"><input type="text"
-															class="form-control" id="deliverCount{{$index}}"     ng-if="type!='edit'"  ng-init="orderMateriels[$index].deliverCount=materiel.amount"
+															class="form-control" id="deliverCount{{$index}}"     ng-if="type!='edit'"  ng-init="orderMateriels[$index].deliverCount=materiel.amount-materiel.orderMateriel.deliveredCount"
 															name="deliverCount" data-ordercount="{{materiel.amount}}"   
 															ng-model="orderMateriels[$index].deliverCount"
 															ng-hide="deliverAdd"/>
@@ -532,7 +532,7 @@
 														<td>{{calcTotalNum()}}{{materielCount}}</td>
 														<td></td>
 														<td>{{totalAmount}}</td>
-														<td>{{totalAmount-totalDeliverCount}}</td>
+														<td>{{totalUnDeliveryCount}}</td>
 														<td>{{totalDeliverCount}}</td>
 														<td></td>
 														<td></td>

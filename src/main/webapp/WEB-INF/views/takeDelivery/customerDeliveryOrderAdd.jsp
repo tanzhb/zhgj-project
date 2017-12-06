@@ -452,7 +452,7 @@
 													<!-- 	<th style="min-width: 120px;" rowspan="2">批次号<span
 															class="required2"> * </span></th> -->
 													<!-- 	<th style="min-width: 120px;" rowspan="2">生产日期</th> -->
-														<th colspan="4"
+														<th colspan="5"
 															style="text-align: center; min-width: 100px;">发货</th>
 														<!-- <th colspan="3"  style="text-align: center;min-width: 100px;">收货</th> -->
 														<!-- <th colspan="3"  style="text-align: center;">检验</th>

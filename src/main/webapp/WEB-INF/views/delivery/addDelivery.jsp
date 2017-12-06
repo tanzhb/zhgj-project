@@ -942,15 +942,15 @@
 															</p>
 														</td>
 														<td>
-															<p class="form-control-static">{{_deliveryMateriel.amount-deliveryMaterielE[$index].deliverCount}}
+															<p class="form-control-static">{{_deliveryMateriel.amount-_deliveryMateriel.deliveredCount}}
 															</p>
 														</td>
 														<td class="form-group"><input type="text"  ng-if="!otherMode"
-															name="deliverCount" id="deliverCount{{$index}}"  ng-init="deliveryMaterielE[$index].deliverCount=_deliveryMateriel.amount"
+															name="deliverCount" id="deliverCount{{$index}}"  ng-init="deliveryMaterielE[$index].deliverCount=_deliveryMateriel.amount-_deliveryMateriel.deliveredCount"
 															class="form-control"
 															ng-hide="orderMaterielInput{{$index}}"
 															ng-model="deliveryMaterielE[$index].deliverCount"
-															data-ordercount="{{_deliveryMateriel.amount}}"
+															data-ordercount="{{_deliveryMateriel.amount-_deliveryMateriel.deliveredCount}}"
 															/>
 															<input type="text"  ng-if="otherMode"
 															name="deliverCount" id="deliverCount{{$index}}"  
@@ -986,7 +986,7 @@
 														<td></td>
 														<td></td>
 														<td>{{totalOrderCount}}</td>
-														<td>{{totalOrderCount-totalDeliveryCount}}</td>
+														<td>{{totalUnDeliveryCount}}</td>
 														<td>{{calcTotalDeliveryCount()}} {{totalDeliveryCount}}</td>
 														<td></td>
 													</tr>

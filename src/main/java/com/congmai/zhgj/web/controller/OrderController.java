@@ -752,18 +752,19 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/getOrderInfo")
 	@ResponseBody
-	public Map getOrderInfo(String serialNum,OrderInfo orderInfo) {
+	public Map getOrderInfo(String serialNum,String  judgeString,OrderInfo orderInfo) {
 		orderInfo = orderService.selectById(serialNum);
 		Map<String, Object> map = new HashMap<String, Object>();
     	map.put("orderInfo", orderInfo);
+    	List<OrderMateriel> orderMateriel=null;
     	
-    	OrderMaterielExample m =new OrderMaterielExample();
+   	OrderMaterielExample m =new OrderMaterielExample();
     	//and 条件1
     	com.congmai.zhgj.web.model.OrderMaterielExample.Criteria criteria =  m.createCriteria();
     	criteria.andDelFlgEqualTo("0");
     	criteria.andOrderSerialEqualTo(serialNum);
     	m.setOrderByClause(" sort asc");
-    	List<OrderMateriel> orderMateriel = orderMaterielService.selectList(m);
+    	orderMateriel = orderMaterielService.selectList(m);
     	map.put("orderMateriel", orderMateriel);
     	
     	//获取合同信息

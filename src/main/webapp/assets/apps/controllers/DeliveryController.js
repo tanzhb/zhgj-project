@@ -218,13 +218,19 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		 	/*$scope.confirmDelivery($scope.delivery.serialNum);*/
 	   		var promise = DeliveryService.goDelivery($scope.delivery.serialNum);
 			promise.then(function(data) {
+				if(data.flag){
+					if(data.isDel){
+						toastr.warning("当前发货单已发货完毕请删除当前发货单!");
+					}else{toastr.warning("请重新编辑发货物料数量后再确认发货!");}
+					return;
+				}else{
 					toastr.success("确认发货成功");
 					if(judgeString=='add'){
 						$scope.delivery.status=1;
 					}else {
 						$scope.deliveryDetail.status=1;
 					}
-					
+				}
 			}, function(data) {
 				// 调用承诺接口reject();
 				$(".modal-backdrop").remove();
@@ -441,19 +447,52 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		var promise = DeliveryService.saveAllDeliveryMateriel($scope.deliveryMaterielE);
 		promise.then(function(data) {
 			if (!handle.isNull(data)) {
-				$(".modal-backdrop").remove();
+				handle.unblockUI();
+				if(data.data.flag){//存在不满足条件的发货
+					if(data.data.isDel){
+						toastr.warning("当前发货单已发货完毕请删除当前发货单!");
+					}else{
+						$scope.deliveryMaterielE=data.data.deliveryMateriels;
+						toastr.warning("存在发货数量超过未发数量的物料,请重新编辑!");}
+				}else{
+					$(".modal-backdrop").remove();
+					toastr.success("保存成功");
+					handle.unblockUI();
+				/*	var array=new Array();
+					for (var i=0;i < data.data.deliveryMateriels.length;i++){
+						if(data.data.deliveryMateriels[i].deliverCount!=0){
+							delete   data.data.deliveryMateriels[i];
+							array.push(data.data.deliveryMateriels[i]);
+						}
+					}
+					$scope.deliveryMaterielE=array; 
+					$scope.materielCount=array.length;*/
+					$scope.deliveryMaterielE=data.data.deliveryMateriels;
+				$scope.editMateriel=true;
+				$scope.saveMateriel=true;
+					for(var i=0;i<$scope.deliveryMaterielE.length;i++){
+						$scope["orderMaterielInput"+i] = true;
+						$scope["orderMaterielShow"+i] = true;
+						
+					}
+					
+					$(".alert-danger").hide();
+				}
+			
+				
+				/*$(".modal-backdrop").remove();
 				toastr.success("保存成功");
 				handle.unblockUI();
-				var array=new Array();
+			var array=new Array();
 				for (var i=0;i < data.data.deliveryMateriels.length;i++){
 					if(data.data.deliveryMateriels[i].deliverCount!=0){
-						/*delete   data.data.deliveryMateriels[i];*/
+						delete   data.data.deliveryMateriels[i];
 						array.push(data.data.deliveryMateriels[i]);
 					}
 				}
 				$scope.deliveryMaterielE=array; 
-				$scope.materielCount=array.length;
-			$scope.editMateriel=true;
+				$scope.materielCount=array.length;*/
+		/*	$scope.editMateriel=true;
 			$scope.saveMateriel=true;
 				for(var i=0;i<$scope.deliveryMaterielE.length;i++){
 					$scope["orderMaterielInput"+i] = true;
@@ -461,7 +500,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 					
 				}
 				
-				$(".alert-danger").hide();
+				$(".alert-danger").hide();*/
 			} else {
 				$(".modal-backdrop").remove();
 				handle.unblockUI();
@@ -578,40 +617,52 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	    			var promise = DeliveryService.saveBasicInfo($scope,"deliveryInfo");
 	    			promise.then(function(data) {
 	    				if (!handle.isNull(data)) {
-	    					$(".modal-backdrop").remove();
-	    					toastr.success("保存成功");
-	    					handle.unblockUI();
-	    					debugger;
-	    					$scope.delivery= data;
-	    					$scope.delivery.serialNum=data.serialNum;
-	    					$scope.deliver={};
-	    	  		    	$scope.deliver.deliverer=$scope.delivery.deliverer;
-	    	  		    	$scope.deliver.remark =$scope.delivery.remark;  
-	    	  		    	$scope.deliver.maker  =$scope.delivery.maker;
-	    	  		    	$scope.deliver.approvalDate =$scope.delivery.approvalDate;  
-	    	  		    	$scope.deliver.deliverDate  =$scope.delivery.deliverDate;
-	    	  		    	$scope.deliver.packageType=$scope.delivery.packageType;
-	    	  		    	$scope.takeDeliveryWarehouseAddress=$scope.delivery.takeAddress;
-	    					if(status!=undefined){
-	    						var promise = DeliveryService.goDelivery($scope.delivery.serialNum);
-	    						promise.then(function(data) {
-	    								$(".modal-backdrop").remove();
-	    								toastr.success("确认发货成功");
-	    								$scope.delivery.status=status;
-	    							/*	$state.go('delivery',{},{reload:true});*/
-	    								handle.unblockUI();
-	    						}, function(data) {
-	    							// 调用承诺接口reject();
-	    							$(".modal-backdrop").remove();
-	    							handle.unblockUI();
-	    							toastr.error("发货失败！请联系管理员");
-	    							console.log(data);
-	    						});
+	    					if(data.flag){
+	    						handle.unblockUI();
+	    						if(data.isDel){
+	    							toastr.warning("当前发货单已发货完毕请删除当前发货单!");
+	    						}else{
+	    							$scope.deliveryMaterielE=data.deliveryMateriels;
+	    							toastr.warning("请重新编辑发货物料数量后再确认发货!");}
+	    						return;
+	    					}else{
+	    						$(".modal-backdrop").remove();
+		    					toastr.success("保存成功");
+		    					handle.unblockUI();
+		    					debugger;
+		    					$scope.delivery= data;
+		    					$scope.delivery.serialNum=data.serialNum;
+		    					$scope.deliver={};
+		    	  		    	$scope.deliver.deliverer=$scope.delivery.deliverer;
+		    	  		    	$scope.deliver.remark =$scope.delivery.remark;  
+		    	  		    	$scope.deliver.maker  =$scope.delivery.maker;
+		    	  		    	$scope.deliver.approvalDate =$scope.delivery.approvalDate;  
+		    	  		    	$scope.deliver.deliverDate  =$scope.delivery.deliverDate;
+		    	  		    	$scope.deliver.packageType=$scope.delivery.packageType;
+		    	  		    	$scope.takeDeliveryWarehouseAddress=$scope.delivery.takeAddress;
+		    					if(status!=undefined){
+		    						var promise = DeliveryService.goDelivery($scope.delivery.serialNum);
+		    						promise.then(function(data) {
+		    								$(".modal-backdrop").remove();
+		    								toastr.success("确认发货成功");
+		    								$scope.delivery.status=status;
+		    							/*	$state.go('delivery',{},{reload:true});*/
+		    								handle.unblockUI();
+		    						}, function(data) {
+		    							// 调用承诺接口reject();
+		    							$(".modal-backdrop").remove();
+		    							handle.unblockUI();
+		    							toastr.error("发货失败！请联系管理员");
+		    							console.log(data);
+		    						});
+		    					}
+		    					getSupplyComId();
+		    					$scope.span = true;
+		    					$scope.inputDeliveryInfo = false;
+		    					$(".alert-danger").hide();
 	    					}
-	    					getSupplyComId();
-	    					$scope.span = true;
-	    					$scope.inputDeliveryInfo = false;
-	    					$(".alert-danger").hide();
+	    					
+	    				
 	    				} else {
 	    					$(".modal-backdrop").remove();
 	    					handle.unblockUI();
@@ -1999,12 +2050,14 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	}
 	          		    	
 	          		    	$scope.materielCount=data.orderMateriel.length;
-	          		    	var totalOrderCount=0;
+	          		    	var totalOrderCount=0,totalDeliveryedCount=0;
 	          		    	for(var i=0;i< $scope.deliveryMaterielE.length;i++){
 	          		    		totalOrderCount+=Number($scope.deliveryMaterielE[i].amount);
+	          		    		totalDeliveryedCount+=Number($scope.deliveryMaterielE[i].deliveredCount);
 	          		    	}
 	          		    	$scope.totalOrderCount=totalOrderCount;
-	          		    	$scope.totalDeliveryCount=totalOrderCount;
+	          		    	$scope.totalDeliveryCount=totalOrderCount-totalDeliveryedCount;
+	          		    	$scope.totalUnDeliveryCount=totalOrderCount-totalDeliveryedCount;
 	          		    	
 	          		    	//重新加载发货仓库和收货仓库
 	          		    	
@@ -2123,6 +2176,14 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	}
 	          		    	
 	          		    	$scope.materielCount=data.deliveryMateriels.length;
+	          		    	var totalOrderCount=0,totalDeliveryedCount=0;
+	          		    	for(var i=0;i< data.deliveryMateriels.length;i++){
+	          		    		totalOrderCount+=Number(data.deliveryMateriels[i].amount);
+	          		    		totalDeliveryedCount+=Number(data.deliveryMateriels[i].deliveredCount);
+	          		    	}
+	          		    	$scope.totalOrderCount=totalOrderCount;
+	          		    	$scope.totalDeliveryCount=totalOrderCount-totalDeliveryedCount;
+	          		    	$scope.totalUnDeliveryCount=totalOrderCount-totalDeliveryedCount;
 	          		    	length=data.deliveryMateriels.length;
 	          		    	$("#serialNum").val(serialNumEdit);//赋值给隐藏input，通过和不通过时调用
 	    					$("#taskId").val(ids);//赋值给隐藏input，通过和不通过时调用
@@ -2874,7 +2935,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
     
 	jQuery.validator.addMethod("deliverNumCheck", function (value, element) {
 		    return element.dataset.ordercount=="otherMode"?false : this.optional(element) || Number(element.dataset.ordercount)-value >= 0;
-		}, "发货数量不能超过订单数量");
+		}, "发货数量不能超过未发数量");
 
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         // 获取已激活的标签页的名称

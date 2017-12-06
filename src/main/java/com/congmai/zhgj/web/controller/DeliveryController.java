@@ -3,6 +3,7 @@ package com.congmai.zhgj.web.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -335,21 +336,62 @@ public class DeliveryController {
 	 * @throws Exception 
 	 */
 	@RequestMapping(value = "/goDelivery", method = RequestMethod.GET)
-	public ResponseEntity<Void> goDelivery(String serialNum, HttpServletRequest request,UriComponentsBuilder ucBuilder) throws Exception {
+	public ResponseEntity<Map<String,Object>> goDelivery(String serialNum, HttpServletRequest request,UriComponentsBuilder ucBuilder) throws Exception {
+		//先判断现在的发货数量与未发数量符合条件才可确认发货,否则提示用户修改
+		Map<String,Object> map=new HashMap<String,Object>();
+		Boolean  isDel=false;//是否删除当前发货单
+		 Boolean flag=false;//还可以发
+		DeliveryVO delivery=deliveryService.selectDetailById(serialNum);
+		String orderSerial=delivery.getOrderSerial();
+		List<DeliveryMaterielVO> orderMateriels = deliveryService.selectList(orderSerial);//取最新的数据判断
+		OrderInfo o=orderService.selectById(orderSerial);
+		String  deliveryCount=o.getDeliveryCount();//订单已发数量
+		String  materielCount=o.getMaterielCount();//订单总数量
+		  BigDecimal deliveryCount1=new BigDecimal(deliveryCount);
+		  BigDecimal materielCount1=new BigDecimal(materielCount);
+		  if(deliveryCount1.compareTo(materielCount1)>=0){
+			  flag=true;
+			  isDel=true;//提示删除当前发货单
+			  map.put("isDel", isDel);
+			  map.put("flag", flag);
+			  return new ResponseEntity<Map<String,Object>>(map, HttpStatus.CREATED);
+		  }else{
+			  map.put("isDel", isDel);
+		  }
+		 
+		List<DeliveryMaterielVO> deliveryMateriels1=null;//查出当前发货信息
+		deliveryMateriels1= deliveryService.selectListForDetail(serialNum);
+		if(deliveryMateriels1!=null&&deliveryMateriels1.size()>0){
+			String materielNum=deliveryMateriels1.get(0).getMaterielNum();
+			if(StringUtils.isEmpty(materielNum)){
+			deliveryMateriels1 = deliveryService.selectListForDetail2(serialNum);	
+			}	
+		}
+		  for(DeliveryMaterielVO deliveryMateriel: deliveryMateriels1){
+			  for(DeliveryMaterielVO vo:orderMateriels){
+				  if(deliveryMateriel.getOrderMaterielSerialNum().equals(vo.getOrderMaterielSerialNum())){//两个订单物料流水相同时
+					  BigDecimal deliverCount=new BigDecimal(deliveryMateriel.getDeliverCount());
+					  BigDecimal canDeliverCount=new BigDecimal(vo.getAmount()).subtract(new BigDecimal(vo.getDeliveredCount()==null?"0":vo.getDeliveredCount()));//可发数量=物料数量-已发数量
+					  if(deliverCount.compareTo(canDeliverCount)>0){
+						  flag=true;
+						  map.put("flag", flag);
+						  return new ResponseEntity<Map<String,Object>>(map, HttpStatus.CREATED);
+					  }
+				  }
+			  }
+		  }
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
 
-		Map<String,Object> map=new HashMap<String,Object>();
 		map.put("serialNum", serialNum);
 		map.put("updater", currenLoginName);
 		
-		DeliveryVO delivery=deliveryService.selectDetailById(serialNum);
+	
 		TakeDelivery takeDelivery = new TakeDelivery();
 		takeDelivery = takeDeliveryMapper.selectTakeDeliveryByDeliveryId(serialNum);
 		
-		String orderSerial=delivery.getOrderSerial();
+		
 		map.put("orderSerial", orderSerial);
-		OrderInfo o=orderService.selectById(orderSerial);
 		map.put("orderInfo", o);
 		Boolean createQG=StaticConst.getInfo("waimao").equals(o.getTradeType())&&!StringUtils.isEmpty(o.getSupplyComId());//供应商发货/平台发货是否产生清关单
 		deliveryService.updateOrderWhenDeliveryComlete(map);
@@ -458,8 +500,8 @@ public class DeliveryController {
 		
 		//发货消息
 		EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(delivery,MessageConstants.DELIVERY));
-		
-		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+		 map.put("flag", flag);
+		return new ResponseEntity<Map<String,Object>>(map, HttpStatus.CREATED);
 	}
     
     
@@ -645,10 +687,45 @@ public class DeliveryController {
 	   
 	   params = params.replace("\\", "");
 	   List<DeliveryMaterielVO> deliveryMateriels;
+	   Map<String,Object> map =new HashMap<String,Object>();
 	   /*ObjectMapper objectMapper = new ObjectMapper();  
        JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, DeliveryMaterielVO.class);  
        deliveryMateriels = objectMapper.readValue(params, javaType);*/
 	  deliveryMateriels = JSON.parseArray(params, DeliveryMaterielVO.class);
+	  List<DeliveryMaterielVO> orderMateriels = deliveryService.selectList(deliveryMateriels.get(0).getOrderSerial());//取最新的数据判断
+	  Boolean flag=false;//还可以发
+	  Boolean isDel=false;//是否删除发货单
+		OrderInfo o=orderService.selectById(deliveryMateriels.get(0).getOrderSerial());
+		String  deliveryCount=o.getDeliveryCount();//订单已发数量
+		String  materielCount=o.getMaterielCount();//订单总数量
+		  BigDecimal deliveryCount1=new BigDecimal(deliveryCount);
+		  BigDecimal materielCount1=new BigDecimal(materielCount);
+		  if(deliveryCount1.compareTo(materielCount1)>=0){
+			  flag=true;
+			  isDel=true;//提示删除当前发货单
+			  map.put("isDel", isDel);
+			  map.put("flag", flag);
+			  return map;
+		  }else{
+			  map.put("isDel", isDel);
+		  }
+	  for(DeliveryMaterielVO deliveryMateriel: deliveryMateriels){
+		  for(DeliveryMaterielVO vo:orderMateriels){
+			  if(deliveryMateriel.getOrderMaterielSerialNum().equals(vo.getOrderMaterielSerialNum())){//两个订单物料流水相同时
+				  BigDecimal deliverCount=new BigDecimal(deliveryMateriel.getDeliverCount());
+				  BigDecimal canDeliverCount=new BigDecimal(vo.getAmount()).subtract(new BigDecimal(vo.getDeliveredCount()==null?"0":vo.getDeliveredCount()));//可发数量=物料数量-已发数量
+				  if(deliverCount.compareTo(canDeliverCount)>0){
+					  flag=true;
+					  deliveryMateriel.setDeliveredCount(vo.getDeliveredCount());//更新成最新的已发数量
+					  deliveryMateriel.setDeliverCount("0");//发货数量置为0
+					  map.put("deliveryMateriels", deliveryMateriels);//重新将最新的发货数据传到前台
+					  map.put("flag", flag);
+					  return map;
+				  }
+			  }
+		  }
+	  }
+	  
 	   try{
    		Subject currentUser = SecurityUtils.getSubject();
    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
@@ -703,7 +780,6 @@ public class DeliveryController {
    		
    	}
 	   
-	   Map<String,Object>map=new HashMap<String,Object>();
 	   String  serialNum=deliveryMateriels.get(0).getDeliverSerial();
    	deliveryMateriels = deliveryService.selectListForDetail(serialNum);
 	if(deliveryMateriels.size()>0){
@@ -713,6 +789,7 @@ public class DeliveryController {
 		}	
 	}
 	   map.put("deliveryMateriels", deliveryMateriels);
+	   map.put("flag", flag);
 	   
 	   return map;
    }
@@ -854,6 +931,50 @@ public class DeliveryController {
     @RequestMapping(value="saveBasicInfo",method=RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<DeliveryVO>  saveBasicInfo(DeliveryVO delivery,DeliveryTransportVO deliveryTransport,TakeDeliveryVO takeDeliveryVO){
+    	
+    	//保存前判断发货数量是否满足条件
+		Boolean  isDel=false;//是否删除当前发货单
+		 Boolean flag=false;//还可以发
+    	String orderSerial=delivery.getOrderSerial();
+    	DeliveryVO deliveryVO=new  DeliveryVO();
+		List<DeliveryMaterielVO> orderMateriels = deliveryService.selectList(orderSerial);//取最新的数据判断
+		OrderInfo orderInfo=orderService.selectById(orderSerial);
+		String  deliveryCount=orderInfo.getDeliveryCount();//订单已发数量
+		String  materielCount=orderInfo.getMaterielCount();//订单总数量
+		  BigDecimal deliveryCount1=new BigDecimal(deliveryCount);
+		  BigDecimal materielCount1=new BigDecimal(materielCount);
+		  if(deliveryCount1.compareTo(materielCount1)>=0){
+			  flag=true;
+			  isDel=true;//提示删除当前发货单
+			  deliveryVO.setFlag(flag);
+			  deliveryVO.setIsDel(isDel);
+			  return new ResponseEntity<DeliveryVO>(deliveryVO, HttpStatus.CREATED);
+		  }else{
+			  deliveryVO.setIsDel(isDel);
+		  }
+		 
+		List<DeliveryMaterielVO> deliveryMateriels1=null;//查出当前发货信息
+		deliveryMateriels1= deliveryService.selectListForDetail(delivery.getSerialNum());
+		if(deliveryMateriels1!=null&&deliveryMateriels1.size()>0){
+			String materielNum=deliveryMateriels1.get(0).getMaterielNum();
+			if(StringUtils.isEmpty(materielNum)){
+			deliveryMateriels1 = deliveryService.selectListForDetail2(delivery.getSerialNum());	
+			}	
+		}
+		  for(DeliveryMaterielVO deliveryMateriel: deliveryMateriels1){
+			  for(DeliveryMaterielVO vo:orderMateriels){
+				  if(deliveryMateriel.getOrderMaterielSerialNum().equals(vo.getOrderMaterielSerialNum())){//两个订单物料流水相同时
+					  BigDecimal deliverCount=new BigDecimal(deliveryMateriel.getDeliverCount());
+					  BigDecimal canDeliverCount=new BigDecimal(vo.getAmount()).subtract(new BigDecimal(vo.getDeliveredCount()==null?"0":vo.getDeliveredCount()));//可发数量=物料数量-已发数量
+					  if(deliverCount.compareTo(canDeliverCount)>0){
+						  flag=true;
+						  deliveryVO.setFlag(flag);
+						  deliveryVO.setDeliveryMateriels(deliveryMateriels1);
+						  return new ResponseEntity<DeliveryVO>(deliveryVO, HttpStatus.CREATED);
+					  }
+				  }
+			  }
+		  }
     	//保存基本信息第一部分
     	Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名

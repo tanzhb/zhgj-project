@@ -4386,7 +4386,29 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 							var promise = takeDeliveryService
 									.saveTakeDelivery(params);
 							promise.then(function(data) {
-								if(number==0){
+								if(data.data.flag){
+									handle.unblockUI();
+									if(data.data.flag){//存在不满足条件的发货
+										if(data.data.isDel){
+											toastr.warning("当前发货单已发货完毕请删除当前发货单!");
+										}else{
+											$scope.orderMateriels=data.data.deliveryMateriels;
+											toastr.warning("存在发货数量超过未发数量的物料,请重新编辑!");}
+									}
+								}else{
+									if(number==0){
+										toastr.success("保存提货成功！");
+										$scope.deliverTransport=data.data.deliveryTransport;
+										$scope.takeDeliver=data.data.takeDelivery ;
+										$scope.deliver=data.data.delivery;
+										$scope.deliverAdd=true;
+										$scope.deliverView=true;
+									}else{toastr.success("确认提货成功！");
+									$state.go("customerOrder");
+									}
+									handle.unblockUI();
+								}
+							/*	if(number==0){
 									toastr.success("保存提货成功！");
 									$scope.deliverTransport=data.data.deliveryTransport;
 									$scope.takeDeliver=data.data.takeDelivery ;
@@ -4396,19 +4418,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 								}else{toastr.success("确认提货成功！");
 								$state.go("customerOrder");
 								}
-								/*if(data.data == "1"){
-									if(number==0){
-										toastr.success("保存代发货成功！");
-										$scope.deliverAdd=true;
-										$scope.deliverView=true;
-									}else{toastr.success("代发货成功！");
-									$state.go("buyOrder");
-									}
-									
-								}else{
-									toastr.error("代发货失败！请联系管理员");
-								}*/
-								handle.unblockUI();
+								handle.unblockUI();*/
 							}, function(data) {
 								// 调用承诺接口reject();
 								handle.unblockUI();
