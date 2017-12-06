@@ -452,7 +452,7 @@
      <!-- 根订单物料流水查已发数量 -->
     <select id="selectDeliveredCountByOmSerial" resultType="java.lang.String" parameterType="java.lang.String">
     SELECT
-	SUM(a.deliverCount)
+	IFNULL(SUM(a.deliverCount),0)
 	FROM
 	deliveryMateriel a
 	LEFT JOIN delivery f ON a.deliverSerial=f.serialNum

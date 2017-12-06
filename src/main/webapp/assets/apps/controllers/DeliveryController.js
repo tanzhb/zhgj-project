@@ -2050,14 +2050,15 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	}
 	          		    	
 	          		    	$scope.materielCount=data.orderMateriel.length;
-	          		    	var totalOrderCount=0,totalDeliveryedCount=0;
+	          		    	var totalOrderCount=0,totalDeliveryedCount=0,totalUnDeliveryCount=0;
 	          		    	for(var i=0;i< $scope.deliveryMaterielE.length;i++){
 	          		    		totalOrderCount+=Number($scope.deliveryMaterielE[i].amount);
 	          		    		totalDeliveryedCount+=Number($scope.deliveryMaterielE[i].deliveredCount);
+	          		    		totalUnDeliveryCount+=Number($scope.deliveryMaterielE[i].amount-$scope.deliveryMaterielE[i].deliveredCount);
 	          		    	}
 	          		    	$scope.totalOrderCount=totalOrderCount;
 	          		    	$scope.totalDeliveryCount=totalOrderCount-totalDeliveryedCount;
-	          		    	$scope.totalUnDeliveryCount=totalOrderCount-totalDeliveryedCount;
+	          		    	$scope.totalUnDeliveryCount=totalUnDeliveryCount;
 	          		    	
 	          		    	//重新加载发货仓库和收货仓库
 	          		    	
@@ -2176,14 +2177,15 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	}
 	          		    	
 	          		    	$scope.materielCount=data.deliveryMateriels.length;
-	          		    	var totalOrderCount=0,totalDeliveryedCount=0;
+	          		    	var totalOrderCount=0,totalDeliveryedCount=0,totalUnDeliveryCount=0;
 	          		    	for(var i=0;i< data.deliveryMateriels.length;i++){
 	          		    		totalOrderCount+=Number(data.deliveryMateriels[i].amount);
 	          		    		totalDeliveryedCount+=Number(data.deliveryMateriels[i].deliveredCount);
+	          		    		totalUnDeliveryCount+=Number($scope.deliveryMaterielE[i].amount-$scope.deliveryMaterielE[i].deliveredCount);
 	          		    	}
 	          		    	$scope.totalOrderCount=totalOrderCount;
 	          		    	$scope.totalDeliveryCount=totalOrderCount-totalDeliveryedCount;
-	          		    	$scope.totalUnDeliveryCount=totalOrderCount-totalDeliveryedCount;
+	          		    	$scope.totalUnDeliveryCount=totalUnDeliveryCount;
 	          		    	length=data.deliveryMateriels.length;
 	          		    	$("#serialNum").val(serialNumEdit);//赋值给隐藏input，通过和不通过时调用
 	    					$("#taskId").val(ids);//赋值给隐藏input，通过和不通过时调用
@@ -2258,15 +2260,17 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 				    				$scope.deliveryMaterielE=array; 
 				    				$scope.materielCount=array.length;
 			          		    	//$scope.deliveryMaterielE=data.deliveryMateriels;
-			          		     var totalOrderCount=0,totalDeliveryCount=0;
+			          		     var totalOrderCount=0,totalDeliveryCount=0,totalUnDeliveryCount=0;
 			          		    	for(var i=0;i<$scope.deliveryMaterielE.length;i++){
 			          		    		if($scope.deliveryMaterielE[i].status=='0'){$scope.deliveryMaterielE[i].status='待发货'};
 			          		    		if($scope.deliveryMaterielE[i].status=='1'){$scope.deliveryMaterielE[i].status='已发货'}
 			          		    	totalOrderCount=totalOrderCount+Number($scope.deliveryMaterielE[i].amount);
 			          		    	totalDeliveryCount=totalDeliveryCount+Number($scope.deliveryMaterielE[i].deliverCount);
+			          		    	totalUnDeliveryCount=totalUnDeliveryCount+Number($scope.deliveryMaterielE[i].amount-$scope.deliveryMaterielE[i].deliveredCount);
 			          		    	}
 			          		    	$scope.totalOrderCount=totalOrderCount;
 			          		    	$scope.totalDeliveryCount=totalDeliveryCount;
+			          		    	$scope.totalUnDeliveryCount=totalUnDeliveryCount;
 			          		    	$("#serialNum").val(serialNum);//赋值给隐藏input，通过和不通过时调用
 			    					$("#taskId").val(ids);//赋值给隐藏input，通过和不通过时调用
 			    					

@@ -1347,11 +1347,50 @@ public class TakeDeliveryController {
      */
   @RequestMapping(value="/confirmDelivery",method=RequestMethod.POST)
   @ResponseBody
-  public String confirmDelivery(Map<String, Object> map,@RequestBody String serialNum,HttpServletRequest request) {
-    	String flag = "0"; //默认失败
+  public Map<String, Object> confirmDelivery(Map<String, Object> map,@RequestBody String serialNum,HttpServletRequest request) {
+    	String flags1 = "0"; //默认失败
+    	Map<String, Object>map1=new HashMap<String, Object>();
+    	Delivery  delivery=takeDeliveryMapper.selectByPrimaryDeliveryKey(serialNum);
+    	//保存/更新前判断发货数量
+		OrderInfo o=orderService.selectById(delivery.getOrderSerial());
+		  Boolean flags=false;//还可以发
+		  Boolean isDel=false;//是否删除发货单
+			String  deliveryCount=o.getDeliveryCount();//订单已发数量
+			String  materielCount=o.getMaterielCount();//订单总数量
+			  BigDecimal deliveryCount1=new BigDecimal(deliveryCount);
+			  BigDecimal materielCount1=new BigDecimal(materielCount);
+			  if(deliveryCount1.compareTo(materielCount1)>=0){
+				  flags=true;
+				  isDel=true;//提示删除当前发货单
+				  map1.put("isDel", isDel);
+				  map1.put("flag", flags);
+				  return map1;
+			  }else{
+				  map1.put("isDel", isDel);
+			  }
+				OrderMaterielExample m =new OrderMaterielExample();
+		    	//and 条件1
+		    	com.congmai.zhgj.web.model.OrderMaterielExample.Criteria criteria =  m.createCriteria();
+		    	criteria.andDelFlgEqualTo("0");
+		    	criteria.andOrderSerialEqualTo(delivery.getOrderSerial());
+		    	m.setOrderByClause(" sort asc");
+		    	List<OrderMateriel> orderMateriel = orderMaterielService.selectList(m);//获取最新的已发
+		    	List<DeliveryMaterielVO> deliveryMateriels=deliveryService.selectListForDetail(delivery.getSerialNum());
+		  	  for(DeliveryMaterielVO deliveryMateriel: deliveryMateriels){
+				  for(OrderMateriel vo:orderMateriel){
+					  if(deliveryMateriel.getOrderMaterielSerial().equals(vo.getSerialNum())){//两个订单物料流水相同时
+						  BigDecimal deliverCount=new BigDecimal(deliveryMateriel.getDeliverCount());
+						  BigDecimal canDeliverCount=new BigDecimal(vo.getAmount()).subtract(new BigDecimal(vo.getDeliveredCount()==null?"0":vo.getDeliveredCount()));//可发数量=物料数量-已发数量
+						  if(deliverCount.compareTo(canDeliverCount)>0){
+							  flags=true;
+							  map1.put("flag", flags);
+							  return map1;
+						  }
+					  }
+				  }
+			  }
     	try{
     		if(StringUtils.isNotEmpty(serialNum)){
-    			Delivery  delivery=takeDeliveryMapper.selectByPrimaryDeliveryKey(serialNum);
     			delivery.setStatus("1");
     			TakeDelivery takeDelivery = new TakeDelivery();
     			takeDelivery = takeDeliveryMapper.selectTakeDeliveryByDeliveryId(serialNum);
@@ -1362,9 +1401,10 @@ public class TakeDeliveryController {
     		}
     	}catch(Exception e){
     		logger.warn(e.getMessage(), e);
-    		flag = "1";
+    		flags1 = "1";
     	}
-    	return flag;
+    	map1.put("flags1", flags1);
+    	return map1;
  }
 
 }

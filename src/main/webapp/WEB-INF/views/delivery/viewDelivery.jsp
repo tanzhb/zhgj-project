@@ -1048,7 +1048,7 @@
 														<td></td>
 														<td> {{materielCount}}</td>
 														<td>{{totalOrderCount}}</td>
-														<td>{{totalOrderCount-totalDeliveryCount}}</td>
+														<td>{{totalUnDeliveryCount}}</td>
 														<td>{{totalDeliveryCount}}</td>
 														<td></td>
 														<td></td>
