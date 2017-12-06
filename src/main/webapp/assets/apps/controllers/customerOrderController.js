@@ -203,6 +203,8 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
             	validateCSDInit();// 加载结算条款明细表单验证
             	validateFileInit();//加载订单附件表单验证
             	validateClauseFrameworkInit();// 加载框架条款表单验证
+            	
+            	setTimeout($scope.autoSave, 300000);
         	}
     });
     
@@ -223,12 +225,12 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
    
    
    $scope.renderDone = function(){
-	   var date3= $scope.saleOrder.orderDate;
-	   	var date4= $scope.saleOrder.makeDate;
+	   var date3= $scope.customerOrder.orderDate;
+	   	var date4= $scope.customerOrder.makeDate;
 	   	/*var date5= $scope.clauseCheckAccept.playCheckDate*/
 	   	$scope.datepickerInit();
-	   	$scope.saleOrder.orderDate = date3;
-	   	$scope.saleOrder.makeDate = date4;
+	   	$scope.customerOrder.orderDate = date3;
+	   	$scope.customerOrder.makeDate = date4;
 	   	/*$scope.clauseCheckAccept.playCheckDate = date5;*/
 	  };
 	  
@@ -265,7 +267,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 // $scope.customerOrder.createTime=null;
 // $scope.customerOrder.updateTime=null;
     		// **********//
-    		orderService.checkNum($scope.saleOrder).then(
+    		orderService.checkNum($scope.customerOrder).then(
          		     function(data){
          		    	 if(data>0){
          		    		toastr.error('订单编号重复！');
@@ -313,6 +315,44 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
     	}
     	
     }; 	
+    
+    
+    $scope.autoSave  = function() {
+		$rootScope.judgeIsExist("order",$scope.customerOrder.orderNum, $scope.customerOrder.serialNum,function(result){
+			var 	isExist = result;
+		if(isExist){
+			toastr.error('订单编号重复！');
+		}else{
+			if($state.current.name=="addCustomerOrder"&&$scope.customerOrderInput != true&&$('#form_sample_1').valid()){//处于编辑状态且验证通过
+				orderService.save($scope.customerOrder).then(
+	         		     function(data){
+	         		    	$scope.customerOrder = data;
+	         		    	$scope.contract.orderSerial = data.serialNum;
+	  	   	    		$scope.contract.comId = $scope.customerOrder.buyComId;
+	  	   	    		orderService.saveContract($scope.contract).then(
+	  	   	       		     function(data){
+	  	   	       		    	toastr.success('订单自动保存成功！');
+	  	   	       		    	$scope.contract = data.data;
+	  	   	       		     },
+	  	   	       		     function(error){
+	  	   	       		    	toastr.error('订单自动保存出错！');
+	  	   	       		         $scope.error = error;
+	  	   	       		     }
+	  	   	       		 );
+	         		     },
+	         		     function(error){
+	         		         $scope.error = error;
+	         		         toastr.error('订单自动保存出错！');
+	         		     }
+	         		 );
+			}
+		}
+	});
+	if($state.current.name=="addCustomerOrder"){
+		setTimeout($scope.autoSave, 300000);
+	}
+	
+};
     
     $scope.cancel  = function() {// 取消编辑
     	if($scope.customerOrder.serialNum==null || $scope.customerOrder.serialNum=='') {// 如果是取消新增，返回列表页面

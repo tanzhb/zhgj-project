@@ -309,7 +309,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     		if(isExist){
     			toastr.error('订单编号重复！');
     		}else{
-    			if($state.current.name=="addBuyOrder"&&$('#form_sample_1').valid()){//处于编辑状态且验证通过
+    			if($state.current.name=="addBuyOrder"&&$scope.buyOrderInput != true&&$('#form_sample_1').valid()){//处于编辑状态且验证通过
     	    		if($scope.buyOrder.orderDate=='') {// 日期为空的处理
     	    			$scope.buyOrder.orderDate=null;
     	    		}
