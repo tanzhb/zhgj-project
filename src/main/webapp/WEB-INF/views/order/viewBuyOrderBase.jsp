@@ -32,7 +32,9 @@ margin-right: 20px;
 		<li class="bold" ng-hide="tab_1_6Hide"><a data-target="#tab_1_8" data-toggle="tab">售后条款</a></li>
 		<li class="bold"><a data-target="#tab_1_9" data-toggle="tab">附件</a></li>
 		<!-- <li class="bold"><a data-target="#tab_1_10" data-toggle="tab">备注</a></li> -->
-		
+		<li class="dropdown pull-right tabdrop">
+			<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
+		</li>
 	</ul>
 <div class="tab-content" style="min-height: 300px;">
 	<div class="tab-pane fade active in" id="tab_1_1">

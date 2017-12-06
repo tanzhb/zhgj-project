@@ -44,6 +44,9 @@
 				<div class="portlet light ">
                         <div class="portlet-title">
                             <div class="caption">仓库信息</div>
+                            <div class="actions" >
+                                <button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
+                            </div>
                             <div class="actions">
                                 <button  ng-show="warehouseView"    class="btn purple  btn-sm btn-circle" ng-click="editWarehouse()">
                                             <i class="fa fa-edit"></i> 编辑 </button>

@@ -261,6 +261,10 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     			toastr.error('订单编号重复！');
     			return;
     		}else{
+    			//如果平台修改了双方已确认的订单，需重新提交
+    			if(!isNull($scope.buyOrder.serialNum)&&$scope.buyOrder.status =='1'){
+    				$scope.buyOrder.status = 0;
+    			}
     		orderService.save($scope.buyOrder).then(
 	        		     function(data){
 	        		    	$scope.buyOrder = data;
@@ -268,7 +272,6 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	        		    	/*if(isNull($scope.contract.contractNum)){
 	        		    		$scope.contract.contractNum = $scope.buyOrder.orderNum;
 	        		    	}*/
-	 	   	    		
 	        		    	$scope.contract.comId = $scope.buyOrder.supplyComId;
 //	 	   	    		$scope.contract.signDate = $scope.buyOrder.orderDate;
 	 	   	    		orderService.saveContract($scope.contract).then(
@@ -396,7 +399,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 									type, row, meta) {
 								var clickhtm = '<a href="javascript:void(0);" ng-click="viewBuyOrder(\''+row.serialNum+'\')">'+data+'</a></br>'
 								if(row.status==0){
-									return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  >未开始</span>';
+									return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  >待提交</span>';
 								}else if(row.status==1){
 									if(row.processBase!=""&&row.processBase!=null){
 	                        			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
@@ -417,9 +420,9 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 								}else if(row.status==3){
 									return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">待签合同</span>';
 								}else if(row.status=="66"){
-                    				return clickhtm + '<span style="color:green" ng-click="viewOrderLog(\''+row.serialNum+'\')">已提交</span>';
+                    				return clickhtm + '<span style="color:green" ng-click="viewOrderLog(\''+row.serialNum+'\')">待供方确认</span>';
 								}else if(row.status=="77"){
-                    				return clickhtm + '<span style="color:green" ng-click="viewOrderLog(\''+row.serialNum+'\')">待确认</span>';
+                    				return clickhtm + '<span style="color:green" ng-click="viewOrderLog(\''+row.serialNum+'\')">待我方确认</span>';
 								}else{
 									if(row.processBase!=""&&row.processBase!=null){
 	                        			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
@@ -833,7 +836,9 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     			var processBase = table.row('.active').data().processBase;
     			if(processBase != null){
     				showToastr('toast-top-center', 'warning', '该订单已发起流程审批，不能修改！')
-    			}else $state.go('addBuyOrder',{serialNum:table.row('.active').data().serialNum});
+    			}/*else if(table.row('.active').data().status==1){
+    				showToastr('toast-top-center', 'warning', '该订单已确认，不能修改！')
+    			}*/else $state.go('addBuyOrder',{serialNum:table.row('.active').data().serialNum});
     		}
     		
         };

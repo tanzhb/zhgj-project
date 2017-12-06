@@ -46,7 +46,9 @@
 							<li class="bold"><a data-target="#tab_1_6" data-toggle="tab">采购商</a></li>
 						</shiro:hasRole>
 						<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">附件</a></li>
-						
+						<li class="dropdown pull-right tabdrop">
+							<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
+						</li>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane fade active in" id="tab_1_1">
@@ -184,12 +186,18 @@
 				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">物料属性</label>
-				                                  <div class="">
-				                                      <input type="text" class="form-control" ng-hide="materielInput" ng-model="materiel.materielAttribute" >
+				                                  <div ng-hide="materielInput">
+				                                      <select id="materielAttribute" class="mt-multiselect btn btn-default form-control" multiple="multiple" data-label="left" data-filter="true" name="materielAttribute" ng-hide="materielInput" ng-model="materiel.materielAttribute" >
+		                                              <option ng-repeat="_function in functionList" value="{{_function.categoryId}}">{{_function.categoryName}}</option>
+		                                             </select>
 				                                      <div class="form-control-focus"> </div>
-				                                      <span class="help-block" ng-hide="materielInput">请输入物料属性</span>
-				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.materielAttribute}} </p>
+				                                      <span class="help-block" ng-hide="materielInput">请选择物料属性</span>
+				                                      
 				                                  </div>
+				                                  <div ng-show="materielShow">
+				                                   	<p class="form-control-static" ng-show="materielShow"> {{materiel.materielAttributeName}} </p>
+				                                  </div>
+				                                 
 				
 				                              </div>
 				                          </div>

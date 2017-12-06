@@ -44,6 +44,9 @@
 								ng-if="inOrOut.indexOf('out')>-1">销项票信息</span></a></li>
 						<li class="bold"  ng-hide="tab_1_2Hide"><a data-target="#tab_1_2" data-toggle="tab">物料信息</a></li>
 						<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">附件</a></li>
+						<li class="dropdown pull-right tabdrop">
+							<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
+						</li>						
 					</ul>
 					<%--  <div class="portlet-title">
                             <div class="caption"><span ng-if="inOrOut.indexOf('in')>-1" >进项票信息</span><span  ng-if="inOrOut.indexOf('out')>-1">销项票信息</span></div>    

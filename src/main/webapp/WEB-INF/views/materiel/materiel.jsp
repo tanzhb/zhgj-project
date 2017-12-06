@@ -264,7 +264,7 @@ margin-bottom: 20px;
 								                              <div class="form-group">
 								                                  <label class="control-label col-md-5 bold">物料属性</label>
 								                                  <label class="control-label col-md-7">
-								                                      {{materiel.materielAttribute}}
+								                                      {{materiel.materielAttributeName}}
 								                                  </label>
 								
 								                              </div>
@@ -776,7 +776,7 @@ margin-bottom: 20px;
 			    <div class="portlet light ">
 			  		<ul class="nav nav-tabs">
 						<li class="active bold"> <a data-target="#tab_1_1" data-toggle="tab">层级分类</a> </li>
-						<li class="bold" ><a data-target="#tab_1_2" data-toggle="tab">功能分类</a></li>
+						<li class="bold" ><a data-target="#tab_1_2" data-toggle="tab" ng-click="queryFunctionListByParent('1');">功能分类</a></li>
 					</ul>
 					<div class="tab-content" style="min-height: 300px;">
 						<div class="tab-pane fade active in" id="tab_1_1">
@@ -899,6 +899,30 @@ margin-bottom: 20px;
 		                    </div>
 						</div>
 						<div class="tab-pane fade in" id="tab_1_2">
+							<div class="portlet-body">
+	                        	<div class="row">
+	  								<div class="col-md-8">
+			                        	<div class="btn-group">
+	                                     <div class="clearfix">
+	                                          <div class="btn-group" data-toggle="buttons" >
+	                                              <label ng-repeat="_function in functionList track by $index" class="btn btn-default  btn-default-margin"
+	                                              ng-click="selectFunction(_function.categoryId)">
+	                                                  <input type="radio" class="toggle" > {{_function.categoryName}} 
+	                                              </label> 
+	                                          </div>
+	                                      </div>
+	                                 	</div>
+	                                 </div>
+	                                 <div class="col-md-4">
+	                                 	<div class="actions">
+											<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addFunction()">
+							                                              <i class="fa fa-plus"></i> 添加</label>
+											<label class="btn btn-transparent red btn-circle btn-sm" ng-click="deleteFunction()">
+						                                              <i class="fa fa-minus"></i> 删除</label>
+										</div>
+	                                 </div>
+	                               </div>
+	                        </div>
 						</div>
 					</div>
 				</div>
@@ -1040,7 +1064,7 @@ margin-bottom: 20px;
                               <div class="form-group">
                                   <label class="control-label col-md-5 bold">物料属性</label>
                                   <label class="control-label col-md-7">
-                                      {{materiel.materielAttribute}}
+                                      {{materiel.materielAttributeName}}
                                   </label>
 
                               </div>
@@ -1364,4 +1388,56 @@ margin-bottom: 20px;
 		</div>
 	</div>
 <!-- 删除物料分类modal 结束 -->
+<!-- 新增功能modal START -->
+<div class="modal fade" id="addFunction" role="import" aria-hidden="true">
+     <div class="modal-dialog" >
+	    <div class="modal-content">
+	 		<div class="modal-header">
+	            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+	            <h4 class="modal-title" >新增功能分类</h4>
+	        </div>
+	        <div class="modal-body">
+         		<div class="portlet-body form">
+                    <!--  BEGIN FORM -->
+                     <form class="form-horizontal" role="form">
+                         <div class="form-body">
+                              <input type="text"  ng-model="category.categoryName" class="form-control" >
+                         </div>
+                     </form>
+                    <!--  END FORM -->
+                </div>
+	    	</div>
+	    	<div class="modal-footer">
+					<button type="button" data-dismiss="modal"
+						class="btn dark btn-outline">取消</button>
+					<button type="button" ng-click="addFunctionConfirm()" class="btn green">确定
+						</button>
+				</div>
+    	</div>
+	</div>
+</div>
+<!-- 新增功能modal END-->
+<!-- 删除功能modal 开始 -->
+	<div id="deleteFunction" class="modal fade" tabindex="-1"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true"></button>
+					<h4 class="modal-title">确认</h4>
+				</div>
+				<div class="modal-body">
+					<p>是否删除已选功能分类?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" data-dismiss="modal"
+						class="btn dark btn-outline">取消</button>
+					<button type="button" ng-click="deleteFunctionConfirm()" class="btn green">确定
+						</button>
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- 删除功能modal 结束 -->
 <jsp:include  page="importMateriel.jsp"/>

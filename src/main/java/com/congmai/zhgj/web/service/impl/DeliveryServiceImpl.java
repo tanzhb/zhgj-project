@@ -23,6 +23,7 @@ import com.congmai.zhgj.web.dao.DeliveryTransportMapper;
 import com.congmai.zhgj.web.dao.MaterielMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
 import com.congmai.zhgj.web.dao.StockInOutCheckMapper;
+import com.congmai.zhgj.web.dao.TakeDeliveryMapper;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.Company;
@@ -36,6 +37,7 @@ import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.RelationFile;
 import com.congmai.zhgj.web.model.StockInOutCheck;
+import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.service.ContractService;
@@ -55,6 +57,10 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 	//发货的dao
 	@Resource
 	private DeliveryMapper deliveryMapper;
+	
+	//收货的dao
+	@Resource
+	private TakeDeliveryMapper takeDeliveryMapper;
 	
 	@Resource
 	private CustomsFormMapper customsFormMapper;
@@ -413,6 +419,15 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 				}
 			}
 			orderInfo.setDeliverStatus(orderInfo.CLEARANCE);
+			
+			//更新收货单状态
+			TakeDelivery takeDelivery = new TakeDelivery();
+			TakeDelivery temp = takeDeliveryMapper.selectTakeDeliveryByDeliveryId(serialNum);
+			takeDelivery.setSerialNum(temp.getSerialNum());
+			takeDelivery.setStatus(TakeDelivery.WAIT_Cearance);//收货单更新为待清关
+			takeDeliveryMapper.updateByPrimaryKeySelective(takeDelivery);//更新收货单状态
+			
+			
 			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 		}
 			

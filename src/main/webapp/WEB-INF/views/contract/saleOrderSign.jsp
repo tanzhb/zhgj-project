@@ -31,7 +31,7 @@
 						<ul class="nav nav-tabs">
 							<li class="dropdown pull-right tabdrop">
 								<button type="button" ng-click="goback()" class="btn default">
-									<i class="fa fa-reply"></i>取消
+									<i class="fa fa-reply"></i>返回
 								</button>
 								<button type="button" ng-click="signSaleContract()"
 									class="btn blue">

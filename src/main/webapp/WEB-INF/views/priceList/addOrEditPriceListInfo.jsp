@@ -43,6 +43,9 @@
 				<div class="portlet light ">
                         <div class="portlet-title" >
                             <div class="caption"><span ng-if="buyOrSale.indexOf('buy')>-1">采购</span><span ng-if="buyOrSale.indexOf('sale')>-1">销售</span>价格信息</div><!--   -->
+                            <div class="actions" >
+                                <button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
+                            </div>
                             <div class="actions" ng-if="buyOrSale.indexOf('view')<0">
                                 <button  ng-show="priceListView"   class="btn purple  btn-sm btn-circle " ng-click="editPriceList()">
                                             <i class="fa fa-edit"></i> 编辑 </button>

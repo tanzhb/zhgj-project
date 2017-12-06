@@ -56,7 +56,7 @@
                   		<i class="fa fa-edit"></i> 编辑 </button>
                        <button   ng-hide="deliverAdd" class="btn defualt  btn-sm btn-circle" ng-click="cancelTakeDelivery()" onclick="return false;">
                               <i class="fa fa-mail-reply"></i> 取消 </button>
-                                
+                                <button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
 					</li>
 					<li class="active bold">
                   	<a data-target="#tab_1_1" data-toggle="tab">发货信息</a>

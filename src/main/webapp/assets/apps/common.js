@@ -679,7 +679,9 @@ var returnMin = function(d1,d2) {
 		return d1
 	}
 }
-
+var goBackPage = function(){
+	window.history.back(-1);
+}
 $(function(){
 	var rootPath=getWSPath_web1();
      $.ajax({ url: "rest/user/getUserInfo",method: "POST",  success: function(data){

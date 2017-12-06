@@ -75,6 +75,11 @@ CategoryService {
 		return categoryMapper.selectMaxSortByParentId(parentId);
 	}
 
+	@Override
+	public List<Category> selectList(CategoryExample m) {
+		return categoryMapper.selectByExample(m);
+	}
+
 
 
 }
