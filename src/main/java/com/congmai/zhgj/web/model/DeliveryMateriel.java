@@ -70,6 +70,8 @@ public class DeliveryMateriel {
     
     private StockInOutRecord stockInOutRecord;
     
+    private String  deliveredCount;//已发数量
+    
     private Delivery delivery;
     private String buyComId;//物权方comId
     private  String stockInSerialNum;
@@ -556,6 +558,15 @@ public class DeliveryMateriel {
 		this.outCount = outCount;
 	}
 
+	public String getDeliveredCount() {
+		return deliveredCount;
+	}
+
+	public void setDeliveredCount(String deliveredCount) {
+		this.deliveredCount = deliveredCount;
+	}
+
+	
 	
     
     

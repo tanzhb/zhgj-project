@@ -114,6 +114,8 @@ public class DeliveryMaterielVO  {
 	
 	private List<RelationFile> files;
 	
+	 private String  deliveredCount;//已发数量
+	
 	
 
 
@@ -396,6 +398,14 @@ public class DeliveryMaterielVO  {
 
 	public void setFiles(List<RelationFile> files) {
 		this.files = files;
+	}
+
+	public String getDeliveredCount() {
+		return deliveredCount;
+	}
+
+	public void setDeliveredCount(String deliveredCount) {
+		this.deliveredCount = deliveredCount;
 	}
 
 }

@@ -899,6 +899,7 @@
 														<th>单位</th>
 														<th>附件</th>
 														<th>订单数量</th>
+														<th>未发数量</th>
 														<th>发货数量</th>
 														<th>备注</th>
 														<th style="width: 100px;">操作</th>
@@ -942,12 +943,16 @@
 															<p class="form-control-static">{{_deliveryMateriel.amount}}
 															</p>
 														</td>
+														<td>
+															<p class="form-control-static">{{_deliveryMateriel.amount-_deliveryMateriel.deliveredCount}}
+															</p>
+														</td>
 														<td class="form-group"><input type="text"
 															name="deliverCount" id="deliverCount{{$index}}"   
 															class="form-control"
 															ng-hide="orderMaterielInput{{$index}}"
 															ng-model="deliveryMaterielE[$index].deliverCount"
-															data-ordercount="{{_deliveryMateriel.amount}}"
+															data-ordercount="{{_deliveryMateriel.amount-_deliveryMateriel.deliveredCount}}"
 															/><!-- ng-blur="getTotalDeliveryCount()"  -->
 															<div class="form-control-focus"></div>
 															<p class="form-control-static"
@@ -969,7 +974,7 @@
 												</tbody>
 
 												<tfoot>
-													<tr>
+													<!-- <tr>
 														<td>合计</td>
 														<td>{{materielCount}}</td>
 														<td></td>
@@ -978,6 +983,17 @@
 														<td>{{totalOrderCount}}</td>
 														<td>{{calcTotalDeliveryCount()}} {{totalDeliveryCount}}</td>
 														<td></td>
+														<td></td>
+													</tr> -->
+													<tr>
+														<td>合计</td>
+														<td>{{materielCount}}</td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td>{{totalOrderCount}}</td>
+														<td>{{totalUnDeliveryCount}}</td>
+														<td>{{calcTotalDeliveryCount()}} {{totalDeliveryCount}}</td>
 														<td></td>
 													</tr>
 												</tfoot>

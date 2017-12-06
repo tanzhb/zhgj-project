@@ -127,6 +127,7 @@
 	     <result column="stockInRemark" property="stockInRemark" jdbcType="VARCHAR" />
 	     <result column="dmRemark" property="remark" jdbcType="VARCHAR" />
 	     <result column="supplyMaterielSerial" property="supplyMaterielSerial" jdbcType="VARCHAR" />
+	     <association column="orderMaterielSerial" property="deliveredCount" select="com.congmai.zhgj.web.dao.DeliveryMapper.selectDeliveredCountByOmSerial"  />
 	     <association column="dmWarehouseSerial" property="warehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>
 	     <association column="dmPositionSerial" property="position" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectPositionByPositionSerial" ></association>
 	     <association column="stockInWarehouseSerial" property="stockInWarehouse" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectWarehouseByWarehouseSerial" ></association>

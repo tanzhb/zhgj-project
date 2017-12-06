@@ -983,13 +983,14 @@
 						<!-- 	<th colspan="3" style="text-align: center;">检验</th>
 							<th colspan="5" style="text-align: center;">入库</th> -->
 							<th rowspan="2">状态</th>
+							<th rowspan="2">备注</th>
 						</tr>
 						<tr>
 							<th>订单数量</th>
 							<th>未发数量</th>
 							<th>发货数量</th>
 							<th>附件</th>
-							<th>备注</th>
+							<!-- <th>备注</th> -->
 							<!-- <th>实收数量</th>
 							<th>拒收数量</th>
 							<th>附件</th>
@@ -1013,7 +1014,7 @@
 							<td>{{materiel.unit}}</td>
 							<!-- <td>{{materiel.manufactureDate}}</td> -->
 							<td>{{materiel.amount}}</td>
-							<td>{{materiel.amount-materiel.deliverCount}}</td>
+							<td>{{materiel.amount-materiel.deliveredCount}}</td>
 							<td>{{materiel.deliverCount}}</td>
 							<td>
 								<a href="javascript:;" ng-click="downloadFile1(item.file)" ng-repeat="item in materiel.files">{{item.file|limitTo:30:item.file.indexOf('_')+1}}&nbsp;</a>
@@ -1047,7 +1048,7 @@
 														<td></td>
 														<td> {{materielCount}}</td>
 														<td>{{totalOrderCount}}</td>
-														<td>{{totalOrderCount-totalDeliveryCount}}</td>
+														<td>{{totalUnDeliveryCount}}</td>
 														<td>{{totalDeliveryCount}}</td>
 														<td></td>
 														<td></td>

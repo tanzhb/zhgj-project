@@ -112,7 +112,7 @@
   <sql id="Base_Column_List" >
     serialNum, contractSerial, supplyComId, buyComId, orderNum, orderType,tradeType, seller, entrustParty, 
     serviceModel, demandPlanSerial, saleApplySerial,projectNum, settlementClause, orderSerial, deliveryMode, 
-    transportMode, orderDate,makeDate, maker, rate, currency, exchangeRate, orderAmount,deliveryCount,payAmount, materielCount,
+    transportMode, orderDate,makeDate, maker, rate, currency, exchangeRate, orderAmount,IFNULL(deliveryCount,0) as deliveryCount ,payAmount, materielCount,
 materielAmount,
 rateAmount,
 rateAndAmount,
@@ -168,7 +168,7 @@ orderInfo.billStatus, orderInfo.delFlg,
 		 </if>
 		 <if test="status=='2'.toString()" >
 		 	AND orderInfo.status='2'
-		 	AND orderInfo.materielCount > orderInfo.deliveryCount
+		 	AND (orderInfo.deliveryCount is null  or  (orderInfo.materielCount > orderInfo.deliveryCount and  orderInfo.deliveryCount  is not null))
 		 </if>
 		 <if test="status=='000'" >
 		 	AND orderInfo.status != 0
@@ -215,7 +215,7 @@ orderInfo.billStatus, orderInfo.delFlg,
 		 </if>
 		 <if test="status=='2'.toString()" >
 		 	AND orderInfo.status='2'
-		 	AND orderInfo.materielCount > orderInfo.deliveryCount
+		 	AND (orderInfo.deliveryCount is null  or  (orderInfo.materielCount > orderInfo.deliveryCount and  orderInfo.deliveryCount  is not null))
 		 </if>
 		 <if test="status=='000'" >
 		 	AND orderInfo.status != 0

@@ -27,6 +27,7 @@
     <!-- <association property="materiel" column="materielSerial" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByPrimaryKey"/> -->
     <association property="materiel" column="serialNum" select="com.congmai.zhgj.web.dao.MaterielMapper.selectDifferentMaterielByOrderSerial"/> <!-- 订单物料显示供应商或采购商或基础物料 -->
     <association property="supplyMateriel" column="supplyMaterielSerial" select="com.congmai.zhgj.web.dao.SupplyMaterielMapper.selectByPrimaryKey"/>
+      <association  property="deliveredCount"   column="serialNum"  select="com.congmai.zhgj.web.dao.DeliveryMapper.selectDeliveredCountByOmSerial"/><!-- 通过订单物料流水查已发数量 -->
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >

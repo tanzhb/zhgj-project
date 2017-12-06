@@ -1217,7 +1217,7 @@
 							<td>{{materiel.orderMateriel.materiel.unit}}</td>
 							<!-- <td>{{materiel.manufactureDate}}</td> -->
 							<td>{{materiel.orderMateriel.amount}}</td>
-							<td>{{materiel.orderMateriel.amount-materiel.deliverCount}}</td>
+							<td>{{materiel.orderMateriel.amount-materiel.deliveredCount}}</td>
 							<td>{{materiel.deliverCount}}</td>
 							<td>
 								<a href="javascript:;" ng-click="downloadFile1(item.file)" ng-repeat="item in materiel.deliveryFiles">{{item.file|limitTo:30:item.file.indexOf('_')+1}}&nbsp;</a>
@@ -1249,9 +1249,9 @@
 														<td>合计</td>
 														<td></td>
 														<td></td>
-														<td> {{materielCount}}</td>
+														<td>{{calcTotalNum()}} {{materielCount}}</td>
 														<td>{{totalOrderCount}}</td>
-														<td>{{totalOrderCount-totalDeliveryCount}}</td>
+														<td>{{totalUnDeliveryCount}}</td>
 														<td>{{totalDeliveryCount}}</td>
 														<td></td>
 														<td></td>

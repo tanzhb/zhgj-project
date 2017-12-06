@@ -119,10 +119,13 @@ angular.module('MetronicApp').service('orderService',
 			            })  
 			        return deferred.promise;  
 			    },//获取订单信息
-			    getOrderInfo : function(serialNum){
+			    getOrderInfo : function(serialNum,judgeString){
 			        var deferred = $q.defer();  
-
-			        $http.get("rest/order/getOrderInfo", {params:{serialNum:serialNum}})
+			        debugger;
+					if(judgeString==undefined){
+						judgeString=null;
+					}
+			        $http.get("rest/order/getOrderInfo", {params:{serialNum:serialNum,judgeString:judgeString}})
 			        .success(function (data) {  
 			            // 如果连接成功，延时返回给调用者  
 			            deferred.resolve(data);  

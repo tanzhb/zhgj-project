@@ -197,7 +197,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	 		 */
 	        $scope.getOrderMateriel=function () { 
 	            var sd = $scope.deliver.orderSerial;
-	        	var promise = orderService.getOrderInfo(sd);
+	        	var promise = orderService.getOrderInfo(sd,'deliver');//查发货的物料
         		promise.then(function(data){
         			$scope.orderMateriels = data.orderMateriel;
         			$scope.deliver.materielCount = data.orderMateriel.length;
@@ -389,6 +389,16 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 							var promise = takeDeliveryService
 									.saveTakeDelivery(params);
 							promise.then(function(data) {
+								if(data.data.flag){
+									handle.unblockUI();
+									if(data.data.flag){//存在不满足条件的发货
+										if(data.data.isDel){
+											toastr.warning("当前发货单已发货完毕请删除当前发货单!");
+										}else{
+											$scope.orderMateriels=data.data.deliveryMateriels;
+											toastr.warning("存在发货数量超过未发数量的物料,请重新编辑!");}
+									}
+								}else{
 								if(number==0){
 									toastr.success("保存代发货成功！");
 									$scope.deliverTransport=data.data.deliveryTransport;
@@ -400,19 +410,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 								}else{toastr.success("代发货成功！");
 								$state.go("buyOrder");
 								}
-								/*if(data.data == "1"){
-									if(number==0){
-										toastr.success("保存代发货成功！");
-										$scope.deliverAdd=true;
-										$scope.deliverView=true;
-									}else{toastr.success("代发货成功！");
-									$state.go("buyOrder");
-									}
-									
-								}else{
-									toastr.error("代发货失败！请联系管理员");
-								}*/
 								handle.unblockUI();
+								}
 							}, function(data) {
 								// 调用承诺接口reject();
 								handle.unblockUI();
@@ -429,12 +428,30 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 			$scope.confirmDelivery= function() {
 				var promise = takeDeliveryService.confirmDelivery($scope.deliver.serialNum);
 				promise.then(function(data) {
-					if(data= "0"){
+					if(data.data.flag){
+						handle.unblockUI();
+						if(data.data.flag){//存在不满足条件的发货
+							if(data.data.isDel){
+								toastr.warning("当前发货单已发货完毕请删除当前发货单!");
+							}else{
+								//$scope.orderMateriels=data.data.deliveryMateriels;
+								toastr.warning("存在发货数量超过未发数量的物料,请重新编辑!");}
+						}
+					}else{
+						if(data.data.flags1= "0"){
+							toastr.success("确认代发货成功！");
+							$scope.deliver.status=1;
+						}else{
+							toastr.error("确认代发货.失败！请联系管理员");
+						}
+					handle.unblockUI();
+					}
+				/*	if(data= "0"){
 						toastr.success("确认代发货成功！");
 						$scope.deliver.status=1;
 					}else{
 						toastr.error("确认代发货.失败！请联系管理员");
-					}
+					}*/
 				}, function(data) {
 					// 调用承诺接口reject();
 					toastr.error("确认代发货.失败！请联系管理员");
@@ -1663,18 +1680,35 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		
 	  		
 	  		$scope.calcTotalNum = function(){
-	  			if(!isNull($scope.orderMateriels)){
+	  			if(!isNull($scope.orderMateriels)&&$stateParams.type=='edit'){
 	  				$scope.totalDeliverCount = 0;
 	  				$scope.totalDeliveryCount = 0;
 	  				$scope.totalAmount = 0;
+	  				$scope.totalUnDeliveryCount=0;
 	  				$scope.materielCount = $scope.orderMateriels.length;
-	  				$scope.deliver.materielCount = $scope.orderMateriels.length;
+	  				/*$scope.deliver.materielCount = $scope.orderMateriels.length;*/
 	  				for(var i in $scope.orderMateriels){
 	  					$scope.totalDeliverCount += handle.formatNumber($scope.orderMateriels[i].deliverCount);
 	  					$scope.totalAmount += handle.formatNumber($scope.orderMateriels[i].amount);
+	  					$scope.totalUnDeliveryCount+=handle.formatNumber($scope.orderMateriels[i].amount-$scope.orderMateriels[i].orderMateriel.deliveredCount);
+	  				}
+	  				$scope.totalDeliveryCount=	$scope.totalDeliverCount;
+	  			}else if(!isNull($scope.orderMateriels)&&$stateParams.type!='edit'){
+	  				$scope.totalDeliverCount = 0;
+	  				$scope.totalDeliveryCount = 0;
+	  				$scope.totalAmount = 0;
+	  				$scope.totalUnDeliveryCount=0;
+	  				$scope.materielCount = $scope.orderMateriels.length;
+	  				//$scope.deliver.materielCount = $scope.orderMateriels.length;
+	  				for(var i in $scope.orderMateriels){
+	  					$scope.totalDeliverCount += handle.formatNumber($scope.orderMateriels[i].deliverCount);
+	  					$scope.totalAmount += handle.formatNumber($scope.orderMateriels[i].amount);
+	  					$scope.totalUnDeliveryCount+=handle.formatNumber($scope.orderMateriels[i].amount-$scope.orderMateriels[i].deliveredCount);
 	  				}
 	  				$scope.totalDeliveryCount=	$scope.totalDeliverCount;
 	  			}
+	  			
+	  				
 	  		}
 	  		
 	  		/************************************************申请JS***********************************************/
