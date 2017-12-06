@@ -4224,10 +4224,18 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			   		  var promise = deliveryService.goDelivery($scope.deliver.serialNum);
 			   		//var promise = takeDeliveryService.confirmDelivery($scope.deliver.serialNum);
 					promise.then(function(data) {
+						if(data.flag){
+							if(data.isDel){
+								toastr.warning("当前发货单已发货完毕请删除当前发货单!");
+							}else{toastr.warning("请重新编辑发货物料数量后再确认发货!");}
+							return;
+						}else{
 							$(".modal-backdrop").remove();
 							toastr.success("确认提货成功");
 							$state.go('customerOrder',{},{reload:true});
 							handle.unblockUI();
+						}
+							
 					}, function(data) {
 						// 调用承诺接口reject();
 						$(".modal-backdrop").remove();
@@ -4282,7 +4290,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			        			$scope.takeDeliver.warehouseSerial = $scope.takeDeliver.warehouse.serialNum;
 				        		$scope.takeDeliver.warehouseName = $scope.takeDeliver.warehouse.address;
 			        		}
-			        		var totalOrderCount=0, totalDeliveryCount=0;
+			        		var totalOrderCount=0, totalDeliveryCount=0,totalUnDeliveryCount=0;
 			        		for(var i in data.data.deliveryMateriels){
 			        			if(data.data.deliveryMateriels[i].orderMateriel!=null){
 			        				$scope.orderMateriels[i].materiel = data.data.deliveryMateriels[i].orderMateriel.materiel;
@@ -4291,6 +4299,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 				        			$scope.orderMateriels[i].orderMaterielSerial = data.data.deliveryMateriels[i].orderMateriel.serialNum;
 				        			totalOrderCount=totalOrderCount+Number( data.data.deliveryMateriels[i].orderMateriel.amount);
 				        			totalDeliveryCount=totalDeliveryCount+Number( data.data.deliveryMateriels[i].deliverCount);
+				        			totalUnDeliveryCount=totalUnDeliveryCount+Number( data.data.deliveryMateriels[i].amount-data.data.deliveryMateriels[i].deliveredCount);
 			        			}else  if(data.data.deliveryMateriels[i].serialNum!=null){
 			        				$scope.orderMateriels[i].orderMaterielSerial = data.data.deliveryMateriels[i].serialNum;
 			        				
@@ -4310,6 +4319,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			        		}
 			        		$scope.totalDeliveryCount=totalDeliveryCount;//发货总数
 			        		$scope.totalOrderCount=totalOrderCount;//订单总数
+			        		$scope.totalUnDeliveryCount=totalUnDeliveryCount;//未发总数
 			        		
 			        		
 			        	}
@@ -4469,11 +4479,13 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			  			if(!isNull($scope.orderMateriels)){
 			  				$scope.totalDeliverCount = 0;
 			  				$scope.totalAmount = 0;
+			  				$scope.totalUnDeliveryCount=0;
 			  				$scope.materielCount = $scope.orderMateriels.length;
 			  				$scope.deliver.materielCount = $scope.orderMateriels.length;
 			  				for(var i in $scope.orderMateriels){
 			  					$scope.totalDeliverCount += handle.formatNumber($scope.orderMateriels[i].deliverCount);
 			  					$scope.totalAmount += handle.formatNumber($scope.orderMateriels[i].amount);
+			  				$scope.totalUnDeliveryCount+=handle.formatNumber($scope.orderMateriels[i].amount-$scope.orderMateriels[i].deliveredCount);
 			  				}
 			  			}
 			  		}
@@ -4728,7 +4740,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	  				jQuery.validator.addMethod("deliverNumCheck", function (value, element) {
 		  			
 		  			    return this.optional(element) || Number(element.dataset.ordercount)-value >= 0;
-		  			}, "发货数量不能超过订单数量");
+		  			}, "发货数量不能超过未发数量");
 		  			
 	  		  	  var order_table;//加载采购订单(客户端)
 	  		      var _tableAjaxUrl = "rest/order/findOrderList?type=buy&selectFor=delivery";
