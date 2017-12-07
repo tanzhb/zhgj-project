@@ -321,9 +321,9 @@ public class InvoiceController {
      * 
      */
     @RequestMapping(value = "/getMaterielList")
-    public ResponseEntity<Map> getMaterielList(HttpServletRequest request, String  orderSerial,String deliverSerial) {
+    public ResponseEntity<Map> getMaterielList(HttpServletRequest request, String  orderSerial,String deliverSerial,String customsFormType) {
     	
-		List<Materiel> materiels = materielService.selectMaterielByOrderSerial(orderSerial.substring(0, 32),orderSerial,deliverSerial);
+		List<Materiel> materiels = materielService.selectMaterielByOrderSerial(orderSerial.substring(0, 32),orderSerial,deliverSerial,customsFormType);
 		/*OrderInfo orderInfo=orderService.selectById(orderSerial.substring(0, 32));*/
 		DeliveryTransport dt=new  DeliveryTransport();
 		BigDecimal deliverAmount=BigDecimal.ZERO;//deliverAmount发货金额

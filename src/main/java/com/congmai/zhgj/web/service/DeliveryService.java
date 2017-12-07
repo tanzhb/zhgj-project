@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.congmai.zhgj.core.generic.GenericService;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryTransportVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
@@ -239,5 +240,7 @@ public interface DeliveryService extends GenericService<DeliveryMaterielVO, Stri
 	public void createCustomsClearanceForm(Map<String,Object> map1);//自动产生清关单
 	
 	  public String getDeliveryTotalCount(String serialNum);
+	  
+	  public void  updateDelivery(Delivery delivery);
 	
 }

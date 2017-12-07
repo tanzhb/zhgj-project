@@ -58,7 +58,7 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 				$scope.customsForm=data.customsForm;
 				$scope.file=data.file;
 				_fileIndex=$scope.file.length;
-				loadMaterielTable($scope.customsForm.orderSerial,$scope.customsForm.deliverSerial);//加载物料信息列表
+				loadMaterielTable($scope.customsForm.orderSerial,$scope.customsForm.deliverSerial,$scope.customsFormType);//加载物料信息列表
 				
 			 });
 		 }
@@ -608,17 +608,17 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 								$scope.customsForm.buyOrderNum = delivery.orderNum;
 								$scope.customsForm.orderSerial = delivery.orderSerial;
 							
-							loadMaterielTable($scope.customsForm.orderSerial,$scope.customsForm.deliverSerial);//加载物料列表
+							loadMaterielTable($scope.customsForm.orderSerial,$scope.customsForm.deliverSerial,$scope.customsFormType);//加载物料列表
 							
 							$("#takeDeliveryInfo").modal('hide'); 
 						}
 						
 			  		}
 					var  materielTable;
-					function loadMaterielTable(orderSerial,deliverSerial){
+					function loadMaterielTable(orderSerial,deliverSerial,customsFormType){
 						var a = 0;
 						debugger;
-						tableAjaxUrl= "rest/invoice/getMaterielList?orderSerial="+orderSerial+"&deliverSerial="+deliverSerial;
+						tableAjaxUrl= "rest/invoice/getMaterielList?orderSerial="+orderSerial+"&deliverSerial="+deliverSerial+"&customsFormType="+customsFormType;
 						 if(materielTable!=undefined){
 							 materielTable.destroy();
 						/*	 materielTable.ajax.reload();*/

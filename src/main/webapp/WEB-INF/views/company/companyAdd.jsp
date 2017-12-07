@@ -374,7 +374,7 @@
 			                                                    <th>微信</th>
 			                                                    <th>邮箱</th>
 			                                                    <th>备注</th>
-			                                                    <th style="width:65px;"></th>
+			                                                    <th style="width:65px;">操作</th>
 			                                                </tr>
 			                                            </thead>
 			                                            <tbody  ng-if="companyContacts.length==0">

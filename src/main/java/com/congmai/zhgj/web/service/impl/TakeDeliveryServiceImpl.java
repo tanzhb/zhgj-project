@@ -676,6 +676,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			map.put("orderSerial", orderSerial);
 			map.put("invoiceSerial", null);
 			map.put("deliverySerial", deliverySerial);
+			map.put("isClearance", "0");//是否清关单
 			List<Materiel> materiels = materielMapper.selectMaterielByOrderSerial(map);
 			DeliveryTransportExample de=new DeliveryTransportExample();
 			com.congmai.zhgj.web.model.DeliveryTransportExample.Criteria  c=de.createCriteria();
@@ -1009,6 +1010,12 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		}else{
 			return null;
 		}
+	}
+
+	@Override
+	public void updateTakeDelivery(TakeDelivery takeDelivery) {
+		takeDeliveryMapper.updateByPrimaryKeySelective(takeDelivery);//更新收货单状态
+		
 	}
 
 	

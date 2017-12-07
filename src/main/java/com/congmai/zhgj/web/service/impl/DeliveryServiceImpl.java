@@ -18,6 +18,7 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.dao.CustomsFormMapper;
+import com.congmai.zhgj.web.dao.Delivery2Mapper;
 import com.congmai.zhgj.web.dao.DeliveryMapper;
 import com.congmai.zhgj.web.dao.DeliveryTransportMapper;
 import com.congmai.zhgj.web.dao.MaterielMapper;
@@ -28,6 +29,7 @@ import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CustomsForm;
+import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryTransport;
 import com.congmai.zhgj.web.model.DeliveryTransportExample;
@@ -81,6 +83,9 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 	private OrderService  orderService;
 	@Resource 
 	private ContractService contractService;
+	
+	@Resource
+	private Delivery2Mapper delivery2Mapper;
 
 	@Override
 	public GenericDao<DeliveryMaterielVO, String> getDao() {
@@ -442,6 +447,7 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		map.put("orderSerial", orderSerial);
 		map.put("invoiceSerial", null);
 		map.put("deliverySerial", deliverySerial);
+		map.put("isClearance", "1");//是否清关单
 		List<Materiel> materiels = materielMapper.selectMaterielByOrderSerial(map);
 		DeliveryTransportExample de=new DeliveryTransportExample();
 		com.congmai.zhgj.web.model.DeliveryTransportExample.Criteria  c=de.createCriteria();
@@ -537,5 +543,12 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 	public String getDeliveryTotalCount(String serialNum) {
 		// TODO Auto-generated method stub
 		return deliveryMapper.selectTotalCountByDeliverSerial(serialNum);
+	}
+
+
+	@Override
+	public void updateDelivery(Delivery delivery) {
+		delivery2Mapper.updateByPrimaryKeySelective(delivery);
+		
 	}
 }
