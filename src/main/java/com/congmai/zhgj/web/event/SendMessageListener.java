@@ -59,7 +59,7 @@ import com.congmai.zhgj.web.service.impl.WebSocketProcessor;
 @Component
 public class SendMessageListener implements  ApplicationListener<SendMessageEvent> {
 
-	private Logger logger = LoggerFactory.getLogger(SendMessageListener.class);
+//	private Logger logger = LoggerFactory.getLogger(SendMessageListener.class);
 
 	private MessageProcessor messageProcessor = null;
 
@@ -192,7 +192,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				messageService.insert(messageVO);
 			}
 		} catch (Exception e) {
-			logger.warn(e.getMessage(), e);
+//			logger.warn(e.getMessage(), e);
 		}
 
 
@@ -236,7 +236,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				messageService.insert(messageVO);
 			}
 		} catch (Exception e) {
-			logger.warn(e.getMessage(), e);
+//			logger.warn(e.getMessage(), e);
 		}
 	}
 	/**
@@ -277,7 +277,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				messageService.insert(messageVO);
 			}
 		} catch (Exception e) {
-			logger.warn(e.getMessage(), e);
+//			logger.warn(e.getMessage(), e);
 		}
 	}
 
@@ -329,7 +329,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				messageService.insertBatch(messageVO);
 			}
 		} catch (Exception e) {
-			logger.warn(e.getMessage(), e);
+//			logger.warn(e.getMessage(), e);
 		}
 	}
 
@@ -376,7 +376,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				messageService.insert(messageVO);
 			}
 		} catch (Exception e) {
-			logger.warn(e.getMessage(), e);
+//			logger.warn(e.getMessage(), e);
 		}
 	}
 
@@ -418,7 +418,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				messageService.insert(messageVO);
 			}
 		} catch (Exception e) {
-			logger.warn(e.getMessage(), e);
+//			logger.warn(e.getMessage(), e);
 		}
 	}
 
@@ -472,7 +472,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				messageService.insertBatch(messageVO);
 			}
 		} catch (Exception e) {
-			logger.warn(e.getMessage(), e);
+//			logger.warn(e.getMessage(), e);
 		}
 
 	}
@@ -559,7 +559,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 
 			}
 		} catch (Exception e) {
-			logger.warn(e.getMessage(), e);
+//			logger.warn(e.getMessage(), e);
 		}
 	}
 
@@ -634,7 +634,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 
 			}
 		} catch (Exception e) {
-			logger.warn(e.getMessage(), e);
+//			logger.warn(e.getMessage(), e);
 		}
 	}
 
@@ -708,7 +708,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				}
 			}
 		} catch (Exception e) {
-			logger.warn(e.getMessage(), e);
+//			logger.warn(e.getMessage(), e);
 		}
 	}
 
@@ -790,7 +790,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				}
 			}
 		} catch (Exception e) {
-			logger.warn(e.getMessage(), e);
+//			logger.warn(e.getMessage(), e);
 		}
 
 	}
@@ -867,7 +867,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				}
 			}
 		} catch (Exception e) {
-			logger.warn(e.getMessage(), e);
+//			logger.warn(e.getMessage(), e);
 		}
 	}
 
@@ -945,7 +945,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				}
 			}
 		} catch (Exception e) {
-			logger.warn(e.getMessage(), e);
+//			logger.warn(e.getMessage(), e);
 		}
 	}
 
@@ -1025,7 +1025,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				}
 			}
 		} catch (Exception e) {
-			logger.warn(e.getMessage(), e);
+//			logger.warn(e.getMessage(), e);
 		}
 
 	}
@@ -1100,7 +1100,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				}
 			}
 		} catch (Exception e) {
-			logger.warn(e.getMessage(), e);
+//			logger.warn(e.getMessage(), e);
 		}
 
 	}
@@ -1171,7 +1171,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				}
 			}
 		} catch (Exception e) {
-			logger.warn(e.getMessage(), e);
+//			logger.warn(e.getMessage(), e);
 		}
 
 	}
@@ -1214,7 +1214,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				messageService.insertBatch(messageVO);
 				}
 		} catch (Exception e) {
-			logger.warn(e.getMessage(), e);
+//			logger.warn(e.getMessage(), e);
 		}
 
 	}
@@ -1257,7 +1257,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				messageService.insertBatch(messageVO);
 				}
 		} catch (Exception e) {
-			logger.warn(e.getMessage(), e);
+//			logger.warn(e.getMessage(), e);
 		}
 
 	}
