@@ -63,6 +63,7 @@
         <root level="info">  
             <appender-ref ref="Console" />  
             <appender-ref ref="uas_appender" />  
+            <appender-ref ref="Console"/>,<appender-ref ref="log"/>
         </root>  
     </Loggers>  
   
