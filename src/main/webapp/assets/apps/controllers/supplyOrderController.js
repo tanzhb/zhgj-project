@@ -1369,7 +1369,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 			  	   	    		$scope.clauseSettlement.materielAmount = $scope.totalAmount();
 			  	   	  	        $scope.clauseSettlement.rateAmount = $scope.totalRateAndCustomsAmount();
 			  	   	  	        $scope.clauseSettlement.rateAndAmount = $scope.totalRateAndAmount();
-			  	   	  	        $scope.clauseSettlement.orderAmount = $scope.totalOrderAmount();
+			  	   	  	        $scope.clauseSettlement.orderAmount = $scope.totalOrderAmount().toFixed(2);
 			  	   	    		delete $scope.clauseSettlement.CSD;
 			  	   	    		orderService.saveClauseSettlement($scope.clauseSettlement).then(//保存结算条款
 			  	   	       		     function(data){
@@ -1957,7 +1957,7 @@ var e = $("#form_clauseSettlement"),
     		$scope.clauseSettlement.materielAmount = $scope.totalAmount();
   	        $scope.clauseSettlement.rateAmount = $scope.totalRateAndCustomsAmount();
   	        $scope.clauseSettlement.rateAndAmount = $scope.totalRateAndAmount();
-  	        $scope.clauseSettlement.orderAmount = $scope.totalOrderAmount();
+  	        $scope.clauseSettlement.orderAmount = $scope.totalOrderAmount().toFixed(2);
     		delete $scope.clauseSettlement.CSD;
     		orderService.saveClauseSettlement($scope.clauseSettlement).then(//保存结算条款
        		     function(data){
@@ -3015,7 +3015,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
       	        if(!isNull($scope.clauseSettlement)&&!isNull($scope.clauseSettlement.otherAmount)){
       	        	$scope.submitOrder.otherAmount = $scope.clauseSettlement.otherAmount;
       	        }
-      	        $scope.submitOrder.orderAmount = $scope.totalOrderAmount();
+      	        $scope.submitOrder.orderAmount = $scope.totalOrderAmount().toFixed(2);
 	    	    orderService.save($scope.submitOrder).then(
           		     function(data){
           		    	

@@ -1630,7 +1630,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 				  	   	    		$scope.clauseSettlement.materielAmount = $scope.totalAmount();
 				  	   	  	        $scope.clauseSettlement.rateAmount = $scope.totalRateAndCustomsAmount();
 				  	   	  	        $scope.clauseSettlement.rateAndAmount = $scope.totalRateAndAmount();
-				  	   	  	        $scope.clauseSettlement.orderAmount = $scope.totalOrderAmount();
+				  	   	  	        $scope.clauseSettlement.orderAmount = $scope.totalOrderAmount().toFixed(2);
 				  	   	    		delete $scope.clauseSettlement.CSD;
 				  	   	    		orderService.saveClauseSettlement($scope.clauseSettlement).then(//保存结算条款
 				  	   	       		     function(data){
@@ -2217,7 +2217,7 @@ var e = $("#form_clauseSettlement"),
     		$scope.clauseSettlement.materielAmount = $scope.totalAmount();
   	        $scope.clauseSettlement.rateAmount = $scope.totalRateAndCustomsAmount();
   	        $scope.clauseSettlement.rateAndAmount = $scope.totalRateAndAmount();
-  	        $scope.clauseSettlement.orderAmount = $scope.totalOrderAmount();
+  	        $scope.clauseSettlement.orderAmount = $scope.totalOrderAmount().toFixed(2);
     		delete $scope.clauseSettlement.CSD;
     		orderService.saveClauseSettlement($scope.clauseSettlement).then(//保存结算条款
        		     function(data){
@@ -3278,7 +3278,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
       	        if(!isNull($scope.clauseSettlement)&&!isNull($scope.clauseSettlement.otherAmount)){
     	        	$scope.submitOrder.otherAmount = $scope.clauseSettlement.otherAmount;
     	        }
-      	        $scope.submitOrder.orderAmount = $scope.totalOrderAmount();
+      	        $scope.submitOrder.orderAmount = $scope.totalOrderAmount().toFixed(2);
 	    	    orderService.save($scope.submitOrder).then(
           		     function(data){
           		    	
@@ -4161,6 +4161,126 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	          		     }
 	          		 );
 	        }
+	        
+	        /** ************关联销售订单 start*************** */
+	        $scope.selectOrder = function() {
+				 $('#saleOrderInfo').modal('show');// 删除成功后关闭模态框
+				 loadMainTable1();
+			 };
+	        
+	        // 确认选择开始***************************************
+	        var ids = '';
+			 $scope.confirmSelectOrder = function() {
+				 var ids = '';
+				 table1.$('input[type="radio"]').each(function() {
+						if ($.contains(document, this)) {											
+							if (this.checked) {
+								// 将选中数据id放入ids中
+								if (ids == '') {
+									ids = this.value;
+								} else
+									ids = ids + ','
+											+ this.value;
+							}
+						}
+					});
+
+				 if(ids!=''){
+					 $scope.buyOrder.orderSerial = ids;
+				 }
+				 
+				 $('#saleOrderInfo').modal('hide');// 删除成功后关闭模态框
+
+			 };
+	        
+	        var table1;
+	 	    var loadMainTable1 = function() {
+	 	            a = 0;
+	 	            App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
+	 	            table1 = $("#sample_21")
+	 				.DataTable({
+	 	                language: {
+	 	                    aria: {
+	 	                        sortAscending: ": activate to sort column ascending",
+	 	                        sortDescending: ": activate to sort column descending"
+	 	                    },
+	 	                    emptyTable: "空表",
+	 	                    info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+	 	                    infoEmpty: "没有数据",
+	 	                    //infoFiltered: "(filtered1 from _MAX_ total entries)",
+	 	                    lengthMenu: "每页显示 _MENU_ 条数据",
+	 	                    search: "查询:",processing:"加载中...",
+	 	                    zeroRecords: "抱歉， 没有找到！",
+	 	                    paginate: {
+	 	                        "sFirst": "首页",
+	 	                        "sPrevious": "前一页",
+	 	                        "sNext": "后一页",
+	 	                        "sLast": "尾页"
+	 	                     }
+	 	                },
+	 	/*                fixedHeader: {//固定表头、表底
+	 	                    header: !0,
+	 	                    footer: !0,
+	 	                    headerOffset: a
+	 	                },*/
+	 	                order: [[1, "desc"]],//默认排序列及排序方式
+	 	                searching: true,//是否过滤检索
+	 	                ordering:  true,//是否排序
+	 	                lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
+	 	                pageLength: 5,//每页显示数量
+	 	                processing: true,//loading等待框
+//	 	                serverSide: true,
+	 	                ajax:"rest/order/findOrderList?type=sale&selectFor=platformOrder",//加载数据中
+	 	                "aoColumns": [
+	 	                              { mData: 'serialNum' },
+	                               { mData: 'orderNum' },
+	                               { mData: 'buyName' },
+	                               { mData: 'materielCount' },
+	                               { mData: 'orderAmount' },
+	                               /*{ mData: 'deliveryMode' },*/
+	                               { mData: 'orderType' },
+	                               /*{ mData: 'saleApplySerial' },*/
+	                               { mData: 'orderSerial' },
+	                               { mData: 'orderDate' }
+
+	 	                        ],
+	 	               'aoColumnDefs' : [ {
+	 								'targets' : 0,
+	 								'searchable' : false,
+	 								'orderable' : false,
+	 								'render' : function(data,
+	 										type, row, meta) {
+	 									return "<label class='mt-radio mt-radio-single mt-radio-outline'>" +
+										"<input type='radio' name='serialNum' class='checkboxes' value="+ row.orderNum +" />" +
+										"<span></span></label>";
+	 								},
+	 								"createdCell": function (td, cellData, rowData, row, col) {
+	 									 $compile(td)($scope);
+	 							       }
+	 							},{
+	 								'targets' : 2,
+	 								'searchable' : false,
+	 								'orderable' : false,
+	 								'render' : function(data,
+	 										type, full, meta) {
+	 									if(isNull(data)){
+	 										return '中航能科（上海）能源科技有限公司'
+	 									}else{
+	 										return data;
+	 									}
+	 								},
+	 								"createdCell": function (td, cellData, rowData, row, col) {
+	 									 $compile(td)($scope);
+	 							       }
+	 							} ]
+
+	 	            }).on('order.dt',
+	 	            function() {
+	 	                console.log('排序');
+	 	            })
+	 	        };
+	 	   
+	 	       /** *************关联销售订单  end*************** */ 
 }]);
 
 

@@ -52,7 +52,7 @@ public class OperateLogAop{
     @Autowired
     OperateLogService operateLogService;
     HttpServletRequest request = null;
-    Logger logger = Logger.getLogger(OperateLogAop.class);
+//    Logger logger = Logger.getLogger(OperateLogAop.class);
     ThreadLocal<Long> time = new ThreadLocal<Long>();
     //用于生成操作日志的唯一标识，用于业务流程审计日志调用
     public static ThreadLocal<String> tag = new ThreadLocal<String>();
@@ -82,8 +82,8 @@ public class OperateLogAop{
     public void afterExec(JoinPoint joinPoint) {
         MethodSignature ms = (MethodSignature) joinPoint.getSignature();
         Method method = ms.getMethod();
-        logger.debug("标记为" + tag.get() + "的方法" + method.getName()
-                + "运行消耗" + (System.currentTimeMillis() - time.get()) + "ms");   
+//        logger.debug("标记为" + tag.get() + "的方法" + method.getName()
+//                + "运行消耗" + (System.currentTimeMillis() - time.get()) + "ms");   
     }
     //在执行目标方法的过程中，会执行这个方法，可以在这里实现日志的记录
     @SuppressWarnings("rawtypes")
@@ -144,7 +144,7 @@ public class OperateLogAop{
                 //保存操作日志
                 operateLogService.insert(valueReturn);
             }else{
-                logger.info("不记录日志信息");
+//                logger.info("不记录日志信息");
             }
             //保存操作结果    
         } catch (Exception e) {
@@ -206,7 +206,7 @@ public class OperateLogAop{
                 valueReturn.setSerialNum(tag.get());
                 operateLogService.insert(valueReturn);
             }else{
-                logger.info("不记录日志信息");
+//                logger.info("不记录日志信息");
             }
         } catch (Exception e1) {
             e1.printStackTrace();
@@ -215,18 +215,18 @@ public class OperateLogAop{
          
 
     private void info(JoinPoint joinPoint) {
-        logger.debug("--------------------------------------------------");
-        logger.debug("King:\t" + joinPoint.getKind());
-        logger.debug("Target:\t" + joinPoint.getTarget().toString());
-        Object[] os = joinPoint.getArgs();
-        logger.debug("Args:");
-        for (int i = 0; i < os.length; i++) {
-           /* logger.debug("\t==>参数[" + i + "]:\t" + os[i].toString());*/
-        }
-        logger.debug("Signature:\t" + joinPoint.getSignature());
-        logger.debug("SourceLocation:\t" + joinPoint.getSourceLocation());
-        logger.debug("StaticPart:\t" + joinPoint.getStaticPart());
-        logger.debug("--------------------------------------------------");
+//        logger.debug("--------------------------------------------------");
+//        logger.debug("King:\t" + joinPoint.getKind());
+//        logger.debug("Target:\t" + joinPoint.getTarget().toString());
+//        Object[] os = joinPoint.getArgs();
+//        logger.debug("Args:");
+//        for (int i = 0; i < os.length; i++) {
+//           /* logger.debug("\t==>参数[" + i + "]:\t" + os[i].toString());*/
+//        }
+//        logger.debug("Signature:\t" + joinPoint.getSignature());
+//        logger.debug("SourceLocation:\t" + joinPoint.getSourceLocation());
+//        logger.debug("StaticPart:\t" + joinPoint.getStaticPart());
+//        logger.debug("--------------------------------------------------");
     }
     
     /** 

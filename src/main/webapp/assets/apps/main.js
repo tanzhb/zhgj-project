@@ -104,6 +104,10 @@ MetronicApp.controller('AppController', [ '$scope', '$rootScope','$compile',
 					console.log('webSocket is open!');
 					//webSocket.send('Hello Server!');
 				};
+				webSocket.onclose = function(event) {
+					console.log('webSocket is close!');
+					//webSocket.send('Hello Server!');
+				};
 				webSocket.onmessage = function(event) {
 					try{
 						var obj = eval('(' + event.data+ ')'); 
