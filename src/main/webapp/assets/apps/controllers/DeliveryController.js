@@ -214,7 +214,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 				$scope.delivery.status="1";
 			$scope.saveDeliveryInfo($scope.delivery.status);//先保存
 			}
-		}else{
+		}else if(judgeString=='view'){
 		 	/*$scope.confirmDelivery($scope.delivery.serialNum);*/
 	   		var promise = DeliveryService.goDelivery($scope.delivery.serialNum);
 			promise.then(function(data) {
@@ -231,6 +231,25 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 						$scope.deliveryDetail.status=1;
 					}
 				}
+			}, function(data) {
+				// 调用承诺接口reject();
+				$(".modal-backdrop").remove();
+				handle.unblockUI();
+				toastr.error("发货失败！请联系管理员");
+				console.log(data);
+			});
+		}else{//收货
+			var promise = DeliveryService.goTakeDelivery($scope.delivery.serialNum);//收货
+			promise.then(function(data) {
+				if(data.flag=='0'){
+					toastr.success("确认收货成功");
+					if(judgeString!='add'){
+						$scope.deliveryDetail.status=4;
+					}
+				}else{
+					toastr.error("确认收货失败！请联系管理员");
+				}
+			
 			}, function(data) {
 				// 调用承诺接口reject();
 				$(".modal-backdrop").remove();

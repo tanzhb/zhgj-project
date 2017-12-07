@@ -14,6 +14,8 @@ public class OrderInfo extends BaseVO {
 	
 	//已发货
 	public static final String DELIVER = "1";
+	
+	public static final String WAIT_TAKEDELIVER= "88";//销售订单待收货
 	//已收货
 	public static final String TAKEDELIVER = "2";
 	//已检验
@@ -66,7 +68,7 @@ public class OrderInfo extends BaseVO {
 	
 	public static final String WAIT_SUPPLY_CONFIRMED= "66";//平台提交待供应商确认
 	
-	public static final String WAIT_PT_CONFIRMED= "77";//供应商确认后，待平台确认
+	public static final String WAIT_PT_CONFIRMED= "77";//供应商确认后，待平台
 	
 	private String serialNum;
 

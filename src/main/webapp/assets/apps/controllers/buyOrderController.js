@@ -518,9 +518,9 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 									}
 								}else if(row.deliverStatus=="1"){
                     				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已发货</span>';
-								}else if(row.deliverStatus=="2"){
+								}/*else if(row.deliverStatus=="2"){
                     				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已收货</span>';
-								}else if(row.deliverStatus=="3"){
+								}*/else if(row.deliverStatus=="3"){
                     				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已检验</span>';
 								}else if(row.deliverStatus=="4"){
                     				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已出库</span>';

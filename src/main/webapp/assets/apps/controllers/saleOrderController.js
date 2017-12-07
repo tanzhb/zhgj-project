@@ -543,6 +543,8 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
                     				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待出库</span>';
 								}else if(row.deliverStatus=="13"){
                     				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已报关</span>';
+								}else if(row.deliverStatus=="88"){
+                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待收货</span>';
 								}else{
 									return htm + '<span>未开始</span>';
 								}
@@ -4074,9 +4076,11 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 																	}else if(data=='7'){
 		 																		return '待报关';
 		 																	}else if(data=='8'){
-		 																		return '完成发货';
+		 																		return '待收货';//完成发货
 		 																	}else if(data=='9'){
 		 																		return '待入库';
+		 																	}else if(data=='10'){
+		 																		return '待收货';
 		 																	}else{
 		 																		return '';
 		 																	}
@@ -4084,7 +4088,19 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 							                            			return "";
 		 							                            		}
 		 							                            	}
-		 							                            }, { mData: 'status' }
+		 							                            }, { mData: 'status'/* ,
+				 					                            	mRender:function(data,row){
+				 							                            		if(data!=""&&data!=null){
+				 							                            			if(data=='8' ||data=='10'){
+				 							                            				return '<span style="color:#fcb95b" ng-click="jumpToGetDeliveryInfo(\''+row.serialNum+'\')">收货</span>';
+				 							                            			}else{
+				 																		return '';
+				 																	}
+				 							                            		}else{
+				 							                            			return "";
+				 							                            		}
+				 							                            	}*/
+		 							                            	}
 		 							                            ],
 		 							                            'aoColumnDefs': [ {
 		 							                            	'targets' : 0,
@@ -4122,7 +4138,15 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 							                            	'className' : 'dt-body-center',
 		 							                            	'render' : function(data,
 		 							                            			type, row, meta) {
-		 							                            		return '';
+		 							                            		if(data!=""&&data!=null){
+		 							                            			if(data=='8' ||data=='10'){
+		 							                            				return '<span style="color:#fcb95b" ng-click="jumpToGetDeliveryInfo(\''+row.serialNum+'\')">收货</span>';
+		 							                            			}else{
+		 																		return '';
+		 																	}
+		 							                            		}else{
+		 							                            			return "";
+		 							                            		}
 		 							                            	},
 		 							                            	"createdCell": function (td, cellData, rowData, row, col) {
 		 							                            		$compile(td)($scope);

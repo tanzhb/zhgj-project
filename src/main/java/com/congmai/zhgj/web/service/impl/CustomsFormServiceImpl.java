@@ -82,18 +82,21 @@ public class CustomsFormServiceImpl extends GenericServiceImpl<CustomsForm, Stri
 	public void  confirmDeclaration(CustomsForm customsForm){
 		Delivery d=new Delivery();
 		d.setSerialNum(customsForm.getDeliverSerial());
-		d.setStatus(DeliveryVO.COMPLETE);//发货完成
+		//d.setStatus(DeliveryVO.COMPLETE);//发货完成
+		d.setStatus(DeliveryVO.WAIT_TAKEDELIVER_DELIVERY);//待收货
 		delivery2Mapper.updateByPrimaryKeySelective(d);
 		Delivery delivery=delivery2Mapper.selectByDeliveryPrimaryKey(customsForm.getDeliverSerial());
 		OrderInfo o=orderInfoMapper.selectByPrimaryKey(delivery.getOrderSerial());
 		OrderInfo orderInfo=new OrderInfo();
 		orderInfo.setSerialNum(delivery.getOrderSerial());
-		orderInfo.setDeliverStatus(OrderInfo.COMPLETE);
+		//orderInfo.setDeliverStatus(OrderInfo.COMPLETE);
+		orderInfo.setDeliverStatus(orderInfo.WAIT_TAKEDELIVER);//待收货
 		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 		TakeDelivery takeDelivery = new TakeDelivery();
 		TakeDelivery takeDelivery1 = takeDeliveryMapper.selectTakeDeliveryByDeliveryId(customsForm.getDeliverSerial());
 		takeDelivery.setSerialNum(takeDelivery1.getSerialNum());
-		takeDelivery.setStatus(TakeDelivery.COMPLETE_Declaration);//已报关
+		//takeDelivery.setStatus(TakeDelivery.COMPLETE_Declaration);//已报关
+		takeDelivery.setStatus(TakeDelivery.WAITING);//待收货
 		takeDeliveryMapper.updateByPrimaryKeySelective(takeDelivery);
 	}
 	@OperationLog(operateType = "update" ,operationDesc = "确认清关" ,objectSerial= "{serialNum}")

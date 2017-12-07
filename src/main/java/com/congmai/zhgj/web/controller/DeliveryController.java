@@ -1654,4 +1654,46 @@ public class DeliveryController {
 
 
 	}
+	
+	/**
+	 * 确认收货
+	 * @param request（http 请求对象）
+	 * @param ucBuilder
+	 * @return 操作结果
+	 * @throws Exception 
+	 */
+	@RequestMapping(value = "/goTakeDelivery", method = RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> goTakeDelivery(String serialNum, HttpServletRequest request,UriComponentsBuilder ucBuilder) throws Exception {
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
+		String flags1="0";
+		Map<String,Object>map=new HashMap<String,Object>();
+		try{
+    		if(org.apache.commons.lang3.StringUtils.isNotEmpty(serialNum)){
+    			DeliveryVO delivery1=deliveryService.selectDetailById(serialNum);
+    			Delivery delivery=new Delivery();
+    			delivery.setStatus(DeliveryVO.TAKEDELIVER_DELIVERY);//已收货
+    			delivery.setSerialNum(serialNum);
+    			delivery.setUpdater(currenLoginName);
+    			deliveryService.updateDelivery(delivery);
+    			OrderInfo o=new OrderInfo();
+    			o.setSerialNum(delivery1.getOrderSerial());
+    			o.setDeliverStatus(OrderInfo.TAKEDELIVER);//已收货
+    			o.setUpdater(currenLoginName);
+    			orderService.updateStatus(o);
+    		/*TakeDelivery takeDelivery = takeDeliveryMapper.selectTakeDeliveryByDeliveryId(serialNum);
+    		TakeDelivery takeDelivery1=new TakeDelivery();
+    		takeDelivery1.setSerialNum(takeDelivery.getSerialNum());
+    		takeDelivery1.setStatus(TakeDelivery.COMPLETE_TAKEDELIVERY);//已收货
+    			takeDeliveryService.updateTakeDelivery(takeDelivery1);*/
+    		}
+    	}catch(Exception e){
+    		logger.warn(e.getMessage(), e);
+    		flags1 = "1";
+    	}
+		//收货消息
+		//EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(delivery,MessageConstants.DELIVERY));
+		 map.put("flag", flags1);
+		return new ResponseEntity<Map<String,Object>>(map, HttpStatus.CREATED);
+	}
 }

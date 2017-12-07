@@ -206,6 +206,10 @@ public class DeliveryVO extends BaseVO implements Serializable{
 	    
 	    public static final String WAIT_IN_RECORD = "9"; //发货单待入库
 	    
+	    public static final String WAIT_TAKEDELIVER_DELIVERY=  "10"; //待收货
+	    
+	    public static final String TAKEDELIVER_DELIVERY=  "4"; //已收货
+	    
 	    private  Boolean  isDel;
 	    
 	    private  Boolean  flag;

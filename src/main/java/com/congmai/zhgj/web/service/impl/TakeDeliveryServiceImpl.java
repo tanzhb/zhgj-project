@@ -619,9 +619,12 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		d.setStatus(DeliveryVO.DECLARATION);
 		td.setStatus(TakeDelivery.WAIT_Declaration);
 		}else{
-			orderInfo.setDeliverStatus(orderInfo.OUTRECORD);//已出库
-			d.setStatus(DeliveryVO.COMPLETE);//发货完成
-			td.setStatus(TakeDelivery.COMPLETE);
+			//orderInfo.setDeliverStatus(orderInfo.OUTRECORD);//已出库
+			orderInfo.setDeliverStatus(orderInfo.WAIT_TAKEDELIVER);//待收货
+			//d.setStatus(DeliveryVO.COMPLETE);//发货完成
+			d.setStatus(DeliveryVO.WAIT_TAKEDELIVER_DELIVERY);//待收货
+			//td.setStatus(TakeDelivery.COMPLETE);
+			td.setStatus(TakeDelivery.WAITING);//待收货
 		}
 		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 		delivery2Mapper.updateByPrimaryKeySelective(d);
