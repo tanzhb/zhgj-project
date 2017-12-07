@@ -181,7 +181,8 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label bold">关联销售订单号：</label>
                                  <div class="">
-                                 <input type="text" readonly name="orderSerial" class="form-control" ng-hide="buyOrderInput" ng-model="buyOrder.orderSerial"  >
+                                 <input type="text" readonly name="orderSerial" class="form-control" ng-hide="buyOrderInput" ng-model="buyOrder.orderSerial" 
+                                 ng-click="selectOrder()" >
                                      <div class="form-control-focus"> </div>
                                      <span class="help-block" ng-hide="buyOrderInput">请输入关联销售订单号</span>
                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.orderSerial}} </p>
