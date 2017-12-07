@@ -148,6 +148,7 @@ public class Materiel {
     
     private  String materielMoney;//金额(报关单/清关单物料中的金额)
     
+    private  String stockCount;//存放实际出库数量
     
     
    
@@ -722,6 +723,14 @@ public class Materiel {
 
 	public void setMaterielAttributeName(String materielAttributeName) {
 		this.materielAttributeName = materielAttributeName;
+	}
+
+	public String getStockCount() {
+		return stockCount;
+	}
+
+	public void setStockCount(String stockCount) {
+		this.stockCount = stockCount;
 	}
     
 }

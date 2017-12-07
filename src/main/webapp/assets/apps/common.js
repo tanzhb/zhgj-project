@@ -91,7 +91,7 @@ jQuery.validator.addMethod("isPhone", function(value,element) {
 	  var tel = /^\d{3,4}-?\d{7,9}$/;
 	  return this.optional(element) || (tel.test(value) || mobile.test(value));
 
-	}, "请正确填写您的联系电话"); 
+	}, "请正确填写您的联系电话/手机号"); 
 
 jQuery.validator.addMethod("minNumber",function(value, element){
     var returnVal = true;

@@ -587,7 +587,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 					address:{required:"地址不能为空！"},
 					/*zipCode:{required:"邮编不能为空！"},*/
 					contactTel:{required:"联系电话不能为空！"},
-					mobileNum:{email:"手机不能为空！"}
+					mobileNum:{required:"手机不能为空！"}
 				},
 				rules: {
 					address: {
@@ -597,10 +597,12 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 						required: !0
 					},*/
 					contactTel: {
-						required: !0
+						required: !0,
+					isPhone: !0
 					},
 					mobileNum: {
-						required: !0
+						required: !0,
+						isPhone: !0
 					}
 				},
 				invalidHandler: function(e, t) {
@@ -780,9 +782,25 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        			$(".alert-danger").html("企业编号已存在！");
 	        			return;
 	        		}*/
-	        		handle.blockUI();
+	        		
 	        		$scope.company.createTime=null;
 	        		$scope.company.updateTime=null;
+	        		if(($scope.companyContacts==undefined||$scope.companyContacts.length==0)){
+	        			if($scope.companyContact1==undefined){
+	        				$(".alert-danger").html("联系方式中联系人至少有一个!");
+	    					$(".alert-danger").show();
+	    					return;
+	        			}
+	        			
+	        		}
+	        		if(($scope.companyAddresses==undefined||$scope.companyAddresses.length==0)){
+	        			if($scope.companyAddress1==undefined){
+	        				$(".alert-danger").html("联系方式中联系地址至少有一个!");
+	    					$(".alert-danger").show();
+	    					return;
+	        			}
+	        		}
+	        		handle.blockUI();
 	        		var promise = companyService.saveCompany($scope.company);
 	        		promise.then(function(data){
 	        			if(!handle.isNull(data.data)){
@@ -795,10 +813,9 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        				$(".modal-backdrop").remove();
 		        			toastr.success("保存成功");
 		        			handle.unblockUI();
-		        			var company = data.data;debugger;
+		        			var company = data.data;
 		        			//$state.go('companyAdd',company,{reload:true});
-		        			//$scope.company = company
-		        		
+		        			$scope.company = company
 		        			getCompanyInfo(company.comId,"company");
 		        			console.log(data.data);
 		        			$scope.companyView = true;
@@ -809,6 +826,16 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		        			//$scope.saveCompanyQualification(true);
 		        			//$stateParams.comId = company.comId;
 		        			//$location.search('comId',company.comId);
+		        			if(flagAddress&&flagContact){
+		        			$scope.companyContact1.comId=company.comId;
+		        			$scope.companyAddress1.comId=company.comId;
+		        			$scope.companyContact=$scope.companyContact1;
+		        			$scope.companyAddress1=$scope.companyAddress1;
+		        			flagContact=false;
+		        			flagAddress=false;
+		        			 $scope.saveCompanyAddress();
+		        			 $scope.saveCompanyContact();
+		        			}
 	        			}else{
 	        				$(".modal-backdrop").remove();
 		        			handle.unblockUI();
@@ -1167,37 +1194,51 @@ $scope.showCompany=function(judgeString){
 	       /**
 	        * 保存联系人信息
 	        */
+	       var  flagContact,flagAddress;
 	       $scope.saveCompanyContact = function(){
-		    	if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
+		    	if((handle.isNull($scope.company)||handle.isNull($scope.company.comId))&&flagContact!=undefined){//handle.isNull($scope.company)||handle.isNull($scope.company.comId)
 		    		 toastr.warning("您的企业信息还未保存");
 		    		 return;
 		    	}else{
 		    		if(handle.isNull($scope.companyContact)){
-		    			$scope.companyContact = {}
+		    			$scope.companyContact = {};
 		    		}
-		    		$scope.companyContact.comId = $scope.company.comId;
+		    		if(flagContact==undefined&&($scope.companyContacts==undefined||$scope.companyContacts.length==0)){
+		    			flagContact=true;
+		    		}else{
+		    			flagContact=false;
+		    		}
+		    		if(!flagContact){
+		    			$scope.companyContact.comId = $scope.company.comId;
+		    		}
 		    		$scope.companyContact.createTime = null;
 		    		$scope.companyContact.updateTime = null;
 		    	}
 		    	if($('#contactForm').valid()){
-		    		console.log($scope.companyContact);
-		        	var promise = companyService.saveCompanyContact($scope.companyContact);
-		        	promise.then(function(data){
-		        		//$(".modal-backdrop").remove();
-		        		if(!handle.isNull(data.data)){
-			        		toastr.success("保存成功");
-			        		$("#contactor").modal("hide");
-			        		$scope.companyContact = {};
-			        		$scope.companyContacts = data.data;
-		        		}else{
-		        			$("#contactor").modal("hide");
-		        			toastr.error("保存失败！请联系管理员");
-		        		}
-		            },function(data){
-		               //调用承诺接口reject();
-		            	toastr.error("保存失败！请联系管理员");
-		            	console.log(data);
-		            });
+		    		if(!flagContact){//不是第一个
+		    			var promise = companyService.saveCompanyContact($scope.companyContact);
+			        	promise.then(function(data){
+			        		//$(".modal-backdrop").remove();
+			        		if(!handle.isNull(data.data)){
+				        		toastr.success("保存成功");
+				        		$("#contactor").modal("hide");
+				        		$scope.companyContact = {};
+				        		$scope.companyContacts = data.data;
+			        		}else{
+			        			$("#contactor").modal("hide");
+			        			toastr.error("保存失败！请联系管理员");
+			        		}
+			            },function(data){
+			               //调用承诺接口reject();
+			            	toastr.error("保存失败！请联系管理员");
+			            	console.log(data);
+			            });
+		    		}else{
+		    			$scope.companyContact1=$scope.companyContact;
+		    			 toastr.warning("第一条联系方式暂存!");
+		    			$("#contactor").modal("hide");
+		    		}
+		        	
 		    	}
 	    	    
 	       }
@@ -1207,7 +1248,7 @@ $scope.showCompany=function(judgeString){
 	        */
 	       $scope.addCompanyContact = function(){
 	    	   $scope.title = null;
-	    	   if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
+	    	   if((handle.isNull($scope.company)||handle.isNull($scope.company.comId))&&flagContact!=undefined){
 		    		 toastr.warning("您的企业信息还未保存");
 		    		 return;
 		       }else{
@@ -1237,6 +1278,10 @@ $scope.showCompany=function(judgeString){
 	        * 删除联系人信息
 	        */
 	       $scope.deleteCompanyContact = function(serialNum){
+	    	   if($scope.companyContacts.length==1){
+	    		   toastr.warning("请编辑此条信息,至少有一条联系人信息!");
+	    		   return;
+	    	   }
 	    	   handle.confirm("确定删除吗？",function(){
 	        		handle.blockUI();
 	        		var promise = companyService.deleteCompanyContact(serialNum);
@@ -1257,42 +1302,55 @@ $scope.showCompany=function(judgeString){
 	        		
 	        	});
 	       }
-	       
+	  
 	       /***************************************************联系地址START*************************************************
 	       /**
 	        * 保存联系地址信息
 	        */
 	       $scope.saveCompanyAddress = function(){
-	    	   if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
+	    	   if((handle.isNull($scope.company)||handle.isNull($scope.company.comId))&&flagAddress!=undefined){
 	    		   toastr.warning("您的企业信息还未保存");
 	    		   return;
 	    	   }else{
 	    		   if(handle.isNull($scope.companyAddress)){
-	    			   $scope.companyAddress = {}
+	    			   $scope.companyAddress = {};
 	    		   }
-	    		   $scope.companyAddress.comId = $scope.company.comId;
+	    		   if(flagAddress==undefined&&($scope.companyAddresses==undefined||$scope.companyAddresses.length==0)){
+	    			   flagAddress=true;
+	    		   }else{
+	    			   flagAddress=false;
+	    		   }
+	    		   if(!flagAddress){
+	    			   $scope.companyAddress.comId = $scope.company.comId;
+	    		   }
 	    		   $scope.companyAddress.createTime = null;
 	    		   $scope.companyAddress.updateTime = null;
 	    	   }
 	    	   if($('#companyAddressForm').valid()){
-	    		   console.log($scope.companyAddress);
-	    		   var promise = companyService.saveCompanyAddress($scope.companyAddress);
-	    		   promise.then(function(data){
-	    			   //$(".modal-backdrop").remove();
-	    			   if(!handle.isNull(data.data)){
-	    				   toastr.success("保存成功");
-	    				   $("#address").modal("hide");
-	    				   $scope.companyAddress = {};
-	    				   $scope.companyAddresses = data.data;
-	    			   }else{
-	    				   $("#address").modal("hide");
-	    				   toastr.error("保存失败！请联系管理员");
-	    			   }
-	    		   },function(data){
-	    			   //调用承诺接口reject();
-	    			   toastr.error("保存失败！请联系管理员");
-	    			   console.log(data);
-	    		   });
+	    		   if(!flagAddress){
+	    			   var promise = companyService.saveCompanyAddress($scope.companyAddress);
+		    		   promise.then(function(data){
+		    			   //$(".modal-backdrop").remove();
+		    			   if(!handle.isNull(data.data)){
+		    				   toastr.success("保存成功");
+		    				   $("#address").modal("hide");
+		    				   $scope.companyAddress = {};
+		    				   $scope.companyAddresses = data.data;
+		    			   }else{
+		    				   $("#address").modal("hide");
+		    				   toastr.error("保存失败！请联系管理员");
+		    			   }
+		    		   },function(data){
+		    			   //调用承诺接口reject();
+		    			   toastr.error("保存失败！请联系管理员");
+		    			   console.log(data);
+		    		   });
+	    		   }else{
+	    			   $scope.companyAddress1= $scope.companyAddress; 
+	    			   toastr.warning("第一条联系地址暂存!");
+	    			   $("#address").modal("hide");
+	    		   }
+	    		   
 	    	   }
 	    	   
 	       }
@@ -1302,7 +1360,7 @@ $scope.showCompany=function(judgeString){
 	        */
 	       $scope.addCompanyAddress = function(){
 	    	   $scope.title = null;
-	    	   if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
+	    	   if((handle.isNull($scope.company)||handle.isNull($scope.company.comId))&&flagAddress!=undefined){
 	    		   toastr.warning("您的企业信息还未保存");
 	    		   return;
 	    	   }else{
@@ -1332,6 +1390,10 @@ $scope.showCompany=function(judgeString){
 	        * 删除联系地址信息
 	        */
 	       $scope.deleteCompanyAddress = function(serialNum){
+	    	   if($scope.companyAddresses.length==1){
+	    		   toastr.warning("请编辑此条信息,至少有一条联系地址!");
+	    		   return;
+	    	   }
 	    	   handle.confirm("确定删除吗？",function(){
 	    		   handle.blockUI();
 	    		   var promise = companyService.deleteCompanyAddress(serialNum);
