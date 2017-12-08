@@ -15,6 +15,11 @@
     <result column="positionName" property="positionName" jdbcType="VARCHAR" />
     <result column="stockInCount" property="stockInCount" jdbcType="VARCHAR" />
     <result column="batchNum" property="batchNum" jdbcType="VARCHAR" />
+    <!--  <association column="positionSerial" property="warehouse" select="com.congmai.zhgj.web.dao.WarehousepositionMapper.selectByPrimaryKey" ></association>
+      <association column="warehouseSerial" property="warehouseposition" select="com.congmai.zhgj.web.dao.WarehouseMapper.selectByPrimaryKey" ></association> -->
+     <!--  <association column="positionSerial" property="positionNum" select="com.congmai.zhgj.web.dao.WarehousepositionMapper.selectByPrimaryKey" ></association>
+      <association column="warehouseSerial" property="warehouseName" select="com.congmai.zhgj.web.dao.WarehouseMapper.selectByPrimaryKey" ></association>  -->
+      
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >

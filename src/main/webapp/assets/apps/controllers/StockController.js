@@ -430,8 +430,8 @@ angular
 	  		                                          { mData: 'batchNum' },
 	  		                                          { mData: 'stockInOutRecord.stockDate' },
 	 	  		                                      { mData: 'stockCount' },
-	 	  		                                      { mData: 'warehouse' },
-		  		                                      { mData: 'position' },
+	 	  		                                      { mData: 'warehouseName' },
+		  		                                      { mData: 'positionNum' },
 		  		                                       { mData: 'remark' }//备注
                                                      
 			  		                            ],
@@ -446,7 +446,7 @@ angular
 		 	    								}
 												
 											}
-										},{
+										}/*,{
 											'targets' : 7,
 											'render' : function(data,
 													type, row, meta) {
@@ -468,7 +468,7 @@ angular
 		 	    								}
 												
 											}
-										} ],
+										} */],
 
 								})
 				// 构建datatables结束***************************************
@@ -548,11 +548,11 @@ angular
 			  		                                    { mData: 'stockInOutRecord.inOutNum' },
                                                         { mData: 'stockInOutRecord.inOutType' },
                                                         { mData: 'stockInOutRecord.inOutNum' },
-                                                        { mData: 'stockInOutRecord.inOutType' },
+                                                        { mData: 'batchNum' },
                                                         { mData: 'stockInOutRecord.stockDate' },
                                                         { mData: 'stockCount' },
-			  		                                  { mData: 'warehouse' },
-			  		                                  { mData: 'position' },
+			  		                                  { mData: 'warehouseName' },
+			  		                                  { mData: 'positionNum' },
 			  		                                  { mData: 'remark' }//备注
 			  		                            ],
 			  		                   'aoColumnDefs' : [{
@@ -577,7 +577,7 @@ angular
 		 	    								}
 												
 											}
-										},{
+										}/*,{
 											'targets' : 7,
 											'render' : function(data,
 													type, row, meta) {
@@ -599,7 +599,7 @@ angular
 		 	    								}
 												
 											}
-										}],
+										}*/],
 
 								})
 				// 构建datatables结束***************************************

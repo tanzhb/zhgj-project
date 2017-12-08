@@ -7,7 +7,7 @@
     <result column="takeDeliverSerial" property="takeDeliverSerial" jdbcType="VARCHAR" />
     <result column="docNum" property="docNum" jdbcType="VARCHAR" />
     <result column="inOutNum" property="inOutNum" jdbcType="VARCHAR" />
-    <result column="stockDate" property="stockDate" jdbcType="DATE" />
+    <result column="stockDate" property="stockDate" jdbcType="TIMESTAMP" />
     <result column="operator" property="operator" jdbcType="VARCHAR" />
     <result column="contactNum" property="contactNum" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
@@ -32,7 +32,7 @@
     <result column="takeDeliverSerial" property="takeDeliverSerial" jdbcType="VARCHAR" />
     <result column="docNum" property="docNum" jdbcType="VARCHAR" />
     <result column="inOutNum" property="inOutNum" jdbcType="VARCHAR" />
-    <result column="stockDate" property="stockDate" jdbcType="DATE" />
+    <result column="stockDate" property="stockDate" jdbcType="TIMESTAMP" />
     <result column="operator" property="operator" jdbcType="VARCHAR" />
     <result column="contactNum" property="contactNum" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
@@ -61,7 +61,7 @@
     <result column="takeDeliverSerial" property="takeDeliverSerial" jdbcType="VARCHAR" />
     <result column="docNum" property="docNum" jdbcType="VARCHAR" />
     <result column="inOutNum" property="inOutNum" jdbcType="VARCHAR" />
-    <result column="stockDate" property="stockDate" jdbcType="DATE" />
+    <result column="stockDate" property="stockDate" jdbcType="TIMESTAMP" />
     <result column="operator" property="operator" jdbcType="VARCHAR" />
     <result column="contactNum" property="contactNum" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
@@ -199,7 +199,7 @@
       packageType, packageSpecifications, packageCount,materielCount
       )
     values (#{serialNum,jdbcType=VARCHAR}, #{deliverSerial,jdbcType=VARCHAR}, #{takeDeliverSerial,jdbcType=VARCHAR}, 
-      #{docNum,jdbcType=VARCHAR}, #{inOutNum,jdbcType=VARCHAR}, #{stockDate,jdbcType=DATE}, 
+      #{docNum,jdbcType=VARCHAR}, #{inOutNum,jdbcType=VARCHAR}, #{stockDate,jdbcType=TIMESTAMP}, 
       #{operator,jdbcType=VARCHAR}, #{contactNum,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
@@ -291,7 +291,7 @@
         #{inOutNum,jdbcType=VARCHAR},
       </if>
       <if test="stockDate != null" >
-        #{stockDate,jdbcType=DATE},
+        #{stockDate,jdbcType=TIMESTAMP},
       </if>
       <if test="operator != null" >
         #{operator,jdbcType=VARCHAR},
@@ -368,7 +368,7 @@
         inOutNum = #{record.inOutNum,jdbcType=VARCHAR},
       </if>
       <if test="record.stockDate != null" >
-        stockDate = #{record.stockDate,jdbcType=DATE},
+        stockDate = #{record.stockDate,jdbcType=TIMESTAMP},
       </if>
       <if test="record.operator != null" >
         operator = #{record.operator,jdbcType=VARCHAR},
@@ -430,7 +430,7 @@
       takeDeliverSerial = #{record.takeDeliverSerial,jdbcType=VARCHAR},
       docNum = #{record.docNum,jdbcType=VARCHAR},
       inOutNum = #{record.inOutNum,jdbcType=VARCHAR},
-      stockDate = #{record.stockDate,jdbcType=DATE},
+      stockDate = #{record.stockDate,jdbcType=TIMESTAMP},
       operator = #{record.operator,jdbcType=VARCHAR},
       contactNum = #{record.contactNum,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
@@ -467,7 +467,7 @@
         inOutNum = #{inOutNum,jdbcType=VARCHAR},
       </if>
       <if test="stockDate != null" >
-        stockDate = #{stockDate,jdbcType=DATE},
+        stockDate = #{stockDate,jdbcType=TIMESTAMP},
       </if>
       <if test="operator != null" >
         operator = #{operator,jdbcType=VARCHAR},

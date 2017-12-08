@@ -55,8 +55,8 @@
 	<result column="stockInCheckRemark" property="stockInCheckRemark" jdbcType="VARCHAR" />
     <association column="orderMaterielSerial" property="orderMateriel" select="com.congmai.zhgj.web.dao.OrderMaterielMapper.selectByPrimaryKey" ></association>
     <association column="supplyMaterielSerial" property="supplyMateriel" select="com.congmai.zhgj.web.dao.SupplyMaterielMapper.selectByPrimaryKey" ></association>
-    <association property="warehouse" column="warehouseSerial" select="com.congmai.zhgj.web.dao.WarehouseMapper.selectByPrimaryKey"></association>
-    <association property="position" column="positionSerial" select="com.congmai.zhgj.web.dao.WarehousepositionMapper.selectByPrimaryKey"></association>
+    <association column="serialNum" property="stockInBatchs" select="com.congmai.zhgj.web.dao.StockOutBatchMapper.selectStockInBatchBySerialNum" ></association> <!-- 根据发货物料取出批次相关入库批次详情 -->
+    <association column="serialNum" property="stockOutMateriels" select="com.congmai.zhgj.web.dao.StockOutBatchMapper.selectStockOutBatchBySerialNum" ></association> <!-- 根据发货物料取出批次相关出库批次详情 -->
     <association property="stockInOutRecord" javaType="com.congmai.zhgj.web.model.StockInOutRecord">
     	<result column="s_serialNum" property="serialNum" jdbcType="VARCHAR" />
 	    <result column="deliverSerial" property="deliverSerial" jdbcType="VARCHAR" />
@@ -745,14 +745,15 @@
   <select id="getDetailByRelationDeliverSerialListForZijian"  resultMap="BaseResultMap2" parameterType="java.util.List" >
      select
    		dm.serialNum as serialNum ,dm.stockCount,dm.batchNum,s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial, s.inOutNum,s.inOutType,s.stockDate, s.operator, s.contactNum, 
-    	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,dm.orderMaterielSerial,o.orderNum,o.buyComId,
-    	 dm.warehouseSerial as warehouseSerial,dm.positionSerial as  positionSerial
+    	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,dm.orderMaterielSerial,o.orderNum,o.buyComId
+    	
     from stockInOutRecord s
     <!-- left join takeDelivery td on td.serialNum = s.takeDeliverSerial -->
    <!--  LEFT JOIN delivery d ON d.takeDeliverSerial = td.serialNum -->
    left join delivery d on d.serialNum = s.deliverSerial
     left join deliveryMateriel dm on d.serialNum = dm.deliverSerial
     left join orderInfo o on o.serialNum = d.orderSerial
+       <!-- left join 	stockOutBatch sob on  dm.serialNum=sob.stockInBatchSerial -->
     where  dm.delFlg=0 and s.delFlg=0  and s.status=1 and o.buyComId is not null and  s.deliverSerial in 
         <foreach item="idList" collection="list" open="(" close=")" separator=",">
             #{idList}
@@ -763,14 +764,15 @@
   <select id="getDetailByRelationDeliverSerialListForDaiguan"  resultMap="BaseResultMap2" parameterType="java.util.List" >
      select
    		dm.serialNum as serialNum ,dm.stockCount,dm.batchNum,s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial, s.inOutNum,s.inOutType,s.stockDate, s.operator, s.contactNum, 
-    	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,dm.orderMaterielSerial,o.orderNum,o.buyComId,
-    	 dm.warehouseSerial as warehouseSerial,dm.positionSerial as  positionSerial
+    	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,dm.orderMaterielSerial,o.orderNum,o.buyComId
+    	
     from stockInOutRecord s
     <!-- left join takeDelivery td on td.serialNum = s.takeDeliverSerial -->
    <!--  LEFT JOIN delivery d ON d.takeDeliverSerial = td.serialNum -->
    left join delivery d on d.serialNum = s.deliverSerial
     left join deliveryMateriel dm on d.serialNum = dm.deliverSerial
     left join orderInfo o on o.serialNum = d.orderSerial
+   <!--   left join 	stockOutBatch sob on  dm.serialNum=sob.stockOutMaterielSerial -->
     where  dm.delFlg=0 and s.delFlg=0 and s.status=1 and o.buyComId is not  null and  s.status=1 and   s.deliverSerial in 
         <foreach item="idList" collection="list" open="(" close=")" separator=",">
             #{idList}
@@ -780,15 +782,14 @@
    <!--   自建库存获取入库记录中入库明细   -->
      <select id="getDetailByRelationTakeDeliverSerialListForZijian"  resultMap="BaseResultMap2" parameterType="java.util.List">
      select
-   		dm.serialNum as serialNum ,dm.stockCount,dm.batchNum,s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial, s.inOutNum,s.inOutType,s.stockDate, s.operator, s.contactNum, 
-    	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,dm.orderMaterielSerial,o.orderNum,o.buyComId,
-    	dm.warehouseSerial as warehouseSerial,dm.positionSerial as  positionSerial
+   		dm.serialNum as serialNum ,dm.stockCount,s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial, s.inOutNum,s.inOutType,s.stockDate, s.operator, s.contactNum, 
+    	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,dm.orderMaterielSerial,o.orderNum,o.buyComId
     from stockInOutRecord s
     left join takeDelivery td on td.serialNum = s.takeDeliverSerial
     LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
     left join deliveryMateriel dm on td.serialNum = dm.deliverSerial
     left join orderInfo o on o.serialNum = d.orderSerial
-     where dm.delFlg=0 and s.delFlg=0 and s.status=1  and o.buyComId is  null and s.status=1 and  s.takeDeliverSerial in 
+     where dm.delFlg=0 and s.delFlg=0 and o.buyComId is  null and s.status=1 and  s.takeDeliverSerial in 
         <foreach item="idList" collection="list" open="(" close=")" separator=",">
             #{idList}
         </foreach>
@@ -797,15 +798,14 @@
       <!--   代管库存获取入库记录中入库明细   -->
      <select id="getDetailByRelationTakeDeliverSerialListForDaiguan"  resultMap="BaseResultMap2" parameterType="java.util.List">
      select
-   		dm.serialNum as serialNum ,dm.stockCount,dm.batchNum,s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial, s.inOutNum,s.inOutType,s.stockDate, s.operator, s.contactNum, 
-    	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,dm.orderMaterielSerial,o.orderNum,o.buyComId,
-    	dm.warehouseSerial as warehouseSerial,dm.positionSerial as  positionSerial
+   		dm.serialNum as serialNum ,dm.stockCount,s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial, s.inOutNum,s.inOutType,s.stockDate, s.operator, s.contactNum, 
+    	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,dm.orderMaterielSerial,o.orderNum,o.buyComId
     from stockInOutRecord s
     left join takeDelivery td on td.serialNum = s.takeDeliverSerial
         LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
     left join deliveryMateriel dm on td.serialNum = dm.deliverSerial
     left join orderInfo o on o.serialNum = d.orderSerial
-     where dm.delFlg=0 and s.delFlg=0 and o.buyComId is null and s.status=1  and s.takeDeliverSerial in 
+     where dm.delFlg=0 and s.delFlg=0 and o.buyComId is  not null and s.status=1  and s.takeDeliverSerial in 
         <foreach item="idList" collection="list" open="(" close=")" separator=",">
             #{idList}
         </foreach>
@@ -814,7 +814,7 @@
        <!--   获取入库记录中入库明细   -->
      <select id="getDetailByRelationTakeDeliverSerialList"  resultMap="BaseResultMap2" parameterType="java.util.List">
      select
-   		dm.serialNum as serialNum ,dm.stockCount,dm.batchNum,s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial, s.inOutNum,s.inOutType,s.stockDate, s.operator, s.contactNum, 
+   		dm.serialNum as serialNum ,dm.stockCount,s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial, s.inOutNum,s.inOutType,s.stockDate, s.operator, s.contactNum, 
     	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,dm.orderMaterielSerial,o.orderNum,o.buyComId,
     	dm.warehouseSerial as warehouseSerial,dm.positionSerial as  positionSerial
     from stockInOutRecord s
@@ -868,7 +868,7 @@
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
-		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial and s.status=1
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial 
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
@@ -892,7 +892,7 @@
 			)
 		)
 		
-		WHERE stock.serialNum = #{serialNum};
+		WHERE stock.serialNum = #{serialNum} and s.status=1;
 		</select>
 		
 		<select id="getStockInBatchListByMaterielOwn"  resultMap="BaseResultMap2" parameterType="map"> 
@@ -927,7 +927,7 @@
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
-		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial and s.status=1
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial 
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
@@ -957,6 +957,6 @@
 					FROM
 						orderInfo
 					WHERE
-						orderInfo.serialNum = #{orderSerial}));
+						orderInfo.serialNum = #{orderSerial}))and s.status=1;
 		</select>
 </mapper>

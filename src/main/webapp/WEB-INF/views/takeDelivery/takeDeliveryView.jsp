@@ -653,7 +653,7 @@
 													<div class="">
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-hide="span">
-															{{stockInOutRecord.stockDate}}</p>
+															{{stockInOutRecord.stockDate|date:'yyyy-MM-dd hh:mm:ss'}}</p>
 													</div>
 
 												</div>

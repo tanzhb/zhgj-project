@@ -67,11 +67,12 @@ public class DeliveryMateriel {
     private Warehouse warehouse;
     
     private Warehouseposition position;
+ private String  warehouseName;
     
+    private String positionNum;
     private StockInOutRecord stockInOutRecord;
     
     private String  deliveredCount;//已发数量
-    
     private Delivery delivery;
     private String buyComId;//物权方comId
     private  String stockInSerialNum;
@@ -564,6 +565,22 @@ public class DeliveryMateriel {
 
 	public void setDeliveredCount(String deliveredCount) {
 		this.deliveredCount = deliveredCount;
+	}
+
+	public String getWarehouseName() {
+		return warehouseName;
+	}
+
+	public String getPositionNum() {
+		return positionNum;
+	}
+
+	public void setWarehouseName(String warehouseName) {
+		this.warehouseName = warehouseName;
+	}
+
+	public void setPositionNum(String positionNum) {
+		this.positionNum = positionNum;
 	}
 
 	

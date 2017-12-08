@@ -92,6 +92,8 @@ License: You must have a valid license purchased only from themeforest(the above
 	type="text/css" />
 <link href="assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet"
 	type="text/css" />
+	<link href="assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.less.css" rel="stylesheet"
+	type="text/css" />
 <link href="assets/global/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" type="text/css" />
 <link href="assets/apps/css/common.css"
 	rel="stylesheet" type="text/css" />
@@ -253,6 +255,8 @@ License: You must have a valid license purchased only from themeforest(the above
 	<script src="assets/global/plugins/icheck/icheck.min.js" type="text/javascript"></script>
 	<script src="assets/pages/scripts/form-icheck.min.js" type="text/javascript"></script>
 	<script src="assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
+	<script src="assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+	<script src="assets/global/plugins/bootstrap-datepicker/locales/bootstrap-datetimepicker.zh-CN.min.js" type="text/javascript"></script>
 	<script src="assets/global/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js" type="text/javascript"></script>
 	<script src="assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
 	<script src="assets/global/plugins/bootstrap-select/js/i18n/defaults-zh_CN.js" type="text/javascript"></script>
