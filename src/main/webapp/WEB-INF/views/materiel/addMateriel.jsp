@@ -68,6 +68,7 @@
 				                  <div class="form-body">
 				                      <div class="alert alert-danger display-hide">
 				                          <button class="close" data-close="alert"></button> 请先输入正确数据！ </div>
+				                      <shiro:hasRole name="admin">
 				                      <div class="row">
 				                          <div class="col-md-4">
 				                              <div class="form-group">
@@ -202,6 +203,101 @@
 				                              </div>
 				                          </div>
 				                      </div>
+				                      </shiro:hasRole>
+				                      <shiro:lacksRole name="admin">
+					                      <div class="row">
+					                          <div class="col-md-4">
+					                              <div class="form-group">
+					                                  <label class="control-label bold">物料编码<span class="required" aria-required="true"> * </span></label>
+					                                  <div class="">
+					                                      <p class="form-control-static" > {{materiel.materielNum}} </p>
+					                                  </div>
+					                              </div>
+					                          </div>
+					                          <!--/span-->
+					                          <div class="col-md-4">
+					                              <div class="form-group ">
+					                                  <label class="control-label bold">助记码</label>
+					                                  <div class="">
+					                                      <p class="form-control-static" > {{materiel.mnemonicCode}} </p>
+					                                  </div>
+					                              </div>
+					                          </div>
+					                          <!--/span-->
+					                          <div class="col-md-4">
+					                              <div class="form-group ">
+					                                  <label class="control-label bold">物料名称<span class="required" aria-required="true"> * </span></label>
+					                                  <div class="">
+					                                      <p class="form-control-static" > {{materiel.materielName}} </p>
+					                                  </div>
+					
+					                              </div>
+					                          </div>
+					                      </div>
+					                      <!--/row-->
+					                      <div class="row">
+					                      	<div class="col-md-4">
+					                              <div class="form-group ">
+					                                  <label class="control-label bold">规格型号<span class="required" aria-required="true"> * </span></label>
+					                                  <div class="">
+					                                      <p class="form-control-static" > {{materiel.specifications}} </p>
+					                                  </div>
+					
+					                              </div>
+					                          </div>
+					                      	<div class="col-md-4">
+					                              <div class="form-group ">
+					                                  <label class="control-label bold">物料大类<span class="required" aria-required="true"> * </span></label>
+					                                  <div class="">
+					                                      <p class="form-control-static" > {{materiel.typeName}} </p>
+					                                  </div>
+					
+					                              </div>
+					                          </div>
+					                          <div class="col-md-4">
+					                              <div class="form-group ">
+					                                  <label class="control-label bold">一级分类<span class="required" aria-required="true"> * </span></label>
+					                                  <div class="">
+					                                      <p class="form-control-static" > {{materiel.categoryName1}} </p>
+					                                  </div>
+					
+					                              </div>
+					                          </div>
+					                      </div>
+					                      <!--/row-->
+					                      <div class="row">
+					                           <div class="col-md-4">
+					                              <div class="form-group ">
+					                                  <label class="control-label bold">二级分类</label>
+					                                  <div class="">
+					                                      <p class="form-control-static" > {{materiel.categoryName2}} </p>
+					                                  </div>
+					
+					                              </div>
+					                          </div>
+					                           <div class="col-md-4">
+					                              <div class="form-group ">
+					                                  <label class="control-label bold">三级分类</label>
+					                                  <div class="">
+					                                      <p class="form-control-static" > {{materiel.categoryName3}} </p>
+					                                  </div>
+					
+					                              </div>
+					                          </div>
+					                          <!--/span-->
+					                          <div class="col-md-4">
+					                              <div class="form-group ">
+					                                  <label class="control-label bold">物料属性</label>
+					                                  <div >
+					                                   	<p class="form-control-static" > {{materiel.materielAttributeName}} </p>
+					                                  </div>
+					                                 
+					
+					                              </div>
+					                          </div>
+					                      </div>
+				                      
+				                      </shiro:lacksRole>
 				                     <!--  <div class="row">
 				                          
 				                          /span
