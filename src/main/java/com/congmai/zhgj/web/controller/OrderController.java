@@ -67,6 +67,7 @@ import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
+import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.OperateLog;
 import com.congmai.zhgj.web.model.OperateLogExample;
 import com.congmai.zhgj.web.model.OrderFile;
@@ -92,6 +93,7 @@ import com.congmai.zhgj.web.service.OrderFileService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.ProcessBaseService;
+import com.congmai.zhgj.web.service.StockService;
 import com.congmai.zhgj.web.service.UserCompanyService;
 
 
@@ -143,6 +145,8 @@ public class OrderController {
     private DemandPlanMaterielService demandPlanMaterielService;
     @Resource
     private CompanyService companyService;
+    @Resource
+    private StockService stockService;
     
     
 	//销售订单
@@ -765,6 +769,21 @@ public class OrderController {
     	criteria.andOrderSerialEqualTo(serialNum);
     	m.setOrderByClause(" sort asc");
     	orderMateriel = orderMaterielService.selectList(m);
+    	
+    	if(orderMateriel!=null){
+			for (int i = 0; i < orderMateriel.size(); i++) {//设置所选基本物料的自建库存数量
+				if(orderMateriel.get(i).getMateriel()!=null){
+					Materiel m1 = orderMateriel.get(i).getMateriel();
+					String inCountString = stockService.getCountInAmountForZijian(m1.getSerialNum());
+    				String outCountString = stockService.getCountOutAmountForZijian(m1.getSerialNum());
+    				m1.setStockCount(
+    						(Integer.parseInt(inCountString==null?"0":inCountString)
+    								-Integer.parseInt(outCountString==null?"0":outCountString))+"");
+				}
+				
+				
+			}
+		}
     	map.put("orderMateriel", orderMateriel);
     	
     	//获取合同信息
