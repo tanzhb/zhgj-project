@@ -412,6 +412,8 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
 	          		    	 if(data==""){
 	          		    		$scope.company.comTypeName="";
 	          		    		return;
+	          		    	 }else{
+	          		    		$scope.company = data;
 	          		    	 }
 	          		    	/*$scope.company=data;*/
 	          		    	if(data.comType=='1'){

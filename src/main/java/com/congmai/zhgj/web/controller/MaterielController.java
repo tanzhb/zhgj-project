@@ -58,6 +58,7 @@ import com.congmai.zhgj.web.service.CategoryService;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.MaterielFileService;
 import com.congmai.zhgj.web.service.MaterielService;
+import com.congmai.zhgj.web.service.StockService;
 import com.congmai.zhgj.web.service.SupplyMaterielService;
 import com.congmai.zhgj.web.service.UserCompanyService;
 
@@ -97,6 +98,8 @@ public class MaterielController {
     @Resource
     private CompanyService companyService;
     
+    @Resource
+    private StockService stockService;
     
     /**
      * 保存物料
@@ -829,6 +832,20 @@ public class MaterielController {
     	List<SupplyMateriel> list = null;
     	try {
     		list = supplyMaterielService.chooseMateriel(ids);
+    		if(list!=null){
+    			for (int i = 0; i < list.size(); i++) {//设置所选基本物料的自建库存数量
+    				if(list.get(i).getMateriel()!=null){
+    					Materiel m = list.get(i).getMateriel();
+    					String inCountString = stockService.getCountInAmountForZijian(m.getSerialNum());
+        				String outCountString = stockService.getCountOutAmountForZijian(m.getSerialNum());
+        				m.setStockCount(
+        						(Integer.parseInt(inCountString==null?"0":inCountString)
+        								-Integer.parseInt(outCountString==null?"0":outCountString))+"");
+    				}
+    				
+					
+				}
+    		}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -849,6 +866,18 @@ public class MaterielController {
     	List<Materiel> list = null;
     	try {
     		list = materielService.chooseMateriel(ids);
+    		if(list!=null){
+    			for (int i = 0; i < list.size(); i++) {//设置所选物料的自建库存数量
+    				String inCountString = stockService.getCountInAmountForZijian(list.get(i).getSerialNum());
+    				String outCountString = stockService.getCountOutAmountForZijian(list.get(i).getSerialNum());
+    				list.get(i).setStockCount(
+    						(Integer.parseInt(inCountString==null?"0":inCountString)
+    								-Integer.parseInt(outCountString==null?"0":outCountString))+"");
+					
+				}
+    		}
+    		
+    		
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}

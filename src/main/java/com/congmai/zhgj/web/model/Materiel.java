@@ -148,13 +148,11 @@ public class Materiel {
     
     private  String materielMoney;//金额(报关单/清关单物料中的金额)
     
-    private  String stockCount;//存放实际出库数量
+    private  String stockCount;//库存数量
     
-    
+    private  String guideUnitPrice;//指导单价
    
     
-    
-
     public String getCustomsRate() {
 		return customsRate;
 	}
@@ -731,6 +729,14 @@ public class Materiel {
 
 	public void setStockCount(String stockCount) {
 		this.stockCount = stockCount;
+	}
+
+	public String getGuideUnitPrice() {
+		return guideUnitPrice;
+	}
+
+	public void setGuideUnitPrice(String guideUnitPrice) {
+		this.guideUnitPrice = guideUnitPrice;
 	}
     
 }
