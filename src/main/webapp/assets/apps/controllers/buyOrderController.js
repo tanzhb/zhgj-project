@@ -102,7 +102,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		$scope.buyOrder.tradeType="内贸";
             		$scope.buyOrder.currency="人民币";
             		$scope.buyOrder.orderDate = timeStamp2String2(new Date());
-            		$scope.contract.signDate = timeStamp2String2(new Date());
+//            		$scope.contract.signDate = timeStamp2String2(new Date());
             		$scope.clauseSettlement = {};
             		$scope.clauseSettlement.otherAmount = 0;
             		$scope.buyOrder.seller ="中航能科（上海）能源科技有限公司";
@@ -446,7 +446,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 									type, row, meta) {
 								var clickhtm = '<a href="javascript:void(0);" ng-click="viewBuyOrder(\''+row.serialNum+'\')">'+data+'</a></br>'
 								if(row.status==0){
-									return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  >待提交</span>';
+									return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  >待申请</span>';
 								}else if(row.status==1){
 									if(row.processBase!=""&&row.processBase!=null){
 	                        			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
@@ -456,7 +456,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 										}else if(row.processBase.status=="APPROVAL_FAILED"){
 											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:red">未通过</span>';
 										}else{
-											return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未发布</span>';
+											return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">待申请</span>';
 										}
 	                        		}else{
 	                        			return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未审批</span>';
@@ -521,7 +521,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 								}/*else if(row.deliverStatus=="2"){
                     				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已收货</span>';
 								}*/else if(row.deliverStatus=="3"){
-                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已检验</span>';
+                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待入库</span>';
 								}else if(row.deliverStatus=="4"){
                     				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已出库</span>';
 								}else if(row.deliverStatus=="5"){
@@ -1241,7 +1241,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                                    { mData: 'materielNum' },
                                    { mData: 'materielName' },
                                    { mData: 'specifications' },
-                                   { mData: 'unit' }
+                                   { mData: 'unit' },
+                                   { mData: 'stockCount' }
                              ],
                     'aoColumnDefs' : [ {
      							'targets' : 0,
@@ -3306,15 +3307,24 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		       
 		     //********审批流程start****************//
 		       $scope.submitBuyApply  = function() {// 进入申请审批页面
-		        	if(table.rows('.active').data().length != 1){
+		    	   if(!isNull($scope.buyOrder)&&!isNull($scope.buyOrder.serialNum)){//详情页面进入审批
+		    			var processBase = $scope.buyOrder.processBase;
+		    			if(processBase != null){
+		    				showToastr('toast-top-center', 'warning', '该订单已发起流程审批，不能再次申请！')
+		    			}/*else if(table.row('.active').data().status!=1){
+		    				showToastr('toast-top-center', 'warning', '该订单未确认，不能进入审批流程！')
+		    			}*/else $state.go('submitBuyApply',{serialNum:$scope.buyOrder.serialNum});
+		    			
+		    			$state.go('submitBuyApply',{serialNum:table.row('.active').data().serialNum})
+		    		}else if(table.rows('.active').data().length != 1){
 		    			showToastr('toast-top-center', 'warning', '请选择一条任务进行流程申请！')
 		    		}else{
 		    			var processBase = table.row('.active').data().processBase;
 		    			if(processBase != null){
 		    				showToastr('toast-top-center', 'warning', '该订单已发起流程审批，不能再次申请！')
-		    			}else if(table.row('.active').data().status!=1){
+		    			}/*else if(table.row('.active').data().status!=1){
 		    				showToastr('toast-top-center', 'warning', '该订单未确认，不能进入审批流程！')
-		    			}else $state.go('submitBuyApply',{serialNum:table.row('.active').data().serialNum});
+		    			}*/else $state.go('submitBuyApply',{serialNum:table.row('.active').data().serialNum});
 		    		}     	
 		        };
 		        

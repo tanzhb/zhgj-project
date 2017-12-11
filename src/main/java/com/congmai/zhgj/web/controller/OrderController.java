@@ -344,6 +344,7 @@ public class OrderController {
     	String flag = "0"; //默认失败
     	OrderInfo orderInfo = json2Order(params);
     	orderInfo.setUpdateTime(new Date());
+    	orderInfo.setStatus("1");//在未确认状态提交申请的订单，设置为已确认
     	orderService.updateStatus(orderInfo);//更新备注
     	
 		//启动订单审批测试流程-start

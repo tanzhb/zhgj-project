@@ -511,7 +511,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 								}else if(row.deliverStatus=="2"){
                     				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已收货</span>';
 								}else if(row.deliverStatus=="3"){
-                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待发货</span>';/*已检验*/
+                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待出库</span>';
 								}else if(row.deliverStatus=="4"){
                     				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已出库</span>';
 								}else if(row.deliverStatus=="5"){
@@ -1206,7 +1206,8 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
                                    { mData: 'materielName' },
                                    { mData: 'specifications' },
                                    { mData: 'unit' },
-                                   { mData: 'supplyMateriels' }
+                                   { mData: 'supplyMateriels' },
+                                   { mData: 'stockCount' }
                              ],
                     'aoColumnDefs' : [ {
      							'targets' : 0,

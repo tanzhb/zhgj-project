@@ -614,7 +614,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 							                            				return '待审批';
 							                            			}else if(data=='2'){
 							                            				return '已签订';
-							                            			}else if(data=='3'||data=='1'){
+							                            			}else if(data=='3'){
 							                            				return '待签订';
 							                            			}else{
 							                            				return '已签订';
@@ -687,7 +687,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 			}
 			var status = table2.row('.active').data().status;
 			var comId= table2.row('.active').data().comId;
-			if(status!='3'&&status!='1'){
+			if(status!='3'){
 				toastr.warning('只能签订状态为‘待签订’的合同！');return;
 			}
 			
