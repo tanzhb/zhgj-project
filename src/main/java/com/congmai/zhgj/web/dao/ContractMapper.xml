@@ -61,7 +61,7 @@
 	contract a
 	LEFT JOIN orderInfo b ON a.serialNum=b.contractSerial
 	WHERE a.delFlg='0' AND b.buyComId IS NULL AND b.delFlg='0'
-	and b.status !=0
+	and b.status !=0 and b.status !=66 and b.status !=77 and b.status !=1  <!-- 审批通过的采购订单，才生成采购合同 -->
 	<!-- AND a.creator=#{userId} -->
 	GROUP BY(a.serialNum)
     </select>

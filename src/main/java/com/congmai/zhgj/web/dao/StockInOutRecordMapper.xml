@@ -1090,4 +1090,52 @@ sib.stockInCount
 	om.materielSerial = #{materielSerial,jdbcType=VARCHAR} and o.buyComId=#{materielOwner,jdbcType=VARCHAR})temp  where  temp.serialNum= td.deliverSerial
      )
      </select>
+     
+     
+     <select id="getMaterielZiJianStock"  parameterType="java.lang.String"   resultType="java.lang.String">
+	
+select (
+SELECT IFNULL(SUM(a.stockInCount ),0) from (SELECT
+		DISTINCT sib.serialNum,
+			sib.stockInCount
+
+		FROM
+			stockInbatch sib
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
+		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
+		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial AND s.status=1
+		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
+		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
+		AND (
+			stock.manageType = '1'
+				AND o.orderType != '委托采购'
+		)
+		
+		  WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR}
+)a)
+	  -
+	(  
+	 SELECT IFNULL(SUM(a.outCount ),0) from (
+	SELECT
+			DISTINCT sob.serialNum,
+sob.outCount
+		FROM
+			stockoutbatch sob
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial
+		LEFT JOIN delivery d ON d.serialNum = dm.deliverSerial
+		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial AND s.status=1
+		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
+		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
+		AND (
+			stock.manageType = '1'
+				AND  o.orderType != '委托采购'
+				
+		)
+		
+		WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR}
+)a)
+     </select>
 </mapper>

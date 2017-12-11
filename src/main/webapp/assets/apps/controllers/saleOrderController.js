@@ -524,7 +524,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 								}else if(row.deliverStatus=="2"){
                     				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已收货</span>';
 								}else if(row.deliverStatus=="3"){
-                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已检验</span>';
+                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待出库</span>';
 								}else if(row.deliverStatus=="4"){
                     				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已出库</span>';
 								}else if(row.deliverStatus=="5"){
@@ -1209,6 +1209,121 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
         /** *************订单物料操作 start*************** */
         
         var selectMateriel = function() {
+        	var thisAjaxUrl = "rest/materiel/findMaterielList?isLatestVersion=1&type=sale"
+        	var thisAoColumns = [
+                             { mData: 'serialNum' },
+                             { mData: 'materielNum' },
+                             { mData: 'materielName' },
+                             { mData: 'specifications' },
+                             { mData: 'unit' },
+                             { mData: 'supplyMateriels' },
+                             { mData: 'stockCount' }
+                             
+                       ];
+        	var thisAoColumnDefs = [ {
+				'targets' : 0,
+					'searchable' : false,
+					'orderable' : false,
+					
+					'render' : function(data,
+							type, row, meta) {
+						if(row.supplyMateriels.length>0){
+							if($scope.modalType=='single'){
+								return '<input type="radio" id="'+ row.serialNum +'" ng-click="getCheckedIds(\''+data+'\','+meta.row+')" name="serialNum" value="'
+								+ $('<div/>')
+										.text(
+												row.supplyMateriels[0].serialNum)
+										.html()
+								+ '">';
+
+							}else{
+								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+								"<input type='checkbox' class='checkboxes' data-checked=false name='material_serial'  id='"+ row.serialNum +"' ng-click='getCheckedIds(\""+data+"\","+meta.row+")' value="+ row.supplyMateriels[0].serialNum +" />" +
+								"<span></span></label>";
+							}
+						}else{
+							return '';
+						}
+						
+					},
+					"createdCell": function (td, cellData, rowData, row, col) {
+						 $compile(td)($scope);
+				       }
+				},{
+					'targets' : 1,
+					'render' : function(data,
+							type, row, meta) {
+						var ClauseFrameworkIcon='';// ClauseFramework图标
+						if(row.isCSD==1){
+							ClauseFrameworkIcon = '<span class="label label-sm label-success">B</span> '
+						}
+						return ClauseFrameworkIcon + data;
+					}
+
+				},{
+					'targets' : 5,
+					'render' : function(data,
+							type, row, meta) {
+						if(data.length>0){
+							var select='<select class="form-control" id="select'+row.serialNum+'" ng-model="model'+row.serialNum+'" ng-init="model'+row.serialNum+'=\''+data[0].serialNum+'\'" ng-change="changeSelectValue(\'select'+row.serialNum+'\',\''+row.serialNum+'\')">'
+							for(var i=0;i<data.length;i++){
+								if(data[i].supply){
+									select = select + '<option value="'+data[i].serialNum+'">'+data[i].supply.comName+'</option>';
+								}else{
+									select = select + '<option value="'+data[i].serialNum+'"></option>';
+								}
+								
+							}
+							select = select + '</select>';	
+							return select;
+						}else{
+							return '无供应商';
+						}
+					},
+					"createdCell": function (td, cellData, rowData, row, col) {
+					 $compile(td)($scope);
+			       }
+
+				}];
+        	//自主销售不需要供应商
+        	if($scope.saleOrder.orderType=='自主销售'){
+        		thisAjaxUrl = "rest/materiel/findMaterielList?isLatestVersion=1";
+        		thisAoColumns = [
+                                 { mData: 'serialNum' },
+                                 { mData: 'materielNum' },
+                                 { mData: 'materielName' },
+                                 { mData: 'specifications' },
+                                 { mData: 'unit' },
+                                 { mData: 'stockCount' }
+                           ];
+        		var thisAoColumnDefs = [ {
+    				'targets' : 0,
+    					'searchable' : false,
+    					'orderable' : false,
+    					'render' : function(data,
+    							type, row, meta) {
+    						return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+								"<input type='checkbox' class='checkboxes' data-checked=false  id='"+ row.serialNum +"' ng-click='ziZhuGetCheckedIds(\""+data+"\","+meta.row+")' name='material_serial' value="+ row.serialNum +" />" +
+								"<span></span></label>";
+						},
+    					"createdCell": function (td, cellData, rowData, row, col) {
+    						 $compile(td)($scope);
+    				       }
+    				},{
+    					'targets' : 1,
+    					'render' : function(data,
+    							type, row, meta) {
+    						var ClauseFrameworkIcon='';// ClauseFramework图标
+    						if(row.isCSD==1){
+    							ClauseFrameworkIcon = '<span class="label label-sm label-success">B</span> '
+    						}
+    						return ClauseFrameworkIcon + data;
+    					}
+
+    				}];
+        	}
+        	
+        	
                  a = 0;
                  App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
                  table = $("#select_sample_2").DataTable({
@@ -1242,89 +1357,9 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
                      pageLength: 5,// 每页显示数量
                      processing: true,// loading等待框
 // serverSide: true,
-                     ajax: "rest/materiel/findMaterielList?isLatestVersion=1&type=sale",// 加载数据中
-                     "aoColumns": [
-                                   { mData: 'serialNum' },
-                                   { mData: 'materielNum' },
-                                   { mData: 'materielName' },
-                                   { mData: 'specifications' },
-                                   { mData: 'unit' },
-                                   { mData: 'supplyMateriels' }
-                             ],
-                    'aoColumnDefs' : [ {
-     							'targets' : 0,
-     							'searchable' : false,
-     							'orderable' : false,
-     							
-     							'render' : function(data,
-     									type, row, meta) {
-     								if(row.supplyMateriels.length>0){
-     									if($scope.modalType=='single'){
-         	  								return '<input type="radio" id="'+ row.serialNum +'" ng-click="getCheckedIds(\''+data+'\','+meta.row+')" name="serialNum" value="'
-       										+ $('<div/>')
-       												.text(
-       														row.supplyMateriels[0].serialNum)
-       												.html()
-       										+ '">';
-
-         								}else{
-         	  								/*return '<input type="checkbox" data-checked=false id="'+ row.serialNum +'" ng-click="getCheckedIds(\''+data+'\','+meta.row+')" name="material_serial" value="'
-       										+ $('<div/>')
-       												.text(
-       														row.supplyMateriels[0].serialNum)
-       												.html()
-       										+ '">';*/
-
-         									return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
-         									"<input type='checkbox' class='checkboxes' data-checked=false name='material_serial'  id='"+ row.serialNum +"' ng-click='getCheckedIds(\""+data+"\","+meta.row+")' value="+ row.supplyMateriels[0].serialNum +" />" +
-         									"<span></span></label>";
-         								
-
-         								}
-     								}else{
-     									return '';
-     								}
-     								
-     							},
-     							"createdCell": function (td, cellData, rowData, row, col) {
-     								 $compile(td)($scope);
-     						       }
-     						},{
-     							'targets' : 1,
-     							'render' : function(data,
-     									type, row, meta) {
-     								var ClauseFrameworkIcon='';// ClauseFramework图标
-     								if(row.isCSD==1){
-     									ClauseFrameworkIcon = '<span class="label label-sm label-success">B</span> '
-     								}
-     								return ClauseFrameworkIcon + data;
-     							}
-
-     						},{
-     							'targets' : 5,
-     							'render' : function(data,
-     									type, row, meta) {
-     								if(data.length>0){
-     									var select='<select class="form-control" id="select'+row.serialNum+'" ng-model="model'+row.serialNum+'" ng-init="model'+row.serialNum+'=\''+data[0].serialNum+'\'" ng-change="changeSelectValue(\'select'+row.serialNum+'\',\''+row.serialNum+'\')">'
- 	 									for(var i=0;i<data.length;i++){
- 	 										if(data[i].supply){
- 	 											select = select + '<option value="'+data[i].serialNum+'">'+data[i].supply.comName+'</option>';
- 	 										}else{
- 	 											select = select + '<option value="'+data[i].serialNum+'"></option>';
- 	 										}
- 	 										
- 	 									}
- 	 									select = select + '</select>';	
- 	     								return select;
-     								}else{
-     									return '无供应商';
-     								}
-     							},
-     							"createdCell": function (td, cellData, rowData, row, col) {
-    								 $compile(td)($scope);
-    						       }
-
-     						}]
+                     ajax: thisAjaxUrl,// 加载数据中
+                     "aoColumns": thisAoColumns,
+                    'aoColumnDefs' : thisAoColumnDefs
 
                  }).on('order.dt',
                          function() {
@@ -1360,6 +1395,40 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
       			data.materiel.materielSerial = data.materiel.serialNum; //为保存操作做准备，新增物料serialNum为空
       			data.materiel.serialNum = null
       			data.materiel.supplyMaterielSerial = $("#"+serialNum).val();
+      			if($("#"+serialNum).data("radio")==true){ //修改物料弹出框
+      				$scope.serialNums = []; //清空选中数组
+      				$scope.serialNums.push(data);
+      				$scope.selectedMaterielHide = true; //不显示已选物料
+      				return;
+      			}
+      			if($("#"+serialNum).data("checked")||$("#"+serialNum).data("checked")==undefined){
+      				for(var i=0;i<$scope.serialNums.length;i++){
+      					if($scope.serialNums[i].serialNum==serialNum){
+      						$scope.serialNums.splice(i,1);
+      						$("#"+serialNum).attr("checked",false);
+      						$("#"+serialNum).data("checked",false);
+      						break;
+      					}
+      					
+      				}
+      				
+      			}else{
+      				$scope.serialNums.push(data);
+      				$("#"+serialNum).data("checked",true);
+      				$("#"+serialNum).attr("checked",true);
+      			}
+      			
+      		}
+      		
+      		/**
+      		 * checkbox点击事件（生成选中内容）（自主销售）
+      		 */
+      		$scope.ziZhuGetCheckedIds = function(serialNum,index){
+      			var data={};
+      			data.serialNum = serialNum;
+      			data.materiel = table.row(index).data(); //获取一行数据
+      			data.materiel.materielSerial = data.materiel.serialNum; //为保存操作做准备，新增物料serialNum为空
+
       			if($("#"+serialNum).data("radio")==true){ //修改物料弹出框
       				$scope.serialNums = []; //清空选中数组
       				$scope.serialNums.push(data);
@@ -1501,7 +1570,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 		}
     	
         $scope.copyMateriels = {};
-    	$scope.confirmSelect = function(){
+    	$scope.confirmSelect = function(){//非自主销售订单，选择供应物料确认
     		if($scope.modalType=='single'){
     			var id_count = table.$('input[name="serialNum"]:checked').length;
     			if(id_count==0){
@@ -1600,7 +1669,54 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 	       		     });
     	}
     	
-
+    	$scope.ziZhuConfirmSelect = function(){//自主销售订单，选择基本物料确认
+    		if($scope.serialNums.length==0){ //判断是否选择了物料
+				toastr.warning("请选择物料");
+				return;
+			}
+	    		//--------批量增加物料信息START--------------
+    			var ids = '';
+				for(var i=0;i<$scope.serialNums.length;i++){
+					if (ids == '') {
+						ids = $scope.serialNums[i].materiel.serialNum;
+					} else{
+						ids = ids + ',' + $scope.serialNums[i].materiel.serialNum;
+					}
+				}
+        		handle.blockUI();
+        		var promise = materielService.chooseBasicMateriels(ids);
+        		promise.then(function(data){
+        			toastr.success("添加成功！");
+        			handle.unblockUI();
+        			if($scope.orderMateriel.length==0){
+        				for(var i = 0;i < data.data.length;i++){// data.data为选择的标准物料
+        					$scope.tempMateriel = {};
+        					$scope.tempMateriel.materiel = (data.data)[i];
+        					$scope.tempMateriel.orderSerial = $scope.saleOrder.serialNum;
+        					$scope.tempMateriel.materielSerial = (data.data)[i].serialNum;
+        					$scope.orderMateriel.push($scope.tempMateriel);
+        					$scope["orderMaterielInput"+i] = false;
+        					$scope["orderMaterielShow"+i] = false;
+        				}
+        			}else{
+        				for(var i = 0;i < data.data.length;i++){// data.data为选择的标准物料
+        					$scope.tempMateriel = {};
+        					$scope.tempMateriel.materiel = (data.data)[i];
+        					$scope.tempMateriel.orderSerial = $scope.saleOrder.serialNum;
+        					$scope.tempMateriel.materielSerial = (data.data)[i].serialNum;
+        					$scope.orderMateriel.push($scope.tempMateriel);
+	        				$scope["orderMaterielInput"+(length+i)] = false;
+							$scope["orderMaterielShow"+(length+i)] = false;
+							/*$scope["orderMaterielInput" + ($scope.orderMateriel.length-1)] = true;
+							$scope["orderMaterielShow" + ($scope.orderMateriel.length-1)] = true;*/
+		        		}
+        			}
+        			$scope.copyMateriels = angular.copy($scope.orderMateriel);
+        			$("#basicMaterielInfo").modal("hide");
+        		},function(data){
+        			// 调用承诺接口reject();
+        		});
+    	}
      	 //关闭物料列表时，清除选中状态START--------------
     	 $('#basicMaterielInfo').on('hide.bs.modal', function (e) { 
     		 clearChecked();

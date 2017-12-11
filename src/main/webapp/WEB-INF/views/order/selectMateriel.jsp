@@ -27,7 +27,9 @@
 	                            <th> 物料名称 </th>
 	                            <th> 规格型号 </th>
 	                            <th> 单位 </th>
-	                            <th> 供应商 </th>
+	                            <th ng-if="saleOrder.orderType!='自主销售'"> 供应商 </th>
+	                            <th> 库存数量 </th>
+	                            
 	                        </tr>
 	                    </thead>
 	                    <tbody>
@@ -37,7 +39,9 @@
 	            <div class="modal-footer">
 					<button type="button" data-dismiss="modal"
 						class="btn dark btn-outline">取消</button>
-					<button type="button" ng-click="confirmSelect()" class="btn green">确定
+					<button ng-if="saleOrder.orderType!='自主销售'" type="button" ng-click="confirmSelect()" class="btn green">确定
+						</button>
+					<button ng-if="saleOrder.orderType=='自主销售'" type="button" ng-click="ziZhuConfirmSelect()" class="btn green">确定
 						</button>
 				</div>
 			</div>

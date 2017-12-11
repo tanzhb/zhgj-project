@@ -206,15 +206,6 @@ margin-right: 20px;
                   <div class="row">
                   		<div class="col-md-4">
                              <div class="form-group ">
-                                <label class="control-label col-md-5 bold">采购合同号：</label>
-                                 <div class="control-label col-md-7">
-                                     <p ng-if="$state.current.name=='viewBuyOrder'||$state.current.name=='submitBuyApply'"  > <a href="javascript:void(0);" ng-click="goContract()">{{contract.contractNum}}</a> </p>
-                                     <p ng-if="$state.current.name!='viewBuyOrder'&&$state.current.name!='submitBuyApply'"  > {{contract.contractNum}} </p>
-                                 </div>
-                             </div>
-                         </div>
-                         <div class="col-md-4">
-                             <div class="form-group ">
                                 <label class="control-label col-md-5 bold">电子合同：</label>
                                  <div class="control-label col-md-7">
                                      <label ng-if="contract.electronicContract==null||contract.electronicContract==''" class="c_edit" >未上传附件</label>
@@ -222,6 +213,16 @@ margin-right: 20px;
                                  </div>
                              </div>
                          </div>
+                  		<div class="col-md-4">
+                             <div class="form-group ">
+                                <label class="control-label col-md-5 bold">采购合同号：</label>
+                                 <div class="control-label col-md-7">
+                                     <p ng-if="$state.current.name=='viewBuyOrder'||$state.current.name=='submitBuyApply'"  > <a href="javascript:void(0);" ng-click="goContract()">{{contract.contractNum}}</a> </p>
+                                     <p ng-if="$state.current.name!='viewBuyOrder'&&$state.current.name!='submitBuyApply'"  > {{contract.contractNum}} </p>
+                                 </div>
+                             </div>
+                         </div>
+                         
                          <div class="col-md-4">
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">合同签订日期：</label>
@@ -337,14 +338,6 @@ margin-right: 20px;
                          </div>
                          <div class="col-md-4">
                              <div class="form-group ">
-                                <label class="control-label col-md-5 bold">采购合同号：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > <a href="javascript:void(0);" ng-if="$state.current.name=='viewBuyOrder'||$state.current.name=='submitBuyApply'" ng-click="goContract()">{{contract.contractNum}}</a> </p>
-                                 </div>
-                             </div>
-                         </div>
-                         <div class="col-md-4">
-                             <div class="form-group ">
                                 <label class="control-label col-md-5 bold">电子合同：</label>
                                  <div class="control-label col-md-7">
                                      <label ng-if="contract.electronicContract==null||contract.electronicContract==''" class="c_edit" >未上传附件</label>
@@ -352,6 +345,15 @@ margin-right: 20px;
                                  </div>
                              </div>
                          </div>
+                         <div class="col-md-4">
+                             <div class="form-group ">
+                                <label class="control-label col-md-5 bold">采购合同号：</label>
+                                 <div class="control-label col-md-7">
+                                     <p  > <a href="javascript:void(0);" ng-if="$state.current.name=='viewBuyOrder'||$state.current.name=='submitBuyApply'" ng-click="goContract()">{{contract.contractNum}}</a> </p>
+                                 </div>
+                             </div>
+                         </div>
+                         
                          <!--/span-->
                      </div>
                      <div  class="row">
@@ -490,14 +492,6 @@ margin-right: 20px;
                          <!--/span-->
                          <div class="col-md-4">
                              <div class="form-group ">
-                                <label class="control-label col-md-5 bold">采购合同号：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > <a href="javascript:void(0);" ng-if="$state.current.name=='viewBuyOrder'||$state.current.name=='submitBuyApply'" ng-click="goContract()">{{contract.contractNum}}</a> </p>
-                                 </div>
-                             </div>
-                         </div>
-                         <div class="col-md-4">
-                             <div class="form-group ">
                                 <label class="control-label col-md-5 bold">电子合同：</label>
                                  <div class="control-label col-md-7">
                                      <label ng-if="contract.electronicContract==null||contract.electronicContract==''" class="c_edit" >未上传附件</label>
@@ -505,6 +499,15 @@ margin-right: 20px;
                                  </div>
                              </div>
                          </div>
+                         <div class="col-md-4">
+                             <div class="form-group ">
+                                <label class="control-label col-md-5 bold">采购合同号：</label>
+                                 <div class="control-label col-md-7">
+                                     <p  > <a href="javascript:void(0);" ng-if="$state.current.name=='viewBuyOrder'||$state.current.name=='submitBuyApply'" ng-click="goContract()">{{contract.contractNum}}</a> </p>
+                                 </div>
+                             </div>
+                         </div>
+                         
                          <!--/span-->
                      	<div class="col-md-4">
                              <div class="form-group ">
@@ -807,7 +810,7 @@ margin-right: 20px;
 								<th>含税金额</th>
 								<th>交付日期</th>
 								<th>最晚交付日期</th>
-								<th>交付/提货地点</th>
+								<th>交付地址</th>
                                  </tr>
                              </thead>
                              <tbody>

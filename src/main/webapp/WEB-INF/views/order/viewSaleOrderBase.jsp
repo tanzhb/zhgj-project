@@ -218,15 +218,7 @@ margin-right: 20px;
                          </div>
                      </div>
                      <div class="row">
-                        	<div class="col-md-4">
-                              <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">销售合同号：</label>
-                                  <div class="control-label col-md-7">
-                                      <a href="javascript:void(0);" ng-click="goContract()">{{contract.contractNum}}</a>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="col-md-4">
+                      	<div class="col-md-4">
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">电子合同：</label>
                                  <div class="control-label col-md-7">
@@ -235,6 +227,15 @@ margin-right: 20px;
                                  </div>
                              </div>
                          </div>
+                        	<div class="col-md-4">
+                              <div class="form-group ">
+                                 <label class="control-label col-md-5 bold">销售合同号：</label>
+                                  <div class="control-label col-md-7">
+                                      <a href="javascript:void(0);" ng-click="goContract()">{{contract.contractNum}}</a>
+                                  </div>
+                              </div>
+                          </div>
+                         
                          <div class="col-md-4">
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">合同签订日期：</label>
@@ -363,14 +364,6 @@ margin-right: 20px;
                              </div>
                          </div>
                          <div class="col-md-4">
-                              <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">销售合同号：</label>
-                                  <div class="control-label col-md-7">
-                                      <a href="javascript:void(0);" ng-click="goContract()">{{contract.contractNum}}</a>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="col-md-4">
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">电子合同：</label>
                                  <div class="control-label col-md-7">
@@ -379,6 +372,15 @@ margin-right: 20px;
                                  </div>
                              </div>
                          </div>
+                         <div class="col-md-4">
+                              <div class="form-group ">
+                                 <label class="control-label col-md-5 bold">销售合同号：</label>
+                                  <div class="control-label col-md-7">
+                                      <a href="javascript:void(0);" ng-click="goContract()">{{contract.contractNum}}</a>
+                                  </div>
+                              </div>
+                          </div>
+                          
                          <!--/span-->
                      </div>
                      <div class="row">
@@ -532,15 +534,7 @@ margin-right: 20px;
                          /span
                      </div> -->
                      <div class="row">
-                        <div class="col-md-4">
-                              <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">销售合同号：</label>
-                                  <div class="control-label col-md-7">
-                                      <a href="javascript:void(0);" ng-click="goContract()">{{contract.contractNum}}</a>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="col-md-4">
+                      	<div class="col-md-4">
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">电子合同：</label>
                                  <div class="control-label col-md-7">
@@ -549,6 +543,15 @@ margin-right: 20px;
                                  </div>
                              </div>
                          </div>
+                        <div class="col-md-4">
+                              <div class="form-group ">
+                                 <label class="control-label col-md-5 bold">销售合同号：</label>
+                                  <div class="control-label col-md-7">
+                                      <a href="javascript:void(0);" ng-click="goContract()">{{contract.contractNum}}</a>
+                                  </div>
+                              </div>
+                          </div>
+                         
                          <div class="col-md-4">
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">合同签订日期：</label>
@@ -841,11 +844,11 @@ margin-right: 20px;
                                   <tr>
 									<th>商品编号</th>
 									<th ng-if="saleOrder.tradeType =='外贸'">海关编码</th>
-									<th>供应商商品编号</th>
+									<th ng-if="saleOrder.orderType!='自主销售'">供应商商品编号</th>
 									<th>物料名称</th>
 									<th>规格型号</th>
 									<th>单位</th>
-									<th>供应商</th>
+									<th ng-if="saleOrder.orderType!='自主销售'">供应商</th>
 									<th>销售数量</th>
 									<th>指导单价</th>
 									<th>含税单价</th>
@@ -865,7 +868,7 @@ margin-right: 20px;
 									<th>含税金额</th>
 									<th>交付日期</th>
 									<th>最晚交付日期</th>
-									<th>交付/提货地点</th>
+									<th>交付地址</th>
                                   </tr>
                               </thead>
                               <tbody>
@@ -877,7 +880,7 @@ margin-right: 20px;
 			                          <td ng-if="saleOrder.tradeType =='外贸'">
 			                          		<p class="form-control-static" > {{_orderMateriel.materiel.customsCode}} </p>
 			                          </td>
-			                          <td>
+			                          <td ng-if="saleOrder.orderType!='自主销售'">
 			                                <p class="form-control-static" > {{_orderMateriel.supplyMateriel.supplyMaterielNum}} </p>
 			                          </td>
 			                          <td>
@@ -889,7 +892,7 @@ margin-right: 20px;
 			                          <td>
                                       		<p class="form-control-static" > {{_orderMateriel.materiel.unit}} </p>
 			                          </td>
-			                          <td>
+			                          <td ng-if="saleOrder.orderType!='自主销售'">
 			                                <p class="form-control-static" > {{_orderMateriel.supplyMateriel.supply.comName}} </p>
 			                          </td>
 			                          <td>  
@@ -945,13 +948,13 @@ margin-right: 20px;
                                       
                                   </tr>
                                   <tr>
-									<th></th>
+									<th ng-if="saleOrder.orderType!='自主销售'"></th>
 									<th ng-if="saleOrder.tradeType =='外贸'"></th>
 									<th clase="bold">合计：</th>
 									<th clase="bold">{{totalCount()}}</th>
 									<th></th>
 									<th></th>
-									<th>{{totalSupply()}}</th>
+									<th ng-if="saleOrder.orderType!='自主销售'">{{totalSupply()}}</th>
 									<th>{{totalMaterielCount()}}</th>
 									<th></th>
 									<th></th>

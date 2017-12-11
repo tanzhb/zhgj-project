@@ -380,8 +380,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 						if(row.status==0){
 							return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  >未开始</span>';
 						}else if(row.status==1){
-
-							if(row.processBase!=""&&row.processBase!=null){
+							/*if(row.processBase!=""&&row.processBase!=null){
                     			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
 									return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">审核中</span>';
 								}else if(row.processBase.status=="APPROVAL_SUCCESS"){
@@ -393,8 +392,8 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 								}
                     		}else{
                     			return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未审批</span>';
-                    		}
-							return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:#fcb95b">待审批</span>';
+                    		}*/
+							return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:#fcb95b">待签合同</span>';
 						}else if(row.status==2){
 							return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已签合同</span>';
 						}else if(row.status==3){
@@ -404,7 +403,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 						}else if(row.status=="77"){
             				return clickhtm + '<span style="color:green" ng-click="viewOrderLog(\''+row.serialNum+'\')">已确认</span>';
 						}else{
-							if(row.processBase!=""&&row.processBase!=null){
+							/*if(row.processBase!=""&&row.processBase!=null){
                     			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
 									return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">审核中</span>';
 								}else if(row.processBase.status=="APPROVAL_SUCCESS"){
@@ -416,8 +415,8 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 								}
                     		}else{
                     			return clickhtm + '';
-                    		}
-							
+                    		}*/
+							return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:#fcb95b">待签合同</span>';
 						}
 					},
 					"createdCell": function (td, cellData, rowData, row, col) {
@@ -454,7 +453,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 						}else if(row.deliverStatus=="2"){
             				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已收货</span>';
 						}else if(row.deliverStatus=="3"){
-            				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已检验</span>';
+            				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待入库</span>';
 						}else if(row.deliverStatus=="4"){
             				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已出库</span>';
 						}else if(row.deliverStatus=="5"){
@@ -980,7 +979,8 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
                                    { mData: 'materielNum' },
                                    { mData: 'materielName' },
                                    { mData: 'specifications' },
-                                   { mData: 'unit' }
+                                   { mData: 'unit' },
+                                   { mData: 'stockCount' }
                              ],
                     'aoColumnDefs' : [ {
      							'targets' : 0,

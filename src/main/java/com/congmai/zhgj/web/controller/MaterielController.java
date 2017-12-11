@@ -400,7 +400,7 @@ public class MaterielController {
      * @Description 查询物料列表//全部查询，或根据父节点查询
      * @param parent(若有值，则查询该分类下的物料)
      * @param isLatestVersion(若有值为1，则查询所以已发布的正式物料)
-     * @param type
+     * @param type 销售订单选择物料，筛选有供应商的物料
      * @return
      */
     @RequestMapping("/findMaterielList")
