@@ -253,7 +253,7 @@
 									</div>
 									<!--/row-->
 									
-									<div class="row">
+									<div class="row" style="border-top:1px solid #dddddd;padding-top: 20px;">
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="dWarehouseSerial">发货仓库<!--  <span  ng-hide="deliverAdd"  class="required"> * </span> --></label>
@@ -338,7 +338,7 @@
 									</div>
 									<!--/row-->
 						
-									<div class="row">
+									<div class="row" style="border-top:1px solid #dddddd;padding-top: 20px;">
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="transportType">运输方式</label>

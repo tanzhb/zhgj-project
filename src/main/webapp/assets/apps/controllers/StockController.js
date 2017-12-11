@@ -154,11 +154,11 @@ angular
 													}, {
 														mData : 'specifications'
 													},{
-														mData : 'belongWarehouseNumZijian'
+														mData : 'belongWarehouseNameZijian'//belongWarehouseNumZijian 所属仓库数
 													}, {
 														mData : 'currentAmount'
 													}, {
-														mData : 'averrageWhAge'
+														mData : 'firstInDateZijian'//averrageWhAge
 													}, {
 														mData : 'preSaleAmount'
 													},{
@@ -199,6 +199,32 @@ angular
 													},"createdCell": function (td, cellData, rowData, row, col) {
 														 $compile(td)($scope);
 												    }
+												},{
+													'targets' : 5,
+													'render' : function(data,
+															type, row, meta) {
+				 	    								if(data==''||data==null){
+				 	    									return "";
+				 	    								}else if(count(data,',')<=1){
+				 	    									return  data ;
+				 	    								}else if(count(data,',')>1){
+				 	    									return  '<span title="仓库名称:'+data+'">'+data.substring(0,data.indexOf(','))+".........."+'</span>' ;
+				 	    								}
+													},"createdCell": function (td, cellData, rowData, row, col) {
+														 $compile(td)($scope);
+												    }
+												},{
+													'targets' : 7,
+													'render' : function(data,
+															type, row, meta) {
+				 	    								if(data==''||data==null){
+				 	    									return "";
+				 	    								}else{
+				 	    									debugger;
+				 	    									return daysBetween(timeStamp2ShortString(Date.parse(new Date())),data);
+				 	    								}
+														
+													}
 												},{
 													'targets' : 11,
 													'render' : function(data,
@@ -297,11 +323,11 @@ angular
 										}, {
 											mData : 'specifications'
 										},{
-											mData : 'belongWarehouseNumDaiguan'
+											mData : 'belongWarehouseNameDaiguan'
 										}, {
 											mData : 'currentAmount'
 										}, {
-											mData : 'averrageWhAge'
+											mData : 'firstInDateDaiguan'
 										}, {
 											mData : 'preSaleAmount'
 										},{
@@ -342,6 +368,32 @@ angular
 										},"createdCell": function (td, cellData, rowData, row, col) {
 											 $compile(td)($scope);
 									    }
+									},{
+										'targets' : 5,
+										'render' : function(data,
+												type, row, meta) {
+	 	    								if(data==''||data==null){
+	 	    									return "";
+	 	    								}else if(count(data,',')<=1){
+	 	    									return  data ;
+	 	    								}else if(count(data,',')>1){
+	 	    									return  '<span title="仓库名称:'+data+'">'+data.substring(0,data.indexOf(','))+".........."+'</span>' ;
+	 	    								}
+										},"createdCell": function (td, cellData, rowData, row, col) {
+											 $compile(td)($scope);
+									    }
+									},{
+										'targets' : 7,
+										'render' : function(data,
+												type, row, meta) {
+	 	    								if(data==''||data==null){
+	 	    									return "";
+	 	    								}else{
+	 	    									debugger;
+	 	    									return daysBetween(timeStamp2ShortString(Date.parse(new Date())),data);
+	 	    								}
+											
+										}
 									},{
 										'targets' : 11,
 										'render' : function(data,
@@ -1098,6 +1150,11 @@ angular
 						        	},function(data){
 						        		//调用承诺接口reject();
 						        	});
+							}
+							function count(str,char){//统计逗号出现的次数
+							 var str=str;
+							 var num=(str.split(char)).length-1;
+							 return num;
 							}
 							 function getStockInfo(serialNum){//查看库区
 						    	   if(!handle.isNull(serialNum)){

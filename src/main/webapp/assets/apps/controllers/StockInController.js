@@ -350,6 +350,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 			 * 获得仓库名
 			 */
 			$scope.getWarehouseName = function(type){
+				debugger;
 				for(var i in $scope.warehouses){
 					if(type=="deliver"){
 						if($scope.warehouses[i].serialNum == $scope.deliver.warehouseSerial){

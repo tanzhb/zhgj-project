@@ -489,8 +489,8 @@
 							data-toggle="tab">出库信息</a></li>
 						<!-- <li class="bold"><a data-target="#tab_1_3" data-toggle="tab">收货信息</a>
 						</li> -->
-						<!-- <li class="bold"><a data-target="#tab_1_3" data-toggle="tab">运输信息</a></li>-->
-						<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">物料信息</a></li>
+						<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">发货信息</a></li>
+						<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">物料信息</a></li>
 						<li class="dropdown pull-right tabdrop">
 							<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
 						</li>												
@@ -506,7 +506,7 @@
 								<div class="form-body">
 									<div class="alert alert-danger display-hide">
                                                 <button class="close" data-close="alert"></button>请先输出正确数据！</div>
-                                                 <jsp:include  page="../takeDelivery/stockInOutDeliveryInfo.jsp" />
+                                              <%--    <jsp:include  page="../takeDelivery/stockInOutDeliveryInfo.jsp" /> --%>
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
@@ -534,7 +534,7 @@
                                                     <label class="control-label bold" for="stockDate">出库日期 </label>
                                                     <div class="">
                                                     <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" >{{record.stockDate}}</p>
+                                                         <p class="control-label left" >{{record.stockDate|date:'yyyy-MM-dd'}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -651,6 +651,10 @@
          				</div>
          					</div>
          					<div class="tab-pane fade" id="tab_1_2"  >
+         					<jsp:include  page="../takeDelivery/stockInOutDeliveryInfo.jsp" />
+         					</div>
+         					
+         					<div class="tab-pane fade" id="tab_1_3"  >
          					<!-- <!--  <div class="portlet-body">
 						<div class="table-scrollable">
 							<table id="deliveryMaterielTable"
@@ -814,7 +818,7 @@
 							<td>{{materiel.inOutNums}}<span ng-repeat="stockInBatch in materiel.stockInBatchs track by $index">
 												<span ng-if="!$first">;</span> {{stockInBatch.batchNum}}({{stockInBatch.stockInCount}})
 												</span></td>
-							<td>{{materiel.stockCount}}</td>
+							<td>{{materiel.stockCount==null?"0":materiel.stockCount}}</td>
 							<td>{{materiel.deliverCount-materiel.stockCount}}</td>
 							<td>{{materiel.stockRemark}}</td>
 							<td>

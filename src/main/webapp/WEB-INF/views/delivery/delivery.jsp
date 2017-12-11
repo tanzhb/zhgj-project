@@ -262,15 +262,15 @@
 				                                     <span></span>
 				                                 </label>
 										</th>
-										<th>出库明细号</th>
+										<th>出库单号</th>
 										<th>出库类型</th>
 										<th>商品名称</th>
 										<th>规格型号</th>
 										<th>出库日期</th>
 										<th>出库数量</th>
-										<th>关联批次号</th>
+										<th>销售订单号</th>
 										<th>收货方</th>
-										<th>关联单据号</th>
+										<th>发货计划单号</th>
 										<th>状态</th>
 									</tr>
 								</thead>

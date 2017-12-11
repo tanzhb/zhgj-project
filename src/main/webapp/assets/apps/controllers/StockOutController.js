@@ -266,9 +266,9 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					
 					var arraySerialNums=$scope.arraySerialNums;
 					var deliveryMaterielSerialNums =$scope.deliveryMaterielSerialNums;
-					handle.blockUI();
+					
 					for(var i=0;i < deliveryMaterielSerialNums.length;i++){
-						if($scope["arraySerialNums"+deliveryMaterielSerialNums[i]]==undefined&&$scope.takeDeliveryMateriels[i].stockOutMateriels.length==0){
+						if($scope["arraySerialNums"+deliveryMaterielSerialNums[i]]==undefined&&$scope.takeDeliveryMateriels[i].stockOutMateriels.length==0&&$scope.takeDeliveryMateriels[i].currentStockAmount>0){
 							toastr.warning("存在未选择出库批次的物料!");
 							return;
 						}
@@ -304,6 +304,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 						//params.stockOutMateriels.push($scope.takeDeliveryMateriels[i].stockOutMateriels);
 					}
 					}
+					handle.blockUI();
 					var promise = takeDeliveryService
 							.saveStockOutData(params);
 					promise.then(function(data) {
@@ -332,6 +333,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 			}
 			
 			$scope.getWarehouseName = function(type){
+				debugger;
 				for(var i in $scope.warehouses){
 					if(type=="deliver"){
 						if($scope.warehouses[i].serialNum == $scope.deliver.warehouseSerial){
@@ -884,7 +886,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 							 toastr.warning("重新选择出库,数量为"+value+"!");
 							
 						}
-						$scope.judgeNumber(stockCount,stockOutCount,serialNum);
+						//$scope.judgeNumber(stockCount,stockOutCount,serialNum);
 						
 					}
 					

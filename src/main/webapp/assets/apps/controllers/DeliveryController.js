@@ -3034,12 +3034,12 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
                                 { mData: 'stockInOutRecord.serialNum' },
                                 { mData: 'stockInOutRecord.inOutNum' },
                                 { mData: 'stockInOutRecord.inOutType' },
-                                { mData: 'orderMateriel'},
-                                { mData: 'orderMateriel'},
+                                { mData: 'materiel'},
+                                { mData: 'materiel'},
                                 { mData: 'stockInOutRecord.stockDate' },
                                 { mData: 'stockCount' },
-                                { mData: 'batchNum' },
-                                { mData: 'stockInOutRecord.shipperOrReceiverName' },
+                                { mData: 'orderNum' },
+                                { mData: 'stockInOutRecord.shipperOrReceiver' },
                                 { mData: 'delivery' },
                                 { mData: 'stockInOutRecord.status' }
                           ],
@@ -3082,7 +3082,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
   								if(data==null){
   									return "";
   								}else{
-  									return data.materiel.materielName;
+  									return data.materielName;
   								}
   								
   							}
@@ -3093,7 +3093,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
   								if(data==null){
   									return "";
   								}else{
-  									return data.materiel.specifications;
+  									return data.specifications;
   								}
   							}
   						},{

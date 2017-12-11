@@ -253,13 +253,13 @@
 									</div>
 									<!--/row-->
 									
-									<div class="row">
+									<div class="row"  style="border-top:1px solid #dddddd;padding-top: 20px;">
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="dWarehouseSerial">发货仓库 <!-- <span  ng-hide="deliverAdd"  class="required"> * </span> --></label>
                                                     <div class="">
                                                     <div  ng-hide="deliverAdd" >
-                                                    	<select class="bs-select1 form-control order" data-live-search="true"  id="dWarehouseSerialnum"  name="dWarehouseSerial" ng-model="deliver.warehouseSerial"  ng-change="getWarehouseName('deliver')" ng-hide="deliverAdd"  data-size="">
+                                                    	<select class="form-control"  data-live-search="true"  id="dWarehouseSerialnum"  name="dWarehouseSerial" ng-model="deliver.warehouseSerial"  ng-change="getWarehouseName('deliver')" ng-hide="deliverAdd"  data-size="">
 	                                                        <option value=""></option>
 	                                                        <option  ng-repeat="warehouse in warehouselistf" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
 	                                                    </select>
@@ -338,7 +338,7 @@
 									</div>
 									<!--/row-->
 						
-									<div class="row">
+									<div class="row" style="border-top:1px solid #dddddd;padding-top: 20px;">
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="transportType">运输方式</label>

@@ -256,7 +256,7 @@
 									</div>
 								</div>
 
-								<div class="portlet-body form">
+								<div class="portlet-body form"  style="border-top:1px solid #dddddd;" >
 									<!-- BEGIN FORM-->
 									<div class="form-body">
 										<div class="row">
@@ -499,7 +499,7 @@
 											/span
 										</div>
 										/row -->
-											<div class="row">
+											<div class="row"  style="border-top:1px solid #dddddd;padding-top: 20px;">
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">运输方式</label>

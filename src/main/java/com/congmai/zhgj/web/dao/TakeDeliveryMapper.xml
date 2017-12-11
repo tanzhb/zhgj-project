@@ -171,7 +171,8 @@
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="deliverAddress" property="deliverAddress" jdbcType="VARCHAR" />
-    
+    <result column="takeDeliverAddress" property="takeDeliverAddress" jdbcType="VARCHAR" />
+   
      <result column="inOutSerial" property="inOutSerial" jdbcType="VARCHAR" />
     <result column="inOutNum" property="inOutNum" jdbcType="VARCHAR" />
     <result column="inOutType" property="inOutType" jdbcType="TIMESTAMP" />
@@ -362,7 +363,7 @@
     d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, d.deliverAddress,
     dt.transportType,d.supplyComId,d.buyComId,
 	td.serialNum as tdSerialNum,td.warehouseSerial as tdWarehouseSerial,td.takeDeliverDate,td.receiver as tdReceiver,td.contactNum as tdContactNum,td.takeDeliverNum,td.remark as take_delivery_remark,
-	td.status,
+	td.status,td.takeDeliverAddress,
 	 sr. inOutNum as inOutNum,  sr.inOutType as inOutType, sr.remark as  inOutRemark,sr.packageCount as  inOutPackageCount, sr.serialNum as inOutSerial
     from takeDelivery td
     left join delivery  d on d.serialNum = td.deliverSerial

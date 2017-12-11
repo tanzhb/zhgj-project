@@ -97,8 +97,8 @@
 													<th>包装数量</th>
 													<th>物料数量</th>
 													<th>发货日期</th>
-													<th>运输方式</th>
-													<th>发货/提货地址</th>
+													<th>预计到货日期</th><!-- 运输方式 -->
+													<th>收货地址</th><!-- 发货/提货地址 -->
 													<th>备注</th>
 													<th>状态</th>
 													<th>操作</th>
@@ -272,15 +272,15 @@
 												<input type="checkbox" class="group-checkable"
 												data-set="#stockInTable .checkboxes" /> <span></span>
 										</label></th>
-										<th>入库明细号</th>
+										<th>入库单号</th>
 										<th>入库类型</th>
 										<th>商品名称</th>
 										<th>规格型号</th>
 										<th>入库日期</th>
 										<th>入库数量</th>
-										<th>关联批次号</th>
+										<th>采购订单号</th>
 										<th>供应商</th>
-										<th>关联单据</th>
+										<th>收货计划单号</th>
 										<th>状态</th>
 									</tr>
 								</thead>

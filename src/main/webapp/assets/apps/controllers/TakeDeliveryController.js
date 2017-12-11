@@ -527,27 +527,29 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 			}
 			
 			$scope.getWarehouseName = function(type){
-				for(var i in $scope.warehouses){
-					if(type=="deliver"){
-						if($scope.deliver.warehouseSerial=='无'){
-							$scope.deliver.deliverAddress = '';
-							return;
-						}
-						if($scope.warehouses[i].serialNum == $scope.deliver.warehouseSerial){
-							$scope.deliver.deliverAddress = $scope.warehouses[i].address;
-						}
-					}else{
-						if($scope.takeDeliver.warehouseSerial=="无"){
-							$scope.takeDeliver.takeDeliverAddress = '';
-							return;
-						}
-						if($scope.warehouses[i].serialNum == $scope.takeDeliver.warehouseSerial){
-							$scope.takeDeliver.takeDeliverAddress = $scope.warehouses[i].address;
+				debugger;
+				if(type=='deliver'){
+					for(var i in $scope.warehouselistf){
+						if(type=="deliver"){
+							if($scope.deliver.warehouseSerial=='无'){
+								$scope.deliver.deliverAddress = '';
+								return;
+							}
+							if($scope.warehouselistf[i].serialNum == $scope.deliver.warehouseSerial){
+								$scope.deliver.deliverAddress = $scope.warehouselistf[i].warehouseName;
+							}
 						}
 					}
-					
+				}else{
+					for(var i in $scope.warehouselists){
+							if($scope.warehouselists[i].serialNum == $scope.takeDeliver.warehouseSerial){
+								$scope.takeDeliver.takeDeliverAddress = $scope.warehouselists[i].warehouseName;
+							}
+						}
+					}
+				
 				}
-			}
+			
 			
 			/**
 			 * 去编辑收货计划
@@ -889,8 +891,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	                                  //{ mData: 'materielCount' },物料条目数
 			                          { mData: 'materielTotalCount' },//物料总数
 	                                  { mData: 'deliverDate' },
-	                                  { mData: 'packageType' },
-	                                 { mData: 'deliverAddress' },
+	                                  { mData: 'takeDelivery.takeDeliverDate' },//packageType
+	                                 { mData: 'takeDeliverAddress' },//deliverAddress
 	                                 { mData: 'inOutRemark' },
 	                                  { mData: 'status' },
 	                                  { mData: 'status' }
@@ -1381,8 +1383,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		                                  { mData: 'orderMateriel'},
 	  		                                  { mData: 'stockInOutRecord.stockDate' },
 	  		                                  { mData: 'stockCount' },
-	  		                                  { mData: 'batchNum' },
-	  		                                  { mData: 'stockInOutRecord.shipperOrReceiverName' },
+	  		                                  { mData: 'orderNum' },//batchNum
+	  		                                  { mData: 'stockInOutRecord.shipperOrReceiver' },
 	  		                                  { mData: 'delivery' },
 	  		                                  { mData: 'stockInOutRecord.status' }
 	  		                            ],
@@ -1412,7 +1414,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		    							'render' : function(data,
 	  		    									type, row, meta) {
 	  		    										
-	  		  	  	  								return '<a href="javascript:void(0);" ng-click="stockInView(\''+row.stockInOutRecord.serialNum+'\')">'+data+'</a>';
+	  		  	  	  							/*	return '<a href="javascript:void(0);" ng-click="stockInView(\''+row.stockInOutRecord.serialNum+'\')">'+data+'</a>';*/
+	  		    								return '<a href="javascript:void(0);" ng-click="takeDeliveryView(\''+row.stockInOutRecord.takeDeliverSerial+'\')">'+data+'</a>';
 	  		  	
 	  		    							},
 	  		    							"createdCell": function (td, cellData, rowData, row, col) {
@@ -1441,7 +1444,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		    									return data.materiel.specifications;
 	  		    								}
 	  		    							}
-	  		    						},{
+	  		    						}/*,{
 	  		    							'targets' : 7,
 	  		    							'render' : function(data,
 	  		    									type, row, meta) {
@@ -1461,7 +1464,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		  	  								return data;
 	  		  	
 	  		    							}
-	  		    						},{
+	  		    						}*/,{
 	  		    							'targets' : 9,
 	  		    							'render' : function(data,
 	  		    									type, row, meta) {
@@ -1690,7 +1693,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  				for(var i in $scope.orderMateriels){
 	  					$scope.totalDeliverCount += handle.formatNumber($scope.orderMateriels[i].deliverCount);
 	  					$scope.totalAmount += handle.formatNumber($scope.orderMateriels[i].amount);
-	  					$scope.totalUnDeliveryCount+=handle.formatNumber($scope.orderMateriels[i].amount-$scope.orderMateriels[i].orderMateriel.deliveredCount);
+	  					$scope.totalUnDeliveryCount+=handle.formatNumber($scope.orderMateriels[i].amount-$scope.orderMateriels[i].deliveredCount);
 	  				}
 	  				$scope.totalDeliveryCount=	$scope.totalDeliverCount;
 	  			}else if(!isNull($scope.orderMateriels)&&$stateParams.type!='edit'){

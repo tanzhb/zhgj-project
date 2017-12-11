@@ -511,7 +511,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 								}else if(row.deliverStatus=="2"){
                     				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已收货</span>';
 								}else if(row.deliverStatus=="3"){
-                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已检验</span>';
+                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待发货</span>';/*已检验*/
 								}else if(row.deliverStatus=="4"){
                     				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已出库</span>';
 								}else if(row.deliverStatus=="5"){
@@ -4532,6 +4532,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			  			}
 			  		}
 			        $scope.getWarehouseName = function(type){
+			        	debugger;
 						for(var i in $scope.warehouses){
 							if(type=="deliver"){
 								if($scope.deliver.warehouseSerial=='无'){

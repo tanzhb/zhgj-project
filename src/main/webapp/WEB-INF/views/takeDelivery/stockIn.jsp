@@ -51,8 +51,8 @@
 							data-toggle="tab">入库信息</a></li>
 						<!-- <li class="bold"><a data-target="#tab_1_3" data-toggle="tab">收货信息</a>
 						</li> -->
-						<!-- <li class="bold"><a data-target="#tab_1_3" data-toggle="tab">运输信息</a></li>-->
-						<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">物料信息</a></li>
+						<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">发货信息</a></li>
+						<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">物料信息</a></li>
 						<li class="dropdown pull-right tabdrop">
 							<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
 						</li>						
@@ -82,7 +82,7 @@
 								<div class="form-body">
 									<div class="alert alert-danger display-hide">
                                                 <button class="close" data-close="alert"></button>请先输入正确数据！</div>
-                                                 <jsp:include  page="stockInOutDeliveryInfo.jsp" />
+                                                <%--  <jsp:include  page="stockInOutDeliveryInfo.jsp" /> --%>
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
@@ -298,6 +298,9 @@
          				</div>
          					</div>
          					<div class="tab-pane fade" id="tab_1_2"  >
+         					<jsp:include  page="stockInOutDeliveryInfo.jsp" />
+         					</div>
+         					<div class="tab-pane fade" id="tab_1_3"  >
          					 <div class="portlet-body">
 						<div class="table-scrollable">
 							<table id="deliveryMaterielTable"

@@ -53,7 +53,9 @@
   	<result column="stockInQualifiedCount" property="stockInQualifiedCount" jdbcType="VARCHAR" />
 	<result column="stockInUnqualifiedCount" property="stockInUnqualifiedCount" jdbcType="VARCHAR" />
 	<result column="stockInCheckRemark" property="stockInCheckRemark" jdbcType="VARCHAR" />
+	<result column="orderNum" property="orderNum" jdbcType="VARCHAR" />
     <association column="orderMaterielSerial" property="orderMateriel" select="com.congmai.zhgj.web.dao.OrderMaterielMapper.selectByPrimaryKey" ></association>
+    <association column="materielSerial" property="materiel" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByPrimaryKey" ></association>
     <association column="supplyMaterielSerial" property="supplyMateriel" select="com.congmai.zhgj.web.dao.SupplyMaterielMapper.selectByPrimaryKey" ></association>
     <association column="serialNum" property="stockInBatchs" select="com.congmai.zhgj.web.dao.StockOutBatchMapper.selectStockInBatchBySerialNum" ></association> <!-- 根据发货物料取出批次相关入库批次详情 -->
     <association column="serialNum" property="stockOutMateriels" select="com.congmai.zhgj.web.dao.StockOutBatchMapper.selectStockOutBatchBySerialNum" ></association> <!-- 根据发货物料取出批次相关出库批次详情 -->
@@ -635,7 +637,7 @@
 		IFNULL(dm.orderMaterielSerial,dm2.orderMaterielSerial) as orderMaterielSerial,
 		IFNULL(dm.supplyMaterielSerial,dm2.supplyMaterielSerial) as supplyMaterielSerial,
    		s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial,s.shipperOrReceiver,s.inOutNum,s.inOutType,s.stockDate, s.operator, s.contactNum,s.docNum, 
-    	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,o.orderNum,o.buyComId
+    	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,o.orderNum,o.buyComId,o.orderNum as orderNum
     from stockInOutRecord s
     left join delivery d on d.serialNum = s.deliverSerial
     left join deliveryMateriel dm on d.serialNum = dm.deliverSerial and dm.stockInOutRecordSerial is null and dm.delFlg = 0
@@ -664,7 +666,8 @@
 		IFNULL(dm.orderMaterielSerial,dm2.orderMaterielSerial) as orderMaterielSerial,
 		IFNULL(dm.supplyMaterielSerial,dm2.supplyMaterielSerial) as supplyMaterielSerial,
    		s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial,s.shipperOrReceiver,s.inOutNum,s.inOutType,s.stockDate, s.operator, s.contactNum,s.docNum, 
-    	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,o.orderNum,o.buyComId
+    	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,o.orderNum,o.supplyComId as buyComId,o.orderNum as orderNum,td.serialNum as takeDeliverSerial,
+    	m.serialNum  as materielSerial
     from stockInOutRecord s
     left join takeDelivery td on td.serialNum = s.takeDeliverSerial
     LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
