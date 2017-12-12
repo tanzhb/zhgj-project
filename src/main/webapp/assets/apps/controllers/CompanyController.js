@@ -810,6 +810,12 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        					$(".alert-danger").show();
 	        					return;
 	        				}
+	        				if(data.data.comName=="isExist"){
+	        					handle.unblockUI();
+	        					$(".alert-danger").html("企业名称已存在！");
+	        					$(".alert-danger").show();
+	        					return;
+	        				}
 	        				$(".modal-backdrop").remove();
 		        			toastr.success("保存成功");
 		        			handle.unblockUI();

@@ -92,8 +92,6 @@ License: You must have a valid license purchased only from themeforest(the above
 	type="text/css" />
 <link href="assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet"
 	type="text/css" />
-	<link href="assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.less.css" rel="stylesheet"
-	type="text/css" />
 <link href="assets/global/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" type="text/css" />
 <link href="assets/apps/css/common.css"
 	rel="stylesheet" type="text/css" />

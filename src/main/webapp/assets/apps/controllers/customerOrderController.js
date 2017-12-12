@@ -74,6 +74,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
         			getCurrentUser();
             		//initWarehouse();
             		initWarehouses( "pts",null,"out");
+            		initCompanyaddresses('pt');
             		$rootScope.setNumCode("SE",function(newCode){
     	    			$scope.deliver.deliverNum = newCode;
     	    			$scope.deliver.approvalDate=$filter('date')(new Date(), 'yyyy-MM-dd');
@@ -3292,7 +3293,64 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		       		//调用承诺接口reject();
 		       	});
 			}
+			/**
+			 * 加载收货/发货地址列表数据
+			 */
+			var initCompanyaddresses = function(comId){
+				var promise = deliveryService.getCompanyaddressList(comId);
+		       	promise.then(function(data){
+		       		if(comId=="pt"){
+		       		 $scope.companyAddressesf=data;
+		       		setTimeout(function () {
+		       		  	$("#deliverAddress").selectpicker({
+		                showSubtext: true
+		            });
+					$('#deliverAddress').selectpicker('refresh');//刷新插件
+		               }, 100);
+		       		 
+		       		}else{
+		       		 $scope.companyAddressess=data;
+		       		setTimeout(function () {
+		       			$("#takeDeliverAddress").selectpicker({
+		                       showSubtext: true
+		                   });
+		       			$('#takeDeliverAddress').selectpicker('refresh');//刷新插件
+		               }, 100);
+		       		}
+		       	},function(data){
+		       		//调用承诺接口reject();
+		       	});
+			}
 			
+			$scope.showSX=function(judgeString){
+				debugger;
+				if(judgeString=='s'){
+					if($scope.deliver.orderNum==undefined){
+						toastr.warning("请先选择采购订单");
+						return;
+					}
+					if($scope.companyAddressess.length==0){
+						toastr.warning("该企业无联系地址");
+						return;
+					}
+					if($scope.showSXs!='1'){
+						$scope.showSXs='1';
+					}else{
+						$scope.showSXs=='0';
+					}
+				}else{
+					if($scope.companyAddressesf.length==0){
+						toastr.warning("该企业无联系地址");
+						return;
+					}
+					if($scope.showSXf!='1'){
+						$scope.showSXf='1';
+					}else{
+						$scope.showSXf=='0';
+					}
+				}
+			
+			}
 			var getComId=function (){
 				var promise = orderService.getComId();
 				promise.then(function(data) {
@@ -4492,6 +4550,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 							$scope.deliver.supplyComId = order.supplyComId;
 							$scope.deliver.buyComId = order.buyComId;
 							initWarehouses( "buys",null,"in");
+							initCompanyaddresses($scope.deliver.buyComId );
 							
 							$scope.deliver.shipper = "中航能科（上海）能源科技有限公司";
 							$scope.deliver.receiver=order.buyName;
@@ -4534,26 +4593,45 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			  		}
 			        $scope.getWarehouseName = function(type){
 			        	debugger;
-						for(var i in $scope.warehouses){
+						/*for(var i in $scope.warehouses){
 							if(type=="deliver"){
 								if($scope.deliver.warehouseSerial=='无'){
 									$scope.deliver.deliverAddress = '';
 									return;
 								}
-								if($scope.warehouses[i].serialNum == $scope.deliver.warehouseSerial){
-									$scope.deliver.deliverAddress = $scope.warehouses[i].address;
+								if($scope.warehouseListf[i].serialNum == $scope.deliver.warehouseSerial){
+									$scope.deliver.deliverAddress = $scope.warehouseListf[i].address;
 								}
 							}else{
 								if($scope.takeDeliver.warehouseSerial=="无"){
 									$scope.takeDeliver.takeDeliverAddress = '';
 									return;
 								}
-								if($scope.warehouses[i].serialNum == $scope.takeDeliver.warehouseSerial){
-									$scope.takeDeliver.takeDeliverAddress = $scope.warehouses[i].address;
+								if($scope.warehouseLists[i].serialNum == $scope.takeDeliver.warehouseSerial){
+									$scope.takeDeliver.takeDeliverAddress = $scope.warehouseLists[i].address;
 								}
 							}
 							
-						}
+						}*/
+			        	if(type=='deliver'){
+							for(var i in $scope.warehouseListf){
+								if(type=="deliver"){
+									if($scope.deliver.warehouseSerial=='无'){
+										$scope.deliver.deliverAddress = '';
+										return;
+									}
+									if($scope.warehouseListf[i].serialNum == $scope.deliver.warehouseSerial){
+										$scope.deliver.deliverAddress = $scope.warehouseListf[i].warehouseName;
+									}
+								}
+							}
+						}else{
+							for(var i in $scope.warehouseLists){
+									if($scope.warehouseLists[i].serialNum == $scope.takeDeliver.warehouseSerial){
+										$scope.takeDeliver.takeDeliverAddress = $scope.warehouseLists[i].warehouseName;
+									}
+								}
+							}
 					}
 					// 页面加载完成后调用，验证输入框(提货)
 	  				$scope.$watch('$viewContentLoaded', function() {  

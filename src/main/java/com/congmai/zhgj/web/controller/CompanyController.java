@@ -256,8 +256,13 @@ public class CompanyController {
 
         	try{
         		String isExist = checkComNumIsExist(company.getComId(),company.getComNum());
+        		String isExist1 = checkComNameIsExist(company.getComId(),company.getComName());
         		if("2".equals(isExist)){
         			company.setComNum("isExist");
+        			return company;
+        		}
+        		if("2".equals(isExist1)){
+        			company.setComName("isExist");
         			return company;
         		}
         		if(StringUtils.isEmpty(company.getComId())){
@@ -733,6 +738,35 @@ public class CompanyController {
     	
     	return companyService.selectAll();
     }
-
+    /**
+     * @Description (检查企业名称唯一性)
+     * @param comNum
+     * @param comId
+     * @return
+     */
+    @RequestMapping("checkComNameIsExist")
+    @ResponseBody
+    public String checkComNameIsExist(String comId,String comName){
+    	String flag  = "0"; //默认失败
+    	try {
+    		CompanyExample example = new CompanyExample();
+        	Criteria criteria = example.createCriteria();
+        	criteria.andDelFlgEqualTo("0");
+        	criteria.andComNameEqualTo(comName);
+        	if(StringUtils.isNotEmpty(comId)){
+        		criteria.andComIdNotEqualTo(comId);
+        	}
+        	int count = companyService.countCompanybySelective(example);
+        	if(count > 0){
+        				flag = "2"; //存在重复
+        	}else{
+        				flag = "1"; //合法
+        	}
+		} catch (Exception e) {
+			System.out.println(this.getClass()+"----------"+e.getMessage());
+		}
+    	
+    	return flag;
+    }
 }
 

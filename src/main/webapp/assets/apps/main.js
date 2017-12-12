@@ -1574,6 +1574,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/global/plugins/datatables/datatables.all.min.js',
 		    				        'assets/apps/controllers/TakeDeliveryController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js',
+		    				        'assets/apps/service/DeliveryService.js',
 		    				        'assets/apps/service/orderService.js',
 	        				        'assets/apps/scripts/angular-file-upload.min.js',
 		    				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
@@ -1607,6 +1608,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/apps/controllers/TakeDeliveryController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js',
 		    				        'assets/apps/service/CommonService.js',
+		    				        'assets/apps/service/DeliveryService.js',
 		    				        'assets/apps/scripts/angular-file-upload-shim.min.js',
 	        				        'assets/apps/scripts/angular-file-upload.min.js',
 	        				        'assets/apps/scripts/FileUploader.js',
@@ -1632,6 +1634,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/apps/service/TakeDeliveryService.js',
 		    				        'assets/apps/service/orderService.js',
 		    				        'assets/apps/service/CommonService.js',
+		    				        'assets/apps/service/DeliveryService.js',
 		    				        'assets/apps/scripts/angular-file-upload-shim.min.js',
 	        				        'assets/apps/scripts/angular-file-upload.min.js',
 	        				        'assets/apps/scripts/FileUploader.js',
@@ -1657,6 +1660,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/apps/controllers/TakeDeliveryController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js',
 		    				        'assets/apps/service/orderService.js',
+		    				        'assets/apps/service/DeliveryService.js',
 		    				        'assets/apps/scripts/angular-file-upload-shim.min.js',
 	        				        'assets/apps/scripts/angular-file-upload.min.js',
 	        				        'assets/apps/scripts/FileUploader.js',
@@ -1680,6 +1684,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/apps/controllers/TakeDeliveryController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js',
 		    				        'assets/apps/service/CommonService.js',
+		    				        'assets/apps/service/DeliveryService.js',
 	        				        'assets/apps/scripts/angular-file-upload.min.js',
 		    				        'assets/apps/service/orderService.js'
 		    				        ]
@@ -1701,6 +1706,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/apps/controllers/TakeDeliveryController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js',
 		    				        'assets/apps/service/CommonService.js',
+		    				        'assets/apps/service/DeliveryService.js',
 	        				        'assets/apps/scripts/angular-file-upload.min.js',
 		    				        'assets/apps/service/orderService.js'
 		    				        ]

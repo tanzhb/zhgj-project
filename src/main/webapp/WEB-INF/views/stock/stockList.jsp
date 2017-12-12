@@ -117,8 +117,8 @@
                             <th> 预售 </th>
                             <th> 在途 </th>
                             <th> 可售 </th>
-                            <th> 风险等级 </th>
-                            <th> 状态</th>
+                            <th> 状态 </th>
+                            <th>风险等级</th>
 						</tr>
 						
 					</thead>

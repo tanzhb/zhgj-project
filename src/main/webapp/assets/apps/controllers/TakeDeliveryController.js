@@ -2,8 +2,8 @@
  * 
  */
 
-angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope','$scope','$state','$http','$filter','takeDeliveryService','orderService','$location','$compile','$stateParams','commonService','FileUploader',
-                                                                   function($rootScope,$scope,$state,$http,$filter,takeDeliveryService,orderService,$location,$compile,$stateParams,commonService,FileUploader) {
+angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope','$scope','$state','$http','$filter','takeDeliveryService','orderService','DeliveryService','$location','$compile','$stateParams','commonService','FileUploader',
+                                                                   function($rootScope,$scope,$state,$http,$filter,takeDeliveryService,orderService,DeliveryService,$location,$compile,$stateParams,commonService,FileUploader) {
 	 $scope.$on('$viewContentLoaded', function() {   
 	    	// initialize core components
 		    handle = new pageHandle();
@@ -170,6 +170,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		                   });
 		       		$('#dWarehouseSerialnum').selectpicker('refresh');//刷新插件
 		       			            }, 100);
+					 initCompanyaddresses($scope.deliver.supplyComId,'fa');//先加载发货地址列表
 				}else{
 					$scope.warehouselists = data;
 					setTimeout(function () {
@@ -178,6 +179,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		                });
 		    			$('#warehouseSerialnum').selectpicker('refresh');
 		       			            }, 100);
+					 initCompanyaddresses($scope.deliver.buyComId,'sh');//先加载收货地址列表
 					
 				}
 				
@@ -185,7 +187,70 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 				//调用承诺接口reject();
 			});
 			}
+			/**
+			 * 加载收货/发货地址列表数据
+			 */
+			var initCompanyaddresses = function(comId,judgeString){
+				if(comId==null){
+					comId='pt';
+				}
+				var promise = DeliveryService.getCompanyaddressList(comId);
+		       	promise.then(function(data){
+		       		if(judgeString=="fa"){
+		       		 $scope.companyAddressesf=data;
+		       		setTimeout(function () {
+		       		  	$("#deliverAddress").selectpicker({
+		                showSubtext: true
+		            });
+					$('#deliverAddress').selectpicker('refresh');//刷新插件
+		               }, 100);
+		       		 
+		       		}else{
+		       		 $scope.companyAddressess=data;
+		       		setTimeout(function () {
+		       			$("#takeDeliverAddress").selectpicker({
+		                       showSubtext: true
+		                   });
+		       			$('#takeDeliverAddress').selectpicker('refresh');//刷新插件
+		               }, 100);
+		       		}
+		       	},function(data){
+		       		//调用承诺接口reject();
+		       	});
+			}
+			$scope.showSX=function(judgeString){
+				debugger;
+				if(judgeString=='s'){
+					if($scope.deliver.orderNum==undefined){
+						toastr.warning("请先选择采购订单");
+						return;
+					}
+					if($scope.companyAddressess.length==0){
+						toastr.warning("该企业无联系地址");
+						return;
+					}
+					if($scope.showSXs!='1'){
+						$scope.showSXs='1';
+					}else{
+						$scope.showSXs=='0';
+					}
+				}else{
+					if($scope.deliver.orderNum==undefined){
+						toastr.warning("请先选择采购订单");
+						return;
+					}
+					if($scope.companyAddressesf.length==0){
+						toastr.warning("该企业无联系地址");
+						return;
+					}
+					if($scope.showSXf!='1'){
+						$scope.showSXf='1';
+					}else{
+						$scope.showSXf=='0';
+					}
+				}
 			
+			}
 			var setDefualtData = function(type){
 				
 				/*$scope.deliver.makeDate = timeStamp2ShortString(new Date());*/
@@ -259,6 +324,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
       		    	}
 	        		initWarehouse("pt",$scope.deliver.supplyComId,"out");
 					initWarehouse("pt",$scope.deliver.buyComId,"in");
+					// initCompanyaddresses($scope.deliver.supplyComId,'fa');//先加载发货地址列表
+					// initCompanyaddresses($scope.deliver.buyComId,'sh');//先加载收货地址列表
 	        		
 	        		$scope.takeDeliver = data.data.takeDelivery;
 	        		if($scope.takeDeliver.warehouse != null){

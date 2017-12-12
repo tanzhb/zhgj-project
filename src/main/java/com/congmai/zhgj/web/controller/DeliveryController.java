@@ -79,6 +79,8 @@ import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.CompanyAddress;
+import com.congmai.zhgj.web.model.CompanyExample;
 import com.congmai.zhgj.web.model.CompanyQualification;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.Delivery;
@@ -102,6 +104,7 @@ import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.WarehouseExample;
 import com.congmai.zhgj.web.model.OrderMaterielExample.Criteria;
+import com.congmai.zhgj.web.service.CompanyAddressService;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.DeliveryService;
@@ -202,7 +205,9 @@ public class DeliveryController {
 	
 	@Resource
 	private CompanyService  companyservice;
-
+	
+	@Resource
+	private CompanyAddressService  companyAddressService;
 	
 	 /**
      * @Description (查询仓库列表)
@@ -1695,5 +1700,24 @@ public class DeliveryController {
 		//EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(delivery,MessageConstants.DELIVERY));
 		 map.put("flag", flags1);
 		return new ResponseEntity<Map<String,Object>>(map, HttpStatus.CREATED);
+	}
+	
+	 /**
+     * @Description (根据企业id找联系地址列表)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/getCompanyaddress", method = RequestMethod.POST)
+    public ResponseEntity<List<CompanyAddress>>  getCompanyaddressList(HttpServletRequest request,String  comId) {
+    	List<CompanyAddress> companyAddresss=null;
+    if("pt".equals(comId)){
+    	 comId=companyservice.selectComIdByComName(StaticConst.getInfo("comName"));
+    }
+    if(StringUtil.isEmpty(comId)){//供应商发货时
+    	User user = UserUtil.getUserFromSession();
+		comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));//查询当前登录人所属企业类型
+   }
+    companyAddresss = companyAddressService.selectListByComId(comId);
+		return new ResponseEntity<List<CompanyAddress>>(companyAddresss, HttpStatus.OK);
 	}
 }

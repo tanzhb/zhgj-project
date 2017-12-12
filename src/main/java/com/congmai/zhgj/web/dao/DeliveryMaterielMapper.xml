@@ -674,7 +674,10 @@
     left join deliveryMateriel dm on td.serialNum = dm.deliverSerial and dm.stockInOutRecordSerial is null and dm.delFlg = 0
     left join deliveryMateriel dm2 on s.serialNum = dm2.stockInOutRecordSerial and dm2.deliverSerial = '' and dm2.delFlg = 0
     left join orderInfo o on o.serialNum = d.orderSerial
-    
+     <if test="comId==null" >
+    left join orderMateriel om ON om.serialNum = IFNULL(dm.orderMaterielSerial,dm2.orderMaterielSerial)
+    left join materiel m on om.materielSerial = m.serialNum
+	</if>
     <if test="comId != null" >
     left join orderMateriel om ON om.serialNum = IFNULL(dm.orderMaterielSerial,dm2.orderMaterielSerial)
     left join materiel m on om.materielSerial = m.serialNum

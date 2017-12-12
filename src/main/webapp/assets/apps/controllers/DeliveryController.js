@@ -98,6 +98,11 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
     
     //查询仓库列表
     initWarehouses('pt',null,"out");//先加载平台发货仓库列表
+    if($stateParams.oprateType != "forSupplyOrder"){
+    initCompanyaddresses('pt','fa');//先加载平台发货地址列表
+    }else{
+    	 initCompanyaddresses(null,'fa');
+    }
 		//$scope.getWarehouseList();
 		if($state.current.name=="delivery"){
 			var type = handle.getCookie("d_type");
@@ -180,7 +185,67 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
        		//调用承诺接口reject();
        	});
 	}
+	/**
+	 * 加载收货/发货地址列表数据
+	 */
+	var initCompanyaddresses = function(comId,judgeString){
+		if(comId==null&&$stateParams.oprateType!='forSupplyOrder'){
+			comId='pt';
+		}
+		var promise = DeliveryService.getCompanyaddressList(comId);
+       	promise.then(function(data){
+       		if(judgeString=='fa'){
+       		 $scope.companyAddressesf=data;
+       		setTimeout(function () {
+       		  	$("#warehouseAddress").selectpicker({
+                showSubtext: true
+            });
+			$('#warehouseAddress').selectpicker('refresh');//刷新插件
+               }, 100);
+       		 
+       		}else  if(judgeString=='sh'){
+       		 $scope.companyAddressess=data;
+       		setTimeout(function () {
+       			$("#takeDeliveryWarehouseAddress").selectpicker({
+                       showSubtext: true
+                   });
+       			$('#takeDeliveryWarehouseAddress').selectpicker('refresh');//刷新插件
+               }, 100);
+       		}
+       	},function(data){
+       		//调用承诺接口reject();
+       	});
+	}
 	
+	$scope.showSX=function(judgeString){
+		debugger;
+		if(judgeString=='s'){
+			if($scope.saleOrder==undefined){
+				toastr.warning("请先选择销售订单");
+				return;
+			}
+			if($scope.companyAddressess.length==0){
+				toastr.warning("该企业无联系地址");
+				return;
+			}
+			if($scope.showSXs!='1'){
+				$scope.showSXs='1';
+			}else{
+				$scope.showSXs=='0';
+			}
+		}else{
+			if($scope.companyAddressesf.length==0){
+				toastr.warning("该企业无联系地址");
+				return;
+			}
+			if($scope.showSXf!='1'){
+				$scope.showSXf='1';
+			}else{
+				$scope.showSXf=='0';
+			}
+		}
+	
+	}
    //编辑页面的ng-repeat完成
    $scope.repeatDone1 = function(){
 	   $('.date-picker').datepicker({
@@ -2050,7 +2115,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    		$scope.delivery.receiver=data.orderInfo.buyName;//收货方默认销售订单的采购方
 	          		    	}
 	          		    	 initWarehouses('pts',data.orderInfo.buyComId,"in");
-	          		    	
+	          		    	 initCompanyaddresses(data.orderInfo.buyComId,'sh');//先加载收货地址列表
 	          		    	$scope.delivery.maker=data.currenLoginName;//制单人默认当前用户
 	          		    	/*$scope.delivery.deliverNum=data.deliverNum;//随机产生的发货单号
 */	          		    	if($scope.delivery!=null){
@@ -2171,6 +2236,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	$scope.takeDelivery.contactNum=$scope.delivery.takeDeliveryContactNum;
 	          		    	$scope.takeDelivery.remark=$scope.delivery.takeDeliveryRemark;
 	          		    	 initWarehouses('pts',$scope.delivery.buyComId,"in");
+	          		    	 initCompanyaddresses($scope.delivery.buyComId,'sh');//先加载收货地址列表
 	          		    	if(data.delivery.deliverType=='其他发货'){
 	          		    		$scope.otherMode=true;
 	          		    	}else{
