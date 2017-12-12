@@ -4207,6 +4207,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	 	    var loadMainTable1 = function() {
 	 	            a = 0;
 	 	            App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
+	 	            if(!isNull(table1)) return;
 	 	            table1 = $("#sample_21")
 	 				.DataTable({
 	 	                language: {
