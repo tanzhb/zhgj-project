@@ -681,7 +681,9 @@
                                                             <option value="3" >三级供应商</option>
                                                         </select>
 													<div class="form-control-focus"></div>
-													<p class="control-label left" ng-show="companyMView">{{companyManage.type}}</p>
+													<p class="control-label left" ng-show="companyMView" ng-if="companyManage.type=='1'">一级供应商</p>
+													<p class="control-label left" ng-show="companyMView"  ng-if="companyManage.type=='2'">二级供应商</p>
+													<p class="control-label left" ng-show="companyMView"  ng-if="companyManage.type=='3'">三级供应商</p>
 												</div>
 											</div>
 										</div>
@@ -700,7 +702,9 @@
                                                             <option value="3" >淘汰供应商</option>
                                                         </select>
 													<div class="form-control-focus"></div>
-													<p class="control-label left" ng-show="companyMView">{{companyManage.grade}}</p>
+													<p class="control-label left" ng-show="companyMView" ng-if="companyManage.grade=='1'">合格供应商</p>
+													<p class="control-label left" ng-show="companyMView"  ng-if="companyManage.grade=='2'">预警供应商</p>
+													<p class="control-label left" ng-show="companyMView"  ng-if="companyManage.grade=='3'">淘汰供应商</p>
 												</div>
 											</div>
 										</div>

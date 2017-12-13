@@ -151,6 +151,7 @@
 					<li  ng-hide="isNotBuy" ng-if="type=='buy'"><a class="bold" data-target="#tab_1_5" data-toggle="tab">供应商</a></li>
 					<li  ng-hide="isNotSupply"  ng-if="type=='supply'"><a class="bold" data-target="#tab_1_6" data-toggle="tab">采购商</a></li>
 					<li><a class="bold" data-target="#tab_1_7" data-toggle="tab">企业管理员</a></li>
+					<li><a class="bold" data-target="#tab_1_8" data-toggle="tab">管理信息</a></li>
 					
 				</ul>
 				<div class="tab-content">
@@ -484,6 +485,67 @@
 							</div>
 							<!-- END SAMPLE TABLE PORTLET-->
 						</div>
+					</div>
+					<div class="tab-pane fade" id="tab_1_8">
+						         <div class="portlet light">
+                          <div class="portlet-body form">
+                             <!--  BEGIN FORM -->
+                              <form class="" >
+                                  <div class="form-body">
+                                      <div class="row">
+                                          <div class="col-md-6">
+                                              <div class="form-group">
+                                                  <label class="control-label col-md-5 bold">供应商简称：</label>
+                                                  <div class="col-md-7">
+                                                      <p class="form-control-static">{{companyManage.comShortName}}</p>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <!-- /span -->
+                                          <div class="col-md-6">
+                                              <div class="form-group">
+                                                  <label class="control-label col-md-5  bold">维护人员：</label>
+                                                  <div class="col-md-7">
+                                                     <a href="javascript:;" style="margin:0px 5px 2px 0px;" class="btn btn-xs green"    ng-repeat="data in companyManage.users"  >
+                           {{data.userName}}
+                    </a>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                         <!--  /span -->
+                                      </div>
+                                      <!-- /row -->
+                                      <div class="row">
+                                          <div class="col-md-6">
+                                              <div class="form-group">
+                                                  <label class="control-label col-md-5 bold">供应商分类：</label>
+                                                  <div class="col-md-7">
+                                                      <p class="form-control-static" ng-if="companyManage.type=='1'">一级供应商</p>
+													<p class="form-control-static"  ng-if="companyManage.type=='2'">二级供应商</p>
+													<p class="form-control-static"  ng-if="companyManage.type=='3'">三级供应商</p>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <!-- /span -->
+                                          <div class="col-md-6">
+                                              <div class="form-group">
+                                                  <label class="control-label col-md-5 bold">供应商等级：</label>
+                                                  <div class="col-md-7">
+                                                      <p class="form-control-static"  ng-if="companyManage.grade=='1'">合格供应商</p>
+													<p class="form-control-static"  ng-if="companyManage.grade=='2'">预警供应商</p>
+													<p class="form-control-static"  ng-if="companyManage.grade=='3'">淘汰供应商</p>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <!-- /span -->
+                                      </div>
+                                   <!--    /row -->
+                                      
+                                  </div>
+                              </form>
+                             <!--  END FORM -->
+                          </div>
+                      </div>
 					</div>
 					<div class="tab-pane fade" id="tab_1_2">
 						<!-- START SAMPLE TABLE PORTLET-->
