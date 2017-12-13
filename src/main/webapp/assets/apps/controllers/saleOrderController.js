@@ -357,15 +357,15 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 			.DataTable({
                 language: {
                     aria: {
-                        sortAscending: ": activate to sort column ascending",
-                        sortDescending: ": activate to sort column descending"
+                        sortAscending: ": 以升序排列此列",
+                        sortDescending: ": 以降序排列此列"
                     },
                     emptyTable: "空表",
                     info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
                     infoEmpty: "没有数据",
                     // infoFiltered: "(filtered1 from _MAX_ total entries)",
                     lengthMenu: "每页显示 _MENU_ 条数据",
-                    search: "查询:",processing:"加载中...",
+                    search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
                     zeroRecords: "抱歉， 没有找到！",
                     paginate: {
                         "sFirst": "首页",
@@ -377,7 +377,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 /*
  * fixedHeader: {//固定表头、表底 header: !0, footer: !0, headerOffset: a },
  */
-                order: [[9, "asc"],[1, "desc"]],// 默认排序列及排序方式
+                order: [[10, "asc"],[1, "desc"]],// 默认排序列及排序方式
                 searching: true,// 是否过滤检索
                 ordering:  true,// 是否排序
                 lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
@@ -396,6 +396,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
                               { mData: 'saleApplySerial' },
                               { mData: 'orderSerial' },
                               { mData: 'orderDate' },
+                              { mData: 'status' },
                               { bVisible: false }/*,
                               { mData: 'processBase',
 	                            	mRender:function(data,
@@ -617,8 +618,49 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 									type, row, meta) {
 								return data +'</br>' + row.maker;
 							}
-						}, {
+						},{
 							'targets' : 9,
+							'render' : function(data,
+									type, row, meta) {
+								var clickhtm = ''
+								if(row.status==55){
+									return clickhtm + '<a href="javascript:void(0);" ng-click="submitPage(\''+row.serialNum+'\')">接收</a>';
+								}else if(row.processBase!=""&&row.processBase!=null){
+                        			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
+										return clickhtm + '';
+									}else if(row.processBase.status=="APPROVAL_SUCCESS"){
+										if(row.status==1){
+											return clickhtm + '<a href="javascript:void(0);" ng-click="signContract(\''+row.contract.id+'\',\''+row.contract.comId+'\')">签订</a>';
+										}else if(row.status==3){
+											return clickhtm + '<a href="javascript:void(0);" ng-click="signContract(\''+row.contract.id+'\',\''+row.contract.comId+'\')">签订</a>';
+										}else if(row.status==2){
+											if(isNull(row.deliveryCount)||row.deliveryCount==0){
+												return clickhtm + '<a href="javascript:void(0);" ng-click="deliveryAdd(\''+row.serialNum+'\')">发货</a>';
+											}else if(Number(row.materielCount)>Number(row.deliveryCount)){
+												return clickhtm + '<a href="javascript:void(0);" ng-click="deliveryAdd(\''+row.serialNum+'\')">发货</a>';
+											}else{
+												return clickhtm + '';
+											}
+											
+										}else{
+											return clickhtm + '';
+										}
+									}else if(row.processBase.status=="APPROVAL_FAILED"){
+										return clickhtm + '';
+									}else{
+										return clickhtm + '';
+									}
+                        		}else{
+                        			return clickhtm + '';
+                        		}
+								
+							
+							},
+							"createdCell": function (td, cellData, rowData, row, col) {
+								 $compile(td)($scope);
+						       }
+						}, {
+							'targets' : 10,
 							'render' : function(data,
 									type, row, meta) {
 								var renderRow = meta.settings.aoData[meta.row];
@@ -704,15 +746,15 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     			.DataTable({
                     language: {
                         aria: {
-                            sortAscending: ": activate to sort column ascending",
-                            sortDescending: ": activate to sort column descending"
+                            sortAscending: ": 以升序排列此列",
+                            sortDescending: ": 以降序排列此列"
                         },
                         emptyTable: "空表",
                         info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
                         infoEmpty: "没有数据",
                         // infoFiltered: "(filtered1 from _MAX_ total entries)",
                         lengthMenu: "每页显示 _MENU_ 条数据",
-                        search: "查询:",processing:"加载中...",
+                        search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
                         zeroRecords: "抱歉， 没有找到！",
                         paginate: {
                             "sFirst": "首页",
@@ -1329,8 +1371,8 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
                  table = $("#select_sample_2").DataTable({
                      language: {
                          aria: {
-                             sortAscending: ": activate to sort column ascending",
-                             sortDescending: ": activate to sort column descending"
+                             sortAscending: ": 以升序排列此列",
+                             sortDescending: ": 以降序排列此列"
                          },
                          emptyTable: "空表",
                          info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -1338,7 +1380,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
                          // infoFiltered: "(filtered1 from _MAX_ total
 							// entries)",
                          lengthMenu: "每页显示 _MENU_ 条数据",
-                         search: "查询:",processing:"加载中...",
+                         search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
                          zeroRecords: "抱歉， 没有找到！",
                          paginate: {
                              "sFirst": "首页",
@@ -3058,15 +3100,26 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	        $scope.cancelPage  = function() {// 取消编辑
 	        	$state.go("saleOrder");
 	        };
-	        $scope.submitPage  = function() {// 取消编辑
+	        $scope.submitPage  = function(serialNum) {// 取消编辑
 	        	$scope.submitOrder = {}
-	        	$scope.submitOrder.serialNum = $scope.saleOrder.serialNum;
-	        	$scope.submitOrder.remark = $scope.saleOrder.remark;
-	        	$scope.submitOrder.status = 0;
-	        	$scope.saleOrder.status = 0;
+	        	if(!isNull(serialNum)){//列表操作栏按钮接收
+	        		$scope.submitOrder.serialNum = serialNum;
+		        	$scope.submitOrder.status = 0;
+	        	}else{//详情页面按钮接收
+	        		$scope.submitOrder.serialNum = $scope.saleOrder.serialNum;
+		        	$scope.submitOrder.remark = $scope.saleOrder.remark;
+		        	$scope.submitOrder.status = 0;
+		        	$scope.saleOrder.status = 0;
+	        	}
 	        	orderService.acceptSubmit($scope.submitOrder).then(
 	          		     function(data){
-	          		    	toastr.info('订单接受成功！');
+	          		    	if(!isNull(serialNum)){//列表操作栏按钮接收
+	          		    		toastr.info('订单接收成功！');
+	          		    		$state.go('saleOrder',{},{reload:true});
+	        	        	}else{//详情页面按钮提交
+	        	        		toastr.info('订单接收成功！');
+	        	        	}
+	          		    	
 	          		     },
 	          		     function(error){
 	          		         $scope.error = error;
@@ -3531,8 +3584,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        			{
 		        				language : {
 		        					aria : {
-		        						sortAscending : ": activate to sort column ascending",
-		        						sortDescending : ": activate to sort column descending"
+		        						sortAscending : ": 以升序排列此列",
+		        						sortDescending : ": 以降序排列此列"
 		        					},
 		        					emptyTable : "空表",
 		        					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -3770,8 +3823,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        			{
 		        				language : {
 		        					aria : {
-		        						sortAscending : ": activate to sort column ascending",
-		        						sortDescending : ": activate to sort column descending"
+		        						sortAscending : ": 以升序排列此列",
+		        						sortDescending : ": 以降序排列此列"
 		        					},
 		        					emptyTable : "空表",
 		        					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -3997,8 +4050,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		         			{
 		         				language: {
 		                            aria: {
-		                                sortAscending: ": activate to sort column ascending",
-		                                sortDescending: ": activate to sort column descending"
+		                                sortAscending: ": 以升序排列此列",
+		                                sortDescending: ": 以降序排列此列"
 		                            },
 		                            emptyTable: "空表",
 		                            info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -4006,7 +4059,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		                            // infoFiltered: "(filtered1 from _MAX_ total
 		    							// entries)",
 		                            lengthMenu: "每页显示 _MENU_ 条数据",
-		                            search: "查询:",processing:"加载中...",
+		                            search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
 		                            zeroRecords: "抱歉， 没有找到！",
 		                            paginate: {
 		                                "sFirst": "首页",
@@ -4120,8 +4173,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 						{
 		 							language : {
 		 								aria : {
-		 									sortAscending : ": activate to sort column ascending",
-		 									sortDescending : ": activate to sort column descending"
+		 									sortAscending : ": 以升序排列此列",
+		 									sortDescending : ": 以降序排列此列"
 		 								},
 		 								emptyTable : "空表",
 		 								info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -4354,5 +4407,12 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			    	 window.location.href=$rootScope.basePath+"/rest/delivery/exportDelivery";
 			    	 handle.unblockUI(); 
 			       }
-		    	 
+		    	//从订单签订合同
+		 	       $scope.signContract= function(ids,comId) {
+		 	    	  $state.go('saleOrderSign',{id:ids,comId:comId,type:"sale"});
+		 	       }
+		 	    //从订单代发货
+		 	      $scope.deliveryAdd= function(serialNum) {
+		 	    	  $state.go('addDelivery',{oprateType:"forSaleOrder",orderSerialNum:serialNum});
+		 	       }
 }]);

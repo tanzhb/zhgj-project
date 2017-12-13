@@ -385,15 +385,15 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 			.DataTable({
                 language: {
                     aria: {
-                        sortAscending: ": activate to sort column ascending",
-                        sortDescending: ": activate to sort column descending"
+                        sortAscending: ": 以升序排列此列",
+                        sortDescending: ": 以降序排列此列"
                     },
                     emptyTable: "空表",
                     info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
                     infoEmpty: "没有数据",
                     // infoFiltered: "(filtered1 from _MAX_ total entries)",
                     lengthMenu: "每页显示 _MENU_ 条数据",
-                    search: "查询:",processing:"加载中...",
+                    search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
                     zeroRecords: "抱歉， 没有找到！",
                     paginate: {
                         "sFirst": "首页",
@@ -405,7 +405,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 /*
  * fixedHeader: {//固定表头、表底 header: !0, footer: !0, headerOffset: a },
  */
-                order: [[9, "asc"],[1, "desc"]],// 默认排序列及排序方式
+                order: [[10, "asc"],[1, "desc"]],// 默认排序列及排序方式
                 searching: true,// 是否过滤检索
                 ordering:  true,// 是否排序
                 lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
@@ -425,6 +425,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                               { mData: 'saleApplySerial' },
                               { mData: 'orderSerial' },
                               { mData: 'orderDate' },
+                              { mData: 'status' },
                               { bVisible: false }
                         ],
                'aoColumnDefs' : [ {
@@ -452,7 +453,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	                        			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
 											return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">审核中</span>';
 										}else if(row.processBase.status=="APPROVAL_SUCCESS"){
-											
+											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">待签合同</span>';
 										}else if(row.processBase.status=="APPROVAL_FAILED"){
 											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:red">未通过</span>';
 										}else{
@@ -613,8 +614,54 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 									type, row, meta) {
 								return data +'</br>' + row.maker;
 							}
-						}, {
+						},{
 							'targets' : 9,
+							'render' : function(data,
+									type, row, meta) {
+								var clickhtm = ''
+								if(row.status==0){
+									return clickhtm + '<a href="javascript:void(0);" ng-click="submitBuyApply(\''+row.serialNum+'\')">申请</a><br/>'
+									+'<a href="javascript:void(0);" ng-click="pingTaiSubmit(\''+row.serialNum+'\')">提交</a>'
+								}else if(row.status==1){
+									if(row.processBase!=""&&row.processBase!=null){
+	                        			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
+	                        				return clickhtm + '';
+										}else if(row.processBase.status=="APPROVAL_SUCCESS"){
+											return clickhtm + '<a href="javascript:void(0);" ng-click="signContract(\''+row.contract.id+'\',\''+row.contract.comId+'\')">签订</a>'
+										}else if(row.processBase.status=="APPROVAL_FAILED"){
+											return clickhtm + '';
+										}else{
+											return clickhtm + '<a href="javascript:void(0);" ng-click="submitBuyApply(\''+row.serialNum+'\')">申请</a>'
+										}
+	                        		}else{
+	                        			return clickhtm + '';
+	                        		}
+									return clickhtm + '<a href="javascript:void(0);" ng-click="submitBuyApply(\''+row.serialNum+'\')">申请</a>'
+								}else if(row.status==2){
+									if(isNull(row.deliveryCount)||row.deliveryCount==0){
+										return clickhtm + '<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">代发货</a>'
+									}else if(Number(row.materielCount)>Number(row.deliveryCount)){
+										return clickhtm + '<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">代发货</a>'
+									}else{
+										return clickhtm + '';
+									}
+								}else if(row.status==3){
+									return clickhtm + '<a href="javascript:void(0);" ng-click="signContract(\''+row.contract.id+'\',\''+row.contract.comId+'\')">签订</a>'
+								}else if(row.status=="66"){
+									return clickhtm + '';
+								}else if(row.status=="77"){
+									return clickhtm + '<a href="javascript:void(0);" ng-click="submitBuyApply(\''+row.serialNum+'\')">申请</a><br/>'
+									+'<a href="javascript:void(0);" ng-click="pingTaiSubmit(\''+row.serialNum+'\')">提交</a><br/>'
+									+'<a href="javascript:void(0);" ng-click="pingTaiConfirmed(\''+row.serialNum+'\')">确认</a>'
+								}else{
+									return clickhtm + '';
+								}
+							},
+							"createdCell": function (td, cellData, rowData, row, col) {
+								 $compile(td)($scope);
+						       }
+						}, {
+							'targets' : 10,
 							'render' : function(data,
 									type, row, meta) {
 								var renderRow = meta.settings.aoData[meta.row];
@@ -698,15 +745,15 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     			.DataTable({
                     language: {
                         aria: {
-                            sortAscending: ": activate to sort column ascending",
-                            sortDescending: ": activate to sort column descending"
+                            sortAscending: ": 以升序排列此列",
+                            sortDescending: ": 以降序排列此列"
                         },
                         emptyTable: "空表",
                         info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
                         infoEmpty: "没有数据",
                         // infoFiltered: "(filtered1 from _MAX_ total entries)",
                         lengthMenu: "每页显示 _MENU_ 条数据",
-                        search: "查询:",processing:"加载中...",
+                        search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
                         zeroRecords: "抱歉， 没有找到！",
                         paginate: {
                             "sFirst": "首页",
@@ -1207,8 +1254,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                  table = $("#select_sample_2").DataTable({
                      language: {
                          aria: {
-                             sortAscending: ": activate to sort column ascending",
-                             sortDescending: ": activate to sort column descending"
+                             sortAscending: ": 以升序排列此列",
+                             sortDescending: ": 以降序排列此列"
                          },
                          emptyTable: "空表",
                          info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -1216,7 +1263,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                          // infoFiltered: "(filtered1 from _MAX_ total
 							// entries)",
                          lengthMenu: "每页显示 _MENU_ 条数据",
-                         search: "查询:",processing:"加载中...",
+                         search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
                          zeroRecords: "抱歉， 没有找到！",
                          paginate: {
                              "sFirst": "首页",
@@ -3306,25 +3353,21 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		     //********订单物料合计，结算条款end****************//
 		       
 		     //********审批流程start****************//
-		       $scope.submitBuyApply  = function() {// 进入申请审批页面
-		    	   if(!isNull($scope.buyOrder)&&!isNull($scope.buyOrder.serialNum)){//详情页面进入审批
+		       $scope.submitBuyApply  = function(serialNum) {// 进入申请审批页面
+		    	   if(!isNull(serialNum)){//列表操作栏按钮进入审批申请
+		    			$state.go('submitBuyApply',{serialNum:serialNum});
+		    		}else if(!isNull($scope.buyOrder)&&!isNull($scope.buyOrder.serialNum)){//详情页面进入审批
 		    			var processBase = $scope.buyOrder.processBase;
 		    			if(processBase != null){
 		    				showToastr('toast-top-center', 'warning', '该订单已发起流程审批，不能再次申请！')
-		    			}/*else if(table.row('.active').data().status!=1){
-		    				showToastr('toast-top-center', 'warning', '该订单未确认，不能进入审批流程！')
-		    			}*/else $state.go('submitBuyApply',{serialNum:$scope.buyOrder.serialNum});
-		    			
-		    			$state.go('submitBuyApply',{serialNum:table.row('.active').data().serialNum})
-		    		}else if(table.rows('.active').data().length != 1){
+		    			}else $state.go('submitBuyApply',{serialNum:$scope.buyOrder.serialNum});
+		    		}else if(table.rows('.active').data().length != 1){//列表选择进入审批申请
 		    			showToastr('toast-top-center', 'warning', '请选择一条任务进行流程申请！')
 		    		}else{
 		    			var processBase = table.row('.active').data().processBase;
 		    			if(processBase != null){
 		    				showToastr('toast-top-center', 'warning', '该订单已发起流程审批，不能再次申请！')
-		    			}/*else if(table.row('.active').data().status!=1){
-		    				showToastr('toast-top-center', 'warning', '该订单未确认，不能进入审批流程！')
-		    			}*/else $state.go('submitBuyApply',{serialNum:table.row('.active').data().serialNum});
+		    			}else $state.go('submitBuyApply',{serialNum:table.row('.active').data().serialNum});
 		    		}     	
 		        };
 		        
@@ -3334,6 +3377,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        	$scope.submitOrder.serialNum = $scope.buyOrder.serialNum;
 		        	$scope.submitOrder.remark = $scope.buyOrder.remark;
 		        	$scope.submitOrder.orderNum = $scope.buyOrder.orderNum;
+		        	$scope.submitOrder.tradeType = $scope.buyOrder.tradeType;
 		        	//启动流程
 		        	orderService.startBuyOrderProcess($scope.submitOrder).then(
 		          		     function(data){
@@ -3406,8 +3450,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        			{
 		        				language : {
 		        					aria : {
-		        						sortAscending : ": activate to sort column ascending",
-		        						sortDescending : ": activate to sort column descending"
+		        						sortAscending : ": 以升序排列此列",
+		        						sortDescending : ": 以降序排列此列"
 		        					},
 		        					emptyTable : "空表",
 		        					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -3646,8 +3690,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        			{
 		        				language : {
 		        					aria : {
-		        						sortAscending : ": activate to sort column ascending",
-		        						sortDescending : ": activate to sort column descending"
+		        						sortAscending : ": 以升序排列此列",
+		        						sortDescending : ": 以降序排列此列"
 		        					},
 		        					emptyTable : "空表",
 		        					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -3826,8 +3870,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
      			{
      				language: {
                         aria: {
-                            sortAscending: ": activate to sort column ascending",
-                            sortDescending: ": activate to sort column descending"
+                            sortAscending: ": 以升序排列此列",
+                            sortDescending: ": 以降序排列此列"
                         },
                         emptyTable: "空表",
                         info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -3835,7 +3879,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
                         // infoFiltered: "(filtered1 from _MAX_ total
 							// entries)",
                         lengthMenu: "每页显示 _MENU_ 条数据",
-                        search: "查询:",processing:"加载中...",
+                        search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
                         zeroRecords: "抱歉， 没有找到！",
                         paginate: {
                             "sFirst": "首页",
@@ -3947,15 +3991,15 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
               TakeDelieryTable = $("#takeDeliveryTable").DataTable({
                   language: {
                       aria: {
-                          sortAscending: ": activate to sort column ascending",
-                          sortDescending: ": activate to sort column descending"
+                          sortAscending: ": 以升序排列此列",
+                          sortDescending: ": 以降序排列此列"
                       },
                       emptyTable: "空表",
                       info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
                       infoEmpty: "没有数据",
                       //infoFiltered: "(filtered1 from _MAX_ total entries)",
                       lengthMenu: "每页显示 _MENU_ 条数据",
-                      search: "查询:",processing:"加载中...",
+                      search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
                       zeroRecords: "抱歉， 没有找到！",
                       paginate: {
                           "sFirst": "首页",
@@ -4140,14 +4184,27 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	        }
 	        
 	        
-	        $scope.pingTaiSubmit  = function() {// 平台提交给供应商
+	        $scope.pingTaiSubmit  = function(serialNum) {// 平台提交给供应商
+	        	
 	        	$scope.submitOrder = {}
-	        	$scope.submitOrder.serialNum = $scope.buyOrder.serialNum;
-	        	$scope.submitOrder.status = 66;
-	        	$scope.buyOrder.status = 66;
+	        	if(!isNull(serialNum)){//列表操作栏按钮提交
+	        		$scope.submitOrder.serialNum = serialNum;
+	        		$scope.submitOrder.status = 66;
+	        	}else{//详情页面按钮提交
+	        		$scope.submitOrder.serialNum = $scope.buyOrder.serialNum;
+	        		$scope.submitOrder.status = 66;
+		        	$scope.buyOrder.status = 66;
+	        	}
+	        	
 	        	orderService.pingTaiSubmit($scope.submitOrder).then(
 	          		     function(data){
-	          		    	toastr.info('订单提交成功！');
+	          		    	if(!isNull(serialNum)){//列表操作栏按钮提交
+	          		    		toastr.info('订单提交成功！');
+	          		    		$state.go('buyOrder',{},{reload:true});
+	        	        	}else{//详情页面按钮提交
+	        	        		toastr.info('订单提交成功！');
+	        	        	}
+	          		    	
 	          		     },
 	          		     function(error){
 	          		         $scope.error = error;
@@ -4158,12 +4215,23 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	        
 	        $scope.pingTaiConfirmed = function(serialNum){
 	        	$scope.submitOrder = {}
-	        	$scope.submitOrder.serialNum = $scope.buyOrder.serialNum;
-	        	$scope.submitOrder.status = 1;
-	        	$scope.buyOrder.status = 1;
+	        	if(!isNull(serialNum)){//列表操作栏按钮确认
+	        		$scope.submitOrder.serialNum = serialNum;
+	        		$scope.submitOrder.status = 1;
+	        	}else{//详情页面按钮确认
+	        		$scope.submitOrder.serialNum = $scope.buyOrder.serialNum;
+	        		$scope.submitOrder.status = 1;
+		        	$scope.buyOrder.status = 1;
+	        	}
+	        	
 	        	orderService.recive($scope.submitOrder).then(
 	          		     function(data){
-	          		    	toastr.success('订单确认成功！！');
+	          		    	if(!isNull(serialNum)){//列表操作栏按钮确认
+	          		    		toastr.success('订单确认成功！！');
+	          		    		$state.go('buyOrder',{},{reload:true});
+	        	        	}else{//详情页面按钮确认
+	        	        		toastr.success('订单确认成功！！');
+	        	        	}
 	          		     },
 	          		     function(error){
 	          		         $scope.error = error;
@@ -4212,15 +4280,15 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	 				.DataTable({
 	 	                language: {
 	 	                    aria: {
-	 	                        sortAscending: ": activate to sort column ascending",
-	 	                        sortDescending: ": activate to sort column descending"
+	 	                        sortAscending: ": 以升序排列此列",
+	 	                        sortDescending: ": 以降序排列此列"
 	 	                    },
 	 	                    emptyTable: "空表",
 	 	                    info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
 	 	                    infoEmpty: "没有数据",
 	 	                    //infoFiltered: "(filtered1 from _MAX_ total entries)",
 	 	                    lengthMenu: "每页显示 _MENU_ 条数据",
-	 	                    search: "查询:",processing:"加载中...",
+	 	                    search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
 	 	                    zeroRecords: "抱歉， 没有找到！",
 	 	                    paginate: {
 	 	                        "sFirst": "首页",
@@ -4292,6 +4360,15 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	 	        };
 	 	   
 	 	       /** *************关联销售订单  end*************** */ 
+	 	       //从订单签订合同
+	 	       $scope.signContract= function(ids,comId) {
+	 	    	  $state.go('saleOrderSign',{id:ids,comId:comId,type:"buy"});
+	 	       }
+	 	    //从订单代发货
+	 	      $scope.takeDeliveryAdd= function(serialNum) {
+	 	    	  $state.go('takeDeliveryAdd',{oprateType:"forBuyOrder",orderSerialNum:serialNum});
+	 	       }
+	 	       
 }]);
 
 
