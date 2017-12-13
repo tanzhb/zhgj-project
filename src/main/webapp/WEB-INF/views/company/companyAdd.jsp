@@ -646,7 +646,7 @@
 												<label class="control-label bold" for="accendant">维护人员</label>
 												<div class="">
 													 <div class="btn-group">
-                                         <a ng-hide="companyMAdd" href="javascript:;" style="margin:0px 5px 2px 0px;" class="btn btn-xs green"    ng-repeat="data in accendants"  ng-click="getCheckedIds(data.userId,data.userName)">
+                                         <a ng-hide="companyMAdd" href="javascript:;" style="margin:0px 5px 2px 0px;text-transform:none" class="btn btn-xs green"    ng-repeat="data in accendants"  ng-click="getCheckedIds(data.userId,data.userName)">
                            {{data.userName}}<i class="fa fa-close"></i>
                     </a>
                     <a class="btn blue btn-sm" ng-click="addAccendant()"  ng-if="!companyMAdd">
@@ -655,7 +655,7 @@
                                  </div>
 													<div class="form-control-focus"></div>
 													<p class="control-label left" ng-show="companyMView">
-													<a href="javascript:;" style="margin:0px 5px 2px 0px;" class="btn btn-xs green"    ng-repeat="data in companyManage.users"  >
+													<a href="javascript:;" style="margin:0px 5px 2px 0px;text-transform:none" class="btn btn-xs green"    ng-repeat="data in companyManage.users"  >
                            {{data.userName}}
                     </a>
 													<!-- {{companyManage.accendant}} --></p>

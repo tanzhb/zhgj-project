@@ -506,7 +506,7 @@
                                               <div class="form-group">
                                                   <label class="control-label col-md-5  bold">维护人员：</label>
                                                   <div class="col-md-7">
-                                                     <a href="javascript:;" style="margin:0px 5px 2px 0px;" class="btn btn-xs green"    ng-repeat="data in companyManage.users"  >
+                                                     <a href="javascript:;" style="margin:0px 5px 2px 0px;text-transform:none" class="btn btn-xs green"    ng-repeat="data in companyManage.users"  >
                            {{data.userName}}
                     </a>
                                                   </div>
