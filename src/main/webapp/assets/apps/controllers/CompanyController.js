@@ -1009,6 +1009,9 @@ $scope.showCompany=function(judgeString){
 	       			$scope.companyQualificationView = true;
 	       			$scope.companyQualificationAdd = true;
 	       			$scope.companyQualificationEdit = false;
+	       			$scope.companyMAdd = true;
+	       			$scope.companyMView = true;
+	       			
 	        	}
 	        	//$scope.cancelCompanyQualification();
 	        };

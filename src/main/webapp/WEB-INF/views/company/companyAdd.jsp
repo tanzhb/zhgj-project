@@ -73,7 +73,7 @@
                                             <i class="fa fa-edit"></i> 编辑 </button>
                                 <button   ng-hide="companyMAdd" class="btn green btn-sm  btn-circle" ng-click="saveCompanyManageInfo()">
                                             <i class="fa fa-check"></i> 保存 </button>
-                                <button   ng-hide="companyMAdd" class="btn defualt  btn-sm  btn-circle" ng-click="cancelCompanyManageInfo()">
+                                <button   ng-hide="companyMAdd" class="btn defualt  btn-sm  btn-circle" ng-click="cancelCompany('companyManage')">
                                             <i class="fa fa-mail-reply"></i> 取消 </button>
 					</li>
 					
