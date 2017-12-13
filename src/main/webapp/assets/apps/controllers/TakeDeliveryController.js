@@ -37,6 +37,10 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		    			$scope.deliver.approvalDate=$filter('date')(new Date(), 'yyyy-MM-dd');
 		    		});
 	    		}
+	    		if(!isNull($stateParams.orderSerialNum)){//由订单代发货
+	    			$scope.deliver.orderSerial = $stateParams.orderSerialNum;
+	    			$scope.getOrderMateriel();
+	    		}
 	    		if(!isNull($stateParams.serialNum)){
 	    			$(".d_tip").text("编辑代发货信息");
 	    			takeDeliveryInfo($stateParams.serialNum,"edit");
@@ -264,6 +268,25 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	            var sd = $scope.deliver.orderSerial;
 	        	var promise = orderService.getOrderInfo(sd,'deliver');//查发货的物料
         		promise.then(function(data){
+        			var order = data.orderInfo;
+					$scope.deliver.supplyComId = order.supplyComId;
+					$scope.deliver.buyComId = order.buyComId;
+					//$scope.deliver.shipper = order.supplyComId;
+					if(!isNull(order.buyComId)){
+						//$scope.deliver.receiver =  order.buyComId;
+						$scope.deliver.receiver =  order.buyName;
+					}
+					initWarehouse("pt",$scope.deliver.supplyComId,"out");
+					initWarehouse("pt",$scope.deliver.buyComId,"in");
+					
+					$scope.deliver.supplyName = order.supplyName;
+					$scope.deliver.shipper = order.supplyName;
+					if(isNull(order.buyComId)){
+						$scope.deliver.receiver = "中航能科（上海）能源科技有限公司";
+					}
+					
+					$scope.deliver.orderNum = order.orderNum;
+					
         			$scope.orderMateriels = data.orderMateriel;
         			$scope.deliver.materielCount = data.orderMateriel.length;
         		},function(data){
@@ -901,15 +924,15 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	                table = $("#takeDeliveryTable").DataTable({
 	                    language: {
 	                        aria: {
-	                            sortAscending: ": activate to sort column ascending",
-	                            sortDescending: ": activate to sort column descending"
+	                            sortAscending: ": 以升序排列此列",
+	                            sortDescending: ": 以降序排列此列"
 	                        },
 	                        emptyTable: "空表",
 	                        info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
 	                        infoEmpty: "没有数据",
 	                        //infoFiltered: "(filtered1 from _MAX_ total entries)",
 	                        lengthMenu: "每页显示 _MENU_ 条数据",
-	                        search: "查询:",processing:"加载中...",
+	                        search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
 	                        zeroRecords: "抱歉， 没有找到！",
 	                        paginate: {
 	                            "sFirst": "首页",
@@ -1396,15 +1419,15 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		              stock_table = $("#stockInTable").DataTable({
 	  		                    language: {
 	  		                        aria: {
-	  		                            sortAscending: ": activate to sort column ascending",
-	  		                            sortDescending: ": activate to sort column descending"
+	  		                            sortAscending: ": 以升序排列此列",
+	  		                            sortDescending: ": 以降序排列此列"
 	  		                        },
 	  		                        emptyTable: "空表",
 	  		                        info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
 	  		                        infoEmpty: "没有数据",
 	  		                        //infoFiltered: "(filtered1 from _MAX_ total entries)",
 	  		                        lengthMenu: "每页显示 _MENU_ 条数据",
-	  		                        search: "查询:",processing:"加载中...",
+	  		                        search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
 	  		                        zeroRecords: "抱歉， 没有找到！",
 	  		                        paginate: {
 	  		                            "sFirst": "首页",
@@ -1629,15 +1652,15 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		            order_table = $("#buyOrder").DataTable({
 	  		                  language: {
 	  		                      aria: {
-	  		                          sortAscending: ": activate to sort column ascending",
-	  		                          sortDescending: ": activate to sort column descending"
+	  		                          sortAscending: ": 以升序排列此列",
+	  		                          sortDescending: ": 以降序排列此列"
 	  		                      },
 	  		                      emptyTable: "空表",
 	  		                      info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
 	  		                      infoEmpty: "没有数据",
 	  		                      // infoFiltered: "(filtered1 from _MAX_ total entries)",
 	  		                      lengthMenu: "每页显示 _MENU_ 条数据",
-	  		                      search: "查询:",processing:"加载中...",
+	  		                      search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
 	  		                      zeroRecords: "抱歉， 没有找到！",
 	  		                      paginate: {
 	  		                          "sFirst": "首页",
@@ -1724,24 +1747,25 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 				}else{
 					//var serialNum = $('#buyOrder input[name="selecrOrderSerial"]:checked').val();
 					$scope.deliver.orderSerial = $('#buyOrder input[name="selecrOrderSerial"]:checked').val();
-					var order = order_table.row('.active').data();
-					$scope.deliver.supplyComId = order.supplyComId;
-					$scope.deliver.buyComId = order.buyComId;
-					//$scope.deliver.shipper = order.supplyComId;
-					if(!isNull(order.buyComId)){
-						//$scope.deliver.receiver =  order.buyComId;
-						$scope.deliver.receiver =  order.buyName;
-					}
-					initWarehouse("pt",$scope.deliver.supplyComId,"out");
-					initWarehouse("pt",$scope.deliver.buyComId,"in");
-					
-					$scope.deliver.supplyName = order.supplyName;
-					$scope.deliver.shipper = order.supplyName;
-					if(isNull(order.buyComId)){
-						$scope.deliver.receiver = "中航能科（上海）能源科技有限公司";
-					}
-					
-					$scope.deliver.orderNum = $('#buyOrder input[name="selecrOrderSerial"]:checked').data("num");
+//以下内容修改为获取订单后设置↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+//					var order = order_table.row('.active').data();
+//					$scope.deliver.supplyComId = order.supplyComId;
+//					$scope.deliver.buyComId = order.buyComId;
+//					//$scope.deliver.shipper = order.supplyComId;
+//					if(!isNull(order.buyComId)){
+//						//$scope.deliver.receiver =  order.buyComId;
+//						$scope.deliver.receiver =  order.buyName;
+//					}
+//					initWarehouse("pt",$scope.deliver.supplyComId,"out");
+//					initWarehouse("pt",$scope.deliver.buyComId,"in");
+//					
+//					$scope.deliver.supplyName = order.supplyName;
+//					$scope.deliver.shipper = order.supplyName;
+//					if(isNull(order.buyComId)){
+//						$scope.deliver.receiver = "中航能科（上海）能源科技有限公司";
+//					}
+//					
+//					$scope.deliver.orderNum = $('#buyOrder input[name="selecrOrderSerial"]:checked').data("num");
 					$scope.getOrderMateriel();
 					$("#buyOrderInfo").modal('hide'); 
 				}
@@ -1921,15 +1945,15 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
   		        return          apply_table = $("#sample_2").DataTable({
   		                  language: {
   		                      aria: {
-  		                          sortAscending: ": activate to sort column ascending",
-  		                          sortDescending: ": activate to sort column descending"
+  		                          sortAscending: ": 以升序排列此列",
+  		                          sortDescending: ": 以降序排列此列"
   		                      },
   		                      emptyTable: "空表",
   		                      info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
   		                      infoEmpty: "没有数据",
   		                      // infoFiltered: "(filtered1 from _MAX_ total entries)",
   		                      lengthMenu: "每页显示 _MENU_ 条数据",
-  		                      search: "查询:",processing:"加载中...",
+  		                      search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
   		                      zeroRecords: "抱歉， 没有找到！",
   		                      paginate: {
   		                          "sFirst": "首页",
@@ -2093,15 +2117,15 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  			return y_table = $("#ybTable").DataTable({
 	  				language: {
 	  					aria: {
-	  						sortAscending: ": activate to sort column ascending",
-	  						sortDescending: ": activate to sort column descending"
+	  						sortAscending: ": 以升序排列此列",
+	  						sortDescending: ": 以降序排列此列"
 	  					},
 	  					emptyTable: "空表",
 	  					info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
 	  					infoEmpty: "没有数据",
 	  					// infoFiltered: "(filtered1 from _MAX_ total entries)",
 	  					lengthMenu: "每页显示 _MENU_ 条数据",
-	  					search: "查询:",processing:"加载中...",
+	  					search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
 	  					zeroRecords: "抱歉， 没有找到！",
 	  					paginate: {
 	  						"sFirst": "首页",
@@ -2338,15 +2362,15 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	              m_table = $("#select_sample_2").DataTable({
 	                  language: {
 	                      aria: {
-	                          sortAscending: ": activate to sort column ascending",
-	                          sortDescending: ": activate to sort column descending"
+	                          sortAscending: ": 以升序排列此列",
+	                          sortDescending: ": 以降序排列此列"
 	                      },
 	                      emptyTable: "空表",
 	                      info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
 	                      infoEmpty: "没有数据",
 	                      //infoFiltered: "(filtered1 from _MAX_ total entries)",
 	                      lengthMenu: "每页显示 _MENU_ 条数据",
-	                      search: "查询:",processing:"加载中...",
+	                      search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
 	                      zeroRecords: "抱歉， 没有找到！",
 	                      paginate: {
 	                          "sFirst": "首页",

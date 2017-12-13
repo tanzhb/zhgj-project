@@ -1594,7 +1594,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    		}]
 		    	}	        
 		    }) .state('takeDeliveryAdd', {
-		    	url: "/takeDeliveryAdd?:serialNum&:type",
+		    	url: "/takeDeliveryAdd?:serialNum&:type&:orderSerialNum",
 		    	templateUrl: "rest/takeDelivery/takeDeliveryAdd",
 		    	data: {pageTitle: '新增代发货'},
 		    	reload:true, 
@@ -2236,7 +2236,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    })  
 		    
 		    .state('addDelivery', {
-            url: "/addDelivery:oprateType",
+            url: "/addDelivery:oprateType&:orderSerialNum",
             templateUrl: "rest/delivery/addDelivery",
             data: {pageTitle: '新增发货'},
             controller: "DeliveryController",

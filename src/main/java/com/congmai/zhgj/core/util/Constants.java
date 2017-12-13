@@ -59,6 +59,9 @@ public class Constants {
 	/***************** 采购订单流程key *****************/
 	public static final String BUYORDER = "com.congmai.zhgj.buyOrder";
 	
+	/***************** 外贸采购订单流程key *****************/
+	public static final String FOREIGN_TRADE_ORDER = "com.congmai.zhgj.foreignTradeOrder";
+	
 	/***************** 销售订单流程key *****************/
 	public static final String SALEORDER = "com.congmai.zhgj.saleOrder";
 

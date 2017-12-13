@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 
 import org.activiti.bpmn.BpmnAutoLayout;
 import org.activiti.bpmn.model.ActivitiListener;
+import org.activiti.bpmn.model.BaseElement;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.EndEvent;
 import org.activiti.bpmn.model.ExclusiveGateway;
@@ -58,6 +59,7 @@ import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.activiti.processTask.taskCommand.DeleteActiveTaskCmd;
 import com.congmai.zhgj.web.activiti.processTask.taskCommand.RevokeTaskCmd;
 import com.congmai.zhgj.web.activiti.processTask.taskCommand.StartActivityCmd;
+import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
@@ -707,8 +709,13 @@ public class ProcessServiceImp implements IProcessService{
         variables.put("entity", orderInfo);
 
         String businessKey = orderInfo.getBusinessKey();
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(Constants.BUYORDER, businessKey, variables);
-        String processInstanceId = processInstance.getId();
+        ProcessInstance processInstance;
+        if (StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())) {
+        	processInstance = runtimeService.startProcessInstanceByKey(Constants.FOREIGN_TRADE_ORDER, businessKey, variables);
+		}else{
+			processInstance = runtimeService.startProcessInstanceByKey(Constants.BUYORDER, businessKey, variables);
+		}
+		String processInstanceId = processInstance.getId();
         orderInfo.setProcessInstanceId(processInstanceId);
         this.processBaseService.update(orderInfo);
 

@@ -31,8 +31,8 @@ angular
 											{
 												language : {
 													aria : {
-														sortAscending : ": activate to sort column ascending",
-														sortDescending : ": activate to sort column descending"
+														sortAscending : ": 以升序排列此列",
+														sortDescending : ": 以降序排列此列"
 													},
 													emptyTable : "空表",
 													info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",

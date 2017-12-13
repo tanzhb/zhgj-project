@@ -279,15 +279,15 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 			.DataTable({
                 language: {
                     aria: {
-                        sortAscending: ": activate to sort column ascending",
-                        sortDescending: ": activate to sort column descending"
+                        sortAscending: ": 以升序排列此列",
+                        sortDescending: ": 以降序排列此列"
                     },
                     emptyTable: "空表",
                     info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
                     infoEmpty: "没有数据",
                     // infoFiltered: "(filtered1 from _MAX_ total entries)",
                     lengthMenu: "每页显示 _MENU_ 条数据",
-                    search: "查询:",processing:"加载中...",
+                    search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
                     zeroRecords: "抱歉， 没有找到！",
                     paginate: {
                         "sFirst": "首页",
@@ -643,15 +643,15 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
     			.DataTable({
                     language: {
                         aria: {
-                            sortAscending: ": activate to sort column ascending",
-                            sortDescending: ": activate to sort column descending"
+                            sortAscending: ": 以升序排列此列",
+                            sortDescending: ": 以降序排列此列"
                         },
                         emptyTable: "空表",
                         info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
                         infoEmpty: "没有数据",
                         // infoFiltered: "(filtered1 from _MAX_ total entries)",
                         lengthMenu: "每页显示 _MENU_ 条数据",
-                        search: "查询:",processing:"加载中...",
+                        search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
                         zeroRecords: "抱歉， 没有找到！",
                         paginate: {
                             "sFirst": "首页",
@@ -945,8 +945,8 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
                  table = $("#select_sample_2").DataTable({
                      language: {
                          aria: {
-                             sortAscending: ": activate to sort column ascending",
-                             sortDescending: ": activate to sort column descending"
+                             sortAscending: ": 以升序排列此列",
+                             sortDescending: ": 以降序排列此列"
                          },
                          emptyTable: "空表",
                          info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -954,7 +954,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
                          // infoFiltered: "(filtered1 from _MAX_ total
 							// entries)",
                          lengthMenu: "每页显示 _MENU_ 条数据",
-                         search: "查询:",processing:"加载中...",
+                         search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
                          zeroRecords: "抱歉， 没有找到！",
                          paginate: {
                              "sFirst": "首页",
@@ -3076,8 +3076,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		      			{
 		      				language: {
 		                         aria: {
-		                             sortAscending: ": activate to sort column ascending",
-		                             sortDescending: ": activate to sort column descending"
+		                             sortAscending: ": 以升序排列此列",
+		                             sortDescending: ": 以降序排列此列"
 		                         },
 		                         emptyTable: "空表",
 		                         info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -3085,7 +3085,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		                         // infoFiltered: "(filtered1 from _MAX_ total
 		 							// entries)",
 		                         lengthMenu: "每页显示 _MENU_ 条数据",
-		                         search: "查询:",processing:"加载中...",
+		                         search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
 		                         zeroRecords: "抱歉， 没有找到！",
 		                         paginate: {
 		                             "sFirst": "首页",
@@ -3273,8 +3273,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        			{
 		        				language : {
 		        					aria : {
-		        						sortAscending : ": activate to sort column ascending",
-		        						sortDescending : ": activate to sort column descending"
+		        						sortAscending : ": 以升序排列此列",
+		        						sortDescending : ": 以降序排列此列"
 		        					},
 		        					emptyTable : "空表",
 		        					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -3508,8 +3508,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        			{
 		        				language : {
 		        					aria : {
-		        						sortAscending : ": activate to sort column ascending",
-		        						sortDescending : ": activate to sort column descending"
+		        						sortAscending : ": 以升序排列此列",
+		        						sortDescending : ": 以降序排列此列"
 		        					},
 		        					emptyTable : "空表",
 		        					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -3701,8 +3701,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 						{
 							language : {
 								aria : {
-									sortAscending : ": activate to sort column ascending",
-									sortDescending : ": activate to sort column descending"
+									sortAscending : ": 以升序排列此列",
+									sortDescending : ": 以降序排列此列"
 								},
 								emptyTable : "空表",
 								info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",

@@ -464,7 +464,7 @@ margin-right: 20px;
                      </div>
                      <div class="row">
                          <!--/span-->
-                         <div class="col-md-4">
+                         <!-- <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label bold">结算汇率：</label>
                                  <div class="">
@@ -474,7 +474,7 @@ margin-right: 20px;
                                      <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.exchangeRate}} </p>
                                  </div>
                              </div>
-                         </div>
+                         </div> -->
                          <!--/span-->
                          <!-- <div class="col-md-4">
                          	<div class="form-group ">
@@ -1383,9 +1383,13 @@ margin-right: 20px;
 		                          <td>
                                      		<select  id="paymentMethod[$index]" name="paymentMethod" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].paymentMethod"  >
 		                                <option value=""></option>
-                                            	<option value="现款" >现款</option>
-                                              <option value="承兑汇款" >承兑汇款</option>
-                                              <option value="电子承兑" >电子承兑</option>
+                                            	<option ng-if="buyOrder.tradeType =='外贸'" value="T" >T</option>
+                                              <option ng-if="buyOrder.tradeType =='外贸'" value="TL" >TL</option>
+                                              <option ng-if="buyOrder.tradeType =='外贸'" value="C" >C</option>
+                                              
+                                              <option ng-if="buyOrder.tradeType =='内贸'" value="电汇" >电汇</option>
+                                              <option ng-if="buyOrder.tradeType =='内贸'" value="银行承兑" >银行承兑</option>
+                                              <option ng-if="buyOrder.tradeType =='内贸'" value="商业承兑" >商业承兑</option>
                                               </select>
 		                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.paymentMethod}} </p>
 		                          </td>

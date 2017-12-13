@@ -113,6 +113,7 @@
 			                            <th> 关联采购合同 </th>
 			                            <th> 关联销售单 </th>
 			                            <th> 下单日期 </th>
+			                            <th> 操作 </th>
 			                            <!-- <th style="white-space: nowrap;">状态</th> -->
 			                        </tr>
 			                    </thead>
