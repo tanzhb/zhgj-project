@@ -800,6 +800,23 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    					return;
 	        			}
 	        		}
+	        		
+	        		/*if($scope.companyManage==undefined){
+	        			$(".alert-danger").html("请输入管理信息!");
+    					$(".alert-danger").show();
+    					return;
+	        			}else{
+	        				if($scope.accendants==undefined){
+		        				$(".alert-danger").html("维护人员至少有一个!");
+		    					$(".alert-danger").show();
+		    					return;
+		        			}
+	        			}*/
+	        		if($scope.accendants==undefined){
+        				$(".alert-danger").html("维护人员至少有一个!");
+    					$(".alert-danger").show();
+    					return;
+        			}
 	        		handle.blockUI();
 	        		var promise = companyService.saveCompany($scope.company);
 	        		promise.then(function(data){
@@ -842,6 +859,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		        			 $scope.saveCompanyAddress();
 		        			 $scope.saveCompanyContact();
 		        			}
+		        			//$scope.saveCompanyManage();//保存管理信息
 	        			}else{
 	        				$(".modal-backdrop").remove();
 		        			handle.unblockUI();
@@ -1308,7 +1326,59 @@ $scope.showCompany=function(judgeString){
 	        		
 	        	});
 	       }
-	  
+	       /**
+	        * 保存企业管理信息
+	        */
+	       $scope.saveCompanyManageInfo = function(){
+	    	   if((handle.isNull($scope.company)||handle.isNull($scope.company.comId))&&flagAddress!=undefined){
+	    		   toastr.warning("您的企业信息还未保存");
+	    		   return;
+	    	   }else{
+	    		   if( $scope.accendants==undefined){
+	    			   toastr.warning("至少选择一个维护人员");
+		    		   return;
+	    		   }
+	    	   }
+	    	   if(true){
+	    		   var userId='';
+	    		   for(var i=0;i<$scope.accendants.length;i++){
+	    			   userId+=$scope.accendants[i].userId;
+	    			   if(i!=$scope.accendants.length-1){
+	    				   userId+=',';
+	    			   }
+	    		   }
+	    		   if($scope.companyManage==undefined){
+	    			   $scope.companyManage={};
+	    		   }
+	    		   $scope.companyManage.userId=userId;
+	    		   $scope.companyManage.comId=$scope.company.comId;
+	    		   $scope.companyManage.users=null;
+	    			   var promise = companyService.saveCompanyManage($scope.companyManage);
+		    		   promise.then(function(data){
+		    			   //$(".modal-backdrop").remove();
+		    			   if(data.data.flag=='1'){
+		    				   toastr.success("保存成功");
+		    				   $scope.companyManage= data.data.companyManage;
+		    				  $scope.companyMView=true;
+		    				   $scope.companyMAdd=true
+		    				   
+		    			   }else{
+		    				   toastr.error("保存失败！请联系管理员");
+		    			   }
+		    		   },function(data){
+		    			   //调用承诺接口reject();
+		    			   toastr.error("保存失败！请联系管理员");
+		    			   console.log(data);
+		    		   });
+	    		   
+	    	   }
+	       }
+	       
+	       $scope.editCompanyManageInfo=function(){
+	    	   $scope.companyMView=false;
+			   $scope.companyMAdd=false;
+			   
+	       }
 	       /***************************************************联系地址START*************************************************
 	       /**
 	        * 保存联系地址信息
@@ -1689,6 +1759,9 @@ $scope.showCompany=function(judgeString){
 		 	        		$scope.companyFinances = data.data.companyFinances;
 		 	        		$scope.companyAddresses = data.data.companyAddresses;
 		 	        		$scope.comManagers = data.data.comManagers;
+		 	        		$scope.companyManage = data.data.companyManage;
+		 	        		$scope.accendants=$scope.companyManage.users;
+		 	        		$scope.users=$scope.companyManage.users;
 		 	        		$scope.supplies = data.data.supplies;
 		 	        		$scope.buyComs = data.data.buyComs;
 		 	        		
@@ -1829,21 +1902,31 @@ $scope.showCompany=function(judgeString){
 	        	$scope.basicInfo = false;
 	        	$scope.qualificationInfo = false;
 	        	$scope.billInfo = false;
+	        	$scope.manage = false;
 	        	$scope.$apply();
 	        }else if(activeTab=="资质信息"){
 	        	$scope.basicInfo = true;
 	        	$scope.qualificationInfo = true;
 	        	$scope.billInfo = false;
+	        	$scope.manage = false;
 	        	$scope.$apply();
 	        }else if(activeTab=="财务信息"){
 	        	$scope.basicInfo = true;
 	        	$scope.qualificationInfo = false;
 	        	$scope.billInfo = true;
+	        	$scope.manage = false;
+	        	$scope.$apply();
+	        }else if(activeTab=="管理信息"){
+	        	$scope.basicInfo = true;
+	        	$scope.qualificationInfo = false;
+	        	$scope.billInfo = false;
+	        	$scope.manage = true;
 	        	$scope.$apply();
 	        }else{
 	        	$scope.basicInfo = true;
 	        	$scope.qualificationInfo = false;
 	        	$scope.billInfo = false;
+	        	$scope.manage = false;
 	        	$scope.$apply();
 	        }
 	     });
@@ -1869,8 +1952,202 @@ $scope.showCompany=function(judgeString){
 	    	   //console.log("==============>"+$scope.materielAllChecked);
 	    };
 	       
+	    $scope.addAccendant = function (){//添加维护人员
+	    	selectAccendant();
+    		$("#basicUserInfo").modal("show");
+		}
+      /** *************维护人员操作 start*************** */
+        var tableUser;
+        var selectAccendant = function() {
+        	if(tableUser!=undefined){
+        		tableUser.destroy();
+        	}
+                 a = 0;
+                 App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
+                 tableUser = $("#select_sample_2").DataTable({
+                     language: {
+                         aria: {
+                             sortAscending: ": activate to sort column ascending",
+                             sortDescending: ": activate to sort column descending"
+                         },
+                         emptyTable: "空表",
+                         info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                         infoEmpty: "没有数据",
+                         // infoFiltered: "(filtered1 from _MAX_ total
+							// entries)",
+                         lengthMenu: "每页显示 _MENU_ 条数据",
+                         search: "查询:",processing:"加载中...",
+                         zeroRecords: "抱歉， 没有找到！",
+                         paginate: {
+                             "sFirst": "首页",
+                             "sPrevious": "前一页",
+                             "sNext": "后一页",
+                             "sLast": "尾页"
+                          }
+                     },
+     /*
+		 * fixedHeader: {//固定表头、表底 header: !0, footer: !0, headerOffset: a },
+		 */
+                     order: [[1, "desc"]],// 默认排序列及排序方式
+                     searching: true,// 是否过滤检索
+                     ordering:  true,// 是否排序
+                     lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
+                     pageLength: 5,// 每页显示数量
+                     processing: true,// loading等待框
+// serverSide: true,
+                     ajax: "rest/company/findUserList",//查找所有用户
+                     "aoColumns": [
+                                   { mData: 'userId' },
+                                   { mData: 'userName' },
+                                   { mData: 'sex' },
+                                   { mData: 'department' },
+                                   { mData: 'position' }
+                             ],
+                    'aoColumnDefs' : [ {
+     							'targets' : 0,
+     							'searchable' : false,
+     							'orderable' : false,
+     							
+     							'render' : function(data,
+     									type, row, meta) {
+     	  								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+     									"<input type='checkbox' class='checkboxes' data-checked=false  id='"+ row.userId +"' ng-click='getCheckedIds(\""+data+"\",\""+row.userName+"\")' name='user_serial' value="+ row.userId +" />" +
+     									"<span></span></label>";
 
-	       
-	       
+     							},
+     							"createdCell": function (td, cellData, rowData, row, col) {
+     								 $compile(td)($scope);
+     						       }
+     						}/*,{
+     							'targets' : 1,
+     							'render' : function(data,
+     									type, row, meta) {
+     								var ClauseFrameworkIcon='';// ClauseFramework图标
+     								if(row.isCSD==1){
+     									ClauseFrameworkIcon = '<span class="label label-sm label-success">B</span> '
+     								}
+     								return ClauseFrameworkIcon + data;
+     							}
 
+     						}*/],	//stateSave:false,
+							"fnInitComplete":function(settings) {//fnInitComplete stateLoadCallback
+			                	   showDetail();
+			                   }
+
+                 }).on('order.dt',
+                         function() {
+                     console.log('排序');
+                 }).on('page.dt', 
+                 function () {
+               	  console.log('翻页');
+   	          }).on('draw.dt',function() {
+   	        	  checkedIdHandler();
+   	          });
+                 //全选操作
+                 $("#select_sample_2").find(".group-checkable").change(function() {
+      	            var e = jQuery(this).attr("data-set"),
+      	            t = jQuery(this).is(":checked");
+      	            jQuery(e).each(function() {
+      	                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+      	            })
+      	        }),
+      	        $("#select_sample_2").on("change", "tbody tr .checkboxes",
+      	        function() {
+      	            $(this).parents("tr").toggleClass("active")
+      	        })
+             };
+             /**
+       		 * 遍历checkbox,检查并处理已取消的元素
+       		 */
+       		function checkedIdHandler(){
+       			//获取选中用户ID
+       			tableUser.$('input[name="user_serial"]').each(function() { //遍历当前页的物料信息
+       					if ($.contains(document, this)) {
+       						if (this.checked) {
+       							if($scope.users.length>0){
+       								var flag = false;
+       								for(var i=0;i<$scope.users.length;i++){
+       									if($scope.users[i].userId == $(this).attr("id")){
+       										flag=true;
+       										break;
+       									}
+       									if(i==$scope.users.length-1&& flag==false){//不在选中数组内，checkbox清除选中状态
+       										$(this).attr("checked",false);
+       										$(this).data("checked",false);
+       									}
+       								}
+       							}else if($scope.users.length==0){//没有被选中的物料
+       								$(this).attr("checked",false);
+       								$(this).data("checked",false);
+       							}
+       						}
+       					}
+       			});
+       		}
+            /**
+      		 * checkbox点击事件（生成选中内容）
+      		 */
+      		$scope.getCheckedIds = function(userId,userName){
+      			var data={};
+      			data.userId = userId;
+      			data.userName = userName; //获取一行数据
+      			if($scope.users==undefined&&$scope.accendants==undefined	){
+      				$scope.users=[];
+      			}else{
+      				if($scope.accendants!=undefined){
+      					$scope.users=$scope.accendants;
+      				}
+      			for(var i=0;i<$scope.users.length;i++){
+  					if($scope.users[i].userId==userId){
+  						$scope.users.splice(i,1);
+  						$("#"+userId).attr("checked",false);
+  						$("#"+userId).data("checked",false);
+  						return;
+  					}
+      			}
+      		}
+      			if($("#"+userId).data("checked")||$("#"+userId).data("checked")==undefined){
+      				for(var i=0;i<$scope.users.length;i++){
+      					if($scope.users[i].userId==userId){
+      						$scope.users.splice(i,1);
+      						$("#"+userId).attr("checked",false);
+      						$("#"+userId).data("checked",false);
+      						break;
+      					}
+      				}
+      			}else{
+      				$scope.users.push(data);
+      				$("#"+userId).data("checked",true);
+      				$("#"+userId).attr("checked",true);
+      			}
+      			
+      		}
+      		$scope.confirmSelect=function(){
+      			if($scope.users==undefined){
+      				 toastr.warning("请至少选择一个用户");
+		    		 return;
+      			}
+      			$scope.accendants=$scope.users;
+      			$("#basicUserInfo").modal("hide");
+      		}
+      		 /**
+	 		 * 遍历checkbox将之前保存的维护人员情况展示出来
+	 		 */
+	 		function showDetail(){
+	 			//m_table.$('input[type="checkbox"]')
+	 			tableUser.$('input[type="checkbox"]').each(function() { //遍历所有checkbox
+	 				
+	 					if ($.contains(document, this)) {
+	 						 var users=$scope.accendants;
+	 						 if(users!=undefined){
+							 for(var i=0;i<users.length;i++){
+								  var userId=users[i].userId;
+								 if($(this).attr("id")==userId){
+									$("#"+userId).attr("checked",true);
+								 }
+							 }
+	 						 }
+	 					}
+	 			});
+	 		}
 }]); 

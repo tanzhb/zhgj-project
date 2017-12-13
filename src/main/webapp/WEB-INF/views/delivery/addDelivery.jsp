@@ -299,7 +299,7 @@
 															</span>
 														</div>
 														</div>
-														<div class="" ng-show="showSXf=='1'">
+														<div class="" ng-show="showSXf=='1'"  >
 														<select class="form-control"  id="warehouseAddress"  data-live-search="true" data-size=""  
 															name="warehouseAddress"
 															ng-model="warehouseAddress"

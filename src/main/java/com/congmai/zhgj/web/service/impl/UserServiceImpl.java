@@ -12,6 +12,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
@@ -110,5 +111,20 @@ public class UserServiceImpl extends GenericServiceImpl<User, Integer> implement
 	public void updatePhone(User user) {
 		// TODO Auto-generated method stub
 		userMapper.updatePhone(user);
+	}
+
+
+	@Override
+	public List<User> selectUserList(String type) {
+		// TODO Auto-generated method stub
+		UserExample example = new UserExample();
+		/*if(!StringUtils.isEmpty(type)){
+			if("buy".equals(type)){
+				example.createCriteria().andGroupIdEqualTo(0);
+			}else{
+				example.createCriteria().andGroupIdEqualTo(0);
+			}
+		}*/
+		return userMapper.selectByExample(example);
 	}
 }

@@ -68,6 +68,15 @@
                                 <button   ng-hide="billAdd" class="btn defualt  btn-sm  btn-circle" ng-click="cancelCompany('bill')">
                                             <i class="fa fa-mail-reply"></i> 取消 </button>
 					</li>
+					<li class="dropdown pull-right tabdrop" ng-show="manage">
+					 			<button   ng-show="companyMView" class="btn purple  btn-sm  btn-circle" ng-click="editCompanyManageInfo()">
+                                            <i class="fa fa-edit"></i> 编辑 </button>
+                                <button   ng-hide="companyMAdd" class="btn green btn-sm  btn-circle" ng-click="saveCompanyManageInfo()">
+                                            <i class="fa fa-check"></i> 保存 </button>
+                                <button   ng-hide="companyMAdd" class="btn defualt  btn-sm  btn-circle" ng-click="cancelCompanyManageInfo()">
+                                            <i class="fa fa-mail-reply"></i> 取消 </button>
+					</li>
+					
 					<li class="active bold">
                   	<a data-target="#tab_1_1" data-toggle="tab">企业信息</a>
               		</li>
@@ -75,6 +84,7 @@
 					</li>
 					<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">财务信息</a></li>
 					<li class="bold"><a data-target="#tab_1_4" data-toggle="tab">联系方式</a></li>
+					<li class="bold"><a data-target="#tab_1_5" data-toggle="tab">管理信息</a></li>
 				</ul>
 				<div class="tab-content">
 				<div class="tab-pane fade active in" id="tab_1_1">
@@ -612,7 +622,146 @@
 						</div>
 					</div>
 				</div>
-
+	<div class="tab-pane fade" id="tab_1_5">
+					<div class="portlet light ">
+						<div class="portlet-body form">
+							<form id="billForm">
+								<div class="form-body">
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label bold" for="corporatePresence">供应商简称
+												</label>
+												<div class="">
+													<input type="text" class="form-control" id="comShortName"
+														ng-model="companyManage.comShortName" 
+														ng-hide="companyMAdd">
+													<div class="form-control-focus"></div>
+													<p class="control-label left" ng-show="companyMView">{{companyManage.comShortName}}</p>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label bold" for="accendant">维护人员</label>
+												<div class="">
+													 <div class="btn-group">
+                                         <a ng-hide="companyMAdd" href="javascript:;" style="margin:0px 5px 2px 0px;" class="btn btn-xs green"    ng-repeat="data in accendants"  ng-click="getCheckedIds(data.userId,data.userName)">
+                           {{data.userName}}<i class="fa fa-close"></i>
+                    </a>
+                    <a class="btn blue btn-sm" ng-click="addAccendant()"  ng-if="!companyMAdd">
+									<i class="fa fa-plus"></i>
+								</a>
+                                 </div>
+													<div class="form-control-focus"></div>
+													<p class="control-label left" ng-show="companyMView">
+													<a href="javascript:;" style="margin:0px 5px 2px 0px;" class="btn btn-xs green"    ng-repeat="data in companyManage.users"  >
+                           {{data.userName}}
+                    </a>
+													<!-- {{companyManage.accendant}} --></p>
+												</div>
+											</div>
+										</div>
+										
+									</div>
+									<!--/row-->
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label bold" for="type">供应商分类
+												</label>
+												<div class="">
+													<!-- <input type="text" class="form-control" 
+														ng-model="companyManage.type"
+														ng-hide="billAdd"> -->
+														 <select class="form-control" id="type"  ng-hide="companyMAdd" name="type"  ng-model="companyManage.type" >
+                                                            <option value=""></option>
+                                                           	<option value="1" >一级供应商</option>
+                                                            <option value="2" >二级供应商</option>
+                                                            <option value="3" >三级供应商</option>
+                                                        </select>
+													<div class="form-control-focus"></div>
+													<p class="control-label left" ng-show="companyMView">{{companyManage.type}}</p>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label class="control-label bold" for="openingBank">供应商等级
+												</label>
+												<div class="">
+													<!-- <input type="text" class="form-control" id="openingBank"
+														ng-model="companyManage.grade"
+														ng-hide="billAdd"> -->
+														<select class="form-control" id="grade"  ng-hide="companyMAdd" name="grade"  ng-model="companyManage.grade" >
+                                                            <option value=""></option>
+                                                           	<option value="1" >合格供应商</option>
+                                                            <option value="2" >预警供应商</option>
+                                                            <option value="3" >淘汰供应商</option>
+                                                        </select>
+													<div class="form-control-focus"></div>
+													<p class="control-label left" ng-show="companyMView">{{companyManage.grade}}</p>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!--/row-->
+								</div>
+							</form>
+						</div>
+						<!-- <div class="portlet-title">
+							<div class="caption">收付款信息</div>
+							<div class="actions"></div>
+						</div>
+						<div class="portlet-body form">
+							<div class="table-scrollable">
+								<table
+									class="table table-striped table-bordered table-advance table-hover">
+									<thead>
+										<tr>
+											<th>银行</th>
+											<th>户名</th>
+											<th>账号</th>
+											<th>备注</th>
+											<th style="min-width: 60px;max-width: 100px">操作</th>
+										</tr>
+									</thead>
+									<tbody ng-if="companyFinances.length==0">
+										<tr>
+											<td colspan="5" align="center">暂无数据</td>
+										</tr>
+									</tbody>
+									<tbody ng-repeat="finance in companyFinances">
+										<tr ng-mouseover="showOperation('finance',$index)"
+											ng-mouseleave="hideOperation('finance',$index)">
+											<td>{{finance.openingBank}}</td>
+											<td>{{finance.accountName}}</td>
+											<td>{{finance.accountNumber}}</td>
+											<td>{{finance.remark}}</td>
+											<td ng-show="operation_f{{$index}}">
+												<a class="btn btn-circle btn-icon-only btn-default" href="javascript:;" ng-click="editCompanyFinance(finance.serialNum)" title="编辑">
+                                                                <i class="icon-wrench"></i>
+                                                        </a>
+                                                        <a class="btn btn-circle btn-icon-only btn-default" href="javascript:;" ng-click="deleteCompanyFinance(finance.serialNum)" title="删除">
+                                                                <i class="icon-trash"></i>
+                                                        </a> <a
+												ng-click="editCompanyFinance(finance.serialNum)"><i
+													class="fa fa-edit" title="编辑"></i></a> &nbsp;&nbsp;&nbsp; <a
+												ng-click="deleteCompanyFinance(finance.serialNum)"><i
+													class="fa fa-trash" title="删除"></i></a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="form-actions right">
+								<a class="btn blue btn-sm" ng-click="addCompanyFinance()">
+									<i class="fa fa-plus"></i> 增加
+								</a>
+							</div>
+						</div> -->
+					</div>
+				</div>
 			</div>
         <!-- END EXAMPLE TABLE PORTLET-->
     <!-- </div> -->
@@ -907,7 +1056,7 @@
  </div>
 <!-- 联系地址modal END -->
 
-
+<jsp:include  page="selectUser.jsp"/> <!-- 选择维护人员 -->
 <!-- END MAIN CONTENT -->
 <!-- BEGIN MAIN JS -->
  <script>

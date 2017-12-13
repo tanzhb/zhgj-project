@@ -284,7 +284,20 @@ angular.module('MetronicApp').service('companyService',['$http','$q',function($h
 		});
 		return deferred.promise;//返回承诺
 	}
-
+	/**
+	 * 保存管理信息
+	 */
+	this.saveCompanyManage = function (companyManage){
+		var deferred = $q.defer();
+		$http.post("rest/company/saveCompanyManage", 
+				companyManage//传整个表单数据  
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
 
 
 }]); 

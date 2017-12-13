@@ -38,6 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
@@ -49,17 +50,23 @@ import com.congmai.zhgj.web.model.CompanyAddress;
 import com.congmai.zhgj.web.model.CompanyContact;
 import com.congmai.zhgj.web.model.CompanyExample;
 import com.congmai.zhgj.web.model.CompanyExample.Criteria;
+import com.congmai.zhgj.web.model.Category;
 import com.congmai.zhgj.web.model.CompanyFinance;
+import com.congmai.zhgj.web.model.CompanyManage;
 import com.congmai.zhgj.web.model.CompanyQualification;
 import com.congmai.zhgj.web.model.DataTablesParams;
+import com.congmai.zhgj.web.model.Materiel;
+import com.congmai.zhgj.web.model.MaterielSelectExample;
 import com.congmai.zhgj.web.model.SupplyBuyVO;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.CompanyAddressService;
 import com.congmai.zhgj.web.service.CompanyContactService;
 import com.congmai.zhgj.web.service.CompanyFinanceService;
+import com.congmai.zhgj.web.service.CompanyManageService;
 import com.congmai.zhgj.web.service.CompanyQualificationService;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.UserCompanyService;
+import com.congmai.zhgj.web.service.UserService;
 
 
 /**
@@ -86,6 +93,10 @@ public class CompanyController {
 	private UserCompanyService userCompanyService;
 	@Autowired
 	private CompanyAddressService companyAddressService;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private CompanyManageService companyManageService;
 	
 	  /**
      * @Description (企业信息首页)
@@ -198,6 +209,7 @@ public class CompanyController {
     	map.put("companyContacts", companyContactService.selectListByComId(comId));
     	map.put("companyAddresses", companyAddressService.selectListByComId(comId));
     	map.put("comManagers", null);
+    	map.put("companyManage", companyManageService.selectListByComId(comId).get(0));
     	company.setPageIndex(0);
 		 company.setPageSize(-1);
 		 if("1".equals(company.getComType())){
@@ -237,6 +249,7 @@ public class CompanyController {
      	map.put("companyQualifications", companyQualificationService.selectListByComId(comId));
     	map.put("companyContacts", companyContactService.selectListByComId(comId));
     	map.put("companyAddresses", companyAddressService.selectListByComId(comId));
+    	map.put("companyManage", companyManageService.selectListByComId(comId).get(0));
     	return "company/companyView";
     }
     
@@ -767,6 +780,56 @@ public class CompanyController {
 		}
     	
     	return flag;
+    }
+    /**
+     * 
+     * @Description 查询用户
+     * @param type(采购商/供应商)
+     * @return
+     */
+    @RequestMapping("/findUserList")
+    @ResponseBody
+    public ResponseEntity<Map> findUserList(String type) {
+    	List<User>userList=userService.selectUserList(type);
+		Map pageMap = new HashMap();
+		pageMap.put("draw", 1);
+		pageMap.put("recordsTotal", userList==null?0:userList.size());
+		pageMap.put("recordsFiltered", userList==null?0:userList.size());
+		pageMap.put("data", userList);
+		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+
+    }
+    /**
+     * @Description (保存管理信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="saveCompanyManage",method=RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object>  saveCompanyManage(@RequestBody CompanyManage companyManage,HttpServletRequest request) {
+    	String flag ="0"; //默认失败
+    	Subject currentUser = SecurityUtils.getSubject();
+    	String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+    	Map<String, Object> map=new HashMap<String, Object>();
+        	try{
+        		if(org.springframework.util.StringUtils.isEmpty(companyManage.getSerialNum())){
+        			companyManage.setSerialNum(UUID.randomUUID().toString().replace("-",""));
+        			companyManage.setCreator(currenLoginName);
+        			companyManageService.insert(companyManage);
+        		}else{
+        			companyManage.setUpdater(currenLoginName);
+        			companyManageService.update(companyManage);
+        		}
+        		List<CompanyManage>list=companyManageService.selectListByComId(companyManage.getComId());
+        		map.put("companyManage", list.get(0));
+        		flag = "1";
+        		
+        	}catch(Exception e){
+        		System.out.println(e.getMessage());
+        		return null;
+        	}
+        	map.put("flag", flag);
+    	return map;
     }
 }
 
