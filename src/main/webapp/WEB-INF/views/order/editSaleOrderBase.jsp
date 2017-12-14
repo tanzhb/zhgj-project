@@ -104,7 +104,7 @@ margin-right: 20px;
                                  	<div class="row">
                        					<div class="col-md-8">
                        						<select class="form-control" id="buyComId"  data-live-search="true"  name="buyComId"  
-                                  		 ng-model="saleOrder.buyComId"   data-size="8">
+                                  		 ng-model="saleOrder.buyComId"   data-size="8" ng-change="setEntrustParty(this)">
                                                   <option value=""></option>
                                                   <option  ng-repeat="customer in customers" value="{{customer.comId}}" >{{customer.comName}}</option>
                                               </select>
@@ -160,7 +160,7 @@ margin-right: 20px;
                                  
                              </div>
                          </div>
-                         <div class="col-md-4">
+                         <div class="col-md-4" ng-if="saleOrder.orderType !='委托销售'">
                              <div class="form-group ">
                                  <label class="control-label bold">关联销售申请单号：</label>
                                  <div class="">
@@ -168,6 +168,17 @@ margin-right: 20px;
                                      <div class="form-control-focus"> </div>
                                      <span class="help-block" ng-hide="saleOrderInput">请输入关联销售申请单号</span>
                                      <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.saleApplySerial}} </p>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="col-md-4" ng-if="saleOrder.orderType =='委托销售'">
+                             <div class="form-group ">
+                                 <label class="control-label bold">客户项目号：</label>
+                                 <div class="">
+                                 <input type="text" name="projectNum" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.projectNum"  >
+                                     <div class="form-control-focus"> </div>
+                                     <span class="help-block" ng-hide="saleOrderInput">请输入客户项目号</span>
+                                     <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.projectNum}} </p>
                                  </div>
                              </div>
                          </div>

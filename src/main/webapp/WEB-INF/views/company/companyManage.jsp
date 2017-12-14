@@ -21,10 +21,16 @@
 <!-- BEGIN MAIN CONTENT -->
 <div class="tabbable-line">
 	<ul class="nav nav-tabs" id="statement_tab">
+	<shiro:hasPermission name="zhgj:buyCompany">
 		<li   id="buy"  ng-hide="isNotSupply"><a  ng-click="showCompany('buy')">采购商</a></li>
+		</shiro:hasPermission>
+		<shiro:hasPermission name="zhgj:supplyCompany">
 		<li  id="supply"  ng-hide="isNotBuy"><a ng-click="showCompany('supply')">供应商</a></li>
+		</shiro:hasPermission>
+		<shiro:hasPermission name="zhgj:otherCompany">
 		<li   id="other"  ng-hide="isNotOther"><a  ng-click="showCompany('other')">其他 </a>
 		</li>
+		</shiro:hasPermission>
 	</ul>
 <div class="row">
 	<div class="col-md-12">

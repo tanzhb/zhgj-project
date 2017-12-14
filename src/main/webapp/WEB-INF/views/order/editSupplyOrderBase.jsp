@@ -231,7 +231,7 @@ margin-right: 20px;
                                  
                              </div>
                          </div>
-                         <div class="col-md-4">
+                         <div class="col-md-4" ng-if="buyOrder.orderType !='委托采购'">
                          	<div class="form-group ">
                                  <label class="control-label bold">关联采购申请单号：</label>
                                  <div class="">
@@ -241,6 +241,17 @@ margin-right: 20px;
                                      <p class="form-control-static" ng-show="buyOrderShow">{{buyOrder.demandPlanSerial}} </p>
                                  </div>
                                  
+                             </div>
+                         </div>
+                         <div class="col-md-4" ng-if="buyOrder.orderType =='委托采购'">
+                             <div class="form-group ">
+                                 <label class="control-label bold">客户项目号：</label>
+                                 <div class="">
+                                 <input type="text" name="projectNum" class="form-control" ng-hide="buyOrderInput" ng-model="buyOrder.projectNum"  >
+                                     <div class="form-control-focus"> </div>
+                                     <span class="help-block" ng-hide="buyOrderInput">请输入客户项目号</span>
+                                     <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.projectNum}} </p>
+                                 </div>
                              </div>
                          </div>
                          <!--/span-->

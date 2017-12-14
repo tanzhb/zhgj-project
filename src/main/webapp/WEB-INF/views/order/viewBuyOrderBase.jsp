@@ -121,13 +121,21 @@ margin-right: 20px;
                                  </div>
                              </div>
                          </div>
-                         <div class="col-md-4">
+                         <div class="col-md-4" ng-if="buyOrder.orderType !='委托采购'">
                          	<div class="form-group ">
                                  <label class="control-label col-md-5 bold">关联采购申请单号：</label>
                                  <div class="control-label col-md-7">
                                  <p  >{{buyOrder.demandPlanSerial}} </p>
                                  </div>
                                  
+                             </div>
+                         </div>
+                         <div class="col-md-4" ng-if="buyOrder.orderType =='委托采购'">
+                             <div class="form-group ">
+                                 <label class="control-label col-md-5 bold">关联项目号：</label>
+                                 <div class="control-label col-md-7">
+                                     <p  > {{buyOrder.projectNum}} </p>
+                                 </div>
                              </div>
                          </div>
                          <!--/span-->

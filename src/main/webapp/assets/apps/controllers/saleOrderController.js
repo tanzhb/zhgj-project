@@ -3695,7 +3695,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        							className : "btn default"
 		        						}*/ ],
 		        				dom : "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
-		        				order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+		        				order : [ [ 6, "asc" ] ],// 默认排序列及排序方式
 
 		        				bRetrieve : true,
 		        				lengthMenu : [
@@ -3840,7 +3840,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        						"sLast" : "尾页"
 		        					}
 		        				},
-		        				order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+		        				order : [ [ 5, "desc" ] ],// 默认排序列及排序方式
 		        				bRetrieve : true,
 		        				lengthMenu : [
 		        						[ 5, 10, 15, 30, -1 ],
@@ -4414,5 +4414,14 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 	    //从订单代发货
 		 	      $scope.deliveryAdd= function(serialNum) {
 		 	    	  $state.go('addDelivery',{oprateType:"forSaleOrder",orderSerialNum:serialNum});
+		 	       }
+		 	     //设置
+		 	      $scope.setEntrustParty= function(obj) {
+		 	    	 for(var i=0;i<$scope.customers.length;i++){
+		 	    		 if($scope.saleOrder.buyComId == $scope.customers[i].comId){
+		 	    			$scope.saleOrder.entrustParty = $scope.customers[i].comName
+		 	    			return;
+		 	    		 }
+		 	    	 }
 		 	       }
 }]);

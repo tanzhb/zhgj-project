@@ -23,12 +23,16 @@
 <!-- BEGIN MAIN CONTENT -->
 <div class="tabbable-line">
     <ul class="nav nav-tabs">
+    <shiro:hasPermission name="zhgj:incomeBill:*">
         <li  id="in" >
             <a data-target="#tab_in" data-toggle="tab"  ng-click="showOut('showin')">进项票</a>
         </li>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="zhgj:ticket:*">
         <li  id="out">
             <a data-target="#tab_out" data-toggle="tab"   ng-click="showOut('showout')">销项票</a>
         </li>
+        </shiro:hasPermission>
     </ul>
     <div class="tab-content">
     	<!-- 进项票列表---START -->

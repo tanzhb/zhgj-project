@@ -3414,6 +3414,11 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" + 
 				 		"<li><a>查看采购订单</a></li>";
+			   }else if('viewSaleOrder' == toState.name){//查看销售订单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>查看销售订单</a></li>";
 			   }else if('viewSupplyOrder' == toState.name){//查看供应商订单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +

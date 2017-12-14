@@ -1,5 +1,6 @@
 <%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <head>
 	<meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8" />
 </head>
@@ -26,12 +27,16 @@
 <!-- BEGIN MAIN CONTENT -->
 <div class="tabbable-line">
     <ul class="nav nav-tabs">
+    	<shiro:hasPermission name="zhgj:stockInCheck:*">
         <li  id="in" >
             <a data-target="#tab_in" data-toggle="tab"  ng-click="showOut('showIn')">入库检验</a>
         </li>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="zhgj:stockOutCheck:*">
         <li  id="out">
             <a data-target="#tab_out" data-toggle="tab"   ng-click="showOut('showOut')">出库检验</a>
         </li>
+        </shiro:hasPermission>
     </ul>
     <div class="tab-content">
     	<!-- 入库检验列表---START -->

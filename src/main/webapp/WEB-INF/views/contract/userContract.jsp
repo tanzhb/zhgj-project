@@ -1,11 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <div class="tabbable-line">
 	<ul class="nav nav-tabs" id="contract_tab">
+	<shiro:hasPermission name="zhgj:saleContract">
 		<li><a data-target="#tab_15_2" data-toggle="tab">销售合同</a></li>
+		</shiro:hasPermission>
+		<shiro:hasPermission name="zhgj:buyContract">
 		<li><a data-target="#tab_15_3" data-toggle="tab">采购合同</a></li>
+		</shiro:hasPermission>
+		<shiro:hasPermission name="zhgj:otherContract">
 		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">其他合同</a>
 		</li>
+		</shiro:hasPermission>
 	</ul>
 	<div class="tab-content">
 		<div class="tab-pane active" id="tab_15_1">

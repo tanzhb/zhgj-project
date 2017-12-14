@@ -1813,7 +1813,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 									className : "btn default"
 								}*/ ],
 						dom : "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
-						order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+						order : [ [6, "asc" ] ],// 默认排序列及排序方式
 
 						bRetrieve : true,
 						lengthMenu : [
@@ -1965,7 +1965,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 								"sLast" : "尾页"
 							}
 						},
-						order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+						order : [ [ 5, "desc" ] ],// 默认排序列及排序方式
 						bRetrieve : true,
 						lengthMenu : [
 								[ 5, 10, 15, 30, -1 ],
