@@ -76,6 +76,14 @@
                                 <button   ng-hide="companyMAdd" class="btn defualt  btn-sm  btn-circle" ng-click="cancelCompany('companyManage')">
                                             <i class="fa fa-mail-reply"></i> 取消 </button>
 					</li>
+					<li class="dropdown pull-right tabdrop" ng-show="comRelation">
+					 			<button   ng-show="CompanyInfoShow" class="btn purple  btn-sm  btn-circle" ng-click="editCompanyRelationInfo()">
+                                            <i class="fa fa-edit"></i> 编辑 </button>
+                                <button   ng-hide="CompanyInfoInput" class="btn green btn-sm  btn-circle" ng-click="saveCompanyRelationInfo()">
+                                            <i class="fa fa-check"></i> 保存 </button>
+                                <button   ng-hide="CompanyInfoInput" class="btn defualt  btn-sm  btn-circle" ng-click="cancelCompany('companyRelation')">
+                                            <i class="fa fa-mail-reply"></i> 取消 </button>
+					</li>
 					
 					<li class="active bold">
                   	<a data-target="#tab_1_1" data-toggle="tab">企业信息</a>
@@ -85,6 +93,8 @@
 					<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">财务信息</a></li>
 					<li class="bold"><a data-target="#tab_1_4" data-toggle="tab">联系方式</a></li>
 					<li class="bold"><a data-target="#tab_1_5" data-toggle="tab">管理信息</a></li>
+					<li class="bold"  ng-show="company.comType=='2'"><a data-target="#tab_1_6" data-toggle="tab">采购商</a></li>
+					<li class="bold"  ng-show="company.comType=='1'"><a data-target="#tab_1_6" data-toggle="tab">供应商</a></li>
 				</ul>
 				<div class="tab-content">
 				<div class="tab-pane fade active in" id="tab_1_1">
@@ -766,6 +776,103 @@
 						</div> -->
 					</div>
 				</div>
+				<div class="tab-pane fade" id="tab_1_6">
+						<!-- 采购商/供应商start-->
+				          <!-- <div class="portlet-title" style="min-height: 48px;">
+				               <div class="tools" style="float:right">
+				               	 	<button type="submit" ng-click="saveBuyMateriel()" ng-hide="buyMaterielInfoInput" class="btn green  btn-circle  btn-sm">
+				                  		<i class="fa fa-save"></i> 保存 </button>
+				                  <button ng-click="cancelBuyMateriel()" type="button" ng-hide="buyMaterielInfoInput" class="btn defualt  btn-circle  btn-sm">
+				                  		<i class="fa fa-undo"></i> 取消 </button>
+				                  <button ng-click="editBuyMateriel()" type="button" ng-show="buyMaterielInfoShow" class="btn purple  btn-circle  btn-sm">
+				                  		<i class="fa fa-edit"></i> 编辑 </button>
+				                </div>
+				            </div> -->
+				           <div class="portlet-body form" ng-if="company.comType=='2'">
+							     <form id="form_sample_6" >
+							         <div class="table-scrollable">
+				                          <table class="table table-bordered table-hover">
+				                              <thead>
+				                                  <tr>
+				                                      <th>采购商</th>
+				                                      <th>采购商编号</th>
+				                                       <th>操作</th>
+				                                  </tr>
+				                              </thead>
+				                              <tbody>
+				                                  <tr ng-repeat="_buyCompany in supplies track by $index" ng-mouseover="showOperation('_buyCompany',$index)" ng-mouseleave="hideOperation('_buyCompany',$index)" >
+							                          <td>
+						                                 	<div ng-hide="CompanyInfoInput">
+							                                 	<select class="form-control" id="buyComId[$index]"  class="bs-select form-control diySelectCss"  ng-change="fuzhi('supply',$index)"   name="buyComId" data-live-search="true" data-size="8"  ng-model="supplies[$index].comId"  >
+							                                 	 <option value=""></option>
+					                                              	<option ng-repeat="_buy in buyCompanys" value="{{_buy.comId}}" repeat-done="repeatDone('buy')">{{_buy.comName}}</option>
+					                                             </select>
+				                                             </div>
+							                                <p class="form-control-static" ng-show="CompanyInfoShow"> {{_buyCompany.comName}} </p>
+							                          </td>
+							                          <td>
+						                                 	<p class="form-control-static" > {{supplies[$index].comNum}} </p>
+							                          </td>
+							                         <td ng-show="operation_b{{$index}}" >
+				                                      	<a href="javascript:;"  class="btn red btn-sm" ng-hide="CompanyInfoInput" ng-click="deleteComRelation('buy',$index)">
+				                                    			<i class="fa fa-close"></i> 
+				                             				</a>
+				                                      </td>
+				                                  </tr>
+				                              </tbody>
+				                          </table>
+				                      </div>
+				                      <div class="form-actions right">
+											<a  class="btn blue btn-sm"  ng-hide="CompanyInfoInput" ng-click="addComRelation('buy')"   >
+					                              <i class="fa fa-plus"></i> 增加
+					                       	</a> 
+				                  		</div>
+				                  </form>
+				          </div>
+				          
+				              <div class="portlet-body form" ng-if="company.comType=='1'">
+							     <form id="form_sample_6" >
+							         <div class="table">
+				                          <table class="table table-bordered table-hover">
+				                              <thead>
+				                                  <tr>
+				                                      <th>供应商</th>
+				                                      <th>供应商编号</th>
+				                                      <th>操作</th>
+				                                  </tr>
+				                              </thead>
+				                              <tbody>
+				                                  <tr ng-repeat="_supplyCompany in buyComs track by $index" ng-mouseover="showOperation('_supplyCompany',$index)" ng-mouseleave="hideOperation('_supplyCompany',$index)" >
+							                          <td>
+						                                 	<div ng-hide="CompanyInfoInput">
+							                                 	<select class="form-control" id="buyComId[$index]" name="supplyComId"    ng-change="fuzhi('buy',$index)"    data-live-search="true" data-size="8"  ng-model="buyComs[$index].comId"  >
+							                                 	 <option value=""></option>
+					                                              	<option ng-repeat="_buy in supplyCompanys" value="{{_buy.comId}}" repeat-done="repeatDone('supply')">{{_buy.comName}}</option>
+					                                             </select>
+				                                             </div>
+							                                <p class="form-control-static" ng-show="CompanyInfoShow"> {{_supplyCompany.comName}} </p>
+							                          </td>
+							                          <td>
+						                                 	<p class="form-control-static" > {{buyComs[$index].comNum}} </p>
+							                          </td>
+							                       <td ng-show="operation_s{{$index}}">
+				                                      	<a href="javascript:;"  class="btn red btn-sm" ng-hide="CompanyInfoInput" ng-click="deleteComRelation('supply',$index)">
+				                                    			<i class="fa fa-close"></i> 
+				                             				</a>
+				                                      </td>
+				                                  </tr>
+				                              </tbody>
+				                          </table>
+				                      </div>
+				                      <div class="form-actions right">
+											<a  class="btn blue btn-sm"  ng-hide="CompanyInfoInput" ng-click="addComRelation('supply')"   >
+					                              <i class="fa fa-plus"></i> 增加
+					                       	</a> 
+				                  		</div>
+				                  </form>
+				          </div>
+				          <!-- 供应商 end-->
+						</div>
 			</div>
         <!-- END EXAMPLE TABLE PORTLET-->
     <!-- </div> -->

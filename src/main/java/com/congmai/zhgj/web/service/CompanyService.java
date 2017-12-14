@@ -76,4 +76,6 @@ public interface CompanyService extends GenericService<Company, String>{
 	
 	List<SupplyBuyVO>getSupplyBuy(SupplyBuyVO vo);
 	
+	void deleteSupplyBuy(String comId);
+	
 }

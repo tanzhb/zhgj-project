@@ -258,6 +258,16 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 	}
 
 
+	@Override
+	public void deleteSupplyBuy(String comId) {
+		// TODO Auto-generated method stub
+		SupplyBuyVOExample se=new  SupplyBuyVOExample ();
+		SupplyBuyVOExample.Criteria  c=se.createCriteria();
+		c.andCreateIdEqualTo(comId);
+		supplyBuyVOMapper.deleteByExample(se);
+	}
+
+
 
 	
 }

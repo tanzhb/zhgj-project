@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
@@ -58,6 +59,8 @@ import com.congmai.zhgj.web.model.DataTablesParams;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielSelectExample;
 import com.congmai.zhgj.web.model.SupplyBuyVO;
+import com.congmai.zhgj.web.model.SupplyMateriel;
+import com.congmai.zhgj.web.model.SupplyMaterielExample;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.CompanyAddressService;
 import com.congmai.zhgj.web.service.CompanyContactService;
@@ -209,7 +212,7 @@ public class CompanyController {
     	map.put("companyContacts", companyContactService.selectListByComId(comId));
     	map.put("companyAddresses", companyAddressService.selectListByComId(comId));
     	map.put("comManagers", null);
-    	map.put("companyManage", companyManageService.selectListByComId(comId).get(0));
+    	map.put("companyManage", CollectionUtils.isEmpty(companyManageService.selectListByComId(comId))?null:companyManageService.selectListByComId(comId).get(0));
     	company.setPageIndex(0);
 		 company.setPageSize(-1);
 		 if("1".equals(company.getComType())){
@@ -249,7 +252,7 @@ public class CompanyController {
      	map.put("companyQualifications", companyQualificationService.selectListByComId(comId));
     	map.put("companyContacts", companyContactService.selectListByComId(comId));
     	map.put("companyAddresses", companyAddressService.selectListByComId(comId));
-    	map.put("companyManage", companyManageService.selectListByComId(comId).get(0));
+    	map.put("companyManage", CollectionUtils.isEmpty(companyManageService.selectListByComId(comId))?null:companyManageService.selectListByComId(comId).get(0));
     	return "company/companyView";
     }
     
@@ -830,6 +833,54 @@ public class CompanyController {
         	}
         	map.put("flag", flag);
     	return map;
+    }
+    /**
+     * 
+     * @Description 保存企业业务关系
+     * @param params
+     * @return 
+     */
+    @RequestMapping(value = "/saveCompanyRelation", method = RequestMethod.POST)
+    @ResponseBody
+    public List<Company> saveCompanyRelation(@RequestBody String params) {
+    	params = params.replace("\\", "");
+        List<Company> comList = null;
+		try {
+			comList = JSON.parseArray(params, Company.class);
+	    	if(!CollectionUtils.isEmpty(comList)){
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+	    		String comId=comList.get(0).getCreator();
+		    	companyService.deleteSupplyBuy(comId);//先删除所有业务关系
+		    	Company com=companyService.selectById(comList.get(0).getCreator());
+		    	String comType=com.getComType();
+	    		for(Company f:comList){
+	    			SupplyBuyVO svo=new SupplyBuyVO();
+	    			svo.setSerialNum(ApplicationUtils.random32UUID());
+	    			if("1".equals(comType)){
+	    				svo.setBuyId(null);
+	    				svo.setSupplyId(f.getComId());
+	    			}else if("2".equals(comType)){
+	    				svo.setBuyId(f.getComId());
+	    				svo.setSupplyId(null);
+	    			}
+	    			svo.setCreateId(comId);
+	    			svo.setCreator(currenLoginName);
+	    			svo.setUpdater(currenLoginName);
+	    			svo.setCreateTime(new Date());
+	    			svo.setUpdateTime(new Date());
+	    			companyService.insertSupplyBuy(svo);
+		    	}
+	        }else{
+	        	/*String createComId=	comList.get(0).getCreator();
+	        	supplybuy*/
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+    	return comList;
+    	
     }
 }
 

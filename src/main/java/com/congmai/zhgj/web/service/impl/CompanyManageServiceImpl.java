@@ -3,6 +3,7 @@ package com.congmai.zhgj.web.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,7 @@ public class CompanyManageServiceImpl extends GenericServiceImpl<CompanyManage, 
 		CompanyManageExample example = new CompanyManageExample();
 		example.createCriteria().andComIdEqualTo(comId);
 		List<CompanyManage>cm=companyManageMapper.selectByExample(example);
+		if(CollectionUtils.isNotEmpty(cm)){
 		String[]s=cm.get(0).getUserId().split(",");
 		List<User>users=new ArrayList<User>();
 		for(int i=0;i<s.length;i++){
@@ -46,6 +48,7 @@ public class CompanyManageServiceImpl extends GenericServiceImpl<CompanyManage, 
 			}
 		}
 		cm.get(0).setUsers(users);
+		}
 		return cm ;
 	}
 
