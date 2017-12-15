@@ -18,11 +18,12 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    		getCompanyInfo($stateParams.comId);
 	    		//qualificationFormValid();
 	    		validatorInit();
+	    		if(isNull($stateParams.comId)){
 	    		$rootScope.setNumCode("C",function(newCode){//
 	    			$scope.company={};
         			$scope.company.comNum= newCode;//企业编码
         		});
-	    		
+	    		}
 	 		}else{
 	 			//createTable(15,1,true);
 	 			loadCompanyTable($stateParams.type);
@@ -88,7 +89,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		 * 加载供应商数据
 		 */
 		var initSuppliers = function(judgeString){
-			if(judgeString==undefined){
+			/*if(judgeString==undefined){
 			var promise = orderService.initSuppliers();
 	        	promise.then(function(data){
 	        		$scope.supplyCompanys = data.data;
@@ -109,13 +110,27 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
                     size : 5
                 });
     			$('select[name="supplyComId"]').selectpicker('refresh');//刷新插件
-			}
+			}*/
+			var promise = orderService.initSuppliers();
+        	promise.then(function(data){
+        		$scope.supplyCompanys = data.data;
+        		setTimeout(function () {
+        			$('select[name="supplyComId"]').selectpicker({
+                        showSubtext: true,
+                        size : 5
+                    });
+        			$('select[name="supplyComId"]').selectpicker('refresh');//刷新插件
+        			
+                }, 100);
+        	},function(data){
+        		//调用承诺接口reject();
+        	});
 		}
 		   /**
 		 * 加载客户数据
 		 */
 		var initCustomers = function(judgeString){
-			if(judgeString==undefined){
+		/*	if(judgeString==undefined){
 			var promise = orderService.initCustomers();
 	        	promise.then(function(data){
 	        		$scope.buyCompanys = data.data;
@@ -136,7 +151,21 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
                     size : 5
                 });
     			$('select[name="buyComId"]').selectpicker('refresh');//刷新插件
-			}
+			}*/
+			var promise = orderService.initCustomers();
+        	promise.then(function(data){
+        		$scope.buyCompanys = data.data;
+        		setTimeout(function () {
+        			$('select[name="buyComId"]').selectpicker({
+                        showSubtext: true,
+                        size : 5
+                    });
+        			$('select[name="buyComId"]').selectpicker('refresh');//刷新插件
+        			
+                }, 100);
+        	},function(data){
+        		//调用承诺接口reject();
+        	});
 		}
 	 var validatorInit= function(){
 		 
@@ -1691,8 +1720,23 @@ $scope.showCompany=function(judgeString){
 	       /**
 	        * 企业资质初始化日期控件
 	        */
-	       $scope.repeatDone = function(){
-	    	   handle.datePickersInit("bottom");
+	       $scope.repeatDone = function(judgeString){
+	    	   if(judgeString==undefined){
+	    		   handle.datePickersInit("bottom");
+	    	   }else if(judgeString=='buy'){
+	    		   $('select[name="buyComId"]').selectpicker({
+	                    showSubtext: true,
+	                    size : 5
+	                });
+	    			$('select[name="buyComId"]').selectpicker('refresh');//刷新插件
+	    	   }else if(judgeString=='supply'){
+	    		   $('select[name="supplyComId"]').selectpicker({
+	                    showSubtext: true,
+	                    size : 5
+	                });
+	    			$('select[name="supplyComId"]').selectpicker('refresh');//刷新插件
+	    	   }
+	    	   
 	    	   //$("#qualificationForm").removeData("validator").removeData("unobtrusiveValidation");
 	    	 
 	    	   //$.validator.parse($("#qualificationForm"));
@@ -1838,8 +1882,8 @@ $scope.showCompany=function(judgeString){
 		 	        			$scope.buyComs = data.data.buyComs;
 		 	        			buyIndex = $scope.buyComs.length;
 		 	        		}
-		 	        		initCustomers();
-		 		    		initSuppliers();
+		 	        		/*initCustomers();
+		 		    		initSuppliers();*/
 		 	        		data.data.comId = comId; //将企业id也放入数组，一边取消操作
 		 	        		if($scope.companyInfo!=undefined){
 		 	        			$scope.companyInfo.push(data.data); //将返回信息添加至checkbox选中数组
@@ -2258,13 +2302,14 @@ $scope.showCompany=function(judgeString){
 	   		    	   $scope.buyComs[buyIndex] = {};
 	   		    	   $scope.buyComs[buyIndex].creator=$scope.company.comId;
 	   		    	buyIndex++;
-	   		    	initSuppliers('notnull');
+	   		    	$scope.buyComs=angular.copy($scope.buyComs);
+	   		    	//initSuppliers('notnull');
 	   		       }else if(judgeString=='buy'){//supplies
 	   		    	   if($scope.supplies){}else{$scope.supplies =[{}]}
 	   		    	   $scope.supplies[supplyIndex] = {};
 	   		    	   $scope.supplies[supplyIndex].creator=$scope.company.comId;
 	   		    	supplyIndex++;
-	   		 	  initCustomers('notnull');
+	   		 	 // initCustomers('notnull');
 	   		       }
 	   	    };
 	   	    

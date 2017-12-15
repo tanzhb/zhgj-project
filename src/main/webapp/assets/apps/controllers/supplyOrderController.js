@@ -3941,6 +3941,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
     	 window.location.href=$rootScope.basePath+"/rest/delivery/exportDelivery";
     	 handle.unblockUI(); 
        }
+	 $scope.jumpToUrl= function(judgeString) {
+    	  $state.go('addDelivery',{oprateType:judgeString,orderSerialNum:null});
+     }
 }]);
 
 
