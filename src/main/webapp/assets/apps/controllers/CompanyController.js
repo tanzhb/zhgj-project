@@ -24,6 +24,8 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
         		});
 	    		
 	 		}else{
+	 			
+	 			
 	 			//createTable(15,1,true);
 	 			loadCompanyTable($stateParams.type);
 	 			//loadTable($stateParams.type);

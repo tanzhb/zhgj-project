@@ -681,7 +681,7 @@ public class CompanyController {
 				}
 			}, 2);
 				
-				companyService.insertBatch(companyList);
+//				companyService.insertBatch(companyList);
 			
 			map.put("data", "success");
 		} catch (Exception e1) {

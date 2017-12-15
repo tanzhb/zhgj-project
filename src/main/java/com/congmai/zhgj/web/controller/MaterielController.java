@@ -802,7 +802,7 @@ public class MaterielController {
 							materiel.setPalletWeight(row.get(24).toString());
 							materiel.setRemark(row.get(25).toString());
 
-							insertNew(materiel);
+							/*insertNew(materiel);*/
 						}catch(Exception  e){
 							throw new Exception("第"+i+"行数据异常请检查，数据内容："+row.toString());
 						}

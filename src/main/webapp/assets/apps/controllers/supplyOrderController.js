@@ -3142,14 +3142,14 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		  		 $scope.filterOrderMateriel = [];
 		  		if($scope.orderMateriel.length>0&&$scope.queryStr&&!isNull($scope.queryStr)){
 		  			for(var i = 0;i < $scope.orderMateriel.length;i++){// data.data为选择的标准物料
-		  				if(($scope.orderMateriel)[i].materiel.materielNum.indexOf($scope.queryStr)>=0){
-		  					$scope.filterOrderMateriel.push(angular.copy(($scope.orderMateriel)[i]));
-		  				}else if(($scope.orderMateriel)[i].materiel.materielName.indexOf($scope.queryStr)>=0){
-		  					$scope.filterOrderMateriel.push(angular.copy(($scope.orderMateriel)[i]));
-		  				}else if(($scope.orderMateriel)[i].materiel.specifications.indexOf($scope.queryStr)>=0){
-		  					$scope.filterOrderMateriel.push(angular.copy(($scope.orderMateriel)[i]));
-		  				}
-		  			}
+						if(!isNull(($scope.orderMateriel)[i].materiel.materielNum)&&($scope.orderMateriel)[i].materiel.materielNum.indexOf($scope.queryStr)>=0){
+							$scope.filterOrderMateriel.push(angular.copy(($scope.orderMateriel)[i]));
+						}else if(!isNull(($scope.orderMateriel)[i].materiel.materielName)&&($scope.orderMateriel)[i].materiel.materielName.indexOf($scope.queryStr)>=0){
+							$scope.filterOrderMateriel.push(angular.copy(($scope.orderMateriel)[i]));
+						}else if(!isNull(($scope.orderMateriel)[i].materiel.specifications)&&($scope.orderMateriel)[i].materiel.specifications.indexOf($scope.queryStr)>=0){
+							$scope.filterOrderMateriel.push(angular.copy(($scope.orderMateriel)[i]));
+						}
+					}
 		  		}else{
 		  			$scope.filterOrderMateriel = angular.copy($scope.orderMateriel);
 		  		}

@@ -57,17 +57,24 @@ angular
 									 			$scope.inOrOut=$stateParams.inOrOut;
 									 			getStockInOutCheckInfo($stateParams.inOrOut);//查看出入库检验详情页面
 								 		}else{
-									 			if($stateParams.inOrOut=='showOut'){
+									 			
+								 				if($stateParams.inOrOut=='showOut'){
 									 				debugger;
 									 				$("#in").removeClass("active");
 									 				$("#out").addClass("active");
+									 				$("#tab_in").removeClass("active");
+									 				$("#tab_out").addClass("active");
 									 				loadStockInOutCheckTable('outcheck');
 									 				//加载入库检验列表
 									 			}else{
 									 				$("#in").addClass("active");
 									 				$("#out").removeClass("active");
+									 				$("#tab_in").addClass("active");
+									 				$("#tab_out").removeClass("active")
 									 				loadStockInOutCheckTable('incheck');//加载入库检验列表
 									 			}
+								 			
+								 			
 										 		}
 											
 												// set default layout mode
