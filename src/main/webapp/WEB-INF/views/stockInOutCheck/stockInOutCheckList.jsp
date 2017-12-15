@@ -40,7 +40,7 @@
     </ul>
     <div class="tab-content">
     	<!-- 入库检验列表---START -->
-        <div class="tab-pane active" id="tab_in">
+        <div class="tab-pane" id="tab_in">
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
 		<div class="portlet light">
 			<div class="portlet-title">

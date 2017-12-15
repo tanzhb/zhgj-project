@@ -57,7 +57,8 @@ angular
 									 			$scope.inOrOut=$stateParams.inOrOut;
 									 			getStockInOutCheckInfo($stateParams.inOrOut);//查看出入库检验详情页面
 								 		}else{
-									 			
+								 			initTabClass();
+								 			
 								 				if($stateParams.inOrOut=='showOut'){
 									 				debugger;
 									 				$("#in").removeClass("active");
@@ -82,7 +83,37 @@ angular
 												$rootScope.settings.layout.pageBodySolid = false;
 												$rootScope.settings.layout.pageSidebarClosed = false;
 											});
-							
+							var initTabClass = function(){
+								var liobj = $('ul[class="nav nav-tabs"]>li')[0]
+									$(liobj).addClass("active");
+//									$($('#'+liobj.id+' a')[0].dataset.target).addClass("active");
+									$($('ul[class="nav nav-tabs"]>li a')[0].dataset.target).addClass("active");
+									
+//									methodName = $('#'+liobj.id+' a')[0].attributes[2].nodeValue; 
+									methodName = '';
+									try{
+										methodName = '$scope.'+$('ul[class="nav nav-tabs"]>li a')[0].attributes[2].nodeValue;
+									}catch(e){ 
+//										alert(methodName+"()不存在！"); 
+									}
+									function m(methodName){ 
+										//初始化this.func属性, 
+										this.func = function(){}; 
+										try{ 
+										//这里用eval方法，把我们传进来的这个方法名所代表的方法当作一个对象来赋值给method1的func属性。 
+										//如果找不到methodName这个对应的对象,则eval方法会抛异常 
+											this.func = eval(methodName); 
+										}catch(e){ 
+//											alert(methodName+"()不存在！"); 
+										} 
+									} 
+									try{
+										var c = new m(methodName); 
+										c.func(); 
+									}catch(e){ 
+//										alert(methodName+"()不存在！"); 
+									} 
+							}
 							//初始化toastr开始
 							toastr.options = {
 									"closeButton" : true,
