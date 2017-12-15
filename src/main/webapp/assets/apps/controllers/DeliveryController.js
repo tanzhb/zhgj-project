@@ -44,7 +44,19 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
     	getCurrentUser();
     	
 	    	if(!isNull($stateParams.orderSerialNum)){//由订单发货
-				$scope.getSaleOrderInfo($stateParams.orderSerialNum);
+				//查找是否已有进行中发货单
+    			DeliveryService.getDoingDelivery($stateParams.orderSerialNum).then(
+             		     function(data){
+             		    	 if(isNull(data.data)){
+             		    		$scope.getSaleOrderInfo($stateParams.orderSerialNum);
+             		    	 }else{
+             		    		$scope.getDeliveryEditInfo(data.data.serialNum);
+             		    	 }
+             		     },
+               		     function(error){
+               		         $scope.error = error;
+               		     }
+               		 );
 			}
 		}
 		//根据参数查询对象

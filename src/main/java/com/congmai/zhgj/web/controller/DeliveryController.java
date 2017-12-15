@@ -99,6 +99,7 @@ import com.congmai.zhgj.web.model.RelationFileExample;
 import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.TakeDelivery;
+import com.congmai.zhgj.web.model.TakeDeliverySelectExample;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
@@ -300,34 +301,34 @@ public class DeliveryController {
 		if("1".equals(noInit)){//不查询初始化状态的发货
 			query.setStatus("noInit");
 		}
-		List<DeliveryVO> contractList=deliveryService.findAllDeliveryList(query);
+		List<DeliveryVO> deliveryList=deliveryService.findAllDeliveryList(query);
 		List<DeliveryVO> now=new ArrayList<DeliveryVO>();
 		if("clearance".equals(customsFormType)){
-			for(DeliveryVO deliveryVO:contractList){
+			for(DeliveryVO deliveryVO:deliveryList){
 				OrderInfo o=orderService.selectById(deliveryVO.getOrderSerial());
 				if(StaticConst.getInfo("waimao").equals(o.getTradeType())&&o.getOrderType().indexOf(StaticConst.getInfo("caigou"))>-1){
 					now.add(deliveryVO);
 				}
 				
 			}
-			contractList=now;
+			deliveryList=now;
 		}else if("declaration".equals(customsFormType)){
-			for(DeliveryVO deliveryVO:contractList){
+			for(DeliveryVO deliveryVO:deliveryList){
 				OrderInfo o=orderService.selectById(deliveryVO.getOrderSerial());
 				if(StaticConst.getInfo("waimao").equals(o.getTradeType())&&o.getOrderType().indexOf(StaticConst.getInfo("xiaoshou"))>-1){
 					now.add(deliveryVO);
 				}
 				
 			}
-			contractList=now;
+			deliveryList=now;
 		}
 
 		//封装datatables数据返回到前台
 		Map<String,Object> pageMap = new HashMap<String,Object>();
 		pageMap.put("draw", 1);
-		pageMap.put("recordsTotal",contractList==null?0:contractList.size());
-		pageMap.put("recordsFiltered",contractList==null?0:contractList.size());
-		pageMap.put("data", contractList);
+		pageMap.put("recordsTotal",deliveryList==null?0:deliveryList.size());
+		pageMap.put("recordsFiltered",deliveryList==null?0:deliveryList.size());
+		pageMap.put("data", deliveryList);
 		return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
 	}
     
@@ -1720,4 +1721,25 @@ public class DeliveryController {
     companyAddresss = companyAddressService.selectListByComId(comId);
 		return new ResponseEntity<List<CompanyAddress>>(companyAddresss, HttpStatus.OK);
 	}
+    
+    /**
+     * @Description (查找进行中发货单)
+     * @param orderSerialNum
+     * @return
+     */
+    @RequestMapping(value="getDoingDelivery",method=RequestMethod.POST)
+    @ResponseBody
+    public DeliveryVO getDoingDelivery(@RequestBody String orderSerialNum) {
+
+		DeliveryVO query = new DeliveryVO();
+		query.setOrderSerial(orderSerialNum);
+		query.setStatus("isInit");
+		List<DeliveryVO> deliveryList=deliveryService.findAllDeliveryList(query);
+		if(!CollectionUtils.isEmpty(deliveryList)){
+			return deliveryList.get(0);
+		}else{
+			return null;
+		}
+    	
+    }
 }

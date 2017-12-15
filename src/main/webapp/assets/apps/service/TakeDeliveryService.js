@@ -330,5 +330,20 @@ angular.module('MetronicApp').service('takeDeliveryService',['$http','$q',functi
 		});
 		return deferred.promise;//返回承诺
 	}
+	
+	/**
+	 * 查找进行中代发货单
+	 */
+	this.getDoingTakeDelivery = function(orderSerialNum){
+		var deferred = $q.defer();
+		$http.post("rest/takeDelivery/getDoingTakeDelivery",  
+				orderSerialNum//传收货流水号
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
 
 }]); 

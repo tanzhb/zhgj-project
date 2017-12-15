@@ -74,10 +74,12 @@ import com.congmai.zhgj.web.model.StockInOutRecordExample;
 import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.model.TakeDeliveryExample;
 import com.congmai.zhgj.web.model.TakeDeliveryParams;
+import com.congmai.zhgj.web.model.TakeDeliverySelectExample;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.WarehouseExample;
 import com.congmai.zhgj.web.model.Warehouseposition;import com.congmai.zhgj.web.model.WarehousepositionExample;
+import com.congmai.zhgj.web.model.TakeDeliverySelectExample.Criteria;
 import com.congmai.zhgj.web.service.DeliveryMaterielService;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.DeliveryTransportService;
@@ -675,6 +677,33 @@ public class TakeDeliveryController {
     	return takeDeliveryService.findStockInSerialNum(serialNum);
     }
     
+    
+    /**
+     * @Description (查找进行中代发货单)
+     * @param orderSerialNum
+     * @return
+     */
+    @RequestMapping(value="getDoingTakeDelivery",method=RequestMethod.POST)
+    @ResponseBody
+    public Delivery getDoingTakeDelivery(@RequestBody String orderSerialNum) {
+    	TakeDeliverySelectExample example = new TakeDeliverySelectExample();
+		example.setPageIndex(0);
+		example.setPageSize(-1);
+		Criteria c2 =  example.createCriteria();
+		c2.andStatusEqualTo("0");//状态为初始，只能是代发货
+		c2.andDeliverTypeEqualTo("代发货");
+		c2.andDelFlgEqualTo("0");
+		c2.andDeliverBuyComIdIsNull();
+		c2.andOrderEqualTo(orderSerialNum);
+		
+		List<Delivery> takeDeliverys = takeDeliveryMapper.selectListByExample(example);
+		if(CollectionUtils.isNotEmpty(takeDeliverys)){
+			return takeDeliverys.get(0);
+		}else{
+			return null;
+		}
+    	
+    }
     /**
      * @Description (发货流水查找出库记录流水号)
      * @param serialNum

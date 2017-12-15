@@ -249,6 +249,9 @@
     <if test="status == 'noInit'" >
        AND a.status != 0
     </if>
+    <if test="status == 'isInit'" >
+       AND a.status = 0
+    </if>
 	  <if test="buyComId != null" >
        AND a.buyComId= #{buyComId} 
     </if>
@@ -259,6 +262,10 @@
      <if test="deliverType == 'mhq'" ><!-- 供应商查看销售订单发货列表发货计划 -->
        AND(( a.supplyComId is null  and a.buyComId is not null and  a.status != 0 ) or (a.status= 0 and a.deliverType!='采购商提货'  ))
     </if>
+    <if test="orderSerial != null" >
+       AND a.orderSerial= #{orderSerial} 
+    </if>
+    
 <!-- 	<if test="supplyComIds != null" >
         and a.supplyComId in
          <foreach item="item" index="index" collection="supplyComIds" open="(" separator="," close=")">  
