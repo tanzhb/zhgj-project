@@ -4424,4 +4424,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 	    		 }
 		 	    	 }
 		 	       }
+		 	     $scope.jumpToUrl= function(judgeString) {
+		 	    	  $state.go('addDelivery',{oprateType:judgeString,orderSerialNum:null});
+		 	     }
 }]);

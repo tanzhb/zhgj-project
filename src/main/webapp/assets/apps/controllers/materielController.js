@@ -250,6 +250,14 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     	materielService.getSuppliers().then(
      		     function(data){
      		    	$scope.suppliers=data.data;
+     		    	setTimeout(function () {
+            			$('select[name="supplyComId"]').selectpicker({
+                            showSubtext: true,
+                            size : 5
+                        });
+            			$('select[name="supplyComId"]').selectpicker('refresh');//刷新插件
+            			
+                    }, 100);
      		     },
      		     function(error){
      		         $scope.error = error;
@@ -266,6 +274,14 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     	materielService.getBuys().then(
      		     function(data){
      		    	$scope.buys=data.data;
+     		   	setTimeout(function () {
+        			$('select[name="buyComId"]').selectpicker({
+                        showSubtext: true,
+                        size : 5
+                    });
+        			$('select[name="buyComId"]').selectpicker('refresh');//刷新插件
+        			
+                }, 100);
      		     },
      		     function(error){
      		         $scope.error = error;
@@ -1455,9 +1471,21 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 	   		    	   /*$('.bs-select').selectpicker();*/
 	   		       }
 	   	    };
-	   	    $scope.repeatDone = function(){
-//	   	    	$compile($("select[name='supplyComId']"))($scope);
-//	   	    	$("select[name='supplyComId']").selectpicker();
+	   	    $scope.repeatDone = function(judgeString){
+	   	    	debugger;
+	   	    	if(judgeString=='buy'){
+		    		   $('select[name="buyComId"]').selectpicker({
+		                    showSubtext: true,
+		                    size : 5
+		                });
+		    			$('select[name="buyComId"]').selectpicker('refresh');//刷新插件
+		    	   }else if(judgeString=='supply'){
+		    		   $('select[name="supplyComId"]').selectpicker({
+		                    showSubtext: true,
+		                    size : 5
+		                });
+		    			$('select[name="supplyComId"]').selectpicker('refresh');//刷新插件
+		    	   }
 	       };
 	       
 	   	    $scope.multiselectInit = function(){
@@ -1636,10 +1664,6 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 		   		    	   /*$('.bs-select').selectpicker();*/
 		   		       }
 		   	    };
-		   	    $scope.repeatDone = function(){
-//		   	    	$compile($("select[name='buyComId']"))($scope);
-//		   	    	$("select[name='buyComId']").selectpicker();
-		       };
 		   	    
 		   	    /**
 			        * 采购商删除一行

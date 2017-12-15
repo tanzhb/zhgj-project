@@ -16,7 +16,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		loadMainTable1();
 		//加载物料表
 		selectParentMateriel();
-	
+	debugger;
 		getSupplyComId();
 		//控制输入框和span标签的显示
 		$scope.span =false;

@@ -920,7 +920,7 @@
 				            </div>
 				           <div class="portlet-body form">
 							     <form id="form_sample_5" >
-							         <div class="table-scrollable">
+							         <div class="table">
 				                          <table class="table table-bordered table-hover">
 				                              <thead>
 				                                  <tr>
@@ -945,8 +945,8 @@
 				                                  <tr ng-repeat="_supplyMateriel in supplyMateriel track by $index" ng-mouseover="showOperation('supplyMateriel',$index)" ng-mouseleave="hideOperation('supplyMateriel',$index)" >
 							                          <td>
 						                                 	<div ng-hide="supplyMaterielInfoInput">
-							                                 	<select class="form-control" id="supplyComId[$index]" name="supplyComId" class="bs-select form-control diySelectCss" data-live-search="true" data-size="8"  ng-model="supplyMateriel[$index].supplyComId"  >
-					                                              	<option ng-repeat="_supplier in suppliers" value="{{_supplier.comId}}" repeat-done="repeatDone()">{{_supplier.comName}}</option>
+							                                 	<select class="form-control" id="supplyComId[$index]" name="supplyComId"  data-live-search="true" data-size="8"  ng-model="supplyMateriel[$index].supplyComId"  >
+					                                              	<option ng-repeat="_supplier in suppliers" value="{{_supplier.comId}}" repeat-done="repeatDone('supply')">{{_supplier.comName}}</option>
 					                                             </select>
 				                                             </div>
 							                                <p class="form-control-static" ng-show="supplyMaterielInfoShow"> {{_supplyMateriel.supply.comName}} </p>
@@ -1044,7 +1044,7 @@
 				            </div>
 				           <div class="portlet-body form">
 							     <form id="form_sample_6" >
-							         <div class="table-scrollable">
+							         <div class="table">
 				                          <table class="table table-bordered table-hover">
 				                              <thead>
 				                                  <tr>
@@ -1067,8 +1067,8 @@
 				                                  <tr ng-repeat="_buyMateriel in buyMateriel track by $index" ng-mouseover="showOperation('buyMateriel',$index)" ng-mouseleave="hideOperation('buyMateriel',$index)" >
 							                          <td>
 						                                 	<div ng-hide="buyMaterielInfoInput">
-							                                 	<select class="form-control" id="buyComId[$index]" name="buyComId" class="bs-select form-control diySelectCss" data-live-search="true" data-size="8"  ng-model="buyMateriel[$index].buyComId"  >
-					                                              	<option ng-repeat="_buy in buys" value="{{_buy.comId}}" repeat-done="repeatDone()">{{_buy.comName}}</option>
+							                                 	<select class="form-control" id="buyComId[$index]" name="buyComId" data-live-search="true" data-size="8"  ng-model="buyMateriel[$index].buyComId"  >
+					                                              	<option ng-repeat="_buy in buys" value="{{_buy.comId}}" repeat-done="repeatDone('buy')">{{_buy.comName}}</option>
 					                                             </select>
 				                                             </div>
 							                                <p class="form-control-static" ng-show="buyMaterielInfoShow"> {{_buyMateriel.buy.comName}} </p>
