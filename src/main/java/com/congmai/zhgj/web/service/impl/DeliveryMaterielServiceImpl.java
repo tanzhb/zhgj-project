@@ -75,7 +75,7 @@ public class DeliveryMaterielServiceImpl extends GenericServiceImpl<DeliveryMate
 	}
 
 	@Override
-	public Page<DeliveryMateriel> selectListByExample(StockInOutRecord record,String type) {
+	public Page<DeliveryMateriel> selectListByExample(StockInOutRecord record,String type,String  status) {
 		StockInOutRecordSelectExample example = new StockInOutRecordSelectExample();
 		example.setPageIndex(0);
 		example.setPageSize(-1);
@@ -86,7 +86,11 @@ public class DeliveryMaterielServiceImpl extends GenericServiceImpl<DeliveryMate
 			comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
 		}
     	example.setComId(comId);
-    	
+    	if(!StringUtils.isEmpty(status)){
+    		example.setStatus(status);
+    	}else{
+    		example.setStatus(null);
+    	}
 		Page<DeliveryMateriel> page = new Page<DeliveryMateriel>();
 		Criteria c = example.createCriteria();
 		c.andDelFlgEqualTo("0");

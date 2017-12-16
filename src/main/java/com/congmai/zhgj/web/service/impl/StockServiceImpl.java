@@ -140,12 +140,20 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 			String  batchNum="";
 			String  warehouseName="";
 			String  positionNum="";
+			String   warehouseSerial="";//仓库流水
+			String   positionSerial="";//库区流水
 			if(CollectionUtils.isNotEmpty(stockInBatchs)&&stockInBatchs.size()>0){
 				for(int i=0;i<stockInBatchs.size();i++){
 					StockInBatch s=stockInBatchs.get(i);
 						batchNum=batchNum.concat(s.getBatchNum());
-						warehouseName=warehouseName.concat(warehouseMapper.selectByPrimaryKey(s.getWarehouseSerial()).getWarehouseName());
-						positionNum=positionNum.concat(warehousepositionMapper.selectByPrimaryKey(s.getPositionSerial()).getPositionNum());
+						if(!(warehouseSerial.indexOf(s.getWarehouseSerial())>-1)){
+							warehouseName=warehouseName.concat(warehouseMapper.selectByPrimaryKey(s.getWarehouseSerial()).getWarehouseName());
+							warehouseSerial=warehouseSerial.concat(s.getWarehouseSerial());
+						}
+						if(!(positionSerial.indexOf(s.getPositionSerial())>-1)){
+							positionNum=positionNum.concat(warehousepositionMapper.selectByPrimaryKey(s.getPositionSerial()).getPositionNum());
+							positionSerial=warehouseSerial.concat(s.getPositionSerial());
+						}
 					if(i!=stockInBatchs.size()-1){
 						batchNum=batchNum.concat(";");
 						warehouseName=warehouseName.concat(";");
@@ -180,12 +188,20 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 			String  batchNum="";
 			String  warehouseName="";
 			String  positionNum="";
+			String   warehouseSerial="";//仓库流水
+			String   positionSerial="";//库区流水
 			if(CollectionUtils.isNotEmpty(stockOutMateriels)&&stockOutMateriels.size()>0){
 				for(int i=0;i<stockOutMateriels.size();i++){
 					StockInBatch s=stockInBatchMapper.selectByPrimaryKey(stockOutMateriels.get(i).getStockInBatchSerial());
 						batchNum=batchNum.concat(s.getBatchNum());
-						warehouseName=warehouseName.concat(warehouseMapper.selectByPrimaryKey(s.getWarehouseSerial()).getWarehouseName());
-						positionNum=positionNum.concat(warehousepositionMapper.selectByPrimaryKey(s.getPositionSerial()).getPositionNum());
+						if(!(warehouseSerial.indexOf(s.getWarehouseSerial())>-1)){
+							warehouseName=warehouseName.concat(warehouseMapper.selectByPrimaryKey(s.getWarehouseSerial()).getWarehouseName());
+							warehouseSerial=warehouseSerial.concat(s.getWarehouseSerial());
+						}
+						if(!(positionSerial.indexOf(s.getPositionSerial())>-1)){
+							positionNum=positionNum.concat(warehousepositionMapper.selectByPrimaryKey(s.getPositionSerial()).getPositionNum());
+							positionSerial=warehouseSerial.concat(s.getPositionSerial());
+						}
 					if(i!=stockOutMateriels.size()-1){
 						batchNum=batchNum.concat(";");
 						warehouseName=warehouseName.concat(";");

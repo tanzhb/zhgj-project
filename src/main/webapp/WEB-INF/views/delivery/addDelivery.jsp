@@ -288,9 +288,9 @@
 														class="required" aria-required="true"> * </span></label>
 													<div class="" ng-if="showSXf!='1'">
 													<div class="input-group"  ng-if="showSXf!='1'">
-															<input type="text" name="warehouseAddress"
+															<input type="text" name="warehouseAddress"   
 															class="form-control" ng-model="warehouseAddress"
-															ng-show="inputDeliveryInfo"   ng-if="showSXf!='1'"/>
+															ng-show="inputDeliveryInfo"   >
 															<span ng-show="inputDeliveryInfo" class="input-group-btn" ng-click="showSX('f')"
 																style="vertical-align: top;">
 																<button class="btn default" type="button" >
@@ -300,8 +300,8 @@
 														</div>
 														</div>
 														<div class="" ng-show="showSXf=='1'"  >
-														<select class="form-control"  id="warehouseAddress"  data-live-search="true" data-size=""  
-															name="warehouseAddress"
+														<select class="form-control"   data-live-search="true" data-size=""  
+															name="warehouseAddress1"
 															ng-model="warehouseAddress"
 															ng-show="inputDeliveryInfo">
 															<option ng-repeat="item in companyAddressesf"
@@ -345,7 +345,7 @@
 														class="required" aria-required="true"> * </span> --></label>
 													<div class="">
 													<div  ng-hide="span">
-														<select class="form-control"  data-live-search="true" data-size=""   id="takeDeliverWarehouse"
+														<select class="form-control"  data-live-search="true" data-size=""   
 															name="warehouseSerial"
 															ng-model="takeDelivery.warehouseSerial"
 															ng-change="selectAddressTakeDelivery()" ng-show="inputDeliveryInfo">
@@ -380,9 +380,9 @@
 														</div> -->
 															<div class="" ng-if="showSXs!='1'">
 													<div class="input-group"  ng-if="showSXs!='1'">
-													<input type="text" name="takeDeliveryWarehouseAddress"
+													<input type="text" name="takeDeliveryWarehouseAddress"  
 															class="form-control"
-															ng-model="takeDeliveryWarehouseAddress" ng-show="inputDeliveryInfo"   ng-if="showSXs!='1'"/>
+															ng-model="takeDeliveryWarehouseAddress" ng-show="inputDeliveryInfo"   />
 															<span ng-show="inputDeliveryInfo" class="input-group-btn" ng-click="showSX('s')"
 																style="vertical-align: top;">
 																<button class="btn default" type="button" >
@@ -392,8 +392,8 @@
 														</div>
 														</div>
 														<div class="" ng-show="showSXs=='1'">
-														<select class="form-control"  id="takeDeliveryWarehouseAddress"  data-live-search="true" data-size="" 
-															name="takeDeliveryWarehouseAddress"
+														<select class="form-control"   data-live-search="true" data-size="" 
+															name="takeDeliveryWarehouseAddress1"
 															ng-model="takeDeliveryWarehouseAddress"
 															ng-show="inputDeliveryInfo">
 															<option ng-repeat="item in companyAddressess"

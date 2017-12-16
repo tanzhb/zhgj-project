@@ -123,6 +123,37 @@
       </foreach>
     </where>
   </sql>
+  <sql id="Example_Where_Clause1" >
+  <where>
+  <trim  prefix="(" suffix=")" >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+      </trim>
+      </where>
+  </sql>
   <sql id="Update_By_Example_Where_Clause" >
     <where >
       <foreach collection="example.oredCriteria" item="criteria" separator="or" >
@@ -644,13 +675,10 @@
     left join deliveryMateriel dm2 on s.serialNum = dm2.stockInOutRecordSerial and dm2.deliverSerial = '' and dm2.delFlg = 0
     left join orderInfo o on o.serialNum = d.orderSerial
     <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
+      <include refid="Example_Where_Clause1" />
     </if>
-    <if test="_parameter == null" >
-      where s.status=1
-    </if>
-      <if test="_parameter != null" >
-      and  s.status=1
+      <if test="status != null" >
+      and  s.status= #{status,jdbcType=VARCHAR}
     </if>
     <if test="orderByClause != null" >
       order by ${orderByClause}
@@ -684,16 +712,13 @@
 	LEFT JOIN buyMateriel bm on m.materielId = bm.materielId
 	LEFT JOIN supplyMateriel sm on m.materielId = sm.materielId
 	</if>
-	
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
+	<if test="_parameter != null" >
+      <include refid="Example_Where_Clause1" />
     </if>
-    <if test="_parameter == null" >
-      where s.status=1
+      <if test="status != null" >
+      and  s.status= #{status,jdbcType=VARCHAR}
     </if>
-      <if test="_parameter != null" >
-      and  s.status=1
-    </if>
+    
     <if test="comId != null" >
         AND (sm.supplyComId = #{comId,jdbcType=VARCHAR} or bm.buyComId = #{comId,jdbcType=VARCHAR})
       </if>
@@ -710,13 +735,10 @@
     left join delivery d on d.serialNum = s.deliverSerial
     left join deliveryMateriel dm on dm.deliverSerial = s.deliverSerial
     <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
+      <include refid="Example_Where_Clause1" />
     </if>
-    <if test="_parameter == null" >
-      where s.status=1
-    </if>
-      <if test="_parameter != null" >
-      and  s.status=1
+      <if test="status != null" >
+     and  s.status= #{status,jdbcType=VARCHAR}
     </if>
   </select>
   	<!-- 统计入库记录数 -->
@@ -727,15 +749,16 @@
     left join takeDelivery td on td.serialNum = s.takeDeliverSerial
     LEFT JOIN delivery d ON d.takeDeliverSerial = td.serialNum
     left join deliveryMateriel dm on dm.deliverSerial = d.serialNum
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
+   <if test="_parameter != null" >
+      <include refid="Example_Where_Clause1" />
     </if>
-    <if test="_parameter == null" >
-      where s.status=1
+      <if test="status != null" >
+      and  s.status= #{status,jdbcType=VARCHAR}
     </if>
-      <if test="_parameter != null" >
-      and  s.status=1
-    </if>
+    
+    <if test="comId != null" >
+        AND (sm.supplyComId = #{comId,jdbcType=VARCHAR} or bm.buyComId = #{comId,jdbcType=VARCHAR})
+      </if>
   </select>
   
   <!-- 根据出入库流水号查找发货物料信息 -->

@@ -774,7 +774,7 @@ public class TakeDeliveryController {
 				}*/
 		 record.setPageIndex(0);
 		 record.setPageSize(-1);
-	 	Page<DeliveryMateriel> takeDeliverys = deliveryMaterielService.selectListByExample(record,"in");
+	 	Page<DeliveryMateriel> takeDeliverys = deliveryMaterielService.selectListByExample(record,"in","1");
 	 	//List<Company> companys = companyService.selectByPage(company).getResult();
 			// 封装datatables数据返回到前台
 			Map<String,Object> pageMap = new HashMap<String,Object>();
@@ -822,7 +822,7 @@ public class TakeDeliveryController {
 		 if(user != null){
 			 String comId = userCompanyService.getUserComId(user.getUserId().toString());
 			 record.setSupplyComId(comId);
-			 Page<DeliveryMateriel> takeDeliverys = deliveryMaterielService.selectListByExample(record,"out");
+			 Page<DeliveryMateriel> takeDeliverys = deliveryMaterielService.selectListByExample(record,"out","1");
 			 //List<Company> companys = companyService.selectByPage(company).getResult();
 			 // 封装datatables数据返回到前台
 			 pageMap.put("draw", 1);
@@ -867,7 +867,7 @@ public class TakeDeliveryController {
 	    		StockInOutRecord record = new StockInOutRecord();
 	    		record.setPageIndex(0);
 	    		record.setPageSize(-1);
-	    		List<DeliveryMateriel> stockInList = deliveryMaterielService.selectListByExample(record,"in").getResult();
+	    		List<DeliveryMateriel> stockInList = deliveryMaterielService.selectListByExample(record,"in","1").getResult();
 	    		dataMap.put("stockInList",stockInList);
 	    		ExcelUtil.export(request, response, dataMap, "stockIn", "入库记录");
 	    }
@@ -883,7 +883,7 @@ public class TakeDeliveryController {
 	    	StockInOutRecord record = new StockInOutRecord();
 	    	record.setPageIndex(0);
 	    	record.setPageSize(-1);
-	    	List<DeliveryMateriel> stockOutList = deliveryMaterielService.selectListByExample(record,"out").getResult();
+	    	List<DeliveryMateriel> stockOutList = deliveryMaterielService.selectListByExample(record,"out","1").getResult();
 	    	dataMap.put("stockOutList",stockOutList);
 	    	ExcelUtil.export(request, response, dataMap, "stockOut", "出库记录");
 	    }

@@ -13,6 +13,6 @@ import com.congmai.zhgj.web.model.StockInOutRecordExample;
 public interface DeliveryMaterielService extends GenericService<DeliveryMateriel, String>{
 	 List<DeliveryMateriel> selectByExample(DeliveryMaterielExample example);
 	 List<DeliveryMateriel> selectByExampleForStockIn(DeliveryMaterielExample example);
-	 Page<DeliveryMateriel> selectListByExample(StockInOutRecord record,String type);
+	 Page<DeliveryMateriel> selectListByExample(StockInOutRecord record,String type,String  status);//status是否已入库   1是 0否  空或null查所有
  int updateDeliveryMateriel(DeliveryMateriel record);
 }

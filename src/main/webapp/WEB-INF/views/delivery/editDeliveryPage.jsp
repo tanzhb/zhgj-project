@@ -291,8 +291,8 @@
 															</div> -->
 															<div class="" ng-if="showSXf!='1'">
 													<div class="input-group"  ng-if="showSXf!='1'">
-															<input type="text" name="warehouseAddress"
-															class="form-control" ng-model="warehouseAddress"
+															<input type="text" name="warehouseAddress"  id="warehouseAddress"
+															class="form-control" ng-model="warehouseAddress"  
 															ng-show="inputDeliveryInfo"   ng-if="showSXf!='1'"/>
 															<span ng-show="inputDeliveryInfo" class="input-group-btn" ng-click="showSX('f')"
 																style="vertical-align: top;">
@@ -303,8 +303,8 @@
 														</div>
 														</div>
 														<div class="" ng-show="showSXf=='1'">
-														<select class="form-control"  id="warehouseAddress"  data-live-search="true" data-size=""  
-															name="warehouseAddress"
+														<select class="form-control"   data-live-search="true" data-size=""  
+															name="warehouseAddress1`"
 															ng-model="warehouseAddress"
 															ng-show="inputDeliveryInfo">
 															<option ng-repeat="item in companyAddressesf"
@@ -384,8 +384,8 @@
 														</div>
 														</div>
 														<div class="" ng-show="showSXs=='1'">
-														<select class="form-control"  id="takeDeliveryWarehouseAddress"  data-live-search="true" data-size="" 
-															name="takeDeliveryWarehouseAddress"
+														<select class="form-control"  data-live-search="true" data-size="" 
+															name="takeDeliveryWarehouseAddress1"
 															ng-model="takeDeliveryWarehouseAddress"
 															ng-show="inputDeliveryInfo">
 															<option ng-repeat="item in companyAddressess"
