@@ -10,12 +10,12 @@
 		<li><a data-target="#tab_15_3" data-toggle="tab">采购合同</a></li>
 		</shiro:hasPermission>
 		<shiro:hasPermission name="zhgj:otherContract">
-		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">其他合同</a>
+		<li class=""><a data-target="#tab_15_1" data-toggle="tab">其他合同</a>
 		</li>
 		</shiro:hasPermission>
 	</ul>
 	<div class="tab-content">
-		<div class="tab-pane active" id="tab_15_1">
+		<div class="tab-pane" id="tab_15_1">
 			<div class="row">
 				<div class="col-md-12">
 

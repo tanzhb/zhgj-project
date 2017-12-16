@@ -1126,6 +1126,11 @@ public class TakeDeliverySelectExample {
             addCriterion("d.deliverType <>", value, "deliverType");
             return (Criteria) this;
         }
+        
+        public Criteria andOrderEqualTo(String value) {
+            addCriterion("d.orderSerial =", value, "orderSerial");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

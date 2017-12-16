@@ -38,8 +38,20 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		    		});
 	    		}
 	    		if(!isNull($stateParams.orderSerialNum)){//由订单代发货
-	    			$scope.deliver.orderSerial = $stateParams.orderSerialNum;
-	    			$scope.getOrderMateriel();
+	    			//查找是否已有进行中代发货单
+	    			takeDeliveryService.getDoingTakeDelivery($stateParams.orderSerialNum).then(
+	             		     function(data){
+	             		    	 if(isNull(data.data)){
+	             		    		$scope.deliver.orderSerial = $stateParams.orderSerialNum;
+		        	    			$scope.getOrderMateriel();
+	             		    	 }else{
+	             		    		takeDeliveryInfo(data.data.takeDelivery.serialNum,"edit");
+	             		    	 }
+	             		     },
+	               		     function(error){
+	               		         $scope.error = error;
+	               		     }
+	               		 );
 	    		}
 	    		if(!isNull($stateParams.serialNum)){
 	    			$(".d_tip").text("编辑代发货信息");

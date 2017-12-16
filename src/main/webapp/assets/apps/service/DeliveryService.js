@@ -65,7 +65,9 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     		findStockOutSerialNum:findStockOutSerialNum,
     		goTakeDelivery:goTakeDelivery,//确认收货
     		//查询联系地址
-    		getCompanyaddressList:getCompanyaddressList
+    		getCompanyaddressList:getCompanyaddressList,
+    		//获取进行中的发货单
+    		getDoingDelivery:getDoingDelivery
     };
 
     return factory;
@@ -592,5 +594,21 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
    		
         return deferred.promise;  
     }
+    
+    
+    /**
+	 * 查找进行中发货单
+	 */
+    function getDoingDelivery(orderSerialNum){
+		var deferred = $q.defer();
+		$http.post("rest/delivery/getDoingDelivery",  
+				orderSerialNum//传收货流水号
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
 }]);
 
