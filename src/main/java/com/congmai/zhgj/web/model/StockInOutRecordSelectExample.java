@@ -18,6 +18,8 @@ public class StockInOutRecordSelectExample {
     
     private String comId;//用于查询该公司的物料出入库记录
     
+    private String status;//用于查询该公司的物料出入库记录
+    
     
     
     public String getComId() {
@@ -26,6 +28,14 @@ public class StockInOutRecordSelectExample {
 
 	public void setComId(String comId) {
 		this.comId = comId;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public StockInOutRecordSelectExample() {

@@ -10,9 +10,10 @@
 					<div class="portlet light ">
 						<ul class="nav nav-tabs">
 							<li class="active bold"><a data-target="#tab_1_1"
-								data-toggle="tab">收款信息</a></li>
-							<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">付款信息</a>
-							<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">附件信息</a>
+								data-toggle="tab">应收信息</a></li>
+							<!-- <li class="bold"><a data-target="#tab_1_2" data-toggle="tab">付款信息</a> -->
+							<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">核销记录</a>
+							<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">附件</a>
 							<li class="dropdown pull-right tabdrop">
 								<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
 							</li>							
@@ -43,7 +44,7 @@
 										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">收款单号<span
+													<label class="control-label bold">应收账单号<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<input type="text" name="paymentNum" class="form-control"
@@ -57,28 +58,7 @@
 
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">收款类型<span
-														class="required" aria-required="true"> * </span></label>
-													<div class="">
-														<select class="form-control"
-															id="paymentType" ng-show="input"
-															name="paymentType"
-															ng-model="paymentRecord.paymentType">
-															<option value="">收款类型</option>
-															<option value="采购付款">采购付款</option>
-															<option value="预付款">预付款</option>
-														</select>
-														<p class="form-control-static" ng-show="span">{{pay.paymentType}}</p>
-														<div class="form-control-focus"></div>
-													</div>
-												</div>
-											</div>
-											<!--/span-->
-
-
-											<div class="col-md-4">
-												<div class="form-group">
-													<label class="control-label bold">关联销售单号<span
+													<label class="control-label bold">关联销售订单号<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<div class="input-group" data-target="#basicMaterielInfo"
@@ -99,10 +79,46 @@
 												</div>
 											</div>
 											<!--/span-->
+												<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">收款类型<span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<select class="form-control"
+															id="paymentType" ng-show="input"
+															name="paymentType"
+															ng-model="paymentRecord.paymentType">
+															<option value="">收款类型</option>
+															<option value="采购付款">采购付款</option>
+															<option value="采购退款">采购退款</option>
+															<option value="服务费用类">服务费用类</option>
+															<option value="报关">报关</option>
+															<option value="其它">其它</option>
+														</select>
+														<p class="form-control-static" ng-show="span">{{pay.paymentType}}</p>
+														<div class="form-control-focus"></div>
+													</div>
+												</div>
+											</div>
+											<!--/span-->
 										</div>
 										
 										<!--/row-->
 										<div class="row">
+										<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">下单日期<span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="text" class="form-control" name="applyDate"
+														data-date-format="yyyy-mm-dd" id="applyDate"
+													    data-date-viewmode="years" size="16"
+															ng-model="paymentRecord.applyDate" ng-show="input"/>
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-show="span">{{pay.applyDate}}</p>
+													</div>
+												</div>
+											</div>
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">订单金额<span
@@ -119,58 +135,14 @@
 											<!--/span-->
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">申请收款金额<span
-														class="required" aria-required="true"> * </span></label>
-													<div class="">
-														<input type="text" name="applyPaymentAmount" id="applyPaymentAmount" class="form-control" number
-															 ng-model="paymentRecord.applyPaymentAmount" ng-blur="getChnAmount()" ng-show="input"/>
-															 <p class="form-control-static" ng-show="span">{{pay.applyPaymentAmount}}</p>
-														<div class="form-control-focus"></div>
-													</div>
-												</div>
-											</div>
-											
-											<div class="col-md-4">
-												<div class="form-group">
-													<label class="control-label bold">节点单据号 <span
-														class="required" aria-required="true"> * </span></label>
-													<div class="">
-														<input type="text" class="form-control" name="nodeNum"
-															ng-model="paymentRecord.nodeNum" ng-show="input"/>
-														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.nodeNum}}</p>
-													</div>
-												</div>
-											</div>
-											<!--/span-->
-										</div>
-
-
-										<!--/row-->
-										<div class="row">
-											<div class="col-md-4">
-												<div class="form-group">
-													<label class="control-label bold">大写金额<span
-														class="required" aria-required="true"> * </span></label>
-													<div class="">
-														<input type="text" name="chnAmount" class="form-control"
-															readonly ng-model="chnAmount" ng-show="input"/>
-														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{applyPaymentAmountChn}}</p>
-													</div>
-												</div>
-											</div>
-											<!--/span-->
-											<div class="col-md-4">
-												<div class="form-group">
-													<label class="control-label bold">申请币种<span
+													<label class="control-label bold">币种<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<select class="form-control" id="applyCurrency"
 															name="applyCurrency"
 															ng-model="paymentRecord.applyCurrency"
 															 ng-show="input">
-															<option value="">申请币种</option>
+															<option value="">币种</option>
 															<option value="人民币">人民币</option>
 															<option value="美元">美元</option>
 															<option value="欧元">欧元</option>
@@ -180,29 +152,7 @@
 													</div>
 												</div>
 											</div>
-											<!--/span-->
-											<div class="col-md-4">
-												<div class="form-group">
-													<label class="control-label bold">申请收款日期<span
-														class="required" aria-required="true"> * </span></label>
-													<div class="">
-														<input type="text" class="form-control" name="playPaymentDate"
-														data-date-format="yyyy-mm-dd"
-													    data-date-viewmode="years" size="16"
-															ng-model="paymentRecord.playPaymentDate" ng-show="input" id="playPaymentDate"/>
-														<p class="form-control-static" ng-show="span">{{pay.playPaymentDate}}</p>
-														<div class="form-control-focus"></div>
-													</div>
-
-												</div>
-											</div>
-											<!--/span-->
-										</div>
-
-
-										<!--/row-->
-										<div class="row">
-											<div class="col-md-4">
+												<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">支付类型<span
 														class="required" aria-required="true"> * </span></label>
@@ -240,20 +190,121 @@
 													</div>
 												</div>
 											</div>
-											<!--/span-->
-										</div>
-
-
-										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">发票方式<span
+													<label class="control-label bold">支付比率<span
 														class="required" aria-required="true"> * </span></label>
-													<div class="">先款后票</div>
+													<div class="">
+														<input type="text" name="chnAmount" class="form-control"
+															readonly ng-model="chnAmount" ng-show="input"/>
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-show="span">{{applyPaymentAmountChn}}</p>
+													</div>
 												</div>
 											</div>
-											<!--/span-->
 											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">支付金额<span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="text" name="applyPaymentAmount" id="applyPaymentAmount" class="form-control" number
+															 ng-model="paymentRecord.applyPaymentAmount" ng-blur="getChnAmount()" ng-show="input"/>
+															 <p class="form-control-static" ng-show="span">{{pay.applyPaymentAmount}}</p>
+														<div class="form-control-focus"></div>
+													</div>
+												</div>
+											</div>
+											
+											<!-- <div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">节点单据号 <span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="text" class="form-control" name="nodeNum"
+															ng-model="paymentRecord.nodeNum" ng-show="input"/>
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-show="span">{{pay.nodeNum}}</p>
+													</div>
+												</div>
+											</div> -->
+											<!--/span-->
+											
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">大写金额<span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="text" name="chnAmount" class="form-control"
+															readonly ng-model="chnAmount" ng-show="input"/>
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-show="span">{{applyPaymentAmountChn}}</p>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">支付方式<span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<select class="form-control" id="applyCurrency"
+															name="applyCurrency"
+															ng-model="paymentRecord.applyCurrency"
+															 ng-show="input">
+															<option value="">币种</option>
+															<option value="人民币">人民币</option>
+															<option value="美元">美元</option>
+															<option value="欧元">欧元</option>
+															<option value="日币">日币</option>
+														</select>
+														<p class="form-control-static" ng-show="span">{{pay.applyCurrency}}</p>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">计划收款日期 <span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="text" class="form-control" name="playPaymentDate"
+														data-date-format="yyyy-mm-dd"
+													    data-date-viewmode="years" size="16"
+															ng-model="paymentRecord.playPaymentDate" ng-show="input" id="playPaymentDate"/>
+														<p class="form-control-static" ng-show="span">{{pay.playPaymentDate}}</p>
+														<div class="form-control-focus"></div>
+													</div>
+
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">账期</label>
+													<div class="">
+														<input type="text" class="form-control" name="playPaymentDate"
+														data-date-format="yyyy-mm-dd"
+													    data-date-viewmode="years" size="16"
+															ng-model="paymentRecord.playPaymentDate" ng-show="input" id="playPaymentDate"/>
+														<p class="form-control-static" ng-show="span">{{pay.playPaymentDate}}</p>
+														<div class="form-control-focus"></div>
+													</div>
+
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">发票方式 <span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="text" class="form-control" name="playPaymentDate"
+														data-date-format="yyyy-mm-dd"
+													    data-date-viewmode="years" size="16"
+															ng-model="paymentRecord.playPaymentDate" ng-show="input" id="playPaymentDate"/>
+														<p class="form-control-static" ng-show="span">{{pay.playPaymentDate}}</p>
+														<div class="form-control-focus"></div>
+													</div>
+
+												</div>
+											</div>
+												<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">是否开票<span
 														class="required" aria-required="true"> * </span></label>
@@ -269,27 +320,7 @@
 													</div>
 												</div>
 											</div>
-
-											<div class="col-md-4">
-												<div class="form-group">
-													<label class="control-label bold">申请日期<span
-														class="required" aria-required="true"> * </span></label>
-													<div class="">
-														<input type="text" class="form-control" name="applyDate"
-														data-date-format="yyyy-mm-dd" id="applyDate"
-													    data-date-viewmode="years" size="16"
-															ng-model="paymentRecord.applyDate" ng-show="input"/>
-														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.applyDate}}</p>
-													</div>
-												</div>
-											</div>
-										</div>
-										<!--/span-->
-
-										<!--/row-->
-										<div class="row">
-											<div class="col-md-4">
+												<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">申请人<span
 														class="required" aria-required="true"> * </span></label>
@@ -315,7 +346,20 @@
 													</div>
 												</div>
 											</div>
-											<!--/span-->
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">申请日期<span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="text" class="form-control" name="applyDate"
+														data-date-format="yyyy-mm-dd" id="applyDate"
+													    data-date-viewmode="years" size="16"
+															ng-model="paymentRecord.applyDate" ng-show="input"/>
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-show="span">{{pay.applyDate}}</p>
+													</div>
+												</div>
+											</div>
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">备注 </label>
@@ -327,18 +371,180 @@
 													</div>
 												</div>
 											</div>
-											<!--/span-->
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">状态 </label>
+													<div class="">
+														
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-show="span">{{pay.remark}}</p>
+													</div>
+												</div>
+											</div>
+										<!--/row-->
+										
 										</div>
 
+
+										<div class="row"   style="border-top:1px solid #dddddd;padding-top: 20px;">
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">付款方 <span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="text" class="form-control" name="payee"
+															ng-model="pay.payee" ng-show="input" />
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-show="span">{{pay.payee}}</p>
+													</div>
+												</div>
+											</div>
+											<!--/span-->
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">联系人<span
+														class="required" aria-required="true"> * </span>
+													</label>
+													<div class="">
+														<input type="text" class="form-control" name="contact"
+															ng-model="pay.contact" ng-show="input" />
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-show="span">{{pay.contact}}</p>
+													</div>
+												</div>
+											</div>
+											<!--/span-->
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">联系电话 <span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="text" class="form-control" name="contactNum"
+															ng-model="pay.contactNum" ng-show="input" />
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-show="span">{{pay.contactNum}}</p>
+													</div>
+												</div>
+											</div>
+											<!--/span-->
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">收款银行 <span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<select class="form-control" id="bank" name="bank"
+															ng-model="pay.bank" ng-show="input" ng-show="input">
+															<option value="">收款银行</option>
+															<option value="工商银行">工商银行</option>
+															<option value="交通银行">交通银行</option>
+														</select>
+														<p class="form-control-static" ng-show="span">{{pay.bank}}</p>
+													</div>
+
+												</div>
+											</div>
+											<!--/span-->
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">户名 <span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="text" class="form-control" name="accountName"
+															ng-model="pay.accountName" ng-show="input" />
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-show="span">{{pay.accountName}}</p>
+													</div>
+
+												</div>
+											</div>
+											<!--/span-->
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">账号 <span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">
+														<input type="text" class="form-control"
+															name="accountNumber" ng-model="pay.accountNumber"
+															ng-show="input" />
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-show="span">{{pay.accountNumber}}</p>
+													</div>
+												</div>
+											</div>
+											<!--/span-->
+										</div>
+										<!--/row-->
+									
+
+										<!--row-->
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">订单应收金额<span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">{{pay.orderAmount| currency:'￥'}}</div>
+
+												</div>
+											</div>
+											<!--/span-->
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">预收金额 <span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">{{0| currency:'￥'}}</div>
+
+												</div>
+											</div>
+											<!--/span-->
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">已收金额 <span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">{{pay.paiedMoney| currency:'￥'}}</div>
+												</div>
+											</div>
+											<!--/span-->
+										</div>
+										<!--row-->
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">未收金额 <span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">{{pay.orderAmount-pay.paiedMoney|
+														currency:'￥'}}</div>
+
+												</div>
+											</div>
+											<!--/span-->
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">已开票金额 <span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">{{pay.billedMoney| currency:'￥'}}</div>
+
+												</div>
+											</div>
+											<!--/span-->
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">未开票金额 <span
+														class="required" aria-required="true"> * </span></label>
+													<div class="">{{pay.orderAmount-pay.billedMoney|
+														currency:'￥'}}</div>
+												</div>
+											</div>
+											<!--/span-->
+										</div>
 									</div>
 									<!--/row-->
 								</div>
 							</div>
 
 
-							<div class="tab-pane fade" id="tab_1_2">
+							<!-- <div class="tab-pane fade" id="tab_1_2">
 								<div class="portlet-body form">
-									<!-- BEGIN FORM-->
+									BEGIN FORM
 									<div class="form-body">
 										<div class="alert alert-danger display-hide">
 											<button class="close" data-close="alert"></button>
@@ -357,7 +563,7 @@
 													</div>
 												</div>
 											</div>
-											<!--/span-->
+											/span
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">付款方联系人<span
@@ -370,7 +576,7 @@
 													</div>
 												</div>
 											</div>
-											<!--/span-->
+											/span
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">联系电话 <span
@@ -383,9 +589,9 @@
 													</div>
 												</div>
 											</div>
-											<!--/span-->
+											/span
 										</div>
-										<!--/row-->
+										/row
 										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
@@ -405,7 +611,7 @@
 
 												</div>
 											</div>
-											<!--/span-->
+											/span
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">户名 <span
@@ -419,7 +625,7 @@
 
 												</div>
 											</div>
-											<!--/span-->
+											/span
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">账号 <span
@@ -432,10 +638,10 @@
 													</div>
 												</div>
 											</div>
-											<!--/span-->
+											/span
 										</div>
 
-										<!--row-->
+										row
 										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
@@ -445,7 +651,7 @@
 
 												</div>
 											</div>
-											<!--/span-->
+											/span
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">预收金额 <span
@@ -454,7 +660,7 @@
 
 												</div>
 											</div>
-											<!--/span-->
+											/span
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">已收金额 <span
@@ -462,9 +668,9 @@
 													<div class="">{{saleOrder.paiedMoney| currency:'￥'}}</div>
 												</div>
 											</div>
-											<!--/span-->
+											/span
 										</div>
-										<!--row-->
+										row
 										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
@@ -474,7 +680,7 @@
 
 												</div>
 											</div>
-											<!--/span-->
+											/span
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">已开票金额 <span
@@ -483,7 +689,7 @@
 
 												</div>
 											</div>
-											<!--/span-->
+											/span
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">未开票金额 <span
@@ -491,12 +697,17 @@
 													<div class="">{{saleOrder.orderAmount-saleOrder.billedMoney| currency:'￥'}}</div>
 												</div>
 											</div>
-											<!--/span-->
+											/span
 										</div>
 									</div>
 								</div>
+							</div> -->
+					<div class="tab-pane fade" id="tab_1_2">
+								<div class="portlet-body form">
+									<!-- BEGIN FORM-->
+									核销记录
+								</div>
 							</div>
-
 
 							<div class="tab-pane fade" id="tab_1_3">
 								<div class="portlet-title" style="min-height: 48px;">

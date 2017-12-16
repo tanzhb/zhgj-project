@@ -983,8 +983,8 @@ public class DeliveryController {
     	//保存基本信息第一部分
     	Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-		String transportserialNum=delivery.getTransportserialNum();
-    	String takeDeliverSerialNum=delivery.getTakeDeliverSerialNum();
+		String transportserialNum=deliveryTransport.getDeliveryTransportSerialNum();
+    	String takeDeliverSerialNum=takeDeliveryVO.getTakeDeliveryVOSerialNum();
     	String deliverySerialNum=delivery.getSerialNum();
     	if("deliveryInfo".equals(delivery.getType())){
     	if(StringUtils.isEmpty(delivery.getSerialNum())){
@@ -1014,7 +1014,7 @@ public class DeliveryController {
     	}
     	//保存基本信息第二部分
     	if("deliveryInfo".equals(delivery.getType())){
-    	if(StringUtils.isEmpty(deliveryTransport.getDeliveryTransportSerialNum())){
+    	if(StringUtils.isEmpty(transportserialNum)){
     	deliveryTransport.setSerialNum(ApplicationUtils.random32UUID());
     	deliveryTransport.setCreator(currenLoginName);
     	deliveryTransport.setDeliverSerial(deliverySerialNum);
@@ -1026,7 +1026,7 @@ public class DeliveryController {
     	}}
     	//保存基本信息第三部分
     	if("deliveryInfo".equals(delivery.getType())){
-    	if(StringUtils.isEmpty(takeDeliveryVO.getTakeDeliveryVOSerialNum())){
+    	if(StringUtils.isEmpty(takeDeliverSerialNum)){
     	takeDeliveryVO.setSerialNum(ApplicationUtils.random32UUID());
     	takeDeliveryVO.setCreator(currenLoginName);
     	takeDeliveryVO.setDeliverSerial(deliverySerialNum);

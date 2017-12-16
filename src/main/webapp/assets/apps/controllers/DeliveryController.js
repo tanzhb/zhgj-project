@@ -701,6 +701,16 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	    			return;
 	    		}else{
 	    			handle.blockUI();
+	    			if($scope.showSXf!=1){
+	    				$scope.warehouseAddress=$("input[name='warehouseAddress']").val();
+	    			}else if($scope.showSXf==1){
+	    				$scope.warehouseAddress=$("input[name='warehouseAddress1']").val();
+	    			}
+	    			if($scope.showSXs!=1){
+	    				$scope.takeDeliveryWarehouseAddress=$("input[name='takeDeliveryWarehouseAddress']").val();
+	    			}else if($scope.showSXs==1){
+	    				$scope.takeDeliveryWarehouseAddress=$("input[name='takeDeliveryWarehouseAddress1']").val();
+	    			}
 	    			var promise = DeliveryService.saveBasicInfo($scope,"deliveryInfo");
 	    			promise.then(function(data) {
 	    				if (!handle.isNull(data)) {
@@ -726,7 +736,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		    	  		    	$scope.deliver.approvalDate =$scope.delivery.approvalDate;  
 		    	  		    	$scope.deliver.deliverDate  =$scope.delivery.deliverDate;
 		    	  		    	$scope.deliver.packageType=$scope.delivery.packageType;
-		    	  		    	$scope.takeDeliveryWarehouseAddress=$scope.delivery.takeAddress;
+		    	  		    //	$scope.takeDeliveryWarehouseAddress=$scope.delivery.takeAddress;
 		    					if(status!=undefined){
 		    						var promise = DeliveryService.goDelivery($scope.delivery.serialNum);
 		    						promise.then(function(data) {
@@ -2633,7 +2643,23 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 							
 	
 	// 页面加载完成后调用，验证输入框
-	$scope.$watch('$viewContentLoaded', function() {  
+	$scope.$watch('$viewContentLoaded', function() { 
+		debugger;
+		var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,takeDeliveryWarehouseAddress1Flag;
+		if($scope.showSXf!=1){
+			warehouseAddressFlag=true;
+			warehouseAddress1Flag=false;
+		}else if($scope.showSXf==1){
+			warehouseAddressFlag=false;
+			warehouseAddress1Flag=true;
+		}
+		if($scope.showSXs!=1){
+			takeDeliveryWarehouseAddressFlag=true;
+			takeDeliveryWarehouseAddress1Flag=false;
+		}else if($scope.showSXs==1){
+			takeDeliveryWarehouseAddressFlag=false;
+			takeDeliveryWarehouseAddress1Flag=true;
+		}
 		var e = $("#form_sample_deliverInfo"),
         r = $(".alert-danger", e),
         i = $(".alert-success", e);
@@ -2652,7 +2678,9 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
             	maker:{required:"制单人不能为空！"},
             	makeDate:{required:"制单日期不能为空！"},
             	takeDeliveryWarehouseAddress:{required:"收货地址不能为空！"},
+            	takeDeliveryWarehouseAddress1:{required:"收货地址不能为空！"},
             	warehouseAddress:{required:"发货地址不能为空！"},
+            	warehouseAddress1:{required:"发货地址不能为空！"},
             	
             	/*deliveryWarehouseSerial:{required:"发货仓库不能为空！"},*/
             	deliverDate:{required:"发货日期不能为空！"},
@@ -2712,9 +2740,13 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
                 },*/
                 deliverDate:{required:true,
                 },
-                warehouseAddress:{required:true,
+                warehouseAddress:{required:warehouseAddressFlag,
                 },
-                takeDeliveryWarehouseAddress:{required:true,
+                takeDeliveryWarehouseAddress:{required:takeDeliveryWarehouseAddressFlag,
+                },
+                warehouseAddress1:{required:warehouseAddress1Flag,
+                },
+                takeDeliveryWarehouseAddress1:{required:takeDeliveryWarehouseAddress1Flag,
                 },
                 contactNum:{
                 	digits:true,
@@ -3330,7 +3362,12 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		  	 }
 		  	 
 		  	/** *************订单物料明细可检索化  end*************** */
-
+		  	$scope.changeValue = function(obj,judgeString){
+		  		debugger;
+		  		if(judgeString=='f'){
+		  			$scope.warehouseAddress=$(obj).val();
+		  		}
+		  	}
 }]);
 
 
