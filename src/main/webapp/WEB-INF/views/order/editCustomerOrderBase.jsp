@@ -293,7 +293,7 @@ margin-right: 20px;
                          </div>
                          <div class="col-md-4">
                              <div class="form-group ">
-                                <label class="control-label bold">电子合同：</label>
+                                <label class="control-label bold">服务委托书：</label>
                                  <div class="">
                                  		<div ng-hide="customerOrderInput"   ng-if="contract.electronicContract==null||contract.electronicContract==''"  class="fileinput fileinput-new" data-provides="fileinput">
                                             <span class="btn blue btn-circle btn-file">
@@ -449,7 +449,7 @@ margin-right: 20px;
                          </div>
                           <div class="col-md-4">
                              <div class="form-group ">
-                                <label class="control-label bold">电子合同：</label>
+                                <label class="control-label bold">服务委托书：</label>
                                  <div class="">
                                  		<div ng-hide="customerOrderInput"   ng-if="contract.electronicContract==null||contract.electronicContract==''"  class="fileinput fileinput-new" data-provides="fileinput">
                                             <span class="btn blue btn-circle btn-file">
@@ -679,7 +679,7 @@ margin-right: 20px;
                          </div>
                          <div class="col-md-4">
                              <div class="form-group ">
-                                <label class="control-label bold">电子合同：</label>
+                                <label class="control-label bold">服务委托书：</label>
                                  <div class="">
                                  		<div ng-hide="customerOrderInput"   ng-if="contract.electronicContract==null||contract.electronicContract==''"  class="fileinput fileinput-new" data-provides="fileinput">
                                             <span class="btn blue btn-circle btn-file">

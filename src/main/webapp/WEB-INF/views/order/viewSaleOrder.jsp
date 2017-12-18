@@ -38,7 +38,7 @@
 		            <div class="portlet-title">
 			               <div class="tools">
 			               		<button ng-if="saleOrder.status==55" type="button" ng-click="submitPage()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">接收</button>
-			               		<button ng-if="saleOrder.status==0&&saleOrder.orderType =='委托销售'&&(saleOrder.orderSerial ==''||saleOrder.orderSerial ==null)" type="button" ng-click="saleGenerateBuy()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">分解采购</button>
+			               		<button ng-if="saleOrder.orderType =='委托销售'&&(saleOrder.orderSerial ==''||saleOrder.orderSerial ==null)" type="button" ng-click="saleGenerateBuy()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">分解采购</button>
 				                <button type="button" ng-click="cancelPage()" class="btn default btn-circle  btn-sm"><i class="fa fa-undo"></i> 取消 </button>
 				            </div>
 					</div>

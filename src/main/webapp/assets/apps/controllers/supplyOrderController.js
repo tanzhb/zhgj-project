@@ -563,12 +563,13 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 					'render' : function(data,
 							type, row, meta) {
 						var renderRow = meta.settings.aoData[meta.row];
-						return returnMin(
-									returnMin(
-											diySortFlag(renderRow.anCells[1].textContent),diySortFlag(renderRow.anCells[3].textContent)
-											),
-									diySortFlag(renderRow.anCells[4].textContent)
-									)
+						return 1 ;
+//						return returnMin(
+//									returnMin(
+//											diySortFlag(renderRow.anCells[1].textContent),diySortFlag(renderRow.anCells[3].textContent)
+//											),
+//									diySortFlag(renderRow.anCells[4].textContent)
+//									)
 					}
 				} ]
 

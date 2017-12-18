@@ -101,6 +101,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		$scope.buyOrder.orderType="自主采购";
             		$scope.buyOrder.tradeType="内贸";
             		$scope.buyOrder.currency="人民币";
+            		$scope.buyOrder.serviceModel="普通代理";
+            		$scope.buyOrder.settlementClause="平进平出";
             		$scope.buyOrder.orderDate = timeStamp2String2(new Date());
 //            		$scope.contract.signDate = timeStamp2String2(new Date());
             		$scope.clauseSettlement = {};
@@ -665,12 +667,13 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 							'render' : function(data,
 									type, row, meta) {
 								var renderRow = meta.settings.aoData[meta.row];
-								return returnMin(
-											returnMin(
-													diySortFlag(renderRow.anCells[1].textContent),diySortFlag(renderRow.anCells[3].textContent)
-													),
-											diySortFlag(renderRow.anCells[4].textContent)
-											)
+								return 1 ;
+//								return returnMin(
+//											returnMin(
+//													diySortFlag(renderRow.anCells[1].textContent),diySortFlag(renderRow.anCells[3].textContent)
+//													),
+//											diySortFlag(renderRow.anCells[4].textContent)
+//											)
 							}
 						} ]
 
