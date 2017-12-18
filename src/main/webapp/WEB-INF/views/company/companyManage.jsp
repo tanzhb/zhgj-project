@@ -156,7 +156,7 @@
 					<li><a class="bold" data-target="#tab_1_4" data-toggle="tab">联系方式</a></li>
 					<li  ng-hide="isNotBuy" ng-if="type=='buy'"><a class="bold" data-target="#tab_1_5" data-toggle="tab">供应商</a></li>
 					<li  ng-hide="isNotSupply"  ng-if="type=='supply'"><a class="bold" data-target="#tab_1_6" data-toggle="tab">采购商</a></li>
-					<li><a class="bold" data-target="#tab_1_7" data-toggle="tab">企业管理员</a></li>
+					<!-- <li><a class="bold" data-target="#tab_1_7" data-toggle="tab">企业管理员</a></li> -->
 					<li><a class="bold" data-target="#tab_1_8" data-toggle="tab">管理信息</a></li>
 					
 				</ul>

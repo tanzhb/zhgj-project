@@ -212,19 +212,19 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
        		if(judgeString=='fa'){
        		 $scope.companyAddressesf=data;
        		setTimeout(function () {
-       		  	$("#warehouseAddress").selectpicker({
+       		  	$("select[name='warehouseAddress1']").selectpicker({
                 showSubtext: true
             });
-			$('#warehouseAddress').selectpicker('refresh');//刷新插件
+			$("select[name='warehouseAddress1']").selectpicker('refresh');//刷新插件
                }, 100);
        		 
        		}else  if(judgeString=='sh'){
        		 $scope.companyAddressess=data;
-       		setTimeout(function () {
-       			$("#takeDeliveryWarehouseAddress").selectpicker({
+       		setTimeout(function () {//
+       			$("select[name='takeDeliveryWarehouseAddress1']").selectpicker({
                        showSubtext: true
                    });
-       			$('#takeDeliveryWarehouseAddress').selectpicker('refresh');//刷新插件
+       			$("select[name='takeDeliveryWarehouseAddress1']").selectpicker('refresh');//刷新插件
                }, 100);
        		}
        	},function(data){
@@ -246,17 +246,17 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			if($scope.showSXs!='1'){
 				$scope.showSXs='1';
 			}else{
-				$scope.showSXs=='0';
+				$scope.showSXs='0';
 			}
 		}else{
 			if($scope.companyAddressesf.length==0){
 				toastr.warning("该企业无联系地址");
-				return;
+			return;
 			}
 			if($scope.showSXf!='1'){
 				$scope.showSXf='1';
 			}else{
-				$scope.showSXf=='0';
+				$scope.showSXf='0';
 			}
 		}
 	
@@ -294,7 +294,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 				$scope.delivery.status="1";
 			$scope.saveDeliveryInfo($scope.delivery.status);//先保存
 			}
-		}else if(judgeString=='view'){
+		}else if(judgeString=='view'||judgeString=='add'){
 		 	/*$scope.confirmDelivery($scope.delivery.serialNum);*/
 	   		var promise = DeliveryService.goDelivery($scope.delivery.serialNum);
 			promise.then(function(data) {
@@ -703,6 +703,19 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	//保存基本信息
 	$scope.saveDeliveryInfo=function(status){
 		if($('#form_sample_deliverInfo').valid()){
+			if($scope.showSXf =='1'){
+				if(isNull($("select[name='warehouseAddress1']").val())){
+					toastr.error('发货地址未选择！');
+	    			return;
+				}
+			}
+			if($scope.showSXs=='1'){
+				if(isNull($("select[name='takeDeliveryWarehouseAddress1']").val())){
+					toastr.error('收货地址未选择！');
+	    			return;
+				}
+			}
+			
 			/*$scope.deliveryTransport={};
 			$scope.takeDelivery={};*/
 			 $rootScope.judgeIsExist("deliver",$scope.delivery.deliverNum, $scope.delivery.serialNum,function(result){
@@ -735,6 +748,8 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	    							toastr.warning("请重新编辑发货物料数量后再确认发货!");}
 	    						return;
 	    					}else{
+	    						$scope.showSXf='0';
+								$scope.showSXs='0';
 	    						$(".modal-backdrop").remove();
 		    					toastr.success("保存成功");
 		    					handle.unblockUI();
@@ -1065,6 +1080,8 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 																		return '完成发货';
 																	}else if(data=='9'){
 																		return '待入库';
+																	}else if(data=='10'){
+																		return '待收货';
 																	}else{
 																		return '';
 																	}
@@ -2655,24 +2672,25 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 							
 	
 	// 页面加载完成后调用，验证输入框
+var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,takeDeliveryWarehouseAddress1Flag;
 	$scope.$watch('$viewContentLoaded', function() { 
 		debugger;
-		var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,takeDeliveryWarehouseAddress1Flag;
-		if($scope.showSXf!=1){
+		if($scope.showSXf!='1'){
 			warehouseAddressFlag=true;
 			warehouseAddress1Flag=false;
-		}else if($scope.showSXf==1){
+		}else if($scope.showSXf=='1'){
 			warehouseAddressFlag=false;
 			warehouseAddress1Flag=true;
 		}
-		if($scope.showSXs!=1){
+		if($scope.showSXs!='1'){
 			takeDeliveryWarehouseAddressFlag=true;
 			takeDeliveryWarehouseAddress1Flag=false;
-		}else if($scope.showSXs==1){
+		}else if($scope.showSXs=='1'){
 			takeDeliveryWarehouseAddressFlag=false;
 			takeDeliveryWarehouseAddress1Flag=true;
 		}
 		var e = $("#form_sample_deliverInfo"),
+		
         r = $(".alert-danger", e),
         i = $(".alert-success", e);
         e.validate({

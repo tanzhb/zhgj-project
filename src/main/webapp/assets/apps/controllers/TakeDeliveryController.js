@@ -215,19 +215,19 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		       		if(judgeString=="fa"){
 		       		 $scope.companyAddressesf=data;
 		       		setTimeout(function () {
-		       		  	$("#deliverAddress").selectpicker({
+		       		  	$("select[name='deliverAddress1']").selectpicker({
 		                showSubtext: true
 		            });
-					$('#deliverAddress').selectpicker('refresh');//刷新插件
+					$("select[name='deliverAddress1']").selectpicker('refresh');//刷新插件
 		               }, 100);
 		       		 
 		       		}else{
 		       		 $scope.companyAddressess=data;
 		       		setTimeout(function () {
-		       			$("#takeDeliverAddress").selectpicker({
+		       			$("select[name='takeDeliverAddress1']").selectpicker({
 		                       showSubtext: true
 		                   });
-		       			$('#takeDeliverAddress').selectpicker('refresh');//刷新插件
+		       			$("select[name='takeDeliverAddress1']").selectpicker('refresh');//刷新插件
 		               }, 100);
 		       		}
 		       	},function(data){
@@ -243,12 +243,12 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					}
 					if($scope.companyAddressess.length==0){
 						toastr.warning("该企业无联系地址");
-						return;
+						//return;
 					}
 					if($scope.showSXs!='1'){
 						$scope.showSXs='1';
 					}else{
-						$scope.showSXs=='0';
+						$scope.showSXs='0';
 					}
 				}else{
 					if($scope.deliver.orderNum==undefined){
@@ -257,12 +257,12 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					}
 					if($scope.companyAddressesf.length==0){
 						toastr.warning("该企业无联系地址");
-						return;
+						//return;
 					}
 					if($scope.showSXf!='1'){
 						$scope.showSXf='1';
 					}else{
-						$scope.showSXf=='0';
+						$scope.showSXf='0';
 					}
 				}
 			
@@ -448,6 +448,19 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	         */
 			$scope.saveTakeDelivery = function(number) {
 				if($('#takeDeliveryForm').valid()){
+					if($scope.showSXf =='1'){
+						if(isNull($("select[name='deliverAddress1']").val())){
+							toastr.error('发货地址未选择！');
+			    			return;
+						}
+					}
+					if($scope.showSXs=='1'){
+						if(isNull($("select[name='takeDeliverAddress1']").val())){
+							toastr.error('收货地址未选择！');
+			    			return;
+						}
+					}
+					
 					 $rootScope.judgeIsExist("deliver",$scope.deliver.deliverNum, $scope.deliver.serialNum,function(result){
 			    			var 	isExist = result;
 			    		debugger;
@@ -501,6 +514,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 											toastr.warning("存在发货数量超过未发数量的物料,请重新编辑!");}
 									}
 								}else{
+									$scope.showSXf='0';
+									$scope.showSXs='0';
 								if(number==0){
 									toastr.success("保存代发货成功！");
 									$scope.deliverTransport=data.data.deliveryTransport;

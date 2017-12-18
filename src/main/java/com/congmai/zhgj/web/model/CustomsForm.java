@@ -32,7 +32,7 @@ public class CustomsForm {
 
     private String remark;
 
-    private String status;
+    private String status;//当报关单状态为2时显示已付款状态 ;当报关单状态为1为已确认未付款
 
     private String delFlg;
 

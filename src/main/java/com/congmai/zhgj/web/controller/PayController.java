@@ -54,6 +54,7 @@ import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.UserUtil;
+import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.event.EventExample;
 import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.BaseVO;
@@ -325,7 +326,12 @@ public class PayController {
 	@ResponseBody
 	public Map getSaleOrderInfo(String serialNum, OrderInfo orderInfo) {
 		orderInfo = orderService.selectById(serialNum);
+		Boolean createBG=StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())&&StringUtils.isEmpty(orderInfo.getSupplyComId());//该订单是否需要报关
 		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("createBG", createBG);
+		if(createBG){
+			
+		}
 		String paiedMoney = payService.selectPaiedMoney(serialNum);
 		orderInfo.setPaiedMoney(paiedMoney);
 		String billedMoney = payService.selectBilledMoney(serialNum);

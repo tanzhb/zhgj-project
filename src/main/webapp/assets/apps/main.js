@@ -2912,6 +2912,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/GatheringMoneyService.js',
 				'assets/apps/controllers/GatheringMoneyController.js',
+				  'assets/apps/service/CommonService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -2952,6 +2953,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/angular-file-upload.min.js',
 				'assets/apps/scripts/pageHandle.js',
 			    'assets/apps/controllers/GatheringMoneyController.js',
+			    'assets/apps/service/CommonService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js',
                       ]
@@ -2991,6 +2993,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/GatheringMoneyService.js',
 				'assets/apps/controllers/GatheringMoneyController.js',
+				  'assets/apps/service/CommonService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -3105,6 +3108,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/GatheringMoneyService.js',
 				'assets/apps/controllers/GatheringMoneyController.js',
+				 'assets/apps/service/CommonService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js'
                       ]

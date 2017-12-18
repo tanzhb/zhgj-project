@@ -3337,7 +3337,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 					if($scope.showSXs!='1'){
 						$scope.showSXs='1';
 					}else{
-						$scope.showSXs=='0';
+						$scope.showSXs='0';
 					}
 				}else{
 					if($scope.companyAddressesf.length==0){
@@ -3347,7 +3347,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 					if($scope.showSXf!='1'){
 						$scope.showSXf='1';
 					}else{
-						$scope.showSXf=='0';
+						$scope.showSXf='0';
 					}
 				}
 			
@@ -4482,7 +4482,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 								 if(!isNull($scope.orderMateriels[i].serialNum)&&$scope.deliver.serialNum==undefined){
 										param.orderMaterielSerial = $scope.orderMateriels[i].serialNum;
 									}else{//修改
-										param.orderMaterielSerial = $scope.orderMateriels[i].orderMaterielSerial;
+										param.orderMaterielSerial = $scope.orderMateriels[i].orderMaterielSerial==undefined?$scope.orderMateriels[i].serialNum:$scope.orderMateriels[i].orderMaterielSerial;
 									}
 								param.batchNum = $scope.orderMateriels[i].batchNum;
 								param.manufactureDate = $scope.orderMateriels[i].manufactureDate;
@@ -4508,6 +4508,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 											toastr.warning("存在发货数量超过未发数量的物料,请重新编辑!");}
 									}
 								}else{
+									$scope.showSXf='0';
+									$scope.showSXs='0';
 									if(number==0){
 										toastr.success("保存提货成功！");
 										$scope.deliverTransport=data.data.deliveryTransport;
