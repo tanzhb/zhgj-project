@@ -333,10 +333,12 @@ public class TakeDeliveryController {
     	 objectMapper.configure(org.codehaus.jackson.map.DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
   	   		TakeDeliveryParams  takeDeliveryParams = null;
   	   	Map<String, Object>map1 =new HashMap<String, Object>();
+  	  String  takeDeliverAddress="";
 		   try {
 			   //JSONObject a = JSONObject.fromObject(params);
 			  // takeDeliveryParams = objectMapper.readValue(params,TakeDeliveryParams.class);
 			   takeDeliveryParams = JSON.parseObject(params, TakeDeliveryParams.class);
+			   takeDeliverAddress=takeDeliveryParams.getTakeDelivery().getTakeDeliverAddress();
 			} catch (Exception e) {
 		    	logger.warn(e.getMessage(), e);
 			}
@@ -397,7 +399,12 @@ public class TakeDeliveryController {
         		return null;
         	}
         	//deliver.warehouseSerial
+        	if(!StringUtils.isEmpty(takeDeliveryParams.getTakeDelivery().getWarehouseSerial())){
+        		String takeDeliverWarehouseName=warehouseService.selectOne(takeDeliveryParams.getTakeDelivery().getWarehouseSerial()).getWarehouseName();
+        		takeDeliveryParams.getDelivery().setTakeDeliverWarehouseName(takeDeliverWarehouseName);
+        	}
         	map1.put("delivery", takeDeliveryParams.getDelivery());
+        	takeDeliveryParams.getTakeDelivery().setTakeDeliverAddress(takeDeliverAddress);
         	map1.put("takeDelivery", takeDeliveryParams.getTakeDelivery());
         	map1.put("deliveryTransport", takeDeliveryParams.getDeliveryTransport());
     	return map1;

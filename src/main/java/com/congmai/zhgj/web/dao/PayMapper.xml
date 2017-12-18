@@ -42,7 +42,7 @@
     <!--查询结算条款列表  -->
    <select id="selectClauseSettlementDetailList2" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ClauseSettlementDetail">
     SELECT
-	c.paymentType,c.deliveryNode
+	c.paymentType,c.deliveryNode,c.deliveryRate,c.deliveryAmount,c.accountPeriod,c.billingMethod,a.currency  as paymentMethod
 	FROM
 	orderInfo a 
 	LEFT JOIN clauseSettlement b ON a.contractSerial=b.contractSerial 

@@ -286,7 +286,7 @@
 												<div class="form-group">
 													<label class="control-label bold">发货地址<span ng-hide="span"
 														class="required" aria-required="true"> * </span></label>
-													<div class="" ng-if="showSXf!='1'">
+												<!-- 	<div class="" ng-if="showSXf!='1'">
 													<div class="input-group"  ng-if="showSXf!='1'">
 															<input type="text" name="warehouseAddress"   
 															class="form-control" ng-model="warehouseAddress"
@@ -308,12 +308,38 @@
 																value="{{item.address}}">{{item.address}}</option>
 															<option value=""></option>
 														</select>
-														<!-- <span ng-show="inputDeliveryInfo" class="input-group-btn" ng-click="showSX()"
+														<span ng-show="inputDeliveryInfo" class="input-group-btn" ng-click="showSX('f')"
 																style="vertical-align: top;">
 																<button class="btn default" type="button"  >
-																	<i class="fa fa-search"></i>筛选
+																	<i class="fa fa-search"></i>输入
 																</button>
-															</span> -->
+															</span>
+														</div> -->
+																  	<div class="" >
+													<div class="input-group"  >
+													<input type="text" name="warehouseAddress"
+															class="form-control"
+															ng-model="warehouseAddress"    ng-if="showSXf!='1'"  ng-show="inputDeliveryInfo"/>
+															<div  ng-show="showSXf=='1'">
+																<select class="form-control"   data-live-search="true" data-size=""   ng-show="inputDeliveryInfo"
+															name="warehouseAddress1"
+															ng-model="warehouseAddress"
+															 >
+															<option ng-repeat="item in companyAddressesf"
+																value="{{item.address}}">{{item.address}}</option>
+															<option value=""></option>
+														</select>
+														</div>
+															<span ng-show="inputDeliveryInfo"  class="input-group-btn" ng-click="showSX('f')"
+																style="vertical-align: top;">
+																<button class="btn default" type="button"  ng-if="showSXf!='1'">
+																	筛选
+																</button>
+																	<button class="btn default" type="button"  ng-if="showSXf=='1'">
+																	输入
+																</button>
+															</span>
+														</div>
 														</div>
 													
 														
@@ -346,7 +372,7 @@
 													<div class="">
 													<div  ng-hide="span">
 														<select class="form-control"  data-live-search="true" data-size=""   
-															name="warehouseSerial"
+															name="warehouseSerial"  id="takeDeliverWarehouse"
 															ng-model="takeDelivery.warehouseSerial"
 															ng-change="selectAddressTakeDelivery()" ng-show="inputDeliveryInfo">
 															<option ng-repeat="item in warehouseLists"
@@ -365,20 +391,8 @@
 												<div class="form-group">
 													<label class="control-label bold">收货地址<span  ng-hide="span"
 														class="required" aria-required="true"> * </span></label>
-												<!-- 	<div class="">
-														<input type="text" name="takeDeliveryWarehouseAddress"
-															class="form-control"
-															ng-model="takeDeliveryWarehouseAddress" ng-show="inputDeliveryInfo" />
-	<select class="form-control"  id="takeDeliveryWarehouseAddress"  data-live-search="true" data-size="" 
-															name="takeDeliveryWarehouseAddress"
-															ng-model="takeDeliveryWarehouseAddress"
-															ng-show="inputDeliveryInfo">
-															<option ng-repeat="item in companyAddressess"
-																value="{{item.address}}">{{item.address}}</option>
-															<option value=""></option>
-														</select>
-														</div> -->
-															<div class="" ng-if="showSXs!='1'">
+											
+													<!-- 		<div class="" ng-if="showSXs!='1'">
 													<div class="input-group"  ng-if="showSXs!='1'">
 													<input type="text" name="takeDeliveryWarehouseAddress"  
 															class="form-control"
@@ -400,12 +414,38 @@
 																value="{{item.address}}">{{item.address}}</option>
 															<option value=""></option>
 														</select>
-													<!-- 	<span ng-show="inputDeliveryInfo" class="input-group-btn" ng-click="showSX()"
+														<span ng-show="inputDeliveryInfo" class="input-group-btn" ng-click="showSX()"
 																style="vertical-align: top;">
 																<button class="btn default" type="button"  >
 																	<i class="fa fa-search"></i>筛选
 																</button>
-															</span> -->
+															</span>
+														</div> -->
+																	  	<div class="" >
+													<div class="input-group"  >
+													<input type="text" name="takeDeliveryWarehouseAddress"
+															class="form-control"
+															ng-model="takeDeliveryWarehouseAddress"   ng-show="inputDeliveryInfo"  ng-if="showSXs!='1'"/>
+															<div  ng-show="showSXs=='1'">
+																<select class="form-control"   data-live-search="true" data-size=""   ng-show="inputDeliveryInfo"
+															name="takeDeliveryWarehouseAddress1"
+															ng-model="takeDeliveryWarehouseAddress"
+															 >
+															<option ng-repeat="item in companyAddressesf"
+																value="{{item.address}}">{{item.address}}</option>
+															<option value=""></option>
+														</select>
+														</div>
+															<span ng-show="inputDeliveryInfo"  class="input-group-btn" ng-click="showSX('s')"
+																style="vertical-align: top;">
+																<button class="btn default" type="button"  ng-if="showSXs!='1'">
+																	筛选
+																</button>
+																	<button class="btn default" type="button"  ng-if="showSXs=='1'">
+																	输入
+																</button>
+															</span>
+														</div>
 														</div>
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">

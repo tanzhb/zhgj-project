@@ -116,6 +116,8 @@ public class Delivery {
 	private String inOutPackageCount;// 出入库计划列表包装数量
 	private    StockInOutRecord  stockInOutRecord;//出入库记录
 	private String takeDeliverAddress;//收货地址
+	
+	private String takeDeliverWarehouseName;// 收货仓库名称
 
 	public String getSerialNum() {
 		return serialNum;
@@ -579,6 +581,14 @@ public class Delivery {
 
 	public void setTakeDeliverAddress(String takeDeliverAddress) {
 		this.takeDeliverAddress = takeDeliverAddress;
+	}
+
+	public String getTakeDeliverWarehouseName() {
+		return takeDeliverWarehouseName;
+	}
+
+	public void setTakeDeliverWarehouseName(String takeDeliverWarehouseName) {
+		this.takeDeliverWarehouseName = takeDeliverWarehouseName;
 	}
 	
 }

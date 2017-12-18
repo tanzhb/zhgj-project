@@ -28,6 +28,7 @@ public interface CustomsFormService extends GenericService<CustomsForm, String> 
 	int updateStatus(CustomsForm customsForm);
 	 List<CustomsForm> selectCustomsFormList(String  type );
 	 void deleteCustomsForm(String serialNumList);
+	 List<CustomsForm> selectCustomsFormList(String  type,String orderSerial );
 	 
 	
 	    
