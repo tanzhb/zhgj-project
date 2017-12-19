@@ -9,7 +9,7 @@
     <ul class="nav nav-tabs">
 			<li class="active"><a data-target="#tab_15_1" data-toggle="tab">订单</a>
 			</li>
-			<li><a data-target="" data-toggle="tab">框架合同</a></li>
+			<!-- <li><a data-target="" data-toggle="tab">框架合同</a></li> -->
 			<li><a data-target="#tab_15_3" data-toggle="tab">发货计划</a></li>
 	</ul>
     <div class="tab-content">

@@ -29,9 +29,9 @@
 			<li class="active"><a data-target="#tab_15_1" data-toggle="tab">销售订单</a>
 			</li>
 		</shiro:hasPermission>
-		<shiro:hasPermission name="zhgj:frameOrder">
+<%-- 		<shiro:hasPermission name="zhgj:frameOrder">
 			<li><a data-target="" data-toggle="tab">框架合同</a></li>
-		</shiro:hasPermission>
+		</shiro:hasPermission> --%>
 			<li><a data-target="#tab_15_3" data-toggle="tab">发货计划</a></li>
 	</ul>
     <div class="tab-content">
