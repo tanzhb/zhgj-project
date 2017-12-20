@@ -37,6 +37,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			$scope.delivery.deliverNum = newCode;
 		});
 		$scope.delivery={};
+		$scope.deliver={};
     	$scope.deliver.deliverDate=$filter('date')(new Date(), 'yyyy-MM-dd');
     	/*$scope.delivery.packageSpecifications="原厂包装";*/
     	$scope.delivery.deliverType="贸易发货";
@@ -248,6 +249,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			}else{
 				$scope.showSXs='0';
 			}
+			$scope.takeDeliveryWarehouseAddress='';
 		}else{
 			if($scope.companyAddressesf.length==0){
 				toastr.warning("该企业无联系地址");
@@ -258,6 +260,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			}else{
 				$scope.showSXf='0';
 			}
+			$scope.warehouseAddress='';
 		}
 	
 	}
@@ -2159,6 +2162,13 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	 initWarehouses('pts',data.orderInfo.buyComId,"in");
 	          		    	 initCompanyaddresses(data.orderInfo.buyComId,'sh');//先加载收货地址列表
 	          		    	$scope.delivery.maker=data.currenLoginName;//制单人默认当前用户
+	          		    	if(data.clauseDelivery!=null){
+	          		    		$scope.deliver.packageType=data.clauseDelivery.deliveryMode;
+	          		    		$scope.warehouseAddress=data.clauseDelivery.warehouseAddress;
+	          		    	}else{
+	          		    		$scope.deliver.packageType='';
+	          		    		$scope.warehouseAddress='';
+	          		    	}
 	          		    	/*$scope.delivery.deliverNum=data.deliverNum;//随机产生的发货单号
 */	          		    	if($scope.delivery!=null){
 	          		    	/*	if($scope.delivery.orderNum!=""&&$scope.delivery.orderNum!=null){*/

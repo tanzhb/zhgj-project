@@ -24,7 +24,9 @@ public class PaymentRecord extends BaseVO implements Serializable{
     
     //付款计划单号
     private String paymentPlanNum;
-
+    
+  //下单日期
+    private Date orderDate;
     //供应商
     private String supplyComId;
 
@@ -39,7 +41,7 @@ public class PaymentRecord extends BaseVO implements Serializable{
     
     //订单编号
     private String orderNum;
-
+    
     //支付类型
     private String paymentType;
     
@@ -200,7 +202,9 @@ public class PaymentRecord extends BaseVO implements Serializable{
     
     private String billType;
     
-
+    private String  customsFormSerial;//报关/清关流水
+    
+    private  List<CompanyFinance>comFinances;
 
 	public String getBillType() {
 		return billType;
@@ -684,4 +688,29 @@ public class PaymentRecord extends BaseVO implements Serializable{
 	public void setFileList(List<PaymentFile> fileList) {
 		this.fileList = fileList;
 	}
+
+	public String getCustomsFormSerial() {
+		return customsFormSerial;
+	}
+
+	public void setCustomsFormSerial(String customsFormSerial) {
+		this.customsFormSerial = customsFormSerial;
+	}
+	@JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
+	public Date getOrderDate() {
+		return orderDate;
+	}
+
+	public void setOrderDate(Date orderDate) {
+		this.orderDate = orderDate;
+	}
+
+	public List<CompanyFinance> getComFinances() {
+		return comFinances;
+	}
+
+	public void setComFinances(List<CompanyFinance> comFinances) {
+		this.comFinances = comFinances;
+	}
+	
 }

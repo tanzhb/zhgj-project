@@ -3303,19 +3303,19 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		       		if(comId=="pt"){
 		       		 $scope.companyAddressesf=data;
 		       		setTimeout(function () {
-		       		  	$("#deliverAddress").selectpicker({
+		       		  	$("select[name='deliverAddress1']").selectpicker({
 		                showSubtext: true
 		            });
-					$('#deliverAddress').selectpicker('refresh');//刷新插件
+		       		 $("select[name='deliverAddress1']").selectpicker('refresh');//刷新插件
 		               }, 100);
 		       		 
 		       		}else{
 		       		 $scope.companyAddressess=data;
 		       		setTimeout(function () {
-		       			$("#takeDeliverAddress").selectpicker({
+		       			$("select[name='takeDeliverAddress1']").selectpicker({
 		                       showSubtext: true
 		                   });
-		       			$('#takeDeliverAddress').selectpicker('refresh');//刷新插件
+		       			$("select[name='takeDeliverAddress1']").selectpicker('refresh');//刷新插件
 		               }, 100);
 		       		}
 		       	},function(data){
@@ -3339,6 +3339,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 					}else{
 						$scope.showSXs='0';
 					}
+					$scope.takeDeliver.takeDeliverAddress='';
 				}else{
 					if($scope.companyAddressesf.length==0){
 						toastr.warning("该企业无联系地址");
@@ -3349,6 +3350,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 					}else{
 						$scope.showSXf='0';
 					}
+					$scope.deliver.deliverAddress='';
 				}
 			
 			}
@@ -4457,60 +4459,90 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			         */
 					$scope.saveTakeDelivery = function(number) {
 						if($('#takeDeliveryForm').valid()){
-							handle.blockUI();
-							var params = {};
-							if(number==0){//保存代发货
-								$scope.deliver.status="0";//待提货
-							}else{
-								$scope.deliver.status="1";//确认提货
+							if($scope.showSXf =='1'){
+								if(isNull($("select[name='deliverAddress1']").val())){
+									toastr.error('发货地址未选择！');
+					    			return;
+								}
 							}
-							params.delivery = $scope.deliver;
-							params.deliveryTransport = $scope.deliverTransport;
-							params.takeDelivery = $scope.takeDeliver;
-							params.deliveryMateriels = [];
-							var param
-							for(var i=0;i < $scope.orderMateriels.length;i++){
-								param = {};
-								if(!isNull($scope.orderMateriels[i].supplyMaterielSerial)){
-									param.supplyMaterielSerial = $scope.orderMateriels[i].supplyMaterielSerial;
-									//param.orderMaterielSerial = '';
-								}else if(!isNull($scope.orderMateriels[i].orderMateriel)){
-									param.orderMaterielSerial = $scope.orderMateriels[i].orderMateriel.serialNum;
-								}/*else if(!isNull($scope.orderMateriels[i].serialNum)){
-									param.orderMaterielSerial = $scope.orderMateriels[i].serialNum;
-								}*/
-								 if(!isNull($scope.orderMateriels[i].serialNum)&&$scope.deliver.serialNum==undefined){
-										param.orderMaterielSerial = $scope.orderMateriels[i].serialNum;
-									}else{//修改
-										param.orderMaterielSerial = $scope.orderMateriels[i].orderMaterielSerial==undefined?$scope.orderMateriels[i].serialNum:$scope.orderMateriels[i].orderMaterielSerial;
-									}
-								param.batchNum = $scope.orderMateriels[i].batchNum;
-								param.manufactureDate = $scope.orderMateriels[i].manufactureDate;
-								param.deliverCount = $scope.orderMateriels[i].deliverCount;
-								param.deliverRemark = $scope.orderMateriels[i].deliverRemark;
-								param.acceptCount = $scope.orderMateriels[i].acceptCount;
-								param.refuseCount = $scope.orderMateriels[i].deliverCount-$scope.orderMateriels[i].acceptCount;
-								param.takeRemark = $scope.orderMateriels[i].takeRemark;
-								param.attachFile = $("#batchNumReal"+i).text();
-								params.deliveryMateriels.push(param);
+							if($scope.showSXs=='1'){
+								if(isNull($("select[name='takeDeliverAddress1']").val())){
+									toastr.error('收货地址未选择！');
+					    			return;
+								}
 							}
-							
-							var promise = takeDeliveryService
-									.saveTakeDelivery(params);
-							promise.then(function(data) {
-								if(data.data.flag){
-									handle.unblockUI();
-									if(data.data.flag){//存在不满足条件的发货
-										if(data.data.isDel){
-											toastr.warning("当前发货单已发货完毕请删除当前发货单!");
-										}else{
-											$scope.orderMateriels=data.data.deliveryMateriels;
-											toastr.warning("存在发货数量超过未发数量的物料,请重新编辑!");}
-									}
+							 $rootScope.judgeIsExist("deliver",$scope.deliver.deliverNum, $scope.deliver.serialNum,function(result){
+					    			var 	isExist = result;
+					    		debugger;
+					    		if(isExist){
+					    			 toastr.error('发货单号重复！');
+					    			return;
+					    		}else{handle.blockUI();
+								var params = {};
+								if(number==0){//保存代发货
+									$scope.deliver.status="0";//待提货
 								}else{
-									$scope.showSXf='0';
-									$scope.showSXs='0';
-									if(number==0){
+									$scope.deliver.status="1";//确认提货
+								}
+								params.delivery = $scope.deliver;
+								params.deliveryTransport = $scope.deliverTransport;
+								params.takeDelivery = $scope.takeDeliver;
+								params.deliveryMateriels = [];
+								var param
+								for(var i=0;i < $scope.orderMateriels.length;i++){
+									param = {};
+									if(!isNull($scope.orderMateriels[i].supplyMaterielSerial)){
+										param.supplyMaterielSerial = $scope.orderMateriels[i].supplyMaterielSerial;
+										//param.orderMaterielSerial = '';
+									}else if(!isNull($scope.orderMateriels[i].orderMateriel)){
+										param.orderMaterielSerial = $scope.orderMateriels[i].orderMateriel.serialNum;
+									}/*else if(!isNull($scope.orderMateriels[i].serialNum)){
+										param.orderMaterielSerial = $scope.orderMateriels[i].serialNum;
+									}*/
+									 if(!isNull($scope.orderMateriels[i].serialNum)&&$scope.deliver.serialNum==undefined){
+											param.orderMaterielSerial = $scope.orderMateriels[i].serialNum;
+										}else{//修改
+											param.orderMaterielSerial = $scope.orderMateriels[i].orderMaterielSerial==undefined?$scope.orderMateriels[i].serialNum:$scope.orderMateriels[i].orderMaterielSerial;
+										}
+									param.batchNum = $scope.orderMateriels[i].batchNum;
+									param.manufactureDate = $scope.orderMateriels[i].manufactureDate;
+									param.deliverCount = $scope.orderMateriels[i].deliverCount;
+									param.deliverRemark = $scope.orderMateriels[i].deliverRemark;
+									param.acceptCount = $scope.orderMateriels[i].acceptCount;
+									param.refuseCount = $scope.orderMateriels[i].deliverCount-$scope.orderMateriels[i].acceptCount;
+									param.takeRemark = $scope.orderMateriels[i].takeRemark;
+									param.attachFile = $("#batchNumReal"+i).text();
+									params.deliveryMateriels.push(param);
+								}
+								
+								var promise = takeDeliveryService
+										.saveTakeDelivery(params);
+								promise.then(function(data) {
+									if(data.data.flag){
+										handle.unblockUI();
+										if(data.data.flag){//存在不满足条件的发货
+											if(data.data.isDel){
+												toastr.warning("当前发货单已发货完毕请删除当前发货单!");
+											}else{
+												$scope.orderMateriels=data.data.deliveryMateriels;
+												toastr.warning("存在发货数量超过未发数量的物料,请重新编辑!");}
+										}
+									}else{
+										$scope.showSXf='0';
+										$scope.showSXs='0';
+										if(number==0){
+											toastr.success("保存提货成功！");
+											$scope.deliverTransport=data.data.deliveryTransport;
+											$scope.takeDeliver=data.data.takeDelivery ;
+											$scope.deliver=data.data.delivery;
+											$scope.deliverAdd=true;
+											$scope.deliverView=true;
+										}else{toastr.success("确认提货成功！");
+										$state.go("customerOrder");
+										}
+										handle.unblockUI();
+									}
+								/*	if(number==0){
 										toastr.success("保存提货成功！");
 										$scope.deliverTransport=data.data.deliveryTransport;
 										$scope.takeDeliver=data.data.takeDelivery ;
@@ -4520,26 +4552,17 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 									}else{toastr.success("确认提货成功！");
 									$state.go("customerOrder");
 									}
+									handle.unblockUI();*/
+								}, function(data) {
+									// 调用承诺接口reject();
 									handle.unblockUI();
-								}
-							/*	if(number==0){
-									toastr.success("保存提货成功！");
-									$scope.deliverTransport=data.data.deliveryTransport;
-									$scope.takeDeliver=data.data.takeDelivery ;
-									$scope.deliver=data.data.delivery;
-									$scope.deliverAdd=true;
-									$scope.deliverView=true;
-								}else{toastr.success("确认提货成功！");
-								$state.go("customerOrder");
-								}
-								handle.unblockUI();*/
-							}, function(data) {
-								// 调用承诺接口reject();
-								handle.unblockUI();
-								toastr.error("代发货失败！请联系管理员");
-								console.log(data);
-							});
+									toastr.error("代发货失败！请联系管理员");
+									console.log(data);
+								});
 						}
+							
+							 });
+		}
 					}; 
 					$scope.confirmSelectOrder = function(){
 			  			var id_count = $('#buyOrder input[name="selecrOrderSerial"]:checked').length;

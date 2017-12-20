@@ -29,6 +29,8 @@ public class CustomsForm {
     private Date playArrivalDate;
 
     private String port;
+    
+    private OrderInfo  orderInfo;
 
     private String remark;
 
@@ -237,5 +239,15 @@ public class CustomsForm {
 	public void setFiles(List<RelationFile> files) {
 		this.files = files;
 	}
+
+	public OrderInfo getOrderInfo() {
+		return orderInfo;
+	}
+
+	public void setOrderInfo(OrderInfo orderInfo) {
+		this.orderInfo = orderInfo;
+	}
+
+	
     
 }

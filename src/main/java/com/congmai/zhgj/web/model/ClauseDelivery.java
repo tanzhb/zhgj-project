@@ -28,6 +28,8 @@ public class ClauseDelivery {
     private String updater;
 
     private Date updateTime;
+    
+	public String warehouseAddress;//仓库地址
 
     public String getSerialNum() {
         return serialNum;
@@ -131,6 +133,14 @@ public class ClauseDelivery {
 
 	public void setDeliveryMode(String deliveryMode) {
 		this.deliveryMode = deliveryMode;
+	}
+
+	public String getWarehouseAddress() {
+		return warehouseAddress;
+	}
+
+	public void setWarehouseAddress(String warehouseAddress) {
+		this.warehouseAddress = warehouseAddress;
 	}
     
 }

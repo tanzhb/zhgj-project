@@ -791,6 +791,8 @@ public class OrderController {
     	ContractVO contract = null;
 		if(StringUtils.isNotEmpty(orderInfo.getContractSerial())){
     		contract=contractService.selectConbtractById(orderInfo.getContractSerial());
+    	}else{
+    		map.put("clauseDelivery", null);
     	}
     	map.put("contract", contract);
     	if(contract!=null&&StringUtils.isNotEmpty(contract.getId())){

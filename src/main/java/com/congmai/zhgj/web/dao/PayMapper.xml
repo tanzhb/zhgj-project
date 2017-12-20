@@ -4,10 +4,10 @@
     
     <!--添加应付款  -->
     <insert id="insertPaymentRecord" parameterType="com.congmai.zhgj.web.model.PaymentRecord">
-    INSERT INTO paymentRecord(serialNum,paymentNum,supplyComId,buyComId,paymentType,orderSerial,applyPaymentAmount,billStyle,paymentDate,
+    INSERT INTO paymentRecord(serialNum,paymentNum,supplyComId,buyComId,paymentType,orderSerial,applyPaymentAmount,billStyle,billType,accountPeriod,deliveryRate,paymentDate,customsFormSerial,
     applyCurrency,playPaymentDate,payType,paymentNode,nodeNum,applyDept,payee,contact,contactNum,bank,accountName,accountNumber,
     isBill,applyDate,applicant,remark,status,creator,createTime,updater,updateTime) 
-    VALUES(#{serialNum},#{paymentNum},#{supplyComId},#{buyComId},#{paymentType},#{orderSerial},#{applyPaymentAmount},#{billStyle},#{paymentDate},
+    VALUES(#{serialNum},#{paymentNum},#{supplyComId},#{buyComId},#{paymentType},#{orderSerial},#{applyPaymentAmount},#{billStyle},#{billType},#{accountPeriod},#{deliveryRate},#{paymentDate},#{customsFormSerial},
     #{applyCurrency},#{playPaymentDate},#{payType},#{paymentNode},#{nodeNum},#{applyDept},#{payee},#{contact},#{contactNum},#{bank},#{accountName},#{accountNumber},
     #{isBill},#{applyDate},#{applicant},#{remark},'0',#{creator},NOW(),#{creator},NOW())
     </insert>
@@ -66,7 +66,7 @@
     <select id="selectAllPaymentRecordList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.PaymentRecord">
     SELECT
 	a.serialNum,a.paymentNum,a.playPaymentDate,a.paymentNode,a.nodeNum,a.applyPaymentAmount,b.orderNum,
-	(SELECT comName FROM company WHERE comId=a.supplyComId) AS supplyComId,a.paymentDate,a.paymentAmount,a.status
+	(SELECT comName FROM company WHERE comId=a.supplyComId) AS supplyComId,a.paymentDate,a.paymentAmount,a.status,a.paymentType,a.applyCurrency
 	FROM
 	paymentRecord a
 	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
@@ -82,7 +82,7 @@
     <select id="findAllGatheringMoneyRecord" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.PaymentRecord">
 	 SELECT
 	 a.serialNum,a.paymentNum,a.playPaymentDate,a.paymentNode,a.nodeNum,a.applyPaymentAmount,b.orderNum,
-	(SELECT comName FROM company WHERE comId=a.buyComId) AS buyComId,a.paymentDate,a.paymentAmount,a.status
+	(SELECT comName FROM company WHERE comId=a.buyComId) AS buyComId,a.paymentDate,a.paymentAmount,a.status,a.paymentType,a.applyCurrency,a.payee,a.isBill
 	FROM
 	paymentRecord a
 	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
@@ -99,7 +99,7 @@
 	a.serialNum,a.paymentNum,a.paymentType,b.orderNum,b.serialNum AS orderSerial,a.supplyComId,a.buyComId,
 	b.orderAmount,a.applyPaymentAmount,a.applyCurrency,a.playPaymentDate,a.payType,a.paymentNode,a.nodeNum,
 	a.billStyle,a.isBill,a.applyDate,a.applicant,a.applyDept,a.remark,
-    a.payee,a.contact,a.contactNum,a.bank,a.accountName,a.accountNumber,a.status,a.reason,a.processInstanceId,a.userId
+    a.payee,a.contact,a.contactNum,a.bank,a.accountName,a.accountNumber,a.status,a.reason,a.processInstanceId,a.userId,a.billType,b.orderDate,a.accountPeriod,.b.orderAmount,b.orderNum,a.deliveryRate
 	FROM
 	paymentRecord a
 	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
@@ -182,6 +182,10 @@
 	paymentNode=#{paymentNode},
 	nodeNum=#{nodeNum},
 	billStyle=#{billStyle},
+	billType=#{billType},
+	accountPeriod=#{accountPeriod},
+	deliveryRate=#{deliveryRate},
+	customsFormSerial=#{customsFormSerial},
 	isBill=#{isBill},
 	applyDate=#{applyDate},
 	applicant=#{applicant},

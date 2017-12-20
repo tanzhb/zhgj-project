@@ -1,5 +1,5 @@
-angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope','$http', 'settings', 'PayService','$state','$compile','$stateParams','FileUploader',  
-                                                           function($rootScope,$scope,$http,settings,PayService,$state,$compile,$stateParams,FileUploader) {
+angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope','$http', 'settings', 'PayService','commonService','$state','$compile','$filter','$stateParams','FileUploader',  
+                                                           function($rootScope,$scope,$http,settings,PayService,commonService,$state,$compile,$filter,$stateParams,FileUploader) {
 	$scope.$on('$viewContentLoaded', function() {   
 		
 		App.initAjax();
@@ -20,7 +20,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		validateFileInit();//file表单初始化
 		
 
-		if($state.current.name=="addPay"){
+	/*	if($state.current.name=="addPay"){
 			$rootScope.setNumCode("OM",function(newCode){
 				$scope.paymentRecord={};
 	 			$scope.paymentRecord.paymentNum= newCode;//付款单号
@@ -29,9 +29,33 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		//根据参数查询对象
 		 if($stateParams.serialNum){
 			 $scope.getPayInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);	//在审批页面加载评论
-         }
+         }*/
 		 
-		 
+		 if($state.current.name=="addPay"){
+				$scope.span =false;
+				$scope.input = true;
+				$scope.inputFile=true;
+				//根据参数查询对象
+				 if($stateParams.serialNum){
+					 $scope.getPayInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);	//在审批页面加载评论
+					    }else{
+			$rootScope.setNumCode("OM",function(newCode){
+				$scope.paymentRecord={};
+					$scope.paymentRecord.paymentNum= newCode;//收款单号
+					$scope.paymentRecord.playPaymentDate= $filter('date')(new Date(), 'yyyy-MM-dd');//计划收款日期
+					$scope.paymentRecord.applyDate= $filter('date')(new Date(), 'yyyy-MM-dd');//申请日期
+					$scope.paymentRecord.applyDateForBg=$filter('date')(new Date(), 'yyyy-MM-dd');//报关申请日期
+					$scope.paymentRecord.isBill='0';
+					getCurrentUser();
+				});
+					    }
+			
+			}else if($state.current.name=="viewPay"){
+				$scope.getPayInfo($stateParams.serialNum);	
+				$scope.input=false;
+				$scope.span=true;
+				
+			}
 		 
 	});
 
@@ -43,24 +67,41 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		}else{
 			if(table.row('.active').data().status != '0'){
 				showToastr('toast-top-center', 'warning', '该条数据已经申请流程审批，不能进行修改！')
-			}else $state.go('editPay',{serialNum:table.row('.active').data().serialNum});
+			}else $state.go('addPay',{serialNum:table.row('.active').data().serialNum});
 		} 
 	};
 
-
+	 /**
+	 * 加载当前用户信息
+	 */
+	var getCurrentUser = function(){
+		var promise = commonService.getCurrentUser();
+		promise.then(function(data){
+			$scope.paymentRecord.applicant = data.data.userName;
+			$scope.paymentRecord.applyDept=data.data.department;
+			
+		},function(data){
+			//调用承诺接口reject();
+		});
+	}
 	//根据参数查询付款对象
 	$scope.getPayInfo  = function(serialNum, ids, comments) {
 		debugger
 		PayService.selectPay(serialNum).then(
       		     function(data){
-      		    	$scope.pay=data;
-      		    	$scope.file=data.fileList;
-      		    	for(var i=0;i<data.fileList.length;i++){
-      		    	$scope.file[i].paymentSerial = $scope.pay.serialNum;
-      		    	}
-      		    	$scope.chnAmount=convertCurrency($scope.pay.applyPaymentAmount);
-      		    	$scope.clauseSettlementList=data.clauseSettList;
-      		    	
+      		   	$scope.paymentRecord=data;
+  		    	$scope.saleOrder={};
+  		    	$scope.saleOrder.orderAmount=data.orderAmount;
+  		    	$scope.saleOrder.orderNum=data.orderNum;
+  		    	$scope.file=data.fileList;
+  		    	for(var i=0;i<data.fileList.length;i++){
+  		    	$scope.file[i].paymentSerial = $scope.pay.serialNum;
+  		    	}
+  		    	$scope.chnAmount=convertCurrency($scope.paymentRecord.applyPaymentAmount);
+  		    	$scope.clauseSettlementList=data.clauseSettList;
+  		    	$scope.paymentRecord.payType=data.payType;
+  		    	$scope.comFinances=data.comFinances//收付款信息
+  		    	$scope.paymentRecord.bank=data.bank;
       		    	$("#serialNum").val(serialNum);//赋值给隐藏input，通过和不通过时调用
 					$("#taskId").val(ids);//赋值给隐藏input，通过和不通过时调用
 
@@ -339,8 +380,13 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
    						supplyComId=$scope.saleOrder.supplyComId;
    						var orderSerial=data.orderInfo.serialNum;
    						$scope.orderSerial=data.orderInfo.serialNum;
+   						$scope.paymentRecord.orderDate=data.orderInfo.orderDate;
    						$scope.deliveryMaterielE=data.clauList;
+   						$scope.isQG=data.createQG;
    						$scope.clauseSettlementList=data.clauseSettlementDetail;
+   						$scope.comFinances=data.comFinances//收付款信息
+   						$scope.paymentRecord.payee=data.orderInfo.supplyName;
+   						
    					}else{
    						$scope.pay.orderNum=data.orderInfo.orderNum;
    						$scope.pay.orderSerial=data.orderInfo.serialNum;
@@ -361,7 +407,40 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
    		);
 
    	};
-   	
+	//选择支付节点赋值
+   	$scope.selectPaymentNode=function(node){
+		var serialNum;
+		if($scope.pay!=null){
+			serialNum=$scope.pay.orderSerial;
+		}else{
+			serialNum=$scope.orderSerial;
+		}
+		if(node!=''){//选择了支付节点
+			for(var i=0;i<$scope.clauseSettlementList.length;i++){
+				if(node==$scope.clauseSettlementList[i].deliveryNode){
+					$scope.paymentRecord.payType=$scope.clauseSettlementList[i].paymentType;//支付类型
+					$scope.paymentRecord.deliveryRate=$scope.clauseSettlementList[i].deliveryRate+"%";//支付比率
+					$scope.paymentRecord.applyPaymentAmount=$scope.clauseSettlementList[i].deliveryAmount;//支付金额
+					$scope.chnAmount=convertCurrency($scope.clauseSettlementList[i].deliveryAmount);//大写金额
+					$scope.paymentRecord.applyCurrency=$scope.clauseSettlementList[i].paymentMethod;//支付方式
+					$scope.paymentRecord.accountPeriod=$scope.clauseSettlementList[i].accountPeriod;//账期
+					$scope.paymentRecord.billType=$scope.clauseSettlementList[i].billingMethod=='先票后款'?'1':'0';//发票方式
+					$scope.paymentRecord.applyCurrency=$scope.clauseSettlementList[i].paymentMethod;//币种
+				}
+				
+			}
+		}else if(node==''){
+			$scope.paymentRecord.payType='';//支付类型
+			$scope.paymentRecord.deliveryRate='';//支付比率
+			$scope.paymentRecord.applyPaymentAmount='';//支付金额
+			$scope.chnAmount='';//大写金额
+			$scope.paymentRecord.applyCurrency='';//支付方式
+			$scope.paymentRecord.accountPeriod='';//账期
+			$scope.paymentRecord.billType='';//发票方式
+			$scope.paymentRecord.applyCurrency='';//币种
+		}
+		
+	}
    	//选择日期类型及日起值
    	$scope.selectDateTpe=function(node){
 		var serialNum;
@@ -432,14 +511,21 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	    			fd.append('playPaymentDate',$scope.paymentRecord.playPaymentDate);
 	    			fd.append('payType',$scope.paymentRecord.payType);
 	    			fd.append('paymentNode',$scope.paymentRecord.paymentNode);
-	    			fd.append('nodeNum',$scope.paymentRecord.nodeNum);
-	    			fd.append('billStyle',"先款后票"); 
+	    			/*fd.append('nodeNum',$scope.paymentRecord.nodeNum);*/
+	    			fd.append('accountPeriod',$scope.paymentRecord.accountPeriod); 
+	    			fd.append('deliveryRate',$scope.paymentRecord.deliveryRate);
+	    			fd.append('billType',$scope.paymentRecord.billType); 
 	    			fd.append('supplyComId',supplyComId);
-	    			fd.append('isBill',$("input[name='isBill']:checked").val());
-	    			fd.append('applyDate',$scope.paymentRecord.applyDate);
+	    			fd.append('isBill',$scope.paymentRecord.isBill==undefined?'0':$scope.paymentRecord.isBill);
+	    			if($scope.paymentRecord.paymentType=='清关'){
+	    				fd.append('applyDate',$scope.paymentRecord.applyDateForBg);//清关时申请日期
+	    				fd.append('customsFormSerial',$scope.paymentRecord.customsFormSerial);//清关关时报关流水
+	    			}else{
+	    				fd.append('applyDate',$scope.paymentRecord.applyDate);
+	    			}
 	    			fd.append('applicant',$scope.paymentRecord.applicant);
-	    			fd.append('applyDept',$scope.paymentRecord.applyDept);
-	    			fd.append('remark',$scope.paymentRecord.remark);
+	    			fd.append('applyDept',$scope.paymentRecord.applyDept==undefined?'':$scope.paymentRecord.applyDept);
+	    			fd.append('remark',$scope.paymentRecord.remark==undefined?'':$scope.paymentRecord.remark);
 	    			
 	    			fd.append('payee',$scope.paymentRecord.payee);
 	    			fd.append('contact',$scope.paymentRecord.contact);
@@ -460,10 +546,10 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	    				//上传成功的操作
 	    				toastr.success("保存应付款数据成功！");
 	    				handle.unblockUI();
-	    				$scope.pay= data;
+	    				$scope.paymentRecord= data;
 	    				$scope.span = true;
 	    				$scope.input = false;
-	    				$scope.applyPaymentAmountChn=convertCurrency($scope.pay.applyPaymentAmount);
+	    				$scope.applyPaymentAmountChn=convertCurrency($scope.paymentRecord.applyPaymentAmount);
 	    				$(".alert-danger").hide();
 	    					});
 	    		}
@@ -528,7 +614,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	    				//上传成功的操作
 	    				toastr.success("保存应付款数据成功！");
 	    				handle.unblockUI();
-	    				$scope.pay= data;
+	    				$scope.paymentRecord= data;
 	    				$scope.span = true;
 	    				$scope.input = false;
 	    				$scope.applyPaymentAmountChn=convertCurrency($scope.pay.applyPaymentAmount);
@@ -733,7 +819,17 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 					});
 		}
 	};
-	
+	$scope.changeValue=function(){//选择付款银行
+		for(var i in  $scope.comFinances){
+			if($scope.comFinances[i].openingBank==$scope.paymentRecord.bank){
+				$scope.paymentRecord.accountName=$scope.comFinances[i].accountName;
+				$scope.paymentRecord.accountNumber=$scope.comFinances[i].accountNumber;
+				return;
+			}
+		}
+		$scope.paymentRecord.accountName='';
+		$scope.paymentRecord.accountNumber='';
+	}
 	//取消申请
 	$scope.apCancelApply = function() {		
 		if($('#form_sample_1').valid()){
@@ -783,6 +879,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 				$scope.span = true;
 				$scope.input = false;
 				$scope.applyPaymentAmountChn=convertCurrency($scope.pay.applyPaymentAmount);
+				
 					});
 		}
 	};
@@ -1243,16 +1340,23 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 																	"<span></span></label>";
 														}
 						                            },
-						                            { mData: 'paymentNum' },
+						                            { mData: 'paymentNum' },//paymentType
+						                            { mData: 'paymentType' },//paymentType
+						                            { mData: 'applyCurrency' },
+						                            { mData: 'applyPaymentAmount' },
 						                            { mData: 'playPaymentDate' },
-						                            { mData: 'paymentNode' },
-						                            { mData: 'nodeNum' },
-						                            { mData: 'applyPaymentAmount'},
-						                            { mData: 'orderNum'},
-						                            
 						                            { mData: 'supplyComId'},
 						                            { mData: 'paymentDate'},
-						                            { mData: 'paymentAmount' },
+						                            { mData: 'paymentAmount'},
+						                            { mData: 'isBill',
+						                            	mRender:function(data){
+						                            		if(data=='0'){
+						                            				return '否';
+						                            		}else{
+						                            			return "是";
+						                            		}
+						                            	}
+						                            	},
 						                            { mData: 'status',
 						                            	mRender:function(data){
 						                            		if(data!=""&&data!=null){
@@ -1271,7 +1375,11 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 						                            			return "";
 						                            		}
 						                            	}
-						                            }
+						                            },{ mData: 'status',
+						                            	mRender:function(data){
+						                            		return "";
+						                            	}
+						                            	},
 						                            ],
 						                            'aoColumnDefs': [ {
 						                            	'targets' : 0,
@@ -1402,7 +1510,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 						}
 					});
 			if(ids==''){
-				toastr.warning('请选择一个订单！');return;
+				toastr.warning('请选择一个采购订单！');return;
 			}
 			/* alert(ids);*/
 
@@ -1673,6 +1781,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 				applyDept:{required:"申请部门不能为空！"},
 				payee:{required:"收款方不能为空！"},
 				contact:{required:"收款方联系人不能为空！"},
+				qgOrBgNum:{required:"清关单号不能为空,请选择！"},
 				contactNum:{required:"联系电话不能为空！",isPhone:"请正确填写您的联系电话！"},
 				bank:{required:"收款银行不能为空！"},
 				accountName:{required:"户名不能为空！"},
@@ -1698,6 +1807,8 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 				name2: {
 					minlength: 6,
 					required: !0
+				},
+				qgOrBgNum:{required:true,
 				},
 				paymentNum:{required:true,
 					rangelength:[3,20]
@@ -1833,7 +1944,155 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 			}
 		})   
 	});
+	$scope.selectQgInfo=function(){
+		loadQgTable();
+		console.log($scope.orderSerial);
+	}
+	//销售订单列表
+	var table2;
+	var loadQgTable= function() {
+		var orderSerial=$scope.orderSerial;
+		a = 0;
+		 if(table2!=undefined){
+			 table2.destroy();
+		    	 }
+		App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
+		table2= $("#sample_22")
+		.DataTable({
+			language: {
+				aria: {
+					sortAscending: ": 以升序排列此列",
+					sortDescending: ": 以降序排列此列"
+				},
+				emptyTable: "空表",
+				info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+				infoEmpty: "没有数据",
+				// infoFiltered: "(filtered1 from _MAX_ total entries)",
+				lengthMenu: "每页显示 _MENU_ 条数据",
+				search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
+				zeroRecords: "抱歉， 没有找到！",
+				paginate: {
+					"sFirst": "首页",
+					"sPrevious": "前一页",
+					"sNext": "后一页",
+					"sLast": "尾页"
+				}
+			},
+			order: [[1, "desc"]],// 默认排序列及排序方式
+			searching: true,// 是否过滤检索
+			ordering:  true,// 是否排序
+			lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
+			pageLength: 5,// 每页显示数量
+			processing: true,// loading等待框
+			//"rest/invoice/getMaterielList?orderSerial="+orderSerial+"&deliverSerial="+deliverSerial
+			ajax:"rest/customsForm/getCustomsFormList?type=clearance"+"&orderSerial="+orderSerial,// 加载数据中
+			"aoColumns": [
+			              { mData: 'serialNum' },
+			              { mData: 'customsFormNum' },
+			              { mData: 'orderInfo.rate',
+			            		mRender:function(data){
+	                          		return data+"%";
+	                          	}
+			            	  },
+                          { mData: 'addedTax' },
+                          { mData: 'customsAmount' },
+                          { mData: 'customsAmount'}
 
+			              ],
+			              'aoColumnDefs' : [ {
+			            	  'targets' : 0,
+			            	  'searchable' : false,
+			            	  'orderable' : false,
+			            	  'render' : function(data,
+			            			  type, full, meta) {//customsFormSerial,customsFormNum,addedTax,customsAmount,rate
+			            		  return '<input type="radio" name="serialNum" value="'+data+'" ng-click="getData(\''+full.serialNum+'\',\''+full.customsFormNum+'\',\''+full.addedTax+'\',\''+full.customsAmount+'\',\''+full.orderInfo.rate+'\')" '  
+			            		  + $('<div/>')
+			            		  .text(
+			            				  data)
+			            				  .html()
+			            				  + '">';
+			            	  },
+			            	  "createdCell": function (td, cellData, rowData, row, col) {
+			            		  $compile(td)($scope);
+			            	  }
+			              }, {
+			            	  'targets' : 5,
+			            	  'searchable' : false,
+			            	  'orderable' : false,
+			            	  'render' : function(data,
+			            			  type, full, meta) {
+			            		  return  Number(data)+Number(full.addedTax);
+			            	  }
+			            	
+			              } ]
+
+		}).on('order.dt',
+				function() {
+			console.log('排序');
+		})
+
+		// 确认选择开始***************************************
+		var ids = '';
+		$scope.confirmSelectQgInfo = function() {
+
+			// Iterate over all checkboxes in the table
+			table2.$('input[type="radio"]').each(
+					function() {
+						// If checkbox exist in DOM
+						if ($.contains(document, this)) {
+							// If checkbox is checked
+							if (this.checked) {
+								// 将选中数据id放入ids中
+								if (ids == '') {
+									ids = this.value;
+								} else
+									ids = ids + ','
+									+ this.value;
+							}
+						}
+					});
+			if(ids==''){
+				toastr.warning('请选择一个清关单！');return;
+			}
+			$scope.paymentRecord.customsFormSerial=ids;
+			$scope.qgOrBgNum=$scope.customsForm1.qgOrBgNum;
+			$scope.addedTax=$scope.customsForm1.addedTax;
+			$scope.customsAmount=$scope.customsForm1.customsAmount;
+			$scope.qgOrBgNum=$scope.customsForm1.qgOrBgNum;
+			$scope.rate=$scope.customsForm1.rate;
+			$scope.totalMoney=$scope.customsForm1.totalMoney;
+			$scope.chnTotalMoney=convertCurrency($scope.totalMoney);
+			
+			
+			$('#basicQgInfo').modal('hide');// 删除成功后关闭模态框
+			$(".modal-backdrop").remove();
+		};
+		$scope.getData=function(customsFormSerial,customsFormNum,addedTax,customsAmount,rate){
+			$scope.customsForm1={};
+			$scope.customsForm1.serialNum=customsFormSerial;
+			$scope.customsForm1.addedTax=addedTax;
+			$scope.customsForm1.rate=rate;
+			$scope.customsForm1.customsAmount=customsAmount;
+			$scope.customsForm1.qgOrBgNum=customsFormNum;
+			$scope.customsForm1.totalMoney=Number(customsAmount)+Number(addedTax);
+		}
+
+		// 添加checkbox功能***************************************
+		// Handle click on "Select all" control
+		$('#example-select-all').on(
+				'click',
+				function() {
+					// Check/uncheck all checkboxes in the
+					// table
+					var rows = table.rows({
+						'search' : 'applied'
+					}).nodes();
+					$('input[type="checkbox"]', rows).prop(
+							'checked', this.checked);
+				});
+
+		// ***************************************
+	};
 
 }]);
 

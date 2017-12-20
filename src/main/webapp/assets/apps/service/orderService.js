@@ -387,7 +387,17 @@ angular.module('MetronicApp').service('orderService',
 								deferred.reject(err);//请求失败
 							});
 							return deferred.promise;//返回承诺  
-					  }
+					  },
+					  initPtWarehouseAddress : function (){
+							var deferred = $q.defer();
+							$http.get("rest/company/initPtWarehouseAddress")
+							.then(function success(result) {
+								deferred.resolve(result);//请求成功
+							}, function error(err) {
+								deferred.reject(err);//请求失败
+							});
+							return deferred.promise;//返回承诺
+						},
 
 		}
 		} ]);

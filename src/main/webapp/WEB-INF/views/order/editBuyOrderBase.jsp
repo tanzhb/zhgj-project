@@ -1532,6 +1532,45 @@ margin-right: 20px;
                              </div>
                          </div>
                          <div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold"><span ng-if="clauseDelivery.deliveryMode=='自提'">提货</span><span ng-if="clauseDelivery.deliveryMode=='配送'">收货</span>地址<span ng-hide="span"
+														class="required" aria-required="true"> * </span></label>
+											
+																  	<div class="" >
+													<div class="input-group"  >
+													<input type="text" name="warehouseAddress"
+															class="form-control"
+															ng-model="clauseDelivery.warehouseAddress"    ng-if="showSXf!='1'"  ng-hide="clauseDeliveryInput"/>
+															<div  ng-show="showSXf=='1'">
+																<select class="form-control"   data-live-search="true" data-size=""   
+															name="warehouseAddress1"
+															ng-model="clauseDelivery.warehouseAddress"
+															 >
+															<option ng-repeat="item in warehouseAddresses"
+																value="{{item.address}}">{{item.address}}</option>
+															<option value=""></option>
+														</select>
+														</div>
+															<span ng-hide="clauseDeliveryInput"  class="input-group-btn" ng-click="showSX('f')"
+																style="vertical-align: top;">
+																<button class="btn default" type="button"  ng-if="showSXf!='1'">
+																	筛选
+																</button>
+																	<button class="btn default" type="button"  ng-if="showSXf=='1'">
+																	输入
+																</button>
+															</span>
+														</div>
+														</div>
+													
+														
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-show="clauseDeliveryShow">
+															{{clauseDelivery.warehouseAddress}}</p>
+													
+												</div>
+											</div>
+                         <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label bold">运输方式：</label>
                                  <div class="">
@@ -1561,8 +1600,7 @@ margin-right: 20px;
                              </div>
                          </div>
                          <!--/span-->
-                     </div>
-                     <div class="row">
+                   
                          <!--/span-->
                          <div class="col-md-4">
                              <div class="form-group ">

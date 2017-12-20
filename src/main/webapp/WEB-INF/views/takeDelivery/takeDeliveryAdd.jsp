@@ -8,6 +8,9 @@
 .required2{
 	color:red;
 }
+.help-block {
+    color: #e73d4a;
+}
 
 /* #deliveryMaterielTable thead tr th{
 	text-align: center;
@@ -373,11 +376,11 @@
                                                         </div> -->
                                                         	<div class="" >
 													<div class="input-group"  >
-													<input type="text" name="takeDeliverAddress"
+													<input type="text" name="takeDeliverAddress"  id="takeDeliverAddress"
 															class="form-control"
 															ng-model="takeDeliver.takeDeliverAddress"   ng-if="showSXs!='1'"   ng-hide="deliverAdd"/>
 															<div  ng-show="showSXs=='1'">
-																<select class="form-control"  id="takeDeliverAddress"  data-live-search="true" data-size=""  
+																<select class="form-control"  id="takeDeliverAddress1"  data-live-search="true" data-size=""  
 															name="takeDeliverAddress1"
 															ng-model="takeDeliver.takeDeliverAddress" 
 															 >
@@ -578,9 +581,9 @@
 															ng-model="materiel.manufactureDate" placeholder="">
 															<span class="help-block"></span></td> -->
 														<td><span class="help-block"></span>{{materiel.amount}}</td><!-- ng-init="orderMateriels[$index].deliverCount=materiel.amount" -->
-														<td><span class="help-block"></span>{{materiel.amount-materiel.orderMateriel.deliveredCount}}</td>
+														<td><span class="help-block"></span>{{materiel.amount-materiel.deliveredCount}}</td>
 														<td class="form-group"><input type="text"
-															class="form-control" id="deliverCount{{$index}}"     ng-if="type!='edit'"  ng-init="orderMateriels[$index].deliverCount=materiel.amount-materiel.orderMateriel.deliveredCount"
+															class="form-control" id="deliverCount{{$index}}"     ng-if="type!='edit'"  ng-init="orderMateriels[$index].deliverCount=materiel.amount-materiel.deliveredCount"
 															name="deliverCount" data-ordercount="{{materiel.amount}}"   
 															ng-model="orderMateriels[$index].deliverCount"
 															ng-hide="deliverAdd"/>

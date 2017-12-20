@@ -250,6 +250,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					}else{
 						$scope.showSXs='0';
 					}
+					$scope.takeDeliver.takeDeliverAddress=""
 				}else{
 					if($scope.deliver.orderNum==undefined){
 						toastr.warning("请先选择采购订单");
@@ -264,6 +265,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					}else{
 						$scope.showSXf='0';
 					}
+					$scope.deliver.deliverAddress=""
 				}
 			
 			}
@@ -276,7 +278,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	 		/**
 	 		 *加载订单物料
 	 		 */
-	        $scope.getOrderMateriel=function () { 
+	        $scope.getOrderMateriel=function () {
 	            var sd = $scope.deliver.orderSerial;
 	        	var promise = orderService.getOrderInfo(sd,'deliver');//查发货的物料
         		promise.then(function(data){
@@ -288,6 +290,13 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 						//$scope.deliver.receiver =  order.buyComId;
 						$scope.deliver.receiver =  order.buyName;
 					}
+					if(data.clauseDelivery!=null){
+      		    		$scope.deliver.packageType=data.clauseDelivery.deliveryMode;
+      		    		$scope.takeDeliver.takeDeliverAddress=data.clauseDelivery.warehouseAddress;
+      		    	}else{
+      		    		$scope.deliver.packageType='';
+      		    		$scope.takeDeliver.takeDeliverAddress='';
+      		    	}
 					initWarehouse("pt",$scope.deliver.supplyComId,"out");
 					initWarehouse("pt",$scope.deliver.buyComId,"in");
 					

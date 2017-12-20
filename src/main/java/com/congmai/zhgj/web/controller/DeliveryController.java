@@ -77,6 +77,7 @@ import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.event.EventExample;
 import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.BaseVO;
+import com.congmai.zhgj.web.model.ClauseDelivery;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyAddress;
@@ -105,6 +106,7 @@ import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.WarehouseExample;
 import com.congmai.zhgj.web.model.OrderMaterielExample.Criteria;
+import com.congmai.zhgj.web.service.ClauseDeliveryService;
 import com.congmai.zhgj.web.service.CompanyAddressService;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.ContractService;
@@ -209,6 +211,8 @@ public class DeliveryController {
 	
 	@Resource
 	private CompanyAddressService  companyAddressService;
+	  @Resource
+	    private ClauseDeliveryService clauseDeliveryService;
 	
 	 /**
      * @Description (查询仓库列表)
@@ -562,6 +566,16 @@ public class DeliveryController {
 	public Map getSaleOrderInfo(String serialNum,OrderInfo orderInfo) {
 		orderInfo = orderService.selectById(serialNum);
 		Map<String, Object> map = new HashMap<String, Object>();
+		ContractVO contract = null;
+		if(org.apache.commons.lang3.StringUtils.isNotEmpty(orderInfo.getContractSerial())){
+    		contract=contractService.selectConbtractById(orderInfo.getContractSerial());
+    	}
+		if(contract!=null&&org.apache.commons.lang3.StringUtils.isNotEmpty(contract.getId())){
+			ClauseDelivery clauseDelivery = clauseDeliveryService.selectByContractId(contract.getId());
+    		map.put("clauseDelivery", clauseDelivery);
+		}else{
+			map.put("clauseDelivery", null);
+		}
     	map.put("orderInfo", orderInfo);
     	Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 

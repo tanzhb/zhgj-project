@@ -215,7 +215,7 @@ orderInfo.billStatus, orderInfo.delFlg,
 		 </if>
 		 <if test="status=='2'.toString()" >
 		 	AND orderInfo.status='2'
-		 	AND (orderInfo.deliveryCount is null  or  (orderInfo.materielCount > orderInfo.deliveryCount and  orderInfo.deliveryCount  is not null))
+		 	AND (orderInfo.deliveryCount is null  or  (orderInfo.materielCount!=orderInfo.deliveryCount and  orderInfo.deliveryCount  is not null))
 		 </if>
 		 <if test="status=='000'" >
 		 	AND orderInfo.status != 0
