@@ -18,7 +18,7 @@ public class ContractVO {
 	//id
     private String id;
 
-    //供应商
+
     private String comId;
 
     //合同编号
@@ -85,7 +85,7 @@ public class ContractVO {
     //最新版本（1是0否）
     private String isLatestVersion;
     
-    //物料状态
+    //状态
     private String status;
     
     //删除标志（1是0否）
@@ -129,6 +129,13 @@ public class ContractVO {
     
     
     private String orderNum;
+    
+    //框架协议状态
+    private String frameStatus;
+    //框架协议内容
+    private String contractContent;
+    
+    private String seller;
     
 	public String getId() {
 		return id;
@@ -436,4 +443,14 @@ public class ContractVO {
 	public void setOrderNum(String orderNum) {
 		this.orderNum = orderNum;
 	}
+
+	public String getFrameStatus() {
+		return frameStatus;
+	}
+
+	public void setFrameStatus(String frameStatus) {
+		this.frameStatus = frameStatus;
+	}
+	
+	
 }
