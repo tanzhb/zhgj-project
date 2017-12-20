@@ -61,6 +61,7 @@ import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.CommentVO;
+import com.congmai.zhgj.web.model.CompanyFinance;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.OrderInfo;
@@ -70,6 +71,8 @@ import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Vacation;
+import com.congmai.zhgj.web.service.CompanyFinanceService;
+import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.OrderService;
@@ -117,6 +120,11 @@ public class PayController {
 
 	@Autowired
 	private IProcessService processService;
+	@Autowired
+	private CompanyService companyService;
+	@Autowired
+	private CompanyFinanceService companyFinanceService;
+	
 
 	/**
 	 * 
@@ -327,11 +335,17 @@ public class PayController {
 	public Map getSaleOrderInfo(String serialNum, OrderInfo orderInfo) {
 		orderInfo = orderService.selectById(serialNum);
 		Boolean createBG=StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())&&StringUtils.isEmpty(orderInfo.getSupplyComId());//该订单是否需要报关
+		Boolean createQG=StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())&&!StringUtils.isEmpty(orderInfo.getSupplyComId());//该订单是否需要清关
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("createBG", createBG);
+		map.put("createQG", createQG);
 		if(createBG){
 			
 		}
+		//获取平台收付款信息
+		String comId=companyService.selectComIdByComName(StaticConst.getInfo("comName"));
+		List<CompanyFinance>comFinances=companyFinanceService.selectListByComId(comId);
+		map.put("comFinances", comFinances);
 		String paiedMoney = payService.selectPaiedMoney(serialNum);
 		orderInfo.setPaiedMoney(paiedMoney);
 		String billedMoney = payService.selectBilledMoney(serialNum);
@@ -475,6 +489,8 @@ public class PayController {
 
 			record = payService.selectPayById(record.getSerialNum());
 			String orderSerial = record.getOrderSerial();
+			/*OrderInfo o=orderService.selectById(orderSerial);
+			record.setOrderDate(o.getOrderDate());*/
 			String paiedMoney = payService.selectPaiedMoney(orderSerial);
 			String billedMoney = payService.selectBilledMoney(orderSerial);
 			record.setPaiedMoney(paiedMoney);
@@ -803,6 +819,10 @@ public class PayController {
 				.selectClauseSettlementDetailList2(c.getOrderSerial());
 		
 		c.setClauseSettList(clauseSettlementDetail);
+		//获取平台收付款信息
+				String comId=companyService.selectComIdByComName(StaticConst.getInfo("comName"));
+				List<CompanyFinance>comFinances=companyFinanceService.selectListByComId(comId);
+				c.setComFinances(comFinances);
 		return new ResponseEntity<PaymentRecord>(c, HttpStatus.OK);
 	}
 	

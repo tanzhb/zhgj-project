@@ -2657,7 +2657,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
 
         .state('addPay', {
-            url: "/addPay",
+            url: "/addPay:serialNum",
             templateUrl: "rest/page/addPay",
             data: {pageTitle: '新增付款'},
             controller: "PayController",
@@ -2677,6 +2677,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 	        	'assets/apps/service/PayService.js',
 				'assets/apps/controllers/PayController.js',
+				 'assets/apps/service/CommonService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -2707,6 +2708,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/PayService.js',
 				'assets/apps/controllers/PayController.js',
+				 'assets/apps/service/CommonService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -2737,6 +2739,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 								'assets/apps/scripts/pageHandle.js',
 								'assets/apps/service/PayService.js',
 								'assets/apps/controllers/PayController.js',
+								 'assets/apps/service/CommonService.js',
 								'assets/apps/controllers/app.js',
 								'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -2768,6 +2771,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 								'assets/apps/scripts/pageHandle.js',
 								'assets/apps/service/PayService.js',
 								'assets/apps/controllers/PayController.js',
+								 'assets/apps/service/CommonService.js',
 								'assets/apps/controllers/app.js',
 								'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -2799,6 +2803,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 								'assets/apps/scripts/pageHandle.js',
 								'assets/apps/service/PayService.js',
 								'assets/apps/controllers/PayController.js',
+								 'assets/apps/service/CommonService.js',
 								'assets/apps/controllers/app.js',
 								'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -2830,6 +2835,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 								'assets/apps/service/PayService.js',
 							    'assets/apps/scripts/angular-file-upload.min.js',
 								'assets/apps/controllers/PayController.js',
+								 'assets/apps/service/CommonService.js',
 								'assets/apps/controllers/app.js',
 								'assets/apps/controllers/uploadPhoto.js',
 				
@@ -2871,6 +2877,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 	        	'assets/apps/service/PayService.js',
 				'assets/apps/controllers/PayController.js',
+				 'assets/apps/service/CommonService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -2881,7 +2888,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         
         
         .state('addGatheringMoney', {
-            url: "/addGatheringMoney",
+            url: "/addGatheringMoney:serialNum",
             templateUrl: "rest/page/addGatheringMoney",
             data: {pageTitle: '新增收款'},
             controller: "GatheringMoneyController",

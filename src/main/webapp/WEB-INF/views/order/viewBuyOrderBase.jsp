@@ -1178,6 +1178,14 @@ margin-right: 20px;
                                  </div>
                              </div>
                          </div>
+                          <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label col-md-5 bold"><span ng-if="clauseDelivery.deliveryMode=='自提'">提货</span><span ng-if="clauseDelivery.deliveryMode=='配送'">收货</span>地址：</label>
+                                 <div class="control-label col-md-7">
+                                     <p  > {{clauseDelivery.warehouseAddress}} </p>
+                              		</div>
+                             </div>
+                         </div>
                          <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">运输方式：</label>

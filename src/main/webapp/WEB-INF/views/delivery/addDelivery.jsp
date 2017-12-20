@@ -169,7 +169,7 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="handWay">交付方式</label>
                                                     <div class=""><!-- 包装类型暂时先做为交付方式 -->
-                                                        <select class="form-control" id="packageType"   ng-model="deliver.packageType" ng-show="inputDeliveryInfo"    ng-init="deliver.packageType='配送'">
+                                                        <select class="form-control" id="packageType"   ng-model="deliver.packageType" ng-show="inputDeliveryInfo"   >
 	                                                    	<option value=""></option>
 	                                                    	<option value="配送">配送</option>
 	                                                    	<option value="自提">自提</option>

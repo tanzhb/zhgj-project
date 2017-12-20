@@ -78,16 +78,17 @@
                                     <span></span>
                                 </label>
                             </th>
-							<th style="white-space: nowrap;">收款单号</th>
-							<th style="white-space: nowrap;">计划收款日期</th>
-							<th style="white-space: nowrap;">支付节点</th>
-							<th style="white-space: nowrap;">节点单据号</th>
-							<th style="white-space: nowrap;">收款金额</th>
-							<th style="white-space: nowrap;">关联订单号</th>
+							<th style="white-space: nowrap;">应收帐单号</th>
+							<th style="white-space: nowrap;">收款类型</th>
+							<th style="white-space: nowrap;">币种</th>
+							<th style="white-space: nowrap;">应收金额</th>
+							<th style="white-space: nowrap;">应收日期</th>
 							<th style="white-space: nowrap;">付款方</th>
-							<th style="white-space: nowrap;">实际收款日期</th>
-							<th style="white-space: nowrap;">实际收款金额</th>
+							<th style="white-space: nowrap;">实收日期</th>
+							<th style="white-space: nowrap;">实收金额</th>
+							<th style="white-space: nowrap;">是否开票</th>
 							<th style="white-space: nowrap;">状态</th>
+							<th style="white-space: nowrap;">操作</th>
 						</tr>
 					</thead>
 					<tbody>

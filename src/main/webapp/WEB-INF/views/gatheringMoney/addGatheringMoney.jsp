@@ -41,6 +41,7 @@
 											<button class="close" data-close="alert"></button>
 											请先输入正确数据！
 										</div>
+										
 										<div class="row"   >
 											<div class="col-md-4">
 												<div class="form-group">
@@ -50,7 +51,7 @@
 														<input type="text" name="paymentNum" class="form-control"
 															ng-model="paymentRecord.paymentNum" ng-show="input">
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.paymentNum}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.paymentNum}}</p>
 													</div>
 												</div>
 											</div>
@@ -72,7 +73,7 @@
 																	<i class="fa fa-search"></i>
 																</button>
 															</span>
-															<p class="form-control-static" ng-show="span">{{pay.orderNum}}</p>
+															<p class="form-control-static" ng-show="span">{{paymentRecord.orderNum}}</p>
 														</div>
 														<input type="text" ng-model="orderSerial" ng-hide="true" />
 													</div>
@@ -95,27 +96,27 @@
 															<option   ng-if="isBG"    value="报关">报关</option><!--是否报关单  -->
 															<option value="其它">其它</option>
 														</select>
-														<p class="form-control-static" ng-show="span">{{pay.paymentType}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.paymentType}}</p>
 														<div class="form-control-focus"></div>
 													</div>
 												</div>
 											</div>
 											<!--/span-->
-										<!-- </div> -->
+										</div>
 										
 										<!--/row-->
-										<!-- <div class="row"> -->
+										<div class="row">
 										<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">下单日期<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
-														<input type="text" class="form-control" name="orderDate"  
+														<input type="text" class="form-control" name="orderDate"   disabled="disabled"
 														data-date-format="yyyy-mm-dd" id="orderDate"
 													    data-date-viewmode="years" size="16"
-															ng-model="orderDate" ng-show="input"/>
+															ng-model="paymentRecord.orderDate" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.orderDate}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.orderDate}}</p>
 													</div>
 												</div>
 											</div>
@@ -127,7 +128,7 @@
 														<input type="text" name="orderAmount" class="form-control"
 															 ng-model="saleOrder.orderAmount" ng-show="input" readonly/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.orderAmount}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.orderAmount}}</p>
 													</div>
 
 												</div>
@@ -148,25 +149,26 @@
 															<option value="欧元">欧元</option>
 															<option value="日币">日币</option>
 														</select>
-														<p class="form-control-static" ng-show="span">{{pay.applyCurrency}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.applyCurrency}}</p>
 													</div>
 												</div>
 											</div>
 											</div> <!--/row-->
-											<div class="row"  ng-if="paymentRecord.paymentType!='报关'" >
+											<div ng-show="paymentRecord.paymentType!='报关'">
+											<div class="row"  >
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">支付节点<span
 														class="required" aria-required="true"> * </span></label>
-													<div class="">
+													<div class=""  ng-if="paymentRecord.paymentType!='报关'">
 														<select class="form-control" id="paymentNode"
-															name="paymentNode"
+															name="paymentNode"   
 															ng-model="paymentRecord.paymentNode"
 														    ng-show="input" ng-change="selectPaymentNode(paymentRecord.paymentNode)">
 															<option value="">支付节点</option>
 															<option ng-repeat="item in clauseSettlementList" value="{{item.deliveryNode}}">{{item.deliveryNode}}</option>
 														</select>
-														<p class="form-control-static" ng-show="span">{{pay.paymentNode}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.paymentNode}}</p>
 													</div>
 												</div>
 											</div>
@@ -175,9 +177,9 @@
 													<label class="control-label bold">支付类型<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
-														<select class="form-control" id="payType"  disabled="disabled"
-															name="payType"
-															ng-model="payType"
+														<select class="form-control" id="payType"   disabled="disabled"
+															name="payType"  
+															ng-model="paymentRecord.payType"
 														    ng-show="input">
 															<option value="">支付类型</option>
 															
@@ -187,7 +189,7 @@
 															<option value="全款">全款</option>
 															<option value="尾款">尾款</option> -->
 														</select>
-														<p class="form-control-static" ng-show="span">{{pay.payType}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.payType}}</p>
 													</div>
 												</div>
 											</div>
@@ -198,21 +200,23 @@
 													<label class="control-label bold">支付比率<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
-														<input type="text" name="deliveryRate" class="form-control"
-															readonly ng-model="deliveryRate" ng-show="input"/>
+														<input type="text" name="deliveryRate" class="form-control" ng-if="paymentRecord.paymentType!='报关'"
+															readonly ng-model="paymentRecord.deliveryRate" ng-show="input"/>
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">{{applyPaymentAmountChn}}</p>
 													</div>
 												</div>
 											</div>
+											</div>
+											<div class="row"  >
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">支付金额<span
 														class="required" aria-required="true"> * </span></label>
-													<div class="">
-														<input type="text" name="applyPaymentAmount" id="applyPaymentAmount" class="form-control" number
-															 ng-model="applyPaymentAmount" ng-blur="getChnAmount()" ng-show="input"  readonly/>
-															 <p class="form-control-static" ng-show="span">{{pay.applyPaymentAmount}}</p>
+													<div class="" >
+														<input type="text" name="applyPaymentAmount" id="applyPaymentAmount" class="form-control" number  
+															 ng-model="paymentRecord.applyPaymentAmount" ng-blur="getChnAmount()" ng-show="input"  readonly/>
+															 <p class="form-control-static" ng-show="span">{{paymentRecord.applyPaymentAmount}}</p>
 														<div class="form-control-focus"></div>
 													</div>
 												</div>
@@ -226,7 +230,7 @@
 														<input type="text" class="form-control" name="nodeNum"
 															ng-model="paymentRecord.nodeNum" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.nodeNum}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.nodeNum}}</p>
 													</div>
 												</div>
 											</div> -->
@@ -250,7 +254,7 @@
 													<div class="">
 														<select class="form-control" id="applyCurrency"  disabled="disabled"
 															name="applyCurrency"
-															ng-model="applyCurrency"
+															ng-model="paymentRecord.applyCurrency"
 															 ng-show="input">
 															<option value="">币种</option>
 															<option value="人民币">人民币</option>
@@ -258,20 +262,22 @@
 															<option value="欧元">欧元</option>
 															<option value="日币">日币</option>
 														</select>
-														<p class="form-control-static" ng-show="span">{{pay.applyCurrency}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.applyCurrency}}</p>
 													</div>
 												</div>
 											</div>
+											</div>
+											<div class="row"  >
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">计划收款日期 <span
 														class="required" aria-required="true"> * </span></label>
-													<div class="">
+													<div class=""  >
 														<input type="text" class="form-control" name="playPaymentDate"
 														data-date-format="yyyy-mm-dd"
 													    data-date-viewmode="years" size="16"
 															ng-model="paymentRecord.playPaymentDate" ng-show="input" id="playPaymentDate"/>
-														<p class="form-control-static" ng-show="span">{{pay.playPaymentDate}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.playPaymentDate}}</p>
 														<div class="form-control-focus"></div>
 													</div>
 
@@ -284,8 +290,8 @@
 														<input type="text" class="form-control" name="accountPeriod"  disabled="disabled"
 														data-date-format="yyyy-mm-dd"
 													    data-date-viewmode="years" size="16"
-															ng-model="accountPeriod" ng-show="input" id="accountPeriod"/>
-														<p class="form-control-static" ng-show="span">{{pay.playPaymentDate}}</p>
+															ng-model="paymentRecord.accountPeriod" ng-show="input" id="accountPeriod"/>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.accountPeriod}}</p>
 														<div class="form-control-focus"></div>
 													</div>
 
@@ -296,29 +302,39 @@
 													<label class="control-label bold">发票方式 <span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
-														<input type="text" class="form-control" name="billWay"  disabled="disabled"
-														data-date-format="yyyy-mm-dd"
-													    data-date-viewmode="years" size="16"
-															ng-model="billWay" ng-show="input" id="billWay"/>
-														<p class="form-control-static" ng-show="span">{{pay.billWay}}</p>
+															 <select class="form-control" id="billType"   
+															name="billType"  
+															ng-model="paymentRecord.billType"  
+															 ng-show="input">
+															<option value="1">先票后款</option>
+															<option value="0" >先款后票</option>
+															<option value=""></option>
+														</select>
+														<p class="form-control-static" ng-show="span" ng-if="paymentRecord.billType=='1'">先票后款</p>
+												            <p class="form-control-static" ng-show="span" ng-if="paymentRecord.billType=='0'">先款后票</p>
 														<div class="form-control-focus"></div>
 													</div>
 
 												</div>
 											</div>
+											</div>
+											<div class="row"  >
 												<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">是否开票<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
-													<div ng-show="input">
-														<input type="radio" ng-model="paymentRecord.isBill"
-															ng-checked="paymentRecord.isBill=='1'" name="isBill" value="1">是 <input
-															type="radio" ng-model="paymentRecord.isBill"   ng-checked="paymentRecord.isBill!='1'" 
-															name="isBill" value="0">否
-												   </div>	
-															<p class="form-control-static" ng-show="span" ng-if="pay.isBill=='1'">是</p>
-												            <p class="form-control-static" ng-show="span" ng-if="pay.isBill=='0'">否</p>
+													
+												   <select class="form-control" id="isBill"   
+															name="isBill"  
+															ng-model="paymentRecord.isBill"  
+															 ng-show="input">
+															<option value="1">是</option>
+															<option value="0" >否</option>
+															<option value=""></option>
+														</select>
+															<p class="form-control-static" ng-show="span" ng-if="paymentRecord.isBill=='1'">是</p>
+												            <p class="form-control-static" ng-show="span" ng-if="paymentRecord.isBill=='0'">否</p>
 													</div>
 												</div>
 											</div>
@@ -330,7 +346,7 @@
 														<input type="text" class="form-control" name="applicant"
 															ng-model="paymentRecord.applicant" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.applicant}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.applicant}}</p>
 													</div>
 												</div>
 											</div>
@@ -344,32 +360,34 @@
 														<input type="text" class="form-control" name="applyDept"
 															ng-model="paymentRecord.applyDept" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.applyDept}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.applyDept}}</p>
 													</div>
 												</div>
 											</div>
+											</div>
+										<div class="row"   >
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">申请日期<span
 														class="required" aria-required="true"> * </span></label>
-													<div class="">
+													<div class=""  >
 														<input type="text" class="form-control" name="applyDate"
 														data-date-format="yyyy-mm-dd" id="applyDate"
-													    data-date-viewmode="years" size="16"
+													    data-date-viewmode="years" size="16"  
 															ng-model="paymentRecord.applyDate" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.applyDate}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.applyDate}}</p>
 													</div>
 												</div>
 											</div>
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">备注 </label>
-													<div class="">
+													<div class="" ng-if="paymentRecord.paymentType!='报关'">
 														<input type="text" class="form-control" name="remark"
 															ng-model="paymentRecord.remark" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.remark}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.remark}}</p>
 													</div>
 												</div>
 											</div>
@@ -379,15 +397,16 @@
 													<div class="">
 														
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.status}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.status}}</p>
 													</div>
 												</div>
 											</div>
 										<!--/row-->
 										
 										</div>
-										
-										<div class="row"  ng-if="paymentRecord.paymentType=='报关'" >
+										</div>
+										<div ng-show="paymentRecord.paymentType=='报关'">
+										<div class="row"  >
 										<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">关联报关单号<span
@@ -397,14 +416,14 @@
 															data-toggle="modal" ng-click="selectBgInfo()"
 															onclick="return false;">
 															<input id="orderSerial" name="qgOrBgNum" type="text" ng-show="input"
-																class="form-control" ng-model="saleOrder.orderNum"
+																class="form-control" ng-model="qgOrBgNum"
 																readonly="readonly"> <span
 																class="input-group-btn" ng-show="input" style="vertical-align: top;">
 																<button class="btn default" type="button">
 																	<i class="fa fa-search"></i>
 																</button>
 															</span>
-															<p class="form-control-static" ng-show="span">{{pay.qgOrBgNum}}</p>
+															<p class="form-control-static" ng-show="span">{{paymentRecord.qgOrBgNum}}</p>
 														</div>
 														
 													</div>
@@ -417,7 +436,7 @@
 														<input type="text" class="form-control" name="rate"  readonly
 															ng-model="rate" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.rate}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.rate}}</p>
 													</div>
 												</div>
 											</div>
@@ -428,10 +447,12 @@
 														<input type="text" class="form-control" name="addedTax"  readonly
 															ng-model="addedTax" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.addedTax}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.addedTax}}</p>
 													</div>
 												</div>
 											</div>
+											</div>
+											<div class="row"  >
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">关税额</label>
@@ -440,7 +461,7 @@
 															ng-model="customsAmount" ng-show="input"/>
 													
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.customsAmount}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.customsAmount}}</p>
 													</div>
 												</div>
 											</div>
@@ -451,7 +472,7 @@
 														<input type="text" class="form-control" name="totalMoney"  readonly
 															ng-model="totalMoney" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.totalMoney}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.totalMoney}}</p>
 													</div>
 												</div>
 											</div>
@@ -462,20 +483,22 @@
 														<input type="text" class="form-control" name="chnTotalMoney" readonly
 															ng-model="chnTotalMoney" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.chnTotalMoney}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.chnTotalMoney}}</p>
 													</div>
 												</div>
 											</div>
+											</div>
+											<div class="row"  >
 										<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">申请收款日期 </label>
 												<div class="">
-														<input type="text" class="form-control" name="applyDate"
-														data-date-format="yyyy-mm-dd" id="applyDate"
+														<input type="text" class="form-control" name="applyDateForBg"
+														data-date-format="yyyy-mm-dd" id="applyDateForBg"
 													    data-date-viewmode="years" size="16"
-															ng-model="paymentRecord.applyDate" ng-show="input"/>
+															ng-model="paymentRecord.applyDateForBg" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.applyDate}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.applyDate}}</p>
 													</div>
 												</div>
 											</div>
@@ -487,7 +510,7 @@
 														<input type="text" class="form-control" name="applicant"
 															ng-model="paymentRecord.applicant" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.applicant}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.applicant}}</p>
 													</div>
 												</div>
 											</div>
@@ -501,19 +524,20 @@
 														<input type="text" class="form-control" name="applyDept"
 															ng-model="paymentRecord.applyDept" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.applyDept}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.applyDept}}</p>
 													</div>
 												</div>
 											</div>
-											
+											</div>
+											<div class="row"  >
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">备注 </label>
-													<div class="">
+													<div class=""  ng-if="paymentRecord.paymentType=='报关'">
 														<input type="text" class="form-control" name="remark"
 															ng-model="paymentRecord.remark" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.remark}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.remark}}</p>
 													</div>
 												</div>
 											</div>
@@ -523,23 +547,24 @@
 													<div class="">
 														
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.status}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.status}}</p>
 													</div>
 												</div>
 											</div>
+											</div>
 										</div>
 
-
-										<div class="row"   style="border-top:1px solid #dddddd;padding-top: 20px;">
+										
+										<div class="row"   >
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">付款方 <span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
-														<input type="text" class="form-control" name="payee"
-															ng-model="pay.payee" ng-show="input" />
+														<input type="text" class="form-control" name="payee" readonly
+															ng-model="paymentRecord.payee" ng-show="input" />
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.payee}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.payee}}</p>
 													</div>
 												</div>
 											</div>
@@ -551,9 +576,9 @@
 													</label>
 													<div class="">
 														<input type="text" class="form-control" name="contact"
-															ng-model="pay.contact" ng-show="input" />
+															ng-model="paymentRecord.contact" ng-show="input" />
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.contact}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.contact}}</p>
 													</div>
 												</div>
 											</div>
@@ -564,9 +589,9 @@
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<input type="text" class="form-control" name="contactNum"
-															ng-model="pay.contactNum" ng-show="input" />
+															ng-model="paymentRecord.contactNum" ng-show="input" />
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.contactNum}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.contactNum}}</p>
 													</div>
 												</div>
 											</div>
@@ -576,13 +601,13 @@
 													<label class="control-label bold">收款银行 <span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
-														<select class="form-control" id="bank" name="bank"
-															ng-model="pay.bank" ng-show="input" ng-show="input">
-															<option value="">收款银行</option>
-															<option value="工商银行">工商银行</option>
-															<option value="交通银行">交通银行</option>
+														<select class="form-control" id="bank" name="bank"  ng-change="changeValue()"
+															ng-model="paymentRecord.bank" ng-show="input" >
+															<option value=""></option>
+																<option ng-repeat="item in comFinances"
+																value="{{item.openingBank}}">{{item.openingBank}}</option>
 														</select>
-														<p class="form-control-static" ng-show="span">{{pay.bank}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.bank}}</p>
 													</div>
 
 												</div>
@@ -594,9 +619,9 @@
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<input type="text" class="form-control" name="accountName"
-															ng-model="pay.accountName" ng-show="input" />
+															ng-model="paymentRecord.accountName" ng-show="input"  readonly/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.accountName}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.accountName}}</p>
 													</div>
 
 												</div>
@@ -607,11 +632,11 @@
 													<label class="control-label bold">账号 <span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
-														<input type="text" class="form-control"
-															name="accountNumber" ng-model="pay.accountNumber"
+														<input type="text" class="form-control"  readonly
+															name="accountNumber" ng-model="paymentRecord.accountNumber"
 															ng-show="input" />
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.accountNumber}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.accountNumber}}</p>
 													</div>
 												</div>
 											</div>
@@ -626,7 +651,7 @@
 												<div class="form-group">
 													<label class="control-label bold">订单应收金额<span
 														class="required" aria-required="true"> * </span></label>
-													<div class="">{{pay.orderAmount| currency:'￥'}}</div>
+													<div class="">{{paymentRecord.orderAmount| currency:'￥'}}</div>
 
 												</div>
 											</div>
@@ -644,7 +669,7 @@
 												<div class="form-group">
 													<label class="control-label bold">已收金额 <span
 														class="required" aria-required="true"> * </span></label>
-													<div class="">{{pay.paiedMoney| currency:'￥'}}</div>
+													<div class="">{{paymentRecord.paiedMoney| currency:'￥'}}</div>
 												</div>
 											</div>
 											<!--/span-->
@@ -655,7 +680,7 @@
 												<div class="form-group">
 													<label class="control-label bold">未收金额 <span
 														class="required" aria-required="true"> * </span></label>
-													<div class="">{{pay.orderAmount-pay.paiedMoney|
+													<div class="">{{paymentRecord.orderAmount-paymentRecord.paiedMoney|
 														currency:'￥'}}</div>
 
 												</div>
@@ -665,7 +690,7 @@
 												<div class="form-group">
 													<label class="control-label bold">已开票金额 <span
 														class="required" aria-required="true"> * </span></label>
-													<div class="">{{pay.billedMoney| currency:'￥'}}</div>
+													<div class="">{{paymentRecord.billedMoney| currency:'￥'}}</div>
 
 												</div>
 											</div>
@@ -674,12 +699,13 @@
 												<div class="form-group">
 													<label class="control-label bold">未开票金额 <span
 														class="required" aria-required="true"> * </span></label>
-													<div class="">{{pay.orderAmount-pay.billedMoney|
+													<div class="">{{paymentRecord.orderAmount-paymentRecord.billedMoney|
 														currency:'￥'}}</div>
 												</div>
 											</div>
 											<!--/span-->
 										</div>
+
 									</div>
 									<!--/row-->
 								</div>
@@ -703,7 +729,7 @@
 														<input type="text" class="form-control" name="payee"
 															ng-model="paymentRecord.payee" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.payee}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.payee}}</p>
 													</div>
 												</div>
 											</div>
@@ -716,7 +742,7 @@
 														<input type="text" class="form-control" name="contact"
 															ng-model="paymentRecord.contact" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.contact}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.contact}}</p>
 													</div>
 												</div>
 											</div>
@@ -729,7 +755,7 @@
 														<input type="text" class="form-control" name="contactNum"
 															ng-model="paymentRecord.contactNum" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.contactNum}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.contactNum}}</p>
 													</div>
 												</div>
 											</div>
@@ -750,7 +776,7 @@
 															<option value="工商银行">工商银行</option>
 															<option value="交通银行">交通银行</option>
 														</select>
-														<p class="form-control-static" ng-show="span">{{pay.bank}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.bank}}</p>
 													</div>
 
 												</div>
@@ -764,7 +790,7 @@
 														<input type="text" class="form-control" name="accountName"
 															ng-model="paymentRecord.accountName" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.accountName}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.accountName}}</p>
 													</div>
 
 												</div>
@@ -778,7 +804,7 @@
 														<input type="text" class="form-control" name="accountNumber"
 															ng-model="paymentRecord.accountNumber" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{pay.accountNumber}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.accountNumber}}</p>
 													</div>
 												</div>
 											</div>
@@ -1080,7 +1106,7 @@
 		language : "zh-CN"
 	});
 
-	$('#makeDate').datepicker({
+	$('#orderDate').datepicker({
 		rtl : App.isRTL(),
 		orientation : "left",
 		autoclose : true,
@@ -1094,7 +1120,7 @@
 		autoclose : true,
 		dateFormat : "yyyy-mm-dd",
 		language : "zh-CN"
-	});
+	}); 
 
 	$('#applyDate').datepicker({
 		rtl : App.isRTL(),
@@ -1103,4 +1129,13 @@
 		dateFormat : "yyyy-mm-dd",
 		language : "zh-CN"
 	});
+	$('#applyDateForBg').datepicker({
+		rtl : App.isRTL(),
+		orientation : "left",
+		autoclose : true,
+		dateFormat : "yyyy-mm-dd",
+		language : "zh-CN"
+	});
+	
+
 </script>

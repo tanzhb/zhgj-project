@@ -62,6 +62,8 @@ import com.congmai.zhgj.web.model.SupplyBuyVO;
 import com.congmai.zhgj.web.model.SupplyMateriel;
 import com.congmai.zhgj.web.model.SupplyMaterielExample;
 import com.congmai.zhgj.web.model.User;
+import com.congmai.zhgj.web.model.Warehouse;
+import com.congmai.zhgj.web.model.WarehouseExample;
 import com.congmai.zhgj.web.service.CompanyAddressService;
 import com.congmai.zhgj.web.service.CompanyContactService;
 import com.congmai.zhgj.web.service.CompanyFinanceService;
@@ -70,6 +72,7 @@ import com.congmai.zhgj.web.service.CompanyQualificationService;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.UserCompanyService;
 import com.congmai.zhgj.web.service.UserService;
+import com.congmai.zhgj.web.service.WarehouseService;
 
 
 /**
@@ -100,6 +103,8 @@ public class CompanyController {
 	private UserService userService;
 	@Autowired
 	private CompanyManageService companyManageService;
+	@Autowired
+	private WarehouseService warehouseService;
 	
 	  /**
      * @Description (企业信息首页)
@@ -881,6 +886,20 @@ public class CompanyController {
 		
     	return comList;
     	
+    }
+    
+    /**
+     * @Description (获取平台公司仓库)
+     * @param request
+     * @return
+     */
+    @RequestMapping("initPtWarehouseAddress")
+    @ResponseBody
+    public List<Warehouse> getPtWarehouseAddress(HttpServletRequest request) {
+    	WarehouseExample we=new WarehouseExample();
+    	com.congmai.zhgj.web.model.WarehouseExample.Criteria c=we.createCriteria();
+    	c.andDelFlgEqualTo("0").andOwnerEqualTo("pingtai");
+    	return warehouseService.selectWarehouseList(we);
     }
 }
 

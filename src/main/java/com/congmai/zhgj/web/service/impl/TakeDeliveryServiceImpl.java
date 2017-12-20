@@ -613,6 +613,12 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		TakeDelivery td=new TakeDelivery();
 		td.setSerialNum(old_delivery.getTakeDeliverSerial());
 		if(StaticConst.getInfo("waimao").equals(o.getTradeType())&&StringUtils.isEmpty(o.getSupplyComId())){//外贸
+			List<DeliveryMateriel> materiels = deliveryMateriels; //这里是出入库的物料信息
+			for(DeliveryMateriel materiel : materiels){
+				DeliveryMaterielExample example2 = new DeliveryMaterielExample();
+				example2.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
+				deliveryMaterielMapper.updateByExampleSelective(materiel, example2);
+			}
 		createCustomsDeclarationForm(deliverySerial,currenLoginName);
 		//更新订单状态待报关
 		orderInfo.setDeliverStatus(orderInfo.DECLARATION);
@@ -625,6 +631,13 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			d.setStatus(DeliveryVO.WAIT_TAKEDELIVER_DELIVERY);//待收货
 			//td.setStatus(TakeDelivery.COMPLETE);
 			td.setStatus(TakeDelivery.WAITING);//待收货
+			List<DeliveryMateriel> materiels = deliveryMateriels; //这里是出入库的物料信息
+			for(DeliveryMateriel materiel : materiels){
+				DeliveryMaterielExample example2 = new DeliveryMaterielExample();
+				example2.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
+				deliveryMaterielMapper.updateByExampleSelective(materiel, example2);
+				/*createStock(materiel,new StockExample(),currenLoginName);*/
+			}
 		}
 		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 		delivery2Mapper.updateByPrimaryKeySelective(d);
@@ -644,13 +657,6 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		//出库完成状态处理
 		//stockOutEndHandle(old_delivery.getOrderSerial(),deliverySerial,currenLoginName);
 		
-		List<DeliveryMateriel> materiels = deliveryMateriels; //这里是出入库的物料信息
-		for(DeliveryMateriel materiel : materiels){
-			DeliveryMaterielExample example2 = new DeliveryMaterielExample();
-			example2.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
-			deliveryMaterielMapper.updateByExampleSelective(materiel, example2);
-			/*createStock(materiel,new StockExample(),currenLoginName);*/
-		}
 		//保存出库来源批次
 				List<StockOutBatch> stockOutMaterielsNew = stockOutMateriels; //这里是入库的物料信息
 				StockOutBatchExample  se=new  StockOutBatchExample();
