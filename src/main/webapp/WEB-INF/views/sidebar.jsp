@@ -137,6 +137,15 @@
                     </a>
                 </li>
                 </shiro:hasPermission>
+                <shiro:hasPermission name="zhgj:frameOrder">
+                <li>
+                    <a ui-sref="frameOrder">
+                        销售框架</span>
+                    </a>
+                </li>
+                </shiro:hasPermission>
+                
+                
                  <shiro:hasPermission name="zhgj:saleOrder:*">
                 <li>
                     <a ui-sref="customsDeclarationForm">
@@ -166,6 +175,13 @@
                     </a>
                 </li>
                 </shiro:hasPermission>
+                <shiro:hasPermission name="zhgj:buyFrameOrder">
+					<li>
+		                    <a ui-sref="buyOrder">
+		                       采购框架</span>
+		                    </a>
+		            </li>
+				</shiro:hasPermission>
                 <shiro:hasPermission name="zhgj:purchaseForecast:*">
                 <li>
                     <a ui-sref="purchaseForecast">

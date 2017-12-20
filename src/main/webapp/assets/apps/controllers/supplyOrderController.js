@@ -11,7 +11,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
         $rootScope.settings.layout.pageSidebarClosed = false;
         if($state.current.name=="supplyOrder"){
         	loadMainTable();// 加载订单列表(普通订单)
-        	loadMainFramTable();// 框架订单列表
+//        	loadMainFramTable();// 框架订单列表
         	loadDeliveryTable();// 发货计划列表
         	}else{
         		$scope.datepickerInit();
@@ -563,12 +563,13 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 					'render' : function(data,
 							type, row, meta) {
 						var renderRow = meta.settings.aoData[meta.row];
-						return returnMin(
-									returnMin(
-											diySortFlag(renderRow.anCells[1].textContent),diySortFlag(renderRow.anCells[3].textContent)
-											),
-									diySortFlag(renderRow.anCells[4].textContent)
-									)
+						return 1 ;
+//						return returnMin(
+//									returnMin(
+//											diySortFlag(renderRow.anCells[1].textContent),diySortFlag(renderRow.anCells[3].textContent)
+//											),
+//									diySortFlag(renderRow.anCells[4].textContent)
+//									)
 					}
 				} ]
 

@@ -11,7 +11,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
         $rootScope.settings.layout.pageSidebarClosed = false;
         if($state.current.name=="saleOrder"){
         	loadMainTable();// 加载订单列表(普通订单)
-        	loadMainFramTable();// 框架订单列表
+//        	loadMainFramTable();// 框架订单列表
         	loadDeliveryTable();// 发货计划列表
         	
         	//***************************************流程处理相关start
@@ -100,6 +100,9 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
             		$scope.saleOrder.orderType="自主销售";
             		$scope.saleOrder.tradeType="内贸";
             		$scope.saleOrder.currency="人民币";
+            		$scope.saleOrder.serviceModel="普通代理";
+            		$scope.saleOrder.settlementClause="平进平出";
+            		
             		$scope.saleOrder.orderDate = timeStamp2String2(new Date())
             		$scope.saleOrder.rate = 17;
                 	//合同内容
@@ -665,12 +668,13 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 							'render' : function(data,
 									type, row, meta) {
 								var renderRow = meta.settings.aoData[meta.row];
-								return returnMin(
-											returnMin(
-													diySortFlag(renderRow.anCells[1].textContent),diySortFlag(renderRow.anCells[3].textContent)
-													),
-											diySortFlag(renderRow.anCells[4].textContent)
-											)
+								return 1 ;
+//								return returnMin(
+//											returnMin(
+//													diySortFlag(renderRow.anCells[1].textContent),diySortFlag(renderRow.anCells[3].textContent)
+//													),
+//											diySortFlag(renderRow.anCells[4].textContent)
+//											)
 							}
 						} ]
 
