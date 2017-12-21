@@ -251,4 +251,10 @@ public class ContractServiceImpl extends GenericServiceImpl<ContractVO, String> 
 		oi.setUpdateTime(new Date());
 		orderService.updateStatus(oi);
 	}
+
+
+	@Override
+	public List<ContractVO> selectList(ContractVO parm) {
+		return contractMapper.selectList(parm);
+	}
 }

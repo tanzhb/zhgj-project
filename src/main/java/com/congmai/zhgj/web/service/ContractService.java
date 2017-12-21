@@ -90,4 +90,7 @@ public interface ContractService extends GenericService<ContractVO, String> {
 	 * @param nodeString
 	 */
 	public void findPaymentNode(String orderString, String nodeString);
+
+
+	public List<ContractVO> selectList(ContractVO parm);
 }

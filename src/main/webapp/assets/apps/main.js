@@ -4026,7 +4026,7 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 			   }else if('addBuyFrame' == toState.name){//新增采购订单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>采购框架</a><i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a ui-sref='buyOrder'>采购框架列表</a><i class='fa fa-angle-right'></i></li>";
+				 		"<li><a ui-sref='buyFrame'>采购框架列表</a><i class='fa fa-angle-right'></i></li>";
 				 		if(toParams.serialNum != undefined){
 							 html += "<li><a>修改框架订单</a></li>";
 						 } else html += "<li><a>新增框架订单</a></li>";

@@ -46,8 +46,9 @@
 	FROM
 	contract a
 	LEFT JOIN orderInfo b ON a.serialNum=b.contractSerial
-	WHERE a.delFlg='0' AND b.supplyComId IS NULL AND b.delFlg='0'
-	and b.status !=0
+	WHERE a.delFlg='0' AND ((b.supplyComId IS NULL AND b.delFlg='0'
+	and b.status !=0)
+	or ((a.status=3 or a.status=2) and a.contractType = '采购框架'))
 	<!-- AND a.creator=#{userId} -->
 	GROUP BY(a.serialNum)
     </select>
@@ -60,8 +61,9 @@
 	FROM
 	contract a
 	LEFT JOIN orderInfo b ON a.serialNum=b.contractSerial
-	WHERE a.delFlg='0' AND b.buyComId IS NULL AND b.delFlg='0'
-	and b.status !=0 and b.status !=66 and b.status !=77 and b.status !=1  <!-- 审批通过的采购订单，才生成采购合同 -->
+	WHERE a.delFlg='0' AND ((b.buyComId IS NULL AND b.delFlg='0'
+	and b.status !=0 and b.status !=66 and b.status !=77 and b.status !=1)  <!-- 审批通过的采购订单，才生成采购合同 -->
+	or ((a.status=3 or a.status=2) and a.contractType = '销售框架'))
 	<!-- AND a.creator=#{userId} -->
 	GROUP BY(a.serialNum)
     </select>
@@ -111,6 +113,8 @@
 	b.serialNum AS orderSerial,
 	b.supplyComId,
 	b.orderNum,
+	a.comId,
+	(SELECT comName FROM company WHERE comId=a.comId) AS comName,
 	a.contractNumber
 	FROM
 	contract a
@@ -256,5 +260,34 @@
       </if>
       
     </select> 
+    
+    
+    <!--查询合同列表  -->
+   <select id="selectList" parameterType="com.congmai.zhgj.web.model.ContractVO" resultType="com.congmai.zhgj.web.model.ContractVO">
+    SELECT 
+    a.serialNum AS Id,
+	a.contractNum,
+	a.firstParty,
+	a.secondParty,
+	a.contractType,
+	a.serviceModel,
+	a.signDate,
+	a.signer,
+	a.startDate,
+	a.endDate,
+	a.versionNO,
+	a.status,
+	a.creator,
+	(SELECT comName FROM company WHERE comId=a.comId) AS comId
+	FROM
+	contract a
+	
+	WHERE
+	a.delFlg='0'
+		<if test="contractType != null" >
+        and contractType = #{contractType,jdbcType=VARCHAR}
+      </if>
+
+    </select>
   
 </mapper>

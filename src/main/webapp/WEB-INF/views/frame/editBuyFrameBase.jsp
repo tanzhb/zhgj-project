@@ -78,7 +78,7 @@ margin-right: 20px;
                          					</div>
                          				</div>	
                                                </div>
-                                     <p class="form-control-static" ng-show="buyFrameShow"> {{buyFrame.supplyName}} </p>
+                                     <p class="form-control-static" ng-show="buyFrameShow"> {{buyFrame.comName}} </p>
                                  </div>
                                  
                                  
@@ -132,7 +132,7 @@ margin-right: 20px;
                                             <span class="btn blue btn-circle btn-file">
                                                 <span class="fileinput-new">上传附件</span>
                                                 <span class="fileinput-exists">更改</span>
-                                                <input type="file" name="electronicContract" nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="buyFrame.electronicContract" ng-click="uploadFile('electronicContract')" > </span>
+                                                <input type="file" name="electronicContract" nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="buyFrame.electronicContract" ng-click="uploadFile('electronicContract')" /> </span>
                                             <span class="fileinput-filename">{{buyFrame.electronicContract.substring(buyFrame.electronicContract.indexOf("_")+1)}}</span> &nbsp;
                                             <a href="javascript：;" class="close fileinput-exists" ng-click="removefile('electronicContract')" data-dismiss="fileinput"> </a>
                                         </div>
@@ -140,7 +140,7 @@ margin-right: 20px;
                                             <span class="btn blue btn-circle btn-file">
                                                 <span class="fileinput-new">上传附件</span>
                                                 <span class="fileinput-exists">更改</span>
-                                                <input type="file" name="electronicContract" nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="buyFrame.electronicContract" ng-click="uploadFile('electronicContract')" > </span>
+                                                <input type="file" name="electronicContract" nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="buyFrame.electronicContract" ng-click="uploadFile('electronicContract')" /> </span>
                                             <span class="fileinput-filename">{{buyFrame.electronicContract.substring(buyFrame.electronicContract.indexOf("_")+1)}}</span> &nbsp;
                                             <a href="javascript：;" class="close fileinput-exists"  ng-click="removefile('electronicContract')" data-dismiss="fileinput"> </a>
                                         </div>
@@ -168,10 +168,10 @@ margin-right: 20px;
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>开始日期：</label>
                                  <div class="">
                                  		<input type="text" class="form-control form-control-inline input-medium date-picker" 
-                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-model="buyFrame.startDate"  ng-hide="contractInput" id="startDate" name="startDate"/>
+                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-model="buyFrame.startDate"  ng-hide="buyFrameInput" id="startDate" name="startDate"/>
 									<div class="form-control-focus"> </div>
-									<span class="help-block" ng-hide="contractInput">请输入开始日期</span>
-                                     <p class="form-control-static" ng-show="contractShow"> {{buyFrame.startDate}} </p>
+									<span class="help-block" ng-hide="buyFrameInput">请输入开始日期</span>
+                                     <p class="form-control-static" ng-show="buyFrameShow"> {{buyFrame.startDate}} </p>
                                  </div>
                              </div>
                          </div>
@@ -180,10 +180,10 @@ margin-right: 20px;
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>结束日期：</label>
                                  <div class="">
                                  		<input type="text" class="form-control form-control-inline input-medium date-picker" 
-                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-model="buyFrame.endDate"  ng-hide="contractInput" id="endDate" name="endDate"/>
+                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-model="buyFrame.endDate"  ng-hide="buyFrameInput" id="endDate" name="endDate"/>
 									<div class="form-control-focus"> </div>
-									<span class="help-block" ng-hide="contractInput">请输入结束日期</span>
-                                     <p class="form-control-static" ng-show="contractShow"> {{buyFrame.endDate}} </p>
+									<span class="help-block" ng-hide="buyFrameInput">请输入结束日期</span>
+                                     <p class="form-control-static" ng-show="buyFrameShow"> {{buyFrame.endDate}} </p>
                                  </div>
                              </div>
                          </div>

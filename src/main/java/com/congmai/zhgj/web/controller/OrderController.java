@@ -722,6 +722,36 @@ public class OrderController {
     }
 
     /**
+     * 
+     * @Description (各类框架列表查询)
+     * @param type（只分为销售：sale，采购:buy两种）
+     * @param selectFor(自定义参数值，用于控制生成查询sql)
+     * @return
+     */
+    @RequestMapping("/findFrameList")
+    @ResponseBody
+    public ResponseEntity<Map> findFrameList(String type,String selectFor) {
+    	List<ContractVO> contractList = new ArrayList<ContractVO>();
+    	
+    	ContractVO parm =new ContractVO();
+    	if(SALEORDER.equals(type)){//查找公司销售订单
+    		parm.setContractType(StaticConst.CONTRACT_TYPE_SALEFRAME.getInfo());
+    	}else if(BUYORDER.equals(type)){//查找公司采购订单
+    		parm.setContractType(StaticConst.CONTRACT_TYPE_BUYFRAME.getInfo());
+    	}
+    	
+    	contractList = contractService.selectList(parm);
+    	
+    	//封装datatables数据返回到前台
+		Map pageMap = new HashMap();
+		pageMap.put("draw", 1);
+		pageMap.put("recordsTotal", contractList==null?0:contractList.size());
+		pageMap.put("recordsFiltered", contractList==null?0:contractList.size());
+		pageMap.put("data", contractList);
+		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+
+    }
+    /**
 	 * 
 	 * @Description 批量删除订单
 	 * @param ids
@@ -757,7 +787,7 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/getOrderInfo")
 	@ResponseBody
-	public Map getOrderInfo(String serialNum,String  judgeString,OrderInfo orderInfo) {
+	public Map getOrderInfo(String serialNum,OrderInfo orderInfo) {
 		orderInfo = orderService.selectById(serialNum);
 		Map<String, Object> map = new HashMap<String, Object>();
     	map.put("orderInfo", orderInfo);
@@ -832,6 +862,54 @@ public class OrderController {
     	return map;
 	}
 	
+	
+	/**
+	 * 
+	 * @Description 获取框架协议信息
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "/getFrameInfo")
+	@ResponseBody
+	public Map getFrameInfo(String serialNum) {
+		Map<String, Object> map = new HashMap<String, Object>();
+    	//获取合同信息
+    	ContractVO contract=contractService.selectConbtractById(serialNum);
+    	map.put("contract", contract);
+    	if(contract!=null&&StringUtils.isNotEmpty(contract.getId())){
+    		//获取合同条款信息
+    		ClauseAfterSales clauseAfterSales = clauseAfterSalesService.selectByContractId(contract.getId());
+    		map.put("clauseAfterSales", clauseAfterSales);
+    		ClauseAdvance clauseAdvance = clauseAdvanceService.selectByContractId(contract.getId());
+    		map.put("clauseAdvance", clauseAdvance);
+    		ClauseCheckAccept clauseCheckAccept = clauseCheckAcceptService.selectByContractId(contract.getId());
+    		map.put("clauseCheckAccept", clauseCheckAccept);
+    		ClauseDelivery clauseDelivery = clauseDeliveryService.selectByContractId(contract.getId());
+    		map.put("clauseDelivery", clauseDelivery);
+    		ClauseSettlement clauseSettlement = clauseSettlementService.selectByContractId(contract.getId());
+    		map.put("clauseSettlement", clauseSettlement);
+    		
+        	//查询框架合同
+//        	if(StaticConst.getInfo("framContract").equals(contract.getContractType())){//如果是框架合同
+//        		ClauseFrameworkExample mf =new ClauseFrameworkExample();
+//    	    	com.congmai.zhgj.web.model.ClauseFrameworkExample.Criteria criteriaf =  mf.createCriteria();
+//    	    	criteriaf.andContractSerialEqualTo(contract.getId());
+//    	    	criteriaf.andDelFlgEqualTo("0");
+//    	    	List<ClauseFramework> ClauseFramework = clauseFrameworkService.selectList(mf);
+//    	    	map.put("ClauseFramework", ClauseFramework);
+//        	}
+    	}
+    	
+    	//获取订单附件
+//    	OrderFileExample om =new OrderFileExample();
+//    	com.congmai.zhgj.web.model.OrderFileExample.Criteria criteria2 =  om.createCriteria();
+//    	criteria2.andOrderSerialEqualTo(serialNum);
+//    	criteria2.andDelFlgEqualTo("0");
+//    	List<OrderFile> file = orderFileService.selectList(om);
+//    	map.put("file", file);
+    	
+    	return map;
+	}
 	
 	/**
      * @Description (保存订单物料信息)
@@ -956,24 +1034,33 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/saveContract", method = RequestMethod.POST)
 	@ResponseBody
-	public ContractVO saveContract(@RequestBody ContractVO contract, HttpServletRequest request) {
-		if(contract.getId()==null||contract.getId().isEmpty()){//新增
-			contract.setId(ApplicationUtils.random32UUID());
-    		Subject currentUser = SecurityUtils.getSubject();
-    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-    		contract.setCreator(currenLoginName);
-    		contract.setUpdater(currenLoginName);
-    		contract.setCreateTime(new Date());
-    		contract.setUpdateTime(new Date());
+	public ContractVO saveContract(@RequestBody String params, HttpServletRequest request) {
+		params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+		ContractVO contract = new ContractVO();
+		try {
+			contract = objectMapper.readValue(params, ContractVO.class);
+			if(contract.getId()==null||contract.getId().isEmpty()){//新增
+				contract.setId(ApplicationUtils.random32UUID());
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+	    		contract.setCreator(currenLoginName);
+	    		contract.setUpdater(currenLoginName);
+	    		contract.setCreateTime(new Date());
+	    		contract.setUpdateTime(new Date());
 
-    		orderService.insertContract(contract);
-    	}else{//更新
-    		Subject currentUser = SecurityUtils.getSubject();
-    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-    		contract.setUpdater(currenLoginName);
-    		contract.setUpdateTime(new Date());
-    		orderService.updateContract(contract);
-    	}
+	    		orderService.insertContract(contract);
+	    	}else{//更新
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+	    		contract.setUpdater(currenLoginName);
+	    		contract.setUpdateTime(new Date());
+	    		orderService.updateContract(contract);
+	    	}
+		}catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
 		return contract;
 	}
     

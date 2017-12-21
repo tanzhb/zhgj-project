@@ -25,7 +25,7 @@ margin-right: 20px;
 		<!-- <li class="bold"><a data-target="#tab_1_2" data-toggle="tab">合同信息</a>
 		</li> -->
 		<li class="bold" ng-show="ClauseFrameworkShow"><a data-target="#tab_1_3" data-toggle="tab">框架条款</a></li>
-		<li class="bold" ng-hide="tab_1_1Hide"><a data-target="#tab_1_4" data-toggle="tab">物料信息</a></li>
+		<!-- <li class="bold" ng-hide="tab_1_1Hide"><a data-target="#tab_1_4" data-toggle="tab">物料信息</a></li> -->
 		<li class="bold" ng-hide="tab_1_3Hide"><a data-target="#tab_1_5" data-toggle="tab">结算条款</a></li>			
 		<li class="bold" ng-hide="tab_1_4Hide"><a data-target="#tab_1_7" data-toggle="tab">交付条款</a></li>
 		<li class="bold" ng-hide="tab_1_5Hide"><a data-target="#tab_1_6" data-toggle="tab">验收条款</a></li>
@@ -46,54 +46,25 @@ margin-right: 20px;
                          <button class="close" data-close="alert"></button> 请先输入正确数据！ </div>
                      
                      <div class="row">
-                     		<!--/span-->
-                         <!--/span-->
-                         
-                         <div class="col-md-4">
-                         	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">采购类型：</label>
-                                 <div class="control-label col-md-7" >
-	                                 <p > {{buyFrame.orderType}} </p>
-                                 </div>
-                             </div>
-                         </div>
-                         <div class="col-md-4">
-                         	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">贸易类型：</label>
-                                 <div class="control-label col-md-7" >
-	                                 <p > {{buyFrame.tradeType}} </p>
-                                 </div>
-                             </div>
-                         </div>
-                         <div class="col-md-4">
-                         		<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">合同类型：</label>
-                                 <div class="control-label col-md-7">
-                                   <p  > {{contract.contractType}} </p>
-                                 </div>
-                             </div>
-                         		
-                         </div>
-                     </div>
-                     <div class="row">
                          <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">供应商：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.supplyName}} </p>
+                                 <div class="col-md-7">
+                                     <p class="form-control-static"> {{buyFrame.comName}} </p>
                                  </div>
+                                 
+                                 
                              </div>
                          </div>
-                         <!--/span-->
                          <div class="col-md-8">
                              <div class="form-group ">
-                                 <label class="control-label col-md-3  bold">合同内容：</label>
+                                 <label class="control-label col-md-3  bold">协议内容：</label>
                                  <div class="control-label col-md-9">
                                  <div class="btn-group">
                                      <div class="clearfix">
                                           <div class="btn-group" data-toggle="buttons">
-                                              <label class="btn btn-default  btn-default-margin" id="tab_1_1Id" ng-hide = "tab_1_1label" >
-                                                  <input type="checkbox" class="toggle"> <i class="fa fa-check"></i> 物料清单 </label> 
+                                              <!-- <label class="btn btn-default  btn-default-margin" id="tab_1_1Id" ng-hide = "tab_1_1label" >
+                                                  <input type="checkbox" class="toggle"> <i class="fa fa-check"></i> 物料清单 </label>  -->
                                               <!-- <label class="btn btn-default  btn-default-margin" id="tab_1_2Id" ng-hide = "tab_1_2label">
                                                   <input type="checkbox" class="toggle"> <i class="fa fa-check"></i> 垫资条款 </label>  -->
                                               <label class="btn btn-default  btn-default-margin" id="tab_1_3Id" ng-hide = "tab_1_3label">
@@ -115,450 +86,59 @@ margin-right: 20px;
                      <div class="row">
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">采购订单号：</label>
-                                 <div class="control-label col-md-7">
-                                 <p > {{buyFrame.orderNum}} </p>
-                                 </div>
-                             </div>
-                         </div>
-                         <div class="col-md-4" ng-if="buyFrame.orderType !='委托采购'">
-                         	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">关联采购申请单号：</label>
-                                 <div class="control-label col-md-7">
-                                 <p  >{{buyFrame.demandPlanSerial}} </p>
+                                 <label class="control-label col-md-5 bold">框架协议号：</label>
+                                 <div class="col-md-7">
+                                     <p class="form-control-static" > {{buyFrame.contractNum}} </p>
                                  </div>
                                  
                              </div>
                          </div>
-                         <div class="col-md-4" ng-if="buyFrame.orderType =='委托采购'">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">关联项目号：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.projectNum}} </p>
-                                 </div>
-                             </div>
-                         </div>
-                         <!--/span-->
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">关联销售订单号：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.orderSerial}} </p>
+                                <label class="control-label col-md-5 bold">上传电子协议：</label>
+                                 <div class="col-md-7">
+                                      	<p class="form-control-static"  id="noFileFlag" ng-if="buyFrame.electronicContract==null||buyFrame.electronicContract==''" class="c_edit" >未上传附件</p>
+                                      	<p class="form-control-static"  ng-if="buyFrame.electronicContract!=null&&buyFrame.electronicContract!=''" class="c_edit" ><a href="javascript：;" ng-click="downloadFile(buyFrame.electronicContract)">{{buyFrame.electronicContract.substring(buyFrame.electronicContract.indexOf("_")+1)}}</a></p>
                                  </div>
                              </div>
                          </div>
-                         
-                     </div>
-                     <!--/row-->
-                     
-                     <div ng-if="(buyFrame.orderType =='自主采购'||buyFrame.orderType =='服务采购') && buyFrame.tradeType =='内贸'">
-                     <div class="row">
                          <div class="col-md-4">
                          	<div class="form-group ">
                                  <label class="control-label col-md-5 bold">采购商：</label>
-                                    <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.seller}} </p>
+                                    <div class="col-md-7">
+                                     <p class="form-control-static" > {{buyFrame.seller}} </p>
                                  </div>
                              </div>
                          </div>
-                         <!--/span-->
-                         <div class="col-md-4">
-                         	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">币种：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.currency}} </p>
-                                 </div>
-                             </div>
-                         </div>
-                         <!--/span-->
-                         <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">税率：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.rate}}% </p>
-                                 </div>
-                             </div>
-                         </div>
-                     </div>
-                     <div class="row">
-                         
-                         <div class="col-md-4">
-                         	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">制单人：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.maker}} </p>
-                                 </div>
-                             </div>
-                         </div>
-                         <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">制单日期：</label>
-                                 <div class="control-label col-md-7" >
-                                     <p > {{buyFrame.makeDate}} </p>
-                                 </div>
-                                 
-                             </div>
-                         </div>
-                         <!--/span-->
-                         <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">下单日期：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.orderDate}} </p>
-                                 </div>
-                                 
-                             </div>
-                         </div>
-                         <!--/span-->
-                     </div>
-                  <div class="row">
-                  		<div class="col-md-4">
-                             <div class="form-group ">
-                                <label class="control-label col-md-5 bold">电子合同：</label>
-                                 <div class="control-label col-md-7">
-                                     <label ng-if="contract.electronicContract==null||contract.electronicContract==''" class="c_edit" >未上传附件</label>
-                                     <label ng-if="contract.electronicContract!=null&&contract.electronicContract!=''" class="c_edit" ><a href="javascript:;" ng-click="downloadFile(contract.electronicContract)">{{contract.electronicContract.substring(contract.electronicContract.indexOf("_")+1)}}</a></label>
-                                 </div>
-                             </div>
-                         </div>
-                  		<div class="col-md-4">
-                             <div class="form-group ">
-                                <label class="control-label col-md-5 bold">采购合同号：</label>
-                                 <div class="control-label col-md-7">
-                                     <p ng-if="$state.current.name=='viewBuyFrame'||$state.current.name=='submitBuyApply'"  > <a href="javascript:void(0);" ng-click="goContract()">{{contract.contractNum}}</a> </p>
-                                     <p ng-if="$state.current.name!='viewBuyFrame'&&$state.current.name!='submitBuyApply'"  > {{contract.contractNum}} </p>
-                                 </div>
-                             </div>
-                         </div>
-                         
-                         <div class="col-md-4">
-                             <div class="form-group ">
-                                <label class="control-label col-md-5 bold">合同签订日期：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{contract.signDate}} </p>
-                                 </div>
-                                 
-                             </div>
-                         </div>
-                          <div class="col-md-4">
-                             <div class="form-group ">
-                                <label class="control-label col-md-5 bold">备注：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.orderRemark}} </p>
-                                 </div>
-                                 
-                             </div>
-                         </div>
-                         <div class="col-md-4">
-                             <div class="form-group ">
-                                <label class="control-label col-md-5 bold">状态：</label>
-                                 <div class="control-label col-md-7">
-                                     <p ng-if="buyFrame.status==1&&(buyFrame.processBase.status=='PENDING'
-                                     ||buyFrame.processBase.status=='WAITING_FOR_APPROVAL')"  
-                                     ng-click="viewGraphTrace(buyFrame.processBase.processInstanceId)" style="color:#fcb95b"> 审核中 </p>
-                                     
-                                      <p ng-if="buyFrame.status==1&&(buyFrame.processBase.status=='APPROVAL_FAILED')"  
-                                     ng-click="viewGraphTrace(buyFrame.processBase.processInstanceId)" style="color:#fcb95b"> 未通过 </p>
-                                     
-                                      <p ng-if="buyFrame.status==3"  
-                                     ng-click="viewOrderLog(buyFrame.serialNum)" style="color:#fcb95b"> 待签合同 </p>
-                                     
-                                     <p ng-if="buyFrame.status==2"   
-                                     ng-click="viewOrderLog(buyFrame.serialNum)" style="color:green"> 已签合同 </p>
-                                     
-                                 </div>
-                                 
-                             </div>
-                         </div>
-                         <!--/span-->
                      </div>
                      <!--/row-->
-                     </div>
-                     <div ng-if="(buyFrame.orderType =='自主采购'||buyFrame.orderType =='服务采购') && buyFrame.tradeType =='外贸'">
                      <div class="row">
-                         <div class="col-md-4">
-                         	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">采购商：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.seller}} </p>
-                                 </div>
-                             </div>
-                         </div>
-                         <!--/span-->
-                         <div class="col-md-4">
-                         	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">币种：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.currency}} </p>
-                                 </div>
-                             </div>
-                         </div>
-                         <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">税率：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.rate}}% </p>
-                                 </div>
-                             </div>
-                         </div>
-                         <!--/span-->
-                     </div>
-                     <div class="row">
-                         <!-- <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">结算汇率：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.exchangeRate}} </p>
-                                 </div>
-                             </div>
-                         </div> -->
-                         <!--/span-->
-                         <div class="col-md-4">
-                         	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">制单人：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.maker}} </p>
-                                 </div>
-                             </div>
-                         </div>
-                         <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">制单日期：</label>
-                                 <div class="control-label col-md-7" >
-                                     <p > {{buyFrame.makeDate}} </p>
-                                 </div>
-                                 
-                             </div>
-                         </div>
-                         <!--/span-->
-                     </div>
-                     <div class="row">
-                         
-                         <!--/span-->
-                         <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">下单日期：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.orderDate}} </p>
-                                 </div>
-                                 
-                             </div>
-                         </div>
-                         <div class="col-md-4">
-                             <div class="form-group ">
-                                <label class="control-label col-md-5 bold">电子合同：</label>
-                                 <div class="control-label col-md-7">
-                                     <label ng-if="contract.electronicContract==null||contract.electronicContract==''" class="c_edit" >未上传附件</label>
-                                     <label ng-if="contract.electronicContract!=null&&contract.electronicContract!=''" class="c_edit" ><a href="javascript:;" ng-click="downloadFile(contract.electronicContract)">{{contract.electronicContract.substring(contract.electronicContract.indexOf("_")+1)}}</a></label>
-                                 </div>
-                             </div>
-                         </div>
-                         <div class="col-md-4">
-                             <div class="form-group ">
-                                <label class="control-label col-md-5 bold">采购合同号：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > <a href="javascript:void(0);" ng-if="$state.current.name=='viewBuyFrame'||$state.current.name=='submitBuyApply'" ng-click="goContract()">{{contract.contractNum}}</a> </p>
-                                 </div>
-                             </div>
-                         </div>
-                         
-                         <!--/span-->
-                     </div>
-                     <div  class="row">
                      	<div class="col-md-4">
                              <div class="form-group ">
-                                <label class="control-label col-md-5 bold">合同签订日期：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{contract.signDate}} </p>
+                                 <label class="control-label col-md-5 bold">开始日期：</label>
+                                 <div class="col-md-7">
+                                     <p class="form-control-static" > {{buyFrame.startDate}} </p>
                                  </div>
-                                 
+                             </div>
+                         </div>
+                         <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label col-md-5 bold"> 结束日期：</label>
+                                 <div class="col-md-7">
+                                     <p class="form-control-static" > {{buyFrame.endDate}} </p>
+                                 </div>
                              </div>
                          </div>
                          <div class="col-md-4">
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">备注：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.orderRemark}} </p>
+                                 <div class="col-md-7">
+                                     <p class="form-control-static"> {{buyFrame.remark}} </p>
                                  </div>
-                                 
                              </div>
                          </div>
-                     	<div class="col-md-4">
-                             <div class="form-group ">
-                                <label class="control-label col-md-5 bold">状态：</label>
-                                 <div class="control-label col-md-7">
-                                     <p ng-if="buyFrame.status==1&&(buyFrame.processBase.status=='PENDING'
-                                     ||buyFrame.processBase.status=='WAITING_FOR_APPROVAL')"  
-                                     ng-click="viewGraphTrace(buyFrame.processBase.processInstanceId)" style="color:#fcb95b"> 审核中 </p>
-                                     
-                                      <p ng-if="buyFrame.status==1&&(buyFrame.processBase.status=='APPROVAL_FAILED')"  
-                                     ng-click="viewGraphTrace(buyFrame.processBase.processInstanceId)" style="color:#fcb95b"> 未通过 </p>
-                                     
-                                      <p ng-if="buyFrame.status==3"  
-                                     ng-click="viewOrderLog(buyFrame.serialNum)" style="color:#fcb95b"> 待签合同 </p>
-                                     
-                                     <p ng-if="buyFrame.status==2"   
-                                     ng-click="viewOrderLog(buyFrame.serialNum)" style="color:green"> 已签合同 </p>
-                                 </div>
-                                 
-                             </div>
-                         </div>
-                     </div>
+                    </div>
                      <!--/row-->
-                     </div>
-                     <div ng-if="buyFrame.orderType =='委托采购'">
-                     <div class="row">
-                     	<div class="col-md-4">
-                         	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">采购商：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.seller}} </p>
-                                 </div>
-                             </div>
-                         </div>
-                          <!--/span-->
-                         <div class="col-md-4">
-                         	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">委托方：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.entrustParty}} </p>
-                                 </div>
-                             </div>
-                         </div>
-                         <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">服务模式：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.serviceModel}} </p>
-                                 </div>
-                                 
-                             </div>
-                         </div>
-                         <!--/span-->
-                     </div>
-                     <div class="row">
-                     	<div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">结算方式：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.settlementClause}} </p>
-                                 </div>
-                                 
-                             </div>
-                         </div>
-                          <!--/span-->
-                         <div class="col-md-4">
-                         	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">币种：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.currency}} </p>
-                                 </div>
-                             </div>
-                         </div>
-                         <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">税率：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.rate}}% </p>
-                                 </div>
-                             </div>
-                         </div>
-                         <!--/span-->
-                     </div>
-                     <div class="row">
-                     		
-                         <div class="col-md-4">
-                         	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">制单人：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.maker}} </p>
-                                 </div>
-                             </div>
-                         </div>
-                         <!--/span-->
-                         <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">制单日期：</label>
-                                 <div class="control-label col-md-7" >
-                                     <p > {{buyFrame.makeDate}} </p>
-                                 </div>
-                                 
-                             </div>
-                         </div>
-                         <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">下单日期：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.orderDate}} </p>
-                                 </div>
-                                 
-                             </div>
-                         </div>
-                         <!--/span-->
-                     </div>
-                     <div class="row">
-                         <!--/span-->
-                         <div class="col-md-4">
-                             <div class="form-group ">
-                                <label class="control-label col-md-5 bold">电子合同：</label>
-                                 <div class="control-label col-md-7">
-                                     <label ng-if="contract.electronicContract==null||contract.electronicContract==''" class="c_edit" >未上传附件</label>
-                                     <label ng-if="contract.electronicContract!=null&&contract.electronicContract!=''" class="c_edit" ><a href="javascript:;" ng-click="downloadFile(contract.electronicContract)">{{contract.electronicContract.substring(contract.electronicContract.indexOf("_")+1)}}</a></label>
-                                 </div>
-                             </div>
-                         </div>
-                         <div class="col-md-4">
-                             <div class="form-group ">
-                                <label class="control-label col-md-5 bold">采购合同号：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > <a href="javascript:void(0);" ng-if="$state.current.name=='viewBuyFrame'||$state.current.name=='submitBuyApply'" ng-click="goContract()">{{contract.contractNum}}</a> </p>
-                                 </div>
-                             </div>
-                         </div>
-                         
-                         <!--/span-->
-                     	<div class="col-md-4">
-                             <div class="form-group ">
-                                <label class="control-label col-md-5 bold">合同签订日期：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{contract.signDate}} </p>
-                                 </div>
-                                 
-                             </div>
-                         </div>
-                          <div class="col-md-4">
-                             <div class="form-group ">
-                                <label class="control-label col-md-5 bold">备注：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{buyFrame.orderRemark}} </p>
-                                 </div>
-                                 
-                             </div>
-                         </div>
-                     	<div class="col-md-4">
-                             <div class="form-group ">
-                                <label class="control-label col-md-5 bold">状态：</label>
-                                 <div class="control-label col-md-7">
-                                     <p ng-if="buyFrame.status==1&&(buyFrame.processBase.status=='PENDING'
-                                     ||buyFrame.processBase.status=='WAITING_FOR_APPROVAL')"  
-                                     ng-click="viewGraphTrace(buyFrame.processBase.processInstanceId)" style="color:#fcb95b"> 审核中 </p>
-                                     
-                                      <p ng-if="buyFrame.status==1&&(buyFrame.processBase.status=='APPROVAL_FAILED')"  
-                                     ng-click="viewGraphTrace(buyFrame.processBase.processInstanceId)" style="color:#fcb95b"> 未通过 </p>
-                                     
-                                      <p ng-if="buyFrame.status==3"  
-                                     ng-click="viewOrderLog(buyFrame.serialNum)" style="color:#fcb95b"> 待签合同 </p>
-                                     
-                                     <p ng-if="buyFrame.status==2"   
-                                     ng-click="viewOrderLog(buyFrame.serialNum)" style="color:green"> 已签合同 </p>
-                                 </div>
-                                 
-                             </div>
-                         </div>
-                     </div>
-                     <!--/row-->
-                     </div>
-                     
                  </div>
 			</form>
             </div>   

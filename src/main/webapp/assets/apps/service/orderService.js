@@ -119,13 +119,22 @@ angular.module('MetronicApp').service('orderService',
 			            })  
 			        return deferred.promise;  
 			    },//获取订单信息
-			    getOrderInfo : function(serialNum,judgeString){
+			    getOrderInfo : function(serialNum){
 			        var deferred = $q.defer();  
-			        debugger;
-					if(judgeString==undefined){
-						judgeString=null;
-					}
-			        $http.get("rest/order/getOrderInfo", {params:{serialNum:serialNum,judgeString:judgeString}})
+			        $http.get("rest/order/getOrderInfo", {params:{serialNum:serialNum}})
+			        .success(function (data) {  
+			            // 如果连接成功，延时返回给调用者  
+			            deferred.resolve(data);  
+			        })  
+			            .error(function () {  
+			                deferred.reject('连接服务器出错！');  
+			            })  
+			        return deferred.promise;  
+			          
+			    },//获取框架协议信息
+			    getFrameInfo : function(serialNum){
+			        var deferred = $q.defer();  
+			        $http.get("rest/order/getFrameInfo", {params:{serialNum:serialNum}})
 			        .success(function (data) {  
 			            // 如果连接成功，延时返回给调用者  
 			            deferred.resolve(data);  
