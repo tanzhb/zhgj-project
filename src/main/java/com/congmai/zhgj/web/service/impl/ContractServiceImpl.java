@@ -20,6 +20,7 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.dao.ContractMapper;
 import com.congmai.zhgj.web.dao.UserMapper;
+import com.congmai.zhgj.web.model.Category;
 import com.congmai.zhgj.web.model.ClauseAdvance;
 import com.congmai.zhgj.web.model.ClauseAfterSales;
 import com.congmai.zhgj.web.model.ClauseCheckAccept;
@@ -256,5 +257,10 @@ public class ContractServiceImpl extends GenericServiceImpl<ContractVO, String> 
 	@Override
 	public List<ContractVO> selectList(ContractVO parm) {
 		return contractMapper.selectList(parm);
+	}
+	
+	@Override
+	public int update(ContractVO model) {
+		return contractMapper.updateByPrimaryKeySelective(model);
 	}
 }

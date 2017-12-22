@@ -663,7 +663,7 @@ margin-right: 20px;
                     </div>
          <div class="portlet-body form">
              <!-- BEGIN FORM-->
-             <form action="#" id="form_clauseSettlement"  >
+             <!-- <form action="#" id="form_clauseSettlement"  >
                  <div class="form-body">
                      <div class="alert alert-danger display-hide">
                          <button class="close" data-close="alert"></button> 请先输入正确数据！ </div>
@@ -684,7 +684,7 @@ margin-right: 20px;
                                  </div>
                              </div>
                          </div>
-                         <!--/span-->
+                         /span
                          <div class="col-md-4">
                          		<div class="form-group ">
                               	<label class="control-label bold">税额(含关税)：</label>
@@ -694,11 +694,11 @@ margin-right: 20px;
                               </div>
                          </div>
                          
-                         <!--/span-->
+                         /span
                      </div>
-                     <!--/row-->
+                     /row
                      <div class="row">
-                         <!--/span-->
+                         /span
                          <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label bold">其他费用：</label>
@@ -718,7 +718,7 @@ margin-right: 20px;
                                  </div>
                              </div>
                          </div>
-                         <!--/span-->
+                         /span
                          <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label bold">备注：</label>
@@ -730,11 +730,11 @@ margin-right: 20px;
                               		</div>
                              </div>
                          </div>
-                         <!--/span-->
+                         /span
                      </div>
-                     <!--/row-->
+                     /row
                  </div>
-			</form>
+			</form> -->
 			<form id="form_sample_3"   >
 		         <div class="table-scrollable">
                          <table class="table table-bordered table-hover">

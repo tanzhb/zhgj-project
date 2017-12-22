@@ -5,9 +5,11 @@
     <!--添加合同  -->
     <insert id="insertContract" parameterType="com.congmai.zhgj.web.model.ContractVO">
     INSERT INTO contract(serialNum,  comId,   contractNum,    contractType,  serviceModel,   settlementClause,  startDate,  endDate,   signDate,   signer,    remark, 
-     electronicContract,  signContract,versionNO,status, isLatestVersion,creator,createTime,updater,updateTime,firstParty,secondParty,firstPartySigner,secondPartySigner,otherPartyContractNum,signerAddress,contractNumber) 
+     electronicContract,  signContract,versionNO,status, isLatestVersion,creator,createTime,updater,updateTime,firstParty,secondParty,firstPartySigner,secondPartySigner,otherPartyContractNum,signerAddress,contractNumber
+     ,contractContent,seller) 
                 VALUES(#{id},#{comId},#{contractNum},#{contractType},#{serviceModel},#{settlementClause},#{startDate},#{endDate},#{signDate},#{signer},#{remark},
-     #{electronicContract},#{signContract},   '1','0',  '1',        #{creator},NOW(),#{creator},NOW(),#{firstParty},#{secondParty},#{firstPartySigner},#{secondPartySigner},#{otherPartyContractNum},#{signerAddress},#{contractNumber})
+     #{electronicContract},#{signContract},   '1','0',  '1',        #{creator},NOW(),#{creator},NOW(),#{firstParty},#{secondParty},#{firstPartySigner},#{secondPartySigner},#{otherPartyContractNum},#{signerAddress},#{contractNumber}
+     ,#{contractContent},#{seller})
     </insert>
     
     <!--查询合同列表  -->
@@ -115,7 +117,9 @@
 	b.orderNum,
 	a.comId,
 	(SELECT comName FROM company WHERE comId=a.comId) AS comName,
-	a.contractNumber
+	a.contractNumber,
+	a.contractContent,
+	a.seller
 	FROM
 	contract a
 	LEFT JOIN orderInfo b ON a.serialNum=b.contractSerial
@@ -256,7 +260,7 @@
       contractNum = #{contractNum,jdbcType=VARCHAR}
       and delFlg = '0'
       <if test="id != null" >
-        and id != #{id,jdbcType=VARCHAR}
+        and serialNum != #{id,jdbcType=VARCHAR}
       </if>
       
     </select> 
@@ -289,5 +293,117 @@
       </if>
 
     </select>
+    
+    <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.ContractVO" >
+    update contract
+    <set >
+      <if test="comId != null" >
+        comId = #{comId,jdbcType=VARCHAR},
+      </if>
+      <if test="contractNum != null" >
+        contractNum = #{contractNum,jdbcType=VARCHAR},
+      </if>
+      <if test="contractType != null" >
+        contractType = #{contractType,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceModel != null" >
+        serviceModel = #{serviceModel,jdbcType=VARCHAR},
+      </if>
+      <if test="settlementClause != null" >
+        settlementClause = #{settlementClause,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null" >
+        startDate = #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null" >
+        endDate = #{endDate,jdbcType=DATE},
+      </if>
+      <if test="signDate != null" >
+        signDate = #{signDate,jdbcType=DATE},
+      </if>
+      <if test="firstParty != null" >
+        firstParty = #{firstParty,jdbcType=VARCHAR},
+      </if>
+      <if test="secondParty != null" >
+        secondParty = #{secondParty,jdbcType=VARCHAR},
+      </if>
+      <if test="firstPartySigner != null" >
+        firstPartySigner = #{firstPartySigner,jdbcType=VARCHAR},
+      </if>
+      <if test="secondPartySigner != null" >
+        secondPartySigner = #{secondPartySigner,jdbcType=VARCHAR},
+      </if>
+      <if test="otherPartyContractNum != null" >
+        otherPartyContractNum = #{otherPartyContractNum,jdbcType=VARCHAR},
+      </if>
+      <if test="signer != null" >
+        signer = #{signer,jdbcType=VARCHAR},
+      </if>
+      <if test="contractNumber != null" >
+        contractNumber = #{contractNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="signerAddress != null" >
+        signerAddress = #{signerAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentMethod != null" >
+        paymentMethod = #{paymentMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentPeriod != null" >
+        paymentPeriod = #{paymentPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="totalMaterialMoney != null" >
+        totalMaterialMoney = #{totalMaterialMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceMoney != null" >
+        serviceMoney = #{serviceMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsMoney != null" >
+        logisticsMoney = #{logisticsMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="totalMoney != null" >
+        totalMoney = #{totalMoney,jdbcType=VARCHAR},
+      </if>
+      <if test="electronicContract != null" >
+        electronicContract = #{electronicContract,jdbcType=VARCHAR},
+      </if>
+      <if test="signContract != null" >
+        signContract = #{signContract,jdbcType=VARCHAR},
+      </if>
+      <if test="versionNO != null" >
+        versionNO = #{versionNO,jdbcType=VARCHAR},
+      </if>
+      <if test="isLatestVersion != null" >
+        isLatestVersion = #{isLatestVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        delFlg = #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        updater = #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="seller != null" >
+        seller = #{seller,jdbcType=VARCHAR},
+      </if>
+      <if test="contractContent != null" >
+        contractContent = #{contractContent,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
   
 </mapper>

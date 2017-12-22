@@ -18,13 +18,13 @@ angular.module('MetronicApp').controller('buyFrameController', ['$rootScope', '$
 			var endTaskTable;//已办table
 			
 			if($stateParams.tabHref == '1'){//首页待办列表传过来的参数
-				$('#orderTab a[href="#daiban"]').tab('show');
+				$('#frameTab a[href="#daiban"]').tab('show');
 				showDbTable();
 			}else if($stateParams.tabHref == '2'){//首页已办列表传过来的参数
-				$('#orderTab a[href="#yiban"]').tab('show');
+				$('#frameTab a[href="#yiban"]').tab('show');
 				showYbTable();
 			}else{//从菜单进入
-				$('#orderTab a[href="#apply"]').tab('show');
+				$('#frameTab a[href="#apply"]').tab('show');
 			}
 			
 			
@@ -32,11 +32,11 @@ angular.module('MetronicApp').controller('buyFrameController', ['$rootScope', '$
 
 			// 请假申请
 			$scope.toApply = function() {
-				$('#orderTab a[href="#apply"]').tab('show');
+				$('#frameTab a[href="#apply"]').tab('show');
 			};
 			// 待办流程
 			$scope.toDaiban = function() {
-				$('#orderTab a[href="#daiban"]').tab('show');
+				$('#frameTab a[href="#daiban"]').tab('show');
 
 				// 构建datatables开始***************************************
 				dbtable = showDbTable();								
@@ -45,7 +45,7 @@ angular.module('MetronicApp').controller('buyFrameController', ['$rootScope', '$
 			};
 			// 已办流程
 			$scope.toYiban = function() {
-				$('#orderTab a[href="#yiban"]').tab('show');
+				$('#frameTab a[href="#yiban"]').tab('show');
 				endTaskTable = showYbTable();
 			};
 			
@@ -163,48 +163,48 @@ angular.module('MetronicApp').controller('buyFrameController', ['$rootScope', '$
 	}
 	
 	//审批通过
-	$scope.orderPass = function() {
-	    var mydata={"processInstanceId":$("#processInstanceId").val(),"orderId":$scope.buyFrame.id,"content":$("#content").val(),
+	$scope.framePass = function() {
+	    var mydata={"processInstanceId":$("#processInstanceId").val(),"frameId":$scope.buyFrame.id,"content":$("#content").val(),
 				"completeFlag":true};
-	    var _url = ctx + "rest/order/complate/" + $("#taskId").val();
+	    var _url = ctx + "rest/order/complateFrame/" + $("#taskId").val();
 	    doOrder(_url, mydata, 'audit');
 	};
 	//审批不通过
-	$scope.orderUnPass = function() {
-		var mydata={"processInstanceId":$("#processInstanceId").val(),"orderId":$scope.buyFrame.id,"content":$("#content").val(),
+	$scope.frameUnPass = function() {
+		var mydata={"processInstanceId":$("#processInstanceId").val(),"frameId":$scope.buyFrame.id,"content":$("#content").val(),
 				"completeFlag":false};
-		var _url = ctx + "rest/order/complate/" + $("#taskId").val();
-		doOrder(_url, mydata, 'audit');
+		var _url = ctx + "rest/order/complateFrame/" + $("#taskId").val();
+		doFrame(_url, mydata, 'audit');
 	};
 	
 	//重新申请
-	$scope.replyOrder = function() {
+	$scope.replyFrame = function() {
 	    var mydata={"processInstanceId":$("#processInstanceId").val(),
-				"reApply":true,"orderId":$scope.buyFrame.id,"reason":$scope.buyFrame.remark,"orderType":'buyFrame'};
-		var _url = ctx + "rest/order/modifyOrder/" + $("#taskId").val();
-		doOrder(_url, mydata, 'modify');
+				"reApply":true,"frameId":$scope.buyFrame.id,"reason":$scope.buyFrame.remark,"frameType":'buyFrame'};
+		var _url = ctx + "rest/order/modifyFrame/" + $("#taskId").val();
+		doFrame(_url, mydata, 'modify');
 	};
 	//取消申请
 	$scope.cancelApply = function() {
 	     var mydata={"processInstanceId":$("#processInstanceId").val(),
-				"reApply":false,"orderId":$scope.buyFrame.id,"reason":$scope.buyFrame.remark,"orderType":'buyFrame'};
-		var _url = ctx + "rest/order/modifyOrder/" + $("#taskId").val();
-		doOrder(_url, mydata, 'modify' );
+				"reApply":false,"frameId":$scope.buyFrame.id,"reason":$scope.buyFrame.remark,"frameType":'buyFrame'};
+		var _url = ctx + "rest/order/modifyFrame/" + $("#taskId").val();
+		doFrame(_url, mydata, 'modify' );
 	};
 	$scope.changeFlag = true
-    $scope.repeatDone = function(scope){
+/*    $scope.repeatDone = function(scope){
     	$scope.changeFlag = false;
     	var date1= scope._orderMateriel.deliveryDate;
     	var date2= scope._orderMateriel.lastDeliveryDate;
-    	/*var date3= scope.buyFrame.orderDate;*/
+    	var date3= scope.buyFrame.orderDate;
     	$scope.datepickerInit();
     	if(scope._orderMateriel){
     		scope._orderMateriel.deliveryDate = date1;
     		scope._orderMateriel.lastDeliveryDate = date2;
     	}
     	$scope.changeFlag = true;
-    	/*scope.buyFrame.orderDate = date3;*/
-   };
+    	scope.buyFrame.orderDate = date3;
+   };*/
    
    $scope.repeatMaterielList = function(scope){
 	   searchMaterielList();//订单物料可检索化
@@ -236,12 +236,12 @@ angular.module('MetronicApp').controller('buyFrameController', ['$rootScope', '$
     			if(!isNull($scope.buyFrame.id)&&$scope.buyFrame.status =='1'){
     				$scope.buyFrame.status = 0;
     			}
-    			orderService.saveContract($scope.buyFrame).then(
+    			orderService.saveFrame($scope.buyFrame).then(
 	   	       		     function(data){
 	   	       		    	toastr.success('数据保存成功！');
 	   	       		    	$scope.buyFrame = data.data;
-			   	       		$scope.buyOrderInput = true;
-		      			    $scope.buyOrderShow = true;
+			   	       		$scope.buyFrameInput = true;
+		      			    $scope.buyFrameShow = true;
 	   	       		     },
 	   	       		     function(error){
 	   	       		    	toastr.error('数据保存出错！');
@@ -263,10 +263,10 @@ angular.module('MetronicApp').controller('buyFrameController', ['$rootScope', '$
     		return;
 		}
     	$scope.getBuyFrameInfo($scope.buyFrame.id,$stateParams.taskId, $stateParams.comments,$stateParams.processInstanceId);
-    	$scope.cancelOrder();
+    	$scope.cancelFrame();
     	
     };
-    $scope.cancelOrder  = function() {// 取消编辑订单信息
+    $scope.cancelFrame  = function() {// 取消编辑订单信息
     	$scope.buyFrameInput = true;
 	    $scope.buyFrameShow = true;
     };
@@ -596,13 +596,13 @@ angular.module('MetronicApp').controller('buyFrameController', ['$rootScope', '$
     		
         };
         
-        $scope.copyOrder  = function() {
+        $scope.copyFrame  = function() {
     		if(table.rows('.active').data().length != 1){
     			showToastr('toast-top-center', 'warning', '请选择一个订单！')
     		}else{
     			handle.blockUI();
     			orderService
-				.copyOrder(table.row('.active').data().id)
+				.copyFrame(table.row('.active').data().id)
 				.then(
 						function(data) {
 							handle.unblockUI();
@@ -622,7 +622,7 @@ angular.module('MetronicApp').controller('buyFrameController', ['$rootScope', '$
     		
         };
      // 弹出确认删除模态框
-        $scope.deleteBuyFramOrder = function() {
+        $scope.deleteBuyFramFrame = function() {
 			var ids = '';
 			$scope.deleteType = 'fram';
 			// Iterate over all checkboxes in the table
@@ -649,7 +649,7 @@ angular.module('MetronicApp').controller('buyFrameController', ['$rootScope', '$
 			
 		};
 		
-		$scope.editBuyFramOrder  = function() {// 进入编辑页面
+		$scope.editBuyFramFrame  = function() {// 进入编辑页面
         	var ids = '';
     		// Iterate over all checkboxes in the table
     		framTable.$('input[type="checkbox"]').each(
@@ -715,7 +715,7 @@ angular.module('MetronicApp').controller('buyFrameController', ['$rootScope', '$
 			}
 			
 			orderService
-					.delOrder(ids)
+					.delFrame(ids)
 					.then(
 							function(data) {
 								$('#delBuyFrameModal').modal(
@@ -1680,7 +1680,7 @@ var e = $("#form_clauseSettlement"),
     		toastr.error('订单处于编辑状态，请处理！');return
     	}
     	
-    	if($scope.orderMateriel.length>0){
+    	if(!isNull($scope.orderMateriel)&&$scope.orderMateriel.length>0){
 			for(var i = 0;i < $scope.orderMateriel.length;i++){// data.data为选择的供应物料
 				if(!$scope["orderMaterielInput"+i]){
 					toastr.error('有订单物料处于编辑状态，请处理！');return
@@ -1689,9 +1689,9 @@ var e = $("#form_clauseSettlement"),
 		}
     	
     	if(isNull($scope.clauseSettlement)){// 结算条款为空的处理
-    		toastr.error('请填写结算条款后保存！');return
+    		$scope.clauseSettlement = {}
 		}
-    	if($('#form_clauseSettlement').valid()){
+    	if(/*$('#form_clauseSettlement').valid()*/1==1){
     		$scope.clauseSettlement.contractSerial = $scope.buyFrame.id;
     		$scope.clauseSettlementDetail = $scope.clauseSettlement.CSD;
     		$scope.clauseSettlement.materielAmount = $scope.totalAmount();
@@ -1723,7 +1723,7 @@ var e = $("#form_clauseSettlement"),
           		    		$scope.cancelClauseSettlement()
        		    		}
        		    	//更新订单金额数据
-	        		$scope.updateOrderAmount();	
+//	        		$scope.updateOrderAmount();	
        		    	}else{
       		    		$scope.clauseSettlement = {}
       		    		toastr.success('数据保存成功！');
@@ -2420,13 +2420,13 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	        $scope.cancelPage  = function() {// 取消编辑
 	        	$state.go("buyFrame");
 	        };
-	        $scope.submitPage  = function() {// 提交审核
-	        	$scope.submitOrder = {}
-	        	$scope.submitOrder.serialNum = $scope.buyFrame.id;
-	        	$scope.submitOrder.remark = $scope.buyFrame.remark;
-	        	$scope.submitOrder.status = 1;
+	        $scope.submitPage  = function() {
+	        	$scope.submitFrame = {}
+	        	$scope.submitFrame.id = $scope.buyFrame.id;
+	        	$scope.submitFrame.remark = $scope.buyFrame.remark;
+	        	$scope.submitFrame.status = 1;
 	        	$scope.buyFrame.status = 1;
-	        	orderService.save($scope.submitOrder).then(
+	        	orderService.save($scope.submitFrame).then(
 	          		     function(data){
 	          		    	$scope.buyFrame.orderSerial = data.serialNum;
 	          		    	if(isNull($scope.buyFrame.contractNum)){
@@ -2748,27 +2748,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 
 		       
 		     //更新订单金额数据
-		     $scope.updateOrderAmount = function(obj,attr){
-		    	$scope.submitOrder = {}
-   	        	$scope.submitOrder.serialNum = $scope.buyFrame.id;
-   	        	$scope.submitOrder.materielCount = $scope.totalMaterielCount();
-   	        	$scope.submitOrder.materielAmount = $scope.totalAmount();
-      	        $scope.submitOrder.rateAmount = $scope.totalRateAndCustomsAmount();
-      	        $scope.submitOrder.rateAndAmount = $scope.totalRateAndAmount();
-      	        if(!isNull($scope.clauseSettlement)&&!isNull($scope.clauseSettlement.otherAmount)){
-    	        	$scope.submitOrder.otherAmount = $scope.clauseSettlement.otherAmount;
-    	        }
-      	        $scope.submitOrder.orderAmount = $scope.totalOrderAmount().toFixed(2);
-	    	    orderService.save($scope.submitOrder).then(
-          		     function(data){
-          		    	
-          		     },
-          		     function(error){
-          		         $scope.error = error;
-          		         toastr.error('数据保存出错！');
-          		     }
-          		 );
-		      }
+		     $scope.updateOrderAmount = function(obj,attr){}
 		     
 		     /*$scope._arithmeticDeliveryAmount  = function(scope) {//计算支付金额
 			       	if(scope._CSD.deliveryRate){
@@ -2805,13 +2785,13 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        
 		        
 		        $scope.confirmBuyFrameApply  = function() {// 进入提交申请
-		        	$scope.submitOrder = {}
-		        	$scope.submitOrder.id = $scope.buyFrame.id;
-		        	$scope.submitOrder.remark = $scope.buyFrame.remark;
-		        	$scope.submitOrder.orderNum = $scope.buyFrame.orderNum;
-		        	$scope.submitOrder.tradeType = $scope.buyFrame.tradeType;
+		        	$scope.submitFrame = {}
+		        	$scope.submitFrame.id = $scope.buyFrame.id;
+		        	$scope.submitFrame.remark = $scope.buyFrame.remark;
+		        	$scope.submitFrame.orderNum = $scope.buyFrame.orderNum;
+		        	$scope.submitFrame.tradeType = $scope.buyFrame.tradeType;
 		        	//启动流程
-		        	orderService.startBuyFrameProcess($scope.submitOrder).then(
+		        	orderService.startBuyFrameProcess($scope.submitFrame).then(
 		          		     function(data){
 		          		    	if(data == "1"){
 			        				toastr.success("提交申请成功！");
@@ -3618,17 +3598,17 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	        
 	        $scope.pingTaiSubmit  = function(serialNum) {// 平台提交给供应商
 	        	
-	        	$scope.submitOrder = {}
+	        	$scope.submitFrame = {}
 	        	if(!isNull(serialNum)){//列表操作栏按钮提交
-	        		$scope.submitOrder.serialNum = serialNum;
-	        		$scope.submitOrder.status = 66;
+	        		$scope.submitFrame.id = serialNum;
+	        		$scope.submitFrame.status = 66;
 	        	}else{//详情页面按钮提交
-	        		$scope.submitOrder.serialNum = $scope.buyFrame.id;
-	        		$scope.submitOrder.status = 66;
+	        		$scope.submitFrame.id = $scope.buyFrame.id;
+	        		$scope.submitFrame.status = 66;
 		        	$scope.buyFrame.status = 66;
 	        	}
 	        	
-	        	orderService.pingTaiSubmit($scope.submitOrder).then(
+	        	orderService.pingTaiSubmit($scope.submitFrame).then(
 	          		     function(data){
 	          		    	if(!isNull(serialNum)){//列表操作栏按钮提交
 	          		    		toastr.info('订单提交成功！');
@@ -3646,17 +3626,17 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	        };
 	        
 	        $scope.pingTaiConfirmed = function(serialNum){
-	        	$scope.submitOrder = {}
+	        	$scope.submitFrame = {}
 	        	if(!isNull(serialNum)){//列表操作栏按钮确认
-	        		$scope.submitOrder.serialNum = serialNum;
-	        		$scope.submitOrder.status = 1;
+	        		$scope.submitFrame.id = serialNum;
+	        		$scope.submitFrame.status = 1;
 	        	}else{//详情页面按钮确认
-	        		$scope.submitOrder.serialNum = $scope.buyFrame.id;
-	        		$scope.submitOrder.status = 1;
+	        		$scope.submitFrame.id = $scope.buyFrame.id;
+	        		$scope.submitFrame.status = 1;
 		        	$scope.buyFrame.status = 1;
 	        	}
 	        	
-	        	orderService.recive($scope.submitOrder).then(
+	        	orderService.recive($scope.submitFrame).then(
 	          		     function(data){
 	          		    	if(!isNull(serialNum)){//列表操作栏按钮确认
 	          		    		toastr.success('订单确认成功！！');

@@ -170,6 +170,7 @@
 	LEFT JOIN warehousePosition e ON a.positionSerial=e.serialNum
 	LEFT JOIN delivery f ON a.deliverSerial=f.serialNum
 	WHERE a.deliverSerial=#{serialNum}
+	and a.delFlg = 0
     </select>
     
     <!--查询详情物料集合  -->
@@ -186,6 +187,7 @@
 	LEFT JOIN warehousePosition e ON a.positionSerial=e.serialNum
 	LEFT JOIN delivery f ON a.deliverSerial=f.serialNum
 	WHERE a.deliverSerial=#{serialNum}
+	and a.delFlg = 0
     </select>
     
     <!--查询详情  -->

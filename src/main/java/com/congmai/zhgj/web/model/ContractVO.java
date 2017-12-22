@@ -14,7 +14,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  * @Date 2017年7月31日 下午2:52:03
  * @version 1.0.0
  */
-public class ContractVO {
+public class ContractVO  extends BaseVO {
+	/**
+	 * @Field @serialVersionUID : TODO(这里用一句话描述这个类的作用)
+	 */
+	private static final long serialVersionUID = -9026226685732898427L;
+
+
 	//id
     private String id;
 
