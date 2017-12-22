@@ -572,4 +572,28 @@ public class PageController {
     public String accountSecurity(){
     	return "user/accountSecurity";
     }
+    /**
+     * 收款水单详情页面
+     * @return 收款水单详情页面url
+     */
+    @RequestMapping("/viewReceiveMemo")
+    public String viewReceiveMemo() {
+        return "receiveMemo/viewReceiveMemo";
+    }
+    /**
+     * 添加/修改收款水单页面
+     * @return 添加/修改收款水单页面url
+     */
+    @RequestMapping("/addReceiveMemo")
+    public String addReceiveMemo() {
+        return "receiveMemo/addReceiveMemo";
+    }
+    /**
+     * 收款水单列表页面
+     * @return 收款水单列表页面url
+     */
+    @RequestMapping("/receiveMemo")
+    public String receiveMemoRecord() {
+        return "receiveMemo/receiveMemoRecord";
+    }
 }

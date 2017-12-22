@@ -192,7 +192,8 @@ public class CustomsFormServiceImpl extends GenericServiceImpl<CustomsForm, Stri
 		Criteria  criteria =example.createCriteria();
 		criteria.andDelFlgEqualTo("0").andCustomsFormTypeEqualTo(type).andOrderSerialEqualTo(orderSerial);
 		if("declaration".equals(type)){
-			criteria.andStatusEqualTo("1");	
+			//criteria.andStatusEqualTo("1");	
+			criteria.andStatusEqualTo("0");	
 		}else{
 			criteria.andStatusEqualTo("0");
 		}

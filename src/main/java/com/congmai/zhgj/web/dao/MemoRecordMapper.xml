@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.congmai.zhgj.web.dao.MemoRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.MemoRecord" >
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="memoNum" property="memoNum" jdbcType="VARCHAR" />
+    <result column="supplyComId" property="supplyComId" jdbcType="VARCHAR" />
+    <result column="buyComId" property="buyComId" jdbcType="VARCHAR" />
+    <result column="verificationMoneyAmount" property="verificationMoneyAmount" jdbcType="VARCHAR" />
+    <result column="moneyAmount" property="moneyAmount" jdbcType="VARCHAR" />
+    <result column="currency" property="currency" jdbcType="VARCHAR" />
+    <result column="payee" property="payee" jdbcType="VARCHAR" />
+    <result column="bank" property="bank" jdbcType="VARCHAR" />
+    <result column="accountName" property="accountName" jdbcType="VARCHAR" />
+    <result column="accountNumber" property="accountNumber" jdbcType="VARCHAR" />
+    <result column="paymentDate" property="paymentDate" jdbcType="DATE" />
+    <result column="paymentStyle" property="paymentStyle" jdbcType="VARCHAR" />
+    <result column="paymentVoucher" property="paymentVoucher" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    serialNum, memoNum, supplyComId, buyComId, verificationMoneyAmount, moneyAmount, 
+    currency, payee, bank, accountName, accountNumber, paymentDate, paymentStyle, paymentVoucher, 
+    remark, status, delFlg, creator, createTime, updater, updateTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.MemoRecordExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from memorecord
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from memorecord
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from memorecord
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.MemoRecordExample" >
+    delete from memorecord
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.congmai.zhgj.web.model.MemoRecord" >
+    insert into memorecord (serialNum, memoNum, supplyComId, 
+      buyComId, verificationMoneyAmount, moneyAmount, 
+      currency, payee, bank, 
+      accountName, accountNumber, paymentDate, 
+      paymentStyle, paymentVoucher, remark, 
+      status, delFlg, creator, 
+      createTime, updater, updateTime
+      )
+    values (#{serialNum,jdbcType=VARCHAR}, #{memoNum,jdbcType=VARCHAR}, #{supplyComId,jdbcType=VARCHAR}, 
+      #{buyComId,jdbcType=VARCHAR}, #{verificationMoneyAmount,jdbcType=VARCHAR}, #{moneyAmount,jdbcType=VARCHAR}, 
+      #{currency,jdbcType=VARCHAR}, #{payee,jdbcType=VARCHAR}, #{bank,jdbcType=VARCHAR}, 
+      #{accountName,jdbcType=VARCHAR}, #{accountNumber,jdbcType=VARCHAR}, #{paymentDate,jdbcType=DATE}, 
+      #{paymentStyle,jdbcType=VARCHAR}, #{paymentVoucher,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.MemoRecord" >
+    insert into memorecord
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        serialNum,
+      </if>
+      <if test="memoNum != null" >
+        memoNum,
+      </if>
+      <if test="supplyComId != null" >
+        supplyComId,
+      </if>
+      <if test="buyComId != null" >
+        buyComId,
+      </if>
+      <if test="verificationMoneyAmount != null" >
+        verificationMoneyAmount,
+      </if>
+      <if test="moneyAmount != null" >
+        moneyAmount,
+      </if>
+      <if test="currency != null" >
+        currency,
+      </if>
+      <if test="payee != null" >
+        payee,
+      </if>
+      <if test="bank != null" >
+        bank,
+      </if>
+      <if test="accountName != null" >
+        accountName,
+      </if>
+      <if test="accountNumber != null" >
+        accountNumber,
+      </if>
+      <if test="paymentDate != null" >
+        paymentDate,
+      </if>
+      <if test="paymentStyle != null" >
+        paymentStyle,
+      </if>
+      <if test="paymentVoucher != null" >
+        paymentVoucher,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="delFlg != null" >
+        delFlg,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="updater != null" >
+        updater,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="memoNum != null" >
+        #{memoNum,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyComId != null" >
+        #{supplyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="buyComId != null" >
+        #{buyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="verificationMoneyAmount != null" >
+        #{verificationMoneyAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="moneyAmount != null" >
+        #{moneyAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null" >
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="payee != null" >
+        #{payee,jdbcType=VARCHAR},
+      </if>
+      <if test="bank != null" >
+        #{bank,jdbcType=VARCHAR},
+      </if>
+      <if test="accountName != null" >
+        #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNumber != null" >
+        #{accountNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentDate != null" >
+        #{paymentDate,jdbcType=DATE},
+      </if>
+      <if test="paymentStyle != null" >
+        #{paymentStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentVoucher != null" >
+        #{paymentVoucher,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.MemoRecordExample" resultType="java.lang.Integer" >
+    select count(*) from memorecord
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update memorecord
+    <set >
+      <if test="record.serialNum != null" >
+        serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memoNum != null" >
+        memoNum = #{record.memoNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplyComId != null" >
+        supplyComId = #{record.supplyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.buyComId != null" >
+        buyComId = #{record.buyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.verificationMoneyAmount != null" >
+        verificationMoneyAmount = #{record.verificationMoneyAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.moneyAmount != null" >
+        moneyAmount = #{record.moneyAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currency != null" >
+        currency = #{record.currency,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payee != null" >
+        payee = #{record.payee,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bank != null" >
+        bank = #{record.bank,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accountName != null" >
+        accountName = #{record.accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accountNumber != null" >
+        accountNumber = #{record.accountNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paymentDate != null" >
+        paymentDate = #{record.paymentDate,jdbcType=DATE},
+      </if>
+      <if test="record.paymentStyle != null" >
+        paymentStyle = #{record.paymentStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paymentVoucher != null" >
+        paymentVoucher = #{record.paymentVoucher,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlg != null" >
+        delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creator != null" >
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updater != null" >
+        updater = #{record.updater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update memorecord
+    set serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      memoNum = #{record.memoNum,jdbcType=VARCHAR},
+      supplyComId = #{record.supplyComId,jdbcType=VARCHAR},
+      buyComId = #{record.buyComId,jdbcType=VARCHAR},
+      verificationMoneyAmount = #{record.verificationMoneyAmount,jdbcType=VARCHAR},
+      moneyAmount = #{record.moneyAmount,jdbcType=VARCHAR},
+      currency = #{record.currency,jdbcType=VARCHAR},
+      payee = #{record.payee,jdbcType=VARCHAR},
+      bank = #{record.bank,jdbcType=VARCHAR},
+      accountName = #{record.accountName,jdbcType=VARCHAR},
+      accountNumber = #{record.accountNumber,jdbcType=VARCHAR},
+      paymentDate = #{record.paymentDate,jdbcType=DATE},
+      paymentStyle = #{record.paymentStyle,jdbcType=VARCHAR},
+      paymentVoucher = #{record.paymentVoucher,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      updater = #{record.updater,jdbcType=VARCHAR},
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.MemoRecord" >
+    update memorecord
+    <set >
+      <if test="memoNum != null" >
+        memoNum = #{memoNum,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyComId != null" >
+        supplyComId = #{supplyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="buyComId != null" >
+        buyComId = #{buyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="verificationMoneyAmount != null" >
+        verificationMoneyAmount = #{verificationMoneyAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="moneyAmount != null" >
+        moneyAmount = #{moneyAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null" >
+        currency = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="payee != null" >
+        payee = #{payee,jdbcType=VARCHAR},
+      </if>
+      <if test="bank != null" >
+        bank = #{bank,jdbcType=VARCHAR},
+      </if>
+      <if test="accountName != null" >
+        accountName = #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNumber != null" >
+        accountNumber = #{accountNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentDate != null" >
+        paymentDate = #{paymentDate,jdbcType=DATE},
+      </if>
+      <if test="paymentStyle != null" >
+        paymentStyle = #{paymentStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentVoucher != null" >
+        paymentVoucher = #{paymentVoucher,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        delFlg = #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        updater = #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.MemoRecord" >
+    update memorecord
+    set memoNum = #{memoNum,jdbcType=VARCHAR},
+      supplyComId = #{supplyComId,jdbcType=VARCHAR},
+      buyComId = #{buyComId,jdbcType=VARCHAR},
+      verificationMoneyAmount = #{verificationMoneyAmount,jdbcType=VARCHAR},
+      moneyAmount = #{moneyAmount,jdbcType=VARCHAR},
+      currency = #{currency,jdbcType=VARCHAR},
+      payee = #{payee,jdbcType=VARCHAR},
+      bank = #{bank,jdbcType=VARCHAR},
+      accountName = #{accountName,jdbcType=VARCHAR},
+      accountNumber = #{accountNumber,jdbcType=VARCHAR},
+      paymentDate = #{paymentDate,jdbcType=DATE},
+      paymentStyle = #{paymentStyle,jdbcType=VARCHAR},
+      paymentVoucher = #{paymentVoucher,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      delFlg = #{delFlg,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <!--删除收付款水单  -->
+    <update id="delMemoRecord" parameterType="java.util.List">
+    	UPDATE memorecord 
+    	SET delFlg='1'
+    	where serialNum in
+        <foreach item="idList" collection="list" open="(" close=")" separator=",">
+            #{idList}
+        </foreach>
+    </update>
+</mapper>

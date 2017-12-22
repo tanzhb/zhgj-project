@@ -14,14 +14,18 @@ import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.log.annotation.OperationLog;
+import com.congmai.zhgj.web.dao.MemoRecordMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
 import com.congmai.zhgj.web.dao.PayMapper;
+import com.congmai.zhgj.web.dao.VerificationRecordMapper;
 import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.MaterielFile;
 import com.congmai.zhgj.web.model.MaterielFileExample;
+import com.congmai.zhgj.web.model.MemoRecord;
+import com.congmai.zhgj.web.model.MemoRecordExample;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.PaymentFile;
 import com.congmai.zhgj.web.model.PaymentPlan;
@@ -29,6 +33,8 @@ import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.Vacation;
 import com.congmai.zhgj.web.model.MaterielFileExample.Criteria;
+import com.congmai.zhgj.web.model.VerificationRecord;
+import com.congmai.zhgj.web.model.VerificationRecordExample;
 import com.congmai.zhgj.web.service.PayService;
 
 /**
@@ -46,6 +52,10 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 	private PayMapper payMapper;
 	@Resource
 	private OrderInfoMapper orderInfoMapper;
+	@Resource
+	private VerificationRecordMapper verificationRecordMapper;
+	@Resource
+	private MemoRecordMapper memoRecordMapper;
 	
 
 	@Override
@@ -330,4 +340,53 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 		orderInfo.setUpdateTime(new Date());
 		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 	}
+
+	@Override
+	public List<MemoRecord> findReceiveMemoRecord(String userId) {
+		MemoRecordExample mre=new MemoRecordExample();
+		com.congmai.zhgj.web.model.MemoRecordExample.Criteria c=mre.createCriteria();
+		c.andDelFlgEqualTo("0").andBuyComIdIsNotNull();
+		return memoRecordMapper.selectByExample(mre);
+	}
+
+	@Override
+	public List<VerificationRecord> findVerificationRecord(String serialNum) {
+		VerificationRecordExample mre=new VerificationRecordExample();
+		com.congmai.zhgj.web.model.VerificationRecordExample.Criteria c=mre.createCriteria();
+		c.andReceiveMemoSerialEqualTo(serialNum);
+		return verificationRecordMapper.selectByExample(mre);
+	}
+
+	@Override
+	public void delMemoRecord(String ids) {
+		List<String> idList = ApplicationUtils.getIdList(ids);
+		memoRecordMapper.delMemoRecord(idList);
+	}
+
+	@Override
+	public List<MemoRecord> findPayMemoRecord(String userId) {
+		MemoRecordExample mre=new MemoRecordExample();
+		com.congmai.zhgj.web.model.MemoRecordExample.Criteria c=mre.createCriteria();
+		c.andDelFlgEqualTo("0").andSupplyComIdIsNotNull();
+		return memoRecordMapper.selectByExample(mre);
+	}
+
+	@Override
+	public void insertMemoRecord(MemoRecord ids) {
+		memoRecordMapper.insert(ids);
+	}
+
+	@Override
+	public void updateMemoRecord(MemoRecord ids) {
+		memoRecordMapper.updateByPrimaryKey(ids);
+		
+	}
+
+	@Override
+	public MemoRecord selectMemoRecordById(String serialNum) {
+		// TODO Auto-generated method stub
+		return memoRecordMapper.selectByPrimaryKey(serialNum);
+	}
+
+	
 }

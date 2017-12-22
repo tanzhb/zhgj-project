@@ -32,6 +32,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +54,7 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.MessageConstants;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.event.EventExample;
@@ -63,7 +65,9 @@ import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.CompanyFinance;
 import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.CustomsForm;
 import com.congmai.zhgj.web.model.DeliveryVO;
+import com.congmai.zhgj.web.model.MemoRecord;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.PaymentFile;
@@ -74,6 +78,7 @@ import com.congmai.zhgj.web.model.Vacation;
 import com.congmai.zhgj.web.service.CompanyFinanceService;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.ContractService;
+import com.congmai.zhgj.web.service.CustomsFormService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.PayService;
@@ -124,8 +129,10 @@ public class PayController {
 	private CompanyService companyService;
 	@Autowired
 	private CompanyFinanceService companyFinanceService;
-	
-
+	@Autowired
+	private CustomsFormService customsFormService;
+	@Autowired  
+	Environment env;
 	/**
 	 * 
 	 * @Description 启动应付款流程审批
@@ -495,7 +502,13 @@ public class PayController {
 			String billedMoney = payService.selectBilledMoney(orderSerial);
 			record.setPaiedMoney(paiedMoney);
 			record.setBilledMoney(billedMoney);
-
+			if(StringUtil.isNotEmpty(record.getCustomsFormSerial())){
+				CustomsForm customsForm =customsFormService.selectById(record.getCustomsFormSerial());
+				record.setQgOrBgNum(customsForm.getCustomsFormNum());
+				record.setAddedTax(customsForm.getAddedTax());
+				record.setCustomsAmount(customsForm.getCustomsAmount());
+				record.setRate(customsForm.getOrderInfo().getRate());
+			}
 			HttpHeaders headers = new HttpHeaders();
 			headers.setLocation(ucBuilder.path("/paymentRecordC")
 					.buildAndExpand(record.getSerialNum()).toUri());
@@ -823,6 +836,19 @@ public class PayController {
 				String comId=companyService.selectComIdByComName(StaticConst.getInfo("comName"));
 				List<CompanyFinance>comFinances=companyFinanceService.selectListByComId(comId);
 				c.setComFinances(comFinances);
+				if(StringUtil.isNotEmpty(c.getCustomsFormSerial())){
+					CustomsForm customsForm =customsFormService.selectById(c.getCustomsFormSerial());
+					c.setQgOrBgNum(customsForm.getCustomsFormNum());
+					c.setAddedTax(customsForm.getAddedTax());
+					c.setCustomsAmount(customsForm.getCustomsAmount());
+					c.setRate(customsForm.getOrderInfo().getRate());
+				}
+				OrderInfo orderInfo=orderService.selectById(orderSerial);
+				Boolean createBG=StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())&&StringUtils.isEmpty(orderInfo.getSupplyComId());//该订单是否需要报关
+				Boolean createQG=StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())&&!StringUtils.isEmpty(orderInfo.getSupplyComId());//该订单是否需要清关
+				/*if(){
+					
+				}*/
 		return new ResponseEntity<PaymentRecord>(c, HttpStatus.OK);
 	}
 	
@@ -868,5 +894,148 @@ public class PayController {
 	public void download(@RequestParam("project_id") Integer projectId,
 			HttpServletResponse response) throws IOException {
 
+	}
+	
+	/**
+	 * 
+	 * @Description 查找所有收款水单信息
+	 * @return
+	 */
+	@RequestMapping(value = "/findReceiveMemoRecord", method = RequestMethod.GET)
+	public ResponseEntity<Map> findReceiveMemoRecord(
+			HttpServletRequest request) {
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();// 获取当前登录用户名
+		List<MemoRecord> memoRecordlist = payService
+				.findReceiveMemoRecord(currenLoginName);
+		for(MemoRecord memoRecord:memoRecordlist){
+			memoRecord.setComName(companyService.selectOne(memoRecord.getBuyComId()).getComName());
+		}
+		// 封装datatables数据返回到前台
+		Map pageMap = new HashMap();
+		pageMap.put("draw", 1);
+		pageMap.put("recordsTotal", memoRecordlist == null ? 0
+				: memoRecordlist.size());
+		pageMap.put("recordsFiltered", memoRecordlist == null ? 0
+				: memoRecordlist.size());
+		pageMap.put("data", memoRecordlist);
+		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+	}
+	/**
+	 * 
+	 * @Description 查找所有付款水单信息
+	 * @return
+	 */
+	@RequestMapping(value = "/findPayMemoRecord", method = RequestMethod.GET)
+	public ResponseEntity<Map> findPayMemoRecord(
+			HttpServletRequest request) {
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();// 获取当前登录用户名
+		List<MemoRecord> memoRecordlist = payService
+				.findPayMemoRecord(currenLoginName);
+		// 封装datatables数据返回到前台
+		Map pageMap = new HashMap();
+		pageMap.put("draw", 1);
+		pageMap.put("recordsTotal", memoRecordlist == null ? 0
+				: memoRecordlist.size());
+		pageMap.put("recordsFiltered", memoRecordlist == null ? 0
+				: memoRecordlist.size());
+		pageMap.put("data", memoRecordlist);
+		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+	}
+	/**
+	 * 保存收款水单
+	 */
+	@RequestMapping(value = "/saveReceiveMemo", method = RequestMethod.POST)
+	public ResponseEntity<MemoRecord> saveReceiveMemo(@Valid MemoRecord memoRecord, HttpServletRequest request,
+			UriComponentsBuilder ucBuilder,@RequestParam(value = "files")MultipartFile files[]) {
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
+		String paymentVoucher=null;
+		//只有在文件组不为空时上传文件
+		if(files.length>0){
+			if(files[0]!=null){
+				paymentVoucher=uploadFile1(files[0]);   
+			}
+		}
+		//如果id为空执行保存
+		if(StringUtils.isEmpty(memoRecord.getSerialNum())){
+			String serialNum=ApplicationUtils.random32UUID(); 
+			memoRecord.setSerialNum(serialNum);
+			//给各自的文件字段赋值文件名
+			memoRecord.setPaymentVoucher(paymentVoucher);
+			memoRecord.setCreator(currenLoginName);
+			memoRecord.setDelFlg("0");
+			memoRecord.setStatus("0");
+			payService.insertMemoRecord(memoRecord);
+		}else{
+			//如果id不为空执行更新
+			memoRecord.setUpdater(currenLoginName);
+			//给各自的文件字段赋值文件名
+			memoRecord.setPaymentVoucher(paymentVoucher);
+			payService.updateMemoRecord(memoRecord);
+		}
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(ucBuilder.path("/userContract").buildAndExpand(memoRecord.getSerialNum()).toUri());
+		if(StringUtil.isEmpty(memoRecord.getBuyComId())){
+			memoRecord.setComName(companyService.selectOne(memoRecord.getSupplyComId()).getComName());
+		}else{
+			memoRecord.setComName(companyService.selectOne(memoRecord.getBuyComId()).getComName());
+		}
+		return new ResponseEntity<MemoRecord>(memoRecord, HttpStatus.CREATED);
+	}
+	/**
+	 * 上传执行
+	 * @param file（上传的文件）
+	 * @return
+	 */
+	public String uploadFile1(MultipartFile file){
+		String filename = "";
+		try {
+			String path = env.getProperty("upload_path");
+			String fileName = file.getOriginalFilename();
+			/*String prefix = "." + fileName.substring(fileName.lastIndexOf(".") + 1);*/
+			filename = ApplicationUtils.random32UUID() +"_"+ fileName;
+			File dst = null;
+			File uploadDir = new File(path); // 创建上传目录
+			if (!uploadDir.exists()) {
+				uploadDir.mkdirs(); // 如果不存在则创建upload目录
+			}
+			dst = new File(uploadDir,filename); // 创建一个指向upload目录下的文件对象，文件名随机生成
+			file.transferTo(dst); // 创建文件并将上传文件复制过去
+			System.out.println("上传文件----------"+filename);
+		} catch (Exception e) {
+			System.out.println("文件上传失败----------"+filename+"-------Exception:"+e.getMessage());
+			filename="";
+		}
+		return filename;
+	}
+	/**
+	 * 删除收款水单
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/delReceiveMemo", method = RequestMethod.POST)
+	public ResponseEntity<Void> delReceiveMemo(@RequestBody String ids) {
+		if ("".equals(ids) || ids == null) {
+			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+		}
+
+		payService.delMemoRecord(ids);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	/**
+	 * 通过id查询收款水单详情
+	 */
+	@RequestMapping(value = "/selectReceiveMemo", method = RequestMethod.GET)
+	public ResponseEntity<MemoRecord> selectReceiveMemo(String serialNum) {
+		MemoRecord memoRecord=payService.selectMemoRecordById(serialNum);
+		if(StringUtil.isEmpty(memoRecord.getBuyComId())){
+			memoRecord.setComName(companyService.selectOne(memoRecord.getSupplyComId()).getComName());
+		}else{
+			memoRecord.setComName(companyService.selectOne(memoRecord.getBuyComId()).getComName());
+		}
+		return new ResponseEntity<MemoRecord>(memoRecord, HttpStatus.OK);
 	}
 }

@@ -9,11 +9,13 @@ import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.MaterielFile;
+import com.congmai.zhgj.web.model.MemoRecord;
 import com.congmai.zhgj.web.model.PaymentFile;
 import com.congmai.zhgj.web.model.PaymentPlan;
 import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.Vacation;
+import com.congmai.zhgj.web.model.VerificationRecord;
 
 /**
  * 
@@ -186,4 +188,38 @@ public interface PayService extends GenericService<PaymentRecord, String> {
     public void deleteFileOld(String paySerialNum);
 
 	public void updateOrderStatus(PaymentRecord paymentRecord);
+	
+	 /**
+     * 查询收款水单列表
+     * @param userId
+     * @return
+     */
+    public List<MemoRecord>findReceiveMemoRecord(String userId);
+    
+    /**
+     * 查询付款水单列表
+     * @param userId
+     * @return
+     */
+    public List<MemoRecord>findPayMemoRecord(String userId);
+    
+    /**
+     * 查询收款水单对应的核销记录(通过收款水单流水)
+     * @param userId
+     * @return
+     */
+    public List< VerificationRecord>findVerificationRecord(String serialNum);
+    
+    /**
+     * 
+     * @Description 批量删除 收/付款水单
+     * @param ids
+     * @return
+     */
+	public void delMemoRecord(String ids);
+	
+	public void insertMemoRecord(MemoRecord ids);
+	public void updateMemoRecord(MemoRecord ids);
+	public MemoRecord selectMemoRecordById(String serialNum);
+	
 }

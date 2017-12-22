@@ -44,6 +44,7 @@ import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.enums.ComType;
+import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.event.EventExample;
 import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.Company;
@@ -52,12 +53,26 @@ import com.congmai.zhgj.web.model.CompanyContact;
 import com.congmai.zhgj.web.model.CompanyExample;
 import com.congmai.zhgj.web.model.CompanyExample.Criteria;
 import com.congmai.zhgj.web.model.Category;
+import com.congmai.zhgj.web.model.ClauseAdvance;
+import com.congmai.zhgj.web.model.ClauseAfterSales;
+import com.congmai.zhgj.web.model.ClauseCheckAccept;
+import com.congmai.zhgj.web.model.ClauseDelivery;
+import com.congmai.zhgj.web.model.ClauseFramework;
+import com.congmai.zhgj.web.model.ClauseFrameworkExample;
+import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.CompanyFinance;
+import com.congmai.zhgj.web.model.CompanyFinanceExample;
 import com.congmai.zhgj.web.model.CompanyManage;
 import com.congmai.zhgj.web.model.CompanyQualification;
+import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DataTablesParams;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielSelectExample;
+import com.congmai.zhgj.web.model.OrderFile;
+import com.congmai.zhgj.web.model.OrderFileExample;
+import com.congmai.zhgj.web.model.OrderInfo;
+import com.congmai.zhgj.web.model.OrderMateriel;
+import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.SupplyBuyVO;
 import com.congmai.zhgj.web.model.SupplyMateriel;
 import com.congmai.zhgj.web.model.SupplyMaterielExample;
@@ -901,5 +916,20 @@ public class CompanyController {
     	c.andDelFlgEqualTo("0").andOwnerEqualTo("pingtai");
     	return warehouseService.selectWarehouseList(we);
     }
+    /**
+	 * 
+	 * @Description 获取订单信息
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "/getComFinances",method = RequestMethod.POST)
+	@ResponseBody
+	public List<CompanyFinance> getComFinances(@RequestBody String comId) {
+		List<CompanyFinance>list=new ArrayList<CompanyFinance>();
+		if(!StringUtil.isEmpty(comId)){
+			list=companyFinanceService.selectListByComId(comId);
+		}
+    	return list;
+	}
 }
 

@@ -92,7 +92,7 @@
 															<option value="采购付款">采购付款</option>
 															<option value="采购退款">采购退款</option>
 															<option value="服务费用类">服务费用类</option>
-															<option   ng-if="isBG"    value="报关">报关</option><!--是否报关单  -->
+															<option   ng-if="isBG"    value="清关">清关</option><!--是否报关单  -->
 															<option value="其它">其它</option>
 														</select>
 														<p class="form-control-static" ng-show="span">{{paymentRecord.paymentType}}</p>
@@ -153,7 +153,7 @@
 												</div>
 											</div>
 											</div> <!--/row-->
-											<div ng-show="paymentRecord.paymentType!='报关'">
+											<div ng-show="paymentRecord.paymentType!='清关'">
 											<div class="row"  >
 											<div class="col-md-4">
 												<div class="form-group">
@@ -199,10 +199,10 @@
 													<label class="control-label bold">支付比率<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
-														<input type="text" name="deliveryRate" class="form-control" ng-if="paymentRecord.paymentType!='报关'"
+														<input type="text" name="deliveryRate" class="form-control" ng-if="paymentRecord.paymentType!='清关'"
 															readonly ng-model="paymentRecord.deliveryRate" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{paymentRecord.deliveryRate}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.deliveryRate}}%</p>
 													</div>
 												</div>
 											</div>
@@ -382,7 +382,7 @@
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">备注 </label>
-													<div class="" ng-if="paymentRecord.paymentType!='报关'">
+													<div class="" ng-if="paymentRecord.paymentType!='清关'">
 														<input type="text" class="form-control" name="remark"
 															ng-model="paymentRecord.remark" ng-show="input"/>
 														<div class="form-control-focus"></div>
@@ -404,11 +404,11 @@
 										
 										</div>
 										</div>
-										<div ng-show="paymentRecord.paymentType=='报关'">
+										<div ng-show="paymentRecord.paymentType=='清关'">
 										<div class="row"  >
 										<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">关联报关单号<span
+													<label class="control-label bold">关联清关单号<span
 														class="required" aria-required="true"> * </span></label>
 														<div class="">
 														<div class="input-group" data-target="#basicBgInfo"
@@ -435,7 +435,7 @@
 														<input type="text" class="form-control" name="rate"  readonly
 															ng-model="rate" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{paymentRecord.rate}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.rate}}%</p>
 													</div>
 												</div>
 											</div>
@@ -466,12 +466,12 @@
 											</div>
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">报关合计 </label>
+													<label class="control-label bold">清关合计 </label>
 													<div class="">
 														<input type="text" class="form-control" name="totalMoney"  readonly
 															ng-model="totalMoney" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{paymentRecord.totalMoney}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.applyPaymentAmount}}</p>
 													</div>
 												</div>
 											</div>
@@ -482,7 +482,7 @@
 														<input type="text" class="form-control" name="chnTotalMoney" readonly
 															ng-model="chnTotalMoney" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{paymentRecord.chnTotalMoney}}</p>
+														<p class="form-control-static" ng-show="span">{{chnAmount}}</p>
 													</div>
 												</div>
 											</div>
@@ -532,7 +532,7 @@
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">备注 </label>
-													<div class=""  ng-if="paymentRecord.paymentType=='报关'">
+													<div class=""  ng-if="paymentRecord.paymentType=='清关'">
 														<input type="text" class="form-control" name="remark"
 															ng-model="paymentRecord.remark" ng-show="input"/>
 														<div class="form-control-focus"></div>

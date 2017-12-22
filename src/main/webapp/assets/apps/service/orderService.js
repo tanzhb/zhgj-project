@@ -398,6 +398,15 @@ angular.module('MetronicApp').service('orderService',
 							});
 							return deferred.promise;//返回承诺
 						},
-
+						initComFinances : function (comId){
+							  var deferred = $q.defer();
+								$http.post("rest/company/getComFinances",comId)
+								.then(function success(result) {
+						            deferred.resolve(result);//请求成功
+						        }, function error(err) {
+						            deferred.reject(err);//请求失败
+						        });
+						        return deferred.promise;//返回承诺
+						  },
 		}
 		} ]);

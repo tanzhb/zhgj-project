@@ -204,6 +204,18 @@ public class PaymentRecord extends BaseVO implements Serializable{
     
     private String  customsFormSerial;//报关/清关流水
     
+    private String   qgOrBgNum;//清关或报关单号
+    
+    private String   rate;//税率
+    
+    private String   addedTax;//增值税
+    
+    private String   customsAmount;//关税
+    
+    private String   isQbG;//是否有清报关单
+    
+    
+    
     private  List<CompanyFinance>comFinances;
 
 	public String getBillType() {
@@ -711,6 +723,46 @@ public class PaymentRecord extends BaseVO implements Serializable{
 
 	public void setComFinances(List<CompanyFinance> comFinances) {
 		this.comFinances = comFinances;
+	}
+
+	public String getQgOrBgNum() {
+		return qgOrBgNum;
+	}
+
+	public String getRate() {
+		return rate;
+	}
+
+	public String getAddedTax() {
+		return addedTax;
+	}
+
+	public String getCustomsAmount() {
+		return customsAmount;
+	}
+
+	public void setQgOrBgNum(String qgOrBgNum) {
+		this.qgOrBgNum = qgOrBgNum;
+	}
+
+	public void setRate(String rate) {
+		this.rate = rate;
+	}
+
+	public void setAddedTax(String addedTax) {
+		this.addedTax = addedTax;
+	}
+
+	public void setCustomsAmount(String customsAmount) {
+		this.customsAmount = customsAmount;
+	}
+
+	public String getIsQbG() {
+		return isQbG;
+	}
+
+	public void setIsQbG(String isQbG) {
+		this.isQbG = isQbG;
 	}
 	
 }

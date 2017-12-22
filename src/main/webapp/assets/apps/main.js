@@ -3227,7 +3227,104 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
+         .state('addReceiveMemo', {
+            url: "/addReceiveMemo:serialNum",
+            templateUrl: "rest/page/addReceiveMemo",
+            data: {pageTitle: '新增收款水单'},
+            controller: "ReceiveMemoController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+			
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload-shim.min.js',
+			    'assets/apps/scripts/angular-file-upload.min.js',
+			    'assets/apps/scripts/FileUploader.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/ReceiveMemoService.js',
+				'assets/apps/controllers/ReceiveMemoController.js',
+				  'assets/apps/service/CommonService.js',
+				  'assets/apps/service/orderService.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js'
+                      ]
+                    });
+                }]
+            }
+        })
         
+        
+        .state('receiveMemo', {
+            url: "/receiveMemo",
+            templateUrl: "rest/page/receiveMemo",
+            data: {pageTitle: '收款水单列表'},
+            controller: "ReceiveMemoController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+			
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/ReceiveMemoService.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+			    'assets/apps/controllers/ReceiveMemoController.js',
+			    'assets/apps/service/CommonService.js',
+			    'assets/apps/service/orderService.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js',
+                      ]
+                    });
+                }]
+            }
+        })
+        
+        
+        .state('viewReceiveMemo', {
+            url: "/viewReceiveMemo:serialNum",
+            templateUrl: "rest/page/viewReceiveMemo",
+            data: {pageTitle: '收款水单详情'},
+            controller: "ReceiveMemoController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload-shim.min.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/FileUploader.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/ReceiveMemoService.js',
+				'assets/apps/controllers/ReceiveMemoController.js',
+				  'assets/apps/service/CommonService.js',
+				  'assets/apps/service/orderService.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js'
+                      ]
+                    });
+                }]
+            }
+        })
         
         }]);
 
@@ -3854,6 +3951,20 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 						 html += "<li><a>采购订单</a><i class='fa fa-angle-right'></i></li><li><li><a ui-sref='customsClearanceForm'>清关单列表</a><i class='fa fa-angle-right'></i></li><li><a>查看清关单</a></li>";
 					 } else html += "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li><li><a ui-sref='customsDeclarationForm'>报关单列表</a><i class='fa fa-angle-right'></i></li><li><a>查看报关单</a></li>";
 				 	
+			   }else if('receiveMemo' == toState.name){//收款水单
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a>收付款</a><i class='fa fa-angle-right'></i></li>" +
+				   "<li><a>收款水单</a></li>";				   
+			   }else if('addReceiveMemo' == toState.name){//新增收款水单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+					 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" + 
+					 		"<li><a ui-sref='receiveMemo'>收款水单</a> <i class='fa fa-angle-right'></i></li>" + 
+					 		"<li><a>新增收款水单</a></li>";					 
+			   }else if('viewReceiveMemo' == toState.name){//查看收款水单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a ui-sref='receiveMemo'>收款水单</a> <i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>查看收款水单</a></li>";					 
 			   }else if('solrSearch' == toState.name){//全文检索   
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 			 		"<li><a>全文检索</a></i></li>";	

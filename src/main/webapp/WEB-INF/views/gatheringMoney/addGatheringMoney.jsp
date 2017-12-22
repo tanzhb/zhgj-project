@@ -27,6 +27,10 @@
 											class="btn green  btn-circle  btn-sm" ng-show="input">
 											<i class="fa fa-save"></i> 保存
 										</button>
+									<!-- 	<button type="submit" ng-click="editBasicInfo('receive')"
+											class="btn green  btn-circle  btn-sm" ng-show="inputEdit">
+											<i class="fa fa-save"></i> 编辑
+										</button> -->
 										<button ng-click="goBack()" type="button"
 											class="btn defualt  btn-circle  btn-sm">
 											<i class="fa fa-undo"></i> 取消
@@ -275,7 +279,7 @@
 													<div class=""  >
 														<input type="text" class="form-control" name="playPaymentDate"
 														data-date-format="yyyy-mm-dd"
-													    data-date-viewmode="years" size="16"
+													    data-date-viewmode="years" size="16"   
 															ng-model="paymentRecord.playPaymentDate" ng-show="input" id="playPaymentDate"/>
 														<p class="form-control-static" ng-show="span">{{paymentRecord.playPaymentDate}}</p>
 														<div class="form-control-focus"></div>
@@ -416,7 +420,7 @@
 															data-toggle="modal" ng-click="selectBgInfo()"
 															onclick="return false;">
 															<input id="orderSerial" name="qgOrBgNum" type="text" ng-show="input"
-																class="form-control" ng-model="qgOrBgNum"
+																class="form-control" ng-model="paymentRecord.qgOrBgNum"
 																readonly="readonly"> <span
 																class="input-group-btn" ng-show="input" style="vertical-align: top;">
 																<button class="btn default" type="button">
@@ -434,9 +438,9 @@
 													<label class="control-label bold">税率</label>
 													<div class="">
 														<input type="text" class="form-control" name="rate"  readonly
-															ng-model="rate" ng-show="input"/>
+															ng-model="paymentRecord.rate" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{paymentRecord.rate}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.rate}}%</p>
 													</div>
 												</div>
 											</div>
@@ -445,7 +449,7 @@
 													<label class="control-label bold">增值税额 </label>
 													<div class="">
 														<input type="text" class="form-control" name="addedTax"  readonly
-															ng-model="addedTax" ng-show="input"/>
+															ng-model="paymentRecord.addedTax" ng-show="input"/>
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">{{paymentRecord.addedTax}}</p>
 													</div>
@@ -458,7 +462,7 @@
 													<label class="control-label bold">关税额</label>
 													<div class="">
 													<input type="text" class="form-control" name="customsAmount"  readonly
-															ng-model="customsAmount" ng-show="input"/>
+															ng-model="paymentRecord.customsAmount" ng-show="input"/>
 													
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">{{paymentRecord.customsAmount}}</p>
@@ -470,9 +474,9 @@
 													<label class="control-label bold">报关合计 </label>
 													<div class="">
 														<input type="text" class="form-control" name="totalMoney"  readonly
-															ng-model="totalMoney" ng-show="input"/>
+															ng-model="paymentRecord.totalMoney" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{paymentRecord.totalMoney}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.applyPaymentAmount}}</p>
 													</div>
 												</div>
 											</div>
@@ -483,7 +487,7 @@
 														<input type="text" class="form-control" name="chnTotalMoney" readonly
 															ng-model="chnTotalMoney" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{paymentRecord.chnTotalMoney}}</p>
+														<p class="form-control-static" ng-show="span">{{applyPaymentAmountChn}}</p>
 													</div>
 												</div>
 											</div>

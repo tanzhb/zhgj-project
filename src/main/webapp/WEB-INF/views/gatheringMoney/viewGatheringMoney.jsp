@@ -436,7 +436,7 @@
 														<input type="text" class="form-control" name="rate"  readonly
 															ng-model="rate" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{paymentRecord.rate}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.rate}}%</p>
 													</div>
 												</div>
 											</div>
@@ -472,7 +472,7 @@
 														<input type="text" class="form-control" name="totalMoney"  readonly
 															ng-model="totalMoney" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{paymentRecord.totalMoney}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.applyPaymentAmount}}</p>
 													</div>
 												</div>
 											</div>
@@ -483,7 +483,7 @@
 														<input type="text" class="form-control" name="chnTotalMoney" readonly
 															ng-model="chnTotalMoney" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{paymentRecord.chnTotalMoney}}</p>
+														<p class="form-control-static" ng-show="span">{{chnAmount}}</p>
 													</div>
 												</div>
 											</div>

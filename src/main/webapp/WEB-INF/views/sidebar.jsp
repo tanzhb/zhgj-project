@@ -270,6 +270,7 @@
 				<shiro:hasPermission name="zhgj:accountsPayable:*">
 					<li><a ui-sref="paymentRecordC">应付款</a></li>
 				</shiro:hasPermission>
+					<li><a ui-sref="receiveMemo">收款水单</a></li>
 			</ul>
 		</li>  
 		</shiro:hasPermission>  
