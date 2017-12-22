@@ -1377,7 +1377,7 @@ public class TakeDeliveryController {
 		return takeDeliveryParams;
 	}
 	 /* *//**
-     * @Description (确认代发货/采购商确认提货)
+     * @Description (确认代发货)
      * @param request
      * @return
      */

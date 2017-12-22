@@ -1,5 +1,6 @@
 package com.congmai.zhgj.web.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -25,6 +26,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -533,9 +536,9 @@ public class OrderController {
     		if(BaseVO.APPROVAL_SUCCESS.equals(order.getStatus())){//订单完成，需更新状态为1(订单待接收)
     			OrderInfo oi = new OrderInfo();
     			oi.setSerialNum(order.getSerialNum());
-    			if(oi.getSupplyComId()==null){
+    			if(oi.getSupplyComId()==null){//销售订单
     				oi.setStatus("3");
-    			}else{
+    			}else{//采购订单
     				oi.setStatus("1");
     			}
     			this.orderService.updateStatus(oi);
@@ -722,6 +725,36 @@ public class OrderController {
     }
 
     /**
+     * 
+     * @Description (各类框架列表查询)
+     * @param type（只分为销售：sale，采购:buy两种）
+     * @param selectFor(自定义参数值，用于控制生成查询sql)
+     * @return
+     */
+    @RequestMapping("/findFrameList")
+    @ResponseBody
+    public ResponseEntity<Map> findFrameList(String type,String selectFor) {
+    	List<ContractVO> contractList = new ArrayList<ContractVO>();
+    	
+    	ContractVO parm =new ContractVO();
+    	if(SALEORDER.equals(type)){//查找公司销售订单
+    		parm.setContractType(StaticConst.CONTRACT_TYPE_SALEFRAME.getInfo());
+    	}else if(BUYORDER.equals(type)){//查找公司采购订单
+    		parm.setContractType(StaticConst.CONTRACT_TYPE_BUYFRAME.getInfo());
+    	}
+    	
+    	contractList = contractService.selectList(parm);
+    	
+    	//封装datatables数据返回到前台
+		Map pageMap = new HashMap();
+		pageMap.put("draw", 1);
+		pageMap.put("recordsTotal", contractList==null?0:contractList.size());
+		pageMap.put("recordsFiltered", contractList==null?0:contractList.size());
+		pageMap.put("data", contractList);
+		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+
+    }
+    /**
 	 * 
 	 * @Description 批量删除订单
 	 * @param ids
@@ -757,7 +790,7 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/getOrderInfo")
 	@ResponseBody
-	public Map getOrderInfo(String serialNum,String  judgeString,OrderInfo orderInfo) {
+	public Map getOrderInfo(String serialNum,OrderInfo orderInfo) {
 		orderInfo = orderService.selectById(serialNum);
 		Map<String, Object> map = new HashMap<String, Object>();
     	map.put("orderInfo", orderInfo);
@@ -832,6 +865,54 @@ public class OrderController {
     	return map;
 	}
 	
+	
+	/**
+	 * 
+	 * @Description 获取框架协议信息
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "/getFrameInfo")
+	@ResponseBody
+	public Map getFrameInfo(String serialNum) {
+		Map<String, Object> map = new HashMap<String, Object>();
+    	//获取合同信息
+    	ContractVO contract=contractService.selectConbtractById(serialNum);
+    	map.put("contract", contract);
+    	if(contract!=null&&StringUtils.isNotEmpty(contract.getId())){
+    		//获取合同条款信息
+    		ClauseAfterSales clauseAfterSales = clauseAfterSalesService.selectByContractId(contract.getId());
+    		map.put("clauseAfterSales", clauseAfterSales);
+    		ClauseAdvance clauseAdvance = clauseAdvanceService.selectByContractId(contract.getId());
+    		map.put("clauseAdvance", clauseAdvance);
+    		ClauseCheckAccept clauseCheckAccept = clauseCheckAcceptService.selectByContractId(contract.getId());
+    		map.put("clauseCheckAccept", clauseCheckAccept);
+    		ClauseDelivery clauseDelivery = clauseDeliveryService.selectByContractId(contract.getId());
+    		map.put("clauseDelivery", clauseDelivery);
+    		ClauseSettlement clauseSettlement = clauseSettlementService.selectByContractId(contract.getId());
+    		map.put("clauseSettlement", clauseSettlement);
+    		
+        	//查询框架合同
+//        	if(StaticConst.getInfo("framContract").equals(contract.getContractType())){//如果是框架合同
+//        		ClauseFrameworkExample mf =new ClauseFrameworkExample();
+//    	    	com.congmai.zhgj.web.model.ClauseFrameworkExample.Criteria criteriaf =  mf.createCriteria();
+//    	    	criteriaf.andContractSerialEqualTo(contract.getId());
+//    	    	criteriaf.andDelFlgEqualTo("0");
+//    	    	List<ClauseFramework> ClauseFramework = clauseFrameworkService.selectList(mf);
+//    	    	map.put("ClauseFramework", ClauseFramework);
+//        	}
+    	}
+    	
+    	//获取订单附件
+//    	OrderFileExample om =new OrderFileExample();
+//    	com.congmai.zhgj.web.model.OrderFileExample.Criteria criteria2 =  om.createCriteria();
+//    	criteria2.andOrderSerialEqualTo(serialNum);
+//    	criteria2.andDelFlgEqualTo("0");
+//    	List<OrderFile> file = orderFileService.selectList(om);
+//    	map.put("file", file);
+    	
+    	return map;
+	}
 	
 	/**
      * @Description (保存订单物料信息)
@@ -956,24 +1037,74 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/saveContract", method = RequestMethod.POST)
 	@ResponseBody
-	public ContractVO saveContract(@RequestBody ContractVO contract, HttpServletRequest request) {
-		if(contract.getId()==null||contract.getId().isEmpty()){//新增
-			contract.setId(ApplicationUtils.random32UUID());
-    		Subject currentUser = SecurityUtils.getSubject();
-    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-    		contract.setCreator(currenLoginName);
-    		contract.setUpdater(currenLoginName);
-    		contract.setCreateTime(new Date());
-    		contract.setUpdateTime(new Date());
+	public ContractVO saveContract(@RequestBody String params, HttpServletRequest request) {
+		params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+		ContractVO contract = new ContractVO();
+		try {
+			contract = objectMapper.readValue(params, ContractVO.class);
+			if(contract.getId()==null||contract.getId().isEmpty()){//新增
+				contract.setId(ApplicationUtils.random32UUID());
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+	    		contract.setCreator(currenLoginName);
+	    		contract.setUpdater(currenLoginName);
+	    		contract.setCreateTime(new Date());
+	    		contract.setUpdateTime(new Date());
 
-    		orderService.insertContract(contract);
-    	}else{//更新
-    		Subject currentUser = SecurityUtils.getSubject();
-    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-    		contract.setUpdater(currenLoginName);
-    		contract.setUpdateTime(new Date());
-    		orderService.updateContract(contract);
-    	}
+	    		orderService.insertContract(contract);
+	    	}else{//更新
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+	    		contract.setUpdater(currenLoginName);
+	    		contract.setUpdateTime(new Date());
+	    		orderService.updateContract(contract);
+	    	}
+			contract = contractService.selectConbtractById(contract.getId());
+		}catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
+		return contract;
+	}
+	
+	
+	/**
+	 * 订单保存合同
+	 * @param contract（合同对象）
+	 * @param request（http 请求对象）
+	 * @return 操作结果
+	 */
+	@RequestMapping(value = "/saveFrame", method = RequestMethod.POST)
+	@ResponseBody
+	public ContractVO saveFrame(@RequestBody String params, HttpServletRequest request) {
+		params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+		ContractVO contract = new ContractVO();
+		try {
+			contract = objectMapper.readValue(params, ContractVO.class);
+			if(contract.getId()==null||contract.getId().isEmpty()){//新增
+				contract.setId(ApplicationUtils.random32UUID());
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+	    		contract.setCreator(currenLoginName);
+	    		contract.setUpdater(currenLoginName);
+	    		contract.setCreateTime(new Date());
+	    		contract.setUpdateTime(new Date());
+
+	    		orderService.insertContract(contract);
+	    	}else{//更新
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+	    		contract.setUpdater(currenLoginName);
+	    		contract.setUpdateTime(new Date());
+	    		contractService.update(contract);
+	    	}
+			contract = contractService.selectConbtractById(contract.getId());
+		}catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
 		return contract;
 	}
     
@@ -1977,4 +2108,376 @@ public class OrderController {
     		}
     	}
 	}
+	
+	
+	/**
+     * 
+     * @Description (启动采购框架流程)
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/startBuyFramerProcess", method = RequestMethod.POST)
+    @ResponseBody
+    public String startBuyFramerProcess(@RequestBody String params) {
+    	String flag = "0"; //默认失败
+    	params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+		ContractVO contract = new ContractVO();
+		try {
+			contract = objectMapper.readValue(params, ContractVO.class);
+		} catch (Exception e1) {
+			return flag;
+		} 
+		
+		contract.setStatus(contract.APPING);//在未确认状态提交申请的订单，设置为已确认
+    	contractService.update(contract);//更新备注
+    	
+		//启动订单审批测试流程-start
+		User user = UserUtil.getUserFromSession();
+		contract.setUserId(user.getUserId());
+		contract.setUser_name(user.getUserName());
+		contract.setTitle(user.getUserName()+" 的采购框架申请");
+		contract.setBusinessType(BaseVO.BUYFRAME); 			//业务类型：采购框架
+		contract.setStatus(BaseVO.PENDING);					//审批中
+		contract.setApplyDate(new Date());
+		contract.setReason(contract.getRemark());
+    	processBaseService.insert(contract);
+		String businessKey = contract.getId().toString();
+		contract.setBusinessKey(businessKey);
+		try {
+			String processInstanceId = this.processService.startBuyFramerProcess(contract);
+//                message.setStatus(Boolean.TRUE);
+//    			message.setMessage("订单流程已启动，流程ID：" + processInstanceId);
+		    logger.info("processInstanceId: "+processInstanceId);
+		    
+		    flag = "1";
+		} catch (ActivitiException e) {
+//            	message.setStatus(Boolean.FALSE);
+		    if (e.getMessage().indexOf("no processes deployed with key") != -1) {
+		        logger.warn("没有部署流程!", e);
+//        			message.setMessage("没有部署流程，请联系系统管理员，在[流程定义]中部署相应流程文件！");
+		    } else {
+		        logger.error("启动流程失败：", e);
+//                    message.setMessage("启动订单流程失败，系统内部错误！");
+		    }
+		    throw e;
+		} catch (Exception e) {
+		    logger.error("启动流程失败：", e);
+//                message.setStatus(Boolean.FALSE);
+//                message.setMessage("启动订单流程失败，系统内部错误！");
+		    throw e;
+		}
+        //启动订单审批测试流程-end
+		return flag;
+	}
+    
+    
+    /**
+     * 
+     * @Description (启动销售框架流程)
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/startSaleFramerProcess", method = RequestMethod.POST)
+    @ResponseBody
+    public String startSaleFramerProcess(@RequestBody String params) {
+    	String flag = "0"; //默认失败
+    	params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+		ContractVO contract = new ContractVO();
+		try {
+			contract = objectMapper.readValue(params, ContractVO.class);
+		} catch (Exception e1) {
+			return flag;
+		}
+		
+//		contract.setStatus(contract.APPING);//在未确认状态提交申请的订单，设置为已确认
+//    	contractService.update(contract);//更新备注
+    	
+		//启动订单审批测试流程-start
+		User user = UserUtil.getUserFromSession();
+		contract.setUserId(user.getUserId());
+		contract.setUser_name(user.getUserName());
+		contract.setTitle(user.getUserName()+" 的销售框架申请");
+		contract.setBusinessType(BaseVO.SALEFRAME); 			//业务类型：销售框架
+		contract.setStatus(BaseVO.PENDING);					//审批中
+		contract.setApplyDate(new Date());
+		contract.setReason(contract.getRemark());
+    	processBaseService.insert(contract);
+		String businessKey = contract.getId().toString();
+		contract.setBusinessKey(businessKey);
+		try {
+			String processInstanceId = this.processService.startSaleFramerProcess(contract);
+//                message.setStatus(Boolean.TRUE);
+//    			message.setMessage("订单流程已启动，流程ID：" + processInstanceId);
+		    logger.info("processInstanceId: "+processInstanceId);
+		    flag = "1";
+		} catch (ActivitiException e) {
+//            	message.setStatus(Boolean.FALSE);
+		    if (e.getMessage().indexOf("no processes deployed with key") != -1) {
+		        logger.warn("没有部署流程!", e);
+//        			message.setMessage("没有部署流程，请联系系统管理员，在[流程定义]中部署相应流程文件！");
+		    } else {
+		        logger.error("启动流程失败：", e);
+//                    message.setMessage("启动订单流程失败，系统内部错误！");
+		    }
+		    throw e;
+		} catch (Exception e) {
+		    logger.error("启动流程失败：", e);
+//                message.setStatus(Boolean.FALSE);
+//                message.setMessage("启动订单流程失败，系统内部错误！");
+		    throw e;
+		}
+        //启动订单审批测试流程-end
+		return flag;
+	}
+    
+    
+    /**
+     * 审批框架协议流程
+     * @param taskId
+     * @param model
+     * @return
+     * @throws NumberFormatException
+     * @throws Exception
+     */
+//	@RequiresPermissions("user:order:toApproval") 	//*代表 经理、总监、人力
+    @RequestMapping(value = "/toFrameApproval/{taskId}", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody Map<String, Object> toFrameApproval(@PathVariable("taskId") String taskId) throws NumberFormatException, Exception{
+    	Task task = this.taskService.createTaskQuery().taskId(taskId).singleResult();
+		// 根据任务查询流程实例
+    	String processInstanceId = task.getProcessInstanceId();
+		ProcessInstance pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+		ContractVO contract = (ContractVO) this.runtimeService.getVariable(pi.getId(), "entity");
+		contract.setTask(task);
+		contract.setProcessInstanceId(processInstanceId);
+		List<CommentVO> commentList = this.processService.getComments(processInstanceId);
+		String taskDefinitionKey = task.getTaskDefinitionKey();
+		logger.info("taskDefinitionKey: "+taskDefinitionKey);
+		String result = null;
+		if("modifyApply".equals(taskDefinitionKey)){
+			result = "modify";
+		}else{
+			result = "audit";
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("actionType", result);
+		map.put("contract", contract);
+		map.put("commentList", commentList);
+    	return map;
+    }
+    
+    
+    /**
+     * 完成任务
+     * @param content
+     * @param completeFlag
+     * @param taskId
+     * @param redirectAttributes
+     * @param session
+     * @return
+     * @throws Exception
+     */
+//	@RequiresPermissions("user:order:complate")  //数据库中权限字符串为user:*:complate， 通配符*匹配到order所以有权限操作 
+    @RequestMapping(value = "/complateFrame/{taskId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+	@ResponseBody
+    public String complateFrame(
+    		@RequestParam("id") String id,
+    		@RequestParam("content") String content,
+    		@RequestParam("processInstanceId") String processInstanceId,
+    		@RequestParam("completeFlag") Boolean completeFlag,
+    		@PathVariable("taskId") String taskId, 
+    		RedirectAttributes redirectAttributes) throws Exception{
+    	User user = UserUtil.getUserFromSession();
+    	String result = "";
+    	try {
+    		ContractVO contract = this.contractService.selectById(id);
+    		ContractVO baseContract = (ContractVO) this.runtimeService.getVariable(processInstanceId, "entity");
+    		Map<String, Object> variables = new HashMap<String, Object>();
+    		variables.put("isPass", completeFlag);
+    		if(!completeFlag){
+    			baseContract.setTitle(baseContract.getUser_name()+" 的订单申请失败,需修改后重新提交！");
+    			contract.setStatus(BaseVO.APPROVAL_FAILED);
+    			variables.put("entity", baseContract);
+    			
+    			
+    	
+    		}else{
+    			contract.setStatus(BaseVO.PENDING);					//审批中
+    		}
+    		// 完成任务
+    		this.processService.complete(taskId, content, user.getUserId().toString(), variables);
+    		
+    		
+    		ProcessInstance pi = null;
+    		if(completeFlag){
+    			//此处需要修改，不能根据人来判断审批是否结束。应该根据流程实例id(processInstanceId)来判定。
+    			//判断指定ID的实例是否存在，如果结果为空，则代表流程结束，实例已被删除(移到历史库中)
+    			pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+    			if(BeanUtils.isBlank(pi)){
+    				contract.setStatus(BaseVO.APPROVAL_SUCCESS);
+    			}
+    		}
+    		
+    		this.processBaseService.update(contract);
+    		
+    		if(BaseVO.APPROVAL_SUCCESS.equals(contract.getStatus())){//订单完成，需更新状态为1(订单待接收)
+    			ContractVO c = new ContractVO();
+    			c.setId(c.getId());
+    			if(StaticConst.getInfo("saleFrame").equals(c.getContractType())){//销售框架
+    				c.setStatus("3");
+    			}else if(StaticConst.getInfo("buyFrame").equals(c.getContractType())){//采购订单
+    				c.setStatus("1");
+    			}
+    			this.contractService.update(c);
+    		}
+    		
+    		contract.setProcessInstanceId(processInstanceId);
+    		//发送消息
+
+    		result = "任务办理完成！";
+		} catch (ActivitiObjectNotFoundException e) {
+			result = "此任务不存在，请联系管理员！";
+			throw e;
+		} catch (ActivitiException e) {
+			result = "此任务正在协办，您不能办理此任务！";
+			throw e;
+		} catch (Exception e) {
+			result = "任务办理失败，请联系管理员！";
+			throw e;
+		}
+		return result;
+    }
+	
+    
+    /**
+	 * 调整订单申请
+	 * @param vacation
+	 * @param taskId
+	 * @param processInstanceId
+	 * @param reApply
+	 * @param session
+	 * @return
+	 * @throws Exception
+	 */
+//	@RequiresPermissions("user:vacation:modify")
+	@RequestMapping(value = "/modifyFrame/{taskId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+	@ResponseBody
+	public String modifyFrame(
+			@PathVariable("taskId") String taskId,
+			@RequestParam("processInstanceId") String processInstanceId,
+			@RequestParam("reApply") Boolean reApply,
+			@RequestParam("id") String id,
+			@RequestParam("reason") String reason,
+			@RequestParam("frameType") String frameType) throws Exception{
+		String result = "";
+		User user = UserUtil.getUserFromSession();
+
+		ContractVO contract = new ContractVO();
+		contract.setId(id);
+		
+        Map<String, Object> variables = new HashMap<String, Object>();
+        contract.setUserId(user.getUserId());
+        contract.setUser_name(user.getUserName());
+        if(BaseVO.SALEFRAME.equals(frameType)){
+        	contract.setBusinessType(BaseVO.SALEFRAME);
+        }else{
+        	contract.setBusinessType(BaseVO.BUYFRAME);
+        }
+        
+        contract.setApplyDate(new Date());
+        contract.setBusinessKey(id);
+        contract.setProcessInstanceId(processInstanceId);
+        String content = "";
+        if(reApply){
+        	//修改订单申请
+        	if(BaseVO.SALEFRAME.equals(frameType)){
+        		contract.setTitle(user.getUserName()+" 的销售框架申请！");
+            }else{
+            	contract.setTitle(user.getUserName()+" 的采购框架申请！");
+            }
+        	
+        	contract.setStatus(BaseVO.PENDING);
+	        content = "重新申请";
+	        result = "任务办理完成，订单申请已重新提交！";
+	        
+	      
+        }else{
+        	contract.setTitle(user.getUserName()+" 的订单申请已取消！");
+        	contract.setStatus(BaseVO.APPROVAL_FAILED);
+        	content = "取消申请";
+        	result = "任务办理完成，已经取消您的框架协议申请！";
+        }
+        try {
+    		this.processBaseService.update(contract);
+			variables.put("entity", contract);
+			variables.put("reApply", reApply);
+			this.processService.complete(taskId, content, user.getUserId().toString(), variables);
+			
+			//发送消息
+
+		} catch (ActivitiObjectNotFoundException e) {
+//			message.setStatus(Boolean.FALSE);
+//			message.setMessage("此任务不存在，请联系管理员！");
+			result = "此任务不存在，请联系管理员！";
+			throw e;
+		} catch (ActivitiException e) {
+//			message.setStatus(Boolean.FALSE);
+//			message.setMessage("此任务正在协办，您不能办理此任务！");
+			result = "此任务正在协办，您不能办理此任务！";
+			throw e;
+		} catch (Exception e) {
+//			message.setStatus(Boolean.FALSE);
+//			message.setMessage("任务办理失败，请联系管理员！");
+			result = "任务办理失败，请联系管理员！";
+			throw e;
+		}
+		
+    	return result;
+    }
+	
+    
+    /**
+     * 供应商提交框架
+     */
+    @RequestMapping(value = "/supplyConfirmedFrame", method = RequestMethod.POST)
+    @ResponseBody
+    public ContractVO supplyConfirmedFrame(@RequestBody String params) {
+    	ContractVO contract = jaon2Contract(params);
+    	Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		contract.setUpdater(currenLoginName);
+		contract.setUpdateTime(new Date());
+		contractService.update(contract);
+		return contract;
+    }
+
+	private ContractVO jaon2Contract(String params){
+		params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+		ContractVO contract = new ContractVO();
+		try {
+			contract = objectMapper.readValue(params, ContractVO.class);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return contract;
+	}
+    
+    
+    /**
+     * 平台提交框架
+     */
+    @RequestMapping(value = "/pingTaiSubmitFrame", method = RequestMethod.POST)
+    @ResponseBody
+    public ContractVO pingTaiSubmitFrame(@RequestBody String params) {
+    	ContractVO contract = jaon2Contract(params);
+    	Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		contract.setUpdater(currenLoginName);
+		contract.setUpdateTime(new Date());
+		contractService.update(contract);
+		return contract;
+    }
 }

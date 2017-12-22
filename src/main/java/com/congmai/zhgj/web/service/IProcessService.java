@@ -9,6 +9,7 @@ import org.activiti.engine.runtime.ProcessInstance;
 
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
+import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.Invoice;
 import com.congmai.zhgj.web.model.OrderInfo;
@@ -218,5 +219,9 @@ public interface IProcessService {
      * @throws Exception
      */
 	public String startInvoice(Invoice invoice);
+
+	public String startBuyFramerProcess(ContractVO contract);
+
+	public String startSaleFramerProcess(ContractVO contract);
 
 }

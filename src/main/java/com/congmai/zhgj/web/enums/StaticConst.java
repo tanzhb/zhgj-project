@@ -23,6 +23,14 @@ public enum StaticConst {
 	CONTRACT_TYPE_FRAM("framContract","框架合同"),
 	
 	CONTRACT_TYPE_BUY("buyContract","采购合同"),
+	
+	CONTRACT_TYPE_BUYFRAME("buyFrame","采购框架"),
+	
+	CONTRACT_TYPE_BUYORDER("buyOrder","采购订单"),
+	
+	CONTRACT_TYPE_SALEFRAME("saleFrame","销售框架"),
+	
+	CONTRACT_TYPE_SALEORDER("saleOrder","销售订单"),
 	/**
 	 * @Field @PRICE_TYPE_BUY : TODO(采购价格)
 	 */

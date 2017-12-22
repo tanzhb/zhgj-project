@@ -1,6 +1,27 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <!-- BEGIN PAGE HEADER-->
+<!-- <h3 class="page-title"> 采购订单
+    <small></small>
+</h3> -->
+<!-- <div class="page-bar">
+
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a ui-sref="dashboard">首页</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a ui-sref="buyFrame">采购管理</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a ui-sref="buyFrame">采购订单</a>
+        </li>
+    </ul>
+</div> -->
+
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
 <div class="tabbable-line">
@@ -29,17 +50,42 @@
 							<div class="actions">
 								<label class="btn btn-transparent yellow btn-circle btn-sm"
 										ng-click="submitBuyApply()"> <i class="glyphicon glyphicon-play"></i> 申请</label>
+								<shiro:hasPermission name="buyNormalOrder:add">
 									<label class="btn btn-transparent green btn-circle btn-sm"
 										ui-sref="addBuyFrame"> <i class="fa fa-plus"></i> 添加
 									</label>
+								</shiro:hasPermission>
+								<shiro:hasPermission name="buyNormalOrder:edit">
 									<label class="btn btn-transparent purple btn-circle btn-sm"
 										ng-click="editBuyFrame()"> <i class="fa fa-edit"></i>
 										修改
 									</label>
+								</shiro:hasPermission>
+								<shiro:hasPermission name="buyNormalOrder:add">
+									<label class="btn btn-transparent purple btn-circle btn-sm"
+										ng-click="copyOrder()"> <i class="fa fa-plus"></i> 复制
+									</label>
+								</shiro:hasPermission>
+									<shiro:hasPermission name="buyNormalOrder:delete">
 										<label class="btn btn-transparent red btn-circle btn-sm"
 											ng-click="deleteBuyFrame()"> <i class="fa fa-minus"></i>
 											删除
 										</label>
+									</shiro:hasPermission>
+									<shiro:hasPermission name="buyNormalOrder:import">
+										<label
+											class="btn btn-transparent green btn-outline btn-circle btn-sm"
+											data-toggle="modal" data-target="#import"> <i
+											class="fa fa-upload"></i> 导入
+										</label>
+									</shiro:hasPermission>
+									<shiro:hasPermission name="buyNormalOrder:export">
+										<label
+											class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
+											ng-click="exportBuyFrame()"> <i
+											class="fa fa-file-excel-o"></i> 导出
+										</label>
+									</shiro:hasPermission>
 							</div>
 			            </div>
 			            <div class="portlet-body">
@@ -52,17 +98,17 @@
                                                 <span></span>
                                             </label>
                                         </th>
-			                            <th> 框架协议号 </th>
+			                            <th> 采购订单号 </th>
 			                            <th> 供应商 </th>
-			                            <th> 框架类型 </th>
-			                            <th> 框架合同号 </th>
-			                            <th> 生效日期 </th>
-			                            <th> 失效日期 </th>
-			                            <th> 订单 </th>
-			                            <th> 签订人 </th>
-			                            <th> 版本 </th>
-			                            <th> 状态</th>
+			                            <th> 采购数量 </th>
+			                            <th> 金额 </th>
+			                            <!-- <th> 配送 </th> -->
+			                            <th> 采购类型 </th>
+			                            <th> 关联采购合同 </th>
+			                            <th> 关联销售单 </th>
+			                            <th> 下单日期 </th>
 			                            <th> 操作 </th>
+			                            <!-- <th style="white-space: nowrap;">状态</th> -->
 			                        </tr>
 			                    </thead>
 			                    <tbody>
@@ -155,7 +201,7 @@
 					<h4 class="modal-title">确认</h4>
 				</div>
 				<div class="modal-body">
-					<p>是否删除已选框架协议?</p>
+					<p>是否删除已选订单?</p>
 				</div>
 				<div class="modal-footer">
 					<button type="button" data-dismiss="modal"

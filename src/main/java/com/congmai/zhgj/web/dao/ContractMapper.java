@@ -50,4 +50,6 @@ public interface ContractMapper extends GenericDao<ContractVO, String> {
     
     
     String checkNum(ContractVO contractVO);
+
+	List<ContractVO> selectList(ContractVO parm);
 }

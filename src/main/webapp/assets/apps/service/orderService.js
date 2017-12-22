@@ -118,14 +118,37 @@ angular.module('MetronicApp').service('orderService',
 			                deferred.reject('连接服务器出错！');  
 			            })  
 			        return deferred.promise;  
-			    },//获取订单信息
-			    getOrderInfo : function(serialNum,judgeString){
+			    },
+				//删除框架
+			    delFrame : function(ids){
 			        var deferred = $q.defer();  
-			        debugger;
-					if(judgeString==undefined){
-						judgeString=null;
-					}
-			        $http.get("rest/order/getOrderInfo", {params:{serialNum:serialNum,judgeString:judgeString}})
+	
+			        $http.post("rest/contract/deleteUserContractS", ids)
+			        .success(function (data) {  
+			            // 如果连接成功，延时返回给调用者  
+			            deferred.resolve(data);  
+			        })  
+			            .error(function () {  
+			                deferred.reject('连接服务器出错！');  
+			            })  
+			        return deferred.promise;  
+			    },//获取订单信息
+			    getOrderInfo : function(serialNum){
+			        var deferred = $q.defer();  
+			        $http.get("rest/order/getOrderInfo", {params:{serialNum:serialNum}})
+			        .success(function (data) {  
+			            // 如果连接成功，延时返回给调用者  
+			            deferred.resolve(data);  
+			        })  
+			            .error(function () {  
+			                deferred.reject('连接服务器出错！');  
+			            })  
+			        return deferred.promise;  
+			          
+			    },//获取框架协议信息
+			    getFrameInfo : function(serialNum){
+			        var deferred = $q.defer();  
+			        $http.get("rest/order/getFrameInfo", {params:{serialNum:serialNum}})
 			        .success(function (data) {  
 			            // 如果连接成功，延时返回给调用者  
 			            deferred.resolve(data);  
@@ -181,7 +204,19 @@ angular.module('MetronicApp').service('orderService',
 						deferred.reject(err);//请求失败
 					});
 					return deferred.promise;//返回承诺
-				},//保存售后条款
+				},//保存框架协议
+				saveFrame : function (contract){
+					var deferred = $q.defer();
+					$http.post("rest/order/saveFrame", 
+							contract//传整个表单数据  
+					).then(function success(result) {
+						deferred.resolve(result);//请求成功
+					}, function error(err) {
+						deferred.reject(err);//请求失败
+					});
+					return deferred.promise;//返回承诺
+				},
+				//保存售后条款
 				saveClauseAfterSales : function (clauseAfterSales){
 					var deferred = $q.defer();
 					$http.post("rest/order/saveClauseAfterSales", 
