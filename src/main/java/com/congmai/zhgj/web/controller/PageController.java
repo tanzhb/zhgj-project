@@ -1,3 +1,4 @@
+
 package com.congmai.zhgj.web.controller;
 
 import java.util.HashMap;
@@ -263,6 +264,13 @@ public class PageController {
         return "order/addSupplyOrder";
     }
     /**
+     * 修改平台采购框架
+     */
+    @RequestMapping("/addSupplyFrame")
+    public String addSupplyFrame(String serialNum,String view,String numCode) {
+        return "frame/addSupplyFrame";
+    }
+    /**
      * 查看采购订单
      */
     @RequestMapping("/viewBuyOrder")
@@ -374,9 +382,9 @@ public class PageController {
     /**
      * 采购框架提交申请
      */
-    @RequestMapping("/submitBuyFrame")
-    public String submitBuyFrame(String serialNum,String view) {
-        return "frame/submitBuyFrame";
+    @RequestMapping("/submitBuyFrameApply")
+    public String submitBuyFrameApply(String serialNum,String view) {
+        return "frame/submitBuyFrameApply";
     }
     
     /**

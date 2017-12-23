@@ -68,6 +68,8 @@ import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.ContractFile;
+import com.congmai.zhgj.web.model.ContractFileExample;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.Materiel;
@@ -88,6 +90,7 @@ import com.congmai.zhgj.web.service.ClauseFrameworkService;
 import com.congmai.zhgj.web.service.ClauseSettlementDetailService;
 import com.congmai.zhgj.web.service.ClauseSettlementService;
 import com.congmai.zhgj.web.service.CompanyService;
+import com.congmai.zhgj.web.service.ContractFileService;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.DemandPlanMaterielService;
 import com.congmai.zhgj.web.service.IProcessService;
@@ -136,6 +139,8 @@ public class OrderController {
     private ClauseSettlementDetailService clauseSettlementDetailService;
     @Resource
     private OrderFileService orderFileService;
+    @Resource
+    private ContractFileService contractFileService;
     @Resource
     private ClauseFrameworkService clauseFrameworkService;
     @Resource
@@ -743,6 +748,8 @@ public class OrderController {
     		parm.setContractType(StaticConst.CONTRACT_TYPE_BUYFRAME.getInfo());
     	}
     	
+    	parm.setStatus(selectFor);
+    	
     	contractList = contractService.selectList(parm);
     	
     	//封装datatables数据返回到前台
@@ -903,13 +910,13 @@ public class OrderController {
 //        	}
     	}
     	
-    	//获取订单附件
-//    	OrderFileExample om =new OrderFileExample();
-//    	com.congmai.zhgj.web.model.OrderFileExample.Criteria criteria2 =  om.createCriteria();
-//    	criteria2.andOrderSerialEqualTo(serialNum);
-//    	criteria2.andDelFlgEqualTo("0");
-//    	List<OrderFile> file = orderFileService.selectList(om);
-//    	map.put("file", file);
+//    	获取合同附件
+    	ContractFileExample om =new ContractFileExample();
+    	com.congmai.zhgj.web.model.ContractFileExample.Criteria criteria2 =  om.createCriteria();
+    	criteria2.andContractSerialEqualTo(serialNum);
+    	criteria2.andDelFlgEqualTo("0");
+    	List<ContractFile> file = contractFileService.selectList(om);
+    	map.put("file", file);
     	
     	return map;
 	}
@@ -1091,7 +1098,7 @@ public class OrderController {
 	    		contract.setUpdater(currenLoginName);
 	    		contract.setCreateTime(new Date());
 	    		contract.setUpdateTime(new Date());
-
+	    		contract.setStatus(ContractVO.INIT);
 	    		orderService.insertContract(contract);
 	    	}else{//更新
 	    		Subject currentUser = SecurityUtils.getSubject();
@@ -1320,6 +1327,43 @@ public class OrderController {
 		    	}
 		    	//填充File******↑↑↑↑↑↑********
 		    	orderFileService.betchInsertOrderFiles(file);
+		    	//数据插入******↑↑↑↑↑↑********
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
+    }
+    
+    /**
+     * 
+     * @Description 保存合同附件
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/saveFrameFile", method = RequestMethod.POST)
+    @ResponseBody
+    public void saveFrameFile(@RequestBody String params) {
+    	params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+        JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, ContractFile.class);  
+        List<ContractFile> file;
+		try {
+			file = objectMapper.readValue(params, javaType);
+	    	if(!CollectionUtils.isEmpty(file)){
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		    	for(ContractFile f:file){
+		    		f.setSerialNum(ApplicationUtils.random32UUID());
+		    		f.setUploader(currenLoginName);
+		    		f.setCreator(currenLoginName);
+	    			f.setUpdater(currenLoginName);
+	    			f.setUploadDate(new Date());
+	    			f.setCreateTime(new Date());
+	    			f.setUpdateTime(new Date());
+		    	}
+		    	//填充File******↑↑↑↑↑↑********
+		    	contractFileService.betchInsertContractFiles(file);
 		    	//数据插入******↑↑↑↑↑↑********
 	        }
 		} catch (Exception e) {
@@ -2116,9 +2160,9 @@ public class OrderController {
      * @param params
      * @return
      */
-    @RequestMapping(value = "/startBuyFramerProcess", method = RequestMethod.POST)
+    @RequestMapping(value = "/startBuyFrameProcess", method = RequestMethod.POST)
     @ResponseBody
-    public String startBuyFramerProcess(@RequestBody String params) {
+    public String startBuyFrameProcess(@RequestBody String params) {
     	String flag = "0"; //默认失败
     	params = params.replace("\\", "");
 		ObjectMapper objectMapper = new ObjectMapper();  
@@ -2128,9 +2172,10 @@ public class OrderController {
 		} catch (Exception e1) {
 			return flag;
 		} 
-		
-		contract.setStatus(contract.APPING);//在未确认状态提交申请的订单，设置为已确认
-    	contractService.update(contract);//更新备注
+		String remarkString = contract.getRemark();
+		contract.setRemark(null);
+    	contract.setStatus(contract.APPING);//在未确认状态提交申请的订单，设置为已确认
+    	contractService.update(contract);
     	
 		//启动订单审批测试流程-start
 		User user = UserUtil.getUserFromSession();
@@ -2140,8 +2185,11 @@ public class OrderController {
 		contract.setBusinessType(BaseVO.BUYFRAME); 			//业务类型：采购框架
 		contract.setStatus(BaseVO.PENDING);					//审批中
 		contract.setApplyDate(new Date());
-		contract.setReason(contract.getRemark());
+		contract.setReason(remarkString);
+		contract.setSerialNum(contract.getId());
     	processBaseService.insert(contract);
+    	
+    	
 		String businessKey = contract.getId().toString();
 		contract.setBusinessKey(businessKey);
 		try {
@@ -2178,9 +2226,9 @@ public class OrderController {
      * @param params
      * @return
      */
-    @RequestMapping(value = "/startSaleFramerProcess", method = RequestMethod.POST)
+    @RequestMapping(value = "/startSaleFrameProcess", method = RequestMethod.POST)
     @ResponseBody
-    public String startSaleFramerProcess(@RequestBody String params) {
+    public String startSaleFrameProcess(@RequestBody String params) {
     	String flag = "0"; //默认失败
     	params = params.replace("\\", "");
 		ObjectMapper objectMapper = new ObjectMapper();  
@@ -2203,6 +2251,7 @@ public class OrderController {
 		contract.setStatus(BaseVO.PENDING);					//审批中
 		contract.setApplyDate(new Date());
 		contract.setReason(contract.getRemark());
+		contract.setSerialNum(contract.getId());
     	processBaseService.insert(contract);
 		String businessKey = contract.getId().toString();
 		contract.setBusinessKey(businessKey);
@@ -2282,7 +2331,7 @@ public class OrderController {
     @RequestMapping(value = "/complateFrame/{taskId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
 	@ResponseBody
     public String complateFrame(
-    		@RequestParam("id") String id,
+    		@RequestParam("frameId") String id,
     		@RequestParam("content") String content,
     		@RequestParam("processInstanceId") String processInstanceId,
     		@RequestParam("completeFlag") Boolean completeFlag,
@@ -2291,7 +2340,7 @@ public class OrderController {
     	User user = UserUtil.getUserFromSession();
     	String result = "";
     	try {
-    		ContractVO contract = this.contractService.selectById(id);
+    		ContractVO contract = this.contractService.selectConbtractById(id);
     		ContractVO baseContract = (ContractVO) this.runtimeService.getVariable(processInstanceId, "entity");
     		Map<String, Object> variables = new HashMap<String, Object>();
     		variables.put("isPass", completeFlag);
@@ -2318,12 +2367,12 @@ public class OrderController {
     				contract.setStatus(BaseVO.APPROVAL_SUCCESS);
     			}
     		}
-    		
+    		contract.setSerialNum(contract.getId());
     		this.processBaseService.update(contract);
     		
     		if(BaseVO.APPROVAL_SUCCESS.equals(contract.getStatus())){//订单完成，需更新状态为1(订单待接收)
     			ContractVO c = new ContractVO();
-    			c.setId(c.getId());
+    			c.setId(contract.getId());
     			if(StaticConst.getInfo("saleFrame").equals(c.getContractType())){//销售框架
     				c.setStatus("3");
     			}else if(StaticConst.getInfo("buyFrame").equals(c.getContractType())){//采购订单
@@ -2367,7 +2416,7 @@ public class OrderController {
 			@PathVariable("taskId") String taskId,
 			@RequestParam("processInstanceId") String processInstanceId,
 			@RequestParam("reApply") Boolean reApply,
-			@RequestParam("id") String id,
+			@RequestParam("frameId") String id,
 			@RequestParam("reason") String reason,
 			@RequestParam("frameType") String frameType) throws Exception{
 		String result = "";
@@ -2409,6 +2458,7 @@ public class OrderController {
         	result = "任务办理完成，已经取消您的框架协议申请！";
         }
         try {
+        	contract.setSerialNum(contract.getId());
     		this.processBaseService.update(contract);
 			variables.put("entity", contract);
 			variables.put("reApply", reApply);
@@ -2438,7 +2488,7 @@ public class OrderController {
 	
     
     /**
-     * 供应商提交框架
+     * 供应商确认框架
      */
     @RequestMapping(value = "/supplyConfirmedFrame", method = RequestMethod.POST)
     @ResponseBody
@@ -2478,6 +2528,22 @@ public class OrderController {
 		contract.setUpdater(currenLoginName);
 		contract.setUpdateTime(new Date());
 		contractService.update(contract);
+		return contract;
+    }
+    
+    /**
+     * 平台接收框架协议
+     */
+    @RequestMapping(value = "/reciveFrame", method = RequestMethod.POST)
+    @ResponseBody
+    public ContractVO reciveFrame(@RequestBody String params) {
+    	ContractVO contract = jaon2Contract(params);
+    	Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		contract.setUpdater(currenLoginName);
+		contract.setUpdateTime(new Date());
+		contractService.update(contract);
+		
 		return contract;
     }
 }

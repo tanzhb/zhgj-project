@@ -155,6 +155,10 @@ public class ContractVO  extends BaseVO {
     
     private String seller;
     
+    private String serialNum;
+    
+    private ProcessBase processBase;
+    
 	public String getId() {
 		return id;
 	}
@@ -484,6 +488,22 @@ public class ContractVO  extends BaseVO {
 
 	public void setComName(String comName) {
 		this.comName = comName;
+	}
+
+	public String getSerialNum() {
+		return serialNum;
+	}
+
+	public void setSerialNum(String serialNum) {
+		this.serialNum = serialNum;
+	}
+
+	public ProcessBase getProcessBase() {
+		return processBase;
+	}
+
+	public void setProcessBase(ProcessBase processBase) {
+		this.processBase = processBase;
 	}
 
 	

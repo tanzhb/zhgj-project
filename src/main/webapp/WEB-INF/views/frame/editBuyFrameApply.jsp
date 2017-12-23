@@ -94,7 +94,7 @@
 		            </div>
 		            <div class="portlet-title">
 			               <div class="tools">
-			               		<button type="button" ng-click="replyOrder()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">重新申请</button>
+			               		<button type="button" ng-click="replyFrame()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">重新申请</button>
 			               		<button type="button" ng-click="cancelApply()" ng-hide="orderStatusInput" class="btn red btn-circle  btn-sm">取消申请</button>
 				                <button type="button" ng-click="cancelPage()" class="btn default btn-circle  btn-sm"><i class="fa fa-undo"></i> 取消 </button>
 				            </div>

@@ -14,7 +14,7 @@
         
         <div class="portlet-body">
 			<div class="tabbable-custom ">
-			<ul class="nav nav-tabs " id="orderTab">
+			<ul class="nav nav-tabs " id="frameTab">
 				<li class="active"><a href="#apply" data-toggle="tab"
 					ng-click="toApply()"> 框架协议 </a></li>
 				<li><a href="#daiban" data-toggle="tab" ng-click="toDaiban()">

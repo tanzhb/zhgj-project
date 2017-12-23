@@ -62,6 +62,7 @@ import com.congmai.zhgj.web.activiti.processTask.taskCommand.StartActivityCmd;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
+import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.Invoice;
 import com.congmai.zhgj.web.model.OrderInfo;
@@ -786,6 +787,44 @@ public class ProcessServiceImp implements IProcessService{
         String processInstanceId = processInstance.getId();
         invoice.setProcessInstanceId(processInstanceId);
         this.processBaseService.update(invoice);
+
+        logger.info("processInstanceId: "+processInstanceId);
+        //最后要设置null，就是这么做，还没研究为什么
+        this.identityService.setAuthenticatedUserId(null);
+        return processInstanceId;
+	}
+
+	@Override
+	public String startBuyFramerProcess(ContractVO contract) {
+		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
+        identityService.setAuthenticatedUserId(contract.getUserId().toString());
+        Map<String, Object> variables = new HashMap<String, Object>();
+        variables.put("entity", contract);
+
+        String businessKey = contract.getBusinessKey();
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(Constants.BUYFRAME, businessKey, variables);
+		String processInstanceId = processInstance.getId();
+		contract.setProcessInstanceId(processInstanceId);
+        this.processBaseService.update(contract);
+
+        logger.info("processInstanceId: "+processInstanceId);
+        //最后要设置null，就是这么做，还没研究为什么
+        this.identityService.setAuthenticatedUserId(null);
+        return processInstanceId;
+	}
+
+	@Override
+	public String startSaleFramerProcess(ContractVO contract) {
+		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
+        identityService.setAuthenticatedUserId(contract.getUserId().toString());
+        Map<String, Object> variables = new HashMap<String, Object>();
+        variables.put("entity", contract);
+
+        String businessKey = contract.getBusinessKey();
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(Constants.SALEFRAME, businessKey, variables);
+		String processInstanceId = processInstance.getId();
+		contract.setProcessInstanceId(processInstanceId);
+        this.processBaseService.update(contract);
 
         logger.info("processInstanceId: "+processInstanceId);
         //最后要设置null，就是这么做，还没研究为什么

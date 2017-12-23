@@ -20,7 +20,7 @@ margin-right: 20px;
 <!-- 采购订单基本信息 START -->
 <ul class="nav nav-tabs">
 		<li class="active bold">
-               		<a data-target="#tab_1_1" data-toggle="tab">订单信息</a>
+               		<a data-target="#tab_1_1" data-toggle="tab">框架信息</a>
            		</li>
 		<!-- <li class="bold"><a data-target="#tab_1_2" data-toggle="tab">合同信息</a>
 		</li> -->
@@ -538,7 +538,7 @@ margin-right: 20px;
          <div class="portlet-body form">
              <!-- BEGIN FORM-->
              <form action="#" id="form_clauseSettlement"  >
-                 <div class="form-body">
+                 <!-- <div class="form-body">
                      <div class="alert alert-danger display-hide">
                          <button class="close" data-close="alert"></button> 请先输入正确数据！ </div>
                      <div class="row">
@@ -558,7 +558,7 @@ margin-right: 20px;
                                  </div>
                              </div>
                          </div>
-                         <!--/span-->
+                         /span
                          <div class="col-md-4">
                          		<div class="form-group ">
                               	<label class="control-label col-md-5 bold">税额(含关税)：</label>
@@ -568,11 +568,11 @@ margin-right: 20px;
                               </div>
                          </div>
                          
-                         <!--/span-->
+                         /span
                      </div>
-                     <!--/row-->
+                     /row
                      <div class="row">
-                         <!--/span-->
+                         /span
                          <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">其他费用：</label>
@@ -589,7 +589,7 @@ margin-right: 20px;
                                  </div>
                              </div>
                          </div>
-                         <!--/span-->
+                         /span
                          <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">备注：</label>
@@ -598,10 +598,10 @@ margin-right: 20px;
                               		</div>
                              </div>
                          </div>
-                         <!--/span-->
+                         /span
                      </div>
-                     <!--/row-->
-                 </div>
+                     /row
+                 </div> -->
 			</form>
 			<form id="form_sample_3"   >
 		         <div class="table-scrollable">

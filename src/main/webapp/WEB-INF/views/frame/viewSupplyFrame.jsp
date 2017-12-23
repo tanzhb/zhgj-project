@@ -11,7 +11,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a ui-sref="buyFrame">采购订单</a>
+            <a ui-sref="supplyOrder">销售订单</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
@@ -43,10 +43,8 @@
 					
 		            <div class="portlet-title">
 			               <div class="tools">
-			               		<button type="button" ng-if = "buyFrame.status==0" ng-click="pingTaiSubmit()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">提交供方确认</button>
-			               		<button type="button" ng-if = "buyFrame.status==77" ng-click="pingTaiSubmit()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">重新提交确认</button>
-			               		<button type="button" ng-if = "buyFrame.status==77" ng-click="pingTaiConfirmed()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">确认</button>
-			               		<button type="button" ng-if = "buyFrame.status==0||buyFrame.status==77" ng-click="submitBuyApply()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">申请采购</button>
+			               		<button type="button" ng-if = "buyFrame.status==66" ng-click="editFrame()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">修改</button>
+			               		<button type="button" ng-if = "buyFrame.status==66" ng-click="supplyConfirmedFrame()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">确认</button>
 				                <button type="button" ng-click="cancelPage()" class="btn default btn-circle  btn-sm"><i class="fa fa-undo"></i> 取消 </button>
 				            </div>
 					</div>
